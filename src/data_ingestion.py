@@ -2,6 +2,8 @@
 Data Ingestion Module
 Fetches quantitative market time-series data (Gasoline futures, Crude Oil futures)
 and provides unstructured event logs & NOAA National Production Basin Weather alerts for LLM scoring.
+Includes Iran / Strait of Hormuz conflict alerts, Suez Canal / Red Sea shipping rerouting events,
+and Venezuela heavy crude / OFAC sanctions feeds.
 """
 
 import pandas as pd
@@ -10,6 +12,7 @@ import yfinance as yf
 from datetime import datetime, timedelta
 import logging
 from src.noaa_weather import get_national_production_weather_dataset
+from src.geopolitical_feeds import get_geopolitical_maritime_events
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -75,10 +78,11 @@ def _generate_synthetic_market_data(start_date: str, end_date: str) -> pd.DataFr
 
 def get_historical_event_dataset() -> pd.DataFrame:
     """
-    Combines geopolitical & macroeconomic events with NOAA Weather advisories
-    for major US Oil & Gas Production/Refining Basins (Gulf Coast, Permian, Bakken).
+    Combines global macroeconomic & OPEC events, NOAA National Weather advisories,
+    Iran / Strait of Hormuz conflict alerts, Suez Canal / Red Sea shipping reroutings,
+    and Venezuela heavy crude OFAC sanctions feeds.
     """
-    events = [
+    base_events = [
         {"date": "2022-02-24", "headline": "Russia invades Ukraine; global crude oil prices surge above $100/bbl on severe energy supply disruption fears.", "category": "Geopolitics"},
         {"date": "2022-03-08", "headline": "US bans imports of Russian crude oil and petroleum products; gasoline prices reach historic highs.", "category": "Policy/Sanctions"},
         {"date": "2022-06-14", "headline": "Federal Reserve raises interest rates by 75 bps to combat high inflation; recession fears weigh on oil demand.", "category": "Macroeconomics"},
@@ -96,11 +100,22 @@ def get_historical_event_dataset() -> pd.DataFrame:
         {"date": "2024-10-01", "headline": "Middle East hostilities escalate with missile attacks; crude futures rally 5% on potential Iranian oil facility risks.", "category": "Geopolitics"}
     ]
     
-    events_df = pd.DataFrame(events)
+    events_df = pd.DataFrame(base_events)
     events_df['date'] = pd.to_datetime(events_df['date'])
     
-    # Merge Tier 1 NOAA National Oil & Gas Basin Weather Events
-    noaa_nat_df = get_national_production_weather_dataset()
-    merged = pd.concat([events_df, noaa_nat_df[['date', 'headline', 'weather_type']].rename(columns={'weather_type': 'category'})], ignore_index=True)
-    
-    return merged.sort_values('date').reset_index(drop=True)
+    # 1. Merge NOAA Weather Advisories for US Oil & Gas Basins
+    try:
+        noaa_df = get_national_production_weather_dataset()
+        events_df = pd.concat([events_df, noaa_df], ignore_index=True)
+    except Exception as e:
+        logger.warning(f"Could not load NOAA National Weather dataset: {e}")
+        
+    # 2. Merge Global Geopolitical Maritime Feeds (Iran/Hormuz, Suez/Red Sea, Venezuela)
+    try:
+        geo_maritime_df = get_geopolitical_maritime_events()
+        events_df = pd.concat([events_df, geo_maritime_df], ignore_index=True)
+    except Exception as e:
+        logger.warning(f"Could not load Geopolitical Maritime dataset: {e}")
+
+    events_df = events_df.sort_values('date').reset_index(drop=True)
+    return events_df
