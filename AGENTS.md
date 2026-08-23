@@ -1,54 +1,68 @@
 # Agent System Specification (AGENTS.md)
 
-This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale unleaded gasoline prices by integrating qualitative real-world event intelligence into quantitative time-series models.
+This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and retail unleaded gasoline prices by integrating qualitative real-world event intelligence, **NOAA Weather Models**, and **Tulsa Regional Refining Dynamics** into quantitative time-series estimators.
 
 ---
 
-## Agent Architecture Overview
+## Multi-Agent Architecture Overview
 
 ```
-                      ┌──────────────────────────────────────────────┐
-                      │             UNSTRUCTURED NEWS FEED           │
-                      └──────────────────────┬───────────────────────┘
-                                             │
-                                             ▼
-                      ┌──────────────────────────────────────────────┐
-                      │            EVENT EXTRACTION AGENT            │
-                      │     (LLM NLP Factor Vector Extraction)       │
-                      └──────────────────────┬───────────────────────┘
-                                             │  Structured Scores
-                                             ▼
-┌──────────────────────────────┐     ┌────────────────────────────────┐
-│ QUANTITATIVE DATA ENGINE     │     │ EXPONENTIAL MEMORY FUSION AGENT│
-│ (EIA / Yahoo Finance / FRED) ├────►│  (Decays Shock Memory t1/2=5d) │
-└──────────────────────────────┘     └───────────────┬────────────────┘
-                                                     │ Unified Feature Matrix
-                                                     ▼
-                                     ┌────────────────────────────────┐
-                                     │ QUANTITATIVE FORECASTING AGENT │
-                                     │  (Ridge / XGBoost Estimator)   │
-                                     └───────────────┬────────────────┘
-                                                     │ Base Forecasts
-                                                     ▼
-                                     ┌────────────────────────────────┐
-                                     │ SYNTHESIS & SHOCK SIMULATOR    │
-                                     │             AGENT              │
-                                     └───────────────┬────────────────┘
-                                                     │ Real-Time Adjusted Forecast
-                                                     ▼
-                                     ┌────────────────────────────────┐
-                                     │       FINAL OUTPUT / PROMPT    │
-                                     └────────────────────────────────┘
+               ┌─────────────────────────────────────────────────────────────┐
+               │              UNSTRUCTURED NEWS & NOAA WEATHER FEEDS         │
+               │  • Geopolitical Headlines & OPEC Press Releases             │
+               │  • NOAA NWS API (api.weather.gov) - Oklahoma & Basin Alerts │
+               └──────────────────────────────┬──────────────────────────────┘
+                                              │
+                                              ▼
+               ┌─────────────────────────────────────────────────────────────┐
+               │           1. EVENT & WEATHER EXTRACTION AGENT               │
+               │        (Google Gemini 2.5 Flash / Domain NLP Lexicon)       │
+               │ • Geopolitical Risk  • Supply Disruption  • OPEC Action     │
+               │ • NOAA Tornado Risk  • NOAA Polar Vortex  • Hurricane Track │
+               └──────────────────────────────┬──────────────────────────────┘
+                                              │ Structured Bounded Vector
+                                              ▼
+               ┌─────────────────────────────────────────────────────────────┐
+               │             2. EXPONENTIAL MEMORY FUSION AGENT              │
+               │       (Decays Shocks with Half-Life t1/2 = 4.0 to 5.0 Days) │
+               └──────────────────────────────┬──────────────────────────────┘
+                                              │ Unified Feature Matrix
+                                              ▼
+               ┌─────────────────────────────────────────────────────────────┐
+               │            3. TULSA REGIONAL CALIBRATION AGENT              │
+               │               (src/tulsa_regional.py)                       │
+               │ • Anchors Base Forecast to Live Pump Prices ($3.89/gal)     │
+               │ • Computes Cushing WTI Crack Spread & Rack Margins          │
+               └──────────────────────────────┬──────────────────────────────┘
+                                              │
+                                              ▼
+               ┌─────────────────────────────────────────────────────────────┐
+               │             4. QUANTITATIVE FORECASTING AGENT               │
+               │           (Standardized Ridge / XGBoost Estimator)          │
+               └──────────────────────────────┬──────────────────────────────┘
+                                              │ Base Forecasts
+                                              ▼
+               ┌─────────────────────────────────────────────────────────────┐
+               │             5. SYNTHESIS & SHOCK SIMULATOR AGENT            │
+               │       Simulates Refinery Outages, Tornadoes, & OPEC Cuts    │
+               └──────────────────────────────┬──────────────────────────────┘
+                                              │ Real-Time Adjusted Forecast
+                                              ▼
+               ┌─────────────────────────────────────────────────────────────┐
+               │             6. MLOps PREDICTION LOGGING AGENT               │
+               │        (src/prediction_logger.py -> prediction_history.csv)│
+               │  Backfills Actual Prices & Evaluates Rolling Error Metrics  │
+               └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## Agent Specifications
 
-### 1. Event Extraction Agent (`src/event_analyzer.py`)
+### 1. Event & Weather Extraction Agent (`src/event_analyzer.py` & `src/noaa_weather.py`)
 
-* **Role:** Translates raw, unstructured textual news feeds (OPEC press releases, geopolitical bulletins, weather warnings, macro rate announcements) into structured, bounded numeric factor vectors.
-* **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP fallback.
+* **Role:** Translates raw, unstructured news bulletins and NOAA Weather Service alerts into structured numeric factor vectors.
+* **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
 * **System Prompt Contract:**
   ```text
   You are an expert energy market economist and oil commodities analyst.
@@ -63,58 +77,52 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale unl
   - "opec_action": float between -1.0 (production surge/price war) and +1.0 (steep supply cuts)
   - "overall_price_pressure": float between -1.0 (strong downward price pressure) and +1.0 (strong upward price pressure)
   ```
-* **Output Schema:**
-  ```json
-  {
-    "geopolitical_risk": 0.8,
-    "supply_disruption": 0.4,
-    "demand_sentiment": 0.0,
-    "opec_action": 0.0,
-    "overall_price_pressure": 0.38
-  }
-  ```
 
 ---
 
 ### 2. Exponential Memory Fusion Agent (`src/feature_engineering.py`)
 
-* **Role:** Solves the "single-day point shock" problem by modeling real-world news persistence.
-* **Mathematical Function:** Applies exponential memory decay ($half\text{-}life = 5.0\text{ business days}$) to simulate how shock events affect market expectations over 2–3 weeks:
+* **Role:** Solves point-shock persistence by modeling event decay over 2–3 weeks.
+* **Mathematical Decay:**
   \[
-  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2)}{5.0}} + \text{NewShock}_t
+  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2)}{t_{1/2}}} + \text{NewShock}_t
   \]
-* **Output:** Continuous time-series features (`event_geopolitical_risk`, `event_supply_disruption`, `event_overall_price_pressure`) fused chronologically with technical market indicators.
+  where $t_{1/2} = 5.0\text{ days}$ for national macroeconomic events and $t_{1/2} = 4.0\text{ days}$ for regional NOAA weather shocks.
 
 ---
 
-### 3. Quantitative Forecasting Agent (`src/models.py`)
+### 3. Tulsa Regional Calibration Agent (`src/tulsa_regional.py`)
 
-* **Role:** Trains baseline quantitative models (prices, moving averages, crack spread proxies) alongside hybrid LLM-augmented models.
-* **Algorithm:** Standardized Ridge Regression ($\alpha=10.0$) and XGBoost Regressor ($depth=3, lr=0.03$).
-* **Ablation Duty:** Evaluates out-of-time test set performance and outputs key error metrics:
-  - Mean Absolute Error (MAE)
-  - Root Mean Squared Error (RMSE)
-  - Mean Absolute Percentage Error (MAPE %)
-  - Directional Hit Rate (%)
+* **Role:** Tailors market time series to the Tulsa, OK metropolitan area.
+* **Key Mechanisms:**
+  - **Cushing WTI Dynamics:** Cushing, OK delivery hub (50 miles from Tulsa).
+  - **Live Pump Price Anchor:** Dynamically calibrates historical and projected series to current retail pump prices (e.g. **$\$3.89/\text{gal}$**).
+  - **Tulsa Rack Margin:** $P_{\text{Tulsa Retail}} = P_{\text{Wholesale RBOB}} + \text{Dynamic Rack Margin}$.
 
 ---
 
-### 4. Synthesis & Scenario Simulator Agent (`main.py`)
+### 4. Quantitative Forecasting Agent (`src/models.py`)
 
-* **Role:** Enables counterfactual scenario testing ("What-If" analysis).
-* **Workflow:**
-  1. Accepts user-provided natural language shock scenarios (e.g. *"Category 5 Hurricane approaching Gulf Coast refinery complex"*).
-  2. Invokes the **Event Extraction Agent** to score the shock.
-  3. Injects shock scores into the current market state.
-  4. Runs the **Quantitative Forecasting Agent** to produce the baseline vs. shocked price forecast and delta ($+\$/\text{gal}$).
+* **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression $\alpha=10.0$) and XGBoost regressors on 80/20 chronological train/test splits.
+* **Out-of-Time Test Performance:**
+  - **National Model:** **60.79% Directional Accuracy** ($0.1151\text{ MAE}$).
+  - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331\text{ MAE}$).
 
 ---
 
-## Execution & API Keys
+### 5. Synthesis & Scenario Simulator Agent (`main.py` & `tulsa_main.py`)
 
-To configure live Gemini LLM API calls for the Event Extraction Agent:
-```bash
-export GEMINI_API_KEY="your-api-key-here"
-python main.py --use-llm-api
-```
-If `GEMINI_API_KEY` is omitted, the agent automatically runs the deterministic NLP domain lexicon scorer for reproducible offline experimentation.
+* **Role:** Enables counterfactual "What-If" scenario simulation.
+* **Scenarios Evaluated:**
+  - *West Tulsa HF Sinclair Refinery EF-3 Tornado Shock:* $+\$0.212/\text{gal}\ (+5.60\%)$
+  - *Cushing Keystone Pipeline Spill:* $+\$0.251/\text{gal}\ (+6.62\%)$
+  - *Polar Vortex Grid Freeze:* $+\$0.220/\text{gal}\ (+5.80\%)$
+
+---
+
+### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
+
+* **Role:** Manages persistent prediction tracking in `data/prediction_history.csv`.
+* **Functions:**
+  - `log_predictions()`: Logs 5-day out-of-time forecasts.
+  - `backfill_actual_prices_and_evaluate()`: Backfills actual historical prices from `yfinance` as target dates arrive and calculates rolling MAE, RMSE, and Directional Hit Rate.

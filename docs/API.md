@@ -1,53 +1,49 @@
-# API & Developer Reference Guide
+# Developer API Documentation (docs/API.md)
 
-This document outlines module interfaces, functions, configuration settings, and environment variables for developer integration.
-
----
-
-## 1. Data Ingestion (`src.data_ingestion`)
-
-### `fetch_market_data(start_date: str = "2022-01-01", end_date: str = None) -> pd.DataFrame`
-Fetches financial futures data using `yfinance`:
-* **Tickers:** `RB=F` (RBOB Gasoline Futures), `CL=F` (WTI Crude Oil Futures), `BZ=F` (Brent Crude Futures).
-* **Returns:** `pd.DataFrame` containing `date`, `gasoline_rbob`, `wti_crude`, `brent_crude`.
-
-### `get_historical_event_dataset() -> pd.DataFrame`
-Returns a curated DataFrame of real historical news events, geopolitical conflicts, OPEC decisions, and refinery weather disruptions.
-* **Columns:** `date`, `headline`, `category`.
+Complete module and function reference for the `midgley` LLM Gas Price Forecasting framework.
 
 ---
 
-## 2. Event Analyzer (`src.event_analyzer`)
+## 1. NOAA Weather Integration (`src.noaa_weather`)
 
-### `extract_event_features_llm(headline: str, api_key: str = None) -> dict`
-Extracts structured numerical factor metrics from an event headline string using Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`).
-* **Parameters:**
-  * `headline`: News headline text to evaluate.
-  * `api_key`: Optional Gemini API Key (defaults to `GEMINI_API_KEY` environment variable).
-* **Returns:** Dict containing `geopolitical_risk`, `supply_disruption`, `demand_sentiment`, `opec_action`, `overall_price_pressure`.
+### `fetch_live_noaa_alerts(zones: list = None) -> list`
+Fetches active severe weather alerts from NOAA NWS API (`api.weather.gov`) for specified state/zone codes (default: `['OK', 'TX', 'LA']`).
 
-### `process_event_dataset(events_df: pd.DataFrame, use_llm_api: bool = False) -> pd.DataFrame`
-Applies event scoring across an entire event DataFrame and appends feature metric columns.
+### `get_national_production_weather_dataset() -> pd.DataFrame`
+Returns historical NOAA weather advisories for major US refining/production basins (Gulf Coast Hurricanes, Permian & Bakken Freezes).
 
----
-
-## 3. Feature Engineering (`src.feature_engineering`)
-
-### `create_feature_matrix(market_df: pd.DataFrame, events_df: pd.DataFrame = None, forecast_horizon: int = 5, decay_half_life_days: float = 5.0) -> pd.DataFrame`
-Fuses technical financial indicators with decayed LLM news scores.
-* **Parameters:**
-  * `forecast_horizon`: Days ahead to forecast (default $5$ days).
-  * `decay_half_life_days`: Half-life in business days for news memory decay.
-
-### `prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, forecast_horizon: int = 5) -> dict`
-Splits dataset chronologically into training and test sets.
-* **Returns:** Dictionary containing `X_train_quant`, `X_train_hybrid`, `y_train`, `X_test_quant`, `X_test_hybrid`, `y_test`, and `test_df`.
+### `get_tulsa_cushing_weather_dataset() -> pd.DataFrame`
+Returns localized NOAA weather advisories for Tulsa County (`OKZ060`) and Cushing/Payne County (`OKZ066`).
 
 ---
 
-## 4. Models & Evaluation (`src.models`)
+## 2. Tulsa Regional Forecasting (`src.tulsa_regional`)
 
-### `train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dict`
-Trains Baseline Quantitative Model and Hybrid LLM-Augmented Model and computes comparative out-of-time metrics.
-* **Supported `model_type` values:** `"ridge"`, `"xgboost"`, `"rf"`.
-* **Returns:** Dictionary containing model objects, metric dictionaries (`metrics_quant`, `metrics_hybrid`), improvement percentages, and feature importances.
+### `fetch_tulsa_market_data(start_date: str = "2022-01-01", end_date: str = None, live_current_price: float = 3.89) -> pd.DataFrame`
+Fetches market data tailored to Tulsa, OK ($RB=F$, Cushing $CL=F$, $BZ=F$) and dynamically calibrates the retail series to match live pump prices (`live_current_price = 3.89`).
+
+### `get_tulsa_regional_events() -> pd.DataFrame`
+Returns merged dataset of Tulsa refinery events and localized NOAA weather alerts.
+
+---
+
+## 3. MLOps Prediction Logging (`src.prediction_logger`)
+
+### `log_predictions(predictions_df: pd.DataFrame, region: str = "Tulsa_OK", model_version: str = "v1.2-NOAA-Ridge") -> int`
+Appends new model predictions to `data/prediction_history.csv`.
+
+### `backfill_actual_prices_and_evaluate() -> pd.DataFrame`
+Queries actual historical market prices from `yfinance` up to today, matches target dates, and populates actual prices, errors, and directional hit outcomes.
+
+### `generate_performance_report() -> pd.DataFrame`
+Generates a summary report table aggregating MAE, RMSE, and Directional Hit Rate by Region and Model Version.
+
+---
+
+## 4. Live Fuel Feeds (`src.live_fuel_feed`)
+
+### `fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict`
+Queries GasBuddy GraphQL API for real-time station prices in Tulsa, OK.
+
+### `fetch_google_maps_fuel_prices(place_id: str = None, api_key: str = None) -> dict`
+Queries Google Places API (New) for station `fuelOptions` details (`REGULAR`, `MIDGRADE`, `PREMIUM`, `DIESEL`). Requires `GOOGLE_MAPS_API_KEY`.
