@@ -3,7 +3,7 @@ Data Ingestion Module
 Fetches quantitative market time-series data (Gasoline futures, Crude Oil futures)
 and provides unstructured event logs & NOAA National Production Basin Weather alerts for LLM scoring.
 Includes Iran / Strait of Hormuz conflict alerts, Suez Canal / Red Sea shipping rerouting events,
-and Venezuela heavy crude / OFAC sanctions feeds.
+Venezuela heavy crude / OFAC sanctions feeds, and Executive Social Media (Trump Twitter/Truth Social) Weekend Gap feeds.
 """
 
 import pandas as pd
@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 import logging
 from src.noaa_weather import get_national_production_weather_dataset
 from src.geopolitical_feeds import get_geopolitical_maritime_events
+from src.executive_social_feed import get_executive_social_energy_feed
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -80,7 +81,7 @@ def get_historical_event_dataset() -> pd.DataFrame:
     """
     Combines global macroeconomic & OPEC events, NOAA National Weather advisories,
     Iran / Strait of Hormuz conflict alerts, Suez Canal / Red Sea shipping reroutings,
-    and Venezuela heavy crude OFAC sanctions feeds.
+    Venezuela heavy crude OFAC sanctions feeds, and Executive Social Media (Trump Twitter/Truth Social) feeds.
     """
     base_events = [
         {"date": "2022-02-24", "headline": "Russia invades Ukraine; global crude oil prices surge above $100/bbl on severe energy supply disruption fears.", "category": "Geopolitics"},
@@ -116,6 +117,16 @@ def get_historical_event_dataset() -> pd.DataFrame:
         events_df = pd.concat([events_df, geo_maritime_df], ignore_index=True)
     except Exception as e:
         logger.warning(f"Could not load Geopolitical Maritime dataset: {e}")
+
+    # 3. Merge Executive Social Media Energy Posts (Trump Twitter / Truth Social Weekend Gap Feed)
+    try:
+        social_feed = get_executive_social_energy_feed()
+        social_events = social_feed[['date', 'post_text']].copy()
+        social_events.rename(columns={'post_text': 'headline'}, inplace=True)
+        social_events['category'] = 'Executive_Social_Media'
+        events_df = pd.concat([events_df, social_events], ignore_index=True)
+    except Exception as e:
+        logger.warning(f"Could not load Executive Social Media feed: {e}")
 
     events_df = events_df.sort_values('date').reset_index(drop=True)
     return events_df

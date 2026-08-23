@@ -2,10 +2,10 @@
 Tulsa Regional Master Execution Script (tulsa_main.py)
 Standalone 6-Step Pipeline tailored to the Tulsa, OK metropolitan area:
 1. Market Data Ingestion & Live Pump Price Anchoring ($3.89/gal)
-2. Unstructured Local News, NOAA Weather & Global Maritime Chokepoint Processing
+2. Unstructured Local News, NOAA Weather, Maritime & Executive Social Media Processing
 3. Tulsa Crack Spread Feature Engineering & Exponential Memory Decay
 4. Quantitative Model Training & Ablation Evaluation
-5. Real-Time Tulsa Shock Scenario Simulations (Refinery Tornado, Cushing Spill, Hormuz Blockade)
+5. Real-Time Tulsa Shock Scenario Simulations (Refinery Tornado, Cushing Spill, Hormuz Blockade, Weekend Social Posts)
 6. MLOps Prediction Logging & Rolling Performance Tracking
 """
 
@@ -36,12 +36,12 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
     print(f"  -> Trading days fetched: {len(market_df)}")
     print(f"  -> Live Calibrated Tulsa Pump Price Anchor: ${live_pump_price:.2f}/gal")
 
-    # Step 2: Extract Features from Localized News, NOAA Weather & Maritime Chokepoints
-    print("\n[Step 2/6] Extracting LLM Factor Metrics from Oklahoma, NOAA & Global Maritime Events...")
+    # Step 2: Extract Features from Localized News, NOAA Weather, Maritime & Social Feeds
+    print("\n[Step 2/6] Extracting LLM Factor Metrics from Regional, NOAA, Maritime & Executive Social Feeds...")
     events_raw = get_tulsa_regional_events()
     events_df = process_event_dataset(events_raw, use_llm_api=use_llm_api)
     
-    print("  Sample Scored Regional & Maritime Events:")
+    print("  Sample Scored Events:")
     for _, r in events_df.iloc[:3].iterrows():
         print(f"    - [{r['date'].strftime('%Y-%m-%d')}] '{r['headline'][:65]}...'")
         print(f"       -> GeoRisk: {r['geopolitical_risk']}, SupplyDisruption: {r['supply_disruption']}, NetPressure: {r['overall_price_pressure']}")
@@ -97,8 +97,12 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
             "headline": "Houthi missile strikes force 100% of oil tankers to divert around Cape of Good Hope, adding $4.50/bbl freight surge."
         },
         {
-            "name": "Scenario 5: Venezuela Sanctions Reinstatement",
-            "headline": "US Treasury OFAC revokes Venezuela General License 44; PDVSA heavy crude exports and diluent imports halted."
+            "name": "Scenario 5: Weekend Executive OPEC Talkdown Post",
+            "headline": "TRUMP WEEKEND SOCIAL POST: 'OPEC is pushing oil prices artificially High! Must increase production by 2.0M bpd immediately or face US tariffs!'"
+        },
+        {
+            "name": "Scenario 6: Weekend Foreign Crude Tariff Declaration",
+            "headline": "TRUMP WEEKEND SOCIAL POST: 'Starting Monday morning, 25% Tariffs will take effect on ALL foreign oil imports entering the United States!'"
         }
     ]
     
@@ -129,7 +133,7 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
         print(f"  Headline: \"{headline}\"")
         print(f"  LLM Extraction -> Supply Disruption: {scores['supply_disruption']:+.2f}, Price Pressure: {scores['overall_price_pressure']:+.2f}")
         print(f"  -> Shocked 5-Day Forecast:  ${shocked_forecast:.3f}/gal")
-        print(f"  -> Estimated Price Shock:   +${delta_dollars:.3f}/gal ({net_shock_pct*100:+.2f}%)")
+        print(f"  -> Estimated Price Shock:   {delta_dollars:+.3f}/gal ({net_shock_pct*100:+.2f}%)")
         
     # Step 6: Log Predictions to Historical Store & Report Model Performance
     print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
