@@ -1,4 +1,4 @@
-name: Daily Gas Price LLM Forecasting
+name: Daily Gas Price LLM Forecasting & Public Dashboard
 
 on:
   schedule:
@@ -8,9 +8,15 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  forecast:
+  forecast-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,15 +36,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run National & Tulsa Regional LLM Gas Price Forecasting Pipeline
+      - name: Run National & Tulsa Regional LLM Gas Price Pipeline
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: |
           python run_all.py --use-llm-api
 
-      - name: Commit & Push Updated Prediction Logs
+      - name: Commit Updated README, Dashboard & Prediction Logs
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chmod: Daily automated gas price prediction log update [skip ci]"
-          file_pattern: "data/prediction_history.csv"
+          commit_message: "chmod: Daily automated gas price prediction & public dashboard update [skip ci]"
+          file_pattern: "README.md docs/index.html data/prediction_history.csv"
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

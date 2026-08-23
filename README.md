@@ -6,7 +6,19 @@
 
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures ($RB=F$, $CL=F$, $BZ=F$) to predict wholesale and retail unleaded gasoline prices.
 
+<!-- START_LIVE_FORECAST -->
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-23 11:38 UTC)
+
+| Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **National Wholesale (RBOB)** | `$3.184`/gal | **`$3.076`/gal** | **DOWN 📉** | `2026-08-19` | `v1.2-NOAA-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.094`/gal** | **DOWN 📉** | `2026-08-19` | `v1.2-NOAA-Ridge` |
+
+*🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
+<!-- END_LIVE_FORECAST -->
+
 ---
+
 
 ## 📜 Etymology & Historical Namesake
 
