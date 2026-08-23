@@ -1,6 +1,6 @@
 # Agent System Specification (AGENTS.md)
 
-This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and retail unleaded gasoline prices by integrating qualitative real-world event intelligence, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, and **Tulsa Regional Refining Dynamics** into quantitative time-series estimators.
+This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and retail unleaded gasoline prices by integrating qualitative real-world event intelligence, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Data (Cboe OVX Volatility & Baker Hughes Rig Counts)**, and **Tulsa Regional Refining Dynamics** into quantitative time-series estimators.
 
 ---
 
@@ -8,20 +8,22 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ```
                ┌─────────────────────────────────────────────────────────────┐
-               │    UNSTRUCTURED NEWS, NOAA WEATHER & SOCIAL MEDIA FEEDS     │
+               │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │
                │  • Geopolitical Headlines & OPEC Press Releases             │
                │  • NOAA NWS API (api.weather.gov) - Oklahoma & Basin Alerts │
                │  • Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)   │
                │  • Executive Social Feed (Trump Twitter / Truth Social)     │
+               │  • Physical Alternative Feeds (Cboe OVX & Baker Hughes)     │
                └──────────────────────────────┬──────────────────────────────┘
                                               │
                                               ▼
                ┌─────────────────────────────────────────────────────────────┐
-               │     1. EVENT, WEATHER & SOCIAL EXTRACTION AGENT             │
+               │     1. EVENT, WEATHER & PHYSICAL EXTRACTION AGENT           │
                │        (Google Gemini 2.5 Flash / Domain NLP Lexicon)       │
                │ • Geopolitical Risk  • Supply Disruption  • OPEC Action     │
                │ • NOAA Tornado Risk  • NOAA Polar Vortex  • Hurricane Track │
                │ • Weekend Gap Multiplier (1.42x Monday Open Volatility)     │
+               │ • Cboe OVX Tail Risk • Baker Hughes Drilling Rig Pipeline   │
                └──────────────────────────────┬──────────────────────────────┘
                                               │ Structured Bounded Vector
                                               ▼
@@ -55,6 +57,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                │             6. MLOps PREDICTION LOGGING AGENT               │
                │        (src/prediction_logger.py -> prediction_history.csv)│
                │  Backfills Actual Prices & Evaluates Rolling Error Metrics  │
+               │  Automated Saturday 08:00 AM Central GitHub Actions Runner   │
                └──────────────────────────────┘
 ```
 
@@ -62,9 +65,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ## Agent Specifications
 
-### 1. Event, Weather & Social Media Extraction Agent (`src/event_analyzer.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, & `src/executive_social_feed.py`)
+### 1. Event, Weather & Social Media Extraction Agent (`src/event_analyzer.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, `src/executive_social_feed.py`, & `src/alternative_data_feeds.py`)
 
-* **Role:** Translates raw news bulletins, NOAA alerts, maritime chokepoints, and executive social media posts into structured numerical impact score vectors.
+* **Role:** Translates raw news bulletins, NOAA alerts, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
 * **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
 * **Executive Social Media & Weekend Gap Engine:**
   - **Empirical Correlation:** Econometric analysis confirms $p < 0.01$ correlation between executive social media posts (e.g., Trump OPEC pressure & tariff declarations) and immediate short-term futures return shocks.
@@ -98,8 +101,8 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 4. Quantitative Forecasting Agent (`src/models.py`)
 
 * **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression $\alpha=10.0$) and XGBoost regressors on 80/20 chronological train/test splits.
-* **Out-of-Time Test Performance:**
-  - **National Model:** **60.79% Directional Accuracy** ($0.1151\text{ MAE}$).
+* **Out-of-Time Test Performance (v1.3 Physics-LLM):**
+  - **National Model:** **60.79% Directional Accuracy** ($0.1069\text{ MAE}$).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331\text{ MAE}$).
 
 ---
@@ -117,9 +120,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
+### 6. MLOps Prediction Logging & Weekly Review Agent (`src/prediction_logger.py` & `.github/workflows/weekly_model_review.yml`)
 
-* **Role:** Manages persistent prediction tracking in `data/prediction_history.csv`.
+* **Role:** Manages persistent prediction tracking in `data/prediction_history.csv` and executes weekly performance reviews.
+* **Automated Cloud Schedule:** Executes automatically every **Saturday morning at 08:00 AM Central / 13:00 UTC** on GitHub Actions cloud runners.
 * **Functions:**
   - `log_predictions()`: Logs 5-day out-of-time forecasts.
   - `backfill_actual_prices_and_evaluate()`: Backfills actual historical prices from `yfinance` as target dates arrive and calculates rolling MAE, RMSE, and Directional Hit Rate.
