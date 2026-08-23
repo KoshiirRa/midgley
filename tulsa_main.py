@@ -1,6 +1,6 @@
 """
 Tulsa, Oklahoma Gas Price Prediction Execution Script (tulsa_main.py)
-Fully Calibrated to Live Pump Prices ($3.89/gal) with Dynamic Shock Sensitivity.
+Calibrated to Live Pump Prices ($3.89/gal), NOAA Weather Alerts, & Historical Prediction Logging.
 """
 
 import os
@@ -13,6 +13,7 @@ from src.tulsa_regional import fetch_tulsa_market_data, get_tulsa_regional_event
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
+from src.prediction_logger import log_predictions, generate_performance_report
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -24,29 +25,29 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
     print("=" * 80)
     
     # Step 1: Data Ingestion & Live Pump Price Anchor
-    print("\n[Step 1/5] Ingesting Market Data & Calibrating Live Tulsa Pump Price...")
+    print("\n[Step 1/6] Ingesting Market Data & Calibrating Live Tulsa Pump Price...")
     market_df = fetch_tulsa_market_data(start_date="2022-01-01", live_current_price=live_pump_price)
     raw_events_df = get_tulsa_regional_events()
     print(f"  -> Trading days fetched: {len(market_df)}")
     print(f"  -> Live Calibrated Tulsa Pump Price Anchor: ${live_pump_price:.2f}/gal")
     
-    # Step 2: LLM Regional Event Analysis
-    print("\n[Step 2/5] Extracting LLM Factor Metrics from Oklahoma Event Headlines...")
+    # Step 2: LLM Regional & NOAA Weather Event Analysis
+    print("\n[Step 2/6] Extracting LLM Factor Metrics from Oklahoma & Localized NOAA Events...")
     events_df = process_event_dataset(raw_events_df, use_llm_api=use_llm_api)
-    print("  Sample Scored Regional Events:")
+    print("  Sample Scored Regional & NOAA Events:")
     for idx, row in events_df.head(3).iterrows():
         print(f"    - [{row['date'].strftime('%Y-%m-%d')}] '{row['headline'][:65]}...'")
         print(f"       -> GeoRisk: {row['geopolitical_risk']}, SupplyDisruption: {row['supply_disruption']}, NetPressure: {row['overall_price_pressure']}")
         
     # Step 3: Feature Engineering & Decayed Memory Fusion
-    print("\n[Step 3/5] Engineering Tulsa Crack Spread & Fusing Decayed Event Memory...")
+    print("\n[Step 3/6] Engineering Tulsa Crack Spread & Fusing Decayed Event Memory...")
     feature_df = create_feature_matrix(market_df, events_df, forecast_horizon=5, decay_half_life_days=4.0)
     splits = prepare_chronological_splits(feature_df, train_ratio=0.8, forecast_horizon=5)
     print(f"  -> Chronological Train Split: {len(splits['X_train_quant'])} rows")
     print(f"  -> Chronological Out-of-Time Test Split: {len(splits['X_test_quant'])} rows")
     
     # Step 4: Model Training & Ablation Evaluation
-    print("\n[Step 4/5] Training Models & Running Ablation Experiment...")
+    print("\n[Step 4/6] Training Models & Running Ablation Experiment...")
     results = train_and_compare_models(splits, model_type=model_type)
     
     print("\n" + "=" * 65)
@@ -66,8 +67,8 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
     print(f" RMSE Improvement with LLM Event Features: +{results['rmse_improvement_pct']}% reduction in error")
     print("=" * 65)
     
-    # Step 5: Enhanced Real-Time Tulsa Shock Scenario Simulations
-    print("\n[Step 5/5] Real-Time Tulsa Regional Shock Scenario Simulations...")
+    # Step 5: Real-Time Tulsa Regional Shock Scenario Simulations
+    print("\n[Step 5/6] Real-Time Tulsa Regional Shock Scenario Simulations...")
     
     scenarios = [
         {
@@ -86,11 +87,8 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
     
     base_row = splits['X_test_hybrid'].iloc[-1:].copy()
     raw_pred_price = results['model_hybrid'].predict(base_row)[0]
-    
-    # Target prices in splits test set
     last_hist_price = splits['test_df']['gasoline_rbob'].iloc[-1]
     
-    # Calculate baseline 5-day return % and project onto live pump price ($3.89)
     baseline_return = (raw_pred_price - last_hist_price) / last_hist_price
     tulsa_baseline_forecast = live_pump_price * (1.0 + baseline_return)
     
@@ -102,7 +100,6 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
         headline = sc['headline']
         scores = extract_event_features_llm(headline, api_key=os.environ.get("GEMINI_API_KEY") if use_llm_api else None)
         
-        # Calculate event shock impact on 5-day return
         supply_impact = scores['supply_disruption'] * 0.045
         pressure_impact = scores['overall_price_pressure'] * 0.035
         geo_impact = scores['geopolitical_risk'] * 0.020
@@ -117,8 +114,30 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
         print(f"  -> Shocked 5-Day Forecast:  ${shocked_forecast:.3f}/gal")
         print(f"  -> Estimated Price Shock:   +${delta_dollars:.3f}/gal ({net_shock_pct*100:+.2f}%)")
         
-    print("=" * 80)
-    print("Tulsa Regional Pipeline Execution Complete!\n")
+    # Step 6: Log Predictions to Historical Store & Report Model Performance
+    print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
+    test_dates = splits['test_df']['date']
+    test_current_prices = splits['test_df']['tulsa_retail_gasoline']
+    preds_hybrid = results['predictions_hybrid']
+    
+    pred_log_df = pd.DataFrame({
+        'date': test_dates.values,
+        'current_price': test_current_prices.values,
+        'predicted_5d_price': preds_hybrid
+    })
+    
+    n_logged = log_predictions(pred_log_df, region="Tulsa_OK", model_version="v1.2-NOAA-Tulsa-Ridge")
+    print(f"  -> Logged predictions to store (data/prediction_history.csv)")
+    
+    perf_report = generate_performance_report()
+    if not perf_report.empty:
+        print("\n" + "=" * 65)
+        print("         HISTORICAL PREDICTION TRACKER & MODEL ITERATION SUMMARY")
+        print("=" * 65)
+        print(perf_report.to_string(index=False))
+        print("=" * 65)
+        
+    print("\nTulsa Regional Pipeline Execution Complete!\n")
     
     return results
 

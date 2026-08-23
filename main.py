@@ -1,6 +1,6 @@
 """
 Main Orchestration Script for LLM-Augmented Unleaded Gas Price Forecasting
-Demonstrates the full pipeline: Data Ingestion -> LLM Event Extraction -> Feature Fusion -> Model Comparison -> Scenario Simulation.
+Demonstrates the full pipeline: Data Ingestion -> LLM Event Extraction -> Feature Fusion -> Model Comparison -> Scenario Simulation -> Prediction Logging.
 """
 
 import os
@@ -13,6 +13,7 @@ from src.data_ingestion import fetch_market_data, get_historical_event_dataset
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
+from src.prediction_logger import log_predictions, generate_performance_report
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -23,14 +24,14 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     print("=" * 80)
     
     # Step 1: Data Ingestion
-    print("\n[Step 1/5] Ingesting Commodity Market Data & Unstructured Event Logs...")
+    print("\n[Step 1/6] Ingesting Commodity Market Data & Unstructured Event Logs...")
     market_df = fetch_market_data(start_date="2022-01-01")
     raw_events_df = get_historical_event_dataset()
     print(f"  -> Market trading days fetched: {len(market_df)}")
     print(f"  -> Historical news events loaded: {len(raw_events_df)}")
     
     # Step 2: LLM Event Analysis
-    print("\n[Step 2/5] Extracting LLM Factor Metrics from Unstructured Event Headlines...")
+    print("\n[Step 2/6] Extracting LLM Factor Metrics from Unstructured Event Headlines...")
     events_df = process_event_dataset(raw_events_df, use_llm_api=use_llm_api)
     print("  Sample Scored Events:")
     for idx, row in events_df.head(3).iterrows():
@@ -38,7 +39,7 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         print(f"       -> GeoRisk: {row['geopolitical_risk']}, SupplyDisruption: {row['supply_disruption']}, OPEC: {row['opec_action']}, NetPressure: {row['overall_price_pressure']}")
         
     # Step 3: Feature Engineering & Fusion
-    print("\n[Step 3/5] Engineering Technical Features & Fusing Decayed Event Memory...")
+    print("\n[Step 3/6] Engineering Technical Features & Fusing Decayed Event Memory...")
     feature_df = create_feature_matrix(market_df, events_df, forecast_horizon=5, decay_half_life_days=5.0)
     print(f"  -> Engineered dataset shape: {feature_df.shape}")
     
@@ -47,7 +48,7 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     print(f"  -> Chronological Out-of-Time Test Split: {len(splits['X_test_quant'])} rows")
     
     # Step 4: Model Training & Ablation Evaluation
-    print("\n[Step 4/5] Training Models & Running Ablation Experiment (Quant-Only vs. LLM Hybrid)...")
+    print("\n[Step 4/6] Training Models & Running Ablation Experiment (Quant-Only vs. LLM Hybrid)...")
     results = train_and_compare_models(splits, model_type=model_type)
     
     print("\n" + "=" * 65)
@@ -67,7 +68,7 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     print("=" * 65)
     
     # Step 5: Enhanced Real-Time Counterfactual Scenario Simulator
-    print("\n[Step 5/5] Real-Time National Shock Scenario Simulations...")
+    print("\n[Step 5/6] Real-Time National Shock Scenario Simulations...")
     
     scenarios = [
         {
@@ -107,8 +108,30 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         print(f"  -> Shocked 5-Day Forecast:  ${shocked_forecast:.3f}/gal")
         print(f"  -> Estimated Price Shock:   +${delta_dollars:.3f}/gal ({net_shock_pct*100:+.2f}%)")
         
-    print("=" * 80)
-    print("National Pipeline Execution Complete!\n")
+    # Step 6: Log Predictions & Report Tracker
+    print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
+    test_dates = splits['test_df']['date']
+    test_current_prices = splits['test_df']['gasoline_rbob']
+    preds_hybrid = results['predictions_hybrid']
+    
+    pred_log_df = pd.DataFrame({
+        'date': test_dates.values,
+        'current_price': test_current_prices.values,
+        'predicted_5d_price': preds_hybrid
+    })
+    
+    n_logged = log_predictions(pred_log_df, region="National", model_version="v1.2-NOAA-National-Ridge")
+    print(f"  -> Logged predictions to store (data/prediction_history.csv)")
+    
+    perf_report = generate_performance_report()
+    if not perf_report.empty:
+        print("\n" + "=" * 65)
+        print("         HISTORICAL PREDICTION TRACKER & MODEL ITERATION SUMMARY")
+        print("=" * 65)
+        print(perf_report.to_string(index=False))
+        print("=" * 65)
+        
+    print("\nNational Pipeline Execution Complete!\n")
     
     return results
 
