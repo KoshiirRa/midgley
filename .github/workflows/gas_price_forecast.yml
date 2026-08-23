@@ -6,6 +6,9 @@ on:
     - cron: '0 7 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   forecast:
     runs-on: ubuntu-latest
@@ -13,6 +16,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -32,9 +37,8 @@ jobs:
         run: |
           python run_all.py --use-llm-api
 
-      - name: Commit Updated Prediction Logs
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/prediction_history.csv
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chmod: Daily automated gas price prediction log update" && git push)
+      - name: Commit & Push Updated Prediction Logs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chmod: Daily automated gas price prediction log update [skip ci]"
+          file_pattern: "data/prediction_history.csv"
