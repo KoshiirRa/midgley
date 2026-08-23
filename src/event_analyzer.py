@@ -1,7 +1,7 @@
 """
 LLM Event Analyzer Module
 Extracts structured numerical factor scores from unstructured text headlines and news reports.
-Supports live LLM invocation (Google GenAI Gemini API) with a robust rule-based fallback.
+Supports live LLM invocation (Google GenAI Gemini API) with caching & progress tracking.
 """
 
 import os
@@ -17,6 +17,9 @@ logger = logging.getLogger(__name__)
 logging.getLogger("google_genai").setLevel(logging.ERROR)
 logging.getLogger("google.genai").setLevel(logging.ERROR)
 logging.getLogger("httpx").setLevel(logging.WARNING)
+
+# In-Memory Cache to prevent redundant Gemini API calls for identical headlines
+_LLM_SCORE_CACHE = {}
 
 # System prompt for LLM event scoring
 LLM_EXTRACTION_PROMPT = """
@@ -38,8 +41,11 @@ JSON Output:
 def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     """
     Attempts to score a headline using Google Gemini API via `google-genai` or `google.generativeai`.
-    Falls back to deterministic rule-based score if API is unavailable.
+    Uses in-memory cache to prevent duplicate remote calls.
     """
+    if headline in _LLM_SCORE_CACHE:
+        return _LLM_SCORE_CACHE[headline]
+        
     if api_key is None:
         api_key = os.environ.get("GEMINI_API_KEY")
         
@@ -69,17 +75,21 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
                 text = text.split("```")[1].split("```")[0].strip()
                 
             parsed = json.loads(text)
-            return {
+            scores = {
                 "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
                 "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
                 "demand_sentiment": float(parsed.get("demand_sentiment", 0.0)),
                 "opec_action": float(parsed.get("opec_action", 0.0)),
                 "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
             }
+            _LLM_SCORE_CACHE[headline] = scores
+            return scores
         except Exception as e:
             logger.debug(f"LLM API call failed or not configured ({e}). Using rule-based analyzer.")
             
-    return extract_event_features_rule_based(headline)
+    scores = extract_event_features_rule_based(headline)
+    _LLM_SCORE_CACHE[headline] = scores
+    return scores
 
 
 def extract_event_features_rule_based(headline: str) -> dict:
@@ -123,12 +133,15 @@ def extract_event_features_rule_based(headline: str) -> dict:
 
 
 def process_event_dataset(events_df: pd.DataFrame, use_llm_api: bool = False) -> pd.DataFrame:
-    logger.info(f"Analyzing {len(events_df)} unstructured event headlines...")
+    total_events = len(events_df)
+    logger.info(f"Analyzing {total_events} unstructured event headlines...")
     records = []
     api_key = os.environ.get("GEMINI_API_KEY") if use_llm_api else None
     
     for idx, row in events_df.iterrows():
         headline = row['headline']
+        if (idx + 1) % 5 == 0 or idx == 0 or idx == total_events - 1:
+            logger.info(f"  -> Gemini LLM Processing [{idx+1}/{total_events}]: '{headline[:50]}...'")
         scores = extract_event_features_llm(headline, api_key=api_key)
         record = {**row.to_dict(), **scores}
         records.append(record)
