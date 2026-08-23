@@ -290,6 +290,11 @@ cells = [
 notebook_json = {
     "cells": cells,
     "metadata": {
+        "kernelspec": {
+            "display_name": "Python 3.11 (midgley .venv)",
+            "language": "python",
+            "name": "midgley-venv"
+        },
         "language_info": {
             "name": "python"
         }
