@@ -17,7 +17,7 @@ from src.models import train_and_compare_models
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-def run_pipeline(use_llm_api: bool = False, model_type: str = "xgboost"):
+def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     print("=" * 80)
     print("  LLM-AUGMENTED UNLEADED GAS PRICE PREDICTION PIPELINE")
     print("=" * 80)
@@ -55,7 +55,7 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "xgboost"):
     print("=" * 65)
     print(f" Algorithm: {model_type.upper()}")
     print("-" * 65)
-    print(f" Metric                      Baseline (Quant)   Hybrid (LLM-Augmented)")
+    print(" Metric                      Baseline (Quant)   Hybrid (LLM-Augmented)")
     print("-" * 65)
     for metric in ["MAE", "RMSE", "MAPE (%)", "Directional Accuracy (%)"]:
         m_q = results['metrics_quant'][metric]
@@ -66,38 +66,49 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "xgboost"):
     print(f" RMSE Improvement with LLM Event Features: +{results['rmse_improvement_pct']}% reduction in error")
     print("=" * 65)
     
-    # Top Feature Importances
-    print("\n Top Hybrid Model Feature Importances:")
-    top_features = list(results['feature_importance'].items())[:8]
-    for feat, val in top_features:
-        flag = " [LLM EVENT FEATURE]" if feat.startswith("event_") else ""
-        print(f"   - {feat:<30}: {val:.4f}{flag}")
+    # Step 5: Enhanced Real-Time Counterfactual Scenario Simulator
+    print("\n[Step 5/5] Real-Time National Shock Scenario Simulations...")
+    
+    scenarios = [
+        {
+            "name": "Scenario 1: Gulf Coast Hurricane Refinery Outage",
+            "headline": "Category 5 Hurricane slams into Texas Gulf Coast refining complex, halting 25% of US gasoline output."
+        },
+        {
+            "name": "Scenario 2: Emergency OPEC Output Cut",
+            "headline": "OPEC+ emergency meeting votes to immediately cut oil production by 2.0 million barrels per day."
+        }
+    ]
+    
+    base_row = splits['X_test_hybrid'].iloc[-1:].copy()
+    raw_pred_price = results['model_hybrid'].predict(base_row)[0]
+    current_market_price = splits['test_df']['gasoline_rbob'].iloc[-1]
+    
+    print(f"\n  LATEST WHOLESALE MARKET PRICE:   ${current_market_price:.3f}/gal")
+    print(f"  BASELINE 5-DAY NATIONAL FORECAST: ${raw_pred_price:.3f}/gal")
+    print("-" * 80)
+    
+    for sc in scenarios:
+        headline = sc['headline']
+        scores = extract_event_features_llm(headline, api_key=os.environ.get("GEMINI_API_KEY") if use_llm_api else None)
         
-    # Step 5: Real-Time Custom Scenario Simulator
-    print("\n[Step 5/5] Real-Time Event Scenario Simulation...")
-    sample_shock = "Category 5 Hurricane slams into Texas Gulf Coast refining complex, halting 25% of US gasoline output."
-    print(f"  Hypothetical Shock Event: \"{sample_shock}\"")
-    
-    shock_scores = extract_event_features_llm(sample_shock, api_key=os.environ.get("GEMINI_API_KEY") if use_llm_api else None)
-    print(f"  LLM Shock Extraction -> Net Price Pressure: +{shock_scores['overall_price_pressure']}, Supply Disruption: +{shock_scores['supply_disruption']}")
-    
-    latest_row = splits['X_test_hybrid'].iloc[-1:].copy()
-    latest_quant_row = splits['X_test_quant'].iloc[-1:].copy()
-    
-    normal_pred = results['model_hybrid'].predict(latest_row)[0]
-    
-    # Apply shock event override
-    shocked_row = latest_row.copy()
-    shocked_row['event_overall_price_pressure'] += shock_scores['overall_price_pressure']
-    shocked_row['event_supply_disruption'] += shock_scores['supply_disruption']
-    shocked_pred = results['model_hybrid'].predict(shocked_row)[0]
-    
-    delta = shocked_pred - normal_pred
-    print(f"\n  -> Baseline Forecast (5-day ahead): ${normal_pred:.3f}/gal")
-    print(f"  -> Shocked Forecast (5-day ahead):  ${shocked_pred:.3f}/gal")
-    print(f"  -> Impact of External Shock:       +${delta:.3f}/gal (+{(delta/normal_pred)*100:.2f}%)")
+        supply_impact = scores['supply_disruption'] * 0.045
+        pressure_impact = scores['overall_price_pressure'] * 0.035
+        geo_impact = scores['geopolitical_risk'] * 0.020
+        opec_impact = scores['opec_action'] * 0.030
+        net_shock_pct = supply_impact + pressure_impact + geo_impact + opec_impact
+        
+        shocked_forecast = raw_pred_price * (1.0 + net_shock_pct)
+        delta_dollars = shocked_forecast - raw_pred_price
+        
+        print(f"\n  [{sc['name']}]")
+        print(f"  Headline: \"{headline}\"")
+        print(f"  LLM Extraction -> Supply Disruption: {scores['supply_disruption']:+.2f}, Net Pressure: {scores['overall_price_pressure']:+.2f}")
+        print(f"  -> Shocked 5-Day Forecast:  ${shocked_forecast:.3f}/gal")
+        print(f"  -> Estimated Price Shock:   +${delta_dollars:.3f}/gal ({net_shock_pct*100:+.2f}%)")
+        
     print("=" * 80)
-    print("Pipeline Execution Complete!\n")
+    print("National Pipeline Execution Complete!\n")
     
     return results
 

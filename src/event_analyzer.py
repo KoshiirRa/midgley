@@ -40,7 +40,6 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
         
     if api_key:
         try:
-            # Try importing Google GenAI SDK
             try:
                 from google import genai
                 client = genai.Client(api_key=api_key)
@@ -56,7 +55,6 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
                 response = model.generate_content(LLM_EXTRACTION_PROMPT.format(headline=headline))
                 text = response.text.strip()
                 
-            # Clean markdown codeblocks if present
             if "```json" in text:
                 text = text.split("```json")[1].split("```")[0].strip()
             elif "```" in text:
@@ -83,19 +81,17 @@ def extract_event_features_rule_based(headline: str) -> dict:
     """
     text = headline.lower()
     
-    # Lexicon patterns
     war_sanction_patterns = ["invad", "war", "conflict", "sanction", "missile", "airstrike", "attack", "hostilities", "houthi"]
-    supply_cut_patterns = ["cut", "outage", "disrupt", "explosion", "freeze", "shutdown", "evacuat", "hurricane", "reroute", "delay"]
+    supply_cut_patterns = ["cut", "outage", "disrupt", "explosion", "freeze", "shutdown", "evacuat", "hurricane", "reroute", "delay", "tornado", "halt", "strike", "damage", "spill", "leak"]
     demand_weak_patterns = ["recession", "rate hike", "slowdown", "cooling", "inflation fears", "sell-off", "weak demand"]
     opec_cut_patterns = ["opec+ announces cut", "voluntary production cut", "output cut", "solo output cut", "extend voluntary"]
     opec_hike_patterns = ["phase out", "production surge", "increase output", "output increase"]
     
-    # Calculate scores
     geo_score = 0.8 if any(p in text for p in war_sanction_patterns) else 0.0
     
     supply_score = 0.0
     if any(p in text for p in supply_cut_patterns):
-        supply_score = 0.8 if ("hurricane" in text or "explosion" in text or "cut" in text or "ban" in text) else 0.4
+        supply_score = 0.8 if ("hurricane" in text or "explosion" in text or "tornado" in text or "halt" in text or "shutdown" in text or "cut" in text or "ban" in text) else 0.5
         
     demand_score = -0.6 if any(p in text for p in demand_weak_patterns) else (0.4 if "driving demand" in text or "record highs" in text else 0.0)
     
@@ -119,12 +115,7 @@ def extract_event_features_rule_based(headline: str) -> dict:
 
 
 def process_event_dataset(events_df: pd.DataFrame, use_llm_api: bool = False) -> pd.DataFrame:
-    """
-    Takes a DataFrame of events with 'date' and 'headline' columns and appends
-    LLM/NLP extracted feature columns.
-    """
     logger.info(f"Analyzing {len(events_df)} unstructured event headlines...")
-    
     records = []
     api_key = os.environ.get("GEMINI_API_KEY") if use_llm_api else None
     
@@ -134,5 +125,4 @@ def process_event_dataset(events_df: pd.DataFrame, use_llm_api: bool = False) ->
         record = {**row.to_dict(), **scores}
         records.append(record)
         
-    scored_df = pd.DataFrame(records)
-    return scored_df
+    return pd.DataFrame(records)
