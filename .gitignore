@@ -20,6 +20,3 @@ secrets/
 .ipynb_checkpoints/
 .vscode/
 .idea/
-
-# Data Cache
-data/prediction_history.csv
