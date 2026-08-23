@@ -1,7 +1,8 @@
 """
 LLM Event Analyzer Module
 Extracts structured numerical factor scores from unstructured text headlines and news reports.
-Supports live LLM invocation (Google GenAI Gemini API) with caching & progress tracking.
+Supports ultra-fast Single-Batch LLM invocation (Google Gemini 2.5 Flash) with in-memory caching
+and a robust deterministic rule-based fallback.
 """
 
 import os
@@ -21,8 +22,8 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 # In-Memory Cache to prevent redundant Gemini API calls for identical headlines
 _LLM_SCORE_CACHE = {}
 
-# System prompt for LLM event scoring
-LLM_EXTRACTION_PROMPT = """
+# Single-Headline Prompt Contract (Fallback / Scenario Testing)
+LLM_SINGLE_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following energy news headline/event description and extract structured numerical impact scores regarding unleaded gasoline and crude oil prices.
 
@@ -38,10 +39,27 @@ Return ONLY a raw JSON object with the following fields:
 JSON Output:
 """
 
+# Ultra-Fast Single-Batch System Prompt Contract
+LLM_BATCH_PROMPT = """
+You are an expert energy market economist and oil commodities analyst.
+Analyze the following JSON list of energy news headlines/event descriptions and extract structured numerical impact scores for each item.
+
+Input Headlines:
+{headlines_json}
+
+Return ONLY a raw JSON array of objects in the EXACT SAME ORDER, where each object has:
+- "geopolitical_risk": float between -1.0 and +1.0
+- "supply_disruption": float between 0.0 and +1.0
+- "demand_sentiment": float between -1.0 and +1.0
+- "opec_action": float between -1.0 and +1.0
+- "overall_price_pressure": float between -1.0 and +1.0
+
+JSON Array Output:
+"""
+
 def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     """
-    Attempts to score a headline using Google Gemini API via `google-genai` or `google.generativeai`.
-    Uses in-memory cache to prevent duplicate remote calls.
+    Scores a single headline using Google Gemini API or in-memory cache.
     """
     if headline in _LLM_SCORE_CACHE:
         return _LLM_SCORE_CACHE[headline]
@@ -58,7 +76,7 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
                 config = types.GenerateContentConfig(temperature=0.1)
                 response = client.models.generate_content(
                     model='gemini-2.5-flash',
-                    contents=LLM_EXTRACTION_PROMPT.format(headline=headline),
+                    contents=LLM_SINGLE_PROMPT.format(headline=headline),
                     config=config
                 )
                 text = response.text.strip()
@@ -66,7 +84,7 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
                 import google.generativeai as genai_legacy
                 genai_legacy.configure(api_key=api_key)
                 model = genai_legacy.GenerativeModel('gemini-1.5-flash')
-                response = model.generate_content(LLM_EXTRACTION_PROMPT.format(headline=headline))
+                response = model.generate_content(LLM_SINGLE_PROMPT.format(headline=headline))
                 text = response.text.strip()
                 
             if "```json" in text:
@@ -85,11 +103,80 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
             _LLM_SCORE_CACHE[headline] = scores
             return scores
         except Exception as e:
-            logger.debug(f"LLM API call failed or not configured ({e}). Using rule-based analyzer.")
+            logger.debug(f"LLM single API call notice ({e}). Using rule-based fallback.")
             
     scores = extract_event_features_rule_based(headline)
     _LLM_SCORE_CACHE[headline] = scores
     return scores
+
+
+def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> list:
+    """
+    Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 2.5 Flash API call!
+    """
+    uncached = [h for h in headlines if h not in _LLM_SCORE_CACHE]
+    
+    if uncached:
+        if api_key is None:
+            api_key = os.environ.get("GEMINI_API_KEY")
+            
+        if api_key:
+            try:
+                logger.info(f"⚡ Launching Single-Batch Gemini 2.5 Flash LLM call for {len(uncached)} headlines...")
+                input_json_str = json.dumps([{"id": i, "headline": h} for i, h in enumerate(uncached)], indent=2)
+                prompt = LLM_BATCH_PROMPT.format(headlines_json=input_json_str)
+                
+                try:
+                    from google import genai
+                    from google.genai import types
+                    client = genai.Client(api_key=api_key)
+                    config = types.GenerateContentConfig(temperature=0.1)
+                    response = client.models.generate_content(
+                        model='gemini-2.5-flash',
+                        contents=prompt,
+                        config=config
+                    )
+                    text = response.text.strip()
+                except ImportError:
+                    import google.generativeai as genai_legacy
+                    genai_legacy.configure(api_key=api_key)
+                    model = genai_legacy.GenerativeModel('gemini-1.5-flash')
+                    response = model.generate_content(prompt)
+                    text = response.text.strip()
+                    
+                if "```json" in text:
+                    text = text.split("```json")[1].split("```")[0].strip()
+                elif "```" in text:
+                    text = text.split("```")[1].split("```")[0].strip()
+                    
+                parsed_list = json.loads(text)
+                
+                if isinstance(parsed_list, list) and len(parsed_list) == len(uncached):
+                    for h, parsed in zip(uncached, parsed_list):
+                        _LLM_SCORE_CACHE[h] = {
+                            "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
+                            "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
+                            "demand_sentiment": float(parsed.get("demand_sentiment", 0.0)),
+                            "opec_action": float(parsed.get("opec_action", 0.0)),
+                            "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
+                        }
+                    logger.info(f"  -> Single-Batch LLM extractions complete in 1 request!")
+                else:
+                    logger.warning("Batch size mismatch from LLM. Falling back to itemized processing.")
+            except Exception as e:
+                logger.warning(f"Batch LLM processing notice ({e}). Falling back to itemized processing.")
+                
+    # Gather final scores for all headlines from cache or rule-based fallback
+    results = []
+    for h in headlines:
+        if h in _LLM_SCORE_CACHE:
+            results.append(_LLM_SCORE_CACHE[h])
+        else:
+            scores = extract_event_features_rule_based(h)
+            _LLM_SCORE_CACHE[h] = scores
+            results.append(scores)
+            
+    return results
 
 
 def extract_event_features_rule_based(headline: str) -> dict:
@@ -133,17 +220,16 @@ def extract_event_features_rule_based(headline: str) -> dict:
 
 
 def process_event_dataset(events_df: pd.DataFrame, use_llm_api: bool = False) -> pd.DataFrame:
-    total_events = len(events_df)
-    logger.info(f"Analyzing {total_events} unstructured event headlines...")
-    records = []
+    headlines = events_df['headline'].tolist()
     api_key = os.environ.get("GEMINI_API_KEY") if use_llm_api else None
     
-    for idx, row in events_df.iterrows():
-        headline = row['headline']
-        if (idx + 1) % 5 == 0 or idx == 0 or idx == total_events - 1:
-            logger.info(f"  -> Gemini LLM Processing [{idx+1}/{total_events}]: '{headline[:50]}...'")
-        scores = extract_event_features_llm(headline, api_key=api_key)
-        record = {**row.to_dict(), **scores}
-        records.append(record)
+    if api_key or use_llm_api:
+        batch_scores = extract_batch_event_features_llm(headlines, api_key=api_key)
+    else:
+        batch_scores = [extract_event_features_rule_based(h) for h in headlines]
+        
+    records = []
+    for row, scores in zip(events_df.to_dict('records'), batch_scores):
+        records.append({**row, **scores})
         
     return pd.DataFrame(records)
