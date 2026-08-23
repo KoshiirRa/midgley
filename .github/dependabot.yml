@@ -1,0 +1,22 @@
+# Dependabot Configuration for KoshiirRa/midgley
+version: 2
+updates:
+  # Maintain Python pip dependencies (requirements.txt)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "08:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 10
+
+  # Maintain GitHub Actions workflow dependencies (.github/workflows)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "08:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 10

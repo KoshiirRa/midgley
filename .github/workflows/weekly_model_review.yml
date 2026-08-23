@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
   pages: write
   id-token: write
 
@@ -42,6 +43,12 @@ jobs:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: |
           python run_all.py --use-llm-api
+
+      - name: Open Weekly GitHub Issue Report & Recommendations
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python -m src.weekly_issue_reporter
 
       - name: Commit Updated Performance Metrics & Prediction History
         uses: stefanzweifel/git-auto-commit-action@v5
