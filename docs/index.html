@@ -30,7 +30,9 @@
             </div>
             
             <div class="flex items-center gap-3 text-sm">
-                <span class="text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i> Updated: August 23, 2026 at 11:56 UTC</span>
+                <a href="math.html" class="px-3.5 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 transition flex items-center gap-2 font-semibold">
+                    <i class="fa-solid fa-graduation-cap"></i> Math & Modeling Guide
+                </a>
                 <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
                     <i class="fa-brands fa-github"></i> GitHub Repo
                 </a>
@@ -218,69 +220,73 @@
 
         <!-- 🧠 PREDICTIVE LOGIC & METHODOLOGY DOCUMENTATION SECTION -->
         <section class="p-8 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
-                <div class="p-2.5 bg-blue-500/20 text-blue-400 rounded-xl border border-blue-500/30">
-                    <i class="fa-solid fa-brain text-xl"></i>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-blue-500/20 text-blue-400 rounded-xl border border-blue-500/30">
+                        <i class="fa-solid fa-brain text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Predictive Logic & Model Methodology</h3>
+                        <p class="text-xs text-slate-400">How quantitative time-series data, LLM news extraction, and NOAA weather intelligence combine</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-xl font-bold text-white">Predictive Logic & Model Methodology</h3>
-                    <p class="text-xs text-slate-400">How quantitative time-series data, LLM news extraction, and NOAA weather intelligence combine to form 5-day forecasts</p>
-                </div>
+
+                <a href="math.html" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
+                    <i class="fa-solid fa-graduation-cap"></i> Read Full Math & Formulas Guide &rarr;
+                </a>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-                <!-- Pillar 1: Quantitative Commodity Foundations -->
+                <!-- Pillar 1 -->
                 <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                     <h4 class="text-sm font-bold text-blue-400 flex items-center gap-2">
                         <i class="fa-solid fa-calculator"></i> 1. Quantitative Futures & Crack Spreads
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        The core baseline time series is built from NYMEX RBOB Gasoline Futures (<code class="text-blue-300">RB=F</code>) and WTI Crude Oil Futures (<code class="text-blue-300">CL=F</code>). We compute the 3-2-1 refining <strong>crack spread</strong> (Wholesale RBOB minus Crude per gal) to capture regional refining acquisition margins. For Tulsa, we incorporate Cushing, OK WTI crude dynamics (located 50 miles southwest of Tulsa).
+                        The core baseline time series is built from NYMEX RBOB Gasoline Futures (<code class="text-blue-300">RB=F</code>) and WTI Crude Oil Futures (<code class="text-blue-300">CL=F</code>). We compute the 3-2-1 refining <strong>crack spread</strong> (Wholesale RBOB minus Crude per gal) to capture regional refining acquisition margins.
                     </p>
                 </div>
 
-                <!-- Pillar 2: LLM Unstructured Event Extraction -->
+                <!-- Pillar 2 -->
                 <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                     <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
                         <i class="fa-solid fa-robot"></i> 2. LLM Headline Extraction (Gemini 2.5 Flash)
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Raw, unstructured news headlines and OPEC press releases are analyzed by <strong>Google Gemini 2.5 Flash</strong>. The LLM translates qualitatively complex geopolitical events into bounded numerical impact vectors: <code class="text-emerald-300">geopolitical_risk</code> [-1.0, +1.0], <code class="text-emerald-300">supply_disruption</code> [0.0, +1.0], and <code class="text-emerald-300">overall_price_pressure</code> [-1.0, +1.0].
+                        Raw, unstructured news headlines and OPEC press releases are analyzed by <strong>Google Gemini 2.5 Flash</strong>. The LLM translates qualitatively complex geopolitical events into bounded numerical impact vectors.
                     </p>
                 </div>
 
-                <!-- Pillar 3: NOAA Weather Model Integration -->
+                <!-- Pillar 3 -->
                 <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                     <h4 class="text-sm font-bold text-amber-400 flex items-center gap-2">
                         <i class="fa-solid fa-cloud-bolt"></i> 3. NOAA Weather Intelligence & Alerts
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Weather shocks are fetched from the NOAA National Weather Service API (<code class="text-amber-300">api.weather.gov</code>). We track two geographic tiers: <strong>National Production Basins</strong> (Gulf Coast Hurricanes & Permian Freezes) and <strong>Localized Tulsa Zones</strong> (Tulsa County <code class="text-amber-300">OKZ060</code> Tornado Warnings & Cushing/Payne County <code class="text-amber-300">OKZ066</code> Hard Freeze Warnings).
+                        Weather shocks are fetched from the NOAA National Weather Service API (<code class="text-amber-300">api.weather.gov</code>). We track National Production Basins and Localized Tulsa Zones (<code class="text-amber-300">OKZ060</code> Tornado Warnings & Cushing <code class="text-amber-300">OKZ066</code> Freezes).
                     </p>
                 </div>
 
-                <!-- Pillar 4: Exponential Memory Decay -->
+                <!-- Pillar 4 -->
                 <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                     <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
                         <i class="fa-solid fa-wave-square"></i> 4. Exponential Memory Decay ($t_{1/2} = 4.0 - 5.0$ Days)
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        To prevent news shocks from acting as unrealistic single-day spikes, event impact scores pass through an exponential decay filter: 
-                        Memory_t = Memory_{t-1} * exp(-lambda) + Shock_t.
-                        This models how market participants digest news over a 2 to 3 week window.
+                        To prevent news shocks from acting as single-day spikes, event impact scores pass through an exponential decay filter modeling market news absorption over 2 to 3 weeks.
                     </p>
                 </div>
 
             </div>
 
-            <!-- Pillar 5 & 6: Live Pump Calibration & Machine Learning Model -->
+            <!-- Pillar 5 & 6 -->
             <div class="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
                 <h4 class="text-sm font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-sliders text-blue-400"></i> 5. Live Pump Calibration ($3.89/gal) & Regularized Ridge Pipeline
                 </h4>
                 <p class="text-xs text-slate-300 leading-relaxed">
-                    Rather than predicting non-stationary raw price levels, our model trains a standardized <strong>Ridge Regression ($lpha=10.0$)</strong> pipeline to predict <strong>5-day percentage price returns</strong> ($\Delta \%$). The predicted percentage shift is applied directly to today's live pump price (<strong>$3.89/gal</strong> in Tulsa), ensuring that 5-day forecasts and scenario shocks adjust dynamically relative to real pump prices at local stations today.
+                    Rather than predicting non-stationary raw price levels, our model trains a standardized <strong>Ridge Regression ($lpha=10.0$)</strong> pipeline to predict <strong>5-day percentage price returns</strong> ($\Delta \%$), applied directly to today's live pump price (<strong>$3.89/gal</strong> in Tulsa).
                 </p>
             </div>
         </section>
