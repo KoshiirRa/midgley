@@ -44,7 +44,7 @@ jobs:
           python run_all.py --use-llm-api
 
       - name: Commit Updated README, Dashboard & Prediction Logs
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chmod: Daily automated gas price prediction & public dashboard update [skip ci]"
           file_pattern: "README.md docs/index.html docs/math.html data/prediction_history.csv"
