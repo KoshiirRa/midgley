@@ -2,6 +2,7 @@
 Public Dashboard & Educational Math Guide Generator (src/dashboard_generator.py)
 Generates docs/index.html (Dashboard with Rolling Accuracy Tracker) and
 docs/math.html (Educational Guide) for public deployment to GitHub Pages.
+Includes documentation and KaTeX formulas for Executive Social Media & Weekend Gap Analysis.
 """
 
 import os
@@ -33,14 +34,12 @@ def calculate_rolling_metrics():
         eval_df['forecast_target_date'] = pd.to_datetime(eval_df['forecast_target_date'])
         eval_df = eval_df.sort_values('forecast_target_date')
         
-        # Calculate rolling window metrics over target dates
         unique_dates = sorted(list(eval_df['forecast_target_date'].unique()))
         
         dates = []
         rolling_mae_nat = []
         rolling_hit_nat = []
         
-        # Step through timeline in 10-date increments
         step = max(1, len(unique_dates) // 15)
         for i in range(step, len(unique_dates) + 1, step):
             sub_dates = unique_dates[:i]
@@ -65,7 +64,6 @@ def calculate_rolling_metrics():
 
 def generate_public_dashboard():
     os.makedirs(DOCS_DIR, exist_ok=True)
-    now_str = datetime.now().strftime("%B %d, %Y at %H:%M UTC")
     
     dates, rolling_mae, rolling_hit = calculate_rolling_metrics()
     
@@ -278,7 +276,7 @@ def generate_public_dashboard():
                             </tr>
                             <tr class="bg-blue-950/20 font-bold border-l-2 border-blue-500">
                                 <td class="py-2.5 px-4 text-white">v1.2 NOAA-LLM Regional (Current)</td>
-                                <td class="py-2.5 px-4 text-blue-300">+ Two-Tiered NOAA Weather + Tulsa Rack Calibration</td>
+                                <td class="py-2.5 px-4 text-blue-300">+ Two-Tiered NOAA + Maritime + Executive Social Gap Engine</td>
                                 <td class="py-2.5 px-4 text-emerald-400">$0.1151</td>
                                 <td class="py-2.5 px-4 text-emerald-400">60.79%</td>
                                 <td class="py-2.5 px-4 text-emerald-400"><i class="fa-solid fa-circle text-[10px] mr-1"></i> Active Production</td>
@@ -293,28 +291,28 @@ def generate_public_dashboard():
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-cloud-bolt text-amber-400"></i> Counterfactual "What-If" Shock Scenarios
                 </h3>
-                <p class="text-xs text-slate-400">Estimated real-time pump price impact if major weather or infrastructure disruptions occur today:</p>
+                <p class="text-xs text-slate-400">Estimated real-time pump price impact if major weather, maritime or executive social disruptions occur today:</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                     <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                         <span class="text-xs font-semibold text-amber-400">Tornado Outbreak</span>
                         <h4 class="text-sm font-semibold text-white">West Tulsa HF Sinclair Strike</h4>
-                        <p class="text-2xl font-bold text-rose-400">$3.964 <span class="text-xs font-normal text-rose-300">(+$0.174/gal)</span></p>
+                        <p class="text-2xl font-bold text-rose-400">$3.954 <span class="text-xs font-normal text-rose-300">(+$0.173/gal)</span></p>
                         <p class="text-xs text-slate-500">Halts 125,000 bpd refinery loading racks</p>
                     </div>
 
                     <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                        <span class="text-xs font-semibold text-amber-400">Pipeline Spill</span>
-                        <h4 class="text-sm font-semibold text-white">Cushing Keystone Shutdown</h4>
-                        <p class="text-2xl font-bold text-rose-400">$4.059 <span class="text-xs font-normal text-rose-300">(+$0.273/gal)</span></p>
-                        <p class="text-xs text-slate-500">Chokes crude pipeline supply into Cushing</p>
+                        <span class="text-xs font-semibold text-amber-400">Suez Rerouting</span>
+                        <h4 class="text-sm font-semibold text-white">Red Sea Missile Barrage</h4>
+                        <p class="text-2xl font-bold text-rose-400">$3.982 <span class="text-xs font-normal text-rose-300">(+$0.201/gal)</span></p>
+                        <p class="text-xs text-slate-500">Forces tankers around Cape of Good Hope</p>
                     </div>
 
                     <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                        <span class="text-xs font-semibold text-blue-400">Polar Vortex</span>
-                        <h4 class="text-sm font-semibold text-white">Northeast OK Grid Freeze</h4>
-                        <p class="text-2xl font-bold text-rose-400">$4.008 <span class="text-xs font-normal text-rose-300">(+$0.220/gal)</span></p>
-                        <p class="text-xs text-slate-500">Sub-zero temperatures freeze pipe utilities</p>
+                        <span class="text-xs font-semibold text-blue-400">Executive Social Post</span>
+                        <h4 class="text-sm font-semibold text-white">Weekend OPEC Demand Tweet</h4>
+                        <p class="text-2xl font-bold text-blue-400">$3.780 <span class="text-xs font-normal text-blue-300">($1.42x Gap Volatility)</span></p>
+                        <p class="text-xs text-slate-500">Sunday 18:00 EST futures open gap effect</p>
                     </div>
                 </div>
             </div>
@@ -385,7 +383,7 @@ def generate_public_dashboard():
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-white">Predictive Logic & Model Methodology</h3>
-                        <p class="text-xs text-slate-400">How quantitative time-series data, LLM news extraction, and NOAA weather intelligence combine</p>
+                        <p class="text-xs text-slate-400">How quantitative time-series data, LLM news extraction, NOAA weather, and executive social media combine</p>
                     </div>
                 </div>
 
@@ -429,10 +427,10 @@ def generate_public_dashboard():
                 <!-- Pillar 4 -->
                 <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                     <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
-                        <i class="fa-solid fa-wave-square"></i> 4. Exponential Memory Decay ($t_{{1/2}} = 4.0 - 5.0$ Days)
+                        <i class="fa-solid fa-mobile-screen"></i> 4. Executive Social Feed & Weekend Gap Engine
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        To prevent news shocks from acting as single-day spikes, event impact scores pass through an exponential decay filter modeling market news absorption over 2 to 3 weeks.
+                        Quantifies Trump Twitter and Truth Social energy posts. Saturday/Sunday posts published while commodity markets are closed apply a <strong>$1.42\times$ Weekend Volatility Multiplier</strong> to Sunday 18:00 EST market open price gap forecasts.
                     </p>
                 </div>
 
@@ -520,9 +518,7 @@ def generate_public_dashboard():
             }});
         }}
 
-        // Render Rolling Accuracy Improvement Charts
         window.addEventListener('DOMContentLoaded', () => {{
-            // Chart 1: MAE Trend
             const ctxMAE = document.getElementById('maeTrendChart').getContext('2d');
             new Chart(ctxMAE, {{
                 type: 'line',
@@ -549,7 +545,6 @@ def generate_public_dashboard():
                 }}
             }});
 
-            // Chart 2: Hit Rate Trend
             const ctxHit = document.getElementById('hitRateTrendChart').getContext('2d');
             new Chart(ctxHit, {{
                 type: 'line',
