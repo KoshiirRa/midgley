@@ -1,10 +1,18 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley`)
 
 [![Daily Gas Price LLM Forecasting](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-green.svg)](requirements.txt)
 
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures ($RB=F$, $CL=F$, $BZ=F$) to predict wholesale and retail unleaded gasoline prices.
+
+---
+
+## 📜 Etymology & Historical Namesake
+
+This project is named **`midgley`** in ironic homage to **Thomas Midgley Jr.** (1889–1944), the American chemical engineer who invented **tetraethyllead (TEL)** as a gasoline anti-knock additive in 1921 (and later chlorofluorocarbons/CFCs). Environmental historian J. R. McNeill famously remarked that Midgley *"had more adverse impact on the atmosphere than any other single organism in Earth's history."*
+
+In stark contrast to Midgley's legacy of unintended consequences on atmospheric chemistry and public health, this project harnesses modern **LLM intelligence and NOAA atmospheric weather models** to forecast unleaded gasoline markets and mitigate supply disruption risks.
 
 ---
 
@@ -122,10 +130,6 @@ $env:GOOGLE_MAPS_API_KEY="AIzaSyYourGoogleMapsKey"
 
 * **Tulsa Regional Notebook:** [`notebooks/tulsa_gas_price_llm_forecasting.ipynb`](notebooks/tulsa_gas_price_llm_forecasting.ipynb)
 * **National Wholesale Notebook:** [`notebooks/gas_price_llm_forecasting.ipynb`](notebooks/gas_price_llm_forecasting.ipynb)
-
-### Selecting Jupyter Kernel (Method 2 - Default):
-1. Open notebook in VS Code or JupyterLab.
-2. Click **Select Kernel** (top right) $\rightarrow$ **Select Another Kernel...** $\rightarrow$ **Python Environments...** $\rightarrow$ select **Python 3.11 (`midgley .venv`)**.
 
 ---
 
