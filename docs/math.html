@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- KaTeX for LaTeX Math Rendering -->
+    <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
@@ -215,7 +215,7 @@
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression ($lpha=10.0$)</strong> model to predict 5-day percentage price returns ($\Delta \%$), applied directly to today's live pump price ($P_{	ext{Live Base}} = \$3.89/	ext{gal}$):
+                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression (&alpha; = 10.0)</strong> model to predict 5-day percentage price returns (&Delta;%), applied directly to today's live pump price ($P_{	ext{Live Base}} = \$3.89/	ext{gal}$):
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
