@@ -13,6 +13,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# Suppress verbose SDK internal warnings in logs
+logging.getLogger("google_genai").setLevel(logging.ERROR)
+logging.getLogger("google.genai").setLevel(logging.ERROR)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 # System prompt for LLM event scoring
 LLM_EXTRACTION_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
@@ -42,10 +47,13 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
         try:
             try:
                 from google import genai
+                from google.genai import types
                 client = genai.Client(api_key=api_key)
+                config = types.GenerateContentConfig(temperature=0.1)
                 response = client.models.generate_content(
                     model='gemini-2.5-flash',
-                    contents=LLM_EXTRACTION_PROMPT.format(headline=headline)
+                    contents=LLM_EXTRACTION_PROMPT.format(headline=headline),
+                    config=config
                 )
                 text = response.text.strip()
             except ImportError:
