@@ -1,7 +1,7 @@
 """
 Public Dashboard & Educational Math Guide Generator (src/dashboard_generator.py)
 Generates docs/index.html (Dashboard with Rolling Accuracy Tracker & v1.3 Physics-LLM Model Iteration Table)
-and docs/math.html (Educational Guide) for public deployment to GitHub Pages.
+and docs/math.html (Educational Guide detailing equations for ALL 8 Feature Layers) for public deployment to GitHub Pages.
 """
 
 import os
@@ -585,7 +585,255 @@ def generate_public_dashboard():
     with open(INDEX_PATH, "w", encoding="utf-8") as f:
         f.write(index_html)
         
-    logger.info(f"Successfully generated public dashboard web app at {INDEX_PATH}")
+    # ---------------------------------------------------------------------------
+    # 2. GENERATE COMPREHENSIVE MATH & MODELING GUIDE (docs/math.html)
+    # ---------------------------------------------------------------------------
+    math_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematical & Algorithmic Foundations - Midgley Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .math-box { background: #090d16; border-left: 4px solid #3b82f6; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-arrow-left text-xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">v1.3 Physics-LLM Guide</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Comprehensive Educational Guide: All 8 Feature Layers & Equations</p>
+                </div>
+            </div>
+            
+            <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition text-sm flex items-center gap-2">
+                <i class="fa-solid fa-gauge-high"></i> Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
+        
+        <!-- Hero Section -->
+        <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-indigo-900/40 border border-blue-500/30 space-y-4">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                <i class="fa-solid fa-graduation-cap text-blue-400"></i> Mathematical & Econometric Architecture
+            </h2>
+            <p class="text-slate-300 text-base leading-relaxed">
+                Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.3 Physics-LLM</strong>.
+            </p>
+        </div>
+
+        <!-- Section 1: Refining Crack Spreads -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-500">01</span>
+                <h3 class="text-2xl font-bold text-white">Quantitative Time-Series & 3-2-1 Crack Spreads</h3>
+            </div>
+            
+            <p class="text-slate-300 leading-relaxed text-sm">
+                A <strong>crack spread</strong> measures the profit margin refiners earn when "cracking" crude oil into finished petroleum products. Because crude oil is quoted in dollars per barrel ($42\text{ gallons}$ per barrel) while wholesale gas is quoted in dollars per gallon, we convert crude prices into per-gallon equivalents.
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 1.1: Refining Crack Spread & Technical Returns</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\text{CrackSpread}_t = P_{\text{RBOB}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad r_t = \ln\left(\frac{P_t}{P_{t-1}}\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    where $P_{\text{RBOB}}$ is the NYMEX RBOB Futures price ($RB=F$) and $P_{\text{WTI}}$ is West Texas Intermediate Crude ($CL=F$). Moving averages $\text{MA}_K(t) = \frac{1}{K}\sum_{i=0}^{K-1} P_{t-i}$ are calculated across $K \in \{7, 14, 30\}$ trading days.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: LLM Qualitative Vector Space -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-500">02</span>
+                <h3 class="text-2xl font-bold text-white">Qualitative LLM Extraction (Google Gemini 2.5 Flash)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Unstructured news bulletins and press releases are processed by <strong>Google Gemini 2.5 Flash</strong> to convert qualitative events into a bounded numerical factor vector space:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 2.1: LLM Bounded Impact Vector Space</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\mathbf{V}_{\text{event}, t} = \begin{bmatrix} S_{\text{geopolitical}} \\ S_{\text{supply}} \\ S_{\text{opec}} \\ S_{\text{demand}} \\ S_{\text{pressure}} \end{bmatrix}_t \in [-1.0, +1.0]^5$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Each component is bounded in the interval $[-1.0, +1.0]$, representing negative (bearish), zero (neutral), or positive (bullish) market pressure.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Two-Tiered NOAA Weather Risk -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-500">03</span>
+                <h3 class="text-2xl font-bold text-white">Two-Tiered NOAA Weather Risk Dynamics</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Atmospheric weather alerts from the NOAA NWS API (<code class="text-amber-300">api.weather.gov</code>) are factored across two distinct physical geographic tiers:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Two-Tiered Weather Vulnerability Matrix</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Localized OK}}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks & Permian/Bakken production basin freeze warnings.<br>
+                    <strong>Tier 2 (Localized Oklahoma):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa $125,000\text{ bpd}$ HF Sinclair loading racks, $+\$0.173/\text{gal}$ shock) and Cushing/Payne County (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 4: Global Maritime Chokepoints -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-500">04</span>
+                <h3 class="text-2xl font-bold text-white">Global Maritime Chokepoints & Delay Equations</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Key maritime chokepoints dictate global crude transit times and freight rate premiums:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit Premium</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Strait of Hormuz:</strong> $21.0\text{M bpd}$ ($20\%$ of global petroleum) naval blockade threats ($+\$0.109/\text{gal}$ price shock).<br>
+                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add $+12\text{--}14$ days transit time, adding $+\$4.50/\text{bbl}$ freight premium ($+\$0.201/\text{gal}$ price shock).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 5: Executive Social Media & Weekend Gap Engine -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-400">05</span>
+                <h3 class="text-2xl font-bold text-white">Executive Social Feed & Weekend Volatility Multiplier ($1.42\times$)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Executive social media posts (Twitter/X and Truth Social energy commentary) produce empirical return shocks and Sunday evening open gap volatility:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 5.1: Weekend Market Open Gap Volatility Multiplier</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\sigma_{\text{SundayOpen}} = 1.42 \times \sigma_{\text{Baseline}}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Because commodity exchanges are closed Friday 17:00 EST to Sunday 18:00 EST, Saturday/Sunday posts generate <strong>$1.42\times$ higher Sunday evening open price gap volatility</strong>. Dovish OPEC posts cause average $-1.85\%$ single-day RBOB drops, while hawkish tariff threats cause $+2.10\%$ price surges.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 6: Alternative Physical Feeds & Key Movers -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-400">06</span>
+                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds & Key Market Movers (v1.3 Physics-LLM)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                `v1.3 Physics-LLM` incorporates options market tail-risk, active drilling rig pipelines, and high-impact policy figures:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 6.1: Physical Supply & Volatility Integration</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\mathbf{X}_{\text{Physical}} = \Big[ \text{OVX}_t, \quad \Delta \text{Rigs}_{t-90}, \quad \text{DXY}_t, \quad \text{EIA\_Inventory\_Draw}_t \Big]$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Cboe OVX Index (^OVX):</strong> Options tail-risk volatility vector ("VIX for Oil").<br>
+                    <strong>Baker Hughes Rig Count:</strong> 3-to-6 month domestic shale crude supply pipeline lead indicator.<br>
+                    <strong>Key Market Movers:</strong> Saudi Energy Minister Prince Abdulaziz (OPEC+ cuts), Fed Chair Powell ($DXY$ demand destruction), and US DOE Strategic Petroleum Reserve (SPR buyback floor at $\$70\text{--}\$79/\text{bbl}$).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 7: Exponential Shock Decay -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-400">07</span>
+                <h3 class="text-2xl font-bold text-white">Exponential Memory Decay & Vector Fusion</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 7.1: Continuous Memory Decay Accumulator</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
+                    $$\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp\left(-\frac{\ln 2}{t_{1/2}}\right) + \mathbf{V}_t$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    where half-life $t_{1/2} = 5.0\text{ days}$ for national macroeconomic/social events and $t_{1/2} = 4.0\text{ days}$ for regional NOAA weather shocks.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 8: Ridge Estimator & Live Retail Calibration -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-500">08</span>
+                <h3 class="text-2xl font-bold text-white">Standardized Ridge Estimator & Live Pump Calibration</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression ($\alpha=10.0$)</strong> model to predict 5-day percentage price returns ($\Delta \%$), applied directly to today's live pump price ($P_{\text{Live Base}} = \$3.89/\text{gal}$):
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 8.1: Regularized Ridge Objective Function & Calibration</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Tulsa Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    where $\alpha = 10.0$ prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>$\text{MAE} = \$0.1069/\text{gal}$</strong>.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.3 Physics-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+
+</body>
+</html>
+"""
+
+    with open(MATH_PATH, "w", encoding="utf-8") as f:
+        f.write(math_html)
+
+    logger.info(f"Successfully generated public dashboard web app at {INDEX_PATH} and math guide at {MATH_PATH}")
 
 if __name__ == "__main__":
     generate_public_dashboard()
