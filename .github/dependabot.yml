@@ -1,7 +1,7 @@
-# Dependabot Configuration for KoshiirRa/midgley
+# Dependabot Configuration with Grouped Pull Requests
 version: 2
 updates:
-  # Maintain Python pip dependencies (requirements.txt)
+  # Python Dependencies (Grouped into 1 Weekly PR)
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -9,9 +9,13 @@ updates:
       day: "saturday"
       time: "08:00"
       timezone: "America/Chicago"
-    open-pull-requests-limit: 10
+    groups:
+      python-packages:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 2
 
-  # Maintain GitHub Actions workflow dependencies (.github/workflows)
+  # GitHub Actions Workflow Dependencies (Grouped into 1 Weekly PR)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -19,4 +23,8 @@ updates:
       day: "saturday"
       time: "08:00"
       timezone: "America/Chicago"
-    open-pull-requests-limit: 10
+    groups:
+      actions-workflows:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 2
