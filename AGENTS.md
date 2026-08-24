@@ -34,18 +34,19 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                                               │ Unified Feature Matrix
                                               ▼
                ┌─────────────────────────────────────────────────────────────┐
-               │            3. TULSA REGIONAL CALIBRATION AGENT              │
-               │               (src/tulsa_regional.py)                       │
-               │ • Anchors Base Forecast to Live Pump Prices ($3.89/gal)     │
-               │ • Computes Cushing WTI Crack Spread & Rack Margins          │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │
-                                              ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │             4. QUANTITATIVE FORECASTING AGENT               │◄──────────────────┐
+               │             3. QUANTITATIVE FORECASTING AGENT               │◄──────────────────┐
                │           (Standardized Ridge / XGBoost Estimator)          │                   │
+               │           Main Model: National Wholesale RBOB Futures       │                   │
                └──────────────────────────────┬──────────────────────────────┘                   │
-                                              │ Base Forecasts                                   │
+                                              │ Base Commodity Forecast                          │
+                                              ▼                                                  │
+               ┌─────────────────────────────────────────────────────────────┐                   │
+               │         4. LOCALIZED METRO AREA CALIBRATION AGENTS          │                   │
+               │  • Tulsa Metro Model (Cushing WTI & West Tulsa Refinery)    │                   │
+               │  • Newark Metro Model (PADD 1B & C&D Canal Detour)          │                   │
+               │  • Cincinnati Tri-State (Dual-State Tax & Ohio/Miss River) │                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Localized Metro Forecasts                        │
                                               ▼                                                  │
                ┌─────────────────────────────────────────────────────────────┐                   │
                │             5. SYNTHESIS & SHOCK SIMULATOR AGENT            │                   │
@@ -104,8 +105,19 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 3. Regional Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, & `src/cincinnati_regional.py`)
+### 3. Quantitative Forecasting Agent (`src/models.py`)
 
+* **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression α=10.0) and XGBoost regressors on 80/20 chronological train/test splits. Main model generates base wholesale RBOB commodity price forecasts.
+* **Out-of-Time Test Performance (v1.4 Finlight-LLM):**
+  - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
+  - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
+  - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).
+
+---
+
+### 4. Localized Metro Area Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, & `src/cincinnati_regional.py`)
+
+* **Role:** Ingest the base commodity forecast from the Main Quantitative Model and calibrate to local retail pump prices, dynamic regional rack margins, refinery dynamics, delivery hub logistics, and localized infrastructure shocks.
 * **Tulsa Regional Calibration Agent (`src/tulsa_regional.py`):**
   - Tailors market time series to the Tulsa, OK metropolitan area calibrated to live pump prices ($3.89/gal base) & Cushing WTI delivery hub dynamics.
   - Rack margin: $P_{\text{Tulsa Retail}} = P_{\text{Wholesale RBOB}} + \text{Dynamic Rack Margin}$.
@@ -115,16 +127,6 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Cincinnati Regional Calibration Agent (`src/cincinnati_regional.py`):**
   - Tailors market time series to the Cincinnati, OH & Northern Kentucky tri-state metropolitan area, modeling the dual-state fuel tax differential (Ohio state fuel tax $0.385/\text{gal}$ vs Kentucky state fuel tax $0.260/\text{gal}$, creating a persistent $\approx \$0.125/\text{gal}$ cross-river retail price gap).
   - Integrates Marathon Catlettsburg KY Refinery dynamics (291,000 bpd capacity), Ohio River marine terminal barge deliveries, and **Lower Mississippi River downriver low-water barge bottlenecks (Cairo, IL confluence & Memphis draft restrictions)**.
-
----
-
-### 4. Quantitative Forecasting Agent (`src/models.py`)
-
-* **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression α=10.0) and XGBoost regressors on 80/20 chronological train/test splits.
-* **Out-of-Time Test Performance (v1.4 Finlight-LLM):**
-  - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
-  - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
-  - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).
 
 ---
 

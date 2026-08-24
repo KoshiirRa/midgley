@@ -79,22 +79,19 @@ A live multi-page public web dashboard is automatically updated and deployed on 
                └──────────────────────────────┬──────────────────────────────┘
                                               │ Unified Feature Matrix
                                               ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │              QUANTITATIVE FORECASTING AGENT                 │◄──────────────────┐
-               │          (Standardized Ridge / XGBoost Estimator)           │                   │
-               └──────────────────────────────┬──────────────────────────────┘                   │
-                                              │ Base Forecasts                                   │
-                                              ▼                                                  │
-                          ┌───────────────────┴───────────────────┐                              │
-                          ▼                                       ▼                              │
-          ┌───────────────────────────────┐       ┌───────────────────────────────┐              │
-          │  NATIONAL MODEL (main.py)     │       │ TULSA REGIONAL (tulsa_main.py)│              │
-          │ • Wholesale RBOB Futures      │       │ • Live Pump Base: $3.89/gal   │              │
-          │ • Directional Acc: 60.79%     │       │ • Cushing WTI Proximity       │              │
-          │ • MAE Error: $0.1069/gal      │       │ • West Tulsa Refinery Tornado │              │
-          └───────────────┬───────────────┘       └───────────────┬───────────────┘              │
-                          │                                       │                              │
-                          └───────────────────┬───────────────────┘                              │
+                ┌─────────────────────────────────────────────────────────────┐
+                │              QUANTITATIVE FORECASTING AGENT                 │◄──────────────────┐
+                │          (Standardized Ridge / XGBoost Estimator)           │                   │
+                │          Main Model: National Wholesale RBOB Futures        │                   │
+                └──────────────────────────────┬──────────────────────────────┘                   │
+                                               │ Base Wholesale Commodity Forecast                │
+                                               ▼                                                  │
+                ┌─────────────────────────────────────────────────────────────┐                   │
+                │            LOCALIZED METRO AREA CALIBRATION MODELS          │                   │
+                │ • Tulsa Metro (tulsa_main.py - Live $3.89/gal, Cushing WTI) │                   │
+                │ • Newark Metro (newark_main.py - $3.35/gal, C&D Canal)     │                   │
+                │ • Cincinnati Metro (cincinnati_main.py - Dual-State Tax)    │                   │
+                └──────────────────────────────┬──────────────────────────────┘                   │
                                               ▼                                                  │
                ┌─────────────────────────────────────────────────────────────┐                   │
                │             MLOps PREDICTION TRACKER & LOGGING              │                   │
