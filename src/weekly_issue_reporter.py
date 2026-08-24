@@ -80,7 +80,7 @@ def generate_weekly_markdown_report() -> str:
 
 | Region / Target | Model Architecture | Evaluated Days | Mean Absolute Error (MAE) | Directional Hit Rate | Status |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **National Wholesale (RBOB)** | Ridge ($\\alpha=10.0$) + Gemini 2.5 Flash + Physics Feeds | {eval_count} | **`${nat_mae:.4f}/gal`** | **`{nat_hit:.2f}%`** | 🟢 Optimal |
+| **National Wholesale (RBOB)** | Ridge ($\alpha=10.0$) + Gemini 2.5 Flash + Physics Feeds | {eval_count} | **`${nat_mae:.4f}/gal`** | **`{nat_hit:.2f}%`** | 🟢 Optimal |
 | **Tulsa, OK Metro Retail** | Localized NOAA + Cushing Crack Spread Base | {eval_count} | **`${tulsa_mae:.4f}/gal`** | **`{tulsa_hit:.2f}%`** | 🟢 Optimal |
 
 ---
