@@ -42,23 +42,36 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                                               │
                                               ▼
                ┌─────────────────────────────────────────────────────────────┐
-               │             4. QUANTITATIVE FORECASTING AGENT               │
-               │           (Standardized Ridge / XGBoost Estimator)          │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │ Base Forecasts
+               │             4. QUANTITATIVE FORECASTING AGENT               │◄──────────────────┐
+               │           (Standardized Ridge / XGBoost Estimator)          │                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Base Forecasts                                   │
+                                              ▼                                                  │
+               ┌─────────────────────────────────────────────────────────────┐                   │
+               │             5. SYNTHESIS & SHOCK SIMULATOR AGENT            │                   │
+               │ Simulates Refinery Outages, Hormuz Blockades & Weekend Posts │                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Real-Time Adjusted Forecast                      │
+                                              ▼                                                  │
+               ┌─────────────────────────────────────────────────────────────┐                   │
+               │             6. MLOps PREDICTION LOGGING AGENT               │                   │
+               │        (src/prediction_logger.py -> prediction_history.csv) │                   │
+               │  Logs Out-of-Time Forecasts & Backfills Actual Market Prices│                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Persistent Prediction History                    │
+                                              ▼                                                  │
+               ┌─────────────────────────────────────────────────────────────┐                   │
+               │      7. MODEL PERFORMANCE REVIEW & FEEDBACK LOOP AGENT      │                   │
+               │         (.github/workflows/weekly_model_review.yml)         │                   │
+               │  Evaluates Rolling Error Metrics & Computes Validation Loss │                   │
+               │  Automated Saturday (08:00 AM Central / 13:00 UTC) Runner   │                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Empirical Feedback Signal ───────────────────────┘
                                               ▼
                ┌─────────────────────────────────────────────────────────────┐
-               │             5. SYNTHESIS & SHOCK SIMULATOR AGENT            │
-               │ Simulates Refinery Outages, Hormuz Blockades & Weekend Posts │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │ Real-Time Adjusted Forecast
-                                              ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │             6. MLOps PREDICTION LOGGING AGENT               │
-               │        (src/prediction_logger.py -> prediction_history.csv)│
-               │  Backfills Actual Prices & Evaluates Rolling Error Metrics  │
-               │  Automated Daily (02:00 AM) & Saturday (08:00 AM Central) Runners   │
-               └──────────────────────────────┘
+               │     8. PUBLIC WEB DASHBOARD & PRESENTATION AGENT            │
+               │     (src/dashboard_generator.py -> docs/ GitHub Pages)      │
+               └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -123,17 +136,27 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 6. MLOps Prediction Logging & Weekly Review Agent (`src/prediction_logger.py` & `.github/workflows/weekly_model_review.yml`)
+### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
-* **Role:** Manages persistent prediction tracking in `data/prediction_history.csv` and executes weekly performance reviews.
-* **Automated Cloud Schedule:** Executes automatically every **Saturday morning at 08:00 AM Central / 13:00 UTC** on GitHub Actions cloud runners.
+* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts to `data/prediction_history.csv` and backfilling actual historical market prices as target dates arrive.
+* **Automated Daily Schedule:** Executes automatically during daily forecast runs (02:00 AM Central) to maintain clean out-of-time prediction records.
 * **Functions:**
   - `log_predictions()`: Logs 5-day out-of-time forecasts.
-  - `backfill_actual_prices_and_evaluate()`: Backfills actual historical prices from `yfinance` as target dates arrive and calculates rolling MAE, RMSE, and Directional Hit Rate.
+  - `backfill_actual_prices()`: Queries ground-truth market prices from `yfinance` as target dates mature and backfills actual prices in `prediction_history.csv`.
 
 ---
 
-### 7. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`)
+### 7. Model Performance Review & Continuous Feedback Loop Agent (`.github/workflows/weekly_model_review.yml`)
+
+* **Role:** Operates automated weekly model performance evaluations and maintains a continuous feedback loop into the quantitative forecasting engine to drive accuracy improvements over time.
+* **Automated Cloud Schedule:** Executes automatically every **Saturday morning at 08:00 AM Central / 13:00 UTC** on GitHub Actions cloud runners.
+* **Continuous Feedback Loop Mechanism:**
+  - **Rolling Error Metrics:** Evaluates rolling MAE, RMSE, and Directional Hit Rate metrics across 30-day, 60-day, and 90-day historical evaluation windows.
+  - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
+
+---
+
+### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`)
 
 * **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`).
 * **Route Structure & Hierarchy:**

@@ -73,29 +73,36 @@ A live multi-page public web dashboard is automatically updated and deployed on 
                                               │ Unified Feature Matrix
                                               ▼
                ┌─────────────────────────────────────────────────────────────┐
-               │              QUANTITATIVE FORECASTING AGENT                 │
-               │          (Standardized Ridge / XGBoost Estimator)           │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │ Base Forecasts
-                                              ▼
-                          ┌─────────────────────┴─────────────────────┐
-                          ▼                                           ▼
-          ┌───────────────────────────────┐           ┌───────────────────────────────┐
-          │  NATIONAL MODEL (main.py)     │           │ TULSA REGIONAL (tulsa_main.py)│
-          │ • Wholesale RBOB Futures      │           │ • Live Pump Base: $3.89/gal   │
-          │ • Directional Acc: 60.79%     │           │ • Cushing WTI Proximity       │
-          │ • MAE Error: $0.1069/gal      │           │ • West Tulsa Refinery Tornado │
-          └───────────────┬───────────────┘           └───────────────┬───────────────┘
-                          │                                           │
-                          └─────────────────────┬─────────────────────┘
-                                                ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │             MLOps PREDICTION TRACKER & LOGGING              │
-               │        (src/prediction_logger.py -> prediction_history.csv)│
-               │  Backfills Actual Market Prices & Tracks Iteration Metrics  │
-               │  Automated Daily (02:00 AM) & Saturday (08:00 AM Central) Runners   │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │
+               │              QUANTITATIVE FORECASTING AGENT                 │◄──────────────────┐
+               │          (Standardized Ridge / XGBoost Estimator)           │                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Base Forecasts                                   │
+                                              ▼                                                  │
+                          ┌───────────────────┴───────────────────┐                              │
+                          ▼                                       ▼                              │
+          ┌───────────────────────────────┐       ┌───────────────────────────────┐              │
+          │  NATIONAL MODEL (main.py)     │       │ TULSA REGIONAL (tulsa_main.py)│              │
+          │ • Wholesale RBOB Futures      │       │ • Live Pump Base: $3.89/gal   │              │
+          │ • Directional Acc: 60.79%     │       │ • Cushing WTI Proximity       │              │
+          │ • MAE Error: $0.1069/gal      │       │ • West Tulsa Refinery Tornado │              │
+          └───────────────┬───────────────┘       └───────────────┬───────────────┘              │
+                          │                                       │                              │
+                          └───────────────────┬───────────────────┘                              │
+                                              ▼                                                  │
+               ┌─────────────────────────────────────────────────────────────┐                   │
+               │             MLOps PREDICTION TRACKER & LOGGING              │                   │
+               │        (src/prediction_logger.py -> prediction_history.csv)│                   │
+               │  Logs Out-of-Time Forecasts & Backfills Actual Market Prices│                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Persistent Prediction History                    │
+                                              ▼                                                  │
+               ┌─────────────────────────────────────────────────────────────┐                   │
+               │    WEEKLY MODEL PERFORMANCE REVIEW & CONTINUOUS FEEDBACK    │                   │
+               │         (.github/workflows/weekly_model_review.yml)         │                   │
+               │  Evaluates Rolling Error Metrics & Computes Validation Loss │                   │
+               │  Automated Saturday (08:00 AM Central / 13:00 UTC) Runner   │                   │
+               └──────────────────────────────┬──────────────────────────────┘                   │
+                                              │ Empirical Feedback Signal ───────────────────────┘
                                               ▼
                ┌─────────────────────────────────────────────────────────────┐
                │         PUBLIC GITHUB PAGES WEB DASHBOARD DEPLOYER          │
@@ -127,7 +134,8 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 6. **Real-Time Finlight Financial News Stream (`src/finlight_feed.py`):** Integrates live commodity & macroeconomic news articles from tier-1 financial media (Reuters, Bloomberg, Seeking Alpha, Investing.com) using the `finlight.me` REST API.
 7. **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`):** Quantifies Trump Twitter/Truth Social energy posts and models Monday morning futures open price gaps (1.42x volatility multiplier).
 8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
-9. **Automated Saturday Cloud Review Runner (`.github/workflows/weekly_model_review.yml`):** Runs automatically every Saturday at 08:00 AM Central on GitHub cloud runners independently of desktop power status.
+9. **MLOps Prediction Tracker & Ground-Truth Backfilling (`src/prediction_logger.py`):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv` and automatically backfills actual market prices as target dates arrive.
+10. **Weekly Model Performance Review & Continuous Feedback Loop Runner (`.github/workflows/weekly_model_review.yml`):** Runs automatically every Saturday at 08:00 AM Central on GitHub Actions cloud runners to evaluate rolling MAE/RMSE/Hit Rate metrics and feed performance validation signals back into model retraining and feature weight optimization over time.
 
 ---
 

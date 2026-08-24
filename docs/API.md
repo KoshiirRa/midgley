@@ -30,17 +30,28 @@ Returns merged dataset of Tulsa refinery events and localized NOAA weather alert
 ## 3. MLOps Prediction Logging (`src.prediction_logger`)
 
 ### `log_predictions(predictions_df: pd.DataFrame, region: str = "Tulsa_OK", model_version: str = "v1.2-NOAA-Ridge") -> int`
-Appends new model predictions to `data/prediction_history.csv`.
+Appends new 5-day out-of-time model predictions to `data/prediction_history.csv`.
 
 ### `backfill_actual_prices_and_evaluate() -> pd.DataFrame`
-Queries actual historical market prices from `yfinance` up to today, matches target dates, and populates actual prices, errors, and directional hit outcomes.
-
-### `generate_performance_report() -> pd.DataFrame`
-Generates a summary report table aggregating MAE, RMSE, and Directional Hit Rate by Region and Model Version.
+Queries actual historical market prices from `yfinance` up to today, matches target dates, and populates ground-truth price records in `prediction_history.csv`.
 
 ---
 
-## 5. Dashboard & Multi-Locale Web Generator (`src.dashboard_generator`)
+## 4. Weekly Performance Review & Feedback Loop Runner (`.github/workflows/weekly_model_review.yml`)
+
+### `generate_performance_report() -> pd.DataFrame`
+Generates an empirical summary report table aggregating MAE, RMSE, and Directional Hit Rate by Region and Model Version. Used by the Saturday automated runner (`.github/workflows/weekly_model_review.yml`) to feed performance validation signals back into model re-calibration and feature weight optimization.
+
+---
+
+## 5. Live Fuel Feeds (`src.live_fuel_feed`)
+
+### `fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict`
+Queries GasBuddy GraphQL API for real-time station prices in Tulsa, OK.
+
+---
+
+## 6. Dashboard & Multi-Locale Web Generator (`src.dashboard_generator`)
 
 ### `generate_public_dashboard()`
 Generates all public HTML web app pages into `docs/`: `index.html` (overview), `national.html` & `national/index.html` (`/national`), `tulsa.html` & `tulsa/index.html` (`/tulsa`), and `math.html` (`/math`).
@@ -50,14 +61,6 @@ Returns standard sticky HTML navigation header with active tab highlighting and 
 
 ### `calculate_rolling_metrics() -> tuple`
 Reads `data/prediction_history.csv` and returns arrays `(dates, rolling_mae, rolling_hit)` tracking rolling MAE and directional accuracy improvement over time.
-
-
----
-
-## 4. Live Fuel Feeds (`src.live_fuel_feed`)
-
-### `fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict`
-Queries GasBuddy GraphQL API for real-time station prices in Tulsa, OK.
 
 ### `fetch_google_maps_fuel_prices(place_id: str = None, api_key: str = None) -> dict`
 Queries Google Places API (New) for station `fuelOptions` details (`REGULAR`, `MIDGRADE`, `PREMIUM`, `DIESEL`). Requires `GOOGLE_MAPS_API_KEY`.

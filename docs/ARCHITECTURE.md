@@ -68,16 +68,37 @@ The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\
 
 ---
 
-## 4. MLOps Prediction Logging & Backfilling Engine
+## 4. MLOps Prediction Logging & Backfilling Engine (`src/prediction_logger.py`)
 
-All 5-day out-of-time forecasts are logged to `data/prediction_history.csv`. As time progresses, `src/prediction_logger.py` queries actual historical market prices, backfilling actual 5-day prices and evaluating empirical model performance metrics:
-- **Mean Absolute Error (MAE):** $\frac{1}{N} \sum |P_{\text{actual}} - \hat{P}_{\text{pred}}|$
-- **Root Mean Squared Error (RMSE):** $\sqrt{\frac{1}{N} \sum (P_{\text{actual}} - \hat{P}_{\text{pred}})^2}$
-- **Directional Accuracy (%):** $\frac{1}{N} \sum \mathbb{I}(\text{sign}(\Delta P_{\text{actual}}) == \text{sign}(\Delta \hat{P}_{\text{pred}})) \times 100\%$
+All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records.
 
 ---
 
-## 5. Multi-Page Web Architecture & Routing (`src/dashboard_generator.py`)
+## 5. Weekly Model Performance Review & Continuous Feedback Loop (`.github/workflows/weekly_model_review.yml`)
+
+The weekly model performance review runs automatically on Saturday mornings (08:00 AM Central / 13:00 UTC). Its primary purpose is to calculate rolling error metrics and operate an automated feedback loop back into the forecasting pipeline to continuously enhance model performance over time:
+
+* **Mean Absolute Error (MAE):**
+  \[
+  \text{MAE} = \frac{1}{N} \sum_{i=1}^{N} |P_{\text{actual}, i} - \hat{P}_{\text{pred}, i}|
+  \]
+* **Root Mean Squared Error (RMSE):**
+  \[
+  \text{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (P_{\text{actual}, i} - \hat{P}_{\text{pred}, i})^2}
+  \]
+* **Directional Accuracy (%):**
+  \[
+  \text{Hit Rate} = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}\left(\text{sign}(\Delta P_{\text{actual}, i}) == \text{sign}(\Delta \hat{P}_{\text{pred}, i})\right) \times 100\%
+  \]
+
+### Continuous Feedback Loop Mechanics:
+1. **Diagnostic Validation & Error Tracking:** Calculates rolling metrics across 30-day, 60-day, and 90-day evaluation windows to detect model drift or unmodeled shock divergence.
+2. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
+3. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
+
+---
+
+## 6. Multi-Page Web Architecture & Routing (`src/dashboard_generator.py`)
 
 The public presentation layer is compiled by `src/dashboard_generator.py` into static HTML artifacts in `docs/`:
 
