@@ -140,5 +140,17 @@ def get_historical_event_dataset() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load Key Market Movers feed: {e}")
 
+    # 5. Merge Finlight.me Real-Time Financial Energy News Feed
+    try:
+        from src.finlight_feed import get_finlight_energy_events
+        finlight_df = get_finlight_energy_events()
+        if not finlight_df.empty:
+            fin_events = finlight_df[['date', 'headline']].copy()
+            fin_events['category'] = 'Finlight_Energy_News'
+            events_df = pd.concat([events_df, fin_events], ignore_index=True)
+            logger.info(f"Successfully integrated {len(fin_events)} live finlight.me news events into LLM dataset.")
+    except Exception as e:
+        logger.warning(f"Could not load Finlight.me news feed: {e}")
+
     events_df = events_df.sort_values('date').reset_index(drop=True)
     return events_df

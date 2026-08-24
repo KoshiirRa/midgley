@@ -65,10 +65,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ## Agent Specifications
 
-### 1. Event, Weather & Social Media Extraction Agent (`src/event_analyzer.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, `src/executive_social_feed.py`, & `src/alternative_data_feeds.py`)
+### 1. Event, Weather & Social Media Extraction Agent (`src/event_analyzer.py`, `src/finlight_feed.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, `src/executive_social_feed.py`, & `src/alternative_data_feeds.py`)
 
-* **Role:** Translates raw news bulletins, NOAA alerts, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
+* **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, NOAA alerts, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
 * **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
+* **Real-Time Financial News Stream (`src/finlight_feed.py`):**
+  - **Live Coverage:** Ingests real-time financial energy headlines from tier-1 media (Reuters, Bloomberg, Seeking Alpha, Investing.com) via `finlight.me` REST API.
+  - **Dynamic Ingestion:** Queries oil, gasoline, refining outages, OPEC decisions, and global maritime chokepoint shifts.
 * **Executive Social Media & Weekend Gap Engine:**
   - **Empirical Correlation:** Econometric analysis confirms $p < 0.01$ correlation between executive social media posts (e.g., Trump OPEC pressure & tariff declarations) and immediate short-term futures return shocks.
   - **Dovish OPEC Pressure:** Posts urging OPEC to lower prices cause immediate average $-1.85\%$ single-day RBOB price drops.
@@ -101,7 +104,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 4. Quantitative Forecasting Agent (`src/models.py`)
 
 * **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression $\alpha=10.0$) and XGBoost regressors on 80/20 chronological train/test splits.
-* **Out-of-Time Test Performance (v1.3 Physics-LLM):**
+* **Out-of-Time Test Performance (v1.4 Finlight-LLM):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069\text{ MAE}$).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331\text{ MAE}$).
 

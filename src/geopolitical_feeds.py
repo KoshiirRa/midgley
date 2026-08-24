@@ -35,7 +35,7 @@ CHOKEPOINTS = {
 def get_geopolitical_maritime_events() -> pd.DataFrame:
     """
     Returns structured historical and real-time event feeds for Iran/Hormuz, Suez/Red Sea, and Venezuela.
-    Can be dynamically fetched or augmented via public RSS/API endpoints.
+    Dynamically fetched via finlight.me API or public RSS endpoints when available.
     """
     events = [
         # --- STRAIT OF HORMUZ & IRAN CONFLICT ---
@@ -125,6 +125,41 @@ def get_geopolitical_maritime_events() -> pd.DataFrame:
     
     df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
+
+    # Dynamically augment with live finlight.me news if API key is present
+    try:
+        from src.finlight_feed import fetch_finlight_articles
+        live_articles = fetch_finlight_articles(query="Hormuz OR Red Sea OR Houthi OR Suez OR Venezuela OR sanctions", page_size=20)
+        live_events = []
+        for a in live_articles:
+            text = f"{a.get('title', '')} - {a.get('summary', '')}".lower()
+            chokepoint = None
+            category = "Geopolitical_News"
+            if "hormuz" in text or "iran" in text:
+                chokepoint = "Strait_of_Hormuz"
+                category = "Iran_Hormuz"
+            elif "red sea" in text or "houthi" in text or "suez" in text:
+                chokepoint = "Suez_Bab_el_Mandeb"
+                category = "Suez_RedSea"
+            elif "venezuela" in text or "sanction" in text:
+                chokepoint = "Venezuela_Orinoco"
+                category = "Venezuela"
+
+            if chokepoint:
+                dt_str = pd.to_datetime(a.get("publishDate")).strftime("%Y-%m-%d") if a.get("publishDate") else datetime.now().strftime("%Y-%m-%d")
+                live_events.append({
+                    "date": pd.to_datetime(dt_str),
+                    "headline": a.get("title", ""),
+                    "category": category,
+                    "chokepoint": chokepoint
+                })
+        if live_events:
+            live_df = pd.DataFrame(live_events)
+            df = pd.concat([df, live_df], ignore_index=True)
+            logger.info(f"Augmented geopolitical feed with {len(live_events)} live finlight.me events.")
+    except Exception as e:
+        logger.debug(f"Finlight geopolitical augmentation notice: {e}")
+
     return df
 
 def calculate_chokepoint_risk_index(events_df: pd.DataFrame) -> dict:

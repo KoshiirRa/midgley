@@ -72,7 +72,7 @@ def generate_weekly_markdown_report() -> str:
 
     report = f"""# 📊 Weekly Model Review & Performance Audit ({today_str})
 
-### 🤖 Model Version: `v1.3 Physics-LLM`
+### 🤖 Model Version: `v1.4 Finlight-LLM`
 
 ---
 

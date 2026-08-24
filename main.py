@@ -120,7 +120,7 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         'predicted_5d_price': preds_hybrid
     })
     
-    n_logged = log_predictions(pred_log_df, region="National", model_version="v1.2-NOAA-National-Ridge")
+    n_logged = log_predictions(pred_log_df, region="National", model_version="v1.4-Finlight-National-Ridge")
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

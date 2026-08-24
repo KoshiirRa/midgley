@@ -40,7 +40,7 @@ def ensure_history_store():
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
-    model_version: str = "v1.2-NOAA-Ridge"
+    model_version: str = "v1.4-Finlight-Ridge"
 ) -> int:
     """
     Logs a DataFrame of model predictions into prediction_history.csv.

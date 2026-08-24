@@ -61,8 +61,8 @@ def update_readme_forecasts():
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.184`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_date}` | `v1.2-NOAA-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_date}` | `v1.2-NOAA-Ridge` |
+| **National Wholesale (RBOB)** | `$3.184`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 {END_TAG}"""

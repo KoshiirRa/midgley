@@ -105,7 +105,7 @@ def generate_public_dashboard():
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">v1.3 Physics-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -286,9 +286,16 @@ def generate_public_dashboard():
                                 <td class="py-2.5 px-4 text-blue-300">60.79%</td>
                                 <td class="py-2.5 px-4 text-slate-400">Upgraded</td>
                             </tr>
+                            <tr class="opacity-90">
+                                <td class="py-2.5 px-4 font-semibold">v1.3 Physics-LLM</td>
+                                <td class="py-2.5 px-4">+ Cboe OVX Volatility + Baker Hughes Rigs + Key Movers Feeds</td>
+                                <td class="py-2.5 px-4 text-blue-300">$0.1069</td>
+                                <td class="py-2.5 px-4 text-blue-300">60.79%</td>
+                                <td class="py-2.5 px-4 text-slate-400">Upgraded</td>
+                            </tr>
                             <tr class="bg-blue-950/20 font-bold border-l-2 border-blue-500">
-                                <td class="py-2.5 px-4 text-white">v1.3 Physics-LLM (Current)</td>
-                                <td class="py-2.5 px-4 text-blue-300">+ Cboe OVX Volatility + Baker Hughes Rigs + Key Movers Feeds</td>
+                                <td class="py-2.5 px-4 text-white">v1.4 Finlight-LLM (Current)</td>
+                                <td class="py-2.5 px-4 text-blue-300">+ Real-Time Finlight.me Financial Media REST Stream & Live News Extraction</td>
                                 <td class="py-2.5 px-4 text-emerald-400">$0.1069</td>
                                 <td class="py-2.5 px-4 text-emerald-400">60.79%</td>
                                 <td class="py-2.5 px-4 text-emerald-400"><i class="fa-solid fa-circle text-[10px] mr-1"></i> Active Production</td>
@@ -624,9 +631,9 @@ def generate_public_dashboard():
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">v1.3 Physics-LLM Guide</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">v1.4 Finlight-LLM Guide</span>
                     </h1>
-                    <p class="text-xs text-slate-400">Comprehensive Educational Guide: All 8 Feature Layers & Equations</p>
+                    <p class="text-xs text-slate-400">Comprehensive Educational Guide: All 9 Feature Layers & Equations</p>
                 </div>
             </div>
             
@@ -645,7 +652,7 @@ def generate_public_dashboard():
                 <i class="fa-solid fa-graduation-cap text-blue-400"></i> Mathematical & Econometric Architecture
             </h2>
             <p class="text-slate-300 text-base leading-relaxed">
-                Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.3 Physics-LLM</strong>.
+                Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.4 Finlight-LLM</strong>.
             </p>
         </div>
 
@@ -765,11 +772,11 @@ def generate_public_dashboard():
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-emerald-400">06</span>
-                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds & Key Market Movers (v1.3 Physics-LLM)</h3>
+                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds & Key Market Movers</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                `v1.3 Physics-LLM` incorporates options market tail-risk, active drilling rig pipelines, and high-impact policy figures:
+                Inverted options market tail-risk, active drilling rig pipelines, and high-impact policy figures:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
@@ -785,15 +792,39 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 7: Exponential Shock Decay -->
+        <!-- Section 7: Real-Time Financial Media Feed (Finlight.me REST API) -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-amber-400">07</span>
+                <span class="text-2xl font-black text-purple-400">07</span>
+                <h3 class="text-2xl font-bold text-white">Real-Time Financial Media Feed (Finlight.me REST API)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                <code>v1.4 Finlight-LLM</code> integrates live, real-time financial media news articles via the <strong>finlight.me REST API</strong> (Reuters, Bloomberg, Seeking Alpha, Investing.com, Al Jazeera, Fox News). Targeted Boolean keyword query vectors stream raw commodity and refining bulletins directly into the Gemini 2.5 Flash batch factor extraction pipeline:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 7.1: Live News Vector Ingestion & Batch Factor Scoring</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>API Endpoint:</strong> <code>POST https://api.finlight.me/v2/articles</code> with header <code>X-API-KEY</code>.<br>
+                    <strong>Target Queries:</strong> <code>oil OR gasoline OR crude OR RBOB OR OPEC OR petroleum</code>, <code>refinery OR Cushing OR outage OR inventory OR EIA</code>, and <code>Hormuz OR Red Sea OR Houthi OR Suez OR tanker OR sanctions</code>.<br>
+                    <strong>LLM Transformation:</strong> Raw news payloads (title, summary, source, publishDate) are parsed into 5 bounded quantitative factors: <code>geopolitical_risk</code>, <code>supply_disruption</code>, <code>demand_sentiment</code>, <code>opec_action</code>, and <code>overall_price_pressure</code>.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 8: Exponential Shock Decay -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-400">08</span>
                 <h3 class="text-2xl font-bold text-white">Exponential Memory Decay & Vector Fusion</h3>
             </div>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
-                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 7.1: Continuous Memory Decay Accumulator</h4>
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 8.1: Continuous Memory Decay Accumulator</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
                     $$\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp\left(-\frac{\ln 2}{t_{1/2}}\right) + \mathbf{V}_t$$
                 </div>
@@ -803,10 +834,10 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 8: Ridge Estimator & Live Retail Calibration -->
+        <!-- Section 9: Ridge Estimator & Live Retail Calibration -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-blue-500">08</span>
+                <span class="text-2xl font-black text-blue-500">09</span>
                 <h3 class="text-2xl font-bold text-white">Standardized Ridge Estimator & Live Pump Calibration</h3>
             </div>
 
@@ -815,7 +846,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
-                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 8.1: Regularized Ridge Objective Function & Calibration</h4>
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.1: Regularized Ridge Objective Function & Calibration</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
                     $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Tulsa Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
                 </div>
@@ -829,7 +860,7 @@ def generate_public_dashboard():
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.3 Physics-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
 </body>

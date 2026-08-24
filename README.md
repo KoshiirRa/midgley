@@ -9,12 +9,12 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures ($RB=F$, $CL=F$, $BZ=F$) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-23 19:52 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-24 01:24 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.184`/gal | **`$3.144`/gal** | **DOWN 📉** | `2026-08-19` | `v1.2-NOAA-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.131`/gal** | **DOWN 📉** | `2026-08-19` | `v1.2-NOAA-Ridge` |
+| **National Wholesale (RBOB)** | `$3.184`/gal | **`$3.144`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.131`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -118,13 +118,14 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
    - **Tier 1 (National Basins):** NOAA NHC Hurricane advisories in Gulf Coast refining hubs & Permian/Bakken winter freeze warnings.
    - **Tier 2 (Localized Tulsa & Cushing):** NOAA NWS Tornado Warnings for **Tulsa County (`OKZ060`)** and sub-zero freeze warnings for **Cushing/Payne County (`OKZ066`)**.
 5. **Global Maritime Chokepoint Feeds (`src/geopolitical_feeds.py`):** Tracks Iran conflict alerts in the **Strait of Hormuz** ($21.0\text{M bpd}$ / $20\%$ of global oil), Red Sea / Suez Canal tanker rerouting events, and Venezuela Orinoco heavy crude sanctions.
-6. **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`):** Quantifies Trump Twitter/Truth Social energy posts and models Monday morning futures open price gaps ($1.42\times$ volatility multiplier).
-7. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
-8. **Automated Saturday Cloud Review Runner (`.github/workflows/weekly_model_review.yml`):** Runs automatically every Saturday at 08:00 AM Central on GitHub cloud runners independently of desktop power status.
+6. **Real-Time Finlight Financial News Stream (`src/finlight_feed.py`):** Integrates live commodity & macroeconomic news articles from tier-1 financial media (Reuters, Bloomberg, Seeking Alpha, Investing.com) using the `finlight.me` REST API.
+7. **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`):** Quantifies Trump Twitter/Truth Social energy posts and models Monday morning futures open price gaps ($1.42\times$ volatility multiplier).
+8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
+9. **Automated Saturday Cloud Review Runner (`.github/workflows/weekly_model_review.yml`):** Runs automatically every Saturday at 08:00 AM Central on GitHub cloud runners independently of desktop power status.
 
 ---
 
-## 📊 Model Performance Summary (v1.3 Physics-LLM)
+## 📊 Model Performance Summary (v1.4 Finlight-LLM)
 
 | Region / Target | Model Algorithm | MAE ($/gal) | RMSE ($/gal) | MAPE (%) | Directional Hit Rate |
 | :--- | :--- | :---: | :---: | :---: | :---: |

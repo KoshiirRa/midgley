@@ -41,6 +41,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          FINLIGHT_API_KEY: ${{ secrets.FINLIGHT_API_KEY }}
         run: |
           python run_all.py --use-llm-api
 

@@ -147,7 +147,7 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
         'predicted_5d_price': preds_hybrid
     })
     
-    n_logged = log_predictions(pred_log_df, region="Tulsa_OK", model_version="v1.2-NOAA-Tulsa-Ridge")
+    n_logged = log_predictions(pred_log_df, region="Tulsa_OK", model_version="v1.4-Finlight-Tulsa-Ridge")
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()
