@@ -31,6 +31,8 @@ def update_readme_forecasts():
     nat_dir = "DOWN 📉"
     tulsa_price = 3.780
     tulsa_dir = "DOWN 📉"
+    newark_price = 3.250
+    newark_dir = "DOWN 📉"
     target_date = "Next 5 Business Days"
     
     if os.path.exists(HISTORY_CSV_PATH):
@@ -39,6 +41,7 @@ def update_readme_forecasts():
             if not df.empty:
                 nat_df = df[df['region'] == 'National']
                 tulsa_df = df[df['region'] == 'Tulsa_OK']
+                newark_df = df[df['region'] == 'Newark_DE']
                 
                 if not nat_df.empty:
                     latest_nat = nat_df.iloc[-1]
@@ -53,6 +56,13 @@ def update_readme_forecasts():
                     base_t = latest_tulsa['current_base_price']
                     tulsa_dir = "UP 📈" if tulsa_price >= base_t else "DOWN 📉"
                     target_date = latest_tulsa['forecast_target_date']
+
+                if not newark_df.empty:
+                    latest_newark = newark_df.iloc[-1]
+                    newark_price = latest_newark['predicted_5d_price']
+                    base_n = latest_newark['current_base_price']
+                    newark_dir = "UP 📈" if newark_price >= base_n else "DOWN 📉"
+                    target_date = latest_newark['forecast_target_date']
         except Exception as e:
             logger.warning(f"Could not read prediction history: {e}")
             
@@ -63,6 +73,7 @@ def update_readme_forecasts():
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **National Wholesale (RBOB)** | `$3.184`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 | **Tulsa, OK Metro Retail** | `$3.890`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.350`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 {END_TAG}"""

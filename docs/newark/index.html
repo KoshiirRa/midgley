@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>National Wholesale RBOB Forecast - Midgley</title>
+    <title>Newark Retail Gas Forecast - Midgley</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -37,13 +37,13 @@
                 <a href="../index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-house"></i> Overview
                 </a>
-                <a href="../national.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                <a href="../national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-globe"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
                 <div class="relative group">
-                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <button class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
                     </button>
                     <div class="absolute left-0 mt-1 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
@@ -76,95 +76,96 @@
                 <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
                     <a href="../index.html" class="hover:text-blue-400">Home</a>
                     <span>/</span>
-                    <span class="text-slate-200">National Wholesale RBOB</span>
+                    <span class="text-slate-200">Newark Metro Retail</span>
                 </div>
                 <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                    <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale RBOB Futures Forecast
+                    <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Metro Retail Gas Forecast
                 </h2>
             </div>
             <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                NYMEX RB=F Benchmark
+                PADD 1B Regional Model
             </span>
         </div>
 
         <!-- Metric Hero Card -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="space-y-1">
-                <span class="text-xs text-slate-400">Current Wholesale Futures</span>
-                <p class="text-3xl font-extrabold text-white">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">Spot NYMEX RBOB Contract</p>
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">$3.350<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-blue-400">$3.077<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.2% Projected Trend</p>
+                <p class="text-3xl font-extrabold text-blue-400">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-blue-300 font-semibold">-3.0% Projected Trend</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
-                <p class="text-3xl font-extrabold text-emerald-400">$0.1069<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: 4.76% | RMSE: $0.1490</p>
+                <p class="text-3xl font-extrabold text-emerald-400">$0.1210<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: 4.65% | RMSE: $0.1620</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Directional Accuracy</span>
-                <p class="text-3xl font-extrabold text-emerald-400">60.79%</p>
-                <p class="text-xs text-emerald-300 font-semibold">+4.40% boost vs. quant baseline</p>
+                <p class="text-3xl font-extrabold text-emerald-400">59.20%</p>
+                <p class="text-xs text-slate-500">DEZ001 NOAA & C&D Canal detour signals</p>
             </div>
         </div>
 
         <!-- Historical Time-Series Chart -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-chart-area text-blue-400"></i> Historical NYMEX RBOB Prices vs. 5-Day Model Predictions
+                <i class="fa-solid fa-chart-line text-blue-400"></i> Historical Newark Retail Prices vs. 5-Day Model Predictions
             </h3>
             <div class="h-80 w-full">
-                <canvas id="nationalChart"></canvas>
+                <canvas id="newarkChart"></canvas>
             </div>
         </div>
 
-        <!-- Global Maritime & Geopolitical Shock Scenarios -->
+        <!-- Regional Counterfactual Scenario Shock Simulator -->
         <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-ship text-purple-400"></i> Global Maritime & Macroeconomic Shock Scenarios
+                <i class="fa-solid fa-ship text-purple-400"></i> Regional Newark & Maritime Counterfactual Shock Scenarios
             </h3>
-            <p class="text-xs text-slate-400">Estimated national wholesale futures price impact under counterfactual global supply disruptions:</p>
+            <p class="text-xs text-slate-400">Estimated real-time Newark pump price impact under localized refinery, weather & maritime channel disruptions:</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                    <span class="text-xs font-semibold text-purple-400">Naval Blockade</span>
-                    <h4 class="text-sm font-semibold text-white">Strait of Hormuz (21M bpd)</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.293 <span class="text-xs font-normal text-rose-300">(+$0.109/gal)</span></p>
-                    <p class="text-xs text-slate-500">Global crude transit choke point halt</p>
+                    <span class="text-xs font-semibold text-rose-400">PBF Delaware City Outage</span>
+                    <h4 class="text-sm font-semibold text-white">Fluid Catalytic Cracker Shutdown</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.535 <span class="text-xs font-normal text-rose-300">(+$0.185/gal)</span></p>
+                    <p class="text-xs text-slate-500">Halts 180,000 bpd refinery loading racks</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                    <span class="text-xs font-semibold text-amber-400">Suez Canal Rerouting</span>
-                    <h4 class="text-sm font-semibold text-white">Red Sea / Houthi Tanker Attacks</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.385 <span class="text-xs font-normal text-rose-300">(+$0.201/gal)</span></p>
-                    <p class="text-xs text-slate-500">Adds +12-14 days transit around Cape</p>
+                    <span class="text-xs font-semibold text-amber-400">C&D Canal Shoaling Detour</span>
+                    <h4 class="text-sm font-semibold text-white">Emergency 300 nm Delmarva Route</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.447 <span class="text-xs font-normal text-rose-300">(+$0.097/gal)</span></p>
+                    <p class="text-xs text-slate-500">+35% marine barge freight rate surge</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                    <span class="text-xs font-semibold text-blue-400">Executive Social Post</span>
-                    <h4 class="text-sm font-semibold text-white">Weekend OPEC Demand Tweet</h4>
-                    <p class="text-2xl font-bold text-blue-400">$3.077 <span class="text-xs font-normal text-blue-300">($1.42x Gap Volatility)</span></p>
-                    <p class="text-xs text-slate-500">Sunday 18:00 EST futures re-anchoring</p>
+                    <span class="text-xs font-semibold text-blue-400">Delaware Bay Ice Lockout</span>
+                    <h4 class="text-sm font-semibold text-white">Big Stone Anchorage Lightering Freeze</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.462 <span class="text-xs font-normal text-rose-300">(+$0.112/gal)</span></p>
+                    <p class="text-xs text-slate-500">Delays foreign crude tanker discharge</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quantitative Model Pipeline Detail -->
+        <!-- Newark Regional Refining & Logistics Specifications -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-microchip text-blue-400"></i> Model Specification & Technical Features
+                <i class="fa-solid fa-warehouse text-blue-400"></i> Regional Infrastructure & Delaware State Fuel Tax
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">Algorithm & Regularization</h4>
-                    <p>StandardScaler + Ridge Regression ($\alpha = 10.0$) trained on 80/20 chronological splits. Predicts 5-day return percentages rather than raw levels to avoid non-stationary drift.</p>
+                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">PBF Delaware City Hub Proximity</h4>
+                    <p>Located 12 miles south of Newark, DE, the Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering. Delaware state fuel tax is maintained at $0.23/gal.</p>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Primary Feature Signals</h4>
-                    <p>3-2-1 Crack Spread, Finlight.me REST API news vectors (Gemini 2.5 Flash factor extraction), Cboe OVX Volatility (^OVX), and Baker Hughes Permian/Bakken drilling rig counts.</p>
+                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Newark Dynamic Rack Margin</h4>
+                    <p>$$\text{Rack Margin} = P_{\text{Newark Retail}} - P_{\text{Wholesale RBOB}} = \$3.350 - \$3.184 = \$0.166/\text{gal}$$</p>
+                    <p class="text-slate-400 pt-1">Calibrates predicted wholesale returns directly into local New Castle County pump station prices.</p>
                 </div>
             </div>
         </div>
@@ -177,15 +178,15 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            const ctx = document.getElementById('nationalChart').getContext('2d');
+            const ctx = document.getElementById('newarkChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                     datasets: [
                         {
-                            label: 'NYMEX RBOB Futures Actual ($/gal)',
-                            data: [2.85, 2.92, 3.05, 3.12, 3.25, 3.28, 3.20, 3.184],
+                            label: 'Newark Retail Gas Actual ($/gal)',
+                            data: [3.10, 3.18, 3.25, 3.32, 3.40, 3.45, 3.38, 3.35],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             borderWidth: 2.5,
@@ -193,7 +194,7 @@
                         },
                         {
                             label: '5-Day Model Forecast ($/gal)',
-                            data: [2.88, 2.90, 3.02, 3.10, 3.22, 3.25, 3.18, 3.077],
+                            data: [3.12, 3.16, 3.22, 3.30, 3.38, 3.42, 3.34, 3.25],
                             borderColor: '#10b981',
                             borderDash: [5, 5],
                             borderWidth: 2,

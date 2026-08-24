@@ -47,9 +47,12 @@
                     <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                    <div class="absolute left-0 mt-1 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
                         <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
                         </a>
                         <div class="border-t border-slate-800/80 my-1"></div>
                         <span class="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">More Metros Coming Soon</span>
@@ -94,11 +97,11 @@
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">2 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">3 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 <!-- Card 1: National Wholesale RBOB -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
@@ -167,6 +170,41 @@
 
                     <a href="tulsa.html" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
                         Explore Full Tulsa Regional Analytics & Refinery Outages <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3: Newark Metro Retail -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
+                            <h4 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail Gas
+                            </h4>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            <i class="fa-solid fa-arrow-trend-down mr-1"></i> -3.0% Trend
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Current Live Pump Price</span>
+                            <p class="text-3xl font-extrabold text-white mt-1">$3.350<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                            <p class="text-3xl font-extrabold text-blue-400 mt-1">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> PBF Delaware City Hub: 12 mi</span>
+                        <span>Confidence: <strong class="text-slate-200">59.20%</strong></span>
+                    </div>
+
+                    <a href="newark.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Full Newark Regional Analytics & C&D Detours <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 

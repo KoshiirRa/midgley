@@ -46,9 +46,12 @@
                     <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                    <div class="absolute left-0 mt-1 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
                         <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
                         </a>
                         <div class="border-t border-slate-800/80 my-1"></div>
                         <span class="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">More Metros Coming Soon</span>
@@ -136,34 +139,36 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Two-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
-                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Localized OK}}$$
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Localized OK}} + \mathbf{W}_{\text{Localized DE}}$$
                 </div>
                 <p class="text-xs text-slate-400">
                     <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks & Permian/Bakken production basin freeze warnings.<br>
-                    <strong>Tier 2 (Localized Oklahoma):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa $125,000\text{ bpd}$ HF Sinclair loading racks, $+\$0.173/\text{gal}$ shock) and Cushing/Payne County (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.
+                    <strong>Tier 2 (Localized OK):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa $125,000\text{ bpd}$ HF Sinclair loading racks, $+\$0.173/\text{gal}$ shock) and Cushing (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.<br>
+                    <strong>Tier 2 (Localized DE):</strong> New Castle County (<code class="text-amber-300">DEZ001</code>) Nor'easters & storm surges affecting PBF Delaware City ($180,000\text{ bpd}$) loading racks and Delaware Bay lightering.
                 </p>
             </div>
         </section>
 
-        <!-- Section 4: Global Maritime Chokepoints -->
+        <!-- Section 4: Global & Regional Maritime Chokepoints -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-purple-500">04</span>
-                <h3 class="text-2xl font-bold text-white">Global Maritime Chokepoints & Delay Equations</h3>
+                <h3 class="text-2xl font-bold text-white">Global & Regional Maritime Chokepoints & Delay Equations</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Key maritime chokepoints dictate global crude transit times and freight rate premiums:
+                Key global and regional maritime chokepoints dictate crude transit times and regional rack margins:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit Premium</h4>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit & Detour Premium</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
-                    $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right)$$
+                    $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right), \quad \Delta \text{Margin}_{\text{Delaware}} = +\$0.097/\text{gal } (p = 0.00191)$$
                 </div>
                 <p class="text-xs text-slate-400">
                     <strong>Strait of Hormuz:</strong> $21.0\text{M bpd}$ ($20\%$ of global petroleum) naval blockade threats ($+\$0.109/\text{gal}$ price shock).<br>
-                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add $+12\text{--}14$ days transit time, adding $+\$4.50/\text{bbl}$ freight premium ($+\$0.201/\text{gal}$ price shock).
+                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add $+12\text{--}14$ days transit time, adding $+\$4.50/\text{bbl}$ freight premium ($+\$0.201/\text{gal}$ price shock).<br>
+                    <strong>Delaware Bay & C&D Canal:</strong> Big Stone Anchorage deepwater lightering freezes and C&D Canal shoaling closures force tank barges onto a $300\text{ nm}$ detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by $+\$0.097/\text{gal}$, $p = 0.00191$).
                 </p>
             </div>
         </section>

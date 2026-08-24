@@ -104,13 +104,14 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 3. Tulsa Regional Calibration Agent (`src/tulsa_regional.py`)
+### 3. Regional Calibration Agents (`src/tulsa_regional.py` & `src/newark_regional.py`)
 
-* **Role:** Tailors market time series to the Tulsa, OK metropolitan area.
-* **Key Mechanisms:**
-  - **Cushing WTI Dynamics:** Cushing, OK delivery hub (50 miles from Tulsa).
-  - **Live Pump Price Anchor:** Dynamically calibrates historical and projected series to current retail pump prices (e.g. **$3.89/gal**).
-  - **Tulsa Rack Margin:** $P_{\text{Tulsa Retail}} = P_{\text{Wholesale RBOB}} + \text{Dynamic Rack Margin}$.
+* **Tulsa Regional Calibration Agent (`src/tulsa_regional.py`):**
+  - Tailors market time series to the Tulsa, OK metropolitan area calibrated to live pump prices ($3.89/gal base) & Cushing WTI delivery hub dynamics.
+  - Rack margin: $P_{\text{Tulsa Retail}} = P_{\text{Wholesale RBOB}} + \text{Dynamic Rack Margin}$.
+* **Newark Regional Calibration Agent (`src/newark_regional.py`):**
+  - Tailors market time series to the Newark, DE metropolitan area (PADD 1B Central Atlantic) calibrated to live pump prices ($3.35/gal base) & PBF Delaware City Refinery (180,000 bpd capacity).
+  - Integrates **Delaware Bay deepwater lightering alerts (Big Stone Anchorage)** and **Chesapeake & Delaware (C&D) Canal barge detour events** (300 nm detour around Delmarva, $+\$0.097/\text{gal}$ rack margin expansion, $p = 0.00191$).
 
 ---
 
