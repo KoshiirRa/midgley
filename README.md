@@ -32,9 +32,14 @@ In stark contrast to Midgley's legacy of unintended consequences on atmospheric 
 
 ## 🌐 Public Interactive Web Dashboard
 
-A live public web dashboard (both Executive Consumer View & Technical MLOps Analytics) is automatically updated and deployed on every workflow run via GitHub Pages:
+A live multi-page public web dashboard is automatically updated and deployed on every workflow run via GitHub Pages:
 
 👉 **[https://koshiirra.github.io/midgley/](https://koshiirra.github.io/midgley/)**
+
+- **`/` (Overview)**: Central Midgley overview landing page featuring summary forecast cards for all active locales, rolling accuracy improvement charts, and multi-agent system pillars.
+- **`/national` (National Wholesale)**: Dedicated NYMEX RBOB futures forecast & technical analytics page.
+- **`/tulsa` (Tulsa Retail Gas)**: Dedicated Tulsa metro retail gas forecast & regional refinery shock simulator, accessible via the top nav **`Metro Areas`** dropdown menu.
+- **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 9 feature layers.
 
 ---
 

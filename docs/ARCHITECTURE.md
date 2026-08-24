@@ -74,3 +74,29 @@ All 5-day out-of-time forecasts are logged to `data/prediction_history.csv`. As 
 - **Mean Absolute Error (MAE):** $\frac{1}{N} \sum |P_{\text{actual}} - \hat{P}_{\text{pred}}|$
 - **Root Mean Squared Error (RMSE):** $\sqrt{\frac{1}{N} \sum (P_{\text{actual}} - \hat{P}_{\text{pred}})^2}$
 - **Directional Accuracy (%):** $\frac{1}{N} \sum \mathbb{I}(\text{sign}(\Delta P_{\text{actual}}) == \text{sign}(\Delta \hat{P}_{\text{pred}})) \times 100\%$
+
+---
+
+## 5. Multi-Page Web Architecture & Routing (`src/dashboard_generator.py`)
+
+The public presentation layer is compiled by `src/dashboard_generator.py` into static HTML artifacts in `docs/`:
+
+```
+                               ┌───────────────────────────────┐
+                               │     docs/index.html (/)       │
+                               │  Midgley Overview Landing     │
+                               │  Summary Forecast Cards Grid  │
+                               └──────────────┬────────────────┘
+                                              │
+           ┌──────────────────────────────────┼──────────────────────────────────┐
+           ▼                                  ▼                                  ▼
+┌─────────────────────┐            ┌─────────────────────┐            ┌─────────────────────┐
+│  docs/national.html │            │   docs/tulsa.html   │            │   docs/math.html    │
+│    (/national)      │            │      (/tulsa)       │            │       (/math)       │
+│ National Wholesale  │            │ Tulsa Retail Gas    │            │ KaTeX Math & Vector │
+│ Futures Analytics   │            │ Metro Dropdown Menu │            │ Layer Architecture  │
+└─────────────────────┘            └─────────────────────┘            └─────────────────────┘
+```
+
+Static web compatibility is preserved across both direct file routes (`/national.html`, `/tulsa.html`) and clean directory routes (`/national`, `/tulsa`) by outputting matching `index.html` files in subdirectory paths (`docs/national/index.html` and `docs/tulsa/index.html`).
+

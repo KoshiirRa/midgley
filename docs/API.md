@@ -40,6 +40,20 @@ Generates a summary report table aggregating MAE, RMSE, and Directional Hit Rate
 
 ---
 
+## 5. Dashboard & Multi-Locale Web Generator (`src.dashboard_generator`)
+
+### `generate_public_dashboard()`
+Generates all public HTML web app pages into `docs/`: `index.html` (overview), `national.html` & `national/index.html` (`/national`), `tulsa.html` & `tulsa/index.html` (`/tulsa`), and `math.html` (`/math`).
+
+### `get_nav_header(active_tab: str, rel_prefix: str = "") -> str`
+Returns standard sticky HTML navigation header with active tab highlighting and the **`Metro Areas`** dropdown menu.
+
+### `calculate_rolling_metrics() -> tuple`
+Reads `data/prediction_history.csv` and returns arrays `(dates, rolling_mae, rolling_hit)` tracking rolling MAE and directional accuracy improvement over time.
+
+
+---
+
 ## 4. Live Fuel Feeds (`src.live_fuel_feed`)
 
 ### `fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict`
