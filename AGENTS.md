@@ -96,17 +96,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Role:** Tailors market time series to the Tulsa, OK metropolitan area.
 * **Key Mechanisms:**
   - **Cushing WTI Dynamics:** Cushing, OK delivery hub (50 miles from Tulsa).
-  - **Live Pump Price Anchor:** Dynamically calibrates historical and projected series to current retail pump prices (e.g. **$\$3.89/\text{gal}$**).
+  - **Live Pump Price Anchor:** Dynamically calibrates historical and projected series to current retail pump prices (e.g. **$3.89/gal**).
   - **Tulsa Rack Margin:** $P_{\text{Tulsa Retail}} = P_{\text{Wholesale RBOB}} + \text{Dynamic Rack Margin}$.
 
 ---
 
 ### 4. Quantitative Forecasting Agent (`src/models.py`)
 
-* **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression $\alpha=10.0$) and XGBoost regressors on 80/20 chronological train/test splits.
+* **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression α=10.0) and XGBoost regressors on 80/20 chronological train/test splits.
 * **Out-of-Time Test Performance (v1.4 Finlight-LLM):**
-  - **National Model:** **60.79% Directional Accuracy** ($0.1069\text{ MAE}$).
-  - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331\text{ MAE}$).
+  - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
+  - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
 
 ---
 
@@ -114,12 +114,12 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 * **Role:** Enables counterfactual "What-If" scenario simulation.
 * **Scenarios Evaluated:**
-  - *West Tulsa HF Sinclair Refinery EF-3 Tornado Shock:* $+\$0.173/\text{gal}\ (+4.58\%)$
-  - *Cushing Keystone Pipeline Spill:* $+\$0.173/\text{gal}\ (+4.58\%)$
-  - *Strait of Hormuz Tanker Blockade (21M bpd):* $+\$0.109/\text{gal}\ (+2.88\%)$
-  - *Red Sea / Suez Rerouting Crisis:* $+\$0.201/\text{gal}\ (+5.32\%)$
-  - *Weekend Executive OPEC Talkdown Post:* $\$3.780/\text{gal}$ (Monday Open Re-anchoring)
-  - *Weekend Foreign Energy Tariff Declaration:* $\$3.780/\text{gal}$ (Supply Shock Re-anchoring)
+  - *West Tulsa HF Sinclair Refinery EF-3 Tornado Shock:* +$0.173/gal (+4.58%)
+  - *Cushing Keystone Pipeline Spill:* +$0.173/gal (+4.58%)
+  - *Strait of Hormuz Tanker Blockade (21M bpd):* +$0.109/gal (+2.88%)
+  - *Red Sea / Suez Rerouting Crisis:* +$0.201/gal (+5.32%)
+  - *Weekend Executive OPEC Talkdown Post:* $3.780/gal (Monday Open Re-anchoring)
+  - *Weekend Foreign Energy Tariff Declaration:* $3.780/gal (Supply Shock Re-anchoring)
 
 ---
 
