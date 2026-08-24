@@ -74,10 +74,10 @@ def calculate_rolling_metrics():
 
 
 def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
-    """Generates standard sticky header navigation bar."""
+    """Generates standard sticky header navigation bar with Metro Areas dropdown."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    tulsa_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "tulsa" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
@@ -106,9 +106,21 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 <a href="{nat_link}" class="px-3 py-1.5 rounded-lg {national_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-globe"></i> National RBOB
                 </a>
-                <a href="{tul_link}" class="px-3 py-1.5 rounded-lg {tulsa_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-location-dot"></i> Tulsa Retail
-                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg {metro_cls} transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="{tul_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <div class="border-t border-slate-800/80 my-1"></div>
+                        <span class="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">More Metros Coming Soon</span>
+                    </div>
+                </div>
+
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
@@ -517,6 +529,7 @@ def generate_public_dashboard():
 </body>
 </html>
 """.replace("{{NAV_OVERVIEW}}", nav_overview)
+    index_html = index_html.replace("{{NAV_OVERVIEW}}", nav_overview)
 
     with open(INDEX_PATH, "w", encoding="utf-8") as f:
         f.write(index_html)
@@ -1140,6 +1153,7 @@ def generate_public_dashboard():
 </body>
 </html>
 """.replace("{{NAV_MATH}}", nav_math)
+    math_html = math_html.replace("{{NAV_MATH}}", nav_math)
 
     with open(MATH_PATH, "w", encoding="utf-8") as f:
         f.write(math_html)
