@@ -57,7 +57,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                │             6. MLOps PREDICTION LOGGING AGENT               │
                │        (src/prediction_logger.py -> prediction_history.csv)│
                │  Backfills Actual Prices & Evaluates Rolling Error Metrics  │
-               │  Automated Saturday 08:00 AM Central GitHub Actions Runner   │
+               │  Automated Daily (02:00 AM) & Saturday (08:00 AM Central) Runners   │
                └──────────────────────────────┘
 ```
 

@@ -87,7 +87,7 @@ A live public web dashboard (both Executive Consumer View & Technical MLOps Anal
                │             MLOps PREDICTION TRACKER & LOGGING              │
                │        (src/prediction_logger.py -> prediction_history.csv)│
                │  Backfills Actual Market Prices & Tracks Iteration Metrics  │
-               │  Automated Saturday 08:00 AM Central GitHub Actions Runner   │
+               │  Automated Daily (02:00 AM) & Saturday (08:00 AM Central) Runners   │
                └──────────────────────────────┬──────────────────────────────┘
                                               │
                                               ▼
