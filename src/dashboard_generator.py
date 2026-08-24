@@ -140,7 +140,7 @@ def generate_public_dashboard():
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
     nav_overview = get_nav_header("overview")
-    index_html = """<!DOCTYPE html>
+    index_html = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -526,7 +526,7 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_national_html(rel_prefix: str = "") -> str:
         nav_national = get_nav_header("national", rel_prefix)
-        return """<!DOCTYPE html>
+        return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -710,7 +710,7 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_tulsa_html(rel_prefix: str = "") -> str:
         nav_tulsa = get_nav_header("tulsa", rel_prefix)
-        return """<!DOCTYPE html>
+        return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -894,7 +894,7 @@ def generate_public_dashboard():
     # 4. COMPREHENSIVE MATH & MODELING GUIDE (docs/math.html)
     # ---------------------------------------------------------------------------
     nav_math = get_nav_header("math")
-    math_html = """<!DOCTYPE html>
+    math_html = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
