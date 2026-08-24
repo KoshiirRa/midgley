@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from fastapi import FastAPI, Query, HTTPException, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from src.live_fuel_feed import (
@@ -402,6 +403,13 @@ except Exception as e:
     logger.warning(f"Could not initialize MCP SSE transport: {e}")
 
 
+# Mount static HTML web dashboard if docs directory is present
+if os.path.exists("docs"):
+    app.mount("/", StaticFiles(directory="docs", html=True), name="static")
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
