@@ -120,3 +120,27 @@ def get_newark_delaware_weather_dataset() -> pd.DataFrame:
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
+
+def get_cincinnati_weather_dataset() -> pd.DataFrame:
+    """
+    Localized NOAA Weather & Hydrologic Dataset for Cincinnati Metro (OHZ077 Hamilton County OH)
+    & Northern Kentucky (KYZ091/092/093 Boone/Kenton/Campbell Counties KY) & KCVG Airport:
+    - NOAA NWS Hydrologic Drought Warnings (Mississippi & Ohio River low-water levels at Memphis & Cairo)
+    - Severe Ohio River Ice Jams & Lock freeze-offs (Markland Locks & Dam)
+    - Ohio Valley Severe Convective Squall Lines & Polar Vortex refinery freezes.
+    """
+    cincinnati_weather_events = [
+        {"date": "2022-01-26", "headline": "NOAA NWS Hard Freeze Warning: Polar Vortex drops temperatures to -4°F in Hamilton County OH & NKY, freezing water cooling loops at Ohio Valley refiners.", "zone": "OHZ077 / KYZ091 (Cincinnati Metro)", "weather_type": "Polar Vortex Freeze"},
+        {"date": "2022-06-13", "headline": "NOAA NWS High Wind Warning: Severe June derecho with 75 mph winds strikes Cincinnati metro, knocking out power to 150,000 customers & river terminals.", "zone": "OHZ077 (Hamilton OH)", "weather_type": "Derecho / Severe Wind"},
+        {"date": "2022-10-05", "headline": "NOAA NWS River Drought Statement: Mississippi & Lower Ohio River gages drop to historic low levels at Cairo confluence & Memphis, halting petroleum barge draft.", "zone": "Ohio/Mississippi Confluence", "weather_type": "River Low-Water Drought"},
+        {"date": "2022-12-23", "headline": "NOAA NWS Winter Storm Elliott: Sub-zero Arctic airmass freezes Ohio River locks near Cincinnati; tow barge traffic suspended.", "zone": "OHZ077 / KYZ091", "weather_type": "Winter Freeze / River Jam"},
+        {"date": "2023-04-01", "headline": "NOAA SPC High Risk Convective Outlook: Severe tornado outbreak strikes Tri-State area; damage reported near Boone County KY fuel distribution hubs.", "zone": "KYZ091 (Boone/Kenton KY)", "weather_type": "Tornado Outbreak"},
+        {"date": "2023-09-28", "headline": "NOAA NWS Hydrologic Drought Advisory: Prolonged autumn drought drops Lower Mississippi River gage to -11 ft, enforcing -40% barge payload restrictions to Ohio River.", "zone": "Lower Mississippi Corridor", "weather_type": "River Low-Water Drought"},
+        {"date": "2024-04-03", "headline": "NOAA NWS Flood Warning: Ohio River crests at 54.5 ft in Cincinnati (Flood Stage 52 ft), inundating riverfront terminal docks and slowing barge discharge.", "zone": "OHZ077 (Cincinnati Riverfront)", "weather_type": "River Flood Crest"},
+        {"date": "2025-01-20", "headline": "NOAA NWS Ice Storm Warning: Freezing rain locks Markland Locks & Dam on Ohio River, trapping upstream petroleum barges bound for Cincinnati.", "zone": "Ohio River Locks", "weather_type": "Ice Lockout / Barge Delay"}
+    ]
+    df = pd.DataFrame(cincinnati_weather_events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+

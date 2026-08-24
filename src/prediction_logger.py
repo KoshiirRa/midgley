@@ -117,8 +117,14 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
         
         if target_date_str in actuals_map:
             raw_actual = float(actuals_map[target_date_str])
-            # Tulsa OK & Newark DE retail historical prices match raw_actual + 0.55 rack margin offset
-            actual_price = raw_actual + 0.55 if row['region'] in ["Tulsa_OK", "Newark_DE"] else raw_actual
+            # Regional retail historical prices match raw_actual + rack margin offset
+            if row['region'] == "Cincinnati_KY":
+                actual_price = raw_actual + 0.425
+            elif row['region'] in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH"]:
+                actual_price = raw_actual + 0.55
+            else:
+                actual_price = raw_actual
+
             actual_dir = "UP" if actual_price >= base_price else "DOWN"
             err_dollars = abs(actual_price - pred_price)
             hit = 1 if pred_dir == actual_dir else 0

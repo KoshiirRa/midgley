@@ -12,12 +12,15 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-24 07:59 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-24 10:38 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.184`/gal | **`$3.132`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.156`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `$3.184`/gal | **`$3.144`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.131`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.350`/gal | **`$3.145`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `$3.450`/gal | **`$3.149`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.325`/gal | **`$3.024`/gal** | **DOWN 📉** | `2026-08-19` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -41,7 +44,9 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/` (Overview)**: Central Midgley overview landing page featuring summary forecast cards for all active locales, rolling accuracy improvement charts, and multi-agent system pillars.
 - **`/national` (National Wholesale)**: Dedicated NYMEX RBOB futures forecast & technical analytics page.
 - **`/tulsa` (Tulsa Retail Gas)**: Dedicated Tulsa metro retail gas forecast & regional refinery shock simulator, accessible via the top nav **`Metro Areas`** dropdown menu.
+- **`/cincinnati` (Cincinnati OH/KY Cross-River Retail)**: Dedicated Cincinnati OH/KY metro retail gas forecast featuring dual-state fuel tax differential display (OH $3.45 vs NKY $3.325) and Mississippi/Ohio River low-water barge bottleneck simulator.
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 9 feature layers.
+
 
 ---
 

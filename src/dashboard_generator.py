@@ -22,14 +22,17 @@ INDEX_PATH = os.path.join(DOCS_DIR, "index.html")
 NATIONAL_PATH = os.path.join(DOCS_DIR, "national.html")
 TULSA_PATH = os.path.join(DOCS_DIR, "tulsa.html")
 NEWARK_PATH = os.path.join(DOCS_DIR, "newark.html")
+CINCINNATI_PATH = os.path.join(DOCS_DIR, "cincinnati.html")
 MATH_PATH = os.path.join(DOCS_DIR, "math.html")
 
 NATIONAL_SUB_DIR = os.path.join(DOCS_DIR, "national")
 TULSA_SUB_DIR = os.path.join(DOCS_DIR, "tulsa")
 NEWARK_SUB_DIR = os.path.join(DOCS_DIR, "newark")
+CINCINNATI_SUB_DIR = os.path.join(DOCS_DIR, "cincinnati")
 NATIONAL_SUB_PATH = os.path.join(NATIONAL_SUB_DIR, "index.html")
 TULSA_SUB_PATH = os.path.join(TULSA_SUB_DIR, "index.html")
 NEWARK_SUB_PATH = os.path.join(NEWARK_SUB_DIR, "index.html")
+CINCINNATI_SUB_PATH = os.path.join(CINCINNATI_SUB_DIR, "index.html")
 
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 
@@ -80,13 +83,14 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
     nat_link = f"{rel_prefix}national.html"
     tul_link = f"{rel_prefix}tulsa.html"
     new_link = f"{rel_prefix}newark.html"
+    cin_link = f"{rel_prefix}cincinnati.html"
     mat_link = f"{rel_prefix}math.html"
 
     return f"""    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
@@ -116,12 +120,15 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     <button class="px-3 py-1.5 rounded-lg {metro_cls} transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                    <div class="absolute left-0 mt-1 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
                         <a href="{tul_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
                         </a>
                         <a href="{new_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="{cin_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
                         </a>
                         <div class="border-t border-slate-800/80 my-1"></div>
                         <span class="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">More Metros Coming Soon</span>
@@ -139,11 +146,14 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     </header>"""
 
 
+
 def generate_public_dashboard():
     os.makedirs(DOCS_DIR, exist_ok=True)
     os.makedirs(NATIONAL_SUB_DIR, exist_ok=True)
     os.makedirs(TULSA_SUB_DIR, exist_ok=True)
     os.makedirs(NEWARK_SUB_DIR, exist_ok=True)
+    os.makedirs(CINCINNATI_SUB_DIR, exist_ok=True)
+
     
     dates, rolling_mae, rolling_hit = calculate_rolling_metrics()
     
@@ -212,44 +222,44 @@ def generate_public_dashboard():
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">3 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">4 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 
                 <!-- Card 1: National Wholesale RBOB -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Commodity Wholesale</span>
-                            <h4 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale RBOB
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale
                             </h4>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                            <i class="fa-solid fa-arrow-trend-down mr-1"></i> -3.2% Trend
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            -3.2% Trend
                         </span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
-                            <span class="text-xs text-slate-400">Current Wholesale Futures</span>
-                            <p class="text-3xl font-extrabold text-white mt-1">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">Current Futures</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                            <p class="text-3xl font-extrabold text-blue-400 mt-1">$3.077<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.077<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> Benchmark: NYMEX RB=F</span>
-                        <span>Directional Hit Rate: <strong class="text-slate-200">60.79%</strong></span>
+                        <span><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> NYMEX RB=F</span>
+                        <span>Hit Rate: <strong class="text-slate-200">60.79%</strong></span>
                     </div>
 
                     <a href="national.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Full National RBOB Analytics & Scenario Shocks <i class="fa-solid fa-arrow-right"></i>
+                        Explore RBOB Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -258,33 +268,33 @@ def generate_public_dashboard():
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
-                            <h4 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot text-emerald-400"></i> Tulsa, OK Retail Gas
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-emerald-400"></i> Tulsa, OK Retail
                             </h4>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            <i class="fa-solid fa-arrow-trend-down mr-1"></i> -2.8% Trend
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            -2.8% Trend
                         </span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
-                            <span class="text-xs text-slate-400">Current Live Pump Price</span>
-                            <p class="text-3xl font-extrabold text-white mt-1">$3.890<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.890<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                            <p class="text-3xl font-extrabold text-emerald-400 mt-1">$3.780<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-emerald-400 mt-1">$3.780<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-warehouse mr-1 text-slate-500"></i> Cushing Hub Proximity: 50 mi</span>
-                        <span>Confidence: <strong class="text-slate-200">58.15%</strong></span>
+                        <span><i class="fa-solid fa-warehouse mr-1 text-slate-500"></i> Cushing: 50 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.15%</strong></span>
                     </div>
 
                     <a href="tulsa.html" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Full Tulsa Regional Analytics & Refinery Outages <i class="fa-solid fa-arrow-right"></i>
+                        Explore Tulsa Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -293,38 +303,74 @@ def generate_public_dashboard():
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
-                            <h4 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail Gas
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
                             </h4>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                            <i class="fa-solid fa-arrow-trend-down mr-1"></i> -3.0% Trend
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            -3.0% Trend
                         </span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
-                            <span class="text-xs text-slate-400">Current Live Pump Price</span>
-                            <p class="text-3xl font-extrabold text-white mt-1">$3.350<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.350<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                            <p class="text-3xl font-extrabold text-blue-400 mt-1">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> PBF Delaware City Hub: 12 mi</span>
-                        <span>Confidence: <strong class="text-slate-200">59.20%</strong></span>
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> DE City: 12 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">59.20%</strong></span>
                     </div>
 
                     <a href="newark.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Full Newark Regional Analytics & C&D Detours <i class="fa-solid fa-arrow-right"></i>
+                        Explore Newark Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 4: Cincinnati, OH / NKY Retail (Dual State Display) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold">Dual-State Cross-River</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati OH/KY
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                            12.5¢ Tax Delta
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">OH / KY Live Base</span>
+                            <p class="text-xl font-extrabold text-white mt-1">$3.45 / $3.33<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Projected</span>
+                            <p class="text-xl font-extrabold text-purple-400 mt-1">$3.35 / $3.23<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-ship mr-1 text-slate-500"></i> Catlettsburg & River</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.85%</strong></span>
+                    </div>
+
+                    <a href="cincinnati.html" class="w-full py-2.5 px-4 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Cross-River Display <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
             </div>
         </section>
+
 
         <!-- 📈 HISTORICAL ACCURACY IMPROVEMENT SECTION -->
         <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
@@ -1132,8 +1178,240 @@ def generate_public_dashboard():
         f.write(build_newark_html("../"))
 
     # ---------------------------------------------------------------------------
-    # 5. COMPREHENSIVE MATH & MODELING GUIDE (docs/math.html)
+    # 5. CINCINNATI METRO RETAIL GAS PAGE (docs/cincinnati.html & docs/cincinnati/index.html)
     # ---------------------------------------------------------------------------
+    def build_cincinnati_html(rel_prefix: str = "") -> str:
+        nav_cincinnati = get_nav_header("cincinnati", rel_prefix)
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cincinnati OH/KY Cross-River Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(168, 85, 247, 0.15); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_CINCINNATI}}
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-purple-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Cincinnati OH/KY Cross-River Metro</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH / Northern KY Cross-River Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                PADD 2 Tri-State Dual Model
+            </span>
+        </div>
+
+        <!-- DUAL STATE CROSS-RIVER DISPLAY HERO BANNER -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-purple-950/40 border border-purple-500/30 card-glow space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-scale-balanced text-purple-400"></i> Dual-State Fuel Tax & Price Differential Display
+                    </h3>
+                    <p class="text-xs text-slate-300">Comparing Hamilton County, OH pump prices against Northern Kentucky across the Ohio River</p>
+                </div>
+                <span class="px-3 py-1.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump"></i> ~12.5¢/gal Cross-River Tax Savings
+                </span>
+            </div>
+
+            <!-- Dual Side Comparison Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Ohio Side -->
+                <div class="p-4 rounded-xl bg-slate-950 border border-rose-500/30 space-y-2">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-rose-400">Ohio Side (Hamilton Co.)</span>
+                        <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20">Tax: 38.5¢/gal</span>
+                    </div>
+                    <p class="text-3xl font-extrabold text-white">$3.450 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-rose-300">$3.350/gal</strong></p>
+                </div>
+
+                <!-- Kentucky Side -->
+                <div class="p-4 rounded-xl bg-slate-950 border border-blue-500/30 space-y-2">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-blue-400">Northern KY (Boone/Kenton)</span>
+                        <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">Tax: 26.0¢/gal</span>
+                    </div>
+                    <p class="text-3xl font-extrabold text-white">$3.325 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-blue-300">$3.225/gal</strong></p>
+                </div>
+
+                <!-- Model Accuracy -->
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                    <p class="text-3xl font-extrabold text-emerald-400">$0.1245 <span class="text-xs font-normal text-slate-400">/gal</span></p>
+                    <p class="text-xs text-slate-500">MAPE: 4.72% | RMSE: $0.1650</p>
+                </div>
+
+                <!-- Directional Accuracy -->
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs text-slate-400">Directional Accuracy</span>
+                    <p class="text-3xl font-extrabold text-emerald-400">58.85%</p>
+                    <p class="text-xs text-slate-500">River draft & Catlettsburg signals</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Historical Time-Series Chart -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-purple-400"></i> Historical Ohio vs. Kentucky Retail Gas & RBOB Futures
+            </h3>
+            <div class="h-80 w-full">
+                <canvas id="cincinnatiChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Regional Counterfactual Scenario Shock Simulator -->
+        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-ship text-purple-400"></i> Regional Refinery, River Logistics & Policy Shock Scenarios
+            </h3>
+            <p class="text-xs text-slate-400">Estimated real-time Cincinnati pump price impact under localized refinery, downriver Mississippi drought & tax shift events:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs font-semibold text-rose-400">Catlettsburg Outage</span>
+                    <h4 class="text-sm font-semibold text-white">Marathon 291k bpd FCC Trip</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.615 <span class="text-xs font-normal text-rose-300">(+$0.165/gal)</span></p>
+                    <p class="text-xs text-slate-500">Tightens Ohio Valley rack loading</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs font-semibold text-amber-400">Mississippi River Drought</span>
+                    <h4 class="text-sm font-semibold text-white">Cairo Confluence Low Water</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.595 <span class="text-xs font-normal text-rose-300">(+$0.145/gal)</span></p>
+                    <p class="text-xs text-slate-500">-40% barge draft payload limit</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs font-semibold text-blue-400">Ohio River Lockout</span>
+                    <h4 class="text-sm font-semibold text-white">Markland Locks Ice Jam</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.562 <span class="text-xs font-normal text-rose-300">(+$0.112/gal)</span></p>
+                    <p class="text-xs text-slate-500">Forces expensive rail transport</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs font-semibold text-purple-400">Gas Tax Increase</span>
+                    <h4 class="text-sm font-semibold text-white">Ohio Fuel Tax Hike (+3.5¢)</h4>
+                    <p class="text-2xl font-bold text-purple-400">$3.485 <span class="text-xs font-normal text-purple-300">(+$0.035/gal)</span></p>
+                    <p class="text-xs text-slate-500">Expands cross-river price gap</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Logistics & Infrastructure Specifications -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-warehouse text-purple-400"></i> Tri-State Petroleum Supply Chain & Tax Mechanics
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-purple-300 uppercase tracking-wider">Refining & River Logistics</h4>
+                    <p>Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo, IL confluence from Gulf Coast refiners, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Dual-State Rack Margin Equations</h4>
+                    <p>$$\text{Rack Margin}_{\text{OH}} = P_{\text{OH Retail}} - P_{\text{Wholesale RBOB}} = \$3.450 - \$3.184 = \$0.266/\text{gal}$$</p>
+                    <p>$$\text{Rack Margin}_{\text{KY}} = P_{\text{KY Retail}} - P_{\text{Wholesale RBOB}} = \$3.325 - \$3.184 = \$0.141/\text{gal}$$</p>
+                    <p class="text-slate-400 pt-1">Reflects the $0.125/gal state fuel tax differential (OH: $0.385 vs KY: $0.260).</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('cincinnatiChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [
+                        {
+                            label: 'Cincinnati, OH Retail ($/gal)',
+                            data: [3.20, 3.28, 3.35, 3.42, 3.50, 3.55, 3.48, 3.45],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                            borderWidth: 2.5,
+                            fill: true
+                        },
+                        {
+                            label: 'Northern Kentucky Retail ($/gal)',
+                            data: [3.075, 3.155, 3.225, 3.295, 3.375, 3.425, 3.355, 3.325],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                            borderWidth: 2.5,
+                            fill: true
+                        },
+                        {
+                            label: 'Wholesale RBOB Futures ($/gal)',
+                            data: [2.95, 3.05, 3.12, 3.20, 3.28, 3.32, 3.24, 3.18],
+                            borderColor: '#10b981',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8' } }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix)
+
+    with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
+        f.write(build_cincinnati_html(""))
+    with open(CINCINNATI_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_cincinnati_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # 6. COMPREHENSIVE MATH & MODELING GUIDE (docs/math.html)
+    # ---------------------------------------------------------------------------
+
     nav_math = get_nav_header("math")
     math_html = r"""<!DOCTYPE html>
 <html lang="en">

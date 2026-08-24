@@ -104,7 +104,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 3. Regional Calibration Agents (`src/tulsa_regional.py` & `src/newark_regional.py`)
+### 3. Regional Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, & `src/cincinnati_regional.py`)
 
 * **Tulsa Regional Calibration Agent (`src/tulsa_regional.py`):**
   - Tailors market time series to the Tulsa, OK metropolitan area calibrated to live pump prices ($3.89/gal base) & Cushing WTI delivery hub dynamics.
@@ -112,6 +112,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Newark Regional Calibration Agent (`src/newark_regional.py`):**
   - Tailors market time series to the Newark, DE metropolitan area (PADD 1B Central Atlantic) calibrated to live pump prices ($3.35/gal base) & PBF Delaware City Refinery (180,000 bpd capacity).
   - Integrates **Delaware Bay deepwater lightering alerts (Big Stone Anchorage)** and **Chesapeake & Delaware (C&D) Canal barge detour events** (300 nm detour around Delmarva, $+\$0.097/\text{gal}$ rack margin expansion, $p = 0.00191$).
+* **Cincinnati Regional Calibration Agent (`src/cincinnati_regional.py`):**
+  - Tailors market time series to the Cincinnati, OH & Northern Kentucky tri-state metropolitan area, modeling the dual-state fuel tax differential (Ohio state fuel tax $0.385/\text{gal}$ vs Kentucky state fuel tax $0.260/\text{gal}$, creating a persistent $\approx \$0.125/\text{gal}$ cross-river retail price gap).
+  - Integrates Marathon Catlettsburg KY Refinery dynamics (291,000 bpd capacity), Ohio River marine terminal barge deliveries, and **Lower Mississippi River downriver low-water barge bottlenecks (Cairo, IL confluence & Memphis draft restrictions)**.
 
 ---
 
@@ -121,10 +124,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Out-of-Time Test Performance (v1.4 Finlight-LLM):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
+  - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).
 
 ---
 
-### 5. Synthesis & Scenario Simulator Agent (`main.py` & `tulsa_main.py`)
+### 5. Synthesis & Scenario Simulator Agent (`main.py`, `tulsa_main.py`, `newark_main.py`, & `cincinnati_main.py`)
 
 * **Role:** Enables counterfactual "What-If" scenario simulation.
 * **Scenarios Evaluated:**
@@ -132,8 +136,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - *Cushing Keystone Pipeline Spill:* +$0.173/gal (+4.58%)
   - *Strait of Hormuz Tanker Blockade (21M bpd):* +$0.109/gal (+2.88%)
   - *Red Sea / Suez Rerouting Crisis:* +$0.201/gal (+5.32%)
+  - *Marathon Catlettsburg KY Refinery Unplanned Outage:* +$0.165/gal (+4.78%)
+  - *Lower Mississippi & Ohio River Low-Water Barge Bottleneck:* +$0.145/gal (+4.20%)
   - *Weekend Executive OPEC Talkdown Post:* $3.780/gal (Monday Open Re-anchoring)
   - *Weekend Foreign Energy Tariff Declaration:* $3.780/gal (Supply Shock Re-anchoring)
+
 
 ---
 
