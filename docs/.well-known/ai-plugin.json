@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Midgley Gas Price Intelligence",
+  "name_for_model": "midgley_gas_prices",
+  "description_for_human": "Real-time unleaded gasoline pump price lookup, 5-day out-of-time forecasting, and geopolitical/weather market shock simulations.",
+  "description_for_model": "Plugin for querying live gas prices, 5-day price forecasts, and simulating refinery/geopolitical market shocks across US metro areas (National, Tulsa, Newark, Cincinnati, Oakland).",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://koshiirra.github.io/midgley/openapi.json"
+  },
+  "logo_url": "https://koshiirra.github.io/midgley/assets/icon.png",
+  "contact_email": "m.cubed.3@gmail.com",
+  "legal_info_url": "https://koshiirra.github.io/midgley/"
+}

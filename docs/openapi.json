@@ -1,0 +1,335 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Midgley Gas Price Forecasting API Gateway",
+    "description": "RESTful API for real-time unleaded gasoline pump prices, 5-day out-of-time quantitative forecasts, and counterfactual physical/geopolitical shock simulations.",
+    "version": "1.4.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root Health & API Information",
+        "description": "Returns gateway status and service version.",
+        "operationId": "get_health__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Returns gateway status and service version.",
+        "operationId": "get_health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/prices/live": {
+      "get": {
+        "summary": "Get Live Fuel Prices",
+        "description": "Returns real-time unleaded gasoline pump prices from GasBuddy GraphQL, AAA Web Scraper,\nor benchmark fallbacks with 15-minute response caching.",
+        "operationId": "get_live_prices_api_v1_prices_live_get",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Locale code (national, tulsa, newark, cincinnati, oakland, bayarea)",
+              "default": "national",
+              "title": "Locale"
+            },
+            "description": "Locale code (national, tulsa, newark, cincinnati, oakland, bayarea)"
+          },
+          {
+            "name": "zip_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional 5-digit US zip code for GasBuddy station lookup",
+              "title": "Zip Code"
+            },
+            "description": "Optional 5-digit US zip code for GasBuddy station lookup"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forecast/predict": {
+      "get": {
+        "summary": "Get 5-Day Out-of-Time Forecast",
+        "description": "Triggers model inference to compute 5-day out-of-time forecast, direction, expected dollar delta,\nand historical accuracy metrics.",
+        "operationId": "get_forecast_api_v1_forecast_predict_get",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Locale code",
+              "default": "national",
+              "title": "Locale"
+            },
+            "description": "Locale code"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 30,
+              "minimum": 1,
+              "description": "Forecast horizon in days",
+              "default": 5,
+              "title": "Days"
+            },
+            "description": "Forecast horizon in days"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/combined": {
+      "get": {
+        "summary": "Unified Live Price & Forecast Context",
+        "description": "Returns both current live pump price and 5-day out-of-time forecast along with top market drivers.",
+        "operationId": "get_combined_api_v1_combined_get",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Locale code",
+              "default": "national",
+              "title": "Locale"
+            },
+            "description": "Locale code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forecast/simulate": {
+      "post": {
+        "summary": "Simulate Counterfactual Market Shocks",
+        "description": "Evaluates counterfactual physical, refinery outage, weather disaster, or geopolitical shock scenarios.",
+        "operationId": "simulate_shock_api_v1_forecast_simulate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "SimulateRequest": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id",
+            "description": "Unique scenario ID",
+            "example": "hormuz_blockade"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale",
+            "description": "Target locale code",
+            "default": "national",
+            "example": "oakland"
+          },
+          "custom_shock_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Shock Pct",
+            "description": "Optional custom shock percentage",
+            "example": 0.05
+          }
+        },
+        "type": "object",
+        "required": [
+          "scenario_id"
+        ],
+        "title": "SimulateRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
