@@ -72,4 +72,4 @@ def test_dashboard_generation_and_math_katex():
     # Section 09 (Equation 9.1)
     assert r"\min_{\boldsymbol{\beta}}" in math_content
     assert r"\alpha \|\boldsymbol{\beta}\|_2^2" in math_content
-    assert r"\hat{P}_{\text{Tulsa Retail}, t+5}" in math_content
+    assert r"\hat{P}_{\text{Metro Retail}, t+5}" in math_content

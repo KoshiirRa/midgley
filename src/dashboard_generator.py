@@ -1529,7 +1529,7 @@ def generate_public_dashboard():
             </div>
             
             <p class="text-slate-300 leading-relaxed text-sm">
-                A <strong>crack spread</strong> measures the profit margin refiners earn when "cracking" crude oil into finished petroleum products. Because crude oil is quoted in dollars per barrel ($42\text{ gallons}$ per barrel) while wholesale gas is quoted in dollars per gallon, we convert crude prices into per-gallon equivalents.
+                A <strong>crack spread</strong> measures the profit margin refiners earn when "cracking" crude oil into finished petroleum products. Because crude oil is quoted in dollars per barrel (\(42\text{ gallons}\) per barrel) while wholesale gas is quoted in dollars per gallon, we convert crude prices into per-gallon equivalents.
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
@@ -1538,7 +1538,7 @@ def generate_public_dashboard():
                     $$\text{CrackSpread}_t = P_{\text{RBOB}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad r_t = \ln\left(\frac{P_t}{P_{t-1}}\right)$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where $P_{\text{RBOB}}$ is the NYMEX RBOB Futures price ($RB=F$) and $P_{\text{WTI}}$ is West Texas Intermediate Crude ($CL=F$). Moving averages $\text{MA}_K(t) = \frac{1}{K}\sum_{i=0}^{K-1} P_{t-i}$ are calculated across $K \in \{7, 14, 30\}$ trading days.
+                    where \(P_{\text{RBOB}}\) is the NYMEX RBOB Futures price (\(RB=F\)) and \(P_{\text{WTI}}\) is West Texas Intermediate Crude (\(CL=F\)). Moving averages \(\text{MA}_K(t) = \frac{1}{K}\sum_{i=0}^{K-1} P_{t-i}\) are calculated across \(K \in \{7, 14, 30\}\) trading days.
                 </p>
             </div>
         </section>
@@ -1560,31 +1560,32 @@ def generate_public_dashboard():
                     $$\mathbf{V}_{\text{event}, t} = \begin{bmatrix} S_{\text{geopolitical}} \\ S_{\text{supply}} \\ S_{\text{opec}} \\ S_{\text{demand}} \\ S_{\text{pressure}} \end{bmatrix}_t \in [-1.0, +1.0]^5$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    Each component is bounded in the interval $[-1.0, +1.0]$, representing negative (bearish), zero (neutral), or positive (bullish) market pressure.
+                    Each component is bounded in the interval \([-1.0, +1.0]\), representing negative (bearish), zero (neutral), or positive (bullish) market pressure.
                 </p>
             </div>
         </section>
 
-        <!-- Section 3: Two-Tiered NOAA Weather Risk -->
+        <!-- Section 3: Multi-Tiered NOAA Weather Risk -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-amber-500">03</span>
-                <h3 class="text-2xl font-bold text-white">Two-Tiered NOAA Weather Risk Dynamics</h3>
+                <h3 class="text-2xl font-bold text-white">Multi-Tiered NOAA Weather Risk Dynamics</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Atmospheric weather alerts from the NOAA NWS API (<code class="text-amber-300">api.weather.gov</code>) are factored across two distinct physical geographic tiers:
+                Atmospheric weather alerts from the NOAA NWS API (<code class="text-amber-300">api.weather.gov</code>) are factored across national basins and regional localized metro tiers:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
-                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Two-Tiered Weather Vulnerability Matrix</h4>
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Multi-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
-                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Localized OK}} + \mathbf{W}_{\text{Localized DE}}$$
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}}$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks & Permian/Bakken production basin freeze warnings.<br>
-                    <strong>Tier 2 (Localized OK):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa $125,000\text{ bpd}$ HF Sinclair loading racks, $+\$0.173/\text{gal}$ shock) and Cushing (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.<br>
-                    <strong>Tier 2 (Localized DE):</strong> New Castle County (<code class="text-amber-300">DEZ001</code>) Nor'easters & storm surges affecting PBF Delaware City ($180,000\text{ bpd}$) loading racks and Delaware Bay lightering.
+                    <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks &amp; Permian/Bakken production basin freeze warnings.<br>
+                    <strong>Tier 2 (Tulsa OK):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa \(125,000\text{ bpd}\) HF Sinclair loading racks, \(+\$0.173/\text{gal}\) shock) and Cushing (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.<br>
+                    <strong>Tier 2 (Newark DE):</strong> New Castle County (<code class="text-amber-300">DEZ001</code>) Nor'easters &amp; storm surges affecting PBF Delaware City (\(180,000\text{ bpd}\)) loading racks.<br>
+                    <strong>Tier 2 (Cincinnati OH/KY):</strong> Ohio Valley flooding &amp; Mississippi River low-water draft restrictions affecting river barge deliveries.
                 </p>
             </div>
         </section>
@@ -1593,7 +1594,7 @@ def generate_public_dashboard():
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-purple-500">04</span>
-                <h3 class="text-2xl font-bold text-white">Global & Regional Maritime Chokepoints & Delay Equations</h3>
+                <h3 class="text-2xl font-bold text-white">Global &amp; Regional Maritime Chokepoints &amp; Delay Equations</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
@@ -1601,14 +1602,14 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit & Detour Premium</h4>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit &amp; Detour Premium</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
                     $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right), \quad \Delta \text{Margin}_{\text{Delaware}} = +\$0.097/\text{gal } (p = 0.00191)$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    <strong>Strait of Hormuz:</strong> $21.0\text{M bpd}$ ($20\%$ of global petroleum) naval blockade threats ($+\$0.109/\text{gal}$ price shock).<br>
-                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add $+12\text{--}14$ days transit time, adding $+\$4.50/\text{bbl}$ freight premium ($+\$0.201/\text{gal}$ price shock).<br>
-                    <strong>Delaware Bay & C&D Canal:</strong> Big Stone Anchorage deepwater lightering freezes and C&D Canal shoaling closures force tank barges onto a $300\text{ nm}$ detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by $+\$0.097/\text{gal}$, $p = 0.00191$).
+                    <strong>Strait of Hormuz:</strong> \(21.0\text{M bpd}\) (\(20\%\) of global petroleum) naval blockade threats (\(+\$0.109/\text{gal}\) price shock).<br>
+                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add \(+12\text{--}14\) days transit time, adding \(+\$4.50/\text{bbl}\) freight premium (\(+\$0.201/\text{gal}\) price shock).<br>
+                    <strong>Delaware Bay &amp; C&amp;D Canal:</strong> Big Stone Anchorage deepwater lightering freezes and C&amp;D Canal shoaling closures force tank barges onto a \(300\text{ nm}\) detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by \(+\$0.097/\text{gal}\), \(p = 0.00191\)).
                 </p>
             </div>
         </section>
@@ -1617,7 +1618,7 @@ def generate_public_dashboard():
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-blue-400">05</span>
-                <h3 class="text-2xl font-bold text-white">Executive Social Feed & Weekend Volatility Multiplier ($1.42\times$)</h3>
+                <h3 class="text-2xl font-bold text-white">Executive Social Feed &amp; Weekend Volatility Multiplier (\(1.42\times\))</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
@@ -1630,7 +1631,7 @@ def generate_public_dashboard():
                     $$\sigma_{\text{SundayOpen}} = 1.42 \times \sigma_{\text{Baseline}}$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    Because commodity exchanges are closed Friday 17:00 EST to Sunday 18:00 EST, Saturday/Sunday posts generate <strong>$1.42\times$ higher Sunday evening open price gap volatility</strong>. Dovish OPEC posts cause average $-1.85\%$ single-day RBOB drops, while hawkish tariff threats cause $+2.10\%$ price surges.
+                    Because commodity exchanges are closed Friday 17:00 EST to Sunday 18:00 EST, Saturday/Sunday posts generate <strong>\(1.42\times\) higher Sunday evening open price gap volatility</strong>. Dovish OPEC posts cause average \(-1.85\%\) single-day RBOB drops, while hawkish tariff threats cause \(+2.10\%\) price surges.
                 </p>
             </div>
         </section>
@@ -1639,7 +1640,7 @@ def generate_public_dashboard():
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-emerald-400">06</span>
-                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds & Key Market Movers</h3>
+                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds &amp; Key Market Movers</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
@@ -1647,14 +1648,14 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
-                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 6.1: Physical Supply & Volatility Integration</h4>
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 6.1: Physical Supply &amp; Volatility Integration</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
                     $$\mathbf{X}_{\text{Physical}} = \Big[ \text{OVX}_t, \quad \Delta \text{Rigs}_{t-90}, \quad \text{DXY}_t, \quad \text{EIA\_Inventory\_Draw}_t \Big]$$
                 </div>
                 <p class="text-xs text-slate-400">
                     <strong>Cboe OVX Index (^OVX):</strong> Options tail-risk volatility vector ("VIX for Oil").<br>
                     <strong>Baker Hughes Rig Count:</strong> 3-to-6 month domestic shale crude supply pipeline lead indicator.<br>
-                    <strong>Key Market Movers:</strong> Saudi Energy Minister Prince Abdulaziz (OPEC+ cuts), Fed Chair Powell ($DXY$ demand destruction), and US DOE Strategic Petroleum Reserve (SPR buyback floor at $\$70\text{--}\$79/\text{bbl}$).
+                    <strong>Key Market Movers:</strong> Saudi Energy Minister Prince Abdulaziz (OPEC+ cuts), Fed Chair Powell (\(DXY\) demand destruction), and US DOE Strategic Petroleum Reserve (SPR buyback floor at \(\$70\text{--}\$79/\text{bbl}\)).
                 </p>
             </div>
         </section>
@@ -1671,7 +1672,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 7.1: Live News Vector Ingestion & Batch Factor Scoring</h4>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 7.1: Live News Vector Ingestion &amp; Batch Factor Scoring</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
                     $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
                 </div>
@@ -1687,7 +1688,7 @@ def generate_public_dashboard():
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-amber-400">08</span>
-                <h3 class="text-2xl font-bold text-white">Exponential Memory Decay & Vector Fusion</h3>
+                <h3 class="text-2xl font-bold text-white">Exponential Memory Decay &amp; Vector Fusion</h3>
             </div>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
@@ -1696,7 +1697,7 @@ def generate_public_dashboard():
                     $$\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp\left(-\frac{\ln 2}{t_{1/2}}\right) + \mathbf{V}_t$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where half-life $t_{1/2} = 5.0\text{ days}$ for national macroeconomic/social events and $t_{1/2} = 4.0\text{ days}$ for regional NOAA weather shocks.
+                    where half-life \(t_{1/2} = 5.0\text{ days}\) for national macroeconomic/social events and \(t_{1/2} = 4.0\text{ days}\) for regional NOAA weather shocks.
                 </p>
             </div>
         </section>
@@ -1705,20 +1706,20 @@ def generate_public_dashboard():
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-blue-500">09</span>
-                <h3 class="text-2xl font-bold text-white">Standardized Ridge Estimator & Live Pump Calibration</h3>
+                <h3 class="text-2xl font-bold text-white">Standardized Ridge Estimator &amp; Live Pump Calibration</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression ($\alpha = 10.0$)</strong> model to predict 5-day percentage price returns ($\Delta\%$), applied directly to today's live pump price ($P_{\text{Live Base}} = \$3.89/\text{gal}$):
+                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression (\(\alpha = 10.0\))</strong> model to predict 5-day percentage price returns (\(\Delta\%\)), applied directly to today's live pump price (\(P_{\text{Live Base}}\)):
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
-                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.1: Regularized Ridge Objective Function & Calibration</h4>
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.1: Regularized Ridge Objective Function &amp; Calibration</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
-                    $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Tulsa Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
+                    $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Metro Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where $\alpha = 10.0$ prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>$\text{MAE} = \$0.1069/\text{gal}$</strong>.
+                    where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>\(\text{MAE} = \$0.1069/\text{gal}\)</strong>.
                 </p>
             </div>
         </section>
