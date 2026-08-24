@@ -136,6 +136,8 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
 9. **MLOps Prediction Tracker & Ground-Truth Backfilling (`src/prediction_logger.py`):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv` and automatically backfills actual market prices as target dates arrive.
 10. **Weekly Model Performance Review & Continuous Feedback Loop Runner (`.github/workflows/weekly_model_review.yml`):** Runs automatically every Saturday at 08:00 AM Central on GitHub Actions cloud runners to evaluate rolling MAE/RMSE/Hit Rate metrics and feed performance validation signals back into model retraining and feature weight optimization over time.
+11. **Local Dev Environment & Permanent Web Server (`dev-vm` Port 8080):** Serves live dashboard analytics from the permanent `dev` branch on `dev-vm` (`10.42.42.54`) on port 8080 via a persistent `systemd` user service (`midgley-dev.service`) with user linger enabled.
+
 
 ---
 

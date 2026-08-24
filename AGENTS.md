@@ -164,3 +164,14 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **National Wholesale RBOB Page (`/national` / `docs/national.html` & `docs/national/index.html`):** Dedicated commodity futures page with NYMEX RBOB predictions chart, out-of-time error metrics, global maritime & geopolitical shock scenarios (Hormuz/Suez), and technical driver breakdowns. Accessible via **`National Wholesale`** in the top navbar.
   - **Tulsa Metro Retail Gas Page (`/tulsa` / `docs/tulsa.html` & `docs/tulsa/index.html`):** Dedicated regional retail page calibrated to live pump prices ($3.89/gal), Cushing WTI delivery hub dynamics, West Tulsa HF Sinclair refinery tornado/freeze shock scenarios, and dynamic rack margins ($0.706/gal). Accessible via the top nav **`Metro Areas`** dropdown menu.
   - **Educational Math Guide (`/math` / `docs/math.html`):** Educational reference detailing equations and vector spaces across all 9 feature layers rendered via KaTeX.
+
+---
+
+### 9. Dev Environment & Permanent Server Agent (`dev-vm` Port 8080)
+
+* **Role:** Manages the persistent local development environment on `dev-vm` (`10.42.42.54`), keeping the permanent `dev` branch active and serving the web dashboard live on port 8080.
+* **Key Specifications:**
+  - **Dedicated Dev Branch:** Tracks the permanent `dev` branch (`origin/dev`) at `/home/marty/projects/midgley`.
+  - **Systemd User Service:** Managed by `midgley-dev.service` (`python3 -m http.server 8080 --directory /home/marty/projects/midgley/docs --bind 0.0.0.0`) with automatic restart capabilities (`Restart=always`).
+  - **User Linger:** User linger enabled (`loginctl enable-linger marty`) to ensure background web service persistence across host reboots.
+
