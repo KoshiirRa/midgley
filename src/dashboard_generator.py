@@ -104,7 +104,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     <i class="fa-solid fa-house"></i> Overview
                 </a>
                 <a href="{nat_link}" class="px-3 py-1.5 rounded-lg {national_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-globe"></i> National RBOB
+                    <i class="fa-solid fa-globe"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
