@@ -77,3 +77,23 @@ Reads `data/prediction_history.csv` and returns arrays `(dates, rolling_mae, rol
 
 ### `fetch_google_maps_fuel_prices(place_id: str = None, api_key: str = None) -> dict`
 Queries Google Places API (New) for station `fuelOptions` details (`REGULAR`, `MIDGRADE`, `PREMIUM`, `DIESEL`). Requires `GOOGLE_MAPS_API_KEY`.
+
+---
+
+## 7. Model Context Protocol (MCP) & Production REST API Gateway (Issue #38 Specification)
+
+Exposes Midgley real-time AAA/GasBuddy pump lookups, quantitative 5-day predictions, and scenario simulations to external LLMs, ChatGPT Actions, Claude Desktop, Antigravity, and AI agents.
+
+### Server Modules
+- `src.mcp_server`: FastMCP implementation exposing stdio and Server-Sent Events (`HTTP/SSE`) transports.
+  - `get_live_gas_prices(locale, zip_code)`: Real-time AAA/GasBuddy/EIA retail fuel lookup.
+  - `get_gas_price_prediction(locale, days)`: Quantitative 5-day out-of-time model prediction.
+  - `get_live_and_forecast(locale)`: Single unified payload containing current retail prices, rack margins, 5-day price projection, and active risk drivers.
+  - `simulate_fuel_market_shock(locale, scenario_id)`: Evaluates counterfactual market shocks (e.g. `hormuz_blockade`, `tulsa_tornado`, `oakland_psps_blackout`, `cincinnati_barge_drought`).
+- `src.api_server`: FastAPI REST application exposing `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and `/.well-known/ai-plugin.json`.
+
+### Production Deployment Strategy (Zero-Local Server Dependency)
+1. **Primary Production REST API**: Pre-rendered static JSON endpoints published directly to GitHub Pages (`docs/api/v1/*.json`) via automated GitHub Actions cron runs (`.github/workflows/gas_price_forecast.yml`). Guaranteed 99.99% uptime with $0 hosting overhead.
+2. **Live Dynamic MCP Gateway**: Scale-to-zero container (Google Cloud Run / Render) for real-time zip lookups, live SSE streams, and POST counterfactual simulations.
+3. **Local LLM Tool Provider**: Client-side PyPI stdio package (`midgley-mcp`) for local agent CLI tools (Claude Desktop, Antigravity, Cursor).
+
