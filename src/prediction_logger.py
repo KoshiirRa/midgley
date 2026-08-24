@@ -122,6 +122,10 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
                 actual_price = raw_actual + 0.425
             elif row['region'] in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH"]:
                 actual_price = raw_actual + 0.55
+            elif row['region'] == "Oakland_CA":
+                actual_price = raw_actual + 2.05
+            elif row['region'] == "BayArea_CA":
+                actual_price = raw_actual + 2.15
             else:
                 actual_price = raw_actual
 

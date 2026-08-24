@@ -46,7 +46,7 @@
                     <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
                         <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
                         </a>
@@ -56,8 +56,12 @@
                         <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <div class="border-t border-slate-800/80 my-1"></div>
-                        <span class="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">More Metros Coming Soon</span>
+                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail ($4.95)
+                        </a>
+                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region ($5.05)
+                        </a>
                     </div>
                 </div>
 
@@ -283,6 +287,29 @@
                 </div>
                 <p class="text-xs text-slate-400">
                     where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>\(\text{MAE} = \$0.1069/\text{gal}\)</strong>.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 10: CARB Regulatory Burden & PADD 5 Refining Island -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-500">10</span>
+                <h3 class="text-2xl font-bold text-white">CARB Regulatory Burden &amp; PADD 5 Refining Island Isolation</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Oakland (\(\$4.950/\text{gal}\)) and the 9-County SF Bay Area (\(\$5.050/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 10.1: Total Statutory CARB Tax &amp; Fee Accumulation</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
+                    $$T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} = \$0.634 + \$0.250 + \$0.185 + \$0.150 + \$0.184 = \$0.953/\text{gal}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Refining Crack Spread:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>
+                    <strong>Physical Risk Shocks:</strong> Hayward Fault Seismic (\(+\$0.420/\text{gal}\)), PG&amp;E PSPS Red Flag Wildfire Blackout (\(+\$0.350/\text{gal}\)), and PTWC Tsunami Berth Closure (\(+\$0.165/\text{gal}\)).
                 </p>
             </div>
         </section>

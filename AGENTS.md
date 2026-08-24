@@ -115,7 +115,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 4. Localized Metro Area Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, & `src/cincinnati_regional.py`)
+### 4. Localized Metro Area Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, `src/cincinnati_regional.py`, & `src/oakland_regional.py`)
 
 * **Role:** Ingest the base commodity forecast from the Main Quantitative Model and calibrate to local retail pump prices, dynamic regional rack margins, refinery dynamics, delivery hub logistics, and localized infrastructure shocks.
 * **Tulsa Regional Calibration Agent (`src/tulsa_regional.py`):**
@@ -127,10 +127,14 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Cincinnati Regional Calibration Agent (`src/cincinnati_regional.py`):**
   - Tailors market time series to the Cincinnati, OH & Northern Kentucky tri-state metropolitan area, modeling the dual-state fuel tax differential (Ohio state fuel tax $0.385/\text{gal}$ vs Kentucky state fuel tax $0.260/\text{gal}$, creating a persistent $\approx \$0.125/\text{gal}$ cross-river retail price gap).
   - Integrates Marathon Catlettsburg KY Refinery dynamics (291,000 bpd capacity), Ohio River marine terminal barge deliveries, and **Lower Mississippi River downriver low-water barge bottlenecks (Cairo, IL confluence & Memphis draft restrictions)**.
+* **Oakland & SF Bay Area Regional Calibration Agent (`src/oakland_regional.py`):**
+  - Tailors market time series to Oakland, CA ($4.950/gal base) and the 9-County SF Bay Area Region ($5.050/gal base), establishing high-cost PADD 5 West Coast benchmarks ("scare factor").
+  - Models statutory **CARB & CA state tax burden ($0.953/gal total)**: 63.4¢ state excise tax, ~25¢ Cap-and-Trade carbon fees, ~18.5¢ LCFS credit overhead, and ~15¢ local sales tax/UST fees.
+  - Integrates Chevron Richmond Refinery dynamics (245,000 bpd capacity), PBF Martinez, Valero Benicia, Kinder Morgan SFPP pipeline corridors, **USGS Hayward/San Andreas Fault seismic risks**, **CAL FIRE & PG&E Public Safety Power Shutoff (PSPS) refinery blackout risks**, **NOAA PTWC Tsunami advisories**, and **NHC EPAC Tropical Storm Remnants**.
 
 ---
 
-### 5. Synthesis & Scenario Simulator Agent (`main.py`, `tulsa_main.py`, `newark_main.py`, & `cincinnati_main.py`)
+### 5. Synthesis & Scenario Simulator Agent (`main.py`, `tulsa_main.py`, `newark_main.py`, `cincinnati_main.py`, & `oakland_main.py`)
 
 * **Role:** Enables counterfactual "What-If" scenario simulation.
 * **Scenarios Evaluated:**
@@ -140,6 +144,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - *Red Sea / Suez Rerouting Crisis:* +$0.201/gal (+5.32%)
   - *Marathon Catlettsburg KY Refinery Unplanned Outage:* +$0.165/gal (+4.78%)
   - *Lower Mississippi & Ohio River Low-Water Barge Bottleneck:* +$0.145/gal (+4.20%)
+  - *USGS Hayward Fault M>=6.0 Seismic Quake & Pipeline Shutoff:* +$0.420/gal (+8.48%)
+  - *PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout:* +$0.350/gal (+7.07%)
+  - *Chevron Richmond Refinery Unplanned Hydrocracker Outage:* +$0.285/gal (+5.76%)
+  - *CARB CaRFG Summer-Blend Transition Compliance Surge:* +$0.220/gal (+4.44%)
+  - *NOAA PTWC Pacific Tsunami Berth Closure:* +$0.165/gal (+3.33%)
   - *Weekend Executive OPEC Talkdown Post:* $3.780/gal (Monday Open Re-anchoring)
   - *Weekend Foreign Energy Tariff Declaration:* $3.780/gal (Supply Shock Re-anchoring)
 

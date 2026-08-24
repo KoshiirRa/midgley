@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>National Wholesale RBOB Forecast - Midgley</title>
+    <title>SF Bay Area 9-County Gas Price Matrix - Midgley</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,7 +14,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
-        .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(6, 182, 212, 0.15); }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -37,13 +37,13 @@
                 <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-house"></i> Overview
                 </a>
-                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-globe"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
                 <div class="relative group">
-                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <button class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
                     </button>
                     <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
@@ -81,98 +81,68 @@
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
             <div>
                 <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
-                    <a href="index.html" class="hover:text-blue-400">Home</a>
+                    <a href="index.html" class="hover:text-cyan-400">Home</a>
                     <span>/</span>
-                    <span class="text-slate-200">National Wholesale RBOB</span>
+                    <span class="text-slate-200">SF Bay Area 9-County Metro Region</span>
                 </div>
                 <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                    <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale RBOB Futures Forecast
+                    <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area 9-County Regional Gas Forecast & Price Matrix
                 </h2>
             </div>
-            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                NYMEX RB=F Benchmark
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                NorCal 9-County Matrix
             </span>
         </div>
 
-        <!-- Metric Hero Card -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Current Wholesale Futures</span>
-                <p class="text-3xl font-extrabold text-white">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">Spot NYMEX RBOB Contract</p>
+        <!-- HERO BANNER -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-cyan-950/40 border border-cyan-500/30 card-glow space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-map text-cyan-400"></i> 9-County San Francisco Bay Area Regional Price Matrix
+                    </h3>
+                    <p class="text-xs text-slate-300">Comparing regional pump prices across San Francisco, San Jose, Oakland & North Bay</p>
+                </div>
+                <span class="px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold">
+                    $5.050/gal Regional Average
+                </span>
             </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-blue-400">$3.077<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.2% Projected Trend</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
-                <p class="text-3xl font-extrabold text-emerald-400">$0.1069<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: 4.76% | RMSE: $0.1490</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Directional Accuracy</span>
-                <p class="text-3xl font-extrabold text-emerald-400">60.79%</p>
-                <p class="text-xs text-emerald-300 font-semibold">+4.40% boost vs. quant baseline</p>
+
+            <!-- 9-County Price Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="p-4 rounded-xl bg-slate-950 border border-purple-500/30 space-y-2">
+                    <span class="text-xs text-purple-400 font-bold uppercase">San Francisco Metro</span>
+                    <p class="text-3xl font-extrabold text-white">$5.120 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">Municipal tax & parking overhead</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-blue-500/30 space-y-2">
+                    <span class="text-xs text-blue-400 font-bold uppercase">San Jose / Silicon Valley</span>
+                    <p class="text-3xl font-extrabold text-white">$4.980 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">Santa Clara tech commute corridor</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
+                    <span class="text-xs text-amber-400 font-bold uppercase">Oakland / East Bay</span>
+                    <p class="text-3xl font-extrabold text-white">$4.950 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">Alameda industrial & port corridor</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2">
+                    <span class="text-xs text-emerald-400 font-bold uppercase">North Bay / Solano</span>
+                    <p class="text-3xl font-extrabold text-white">$4.850 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">Valero Benicia refinery proximity</p>
+                </div>
+
             </div>
         </div>
 
-        <!-- Historical Time-Series Chart -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-chart-area text-blue-400"></i> Historical NYMEX RBOB Prices vs. 5-Day Model Predictions
-            </h3>
+        <!-- CHART SECTION -->
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white">9-County SF Bay Area Regional Gas Price Trends</h3>
             <div class="h-80 w-full">
-                <canvas id="nationalChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Global Maritime & Geopolitical Shock Scenarios -->
-        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-ship text-purple-400"></i> Global Maritime & Macroeconomic Shock Scenarios
-            </h3>
-            <p class="text-xs text-slate-400">Estimated national wholesale futures price impact under counterfactual global supply disruptions:</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                    <span class="text-xs font-semibold text-purple-400">Naval Blockade</span>
-                    <h4 class="text-sm font-semibold text-white">Strait of Hormuz (21M bpd)</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.293 <span class="text-xs font-normal text-rose-300">(+$0.109/gal)</span></p>
-                    <p class="text-xs text-slate-500">Global crude transit choke point halt</p>
-                </div>
-
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                    <span class="text-xs font-semibold text-amber-400">Suez Canal Rerouting</span>
-                    <h4 class="text-sm font-semibold text-white">Red Sea / Houthi Tanker Attacks</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.385 <span class="text-xs font-normal text-rose-300">(+$0.201/gal)</span></p>
-                    <p class="text-xs text-slate-500">Adds +12-14 days transit around Cape</p>
-                </div>
-
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                    <span class="text-xs font-semibold text-blue-400">Executive Social Post</span>
-                    <h4 class="text-sm font-semibold text-white">Weekend OPEC Demand Tweet</h4>
-                    <p class="text-2xl font-bold text-blue-400">$3.077 <span class="text-xs font-normal text-blue-300">($1.42x Gap Volatility)</span></p>
-                    <p class="text-xs text-slate-500">Sunday 18:00 EST futures re-anchoring</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quantitative Model Pipeline Detail -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-microchip text-blue-400"></i> Model Specification & Technical Features
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">Algorithm & Regularization</h4>
-                    <p>StandardScaler + Ridge Regression ($\alpha = 10.0$) trained on 80/20 chronological splits. Predicts 5-day return percentages rather than raw levels to avoid non-stationary drift.</p>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Primary Feature Signals</h4>
-                    <p>3-2-1 Crack Spread, Finlight.me REST API news vectors (Gemini 2.5 Flash factor extraction), Cboe OVX Volatility (^OVX), and Baker Hughes Permian/Bakken drilling rig counts.</p>
-                </div>
+                <canvas id="bayAreaChart"></canvas>
             </div>
         </div>
 
@@ -184,25 +154,44 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            const ctx = document.getElementById('nationalChart').getContext('2d');
+            const ctx = document.getElementById('bayAreaChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                     datasets: [
                         {
-                            label: 'NYMEX RBOB Futures Actual ($/gal)',
-                            data: [2.85, 2.92, 3.05, 3.12, 3.25, 3.28, 3.20, 3.184],
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            borderWidth: 2.5,
-                            fill: true
+                            label: 'San Francisco ($5.12 base)',
+                            data: [4.90, 4.98, 5.06, 5.22, 5.30, 5.25, 5.15, 5.12],
+                            borderColor: '#a855f7',
+                            borderWidth: 2,
+                            fill: false
                         },
                         {
-                            label: '5-Day Model Forecast ($/gal)',
-                            data: [2.88, 2.90, 3.02, 3.10, 3.22, 3.25, 3.18, 3.077],
+                            label: 'SF Bay Area 9-County Avg ($5.05 base)',
+                            data: [4.84, 4.92, 5.00, 5.15, 5.22, 5.18, 5.08, 5.05],
+                            borderColor: '#06b6d4',
+                            borderWidth: 3,
+                            fill: false
+                        },
+                        {
+                            label: 'San Jose / Silicon Valley ($4.98 base)',
+                            data: [4.78, 4.85, 4.93, 5.08, 5.15, 5.10, 5.01, 4.98],
+                            borderColor: '#3b82f6',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Oakland / East Bay ($4.95 base)',
+                            data: [4.75, 4.82, 4.90, 5.05, 5.12, 5.08, 4.98, 4.95],
+                            borderColor: '#f59e0b',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'North Bay / Solano ($4.85 base)',
+                            data: [4.65, 4.72, 4.80, 4.95, 5.02, 4.98, 4.88, 4.85],
                             borderColor: '#10b981',
-                            borderDash: [5, 5],
                             borderWidth: 2,
                             fill: false
                         }
@@ -211,9 +200,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#94a3b8' } }
-                    },
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
                     scales: {
                         x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
                         y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }

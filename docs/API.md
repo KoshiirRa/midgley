@@ -12,12 +12,25 @@ Fetches active severe weather alerts from NOAA NWS API (`api.weather.gov`) for s
 ### `get_national_production_weather_dataset() -> pd.DataFrame`
 Returns historical NOAA weather advisories for major US refining/production basins (Gulf Coast Hurricanes, Permian & Bakken Freezes).
 
-### `get_tulsa_cushing_weather_dataset() -> pd.DataFrame`
-Returns localized NOAA weather advisories for Tulsa County (`OKZ060`) and Cushing/Payne County (`OKZ066`).
+### `get_cincinnati_weather_dataset() -> pd.DataFrame`
+Returns localized NOAA weather advisories for Cincinnati / Hamilton County (`OHZ077`) and Northern KY (`KYZ091`).
+
+### `get_oakland_weather_dataset() -> pd.DataFrame`
+Returns localized NOAA weather, environmental & seismic advisories for Alameda (`CAZ508`), Contra Costa (`CAZ511`), San Francisco (`CAZ006`), and Santa Clara (`CAZ513`).
 
 ---
 
-## 2. Tulsa Regional Forecasting (`src.tulsa_regional`)
+## 2. Oakland & SF Bay Area Regional Forecasting (`src.oakland_regional`)
+
+### `fetch_oakland_market_data(start_date: str = "2022-01-01", end_date: str = None, live_oakland_price: float = 4.950, live_bayarea_price: float = 5.050) -> pd.DataFrame`
+Fetches market data tailored to Oakland ($RB=F$, $CL=F$, $BZ=F$), dynamically calibrates retail series to Oakland ($4.950 base) and SF Bay Area ($5.050 base), and computes Richmond crack spread and CARB regulatory tax burden ($0.953/gal).
+
+### `get_oakland_regional_events() -> pd.DataFrame`
+Returns merged dataset of PADD 5 Chevron Richmond refinery events, CARB CaRFG transition shocks, Kinder Morgan SFPP pipeline events, USGS Hayward fault quakes, CAL FIRE / PG&E PSPS power shutoffs, PTWC tsunami alerts, and localized NOAA weather advisories.
+
+---
+
+## 3. Tulsa Regional Forecasting (`src.tulsa_regional`)
 
 ### `fetch_tulsa_market_data(start_date: str = "2022-01-01", end_date: str = None, live_current_price: float = 3.89) -> pd.DataFrame`
 Fetches market data tailored to Tulsa, OK ($RB=F$, Cushing $CL=F$, $BZ=F$) and dynamically calibrates the retail series to match live pump prices (`live_current_price = 3.89`).

@@ -35,6 +35,10 @@ def update_readme_forecasts():
     cin_oh_dir = "DOWN 📉"
     cin_ky_price = 3.225
     cin_ky_dir = "DOWN 📉"
+    oakland_price = 4.840
+    oakland_dir = "DOWN 📉"
+    bayarea_price = 4.940
+    bayarea_dir = "DOWN 📉"
     target_date = "Next 5 Business Days"
     
     if os.path.exists(HISTORY_CSV_PATH):
@@ -46,6 +50,8 @@ def update_readme_forecasts():
                 newark_df = df[df['region'] == 'Newark_DE']
                 cin_oh_df = df[df['region'] == 'Cincinnati_OH']
                 cin_ky_df = df[df['region'] == 'Cincinnati_KY']
+                oakland_df = df[df['region'] == 'Oakland_CA']
+                bayarea_df = df[df['region'] == 'BayArea_CA']
                 
                 if not nat_df.empty:
                     latest_nat = nat_df.iloc[-1]
@@ -79,6 +85,18 @@ def update_readme_forecasts():
                     cin_ky_price = latest_cin_ky['predicted_5d_price']
                     base_ck = latest_cin_ky['current_base_price']
                     cin_ky_dir = "UP 📈" if cin_ky_price >= base_ck else "DOWN 📉"
+
+                if not oakland_df.empty:
+                    latest_oakland = oakland_df.iloc[-1]
+                    oakland_price = latest_oakland['predicted_5d_price']
+                    base_oak = latest_oakland['current_base_price']
+                    oakland_dir = "UP 📈" if oakland_price >= base_oak else "DOWN 📉"
+
+                if not bayarea_df.empty:
+                    latest_bayarea = bayarea_df.iloc[-1]
+                    bayarea_price = latest_bayarea['predicted_5d_price']
+                    base_bay = latest_bayarea['current_base_price']
+                    bayarea_dir = "UP 📈" if bayarea_price >= base_bay else "DOWN 📉"
         except Exception as e:
             logger.warning(f"Could not read prediction history: {e}")
             
@@ -92,6 +110,8 @@ def update_readme_forecasts():
 | **Newark, DE Metro Retail** | `$3.350`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 | **Cincinnati, OH Retail** | `$3.450`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 | **Northern Kentucky Retail** | `$3.325`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `$4.950`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `$5.050`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 {END_TAG}"""
