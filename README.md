@@ -1,5 +1,6 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley`)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.1)
 
+[![Release: v0.1](https://img.shields.io/badge/Release-v0.1-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.1)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
 [![Public Dashboard](https://img.shields.io/badge/Public_Dashboard-koshiirra.github.io%2Fmidgley-blue.svg)](https://koshiirra.github.io/midgley/)
