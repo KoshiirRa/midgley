@@ -400,7 +400,7 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$4.950<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-white mt-1">$5.550<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Forecast</span>
@@ -435,7 +435,7 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">Regional Avg Base</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$5.050<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-white mt-1">$5.650<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Forecast</span>
@@ -1631,7 +1631,7 @@ def generate_public_dashboard():
                 
                 <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
                     <span class="text-xs text-amber-400 font-bold uppercase">Live Oakland Pump Base</span>
-                    <p class="text-3xl font-extrabold text-white">$4.950 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-3xl font-extrabold text-white">$5.550 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
                     <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">$4.840/gal</strong> (-2.2%)</p>
                 </div>
 
@@ -1848,7 +1848,7 @@ def generate_public_dashboard():
                     <p class="text-xs text-slate-300">Comparing regional pump prices across San Francisco, San Jose, Oakland & North Bay</p>
                 </div>
                 <span class="px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold">
-                    $5.050/gal Regional Average
+                    $5.650/gal Regional Average
                 </span>
             </div>
 
@@ -1869,7 +1869,7 @@ def generate_public_dashboard():
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
                     <span class="text-xs text-amber-400 font-bold uppercase">Oakland / East Bay</span>
-                    <p class="text-3xl font-extrabold text-white">$4.950 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-3xl font-extrabold text-white">$5.550 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
                     <p class="text-xs text-slate-400">Alameda industrial & port corridor</p>
                 </div>
 
@@ -2214,7 +2214,7 @@ def generate_public_dashboard():
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Oakland (\(\$4.950/\text{gal}\)) and the 9-County SF Bay Area (\(\$5.050/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
+                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Oakland (\(\$5.550/\text{gal}\)) and the 9-County SF Bay Area (\(\$5.650/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">

@@ -25,8 +25,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def run_oakland_pipeline(
-    live_oakland_price: float = 4.950, 
-    live_bayarea_price: float = 5.050, 
+    live_oakland_price: float = 5.550, 
+    live_bayarea_price: float = 5.650, 
     use_llm_api: bool = False, 
     model_type: str = "ridge"
 ):

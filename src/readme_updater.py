@@ -35,9 +35,9 @@ def update_readme_forecasts():
     cin_oh_dir = "DOWN 📉"
     cin_ky_price = 3.225
     cin_ky_dir = "DOWN 📉"
-    oakland_price = 4.840
+    oakland_price = 5.440
     oakland_dir = "DOWN 📉"
-    bayarea_price = 4.940
+    bayarea_price = 5.540
     bayarea_dir = "DOWN 📉"
     target_date = "Next 5 Business Days"
     
@@ -110,8 +110,8 @@ def update_readme_forecasts():
 | **Newark, DE Metro Retail** | `$3.350`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 | **Cincinnati, OH Retail** | `$3.450`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 | **Northern Kentucky Retail** | `$3.325`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `$4.950`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `$5.050`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `$5.550`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `$5.650`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 {END_TAG}"""

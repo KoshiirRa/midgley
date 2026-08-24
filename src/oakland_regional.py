@@ -30,8 +30,8 @@ TOTAL_CARB_TAX_BURDEN = CARB_EXCISE_TAX + CAP_AND_TRADE_FEE + LCFS_CREDIT_FEE + 
 def fetch_oakland_market_data(
     start_date: str = "2022-01-01", 
     end_date: str = None,
-    live_oakland_price: float = 4.950,
-    live_bayarea_price: float = 5.050
+    live_oakland_price: float = 5.550,
+    live_bayarea_price: float = 5.650
 ) -> pd.DataFrame:
     """
     Fetches market data tailored to Oakland, CA & 9-County SF Bay Area (PADD 5 West Coast)
@@ -98,8 +98,8 @@ def fetch_oakland_market_data(
 def _generate_synthetic_oakland_data(
     start_date: str, 
     end_date: str, 
-    live_oakland_price: float = 4.950, 
-    live_bayarea_price: float = 5.050
+    live_oakland_price: float = 5.550, 
+    live_bayarea_price: float = 5.650
 ) -> pd.DataFrame:
     dates = pd.date_range(start=start_date, end=end_date, freq='B')
     np.random.seed(42)
