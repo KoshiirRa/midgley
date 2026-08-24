@@ -28,43 +28,50 @@ REGION_METADATA = {
         "zip": "20001",
         "state": "US",
         "static_anchor": 3.184,
-        "name": "National Wholesale / US Average"
+        "name": "National Wholesale / US Average",
+        "aaa_keywords": ["National Average", "US Average", "Current Avg."]
     },
     "Tulsa_OK": {
         "zip": "74103",
         "state": "OK",
         "static_anchor": 3.890,
-        "name": "Tulsa, OK Metro Retail"
+        "name": "Tulsa, OK Metro Retail",
+        "aaa_keywords": ["Tulsa"]
     },
     "Newark_DE": {
         "zip": "19711",
         "state": "DE",
         "static_anchor": 3.350,
-        "name": "Newark, DE Metro Retail"
+        "name": "Newark, DE Metro Retail",
+        "aaa_keywords": ["Wilmington", "New Castle", "State Average"]
     },
     "Cincinnati_OH": {
         "zip": "45202",
         "state": "OH",
         "static_anchor": 3.450,
-        "name": "Cincinnati, OH Retail"
+        "name": "Cincinnati, OH Retail",
+        "aaa_keywords": ["Cincinnati"]
     },
     "Cincinnati_KY": {
         "zip": "41011",
         "state": "KY",
         "static_anchor": 3.325,
-        "name": "Northern Kentucky Retail"
+        "name": "Northern Kentucky Retail",
+        "aaa_keywords": ["Cincinnati", "Northern Kentucky", "Covington"]
     },
     "Oakland_CA": {
         "zip": "94612",
         "state": "CA",
         "static_anchor": 5.550,
-        "name": "Oakland, CA Metro Retail"
+        "name": "Oakland, CA Metro Retail",
+        "aaa_keywords": ["Oakland", "San Francisco"]
     },
     "BayArea_CA": {
         "zip": "94102",
         "state": "CA",
         "static_anchor": 5.650,
-        "name": "SF Bay Area 9-County Avg"
+        "name": "SF Bay Area 9-County Avg",
+        "aaa_keywords": ["San Francisco", "Oakland", "San Jose"]
     }
 }
 
@@ -149,10 +156,12 @@ def fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict:
 
 def fetch_aaa_metro_price(region_code: str) -> dict:
     """
-    Scrapes AAA Gas Prices (gasprices.aaa.com) for state/metro average gas prices.
+    Scrapes AAA Gas Prices (gasprices.aaa.com) for targeted metro average gas prices.
+    Parses metro area accordion headers and tables before falling back to state averages.
     """
     meta = REGION_METADATA.get(region_code, {})
     state = meta.get("state", "US")
+    keywords = meta.get("aaa_keywords", ["Current Avg."])
     url = f"https://gasprices.aaa.com/?state={state}" if state != "US" else "https://gasprices.aaa.com/"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -162,12 +171,37 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
         with urllib.request.urlopen(req, timeout=5) as response:
             if response.status == 200:
                 html = response.read().decode('utf-8', errors='ignore')
+                try:
+                    from bs4 import BeautifulSoup
+                    soup = BeautifulSoup(html, 'html.parser')
+                    
+                    # 1. Search for specific metro heading block and its corresponding table
+                    for kw in keywords:
+                        kw_lower = kw.lower()
+                        for el in soup.find_all(['h2', 'h3', 'h4', 'h5', 'h6', 'button', 'a', 'div', 'td', 'th', 'p']):
+                            text = el.get_text(strip=True).lower()
+                            if kw_lower in text:
+                                tbl = el.find_next('table')
+                                if tbl:
+                                    for tr in tbl.find_all('tr'):
+                                        tr_text = tr.get_text(strip=True)
+                                        if 'current avg' in tr_text.lower():
+                                            prices = re.findall(r'\$(\d+\.\d{2,4})', tr_text)
+                                            if prices:
+                                                val = float(prices[0])
+                                                if 1.50 <= val <= 8.50:
+                                                    logger.info(f"AAA scraper matched metro '{kw}' for {region_code}: ${val:.3f}/gal")
+                                                    return {"average_price": round(val, 3), "source": f"AAA Web Scraper ({kw}, {state})"}
+                except Exception as parse_err:
+                    logger.debug(f"BS4 parsing fallback notice for {region_code}: {parse_err}")
+
+                # 2. Regex fallback if BS4 parsing did not return a match
                 matches = re.findall(r'\$(\d+\.\d{2,3})', html)
                 if matches:
-                    valid_prices = [float(m) for m in matches if 1.50 <= float(m) <= 7.50]
+                    valid_prices = [float(m) for m in matches if 1.50 <= float(m) <= 8.50]
                     if valid_prices:
                         avg_p = valid_prices[0]
-                        return {"average_price": round(avg_p, 3), "source": f"AAA Web Scraper ({state})"}
+                        return {"average_price": round(avg_p, 3), "source": f"AAA Web Scraper Fallback ({state})"}
     except Exception as e:
         logger.debug(f"AAA web scraper notice for {region_code}: {e}")
     return None
