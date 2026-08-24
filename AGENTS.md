@@ -130,3 +130,14 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Functions:**
   - `log_predictions()`: Logs 5-day out-of-time forecasts.
   - `backfill_actual_prices_and_evaluate()`: Backfills actual historical prices from `yfinance` as target dates arrive and calculates rolling MAE, RMSE, and Directional Hit Rate.
+
+---
+
+### 7. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`)
+
+* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`).
+* **Route Structure & Hierarchy:**
+  - **Overview Landing Page (`/` / `docs/index.html`):** Executive overview of the Midgley engine, listing current and 5-day projected target forecasts for all active locales, rolling MAE/directional accuracy improvement charts, and core feature pillars.
+  - **National Wholesale RBOB Page (`/national` / `docs/national.html` & `docs/national/index.html`):** Dedicated commodity futures page with NYMEX RBOB predictions chart, out-of-time error metrics, global maritime & geopolitical shock scenarios (Hormuz/Suez), and technical driver breakdowns. Accessible via **`National Wholesale`** in the top navbar.
+  - **Tulsa Metro Retail Gas Page (`/tulsa` / `docs/tulsa.html` & `docs/tulsa/index.html`):** Dedicated regional retail page calibrated to live pump prices ($3.89/gal), Cushing WTI delivery hub dynamics, West Tulsa HF Sinclair refinery tornado/freeze shock scenarios, and dynamic rack margins ($0.706/gal). Accessible via the top nav **`Metro Areas`** dropdown menu.
+  - **Educational Math Guide (`/math` / `docs/math.html`):** Educational reference detailing equations and vector spaces across all 9 feature layers rendered via KaTeX.

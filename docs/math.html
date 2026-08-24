@@ -19,24 +19,49 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
 
-    <!-- Header Navigation -->
     <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 hover:bg-blue-600/30 transition">
-                    <i class="fa-solid fa-arrow-left text-xl"></i>
+                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.1</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM Guide</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.1</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
-                    <p class="text-xs text-slate-400">Comprehensive Educational Guide: All 9 Feature Layers & Equations</p>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
             </div>
             
-            <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition text-sm flex items-center gap-2">
-                <i class="fa-solid fa-gauge-high"></i> Back to Dashboard
-            </a>
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <div class="border-t border-slate-800/80 my-1"></div>
+                        <span class="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">More Metros Coming Soon</span>
+                    </div>
+                </div>
+
+                <a href="math.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
         </div>
     </header>
 
@@ -61,16 +86,16 @@
             </div>
             
             <p class="text-slate-300 leading-relaxed text-sm">
-                A <strong>crack spread</strong> measures the profit margin refiners earn when "cracking" crude oil into finished petroleum products. Because crude oil is quoted in dollars per barrel ($42	ext{ gallons}$ per barrel) while wholesale gas is quoted in dollars per gallon, we convert crude prices into per-gallon equivalents.
+                A <strong>crack spread</strong> measures the profit margin refiners earn when "cracking" crude oil into finished petroleum products. Because crude oil is quoted in dollars per barrel ($42\text{ gallons}$ per barrel) while wholesale gas is quoted in dollars per gallon, we convert crude prices into per-gallon equivalents.
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
                 <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 1.1: Refining Crack Spread & Technical Returns</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
-                    $$	ext{CrackSpread}_t = P_{	ext{RBOB}, t} - rac{P_{	ext{WTI}, t}}{42.0}, \quad r_t = \ln\left(rac{P_t}{P_{t-1}}ight)$$
+                    $$\text{CrackSpread}_t = P_{\text{RBOB}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad r_t = \ln\left(\frac{P_t}{P_{t-1}}\right)$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where $P_{	ext{RBOB}}$ is the NYMEX RBOB Futures price ($RB=F$) and $P_{	ext{WTI}}$ is West Texas Intermediate Crude ($CL=F$). Moving averages $	ext{MA}_K(t) = rac{1}{K}\sum_{i=0}^{K-1} P_{t-i}$ are calculated across $K \in \{7, 14, 30\}$ trading days.
+                    where $P_{\text{RBOB}}$ is the NYMEX RBOB Futures price ($RB=F$) and $P_{\text{WTI}}$ is West Texas Intermediate Crude ($CL=F$). Moving averages $\text{MA}_K(t) = \frac{1}{K}\sum_{i=0}^{K-1} P_{t-i}$ are calculated across $K \in \{7, 14, 30\}$ trading days.
                 </p>
             </div>
         </section>
@@ -89,7 +114,7 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
                 <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 2.1: LLM Bounded Impact Vector Space</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
-                    $$\mathbf{V}_{	ext{event}, t} = egin{bmatrix} S_{	ext{geopolitical}} \ S_{	ext{supply}} \ S_{	ext{opec}} \ S_{	ext{demand}} \ S_{	ext{pressure}} \end{bmatrix}_t \in [-1.0, +1.0]^5$$
+                    $$\mathbf{V}_{\text{event}, t} = \begin{bmatrix} S_{\text{geopolitical}} \\ S_{\text{supply}} \\ S_{\text{opec}} \\ S_{\text{demand}} \\ S_{\text{pressure}} \end{bmatrix}_t \in [-1.0, +1.0]^5$$
                 </div>
                 <p class="text-xs text-slate-400">
                     Each component is bounded in the interval $[-1.0, +1.0]$, representing negative (bearish), zero (neutral), or positive (bullish) market pressure.
@@ -111,11 +136,11 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Two-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
-                    $$\mathbf{W}_t = \mathbf{W}_{	ext{National Basins}} + \mathbf{W}_{	ext{Localized OK}}$$
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Localized OK}}$$
                 </div>
                 <p class="text-xs text-slate-400">
                     <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks & Permian/Bakken production basin freeze warnings.<br>
-                    <strong>Tier 2 (Localized Oklahoma):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa $125,000	ext{ bpd}$ HF Sinclair loading racks, $+\$0.173/	ext{gal}$ shock) and Cushing/Payne County (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.
+                    <strong>Tier 2 (Localized Oklahoma):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa $125,000\text{ bpd}$ HF Sinclair loading racks, $+\$0.173/\text{gal}$ shock) and Cushing/Payne County (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.
                 </p>
             </div>
         </section>
@@ -134,11 +159,11 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
                 <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit Premium</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
-                    $$\Delta P_{	ext{freight}} = C_{	ext{tanker}} 	imes \left( rac{\Delta 	ext{Distance}}{v_{	ext{knot}}} ight)$$
+                    $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right)$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    <strong>Strait of Hormuz:</strong> $21.0	ext{M bpd}$ ($20\%$ of global petroleum) naval blockade threats ($+\$0.109/	ext{gal}$ price shock).<br>
-                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add $+12	ext{--}14$ days transit time, adding $+\$4.50/	ext{bbl}$ freight premium ($+\$0.201/	ext{gal}$ price shock).
+                    <strong>Strait of Hormuz:</strong> $21.0\text{M bpd}$ ($20\%$ of global petroleum) naval blockade threats ($+\$0.109/\text{gal}$ price shock).<br>
+                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add $+12\text{--}14$ days transit time, adding $+\$4.50/\text{bbl}$ freight premium ($+\$0.201/\text{gal}$ price shock).
                 </p>
             </div>
         </section>
@@ -147,7 +172,7 @@
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-blue-400">05</span>
-                <h3 class="text-2xl font-bold text-white">Executive Social Feed & Weekend Volatility Multiplier ($1.42	imes$)</h3>
+                <h3 class="text-2xl font-bold text-white">Executive Social Feed & Weekend Volatility Multiplier ($1.42\times$)</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
@@ -157,10 +182,10 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4">
                 <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 5.1: Weekend Market Open Gap Volatility Multiplier</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
-                    $$\sigma_{	ext{SundayOpen}} = 1.42 	imes \sigma_{	ext{Baseline}}$$
+                    $$\sigma_{\text{SundayOpen}} = 1.42 \times \sigma_{\text{Baseline}}$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    Because commodity exchanges are closed Friday 17:00 EST to Sunday 18:00 EST, Saturday/Sunday posts generate <strong>$1.42	imes$ higher Sunday evening open price gap volatility</strong>. Dovish OPEC posts cause average $-1.85\%$ single-day RBOB drops, while hawkish tariff threats cause $+2.10\%$ price surges.
+                    Because commodity exchanges are closed Friday 17:00 EST to Sunday 18:00 EST, Saturday/Sunday posts generate <strong>$1.42\times$ higher Sunday evening open price gap volatility</strong>. Dovish OPEC posts cause average $-1.85\%$ single-day RBOB drops, while hawkish tariff threats cause $+2.10\%$ price surges.
                 </p>
             </div>
         </section>
@@ -179,12 +204,12 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
                 <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 6.1: Physical Supply & Volatility Integration</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
-                    $$\mathbf{X}_{	ext{Physical}} = \Big[ 	ext{OVX}_t, \quad \Delta 	ext{Rigs}_{t-90}, \quad 	ext{DXY}_t, \quad 	ext{EIA\_Inventory\_Draw}_t \Big]$$
+                    $$\mathbf{X}_{\text{Physical}} = \Big[ \text{OVX}_t, \quad \Delta \text{Rigs}_{t-90}, \quad \text{DXY}_t, \quad \text{EIA\_Inventory\_Draw}_t \Big]$$
                 </div>
                 <p class="text-xs text-slate-400">
                     <strong>Cboe OVX Index (^OVX):</strong> Options tail-risk volatility vector ("VIX for Oil").<br>
                     <strong>Baker Hughes Rig Count:</strong> 3-to-6 month domestic shale crude supply pipeline lead indicator.<br>
-                    <strong>Key Market Movers:</strong> Saudi Energy Minister Prince Abdulaziz (OPEC+ cuts), Fed Chair Powell ($DXY$ demand destruction), and US DOE Strategic Petroleum Reserve (SPR buyback floor at $\$70	ext{--}\$79/	ext{bbl}$).
+                    <strong>Key Market Movers:</strong> Saudi Energy Minister Prince Abdulaziz (OPEC+ cuts), Fed Chair Powell ($DXY$ demand destruction), and US DOE Strategic Petroleum Reserve (SPR buyback floor at $\$70\text{--}\$79/\text{bbl}$).
                 </p>
             </div>
         </section>
@@ -203,7 +228,7 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
                 <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 7.1: Live News Vector Ingestion & Batch Factor Scoring</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
-                    $$\mathbf{V}_{	ext{Finlight}, t} = 	ext{Gemini2.5Flash}\left( 	ext{REST}_{	ext{Finlight}}\Big(	ext{Query}_{	ext{Oil, Refining, Chokepoints}}\Big) ight)$$
+                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
                 </div>
                 <p class="text-xs text-slate-400">
                     <strong>API Endpoint:</strong> <code>POST https://api.finlight.me/v2/articles</code> with header <code>X-API-KEY</code>.<br>
@@ -223,10 +248,10 @@
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 8.1: Continuous Memory Decay Accumulator</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
-                    $$\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp\left(-rac{\ln 2}{t_{1/2}}ight) + \mathbf{V}_t$$
+                    $$\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp\left(-\frac{\ln 2}{t_{1/2}}\right) + \mathbf{V}_t$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where half-life $t_{1/2} = 5.0	ext{ days}$ for national macroeconomic/social events and $t_{1/2} = 4.0	ext{ days}$ for regional NOAA weather shocks.
+                    where half-life $t_{1/2} = 5.0\text{ days}$ for national macroeconomic/social events and $t_{1/2} = 4.0\text{ days}$ for regional NOAA weather shocks.
                 </p>
             </div>
         </section>
@@ -239,16 +264,16 @@
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression (&alpha; = 10.0)</strong> model to predict 5-day percentage price returns (&Delta;%), applied directly to today's live pump price ($P_{	ext{Live Base}} = \$3.89/	ext{gal}$):
+                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression ($\alpha = 10.0$)</strong> model to predict 5-day percentage price returns ($\Delta\%$), applied directly to today's live pump price ($P_{\text{Live Base}} = \$3.89/\text{gal}$):
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
                 <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.1: Regularized Ridge Objective Function & Calibration</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
-                    $$\min_{oldsymbol{eta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T oldsymbol{eta} ight)^2 + lpha \|oldsymbol{eta}\|_2^2, \quad \hat{P}_{	ext{Tulsa Retail}, t+5} = P_{	ext{Live Base}} 	imes (1 + \hat{y}_{t+5})$$
+                    $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Tulsa Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where $lpha = 10.0$ prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>$	ext{MAE} = \$0.1069/	ext{gal}$</strong>.
+                    where $\alpha = 10.0$ prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>$\text{MAE} = \$0.1069/\text{gal}$</strong>.
                 </p>
             </div>
         </section>
