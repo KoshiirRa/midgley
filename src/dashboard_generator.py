@@ -523,7 +523,7 @@ def generate_public_dashboard():
                         </div>
                         <h5 class="text-sm font-bold text-white">Localized Metro Models</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK ($3.89/gal), Newark DE ($3.35/gal), and Cincinnati OH/KY ($3.45/gal) with local rack margins & refinery dynamics.
+                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK (\$3.89/gal), Newark DE (\$3.35/gal), and Cincinnati OH/KY (\$3.45/gal) with local rack margins &amp; refinery dynamics.
                         </p>
                     </div>
 
@@ -531,9 +531,9 @@ def generate_public_dashboard():
                     <div class="p-4 rounded-xl bg-slate-900 border border-amber-500/30 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-amber-400">
                             <span>Stage 5-7</span>
-                            <span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px]">MLOps & Review</span>
+                            <span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px]">MLOps &amp; Review</span>
                         </div>
-                        <h5 class="text-sm font-bold text-white">Scenario Simulator & MLOps</h5>
+                        <h5 class="text-sm font-bold text-white">Scenario Simulator &amp; MLOps</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
                             Simulates counterfactual shocks (refinery outages, canal detours, executive posts). Logs out-of-time predictions and backfills actual prices on Saturdays.
                         </p>
@@ -571,7 +571,7 @@ def generate_public_dashboard():
                         <i class="fa-solid fa-cloud-bolt"></i> 3. NOAA Weather Alerts
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        National Gulf Coast hurricane tracks & Oklahoma localized alerts (<code class="text-amber-300">OKZ060</code> EF-3 tornadoes & Cushing freezes).
+                        National Gulf Coast hurricane tracks, PADD refining alerts, polar vortex freeze warnings, and localized severe weather events.
                     </p>
                 </div>
 
@@ -581,7 +581,7 @@ def generate_public_dashboard():
                         <i class="fa-solid fa-ship"></i> 4. Maritime Chokepoints
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Strait of Hormuz (21M bpd) blockade risk & Red Sea / Suez rerouting freight premiums (+12 to +14 days).
+                        Strait of Hormuz (21M bpd) blockade risk &amp; Red Sea / Suez rerouting freight premiums (+12 to +14 days).
                     </p>
                 </div>
 
@@ -591,7 +591,7 @@ def generate_public_dashboard():
                         <i class="fa-solid fa-user-check"></i> 5. Executive Social Feed
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Econometric modeling of executive energy posts generating $1.42\times$ higher Sunday market open gap volatility.
+                        Econometric modeling of executive energy posts generating 1.42&times; higher Sunday market open gap volatility.
                     </p>
                 </div>
 
@@ -601,7 +601,7 @@ def generate_public_dashboard():
                         <i class="fa-solid fa-satellite"></i> 6. Localized Metro Calibration
                     </h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Feeds Main Model base wholesale forecast into Tulsa OK ($3.89), Newark DE ($3.35), and Cincinnati OH/KY ($3.45) with regional rack margins and transport bottleneck shocks.
+                        Feeds Main Model base wholesale forecast into Tulsa OK (\$3.89/gal), Newark DE (\$3.35/gal), and Cincinnati OH/KY (\$3.45/gal) with regional rack margins and transport bottleneck shocks.
                     </p>
                 </div>
 

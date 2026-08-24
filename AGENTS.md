@@ -10,7 +10,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                ┌─────────────────────────────────────────────────────────────┐
                │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │
                │  • Geopolitical Headlines & OPEC Press Releases             │
-               │  • NOAA NWS API (api.weather.gov) - Oklahoma & Basin Alerts │
+               │  • NOAA NWS API (api.weather.gov) - Multi-Basin & Regional Alerts │
                │  • Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)   │
                │  • Executive Social Feed (Trump Twitter / Truth Social)     │
                │  • Physical Alternative Feeds (Cboe OVX & Baker Hughes)     │
