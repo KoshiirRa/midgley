@@ -183,7 +183,7 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
@@ -485,25 +485,28 @@ def generate_public_dashboard():
 
             <!-- 🔄 HIERARCHICAL PIPELINE STAGE FLOW CHART -->
             <div class="p-6 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-4">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                    <i class="fa-solid fa-sitemap text-blue-400"></i> Multi-Agent Information Flow & Localized Model Hierarchy
-                </h4>
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
+                        <i class="fa-solid fa-sitemap"></i> Multi-Agent Execution Pipeline &amp; Model Hierarchy
+                    </h4>
+                    <span class="text-[10px] text-slate-500 font-mono">Stages 1 &rarr; 7</span>
+                </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
                     
-                    <!-- Stage 1: Extraction & Fusion -->
+                    <!-- Stage 1 & 2: Extraction & Fusion -->
                     <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-blue-400">
-                            <span>Stage 1 & 2</span>
-                            <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 text-[10px]">Data & NLP</span>
+                            <span>Stage 1 &amp; 2</span>
+                            <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 text-[10px]">Data &amp; NLP</span>
                         </div>
-                        <h5 class="text-sm font-bold text-white">Extraction & Memory Fusion</h5>
+                        <h5 class="text-sm font-bold text-white">Extraction &amp; Memory Fusion</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints & social feeds into Gemini 2.5 Flash. Decays shocks with $t_{1/2} = 4.0\text{--}5.0$ days.
+                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 2.5 Flash. Decays shocks with \(t_{1/2} = 4.0\text{--}5.0\) days.
                         </p>
                     </div>
 
-                    <!-- Stage 2: Main Model -->
+                    <!-- Stage 3: Main Model -->
                     <div class="p-4 rounded-xl bg-slate-900 border border-blue-500/40 shadow-lg shadow-blue-500/5 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-emerald-400">
                             <span>Stage 3</span>
@@ -511,11 +514,11 @@ def generate_public_dashboard():
                         </div>
                         <h5 class="text-sm font-bold text-white">Main Quantitative Model</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Fits regularized Ridge/XGBoost on NYMEX RBOB (<code class="text-blue-300">RB=F</code>) & WTI Crude (<code class="text-blue-300">CL=F</code>) technicals + LLM event vector matrix to output base commodity benchmark forecast.
+                            Fits regularized Ridge/XGBoost on NYMEX RBOB (<code class="text-blue-300">RB=F</code>) &amp; WTI Crude (<code class="text-blue-300">CL=F</code>) technicals + LLM event vector matrix to output base commodity benchmark forecast.
                         </p>
                     </div>
 
-                    <!-- Stage 3: Localized Metro Calibration (Fed by Main Model) -->
+                    <!-- Stage 4: Localized Metro Calibration (Fed by Main Model) -->
                     <div class="p-4 rounded-xl bg-slate-900 border border-purple-500/40 shadow-lg shadow-purple-500/5 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-purple-400">
                             <span>Stage 4</span>
@@ -523,11 +526,11 @@ def generate_public_dashboard():
                         </div>
                         <h5 class="text-sm font-bold text-white">Localized Metro Models</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK (\$3.89/gal), Newark DE (\$3.35/gal), and Cincinnati OH/KY (\$3.45/gal) with local rack margins &amp; refinery dynamics.
+                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK ($3.89/gal), Newark DE ($3.35/gal), and Cincinnati OH/KY ($3.45/gal) with local rack margins &amp; refinery dynamics.
                         </p>
                     </div>
 
-                    <!-- Stage 4: Synthesis & Feedback -->
+                    <!-- Stage 5-7: Synthesis & Feedback -->
                     <div class="p-4 rounded-xl bg-slate-900 border border-amber-500/30 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-amber-400">
                             <span>Stage 5-7</span>
@@ -542,69 +545,78 @@ def generate_public_dashboard():
                 </div>
             </div>
 
-            <!-- 🏛️ CORE FEATURE PILLARS -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <!-- Pillar 1 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-blue-400 flex items-center gap-2">
-                        <i class="fa-solid fa-calculator"></i> 1. Quantitative Commodity Futures
+            <!-- 🏛️ 6 CORE FEATURE INGESTION PILLARS -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-emerald-400"></i> 6 Core Feature Ingestion Pillars
                     </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        NYMEX RBOB Gasoline Futures (<code class="text-blue-300">RB=F</code>) and WTI Crude (<code class="text-blue-300">CL=F</code>) build 3-2-1 refining crack spreads and moving average returns.
-                    </p>
+                    <span class="text-[10px] text-slate-500">Multi-modal data feeds ingested into Stage 1 &amp; 2</span>
                 </div>
 
-                <!-- Pillar 2 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                        <i class="fa-solid fa-robot"></i> 2. Gemini 2.5 Flash News
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Real-time headlines from Finlight.me REST API translated into bounded 5-dimensional geopolitical factor impact vectors.
-                    </p>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Pillar 1 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-blue-400 flex items-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> 1. Quantitative Commodity Futures
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            NYMEX RBOB Gasoline Futures (<code class="text-blue-300">RB=F</code>) and WTI Crude (<code class="text-blue-300">CL=F</code>) build 3-2-1 refining crack spreads and moving average returns.
+                        </p>
+                    </div>
 
-                <!-- Pillar 3 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                        <i class="fa-solid fa-cloud-bolt"></i> 3. NOAA Weather Alerts
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        National Gulf Coast hurricane tracks, PADD refining alerts, polar vortex freeze warnings, and localized severe weather events.
-                    </p>
-                </div>
+                    <!-- Pillar 2 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                            <i class="fa-solid fa-robot"></i> 2. Gemini 2.5 Flash News
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Real-time headlines from Finlight.me REST API translated into bounded 5-dimensional geopolitical factor impact vectors.
+                        </p>
+                    </div>
 
-                <!-- Pillar 4 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
-                        <i class="fa-solid fa-ship"></i> 4. Maritime Chokepoints
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Strait of Hormuz (21M bpd) blockade risk &amp; Red Sea / Suez rerouting freight premiums (+12 to +14 days).
-                    </p>
-                </div>
+                    <!-- Pillar 3 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-amber-400 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-bolt"></i> 3. NOAA Weather Alerts
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            National Gulf Coast hurricane tracks, PADD refining alerts, polar vortex freeze warnings, and localized severe weather events.
+                        </p>
+                    </div>
 
-                <!-- Pillar 5 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-rose-400 flex items-center gap-2">
-                        <i class="fa-solid fa-user-check"></i> 5. Executive Social Feed
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Econometric modeling of executive energy posts generating 1.42&times; higher Sunday market open gap volatility.
-                    </p>
-                </div>
+                    <!-- Pillar 4 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
+                            <i class="fa-solid fa-ship"></i> 4. Maritime Chokepoints
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Strait of Hormuz (21M bpd) blockade risk &amp; Red Sea / Suez rerouting freight premiums (+12 to +14 days).
+                        </p>
+                    </div>
 
-                <!-- Pillar 6 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
-                        <i class="fa-solid fa-satellite"></i> 6. Localized Metro Calibration
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Feeds Main Model base wholesale forecast into Tulsa OK (\$3.89/gal), Newark DE (\$3.35/gal), and Cincinnati OH/KY (\$3.45/gal) with regional rack margins and transport bottleneck shocks.
-                    </p>
-                </div>
+                    <!-- Pillar 5 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-rose-400 flex items-center gap-2">
+                            <i class="fa-solid fa-user-check"></i> 5. Executive Social Feed
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Econometric modeling of executive energy posts generating 1.42&times; higher Sunday market open gap volatility.
+                        </p>
+                    </div>
 
+                    <!-- Pillar 6 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+                            <i class="fa-solid fa-satellite"></i> 6. Alternative Physical Feeds
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Cboe OVX options tail-risk volatility &amp; Baker Hughes drilling rig counts tracking 3-6 month supply pipelines.
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </section>
 
@@ -701,7 +713,7 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
@@ -885,7 +897,7 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
@@ -1070,7 +1082,7 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
@@ -1255,7 +1267,7 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(168, 85, 247, 0.15); }
@@ -1485,7 +1497,7 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
