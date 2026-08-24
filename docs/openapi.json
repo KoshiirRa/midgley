@@ -5,6 +5,16 @@
     "description": "RESTful API for real-time unleaded gasoline pump prices, 5-day out-of-time quantitative forecasts, and counterfactual physical/geopolitical shock simulations.",
     "version": "1.4.0"
   },
+  "servers": [
+    {
+      "url": "https://local-dev.dwarvenbard.com",
+      "description": "Primary Dev VM HTTPS Gateway"
+    },
+    {
+      "url": "http://10.42.42.54:8000",
+      "description": "Dev VM Local Network Port"
+    }
+  ],
   "paths": {
     "/": {
       "get": {
@@ -51,7 +61,14 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "description": "Locale code (national, tulsa, newark, cincinnati, oakland, bayarea)",
               "default": "national",
               "title": "Locale"
@@ -110,7 +127,14 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "description": "Locale code",
               "default": "national",
               "title": "Locale"
@@ -165,7 +189,14 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "description": "Locale code",
               "default": "national",
               "title": "Locale"
@@ -226,6 +257,23 @@
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp/sse": {
+      "get": {
+        "summary": "MCP Server SSE Connection Endpoint",
+        "description": "HTTP SSE endpoint for MCP clients.",
+        "operationId": "handle_mcp_sse_mcp_sse_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }

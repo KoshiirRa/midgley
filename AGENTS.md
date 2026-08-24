@@ -204,4 +204,16 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Tagging Strategy:** Tagged as `dev-YYYY-MM-DD` and published as a GitHub Pre-Release.
   - **Automated Changelog Generation:** Parses git commit history since the preceding nightly release, formatting structured release notes with commit messages, commit hashes, and author attributions.
 
+---
+
+### 11. MCP & REST API Gateway Agent (`src/api_server.py`, `src/mcp_server.py`, & `src/lookup_cache.py`)
+
+* **Role:** Exposes real-time unleaded gasoline price ingestion, 5-day out-of-time quantitative forecasting, counterfactual physical/geopolitical shock simulations, and Model Context Protocol (MCP) integrations for external LLMs, AI agents, and chatbots.
+* **Service Orchestration:** Managed by `midgley-api.service` running continuously on `dev-vm` (`https://local-dev.dwarvenbard.com` / `10.42.42.54:8000`).
+* **Key Components:**
+  - **SQLite/In-Memory Response Cache (`src/lookup_cache.py`):** 15-minute TTL cache protecting upstream GasBuddy and AAA web scrapers from rate limits.
+  - **RESTful API Endpoint Gateway (`src/api_server.py`):** FastAPI application serving `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and GPT Action manifest (`/.well-known/ai-plugin.json`).
+  - **Model Context Protocol (MCP) Server (`src/mcp_server.py`):** Exposes MCP tools (`get_live_gas_prices`, `get_gas_price_prediction`, `get_live_and_forecast`, `simulate_fuel_market_shock`), static locale resources (`resource://midgley/locales/{locale}`), and prompt templates (`prompt://midgley/market_summary`) across both `stdio` and `HTTP/SSE` transport modes (`/mcp/sse`).
+
+
 

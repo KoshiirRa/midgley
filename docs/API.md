@@ -1,99 +1,150 @@
-# Developer API Documentation (docs/API.md)
+# Midgley MCP & REST API Gateway Documentation
 
-Complete module and function reference for the `midgley` LLM Gas Price Forecasting framework.
-
----
-
-## 1. NOAA Weather Integration (`src.noaa_weather`)
-
-### `fetch_live_noaa_alerts(zones: list = None) -> list`
-Fetches active severe weather alerts from NOAA NWS API (`api.weather.gov`) for specified state/zone codes (default: `['OK', 'TX', 'LA']`).
-
-### `get_national_production_weather_dataset() -> pd.DataFrame`
-Returns historical NOAA weather advisories for major US refining/production basins (Gulf Coast Hurricanes, Permian & Bakken Freezes).
-
-### `get_cincinnati_weather_dataset() -> pd.DataFrame`
-Returns localized NOAA weather advisories for Cincinnati / Hamilton County (`OHZ077`) and Northern KY (`KYZ091`).
-
-### `get_oakland_weather_dataset() -> pd.DataFrame`
-Returns localized NOAA weather, environmental & seismic advisories for Alameda (`CAZ508`), Contra Costa (`CAZ511`), San Francisco (`CAZ006`), and Santa Clara (`CAZ513`).
+The **Midgley MCP & REST API Gateway** exposes real-time unleaded gasoline pump price ingestion, 5-day out-of-time quantitative forecasting, counterfactual physical/geopolitical shock simulations, and Model Context Protocol (MCP) integrations for AI agents, LLMs, and external financial applications.
 
 ---
 
-## 2. Oakland & SF Bay Area Regional Forecasting (`src.oakland_regional`)
+## 🚀 Quick Start & Endpoint Overview
 
-### `fetch_oakland_market_data(start_date: str = "2022-01-01", end_date: str = None, live_oakland_price: float = 4.950, live_bayarea_price: float = 5.050) -> pd.DataFrame`
-Fetches market data tailored to Oakland ($RB=F$, $CL=F$, $BZ=F$), dynamically calibrates retail series to Oakland ($4.950 base) and SF Bay Area ($5.050 base), and computes Richmond crack spread and CARB regulatory tax burden ($0.953/gal).
-
-### `get_oakland_regional_events() -> pd.DataFrame`
-Returns merged dataset of PADD 5 Chevron Richmond refinery events, CARB CaRFG transition shocks, Kinder Morgan SFPP pipeline events, USGS Hayward fault quakes, CAL FIRE / PG&E PSPS power shutoffs, PTWC tsunami alerts, and localized NOAA weather advisories.
-
----
-
-## 3. Tulsa Regional Forecasting (`src.tulsa_regional`)
-
-### `fetch_tulsa_market_data(start_date: str = "2022-01-01", end_date: str = None, live_current_price: float = 3.89) -> pd.DataFrame`
-Fetches market data tailored to Tulsa, OK ($RB=F$, Cushing $CL=F$, $BZ=F$) and dynamically calibrates the retail series to match live pump prices (`live_current_price = 3.89`).
-
-### `get_tulsa_regional_events() -> pd.DataFrame`
-Returns merged dataset of Tulsa refinery events and localized NOAA weather alerts.
+* **Primary Dev API Base URL**: `https://local-dev.dwarvenbard.com` (Direct Dev VM HTTPS Gateway)
+* **Local Dev VM Direct Port**: `http://10.42.42.54:8000`
+* **OpenAPI 3.1 Spec**: `https://local-dev.dwarvenbard.com/openapi.json` or `https://koshiirra.github.io/midgley/openapi.json`
+* **GPT Action Manifest**: `https://local-dev.dwarvenbard.com/.well-known/ai-plugin.json` or `https://koshiirra.github.io/midgley/.well-known/ai-plugin.json`
+* **MCP SSE Connection**: `https://local-dev.dwarvenbard.com/mcp/sse` (or `http://10.42.42.54:8000/mcp/sse`)
 
 ---
 
-## 3. MLOps Prediction Logging (`src.prediction_logger`)
+## 📡 REST API Endpoints
 
-### `log_predictions(predictions_df: pd.DataFrame, region: str = "Tulsa_OK", model_version: str = "v1.2-NOAA-Ridge") -> int`
-Appends new 5-day out-of-time model predictions to `data/prediction_history.csv`.
+### 1. `GET /api/v1/prices/live`
+Fetches real-time unleaded gas price data using the multi-tiered fallback chain (GasBuddy GraphQL -> AAA Web Scraper -> EIA/yfinance Benchmark -> Prediction History -> Static Anchor) with 15-minute response caching.
 
-### `backfill_actual_prices_and_evaluate() -> pd.DataFrame`
-Queries actual historical market prices from `yfinance` up to today, matches target dates, and populates ground-truth price records in `prediction_history.csv`.
+**Query Parameters:**
+* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `oakland`, `bayarea`. Default: `national`.
+* `zip_code` (optional, string): 5-digit US zip code for station-level GasBuddy search.
 
----
+**Example Request:**
+```bash
+curl -X GET "https://local-dev.dwarvenbard.com/api/v1/prices/live?locale=oakland"
+```
 
-## 4. Weekly Performance Review & Feedback Loop Runner (`.github/workflows/weekly_model_review.yml`)
-
-### `generate_performance_report() -> pd.DataFrame`
-Generates an empirical summary report table aggregating MAE, RMSE, and Directional Hit Rate by Region and Model Version. Used by the Saturday automated runner (`.github/workflows/weekly_model_review.yml`) to feed performance validation signals back into model re-calibration and feature weight optimization.
-
----
-
-## 5. Live Fuel Feeds (`src.live_fuel_feed`)
-
-### `fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict`
-Queries GasBuddy GraphQL API for real-time station prices in Tulsa, OK.
-
----
-
-## 6. Dashboard & Multi-Locale Web Generator (`src.dashboard_generator`)
-
-### `generate_public_dashboard()`
-Generates all public HTML web app pages into `docs/`: `index.html` (overview), `national.html` & `national/index.html` (`/national`), `tulsa.html` & `tulsa/index.html` (`/tulsa`), and `math.html` (`/math`).
-
-### `get_nav_header(active_tab: str, rel_prefix: str = "") -> str`
-Returns standard sticky HTML navigation header with active tab highlighting and the **`Metro Areas`** dropdown menu.
-
-### `calculate_rolling_metrics() -> tuple`
-Reads `data/prediction_history.csv` and returns arrays `(dates, rolling_mae, rolling_hit)` tracking rolling MAE and directional accuracy improvement over time.
-
-### `fetch_google_maps_fuel_prices(place_id: str = None, api_key: str = None) -> dict`
-Queries Google Places API (New) for station `fuelOptions` details (`REGULAR`, `MIDGRADE`, `PREMIUM`, `DIESEL`). Requires `GOOGLE_MAPS_API_KEY`.
+**Example Response:**
+```json
+{
+  "status": "success",
+  "timestamp": "2026-08-24T19:18:24Z",
+  "locale": {
+    "code": "oakland",
+    "region_id": "Oakland_CA",
+    "name": "Oakland & SF Bay Area, CA",
+    "padd_region": "PADD 5 West Coast"
+  },
+  "price_per_gal": 4.950,
+  "source": "AAA Web Scraper (CA)",
+  "cache_hit": true,
+  "cache_age_seconds": 35.8,
+  "carb_tax_regulatory_burden_per_gal": 0.953
+}
+```
 
 ---
 
-## 7. Model Context Protocol (MCP) & Production REST API Gateway (Issue #38 Specification)
+### 2. `GET /api/v1/forecast/predict`
+Generates 5-day out-of-time quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), and historical hit rate.
 
-Exposes Midgley real-time AAA/GasBuddy pump lookups, quantitative 5-day predictions, and scenario simulations to external LLMs, ChatGPT Actions, Claude Desktop, Antigravity, and AI agents.
+**Query Parameters:**
+* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `oakland`).
+* `days` (optional, integer): Forecast horizon in days (1 to 30). Default: `5`.
 
-### Server Modules
-- `src.mcp_server`: FastMCP implementation exposing stdio and Server-Sent Events (`HTTP/SSE`) transports.
-  - `get_live_gas_prices(locale, zip_code)`: Real-time AAA/GasBuddy/EIA retail fuel lookup.
-  - `get_gas_price_prediction(locale, days)`: Quantitative 5-day out-of-time model prediction.
-  - `get_live_and_forecast(locale)`: Single unified payload containing current retail prices, rack margins, 5-day price projection, and active risk drivers.
-  - `simulate_fuel_market_shock(locale, scenario_id)`: Evaluates counterfactual market shocks (e.g. `hormuz_blockade`, `tulsa_tornado`, `oakland_psps_blackout`, `cincinnati_barge_drought`).
-- `src.api_server`: FastAPI REST application exposing `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and `/.well-known/ai-plugin.json`.
+**Example Request:**
+```bash
+curl -X GET "https://local-dev.dwarvenbard.com/api/v1/forecast/predict?locale=tulsa&days=5"
+```
 
-### Production Deployment Strategy (Zero-Local Server Dependency)
-1. **Primary Production REST API**: Pre-rendered static JSON endpoints published directly to GitHub Pages (`docs/api/v1/*.json`) via automated GitHub Actions cron runs (`.github/workflows/gas_price_forecast.yml`). Guaranteed 99.99% uptime with $0 hosting overhead.
-2. **Live Dynamic MCP Gateway**: Scale-to-zero container (Google Cloud Run / Render) for real-time zip lookups, live SSE streams, and POST counterfactual simulations.
-3. **Local LLM Tool Provider**: Client-side PyPI stdio package (`midgley-mcp`) for local agent CLI tools (Claude Desktop, Antigravity, Cursor).
+---
 
+### 3. `GET /api/v1/combined`
+Unified endpoint returning live current pump price, predicted 5-day target forecast, regional rack margin, and key market drivers.
+
+**Example Request:**
+```bash
+curl -X GET "https://local-dev.dwarvenbard.com/api/v1/combined?locale=cincinnati"
+```
+
+---
+
+### 4. `POST /api/v1/forecast/simulate`
+Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks.
+
+**Request Body:**
+```json
+{
+  "scenario_id": "hormuz_blockade",
+  "locale": "oakland",
+  "custom_shock_pct": 0.05
+}
+```
+
+**Example Request:**
+```bash
+curl -X POST "https://local-dev.dwarvenbard.com/api/v1/forecast/simulate" \
+     -H "Content-Type: application/json" \
+     -d '{"scenario_id": "hormuz_blockade", "locale": "oakland"}'
+```
+
+**Supported Scenarios:**
+* `hormuz_blockade`: Strait of Hormuz Tanker Blockade (21M bpd) (+2.88%)
+* `suez_rerouting`: Red Sea / Suez Canal Rerouting Crisis (+5.32%)
+* `tulsa_tornado`: West Tulsa HF Sinclair Refinery EF-3 Tornado (+4.58%)
+* `cushing_spill`: Cushing Keystone Pipeline Rupture & Lock (+4.58%)
+* `marathon_outage`: Marathon Catlettsburg KY Refinery Outage (+4.78%)
+* `mississippi_low_water`: Lower Mississippi & Ohio River Low-Water Bottleneck (+4.20%)
+* `hayward_quake`: USGS Hayward Fault M>=6.0 Seismic Quake (+8.48%)
+* `pge_psps_shutoff`: PG&E PSPS Wildfire Power Shutoff & Blackout (+7.07%)
+* `chevron_hydrocracker`: Chevron Richmond Refinery Hydrocracker Outage (+5.76%)
+* `carb_transition`: CARB CaRFG Summer-Blend Transition Compliance Surge (+4.44%)
+* `weekend_opec_post`: Weekend Executive OPEC Talkdown Post (-1.85%)
+* `weekend_tariff_declaration`: Weekend Foreign Energy Tariff Declaration (+2.10%)
+
+---
+
+## 🤖 Model Context Protocol (MCP) Server Integration
+
+The Midgley MCP Server exposes tools, resources, and prompt templates for integration with Claude Desktop, Antigravity CLI (`agy`), and OpenAI Custom GPTs.
+
+### Transport Modes
+1. **Stdio Mode**:
+   Execute directly in CLI / agent environments:
+   ```bash
+   python -m src.mcp_server
+   ```
+
+2. **HTTP/SSE Transport**:
+   Connect via Server-Sent Events (SSE):
+   `https://local-dev.dwarvenbard.com/mcp/sse` (or `http://10.42.42.54:8000/mcp/sse`)
+
+### Exposed MCP Tools
+- `get_live_gas_prices(locale, zip_code)`
+- `get_gas_price_prediction(locale, days)`
+- `get_live_and_forecast(locale)`
+- `simulate_fuel_market_shock(locale, scenario_id)`
+
+### Exposed MCP Resources
+- `resource://midgley/locales/national`
+- `resource://midgley/locales/tulsa`
+- `resource://midgley/locales/newark`
+- `resource://midgley/locales/cincinnati`
+- `resource://midgley/locales/oakland`
+
+### Exposed MCP Prompts
+- `prompt://midgley/market_summary` (LLM financial briefing prompt template)
+
+---
+
+## ⚙️ Service Orchestration (Dev VM)
+
+Managed by systemd user service `midgley-api.service`:
+```bash
+systemctl --user status midgley-api.service
+systemctl --user restart midgley-api.service
+```
