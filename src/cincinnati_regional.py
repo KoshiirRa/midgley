@@ -14,22 +14,28 @@ import logging
 
 from src.noaa_weather import get_cincinnati_weather_dataset
 from src.data_ingestion import get_historical_event_dataset
+from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logger = logging.getLogger(__name__)
 
 def fetch_cincinnati_market_data(
     start_date: str = "2022-01-01", 
     end_date: str = None,
-    live_oh_price: float = 3.450,
-    live_ky_price: float = 3.325
+    live_oh_price: float = None,
+    live_ky_price: float = None
 ) -> pd.DataFrame:
     """
     Fetches market data tailored to Cincinnati, OH & Northern KY (Tri-State Metro Area)
     and dynamically calibrates the dual-state retail series to match live pump prices:
-      - Ohio Side (Hamilton County): $3.450/gal base (State Tax: 38.5¢/gal)
-      - Kentucky Side (Boone/Kenton/Campbell): $3.325/gal base (State Tax: 26.0¢/gal)
+      - Ohio Side (Hamilton County): State Tax: 38.5¢/gal
+      - Kentucky Side (Boone/Kenton/Campbell): State Tax: 26.0¢/gal
       - Cross-River Tax & Retail Differential: ~$0.125/gal.
     """
+    if live_oh_price is None:
+        live_oh_price = fetch_live_metro_retail_price("Cincinnati_OH")["price"]
+    if live_ky_price is None:
+        live_ky_price = fetch_live_metro_retail_price("Cincinnati_KY")["price"]
+
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
 

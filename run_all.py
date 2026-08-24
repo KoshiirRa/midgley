@@ -25,22 +25,22 @@ if __name__ == "__main__":
     print("\n" + "=" * 80)
     print("  STEP 2: RUNNING TULSA, OK METRO RETAIL FORECASTING MODEL")
     print("=" * 80)
-    tulsa_results = run_tulsa(live_pump_price=3.89, use_llm_api=use_api, model_type="ridge")
+    tulsa_results = run_tulsa(use_llm_api=use_api, model_type="ridge")
 
     print("\n" + "=" * 80)
     print("  STEP 3: RUNNING NEWARK, DE METRO RETAIL FORECASTING MODEL")
     print("=" * 80)
-    newark_results = run_newark(live_pump_price=3.35, use_llm_api=use_api, model_type="ridge")
+    newark_results = run_newark(use_llm_api=use_api, model_type="ridge")
     
     print("\n" + "=" * 80)
     print("  STEP 4: RUNNING CINCINNATI, OH / NKY METRO RETAIL FORECASTING MODEL")
     print("=" * 80)
-    cin_results = run_cincinnati(live_oh_price=3.450, live_ky_price=3.325, use_llm_api=use_api, model_type="ridge")
+    cin_results = run_cincinnati(use_llm_api=use_api, model_type="ridge")
 
     print("\n" + "=" * 80)
     print("  STEP 5: RUNNING OAKLAND & SF BAY AREA METRO RETAIL FORECASTING MODEL")
     print("=" * 80)
-    oakland_results = run_oakland(live_oakland_price=4.950, live_bayarea_price=5.050, use_llm_api=use_api, model_type="ridge")
+    oakland_results = run_oakland(use_llm_api=use_api, model_type="ridge")
 
     print("\n" + "=" * 80)
     print("  STEP 6: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")

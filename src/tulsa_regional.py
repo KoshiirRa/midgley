@@ -10,18 +10,22 @@ import yfinance as yf
 from datetime import datetime
 import logging
 from src.noaa_weather import get_tulsa_cushing_weather_dataset
+from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logger = logging.getLogger(__name__)
 
 def fetch_tulsa_market_data(
     start_date: str = "2022-01-01", 
     end_date: str = None,
-    live_current_price: float = 3.89
+    live_current_price: float = None
 ) -> pd.DataFrame:
     """
     Fetches market data tailored to Tulsa, OK and dynamically calibrates the retail series
-    to match live pump prices ($3.89/gal).
+    to match live pump prices.
     """
+    if live_current_price is None:
+        live_current_price = fetch_live_metro_retail_price("Tulsa_OK")["price"]
+
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
 

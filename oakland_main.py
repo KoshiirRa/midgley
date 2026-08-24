@@ -24,12 +24,19 @@ from src.prediction_logger import log_predictions, generate_performance_report
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from src.live_fuel_feed import fetch_live_metro_retail_price
+
 def run_oakland_pipeline(
-    live_oakland_price: float = 5.550, 
-    live_bayarea_price: float = 5.650, 
+    live_oakland_price: float = None, 
+    live_bayarea_price: float = None, 
     use_llm_api: bool = False, 
     model_type: str = "ridge"
 ):
+    if live_oakland_price is None:
+        live_oakland_price = fetch_live_metro_retail_price("Oakland_CA")["price"]
+    if live_bayarea_price is None:
+        live_bayarea_price = fetch_live_metro_retail_price("BayArea_CA")["price"]
+
     print("=" * 80)
     print("  OAKLAND & SF BAY AREA METRO GAS PRICE PREDICTION PIPELINE (PADD 5 WEST COAST)")
     print(f"  LIVE PUMP PRICE ANCHORS: Oakland (East Bay): ${live_oakland_price:.3f}/gal | SF Bay Area Avg: ${live_bayarea_price:.3f}/gal")

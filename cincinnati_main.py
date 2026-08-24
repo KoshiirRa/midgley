@@ -24,12 +24,19 @@ from src.prediction_logger import log_predictions, generate_performance_report
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from src.live_fuel_feed import fetch_live_metro_retail_price
+
 def run_cincinnati_pipeline(
-    live_oh_price: float = 3.450, 
-    live_ky_price: float = 3.325, 
+    live_oh_price: float = None, 
+    live_ky_price: float = None, 
     use_llm_api: bool = False, 
     model_type: str = "ridge"
 ):
+    if live_oh_price is None:
+        live_oh_price = fetch_live_metro_retail_price("Cincinnati_OH")["price"]
+    if live_ky_price is None:
+        live_ky_price = fetch_live_metro_retail_price("Cincinnati_KY")["price"]
+
     tax_delta = live_oh_price - live_ky_price
     print("=" * 80)
     print("  CINCINNATI, OH / NORTHERN KY METRO GAS PRICE PREDICTION PIPELINE")
@@ -189,4 +196,4 @@ def run_cincinnati_pipeline(
 
 if __name__ == "__main__":
     use_api = "--use-llm-api" in sys.argv
-    run_cincinnati_pipeline(live_oh_price=3.450, live_ky_price=3.325, use_llm_api=use_api, model_type="ridge")
+    run_cincinnati_pipeline(use_llm_api=use_api, model_type="ridge")

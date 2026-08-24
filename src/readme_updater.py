@@ -37,8 +37,14 @@ def update_readme_forecasts():
     cin_ky_dir = "DOWN 📉"
     oakland_price = 5.440
     oakland_dir = "DOWN 📉"
-    bayarea_price = 5.540
-    bayarea_dir = "DOWN 📉"
+    # Base price defaults
+    base_nat = 3.184
+    base_tulsa = 3.890
+    base_newark = 3.350
+    base_cin_oh = 3.450
+    base_cin_ky = 3.325
+    base_oakland = 5.550
+    base_bayarea = 5.650
     target_date = "Next 5 Business Days"
     
     if os.path.exists(HISTORY_CSV_PATH):
@@ -56,47 +62,47 @@ def update_readme_forecasts():
                 if not nat_df.empty:
                     latest_nat = nat_df.iloc[-1]
                     nat_price = latest_nat['predicted_5d_price']
-                    base = latest_nat['current_base_price']
-                    nat_dir = "UP 📈" if nat_price >= base else "DOWN 📉"
+                    base_nat = latest_nat['current_base_price']
+                    nat_dir = "UP 📈" if nat_price >= base_nat else "DOWN 📉"
                     target_date = latest_nat['forecast_target_date']
                     
                 if not tulsa_df.empty:
                     latest_tulsa = tulsa_df.iloc[-1]
                     tulsa_price = latest_tulsa['predicted_5d_price']
-                    base_t = latest_tulsa['current_base_price']
-                    tulsa_dir = "UP 📈" if tulsa_price >= base_t else "DOWN 📉"
+                    base_tulsa = latest_tulsa['current_base_price']
+                    tulsa_dir = "UP 📈" if tulsa_price >= base_tulsa else "DOWN 📉"
                     target_date = latest_tulsa['forecast_target_date']
 
                 if not newark_df.empty:
                     latest_newark = newark_df.iloc[-1]
                     newark_price = latest_newark['predicted_5d_price']
-                    base_n = latest_newark['current_base_price']
-                    newark_dir = "UP 📈" if newark_price >= base_n else "DOWN 📉"
+                    base_newark = latest_newark['current_base_price']
+                    newark_dir = "UP 📈" if newark_price >= base_newark else "DOWN 📉"
                     target_date = latest_newark['forecast_target_date']
 
                 if not cin_oh_df.empty:
                     latest_cin_oh = cin_oh_df.iloc[-1]
                     cin_oh_price = latest_cin_oh['predicted_5d_price']
-                    base_co = latest_cin_oh['current_base_price']
-                    cin_oh_dir = "UP 📈" if cin_oh_price >= base_co else "DOWN 📉"
+                    base_cin_oh = latest_cin_oh['current_base_price']
+                    cin_oh_dir = "UP 📈" if cin_oh_price >= base_cin_oh else "DOWN 📉"
 
                 if not cin_ky_df.empty:
                     latest_cin_ky = cin_ky_df.iloc[-1]
                     cin_ky_price = latest_cin_ky['predicted_5d_price']
-                    base_ck = latest_cin_ky['current_base_price']
-                    cin_ky_dir = "UP 📈" if cin_ky_price >= base_ck else "DOWN 📉"
+                    base_cin_ky = latest_cin_ky['current_base_price']
+                    cin_ky_dir = "UP 📈" if cin_ky_price >= base_cin_ky else "DOWN 📉"
 
                 if not oakland_df.empty:
                     latest_oakland = oakland_df.iloc[-1]
                     oakland_price = latest_oakland['predicted_5d_price']
-                    base_oak = latest_oakland['current_base_price']
-                    oakland_dir = "UP 📈" if oakland_price >= base_oak else "DOWN 📉"
+                    base_oakland = latest_oakland['current_base_price']
+                    oakland_dir = "UP 📈" if oakland_price >= base_oakland else "DOWN 📉"
 
                 if not bayarea_df.empty:
                     latest_bayarea = bayarea_df.iloc[-1]
                     bayarea_price = latest_bayarea['predicted_5d_price']
-                    base_bay = latest_bayarea['current_base_price']
-                    bayarea_dir = "UP 📈" if bayarea_price >= base_bay else "DOWN 📉"
+                    base_bayarea = latest_bayarea['current_base_price']
+                    bayarea_dir = "UP 📈" if bayarea_price >= base_bayarea else "DOWN 📉"
         except Exception as e:
             logger.warning(f"Could not read prediction history: {e}")
             
@@ -105,13 +111,13 @@ def update_readme_forecasts():
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.184`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `$3.350`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Cincinnati, OH Retail** | `$3.450`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `$3.325`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `$5.550`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `$5.650`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `${base_nat:.3f}`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `${base_tulsa:.3f}`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `${base_newark:.3f}`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 {END_TAG}"""

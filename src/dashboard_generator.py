@@ -140,10 +140,10 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                             <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
                         </a>
                         <a href="{oak_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail ($4.95)
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
                         </a>
                         <a href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region ($5.05)
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
                         </a>
                     </div>
                 </div>
@@ -181,11 +181,34 @@ def generate_public_dashboard():
     json_mae = json.dumps(rolling_mae)
     json_hit = json.dumps(rolling_hit)
 
+    prices_map = {
+        'National': {'base': 3.184, 'pred': 3.077},
+        'Tulsa_OK': {'base': 3.890, 'pred': 3.780},
+        'Newark_DE': {'base': 3.350, 'pred': 3.250},
+        'Cincinnati_OH': {'base': 3.450, 'pred': 3.350},
+        'Cincinnati_KY': {'base': 3.325, 'pred': 3.225},
+        'Oakland_CA': {'base': 5.550, 'pred': 4.840},
+        'BayArea_CA': {'base': 5.650, 'pred': 4.940}
+    }
+
+    if os.path.exists(HISTORY_CSV_PATH):
+        try:
+            df_hist = pd.read_csv(HISTORY_CSV_PATH)
+            if not df_hist.empty:
+                for reg in prices_map:
+                    reg_df = df_hist[df_hist['region'] == reg]
+                    if not reg_df.empty:
+                        latest = reg_df.iloc[-1]
+                        prices_map[reg]['base'] = float(latest['current_base_price'])
+                        prices_map[reg]['pred'] = float(latest['predicted_5d_price'])
+        except Exception as e:
+            logger.warning(f"Could not read prediction history for dashboard cards: {e}")
+
     # ---------------------------------------------------------------------------
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
     nav_overview = get_nav_header("overview")
-    index_html = r"""<!DOCTYPE html>
+    index_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -198,16 +221,16 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {{ delimiters: [ {{left: '$$', right: '$$', display: true}}, {{left: '\\\\(', right: '\\\\)', display: false}} ] }});"></script>
 
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        .gradient-bg {{ background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }}
+        .card-glow {{ box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
 
-{{NAV_OVERVIEW}}
+{nav_overview}
 
     <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
@@ -260,11 +283,11 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">Current Futures</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['National']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.077<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">${prices_map['National']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
@@ -295,11 +318,11 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.890<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Tulsa_OK']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-emerald-400 mt-1">$3.780<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-emerald-400 mt-1">${prices_map['Tulsa_OK']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
@@ -330,11 +353,11 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.350<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Newark_DE']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">${prices_map['Newark_DE']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
@@ -365,11 +388,11 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">OH / KY Live Base</span>
-                            <p class="text-xl font-extrabold text-white mt-1">$3.45 / $3.33<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-xl font-extrabold text-white mt-1">${prices_map['Cincinnati_OH']['base']:.2f} / ${prices_map['Cincinnati_KY']['base']:.2f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Projected</span>
-                            <p class="text-xl font-extrabold text-purple-400 mt-1">$3.35 / $3.23<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-xl font-extrabold text-purple-400 mt-1">${prices_map['Cincinnati_OH']['pred']:.2f} / ${prices_map['Cincinnati_KY']['pred']:.2f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
@@ -400,11 +423,11 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$5.550<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Oakland_CA']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$4.840<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Oakland_CA']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
@@ -435,11 +458,11 @@ def generate_public_dashboard():
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
                             <span class="text-xs text-slate-400">Regional Avg Base</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$5.650<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['BayArea_CA']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
                             <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">$4.940<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">${prices_map['BayArea_CA']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
@@ -587,7 +610,7 @@ def generate_public_dashboard():
                         </div>
                         <h5 class="text-sm font-bold text-white">Extraction &amp; Memory Fusion</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 2.5 Flash. Decays shocks with \(t_{1/2} = 4.0\text{--}5.0\) days.
+                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 2.5 Flash. Decays shocks with \(t_{{1/2}} = 4.0\text{{--}}5.0\) days.
                         </p>
                     </div>
 

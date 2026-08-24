@@ -16,6 +16,7 @@ import logging
 
 from src.noaa_weather import get_oakland_weather_dataset
 from src.data_ingestion import get_historical_event_dataset
+from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logger = logging.getLogger(__name__)
 
@@ -30,19 +31,24 @@ TOTAL_CARB_TAX_BURDEN = CARB_EXCISE_TAX + CAP_AND_TRADE_FEE + LCFS_CREDIT_FEE + 
 def fetch_oakland_market_data(
     start_date: str = "2022-01-01", 
     end_date: str = None,
-    live_oakland_price: float = 5.550,
-    live_bayarea_price: float = 5.650
+    live_oakland_price: float = None,
+    live_bayarea_price: float = None
 ) -> pd.DataFrame:
     """
     Fetches market data tailored to Oakland, CA & 9-County SF Bay Area (PADD 5 West Coast)
     and dynamically calibrates retail series to match live pump prices:
-      - Oakland / East Bay (Alameda County): $4.950/gal base (Base Anchor)
-      - SF Bay Area Regional 9-County Average: $5.050/gal base
-      - San Francisco Metro: $5.120/gal (High municipal fees & parking logistics)
-      - San Jose / Silicon Valley: $4.980/gal (Santa Clara County commute corridor)
-      - North Bay / Solano / Napa: $4.850/gal (Benicia refinery proximity)
+      - Oakland / East Bay (Alameda County)
+      - SF Bay Area Regional 9-County Average
+      - San Francisco Metro
+      - San Jose / Silicon Valley
+      - North Bay / Solano / Napa
       - Embedded Total Tax & Regulatory Burden: $0.953/gal.
     """
+    if live_oakland_price is None:
+        live_oakland_price = fetch_live_metro_retail_price("Oakland_CA")["price"]
+    if live_bayarea_price is None:
+        live_bayarea_price = fetch_live_metro_retail_price("BayArea_CA")["price"]
+
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
 

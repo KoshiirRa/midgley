@@ -24,7 +24,12 @@ from src.prediction_logger import log_predictions, generate_performance_report
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def run_newark_pipeline(live_pump_price: float = 3.35, use_llm_api: bool = False, model_type: str = "ridge"):
+from src.live_fuel_feed import fetch_live_metro_retail_price
+
+def run_newark_pipeline(live_pump_price: float = None, use_llm_api: bool = False, model_type: str = "ridge"):
+    if live_pump_price is None:
+        live_pump_price = fetch_live_metro_retail_price("Newark_DE")["price"]
+
     print("=" * 80)
     print("  NEWARK, DELAWARE METRO GAS PRICE PREDICTION PIPELINE")
     print(f"  LIVE PUMP PRICE ANCHOR: ${live_pump_price:.2f}/gal (PADD 1B Central Atlantic)")
@@ -163,4 +168,4 @@ def run_newark_pipeline(live_pump_price: float = 3.35, use_llm_api: bool = False
 
 if __name__ == "__main__":
     use_api = "--use-llm-api" in sys.argv
-    run_newark_pipeline(live_pump_price=3.35, use_llm_api=use_api, model_type="ridge")
+    run_newark_pipeline(use_llm_api=use_api, model_type="ridge")

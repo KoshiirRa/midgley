@@ -13,18 +13,22 @@ import logging
 
 from src.noaa_weather import get_newark_delaware_weather_dataset
 from src.data_ingestion import get_historical_event_dataset
+from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logger = logging.getLogger(__name__)
 
 def fetch_newark_market_data(
     start_date: str = "2022-01-01", 
     end_date: str = None,
-    live_current_price: float = 3.35
+    live_current_price: float = None
 ) -> pd.DataFrame:
     """
     Fetches market data tailored to Newark, DE & PADD 1B Central Atlantic region
-    and dynamically calibrates the retail series to match live pump prices ($3.35/gal base).
+    and dynamically calibrates the retail series to match live pump prices.
     """
+    if live_current_price is None:
+        live_current_price = fetch_live_metro_retail_price("Newark_DE")["price"]
+
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
 
