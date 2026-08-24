@@ -175,3 +175,14 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Systemd User Service:** Managed by `midgley-dev.service` (`python3 -m http.server 8080 --directory /home/marty/projects/midgley/docs --bind 0.0.0.0`) with automatic restart capabilities (`Restart=always`).
   - **User Linger:** User linger enabled (`loginctl enable-linger marty`) to ensure background web service persistence across host reboots.
 
+---
+
+### 10. Nightly Dev Release Automation Agent (`.github/workflows/nightly_dev_release.yml`)
+
+* **Role:** Executes automated nightly pre-releases tracking whatever is committed on the permanent `dev` branch.
+* **Automated Cloud Schedule:** Executes daily at **03:00 AM Central / 08:00 UTC** on GitHub Actions.
+* **Key Specifications:**
+  - **Tagging Strategy:** Tagged as `dev-YYYY-MM-DD` and published as a GitHub Pre-Release.
+  - **Automated Changelog Generation:** Parses git commit history since the preceding nightly release, formatting structured release notes with commit messages, commit hashes, and author attributions.
+
+

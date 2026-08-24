@@ -3,6 +3,8 @@
 [![Release: v0.1](https://img.shields.io/badge/Release-v0.1-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.1)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
+[![Automated Nightly Dev Release](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml)
+
 [![Public Dashboard](https://img.shields.io/badge/Public_Dashboard-koshiirra.github.io%2Fmidgley-blue.svg)](https://koshiirra.github.io/midgley/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-green.svg)](requirements.txt)
@@ -137,6 +139,8 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 9. **MLOps Prediction Tracker & Ground-Truth Backfilling (`src/prediction_logger.py`):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv` and automatically backfills actual market prices as target dates arrive.
 10. **Weekly Model Performance Review & Continuous Feedback Loop Runner (`.github/workflows/weekly_model_review.yml`):** Runs automatically every Saturday at 08:00 AM Central on GitHub Actions cloud runners to evaluate rolling MAE/RMSE/Hit Rate metrics and feed performance validation signals back into model retraining and feature weight optimization over time.
 11. **Local Dev Environment & Permanent Web Server (`dev-vm` Port 8080):** Serves live dashboard analytics from the permanent `dev` branch on `dev-vm` (`10.42.42.54`) on port 8080 via a persistent `systemd` user service (`midgley-dev.service`) with user linger enabled.
+12. **Automated Nightly Dev Releases (`.github/workflows/nightly_dev_release.yml`):** Automatically builds, tags (`dev-YYYY-MM-DD`), and documents GitHub pre-releases tracking whatever is on the `dev` branch every night at 3:00 AM Central Time (08:00 UTC).
+
 
 
 ---

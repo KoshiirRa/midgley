@@ -131,4 +131,15 @@ To support rapid iteration and local testing, a dedicated Linux dev environment 
 * **Systemd User Service (`midgley-dev.service`):** Runs `python3 -m http.server 8080 --directory /home/marty/projects/midgley/docs --bind 0.0.0.0` as a background user service under systemd.
 * **Service Persistence & Linger:** User linger is enabled (`loginctl enable-linger marty`), allowing the dev web server to start automatically at system boot and persist without an open SSH session. Automatic restart (`Restart=always`) ensures high availability against process crashes.
 
+---
+
+## 8. Automated Nightly Dev Release Pipeline (`.github/workflows/nightly_dev_release.yml`)
+
+The project operates an automated release pipeline targeting the `dev` branch:
+
+* **Trigger Schedule:** Scheduled at `0 8 * * *` (03:00 AM Central Time / 08:00 UTC) every night.
+* **Pre-Release Tagging:** Publishes pre-release tags in format `dev-YYYY-MM-DD`.
+* **Automated Release Notes:** Dynamically computes commit history and pull request contributions between consecutive nightly tags, attaching formatted Markdown release notes to the GitHub Release.
+
+
 
