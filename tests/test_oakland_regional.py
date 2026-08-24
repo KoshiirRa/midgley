@@ -28,7 +28,7 @@ def test_fetch_oakland_market_data():
     for col in expected_cols:
         assert col in df.columns, f"Expected column '{col}' missing from Oakland market data"
         
-    assert abs(df['total_regulatory_tax_burden'].iloc[-1] - 0.953) < 1e-4, "CARB tax burden should equal $0.953/gal"
+    assert abs(df['total_regulatory_tax_burden'].iloc[-1] - TOTAL_CARB_TAX_BURDEN) < 1e-4, "CARB tax burden should match TOTAL_CARB_TAX_BURDEN"
     assert df['oakland_retail_gasoline'].iloc[-1] > 4.00, "Oakland retail price should be anchored above $4.00/gal"
 
 

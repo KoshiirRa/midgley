@@ -121,65 +121,49 @@ def run_oakland_pipeline(
         }
     ]
 
-    model = results['model_hybrid']
-    latest_feature_vector = splits['X_test_hybrid'].iloc[-1:].copy()
-    base_pred = model.predict(latest_feature_vector)[0]
+    base_row = splits['X_test_hybrid'].iloc[-1:].copy()
+    raw_pred_price = results['model_hybrid'].predict(base_row)[0]
+    last_hist_price = splits['test_df']['gasoline_rbob'].iloc[-1]
     
-    # Calculate baseline 5-day predicted pump prices
-    last_rbob = market_df['gasoline_rbob'].iloc[-1]
-    last_oakland = market_df['oakland_retail_gasoline'].iloc[-1]
-    last_bayarea = market_df['bayarea_avg_retail_gasoline'].iloc[-1]
-    
-    oakland_delta = base_pred - last_rbob
-    oakland_pred_5d = last_oakland + oakland_delta
-    bayarea_pred_5d = last_bayarea + oakland_delta
+    baseline_return = (raw_pred_price - last_hist_price) / last_hist_price
+    oakland_baseline_forecast = live_oakland_price * (1.0 + baseline_return)
+    bayarea_baseline_forecast = live_bayarea_price * (1.0 + baseline_return)
 
     print(f"\n  Baseline 5-Day Projected Pump Prices (No Shock):")
-    print(f"   -> Oakland Retail 5-Day Target:   ${oakland_pred_5d:.3f}/gal (Current: ${last_oakland:.3f}/gal)")
-    print(f"   -> SF Bay Area 5-Day Target:     ${bayarea_pred_5d:.3f}/gal (Current: ${last_bayarea:.3f}/gal)")
+    print(f"   -> Oakland Retail 5-Day Target:   ${oakland_baseline_forecast:.3f}/gal (Current: ${live_oakland_price:.3f}/gal)")
+    print(f"   -> SF Bay Area 5-Day Target:     ${bayarea_baseline_forecast:.3f}/gal (Current: ${live_bayarea_price:.3f}/gal)")
 
     print("\n  Simulating Counterfactual Shock Scenarios:")
     for sc in scenarios:
-        sim_vector = latest_feature_vector.copy()
-        if "Seismic" in sc['name']:
-            sim_vector['supply_disruption_memory'] += 2.80
-            sim_vector['geopolitical_risk_memory'] += 1.50
-        elif "Wildfire" in sc['name'] or "PSPS" in sc['name']:
-            sim_vector['supply_disruption_memory'] += 2.20
-            sim_vector['geopolitical_risk_memory'] += 1.10
-        elif "Richmond" in sc['name']:
-            sim_vector['supply_disruption_memory'] += 1.80
-        elif "CaRFG" in sc['name']:
-            sim_vector['supply_disruption_memory'] += 1.30
-        elif "Tsunami" in sc['name']:
-            sim_vector['supply_disruption_memory'] += 1.00
-        elif "EPAC" in sc['name']:
-            sim_vector['supply_disruption_memory'] += 0.85
+        headline = sc['headline']
+        scores = extract_event_features_llm(headline, api_key=os.environ.get("GEMINI_API_KEY") if use_llm_api else None)
+        
+        supply_impact = scores['supply_disruption'] * 0.055
+        pressure_impact = scores['overall_price_pressure'] * 0.040
+        geo_impact = scores['geopolitical_risk'] * 0.025
+        net_shock_pct = supply_impact + pressure_impact + geo_impact
 
-        sc_pred_rbob = model.predict(sim_vector)[0]
-        sc_delta = sc_pred_rbob - last_rbob
-        sc_oakland_5d = last_oakland + sc_delta
-        diff = sc_oakland_5d - oakland_pred_5d
-        pct = (diff / oakland_pred_5d) * 100
+        shocked_oakland_5d = oakland_baseline_forecast * (1.0 + net_shock_pct)
+        diff = shocked_oakland_5d - oakland_baseline_forecast
 
         print(f"\n   * {sc['name']}")
-        print(f"     Headline: \"{sc['headline']}\"")
-        print(f"     Simulated Oakland 5-Day Target: ${sc_oakland_5d:.3f}/gal | Impact: {diff:+.3f}/gal ({pct:+.2f}%)")
+        print(f"     Headline: \"{headline}\"")
+        print(f"     Simulated Oakland 5-Day Target: ${shocked_oakland_5d:.3f}/gal | Impact: {diff:+.3f}/gal ({net_shock_pct*100:+.2f}%)")
 
     # Step 6: Log Out-of-Time Predictions
     print("\n[Step 6/6] Logging Out-of-Time Predictions to prediction_history.csv...")
     last_date = market_df['date'].iloc[-1]
     pred_oakland_df = pd.DataFrame([{
         'date': last_date,
-        'current_price': last_oakland,
-        'predicted_5d_price': oakland_pred_5d
+        'current_price': live_oakland_price,
+        'predicted_5d_price': oakland_baseline_forecast
     }])
     log_predictions(pred_oakland_df, region="Oakland_CA", model_version=f"v1.4-{model_type.capitalize()}")
 
     pred_bayarea_df = pd.DataFrame([{
         'date': last_date,
-        'current_price': last_bayarea,
-        'predicted_5d_price': bayarea_pred_5d
+        'current_price': live_bayarea_price,
+        'predicted_5d_price': bayarea_baseline_forecast
     }])
     log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=f"v1.4-{model_type.capitalize()}")
 
