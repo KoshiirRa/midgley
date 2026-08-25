@@ -1,0 +1,11 @@
+[Unit]
+Description=Midgley Local Dev Server Weekly Model Review & Issue Audit Runner
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/marty/projects/midgley
+ExecStart=/bin/bash /home/marty/projects/midgley/scripts/run_local_weekly_review.sh
+
+[Install]
+WantedBy=default.target

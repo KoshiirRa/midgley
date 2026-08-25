@@ -187,13 +187,16 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 9. Dev Environment & Permanent Server Agent (`dev-vm` Port 8080)
+### 9. Dev Environment & Permanent Server Agent (`dev-vm` Port 8080 & Systemd Local Workflow Timers)
 
-* **Role:** Manages the persistent local development environment on `dev-vm` (`10.42.42.54`), keeping the permanent `dev` branch active and serving the web dashboard live on port 8080.
+* **Role:** Manages the persistent local development environment on `dev-vm` (`10.42.42.54`), keeping the permanent `dev` branch active, serving the web dashboard live on port 8080, and running local scheduled workflow equivalents (daily forecasting & weekly model issue self-reviews).
 * **Key Specifications:**
   - **Dedicated Dev Branch:** Tracks the permanent `dev` branch (`origin/dev`) at `/home/marty/projects/midgley`.
-  - **Systemd User Service:** Managed by `midgley-dev.service` (`python3 -m http.server 8080 --directory /home/marty/projects/midgley/docs --bind 0.0.0.0`) with automatic restart capabilities (`Restart=always`).
-  - **User Linger:** User linger enabled (`loginctl enable-linger marty`) to ensure background web service persistence across host reboots.
+  - **Systemd Web & API Services:** Managed by `midgley-dev.service` (dashboard web server on port 8080) and `midgley-api.service` (FastAPI / MCP gateway on port 8000).
+  - **Systemd Scheduled Local Workflow Timers:**
+    - `midgley-daily-forecast.timer`: Executes `scripts/run_local_daily_forecast.sh` daily at **02:00 AM Central / 07:00 UTC**.
+    - `midgley-weekly-review.timer`: Executes `scripts/run_local_weekly_review.sh` every **Saturday at 08:00 AM Central / 13:00 UTC** (running model backtests, GitHub open issue self-reviews via Gemini, and public dashboard updates).
+  - **User Linger:** User linger enabled (`loginctl enable-linger marty`) to ensure background web services and scheduled timers run 24/7 across host reboots.
 
 ---
 
