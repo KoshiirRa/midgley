@@ -83,14 +83,25 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 * **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, NOAA alerts, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
 * **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
-* **Real-Time Financial News Stream (`src/finlight_feed.py`):**
+* **Real-Time Financial News Stream & Quota Safety Valve (`src/finlight_feed.py`):**
   - **Live Coverage:** Ingests real-time financial energy headlines from tier-1 media (Reuters, Bloomberg, Seeking Alpha, Investing.com) via `finlight.me` REST API.
-  - **Dynamic Ingestion:** Queries oil, gasoline, refining outages, OPEC decisions, and global maritime chokepoint shifts.
+  - **Hard Quota Safety Valve:** Persistent ledger at `data/finlight_quota.json` enforcing a **150 call/month safety cap** (and 10 call/day burst limit) out of the 250 free tier allowance. Automatically blocks outgoing API calls when cap is reached, falling back seamlessly to cached news or the Tier 3 Offline Lexicon. Quota status exposed via `GET /api/v1/system/quota`.
+* **Unified Intraday Event Monitor & Webhook Gateway (`src/intraday_event_monitor.py`):**
+  - **Strategy 2 (Free RSS Polling):** Zero-cost 15-minute polling across free energy RSS streams (Google News, NYT, CNBC).
+  - **Strategy 1 (Cascading Anomaly Gate):** Regex/keyword trigger gate (`tariff`, `retaliat`, `trade war`, `opec emergency`, `pipeline halt`, `explosion`, `tornado`) evaluating fast-path impact scores. Tripping threshold: \(|\text{overall\_price\_pressure}| \ge 0.40\) or \(\text{supply\_disruption} \ge 0.50\).
+  - **Strategy 3 (Trading Hours Adaptive Ingestion):** `is_trading_hours()` helper restricts `finlight.me` fetches to active US commodity trading hours (08:00 AM – 05:00 PM EST, Mon–Fri).
+  - **Strategy 4 (Incoming Webhook Gateway & HMAC Security):** `POST /api/v1/events/webhook` endpoint on `src/api_server.py` for direct push ingestion from external alerts (Zapier, IFTTT, Google Alerts). Enforces HMAC-SHA256 signature validation via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment, rejecting unauthorized payload tampering with HTTP 401.
+
+* **Tiered Multi-Provider LLM Failover Engine (`src/event_analyzer.py`):**
+  - **Tier 1 (Primary):** Google **Gemini 2.5 Flash** (`GEMINI_API_KEY`).
+  - **Tier 2 (Secondary - Optional):** OpenAI `gpt-4o-mini` (`OPENAI_API_KEY`) / Anthropic `claude-3-5-haiku` (`ANTHROPIC_API_KEY`). Soft-checked if keys exist; safely skipped if absent.
+  - **Tier 3 (Safety Net - 100% Guaranteed):** **Offline Rule-Based Lexicon Extractor**. 100% offline, $0 cost, 0 API keys required, zero downtime guarantee.
 * **Executive Social Media & Weekend Gap Engine:**
   - **Empirical Correlation:** Econometric analysis confirms $p < 0.01$ correlation between executive social media posts (e.g., Trump OPEC pressure & tariff declarations) and immediate short-term futures return shocks.
   - **Dovish OPEC Pressure:** Posts urging OPEC to lower prices cause immediate average $-1.85\%$ single-day RBOB price drops.
   - **Hawkish Tariff Shocks:** Energy import tariff threats produce $+2.10\%$ 24-hour price surges.
   - **Weekend Market Gap Multiplier:** Saturday/Sunday posts published while commodity markets are closed produce **$1.42\times$ higher Monday morning open price gap volatility**.
+
 
 ---
 
@@ -115,29 +126,29 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 4. Localized Metro Area Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, `src/cincinnati_regional.py`, `src/greenville_regional.py`, & `src/oakland_regional.py`)
+### 4. Localized Metro Area Calibration Agents (`src/locations/<location>/regional.py`)
 
-* **Role:** Ingest the base commodity forecast from the Main Quantitative Model and calibrate to local retail pump prices, dynamic regional rack margins, refinery dynamics, delivery hub logistics, and localized infrastructure shocks.
-* **Tulsa Regional Calibration Agent (`src/tulsa_regional.py`):**
+* **Role:** Ingest the base commodity forecast from the Main Quantitative Model and calibrate to local retail pump prices, dynamic regional rack margins, refinery dynamics, delivery hub logistics, and localized infrastructure shocks. Organized as modular subpackages within `src/locations/`.
+* **Tulsa Regional Calibration Agent (`src/locations/tulsa/`):**
   - Tailors market time series to the Tulsa, OK metropolitan area calibrated to live pump prices ($3.89/gal base) & Cushing WTI delivery hub dynamics.
   - Rack margin: $P_{\text{Tulsa Retail}} = P_{\text{Wholesale RBOB}} + \text{Dynamic Rack Margin}$.
-* **Newark Regional Calibration Agent (`src/newark_regional.py`):**
+* **Newark Regional Calibration Agent (`src/locations/newark/`):**
   - Tailors market time series to the Newark, DE metropolitan area (PADD 1B Central Atlantic) calibrated to live pump prices ($3.35/gal base) & PBF Delaware City Refinery (180,000 bpd capacity).
   - Integrates **Delaware Bay deepwater lightering alerts (Big Stone Anchorage)** and **Chesapeake & Delaware (C&D) Canal barge detour events** (300 nm detour around Delmarva, $+\$0.097/\text{gal}$ rack margin expansion, $p = 0.00191$).
-* **Cincinnati Regional Calibration Agent (`src/cincinnati_regional.py`):**
+* **Cincinnati Regional Calibration Agent (`src/locations/cincinnati/`):**
   - Tailors market time series to the Cincinnati, OH & Northern Kentucky tri-state metropolitan area, modeling the dual-state fuel tax differential (Ohio state fuel tax $0.385/\text{gal}$ vs Kentucky state fuel tax $0.260/\text{gal}$, creating a persistent $\approx \$0.125/\text{gal}$ cross-river retail price gap).
   - Integrates Marathon Catlettsburg KY Refinery dynamics (291,000 bpd capacity), Ohio River marine terminal barge deliveries, and **Lower Mississippi River downriver low-water barge bottlenecks (Cairo, IL confluence & Memphis draft restrictions)**.
-* **Greenville Regional Calibration Agent (`src/greenville_regional.py`):**
+* **Greenville Regional Calibration Agent (`src/locations/greenville/`):**
   - Tailors market time series to the Greenville, NC metropolitan area (PADD 1C South Atlantic) calibrated to live pump prices ($3.25/gal base).
   - Integrates **Colonial Pipeline Line 1/2 breakout hubs at Selma NC & Apex NC**, Port of Wilmington marine oil terminals, North Carolina State Motor Fuel Tax ($0.404/gal variable formula), and **NOAA Pitt County (NCZ081) Tar River flooding & Atlantic hurricane alerts**.
-* **Oakland & SF Bay Area Regional Calibration Agent (`src/oakland_regional.py`):**
+* **Oakland & SF Bay Area Regional Calibration Agent (`src/locations/oakland/`):**
   - Tailors market time series to Oakland, CA ($4.950/gal base) and the 9-County SF Bay Area Region ($5.050/gal base), establishing high-cost PADD 5 West Coast benchmarks ("scare factor").
   - Models statutory **CARB & CA state tax burden ($0.953/gal total)**: 63.4¢ state excise tax, ~25¢ Cap-and-Trade carbon fees, ~18.5¢ LCFS credit overhead, and ~15¢ local sales tax/UST fees.
   - Integrates Chevron Richmond Refinery dynamics (245,000 bpd capacity), PBF Martinez, Valero Benicia, Kinder Morgan SFPP pipeline corridors, **USGS Hayward/San Andreas Fault seismic risks**, **CAL FIRE & PG&E Public Safety Power Shutoff (PSPS) refinery blackout risks**, **NOAA PTWC Tsunami advisories**, and **NHC EPAC Tropical Storm Remnants**.
 
 ---
 
-### 5. Synthesis & Scenario Simulator Agent (`main.py`, `tulsa_main.py`, `newark_main.py`, `cincinnati_main.py`, & `oakland_main.py`)
+### 5. Synthesis & Scenario Simulator Agent (`src/locations/<location>/main.py`)
 
 * **Role:** Enables counterfactual "What-If" scenario simulation.
 * **Scenarios Evaluated:**

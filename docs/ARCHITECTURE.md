@@ -165,5 +165,42 @@ The project operates an automated release pipeline targeting the `dev` branch:
 * **Pre-Release Tagging:** Publishes pre-release tags in format `dev-YYYY-MM-DD`.
 * **Automated Release Notes:** Dynamically computes commit history and pull request contributions between consecutive nightly tags, attaching formatted Markdown release notes to the GitHub Release.
 
+## 9. Modular Location Subpackage Hierarchy (`src/locations/`)
 
+All location-specific forecasting pipelines, regional market data fetchers, event log loaders, and Jupyter notebook builders are organized into a clean, modular subpackage hierarchy under `src/locations/`:
 
+```
+src/locations/
+├── __init__.py                # Master location registry (LOCATIONS dict, get_location(), list_locations())
+├── national/                  # National Wholesale RBOB Futures location package
+│   ├── __init__.py
+│   ├── main.py                # Main national forecasting pipeline
+│   └── notebook_builder.py    # Builds notebooks/gas_price_llm_forecasting.ipynb
+├── tulsa/                     # Tulsa Metro, OK location package
+│   ├── __init__.py
+│   ├── main.py                # Tulsa regional pipeline
+│   ├── regional.py            # Tulsa market data & regional events
+│   └── notebook_builder.py    # Builds notebooks/tulsa_gas_price_llm_forecasting.ipynb
+├── newark/                    # Newark Metro, DE location package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── regional.py
+│   └── notebook_builder.py
+├── cincinnati/                # Cincinnati Tri-State, OH/KY location package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── regional.py
+│   └── notebook_builder.py
+├── greenville/                # Greenville Metro, NC location package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── regional.py
+│   └── notebook_builder.py
+└── oakland/                   # Oakland & SF Bay Area, CA location package
+    ├── __init__.py
+    ├── main.py
+    ├── regional.py
+    └── notebook_builder.py
+```
+
+Root entrypoints (`main.py`, `tulsa_main.py`, `newark_main.py`, etc.), notebook build scripts (`build_*.py`), and `src/*_regional.py` modules operate as lightweight delegation shims to `src/locations/`, maintaining 100% backward compatibility for all existing scripts, workflows, and systemd services.
