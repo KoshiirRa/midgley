@@ -397,7 +397,7 @@ def generate_weekly_markdown_report() -> str:
 
 def create_github_issue():
     """
-    Creates an issue in the KoshiirRa/midgley repository using gh issue create.
+    Creates an issue in the KoshiirRa/midgley repository using gh issue create or GitHub REST API.
     """
     report_md = generate_weekly_markdown_report()
     today_str = datetime.now().strftime("%Y-%m-%d")
@@ -406,19 +406,60 @@ def create_github_issue():
     issue_file = "weekly_issue_body.md"
     with open(issue_file, "w", encoding="utf-8") as f:
         f.write(report_md)
-        
-    logger.info(f"Creating GitHub Issue: {title}...")
+
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+
+    # 1. Try gh CLI
     try:
+        logger.info(f"Creating GitHub Issue via gh CLI: {title}...")
+        env = dict(os.environ)
+        if token:
+            env["GH_TOKEN"] = token
+            env["GITHUB_TOKEN"] = token
+
         cmd = ["gh", "issue", "create", "--repo", "KoshiirRa/midgley", "--title", title, "--body-file", issue_file]
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        logger.info(f"GitHub Issue created successfully: {result.stdout.strip()}")
-        print(f"GitHub Issue Created: {result.stdout.strip()}")
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
+        issue_url = result.stdout.strip()
+        logger.info(f"GitHub Issue created successfully via gh CLI: {issue_url}")
+        print(f"GitHub Issue Created: {issue_url}")
+        return issue_url
     except Exception as e:
-        logger.warning(f"Could not create GitHub issue via gh CLI: {e}")
+        logger.warning(f"Could not create GitHub issue via gh CLI ({e}). Trying REST API fallback...")
     finally:
         if os.path.exists(issue_file):
             os.remove(issue_file)
 
+    # 2. Try REST API fallback
+    if not token:
+        logger.warning("No GH_TOKEN or GITHUB_TOKEN environment variable found for REST API issue creation.")
+        return None
+
+    try:
+        url = "https://api.github.com/repos/KoshiirRa/midgley/issues"
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {token}",
+            "User-Agent": "Midgley-Weekly-Reviewer",
+            "Content-Type": "application/json"
+        }
+        payload = json.dumps({
+            "title": title,
+            "body": report_md
+        }).encode("utf-8")
+
+        req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=15) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+            html_url = res_data.get("html_url", "")
+            logger.info(f"GitHub Issue created successfully via REST API: {html_url}")
+            print(f"GitHub Issue Created via REST API: {html_url}")
+            return html_url
+    except Exception as e:
+        logger.error(f"Failed to create GitHub issue via REST API: {e}")
+        return None
+
+
 if __name__ == "__main__":
     create_github_issue()
+
 
