@@ -231,6 +231,7 @@ def generate_public_dashboard():
     os.makedirs(TULSA_SUB_DIR, exist_ok=True)
     os.makedirs(NEWARK_SUB_DIR, exist_ok=True)
     os.makedirs(CINCINNATI_SUB_DIR, exist_ok=True)
+    os.makedirs(GREENVILLE_SUB_DIR, exist_ok=True)
     os.makedirs(OAKLAND_SUB_DIR, exist_ok=True)
     os.makedirs(BAYAREA_SUB_DIR, exist_ok=True)
 

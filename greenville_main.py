@@ -123,31 +123,18 @@ def run_greenville_pipeline(live_pump_price: float = None, use_llm_api: bool = F
     
     scenario_results = []
     for sc in scenarios:
-        shock_df = base_row.copy()
-        if "Colonial Pipeline" in sc["name"]:
-            shock_df['supply_disruption_decayed'] += 1.8
-            shock_df['overall_price_pressure_decayed'] += 1.6
-        elif "Hurricane" in sc["name"]:
-            shock_df['supply_disruption_decayed'] += 1.5
-            shock_df['overall_price_pressure_decayed'] += 1.4
-        elif "Selma NC Tank Farm" in sc["name"]:
-            shock_df['supply_disruption_decayed'] += 1.3
-            shock_df['overall_price_pressure_decayed'] += 1.1
-        elif "NC State Motor Fuel Tax" in sc["name"]:
-            shock_df['overall_price_pressure_decayed'] += 0.4
-        elif "OPEC Talkdown" in sc["name"]:
-            shock_df['overall_price_pressure_decayed'] -= 1.35
-        elif "Energy Tariff" in sc["name"]:
-            shock_df['supply_disruption_decayed'] += 1.0
-            shock_df['overall_price_pressure_decayed'] += 1.25
-
-        sim_raw_price = results['model_hybrid'].predict(shock_df)[0]
-        sim_return = (sim_raw_price - last_hist_price) / last_hist_price
+        headline = sc['headline']
+        scores = extract_event_features_llm(headline, api_key=os.environ.get("GEMINI_API_KEY") if use_llm_api else None)
+        
+        supply_impact = scores['supply_disruption'] * 0.045
+        pressure_impact = scores['overall_price_pressure'] * 0.035
+        geo_impact = scores['geopolitical_risk'] * 0.020
+        net_shock_pct = supply_impact + pressure_impact + geo_impact
         
         multiplier = 1.42 if ("Weekend" in sc["name"] or "WEEKEND" in sc["headline"]) else 1.0
-        adjusted_sim_return = sim_return * multiplier
+        adjusted_shock_pct = net_shock_pct * multiplier
         
-        sim_greenville_price = live_pump_price * (1.0 + adjusted_sim_return)
+        sim_greenville_price = greenville_baseline_forecast * (1.0 + adjusted_shock_pct)
         dollar_change = sim_greenville_price - greenville_baseline_forecast
         pct_change = (dollar_change / greenville_baseline_forecast) * 100
         
@@ -157,7 +144,7 @@ def run_greenville_pipeline(live_pump_price: float = None, use_llm_api: bool = F
             "Impact ($)": f"{dollar_change:+.3f}/gal",
             "Impact (%)": f"{pct_change:+.2f}%"
         })
-        print(f"  {sc['name']:<56} -> {sim_greenville_price:.3f}/gal ({dollar_change:+.3f} | {pct_change:+.2f}%)")
+        print(f"  {sc['name']:<56} -> ${sim_greenville_price:.3f}/gal ({dollar_change:+.3f} | {pct_change:+.2f}%)")
     print("=" * 75)
 
     # Step 6: MLOps Prediction Logging & Backfilling
