@@ -158,9 +158,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
 * **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts to `data/prediction_history.csv` and backfilling actual historical market prices as target dates arrive.
-* **Automated Daily Schedule:** Executes automatically during daily forecast runs (02:00 AM Central) to maintain clean out-of-time prediction records.
+* **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
 * **Functions:**
-  - `log_predictions()`: Logs 5-day out-of-time forecasts.
+  - `log_predictions()`: Logs 5-day out-of-time forecasts with dynamically calculated target dates.
   - `backfill_actual_prices()`: Queries ground-truth market prices from `yfinance` as target dates mature and backfills actual prices in `prediction_history.csv`.
 
 ---
@@ -179,6 +179,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`)
 
 * **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`).
+* **Dynamic Overview Card Engine:** Dynamically queries real-time live retail pump prices via `fetch_live_metro_retail_price()` for all regional metro cards (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Oakland_CA`, `BayArea_CA`), while preserving NYMEX RBOB commodity futures benchmark pricing ($3.184/gal - $3.270/gal) for the **National Wholesale** contract card.
 * **Route Structure & Hierarchy:**
   - **Overview Landing Page (`/` / `docs/index.html`):** Executive overview of the Midgley engine, listing current and 5-day projected target forecasts for all active locales, rolling MAE/directional accuracy improvement charts, and core feature pillars.
   - **National Wholesale RBOB Page (`/national` / `docs/national.html` & `docs/national/index.html`):** Dedicated commodity futures page with NYMEX RBOB predictions chart, out-of-time error metrics, global maritime & geopolitical shock scenarios (Hormuz/Suez), and technical driver breakdowns. Accessible via **`National Wholesale`** in the top navbar.
@@ -210,10 +211,16 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 11. MCP & REST API Gateway Agent (`src/api_server.py`, `src/mcp_server.py`, & `src/lookup_cache.py`)
+### 11. MCP & REST API Gateway Agent (`src/api_server.py`, `src/mcp_server.py`, `src/live_fuel_feed.py`, & `src/lookup_cache.py`)
 
 * **Role:** Exposes real-time unleaded gasoline price ingestion, 5-day out-of-time quantitative forecasting, counterfactual physical/geopolitical shock simulations, and Model Context Protocol (MCP) integrations for external LLMs, AI agents, and chatbots.
 * **Service Orchestration:** Managed by `midgley-api.service` running continuously on `dev-vm` (`https://local-dev.dwarvenbard.com` / `10.42.42.54:8000`).
+* **Scraper Fallback Sequence (`src/live_fuel_feed.py`):**
+  - **Step 1 (GasBuddy GraphQL):** Real-time station queries by zip code.
+  - **Step 2 (AAA Metro BS4 Scraper):** Targeted BeautifulSoup metro table parsing by region keywords (e.g. `Oakland`, `San Francisco`, `Tulsa`, `Wilmington`, `Cincinnati`, `Covington`). Rejects unparseable headers to return `None` rather than matching global top-nav header text.
+  - **Step 3 (EIA / yfinance RBOB Futures Benchmark):** RBOB futures contract close plus regional rack margin offset.
+  - **Step 4 (prediction_history.csv Clean History):** Prior validated regional base price (sanitized against anomalies $< \$4.50$ for CA regions).
+  - **Step 5 (Static Regional Fallback Anchor):** Locale-specific base anchors ($5.550 Oakland, $5.650 Bay Area, $3.890 Tulsa, $3.350 Newark, $3.450 Cincinnati).
 * **Key Components:**
   - **SQLite/In-Memory Response Cache (`src/lookup_cache.py`):** 15-minute TTL cache protecting upstream GasBuddy and AAA web scrapers from rate limits.
   - **RESTful API Endpoint Gateway (`src/api_server.py`):** FastAPI application serving `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and GPT Action manifest (`/.well-known/ai-plugin.json`).
