@@ -129,7 +129,7 @@ def get_geopolitical_maritime_events() -> pd.DataFrame:
     # Dynamically augment with live finlight.me news if API key is present
     try:
         from src.finlight_feed import fetch_finlight_articles
-        live_articles = fetch_finlight_articles(query="Hormuz OR Red Sea OR Houthi OR Suez OR Venezuela OR sanctions", page_size=20)
+        live_articles = fetch_finlight_articles(page_size=30)
         live_events = []
         for a in live_articles:
             text = f"{a.get('title', '')} - {a.get('summary', '')}".lower()

@@ -1,5 +1,5 @@
 """
-Tulsa Regional Master Execution Script (tulsa_main.py)
+Tulsa Regional Master Execution Script (src/locations/tulsa/main.py)
 Standalone 6-Step Pipeline tailored to the Tulsa, OK metropolitan area:
 1. Market Data Ingestion & Live Pump Price Anchoring ($3.89/gal)
 2. Unstructured Local News, NOAA Weather, Maritime & Executive Social Media Processing
@@ -15,16 +15,20 @@ import logging
 import pandas as pd
 import numpy as np
 
-from src.tulsa_regional import fetch_tulsa_market_data, get_tulsa_regional_events
+from src.locations.tulsa.regional import fetch_tulsa_market_data, get_tulsa_regional_events
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False, model_type: str = "ridge"):
+def run_tulsa_pipeline(live_pump_price: float = None, use_llm_api: bool = False, model_type: str = "ridge"):
+    if live_pump_price is None:
+        live_pump_price = fetch_live_metro_retail_price("Tulsa_OK")["price"]
+
     print("=" * 80)
     print("  TULSA, OKLAHOMA METRO GAS PRICE PREDICTION PIPELINE")
     print(f"  LIVE PUMP PRICE ANCHOR: ${live_pump_price:.2f}/gal")
@@ -138,16 +142,30 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
     # Step 6: Log Predictions to Historical Store & Report Model Performance
     print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
     test_dates = splits['test_df']['date']
-    test_current_prices = splits['test_df']['tulsa_retail_gasoline'] if 'tulsa_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob']
     preds_hybrid = results['predictions_hybrid']
     
-    pred_log_df = pd.DataFrame({
-        'date': test_dates.values,
-        'current_price': test_current_prices.values,
-        'predicted_5d_price': preds_hybrid
-    })
-    
-    n_logged = log_predictions(pred_log_df, region="Tulsa_OK", model_version="v1.4-Finlight-Tulsa-Ridge")
+    # Calculate historical test split prices for Tulsa (calibrated to retail pump price scale)
+    latest_rbob = market_df['gasoline_rbob'].iloc[-1]
+    dynamic_margin = live_pump_price - latest_rbob
+    hist_tulsa_base = splits['test_df']['tulsa_retail_gasoline'] if 'tulsa_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
+    hist_tulsa_pred = preds_hybrid + dynamic_margin
+
+    backfill_new_region_history(
+        test_dates=test_dates,
+        base_prices=hist_tulsa_base,
+        predicted_prices=hist_tulsa_pred,
+        region="Tulsa_OK",
+        model_version=f"v1.4-Finlight-Tulsa-{model_type.capitalize()}"
+    )
+
+    # Log active out-of-time 5-day horizon forecast
+    last_date = market_df['date'].iloc[-1]
+    today_df = pd.DataFrame([{
+        'date': last_date,
+        'current_price': live_pump_price,
+        'predicted_5d_price': tulsa_baseline_forecast
+    }])
+    n_logged = log_predictions(today_df, region="Tulsa_OK", model_version=f"v1.4-Finlight-Tulsa-{model_type.capitalize()}")
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()
@@ -163,4 +181,4 @@ def run_tulsa_pipeline(live_pump_price: float = 3.89, use_llm_api: bool = False,
 
 if __name__ == "__main__":
     use_api = "--use-llm-api" in sys.argv
-    run_tulsa_pipeline(live_pump_price=3.89, use_llm_api=use_api, model_type="ridge")
+    run_tulsa_pipeline(use_llm_api=use_api, model_type="ridge")

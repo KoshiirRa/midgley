@@ -1,6 +1,6 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.1)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.2)
 
-[![Release: v0.1](https://img.shields.io/badge/Release-v0.1-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.1)
+[![Release: v0.2](https://img.shields.io/badge/Release-v0.2-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.2)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
 [![Automated Nightly Dev Release](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml)
@@ -12,12 +12,17 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-25 07:44 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-25 13:42 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.184`/gal | **`$3.551`/gal** | **UP 📈** | `2026-08-22` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.193`/gal** | **DOWN 📉** | `2026-08-22` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `$3.271`/gal | **`$3.184`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.769`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.966`/gal | **`$3.862`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `$3.992`/gal | **`$3.889`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.661`/gal | **`$3.567`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `$5.623`/gal | **`$5.464`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `$5.623`/gal | **`$5.464`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -41,7 +46,13 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/` (Overview)**: Central Midgley overview landing page featuring summary forecast cards for all active locales, rolling accuracy improvement charts, and multi-agent system pillars.
 - **`/national` (National Wholesale)**: Dedicated NYMEX RBOB futures forecast & technical analytics page.
 - **`/tulsa` (Tulsa Retail Gas)**: Dedicated Tulsa metro retail gas forecast & regional refinery shock simulator, accessible via the top nav **`Metro Areas`** dropdown menu.
-- **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 9 feature layers.
+- **`/cincinnati` (Cincinnati OH/KY Cross-River Retail)**: Dedicated Cincinnati OH/KY metro retail gas forecast featuring dual-state fuel tax differential display (OH $3.45 vs NKY $3.325) and Mississippi/Ohio River low-water barge bottleneck simulator.
+- **`/greenville` (Greenville NC Retail)**: Dedicated Greenville, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Selma/Apex breakout hub dynamics, NC state gas tax ($0.404/gal), and NOAA Pitt County (NCZ081) Tar River flood / hurricane alerts.
+- **`/charlotte` (Charlotte NC Retail)**: Dedicated Charlotte, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Paw Creek breakout hub dynamics, NC/SC cross-border tax differential ($0.404/gal NC vs $0.288/gal SC), and NOAA Mecklenburg County (NCZ071) Catawba River flood / winter ice storm alerts.
+- **`/oakland` (Oakland CA Retail)**: Dedicated Oakland / East Bay retail gas forecast featuring CARB regulatory breakdown ($0.953/gal tax burden) and physical risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
+- **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
+- **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers (including Section 10 multiline `aligned` CARB tax breakdown).
+
 
 ---
 
@@ -51,7 +62,7 @@ A live multi-page public web dashboard is automatically updated and deployed on 
                ┌─────────────────────────────────────────────────────────────┐
                │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │
                │  • Global Geopolitical Bulletins & OPEC Press Releases       │
-               │  • NOAA NWS API (api.weather.gov) - Oklahoma & Basin Alerts │
+               │  • NOAA NWS API (api.weather.gov) - Multi-Basin & Regional Alerts │
                │  • Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)   │
                │  • Executive Social Feed (Trump Twitter / Truth Social)     │
                │  • Physical Alternative Feeds (Cboe OVX & Baker Hughes)     │
@@ -74,22 +85,19 @@ A live multi-page public web dashboard is automatically updated and deployed on 
                └──────────────────────────────┬──────────────────────────────┘
                                               │ Unified Feature Matrix
                                               ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │              QUANTITATIVE FORECASTING AGENT                 │◄──────────────────┐
-               │          (Standardized Ridge / XGBoost Estimator)           │                   │
-               └──────────────────────────────┬──────────────────────────────┘                   │
-                                              │ Base Forecasts                                   │
-                                              ▼                                                  │
-                          ┌───────────────────┴───────────────────┐                              │
-                          ▼                                       ▼                              │
-          ┌───────────────────────────────┐       ┌───────────────────────────────┐              │
-          │  NATIONAL MODEL (main.py)     │       │ TULSA REGIONAL (tulsa_main.py)│              │
-          │ • Wholesale RBOB Futures      │       │ • Live Pump Base: $3.89/gal   │              │
-          │ • Directional Acc: 60.79%     │       │ • Cushing WTI Proximity       │              │
-          │ • MAE Error: $0.1069/gal      │       │ • West Tulsa Refinery Tornado │              │
-          └───────────────┬───────────────┘       └───────────────┬───────────────┘              │
-                          │                                       │                              │
-                          └───────────────────┬───────────────────┘                              │
+                ┌─────────────────────────────────────────────────────────────┐
+                │              QUANTITATIVE FORECASTING AGENT                 │◄──────────────────┐
+                │          (Standardized Ridge / XGBoost Estimator)           │                   │
+                │          Main Model: National Wholesale RBOB Futures        │                   │
+                └──────────────────────────────┬──────────────────────────────┘                   │
+                                               │ Base Wholesale Commodity Forecast                │
+                                               ▼                                                  │
+                ┌─────────────────────────────────────────────────────────────┐                   │
+                │            LOCALIZED METRO AREA CALIBRATION MODELS          │                   │
+                │ • Tulsa Metro (tulsa_main.py - Live $3.89/gal, Cushing WTI) │                   │
+                │ • Newark Metro (newark_main.py - $3.35/gal, C&D Canal)     │                   │
+                │ • Cincinnati Metro (cincinnati_main.py - Dual-State Tax)    │                   │
+                └──────────────────────────────┬──────────────────────────────┘                   │
                                               ▼                                                  │
                ┌─────────────────────────────────────────────────────────────┐                   │
                │             MLOps PREDICTION TRACKER & LOGGING              │                   │
@@ -136,9 +144,9 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 6. **Real-Time Finlight Financial News Stream (`src/finlight_feed.py`):** Integrates live commodity & macroeconomic news articles from tier-1 financial media (Reuters, Bloomberg, Seeking Alpha, Investing.com) using the `finlight.me` REST API.
 7. **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`):** Quantifies Trump Twitter/Truth Social energy posts and models Monday morning futures open price gaps (1.42x volatility multiplier).
 8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
-9. **MLOps Prediction Tracker & Ground-Truth Backfilling (`src/prediction_logger.py`):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv` and automatically backfills actual market prices as target dates arrive.
-10. **Weekly Model Performance Review & Continuous Feedback Loop Runner (`.github/workflows/weekly_model_review.yml`):** Runs automatically every Saturday at 08:00 AM Central on GitHub Actions cloud runners to evaluate rolling MAE/RMSE/Hit Rate metrics and feed performance validation signals back into model retraining and feature weight optimization over time.
-11. **Local Dev Environment & Permanent Web Server (`dev-vm` Port 8080):** Serves live dashboard analytics from the permanent `dev` branch on `dev-vm` (`10.42.42.54`) on port 8080 via a persistent `systemd` user service (`midgley-dev.service`) with user linger enabled.
+9. **MLOps Prediction Tracker & Ground-Truth Backfilling (`src/prediction_logger.py`):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv`, backfills actual historical market prices from `yfinance` as target dates arrive, and automatically backfills test split history for newly added regions (`backfill_new_region_history`).
+10. **Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`):** Evaluates rolling MAE/RMSE/Hit Rate metrics across all active regions and performs an automated self-review of all open GitHub repository issues using Gemini 2.5 Flash to identify and rank the issue providing the highest potential modeling improvement.
+11. **Local Dev Environment, Web Server & Systemd Timers (`dev-vm` Port 8080 & 8000):** Serves live dashboard analytics from the permanent `dev` branch on `dev-vm` (`10.42.42.54`), with systemd user timers (`midgley-daily-forecast.timer` and `midgley-weekly-review.timer`) running daily forecasts and weekly issue audits 24/7.
 12. **Automated Nightly Dev Releases (`.github/workflows/nightly_dev_release.yml`):** Automatically builds, tags (`dev-YYYY-MM-DD`), and documents GitHub pre-releases tracking whatever is on the `dev` branch every night at 3:00 AM Central Time (08:00 UTC).
 
 

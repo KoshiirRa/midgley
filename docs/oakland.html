@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oakland, CA Retail Gas Forecast & CARB Display - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.15); }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.1-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
+                    </div>
+                </div>
+
+                <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-piggy-bank"></i> Fill-Up Advisor
+                </a>
+                <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="index.html" class="hover:text-amber-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Oakland, CA Metro (East Bay)</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail Gas Forecast & CARB Regulatory Display
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                PADD 5 High-Cost Benchmark
+            </span>
+        </div>
+
+        <!-- OAKLAND METRO HERO BANNER & PUMP PRICE ANCHOR -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/40 border border-amber-500/30 card-glow space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-gas-pump text-amber-400"></i> Oakland Baseline Pump Price & 5-Day Projected Target
+                    </h3>
+                    <p class="text-xs text-slate-300">Tracking East Bay pump prices ($5.623/gal base) against PADD 5 refining island dynamics & CARB tax overhead</p>
+                </div>
+                <span class="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-shield-halved"></i> $0.953/gal Total Tax & Regulatory Fee
+                </span>
+            </div>
+
+            <!-- Price Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
+                    <span class="text-xs text-amber-400 font-bold uppercase">Live Oakland Pump Base</span>
+                    <p class="text-3xl font-extrabold text-white">$5.623 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">$5.464/gal</strong> (-2.8%)</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs text-slate-400 uppercase">CARB Total Tax Burden</span>
+                    <p class="text-3xl font-extrabold text-amber-400">$0.953 <span class="text-xs font-normal text-slate-400">/gal</span></p>
+                    <p class="text-xs text-slate-400">State Excise + Cap&Trade + LCFS</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs text-slate-400 uppercase">Chevron Richmond Proximity</span>
+                    <p class="text-3xl font-extrabold text-white">12 <span class="text-xs font-normal text-slate-400">miles</span></p>
+                    <p class="text-xs text-slate-400">245,000 bpd Capacity Benchmark</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs text-slate-400 uppercase">Model Directional Accuracy</span>
+                    <p class="text-3xl font-extrabold text-emerald-400">58.40%</p>
+                    <p class="text-xs text-slate-400">Out-of-Time Test Hit Rate</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- CARB REGULATORY BREAKDOWN CARD -->
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-receipt text-amber-400"></i> CARB & State Environmental Tax Breakdown ($0.953/gal Total)
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                California pumps carry the highest regulatory tax overhead in the nation. Midgley isolates each statutory component:
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center text-xs">
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 font-medium block">CA State Excise Tax</span>
+                    <strong class="text-amber-400 text-base block mt-1">63.4¢ /gal</strong>
+                    <span class="text-[10px] text-slate-500">Effective July 1, 2026</span>
+                </div>
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 font-medium block">Cap-and-Trade Carbon</span>
+                    <strong class="text-amber-400 text-base block mt-1">25.0¢ /gal</strong>
+                    <span class="text-[10px] text-slate-500">Allowance Market Obligation</span>
+                </div>
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 font-medium block">LCFS Compliance Fee</span>
+                    <strong class="text-amber-400 text-base block mt-1">18.5¢ /gal</strong>
+                    <span class="text-[10px] text-slate-500">Low Carbon Fuel Standard</span>
+                </div>
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 font-medium block">Local Sales Tax & UST</span>
+                    <strong class="text-amber-400 text-base block mt-1">15.0¢ /gal</strong>
+                    <span class="text-[10px] text-slate-500">Underground Storage Tank</span>
+                </div>
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 font-medium block">US Federal Excise</span>
+                    <strong class="text-blue-400 text-base block mt-1">18.4¢ /gal</strong>
+                    <span class="text-[10px] text-slate-500">Federal Motor Fuel Tax</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHYSICAL HAZARD RISK MATRIX -->
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-volcano text-rose-400"></i> Physical Hazard Risk Matrix (USGS Quakes, PSPS Wildfires & Tsunamis)
+            </h3>
+            <p class="text-xs text-slate-300">
+                PADD 5 refining island vulnerability to physical and environmental shocks:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="p-4 bg-slate-950 rounded-xl border border-rose-500/30 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <strong class="text-rose-400">USGS Hayward Quake (M>=6.0)</strong>
+                        <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">+$0.420/gal</span>
+                    </div>
+                    <p class="text-slate-400">Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips.</p>
+                </div>
+
+                <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/30 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <strong class="text-amber-400">PG&E PSPS Wildfire Shutoff</strong>
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">+$0.350/gal</span>
+                    </div>
+                    <p class="text-slate-400">Diablo wind Red Flag power cuts force emergency flaring & 2-week unit restarts.</p>
+                </div>
+
+                <div class="p-4 bg-slate-950 rounded-xl border border-cyan-500/30 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <strong class="text-cyan-400">NOAA PTWC Tsunami Alert</strong>
+                        <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">+$0.165/gal</span>
+                    </div>
+                    <p class="text-slate-400">Golden Gate & Carquinez Strait crude tanker berth closures delay ANS discharges.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHART SECTION -->
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white">Oakland Retail Gas Price vs NYMEX RBOB Futures</h3>
+            <div class="h-80 w-full">
+                <canvas id="oaklandChart"></canvas>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('oaklandChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [
+                        {
+                            label: 'Oakland, CA Retail ($5.623 base)',
+                            data: [5.42, 5.49, 5.57, 5.72, 5.79, 5.75, 5.65, 5.62],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                            borderWidth: 2.5,
+                            fill: true
+                        },
+                        {
+                            label: 'Wholesale RBOB Futures ($/gal)',
+                            data: [2.95, 3.05, 3.12, 3.20, 3.28, 3.32, 3.24, 3.18],
+                            borderColor: '#3b82f6',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    scales: {
+                        x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

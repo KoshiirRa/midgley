@@ -11,11 +11,39 @@
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ] });"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -28,7 +56,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.1</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.1-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -47,15 +75,34 @@
                     <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
                         <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
                         </a>
-                        <div class="border-t border-slate-800/80 my-1"></div>
-                        <span class="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">More Metros Coming Soon</span>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
                     </div>
                 </div>
 
+                <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-piggy-bank"></i> Fill-Up Advisor
+                </a>
                 <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
@@ -71,11 +118,11 @@
         
         <!-- Headline Hero Banner -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-emerald-900/30 border border-blue-500/20 card-glow space-y-4">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
-                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central</span>
+                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; Last Run: 2026-08-25 17:57 UTC</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
@@ -94,44 +141,44 @@
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">2 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">7 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
                 <!-- Card 1: National Wholesale RBOB -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Commodity Wholesale</span>
-                            <h4 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale RBOB
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale
                             </h4>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                            <i class="fa-solid fa-arrow-trend-down mr-1"></i> -3.2% Trend
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            -3.2% Trend
                         </span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
-                            <span class="text-xs text-slate-400">Current Wholesale Futures</span>
-                            <p class="text-3xl font-extrabold text-white mt-1">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">Current Futures</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                            <p class="text-3xl font-extrabold text-blue-400 mt-1">$3.077<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> Benchmark: NYMEX RB=F</span>
-                        <span>Directional Hit Rate: <strong class="text-slate-200">60.79%</strong></span>
+                        <span><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> NYMEX RB=F</span>
+                        <span>Hit Rate: <strong class="text-slate-200">60.79%</strong></span>
                     </div>
 
                     <a href="national.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Full National RBOB Analytics & Scenario Shocks <i class="fa-solid fa-arrow-right"></i>
+                        Explore RBOB Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -140,38 +187,249 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
-                            <h4 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot text-emerald-400"></i> Tulsa, OK Retail Gas
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-emerald-400"></i> Tulsa, OK Retail
                             </h4>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            <i class="fa-solid fa-arrow-trend-down mr-1"></i> -2.8% Trend
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            -2.8% Trend
                         </span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
                         <div>
-                            <span class="text-xs text-slate-400">Current Live Pump Price</span>
-                            <p class="text-3xl font-extrabold text-white mt-1">$3.890<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.840<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                            <p class="text-3xl font-extrabold text-emerald-400 mt-1">$3.780<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-emerald-400 mt-1">$3.720<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                         </div>
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-warehouse mr-1 text-slate-500"></i> Cushing Hub Proximity: 50 mi</span>
-                        <span>Confidence: <strong class="text-slate-200">58.15%</strong></span>
+                        <span><i class="fa-solid fa-warehouse mr-1 text-slate-500"></i> Cushing: 50 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.15%</strong></span>
                     </div>
 
                     <a href="tulsa.html" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Full Tulsa Regional Analytics & Refinery Outages <i class="fa-solid fa-arrow-right"></i>
+                        Explore Tulsa Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3: Newark Metro Retail -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            -3.0% Trend
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.966<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.862<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> DE City: 12 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">59.20%</strong></span>
+                    </div>
+
+                    <a href="newark.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Newark Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 4: Cincinnati, OH / NKY Retail (Dual State Display) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold">Dual-State Cross-River</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati OH/KY
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                            12.5¢ Tax Delta
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">OH / KY Live Base</span>
+                            <p class="text-xl font-extrabold text-white mt-1">$3.99 / $3.66<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Projected</span>
+                            <p class="text-xl font-extrabold text-purple-400 mt-1">$3.89 / $3.57<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-ship mr-1 text-slate-500"></i> Catlettsburg & River</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.85%</strong></span>
+                    </div>
+
+                    <a href="cincinnati.html" class="w-full py-2.5 px-4 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Cross-River Display <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 5: Greenville, NC Retail (PADD 1C Colonial Pipeline) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-green-400 font-semibold">PADD 1C South Atlantic</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
+                            40.4¢ NC Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.422<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-green-400 mt-1">$3.150<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Selma Hub: 55 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">59.10%</strong></span>
+                    </div>
+
+                    <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 6: Charlotte, NC Retail (Paw Creek Distribution Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C South Atlantic</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            40.4¢ NC Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.752<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">$3.666<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek Hub</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.80%</strong></span>
+                    </div>
+
+                    <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 5: Oakland, CA Retail (High-Cost CARB Benchmark) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 5 High-Cost Benchmark</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            95.3¢ CARB Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$5.623<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$5.464<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> Richmond: 12 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.40%</strong></span>
+                    </div>
+
+                    <a href="oakland.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Oakland Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 6: SF Bay Area 9-County Region -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">9-County NorCal Metro</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            Regional Matrix
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Regional Avg Base</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$5.723<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">$5.564<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-city mr-1 text-slate-500"></i> SF / SJ / Oakland</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.65%</strong></span>
+                    </div>
+
+                    <a href="bayarea.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Bay Area Matrix <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
             </div>
         </section>
+
 
         <!-- 📈 HISTORICAL ACCURACY IMPROVEMENT SECTION -->
         <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
@@ -267,7 +525,7 @@
         </section>
 
         <!-- 🧠 SYSTEM ARCHITECTURE PILLARS SECTION -->
-        <section class="p-8 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
+        <section class="p-8 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
                     <div class="p-2.5 bg-blue-500/20 text-blue-400 rounded-xl border border-blue-500/30">
@@ -275,7 +533,7 @@
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-white">Multi-Agent System Architecture</h3>
-                        <p class="text-xs text-slate-400">How quantitative time-series data, LLM news extraction, NOAA weather, and alternative physical feeds combine</p>
+                        <p class="text-xs text-slate-400">Hierarchical pipeline: Quantitative & LLM Feeds &rarr; Main Wholesale Model &rarr; Localized Metro Area Models</p>
                     </div>
                 </div>
 
@@ -284,68 +542,140 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- 🔄 HIERARCHICAL PIPELINE STAGE FLOW CHART -->
+            <div class="p-6 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
+                        <i class="fa-solid fa-sitemap"></i> Multi-Agent Execution Pipeline &amp; Model Hierarchy
+                    </h4>
+                    <span class="text-[10px] text-slate-500 font-mono">Stages 1 &rarr; 7</span>
+                </div>
                 
-                <!-- Pillar 1 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-blue-400 flex items-center gap-2">
-                        <i class="fa-solid fa-calculator"></i> 1. Quantitative Futures
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                    
+                    <!-- Stage 1 & 2: Extraction & Fusion -->
+                    <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 relative">
+                        <div class="flex items-center justify-between text-xs font-semibold text-blue-400">
+                            <span>Stage 1 &amp; 2</span>
+                            <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 text-[10px]">Data &amp; NLP</span>
+                        </div>
+                        <h5 class="text-sm font-bold text-white">Extraction &amp; Memory Fusion</h5>
+                        <p class="text-[11px] text-slate-400 leading-normal">
+                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 2.5 Flash. Decays shocks with \(t_{1/2} = 4.0	ext{--}5.0\) days.
+                        </p>
+                    </div>
+
+                    <!-- Stage 3: Main Model -->
+                    <div class="p-4 rounded-xl bg-slate-900 border border-blue-500/40 shadow-lg shadow-blue-500/5 space-y-2 relative">
+                        <div class="flex items-center justify-between text-xs font-semibold text-emerald-400">
+                            <span>Stage 3</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px]">Main Model</span>
+                        </div>
+                        <h5 class="text-sm font-bold text-white">Main Quantitative Model</h5>
+                        <p class="text-[11px] text-slate-400 leading-normal">
+                            Fits regularized Ridge/XGBoost on NYMEX RBOB (<code class="text-blue-300">RB=F</code>) &amp; WTI Crude (<code class="text-blue-300">CL=F</code>) technicals + LLM event vector matrix to output base commodity benchmark forecast.
+                        </p>
+                    </div>
+
+                    <!-- Stage 4: Localized Metro Calibration (Fed by Main Model) -->
+                    <div class="p-4 rounded-xl bg-slate-900 border border-purple-500/40 shadow-lg shadow-purple-500/5 space-y-2 relative">
+                        <div class="flex items-center justify-between text-xs font-semibold text-purple-400">
+                            <span>Stage 4</span>
+                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-[10px]">Metro Calibration</span>
+                        </div>
+                        <h5 class="text-sm font-bold text-white">Localized Metro Models</h5>
+                        <p class="text-[11px] text-slate-400 leading-normal">
+                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK ($3.89/gal), Newark DE ($3.35/gal), and Cincinnati OH/KY ($3.45/gal) with local rack margins &amp; refinery dynamics.
+                        </p>
+                    </div>
+
+                    <!-- Stage 5-7: Synthesis & Feedback -->
+                    <div class="p-4 rounded-xl bg-slate-900 border border-amber-500/30 space-y-2 relative">
+                        <div class="flex items-center justify-between text-xs font-semibold text-amber-400">
+                            <span>Stage 5-7</span>
+                            <span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px]">MLOps &amp; Review</span>
+                        </div>
+                        <h5 class="text-sm font-bold text-white">Scenario Simulator &amp; MLOps</h5>
+                        <p class="text-[11px] text-slate-400 leading-normal">
+                            Simulates counterfactual shocks (refinery outages, canal detours, executive posts). Logs out-of-time predictions and backfills actual prices on Saturdays.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 🏛️ 6 CORE FEATURE INGESTION PILLARS -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-emerald-400"></i> 6 Core Feature Ingestion Pillars
                     </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        NYMEX RBOB Gasoline Futures (<code class="text-blue-300">RB=F</code>) and WTI Crude (<code class="text-blue-300">CL=F</code>) build 3-2-1 refining crack spreads and moving average returns.
-                    </p>
+                    <span class="text-[10px] text-slate-500">Multi-modal data feeds ingested into Stage 1 &amp; 2</span>
                 </div>
 
-                <!-- Pillar 2 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                        <i class="fa-solid fa-robot"></i> 2. Gemini 2.5 Flash News
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Real-time headlines from Finlight.me REST API translated into bounded 5-dimensional geopolitical factor impact vectors.
-                    </p>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Pillar 1 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-blue-400 flex items-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> 1. Quantitative Commodity Futures
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            NYMEX RBOB Gasoline Futures (<code class="text-blue-300">RB=F</code>) and WTI Crude (<code class="text-blue-300">CL=F</code>) build 3-2-1 refining crack spreads and moving average returns.
+                        </p>
+                    </div>
 
-                <!-- Pillar 3 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                        <i class="fa-solid fa-cloud-bolt"></i> 3. NOAA Weather Alerts
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        National Gulf Coast hurricane tracks & Oklahoma localized alerts (<code class="text-amber-300">OKZ060</code> EF-3 tornadoes & Cushing freezes).
-                    </p>
-                </div>
+                    <!-- Pillar 2 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                            <i class="fa-solid fa-robot"></i> 2. Gemini 2.5 Flash News
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Real-time headlines from Finlight.me REST API translated into bounded 5-dimensional geopolitical factor impact vectors.
+                        </p>
+                    </div>
 
-                <!-- Pillar 4 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
-                        <i class="fa-solid fa-ship"></i> 4. Maritime Chokepoints
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Strait of Hormuz (21M bpd) blockade risk & Red Sea / Suez rerouting freight premiums (+12 to +14 days).
-                    </p>
-                </div>
+                    <!-- Pillar 3 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-amber-400 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-bolt"></i> 3. NOAA Weather Alerts
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            National Gulf Coast hurricane tracks, PADD refining alerts, polar vortex freeze warnings, and localized severe weather events.
+                        </p>
+                    </div>
 
-                <!-- Pillar 5 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-rose-400 flex items-center gap-2">
-                        <i class="fa-solid fa-user-check"></i> 5. Executive Social Feed
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Econometric modeling of executive energy posts generating $1.42\\times$ higher Sunday market open gap volatility.
-                    </p>
-                </div>
+                    <!-- Pillar 4 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
+                            <i class="fa-solid fa-ship"></i> 4. Maritime Chokepoints
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Strait of Hormuz (21M bpd) blockade risk &amp; Red Sea / Suez rerouting freight premiums (+12 to +14 days).
+                        </p>
+                    </div>
 
-                <!-- Pillar 6 -->
-                <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
-                    <h4 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
-                        <i class="fa-solid fa-satellite"></i> 6. Alternative Physical Feeds
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Cboe OVX options tail-risk volatility & Baker Hughes drilling rig counts tracking 3-6 month supply pipelines.
-                    </p>
-                </div>
+                    <!-- Pillar 5 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-rose-400 flex items-center gap-2">
+                            <i class="fa-solid fa-user-check"></i> 5. Executive Social Feed
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Econometric modeling of executive energy posts generating 1.42&times; higher Sunday market open gap volatility.
+                        </p>
+                    </div>
 
+                    <!-- Pillar 6 -->
+                    <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+                        <h4 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+                            <i class="fa-solid fa-satellite"></i> 6. Alternative Physical Feeds
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Cboe OVX options tail-risk volatility &amp; Baker Hughes drilling rig counts tracking 3-6 month supply pipelines.
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </section>
 
@@ -358,9 +688,9 @@
 
     <!-- JavaScript Charting -->
     <script>
-        const rollingDates = ["2025-10-14", "2025-11-04", "2025-11-25", "2025-12-17", "2026-01-13", "2026-02-04", "2026-03-02", "2026-03-23", "2026-04-14", "2026-05-05", "2026-05-27", "2026-06-17", "2026-07-14", "2026-08-04", "2026-08-25"];
-        const rollingMAEData = [0.0406, 0.0379, 0.041, 0.0497, 0.044, 0.0426, 0.052, 0.076, 0.0813, 0.0868, 0.0922, 0.097, 0.0956, 0.1032, 0.107];
-        const rollingHitData = [88.89, 77.78, 70.37, 55.56, 60.0, 61.11, 61.9, 59.72, 62.96, 64.44, 65.66, 62.04, 60.68, 59.13, 58.21];
+        const rollingDates = ["2025-10-13", "2025-10-29", "2025-11-18", "2025-12-09", "2025-12-29", "2026-01-21", "2026-02-10", "2026-03-03", "2026-03-23", "2026-04-13", "2026-04-29", "2026-05-19", "2026-06-09", "2026-06-30", "2026-07-21", "2026-08-10"];
+        const rollingMAEData = [0.0411, 0.0412, 0.0384, 0.0447, 0.0462, 0.0433, 0.0434, 0.0564, 0.0762, 0.0812, 0.0871, 0.0861, 0.0953, 0.0962, 0.0991, 0.1062];
+        const rollingHitData = [87.5, 75.0, 75.0, 62.5, 57.5, 62.5, 62.5, 62.5, 59.72, 62.5, 63.64, 66.67, 63.46, 61.61, 59.58, 58.98];
 
         window.addEventListener('DOMContentLoaded', () => {
             const ctxMAE = document.getElementById('maeTrendChart').getContext('2d');

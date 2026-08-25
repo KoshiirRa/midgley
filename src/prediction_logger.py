@@ -24,6 +24,8 @@ def ensure_history_store():
             "forecast_target_date",
             "region",
             "model_version",
+            "run_type",
+            "headline_trigger",
             "current_base_price",
             "predicted_5d_price",
             "predicted_direction",
@@ -40,7 +42,9 @@ def ensure_history_store():
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
-    model_version: str = "v1.4-Finlight-Ridge"
+    model_version: str = "v1.4-Finlight-Ridge",
+    run_type: str = "DAILY_BATCH",
+    headline_trigger: str = ""
 ) -> int:
     """
     Logs a DataFrame of model predictions into prediction_history.csv.
@@ -63,6 +67,8 @@ def log_predictions(
             "forecast_target_date": target_date,
             "region": region,
             "model_version": model_version,
+            "run_type": run_type,
+            "headline_trigger": headline_trigger,
             "current_base_price": round(base_price, 4),
             "predicted_5d_price": round(pred_price, 4),
             "predicted_direction": pred_dir,
@@ -74,11 +80,12 @@ def log_predictions(
         
     new_df = pd.DataFrame(new_records)
     combined = pd.concat([history_df, new_df], ignore_index=True)
-    combined.drop_duplicates(subset=["forecast_target_date", "region", "model_version"], keep="last", inplace=True)
+    combined.drop_duplicates(subset=["forecast_target_date", "region", "model_version", "run_type"], keep="last", inplace=True)
     combined.to_csv(HISTORY_CSV_PATH, index=False)
     
-    logger.info(f"Logged {len(new_records)} predictions for region '{region}' under version '{model_version}'.")
+    logger.info(f"Logged {len(new_records)} predictions for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
     return len(new_records)
+
 
 
 def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
@@ -117,8 +124,21 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
         
         if target_date_str in actuals_map:
             raw_actual = float(actuals_map[target_date_str])
-            # Tulsa OK retail historical price matches raw_actual + 0.55 rack margin
-            actual_price = raw_actual + 0.55 if row['region'] == "Tulsa_OK" else raw_actual
+            if row['region'] == "Cincinnati_KY":
+                actual_price = raw_actual + 0.425
+            elif row['region'] in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Greenville_NC"]:
+                actual_price = raw_actual + 0.55
+            elif row['region'] == "Oakland_CA":
+                actual_price = raw_actual + 2.05
+            elif row['region'] == "BayArea_CA":
+                actual_price = raw_actual + 2.15
+            elif row['region'] == "National":
+                actual_price = raw_actual
+            else:
+                # Dynamic rack margin offset fallback for newly added regional markets
+                margin_offset = base_price - raw_actual if base_price > raw_actual else 0.55
+                actual_price = raw_actual + margin_offset
+
             actual_dir = "UP" if actual_price >= base_price else "DOWN"
             err_dollars = abs(actual_price - pred_price)
             hit = 1 if pred_dir == actual_dir else 0
@@ -134,6 +154,33 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
     return history_df
+
+
+def backfill_new_region_history(
+    test_dates,
+    base_prices,
+    predicted_prices,
+    region: str,
+    model_version: str = "v1.4-Ridge"
+) -> int:
+    """
+    Backfills historical test split predictions for a newly added region into prediction_history.csv
+    and automatically matches/evaluates mature target dates against ground-truth market prices.
+    """
+    dates_arr = getattr(test_dates, 'values', test_dates)
+    base_arr = getattr(base_prices, 'values', base_prices)
+    pred_arr = getattr(predicted_prices, 'values', predicted_prices)
+
+    pred_log_df = pd.DataFrame({
+        'date': dates_arr,
+        'current_price': base_arr,
+        'predicted_5d_price': pred_arr
+    })
+    
+    n_logged = log_predictions(pred_log_df, region=region, model_version=model_version)
+    backfill_actual_prices_and_evaluate()
+    logger.info(f"Backfilled and evaluated {n_logged} historical prediction records for region '{region}'.")
+    return n_logged
 
 
 def generate_performance_report() -> pd.DataFrame:

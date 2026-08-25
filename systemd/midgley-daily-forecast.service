@@ -1,0 +1,11 @@
+[Unit]
+Description=Midgley Local Dev Server Daily Forecast Runner
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/marty/projects/midgley
+ExecStart=/bin/bash /home/marty/projects/midgley/scripts/run_local_daily_forecast.sh
+
+[Install]
+WantedBy=default.target

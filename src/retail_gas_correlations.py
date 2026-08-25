@@ -21,7 +21,7 @@ def compute_retail_gas_correlations():
     """
     from src.data_ingestion import fetch_market_data
     from src.energy_equities_feed import fetch_energy_equities_data
-    from src.tulsa_regional import fetch_tulsa_market_data
+    from src.locations.tulsa.regional import fetch_tulsa_market_data
     
     market_df = fetch_market_data("2022-01-01")
     equities_df = fetch_energy_equities_data("2022-01-01")

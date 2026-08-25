@@ -57,9 +57,67 @@ Return ONLY a raw JSON array of objects in the EXACT SAME ORDER, where each obje
 JSON Array Output:
 """
 
+def _try_openai_single(headline: str) -> dict:
+    openai_key = os.environ.get("OPENAI_API_KEY")
+    if not openai_key:
+        return None
+    try:
+        import openai
+        client = openai.OpenAI(api_key=openai_key)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline)}],
+            temperature=0.1,
+            response_format={"type": "json_object"}
+        )
+        text = response.choices[0].message.content.strip()
+        parsed = json.loads(text)
+        return {
+            "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
+            "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
+            "demand_sentiment": float(parsed.get("demand_sentiment", 0.0)),
+            "opec_action": float(parsed.get("opec_action", 0.0)),
+            "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
+        }
+    except Exception as e:
+        logger.debug(f"OpenAI single fallback notice ({e}).")
+        return None
+
+
+def _try_anthropic_single(headline: str) -> dict:
+    anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not anthropic_key:
+        return None
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=anthropic_key)
+        response = client.messages.create(
+            model="claude-3-5-haiku-20241022",
+            max_tokens=300,
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline)}]
+        )
+        text = response.content[0].text.strip()
+        if "```json" in text:
+            text = text.split("```json")[1].split("```")[0].strip()
+        elif "```" in text:
+            text = text.split("```")[1].split("```")[0].strip()
+        parsed = json.loads(text)
+        return {
+            "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
+            "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
+            "demand_sentiment": float(parsed.get("demand_sentiment", 0.0)),
+            "opec_action": float(parsed.get("opec_action", 0.0)),
+            "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
+        }
+    except Exception as e:
+        logger.debug(f"Anthropic single fallback notice ({e}).")
+        return None
+
+
 def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     """
-    Scores a single headline using Google Gemini API or in-memory cache.
+    Scores a single headline using Tier 1 Gemini API, Tier 2 OpenAI/Claude secondary APIs,
+    or Tier 3 in-memory/rule-based lexicon fallback.
     """
     if headline in _LLM_SCORE_CACHE:
         return _LLM_SCORE_CACHE[headline]
@@ -67,6 +125,7 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     if api_key is None:
         api_key = os.environ.get("GEMINI_API_KEY")
         
+    # Tier 1: Gemini 2.5 Flash
     if api_key:
         try:
             try:
@@ -103,11 +162,19 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
             _LLM_SCORE_CACHE[headline] = scores
             return scores
         except Exception as e:
-            logger.debug(f"LLM single API call notice ({e}). Using rule-based fallback.")
+            logger.debug(f"Gemini single API call notice ({e}). Checking Tier 2 secondary providers...")
+
+    # Tier 2: Secondary OpenAI / Anthropic Soft Failover
+    sec_scores = _try_openai_single(headline) or _try_anthropic_single(headline)
+    if sec_scores:
+        _LLM_SCORE_CACHE[headline] = sec_scores
+        return sec_scores
             
+    # Tier 3: Safety Net Offline Rule-Based Lexicon Extractor
     scores = extract_event_features_rule_based(headline)
     _LLM_SCORE_CACHE[headline] = scores
     return scores
+
 
 
 def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> list:
@@ -186,8 +253,8 @@ def extract_event_features_rule_based(headline: str) -> dict:
     """
     text = headline.lower()
     
-    war_sanction_patterns = ["invad", "war", "conflict", "sanction", "missile", "airstrike", "attack", "hostilities", "houthi"]
-    supply_cut_patterns = ["cut", "outage", "disrupt", "explosion", "freeze", "shutdown", "evacuat", "hurricane", "reroute", "delay", "tornado", "halt", "strike", "damage", "spill", "leak"]
+    war_sanction_patterns = ["invad", "war", "conflict", "sanction", "missile", "airstrike", "attack", "hostilities", "houthi", "tariff", "retaliat", "trade war", "embargo"]
+    supply_cut_patterns = ["cut", "outage", "disrupt", "explosion", "freeze", "shutdown", "evacuat", "hurricane", "reroute", "delay", "tornado", "halt", "strike", "damage", "spill", "leak", "tariff"]
     demand_weak_patterns = ["recession", "rate hike", "slowdown", "cooling", "inflation fears", "sell-off", "weak demand"]
     opec_cut_patterns = ["opec+ announces cut", "voluntary production cut", "output cut", "solo output cut", "extend voluntary"]
     opec_hike_patterns = ["phase out", "production surge", "increase output", "output increase"]
@@ -196,7 +263,8 @@ def extract_event_features_rule_based(headline: str) -> dict:
     
     supply_score = 0.0
     if any(p in text for p in supply_cut_patterns):
-        supply_score = 0.8 if ("hurricane" in text or "explosion" in text or "tornado" in text or "halt" in text or "shutdown" in text or "cut" in text or "ban" in text) else 0.5
+        supply_score = 0.8 if ("hurricane" in text or "explosion" in text or "tornado" in text or "halt" in text or "shutdown" in text or "cut" in text or "ban" in text or "tariff" in text or "retaliat" in text) else 0.5
+
         
     demand_score = -0.6 if any(p in text for p in demand_weak_patterns) else (0.4 if "driving demand" in text or "record highs" in text else 0.0)
     

@@ -1,0 +1,345 @@
+"""
+Generate 1920s Vintage Standalone Example Page (scripts/generate_standalone_example.py)
+Generates `docs/example.html` & `docs/example/index.html` as a 1920s vintage petroleum lab standalone interactive web page on the dev server.
+"""
+
+import os
+
+DOCS_DIR = "docs"
+EXAMPLE_PATH = os.path.join(DOCS_DIR, "example.html")
+EXAMPLE_SUB_DIR = os.path.join(DOCS_DIR, "example")
+EXAMPLE_SUB_PATH = os.path.join(EXAMPLE_SUB_DIR, "index.html")
+
+EXAMPLE_HTML = """<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1920s Vintage Fuel Terminal | DELCO Laboratories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <style>
+        body {
+            background-color: #0D0907;
+            color: #FEF3C7;
+            font-family: Georgia, Garamond, Cambria, "Times New Roman", serif;
+        }
+        .font-mono {
+            font-family: "Courier Prime", "Courier New", Courier, monospace;
+        }
+        .font-pump {
+            font-family: "JetBrains Mono", "Courier New", Consolas, monospace;
+        }
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.5rem 0.2rem;
+            margin: 0.5em 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-900/40 selection:text-amber-200">
+
+    <!-- Sticky Antique Navigation Header -->
+    <header class="sticky top-0 z-50 bg-[#120D0A]/90 backdrop-blur-md border-b border-[#785327]/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-700 via-amber-800 to-amber-950 flex items-center justify-center text-amber-200 font-bold font-mono text-lg border border-[#785327] shadow-lg">M</div>
+                    <div>
+                        <a href="index.html" class="text-lg font-bold text-amber-100 tracking-tight flex items-center space-x-2 hover:text-amber-400 transition-colors font-mono">
+                            <span>MIDGLEY 1926</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-mono font-normal">Standalone App</span>
+                        </a>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-2 text-xs font-mono">
+                    <a href="index.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Overview</a>
+                    <a href="national.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Wholesale RBOB</a>
+                    <a href="tulsa.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Tulsa Refinery</a>
+                    <a href="savings.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Fill-Up Advisor</a>
+                    <a href="math.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Math Logs</a>
+                    <a href="example.html" class="px-3 py-1.5 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-bold shadow-sm">Standalone App</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+        <!-- Standalone Header Banner -->
+        <section class="bg-gradient-to-r from-[#17120F] via-[#1C1613] to-[#2B1B10] border-2 border-[#785327]/70 rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+            <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 space-y-3">
+                <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+                    <span class="px-2.5 py-1 rounded bg-[#2A1D13] text-emerald-400 border border-emerald-700/60 font-semibold">● DELCO Lab Terminal Active</span>
+                    <span class="px-2.5 py-1 rounded bg-[#2A1D13] text-amber-300 border border-[#785327]">Model v1.4 Finlight-LLM</span>
+                    <span class="px-2.5 py-1 rounded bg-[#2A1D13] text-amber-400 border border-[#785327]">Cushing WTI Delivery</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-amber-100 tracking-tight font-serif">Interactive Mechanical Fuel Terminal</h1>
+                <p class="text-stone-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+                    1920s Petroleum Filling Station &amp; Laboratory Calculator. Demonstrates interactive mechanical price counters, pressure valve shock simulation toggles, and localized rack margin breakdowns.
+                </p>
+            </div>
+        </section>
+
+        <!-- Interactive Grid: Calculator & Shock Simulator -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- Left Col: Fuel Pump Calculator (7 cols) -->
+            <section class="lg:col-span-7 bg-[#17120F] border border-[#785327]/60 rounded-2xl p-6 space-y-6 shadow-2xl">
+                <div class="flex items-center justify-between border-b border-[#785327]/40 pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-amber-100 tracking-tight font-serif">Mechanical Fill-Up &amp; Rack Margin Calculator</h2>
+                        <p class="text-xs text-stone-400 font-mono">Simulate retail pump costs across PADD regional hubs</p>
+                    </div>
+                    <span class="text-xs px-2.5 py-1 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-mono">⚙️ Analogue Mode</span>
+                </div>
+
+                <!-- Form Controls -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-mono text-stone-400 uppercase tracking-wider mb-2">Select Metro Locale</label>
+                        <select id="localeSelect" onchange="calculateFillup()" class="w-full bg-[#0A0705] border border-[#785327]/60 rounded-xl px-4 py-2.5 text-sm font-mono text-amber-100 focus:outline-none focus:border-amber-500">
+                            <option value="tulsa" selected>Tulsa, OK ($3.890/gal base)</option>
+                            <option value="national">National Wholesale ($3.184/gal base)</option>
+                            <option value="newark">Newark, DE ($3.350/gal base)</option>
+                            <option value="cincinnati">Cincinnati, OH ($3.450/gal base)</option>
+                            <option value="greenville">Greenville, NC ($3.250/gal base)</option>
+                            <option value="charlotte">Charlotte, NC ($3.280/gal base)</option>
+                            <option value="oakland">Oakland, CA ($4.950/gal base)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-stone-400 uppercase tracking-wider mb-2">Fuel Gallons</label>
+                        <input type="number" id="gallonsInput" value="15.0" step="1.0" min="1.0" max="100.0" oninput="calculateFillup()" class="w-full bg-[#0A0705] border border-[#785327]/60 rounded-xl px-4 py-2.5 text-sm font-mono text-amber-100 focus:outline-none focus:border-amber-500">
+                    </div>
+                </div>
+
+                <!-- Calculation Readout Panel -->
+                <div class="bg-[#0A0705] border-2 border-[#573A1B] rounded-xl p-5 space-y-4 font-pump shadow-inner">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-stone-400">Current Mechanical Pump Price:</span>
+                        <span id="pumpPriceReadout" class="text-3xl font-extrabold text-amber-400">$3.890/gal</span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-3 border-t border-[#785327]/30">
+                        <span class="text-xs text-stone-400">Total Tank Fill Cost (15 gal):</span>
+                        <span id="totalCostReadout" class="text-xl font-bold text-amber-100">$58.35</span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs pt-2">
+                        <span class="text-stone-400">Estimated Cushing Rack Margin:</span>
+                        <span id="rackMarginReadout" class="text-amber-300 font-semibold">$0.706/gal</span>
+                    </div>
+
+                    <div id="carbTaxContainer" class="flex items-center justify-between text-xs pt-2 hidden text-red-400">
+                        <span>CARB &amp; CA State Tax Overhead:</span>
+                        <span id="carbTaxReadout font-semibold">$0.953/gal</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Shock Toggle Buttons -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-mono text-stone-400 uppercase tracking-wider">Simulate Pressure Disruption Impact</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+                        <button onclick="toggleShock('tornado')" id="btn-tornado" class="px-3 py-2 rounded border border-[#785327]/40 bg-[#0A0705] hover:bg-[#2A1D13] text-stone-300 transition-all text-left flex items-center justify-between">
+                            <span>🌪️ West Tulsa Tornado</span>
+                            <span class="text-red-400 font-bold">+$0.173</span>
+                        </button>
+
+                        <button onclick="toggleShock('hormuz')" id="btn-hormuz" class="px-3 py-2 rounded border border-[#785327]/40 bg-[#0A0705] hover:bg-[#2A1D13] text-stone-300 transition-all text-left flex items-center justify-between">
+                            <span>🚢 Strait of Hormuz</span>
+                            <span class="text-red-400 font-bold">+$0.109</span>
+                        </button>
+
+                        <button onclick="toggleShock('blackout')" id="btn-blackout" class="px-3 py-2 rounded border border-[#785327]/40 bg-[#0A0705] hover:bg-[#2A1D13] text-stone-300 transition-all text-left flex items-center justify-between">
+                            <span>⚡ PG&amp;E Power Blackout</span>
+                            <span class="text-amber-400 font-bold">+$0.350</span>
+                        </button>
+
+                        <button onclick="toggleShock('tweet')" id="btn-tweet" class="px-3 py-2 rounded border border-[#785327]/40 bg-[#0A0705] hover:bg-[#2A1D13] text-stone-300 transition-all text-left flex items-center justify-between">
+                            <span>📱 Executive OPEC Post</span>
+                            <span class="text-emerald-400 font-bold">-$0.185</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Col: Refinery Pressure Dials & Telemetry (5 cols) -->
+            <section class="lg:col-span-5 space-y-6">
+
+                <!-- Refinery Telemetry Dials -->
+                <div class="bg-[#17120F] border border-[#785327]/60 rounded-2xl p-6 space-y-5 shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-[#785327]/40 pb-3">
+                        <h3 class="text-lg font-bold text-amber-100 tracking-tight font-serif">Refinery Pressure Gauges</h3>
+                        <span class="text-xs px-2 py-0.5 rounded bg-[#2A1D13] text-emerald-400 border border-emerald-700/50 font-mono">4 Active Hubs</span>
+                    </div>
+
+                    <div class="space-y-4 font-mono text-xs">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-stone-300 font-medium">West Tulsa HF Sinclair (125k bpd)</span>
+                                <span class="text-emerald-400 font-bold">94.2% Capacity</span>
+                            </div>
+                            <div class="w-full bg-[#0A0705] h-2.5 rounded overflow-hidden border border-[#573A1B]">
+                                <div class="bg-gradient-to-r from-emerald-600 to-amber-500 h-full rounded" style="width: 94.2%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-stone-300 font-medium">Delaware City PBF (180k bpd)</span>
+                                <span class="text-amber-400 font-bold">88.5% Capacity</span>
+                            </div>
+                            <div class="w-full bg-[#0A0705] h-2.5 rounded overflow-hidden border border-[#573A1B]">
+                                <div class="bg-gradient-to-r from-amber-600 to-amber-500 h-full rounded" style="width: 88.5%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-stone-300 font-medium">Marathon Catlettsburg KY (291k bpd)</span>
+                                <span class="text-emerald-400 font-bold">96.0% Capacity</span>
+                            </div>
+                            <div class="w-full bg-[#0A0705] h-2.5 rounded overflow-hidden border border-[#573A1B]">
+                                <div class="bg-emerald-600 h-full rounded" style="width: 96.0%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-stone-300 font-medium">Chevron Richmond CA (245k bpd)</span>
+                                <span class="text-red-400 font-bold">78.1% (Hydrocracker Maintenance)</span>
+                            </div>
+                            <div class="w-full bg-[#0A0705] h-2.5 rounded overflow-hidden border border-[#573A1B]">
+                                <div class="bg-red-600 h-full rounded" style="width: 78.1%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Accuracy Statistics Card -->
+                <div class="bg-[#17120F] border border-[#785327]/60 rounded-2xl p-6 space-y-4 shadow-2xl">
+                    <h3 class="text-lg font-bold text-amber-100 tracking-tight font-serif border-b border-[#785327]/40 pb-3">Out-of-Time Accuracy Metrics</h3>
+                    <div class="grid grid-cols-2 gap-4 font-mono text-center">
+                        <div class="bg-[#0A0705] border border-[#573A1B] rounded-xl p-3">
+                            <div class="text-2xl font-extrabold text-emerald-400">60.79%</div>
+                            <div class="text-[11px] text-stone-400 mt-1 uppercase">Directional Hit</div>
+                        </div>
+                        <div class="bg-[#0A0705] border border-[#573A1B] rounded-xl p-3">
+                            <div class="text-2xl font-extrabold text-amber-400">$0.1069</div>
+                            <div class="text-[11px] text-stone-400 mt-1 uppercase">Rolling MAE</div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- Section 3: Sepia Research Log Formula Box -->
+        <section class="bg-[#17120F] border border-[#785327]/60 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-[#785327]/40 pb-3">
+                <h3 class="text-lg font-bold text-amber-100 tracking-tight font-serif">Localized Metro Calibration Math Model</h3>
+                <span class="text-xs font-mono text-amber-400">LaTeX KaTeX Log</span>
+            </div>
+            <div class="katex-display text-amber-100 bg-[#0A0705] p-5 rounded-xl border border-[#573A1B]">
+                $$P_{\text{Tulsa Retail, } t+5} = P_{\text{Wholesale RBOB, } t+5} + \text{Dynamic Rack Margin}_t + \sum_{k} \text{Shock}_{k, t} \cdot e^{-\frac{\ln(2) \cdot \Delta t}{\tau_k}}$$
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-[#785327]/60 bg-[#0A0705] py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 font-mono space-y-2 sm:space-y-0">
+            <div>Thomas Midgley Jr. Petroleum Engine &copy; 1926 - 2026</div>
+            <div>Refinery Telemetry &bull; Cushing WTI &bull; NOAA Weather &bull; RBOB Futures</div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        const LOCALES = {
+            tulsa: { price: 3.890, margin: 0.706, carb: false },
+            national: { price: 3.184, margin: 0.000, carb: false },
+            newark: { price: 3.350, margin: 0.520, carb: false },
+            cincinnati: { price: 3.450, margin: 0.580, carb: false },
+            greenville: { price: 3.250, margin: 0.490, carb: false },
+            charlotte: { price: 3.280, margin: 0.520, carb: false },
+            oakland: { price: 4.950, margin: 0.810, carb: true }
+        };
+
+        const activeShocks = {
+            tornado: false,
+            hormuz: false,
+            blackout: false,
+            tweet: false
+        };
+
+        function calculateFillup() {
+            const localeKey = document.getElementById('localeSelect').value;
+            const gallons = parseFloat(document.getElementById('gallonsInput').value) || 15.0;
+            const locale = LOCALES[localeKey] || LOCALES.tulsa;
+
+            let currentPrice = locale.price;
+
+            if (activeShocks.tornado) currentPrice += 0.173;
+            if (activeShocks.hormuz) currentPrice += 0.109;
+            if (activeShocks.blackout) currentPrice += 0.350;
+            if (activeShocks.tweet) currentPrice -= 0.185;
+
+            const totalCost = currentPrice * gallons;
+
+            document.getElementById('pumpPriceReadout').innerText = '$' + currentPrice.toFixed(3) + '/gal';
+            document.getElementById('totalCostReadout').innerText = '$' + totalCost.toFixed(2);
+            document.getElementById('rackMarginReadout').innerText = '$' + locale.margin.toFixed(3) + '/gal';
+
+            const carbContainer = document.getElementById('carbTaxContainer');
+            if (locale.carb) {
+                carbContainer.classList.remove('hidden');
+            } else {
+                carbContainer.classList.add('hidden');
+            }
+        }
+
+        function toggleShock(shockKey) {
+            activeShocks[shockKey] = !activeShocks[shockKey];
+            const btn = document.getElementById('btn-' + shockKey);
+            if (activeShocks[shockKey]) {
+                btn.classList.add('border-[#785327]', 'bg-[#2A1D13]');
+            } else {
+                btn.classList.remove('border-[#785327]', 'bg-[#2A1D13]');
+            }
+            calculateFillup();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            calculateFillup();
+        });
+    </script>
+</body>
+</html>
+"""
+
+def generate():
+    os.makedirs(DOCS_DIR, exist_ok=True)
+    os.makedirs(EXAMPLE_SUB_DIR, exist_ok=True)
+    
+    with open(EXAMPLE_PATH, "w", encoding="utf-8") as f:
+        f.write(EXAMPLE_HTML)
+        
+    with open(EXAMPLE_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(EXAMPLE_HTML)
+        
+    print(f"Successfully generated 1920s vintage {EXAMPLE_PATH} & {EXAMPLE_SUB_PATH}")
+
+if __name__ == "__main__":
+    generate()

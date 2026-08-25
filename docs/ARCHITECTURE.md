@@ -16,6 +16,28 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
   \[
   \text{CrackSpread}_{\text{Tulsa}} = P_{\text{Tulsa Retail (\$ / gal)}} - \frac{P_{\text{Cushing WTI (\$ / bbl)}}}{42.0}
   \]
+- **Newark Regional Crack Spread:**
+  \[
+  \text{CrackSpread}_{\text{Newark}} = P_{\text{Newark Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0}
+  \]
+- **Cincinnati Dual-State Cross-River Rack Margin & Crack Spread:**
+  \[
+  P_{\text{OH Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{OH}} \quad (P_{\text{Live, OH}} = \$3.450/\text{gal})
+  \]
+  \[
+  P_{\text{KY Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{KY}} \quad (P_{\text{Live, KY}} = \$3.325/\text{gal})
+  \]
+  \[
+  \text{TaxSpread}_{\text{OH-KY}} = P_{\text{OH Retail}} - P_{\text{KY Retail}} = \$0.125/\text{gal}
+  \]
+- **Oakland & SF Bay Area PADD 5 Richmond Crack Spread & CARB Tax Burden:**
+  \[
+  \text{CrackSpread}_{\text{Richmond}} = P_{\text{Oakland Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Oakland}} = \$4.950/\text{gal}, P_{\text{Live, BayArea}} = \$5.050/\text{gal})
+  \]
+  \[
+  T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} = \$0.634 + \$0.250 + \$0.185 + \$0.150 + \$0.184 = \$0.953/\text{gal}
+  \]
+
 
 ### B. Exponential Memory Decay Equation
 Real-world event news persistence is modeled via exponential memory decay ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$):
@@ -70,14 +92,16 @@ The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\
 
 ## 4. MLOps Prediction Logging & Backfilling Engine (`src/prediction_logger.py`)
 
-All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records.
+All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records. When a new regional forecasting pipeline is launched, `backfill_new_region_history()` automatically populates historical test split predictions and evaluates mature target dates against historical market actuals immediately.
 
 ---
 
-## 5. Weekly Model Performance Review & Continuous Feedback Loop (`.github/workflows/weekly_model_review.yml`)
+## 5. Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`)
 
-The weekly model performance review runs automatically on Saturday mornings (08:00 AM Central / 13:00 UTC). Its primary purpose is to calculate rolling error metrics and operate an automated feedback loop back into the forecasting pipeline to continuously enhance model performance over time:
+The weekly model performance review runs automatically on Saturday mornings (08:00 AM Central / 13:00 UTC) via GitHub Actions cloud runners and local `dev-vm` systemd user timers (`midgley-weekly-review.timer`). Its primary purpose is to calculate rolling multi-region error metrics, self-review all open GitHub repository issues, and operate an automated feedback loop back into the forecasting pipeline:
 
+* **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley`, evaluates each issue's modeling impact using Google Gemini 2.5 Flash (with a domain-specific keyword heuristic fallback), ranks issues, and selects the top issue offering the largest potential reduction to model loss.
+* **Branch-Flagged Reporting:** Automatically flags issue titles with the source git branch (e.g. `[dev] 📊 Weekly Model Review Report...`).
 * **Mean Absolute Error (MAE):**
   \[
   \text{MAE} = \frac{1}{N} \sum_{i=1}^{N} |P_{\text{actual}, i} - \hat{P}_{\text{pred}, i}|
@@ -92,7 +116,7 @@ The weekly model performance review runs automatically on Saturday mornings (08:
   \]
 
 ### Continuous Feedback Loop Mechanics:
-1. **Diagnostic Validation & Error Tracking:** Calculates rolling metrics across 30-day, 60-day, and 90-day evaluation windows to detect model drift or unmodeled shock divergence.
+1. **Diagnostic Validation & Multi-Region Error Tracking:** Calculates rolling metrics across 30-day, 60-day, and 90-day evaluation windows across all active regions (National, Tulsa, Newark, Cincinnati OH/KY, Oakland, SF Bay Area).
 2. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
 3. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
 
@@ -141,5 +165,42 @@ The project operates an automated release pipeline targeting the `dev` branch:
 * **Pre-Release Tagging:** Publishes pre-release tags in format `dev-YYYY-MM-DD`.
 * **Automated Release Notes:** Dynamically computes commit history and pull request contributions between consecutive nightly tags, attaching formatted Markdown release notes to the GitHub Release.
 
+## 9. Modular Location Subpackage Hierarchy (`src/locations/`)
 
+All location-specific forecasting pipelines, regional market data fetchers, event log loaders, and Jupyter notebook builders are organized into a clean, modular subpackage hierarchy under `src/locations/`:
 
+```
+src/locations/
+├── __init__.py                # Master location registry (LOCATIONS dict, get_location(), list_locations())
+├── national/                  # National Wholesale RBOB Futures location package
+│   ├── __init__.py
+│   ├── main.py                # Main national forecasting pipeline
+│   └── notebook_builder.py    # Builds notebooks/gas_price_llm_forecasting.ipynb
+├── tulsa/                     # Tulsa Metro, OK location package
+│   ├── __init__.py
+│   ├── main.py                # Tulsa regional pipeline
+│   ├── regional.py            # Tulsa market data & regional events
+│   └── notebook_builder.py    # Builds notebooks/tulsa_gas_price_llm_forecasting.ipynb
+├── newark/                    # Newark Metro, DE location package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── regional.py
+│   └── notebook_builder.py
+├── cincinnati/                # Cincinnati Tri-State, OH/KY location package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── regional.py
+│   └── notebook_builder.py
+├── greenville/                # Greenville Metro, NC location package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── regional.py
+│   └── notebook_builder.py
+└── oakland/                   # Oakland & SF Bay Area, CA location package
+    ├── __init__.py
+    ├── main.py
+    ├── regional.py
+    └── notebook_builder.py
+```
+
+Root entrypoints (`main.py`, `tulsa_main.py`, `newark_main.py`, etc.), notebook build scripts (`build_*.py`), and `src/*_regional.py` modules operate as lightweight delegation shims to `src/locations/`, maintaining 100% backward compatibility for all existing scripts, workflows, and systemd services.
