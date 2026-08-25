@@ -7,6 +7,8 @@ in the KoshiirRa/midgley repository detailing rolling accuracy, backtest errors,
 import os
 import json
 import subprocess
+import urllib.request
+import urllib.error
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -16,9 +18,289 @@ logger = logging.getLogger(__name__)
 
 HISTORY_CSV = os.path.join("data", "prediction_history.csv")
 
+
+def fetch_open_github_issues(repo: str = "KoshiirRa/midgley") -> list:
+    """
+    Fetches open issues from the specified GitHub repository.
+    First attempts using gh CLI, falling back to GitHub REST API.
+    Returns a list of dicts with: number, title, body, labels, created_at, html_url.
+    """
+    # 1. Try gh CLI
+    try:
+        cmd = ["gh", "issue", "list", "--repo", repo, "--state", "open", "--json", "number,title,body,labels,createdAt,url"]
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        raw_issues = json.loads(result.stdout)
+        issues = []
+        for raw in raw_issues:
+            label_names = [l.get("name", "") if isinstance(l, dict) else str(l) for l in raw.get("labels", [])]
+            issues.append({
+                "number": raw.get("number"),
+                "title": raw.get("title", ""),
+                "body": raw.get("body", "") or "",
+                "labels": label_names,
+                "created_at": raw.get("createdAt", ""),
+                "html_url": raw.get("url", f"https://github.com/{repo}/issues/{raw.get('number')}")
+            })
+        logger.info(f"Fetched {len(issues)} open issue(s) via gh CLI.")
+        return issues
+    except Exception as e:
+        logger.debug(f"gh CLI issue fetch notice ({e}). Trying GitHub REST API fallback...")
+
+    # 2. Try REST API fallback
+    try:
+        url = f"https://api.github.com/repos/{repo}/issues?state=open&per_page=50"
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "User-Agent": "Midgley-Weekly-Reviewer"
+        }
+        token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as response:
+            data = json.loads(response.read().decode("utf-8"))
+            issues = []
+            for item in data:
+                if "pull_request" in item:
+                    continue  # skip PRs returned in issue list
+                label_names = [l.get("name", "") if isinstance(l, dict) else str(l) for l in item.get("labels", [])]
+                issues.append({
+                    "number": item.get("number"),
+                    "title": item.get("title", ""),
+                    "body": item.get("body", "") or "",
+                    "labels": label_names,
+                    "created_at": item.get("created_at", ""),
+                    "html_url": item.get("html_url", f"https://github.com/{repo}/issues/{item.get('number')}")
+                })
+            logger.info(f"Fetched {len(issues)} open issue(s) via GitHub REST API.")
+            return issues
+    except Exception as e:
+        logger.warning(f"Could not fetch GitHub open issues via REST API: {e}")
+        return []
+
+
+def _build_issue_eval_markdown(top_issue: dict, ranked: list, reasoning: str, rec_impl: str) -> str:
+    if not top_issue:
+        return "ℹ️ *No open GitHub issues found on KoshiirRa/midgley for self-review modeling evaluation.*"
+
+    table_rows = ""
+    for item in ranked:
+        link = f"[#{item['number']}]({item['html_url']})"
+        table_rows += f"| {link} | **{item['title']}** | `{item['category']}` | **`{item['impact_score']}/10.0`** |\n"
+
+    md = f"""### 💡 Highest-Impact Modeling Issue: **[#{top_issue['number']}]({top_issue['html_url']}) - {top_issue['title']}**
+
+- **Modeling Category:** `{top_issue['category']}`
+- **Estimated Impact Score:** **`{top_issue['impact_score']}/10.0`**
+- **Why this improves modeling:** {reasoning}
+- **Recommended Action:** {rec_impl}
+
+#### 📋 Open Issues Ranked by Modeling Priority
+
+| Issue | Title | Category | Impact Score |
+| :---: | :--- | :--- | :---: |
+{table_rows}"""
+    return md
+
+
+def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -> dict:
+    """
+    Deterministic domain-specific keyword scoring fallback to rank open issues by modeling impact.
+    """
+    keywords_high = [
+        "refinery", "noaa", "weather", "cushing", "chokepoint", "ovx", "baker hughes",
+        "crack spread", "feature", "mae", "accuracy", "calibration", "decay", "ridge",
+        "xgboost", "model", "predict", "forecast", "outage", "supply", "rbob"
+    ]
+    keywords_med = [
+        "data", "api", "feed", "ingestion", "cache", "gasbuddy", "pipeline", "bot",
+        "logger", "scrap", "margin", "tax", "regional"
+    ]
+
+    ranked = []
+    for issue in issues:
+        text = (issue["title"] + " " + issue["body"]).lower()
+        score = 2.0
+        category = "General Improvement"
+
+        high_hits = sum(1 for k in keywords_high if k in text)
+        med_hits = sum(1 for k in keywords_med if k in text)
+
+        score += high_hits * 1.5 + med_hits * 0.8
+        score = min(round(score, 1), 9.8)
+
+        if any(k in text for k in ["refinery", "cushing", "noaa", "weather", "chokepoint"]):
+            category = "Refining & Physical Feeds"
+        elif any(k in text for k in ["ridge", "xgboost", "decay", "calibration", "mae", "accuracy"]):
+            category = "Model Calibration & Loss"
+        elif any(k in text for k in ["feature", "ovx", "baker hughes", "crack spread"]):
+            category = "Feature Engineering"
+        elif any(k in text for k in ["data", "feed", "api", "cache", "gasbuddy"]):
+            category = "Data & Feed Ingestion"
+
+        ranked.append({
+            "number": issue["number"],
+            "title": issue["title"],
+            "html_url": issue["html_url"],
+            "impact_score": score,
+            "category": category,
+            "body": issue["body"]
+        })
+
+    ranked.sort(key=lambda x: x["impact_score"], reverse=True)
+    top_issue = ranked[0] if ranked else None
+
+    if top_issue:
+        reasoning = (
+            f"Issue #{top_issue['number']} ('{top_issue['title']}') targets critical domain area "
+            f"'{top_issue['category']}'. Enhancing this area directly addresses forecasting variance "
+            f"and provides the largest potential reduction to current errors (National MAE ${nat_mae:.4f}, Tulsa MAE ${tulsa_mae:.4f})."
+        )
+        rec_impl = f"Prioritize resolving issue #{top_issue['number']} by adding appropriate domain feature vectors or refining loss calibration."
+    else:
+        reasoning = "No open modeling issues evaluated."
+        rec_impl = "Maintain current model version."
+
+    summary_md = _build_issue_eval_markdown(top_issue, ranked, reasoning, rec_impl)
+
+    return {
+        "top_issue": top_issue,
+        "ranking": ranked,
+        "reasoning": reasoning,
+        "recommended_implementation": rec_impl,
+        "summary_markdown": summary_md
+    }
+
+
+def evaluate_open_issues_for_modelling(issues: list, nat_mae: float = 0.1069, tulsa_mae: float = 0.5611, api_key: str = None) -> dict:
+    """
+    Evaluates open GitHub issues to determine which issue yields the single biggest improvement to price forecasting.
+    Uses Google Gemini 2.5 Flash if GEMINI_API_KEY is available, with deterministic domain heuristic fallback.
+    """
+    if not issues:
+        return {
+            "top_issue": None,
+            "ranking": [],
+            "reasoning": "No open issues currently present.",
+            "recommended_implementation": "N/A",
+            "summary_markdown": "ℹ️ *No open GitHub issues currently found on repository KoshiirRa/midgley.*"
+        }
+
+    if api_key is None:
+        api_key = os.environ.get("GEMINI_API_KEY")
+
+    if api_key:
+        try:
+            issues_summary = [
+                {
+                    "number": i["number"],
+                    "title": i["title"],
+                    "body": i["body"][:400],
+                    "labels": i["labels"]
+                }
+                for i in issues
+            ]
+
+            prompt = f"""
+You are an expert energy quantitative modeling engineer and lead AI architect.
+Review the following list of open GitHub issues for the KoshiirRa/midgley project repository and decide which issue would provide the BIGGEST improvement to energy price forecasting modeling (accuracy, MAE, directional hit rate, regional refining dynamics, physical feeds, or feature engineering).
+
+Current Model Performance Metrics:
+- National Wholesale RBOB MAE: ${nat_mae:.4f}/gal
+- Tulsa Metro Retail MAE: ${tulsa_mae:.4f}/gal
+
+Open GitHub Issues:
+{json.dumps(issues_summary, indent=2)}
+
+Return ONLY a raw JSON object with the following fields:
+- "top_issue_number": integer (issue number of the single issue providing the biggest modeling improvement)
+- "top_issue_title": string
+- "impact_score": float between 0.0 and 10.0
+- "category": string (e.g., "Refining & Physical Feeds", "Model Calibration & Loss", "Feature Engineering", "Data & Feed Ingestion", "General Maintenance")
+- "reasoning": string (concise explanation of why this issue yields the biggest modeling improvement)
+- "recommended_implementation": string (brief technical steps to resolve the issue for maximum model gain)
+- "all_issues_ranked": array of objects for all open issues sorted from highest to lowest modeling impact:
+    - "number": integer
+    - "title": string
+    - "impact_score": float
+    - "category": string
+
+JSON Output:
+"""
+            text = ""
+            try:
+                from google import genai
+                from google.genai import types
+                client = genai.Client(api_key=api_key)
+                config = types.GenerateContentConfig(temperature=0.1)
+                response = client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt,
+                    config=config
+                )
+                text = response.text.strip()
+            except ImportError:
+                import google.generativeai as genai_legacy
+                genai_legacy.configure(api_key=api_key)
+                model = genai_legacy.GenerativeModel('gemini-1.5-flash')
+                response = model.generate_content(prompt)
+                text = response.text.strip()
+
+            if "```json" in text:
+                text = text.split("```json")[1].split("```")[0].strip()
+            elif "```" in text:
+                text = text.split("```")[1].split("```")[0].strip()
+
+            parsed = json.loads(text)
+            top_num = parsed.get("top_issue_number")
+            top_issue_data = next((i for i in issues if i["number"] == top_num), issues[0])
+
+            top_issue = {
+                "number": top_issue_data["number"],
+                "title": parsed.get("top_issue_title", top_issue_data["title"]),
+                "html_url": top_issue_data.get("html_url", f"https://github.com/KoshiirRa/midgley/issues/{top_issue_data['number']}"),
+                "impact_score": float(parsed.get("impact_score", 8.5)),
+                "category": parsed.get("category", "Modelling Improvement")
+            }
+
+            ranked = []
+            for r in parsed.get("all_issues_ranked", []):
+                matching_issue = next((i for i in issues if i["number"] == r.get("number")), None)
+                url = matching_issue.get("html_url") if matching_issue else f"https://github.com/KoshiirRa/midgley/issues/{r.get('number')}"
+                ranked.append({
+                    "number": r.get("number"),
+                    "title": r.get("title", ""),
+                    "html_url": url,
+                    "impact_score": float(r.get("impact_score", 5.0)),
+                    "category": r.get("category", "General")
+                })
+
+            if not ranked:
+                ranked = [_evaluate_issues_heuristic(issues, nat_mae, tulsa_mae)["ranking"][0]]
+
+            reasoning = parsed.get("reasoning", "")
+            rec_impl = parsed.get("recommended_implementation", "")
+            summary_md = _build_issue_eval_markdown(top_issue, ranked, reasoning, rec_impl)
+
+            return {
+                "top_issue": top_issue,
+                "ranking": ranked,
+                "reasoning": reasoning,
+                "recommended_implementation": rec_impl,
+                "summary_markdown": summary_md
+            }
+        except Exception as e:
+            logger.warning(f"LLM issue evaluation notice ({e}). Using deterministic heuristic fallback.")
+
+    return _evaluate_issues_heuristic(issues, nat_mae, tulsa_mae)
+
+
 def generate_weekly_markdown_report() -> str:
     """
     Parses data/prediction_history.csv and builds a formatted Markdown report for GitHub Issues.
+    Also fetches open repository issues and performs a self-review evaluation to identify
+    the issue offering the largest potential modeling improvement.
     """
     today_str = datetime.now().strftime("%Y-%m-%d")
     
@@ -70,6 +352,11 @@ def generate_weekly_markdown_report() -> str:
 
     rec_markdown = "\n".join([f"- {r}" for r in recommendations])
 
+    # Open GitHub Issues Self-Review & Modeling Evaluation
+    issues = fetch_open_github_issues()
+    issue_eval = evaluate_open_issues_for_modelling(issues, nat_mae=nat_mae, tulsa_mae=tulsa_mae)
+    issue_analysis_md = issue_eval.get("summary_markdown", "")
+
     report = f"""# 📊 Weekly Model Review & Performance Audit ({today_str})
 
 ### 🤖 Model Version: `v1.4 Finlight-LLM`
@@ -96,6 +383,12 @@ def generate_weekly_markdown_report() -> str:
 ## 🧠 Model Recommendations & Diagnostics
 
 {rec_markdown}
+
+---
+
+## 🎯 High-Impact Issue Analysis & Self-Review
+
+{issue_analysis_md}
 
 ---
 *Automated Weekly Performance Review generated by `src/weekly_issue_reporter.py` via GitHub Actions Cloud Runner.*
@@ -128,3 +421,4 @@ def create_github_issue():
 
 if __name__ == "__main__":
     create_github_issue()
+
