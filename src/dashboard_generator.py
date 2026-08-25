@@ -24,6 +24,7 @@ NATIONAL_PATH = os.path.join(DOCS_DIR, "national.html")
 TULSA_PATH = os.path.join(DOCS_DIR, "tulsa.html")
 NEWARK_PATH = os.path.join(DOCS_DIR, "newark.html")
 CINCINNATI_PATH = os.path.join(DOCS_DIR, "cincinnati.html")
+GREENVILLE_PATH = os.path.join(DOCS_DIR, "greenville.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 MATH_PATH = os.path.join(DOCS_DIR, "math.html")
@@ -32,6 +33,7 @@ NATIONAL_SUB_DIR = os.path.join(DOCS_DIR, "national")
 TULSA_SUB_DIR = os.path.join(DOCS_DIR, "tulsa")
 NEWARK_SUB_DIR = os.path.join(DOCS_DIR, "newark")
 CINCINNATI_SUB_DIR = os.path.join(DOCS_DIR, "cincinnati")
+GREENVILLE_SUB_DIR = os.path.join(DOCS_DIR, "greenville")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 
@@ -39,6 +41,7 @@ NATIONAL_SUB_PATH = os.path.join(NATIONAL_SUB_DIR, "index.html")
 TULSA_SUB_PATH = os.path.join(TULSA_SUB_DIR, "index.html")
 NEWARK_SUB_PATH = os.path.join(NEWARK_SUB_DIR, "index.html")
 CINCINNATI_SUB_PATH = os.path.join(CINCINNATI_SUB_DIR, "index.html")
+GREENVILLE_SUB_PATH = os.path.join(GREENVILLE_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 
@@ -146,7 +149,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
@@ -154,6 +157,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     tul_link = f"{rel_prefix}tulsa.html"
     new_link = f"{rel_prefix}newark.html"
     cin_link = f"{rel_prefix}cincinnati.html"
+    grn_link = f"{rel_prefix}greenville.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -196,6 +200,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         </a>
                         <a href="{cin_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="{grn_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
                         </a>
                         <a href="{oak_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
@@ -245,6 +252,7 @@ def generate_public_dashboard():
         'Newark_DE': {'base': 3.350, 'pred': 3.250},
         'Cincinnati_OH': {'base': 3.450, 'pred': 3.350},
         'Cincinnati_KY': {'base': 3.325, 'pred': 3.225},
+        'Greenville_NC': {'base': 3.250, 'pred': 3.150},
         'Oakland_CA': {'base': 5.550, 'pred': 4.840},
         'BayArea_CA': {'base': 5.650, 'pred': 4.940},
         'SanFrancisco_CA': {'base': 5.720, 'pred': 5.010},
@@ -356,7 +364,7 @@ def generate_public_dashboard():
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">6 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">7 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
@@ -499,6 +507,41 @@ def generate_public_dashboard():
 
                     <a href="cincinnati.html" class="w-full py-2.5 px-4 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
                         Explore Cross-River Display <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 5: Greenville, NC Retail (PADD 1C Colonial Pipeline) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-green-400 font-semibold">PADD 1C South Atlantic</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
+                            40.4¢ NC Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Greenville_NC']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-green-400 mt-1">${prices_map['Greenville_NC']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Selma Hub: 55 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">59.10%</strong></span>
+                    </div>
+
+                    <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -1687,6 +1730,153 @@ def generate_public_dashboard():
         f.write(build_cincinnati_html(""))
     with open(CINCINNATI_SUB_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # 5. GREENVILLE METRO RETAIL GAS PAGE (docs/greenville.html & docs/greenville/index.html)
+    # ---------------------------------------------------------------------------
+    def build_greenville_html(rel_prefix: str = "") -> str:
+        nav_greenville = get_nav_header("greenville", rel_prefix)
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenville, NC Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_GREENVILLE}}
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-green-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Greenville Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
+                PADD 1C South Atlantic Model
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{GREENVILLE_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-green-400">${{GREENVILLE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-green-300 font-semibold">-3.1% Projected Trend</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">$0.1180<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: 4.52% | RMSE: $0.1540</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">59.10%</p>
+                <p class="text-xs text-slate-500">Ridge α=10.0 Estimator</p>
+            </div>
+        </div>
+
+        <!-- Regional Dynamics Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-network-wired text-green-400"></i> PADD 1C Infrastructure & Selma Hub Dynamics
+                </h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Greenville, NC (Pitt County) sits within the PADD 1C Lower Atlantic petroleum distribution corridor. Gasoline supplies originate from Gulf Coast refiners via <strong>Colonial Pipeline (Line 1 Gasoline / Line 2 Distillates)</strong>, breaking out at major junction tank farms in <strong>Selma, NC</strong> (55 miles west) and <strong>Apex, NC</strong> before tank-truck dispatch across Eastern NC.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
+                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
+                        <strong class="text-green-300 block mb-1">Colonial Pipeline Breakout Hubs</strong>
+                        <span class="text-slate-400">Selma & Apex NC tank farms act as primary wholesale rack pricing hubs for Pitt, Lenoir & Beaufort counties.</span>
+                    </div>
+                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
+                        <strong class="text-green-300 block mb-1">NC Motor Fuel Tax Burden</strong>
+                        <span class="text-slate-400">NC state motor fuel tax ($0.404/gal variable formula + 18.4¢ federal = 58.8¢ total tax burden).</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather & Hurricane Risk -->
+            <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-bolt text-amber-400"></i> Pitt County NOAA Alerts
+                </h3>
+                <p class="text-xs text-slate-300">
+                    NOAA NWS zone <strong>NCZ081</strong> alerts track Atlantic hurricane landfall storm surges, Pamlico Sound coastal flooding, and Tar River basin crest levels that disrupt truck delivery routes on US-264 & NC-11.
+                </p>
+                <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-200">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>
+                    <strong>Tar River Flood Crest Factor:</strong> High-water events suspend tank truck dispatch and risk underground storage tank buoyancy.
+                </div>
+            </div>
+        </div>
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-green-400"></i> Greenville Regional Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Colonial Pipeline Mainline Outage</h4>
+                    <p class="text-xs text-slate-400">Line 1 emergency shutdown halts batch shipments into Selma NC breakout tank farms.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.245/gal (+7.54%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Category 3 Atlantic Hurricane Landfall</h4>
+                    <p class="text-xs text-slate-400">Major Hurricane surge floods US-264 distribution highways & Tar River basin.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.215/gal (+6.62%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Selma Hub Tank Farm Power Outage</h4>
+                    <p class="text-xs text-slate-400">Microburst knocks out Duke Energy substation at Selma hub, suspending rack loading.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.185/gal (+5.69%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Greenville, NC Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
+
+    with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
+        f.write(build_greenville_html(""))
+    with open(GREENVILLE_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_greenville_html("../"))
 
     # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)

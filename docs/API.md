@@ -20,7 +20,7 @@ The **Midgley MCP & REST API Gateway** exposes real-time unleaded gasoline pump 
 Fetches real-time unleaded gas price data using the multi-tiered fallback chain (GasBuddy GraphQL -> AAA Web Scraper -> EIA/yfinance Benchmark -> Prediction History -> Static Anchor) with 15-minute response caching.
 
 **Query Parameters:**
-* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `oakland`, `bayarea`. Default: `national`.
+* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `oakland`, `bayarea`. Default: `national`.
 * `zip_code` (optional, string): 5-digit US zip code for station-level GasBuddy search.
 
 **Example Request:**
@@ -99,6 +99,9 @@ curl -X POST "https://local-dev.dwarvenbard.com/api/v1/forecast/simulate" \
 * `cushing_spill`: Cushing Keystone Pipeline Rupture & Lock (+4.58%)
 * `marathon_outage`: Marathon Catlettsburg KY Refinery Outage (+4.78%)
 * `mississippi_low_water`: Lower Mississippi & Ohio River Low-Water Bottleneck (+4.20%)
+* `colonial_outage`: Colonial Pipeline Mainline Outage / Cyberattack Shock (+7.54%)
+* `greenville_hurricane`: Category 3 Atlantic Hurricane Landfall & Tar River Flooding (+6.62%)
+* `selma_outage`: Selma NC Distribution Hub Tank Farm Outage & Blackout (+5.69%)
 * `hayward_quake`: USGS Hayward Fault M>=6.0 Seismic Quake (+8.48%)
 * `pge_psps_shutoff`: PG&E PSPS Wildfire Power Shutoff & Blackout (+7.07%)
 * `chevron_hydrocracker`: Chevron Richmond Refinery Hydrocracker Outage (+5.76%)
@@ -134,6 +137,7 @@ The Midgley MCP Server exposes tools, resources, and prompt templates for integr
 - `resource://midgley/locales/tulsa`
 - `resource://midgley/locales/newark`
 - `resource://midgley/locales/cincinnati`
+- `resource://midgley/locales/greenville`
 - `resource://midgley/locales/oakland`
 
 ### Exposed MCP Prompts

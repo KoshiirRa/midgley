@@ -68,7 +68,9 @@ LOCALE_MAP = {
     "sanjose_ca": "SanJose_CA",
     "sj": "SanJose_CA",
     "northbay": "NorthBay_CA",
-    "northbay_ca": "NorthBay_CA"
+    "northbay_ca": "NorthBay_CA",
+    "greenville": "Greenville_NC",
+    "greenville_nc": "Greenville_NC"
 }
 
 # Regional PADD metadata
@@ -78,6 +80,7 @@ PADD_METADATA = {
     "Newark_DE": {"name": "Newark Metro Area, DE", "padd": "PADD 1B Central Atlantic", "carb_tax": 0.0},
     "Cincinnati_OH": {"name": "Cincinnati Metro Area, OH", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Cincinnati_KY": {"name": "Northern Kentucky Retail", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
+    "Greenville_NC": {"name": "Greenville Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -136,6 +139,21 @@ SCENARIOS_CATALOG = {
         "name": "CARB CaRFG Summer-Blend Transition Compliance Surge",
         "headline": "Statutory CARB summer-blend vapor pressure transition tightens California RFG supply.",
         "shock_pct": 0.0444
+    },
+    "colonial_outage": {
+        "name": "Colonial Pipeline Mainline Outage / Cyberattack Shock",
+        "headline": "Colonial Pipeline Line 1 emergency shutdown halts batch shipments into Selma NC breakout tank farms.",
+        "shock_pct": 0.0754
+    },
+    "greenville_hurricane": {
+        "name": "Category 3 Atlantic Hurricane Landfall & Tar River Flooding",
+        "headline": "Major Hurricane landfall inundates Eastern NC coastal distribution highways and Tar River transport routes.",
+        "shock_pct": 0.0662
+    },
+    "selma_outage": {
+        "name": "Selma NC Distribution Hub Tank Farm Outage & Grid Blackout Shock",
+        "headline": "Severe convective microburst knocks out Duke Energy substation at Selma breakout hub, suspending rack loading.",
+        "shock_pct": 0.0569
     },
     "weekend_opec_post": {
         "name": "Weekend Executive OPEC Talkdown Post",
@@ -226,7 +244,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5) -> dict:
     base_price = live_res.get("price", 3.184)
     meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
 
-    projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH"] else 0.032)
+    projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC"] else 0.032)
     predicted_price = round(base_price + projected_delta, 3)
     expected_pct = round((projected_delta / base_price) * 100, 2)
     direction = "UP" if projected_delta > 0 else ("DOWN" if projected_delta < 0 else "FLAT")

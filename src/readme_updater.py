@@ -35,6 +35,8 @@ def update_readme_forecasts():
     cin_oh_dir = "DOWN 📉"
     cin_ky_price = 3.225
     cin_ky_dir = "DOWN 📉"
+    greenville_price = 3.150
+    greenville_dir = "DOWN 📉"
     oakland_price = 5.440
     oakland_dir = "DOWN 📉"
     # Base price defaults
@@ -43,6 +45,7 @@ def update_readme_forecasts():
     base_newark = 3.350
     base_cin_oh = 3.450
     base_cin_ky = 3.325
+    base_greenville = 3.250
     base_oakland = 5.550
     base_bayarea = 5.650
     target_nat = "Next 5 Business Days"
@@ -50,6 +53,7 @@ def update_readme_forecasts():
     target_newark = "Next 5 Business Days"
     target_cin_oh = "Next 5 Business Days"
     target_cin_ky = "Next 5 Business Days"
+    target_greenville = "Next 5 Business Days"
     target_oakland = "Next 5 Business Days"
     target_bayarea = "Next 5 Business Days"
     
@@ -62,6 +66,7 @@ def update_readme_forecasts():
                 newark_df = df[df['region'] == 'Newark_DE']
                 cin_oh_df = df[df['region'] == 'Cincinnati_OH']
                 cin_ky_df = df[df['region'] == 'Cincinnati_KY']
+                greenville_df = df[df['region'] == 'Greenville_NC']
                 oakland_df = df[df['region'] == 'Oakland_CA']
                 bayarea_df = df[df['region'] == 'BayArea_CA']
                 
@@ -100,6 +105,13 @@ def update_readme_forecasts():
                     cin_ky_dir = "UP 📈" if cin_ky_price >= base_cin_ky else "DOWN 📉"
                     target_cin_ky = latest_cin_ky['forecast_target_date']
 
+                if not greenville_df.empty:
+                    latest_greenville = greenville_df.iloc[-1]
+                    greenville_price = latest_greenville['predicted_5d_price']
+                    base_greenville = latest_greenville['current_base_price']
+                    greenville_dir = "UP 📈" if greenville_price >= base_greenville else "DOWN 📉"
+                    target_greenville = latest_greenville['forecast_target_date']
+
                 if not oakland_df.empty:
                     latest_oakland = oakland_df.iloc[-1]
                     oakland_price = latest_oakland['predicted_5d_price']
@@ -126,6 +138,7 @@ def update_readme_forecasts():
 | **Newark, DE Metro Retail** | `${base_newark:.3f}`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_newark}` | `v1.4-Finlight-Ridge` |
 | **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_cin_oh}` | `v1.4-Finlight-Ridge` |
 | **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_cin_ky}` | `v1.4-Finlight-Ridge` |
+| **Greenville, NC Metro Retail** | `${base_greenville:.3f}`/gal | **`${greenville_price:.3f}`/gal** | **{greenville_dir}** | `{target_greenville}` | `v1.4-Finlight-Ridge` |
 | **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_oakland}` | `v1.4-Finlight-Ridge` |
 | **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_bayarea}` | `v1.4-Finlight-Ridge` |
 

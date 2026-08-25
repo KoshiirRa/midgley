@@ -93,6 +93,13 @@ REGION_METADATA = {
         "static_anchor": 5.453,
         "name": "North Bay / Solano Retail",
         "aaa_keywords": ["Vallejo", "Fairfield", "Napa"]
+    },
+    "Greenville_NC": {
+        "zip": "27834",
+        "state": "NC",
+        "static_anchor": 3.250,
+        "name": "Greenville, NC Metro Retail",
+        "aaa_keywords": ["Greenville", "Pitt", "State Average"]
     }
 }
 

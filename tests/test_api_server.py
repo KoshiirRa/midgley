@@ -59,6 +59,14 @@ class TestAPIServer(unittest.TestCase):
         self.assertIn("key_drivers", data)
         self.assertGreater(len(data["key_drivers"]), 0)
 
+    def test_get_greenville_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=greenville")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "Greenville_NC")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 1C South Atlantic")
+
     def test_post_simulate(self):
         payload = {
             "scenario_id": "hormuz_blockade",

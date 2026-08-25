@@ -154,7 +154,7 @@ async def call_tool(
 
 async def list_resources() -> list[types.Resource]:
     """Exposes static context resources for Midgley supported locales."""
-    locales = ["national", "tulsa", "newark", "cincinnati", "oakland", "bayarea"]
+    locales = ["national", "tulsa", "newark", "cincinnati", "greenville", "oakland", "bayarea"]
     resources = []
     for loc in locales:
         resources.append(

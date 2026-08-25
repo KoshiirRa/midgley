@@ -11,6 +11,7 @@ from tulsa_main import run_tulsa_pipeline as run_tulsa
 from newark_main import run_newark_pipeline as run_newark
 from cincinnati_main import run_cincinnati_pipeline as run_cincinnati
 from oakland_main import run_oakland_pipeline as run_oakland
+from greenville_main import run_greenville_pipeline as run_greenville
 from src.readme_updater import update_readme_forecasts
 from src.dashboard_generator import generate_public_dashboard
 
@@ -38,12 +39,17 @@ if __name__ == "__main__":
     cin_results = run_cincinnati(use_llm_api=use_api, model_type="ridge")
 
     print("\n" + "=" * 80)
-    print("  STEP 5: RUNNING OAKLAND & SF BAY AREA METRO RETAIL FORECASTING MODEL")
+    print("  STEP 5: RUNNING GREENVILLE, NC METRO RETAIL FORECASTING MODEL")
+    print("=" * 80)
+    greenville_results = run_greenville(use_llm_api=use_api, model_type="ridge")
+
+    print("\n" + "=" * 80)
+    print("  STEP 6: RUNNING OAKLAND & SF BAY AREA METRO RETAIL FORECASTING MODEL")
     print("=" * 80)
     oakland_results = run_oakland(use_llm_api=use_api, model_type="ridge")
 
     print("\n" + "=" * 80)
-    print("  STEP 6: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")
+    print("  STEP 7: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")
     print("=" * 80)
     update_readme_forecasts()
     generate_public_dashboard()

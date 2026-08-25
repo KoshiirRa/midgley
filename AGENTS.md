@@ -115,7 +115,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 4. Localized Metro Area Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, `src/cincinnati_regional.py`, & `src/oakland_regional.py`)
+### 4. Localized Metro Area Calibration Agents (`src/tulsa_regional.py`, `src/newark_regional.py`, `src/cincinnati_regional.py`, `src/greenville_regional.py`, & `src/oakland_regional.py`)
 
 * **Role:** Ingest the base commodity forecast from the Main Quantitative Model and calibrate to local retail pump prices, dynamic regional rack margins, refinery dynamics, delivery hub logistics, and localized infrastructure shocks.
 * **Tulsa Regional Calibration Agent (`src/tulsa_regional.py`):**
@@ -127,6 +127,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Cincinnati Regional Calibration Agent (`src/cincinnati_regional.py`):**
   - Tailors market time series to the Cincinnati, OH & Northern Kentucky tri-state metropolitan area, modeling the dual-state fuel tax differential (Ohio state fuel tax $0.385/\text{gal}$ vs Kentucky state fuel tax $0.260/\text{gal}$, creating a persistent $\approx \$0.125/\text{gal}$ cross-river retail price gap).
   - Integrates Marathon Catlettsburg KY Refinery dynamics (291,000 bpd capacity), Ohio River marine terminal barge deliveries, and **Lower Mississippi River downriver low-water barge bottlenecks (Cairo, IL confluence & Memphis draft restrictions)**.
+* **Greenville Regional Calibration Agent (`src/greenville_regional.py`):**
+  - Tailors market time series to the Greenville, NC metropolitan area (PADD 1C South Atlantic) calibrated to live pump prices ($3.25/gal base).
+  - Integrates **Colonial Pipeline Line 1/2 breakout hubs at Selma NC & Apex NC**, Port of Wilmington marine oil terminals, North Carolina State Motor Fuel Tax ($0.404/gal variable formula), and **NOAA Pitt County (NCZ081) Tar River flooding & Atlantic hurricane alerts**.
 * **Oakland & SF Bay Area Regional Calibration Agent (`src/oakland_regional.py`):**
   - Tailors market time series to Oakland, CA ($4.950/gal base) and the 9-County SF Bay Area Region ($5.050/gal base), establishing high-cost PADD 5 West Coast benchmarks ("scare factor").
   - Models statutory **CARB & CA state tax burden ($0.953/gal total)**: 63.4¢ state excise tax, ~25¢ Cap-and-Trade carbon fees, ~18.5¢ LCFS credit overhead, and ~15¢ local sales tax/UST fees.
