@@ -6,9 +6,14 @@ Usage:
     python scripts/build_notebooks.py [--location ALL|national|tulsa|newark|cincinnati|greenville|oakland]
 """
 
+import os
 import sys
 import argparse
 import logging
+
+# Ensure project root is in sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from src.locations import LOCATIONS, build_all_notebooks, get_location
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
