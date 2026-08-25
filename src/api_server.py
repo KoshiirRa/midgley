@@ -6,9 +6,12 @@ scenario simulation, and OpenAPI / GPT Action plugin manifests.
 
 import os
 import json
+import hmac
+import hashlib
 import logging
 from typing import Optional, Dict, Any
 from datetime import datetime, timedelta
+
 
 from fastapi import FastAPI, Query, HTTPException, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -70,7 +73,10 @@ LOCALE_MAP = {
     "northbay": "NorthBay_CA",
     "northbay_ca": "NorthBay_CA",
     "greenville": "Greenville_NC",
-    "greenville_nc": "Greenville_NC"
+    "greenville_nc": "Greenville_NC",
+    "charlotte": "Charlotte_NC",
+    "charlotte_nc": "Charlotte_NC",
+    "clt": "Charlotte_NC"
 }
 
 # Regional PADD metadata
@@ -81,6 +87,7 @@ PADD_METADATA = {
     "Cincinnati_OH": {"name": "Cincinnati Metro Area, OH", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Cincinnati_KY": {"name": "Northern Kentucky Retail", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Greenville_NC": {"name": "Greenville Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
+    "Charlotte_NC": {"name": "Charlotte Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -286,6 +293,21 @@ def get_health():
     }
 
 
+@app.get("/api/v1/system/quota", summary="Get Finlight API Safety Valve Quota Status")
+def get_system_quota():
+    """
+    Returns current Finlight.me API quota usage, monthly/daily safety caps,
+    and active safety valve status.
+    """
+    from src.finlight_feed import get_finlight_quota_status
+    return {
+        "status": "success",
+        "timestamp": datetime.now().isoformat(),
+        "quota": get_finlight_quota_status()
+    }
+
+
+
 @app.get("/api/v1/prices/live", summary="Get Live Fuel Prices")
 def get_live_prices(
     locale: Optional[str] = Query("national", description="Locale code (national, tulsa, newark, cincinnati, oakland, bayarea)"),
@@ -390,6 +412,54 @@ def simulate_shock(req: SimulateRequest):
             "shock_delta_percent": round(shock_pct * 100, 2)
         }
     }
+
+
+def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -> bool:
+    secret_key = os.environ.get("MIDGLEY_WEBHOOK_SECRET")
+    if not secret_key:
+        # Secret not set -> permit in unauthenticated dev mode
+        return True
+
+    if not signature_header:
+        return False
+
+    clean_sig = signature_header.replace("sha256=", "").strip()
+    expected_sig = hmac.new(secret_key.encode("utf-8"), raw_body, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected_sig, clean_sig)
+
+
+class WebhookRequest(BaseModel):
+    headline: str = Field(..., json_schema_extra={"example": "Canada Announces Retaliatory Tariffs as Trade War Escalates"}, description="Breaking news headline text")
+    source: Optional[str] = Field("Webhook_Push", json_schema_extra={"example": "IFTTT_GoogleAlerts"}, description="Event source origin")
+
+
+@app.post("/api/v1/events/webhook", summary="Ingest Real-Time Breaking Event Webhook")
+async def ingest_event_webhook(
+    request: Request,
+    req: WebhookRequest,
+    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature")
+):
+    """
+    Strategy 4: Receives incoming breaking news headlines pushed by external webhooks
+    (IFTTT, Zapier, Google Alerts). Validated via HMAC-SHA256 signature when MIDGLEY_WEBHOOK_SECRET is set.
+    """
+    raw_body = await request.body()
+    if not verify_webhook_signature(raw_body, x_midgley_signature):
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized webhook request: Invalid or missing X-Midgley-Signature HMAC-SHA256 header."
+        )
+
+    from src.intraday_event_monitor import IntradayEventMonitor
+    monitor = IntradayEventMonitor()
+    result = monitor.process_incoming_headline(req.headline, source=req.source or "Webhook_Push")
+    return {
+        "status": "success",
+        "processed_at": datetime.now().isoformat(),
+        "result": result
+    }
+
+
 
 
 @app.get("/.well-known/ai-plugin.json", include_in_schema=False)

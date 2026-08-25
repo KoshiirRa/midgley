@@ -15,6 +15,7 @@ import requests
 import json
 import pandas as pd
 from datetime import datetime
+from typing import Tuple, Dict, Any, List
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,6 +23,127 @@ logger = logging.getLogger(__name__)
 FINLIGHT_BASE_URL = "https://api.finlight.me/v2/articles"
 CACHE_FILE = os.path.join("data", "finlight_cache.json")
 CACHE_TTL_SECONDS = 1800  # 30-minute disk cache TTL
+QUOTA_FILE = os.path.join("data", "finlight_quota.json")
+MAX_MONTHLY_CALLS = 150  # Hard safety cap (out of 250 free tier allowance)
+MAX_DAILY_CALLS = 10     # Soft daily cap to prevent burst exhaustion
+
+
+def _check_and_increment_quota() -> Tuple[bool, dict]:
+    """
+    Checks data/finlight_quota.json ledger against MAX_MONTHLY_CALLS and MAX_DAILY_CALLS caps.
+    If under limits, increments usage and returns (True, status).
+    If limit reached, returns (False, status) to trigger the safety valve intercept.
+    """
+    os.makedirs("data", exist_ok=True)
+    now = datetime.now()
+    month_key = now.strftime("%Y-%m")
+    day_key = now.strftime("%Y-%m-%d")
+
+    data = {
+        "current_month": month_key,
+        "monthly_calls": 0,
+        "daily_calls": {},
+        "last_reset": now.isoformat()
+    }
+
+    if os.path.exists(QUOTA_FILE):
+        try:
+            with open(QUOTA_FILE, "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+                if loaded.get("current_month") == month_key:
+                    data = loaded
+        except Exception as e:
+            logger.warning(f"Could not read quota ledger '{QUOTA_FILE}': {e}")
+
+    monthly_calls = data.get("monthly_calls", 0)
+    today_calls = data.get("daily_calls", {}).get(day_key, 0)
+
+    if monthly_calls >= MAX_MONTHLY_CALLS or today_calls >= MAX_DAILY_CALLS:
+        logger.warning(
+            f"🚨 FINLIGHT API SAFETY VALVE TRIPPED! "
+            f"Monthly calls: {monthly_calls}/{MAX_MONTHLY_CALLS}, Today: {today_calls}/{MAX_DAILY_CALLS}. "
+            f"Blocking HTTP request to preserve free tier quota."
+        )
+        return False, {
+            "allowed": False,
+            "monthly_calls": monthly_calls,
+            "today_calls": today_calls,
+            "max_monthly": MAX_MONTHLY_CALLS,
+            "max_daily": MAX_DAILY_CALLS
+        }
+
+    # Increment quota
+    data["monthly_calls"] = monthly_calls + 1
+    if "daily_calls" not in data or not isinstance(data["daily_calls"], dict):
+        data["daily_calls"] = {}
+    data["daily_calls"][day_key] = today_calls + 1
+    data["last_call"] = now.isoformat()
+
+    try:
+        with open(QUOTA_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        logger.warning(f"Could not write quota ledger '{QUOTA_FILE}': {e}")
+
+    return True, {
+        "allowed": True,
+        "monthly_calls": data["monthly_calls"],
+        "today_calls": data["daily_calls"][day_key],
+        "max_monthly": MAX_MONTHLY_CALLS,
+        "max_daily": MAX_DAILY_CALLS
+    }
+
+
+def get_finlight_quota_status() -> dict:
+    """Returns current Finlight API quota usage and safety valve status."""
+    now = datetime.now()
+    month_key = now.strftime("%Y-%m")
+    day_key = now.strftime("%Y-%m-%d")
+    monthly_calls = 0
+    today_calls = 0
+
+    if os.path.exists(QUOTA_FILE):
+        try:
+            with open(QUOTA_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if data.get("current_month") == month_key:
+                    monthly_calls = data.get("monthly_calls", 0)
+                    today_calls = data.get("daily_calls", {}).get(day_key, 0)
+        except Exception:
+            pass
+
+    return {
+        "month": month_key,
+        "monthly_calls": monthly_calls,
+        "max_monthly_calls": MAX_MONTHLY_CALLS,
+        "monthly_quota_remaining": max(0, MAX_MONTHLY_CALLS - monthly_calls),
+        "today_calls": today_calls,
+        "max_daily_calls": MAX_DAILY_CALLS,
+        "safety_valve_active": (monthly_calls >= MAX_MONTHLY_CALLS or today_calls >= MAX_DAILY_CALLS)
+    }
+
+
+def is_trading_hours(now_dt: datetime = None) -> bool:
+    """
+    Checks if current time is within US Energy Commodity Trading Hours
+    (08:00 AM - 05:00 PM EST, Monday through Friday).
+    """
+    if now_dt is None:
+        now_dt = datetime.now()
+    if now_dt.weekday() >= 5:  # Saturday/Sunday
+        return False
+    hour = now_dt.hour
+    return 8 <= hour < 17
+
+
+def fetch_finlight_on_demand(api_key: str = None, query: str = None) -> list:
+    """
+    On-demand forced fetch triggered by high-impact anomaly detection events.
+    Bypasses disk cache to fetch real-time breaking metadata.
+    """
+    logger.info("⚡ On-demand Finlight.me API fetch triggered by intraday shock evaluator.")
+    return fetch_finlight_articles(api_key=api_key, query=query, force_refresh=True)
+
 
 # Consolidated single targeted query string covering all energy market intelligence topics
 UNIFIED_ENERGY_QUERY = (
@@ -90,6 +212,7 @@ def fetch_finlight_articles(
 ) -> list:
     """
     Fetches raw articles from finlight.me POST /v2/articles endpoint with disk caching & rate-limit fallback.
+    Intercepted by hard Safety Valve quota ledger to prevent exceeding free tier limits.
     """
     if query is None or query in ENERGY_QUERIES:
         query = UNIFIED_ENERGY_QUERY
@@ -107,6 +230,14 @@ def fetch_finlight_articles(
         logger.debug("No FINLIGHT_API_KEY set. Checking disk cache or skipping live Finlight fetch.")
         cached_articles, _ = _read_cache(ttl_seconds=86400 * 7)  # allow up to 7-day stale fallback
         return cached_articles
+
+    # Check Hard Quota Safety Valve Ledger
+    allowed, quota_status = _check_and_increment_quota()
+    if not allowed:
+        logger.warning("Finlight API safety valve active (quota cap reached). Falling back to disk cache.")
+        cached_articles, _ = _read_cache(ttl_seconds=86400 * 7)
+        return cached_articles
+
 
     headers = {
         "accept": "application/json",

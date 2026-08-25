@@ -13,18 +13,20 @@ from src.locations import (
     run_newark_pipeline,
     run_cincinnati_pipeline,
     run_greenville_pipeline,
+    run_charlotte_pipeline,
     run_oakland_pipeline
 )
 from src.locations.tulsa.regional import fetch_tulsa_market_data, get_tulsa_regional_events, _generate_synthetic_tulsa_data
 from src.locations.newark.regional import fetch_newark_market_data, get_newark_regional_events, _generate_synthetic_newark_data
 from src.locations.cincinnati.regional import fetch_cincinnati_market_data, get_cincinnati_regional_events, _generate_synthetic_cincinnati_data
 from src.locations.greenville.regional import fetch_greenville_market_data, get_greenville_regional_events, _generate_synthetic_greenville_data
+from src.locations.charlotte.regional import fetch_charlotte_market_data, get_charlotte_regional_events, _generate_synthetic_charlotte_data
 from src.locations.oakland.regional import fetch_oakland_market_data, get_oakland_regional_events, _generate_synthetic_oakland_data, TOTAL_CARB_TAX_BURDEN
 
 
 def test_locations_registry_structure():
     """Verify that all expected locations are registered with required keys."""
-    expected_locations = {"national", "tulsa", "newark", "cincinnati", "greenville", "oakland"}
+    expected_locations = {"national", "tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland"}
     registered = set(list_locations())
     assert expected_locations.issubset(registered), f"Missing locations in registry: {expected_locations - registered}"
 
@@ -77,6 +79,15 @@ def test_greenville_synthetic_market_data():
     assert pytest.approx(df["greenville_retail_gasoline"].iloc[-1], rel=1e-3) == 3.25
 
 
+def test_charlotte_synthetic_market_data():
+    """Verify Charlotte regional data generator creates required feature columns."""
+    df = _generate_synthetic_charlotte_data("2024-01-01", "2024-01-31", live_current_price=3.28)
+    assert not df.empty
+    assert "charlotte_retail_gasoline" in df.columns
+    assert "paw_creek_rack_crack_spread" in df.columns
+    assert pytest.approx(df["charlotte_retail_gasoline"].iloc[-1], rel=1e-3) == 3.28
+
+
 def test_oakland_synthetic_market_data():
     """Verify Oakland & Bay Area regional data generator includes CARB tax burden breakdown."""
     df = _generate_synthetic_oakland_data("2024-01-01", "2024-01-31", live_oakland_price=4.950, live_bayarea_price=5.050)
@@ -93,6 +104,7 @@ def test_regional_events_loading():
     newark_events = get_newark_regional_events()
     cincinnati_events = get_cincinnati_regional_events()
     greenville_events = get_greenville_regional_events()
+    charlotte_events = get_charlotte_regional_events()
     oakland_events = get_oakland_regional_events()
 
     for name, ev_df in [
@@ -100,6 +112,7 @@ def test_regional_events_loading():
         ("Newark", newark_events),
         ("Cincinnati", cincinnati_events),
         ("Greenville", greenville_events),
+        ("Charlotte", charlotte_events),
         ("Oakland", oakland_events)
     ]:
         assert isinstance(ev_df, pd.DataFrame), f"{name} events is not a DataFrame"

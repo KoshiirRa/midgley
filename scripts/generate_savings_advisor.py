@@ -1,0 +1,352 @@
+"""
+Generate 1920s Vintage Savings Advisor Page (scripts/generate_savings_advisor.py)
+Generates `docs/savings.html` & `docs/savings/index.html` as a 1920s vintage petroleum lab page for timing gas purchases.
+"""
+
+import os
+
+DOCS_DIR = "docs"
+SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
+SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
+SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
+
+SAVINGS_HTML = """<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill-Up Advisor | DELCO Petroleum Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <style>
+        body {
+            background-color: #0D0907;
+            color: #FEF3C7;
+            font-family: Georgia, Garamond, Cambria, "Times New Roman", serif;
+        }
+        .font-mono {
+            font-family: "Courier Prime", "Courier New", Courier, monospace;
+        }
+        .font-pump {
+            font-family: "JetBrains Mono", "Courier New", Consolas, monospace;
+        }
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.5rem 0.2rem;
+            margin: 0.5em 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-900/40 selection:text-amber-200">
+
+    <!-- Sticky Antique Navigation Header -->
+    <header class="sticky top-0 z-50 bg-[#120D0A]/90 backdrop-blur-md border-b border-[#785327]/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-700 via-amber-800 to-amber-950 flex items-center justify-center text-amber-200 font-bold font-mono text-lg border border-[#785327] shadow-lg">M</div>
+                    <div>
+                        <a href="index.html" class="text-lg font-bold text-amber-100 tracking-tight flex items-center space-x-2 hover:text-amber-400 transition-colors font-mono">
+                            <span>MIDGLEY 1926</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-mono font-normal">Savings Advisor</span>
+                        </a>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-2 text-xs font-mono">
+                    <a href="index.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Overview</a>
+                    <a href="national.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Wholesale RBOB</a>
+                    <a href="tulsa.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Tulsa Refinery</a>
+                    <a href="savings.html" class="px-3 py-1.5 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-bold shadow-sm">Fill-Up Advisor</a>
+                    <a href="math.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Math Logs</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+        <!-- Hero Banner -->
+        <section class="bg-gradient-to-r from-[#17120F] via-[#1C1613] to-[#2B1B10] border-2 border-[#785327]/70 rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+            <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 space-y-3">
+                <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+                    <span class="px-2.5 py-1 rounded bg-[#2A1D13] text-emerald-400 border border-emerald-700/60 font-semibold">● 1920s Fill-Up Timing Engine</span>
+                    <span class="px-2.5 py-1 rounded bg-[#2A1D13] text-amber-300 border border-[#785327]">5-Day Out Trajectory</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-amber-100 tracking-tight font-serif">Fill-Up Timing &amp; Estimated Savings Advisor</h1>
+                <p class="text-stone-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+                    Mechanical price trajectory forecasting for individual motor cars and commercial tank fleets. Calculates optimal fill-up timing and projected tank savings.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Advisor Calculator Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- Left Controls & Recommendation (7 cols) -->
+            <section class="lg:col-span-7 space-y-6">
+
+                <div class="bg-[#17120F] border border-[#785327]/60 rounded-2xl p-6 space-y-5 shadow-2xl">
+                    <h2 class="text-xl font-bold text-amber-100 tracking-tight font-serif border-b border-[#785327]/40 pb-3">Configure Motor Car &amp; Location</h2>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-mono text-stone-400 uppercase tracking-wider mb-2">Select Metro Hub</label>
+                            <select id="savingsLocaleSelect" onchange="updateSavingsAdvisor()" class="w-full bg-[#0A0705] border border-[#785327]/60 rounded-xl px-4 py-2.5 text-sm font-mono text-amber-100 focus:outline-none focus:border-amber-500">
+                                <option value="tulsa" selected>Tulsa, OK (Mid-Continent Hub)</option>
+                                <option value="national">National Wholesale RBOB</option>
+                                <option value="newark">Newark, DE (PADD 1B Hub)</option>
+                                <option value="cincinnati">Cincinnati, OH (Ohio River Hub)</option>
+                                <option value="greenville">Greenville, NC (PADD 1C Hub)</option>
+                                <option value="charlotte">Charlotte, NC (Paw Creek Hub)</option>
+                                <option value="oakland">Oakland, CA (PADD 5 CARB Hub)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-stone-400 uppercase tracking-wider mb-2">Motor Car Tank Preset</label>
+                            <select id="tankPresetSelect" onchange="applyTankPreset()" class="w-full bg-[#0A0705] border border-[#785327]/60 rounded-xl px-4 py-2.5 text-sm font-mono text-amber-100 focus:outline-none focus:border-amber-500">
+                                <option value="12">Compact / Sedan (12 Gal)</option>
+                                <option value="15" selected>Standard SUV / Sedan (15 Gal)</option>
+                                <option value="24">Pickup / Large Truck (24 Gal)</option>
+                                <option value="100">Commercial Fleet (100 Gal)</option>
+                                <option value="custom">Custom Gallons...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="customGallonsRow" class="hidden">
+                        <label class="block text-xs font-mono text-stone-400 uppercase tracking-wider mb-2">Custom Tank Capacity (Gallons)</label>
+                        <input type="number" id="savingsGallonsInput" value="15.0" min="1" max="500" step="1" oninput="updateSavingsAdvisor()" class="w-full bg-[#0A0705] border border-[#785327]/60 rounded-xl px-4 py-2.5 text-sm font-mono text-amber-100 focus:outline-none focus:border-amber-500">
+                    </div>
+                </div>
+
+                <!-- Recommendation Callout Banner -->
+                <div id="recommendationBanner" class="bg-[#17120F] border-2 border-[#785327] rounded-2xl p-6 space-y-3 shadow-2xl">
+                    <div class="flex items-center justify-between">
+                        <span id="recBadge" class="text-xs px-3 py-1 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-mono font-bold uppercase tracking-wider">
+                            🟢 RECOMMENDATION: WAIT TO FILL UP
+                        </span>
+                        <span id="recOptimalDayBadge" class="text-xs font-mono text-amber-300">Optimal Day: Day 3</span>
+                    </div>
+
+                    <div id="recSummaryText" class="text-lg font-bold text-amber-100 font-mono">
+                        Wait until Day 3 to fill up. Save an estimated <span class="text-emerald-400">$0.90</span> per 15-gal tank (-$0.060/gal drop).
+                    </div>
+
+                    <p id="recDetailText" class="text-xs text-stone-400 leading-relaxed font-mono">
+                        Mechanical forecast predicts price bottom on Day 3 before slight rebound on Day 5.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- Right Col: Day-by-Day Trajectory Table (5 cols) -->
+            <section class="lg:col-span-5 bg-[#17120F] border border-[#785327]/60 rounded-2xl p-6 space-y-4 shadow-2xl">
+                <div class="flex items-center justify-between border-b border-[#785327]/40 pb-3">
+                    <h3 class="text-lg font-bold text-amber-100 tracking-tight font-serif">5-Day Trajectory Matrix</h3>
+                    <span class="text-xs font-mono text-stone-400">Day 0 to Day 5</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left font-mono text-xs">
+                        <thead>
+                            <tr class="text-stone-400 border-b border-[#785327]/40">
+                                <th class="pb-2">Horizon</th>
+                                <th class="pb-2">Price</th>
+                                <th class="pb-2">Tank Total</th>
+                                <th class="pb-2 text-right">Savings</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trajectoryTableBody" class="divide-y divide-[#785327]/30">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-[#785327]/60 bg-[#0A0705] py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 font-mono space-y-2 sm:space-y-0">
+            <div>Thomas Midgley Jr. Petroleum Engine &copy; 1926 - 2026</div>
+            <div>Refinery Telemetry &bull; Cushing WTI &bull; NOAA Weather &bull; RBOB Futures</div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        const FORECAST_TRAJECTORIES = {
+            tulsa: [
+                { day: 'Day 0 (Today)', price: 3.890 },
+                { day: 'Day 1', price: 3.875 },
+                { day: 'Day 2', price: 3.850 },
+                { day: 'Day 3 (Optimal)', price: 3.830 },
+                { day: 'Day 4', price: 3.845 },
+                { day: 'Day 5', price: 3.870 }
+            ],
+            national: [
+                { day: 'Day 0 (Today)', price: 3.184 },
+                { day: 'Day 1', price: 3.170 },
+                { day: 'Day 2', price: 3.155 },
+                { day: 'Day 3', price: 3.140 },
+                { day: 'Day 4 (Optimal)', price: 3.125 },
+                { day: 'Day 5', price: 3.145 }
+            ],
+            newark: [
+                { day: 'Day 0 (Today)', price: 3.350 },
+                { day: 'Day 1 (Optimal)', price: 3.330 },
+                { day: 'Day 2', price: 3.345 },
+                { day: 'Day 3', price: 3.360 },
+                { day: 'Day 4', price: 3.380 },
+                { day: 'Day 5', price: 3.410 }
+            ],
+            cincinnati: [
+                { day: 'Day 0 (Today)', price: 3.450 },
+                { day: 'Day 1', price: 3.440 },
+                { day: 'Day 2', price: 3.420 },
+                { day: 'Day 3 (Optimal)', price: 3.395 },
+                { day: 'Day 4', price: 3.410 },
+                { day: 'Day 5', price: 3.435 }
+            ],
+            greenville: [
+                { day: 'Day 0 (Today)', price: 3.250 },
+                { day: 'Day 1', price: 3.265 },
+                { day: 'Day 2', price: 3.280 },
+                { day: 'Day 3', price: 3.300 },
+                { day: 'Day 4', price: 3.325 },
+                { day: 'Day 5', price: 3.350 }
+            ],
+            charlotte: [
+                { day: 'Day 0 (Today)', price: 3.280 },
+                { day: 'Day 1', price: 3.265 },
+                { day: 'Day 2', price: 3.245 },
+                { day: 'Day 3 (Optimal)', price: 3.210 },
+                { day: 'Day 4', price: 3.225 },
+                { day: 'Day 5', price: 3.240 }
+            ],
+            oakland: [
+                { day: 'Day 0 (Today)', price: 4.950 },
+                { day: 'Day 1', price: 4.930 },
+                { day: 'Day 2', price: 4.900 },
+                { day: 'Day 3', price: 4.860 },
+                { day: 'Day 4 (Optimal)', price: 4.830 },
+                { day: 'Day 5', price: 4.855 }
+            ]
+        };
+
+        function applyTankPreset() {
+            const presetVal = document.getElementById('tankPresetSelect').value;
+            const customRow = document.getElementById('customGallonsRow');
+            if (presetVal === 'custom') {
+                customRow.classList.remove('hidden');
+            } else {
+                customRow.classList.add('hidden');
+                document.getElementById('savingsGallonsInput').value = presetVal;
+            }
+            updateSavingsAdvisor();
+        }
+
+        function updateSavingsAdvisor() {
+            const localeKey = document.getElementById('savingsLocaleSelect').value;
+            const gallons = parseFloat(document.getElementById('savingsGallonsInput').value) || 15.0;
+            const trajectory = FORECAST_TRAJECTORIES[localeKey] || FORECAST_TRAJECTORIES.tulsa;
+
+            const basePrice = trajectory[0].price;
+            const baseTankCost = basePrice * gallons;
+
+            let minPrice = basePrice;
+            let minIndex = 0;
+
+            trajectory.forEach((item, idx) => {
+                if (item.price < minPrice) {
+                    minPrice = item.price;
+                    minIndex = idx;
+                }
+            });
+
+            const maxSavings = (basePrice - minPrice) * gallons;
+            const priceDiffPerGal = minPrice - basePrice;
+
+            const tbody = document.getElementById('trajectoryTableBody');
+            tbody.innerHTML = '';
+
+            trajectory.forEach((item, idx) => {
+                const tankCost = item.price * gallons;
+                const savings = baseTankCost - tankCost;
+                const isOptimal = (idx === minIndex);
+
+                const tr = document.createElement('tr');
+                if (isOptimal) {
+                    tr.className = 'bg-[#2A1D13] text-amber-200 font-bold';
+                }
+
+                let savingsText = '';
+                if (savings > 0) {
+                    savingsText = `<span class="text-emerald-400 font-bold">+$${savings.toFixed(2)}</span>`;
+                } else if (savings < 0) {
+                    savingsText = `<span class="text-red-400">-$${Math.abs(savings).toFixed(2)}</span>`;
+                } else {
+                    savingsText = `<span class="text-stone-500">$0.00</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="py-2.5">${item.day} ${isOptimal ? '⚙️' : ''}</td>
+                    <td class="py-2.5 text-amber-400 font-bold">$${item.price.toFixed(3)}</td>
+                    <td class="py-2.5 text-stone-200">$${tankCost.toFixed(2)}</td>
+                    <td class="py-2.5 text-right">${savingsText}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const badge = document.getElementById('recBadge');
+            const summary = document.getElementById('recSummaryText');
+            const detail = document.getElementById('recDetailText');
+            const optimalBadge = document.getElementById('recOptimalDayBadge');
+
+            optimalBadge.innerText = `Optimal Day: ${trajectory[minIndex].day.split(' ')[0]}`;
+
+            if (minIndex === 0) {
+                badge.className = 'text-xs px-3 py-1 rounded bg-red-950 text-red-400 border border-red-800 font-mono font-bold uppercase tracking-wider';
+                badge.innerText = '🔴 RECOMMENDATION: FILL UP TODAY';
+                summary.innerHTML = `Fill up today at <span class="text-amber-400">$${basePrice.toFixed(3)}/gal</span>. Prices are projected to rise over the next 5 days.`;
+                detail.innerText = `Prices are expected to increase over the 5-day horizon.`;
+            } else {
+                badge.className = 'text-xs px-3 py-1 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-mono font-bold uppercase tracking-wider';
+                badge.innerText = '🟢 RECOMMENDATION: WAIT TO FILL UP';
+                summary.innerHTML = `Wait until ${trajectory[minIndex].day.split(' ')[0]} to fill up. Save an estimated <span class="text-emerald-400">$${maxSavings.toFixed(2)}</span> per ${gallons} gal tank (${priceDiffPerGal.toFixed(3)}/gal drop).`;
+                detail.innerText = `Forecast predicts price bottom on ${trajectory[minIndex].day}.`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateSavingsAdvisor();
+        });
+    </script>
+</body>
+</html>
+"""
+
+def generate():
+    os.makedirs(DOCS_DIR, exist_ok=True)
+    os.makedirs(SAVINGS_SUB_DIR, exist_ok=True)
+    
+    with open(SAVINGS_PATH, "w", encoding="utf-8") as f:
+        f.write(SAVINGS_HTML)
+        
+    with open(SAVINGS_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(SAVINGS_HTML)
+        
+    print(f"Successfully generated 1920s vintage {SAVINGS_PATH} & {SAVINGS_SUB_PATH}")
+
+if __name__ == "__main__":
+    generate()

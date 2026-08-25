@@ -24,6 +24,8 @@ def ensure_history_store():
             "forecast_target_date",
             "region",
             "model_version",
+            "run_type",
+            "headline_trigger",
             "current_base_price",
             "predicted_5d_price",
             "predicted_direction",
@@ -40,7 +42,9 @@ def ensure_history_store():
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
-    model_version: str = "v1.4-Finlight-Ridge"
+    model_version: str = "v1.4-Finlight-Ridge",
+    run_type: str = "DAILY_BATCH",
+    headline_trigger: str = ""
 ) -> int:
     """
     Logs a DataFrame of model predictions into prediction_history.csv.
@@ -63,6 +67,8 @@ def log_predictions(
             "forecast_target_date": target_date,
             "region": region,
             "model_version": model_version,
+            "run_type": run_type,
+            "headline_trigger": headline_trigger,
             "current_base_price": round(base_price, 4),
             "predicted_5d_price": round(pred_price, 4),
             "predicted_direction": pred_dir,
@@ -74,11 +80,12 @@ def log_predictions(
         
     new_df = pd.DataFrame(new_records)
     combined = pd.concat([history_df, new_df], ignore_index=True)
-    combined.drop_duplicates(subset=["forecast_target_date", "region", "model_version"], keep="last", inplace=True)
+    combined.drop_duplicates(subset=["forecast_target_date", "region", "model_version", "run_type"], keep="last", inplace=True)
     combined.to_csv(HISTORY_CSV_PATH, index=False)
     
-    logger.info(f"Logged {len(new_records)} predictions for region '{region}' under version '{model_version}'.")
+    logger.info(f"Logged {len(new_records)} predictions for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
     return len(new_records)
+
 
 
 def backfill_actual_prices_and_evaluate() -> pd.DataFrame:

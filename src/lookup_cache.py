@@ -149,3 +149,9 @@ class LookupCache:
 
 # Global singleton cache instance
 global_cache = LookupCache()
+
+
+def clear_lookup_cache():
+    """Clears the global lookup cache instance."""
+    global_cache.clear()
+

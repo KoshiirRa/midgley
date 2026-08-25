@@ -11,6 +11,7 @@ from src.locations.tulsa import run_tulsa_pipeline, build_tulsa_notebook
 from src.locations.newark import run_newark_pipeline, build_newark_notebook
 from src.locations.cincinnati import run_cincinnati_pipeline, build_cincinnati_notebook
 from src.locations.greenville import run_greenville_pipeline, build_greenville_notebook
+from src.locations.charlotte import run_charlotte_pipeline, build_charlotte_notebook
 from src.locations.oakland import run_oakland_pipeline, build_oakland_notebook
 
 logger = logging.getLogger(__name__)
@@ -60,6 +61,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_greenville_pipeline,
         "build_notebook": build_greenville_notebook,
         "notebook_filename": "greenville_gas_price_llm_forecasting.ipynb"
+    },
+    "charlotte": {
+        "id": "charlotte",
+        "name": "Charlotte Metro, NC (PADD 1C)",
+        "type": "regional",
+        "module": "src.locations.charlotte",
+        "run_pipeline": run_charlotte_pipeline,
+        "build_notebook": build_charlotte_notebook,
+        "notebook_filename": "charlotte_gas_price_llm_forecasting.ipynb"
     },
     "oakland": {
         "id": "oakland",
@@ -112,5 +122,6 @@ __all__ = [
     "run_newark_pipeline",
     "run_cincinnati_pipeline",
     "run_greenville_pipeline",
+    "run_charlotte_pipeline",
     "run_oakland_pipeline"
 ]

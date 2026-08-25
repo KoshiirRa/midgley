@@ -25,15 +25,18 @@ TULSA_PATH = os.path.join(DOCS_DIR, "tulsa.html")
 NEWARK_PATH = os.path.join(DOCS_DIR, "newark.html")
 CINCINNATI_PATH = os.path.join(DOCS_DIR, "cincinnati.html")
 GREENVILLE_PATH = os.path.join(DOCS_DIR, "greenville.html")
+CHARLOTTE_PATH = os.path.join(DOCS_DIR, "charlotte.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 MATH_PATH = os.path.join(DOCS_DIR, "math.html")
+SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
 
 NATIONAL_SUB_DIR = os.path.join(DOCS_DIR, "national")
 TULSA_SUB_DIR = os.path.join(DOCS_DIR, "tulsa")
 NEWARK_SUB_DIR = os.path.join(DOCS_DIR, "newark")
 CINCINNATI_SUB_DIR = os.path.join(DOCS_DIR, "cincinnati")
 GREENVILLE_SUB_DIR = os.path.join(DOCS_DIR, "greenville")
+CHARLOTTE_SUB_DIR = os.path.join(DOCS_DIR, "charlotte")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 
@@ -42,6 +45,7 @@ TULSA_SUB_PATH = os.path.join(TULSA_SUB_DIR, "index.html")
 NEWARK_SUB_PATH = os.path.join(NEWARK_SUB_DIR, "index.html")
 CINCINNATI_SUB_PATH = os.path.join(CINCINNATI_SUB_DIR, "index.html")
 GREENVILLE_SUB_PATH = os.path.join(GREENVILLE_SUB_DIR, "index.html")
+CHARLOTTE_SUB_PATH = os.path.join(CHARLOTTE_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 
@@ -149,8 +153,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
     nat_link = f"{rel_prefix}national.html"
@@ -158,9 +163,11 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     new_link = f"{rel_prefix}newark.html"
     cin_link = f"{rel_prefix}cincinnati.html"
     grn_link = f"{rel_prefix}greenville.html"
+    clt_link = f"{rel_prefix}charlotte.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
+    sav_link = f"{rel_prefix}savings.html"
 
     badge_html = get_release_badge()
 
@@ -204,6 +211,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         <a href="{grn_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
                         </a>
+                        <a href="{clt_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
                         <a href="{oak_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
                         </a>
@@ -213,6 +223,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     </div>
                 </div>
 
+                <a href="{sav_link}" class="px-3 py-1.5 rounded-lg {savings_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-piggy-bank"></i> Fill-Up Advisor
+                </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
@@ -232,6 +245,7 @@ def generate_public_dashboard():
     os.makedirs(NEWARK_SUB_DIR, exist_ok=True)
     os.makedirs(CINCINNATI_SUB_DIR, exist_ok=True)
     os.makedirs(GREENVILLE_SUB_DIR, exist_ok=True)
+    os.makedirs(CHARLOTTE_SUB_DIR, exist_ok=True)
     os.makedirs(OAKLAND_SUB_DIR, exist_ok=True)
     os.makedirs(BAYAREA_SUB_DIR, exist_ok=True)
 
@@ -254,6 +268,7 @@ def generate_public_dashboard():
         'Cincinnati_OH': {'base': 3.450, 'pred': 3.350},
         'Cincinnati_KY': {'base': 3.325, 'pred': 3.225},
         'Greenville_NC': {'base': 3.250, 'pred': 3.150},
+        'Charlotte_NC': {'base': 3.280, 'pred': 3.180},
         'Oakland_CA': {'base': 5.550, 'pred': 4.840},
         'BayArea_CA': {'base': 5.650, 'pred': 4.940},
         'SanFrancisco_CA': {'base': 5.720, 'pred': 5.010},
@@ -548,6 +563,41 @@ def generate_public_dashboard():
 
                     <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
                         Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 6: Charlotte, NC Retail (Paw Creek Distribution Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C South Atlantic</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            40.4¢ NC Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Charlotte_NC']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">${prices_map['Charlotte_NC']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek Hub</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.80%</strong></span>
+                    </div>
+
+                    <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -1885,6 +1935,153 @@ def generate_public_dashboard():
         f.write(build_greenville_html("../"))
 
     # ---------------------------------------------------------------------------
+    # CHARLOTTE METRO RETAIL GAS PAGE (docs/charlotte.html & docs/charlotte/index.html)
+    # ---------------------------------------------------------------------------
+    def build_charlotte_html(rel_prefix: str = "") -> str:
+        nav_charlotte = get_nav_header("charlotte", rel_prefix)
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charlotte, NC Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(6, 182, 212, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_CHARLOTTE}}
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-cyan-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Charlotte Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                PADD 1C South Atlantic Model
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{CHARLOTTE_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-cyan-400">${{CHARLOTTE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-cyan-300 font-semibold">-3.0% Projected Trend</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">$0.1215<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: 4.65% | RMSE: $0.1580</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">58.80%</p>
+                <p class="text-xs text-slate-500">Ridge α=10.0 Estimator</p>
+            </div>
+        </div>
+
+        <!-- Regional Dynamics Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-network-wired text-cyan-400"></i> Paw Creek Petroleum Distribution Hub Dynamics
+                </h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Charlotte, NC (Mecklenburg County) serves as the primary refined petroleum distribution node for western North Carolina and upper South Carolina. Major refined product flows arrive via <strong>Colonial Pipeline Line 1 (Gasoline)</strong> and <strong>Plantation Pipeline</strong>, breaking out at the <strong>Paw Creek Petroleum Distribution Hub</strong> in West Charlotte.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
+                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
+                        <strong class="text-cyan-300 block mb-1">Paw Creek Tank Farm Breakout</strong>
+                        <span class="text-slate-400">Paw Creek tank farms serve as the main wholesale rack pricing and rack delivery hub for Mecklenburg and York counties.</span>
+                    </div>
+                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
+                        <strong class="text-cyan-300 block mb-1">NC / SC Cross-Border Tax Differential</strong>
+                        <span class="text-slate-400">NC motor fuel tax ($0.404/gal) vs SC motor fuel tax ($0.288/gal) creates a persistent ~$0.116/gal cross-border tax gap with Fort Mill & Rock Hill, SC.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather & Piedmont Risk -->
+            <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-bolt text-amber-400"></i> Mecklenburg County NOAA Alerts
+                </h3>
+                <p class="text-xs text-slate-300">
+                    NOAA NWS zone <strong>NCZ071</strong> alerts track inland hurricane wind gusts, Catawba River basin flash flood emergencies, and winter ice storms that lock down I-85 & I-77 freight corridors.
+                </p>
+                <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-200">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>
+                    <strong>Piedmont Ice & Transit Factor:</strong> Winter freezing rain events coat interstate corridors, halting tank truck dispatch out of Paw Creek.
+                </div>
+            </div>
+        </div>
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-cyan-400"></i> Charlotte Regional Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Paw Creek Hub Power Blackout</h4>
+                    <p class="text-xs text-slate-400">Substation outage halts automated rack loading at West Charlotte distribution hub.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.185/gal (+5.64%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Colonial Line 1 Batch Throttling</h4>
+                    <p class="text-xs text-slate-400">Emergency batch throttling reduces wholesale gasoline deliveries to Charlotte terminals.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.165/gal (+5.03%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Winter Ice Storm Transit Lockdown</h4>
+                    <p class="text-xs text-slate-400">Freezing rain locks down I-85 & I-77 logistics corridors across Mecklenburg County.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.140/gal (+4.27%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Charlotte, NC Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
+
+    with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
+        f.write(build_charlotte_html(""))
+    with open(CHARLOTTE_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_charlotte_html("../"))
+
+    # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
@@ -2722,7 +2919,19 @@ def generate_public_dashboard():
     with open(MATH_PATH, "w", encoding="utf-8") as f:
         f.write(math_html)
 
-    logger.info(f"Successfully generated public dashboard web app at {INDEX_PATH}, {NATIONAL_PATH}, {TULSA_PATH}, and math guide at {MATH_PATH}")
+    try:
+        from scripts.generate_standalone_example import generate as generate_example
+        generate_example()
+    except Exception as ex:
+        logger.warning(f"Could not generate standalone example page: {ex}")
+
+    try:
+        from scripts.generate_savings_advisor import generate as generate_savings
+        generate_savings()
+    except Exception as ex:
+        logger.warning(f"Could not generate savings advisor page: {ex}")
+
+    logger.info(f"Successfully generated public dashboard web app at {INDEX_PATH}, {NATIONAL_PATH}, {TULSA_PATH}, {SAVINGS_PATH}, and math guide at {MATH_PATH}")
 
 if __name__ == "__main__":
     generate_public_dashboard()

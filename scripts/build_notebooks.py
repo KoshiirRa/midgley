@@ -3,7 +3,7 @@ Unified Programmatic Notebook Builder CLI (scripts/build_notebooks.py)
 Generates Jupyter notebooks for all registered locations or a specified location.
 
 Usage:
-    python scripts/build_notebooks.py [--location ALL|national|tulsa|newark|cincinnati|greenville|oakland]
+    python scripts/build_notebooks.py [--location ALL|national|tulsa|newark|cincinnati|greenville|charlotte|oakland]
 """
 
 import os
@@ -24,7 +24,7 @@ def main():
     parser.add_argument(
         "--location", "-l",
         default="ALL",
-        help="Target location ID (ALL, national, tulsa, newark, cincinnati, greenville, oakland)"
+        help="Target location ID (ALL, national, tulsa, newark, cincinnati, greenville, charlotte, oakland)"
     )
     args = parser.parse_args()
     

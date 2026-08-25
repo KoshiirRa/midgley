@@ -191,5 +191,28 @@ def get_greenville_weather_dataset() -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_charlotte_weather_dataset() -> pd.DataFrame:
+    """
+    Localized NOAA Weather Dataset for Charlotte & Mecklenburg County, NC (NCZ071) & Piedmont NC Region:
+    - NOAA NHC Hurricane & Inland Tropical Cyclone Advisories (Atlantic hurricanes impacting Piedmont NC transit corridors)
+    - NOAA NWS Flash Flood Emergencies (Catawba River basin flooding in Mecklenburg & York counties)
+    - NOAA NWS Severe Convective Thunderstorms, Derecho Winds & Winter Ice Storm Alerts along I-85 / I-77.
+    """
+    charlotte_weather_events = [
+        {"date": "2021-08-17", "headline": "NOAA NHC Tropical Depression Warning: Remnants of Tropical Storm Fred drop 5 inches of rain across Charlotte metro and Mecklenburg County (NCZ071).", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Tropical Storm / Inland Rain"},
+        {"date": "2022-09-30", "headline": "NOAA NHC Hurricane Warning: Hurricane Ian inland high wind gusts knock out Duke Energy power lines near Paw Creek tank farms.", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Inland Hurricane / Power Outage"},
+        {"date": "2022-12-24", "headline": "NOAA NWS Hard Freeze Watch: Polar Vortex drops temperatures to 10°F in Charlotte, freezing process utility water at Paw Creek distribution hub.", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Polar Vortex Freeze"},
+        {"date": "2023-08-31", "headline": "NOAA NHC Tropical Storm Statement: Remnants of Hurricane Idalia spawn severe thunderstorms across Piedmont NC, delaying tank truck transits.", "zone": "NCZ071 (Piedmont NC)", "weather_type": "Tropical Storm / Wind"},
+        {"date": "2024-01-09", "headline": "NOAA NWS High Wind & Flash Flood Warning: Severe storm front causes urban flash flooding across I-85 and Charlotte-Douglas Airport (KCLT).", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Flash Flood Emergency"},
+        {"date": "2024-08-09", "headline": "NOAA NWS River Flood Warning: Tropical Storm Debby forces Catawba River tributaries to overflow, closing delivery access roads to Paw Creek.", "zone": "NCZ071 (Catawba River Basin)", "weather_type": "River Crest Flood"},
+        {"date": "2025-01-22", "headline": "NOAA NWS Ice Storm Warning: Heavy freezing rain coats I-85 and I-77 in Mecklenburg County, locking down tank truck dispatch.", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Ice Storm / Transit Lockdown"},
+        {"date": "2026-02-09", "headline": "NOAA SPC Severe Thunderstorm Watch: Squall line with 70 mph winds causes power substation trips near Paw Creek petroleum tank farm.", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Severe Convective / Grid Trip"}
+    ]
+    df = pd.DataFrame(charlotte_weather_events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
+
 
 

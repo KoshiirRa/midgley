@@ -67,6 +67,14 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(data["locale"]["region_id"], "Greenville_NC")
         self.assertEqual(data["locale"]["padd_region"], "PADD 1C South Atlantic")
 
+    def test_get_charlotte_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=charlotte")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "Charlotte_NC")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 1C South Atlantic")
+
     def test_post_simulate(self):
         payload = {
             "scenario_id": "hormuz_blockade",
@@ -94,6 +102,43 @@ class TestAPIServer(unittest.TestCase):
         data = res.json()
         self.assertEqual(data["schema_version"], "v1")
         self.assertEqual(data["name_for_human"], "Midgley Gas Price Intelligence")
+
+    def test_post_webhook_hmac_verification(self):
+        import hmac
+        import hashlib
+        import json
+        from unittest.mock import patch
+
+        secret = "test_secret_key_123"
+        payload = {"headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates", "source": "Test_Runner"}
+        body_bytes = json.dumps(payload).encode("utf-8")
+        valid_sig = hmac.new(secret.encode("utf-8"), body_bytes, hashlib.sha256).hexdigest()
+
+        with patch.dict("os.environ", {"MIDGLEY_WEBHOOK_SECRET": secret}):
+            # Test 1: Valid signature -> 200 OK
+            res_valid = self.client.post(
+                "/api/v1/events/webhook",
+                content=body_bytes,
+                headers={"Content-Type": "application/json", "X-Midgley-Signature": valid_sig}
+            )
+            self.assertEqual(res_valid.status_code, 200)
+
+            # Test 2: Invalid signature -> 401 Unauthorized
+            res_invalid = self.client.post(
+                "/api/v1/events/webhook",
+                content=body_bytes,
+                headers={"Content-Type": "application/json", "X-Midgley-Signature": "bad_signature"}
+            )
+            self.assertEqual(res_invalid.status_code, 401)
+
+            # Test 3: Missing signature header -> 401 Unauthorized
+            res_missing = self.client.post(
+                "/api/v1/events/webhook",
+                content=body_bytes,
+                headers={"Content-Type": "application/json"}
+            )
+            self.assertEqual(res_missing.status_code, 401)
+
 
 
 if __name__ == "__main__":
