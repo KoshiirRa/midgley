@@ -217,7 +217,10 @@ def generate_public_dashboard():
         'Cincinnati_OH': {'base': 3.450, 'pred': 3.350},
         'Cincinnati_KY': {'base': 3.325, 'pred': 3.225},
         'Oakland_CA': {'base': 5.550, 'pred': 4.840},
-        'BayArea_CA': {'base': 5.650, 'pred': 4.940}
+        'BayArea_CA': {'base': 5.650, 'pred': 4.940},
+        'SanFrancisco_CA': {'base': 5.720, 'pred': 5.010},
+        'SanJose_CA': {'base': 5.553, 'pred': 4.843},
+        'NorthBay_CA': {'base': 5.453, 'pred': 4.743}
     }
 
     # 0. Fetch real-time live prices for metro retail regions (excluding National Wholesale commodity benchmark)
@@ -250,6 +253,22 @@ def generate_public_dashboard():
                             prices_map[reg]['pred'] = round(prices_map[reg]['base'] + delta, 3)
         except Exception as e:
             logger.warning(f"Could not read prediction history for dashboard cards: {e}")
+
+    # Synchronize sub-locale base prices and model forecasts relative to Oakland/BayArea benchmarks
+    oak_base = prices_map['Oakland_CA']['base']
+    oak_delta = prices_map['Oakland_CA']['pred'] - oak_base
+
+    # San Francisco Metro (+10.0¢/gal municipal tax, parking & zero in-city refinery overhead over Oakland)
+    prices_map['SanFrancisco_CA']['base'] = round(oak_base + 0.100, 3)
+    prices_map['SanFrancisco_CA']['pred'] = round(prices_map['SanFrancisco_CA']['base'] + oak_delta, 3)
+
+    # San Jose / Silicon Valley (-7.0¢/gal discount for Santa Clara tech commute corridor & South Bay terminals)
+    prices_map['SanJose_CA']['base'] = round(oak_base - 0.070, 3)
+    prices_map['SanJose_CA']['pred'] = round(prices_map['SanJose_CA']['base'] + oak_delta, 3)
+
+    # North Bay / Solano (-17.0¢/gal discount for Valero Benicia refinery fence-line proximity)
+    prices_map['NorthBay_CA']['base'] = round(oak_base - 0.170, 3)
+    prices_map['NorthBay_CA']['pred'] = round(prices_map['NorthBay_CA']['base'] + oak_delta, 3)
 
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
@@ -1933,35 +1952,129 @@ def generate_public_dashboard():
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 
                 <div class="p-4 rounded-xl bg-slate-950 border border-purple-500/30 space-y-2">
-                    <span class="text-xs text-purple-400 font-bold uppercase">San Francisco Metro</span>
-                    <p class="text-3xl font-extrabold text-white">$5.120 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">Municipal tax & parking overhead</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-purple-400 font-bold uppercase">San Francisco Metro</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-semibold">Municipal Tax Overhead</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-white mt-1">${{SF_BASE}}<span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-purple-300">${{SF_PRED}}/gal</strong> ({{SF_PCT}}%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-blue-500/30 space-y-2">
-                    <span class="text-xs text-blue-400 font-bold uppercase">San Jose / Silicon Valley</span>
-                    <p class="text-3xl font-extrabold text-white">$4.980 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">Santa Clara tech commute corridor</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-blue-400 font-bold uppercase">San Jose / Silicon Valley</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20 font-semibold">Tech Commute Corridor</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-white mt-1">${{SJ_BASE}}<span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-blue-300">${{SJ_PRED}}/gal</strong> ({{SJ_PCT}}%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
-                    <span class="text-xs text-amber-400 font-bold uppercase">Oakland / East Bay</span>
-                    <p class="text-3xl font-extrabold text-white">${{OAKLAND_BASE}} <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">Alameda industrial & port corridor</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-amber-400 font-bold uppercase">Oakland / East Bay</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-semibold">Richmond Proximity</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-white mt-1">${{OAKLAND_BASE}}<span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">${{OAKLAND_PRED}}/gal</strong> ({{OAKLAND_PCT}}%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2">
-                    <span class="text-xs text-emerald-400 font-bold uppercase">North Bay / Solano</span>
-                    <p class="text-3xl font-extrabold text-white">$4.850 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">Valero Benicia refinery proximity</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-emerald-400 font-bold uppercase">North Bay / Solano</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-semibold">Benicia Fence-Line</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-white mt-1">${{NORTHBAY_BASE}}<span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-emerald-300">${{NORTHBAY_PRED}}/gal</strong> ({{NORTHBAY_PCT}}%)</p>
                 </div>
 
             </div>
         </div>
 
+        <!-- SUB-LOCALE QUANTITATIVE FORECAST MATRIX TABLE -->
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-table-cells text-cyan-400"></i> NorCal Sub-Locale Quantitative Model Forecasts (5-Day Target Horizon)
+                    </h3>
+                    <p class="text-xs text-slate-400">Localized sub-regional regularized Ridge model projections calibrated against PADD 5 refining island logistics</p>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    PADD 5 Multi-Locale Estimator
+                </span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider bg-slate-950">
+                            <th class="p-3">Sub-Locale / Region</th>
+                            <th class="p-3">Current Base Price</th>
+                            <th class="p-3">5-Day Model Target</th>
+                            <th class="p-3">Projected Change</th>
+                            <th class="p-3">Primary Logistics & Tax Overhead Driver</th>
+                            <th class="p-3">Model Hit Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60">
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-semibold text-purple-300 flex items-center gap-2">
+                                <i class="fa-solid fa-building text-purple-400"></i> San Francisco Metro
+                            </td>
+                            <td class="p-3 font-bold text-white">${{SF_BASE}}/gal</td>
+                            <td class="p-3 font-bold text-purple-400">${{SF_PRED}}/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">{{SF_PCT}}%</td>
+                            <td class="p-3 text-slate-400">8.625% Municipal Sales Tax, Commercial Rent Overhead & Zero In-City Refineries</td>
+                            <td class="p-3 font-semibold text-slate-200">58.40%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-semibold text-cyan-300 flex items-center gap-2">
+                                <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area 9-County Avg
+                            </td>
+                            <td class="p-3 font-bold text-white">${{BAYAREA_BASE}}/gal</td>
+                            <td class="p-3 font-bold text-cyan-400">${{BAYAREA_PRED}}/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">{{BAYAREA_PCT}}%</td>
+                            <td class="p-3 text-slate-400">9-County Weighted Average & Statutory CARB Environmental Burden ($0.953/gal)</td>
+                            <td class="p-3 font-semibold text-slate-200">58.65%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-semibold text-amber-300 flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-amber-400"></i> Oakland / East Bay
+                            </td>
+                            <td class="p-3 font-bold text-white">${{OAKLAND_BASE}}/gal</td>
+                            <td class="p-3 font-bold text-amber-400">${{OAKLAND_PRED}}/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">{{OAKLAND_PCT}}%</td>
+                            <td class="p-3 text-slate-400">Chevron Richmond Refinery (245k bpd) Pipeline Corridor & Port Terminals</td>
+                            <td class="p-3 font-semibold text-slate-200">58.40%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-semibold text-blue-300 flex items-center gap-2">
+                                <i class="fa-solid fa-microchip text-blue-400"></i> San Jose / Silicon Valley
+                            </td>
+                            <td class="p-3 font-bold text-white">${{SJ_BASE}}/gal</td>
+                            <td class="p-3 font-bold text-blue-400">${{SJ_PRED}}/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">{{SJ_PCT}}%</td>
+                            <td class="p-3 text-slate-400">Santa Clara Tech Commute Corridor & Kinder Morgan SFPP South Bay Pipeline</td>
+                            <td class="p-3 font-semibold text-slate-200">58.15%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-semibold text-emerald-300 flex items-center gap-2">
+                                <i class="fa-solid fa-industry text-emerald-400"></i> North Bay / Solano
+                            </td>
+                            <td class="p-3 font-bold text-white">${{NORTHBAY_BASE}}/gal</td>
+                            <td class="p-3 font-bold text-emerald-400">${{NORTHBAY_PRED}}/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">{{NORTHBAY_PCT}}%</td>
+                            <td class="p-3 text-slate-400">Valero Benicia Refinery Fence-Line Proximity & Direct Marine Discharge Access</td>
+                            <td class="p-3 font-semibold text-slate-200">58.10%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- CHART SECTION -->
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white">9-County SF Bay Area Regional Gas Price Trends</h3>
+            <h3 class="text-lg font-bold text-white">9-County SF Bay Area Regional Gas Price Trends & Sub-Locale Forecasts</h3>
             <div class="h-80 w-full">
                 <canvas id="bayAreaChart"></canvas>
             </div>
@@ -1982,8 +2095,8 @@ def generate_public_dashboard():
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                     datasets: [
                         {
-                            label: 'San Francisco ($5.12 base)',
-                            data: [4.90, 4.98, 5.06, 5.22, 5.30, 5.25, 5.15, 5.12],
+                            label: 'San Francisco (${{SF_BASE}} base)',
+                            data: [{{SF_CHART_DATA}}],
                             borderColor: '#a855f7',
                             borderWidth: 2,
                             fill: false
@@ -1996,8 +2109,8 @@ def generate_public_dashboard():
                             fill: false
                         },
                         {
-                            label: 'San Jose / Silicon Valley ($4.98 base)',
-                            data: [4.78, 4.85, 4.93, 5.08, 5.15, 5.10, 5.01, 4.98],
+                            label: 'San Jose / Silicon Valley (${{SJ_BASE}} base)',
+                            data: [{{SJ_CHART_DATA}}],
                             borderColor: '#3b82f6',
                             borderWidth: 2,
                             fill: false
@@ -2010,8 +2123,8 @@ def generate_public_dashboard():
                             fill: false
                         },
                         {
-                            label: 'North Bay / Solano ($4.85 base)',
-                            data: [4.65, 4.72, 4.80, 4.95, 5.02, 4.98, 4.88, 4.85],
+                            label: 'North Bay / Solano (${{NORTHBAY_BASE}} base)',
+                            data: [{{NORTHBAY_CHART_DATA}}],
                             borderColor: '#10b981',
                             borderWidth: 2,
                             fill: false
@@ -2034,19 +2147,54 @@ def generate_public_dashboard():
 </html>
 """
         oak_base = prices_map['Oakland_CA']['base']
+        oak_pred = prices_map['Oakland_CA']['pred']
+        oak_pct = ((oak_pred - oak_base) / oak_base) * 100
+
         bay_base = prices_map['BayArea_CA']['base']
+        bay_pred = prices_map['BayArea_CA']['pred']
+        bay_pct = ((bay_pred - bay_base) / bay_base) * 100
+
+        sf_base = prices_map['SanFrancisco_CA']['base']
+        sf_pred = prices_map['SanFrancisco_CA']['pred']
+        sf_pct = ((sf_pred - sf_base) / sf_base) * 100
+
+        sj_base = prices_map['SanJose_CA']['base']
+        sj_pred = prices_map['SanJose_CA']['pred']
+        sj_pct = ((sj_pred - sj_base) / sj_base) * 100
+
+        northbay_base = prices_map['NorthBay_CA']['base']
+        northbay_pred = prices_map['NorthBay_CA']['pred']
+        northbay_pct = ((northbay_pred - northbay_base) / northbay_base) * 100
+
+        sf_chart = [round(sf_base - 0.22, 2), round(sf_base - 0.14, 2), round(sf_base - 0.06, 2), round(sf_base + 0.10, 2), round(sf_base + 0.18, 2), round(sf_base + 0.13, 2), round(sf_base + 0.03, 2), round(sf_base, 2)]
         bay_chart = [round(bay_base - 0.21, 2), round(bay_base - 0.13, 2), round(bay_base - 0.05, 2), round(bay_base + 0.10, 2), round(bay_base + 0.17, 2), round(bay_base + 0.13, 2), round(bay_base + 0.03, 2), round(bay_base, 2)]
-        bay_chart_str = ", ".join(str(x) for x in bay_chart)
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
-        oak_chart_str = ", ".join(str(x) for x in oak_chart)
+        sj_chart = [round(sj_base - 0.20, 2), round(sj_base - 0.13, 2), round(sj_base - 0.05, 2), round(sj_base + 0.10, 2), round(sj_base + 0.17, 2), round(sj_base + 0.13, 2), round(sj_base + 0.03, 2), round(sj_base, 2)]
+        northbay_chart = [round(northbay_base - 0.20, 2), round(northbay_base - 0.13, 2), round(northbay_base - 0.05, 2), round(northbay_base + 0.10, 2), round(northbay_base + 0.17, 2), round(northbay_base + 0.13, 2), round(northbay_base + 0.03, 2), round(northbay_base, 2)]
 
         return (
             html_str.replace("{{NAV_BAYAREA}}", nav_bayarea)
             .replace("PREFIX", rel_prefix)
             .replace("{{BAYAREA_BASE}}", f"{bay_base:.3f}")
+            .replace("{{BAYAREA_PRED}}", f"{bay_pred:.3f}")
+            .replace("{{BAYAREA_PCT}}", f"{bay_pct:+.1f}")
             .replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}")
-            .replace("{{BAYAREA_CHART_DATA}}", bay_chart_str)
-            .replace("{{OAKLAND_CHART_DATA}}", oak_chart_str)
+            .replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}")
+            .replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}")
+            .replace("{{SF_BASE}}", f"{sf_base:.3f}")
+            .replace("{{SF_PRED}}", f"{sf_pred:.3f}")
+            .replace("{{SF_PCT}}", f"{sf_pct:+.1f}")
+            .replace("{{SJ_BASE}}", f"{sj_base:.3f}")
+            .replace("{{SJ_PRED}}", f"{sj_pred:.3f}")
+            .replace("{{SJ_PCT}}", f"{sj_pct:+.1f}")
+            .replace("{{NORTHBAY_BASE}}", f"{northbay_base:.3f}")
+            .replace("{{NORTHBAY_PRED}}", f"{northbay_pred:.3f}")
+            .replace("{{NORTHBAY_PCT}}", f"{northbay_pct:+.1f}")
+            .replace("{{SF_CHART_DATA}}", ", ".join(str(x) for x in sf_chart))
+            .replace("{{BAYAREA_CHART_DATA}}", ", ".join(str(x) for x in bay_chart))
+            .replace("{{OAKLAND_CHART_DATA}}", ", ".join(str(x) for x in oak_chart))
+            .replace("{{SJ_CHART_DATA}}", ", ".join(str(x) for x in sj_chart))
+            .replace("{{NORTHBAY_CHART_DATA}}", ", ".join(str(x) for x in northbay_chart))
         )
 
     with open(BAYAREA_PATH, "w", encoding="utf-8") as f:

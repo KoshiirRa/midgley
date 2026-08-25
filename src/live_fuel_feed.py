@@ -72,6 +72,27 @@ REGION_METADATA = {
         "static_anchor": 5.650,
         "name": "SF Bay Area 9-County Avg",
         "aaa_keywords": ["San Francisco", "Oakland", "San Jose"]
+    },
+    "SanFrancisco_CA": {
+        "zip": "94102",
+        "state": "CA",
+        "static_anchor": 5.720,
+        "name": "San Francisco Metro Retail",
+        "aaa_keywords": ["San Francisco"]
+    },
+    "SanJose_CA": {
+        "zip": "95113",
+        "state": "CA",
+        "static_anchor": 5.553,
+        "name": "San Jose / Silicon Valley Retail",
+        "aaa_keywords": ["San Jose", "Santa Clara"]
+    },
+    "NorthBay_CA": {
+        "zip": "94590",
+        "state": "CA",
+        "static_anchor": 5.453,
+        "name": "North Bay / Solano Retail",
+        "aaa_keywords": ["Vallejo", "Fairfield", "Napa"]
     }
 }
 
@@ -217,7 +238,10 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                 "Cincinnati_OH": 0.266,
                 "Cincinnati_KY": 0.141,
                 "Oakland_CA": 2.366,
-                "BayArea_CA": 2.466
+                "BayArea_CA": 2.466,
+                "SanFrancisco_CA": 2.466,
+                "SanJose_CA": 2.296,
+                "NorthBay_CA": 2.196
             }
             offset = margins.get(region_code, 0.50)
             est_price = latest_rbob + offset

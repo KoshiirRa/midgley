@@ -60,7 +60,15 @@ LOCALE_MAP = {
     "oakland": "Oakland_CA",
     "oakland_ca": "Oakland_CA",
     "bayarea": "BayArea_CA",
-    "bayarea_ca": "BayArea_CA"
+    "bayarea_ca": "BayArea_CA",
+    "sanfrancisco": "SanFrancisco_CA",
+    "sanfrancisco_ca": "SanFrancisco_CA",
+    "sf": "SanFrancisco_CA",
+    "sanjose": "SanJose_CA",
+    "sanjose_ca": "SanJose_CA",
+    "sj": "SanJose_CA",
+    "northbay": "NorthBay_CA",
+    "northbay_ca": "NorthBay_CA"
 }
 
 # Regional PADD metadata
@@ -71,7 +79,10 @@ PADD_METADATA = {
     "Cincinnati_OH": {"name": "Cincinnati Metro Area, OH", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Cincinnati_KY": {"name": "Northern Kentucky Retail", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
-    "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953}
+    "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "SanJose_CA": {"name": "San Jose / Silicon Valley, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "NorthBay_CA": {"name": "North Bay / Solano Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953}
 }
 
 # Scenario Simulator Catalog

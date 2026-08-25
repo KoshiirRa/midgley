@@ -80,16 +80,19 @@ def test_oakland_and_bayarea_consistency():
     with open(BAYAREA_PATH, "r", encoding="utf-8") as f:
         bayarea_html = f.read()
 
-    # Ensure no legacy hardcoded $4.95 or $5.05 mismatch strings exist in generated pages
+    # Ensure no legacy hardcoded $4.95, $5.05, or $5.12 mismatch strings exist in generated pages
     assert "($4.950/gal base)" not in oakland_html
     assert "Oakland, CA Retail ($4.95 base)" not in oakland_html
     assert "Oakland / East Bay ($4.95 base)" not in bayarea_html
     assert "SF Bay Area 9-County Avg ($5.05 base)" not in bayarea_html
+    assert "San Francisco ($5.12 base)" not in bayarea_html
 
-    # Check that Oakland base price appears identically in oakland.html and bayarea.html
-    assert "Oakland / East Bay" in bayarea_html
-    # Verify dynamic Oakland base format presence
-    assert "/gal base" in oakland_html
-    assert "/gal base" in bayarea_html
+    # Check that sub-locale 5-day model targets and breakdown matrix table exist in bayarea.html
+    assert "San Francisco Metro" in bayarea_html
+    assert "San Jose / Silicon Valley" in bayarea_html
+    assert "North Bay / Solano" in bayarea_html
+    assert "5-Day Target:" in bayarea_html
+    assert "NorCal Sub-Locale Quantitative Model Forecasts" in bayarea_html
+    assert "Primary Logistics & Tax Overhead Driver" in bayarea_html
 
 
