@@ -9,6 +9,7 @@ for public deployment to GitHub Pages.
 """
 
 import os
+import subprocess
 import json
 import pandas as pd
 import numpy as np
@@ -86,6 +87,32 @@ def calculate_rolling_metrics():
         return [], [], []
 
 
+def get_release_badge() -> str:
+    """Generates dynamic HTML badge for the header based on git branch or environment.
+    
+    When running on the 'dev' branch (or any development branch/environment),
+    it displays a 'Dev Branch v0.1-dev' badge in amber.
+    When running on 'main' or 'master' release branches, it displays 'Release v0.1' in orange.
+    """
+    branch = os.getenv("MIDGLEY_BRANCH", os.getenv("GITHUB_REF_NAME", ""))
+    if not branch:
+        try:
+            cmd_out = subprocess.check_output(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                stderr=subprocess.DEVNULL,
+                text=True
+            ).strip()
+            if cmd_out:
+                branch = cmd_out
+        except Exception:
+            branch = "dev"
+
+    if branch in ["main", "master"] or branch.startswith("release/"):
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.1</span>'
+    else:
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.1-dev</span>'
+
+
 def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -102,6 +129,8 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
 
+    badge_html = get_release_badge()
+
     return f"""    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -110,7 +139,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.1</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley {badge_html} <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -872,12 +901,12 @@ def generate_public_dashboard():
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Current Wholesale Futures</span>
-                <p class="text-3xl font-extrabold text-white">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-white">${{NAT_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-slate-500">Spot NYMEX RBOB Contract</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-blue-400">$3.077<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-blue-400">${{NAT_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-blue-300 font-semibold">-3.2% Projected Trend</p>
             </div>
             <div class="space-y-1">
@@ -998,7 +1027,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix)
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}")
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -1056,12 +1085,12 @@ def generate_public_dashboard():
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Current Live Pump Base</span>
-                <p class="text-3xl font-extrabold text-white">$3.890<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-white">${{TULSA_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-emerald-400">$3.780<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-emerald-400">${{TULSA_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-emerald-300 font-semibold">-2.8% Projected Trend</p>
             </div>
             <div class="space-y-1">
@@ -1183,7 +1212,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix)
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}")
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -1241,12 +1270,12 @@ def generate_public_dashboard():
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Current Live Pump Base</span>
-                <p class="text-3xl font-extrabold text-white">$3.350<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-white">${{NEWARK_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-blue-400">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-blue-400">${{NEWARK_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-blue-300 font-semibold">-3.0% Projected Trend</p>
             </div>
             <div class="space-y-1">
@@ -1368,7 +1397,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix)
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}")
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -1445,8 +1474,8 @@ def generate_public_dashboard():
                         <span class="font-bold text-rose-400">Ohio Side (Hamilton Co.)</span>
                         <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20">Tax: 38.5¢/gal</span>
                     </div>
-                    <p class="text-3xl font-extrabold text-white">$3.450 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-rose-300">$3.350/gal</strong></p>
+                    <p class="text-3xl font-extrabold text-white">${{CIN_OH_BASE}} <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-rose-300">${{CIN_OH_PRED}}/gal</strong></p>
                 </div>
 
                 <!-- Kentucky Side -->
@@ -1455,8 +1484,8 @@ def generate_public_dashboard():
                         <span class="font-bold text-blue-400">Northern KY (Boone/Kenton)</span>
                         <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">Tax: 26.0¢/gal</span>
                     </div>
-                    <p class="text-3xl font-extrabold text-white">$3.325 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-blue-300">$3.225/gal</strong></p>
+                    <p class="text-3xl font-extrabold text-white">${{CIN_KY_BASE}} <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-blue-300">${{CIN_KY_PRED}}/gal</strong></p>
                 </div>
 
                 <!-- Model Accuracy -->
@@ -1599,7 +1628,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix)
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}")
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -1672,8 +1701,8 @@ def generate_public_dashboard():
                 
                 <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
                     <span class="text-xs text-amber-400 font-bold uppercase">Live Oakland Pump Base</span>
-                    <p class="text-3xl font-extrabold text-white">$5.550 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">$4.840/gal</strong> (-2.2%)</p>
+                    <p class="text-3xl font-extrabold text-white">${{OAKLAND_BASE}} <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">${{OAKLAND_PRED}}/gal</strong> (-2.8%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
@@ -1825,7 +1854,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix)
+""".replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{prices_map['Oakland_CA']['base']:.3f}").replace("{{OAKLAND_PRED}}", f"{prices_map['Oakland_CA']['pred']:.3f}")
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -2260,8 +2289,12 @@ def generate_public_dashboard():
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 10.1: Total Statutory CARB Tax &amp; Fee Accumulation</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
-                    $$T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} = \$0.634 + \$0.250 + \$0.185 + \$0.150 + \$0.184 = \$0.953/\text{gal}$$
+                <div class="text-center text-lg sm:text-xl font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\begin{aligned}
+                    T_{\text{CARB}} &= \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} \\[6pt]
+                    &= \$0.634 + \$0.250 + \$0.185 + \$0.150 + \$0.184 \\[6pt]
+                    &= \$0.953/\text{gal}
+                    \end{aligned}$$
                 </div>
                 <p class="text-xs text-slate-400">
                     <strong>Refining Crack Spread:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>

@@ -19,7 +19,7 @@ from src.newark_regional import fetch_newark_market_data, get_newark_regional_ev
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -143,25 +143,30 @@ def run_newark_pipeline(live_pump_price: float = None, use_llm_api: bool = False
     # Step 6: Log Predictions to Historical Store & Report Model Performance
     print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
     test_dates = splits['test_df']['date']
-    test_current_prices = splits['test_df']['newark_retail_gasoline'] if 'newark_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob']
     preds_hybrid = results['predictions_hybrid']
     
-    pred_log_df = pd.DataFrame({
-        'date': test_dates.values,
-        'current_price': test_current_prices.values,
-        'predicted_5d_price': preds_hybrid
-    })
-    
-    # Append latest real-time live forecast row
+    # Calculate historical test split prices for Newark (calibrated to retail pump price scale)
+    latest_rbob = market_df['gasoline_rbob'].iloc[-1]
+    dynamic_margin = live_pump_price - latest_rbob
+    hist_newark_base = splits['test_df']['newark_retail_gasoline'] if 'newark_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
+    hist_newark_pred = preds_hybrid + dynamic_margin
+
+    backfill_new_region_history(
+        test_dates=test_dates,
+        base_prices=hist_newark_base,
+        predicted_prices=hist_newark_pred,
+        region="Newark_DE",
+        model_version=f"v1.4-Finlight-Newark-{model_type.capitalize()}"
+    )
+
+    # Log active out-of-time 5-day horizon forecast
     last_date = market_df['date'].iloc[-1]
     today_df = pd.DataFrame([{
         'date': last_date,
         'current_price': live_pump_price,
-        'predicted_5d_price': float(preds_hybrid[-1])
+        'predicted_5d_price': newark_baseline_forecast
     }])
-    pred_log_df = pd.concat([pred_log_df, today_df], ignore_index=True)
-    
-    n_logged = log_predictions(pred_log_df, region="Newark_DE", model_version="v1.4-Finlight-Newark-Ridge")
+    n_logged = log_predictions(today_df, region="Newark_DE", model_version=f"v1.4-Finlight-Newark-{model_type.capitalize()}")
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

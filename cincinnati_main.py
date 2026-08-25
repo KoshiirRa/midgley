@@ -19,7 +19,7 @@ from src.cincinnati_regional import fetch_cincinnati_market_data, get_cincinnati
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -164,38 +164,48 @@ def run_cincinnati_pipeline(
     # Step 6: Log Predictions to Historical Store & Report Model Performance
     print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
     test_dates = splits['test_df']['date']
-    test_oh_prices = splits['test_df']['cincinnati_oh_retail_gasoline'] if 'cincinnati_oh_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob']
-    test_ky_prices = splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob']
     preds_hybrid = results['predictions_hybrid']
     
-    pred_log_oh = pd.DataFrame({
-        'date': test_dates.values,
-        'current_price': test_oh_prices.values,
-        'predicted_5d_price': preds_hybrid
-    })
-    pred_log_ky = pd.DataFrame({
-        'date': test_dates.values,
-        'current_price': test_ky_prices.values,
-        'predicted_5d_price': preds_hybrid - (live_oh_price - live_ky_price)
-    })
+    # Calculate historical test split prices for Cincinnati OH & KY (calibrated to retail pump price scale)
+    latest_rbob = market_df['gasoline_rbob'].iloc[-1]
+    margin_oh = live_oh_price - latest_rbob
+    margin_ky = live_ky_price - latest_rbob
     
-    # Append latest real-time live forecast rows
+    hist_oh_base = splits['test_df']['cincinnati_oh_retail_gasoline'] if 'cincinnati_oh_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + margin_oh
+    hist_oh_pred = preds_hybrid + margin_oh
+    hist_ky_base = splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + margin_ky
+    hist_ky_pred = preds_hybrid + margin_ky
+
+    backfill_new_region_history(
+        test_dates=test_dates,
+        base_prices=hist_oh_base,
+        predicted_prices=hist_oh_pred,
+        region="Cincinnati_OH",
+        model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}"
+    )
+    backfill_new_region_history(
+        test_dates=test_dates,
+        base_prices=hist_ky_base,
+        predicted_prices=hist_ky_pred,
+        region="Cincinnati_KY",
+        model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}"
+    )
+
+    # Log active out-of-time 5-day horizon forecasts
     last_date = market_df['date'].iloc[-1]
     today_oh = pd.DataFrame([{
         'date': last_date,
         'current_price': live_oh_price,
-        'predicted_5d_price': float(preds_hybrid[-1])
+        'predicted_5d_price': cin_oh_baseline_forecast
     }])
     today_ky = pd.DataFrame([{
         'date': last_date,
         'current_price': live_ky_price,
-        'predicted_5d_price': float(preds_hybrid[-1]) - (live_oh_price - live_ky_price)
+        'predicted_5d_price': cin_ky_baseline_forecast
     }])
-    pred_log_oh = pd.concat([pred_log_oh, today_oh], ignore_index=True)
-    pred_log_ky = pd.concat([pred_log_ky, today_ky], ignore_index=True)
     
-    n_logged_oh = log_predictions(pred_log_oh, region="Cincinnati_OH", model_version="v1.4-Finlight-Cincinnati-Ridge")
-    n_logged_ky = log_predictions(pred_log_ky, region="Cincinnati_KY", model_version="v1.4-Finlight-Cincinnati-Ridge")
+    n_logged_oh = log_predictions(today_oh, region="Cincinnati_OH", model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}")
+    n_logged_ky = log_predictions(today_ky, region="Cincinnati_KY", model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}")
     print(f"  -> Logged predictions for Cincinnati_OH ({n_logged_oh}) and Cincinnati_KY ({n_logged_ky})")
     
     perf_report = generate_performance_report()

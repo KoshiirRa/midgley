@@ -12,17 +12,17 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-25 04:52 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-08-25 13:42 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **National Wholesale (RBOB)** | `$3.271`/gal | **`$3.184`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.847`/gal | **`$3.168`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `$3.969`/gal | **`$3.184`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
-| **Cincinnati, OH Retail** | `$4.024`/gal | **`$3.186`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `$3.667`/gal | **`$2.829`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `$5.620`/gal | **`$5.462`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `$5.620`/gal | **`$5.462`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.890`/gal | **`$3.769`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.966`/gal | **`$3.862`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `$3.992`/gal | **`$3.889`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.661`/gal | **`$3.567`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `$5.623`/gal | **`$5.464`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `$5.623`/gal | **`$5.464`/gal** | **DOWN 📉** | `2026-08-29` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -49,7 +49,7 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/cincinnati` (Cincinnati OH/KY Cross-River Retail)**: Dedicated Cincinnati OH/KY metro retail gas forecast featuring dual-state fuel tax differential display (OH $3.45 vs NKY $3.325) and Mississippi/Ohio River low-water barge bottleneck simulator.
 - **`/oakland` (Oakland CA Retail)**: Dedicated Oakland / East Bay retail gas forecast featuring CARB regulatory breakdown ($0.953/gal tax burden) and physical risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
 - **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
-- **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers.
+- **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers (including Section 10 multiline `aligned` CARB tax breakdown).
 
 
 ---
