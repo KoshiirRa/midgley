@@ -357,6 +357,7 @@ def generate_weekly_markdown_report() -> str:
         return f"# [{branch}] 📊 Weekly Model Review Report ({today_str})\n\nNo prediction history found."
         
     df = pd.read_csv(HISTORY_CSV)
+    df = df.dropna(subset=['region']).copy()
     eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
     
     nat_sub = eval_df[eval_df['region'] == 'National'] if not eval_df.empty else pd.DataFrame()

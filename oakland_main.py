@@ -19,7 +19,7 @@ from src.oakland_regional import fetch_oakland_market_data, get_oakland_regional
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -157,22 +157,50 @@ def run_oakland_pipeline(
         print(f"     Headline: \"{headline}\"")
         print(f"     Simulated Oakland 5-Day Target: ${shocked_oakland_5d:.3f}/gal | Impact: {diff:+.3f}/gal ({net_shock_pct*100:+.2f}%)")
 
-    # Step 6: Log Out-of-Time Predictions
+    # Step 6: Log Out-of-Time Predictions & Historical Test Split Backfill
     print("\n[Step 6/6] Logging Out-of-Time Predictions to prediction_history.csv...")
+    test_dates = splits['test_df']['date']
+    preds_hybrid = results['predictions_hybrid']
+    
+    # Calculate historical test split prices for Oakland ($2.05 rack margin offset above RBOB)
+    hist_oakland_base = splits['test_df']['gasoline_rbob'] + 2.05
+    hist_oakland_pred = preds_hybrid + 2.05
+
+    # Calculate historical test split prices for Bay Area ($2.15 rack margin offset above RBOB)
+    hist_bayarea_base = splits['test_df']['gasoline_rbob'] + 2.15
+    hist_bayarea_pred = preds_hybrid + 2.15
+
+    backfill_new_region_history(
+        test_dates=test_dates,
+        base_prices=hist_oakland_base,
+        predicted_prices=hist_oakland_pred,
+        region="Oakland_CA",
+        model_version=f"v1.4-Oakland-{model_type.capitalize()}"
+    )
+
+    backfill_new_region_history(
+        test_dates=test_dates,
+        base_prices=hist_bayarea_base,
+        predicted_prices=hist_bayarea_pred,
+        region="BayArea_CA",
+        model_version=f"v1.4-BayArea-{model_type.capitalize()}"
+    )
+
+    # Log active out-of-time 5-day horizon forecast
     last_date = market_df['date'].iloc[-1]
     pred_oakland_df = pd.DataFrame([{
         'date': last_date,
         'current_price': live_oakland_price,
         'predicted_5d_price': oakland_baseline_forecast
     }])
-    log_predictions(pred_oakland_df, region="Oakland_CA", model_version=f"v1.4-{model_type.capitalize()}")
+    log_predictions(pred_oakland_df, region="Oakland_CA", model_version=f"v1.4-Oakland-{model_type.capitalize()}")
 
     pred_bayarea_df = pd.DataFrame([{
         'date': last_date,
         'current_price': live_bayarea_price,
         'predicted_5d_price': bayarea_baseline_forecast
     }])
-    log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=f"v1.4-{model_type.capitalize()}")
+    log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=f"v1.4-BayArea-{model_type.capitalize()}")
 
     print("\n" + "=" * 80)
     print("  OAKLAND & SF BAY AREA REGIONAL PIPELINE EXECUTION COMPLETE")

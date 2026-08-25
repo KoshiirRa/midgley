@@ -1,5 +1,4 @@
 log_timestamp,forecast_target_date,region,model_version,current_base_price,predicted_5d_price,predicted_direction,actual_5d_price,actual_direction,error_dollars,directional_hit
->>>>>>> 86f321be25b8de529c2d603b0fc444bb7b766d06,,,,,,,,,,
 2026-08-24 01:02:31,2025-09-24,National,v1.2-NOAA-National-Ridge,1.9707,1.9387,DOWN,2.0188,UP,0.0801,0.0
 2026-08-24 01:02:31,2025-09-27,National,v1.2-NOAA-National-Ridge,1.9782,1.9452,DOWN,,,,
 2026-08-24 01:02:31,2025-09-28,National,v1.2-NOAA-National-Ridge,1.9991,1.9639,DOWN,,,,
