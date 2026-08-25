@@ -222,9 +222,9 @@ def generate_public_dashboard():
         except Exception as e:
             logger.warning(f"Could not read prediction history for dashboard cards: {e}")
 
-    # ---------------------------------------------------------------------------
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
+    last_run_str = datetime.now().strftime("%Y-%m-%d %H:%M UTC")
     nav_overview = get_nav_header("overview")
     index_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -255,11 +255,11 @@ def generate_public_dashboard():
         
         <!-- Headline Hero Banner -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-emerald-900/30 border border-blue-500/20 card-glow space-y-4">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
-                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central</span>
+                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; Last Run: {last_run_str}</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
