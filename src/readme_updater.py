@@ -45,7 +45,13 @@ def update_readme_forecasts():
     base_cin_ky = 3.325
     base_oakland = 5.550
     base_bayarea = 5.650
-    target_date = "Next 5 Business Days"
+    target_nat = "Next 5 Business Days"
+    target_tulsa = "Next 5 Business Days"
+    target_newark = "Next 5 Business Days"
+    target_cin_oh = "Next 5 Business Days"
+    target_cin_ky = "Next 5 Business Days"
+    target_oakland = "Next 5 Business Days"
+    target_bayarea = "Next 5 Business Days"
     
     if os.path.exists(HISTORY_CSV_PATH):
         try:
@@ -64,45 +70,49 @@ def update_readme_forecasts():
                     nat_price = latest_nat['predicted_5d_price']
                     base_nat = latest_nat['current_base_price']
                     nat_dir = "UP 📈" if nat_price >= base_nat else "DOWN 📉"
-                    target_date = latest_nat['forecast_target_date']
+                    target_nat = latest_nat['forecast_target_date']
                     
                 if not tulsa_df.empty:
                     latest_tulsa = tulsa_df.iloc[-1]
                     tulsa_price = latest_tulsa['predicted_5d_price']
                     base_tulsa = latest_tulsa['current_base_price']
                     tulsa_dir = "UP 📈" if tulsa_price >= base_tulsa else "DOWN 📉"
-                    target_date = latest_tulsa['forecast_target_date']
+                    target_tulsa = latest_tulsa['forecast_target_date']
 
                 if not newark_df.empty:
                     latest_newark = newark_df.iloc[-1]
                     newark_price = latest_newark['predicted_5d_price']
                     base_newark = latest_newark['current_base_price']
                     newark_dir = "UP 📈" if newark_price >= base_newark else "DOWN 📉"
-                    target_date = latest_newark['forecast_target_date']
+                    target_newark = latest_newark['forecast_target_date']
 
                 if not cin_oh_df.empty:
                     latest_cin_oh = cin_oh_df.iloc[-1]
                     cin_oh_price = latest_cin_oh['predicted_5d_price']
                     base_cin_oh = latest_cin_oh['current_base_price']
                     cin_oh_dir = "UP 📈" if cin_oh_price >= base_cin_oh else "DOWN 📉"
+                    target_cin_oh = latest_cin_oh['forecast_target_date']
 
                 if not cin_ky_df.empty:
                     latest_cin_ky = cin_ky_df.iloc[-1]
                     cin_ky_price = latest_cin_ky['predicted_5d_price']
                     base_cin_ky = latest_cin_ky['current_base_price']
                     cin_ky_dir = "UP 📈" if cin_ky_price >= base_cin_ky else "DOWN 📉"
+                    target_cin_ky = latest_cin_ky['forecast_target_date']
 
                 if not oakland_df.empty:
                     latest_oakland = oakland_df.iloc[-1]
                     oakland_price = latest_oakland['predicted_5d_price']
                     base_oakland = latest_oakland['current_base_price']
                     oakland_dir = "UP 📈" if oakland_price >= base_oakland else "DOWN 📉"
+                    target_oakland = latest_oakland['forecast_target_date']
 
                 if not bayarea_df.empty:
                     latest_bayarea = bayarea_df.iloc[-1]
                     bayarea_price = latest_bayarea['predicted_5d_price']
                     base_bayarea = latest_bayarea['current_base_price']
                     bayarea_dir = "UP 📈" if bayarea_price >= base_bayarea else "DOWN 📉"
+                    target_bayarea = latest_bayarea['forecast_target_date']
         except Exception as e:
             logger.warning(f"Could not read prediction history: {e}")
             
@@ -111,13 +121,13 @@ def update_readme_forecasts():
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `${base_nat:.3f}`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `${base_tulsa:.3f}`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `${base_newark:.3f}`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_date}` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `${base_nat:.3f}`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_nat}` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `${base_tulsa:.3f}`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_tulsa}` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `${base_newark:.3f}`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_newark}` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_cin_oh}` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_cin_ky}` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_oakland}` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_bayarea}` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 {END_TAG}"""

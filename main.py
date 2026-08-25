@@ -120,6 +120,15 @@ def run_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         'predicted_5d_price': preds_hybrid
     })
     
+    # Append latest real-time live forecast row
+    last_date = market_df['date'].iloc[-1]
+    today_df = pd.DataFrame([{
+        'date': last_date,
+        'current_price': float(market_df['gasoline_rbob'].iloc[-1]),
+        'predicted_5d_price': float(preds_hybrid[-1])
+    }])
+    pred_log_df = pd.concat([pred_log_df, today_df], ignore_index=True)
+    
     n_logged = log_predictions(pred_log_df, region="National", model_version="v1.4-Finlight-National-Ridge")
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     

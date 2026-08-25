@@ -179,6 +179,21 @@ def run_cincinnati_pipeline(
         'predicted_5d_price': preds_hybrid - (live_oh_price - live_ky_price)
     })
     
+    # Append latest real-time live forecast rows
+    last_date = market_df['date'].iloc[-1]
+    today_oh = pd.DataFrame([{
+        'date': last_date,
+        'current_price': live_oh_price,
+        'predicted_5d_price': float(preds_hybrid[-1])
+    }])
+    today_ky = pd.DataFrame([{
+        'date': last_date,
+        'current_price': live_ky_price,
+        'predicted_5d_price': float(preds_hybrid[-1]) - (live_oh_price - live_ky_price)
+    }])
+    pred_log_oh = pd.concat([pred_log_oh, today_oh], ignore_index=True)
+    pred_log_ky = pd.concat([pred_log_ky, today_ky], ignore_index=True)
+    
     n_logged_oh = log_predictions(pred_log_oh, region="Cincinnati_OH", model_version="v1.4-Finlight-Cincinnati-Ridge")
     n_logged_ky = log_predictions(pred_log_ky, region="Cincinnati_KY", model_version="v1.4-Finlight-Cincinnati-Ridge")
     print(f"  -> Logged predictions for Cincinnati_OH ({n_logged_oh}) and Cincinnati_KY ({n_logged_ky})")

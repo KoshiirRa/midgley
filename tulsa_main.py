@@ -152,6 +152,15 @@ def run_tulsa_pipeline(live_pump_price: float = None, use_llm_api: bool = False,
         'predicted_5d_price': preds_hybrid
     })
     
+    # Append latest real-time live forecast row
+    last_date = market_df['date'].iloc[-1]
+    today_df = pd.DataFrame([{
+        'date': last_date,
+        'current_price': live_pump_price,
+        'predicted_5d_price': float(preds_hybrid[-1])
+    }])
+    pred_log_df = pd.concat([pred_log_df, today_df], ignore_index=True)
+    
     n_logged = log_predictions(pred_log_df, region="Tulsa_OK", model_version="v1.4-Finlight-Tulsa-Ridge")
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
