@@ -13,7 +13,7 @@ import subprocess
 import json
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -253,7 +253,7 @@ def generate_public_dashboard():
 
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
-    last_run_str = datetime.now().strftime("%Y-%m-%d %H:%M UTC")
+    last_run_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     nav_overview = get_nav_header("overview")
     index_html = f"""<!DOCTYPE html>
 <html lang="en">
