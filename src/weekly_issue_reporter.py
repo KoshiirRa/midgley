@@ -325,13 +325,13 @@ def generate_weekly_markdown_report() -> str:
         tulsa_hit = round(float(tulsa_sub['directional_hit'].mean() * 100), 2) if not tulsa_sub.empty else 58.15
         eval_count = len(eval_df)
 
-    # Latest forecast predictions
-    latest_df = df.tail(2)
+    # Latest forecast predictions per region
+    latest_df = df.groupby('region', as_index=False).last()
     latest_rows = ""
     for _, row in latest_df.iterrows():
         region = row.get('region', 'N/A')
-        curr_p = row.get('current_price', 0.0)
-        fore_p = row.get('predicted_5d_price', 0.0)
+        curr_p = float(row.get('current_base_price', row.get('current_price', 0.0)))
+        fore_p = float(row.get('predicted_5d_price', 0.0))
         target_d = row.get('forecast_target_date', 'N/A')
         dir_str = "DOWN 📉" if fore_p < curr_p else "UP 📈"
         latest_rows += f"| **{region}** | `${curr_p:.3f}/gal` | **`${fore_p:.3f}/gal`** | {dir_str} | `{target_d}` |\n"
