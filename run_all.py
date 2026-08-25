@@ -1,59 +1,45 @@
 """
 Master Execution Script (run_all.py)
-Runs both the National Wholesale Model and the Tulsa, OK Regional Model sequentially.
-Updates live README.md forecast tables and regenerates the public docs/index.html web dashboard.
+Sequentially runs all registered location forecasting models using the src.locations registry.
+Updates live README.md forecast tables and regenerates the public docs/ index.html web dashboard.
 """
 
 import sys
 import logging
-from main import run_pipeline as run_national
-from tulsa_main import run_tulsa_pipeline as run_tulsa
-from newark_main import run_newark_pipeline as run_newark
-from cincinnati_main import run_cincinnati_pipeline as run_cincinnati
-from oakland_main import run_oakland_pipeline as run_oakland
-from greenville_main import run_greenville_pipeline as run_greenville
+from src.locations import LOCATIONS, run_all_locations
 from src.readme_updater import update_readme_forecasts
 from src.dashboard_generator import generate_public_dashboard
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger(__name__)
+
 if __name__ == "__main__":
     use_api = "--use-llm-api" in sys.argv
+    model_choice = "ridge"
+    for arg in sys.argv:
+        if arg.startswith("--model="):
+            model_choice = arg.split("=")[1].lower()
+            
+    print("=" * 80)
+    print("      MIDGLEY MASTER FORECASTING ENGINE - ALL LOCATIONS PIPELINE")
+    print("=" * 80)
     
-    print("=" * 80)
-    print("  STEP 1: RUNNING NATIONAL WHOLESALE FORECASTING MODEL")
-    print("=" * 80)
-    nat_results = run_national(use_llm_api=use_api, model_type="ridge")
+    step_num = 1
+    total_steps = len(LOCATIONS) + 1
     
-    print("\n" + "=" * 80)
-    print("  STEP 2: RUNNING TULSA, OK METRO RETAIL FORECASTING MODEL")
-    print("=" * 80)
-    tulsa_results = run_tulsa(use_llm_api=use_api, model_type="ridge")
+    for loc_id, loc_info in LOCATIONS.items():
+        print(f"\n" + "=" * 80)
+        print(f"  STEP {step_num}/{total_steps}: RUNNING {loc_info['name'].upper()} MODEL")
+        print("=" * 80)
+        loc_info["run_pipeline"](use_llm_api=use_api, model_type=model_choice)
+        step_num += 1
 
     print("\n" + "=" * 80)
-    print("  STEP 3: RUNNING NEWARK, DE METRO RETAIL FORECASTING MODEL")
-    print("=" * 80)
-    newark_results = run_newark(use_llm_api=use_api, model_type="ridge")
-    
-    print("\n" + "=" * 80)
-    print("  STEP 4: RUNNING CINCINNATI, OH / NKY METRO RETAIL FORECASTING MODEL")
-    print("=" * 80)
-    cin_results = run_cincinnati(use_llm_api=use_api, model_type="ridge")
-
-    print("\n" + "=" * 80)
-    print("  STEP 5: RUNNING GREENVILLE, NC METRO RETAIL FORECASTING MODEL")
-    print("=" * 80)
-    greenville_results = run_greenville(use_llm_api=use_api, model_type="ridge")
-
-    print("\n" + "=" * 80)
-    print("  STEP 6: RUNNING OAKLAND & SF BAY AREA METRO RETAIL FORECASTING MODEL")
-    print("=" * 80)
-    oakland_results = run_oakland(use_llm_api=use_api, model_type="ridge")
-
-    print("\n" + "=" * 80)
-    print("  STEP 7: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")
+    print(f"  STEP {total_steps}/{total_steps}: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")
     print("=" * 80)
     update_readme_forecasts()
     generate_public_dashboard()
     
     print("\n" + "=" * 80)
-    print("                      ALL MODELS EXECUTION COMPLETE")
+    print("                      ALL LOCATIONS EXECUTION COMPLETE")
     print("=" * 80)
