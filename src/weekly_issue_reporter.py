@@ -377,13 +377,11 @@ def generate_weekly_markdown_report() -> str:
             mae = round(float(reg_eval['error_dollars'].mean()), 4)
             hit_rate = round(float(reg_eval['directional_hit'].mean() * 100.0), 2)
             n_days = len(reg_eval)
+            status_str = "🟢 Optimal" if mae < (0.25 if reg == "National" else 0.70) else "⚠️ Calibrating"
+            summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | {n_days} | **`${mae:.4f}/gal`** | **`{hit_rate:.2f}%`** | {status_str} |\n"
         else:
-            mae = 0.1069 if reg == "National" else 0.5609
-            hit_rate = 60.79 if reg == "National" else 58.15
-            n_days = len(df[df['region'] == reg])
-
-        status_str = "🟢 Optimal" if mae < (0.25 if reg == "National" else 0.70) else "⚠️ Calibrating"
-        summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | {n_days} | **`${mae:.4f}/gal`** | **`{hit_rate:.2f}%`** | {status_str} |\n"
+            n_total = len(df[df['region'] == reg])
+            summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | 0 / {n_total} (Pending) | *Pending Horizon* | *Pending Horizon* | ⏳ New Region |\n"
 
     # Latest forecast predictions per region
     latest_df = df.groupby('region', as_index=False).last()
