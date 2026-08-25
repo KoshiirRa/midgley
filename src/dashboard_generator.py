@@ -44,6 +44,35 @@ BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 
+KATEX_MOBILE_CSS = """
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+"""
+
 def calculate_rolling_metrics():
     """Reads prediction_history.csv and computes rolling MAE & Directional Accuracy over time."""
     if not os.path.exists(HISTORY_CSV_PATH):
@@ -292,6 +321,7 @@ def generate_public_dashboard():
     <style>
         .gradient-bg {{ background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }}
         .card-glow {{ box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }}
+        {KATEX_MOBILE_CSS}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -891,6 +921,7 @@ def generate_public_dashboard():
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        {{KATEX_MOBILE_CSS}}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -1046,7 +1077,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}")
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -1075,6 +1106,7 @@ def generate_public_dashboard():
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
+        {{KATEX_MOBILE_CSS}}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -1175,7 +1207,7 @@ def generate_public_dashboard():
                     <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Cushing WTI Hub Proximity</h4>
                     <p>Located 50 miles west of Tulsa, Cushing, OK is the physical delivery point for NYMEX WTI crude. Localized rack margins reflect regional crude access and local refining competition.</p>
                 </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
                     <h4 class="font-bold text-blue-300 uppercase tracking-wider">Tulsa Dynamic Rack Margin</h4>
                     <p>$$\text{Rack Margin} = P_{\text{Tulsa Retail}} - P_{\text{Wholesale RBOB}} = \$3.890 - \$3.184 = \$0.706/\text{gal}$$</p>
                     <p class="text-slate-400 pt-1">Calibrates predicted wholesale returns directly into local pump station prices.</p>
@@ -1231,7 +1263,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}")
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -1260,6 +1292,7 @@ def generate_public_dashboard():
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        {{KATEX_MOBILE_CSS}}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -1360,7 +1393,7 @@ def generate_public_dashboard():
                     <h4 class="font-bold text-blue-300 uppercase tracking-wider">PBF Delaware City Hub Proximity</h4>
                     <p>Located 12 miles south of Newark, DE, the Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering. Delaware state fuel tax is maintained at $0.23/gal.</p>
                 </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
                     <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Newark Dynamic Rack Margin</h4>
                     <p>$$\text{Rack Margin} = P_{\text{Newark Retail}} - P_{\text{Wholesale RBOB}} = \$3.350 - \$3.184 = \$0.166/\text{gal}$$</p>
                     <p class="text-slate-400 pt-1">Calibrates predicted wholesale returns directly into local New Castle County pump station prices.</p>
@@ -1416,7 +1449,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}")
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -1445,6 +1478,7 @@ def generate_public_dashboard():
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(168, 85, 247, 0.15); }
+        {{KATEX_MOBILE_CSS}}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -1582,7 +1616,7 @@ def generate_public_dashboard():
                     <h4 class="font-bold text-purple-300 uppercase tracking-wider">Refining & River Logistics</h4>
                     <p>Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo, IL confluence from Gulf Coast refiners, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.</p>
                 </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
                     <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Dual-State Rack Margin Equations</h4>
                     <p>$$\text{Rack Margin}_{\text{OH}} = P_{\text{OH Retail}} - P_{\text{Wholesale RBOB}} = \$3.450 - \$3.184 = \$0.266/\text{gal}$$</p>
                     <p>$$\text{Rack Margin}_{\text{KY}} = P_{\text{KY Retail}} - P_{\text{Wholesale RBOB}} = \$3.325 - \$3.184 = \$0.141/\text{gal}$$</p>
@@ -1647,7 +1681,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}")
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -1676,6 +1710,7 @@ def generate_public_dashboard():
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.15); }
+        {{KATEX_MOBILE_CSS}}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -1880,7 +1915,7 @@ def generate_public_dashboard():
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str)
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -1909,6 +1944,7 @@ def generate_public_dashboard():
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(6, 182, 212, 0.15); }
+        {{KATEX_MOBILE_CSS}}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -2195,6 +2231,7 @@ def generate_public_dashboard():
             .replace("{{OAKLAND_CHART_DATA}}", ", ".join(str(x) for x in oak_chart))
             .replace("{{SJ_CHART_DATA}}", ", ".join(str(x) for x in sj_chart))
             .replace("{{NORTHBAY_CHART_DATA}}", ", ".join(str(x) for x in northbay_chart))
+            .replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
         )
 
     with open(BAYAREA_PATH, "w", encoding="utf-8") as f:
@@ -2223,7 +2260,8 @@ def generate_public_dashboard():
 
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        .math-box { background: #090d16; border-left: 4px solid #3b82f6; }
+        .math-box { background: #090d16; border-left: 4px solid #3b82f6; overflow-x: auto; max-width: 100%; }
+        {{KATEX_MOBILE_CSS}}
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -2482,8 +2520,8 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_MATH}}", nav_math)
-    math_html = math_html.replace("{{NAV_MATH}}", nav_math)
+""".replace("{{NAV_MATH}}", nav_math).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
+    math_html = math_html.replace("{{NAV_MATH}}", nav_math).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
 
     with open(MATH_PATH, "w", encoding="utf-8") as f:
         f.write(math_html)

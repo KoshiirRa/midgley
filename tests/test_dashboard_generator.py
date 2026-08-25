@@ -96,3 +96,44 @@ def test_oakland_and_bayarea_consistency():
     assert "Primary Logistics & Tax Overhead Driver" in bayarea_html
 
 
+def test_katex_mobile_responsive_css():
+    """Verify that responsive KaTeX mobile CSS rules and overflow-x container protection
+    are injected across all generated HTML dashboard pages.
+    """
+    generate_public_dashboard()
+
+    page_paths = [
+        INDEX_PATH,
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        CINCINNATI_PATH,
+        OAKLAND_PATH,
+        BAYAREA_PATH,
+        MATH_PATH,
+    ]
+
+    for path in page_paths:
+        assert os.path.exists(path), f"Page missing: {path}"
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert ".katex-display" in content, f"Missing .katex-display CSS in {path}"
+        assert "overflow-x: auto" in content, f"Missing overflow-x: auto in {path}"
+        assert "@media (max-width: 640px)" in content, f"Missing mobile breakpoint in {path}"
+
+    # Verify regional rack margin cards contain overflow-x protection
+    with open(NEWARK_PATH, "r", encoding="utf-8") as f:
+        newark_html = f.read()
+        assert "overflow-x-auto" in newark_html
+
+    with open(TULSA_PATH, "r", encoding="utf-8") as f:
+        tulsa_html = f.read()
+        assert "overflow-x-auto" in tulsa_html
+
+    with open(CINCINNATI_PATH, "r", encoding="utf-8") as f:
+        cin_html = f.read()
+        assert "overflow-x-auto" in cin_html
+
+
+

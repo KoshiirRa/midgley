@@ -15,6 +15,34 @@
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(168, 85, 247, 0.15); }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -206,7 +234,7 @@
                     <h4 class="font-bold text-purple-300 uppercase tracking-wider">Refining & River Logistics</h4>
                     <p>Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo, IL confluence from Gulf Coast refiners, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.</p>
                 </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
                     <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Dual-State Rack Margin Equations</h4>
                     <p>$$\text{Rack Margin}_{\text{OH}} = P_{\text{OH Retail}} - P_{\text{Wholesale RBOB}} = \$3.450 - \$3.184 = \$0.266/\text{gal}$$</p>
                     <p>$$\text{Rack Margin}_{\text{KY}} = P_{\text{KY Retail}} - P_{\text{Wholesale RBOB}} = \$3.325 - \$3.184 = \$0.141/\text{gal}$$</p>

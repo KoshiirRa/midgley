@@ -15,6 +15,34 @@
 
     <style>
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
