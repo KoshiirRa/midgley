@@ -64,7 +64,7 @@ REGION_METADATA = {
         "state": "CA",
         "static_anchor": 5.550,
         "name": "Oakland, CA Metro Retail",
-        "aaa_keywords": ["Oakland", "San Francisco"]
+        "aaa_keywords": ["Oakland", "East Bay", "Alameda"]
     },
     "BayArea_CA": {
         "zip": "94102",

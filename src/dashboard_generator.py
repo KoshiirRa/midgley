@@ -296,16 +296,21 @@ def generate_public_dashboard():
     oak_base = prices_map['Oakland_CA']['base']
     oak_delta = prices_map['Oakland_CA']['pred'] - oak_base
 
-    # San Francisco Metro (+10.0¢/gal municipal tax, parking & zero in-city refinery overhead over Oakland)
-    prices_map['SanFrancisco_CA']['base'] = round(oak_base + 0.100, 3)
+    # SF Bay Area Regional 9-County Average (+10.0¢/gal weighted regional average over Oakland base)
+    if prices_map['BayArea_CA']['base'] <= oak_base:
+        prices_map['BayArea_CA']['base'] = round(oak_base + 0.100, 3)
+    prices_map['BayArea_CA']['pred'] = round(prices_map['BayArea_CA']['base'] + oak_delta, 3)
+
+    # San Francisco Metro (+17.0¢/gal municipal tax, parking & zero in-city refinery overhead over Oakland)
+    prices_map['SanFrancisco_CA']['base'] = round(oak_base + 0.170, 3)
     prices_map['SanFrancisco_CA']['pred'] = round(prices_map['SanFrancisco_CA']['base'] + oak_delta, 3)
 
-    # San Jose / Silicon Valley (-7.0¢/gal discount for Santa Clara tech commute corridor & South Bay terminals)
-    prices_map['SanJose_CA']['base'] = round(oak_base - 0.070, 3)
+    # San Jose / Silicon Valley (+3.0¢/gal for Santa Clara tech commute corridor & South Bay terminals)
+    prices_map['SanJose_CA']['base'] = round(oak_base + 0.030, 3)
     prices_map['SanJose_CA']['pred'] = round(prices_map['SanJose_CA']['base'] + oak_delta, 3)
 
-    # North Bay / Solano (-17.0¢/gal discount for Valero Benicia refinery fence-line proximity)
-    prices_map['NorthBay_CA']['base'] = round(oak_base - 0.170, 3)
+    # North Bay / Solano (-10.0¢/gal discount for Valero Benicia refinery fence-line proximity)
+    prices_map['NorthBay_CA']['base'] = round(oak_base - 0.100, 3)
     prices_map['NorthBay_CA']['pred'] = round(prices_map['NorthBay_CA']['base'] + oak_delta, 3)
 
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
