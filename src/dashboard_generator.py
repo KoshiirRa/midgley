@@ -1640,7 +1640,7 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
         nav_oakland = get_nav_header("oakland", rel_prefix)
-        return r"""<!DOCTYPE html>
+        html_str = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1689,7 +1689,7 @@ def generate_public_dashboard():
                     <h3 class="text-lg font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-gas-pump text-amber-400"></i> Oakland Baseline Pump Price & 5-Day Projected Target
                     </h3>
-                    <p class="text-xs text-slate-300">Tracking East Bay pump prices ($4.950/gal base) against PADD 5 refining island dynamics & CARB tax overhead</p>
+                    <p class="text-xs text-slate-300">Tracking East Bay pump prices (${{OAKLAND_BASE}}/gal base) against PADD 5 refining island dynamics & CARB tax overhead</p>
                 </div>
                 <span class="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5">
                     <i class="fa-solid fa-shield-halved"></i> $0.953/gal Total Tax & Regulatory Fee
@@ -1702,7 +1702,7 @@ def generate_public_dashboard():
                 <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
                     <span class="text-xs text-amber-400 font-bold uppercase">Live Oakland Pump Base</span>
                     <p class="text-3xl font-extrabold text-white">${{OAKLAND_BASE}} <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">${{OAKLAND_PRED}}/gal</strong> (-2.8%)</p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">${{OAKLAND_PRED}}/gal</strong> ({{OAKLAND_PCT}}%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
@@ -1823,8 +1823,8 @@ def generate_public_dashboard():
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                     datasets: [
                         {
-                            label: 'Oakland, CA Retail ($4.95 base)',
-                            data: [4.75, 4.82, 4.90, 5.05, 5.12, 5.08, 4.98, 4.95],
+                            label: 'Oakland, CA Retail (${{OAKLAND_BASE}} base)',
+                            data: [{{OAKLAND_CHART_DATA}}],
                             borderColor: '#f59e0b',
                             backgroundColor: 'rgba(245, 158, 11, 0.08)',
                             borderWidth: 2.5,
@@ -1854,7 +1854,14 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{prices_map['Oakland_CA']['base']:.3f}").replace("{{OAKLAND_PRED}}", f"{prices_map['Oakland_CA']['pred']:.3f}")
+"""
+        oak_base = prices_map['Oakland_CA']['base']
+        oak_pred = prices_map['Oakland_CA']['pred']
+        oak_pct = ((oak_pred - oak_base) / oak_base) * 100
+        oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
+        oak_chart_str = ", ".join(str(x) for x in oak_chart)
+
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -1866,7 +1873,7 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_bayarea_html(rel_prefix: str = "") -> str:
         nav_bayarea = get_nav_header("bayarea", rel_prefix)
-        return r"""<!DOCTYPE html>
+        html_str = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1918,7 +1925,7 @@ def generate_public_dashboard():
                     <p class="text-xs text-slate-300">Comparing regional pump prices across San Francisco, San Jose, Oakland & North Bay</p>
                 </div>
                 <span class="px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold">
-                    $5.650/gal Regional Average
+                    ${{BAYAREA_BASE}}/gal Regional Average
                 </span>
             </div>
 
@@ -1939,7 +1946,7 @@ def generate_public_dashboard():
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
                     <span class="text-xs text-amber-400 font-bold uppercase">Oakland / East Bay</span>
-                    <p class="text-3xl font-extrabold text-white">$5.550 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-3xl font-extrabold text-white">${{OAKLAND_BASE}} <span class="text-xs font-normal text-slate-400">/gal base</span></p>
                     <p class="text-xs text-slate-400">Alameda industrial & port corridor</p>
                 </div>
 
@@ -1982,8 +1989,8 @@ def generate_public_dashboard():
                             fill: false
                         },
                         {
-                            label: 'SF Bay Area 9-County Avg ($5.05 base)',
-                            data: [4.84, 4.92, 5.00, 5.15, 5.22, 5.18, 5.08, 5.05],
+                            label: 'SF Bay Area 9-County Avg (${{BAYAREA_BASE}} base)',
+                            data: [{{BAYAREA_CHART_DATA}}],
                             borderColor: '#06b6d4',
                             borderWidth: 3,
                             fill: false
@@ -1996,8 +2003,8 @@ def generate_public_dashboard():
                             fill: false
                         },
                         {
-                            label: 'Oakland / East Bay ($4.95 base)',
-                            data: [4.75, 4.82, 4.90, 5.05, 5.12, 5.08, 4.98, 4.95],
+                            label: 'Oakland / East Bay (${{OAKLAND_BASE}} base)',
+                            data: [{{OAKLAND_CHART_DATA}}],
                             borderColor: '#f59e0b',
                             borderWidth: 2,
                             fill: false
@@ -2025,7 +2032,22 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_BAYAREA}}", nav_bayarea).replace("PREFIX", rel_prefix)
+"""
+        oak_base = prices_map['Oakland_CA']['base']
+        bay_base = prices_map['BayArea_CA']['base']
+        bay_chart = [round(bay_base - 0.21, 2), round(bay_base - 0.13, 2), round(bay_base - 0.05, 2), round(bay_base + 0.10, 2), round(bay_base + 0.17, 2), round(bay_base + 0.13, 2), round(bay_base + 0.03, 2), round(bay_base, 2)]
+        bay_chart_str = ", ".join(str(x) for x in bay_chart)
+        oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
+        oak_chart_str = ", ".join(str(x) for x in oak_chart)
+
+        return (
+            html_str.replace("{{NAV_BAYAREA}}", nav_bayarea)
+            .replace("PREFIX", rel_prefix)
+            .replace("{{BAYAREA_BASE}}", f"{bay_base:.3f}")
+            .replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}")
+            .replace("{{BAYAREA_CHART_DATA}}", bay_chart_str)
+            .replace("{{OAKLAND_CHART_DATA}}", oak_chart_str)
+        )
 
     with open(BAYAREA_PATH, "w", encoding="utf-8") as f:
         f.write(build_bayarea_html(""))

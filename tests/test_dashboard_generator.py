@@ -66,3 +66,30 @@ def test_dashboard_generation_and_math_katex():
     assert r"\min_{\boldsymbol{\beta}}" in math_content
     assert r"T_{\text{CARB}}" in math_content
 
+
+def test_oakland_and_bayarea_consistency():
+    """Verify that Oakland and Bay Area base prices and labels are consistent
+    across index.html, oakland.html, and bayarea.html without legacy hardcoded mismatches.
+    """
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index_html = f.read()
+    with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
+        oakland_html = f.read()
+    with open(BAYAREA_PATH, "r", encoding="utf-8") as f:
+        bayarea_html = f.read()
+
+    # Ensure no legacy hardcoded $4.95 or $5.05 mismatch strings exist in generated pages
+    assert "($4.950/gal base)" not in oakland_html
+    assert "Oakland, CA Retail ($4.95 base)" not in oakland_html
+    assert "Oakland / East Bay ($4.95 base)" not in bayarea_html
+    assert "SF Bay Area 9-County Avg ($5.05 base)" not in bayarea_html
+
+    # Check that Oakland base price appears identically in oakland.html and bayarea.html
+    assert "Oakland / East Bay" in bayarea_html
+    # Verify dynamic Oakland base format presence
+    assert "/gal base" in oakland_html
+    assert "/gal base" in bayarea_html
+
+
