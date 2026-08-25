@@ -32,10 +32,13 @@ def fetch_open_github_issues(repo: str = "KoshiirRa/midgley") -> list:
         raw_issues = json.loads(result.stdout)
         issues = []
         for raw in raw_issues:
+            title_text = raw.get("title", "")
+            if "Weekly Model Review" in title_text or "Weekly Model Performance" in title_text:
+                continue  # Skip automated weekly review report issues from self-review evaluation
             label_names = [l.get("name", "") if isinstance(l, dict) else str(l) for l in raw.get("labels", [])]
             issues.append({
                 "number": raw.get("number"),
-                "title": raw.get("title", ""),
+                "title": title_text,
                 "body": raw.get("body", "") or "",
                 "labels": label_names,
                 "created_at": raw.get("createdAt", ""),
@@ -64,10 +67,13 @@ def fetch_open_github_issues(repo: str = "KoshiirRa/midgley") -> list:
             for item in data:
                 if "pull_request" in item:
                     continue  # skip PRs returned in issue list
+                title_text = item.get("title", "")
+                if "Weekly Model Review" in title_text or "Weekly Model Performance" in title_text:
+                    continue
                 label_names = [l.get("name", "") if isinstance(l, dict) else str(l) for l in item.get("labels", [])]
                 issues.append({
                     "number": item.get("number"),
-                    "title": item.get("title", ""),
+                    "title": title_text,
                     "body": item.get("body", "") or "",
                     "labels": label_names,
                     "created_at": item.get("created_at", ""),
