@@ -29,7 +29,6 @@ CHARLOTTE_PATH = os.path.join(DOCS_DIR, "charlotte.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 MATH_PATH = os.path.join(DOCS_DIR, "math.html")
-SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
 
 NATIONAL_SUB_DIR = os.path.join(DOCS_DIR, "national")
 TULSA_SUB_DIR = os.path.join(DOCS_DIR, "tulsa")
@@ -127,8 +126,8 @@ def get_release_badge() -> str:
     """Generates dynamic HTML badge for the header based on git branch or environment.
     
     When running on the 'dev' branch (or any development branch/environment),
-    it displays a 'Dev Branch v0.1-dev' badge in amber.
-    When running on 'main' or 'master' release branches, it displays 'Release v0.1' in orange.
+    it displays a 'Dev Branch v0.2.1-dev' badge in amber.
+    When running on 'main' or 'master' release branches, it displays 'Release v0.2.1' in orange.
     """
     branch = os.getenv("MIDGLEY_BRANCH", os.getenv("GITHUB_REF_NAME", ""))
     if not branch:
@@ -144,9 +143,9 @@ def get_release_badge() -> str:
             branch = "dev"
 
     if branch in ["main", "master"] or branch.startswith("release/"):
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.1</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.2.1</span>'
     else:
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.1-dev</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.2.1-dev</span>'
 
 
 def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
@@ -155,7 +154,6 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
     nat_link = f"{rel_prefix}national.html"
@@ -167,7 +165,6 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
-    sav_link = f"{rel_prefix}savings.html"
 
     badge_html = get_release_badge()
 
@@ -223,9 +220,6 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     </div>
                 </div>
 
-                <a href="{sav_link}" class="px-3 py-1.5 rounded-lg {savings_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-piggy-bank"></i> Fill-Up Advisor
-                </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
@@ -2925,13 +2919,7 @@ def generate_public_dashboard():
     except Exception as ex:
         logger.warning(f"Could not generate standalone example page: {ex}")
 
-    try:
-        from scripts.generate_savings_advisor import generate as generate_savings
-        generate_savings()
-    except Exception as ex:
-        logger.warning(f"Could not generate savings advisor page: {ex}")
-
-    logger.info(f"Successfully generated public dashboard web app at {INDEX_PATH}, {NATIONAL_PATH}, {TULSA_PATH}, {SAVINGS_PATH}, and math guide at {MATH_PATH}")
+    logger.info(f"Successfully generated public dashboard web app at {INDEX_PATH}, {NATIONAL_PATH}, {TULSA_PATH}, and math guide at {MATH_PATH}")
 
 if __name__ == "__main__":
     generate_public_dashboard()
