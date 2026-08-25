@@ -150,16 +150,28 @@ def run_greenville_pipeline(live_pump_price: float = None, use_llm_api: bool = F
     # Step 6: MLOps Prediction Logging & Backfilling
     print("\n[Step 6/6] Logging Predictions to MLOps Store (data/prediction_history.csv)...")
     test_dates = splits['test_df']['date']
-    test_base_prices = splits['test_df']['gasoline_rbob'] + (live_pump_price - market_df['gasoline_rbob'].iloc[-1])
-    test_predicted = results['y_pred_hybrid']
+    preds_hybrid = results['predictions_hybrid']
     
+    latest_rbob = market_df['gasoline_rbob'].iloc[-1]
+    dynamic_margin = live_pump_price - latest_rbob
+    hist_greenville_base = splits['test_df']['greenville_retail_gasoline'] if 'greenville_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
+    hist_greenville_pred = preds_hybrid + dynamic_margin
+
     n_logged = backfill_new_region_history(
         test_dates=test_dates,
-        base_prices=test_base_prices,
-        predicted_prices=test_predicted,
+        base_prices=hist_greenville_base,
+        predicted_prices=hist_greenville_pred,
         region="Greenville_NC",
-        model_version=f"v1.4-{model_type.capitalize()}"
+        model_version=f"v1.4-Finlight-Greenville-{model_type.capitalize()}"
     )
+
+    last_date = market_df['date'].iloc[-1]
+    today_df = pd.DataFrame([{
+        'date': last_date,
+        'current_price': live_pump_price,
+        'predicted_5d_price': greenville_baseline_forecast
+    }])
+    log_predictions(today_df, region="Greenville_NC", model_version=f"v1.4-Finlight-Greenville-{model_type.capitalize()}")
     print(f"  -> Logged & evaluated {n_logged} historical out-of-time test predictions for Greenville_NC.")
 
     return {
