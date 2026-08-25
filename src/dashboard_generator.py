@@ -191,6 +191,18 @@ def generate_public_dashboard():
         'BayArea_CA': {'base': 5.650, 'pred': 4.940}
     }
 
+    # 0. Fetch real-time live prices for metro retail regions (excluding National Wholesale commodity benchmark)
+    try:
+        from src.live_fuel_feed import fetch_live_metro_retail_price
+        for reg in prices_map:
+            if reg == "National":
+                continue
+            live_res = fetch_live_metro_retail_price(reg)
+            if live_res and live_res.get("price"):
+                prices_map[reg]['base'] = float(live_res["price"])
+    except Exception as live_err:
+        logger.warning(f"Could not fetch live metro prices for dashboard generator: {live_err}")
+
     if os.path.exists(HISTORY_CSV_PATH):
         try:
             df_hist = pd.read_csv(HISTORY_CSV_PATH)
@@ -199,8 +211,14 @@ def generate_public_dashboard():
                     reg_df = df_hist[df_hist['region'] == reg]
                     if not reg_df.empty:
                         latest = reg_df.iloc[-1]
-                        prices_map[reg]['base'] = float(latest['current_base_price'])
-                        prices_map[reg]['pred'] = float(latest['predicted_5d_price'])
+                        hist_base = float(latest['current_base_price'])
+                        hist_pred = float(latest['predicted_5d_price'])
+                        if reg == "National":
+                            prices_map[reg]['base'] = round(hist_base, 3)
+                            prices_map[reg]['pred'] = round(hist_pred, 3)
+                        else:
+                            delta = hist_pred - hist_base
+                            prices_map[reg]['pred'] = round(prices_map[reg]['base'] + delta, 3)
         except Exception as e:
             logger.warning(f"Could not read prediction history for dashboard cards: {e}")
 

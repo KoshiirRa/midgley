@@ -175,7 +175,7 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
                     from bs4 import BeautifulSoup
                     soup = BeautifulSoup(html, 'html.parser')
                     
-                    # 1. Search for specific metro heading block and its corresponding table
+                    # Search for specific metro heading block and its corresponding table
                     for kw in keywords:
                         kw_lower = kw.lower()
                         for el in soup.find_all(['h2', 'h3', 'h4', 'h5', 'h6', 'button', 'a', 'div', 'td', 'th', 'p']):
@@ -193,15 +193,8 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
                                                     logger.info(f"AAA scraper matched metro '{kw}' for {region_code}: ${val:.3f}/gal")
                                                     return {"average_price": round(val, 3), "source": f"AAA Web Scraper ({kw}, {state})"}
                 except Exception as parse_err:
-                    logger.debug(f"BS4 parsing fallback notice for {region_code}: {parse_err}")
+                    logger.debug(f"BS4 parsing notice for {region_code}: {parse_err}")
 
-                # 2. Regex fallback if BS4 parsing did not return a match
-                matches = re.findall(r'\$(\d+\.\d{2,3})', html)
-                if matches:
-                    valid_prices = [float(m) for m in matches if 1.50 <= float(m) <= 8.50]
-                    if valid_prices:
-                        avg_p = valid_prices[0]
-                        return {"average_price": round(avg_p, 3), "source": f"AAA Web Scraper Fallback ({state})"}
     except Exception as e:
         logger.debug(f"AAA web scraper notice for {region_code}: {e}")
     return None
@@ -237,6 +230,7 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
 def fetch_history_last_known_price(region_code: str) -> dict:
     """
     Looks up the last logged current_base_price from data/prediction_history.csv.
+    Filters out invalid/corrupted price anomalies (< $4.50 for CA regions).
     """
     history_path = os.path.join("data", "prediction_history.csv")
     if os.path.exists(history_path):
@@ -244,9 +238,12 @@ def fetch_history_last_known_price(region_code: str) -> dict:
             df = pd.read_csv(history_path)
             reg_df = df[df['region'] == region_code]
             if not reg_df.empty:
-                last_price = float(reg_df.iloc[-1]['current_base_price'])
-                if last_price > 0:
-                    return {"average_price": round(last_price, 3), "source": "prediction_history.csv History"}
+                if region_code in ["Oakland_CA", "BayArea_CA"]:
+                    reg_df = reg_df[reg_df['current_base_price'] > 4.50]
+                if not reg_df.empty:
+                    last_price = float(reg_df.iloc[-1]['current_base_price'])
+                    if last_price > 0:
+                        return {"average_price": round(last_price, 3), "source": "prediction_history.csv History"}
         except Exception as e:
             logger.debug(f"Could not read prediction_history.csv for {region_code}: {e}")
     return None

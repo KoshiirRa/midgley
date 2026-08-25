@@ -73,7 +73,7 @@ class TestLiveFuelFeed(unittest.TestCase):
         """Verify AAA web scraper html regex parsing extracts valid price."""
         mock_response = MagicMock()
         mock_response.status = 200
-        mock_html = "<html><body><span class='price'>$3.890</span></body></html>"
+        mock_html = "<html><body><h3>Tulsa Metro</h3><table><tr><td>Current Avg.</td><td>$3.890</td></tr></table></body></html>"
         mock_response.read.return_value = mock_html.encode("utf-8")
         mock_urlopen.return_value.__enter__.return_value = mock_response
 
@@ -81,6 +81,18 @@ class TestLiveFuelFeed(unittest.TestCase):
         self.assertIsNotNone(res)
         self.assertEqual(res["average_price"], 3.89)
         self.assertIn("AAA Web Scraper", res["source"])
+
+    @patch("src.live_fuel_feed.urllib.request.urlopen")
+    def test_fetch_aaa_metro_price_no_match_returns_none(self, mock_urlopen):
+        """Verify AAA web scraper returns None when header banner National Average is present but no metro table match exists."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_html = "<html><body><header>National Average: $4.099</header></body></html>"
+        mock_response.read.return_value = mock_html.encode("utf-8")
+        mock_urlopen.return_value.__enter__.return_value = mock_response
+
+        res = fetch_aaa_metro_price("Oakland_CA")
+        self.assertIsNone(res)
 
     @patch("pandas.read_csv")
     @patch("os.path.exists")
