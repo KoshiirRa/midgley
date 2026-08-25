@@ -296,6 +296,22 @@ JSON Output:
     return _evaluate_issues_heuristic(issues, nat_mae, tulsa_mae)
 
 
+def get_current_git_branch() -> str:
+    """
+    Detects current git branch name via env var or git command.
+    Defaults to 'dev' if detection fails.
+    """
+    branch = os.environ.get("GITHUB_REF_NAME") or os.environ.get("GIT_BRANCH")
+    if not branch:
+        try:
+            cmd = ["git", "rev-parse", "--abbrev-ref", "HEAD"]
+            res = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            branch = res.stdout.strip()
+        except Exception:
+            branch = "dev"
+    return branch or "dev"
+
+
 def generate_weekly_markdown_report() -> str:
     """
     Parses data/prediction_history.csv and builds a formatted Markdown report for GitHub Issues.
@@ -303,9 +319,10 @@ def generate_weekly_markdown_report() -> str:
     the issue offering the largest potential modeling improvement.
     """
     today_str = datetime.now().strftime("%Y-%m-%d")
+    branch = get_current_git_branch()
     
     if not os.path.exists(HISTORY_CSV):
-        return f"# 📊 Weekly Model Review Report ({today_str})\n\nNo prediction history found."
+        return f"# [{branch}] 📊 Weekly Model Review Report ({today_str})\n\nNo prediction history found."
         
     df = pd.read_csv(HISTORY_CSV)
     eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
@@ -359,7 +376,7 @@ def generate_weekly_markdown_report() -> str:
 
     report = f"""# 📊 Weekly Model Review & Performance Audit ({today_str})
 
-### 🤖 Model Version: `v1.4 Finlight-LLM`
+### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
 
 ---
 
@@ -398,10 +415,12 @@ def generate_weekly_markdown_report() -> str:
 def create_github_issue():
     """
     Creates an issue in the KoshiirRa/midgley repository using gh issue create or GitHub REST API.
+    Flagged with the current git branch name at the beginning of the title.
     """
     report_md = generate_weekly_markdown_report()
     today_str = datetime.now().strftime("%Y-%m-%d")
-    title = f"📊 Weekly Model Review Report & Performance Audit ({today_str})"
+    branch = get_current_git_branch()
+    title = f"[{branch}] 📊 Weekly Model Review Report & Performance Audit ({today_str})"
     
     issue_file = "weekly_issue_body.md"
     with open(issue_file, "w", encoding="utf-8") as f:
@@ -461,5 +480,6 @@ def create_github_issue():
 
 if __name__ == "__main__":
     create_github_issue()
+
 
 
