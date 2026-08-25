@@ -2017,17 +2017,7 @@ def generate_public_dashboard():
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/60">
-                        <tr class="hover:bg-slate-800/40">
-                            <td class="p-3 font-semibold text-purple-300 flex items-center gap-2">
-                                <i class="fa-solid fa-building text-purple-400"></i> San Francisco Metro
-                            </td>
-                            <td class="p-3 font-bold text-white">${{SF_BASE}}/gal</td>
-                            <td class="p-3 font-bold text-purple-400">${{SF_PRED}}/gal</td>
-                            <td class="p-3 font-semibold text-emerald-400">{{SF_PCT}}%</td>
-                            <td class="p-3 text-slate-400">8.625% Municipal Sales Tax, Commercial Rent Overhead & Zero In-City Refineries</td>
-                            <td class="p-3 font-semibold text-slate-200">58.40%</td>
-                        </tr>
-                        <tr class="hover:bg-slate-800/40">
+                        <tr class="hover:bg-slate-800/40 bg-slate-900/60">
                             <td class="p-3 font-semibold text-cyan-300 flex items-center gap-2">
                                 <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area 9-County Avg
                             </td>
@@ -2036,6 +2026,16 @@ def generate_public_dashboard():
                             <td class="p-3 font-semibold text-emerald-400">{{BAYAREA_PCT}}%</td>
                             <td class="p-3 text-slate-400">9-County Weighted Average & Statutory CARB Environmental Burden ($0.953/gal)</td>
                             <td class="p-3 font-semibold text-slate-200">58.65%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-semibold text-emerald-300 flex items-center gap-2">
+                                <i class="fa-solid fa-industry text-emerald-400"></i> North Bay / Solano
+                            </td>
+                            <td class="p-3 font-bold text-white">${{NORTHBAY_BASE}}/gal</td>
+                            <td class="p-3 font-bold text-emerald-400">${{NORTHBAY_PRED}}/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">{{NORTHBAY_PCT}}%</td>
+                            <td class="p-3 text-slate-400">Valero Benicia Refinery Fence-Line Proximity & Direct Marine Discharge Access</td>
+                            <td class="p-3 font-semibold text-slate-200">58.10%</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40">
                             <td class="p-3 font-semibold text-amber-300 flex items-center gap-2">
@@ -2048,6 +2048,16 @@ def generate_public_dashboard():
                             <td class="p-3 font-semibold text-slate-200">58.40%</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-semibold text-purple-300 flex items-center gap-2">
+                                <i class="fa-solid fa-building text-purple-400"></i> San Francisco Metro
+                            </td>
+                            <td class="p-3 font-bold text-white">${{SF_BASE}}/gal</td>
+                            <td class="p-3 font-bold text-purple-400">${{SF_PRED}}/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">{{SF_PCT}}%</td>
+                            <td class="p-3 text-slate-400">8.625% Municipal Sales Tax, Commercial Rent Overhead & Zero In-City Refineries</td>
+                            <td class="p-3 font-semibold text-slate-200">58.40%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
                             <td class="p-3 font-semibold text-blue-300 flex items-center gap-2">
                                 <i class="fa-solid fa-microchip text-blue-400"></i> San Jose / Silicon Valley
                             </td>
@@ -2056,16 +2066,6 @@ def generate_public_dashboard():
                             <td class="p-3 font-semibold text-emerald-400">{{SJ_PCT}}%</td>
                             <td class="p-3 text-slate-400">Santa Clara Tech Commute Corridor & Kinder Morgan SFPP South Bay Pipeline</td>
                             <td class="p-3 font-semibold text-slate-200">58.15%</td>
-                        </tr>
-                        <tr class="hover:bg-slate-800/40">
-                            <td class="p-3 font-semibold text-emerald-300 flex items-center gap-2">
-                                <i class="fa-solid fa-industry text-emerald-400"></i> North Bay / Solano
-                            </td>
-                            <td class="p-3 font-bold text-white">${{NORTHBAY_BASE}}/gal</td>
-                            <td class="p-3 font-bold text-emerald-400">${{NORTHBAY_PRED}}/gal</td>
-                            <td class="p-3 font-semibold text-emerald-400">{{NORTHBAY_PCT}}%</td>
-                            <td class="p-3 text-slate-400">Valero Benicia Refinery Fence-Line Proximity & Direct Marine Discharge Access</td>
-                            <td class="p-3 font-semibold text-slate-200">58.10%</td>
                         </tr>
                     </tbody>
                 </table>
