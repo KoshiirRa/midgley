@@ -59,7 +59,6 @@ MOCKUP_HTML = """<!DOCTYPE html>
                     <a href="index.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Overview</a>
                     <a href="national.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Wholesale RBOB</a>
                     <a href="tulsa.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Tulsa Refinery</a>
-                    <a href="savings.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Fill-Up Advisor</a>
                     <a href="math.html" class="px-3 py-1.5 rounded text-amber-300 hover:text-amber-100 hover:bg-[#2A1D13] transition-all">Math Logs</a>
                     <a href="design_mockup.html" class="px-3 py-1.5 rounded bg-[#2A1D13] text-amber-300 border border-[#785327] font-bold shadow-sm">Vintage Design System</a>
                 </nav>
