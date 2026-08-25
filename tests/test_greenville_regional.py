@@ -5,12 +5,12 @@ import pandas as pd
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.greenville_regional import (
+from src.locations.greenville.regional import (
     fetch_greenville_market_data,
     _generate_synthetic_greenville_data,
     get_greenville_regional_events
 )
-from greenville_main import run_greenville_pipeline
+from src.locations.greenville.main import run_greenville_pipeline
 
 
 def test_fetch_greenville_market_data():

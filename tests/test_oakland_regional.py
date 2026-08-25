@@ -5,13 +5,13 @@ import pandas as pd
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.oakland_regional import (
+from src.locations.oakland.regional import (
     fetch_oakland_market_data,
     _generate_synthetic_oakland_data,
     get_oakland_regional_events,
     TOTAL_CARB_TAX_BURDEN
 )
-from oakland_main import run_oakland_pipeline
+from src.locations.oakland.main import run_oakland_pipeline
 
 
 def test_fetch_oakland_market_data():
