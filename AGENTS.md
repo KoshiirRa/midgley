@@ -251,5 +251,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **RESTful API Endpoint Gateway (`src/api_server.py`):** FastAPI application serving `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and GPT Action manifest (`/.well-known/ai-plugin.json`).
   - **Model Context Protocol (MCP) Server (`src/mcp_server.py`):** Exposes MCP tools (`get_live_gas_prices`, `get_gas_price_prediction`, `get_live_and_forecast`, `simulate_fuel_market_shock`), static locale resources (`resource://midgley/locales/{locale}`), and prompt templates (`prompt://midgley/market_summary`) across both `stdio` and `HTTP/SSE` transport modes (`/mcp/sse`).
 
+---
+
+### 12. GitHub Wiki & Documentation Maintenance Directives (`https://github.com/KoshiirRa/midgley.wiki.git`)
+
+* **Role:** Ensures that the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git`) is continuously updated and kept in full synchronization with the codebase whenever features, system architecture, data feeds, regional models, or environment states change.
+* **Core Documentation Maintenance Rules:**
+  1. **Mandatory Documentation Sync:** Any agent or process modifying system architecture, data ingestion streams, API gateways, MLOps processes, or scenario simulators MUST update the corresponding Markdown documentation page in the GitHub Wiki (`Agent-Architecture.md`, `Data-Ingestion-and-APIs.md`, `Scenario-Simulator.md`, `MLOps-and-Continuous-Feedback.md`).
+  2. **New Regional Model Calibration Specs:** Whenever a new regional metro model or locale subpackage is introduced to `src/locations/`, its complete calibration specifications (PADD region, base pump price, rack margin equation, delivery hub dynamics, state tax burden, refining capacity, and local hazard alert vectors) MUST be documented in `Regional-Metro-Models.md` in the GitHub Wiki.
+  3. **Dev vs. Prod Environment Synchronization:** The environment status and comparative matrix in `Environment-State-and-Dev-vs-Prod.md` and `Home.md` MUST be kept up to date to clearly reflect operational differences between **Production** (`main` branch / GitHub Actions / GitHub Pages) and **Development** (`dev` branch / `dev-vm` `10.42.42.54`).
+  4. **Project History & Roadmap Updates:** Major release milestones, new feature additions, and roadmap target updates MUST be logged in `Project-History-and-Roadmap.md`.
+
+
 
 
