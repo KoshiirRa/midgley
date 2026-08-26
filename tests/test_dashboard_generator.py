@@ -178,7 +178,8 @@ def test_last_run_intelligence_audit_card_daily_batch(tmp_path):
     assert "DAILY_BATCH" in card_html
     assert "Supply Disruption Score" in card_html
     assert "Prediction Revisions Delta" in card_html
-    assert "Impact Analysis" in card_html
+    assert "Technical Analysis" in card_html
+    assert "Simple Summary" in card_html
     assert "Headline Impact Feeds" in card_html
     assert "href=" in card_html
 
@@ -240,8 +241,10 @@ def test_last_run_intelligence_audit_card_intraday_anomaly(tmp_path):
     assert "Canada Announces Retaliatory Tariffs" in card_html
     assert "0.75" in card_html  # Supply disruption score
     assert "0.52" in card_html  # Price pressure score
-    assert "Impact Analysis" in card_html
+    assert "Technical Analysis" in card_html
+    assert "Simple Summary" in card_html
     assert "Exogenous supply disruption (0.75)" in card_html
+    assert "Breaking news shows gas supply problems" in card_html
     assert "https://news.google.com/articles/tariffs_123" in card_html
 
     # Verify all modeled regions and trend arrow indicators exist in Column 3

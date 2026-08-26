@@ -232,24 +232,40 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     </header>"""
 
 
-def generate_impact_explanation(scores: dict, decay_half_life: float, run_type: str) -> str:
-    """Generates plain English explanation of mathematical impact vector and half-life decay."""
+def generate_impact_explanation(scores: dict, decay_half_life: float, run_type: str) -> tuple:
+    """
+    Generates both a technical econometric analysis and a Simple English Wikipedia-style summary.
+    Returns (tech_impact_text, simple_english_text).
+    """
     supply_val = scores.get("supply_disruption", 0.10)
     pressure_val = scores.get("overall_price_pressure", 0.02)
     geo_val = scores.get("geopolitical_risk", 0.15)
 
     if run_type == "INTRADAY_REVISION":
         if pressure_val > 0.15:
-            return f"Exogenous supply disruption ({supply_val:.2f}) and geopolitical risk ({geo_val:.2f}) generate a +{pressure_val:.2f} price pressure shock. Exponential memory decay (t½={decay_half_life:.1f}d) models a 50% impact reduction over 5 days, driving short-term upward futures re-anchoring."
+            tech_text = f"Exogenous supply disruption ({supply_val:.2f}) and geopolitical risk ({geo_val:.2f}) generate a +{pressure_val:.2f} price pressure shock. Exponential memory decay (t½={decay_half_life:.1f}d) models a 50% impact reduction over 5 days, driving short-term upward futures re-anchoring."
+            simple_text = f"Breaking news shows gas supply problems. This pushes wholesale gas prices higher over the next few days. The price surge will be strongest right now and will slowly fade away over 5 days."
         elif pressure_val < -0.15:
-            return f"Dovish sentiment or supply recovery ({pressure_val:.2f}) reduces spot risk premiums. Exponential memory decay (t½={decay_half_life:.1f}d) models a gradual 50% normalization over 5 days."
+            tech_text = f"Dovish sentiment or supply recovery ({pressure_val:.2f}) reduces spot risk premiums. Exponential memory decay (t½={decay_half_life:.1f}d) models a gradual 50% normalization over 5 days."
+            simple_text = f"Breaking news shows gas supply is growing and market tension is easing. This lowers gas prices over the next 5 days before prices return to normal."
         else:
-            return f"Intraday news anomaly evaluates moderate price pressure ({pressure_val:+.2f}) with supply disruption ({supply_val:.2f}). Memory decay (t½={decay_half_life:.1f}d) decays the shock incrementally."
+            tech_text = f"Intraday news anomaly evaluates moderate price pressure ({pressure_val:+.2f}) with supply disruption ({supply_val:.2f}). Memory decay (t½={decay_half_life:.1f}d) decays the shock incrementally."
+            simple_text = f"New energy news created a small price change. Gas prices may shift slightly before settling over the next 5 days."
     else:
         if geo_val >= 0.50 or supply_val >= 0.50:
-            return f"Macro daily batch evaluates elevated geopolitical ({geo_val:.2f}) or supply risk ({supply_val:.2f}). Exponential memory decay (t½={decay_half_life:.1f}d) incorporates persistent event decay into regularized Ridge regression estimates."
+            tech_text = f"Macro daily batch evaluates elevated geopolitical ({geo_val:.2f}) or supply risk ({supply_val:.2f}). Exponential memory decay (t½={decay_half_life:.1f}d) incorporates persistent event decay into regularized Ridge regression estimates."
+            simple_text = f"Global energy risks or supply disruptions are higher than usual. The model adds extra risk margin to gas price predictions over the next 5 days."
+        elif pressure_val > 0.10:
+            tech_text = f"Baseline daily batch market conditions show moderate upward price pressure ({pressure_val:+.2f}). Regularized Ridge regression models macroeconomic futures trends with half-life decay t½={decay_half_life:.1f}d."
+            simple_text = f"Market news is pushing gas prices slightly higher. Prices are expected to rise gently over the next 5 days."
+        elif pressure_val < -0.10:
+            tech_text = f"Baseline daily batch market conditions show moderate downward price pressure ({pressure_val:+.2f}). Regularized Ridge regression models macroeconomic futures trends with half-life decay t½={decay_half_life:.1f}d."
+            simple_text = f"Market news is helping lower gas costs. Prices are expected to drift down slightly over the next 5 days."
         else:
-            return f"Baseline daily batch market conditions show minimal exogenous shocks (supply disruption {supply_val:.2f}, price pressure {pressure_val:+.2f}). Regularized Ridge regression models standard macroeconomic futures & margin trends with half-life decay t½={decay_half_life:.1f}d."
+            tech_text = f"Baseline daily batch market conditions show minimal exogenous shocks (supply disruption {supply_val:.2f}, price pressure {pressure_val:+.2f}). Regularized Ridge regression models standard macroeconomic futures & margin trends with half-life decay t½={decay_half_life:.1f}d."
+            simple_text = f"Gas markets are calm with no big news shocks. Gas prices are following normal everyday market trends over the next 5 days."
+
+    return tech_text, simple_text
 
 
 def parse_last_run_intelligence(history_path: str = None, intraday_path: str = None) -> dict:
@@ -507,7 +523,7 @@ def build_last_run_audit_card_html(audit_data: dict) -> str:
     pressure_bar_cls = "bg-rose-500" if pressure_val > 0.15 else "bg-emerald-500" if pressure_val < -0.05 else "bg-blue-500"
     pressure_bar_width = min(100, max(5, int(abs(pressure_val) * 100)))
 
-    plain_english_impact_text = generate_impact_explanation(scores, decay_half_life, run_type)
+    tech_impact_text, simple_english_text = generate_impact_explanation(scores, decay_half_life, run_type)
 
     headline_items = audit_data.get("headline_items", [])
     headline_links_html = ""
@@ -638,12 +654,23 @@ def build_last_run_audit_card_html(audit_data: dict) -> str:
                                 <span class="font-mono font-bold text-slate-200">{geo_val:.2f}</span>
                             </div>
                         </div>
+
+                        <div class="pt-2 border-t border-slate-800/60 space-y-1">
+                            <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                                <i class="fa-solid fa-code-branch text-blue-400 text-[10px]"></i> Technical Analysis
+                            </span>
+                            <p class="text-[11px] text-slate-400 leading-relaxed font-mono">
+                                {tech_impact_text}
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="pt-2 border-t border-slate-800/60 mt-3 space-y-1">
-                        <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Impact Analysis</span>
-                        <p class="text-xs text-slate-300 leading-relaxed font-sans">
-                            {plain_english_impact_text}
+                    <div class="pt-2 border-t border-slate-800/60 mt-2 space-y-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-info text-xs"></i> Simple Summary
+                        </span>
+                        <p class="text-xs text-slate-200 leading-relaxed font-sans font-medium">
+                            {simple_english_text}
                         </p>
                     </div>
                 </div>
