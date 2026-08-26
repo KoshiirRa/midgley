@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   nightly-release:
@@ -20,6 +21,27 @@ jobs:
           ref: dev
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check Milestone Completion & Auto-Promote Model Version
+        id: milestone_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python src/milestone_checker.py
+          
+          # If files were modified by auto-promotion, commit and push to dev
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -am "chore(model): Auto-promote active model version upon milestone completion [skip ci]"
+            git push origin dev
+          fi
 
       - name: Set Release Tag and Date
         id: release_vars
@@ -42,6 +64,15 @@ jobs:
           echo "" >> release_body.md
           echo "**Branch:** \`dev\` | **Target:** \`origin/dev\`" >> release_body.md
           echo "" >> release_body.md
+
+          # Include Model Promotion Announcement if triggered
+          if [ "${{ steps.milestone_check.outputs.model_promoted }}" == "true" ]; then
+            echo "> [!IMPORTANT]" >> release_body.md
+            echo "> 🎉 **Model Version Auto-Promoted to \`${{ steps.milestone_check.outputs.promoted_title }}\`!**" >> release_body.md
+            echo "> All component issues for milestone \`${{ steps.milestone_check.outputs.promoted_title }}\` have been fully completed and released." >> release_body.md
+            echo "" >> release_body.md
+          fi
+
           echo "### 📝 Changes Committed in this Release Window" >> release_body.md
           echo "" >> release_body.md
 
