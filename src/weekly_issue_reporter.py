@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import logging
+from src.arxiv_monitor import format_arxiv_markdown_section
 
 logger = logging.getLogger(__name__)
 
@@ -444,6 +445,9 @@ def generate_weekly_markdown_report() -> str:
         logger.warning(f"Could not execute catalog monitor in weekly report: {e}")
         catalog_summary_md = f"⚠️ *Catalog monitor scan skipped ({e}).*"
 
+    # Fetch recent arXiv research preprints
+    arxiv_section_md = format_arxiv_markdown_section(days_back=7)
+
     report = f"""# 📊 Weekly Model Review & Performance Audit ({today_str})
 
 ### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
@@ -481,6 +485,10 @@ def generate_weekly_markdown_report() -> str:
 ## 🔍 Automated Developer Catalog Monitor & Discovered Integrations
 
 {catalog_summary_md}
+
+---
+
+{arxiv_section_md}
 
 ---
 

@@ -130,3 +130,4 @@ def test_generate_weekly_markdown_report_includes_self_review(sample_issues):
         report = generate_weekly_markdown_report()
         assert "## 🎯 High-Impact Issue Analysis & Self-Review" in report
         assert "Highest-Impact Modeling Issue" in report
+        assert "## 📚 Relevant Recent arXiv Research Papers" in report
