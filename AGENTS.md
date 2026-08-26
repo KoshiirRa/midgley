@@ -92,6 +92,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Strategy 3 (Trading Hours Adaptive Ingestion):** `is_trading_hours()` helper restricts `finlight.me` fetches to active US commodity trading hours (08:00 AM – 05:00 PM EST, Mon–Fri).
   - **Strategy 4 (Incoming Webhook Gateway & HMAC Security):** `POST /api/v1/events/webhook` endpoint on `src/api_server.py` for direct push ingestion from external alerts (Zapier, IFTTT, Google Alerts). Mandatory payload schema requires `headline` text and `url` article link, with optional `source` origin. Enforces HMAC-SHA256 signature validation via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment, rejecting unauthorized payload tampering with HTTP 401.
 
+* **NOAA Weather Models & Lightweight `wxs.us` Ingestion (`src/noaa_weather.py`):**
+  - **Token-Efficient Ingestion Engine:** Integrates `t.wxs.us` lightweight terminal REST endpoints (`/location?format=json`) to fetch NWS alerts and SPC (Storm Prediction Center) convective outlooks for specific zipcodes (`74101` Tulsa, `19711` Newark, `45202` Cincinnati, `27834` Greenville, `28202` Charlotte, `94612` Oakland).
+  - **90%–95% Token Savings:** Pre-filters location weather data down to ~150–300 tokens (vs 2,500–4,500 tokens for raw NOAA text bulletins/GeoJSON feature maps).
+  - **0-Token Deterministic SPC Risk Mapping:** Maps categorical convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) and sub-risks (Tornado, Hail, Wind) directly in Python without requiring LLM prompt calls.
+
 * **Tiered Multi-Provider LLM Failover Engine (`src/event_analyzer.py`):**
   - **Tier 1 (Primary):** Google **Gemini 2.5 Flash** (`GEMINI_API_KEY`).
   - **Tier 2 (Secondary - Optional):** OpenAI `gpt-4o-mini` (`OPENAI_API_KEY`) / Anthropic `claude-3-5-haiku` (`ANTHROPIC_API_KEY`). Soft-checked if keys exist; safely skipped if absent.

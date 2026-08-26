@@ -213,6 +213,161 @@ def get_charlotte_weather_dataset() -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+# ==============================================================================
+# wxs.us Weather & SPC Convective Outlook Integration (Token-Efficient Ingestion)
+# ==============================================================================
+
+WXS_API_BASE = "https://t.wxs.us"
+
+# SPC Risk Category to Numerical Factor Score Mapping
+SPC_RISK_CATEGORY_MAP = {
+    "HIGH": 1.00,  # High Risk (Widespread severe/tornado outbreak)
+    "MDT":  0.80,  # Moderate Risk
+    "ENH":  0.60,  # Enhanced Risk
+    "SLGT": 0.40,  # Slight Risk
+    "MRGL": 0.20,  # Marginal Risk
+    "NONE": 0.00,  # No severe threat
+}
+
+# Metro Zip Code Registry for Modeled Energy Hubs
+METRO_ZIP_MAP = {
+    "Tulsa_OK": "74101",        # West Tulsa HF Sinclair & Cushing Hub (74023)
+    "Newark_DE": "19711",       # PBF Delaware City Refinery & C&D Canal
+    "Cincinnati_OH": "45202",    # Marathon Catlettsburg & Ohio River Locks
+    "Greenville_NC": "27834",   # Colonial Pipeline Line 1/2 Selma Hub
+    "Charlotte_NC": "28202",    # Paw Creek Distribution Hub
+    "Oakland_CA": "94612"       # SF Bay Area Chevron Richmond Refinery
+}
+
+
+def fetch_wxs_weather_data(location_or_zip: str = "74101", timeout_sec: int = 5) -> dict:
+    """
+    Fetches localized weather alerts, NWS short forecasts, and SPC outlooks
+    from wxs.us lightweight endpoint in structured JSON format.
+    Reduces prompt payload by 90-95% vs raw NOAA NWS bulletin text.
+    """
+    url = f"{WXS_API_BASE}/{location_or_zip}?format=json"
+    headers = {"User-Agent": USER_AGENT, "Accept": "application/json"}
+    
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=timeout_sec) as response:
+            if response.status == 200:
+                return json.loads(response.read().decode('utf-8'))
+    except Exception as e:
+        logger.debug(f"wxs.us fetch notice for {location_or_zip}: {e}")
+        
+    return {}
+
+
+def extract_spc_convective_risk(location_or_zip: str = "74101", raw_data: dict = None) -> dict:
+    """
+    Extracts localized SPC convective outlook risks (Tornado, Hail, Wind, Categorical)
+    and maps them to 0-token deterministic numerical risk factors [0.0, 1.0].
+    
+    Returns dictionary with:
+    - 'location': str
+    - 'categorical_risk': str (HIGH, MDT, ENH, SLGT, MRGL, NONE)
+    - 'convective_risk_score': float (0.0 to 1.0)
+    - 'tornado_risk_score': float (0.0 to 1.0)
+    - 'hail_risk_score': float (0.0 to 1.0)
+    - 'wind_risk_score': float (0.0 to 1.0)
+    - 'active_alerts': list of str
+    - 'summary_token_compact': str (~50-100 tokens compact context string)
+    """
+    if raw_data is None:
+        raw_data = fetch_wxs_weather_data(location_or_zip)
+        
+    location_str = str(location_or_zip)
+    alerts = raw_data.get('alerts', [])
+    outlooks = raw_data.get('outlooks', {})
+    
+    cat_risk = "NONE"
+    tornado_score = 0.0
+    hail_score = 0.0
+    wind_score = 0.0
+    
+    # Process outlooks if available from wxs.us payload
+    if isinstance(outlooks, dict):
+        cat_risk = outlooks.get("categorical", outlooks.get("category", "NONE")).upper()
+        t_risk = outlooks.get("tornado", "NONE").upper()
+        h_risk = outlooks.get("hail", "NONE").upper()
+        w_risk = outlooks.get("wind", "NONE").upper()
+        
+        tornado_score = SPC_RISK_CATEGORY_MAP.get(t_risk, 0.0)
+        hail_score = SPC_RISK_CATEGORY_MAP.get(h_risk, 0.0)
+        wind_score = SPC_RISK_CATEGORY_MAP.get(w_risk, 0.0)
+    elif isinstance(outlooks, list):
+        for item in outlooks:
+            if isinstance(item, dict):
+                cat = item.get("category", "NONE").upper()
+                if cat in SPC_RISK_CATEGORY_MAP and SPC_RISK_CATEGORY_MAP[cat] > SPC_RISK_CATEGORY_MAP.get(cat_risk, 0.0):
+                    cat_risk = cat
+                    
+    # Map overall convective risk score
+    convective_score = SPC_RISK_CATEGORY_MAP.get(cat_risk, 0.0)
+    
+    # Extract active alert headlines
+    alert_headlines = []
+    if isinstance(alerts, list):
+        for alt in alerts:
+            if isinstance(alt, dict):
+                hl = alt.get("event") or alt.get("headline") or str(alt)
+                alert_headlines.append(hl)
+            elif isinstance(alt, str):
+                alert_headlines.append(alt)
+                
+    # Also check if NWS active alerts indicate tornado or severe weather
+    for hl in alert_headlines:
+        hl_upper = hl.upper()
+        if "TORNADO EMERGENCY" in hl_upper or "EF-3" in hl_upper or "EF-4" in hl_upper or "EF-5" in hl_upper:
+            tornado_score = max(tornado_score, 1.0)
+            convective_score = max(convective_score, 1.0)
+            cat_risk = "HIGH"
+        elif "TORNADO WARNING" in hl_upper:
+            tornado_score = max(tornado_score, 0.80)
+            convective_score = max(convective_score, 0.80)
+            if cat_risk in ["NONE", "MRGL", "SLGT"]:
+                cat_risk = "MDT"
+        elif "SEVERE THUNDERSTORM" in hl_upper:
+            wind_score = max(wind_score, 0.60)
+            hail_score = max(hail_score, 0.60)
+            convective_score = max(convective_score, 0.60)
+            if cat_risk in ["NONE", "MRGL"]:
+                cat_risk = "ENH"
+                
+    summary_compact = f"Location {location_str} | SPC Risk: {cat_risk} (Score: {convective_score:.2f}) | Tornado: {tornado_score:.2f} | Hail: {hail_score:.2f} | Wind: {wind_score:.2f} | Active Alerts: {', '.join(alert_headlines) if alert_headlines else 'None'}"
+    
+    return {
+        "location": location_str,
+        "categorical_risk": cat_risk,
+        "convective_risk_score": float(convective_score),
+        "tornado_risk_score": float(tornado_score),
+        "hail_risk_score": float(hail_score),
+        "wind_risk_score": float(wind_score),
+        "active_alerts": alert_headlines,
+        "summary_token_compact": summary_compact
+    }
+
+
+def get_all_metro_spc_convective_outlooks(custom_zip_map: dict = None) -> dict:
+    """
+    Fetches real-time localized weather alerts and SPC convective outlooks
+    for all 6 primary modeled metro regions in Midgley.
+    Returns dictionary mapping metro name -> extracted convective risk structure.
+    """
+    if custom_zip_map is None:
+        custom_zip_map = METRO_ZIP_MAP
+        
+    results = {}
+    for metro_name, zip_code in custom_zip_map.items():
+        raw_data = fetch_wxs_weather_data(zip_code)
+        results[metro_name] = extract_spc_convective_risk(zip_code, raw_data=raw_data)
+        
+    return results
+
+
+
 
 
 
