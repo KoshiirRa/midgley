@@ -225,10 +225,59 @@ Respond strictly in valid JSON format with:
         return evaluate_item_heuristic(item)
 
 
+def infer_issue_domain_labels(eval_res: dict, item: dict) -> list:
+    """
+    Infers standard repository domain labels (data-ingestion, infrastructure, modeling,
+    dashboard, integration, api, security) based on catalog evaluation metadata.
+    Returns a list of label names starting with 'enhancement'.
+    """
+    labels = ["enhancement"]
+    cat = (eval_res.get("category", "") or "").lower()
+    comp = (eval_res.get("target_component", "") or "").lower()
+    title = (item.get("title", "") or "").lower()
+    desc = (item.get("description", "") or "").lower()
+    text = f"{title} {desc} {cat} {comp}"
+
+    if any(k in text for k in ["feed", "ingest", "weather", "noaa", "news", "data source", "eia", "usgs", "census", "sec", "edgar", "stream", "dataset"]):
+        labels.append("data-ingestion")
+    
+    if any(k in text for k in ["cron", "database", "postgres", "sql", "runner", "workflow", "tunnel", "docker", "mlops", "metabase", "archivebox", "dagu", "trigger.dev", "serverless"]):
+        labels.append("infrastructure")
+
+    if any(k in text for k in ["model", "time series", "time-series", "forecasting", "predict", "feature", "estimator", "neuralprophet", "xgboost", "ridge", "geopandas", "prophet"]):
+        labels.append("modeling")
+
+    if any(k in text for k in ["ui", "dashboard", "frontend", "card", "embed", "design system", "visual"]):
+        labels.append("dashboard")
+
+    if any(k in text for k in ["integration", "home assistant", "lubelogger", "android auto", "coupler", "sync"]):
+        labels.append("integration")
+
+    if any(k in text for k in ["mcp", "endpoint", "webhook", "gateway", "rest api"]):
+        labels.append("api")
+
+    if any(k in text for k in ["security", "auth", "hmac", "access control"]):
+        labels.append("security")
+
+    if any(k in text for k in ["token", "prompt", "token-efficiency", "quota", "cost savings", "lightweight", "pre-filter", "wxs.us", "zero-token"]):
+        labels.append("token-efficiency")
+
+    if len(labels) == 1:
+        if any(k in text for k in ["ingest", "data", "api"]):
+            labels.append("data-ingestion")
+        else:
+            labels.append("infrastructure")
+
+    return list(dict.fromkeys(labels))
+
+
 def open_github_issue_for_item(item: dict, eval_res: dict, dry_run: bool = False) -> str:
     """
-    Opens a GitHub Feature Request issue on KoshiirRa/midgley for worthwhile catalog additions.
+    Opens a GitHub Feature Request issue on KoshiirRa/midgley for worthwhile catalog additions,
+    tagging it with standard domain labels.
     """
+    labels = infer_issue_domain_labels(eval_res, item)
+    labels_str = ",".join(labels)
     title = f"[Feature Request] Ingest {item['title']} ({eval_res['category']})"
     body = f"""## Summary
 Automatically discovered new candidate tool **[{item['title']}]({item['url']})** from developer catalog \`{item['catalog_key']}\`.
@@ -240,6 +289,7 @@ Automatically discovered new candidate tool **[{item['title']}]({item['url']})**
 - **Estimated Impact Score:** **\`{eval_res['impact_score']}/10.0\`**
 - **Architecture Target:** \`{eval_res['target_component']}\`
 - **Rationale:** {eval_res['reasoning']}
+- **Assigned Labels:** \`{labels_str}\`
 
 ## Acceptance Criteria
 - [ ] Implement {item['title']} client/connector in \`{eval_res['target_component']}\`.
@@ -248,8 +298,8 @@ Automatically discovered new candidate tool **[{item['title']}]({item['url']})**
 
     if dry_run:
         safe_title = title.encode('ascii', errors='replace').decode('ascii')
-        logger.info(f"[DRY-RUN] Would create issue: {safe_title}")
-        print(f"[DRY-RUN] Created Issue Title: {safe_title}")
+        logger.info(f"[DRY-RUN] Would create issue: {safe_title} with labels [{labels_str}]")
+        print(f"[DRY-RUN] Created Issue Title: {safe_title} | Labels: [{labels_str}]")
         return f"https://github.com/KoshiirRa/midgley/issues/dry-run-{item['title'].lower().replace(' ', '-')}"
 
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
@@ -263,12 +313,12 @@ Automatically discovered new candidate tool **[{item['title']}]({item['url']})**
             env["GH_TOKEN"] = token
             env["GITHUB_TOKEN"] = token
 
-        cmd = ["gh", "issue", "create", "--repo", "KoshiirRa/midgley", "--title", title, "--body-file", issue_file, "--label", "enhancement"]
+        cmd = ["gh", "issue", "create", "--repo", "KoshiirRa/midgley", "--title", title, "--body-file", issue_file, "--label", labels_str]
         res = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
         url = res.stdout.strip()
         if os.path.exists(issue_file):
             os.remove(issue_file)
-        logger.info(f"GitHub issue created via gh CLI: {url}")
+        logger.info(f"GitHub issue created via gh CLI: {url} with labels [{labels_str}]")
         return url
     except Exception as e:
         logger.warning(f"gh CLI issue creation notice ({e}). Trying REST API fallback...")
@@ -285,12 +335,12 @@ Automatically discovered new candidate tool **[{item['title']}]({item['url']})**
             "User-Agent": "Midgley-Catalog-Monitor",
             "Content-Type": "application/json"
         }
-        payload = json.dumps({"title": title, "body": body, "labels": ["enhancement"]}).encode("utf-8")
+        payload = json.dumps({"title": title, "body": body, "labels": labels}).encode("utf-8")
         req = urllib.request.Request(api_url, data=payload, headers=headers, method="POST")
         with urllib.request.urlopen(req, timeout=15) as response:
             res_data = json.loads(response.read().decode("utf-8"))
             html_url = res_data.get("html_url", "")
-            logger.info(f"GitHub issue created via REST API: {html_url}")
+            logger.info(f"GitHub issue created via REST API: {html_url} with labels [{labels_str}]")
             return html_url
     except Exception as e:
         logger.error(f"Failed to create GitHub issue via REST API: {e}")
