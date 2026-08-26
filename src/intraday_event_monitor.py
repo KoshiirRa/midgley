@@ -137,6 +137,14 @@ class IntradayEventMonitor:
                 headline_trigger=headline
             )
 
+            # 4. Regenerate Public Web Dashboard
+            try:
+                from src.dashboard_generator import generate_public_dashboard
+                generate_public_dashboard()
+                logger.info("  -> Regenerated public dashboard web app (docs/).")
+            except Exception as e:
+                logger.warning(f"Failed to regenerate dashboard after anomaly: {e}")
+
         return result
 
     def run_polling_cycle(self) -> Dict:

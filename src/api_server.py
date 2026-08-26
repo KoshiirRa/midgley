@@ -460,6 +460,23 @@ async def ingest_event_webhook(
     }
 
 
+@app.post("/api/v1/events/poll", summary="Trigger Intraday Event Polling Cycle")
+def trigger_event_polling():
+    """
+    Strategy 2: Triggers an on-demand intraday RSS polling cycle across free energy feeds.
+    Evaluates breaking news, invalidates response cache on anomalies, and updates prediction logs.
+    """
+    from src.intraday_event_monitor import IntradayEventMonitor
+    monitor = IntradayEventMonitor()
+    result = monitor.run_polling_cycle()
+    return {
+        "status": "success",
+        "processed_at": datetime.now().isoformat(),
+        "result": result
+    }
+
+
+
 
 
 @app.get("/.well-known/ai-plugin.json", include_in_schema=False)

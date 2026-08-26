@@ -1,0 +1,11 @@
+[Unit]
+Description=Midgley Local Dev Server Intraday Polling Runner
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/marty/projects/midgley
+ExecStart=/bin/bash /home/marty/projects/midgley/scripts/run_local_intraday_polling.sh
+
+[Install]
+WantedBy=default.target

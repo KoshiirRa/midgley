@@ -139,6 +139,13 @@ class TestAPIServer(unittest.TestCase):
             )
             self.assertEqual(res_missing.status_code, 401)
 
+    def test_post_events_poll(self):
+        res = self.client.post("/api/v1/events/poll")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertIn("result", data)
+        self.assertEqual(data["result"]["status"], "success")
 
 
 if __name__ == "__main__":

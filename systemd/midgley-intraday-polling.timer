@@ -1,0 +1,9 @@
+[Unit]
+Description=Midgley Local Dev Server Intraday Polling Timer (Every 15 Minutes)
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+
+[Install]
+WantedBy=timers.target
