@@ -35,8 +35,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     servers=[
-        {"url": "https://local-dev.dwarvenbard.com", "description": "Primary Dev VM HTTPS Gateway"},
-        {"url": "http://10.42.42.54:8000", "description": "Dev VM Local Network Port"}
+        {"url": "http://localhost:8000", "description": "Local API Gateway"}
     ]
 )
 
@@ -492,7 +491,7 @@ def get_ai_plugin_manifest():
         "auth": {"type": "none"},
         "api": {
             "type": "openapi",
-            "url": "https://local-dev.dwarvenbard.com/openapi.json"
+            "url": "https://koshiirra.github.io/midgley/openapi.json"
         },
         "logo_url": "https://koshiirra.github.io/midgley/assets/icon.png",
         "contact_email": "m.cubed.3@gmail.com",

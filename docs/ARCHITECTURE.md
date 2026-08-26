@@ -149,11 +149,11 @@ Static web compatibility is preserved across both direct file routes (`/national
 
 ## 7. Local Dev Environment & Permanent Web Server (`dev-vm` Port 8080)
 
-To support rapid iteration and local testing, a dedicated Linux dev environment is configured on `dev-vm` (`10.42.42.54`):
+To support rapid iteration and local testing, a dedicated Linux dev environment is configured on `dev-vm`:
 
-* **Permanent `dev` Branch:** A permanent development branch (`origin/dev`) is maintained and checked out at `/home/marty/projects/midgley`.
-* **Systemd User Service (`midgley-dev.service`):** Runs `python3 -m http.server 8080 --directory /home/marty/projects/midgley/docs --bind 0.0.0.0` as a background user service under systemd.
-* **Service Persistence & Linger:** User linger is enabled (`loginctl enable-linger marty`), allowing the dev web server to start automatically at system boot and persist without an open SSH session. Automatic restart (`Restart=always`) ensures high availability against process crashes.
+* **Permanent `dev` Branch:** A permanent development branch (`origin/dev`) is maintained in the project workspace.
+* **Systemd User Service (`midgley-dev.service`):** Runs `python3 -m http.server 8080 --directory docs` as a background user service under systemd.
+* **Service Persistence & Linger:** User linger is enabled (`loginctl enable-linger`), allowing the dev web server to start automatically at system boot and persist without an open SSH session. Automatic restart (`Restart=always`) ensures high availability against process crashes.
 
 ---
 

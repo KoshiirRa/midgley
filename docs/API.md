@@ -6,11 +6,11 @@ The **Midgley MCP & REST API Gateway** exposes real-time unleaded gasoline pump 
 
 ## 🚀 Quick Start & Endpoint Overview
 
-* **Primary Dev API Base URL**: `https://local-dev.dwarvenbard.com` (Direct Dev VM HTTPS Gateway)
-* **Local Dev VM Direct Port**: `http://10.42.42.54:8000`
-* **OpenAPI 3.1 Spec**: `https://local-dev.dwarvenbard.com/openapi.json` or `https://koshiirra.github.io/midgley/openapi.json`
-* **GPT Action Manifest**: `https://local-dev.dwarvenbard.com/.well-known/ai-plugin.json` or `https://koshiirra.github.io/midgley/.well-known/ai-plugin.json`
-* **MCP SSE Connection**: `https://local-dev.dwarvenbard.com/mcp/sse` (or `http://10.42.42.54:8000/mcp/sse`)
+* **Primary Dev API Base URL**: `http://localhost:8000` (or configured API Gateway)
+* **Local Dev VM Direct Port**: `http://localhost:8000`
+* **OpenAPI 3.1 Spec**: `https://koshiirra.github.io/midgley/openapi.json`
+* **GPT Action Manifest**: `https://koshiirra.github.io/midgley/.well-known/ai-plugin.json`
+* **MCP SSE Connection**: `http://localhost:8000/mcp/sse`
 
 ---
 
@@ -25,7 +25,7 @@ Fetches real-time unleaded gas price data using the multi-tiered fallback chain 
 
 **Example Request:**
 ```bash
-curl -X GET "https://local-dev.dwarvenbard.com/api/v1/prices/live?locale=oakland"
+curl -X GET "http://localhost:8000/api/v1/prices/live?locale=oakland"
 ```
 
 **Example Response:**
@@ -58,7 +58,7 @@ Generates 5-day out-of-time quantitative price predictions, expected dollar delt
 
 **Example Request:**
 ```bash
-curl -X GET "https://local-dev.dwarvenbard.com/api/v1/forecast/predict?locale=tulsa&days=5"
+curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
 ```
 
 ---
@@ -68,7 +68,7 @@ Unified endpoint returning live current pump price, predicted 5-day target forec
 
 **Example Request:**
 ```bash
-curl -X GET "https://local-dev.dwarvenbard.com/api/v1/combined?locale=cincinnati"
+curl -X GET "http://localhost:8000/api/v1/combined?locale=cincinnati"
 ```
 
 ---
@@ -87,7 +87,7 @@ Simulates counterfactual physical refinery outages, weather disasters, or geopol
 
 **Example Request:**
 ```bash
-curl -X POST "https://local-dev.dwarvenbard.com/api/v1/forecast/simulate" \
+curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
      -H "Content-Type: application/json" \
      -d '{"scenario_id": "hormuz_blockade", "locale": "oakland"}'
 ```
@@ -124,7 +124,7 @@ The Midgley MCP Server exposes tools, resources, and prompt templates for integr
 
 2. **HTTP/SSE Transport**:
    Connect via Server-Sent Events (SSE):
-   `https://local-dev.dwarvenbard.com/mcp/sse` (or `http://10.42.42.54:8000/mcp/sse`)
+   `http://localhost:8000/mcp/sse`
 
 ### Exposed MCP Tools
 - `get_live_gas_prices(locale, zip_code)`

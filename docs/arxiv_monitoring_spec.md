@@ -256,7 +256,7 @@ The following research papers were published to arXiv within the last 7 days and
 2. **Integration Test (`tests/test_weekly_issue_reporter.py`):**
    - Verify `generate_weekly_markdown_report()` includes the `## 📚 Relevant Recent arXiv Research Papers` section.
 3. **Execution Test:**
-   - Execute `python -m src.weekly_issue_reporter` locally or on `dev-vm` (`10.42.42.54`).
+   - Execute `python -m src.weekly_issue_reporter` locally or on `dev-vm`.
 
 ---
 

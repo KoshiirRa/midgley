@@ -214,15 +214,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 9. Dev Environment & Permanent Server Agent (`dev-vm` Port 8080 & Systemd Local Workflow Timers)
 
-* **Role:** Manages the persistent local development environment on `dev-vm` (`10.42.42.54`), keeping the permanent `dev` branch active, serving the web dashboard live on port 8080, and running local scheduled workflow equivalents (daily forecasting & weekly model issue self-reviews).
+* **Role:** Manages the persistent local development environment on `dev-vm`, keeping the permanent `dev` branch active, serving the web dashboard live on port 8080, and running local scheduled workflow equivalents (daily forecasting & weekly model issue self-reviews).
 * **Key Specifications:**
-  - **Dedicated Dev Branch:** Tracks the permanent `dev` branch (`origin/dev`) at `/home/marty/projects/midgley`.
+  - **Dedicated Dev Branch:** Tracks the permanent `dev` branch (`origin/dev`) in the project directory.
   - **Systemd Web & API Services:** Managed by `midgley-dev.service` (dashboard web server on port 8080) and `midgley-api.service` (FastAPI / MCP gateway on port 8000).
   - **Systemd Scheduled Local Workflow Timers:**
     - `midgley-daily-forecast.timer`: Executes `scripts/run_local_daily_forecast.sh` daily at **02:00 AM Central / 07:00 UTC**.
     - `midgley-intraday-polling.timer`: Executes `scripts/run_local_intraday_polling.sh` **every 15 minutes** 24/7 (running zero-cost RSS energy news polling, evaluating shock thresholds, and auto-revising forecasts/dashboard on anomalies).
     - `midgley-weekly-review.timer`: Executes `scripts/run_local_weekly_review.sh` every **Saturday at 08:00 AM Central / 13:00 UTC** (running model backtests, GitHub open issue self-reviews via Gemini, and public dashboard updates).
-  - **User Linger:** User linger enabled (`loginctl enable-linger marty`) to ensure background web services and scheduled timers run 24/7 across host reboots.
+  - **User Linger:** User linger enabled (`loginctl enable-linger`) to ensure background web services and scheduled timers run 24/7 across host reboots.
 
 ---
 
@@ -239,7 +239,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 11. MCP & REST API Gateway Agent (`src/api_server.py`, `src/mcp_server.py`, `src/live_fuel_feed.py`, & `src/lookup_cache.py`)
 
 * **Role:** Exposes real-time unleaded gasoline price ingestion, 5-day out-of-time quantitative forecasting, counterfactual physical/geopolitical shock simulations, and Model Context Protocol (MCP) integrations for external LLMs, AI agents, and chatbots.
-* **Service Orchestration:** Managed by `midgley-api.service` running continuously on `dev-vm` (`https://local-dev.dwarvenbard.com` / `10.42.42.54:8000`).
+* **Service Orchestration:** Managed by `midgley-api.service` running continuously on `dev-vm` (`http://localhost:8000`).
 * **Scraper Fallback Sequence (`src/live_fuel_feed.py`):**
   - **Step 1 (GasBuddy GraphQL):** Real-time station queries by zip code.
   - **Step 2 (AAA Metro BS4 Scraper):** Targeted BeautifulSoup metro table parsing by region keywords (e.g. `Oakland`, `San Francisco`, `Tulsa`, `Wilmington`, `Cincinnati`, `Covington`). Rejects unparseable headers to return `None` rather than matching global top-nav header text.
@@ -259,8 +259,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Core Documentation Maintenance Rules:**
   1. **Mandatory Documentation Sync:** Any agent or process modifying system architecture, data ingestion streams, API gateways, MLOps processes, or scenario simulators MUST update the corresponding Markdown documentation page in the GitHub Wiki (`Agent-Architecture.md`, `Data-Ingestion-and-APIs.md`, `Scenario-Simulator.md`, `MLOps-and-Continuous-Feedback.md`).
   2. **New Regional Model Calibration Specs:** Whenever a new regional metro model or locale subpackage is introduced to `src/locations/`, its complete calibration specifications (PADD region, base pump price, rack margin equation, delivery hub dynamics, state tax burden, refining capacity, and local hazard alert vectors) MUST be documented in `Regional-Metro-Models.md` in the GitHub Wiki.
-  3. **Dev vs. Prod Environment Synchronization:** The environment status and comparative matrix in `Environment-State-and-Dev-vs-Prod.md` and `Home.md` MUST be kept up to date to clearly reflect operational differences between **Production** (`main` branch / GitHub Actions / GitHub Pages) and **Development** (`dev` branch / `dev-vm` `10.42.42.54`).
-  4. **Project History & Roadmap Updates:** Major release milestones, new feature additions, and roadmap target updates MUST be logged in `Project-History-and-Roadmap.md`.
+  3. **Dev vs. Prod Environment Synchronization:** The environment status and comparative matrix in `Environment-State-and-Dev-vs-Prod.md` and `Home.md` MUST be kept up to date to clearly reflect operational differences between **Production** (`main` branch / GitHub Actions / GitHub Pages) and **Development** (`dev` branch / `dev-vm`).
+  4. **Security & Data Privacy:** Public repository documentation and Wiki pages MUST NEVER contain internal IP addresses, local network topology, internal domain names, or private server login credentials.
+  5. **Project History & Roadmap Updates:** Major release milestones, new feature additions, and roadmap target updates MUST be logged in `Project-History-and-Roadmap.md`.
 
 
 
