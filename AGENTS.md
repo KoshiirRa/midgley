@@ -182,13 +182,14 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 7. Model Performance Review & Continuous Feedback Loop Agent (`.github/workflows/weekly_model_review.yml` & `src/weekly_issue_reporter.py`)
+### 7. Model Performance Review & Continuous Feedback Loop Agent (`.github/workflows/weekly_model_review.yml`, `src/weekly_issue_reporter.py` & `src/catalog_monitor.py`)
 
-* **Role:** Operates automated weekly model performance evaluations, self-reviews open GitHub repository issues, and maintains a continuous feedback loop into the quantitative forecasting engine to drive accuracy improvements over time.
+* **Role:** Operates automated weekly model performance evaluations, self-reviews open GitHub repository issues, monitors public developer catalog lists for newly added tools, and maintains a continuous feedback loop into the quantitative forecasting engine to drive accuracy improvements over time.
 * **Automated Cloud Schedule:** Executes automatically every **Saturday morning at 08:00 AM Central / 13:00 UTC** on GitHub Actions cloud runners.
 * **Continuous Feedback Loop & Self-Review Mechanism:**
   - **Rolling Error Metrics:** Evaluates rolling MAE, RMSE, and Directional Hit Rate metrics across 30-day, 60-day, and 90-day historical evaluation windows.
   - **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley` via `gh` CLI or GitHub REST API, evaluates each issue's potential modeling impact using Gemini 2.5 Flash (with a domain-specific heuristic fallback), ranks issues, and selects the top issue expected to yield the largest accuracy/MAE improvement.
+  - **Automated Developer Catalog Monitor (`src/catalog_monitor.py` & `data/catalog_monitors_state.json`):** Continuously tracks 6 major developer catalog indexes (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). On weekly runs, evaluates newly added catalog items with Gemini 2.5 Flash and automatically files GitHub Feature Request issues for items scoring $\ge 7.0/10.0$.
   - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
 
 ---

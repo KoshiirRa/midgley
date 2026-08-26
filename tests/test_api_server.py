@@ -110,7 +110,7 @@ class TestAPIServer(unittest.TestCase):
         from unittest.mock import patch
 
         secret = "test_secret_key_123"
-        payload = {"headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates", "source": "Test_Runner"}
+        payload = {"headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates", "url": "https://news.google.com/articles/123", "source": "Test_Runner"}
         body_bytes = json.dumps(payload).encode("utf-8")
         valid_sig = hmac.new(secret.encode("utf-8"), body_bytes, hashlib.sha256).hexdigest()
 

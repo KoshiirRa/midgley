@@ -48,6 +48,7 @@ CHARLOTTE_SUB_PATH = os.path.join(CHARLOTTE_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 
+KATEX_ONLOAD_SCRIPT = r'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 
 KATEX_MOBILE_CSS = """
@@ -231,6 +232,436 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     </header>"""
 
 
+def generate_impact_explanation(scores: dict, decay_half_life: float, run_type: str) -> str:
+    """Generates plain English explanation of mathematical impact vector and half-life decay."""
+    supply_val = scores.get("supply_disruption", 0.10)
+    pressure_val = scores.get("overall_price_pressure", 0.02)
+    geo_val = scores.get("geopolitical_risk", 0.15)
+
+    if run_type == "INTRADAY_REVISION":
+        if pressure_val > 0.15:
+            return f"Exogenous supply disruption ({supply_val:.2f}) and geopolitical risk ({geo_val:.2f}) generate a +{pressure_val:.2f} price pressure shock. Exponential memory decay (t½={decay_half_life:.1f}d) models a 50% impact reduction over 5 days, driving short-term upward futures re-anchoring."
+        elif pressure_val < -0.15:
+            return f"Dovish sentiment or supply recovery ({pressure_val:.2f}) reduces spot risk premiums. Exponential memory decay (t½={decay_half_life:.1f}d) models a gradual 50% normalization over 5 days."
+        else:
+            return f"Intraday news anomaly evaluates moderate price pressure ({pressure_val:+.2f}) with supply disruption ({supply_val:.2f}). Memory decay (t½={decay_half_life:.1f}d) decays the shock incrementally."
+    else:
+        if geo_val >= 0.50 or supply_val >= 0.50:
+            return f"Macro daily batch evaluates elevated geopolitical ({geo_val:.2f}) or supply risk ({supply_val:.2f}). Exponential memory decay (t½={decay_half_life:.1f}d) incorporates persistent event decay into regularized Ridge regression estimates."
+        else:
+            return f"Baseline daily batch market conditions show minimal exogenous shocks (supply disruption {supply_val:.2f}, price pressure {pressure_val:+.2f}). Regularized Ridge regression models standard macroeconomic futures & margin trends with half-life decay t½={decay_half_life:.1f}d."
+
+
+def parse_last_run_intelligence(history_path: str = None, intraday_path: str = None) -> dict:
+    """
+    Parses data/prediction_history.csv and data/intraday_events.json
+    to extract execution context, score vectors, and prediction revision deltas.
+    """
+    import urllib.parse
+
+    history_csv = history_path if history_path is not None else HISTORY_CSV_PATH
+    intraday_json = intraday_path if intraday_path is not None else os.path.join("data", "intraday_events.json")
+
+    run_type = "DAILY_BATCH"
+    headline_trigger = ""
+    log_timestamp = ""
+    scores = {
+        "supply_disruption": 0.10,
+        "overall_price_pressure": 0.02,
+        "geopolitical_risk": 0.15,
+        "demand_sentiment": 0.00,
+        "opec_action": 0.00
+    }
+    decay_half_life = 5.0
+
+    modeled_regions = [
+        ("National", "National Wholesale", 3.184, 3.077),
+        ("Tulsa_OK", "Tulsa, OK Retail", 3.890, 3.780),
+        ("Newark_DE", "Newark, DE Retail", 3.350, 3.250),
+        ("Cincinnati_OH", "Cincinnati, OH/KY", 3.450, 3.350),
+        ("Greenville_NC", "Greenville, NC Retail", 3.250, 3.150),
+        ("Charlotte_NC", "Charlotte, NC Retail", 3.280, 3.180),
+        ("Oakland_CA", "Oakland, CA Retail", 5.550, 4.840),
+        ("BayArea_CA", "SF Bay Area Region", 5.650, 4.940),
+    ]
+
+    nat_base = 3.184
+    nat_pred = 3.077
+    nat_delta = nat_pred - nat_base
+
+    tulsa_base = 3.890
+    tulsa_pred = 3.780
+    tulsa_delta = tulsa_pred - tulsa_base
+
+    oakland_base = 5.550
+    oakland_pred = 4.840
+    oakland_delta = oakland_pred - oakland_base
+
+    region_deltas = []
+
+    if os.path.exists(history_csv):
+        try:
+            df = pd.read_csv(history_csv)
+            if not df.empty:
+                latest_row = df.iloc[-1]
+                if 'run_type' in df.columns and pd.notna(latest_row['run_type']):
+                    val = str(latest_row['run_type']).strip()
+                    if val and val.lower() != "nan":
+                        run_type = val
+                if 'headline_trigger' in df.columns and pd.notna(latest_row['headline_trigger']):
+                    val = str(latest_row['headline_trigger']).strip()
+                    if val and val.lower() != "nan":
+                        headline_trigger = val
+                if 'log_timestamp' in df.columns and pd.notna(latest_row['log_timestamp']):
+                    val = str(latest_row['log_timestamp']).strip()
+                    if val and val.lower() != "nan":
+                        log_timestamp = val
+
+                for key, name, def_base, def_pred in modeled_regions:
+                    reg_df = df[df['region'] == key]
+                    if not reg_df.empty:
+                        last_reg = reg_df.iloc[-1]
+                        b_price = float(last_reg['current_base_price'])
+                        p_price = float(last_reg['predicted_5d_price'])
+
+                        if len(reg_df) >= 2:
+                            prev_reg = reg_df.iloc[-2]
+                            prev_p_price = float(prev_reg['predicted_5d_price'])
+                            d_val = p_price - prev_p_price
+                        else:
+                            d_val = p_price - b_price
+
+                        pct = (d_val / b_price * 100) if b_price else 0.0
+                        region_deltas.append({
+                            "key": key,
+                            "name": name,
+                            "base_price": b_price,
+                            "predicted_price": p_price,
+                            "delta": d_val,
+                            "pct_change": pct
+                        })
+
+                        if key == 'National':
+                            nat_base, nat_pred, nat_delta = b_price, p_price, d_val
+                        elif key == 'Tulsa_OK':
+                            tulsa_base, tulsa_pred, tulsa_delta = b_price, p_price, d_val
+                        elif key == 'Oakland_CA':
+                            oakland_base, oakland_pred, oakland_delta = b_price, p_price, d_val
+                    else:
+                        d_val = def_pred - def_base
+                        pct = (d_val / def_base * 100) if def_base else 0.0
+                        region_deltas.append({
+                            "key": key,
+                            "name": name,
+                            "base_price": def_base,
+                            "predicted_price": def_pred,
+                            "delta": d_val,
+                            "pct_change": pct
+                        })
+        except Exception as e:
+            logger.warning(f"Could not parse prediction history for audit box: {e}")
+
+    if not region_deltas:
+        for key, name, def_base, def_pred in modeled_regions:
+            d_val = def_pred - def_base
+            pct = (d_val / def_base * 100) if def_base else 0.0
+            region_deltas.append({
+                "key": key,
+                "name": name,
+                "base_price": def_base,
+                "predicted_price": def_pred,
+                "delta": d_val,
+                "pct_change": pct
+            })
+
+    if os.path.exists(intraday_json):
+        try:
+            with open(intraday_json, "r", encoding="utf-8") as f:
+                events = json.load(f)
+                if isinstance(events, list) and len(events) > 0:
+                    anomalies = [e for e in events if e.get("is_anomaly")]
+                    latest_evt = anomalies[-1] if anomalies else events[-1]
+
+                    if run_type == "INTRADAY_REVISION" or bool(headline_trigger):
+                        if not headline_trigger and latest_evt.get("headline"):
+                            headline_trigger = latest_evt.get("headline")
+
+                        if "scores" in latest_evt and isinstance(latest_evt["scores"], dict):
+                            for k, v in latest_evt["scores"].items():
+                                try:
+                                    scores[k] = float(v)
+                                except (ValueError, TypeError):
+                                    pass
+        except Exception as e:
+            logger.warning(f"Could not parse intraday events for audit box: {e}")
+
+    headline_items = []
+    if run_type == "INTRADAY_REVISION" or bool(headline_trigger):
+        if os.path.exists(intraday_json):
+            try:
+                with open(intraday_json, "r", encoding="utf-8") as f:
+                    events = json.load(f)
+                    if isinstance(events, list):
+                        anomalies = [e for e in events if e.get("is_anomaly")]
+                        target_evts = anomalies if anomalies else events
+                        for evt in reversed(target_evts):
+                            h_text = evt.get("headline", "")
+                            h_url = evt.get("url", "")
+                            h_src = evt.get("source", "Webhook / RSS")
+                            if h_text and not any(item["headline"] == h_text for item in headline_items):
+                                headline_items.append({"headline": h_text, "url": h_url, "source": h_src})
+                            if len(headline_items) >= 3:
+                                break
+            except Exception as e:
+                logger.warning(f"Could not parse headline items from intraday_events.json: {e}")
+        if not headline_items and headline_trigger:
+            headline_items.append({
+                "headline": headline_trigger,
+                "url": f"https://news.google.com/search?q={urllib.parse.quote(headline_trigger)}",
+                "source": "Intraday Anomaly Trigger"
+            })
+    else:
+        headline_items = [
+            {
+                "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
+                "url": "https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html",
+                "source": "CME_Group / NYMEX"
+            },
+            {
+                "headline": "NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion",
+                "url": "https://api.weather.gov",
+                "source": "NOAA_NWS_API"
+            },
+            {
+                "headline": "Executive Social Media Feed & OPEC Weekend Price Gap Analysis",
+                "url": "https://finlight.me",
+                "source": "Finlight_v2_API"
+            }
+        ]
+
+    if not log_timestamp:
+        log_timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+
+    return {
+        "run_type": run_type,
+        "headline_trigger": headline_trigger,
+        "log_timestamp": log_timestamp,
+        "scores": scores,
+        "decay_half_life": decay_half_life,
+        "nat_base": nat_base,
+        "nat_pred": nat_pred,
+        "nat_delta": nat_delta,
+        "tulsa_base": tulsa_base,
+        "tulsa_pred": tulsa_pred,
+        "tulsa_delta": tulsa_delta,
+        "oakland_base": oakland_base,
+        "oakland_pred": oakland_pred,
+        "oakland_delta": oakland_delta,
+        "region_deltas": region_deltas,
+        "headline_items": headline_items
+    }
+
+
+def build_last_run_audit_card_html(audit_data: dict) -> str:
+    """Renders responsive Tailwind CSS card for the Last Run Intelligence & Impact Audit Component."""
+    import urllib.parse
+
+    run_type = audit_data.get("run_type", "DAILY_BATCH")
+    headline = audit_data.get("headline_trigger", "")
+    log_ts = audit_data.get("log_timestamp", "")
+    scores = audit_data.get("scores", {})
+    decay_half_life = audit_data.get("decay_half_life", 5.0)
+
+    is_intraday = (run_type == "INTRADAY_REVISION") or bool(headline)
+
+    if is_intraday:
+        badge_html = """<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 shadow-sm">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
+            🚨 Intraday Anomaly Shock
+        </span>"""
+        trigger_title = f"🚨 Intraday Anomaly Shock: {headline}" if headline else "🚨 High-Impact Intraday Anomaly Event"
+        trigger_desc = "Triggered by automated 15-minute energy RSS polling / Webhook anomaly threshold evaluation."
+        run_mode_tag = "INTRADAY_REVISION"
+    else:
+        badge_html = """<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Scheduled Daily Batch
+        </span>"""
+        trigger_title = "Scheduled Daily Batch @ 02:00 AM Central"
+        trigger_desc = "Automated 24-hour commodity futures, weather alerts, and executive social media ingestion."
+        run_mode_tag = "DAILY_BATCH"
+
+    supply_val = scores.get("supply_disruption", 0.10)
+    pressure_val = scores.get("overall_price_pressure", 0.02)
+    geo_val = scores.get("geopolitical_risk", 0.15)
+
+    supply_score_cls = "text-rose-400" if supply_val >= 0.50 else "text-emerald-400" if supply_val < 0.20 else "text-amber-400"
+    supply_bar_cls = "bg-rose-500" if supply_val >= 0.50 else "bg-emerald-500" if supply_val < 0.20 else "bg-amber-500"
+    supply_bar_width = min(100, max(5, int(supply_val * 100)))
+
+    pressure_sign = "+" if pressure_val >= 0 else ""
+    pressure_formatted = f"{pressure_sign}{pressure_val:.2f}"
+    pressure_score_cls = "text-rose-400" if pressure_val > 0.15 else "text-emerald-400" if pressure_val < -0.05 else "text-blue-400"
+    pressure_bar_cls = "bg-rose-500" if pressure_val > 0.15 else "bg-emerald-500" if pressure_val < -0.05 else "bg-blue-500"
+    pressure_bar_width = min(100, max(5, int(abs(pressure_val) * 100)))
+
+    plain_english_impact_text = generate_impact_explanation(scores, decay_half_life, run_type)
+
+    headline_items = audit_data.get("headline_items", [])
+    headline_links_html = ""
+    for h in headline_items:
+        h_text = h.get("headline", "")
+        h_url = h.get("url", "")
+        h_src = h.get("source", "Energy_News")
+        if not h_url:
+            h_url = f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
+
+        headline_links_html += f"""
+                        <a href="{h_url}" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 hover:border-blue-500/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-blue-400 mt-0.5 group-hover:text-blue-300 shrink-0"></i>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs text-slate-200 group-hover:text-white font-medium line-clamp-2">{h_text}</p>
+                                <span class="text-[10px] text-slate-500 font-mono mt-0.5 block">{h_src}</span>
+                            </div>
+                        </a>"""
+
+    region_rows_html = ""
+    for item in audit_data.get("region_deltas", []):
+        name = item["name"]
+        d_val = item["delta"]
+        pct = item["pct_change"]
+
+        sign = "+" if d_val > 0 else ""
+        delta_str = f"{sign}${d_val:.3f}/gal"
+        pct_str = f"{sign}{pct:.2f}%"
+
+        if d_val > 0:
+            color_cls = "text-rose-400"
+            arrow = '<i class="fa-solid fa-arrow-up text-rose-400 ml-1 font-bold"></i>'
+        elif d_val < 0:
+            color_cls = "text-emerald-400"
+            arrow = '<i class="fa-solid fa-arrow-down text-emerald-400 ml-1 font-bold"></i>'
+        else:
+            color_cls = "text-slate-400"
+            arrow = '<i class="fa-solid fa-arrow-right text-slate-400 ml-1 font-bold"></i>'
+
+        region_rows_html += f"""
+                        <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
+                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">{name}</span>
+                            <div class="text-right font-mono text-xs font-semibold {color_cls} flex items-center justify-end gap-0.5">
+                                <span>{delta_str} ({pct_str})</span>
+                                {arrow}
+                            </div>
+                        </div>"""
+
+    return f"""        <!-- LAST RUN INTELLIGENCE & IMPACT AUDIT CARD -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 card-glow space-y-6">
+            
+            <!-- Card Header: Title & Trigger Badge -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800/80 pb-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs uppercase font-bold tracking-wider text-blue-400">Execution Audit</span>
+                        <span class="text-slate-600">&bull;</span>
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-clock mr-1"></i>{log_ts}</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mt-1 flex items-center gap-2.5">
+                        <i class="fa-solid fa-microchip text-blue-400"></i> Last Run Intelligence & Impact Audit
+                    </h3>
+                </div>
+
+                <!-- Trigger Badge -->
+                <div>
+                    {badge_html}
+                </div>
+            </div>
+
+            <!-- Main 3-Column Metric Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Column 1: Trigger Context -->
+                <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                            <i class="fa-solid fa-bolt text-amber-400"></i> Trigger Context
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white leading-tight">{trigger_title}</p>
+                            <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">{trigger_desc}</p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs">
+                            <span class="text-slate-400">Run Mode:</span>
+                            <span class="font-mono font-semibold text-slate-200">{run_mode_tag}</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-800/60 space-y-2 mt-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Headline Impact Feeds</span>
+                            <span class="text-[10px] text-slate-500 font-mono">Live Links</span>
+                        </div>
+                        <div class="space-y-1.5 max-h-44 overflow-y-auto pr-1">
+{headline_links_html}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Mathematical Impact (Score Vector & Half-Life) -->
+                <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-calculator text-blue-400"></i> Mathematical Impact</span>
+                            <span class="text-slate-500 font-mono text-[10px]">t<sub>1/2</sub> = {decay_half_life:.1f}d</span>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-400">Supply Disruption Score</span>
+                                <span class="font-mono font-bold {supply_score_cls}">{supply_val:.2f}</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                <div class="{supply_bar_cls} h-1.5 rounded-full" style="width: {supply_bar_width}%"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center text-xs pt-1">
+                                <span class="text-slate-400">Price Pressure Shock</span>
+                                <span class="font-mono font-bold {pressure_score_cls}">{pressure_formatted}</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                <div class="{pressure_bar_cls} h-1.5 rounded-full" style="width: {pressure_bar_width}%"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center text-xs pt-1">
+                                <span class="text-slate-400">Geopolitical Risk</span>
+                                <span class="font-mono font-bold text-slate-200">{geo_val:.2f}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-800/60 mt-3 space-y-1">
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Impact Analysis</span>
+                        <p class="text-xs text-slate-300 leading-relaxed font-sans">
+                            {plain_english_impact_text}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Column 3: Prediction Revisions Delta -->
+                <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-2.5">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/60 pb-2">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-chart-line text-emerald-400"></i> Prediction Revisions Delta</span>
+                        <span class="text-slate-500 text-[10px]">vs Prev Run</span>
+                    </div>
+
+                    <div class="space-y-1 max-h-60 overflow-y-auto pr-1">
+{region_rows_html}
+                    </div>
+                </div>
+            </div>
+        </div>"""
+
 
 def generate_public_dashboard():
     os.makedirs(DOCS_DIR, exist_ok=True)
@@ -322,6 +753,10 @@ def generate_public_dashboard():
     prices_map['NorthBay_CA']['base'] = round(oak_base - 0.100, 3)
     prices_map['NorthBay_CA']['pred'] = round(prices_map['NorthBay_CA']['base'] + oak_delta, 3)
 
+    # Parse last run intelligence & mathematical impact
+    audit_data = parse_last_run_intelligence()
+    audit_card_html = build_last_run_audit_card_html(audit_data)
+
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
     last_run_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
@@ -339,7 +774,7 @@ def generate_public_dashboard():
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {{ delimiters: [ {{left: '$$', right: '$$', display: true}}, {{left: '\\\\(', right: '\\\\)', display: false}} ] }});"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" {KATEX_ONLOAD_SCRIPT}></script>
 
     <style>
         .gradient-bg {{ background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }}
@@ -369,6 +804,8 @@ def generate_public_dashboard():
                 Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 2.5 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
             </p>
         </div>
+
+{audit_card_html}
 
         <!-- ACTIVE FORECAST LOCALES SECTION -->
         <section class="space-y-4">

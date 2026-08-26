@@ -50,5 +50,47 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-26T12:31:36.581274",
+    "headline": "Michigan gas prices hit a new high in 2025, Midwest refinery outage blamed - Detroit Free Press",
+    "source": "RSS_Feed",
+    "url": "",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    }
+  },
+  {
+    "timestamp": "2026-08-26T12:31:41.515846",
+    "headline": "US Midwest refinery outages boost summer gasoline prices, EIA says - Reuters",
+    "source": "RSS_Feed",
+    "url": "",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    }
+  },
+  {
+    "timestamp": "2026-08-26T12:31:46.521148",
+    "headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates",
+    "source": "Test_Runner",
+    "url": "https://news.google.com/articles/123",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]

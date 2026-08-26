@@ -95,7 +95,7 @@ class IntradayEventMonitor:
         is_anomaly = (overall_pressure >= self.shock_threshold) or (supply_disruption >= 0.50)
         return is_anomaly, scores
 
-    def process_incoming_headline(self, headline: str, source: str = "Webhook") -> Dict:
+    def process_incoming_headline(self, headline: str, source: str = "Webhook", url: str = "") -> Dict:
         """
         Evaluates an individual incoming headline (from Webhook or RSS), logs anomalies,
         and triggers cache invalidation / prediction revision logging if threshold is met.
@@ -108,6 +108,7 @@ class IntradayEventMonitor:
             "timestamp": datetime.now().isoformat(),
             "headline": headline,
             "source": source,
+            "url": url,
             "is_anomaly": is_anomaly_bool,
             "scores": clean_scores
         }
