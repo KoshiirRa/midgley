@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,7 +119,7 @@
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
-                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; Last Run: 2026-08-26 18:15 UTC</span>
+                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: 2026-08-26 18:21 UTC</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
@@ -129,8 +129,306 @@
             </p>
         </div>
 
+        <!-- ACTIVE FORECAST LOCALES SECTION -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Active Forecast Locales
+                    </h3>
+                    <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
+                </div>
+                <span class="text-xs text-slate-400 font-mono">7 Locales Active</span>
+            </div>
+
+            <!-- Major Metric Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Card 1: National Wholesale RBOB -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Commodity Wholesale</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            -3.2% Trend
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Current Futures</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> NYMEX RB=F</span>
+                        <span>Hit Rate: <strong class="text-slate-200">60.79%</strong></span>
+                    </div>
+
+                    <a href="national.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore RBOB Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 2: Tulsa Metro Retail -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-emerald-400"></i> Tulsa, OK Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            -2.8% Trend
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.824<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-emerald-400 mt-1">$3.734<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-warehouse mr-1 text-slate-500"></i> Cushing: 50 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.15%</strong></span>
+                    </div>
+
+                    <a href="tulsa.html" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Tulsa Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3: Newark Metro Retail -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            -3.0% Trend
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.964<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.857<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> DE City: 12 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">59.20%</strong></span>
+                    </div>
+
+                    <a href="newark.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Newark Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 4: Cincinnati, OH / NKY Retail (Dual State Display) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold">Dual-State Cross-River</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati OH/KY
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                            12.5¢ Tax Delta
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">OH / KY Live Base</span>
+                            <p class="text-xl font-extrabold text-white mt-1">$3.96 / $3.71<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Projected</span>
+                            <p class="text-xl font-extrabold text-purple-400 mt-1">$3.88 / $3.63<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-ship mr-1 text-slate-500"></i> Catlettsburg & River</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.85%</strong></span>
+                    </div>
+
+                    <a href="cincinnati.html" class="w-full py-2.5 px-4 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Cross-River Display <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 5: Greenville, NC Retail (PADD 1C Colonial Pipeline) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-green-400 font-semibold">PADD 1C South Atlantic</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
+                            40.4¢ NC Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.463<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-green-400 mt-1">$3.370<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Selma Hub: 55 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">59.10%</strong></span>
+                    </div>
+
+                    <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 6: Charlotte, NC Retail (Paw Creek Distribution Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C South Atlantic</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            40.4¢ NC Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.763<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">$3.659<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek Hub</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.80%</strong></span>
+                    </div>
+
+                    <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 5: Oakland, CA Retail (High-Cost CARB Benchmark) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 5 High-Cost Benchmark</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            95.3¢ CARB Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$5.629<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$5.479<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> Richmond: 12 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.40%</strong></span>
+                    </div>
+
+                    <a href="oakland.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Oakland Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 6: SF Bay Area 9-County Region -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">9-County NorCal Metro</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            Regional Matrix
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Regional Avg Base</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$5.729<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">$5.579<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-city mr-1 text-slate-500"></i> SF / SJ / Oakland</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.65%</strong></span>
+                    </div>
+
+                    <a href="bayarea.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Bay Area Matrix <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
         <!-- LAST RUN INTELLIGENCE & IMPACT AUDIT CARD -->
-        <div class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 card-glow space-y-6">
+        <div id="last-run-audit" class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 card-glow space-y-6 scroll-mt-24">
             
             <!-- Card Header: Title & Trigger Badge -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800/80 pb-4">
@@ -138,7 +436,7 @@
                     <div class="flex items-center gap-2">
                         <span class="text-xs uppercase font-bold tracking-wider text-blue-400">Execution Audit</span>
                         <span class="text-slate-600">&bull;</span>
-                        <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-clock mr-1"></i>2026-08-26 13:15:41</span>
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-clock mr-1"></i>2026-08-26 13:20:26</span>
                     </div>
                     <h3 class="text-xl font-extrabold text-white mt-1 flex items-center gap-2.5">
                         <i class="fa-solid fa-microchip text-blue-400"></i> Last Run Intelligence & Impact Audit
@@ -328,305 +626,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- ACTIVE FORECAST LOCALES SECTION -->
-        <section class="space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <div>
-                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Active Forecast Locales
-                    </h3>
-                    <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
-                </div>
-                <span class="text-xs text-slate-400 font-mono">7 Locales Active</span>
-            </div>
-
-            <!-- Major Metric Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Card 1: National Wholesale RBOB -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Commodity Wholesale</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-globe text-blue-400"></i> National Wholesale
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                            -3.2% Trend
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Current Futures</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> NYMEX RB=F</span>
-                        <span>Hit Rate: <strong class="text-slate-200">60.79%</strong></span>
-                    </div>
-
-                    <a href="national.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore RBOB Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 2: Tulsa Metro Retail -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot text-emerald-400"></i> Tulsa, OK Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            -2.8% Trend
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.824<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-emerald-400 mt-1">$3.734<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-warehouse mr-1 text-slate-500"></i> Cushing: 50 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">58.15%</strong></span>
-                    </div>
-
-                    <a href="tulsa.html" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Tulsa Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 3: Newark Metro Retail -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Local Metro Retail</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                            -3.0% Trend
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.964<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-blue-400 mt-1">$3.857<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> DE City: 12 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">59.20%</strong></span>
-                    </div>
-
-                    <a href="newark.html" class="w-full py-2.5 px-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Newark Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 4: Cincinnati, OH / NKY Retail (Dual State Display) -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold">Dual-State Cross-River</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati OH/KY
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
-                            12.5¢ Tax Delta
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">OH / KY Live Base</span>
-                            <p class="text-xl font-extrabold text-white mt-1">$3.96 / $3.71<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Projected</span>
-                            <p class="text-xl font-extrabold text-purple-400 mt-1">$3.88 / $3.63<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-ship mr-1 text-slate-500"></i> Catlettsburg & River</span>
-                        <span>Hit Rate: <strong class="text-slate-200">58.85%</strong></span>
-                    </div>
-
-                    <a href="cincinnati.html" class="w-full py-2.5 px-4 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Cross-River Display <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 5: Greenville, NC Retail (PADD 1C Colonial Pipeline) -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-green-400 font-semibold">PADD 1C South Atlantic</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
-                            40.4¢ NC Tax
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.464<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-green-400 mt-1">$3.371<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Selma Hub: 55 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">59.10%</strong></span>
-                    </div>
-
-                    <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 6: Charlotte, NC Retail (Paw Creek Distribution Hub) -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C South Atlantic</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                            40.4¢ NC Tax
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.763<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">$3.659<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek Hub</span>
-                        <span>Hit Rate: <strong class="text-slate-200">58.80%</strong></span>
-                    </div>
-
-                    <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 5: Oakland, CA Retail (High-Cost CARB Benchmark) -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 5 High-Cost Benchmark</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                            95.3¢ CARB Tax
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$5.629<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$5.479<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> Richmond: 12 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">58.40%</strong></span>
-                    </div>
-
-                    <a href="oakland.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Oakland Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 6: SF Bay Area 9-County Region -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">9-County NorCal Metro</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                            Regional Matrix
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Regional Avg Base</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$5.729<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">$5.579<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-city mr-1 text-slate-500"></i> SF / SJ / Oakland</span>
-                        <span>Hit Rate: <strong class="text-slate-200">58.65%</strong></span>
-                    </div>
-
-                    <a href="bayarea.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Bay Area Matrix <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-            </div>
-        </section>
-
 
         <!-- 📈 HISTORICAL ACCURACY IMPROVEMENT SECTION -->
         <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">

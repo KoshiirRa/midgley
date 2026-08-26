@@ -573,7 +573,7 @@ def build_last_run_audit_card_html(audit_data: dict) -> str:
                         </div>"""
 
     return f"""        <!-- LAST RUN INTELLIGENCE & IMPACT AUDIT CARD -->
-        <div class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 card-glow space-y-6">
+        <div id="last-run-audit" class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 card-glow space-y-6 scroll-mt-24">
             
             <!-- Card Header: Title & Trigger Badge -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800/80 pb-4">
@@ -789,7 +789,7 @@ def generate_public_dashboard():
     last_run_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     nav_overview = get_nav_header("overview")
     index_html = f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -822,7 +822,7 @@ def generate_public_dashboard():
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
-                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; Last Run: {last_run_str}</span>
+                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
@@ -831,8 +831,6 @@ def generate_public_dashboard():
                 Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 2.5 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
             </p>
         </div>
-
-{audit_card_html}
 
         <!-- ACTIVE FORECAST LOCALES SECTION -->
         <section class="space-y-4">
@@ -1132,6 +1130,7 @@ def generate_public_dashboard():
             </div>
         </section>
 
+{audit_card_html}
 
         <!-- 📈 HISTORICAL ACCURACY IMPROVEMENT SECTION -->
         <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
