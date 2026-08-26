@@ -124,7 +124,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 3. Quantitative Forecasting Agent (`src/models.py`)
 
 * **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression α=10.0) and XGBoost regressors on 80/20 chronological train/test splits. Main model generates base wholesale RBOB commodity price forecasts.
-* **Out-of-Time Test Performance (Model v1.4 "Dubbs" Finlight-LLM Engine):**
+* **Out-of-Time Test Performance (Regular Model v1.4 "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
   - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).

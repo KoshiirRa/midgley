@@ -116,17 +116,19 @@ def check_and_promote_model(repo: str = REPO) -> Optional[Dict[str, Any]]:
         
     promoted_info = None
     
-    # Filter and sort model milestones (e.g. title starts with 'Model v')
+    # Filter and sort model milestones (e.g. title starts with 'Regular Model' or 'Diesel Model')
     model_milestones = []
     for m in milestones:
         title = m.get("title", "")
-        match = re.search(r'Model\s+(v\d+\.\d+)\s+["\']?([^"\']+)["\']?', title)
+        match = re.search(r'(Regular\s+Model|Diesel\s+Model|Gasoline\s+Model|Unleaded\s+Model|Model)\s+(v\d+\.\d+)\s+["\']?([^"\']+)["\']?', title)
         if match:
-            version_str = match.group(1) # e.g. "v1.5"
-            codename = match.group(2)    # e.g. "Houdry"
+            lineage_name = match.group(1) # e.g. "Regular Model"
+            version_str = match.group(2)  # e.g. "v1.5"
+            codename = match.group(3)     # e.g. "Houdry"
             model_milestones.append({
                 "number": m["number"],
                 "title": title,
+                "lineage": lineage_name,
                 "version": version_str,
                 "codename": codename,
                 "open_issues": m.get("open_issues", 0),
