@@ -404,5 +404,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-27T18:00:34.374387",
+    "headline": "Why Canadian oil escaped the 50% tariff policy - Yahoo Finance Singapore",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOdGIxZ0JodGtIelZFbjUxVEk4blJNZWFCQkpIQ1BxRWM3Mk82RDI5YVkyeC0zVGJ0b2ZWQ0JZOThxS2k0eGZKZVBjR2pBUWNWdDlyamY5cUNLcTcwQzdzTm5DNHQxWDJfSmdqc1F6V0RVUHEzLWkzZzdmSUR2ZnE0ZTN6Yw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
