@@ -245,7 +245,7 @@ def test_last_run_intelligence_audit_card_intraday_anomaly(tmp_path):
     assert "Simple Summary" in card_html
     assert "Exogenous supply disruption (0.75)" in card_html
     assert "Breaking news shows gas supply problems" in card_html
-    assert "https://news.google.com/articles/tariffs_123" in card_html
+    assert "https://news.google.com/search?q=" in card_html
 
     # Verify all modeled regions and trend arrow indicators exist in Column 3
     modeled_names = ["National Wholesale", "Tulsa, OK Retail", "Newark, DE Retail", "Cincinnati, OH/KY", "Greenville, NC Retail", "Charlotte, NC Retail", "Oakland, CA Retail", "SF Bay Area Region"]

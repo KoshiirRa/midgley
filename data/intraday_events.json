@@ -124,5 +124,33 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-27T12:28:02.004271",
+    "headline": "Houthi Missile Strike Halts Tanker Traffic in Strait of Hormuz",
+    "source": "Test_Suite",
+    "url": "",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-08-27T12:28:15.563505",
+    "headline": "Houthi Missile Strike Halts Tanker Traffic in Strait of Hormuz",
+    "source": "Test_Suite",
+    "url": "",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]

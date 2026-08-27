@@ -32,7 +32,9 @@ logger = logging.getLogger(__name__)
 
 # Primary Free Energy RSS Feeds for Zero-Cost 15-Min Polling
 FREE_RSS_FEEDS = [
-    "https://news.google.com/rss/search?q=unleaded+gasoline+OR+oil+tariff+OR+refinery+outage+when:1d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=unleaded+gasoline+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=refinery+outage+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=oil+tariff+when:3d&hl=en-US&gl=US&ceid=US:en",
     "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml"
 ]
 
@@ -50,8 +52,8 @@ class IntradayEventMonitor:
     def __init__(self, shock_threshold: float = 0.40):
         self.shock_threshold = shock_threshold
 
-    def fetch_rss_headlines(self, max_age_hours: float = 24.0) -> List[Dict[str, str]]:
-        """Fetches breaking titles from free RSS feeds without using API quotas, discarding stale entries."""
+    def fetch_rss_headlines(self, max_age_hours: float = 72.0) -> List[Dict[str, str]]:
+        """Fetches breaking titles from free RSS feeds without using API quotas, discarding stale entries older than max_age_hours."""
         headlines = []
         if feedparser is None:
             logger.warning("feedparser module not installed. Falling back to rule-based scanner.")

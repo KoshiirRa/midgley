@@ -531,7 +531,8 @@ def build_last_run_audit_card_html(audit_data: dict) -> str:
         h_text = h.get("headline", "")
         h_url = h.get("url", "")
         h_src = h.get("source", "Energy_News")
-        if not h_url:
+        is_dummy_url = any(dummy_kw in h_url for dummy_kw in ["/articles/123", "/articles/tariffs_", "/articles/hormuz_", "example.com", "test_"])
+        if not h_url or is_dummy_url:
             h_url = f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
 
         headline_links_html += f"""
