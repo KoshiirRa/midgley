@@ -46,7 +46,54 @@ class TestIntradayEventMonitor(unittest.TestCase):
             self.assertIn("overall_price_pressure", scores)
             self.assertGreaterEqual(scores["supply_disruption"], 0.50)
 
+    @patch("src.intraday_event_monitor.feedparser")
+    def test_rss_date_filtering_stale_articles(self, mock_feedparser):
+        import time
+        # Create mock entries: one fresh (now) and one old (3 days ago)
+        now_struct = time.gmtime()
+        old_struct = time.gmtime(time.time() - 3 * 86400)
+
+        mock_feed = MagicMock()
+        mock_feed.entries = [
+            {"title": "Fresh Refinery Outage", "published_parsed": now_struct, "link": "https://news.com/fresh"},
+            {"title": "Old Refinery Explosion 2025", "published_parsed": old_struct, "link": "https://news.com/old"}
+        ]
+        mock_feedparser.parse.return_value = mock_feed
+
+        headlines = self.monitor.fetch_rss_headlines(max_age_hours=24.0)
+        titles = [h["headline"] for h in headlines]
+
+        self.assertIn("Fresh Refinery Outage", titles)
+        self.assertNotIn("Old Refinery Explosion 2025", titles)
+
+    @patch("src.intraday_event_monitor.IntradayEventMonitor.fetch_rss_headlines")
+    def test_run_polling_cycle_preserves_url(self, mock_fetch):
+        mock_fetch.return_value = [{
+            "headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates",
+            "published": "2026-08-27T10:00:00",
+            "url": "https://news.google.com/articles/tariffs_test",
+            "source": "RSS_Feed"
+        }]
+
+        with patch.object(self.monitor, "process_incoming_headline") as mock_process:
+            mock_process.return_value = {"is_anomaly": True}
+            self.monitor.run_polling_cycle()
+
+            mock_process.assert_called_once_with(
+                "Canada Announces Retaliatory Tariffs as Trade War Escalates",
+                source="RSS_Feed",
+                url="https://news.google.com/articles/tariffs_test"
+            )
+
+
+    @patch("src.intraday_event_monitor.IntradayEventMonitor.is_headline_already_processed")
+    def test_headline_deduplication_24h(self, mock_is_processed):
+        mock_is_processed.return_value = True
+        res = self.monitor.process_incoming_headline("Major Pipeline Explosion", source="RSS_Feed", url="https://news.com/exp")
+        self.assertFalse(res["is_anomaly"])
+        self.assertTrue(res.get("duplicate"))
 
 
 if __name__ == "__main__":
     unittest.main()
+
