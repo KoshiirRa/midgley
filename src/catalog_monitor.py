@@ -271,6 +271,27 @@ def infer_issue_domain_labels(eval_res: dict, item: dict) -> list:
     return list(dict.fromkeys(labels))
 
 
+def check_existing_issue(title: str, item_url: str) -> bool:
+    """Checks if an open issue for this item/title or URL already exists on the repo."""
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    try:
+        cmd = ["gh", "issue", "list", "--repo", "KoshiirRa/midgley", "--state", "open", "--limit", "100", "--json", "number,title"]
+        env = dict(os.environ)
+        if token:
+            env["GH_TOKEN"] = token
+            env["GITHUB_TOKEN"] = token
+        res = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
+        issues = json.loads(res.stdout.strip())
+        clean_title = title.lower().strip()
+        for iss in issues:
+            if clean_title == iss.get("title", "").lower().strip():
+                logger.info(f"Existing open issue found matching '{title}': #{iss['number']}. Skipping creation.")
+                return True
+    except Exception as e:
+        logger.debug(f"Notice checking existing issues via gh CLI ({e}).")
+    return False
+
+
 def open_github_issue_for_item(item: dict, eval_res: dict, dry_run: bool = False) -> str:
     """
     Opens a GitHub Feature Request issue on KoshiirRa/midgley for worthwhile catalog additions,
@@ -279,6 +300,10 @@ def open_github_issue_for_item(item: dict, eval_res: dict, dry_run: bool = False
     labels = infer_issue_domain_labels(eval_res, item)
     labels_str = ",".join(labels)
     title = f"[Feature Request] Ingest {item['title']} ({eval_res['category']})"
+
+    if not dry_run and check_existing_issue(title, item['url']):
+        return ""
+
     body = f"""## Summary
 Automatically discovered new candidate tool **[{item['title']}]({item['url']})** from developer catalog \`{item['catalog_key']}\`.
 
