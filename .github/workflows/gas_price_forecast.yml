@@ -47,7 +47,7 @@ jobs:
       - name: Commit Updated README, Dashboard & Prediction Logs
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "chmod: Daily automated gas price prediction & public dashboard update [skip ci]"
+          commit_message: "chmod: Daily automated gas price prediction & public dashboard update"
           file_pattern: "README.md docs/ data/prediction_history.csv"
 
       - name: Setup GitHub Pages
