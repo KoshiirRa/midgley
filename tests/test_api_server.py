@@ -10,9 +10,12 @@ from fastapi.testclient import TestClient
 from src.api_server import app
 
 
+import os
+
 class TestAPIServer(unittest.TestCase):
 
     def setUp(self):
+        os.environ["TESTING"] = "1"
         self.client = TestClient(app)
 
     def test_health_check(self):

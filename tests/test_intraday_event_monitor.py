@@ -10,8 +10,11 @@ from src.intraday_event_monitor import IntradayEventMonitor, TRIGGER_KEYWORDS
 from src.event_analyzer import extract_event_features_llm
 
 
+import os
+
 class TestIntradayEventMonitor(unittest.TestCase):
     def setUp(self):
+        os.environ["TESTING"] = "1"
         self.monitor = IntradayEventMonitor(shock_threshold=0.40)
 
     def test_evaluate_headline_routine_news(self):

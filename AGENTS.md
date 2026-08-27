@@ -92,6 +92,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Strategy 3 (Trading Hours Adaptive Ingestion):** `is_trading_hours()` helper restricts `finlight.me` fetches to active US commodity trading hours (08:00 AM – 05:00 PM EST, Mon–Fri).
   - **Strategy 4 (Incoming Webhook Gateway & HMAC Security):** `POST /api/v1/events/webhook` endpoint on `src/api_server.py` for direct push ingestion from external alerts (Zapier, IFTTT, Google Alerts). Mandatory payload schema requires `headline` text and `url` article link, with optional `source` origin. Enforces HMAC-SHA256 signature validation via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment, rejecting unauthorized payload tampering with HTTP 401.
   - **24-Hour Headline & URL Deduplication Engine:** `is_headline_already_processed()` deduplicates incoming headlines and article URLs against `data/intraday_events.json` within a rolling 24-hour window, skipping redundant LLM scoring calls, avoiding duplicate prediction revision logs, and preventing unnecessary dashboard regenerations.
+  - **Test Suite Execution Isolation & Defensive Dashboard Filtering:** Isolates unit test executions by checking `source.startswith("Test_")` or `TESTING=1` environment variable in `process_incoming_headline()`, automatically suppressing persistent disk writes (`_save_anomaly_record`, `log_predictions`) and skipping `generate_public_dashboard()` calls. Defensively filters test event sources (`Test_Suite`, `Test_Runner`, `Test_*`) in `src/dashboard_generator.py` when building public web app card feeds to guarantee production state cleanliness.
 
 * **NOAA Weather Models & Lightweight `wxs.us` Ingestion (`src/noaa_weather.py`):**
   - **Token-Efficient Ingestion Engine:** Integrates `t.wxs.us` lightweight terminal REST endpoints (`/location?format=json`) to fetch NWS alerts and SPC (Storm Prediction Center) convective outlooks for specific zipcodes (`74101` Tulsa, `19711` Newark, `45202` Cincinnati, `27834` Greenville, `28202` Charlotte, `94612` Oakland).
@@ -263,6 +264,39 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   3. **Dev vs. Prod Environment Synchronization:** The environment status and comparative matrix in `Environment-State-and-Dev-vs-Prod.md` and `Home.md` MUST be kept up to date to clearly reflect operational differences between **Production** (`main` branch / GitHub Actions / GitHub Pages) and **Development** (`dev` branch / `dev-vm`).
   4. **Security & Data Privacy:** Public repository documentation and Wiki pages MUST NEVER contain internal IP addresses, local network topology, internal domain names, or private server login credentials.
   5. **Project History & Roadmap Updates:** Major release milestones, new feature additions, and roadmap target updates MUST be logged in `Project-History-and-Roadmap.md`.
+
+---
+
+### 13. GitHub Credential Health & Rate Limit Directives
+
+* **Role:** Ensures agents and development tools maintain GitHub credential health during issue management, milestone tracking, and repository operations.
+* **Diagnostic & Self-Healing Protocol:**
+  - **Rate Limit Detection:** If any `gh` CLI command or GitHub REST API call returns `HTTP 403 API rate limit exceeded` or `status: 403`, the agent MUST immediately inspect `gh auth status` on the execution target (host or `dev-vm` via `ssh marty@10.42.42.54 "gh auth status"`).
+  - **Re-Authentication Prompt:** If the stored credentials are invalid or expired (`The token in keyring/hosts.yml is invalid`), the agent MUST pause API calls and prompt the user to refresh authentication:
+    - **Local Host:** `gh auth refresh -h github.com` (or `gh auth login`)
+    - **Dev VM (`10.42.42.54`):** `ssh marty@10.42.42.54 "gh auth login"`
+  - **Strict Anti-Revocation Rule (No Plaintext Tokens)**: Agents MUST NEVER pass raw GitHub tokens (e.g. `gho_...`, `ghp_...`, `github_pat_...`) inline in CLI commands or single-line env overrides (e.g. `GH_TOKEN=gho_... gh api ...`). Plaintext tokens in shell execution strings or command logs trigger GitHub Secret Scanning, causing instant token revocation. Agents MUST rely strictly on `gh auth` keyring credentials or environment variables set outside command execution strings.
+  - **No Unauthenticated Polling Loops:** Agents MUST NOT retry failing GitHub API calls in a loop when IP rate limits are exhausted.
+
+---
+
+### 14. GitHub Issue Triage & Three-Track Milestone Taxonomy Directives
+
+* **Role:** Establishes strict rules for assigning GitHub issues to three dedicated, parallel milestone release tracks across the project lifecycle.
+* **Three Parallel Release Tracks:**
+  1. **Track 1: Software & UI Release Track (Titled `v0.X`, `v1.X`):** Reserved for general software releases, public web dashboard UI rendering (`docs/`), 1920s gas pump design system, REST API gateway routing, geocoding lookups, security/authentication, mobile/home assistant integrations (Home Assistant, Android Auto, LubeLogger), and dev VM hosting infrastructure (Metabase, Dagu, Cloudflare Tunnels).
+  2. **Track 2: Quantitative Model Engine Track (Titled `Regular Model vX.Y "Codename"` / `Diesel Model vX.Y "Codename"`):** Reserved STRICTLY for quantitative model estimation, econometric estimators, feature engineering, physical/weather data ingestion vectors, crack spread formulas, decay half-life tuning, TimesFM foundation models, SHAP attributions, and ML forecasting algorithms.
+  3. **Track 3: Weekly Self-Review & MLOps Feedback Track (Titled `Weekly Review vX.Y "Codename"`):** Dedicated to the automated Saturday morning review runner (`weekly_model_review.yml`), issue self-review evaluation engine (`weekly_issue_reporter.py`), developer catalog monitoring (`catalog_monitor.py`), arXiv research paper tracking (`arxiv_monitor.py`), CORE API paper ingestion (#53), W&B model drift tracking (#80), ArchiveBox preservation (#97), Healthchecks cron heartbeats (#98), Grafana system telemetry (#107), and prediction history schema expansion (#124).
+* **Strict Separation:** Issues MUST NOT cross release tracks. Non-model UI/API issues belong in the Software/UI Track; forecasting/math issues belong in the Model Engine Track; and automated review/telemetry/meta-agent issues belong in the Weekly Self-Review Track.
+* **Automated Agent Issue Creation & Milestone Triage Protocol:**
+  - **Mandatory Domain Labeling:** ALL issues created or triaged by any AI agent (including `catalog_monitor.py`, `weekly_issue_reporter.py`, `arxiv_monitor.py`, or interactive assistant sessions) MUST be assigned appropriate domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`, `token-efficiency`).
+  - **Mandatory Release Track Milestone Assignment:** Every issue created by an agent MUST be assigned to an appropriate open milestone within its designated Release Track (Track 1: Software/UI `v0.X`, Track 2: Model Engine `Regular Model vX.Y`, or Track 3: Weekly Self-Review `Weekly Review vX.Y`).
+  - **Auto-Creation of Missing Milestones:** If no open milestone currently exists within the designated Release Track, the agent or automated script MUST automatically create a new milestone on GitHub (via `gh api repos/{repo}/milestones -f title="..." -f description="..."` or GitHub REST API) before creating or triaging the issue.
+
+
+
+
+
 
 
 

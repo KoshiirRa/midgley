@@ -424,6 +424,8 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
                             h_text = evt.get("headline", "")
                             h_url = evt.get("url", "")
                             h_src = evt.get("source", "Webhook / RSS")
+                            if any(t_pfx in h_src.lower() for t_pfx in ["test_suite", "test_runner", "test_"]):
+                                continue
                             if h_text and not any(item["headline"] == h_text for item in headline_items):
                                 headline_items.append({"headline": h_text, "url": h_url, "source": h_src})
                             if len(headline_items) >= 3:

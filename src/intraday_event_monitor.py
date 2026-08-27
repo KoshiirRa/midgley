@@ -192,34 +192,38 @@ class IntradayEventMonitor:
         if is_anomaly:
             logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}]: '{headline}' (Scores: {scores})")
 
-            # 1. Log anomaly event to disk
-            self._save_anomaly_record(result)
+            is_test = source.startswith("Test_") or os.environ.get("TESTING") == "1"
+            if is_test:
+                logger.info(f"  -> Skipping persistent storage & dashboard rebuild for test execution [{source}].")
+            else:
+                # 1. Log anomaly event to disk
+                self._save_anomaly_record(result)
 
-            # 2. Flush 15-minute SQLite response cache
-            clear_lookup_cache()
-            logger.info("  -> Cleared SQLite response cache for API gateway.")
+                # 2. Flush 15-minute SQLite response cache
+                clear_lookup_cache()
+                logger.info("  -> Cleared SQLite response cache for API gateway.")
 
-            # 3. Log Intraday Revision Record
-            dummy_df = pd.DataFrame([{
-                "date": datetime.now().strftime("%Y-%m-%d"),
-                "current_price": 3.184,
-                "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
-            }])
-            log_predictions(
-                dummy_df, 
-                region="National", 
-                model_version="v1.4-Finlight-Intraday",
-                run_type="INTRADAY_REVISION",
-                headline_trigger=headline
-            )
+                # 3. Log Intraday Revision Record
+                dummy_df = pd.DataFrame([{
+                    "date": datetime.now().strftime("%Y-%m-%d"),
+                    "current_price": 3.184,
+                    "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
+                }])
+                log_predictions(
+                    dummy_df, 
+                    region="National", 
+                    model_version="v1.4-Finlight-Intraday",
+                    run_type="INTRADAY_REVISION",
+                    headline_trigger=headline
+                )
 
-            # 4. Regenerate Public Web Dashboard
-            try:
-                from src.dashboard_generator import generate_public_dashboard
-                generate_public_dashboard()
-                logger.info("  -> Regenerated public dashboard web app (docs/).")
-            except Exception as e:
-                logger.warning(f"Failed to regenerate dashboard after anomaly: {e}")
+                # 4. Regenerate Public Web Dashboard
+                try:
+                    from src.dashboard_generator import generate_public_dashboard
+                    generate_public_dashboard()
+                    logger.info("  -> Regenerated public dashboard web app (docs/).")
+                except Exception as e:
+                    logger.warning(f"Failed to regenerate dashboard after anomaly: {e}")
 
         return result
 
