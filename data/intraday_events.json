@@ -432,5 +432,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-27T18:30:34.128771",
+    "headline": "Nelson: Danielle Smith faces Canada's wrath over Trump tariff fight - Yahoo News Canada",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOV2tvUlBoSjZXY05GYms2Si1fV2UtUHdlMTdSTDlCdFpZQzViRzF0WU5UV0ZIWHdzYnNBS2FaOU4tTnN5UldzNDdvYllQNW9XeUpKMmNuZ1RrNzhpYW5jTEY1R296MGRnRzZIRkxXRllUYUFKYWl0MDE1NTY4TmdhQ1ZB?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
