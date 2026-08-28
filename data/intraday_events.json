@@ -194,5 +194,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-28T15:30:34.601091",
+    "headline": "Why Canadian oil escaped the 50% tariff policy - Yahoo Finance",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE8wdFFHLWtwdS1ISi1KYmRTdzRqVnEwemJWeEZ0aEkteE4yZXdmWnVNMUJpZmlGbzNwakNCQ29Cc0tFWmJHOWZLWWR3b3czc3VNOVBzeWdrVUhmaU5KLUU1WWJrM3VsYmY0dGRNelE4VFZyQXJwVXhVTElPS01yVmM?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
