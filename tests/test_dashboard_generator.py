@@ -16,6 +16,7 @@ from src.dashboard_generator import (
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
+    get_analytics_script,
 )
 
 
@@ -275,6 +276,47 @@ def test_last_run_intelligence_audit_card_fallback_on_missing_files(tmp_path):
     card_html = build_last_run_audit_card_html(audit_data)
     assert "Last Run Intelligence & Impact Audit" in card_html
     assert "Scheduled Daily Batch" in card_html
+
+
+def test_cloudflare_analytics_injection():
+    """Verify Option A environment isolation for Cloudflare Web Analytics:
+    - Returns empty string when CLOUDFLARE_ANALYTICS_TOKEN is not in os.environ.
+    - Emits beacon script tag when CLOUDFLARE_ANALYTICS_TOKEN is provided.
+    - Verified that generated HTML files omit analytics when token is unset.
+    """
+    # 1. When token is missing from environment
+    old_env = os.environ.pop("CLOUDFLARE_ANALYTICS_TOKEN", None)
+    try:
+        script_out = get_analytics_script()
+        assert script_out == "", "Expected empty string when CLOUDFLARE_ANALYTICS_TOKEN is unset"
+
+        # Generate dashboard without token and verify HTML files have no analytics script
+        generate_public_dashboard()
+        with open(INDEX_PATH, "r", encoding="utf-8") as f:
+            index_content = f.read()
+        assert "beacon.min.js" not in index_content
+
+        # 2. When token is present in environment
+        test_token = "test_cf_token_xyz987"
+        os.environ["CLOUDFLARE_ANALYTICS_TOKEN"] = test_token
+        script_out = get_analytics_script()
+        assert "beacon.min.js" in script_out
+        assert f'"token": "{test_token}"' in script_out
+
+        # Generate dashboard with token and verify HTML index contains analytics script
+        generate_public_dashboard()
+        with open(INDEX_PATH, "r", encoding="utf-8") as f:
+            index_with_analytics = f.read()
+        assert "beacon.min.js" in index_with_analytics
+        assert f'"token": "{test_token}"' in index_with_analytics
+
+    finally:
+        # Restore environment
+        if old_env is not None:
+            os.environ["CLOUDFLARE_ANALYTICS_TOKEN"] = old_env
+        else:
+            os.environ.pop("CLOUDFLARE_ANALYTICS_TOKEN", None)
+
 
 
 
