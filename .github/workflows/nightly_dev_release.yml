@@ -2,8 +2,8 @@ name: Automated Nightly Dev Release
 
 on:
   schedule:
-    # Run every day at 08:00 UTC (03:00 AM Central Time)
-    - cron: '0 8 * * *'
+    # Run every day at 08:14 UTC (03:14 AM Central Time) - off-peak minute
+    - cron: '14 8 * * *'
   workflow_dispatch:
 
 permissions:

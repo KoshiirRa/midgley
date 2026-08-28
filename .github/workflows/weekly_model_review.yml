@@ -2,8 +2,8 @@ name: Weekly Model Performance Review & Dashboard Deployment
 
 on:
   schedule:
-    # Run every Saturday at 13:00 UTC (08:00 AM US Central Time)
-    - cron: '0 13 * * 6'
+    # Run every Saturday at 13:12 UTC (08:12 AM US Central Time) - off-peak minute
+    - cron: '12 13 * * 6'
   workflow_dispatch:
 
 permissions:
