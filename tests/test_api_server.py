@@ -10,9 +10,12 @@ from fastapi.testclient import TestClient
 from src.api_server import app
 
 
+import os
+
 class TestAPIServer(unittest.TestCase):
 
     def setUp(self):
+        os.environ["TESTING"] = "1"
         self.client = TestClient(app)
 
     def test_health_check(self):
@@ -110,7 +113,7 @@ class TestAPIServer(unittest.TestCase):
         from unittest.mock import patch
 
         secret = "test_secret_key_123"
-        payload = {"headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates", "source": "Test_Runner"}
+        payload = {"headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates", "url": "https://news.google.com/articles/123", "source": "Test_Runner"}
         body_bytes = json.dumps(payload).encode("utf-8")
         valid_sig = hmac.new(secret.encode("utf-8"), body_bytes, hashlib.sha256).hexdigest()
 
@@ -139,6 +142,13 @@ class TestAPIServer(unittest.TestCase):
             )
             self.assertEqual(res_missing.status_code, 401)
 
+    def test_post_events_poll(self):
+        res = self.client.post("/api/v1/events/poll")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertIn("result", data)
+        self.assertEqual(data["result"]["status"], "success")
 
 
 if __name__ == "__main__":

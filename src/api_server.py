@@ -35,8 +35,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     servers=[
-        {"url": "https://local-dev.dwarvenbard.com", "description": "Primary Dev VM HTTPS Gateway"},
-        {"url": "http://10.42.42.54:8000", "description": "Dev VM Local Network Port"}
+        {"url": "http://localhost:8000", "description": "Local API Gateway"}
     ]
 )
 
@@ -430,6 +429,7 @@ def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -
 
 class WebhookRequest(BaseModel):
     headline: str = Field(..., json_schema_extra={"example": "Canada Announces Retaliatory Tariffs as Trade War Escalates"}, description="Breaking news headline text")
+    url: str = Field(..., json_schema_extra={"example": "https://news.google.com/rss/articles/123"}, description="Required URL link to full article or news release")
     source: Optional[str] = Field("Webhook_Push", json_schema_extra={"example": "IFTTT_GoogleAlerts"}, description="Event source origin")
 
 
@@ -452,12 +452,29 @@ async def ingest_event_webhook(
 
     from src.intraday_event_monitor import IntradayEventMonitor
     monitor = IntradayEventMonitor()
-    result = monitor.process_incoming_headline(req.headline, source=req.source or "Webhook_Push")
+    result = monitor.process_incoming_headline(req.headline, source=req.source or "Webhook_Push", url=req.url)
     return {
         "status": "success",
         "processed_at": datetime.now().isoformat(),
         "result": result
     }
+
+
+@app.post("/api/v1/events/poll", summary="Trigger Intraday Event Polling Cycle")
+def trigger_event_polling():
+    """
+    Strategy 2: Triggers an on-demand intraday RSS polling cycle across free energy feeds.
+    Evaluates breaking news, invalidates response cache on anomalies, and updates prediction logs.
+    """
+    from src.intraday_event_monitor import IntradayEventMonitor
+    monitor = IntradayEventMonitor()
+    result = monitor.run_polling_cycle()
+    return {
+        "status": "success",
+        "processed_at": datetime.now().isoformat(),
+        "result": result
+    }
+
 
 
 
@@ -474,7 +491,7 @@ def get_ai_plugin_manifest():
         "auth": {"type": "none"},
         "api": {
             "type": "openapi",
-            "url": "https://local-dev.dwarvenbard.com/openapi.json"
+            "url": "https://koshiirra.github.io/midgley/openapi.json"
         },
         "logo_url": "https://koshiirra.github.io/midgley/assets/icon.png",
         "contact_email": "m.cubed.3@gmail.com",

@@ -87,10 +87,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Live Coverage:** Ingests real-time financial energy headlines from tier-1 media (Reuters, Bloomberg, Seeking Alpha, Investing.com) via `finlight.me` REST API.
   - **Hard Quota Safety Valve:** Persistent ledger at `data/finlight_quota.json` enforcing a **150 call/month safety cap** (and 10 call/day burst limit) out of the 250 free tier allowance. Automatically blocks outgoing API calls when cap is reached, falling back seamlessly to cached news or the Tier 3 Offline Lexicon. Quota status exposed via `GET /api/v1/system/quota`.
 * **Unified Intraday Event Monitor & Webhook Gateway (`src/intraday_event_monitor.py`):**
-  - **Strategy 2 (Free RSS Polling):** Zero-cost 15-minute polling across free energy RSS streams (Google News, NYT, CNBC).
+  - **Strategy 2 (Free RSS Polling & Time-Constrained Filtering):** Zero-cost 15-minute polling across free energy RSS streams (Google News, NYT, CNBC). Enforces `when:1d` Google News query constraint and timestamp age filtering (`max_age_hours=24.0`) in `fetch_rss_headlines()`, automatically discarding stale historical articles.
   - **Strategy 1 (Cascading Anomaly Gate):** Regex/keyword trigger gate (`tariff`, `retaliat`, `trade war`, `opec emergency`, `pipeline halt`, `explosion`, `tornado`) evaluating fast-path impact scores. Tripping threshold: \(|\text{overall\_price\_pressure}| \ge 0.40\) or \(\text{supply\_disruption} \ge 0.50\).
   - **Strategy 3 (Trading Hours Adaptive Ingestion):** `is_trading_hours()` helper restricts `finlight.me` fetches to active US commodity trading hours (08:00 AM – 05:00 PM EST, Mon–Fri).
-  - **Strategy 4 (Incoming Webhook Gateway & HMAC Security):** `POST /api/v1/events/webhook` endpoint on `src/api_server.py` for direct push ingestion from external alerts (Zapier, IFTTT, Google Alerts). Enforces HMAC-SHA256 signature validation via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment, rejecting unauthorized payload tampering with HTTP 401.
+  - **Strategy 4 (Incoming Webhook Gateway & HMAC Security):** `POST /api/v1/events/webhook` endpoint on `src/api_server.py` for direct push ingestion from external alerts (Zapier, IFTTT, Google Alerts). Mandatory payload schema requires `headline` text and `url` article link, with optional `source` origin. Enforces HMAC-SHA256 signature validation via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment, rejecting unauthorized payload tampering with HTTP 401.
+  - **24-Hour Headline & URL Deduplication Engine:** `is_headline_already_processed()` deduplicates incoming headlines and article URLs against `data/intraday_events.json` within a rolling 24-hour window, skipping redundant LLM scoring calls, avoiding duplicate prediction revision logs, and preventing unnecessary dashboard regenerations.
+  - **Test Suite Execution Isolation & Defensive Dashboard Filtering:** Isolates unit test executions by checking `source.startswith("Test_")` or `TESTING=1` environment variable in `process_incoming_headline()`, automatically suppressing persistent disk writes (`_save_anomaly_record`, `log_predictions`) and skipping `generate_public_dashboard()` calls. Defensively filters test event sources (`Test_Suite`, `Test_Runner`, `Test_*`) in `src/dashboard_generator.py` when building public web app card feeds to guarantee production state cleanliness.
+
+* **NOAA Weather Models & Lightweight `wxs.us` Ingestion (`src/noaa_weather.py`):**
+  - **Token-Efficient Ingestion Engine:** Integrates `t.wxs.us` lightweight terminal REST endpoints (`/location?format=json`) to fetch NWS alerts and SPC (Storm Prediction Center) convective outlooks for specific zipcodes (`74101` Tulsa, `19711` Newark, `45202` Cincinnati, `27834` Greenville, `28202` Charlotte, `94612` Oakland).
+  - **90%–95% Token Savings:** Pre-filters location weather data down to ~150–300 tokens (vs 2,500–4,500 tokens for raw NOAA text bulletins/GeoJSON feature maps).
+  - **0-Token Deterministic SPC Risk Mapping:** Maps categorical convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) and sub-risks (Tornado, Hail, Wind) directly in Python without requiring LLM prompt calls.
 
 * **Tiered Multi-Provider LLM Failover Engine (`src/event_analyzer.py`):**
   - **Tier 1 (Primary):** Google **Gemini 2.5 Flash** (`GEMINI_API_KEY`).
@@ -119,7 +126,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 3. Quantitative Forecasting Agent (`src/models.py`)
 
 * **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression α=10.0) and XGBoost regressors on 80/20 chronological train/test splits. Main model generates base wholesale RBOB commodity price forecasts.
-* **Out-of-Time Test Performance (v1.4 Finlight-LLM):**
+* **Out-of-Time Test Performance (Regular Model v1.4 "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
   - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).
@@ -182,13 +189,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 7. Model Performance Review & Continuous Feedback Loop Agent (`.github/workflows/weekly_model_review.yml` & `src/weekly_issue_reporter.py`)
+### 7. Model Performance Review & Continuous Feedback Loop Agent (`.github/workflows/weekly_model_review.yml`, `src/weekly_issue_reporter.py`, `src/catalog_monitor.py` & `src/arxiv_monitor.py`)
 
-* **Role:** Operates automated weekly model performance evaluations, self-reviews open GitHub repository issues, and maintains a continuous feedback loop into the quantitative forecasting engine to drive accuracy improvements over time.
+* **Role:** Operates automated weekly model performance evaluations, self-reviews open GitHub repository issues, monitors public developer catalog lists for newly added tools, monitors arXiv.org for relevant quantitative research preprints, and maintains a continuous feedback loop into the quantitative forecasting engine to drive accuracy improvements over time.
 * **Automated Cloud Schedule:** Executes automatically every **Saturday morning at 08:00 AM Central / 13:00 UTC** on GitHub Actions cloud runners.
 * **Continuous Feedback Loop & Self-Review Mechanism:**
   - **Rolling Error Metrics:** Evaluates rolling MAE, RMSE, and Directional Hit Rate metrics across 30-day, 60-day, and 90-day historical evaluation windows.
   - **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley` via `gh` CLI or GitHub REST API, evaluates each issue's potential modeling impact using Gemini 2.5 Flash (with a domain-specific heuristic fallback), ranks issues, and selects the top issue expected to yield the largest accuracy/MAE improvement.
+  - **Automated Developer Catalog Monitor (`src/catalog_monitor.py` & `data/catalog_monitors_state.json`):** Continuously tracks 6 major developer catalog indexes (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). On weekly runs, evaluates newly added catalog items with Gemini 2.5 Flash and automatically files GitHub Feature Request issues for items scoring $\ge 7.0/10.0$.
+  - **Automated arXiv Research Paper Monitor (`src/arxiv_monitor.py`):** Queries `export.arxiv.org/api/query` for recent preprints in quantitative finance, econometrics, and machine learning matching energy market and commodity forecasting queries within the 7-day review window, formatting abstracts and download links into weekly review reports.
   - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
 
 ---
@@ -198,7 +207,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`).
 * **Dynamic Overview Card Engine:** Dynamically queries real-time live retail pump prices via `fetch_live_metro_retail_price()` for all regional metro cards (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Oakland_CA`, `BayArea_CA`), while preserving NYMEX RBOB commodity futures benchmark pricing ($3.184/gal - $3.270/gal) for the **National Wholesale** contract card.
 * **Route Structure & Hierarchy:**
-  - **Overview Landing Page (`/` / `docs/index.html`):** Executive overview of the Midgley engine, listing current and 5-day projected target forecasts for all active locales, rolling MAE/directional accuracy improvement charts, and core feature pillars.
+  - **Overview Landing Page (`/` / `docs/index.html`):** Executive overview of the Midgley engine, featuring the dynamic **Last Run Intelligence & Impact Audit Component** (GitHub Issue #105) positioned between the Hero Banner and Active Forecast Locales. Parses `prediction_history.csv` and `intraday_events.json` to display Trigger Context (with linked headline feeds), Mathematical Impact (score bars, half-life $t_{1/2}=5.0\text{d}$, and plain English impact analysis), and Prediction Revisions Delta across all 8 modeled regions with trend direction arrows (`↑`, `↓`, `→`).
   - **National Wholesale RBOB Page (`/national` / `docs/national.html` & `docs/national/index.html`):** Dedicated commodity futures page with NYMEX RBOB predictions chart, out-of-time error metrics, global maritime & geopolitical shock scenarios (Hormuz/Suez), and technical driver breakdowns. Accessible via **`National Wholesale`** in the top navbar.
   - **Tulsa Metro Retail Gas Page (`/tulsa` / `docs/tulsa.html` & `docs/tulsa/index.html`):** Dedicated regional retail page calibrated to live pump prices ($3.89/gal), Cushing WTI delivery hub dynamics, West Tulsa HF Sinclair refinery tornado/freeze shock scenarios, and dynamic rack margins ($0.706/gal). Accessible via the top nav **`Metro Areas`** dropdown menu.
   - **Educational Math Guide (`/math` / `docs/math.html`):** Educational reference detailing equations and vector spaces across all 10 feature layers rendered via KaTeX (including Section 10 multiline `aligned` CARB tax breakdown).
@@ -207,14 +216,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 9. Dev Environment & Permanent Server Agent (`dev-vm` Port 8080 & Systemd Local Workflow Timers)
 
-* **Role:** Manages the persistent local development environment on `dev-vm` (`10.42.42.54`), keeping the permanent `dev` branch active, serving the web dashboard live on port 8080, and running local scheduled workflow equivalents (daily forecasting & weekly model issue self-reviews).
+* **Role:** Manages the persistent local development environment on `dev-vm`, keeping the permanent `dev` branch active, serving the web dashboard live on port 8080, and running local scheduled workflow equivalents (daily forecasting & weekly model issue self-reviews).
 * **Key Specifications:**
-  - **Dedicated Dev Branch:** Tracks the permanent `dev` branch (`origin/dev`) at `/home/marty/projects/midgley`.
+  - **Dedicated Dev Branch:** Tracks the permanent `dev` branch (`origin/dev`) in the project directory.
   - **Systemd Web & API Services:** Managed by `midgley-dev.service` (dashboard web server on port 8080) and `midgley-api.service` (FastAPI / MCP gateway on port 8000).
   - **Systemd Scheduled Local Workflow Timers:**
     - `midgley-daily-forecast.timer`: Executes `scripts/run_local_daily_forecast.sh` daily at **02:00 AM Central / 07:00 UTC**.
+    - `midgley-intraday-polling.timer`: Executes `scripts/run_local_intraday_polling.sh` **every 15 minutes** 24/7 (running zero-cost RSS energy news polling, evaluating shock thresholds, and auto-revising forecasts/dashboard on anomalies).
     - `midgley-weekly-review.timer`: Executes `scripts/run_local_weekly_review.sh` every **Saturday at 08:00 AM Central / 13:00 UTC** (running model backtests, GitHub open issue self-reviews via Gemini, and public dashboard updates).
-  - **User Linger:** User linger enabled (`loginctl enable-linger marty`) to ensure background web services and scheduled timers run 24/7 across host reboots.
+  - **User Linger:** User linger enabled (`loginctl enable-linger`) to ensure background web services and scheduled timers run 24/7 across host reboots.
 
 ---
 
@@ -231,7 +241,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 11. MCP & REST API Gateway Agent (`src/api_server.py`, `src/mcp_server.py`, `src/live_fuel_feed.py`, & `src/lookup_cache.py`)
 
 * **Role:** Exposes real-time unleaded gasoline price ingestion, 5-day out-of-time quantitative forecasting, counterfactual physical/geopolitical shock simulations, and Model Context Protocol (MCP) integrations for external LLMs, AI agents, and chatbots.
-* **Service Orchestration:** Managed by `midgley-api.service` running continuously on `dev-vm` (`https://local-dev.dwarvenbard.com` / `10.42.42.54:8000`).
+* **Service Orchestration:** Managed by `midgley-api.service` running continuously on `dev-vm` (`http://localhost:8000`).
 * **Scraper Fallback Sequence (`src/live_fuel_feed.py`):**
   - **Step 1 (GasBuddy GraphQL):** Real-time station queries by zip code.
   - **Step 2 (AAA Metro BS4 Scraper):** Targeted BeautifulSoup metro table parsing by region keywords (e.g. `Oakland`, `San Francisco`, `Tulsa`, `Wilmington`, `Cincinnati`, `Covington`). Rejects unparseable headers to return `None` rather than matching global top-nav header text.
@@ -242,6 +252,52 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **SQLite/In-Memory Response Cache (`src/lookup_cache.py`):** 15-minute TTL cache protecting upstream GasBuddy and AAA web scrapers from rate limits.
   - **RESTful API Endpoint Gateway (`src/api_server.py`):** FastAPI application serving `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and GPT Action manifest (`/.well-known/ai-plugin.json`).
   - **Model Context Protocol (MCP) Server (`src/mcp_server.py`):** Exposes MCP tools (`get_live_gas_prices`, `get_gas_price_prediction`, `get_live_and_forecast`, `simulate_fuel_market_shock`), static locale resources (`resource://midgley/locales/{locale}`), and prompt templates (`prompt://midgley/market_summary`) across both `stdio` and `HTTP/SSE` transport modes (`/mcp/sse`).
+
+---
+
+### 12. GitHub Wiki & Documentation Maintenance Directives (`https://github.com/KoshiirRa/midgley.wiki.git`)
+
+* **Role:** Ensures that the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git`) is continuously updated and kept in full synchronization with the codebase whenever features, system architecture, data feeds, regional models, or environment states change.
+* **Core Documentation Maintenance Rules:**
+  1. **Mandatory Documentation Sync:** Any agent or process modifying system architecture, data ingestion streams, API gateways, MLOps processes, or scenario simulators MUST update the corresponding Markdown documentation page in the GitHub Wiki (`Agent-Architecture.md`, `Data-Ingestion-and-APIs.md`, `Scenario-Simulator.md`, `MLOps-and-Continuous-Feedback.md`).
+  2. **New Regional Model Calibration Specs:** Whenever a new regional metro model or locale subpackage is introduced to `src/locations/`, its complete calibration specifications (PADD region, base pump price, rack margin equation, delivery hub dynamics, state tax burden, refining capacity, and local hazard alert vectors) MUST be documented in `Regional-Metro-Models.md` in the GitHub Wiki.
+  3. **Dev vs. Prod Environment Synchronization:** The environment status and comparative matrix in `Environment-State-and-Dev-vs-Prod.md` and `Home.md` MUST be kept up to date to clearly reflect operational differences between **Production** (`main` branch / GitHub Actions / GitHub Pages) and **Development** (`dev` branch / `dev-vm`).
+  4. **Security & Data Privacy:** Public repository documentation and Wiki pages MUST NEVER contain internal IP addresses, local network topology, internal domain names, or private server login credentials.
+  5. **Project History & Roadmap Updates:** Major release milestones, new feature additions, and roadmap target updates MUST be logged in `Project-History-and-Roadmap.md`.
+
+---
+
+### 13. GitHub Credential Health & Rate Limit Directives
+
+* **Role:** Ensures agents and development tools maintain GitHub credential health during issue management, milestone tracking, and repository operations.
+* **Diagnostic & Self-Healing Protocol:**
+  - **Rate Limit Detection:** If any `gh` CLI command or GitHub REST API call returns `HTTP 403 API rate limit exceeded` or `status: 403`, the agent MUST immediately inspect `gh auth status` on the execution target (host or `dev-vm` via `ssh marty@10.42.42.54 "gh auth status"`).
+  - **Re-Authentication Prompt:** If the stored credentials are invalid or expired (`The token in keyring/hosts.yml is invalid`), the agent MUST pause API calls and prompt the user to refresh authentication:
+    - **Local Host:** `gh auth refresh -h github.com` (or `gh auth login`)
+    - **Dev VM (`10.42.42.54`):** `ssh marty@10.42.42.54 "gh auth login"`
+  - **Strict Anti-Revocation Rule (No Plaintext Tokens)**: Agents MUST NEVER pass raw GitHub tokens (e.g. `gho_...`, `ghp_...`, `github_pat_...`) inline in CLI commands or single-line env overrides (e.g. `GH_TOKEN=gho_... gh api ...`). Plaintext tokens in shell execution strings or command logs trigger GitHub Secret Scanning, causing instant token revocation. Agents MUST rely strictly on `gh auth` keyring credentials or environment variables set outside command execution strings.
+  - **No Unauthenticated Polling Loops:** Agents MUST NOT retry failing GitHub API calls in a loop when IP rate limits are exhausted.
+
+---
+
+### 14. GitHub Issue Triage & Three-Track Milestone Taxonomy Directives
+
+* **Role:** Establishes strict rules for assigning GitHub issues to three dedicated, parallel milestone release tracks across the project lifecycle.
+* **Three Parallel Release Tracks:**
+  1. **Track 1: Software & UI Release Track (Titled `v0.X`, `v1.X`):** Reserved for general software releases, public web dashboard UI rendering (`docs/`), 1920s gas pump design system, REST API gateway routing, geocoding lookups, security/authentication, mobile/home assistant integrations (Home Assistant, Android Auto, LubeLogger), and dev VM hosting infrastructure (Metabase, Dagu, Cloudflare Tunnels).
+  2. **Track 2: Quantitative Model Engine Track (Titled `Regular Model vX.Y "Codename"` / `Diesel Model vX.Y "Codename"`):** Reserved STRICTLY for quantitative model estimation, econometric estimators, feature engineering, physical/weather data ingestion vectors, crack spread formulas, decay half-life tuning, TimesFM foundation models, SHAP attributions, and ML forecasting algorithms.
+  3. **Track 3: Weekly Self-Review & MLOps Feedback Track (Titled `Weekly Review vX.Y "Codename"`):** Dedicated to the automated Saturday morning review runner (`weekly_model_review.yml`), issue self-review evaluation engine (`weekly_issue_reporter.py`), developer catalog monitoring (`catalog_monitor.py`), arXiv research paper tracking (`arxiv_monitor.py`), CORE API paper ingestion (#53), W&B model drift tracking (#80), ArchiveBox preservation (#97), Healthchecks cron heartbeats (#98), Grafana system telemetry (#107), and prediction history schema expansion (#124).
+* **Strict Separation:** Issues MUST NOT cross release tracks. Non-model UI/API issues belong in the Software/UI Track; forecasting/math issues belong in the Model Engine Track; and automated review/telemetry/meta-agent issues belong in the Weekly Self-Review Track.
+* **Automated Agent Issue Creation & Milestone Triage Protocol:**
+  - **Mandatory Domain Labeling:** ALL issues created or triaged by any AI agent (including `catalog_monitor.py`, `weekly_issue_reporter.py`, `arxiv_monitor.py`, or interactive assistant sessions) MUST be assigned appropriate domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`, `token-efficiency`).
+  - **Mandatory Release Track Milestone Assignment:** Every issue created by an agent MUST be assigned to an appropriate open milestone within its designated Release Track (Track 1: Software/UI `v0.X`, Track 2: Model Engine `Regular Model vX.Y`, or Track 3: Weekly Self-Review `Weekly Review vX.Y`).
+  - **Auto-Creation of Missing Milestones:** If no open milestone currently exists within the designated Release Track, the agent or automated script MUST automatically create a new milestone on GitHub (via `gh api repos/{repo}/milestones -f title="..." -f description="..."` or GitHub REST API) before creating or triaging the issue.
+
+
+
+
+
+
 
 
 

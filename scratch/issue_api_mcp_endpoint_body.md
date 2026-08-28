@@ -148,6 +148,6 @@ Built using FastMCP / MCP Python SDK:
   - [ ] Add unit tests in `tests/test_mcp_server.py`.
 
 - [ ] **Phase 4: Service Orchestration & Dev VM Deployment**
-  - [ ] Create systemd service unit (`midgley-api.service`) running on `dev-vm` (`10.42.42.54:8000`).
+  - [ ] Create systemd service unit (`midgley-api.service`) running on `dev-vm`.
   - [ ] Expose public endpoint via Cloudflare Tunnel / HTTPS reverse proxy.
   - [ ] Update documentation in `docs/API.md`, `README.md`, and `AGENTS.md`.

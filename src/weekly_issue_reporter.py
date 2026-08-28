@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import logging
+from src.arxiv_monitor import format_arxiv_markdown_section
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,128 @@ def fetch_open_github_issues(repo: str = "KoshiirRa/midgley") -> list:
     except Exception as e:
         logger.warning(f"Could not fetch GitHub open issues via REST API: {e}")
         return []
+
+
+DOMAIN_LABELS = {"data-ingestion", "infrastructure", "modeling", "dashboard", "integration", "api", "security", "token-efficiency"}
+
+
+def classify_issue_domain_labels(issue: dict) -> list:
+    """
+    Classifies open issue into standard repository domain taxonomy labels.
+    If the issue already has at least one domain label, returns existing domain labels.
+    Otherwise, infers appropriate domain labels from issue title and body.
+    """
+    existing_labels = issue.get("labels", [])
+    existing_domain = [l for l in existing_labels if l in DOMAIN_LABELS]
+    if existing_domain:
+        return existing_domain
+
+    text = f"{issue.get('title', '')} {issue.get('body', '')}".lower()
+    inferred = []
+
+    if any(k in text for k in ["ingest", "feed", "noaa", "weather", "eia", "usgs", "census", "sec", "edgar", "airnow", "open-meteo", "tradestie", "searchapi", "tavily", "firecrawl", "alphaai", "brieftape", "frankfurter", "dataset"]):
+        inferred.append("data-ingestion")
+
+    if any(k in text for k in ["cron", "database", "postgres", "sql", "mlops", "metabase", "archivebox", "dagu", "trigger.dev", "weights & biases", "w&b", "cloudflare", "tunnel", "shipyard", "coupler", "cache", "swr", "serverless"]):
+        inferred.append("infrastructure")
+
+    if any(k in text for k in ["model", "time series", "time-series", "forecast", "predict", "feature", "geopandas", "feast", "neuralprophet", "pandas-ta", "crack spread", "naive", "baseline", "interval", "p10", "attribution"]):
+        inferred.append("modeling")
+
+    if any(k in text for k in ["dashboard", "ui", "frontend", "embed", "open graph", "design system", "scoreboard", "fill-up", "audit box", "readme"]):
+        inferred.append("dashboard")
+
+    if any(k in text for k in ["integration", "home assistant", "lubelogger", "android auto", "openfigi", "sync"]):
+        inferred.append("integration")
+
+    if any(k in text for k in ["mcp", "endpoint", "rest api", "webhook", "gateway", "geocoding"]):
+        inferred.append("api")
+
+    if any(k in text for k in ["security", "auth", "hmac", "access control"]):
+        inferred.append("security")
+
+    if any(k in text for k in ["token", "prompt", "token-efficiency", "quota", "cost savings", "lightweight", "pre-filter", "wxs.us", "zero-token"]):
+        inferred.append("token-efficiency")
+
+    if not inferred:
+        inferred.append("data-ingestion" if ("ingest" in text or "data" in text) else "infrastructure")
+
+    return list(dict.fromkeys(inferred))
+
+
+def audit_and_tag_open_issues(issues: list = None, repo: str = "KoshiirRa/midgley", dry_run: bool = False) -> list:
+    """
+    Audits open GitHub issues to ensure every open issue is tagged with appropriate domain labels.
+    Identifies untagged issues or issues missing domain taxonomy tags, infers domain labels,
+    and applies label updates via gh CLI or GitHub REST API.
+    Returns list of tagged issue metadata dicts.
+    """
+    if issues is None:
+        issues = fetch_open_github_issues(repo=repo)
+
+    tagged_records = []
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+
+    for issue in issues:
+        existing = issue.get("labels", [])
+        has_domain_label = any(l in DOMAIN_LABELS for l in existing)
+
+        if not has_domain_label:
+            new_domain_labels = classify_issue_domain_labels(issue)
+            combined_labels = list(dict.fromkeys(existing + new_domain_labels))
+            labels_str = ",".join(new_domain_labels)
+            num = issue["number"]
+
+            if dry_run:
+                logger.info(f"[DRY-RUN] Would add labels [{labels_str}] to Issue #{num}")
+                tagged_records.append({
+                    "number": num,
+                    "title": issue["title"],
+                    "html_url": issue.get("html_url", f"https://github.com/{repo}/issues/{num}"),
+                    "added_labels": new_domain_labels
+                })
+                continue
+
+            success = False
+            try:
+                env = dict(os.environ)
+                if token:
+                    env["GH_TOKEN"] = token
+                    env["GITHUB_TOKEN"] = token
+                cmd = ["gh", "issue", "edit", str(num), "--add-label", labels_str, "--repo", repo]
+                res = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
+                success = True
+                logger.info(f"Updated labels for Issue #{num} via gh CLI: +[{labels_str}]")
+            except Exception as e:
+                logger.debug(f"gh CLI edit notice for Issue #{num} ({e}). Trying REST API...")
+
+            if not success and token:
+                try:
+                    url = f"https://api.github.com/repos/{repo}/issues/{num}/labels"
+                    headers = {
+                        "Accept": "application/vnd.github.v3+json",
+                        "Authorization": f"Bearer {token}",
+                        "User-Agent": "Midgley-Weekly-Reviewer",
+                        "Content-Type": "application/json"
+                    }
+                    payload = json.dumps({"labels": combined_labels}).encode("utf-8")
+                    req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+                    with urllib.request.urlopen(req, timeout=10) as response:
+                        success = True
+                        logger.info(f"Updated labels for Issue #{num} via REST API: +[{labels_str}]")
+                except Exception as e:
+                    logger.warning(f"Failed to update labels for Issue #{num} via REST API: {e}")
+
+            if success:
+                tagged_records.append({
+                    "number": num,
+                    "title": issue["title"],
+                    "html_url": issue.get("html_url", f"https://github.com/{repo}/issues/{num}"),
+                    "added_labels": new_domain_labels
+                })
+
+    logger.info(f"Audited open issues: tagged {len(tagged_records)} issue(s) with domain labels.")
+    return tagged_records
 
 
 def _build_issue_eval_markdown(top_issue: dict, ranked: list, reasoning: str, rec_impl: str) -> str:
@@ -419,8 +542,42 @@ def generate_weekly_markdown_report() -> str:
 
     # Open GitHub Issues Self-Review & Modeling Evaluation
     issues = fetch_open_github_issues()
+    tagged_records = audit_and_tag_open_issues(issues=issues)
     issue_eval = evaluate_open_issues_for_modelling(issues, nat_mae=nat_mae, tulsa_mae=tulsa_mae)
     issue_analysis_md = issue_eval.get("summary_markdown", "")
+
+    tagging_summary_md = "✅ All open repository issues are fully tagged with standard domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`)."
+    if tagged_records:
+        lines = [f"Audited **{len(issues)} open repository issues**. Automatically assigned domain taxonomy labels to **{len(tagged_records)} untagged / external issue(s)**:\n"]
+        for rec in tagged_records:
+            lbl_str = ", ".join([f"`{l}`" for l in rec["added_labels"]])
+            lines.append(f"- **[#{rec['number']}]({rec['html_url']}) - {rec['title']}** → Assigned domain labels: {lbl_str}")
+        tagging_summary_md = "\n".join(lines)
+
+    # Run Developer Catalog Monitor & Differential Evaluator
+    catalog_summary_md = "ℹ️ *No new catalog additions detected during this weekly scan window.*"
+    try:
+        from src.catalog_monitor import run_catalog_monitors
+        cat_res = run_catalog_monitors(dry_run=False)
+        disc_count = cat_res.get("new_items_discovered", 0)
+        scanned_count = cat_res.get("catalogs_scanned", 6)
+        issues_created = cat_res.get("issues_created", [])
+
+        if disc_count > 0:
+            lines = [f"Scanned **{scanned_count} developer catalogs**. Discovered **{disc_count} new entries** across monitored indexes."]
+            if issues_created:
+                lines.append("\n#### 🆕 Automatically Filed GitHub Feature Request Issues:")
+                for iss in issues_created:
+                    lines.append(f"- **[{iss['title']}]({iss['url']})** (`{iss['category']}`) — Modeling Impact Score: **`{iss['score']}/10.0`**")
+            catalog_summary_md = "\n".join(lines)
+        else:
+            catalog_summary_md = f"✅ Monitored **{scanned_count} developer catalogs** (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). All catalog state entries are up-to-date with 0 new additions."
+    except Exception as e:
+        logger.warning(f"Could not execute catalog monitor in weekly report: {e}")
+        catalog_summary_md = f"⚠️ *Catalog monitor scan skipped ({e}).*"
+
+    # Fetch recent arXiv research preprints
+    arxiv_section_md = format_arxiv_markdown_section(days_back=7)
 
     report = f"""# 📊 Weekly Model Review & Performance Audit ({today_str})
 
@@ -455,6 +612,23 @@ def generate_weekly_markdown_report() -> str:
 {issue_analysis_md}
 
 ---
+
+## 🏷️ Automated Repository Issue Tagging & Classification Audit
+
+{tagging_summary_md}
+
+---
+
+## 🔍 Automated Developer Catalog Monitor & Discovered Integrations
+
+{catalog_summary_md}
+
+---
+
+{arxiv_section_md}
+
+---
+
 *Automated Weekly Performance Review generated by `src/weekly_issue_reporter.py` via GitHub Actions Cloud Runner.*
 """
     return report

@@ -32,7 +32,9 @@ logger = logging.getLogger(__name__)
 
 # Primary Free Energy RSS Feeds for Zero-Cost 15-Min Polling
 FREE_RSS_FEEDS = [
-    "https://news.google.com/rss/search?q=unleaded+gasoline+OR+oil+tariff+OR+refinery+outage&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=unleaded+gasoline+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=refinery+outage+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=oil+tariff+when:3d&hl=en-US&gl=US&ceid=US:en",
     "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml"
 ]
 
@@ -50,24 +52,39 @@ class IntradayEventMonitor:
     def __init__(self, shock_threshold: float = 0.40):
         self.shock_threshold = shock_threshold
 
-    def fetch_rss_headlines(self) -> List[Dict[str, str]]:
-        """Fetches breaking titles from free RSS feeds without using API quotas."""
+    def fetch_rss_headlines(self, max_age_hours: float = 72.0) -> List[Dict[str, str]]:
+        """Fetches breaking titles from free RSS feeds without using API quotas, discarding stale entries older than max_age_hours."""
         headlines = []
         if feedparser is None:
             logger.warning("feedparser module not installed. Falling back to rule-based scanner.")
             return headlines
 
+        from datetime import timezone
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
         for url in FREE_RSS_FEEDS:
             try:
                 feed = feedparser.parse(url)
                 for entry in feed.entries[:15]:
                     title = entry.get("title", "").strip()
-                    published = entry.get("published", datetime.now().isoformat())
+                    published = entry.get("published", "")
                     link = entry.get("link", "")
+
+                    # Filter out stale articles if published_parsed exists
+                    pub_parsed = entry.get("published_parsed")
+                    if pub_parsed:
+                        try:
+                            pub_dt = datetime(*pub_parsed[:6])
+                            age_hours = (now - pub_dt).total_seconds() / 3600.0
+                            if age_hours > max_age_hours:
+                                logger.info(f"Skipping stale RSS article ({age_hours:.1f}h old): '{title}'")
+                                continue
+                        except Exception as parse_err:
+                            logger.debug(f"Could not calculate RSS item age: {parse_err}")
+
                     if title:
                         headlines.append({
                             "headline": title,
-                            "published": published,
+                            "published": published if published else now.isoformat(),
                             "url": link,
                             "source": "RSS_Feed"
                         })
@@ -95,11 +112,69 @@ class IntradayEventMonitor:
         is_anomaly = (overall_pressure >= self.shock_threshold) or (supply_disruption >= 0.50)
         return is_anomaly, scores
 
-    def process_incoming_headline(self, headline: str, source: str = "Webhook") -> Dict:
+    def is_headline_already_processed(self, headline: str, url: str = "", max_age_hours: float = 24.0) -> bool:
+        """
+        Checks data/intraday_events.json to see if this headline or URL has already been 
+        evaluated and logged within the last max_age_hours.
+        """
+        if not os.path.exists(ANOMALY_LOG_FILE):
+            return False
+            
+        clean_headline = headline.lower().strip()
+        from datetime import timezone
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        
+        try:
+            with open(ANOMALY_LOG_FILE, "r", encoding="utf-8") as f:
+                events = json.load(f)
+                if not isinstance(events, list):
+                    return False
+                    
+                for evt in events:
+                    evt_headline = evt.get("headline", "").lower().strip()
+                    evt_url = evt.get("url", "").strip()
+                    evt_ts_str = evt.get("timestamp", "")
+                    
+                    # Match by exact URL (if present) or headline text
+                    url_match = bool(url and evt_url and url == evt_url)
+                    headline_match = bool(clean_headline == evt_headline)
+                    
+                    if url_match or headline_match:
+                        if evt_ts_str:
+                            try:
+                                evt_dt = datetime.fromisoformat(evt_ts_str).replace(tzinfo=None)
+                                age_hours = (now - evt_dt).total_seconds() / 3600.0
+                                if age_hours <= max_age_hours:
+                                    return True
+                            except Exception:
+                                return True
+                        else:
+                            return True
+        except Exception as e:
+            logger.warning(f"Failed to check headline deduplication log: {e}")
+            
+        return False
+
+    def process_incoming_headline(self, headline: str, source: str = "Webhook", url: str = "", skip_dedup: bool = False) -> Dict:
         """
         Evaluates an individual incoming headline (from Webhook or RSS), logs anomalies,
         and triggers cache invalidation / prediction revision logging if threshold is met.
+        Deduplicates against previously processed headlines within 24 hours.
         """
+        # Deduplication check unless explicitly skipped or running automated test runner
+        if not skip_dedup and not source.startswith("Test_"):
+            if self.is_headline_already_processed(headline, url=url):
+                logger.info(f"Skipping duplicate headline within 24h window: '{headline}'")
+                return {
+                    "timestamp": datetime.now().isoformat(),
+                    "headline": headline,
+                    "source": source,
+                    "url": url,
+                    "is_anomaly": False,
+                    "duplicate": True,
+                    "scores": {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+                }
+
         is_anomaly, scores = self.evaluate_headline_anomaly(headline)
         clean_scores = {k: float(v) for k, v in scores.items()}
         is_anomaly_bool = bool(is_anomaly)
@@ -108,6 +183,7 @@ class IntradayEventMonitor:
             "timestamp": datetime.now().isoformat(),
             "headline": headline,
             "source": source,
+            "url": url,
             "is_anomaly": is_anomaly_bool,
             "scores": clean_scores
         }
@@ -116,26 +192,38 @@ class IntradayEventMonitor:
         if is_anomaly:
             logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}]: '{headline}' (Scores: {scores})")
 
-            # 1. Log anomaly event to disk
-            self._save_anomaly_record(result)
+            is_test = source.startswith("Test_") or os.environ.get("TESTING") == "1"
+            if is_test:
+                logger.info(f"  -> Skipping persistent storage & dashboard rebuild for test execution [{source}].")
+            else:
+                # 1. Log anomaly event to disk
+                self._save_anomaly_record(result)
 
-            # 2. Flush 15-minute SQLite response cache
-            clear_lookup_cache()
-            logger.info("  -> Cleared SQLite response cache for API gateway.")
+                # 2. Flush 15-minute SQLite response cache
+                clear_lookup_cache()
+                logger.info("  -> Cleared SQLite response cache for API gateway.")
 
-            # 3. Log Intraday Revision Record
-            dummy_df = pd.DataFrame([{
-                "date": datetime.now().strftime("%Y-%m-%d"),
-                "current_price": 3.184,
-                "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
-            }])
-            log_predictions(
-                dummy_df, 
-                region="National", 
-                model_version="v1.4-Finlight-Intraday",
-                run_type="INTRADAY_REVISION",
-                headline_trigger=headline
-            )
+                # 3. Log Intraday Revision Record
+                dummy_df = pd.DataFrame([{
+                    "date": datetime.now().strftime("%Y-%m-%d"),
+                    "current_price": 3.184,
+                    "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
+                }])
+                log_predictions(
+                    dummy_df, 
+                    region="National", 
+                    model_version="v1.4-Finlight-Intraday",
+                    run_type="INTRADAY_REVISION",
+                    headline_trigger=headline
+                )
+
+                # 4. Regenerate Public Web Dashboard
+                try:
+                    from src.dashboard_generator import generate_public_dashboard
+                    generate_public_dashboard()
+                    logger.info("  -> Regenerated public dashboard web app (docs/).")
+                except Exception as e:
+                    logger.warning(f"Failed to regenerate dashboard after anomaly: {e}")
 
         return result
 
@@ -147,7 +235,8 @@ class IntradayEventMonitor:
 
         for item in headlines_data:
             headline = item["headline"]
-            res = self.process_incoming_headline(headline, source=item.get("source", "RSS"))
+            url = item.get("url", "")
+            res = self.process_incoming_headline(headline, source=item.get("source", "RSS"), url=url)
             if res["is_anomaly"]:
                 anomalies_found.append(res)
 

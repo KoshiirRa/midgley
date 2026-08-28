@@ -137,4 +137,145 @@ def test_katex_mobile_responsive_css():
         assert "overflow-x-auto" in cin_html
 
 
+def test_last_run_intelligence_audit_card_daily_batch(tmp_path):
+    """Verifies that the audit card renders properly for a scheduled daily batch run state."""
+    import json
+    import pandas as pd
+    from src.dashboard_generator import (
+        parse_last_run_intelligence,
+        build_last_run_audit_card_html
+    )
+
+    hist_file = tmp_path / "prediction_history.csv"
+    df = pd.DataFrame([{
+        "log_timestamp": "2026-08-26 02:00:00",
+        "forecast_target_date": "2026-08-31",
+        "region": "National",
+        "model_version": "v1.4-Finlight-Ridge",
+        "run_type": "DAILY_BATCH",
+        "headline_trigger": "",
+        "current_base_price": 3.184,
+        "predicted_5d_price": 3.077,
+        "predicted_direction": "DOWN",
+        "actual_5d_price": None,
+        "actual_direction": "",
+        "error_dollars": None,
+        "directional_hit": None
+    }])
+    df.to_csv(hist_file, index=False)
+
+    intraday_file = tmp_path / "intraday_events.json"
+    with open(intraday_file, "w", encoding="utf-8") as f:
+        json.dump([], f)
+
+    audit_data = parse_last_run_intelligence(history_path=str(hist_file), intraday_path=str(intraday_file))
+    assert audit_data["run_type"] == "DAILY_BATCH"
+    assert audit_data["headline_trigger"] == ""
+
+    card_html = build_last_run_audit_card_html(audit_data)
+    assert "Last Run Intelligence & Impact Audit" in card_html
+    assert "Scheduled Daily Batch" in card_html
+    assert "DAILY_BATCH" in card_html
+    assert "Supply Disruption Score" in card_html
+    assert "Prediction Revisions Delta" in card_html
+    assert "Technical Analysis" in card_html
+    assert "Simple Summary" in card_html
+    assert "Headline Impact Feeds" in card_html
+    assert "href=" in card_html
+
+
+def test_last_run_intelligence_audit_card_intraday_anomaly(tmp_path):
+    """Verifies that the audit card renders properly for an intraday anomaly shock revision state."""
+    import json
+    import pandas as pd
+    from src.dashboard_generator import (
+        parse_last_run_intelligence,
+        build_last_run_audit_card_html
+    )
+
+    hist_file = tmp_path / "prediction_history.csv"
+    df = pd.DataFrame([{
+        "log_timestamp": "2026-08-26 12:30:00",
+        "forecast_target_date": "2026-08-31",
+        "region": "National",
+        "model_version": "v1.4-Finlight-Intraday",
+        "run_type": "INTRADAY_REVISION",
+        "headline_trigger": "Canada Announces Retaliatory Tariffs as Trade War Escalates",
+        "current_base_price": 3.184,
+        "predicted_5d_price": 3.250,
+        "predicted_direction": "UP",
+        "actual_5d_price": None,
+        "actual_direction": "",
+        "error_dollars": None,
+        "directional_hit": None
+    }])
+    df.to_csv(hist_file, index=False)
+
+    intraday_file = tmp_path / "intraday_events.json"
+    events = [{
+        "timestamp": "2026-08-26T12:30:00",
+        "headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates",
+        "source": "Webhook",
+        "url": "https://news.google.com/articles/tariffs_123",
+        "is_anomaly": True,
+        "scores": {
+            "geopolitical_risk": 0.85,
+            "supply_disruption": 0.75,
+            "demand_sentiment": 0.0,
+            "opec_action": 0.0,
+            "overall_price_pressure": 0.52
+        }
+    }]
+    with open(intraday_file, "w", encoding="utf-8") as f:
+        json.dump(events, f)
+
+    audit_data = parse_last_run_intelligence(history_path=str(hist_file), intraday_path=str(intraday_file))
+    assert audit_data["run_type"] == "INTRADAY_REVISION"
+    assert "Retaliatory Tariffs" in audit_data["headline_trigger"]
+    assert audit_data["scores"]["supply_disruption"] == 0.75
+
+    card_html = build_last_run_audit_card_html(audit_data)
+    assert "Last Run Intelligence & Impact Audit" in card_html
+    assert "Intraday Anomaly Shock" in card_html
+    assert "INTRADAY_REVISION" in card_html
+    assert "Canada Announces Retaliatory Tariffs" in card_html
+    assert "0.75" in card_html  # Supply disruption score
+    assert "0.52" in card_html  # Price pressure score
+    assert "Technical Analysis" in card_html
+    assert "Simple Summary" in card_html
+    assert "Exogenous supply disruption (0.75)" in card_html
+    assert "Breaking news shows gas supply problems" in card_html
+    assert "https://news.google.com/search?q=" in card_html
+
+    # Verify all modeled regions and trend arrow indicators exist in Column 3
+    modeled_names = ["National Wholesale", "Tulsa, OK Retail", "Newark, DE Retail", "Cincinnati, OH/KY", "Greenville, NC Retail", "Charlotte, NC Retail", "Oakland, CA Retail", "SF Bay Area Region"]
+    for reg_name in modeled_names:
+        assert reg_name in card_html, f"Region name '{reg_name}' missing from audit card HTML"
+
+    assert "fa-arrow-" in card_html, "Trend arrow icon missing from audit card HTML"
+
+
+def test_last_run_intelligence_audit_card_fallback_on_missing_files(tmp_path):
+    """Verifies that parse_last_run_intelligence and build_last_run_audit_card_html execute cleanly
+    with fallback defaults when history or intraday event files do not exist.
+    """
+    from src.dashboard_generator import (
+        parse_last_run_intelligence,
+        build_last_run_audit_card_html
+    )
+
+    non_existent_history = str(tmp_path / "non_existent_history.csv")
+    non_existent_intraday = str(tmp_path / "non_existent_intraday.json")
+
+    audit_data = parse_last_run_intelligence(history_path=non_existent_history, intraday_path=non_existent_intraday)
+    assert audit_data["run_type"] == "DAILY_BATCH"
+    assert audit_data["headline_trigger"] == ""
+    assert "supply_disruption" in audit_data["scores"]
+
+    card_html = build_last_run_audit_card_html(audit_data)
+    assert "Last Run Intelligence & Impact Audit" in card_html
+    assert "Scheduled Daily Batch" in card_html
+
+
+
 

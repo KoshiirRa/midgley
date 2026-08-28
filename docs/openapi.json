@@ -7,12 +7,8 @@
   },
   "servers": [
     {
-      "url": "https://local-dev.dwarvenbard.com",
-      "description": "Primary Dev VM HTTPS Gateway"
-    },
-    {
-      "url": "http://10.42.42.54:8000",
-      "description": "Dev VM Local Network Port"
+      "url": "http://localhost:8000",
+      "description": "Local API Gateway"
     }
   ],
   "paths": {

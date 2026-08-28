@@ -75,4 +75,4 @@ For local agent environments (Claude Desktop, Antigravity CLI, Cursor, Aider):
 | **Production REST API (Primary)** | GitHub Pages (`docs/api/v1/*.json`) | **$0** | **99.99%** (GitHub CDN) | Primary public endpoint for ChatGPT Actions, web chatbots, and static GET queries. |
 | **Production MCP Gateway** | Google Cloud Run / Render (Docker) | **$0** (Scale to zero) | **High** (Cloud native) | Dynamic zip lookups, live MCP SSE streams, and counterfactual `POST` simulations. |
 | **Local LLM Tool Provider** | PyPI (`uvx midgley-mcp`) | **$0** | **100%** (Runs client-side) | Plug-and-play local MCP tool provider for Claude Desktop, Antigravity CLI, & Cursor. |
-| **Dev Environment (Internal)** | `dev-vm` (`10.42.42.54:8000`) | **$0** | Local Lab | Internal testing, local development, and experimental feature builds. |
+| **Dev Environment (Internal)** | `dev-vm` | **$0** | Local Lab | Internal testing, local development, and experimental feature builds. |

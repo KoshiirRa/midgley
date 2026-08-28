@@ -32,7 +32,7 @@ python -m src.dashboard_generator
 
 # Auto-commit updated history, metrics & dashboard if working tree is dirty
 if [ -d ".git" ]; then
-    git add README.md docs/ data/prediction_history.csv 2>/dev/null || true
+    git add README.md docs/ data/ 2>/dev/null || true
     if ! git diff-index --quiet HEAD --; then
         git commit -m "chrono: Weekly Saturday local dev model performance review & issue audit [skip ci]" || true
         echo "Committed weekly review updates to dev branch."
