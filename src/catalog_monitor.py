@@ -43,6 +43,22 @@ CATALOG_SOURCES = {
     "awesome-selfhosted": {
         "url": "https://raw.githubusercontent.com/awesome-selfhosted/awesome-selfhosted/master/README.md",
         "name": "Awesome Selfhosted (awesome-selfhosted/awesome-selfhosted)"
+    },
+    "awesome-quant": {
+        "url": "https://raw.githubusercontent.com/wilsonfreitas/awesome-quant/master/README.md",
+        "name": "Awesome Quant (wilsonfreitas/awesome-quant)"
+    },
+    "awesome-python": {
+        "url": "https://raw.githubusercontent.com/vinta/awesome-python/master/README.md",
+        "name": "Awesome Python (vinta/awesome-python)"
+    },
+    "awesome-nodejs": {
+        "url": "https://raw.githubusercontent.com/sindresorhus/awesome-nodejs/main/readme.md",
+        "name": "Awesome Node.js (sindresorhus/awesome-nodejs)"
+    },
+    "api-mega-list": {
+        "url": "https://raw.githubusercontent.com/cporter202/API-mega-list/master/README.md",
+        "name": "API Mega List (cporter202/API-mega-list)"
     }
 }
 
