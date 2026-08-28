@@ -275,6 +275,78 @@ def test_last_run_intelligence_audit_card_fallback_on_missing_files(tmp_path):
     card_html = build_last_run_audit_card_html(audit_data)
     assert "Last Run Intelligence & Impact Audit" in card_html
     assert "Scheduled Daily Batch" in card_html
+    assert '<a href="technical_breakdown.html"' in card_html
+
+
+def test_generate_technical_breakdown_file(tmp_path):
+    """Verifies that generate_technical_breakdown_file creates HTML and MD breakdown reports
+    with exact substituted numerical values for all variables.
+    """
+    import json
+    from src.dashboard_generator import (
+        parse_last_run_intelligence,
+        build_last_run_audit_card_html,
+        generate_technical_breakdown_file
+    )
+
+    audit_data = {
+        "run_type": "INTRADAY_REVISION",
+        "headline_trigger": "OPEC Emergency Production Cut Announced",
+        "log_timestamp": "2026-08-28 14:00:00",
+        "scores": {
+            "supply_disruption": 0.80,
+            "overall_price_pressure": 0.52,
+            "geopolitical_risk": 0.80,
+            "demand_sentiment": 0.00,
+            "opec_action": 0.50
+        },
+        "decay_half_life": 5.0,
+        "headline_items": [{"headline": "OPEC Emergency Production Cut Announced", "url": "https://news.google.com", "source": "Reuters"}],
+        "region_deltas": [
+            {"key": "National", "name": "National Wholesale", "base_price": 3.184, "predicted_price": 3.250, "delta": 0.066, "pct_change": 2.07},
+            {"key": "Tulsa_OK", "name": "Tulsa, OK Retail", "base_price": 3.890, "predicted_price": 3.780, "delta": -0.110, "pct_change": -2.83}
+        ]
+    }
+
+    docs_dir = str(tmp_path / "docs")
+    generate_technical_breakdown_file(audit_data, docs_dir=docs_dir)
+
+    html_file = tmp_path / "docs" / "technical_breakdown.html"
+    md_file = tmp_path / "docs" / "technical_breakdown.md"
+
+    assert html_file.exists()
+    assert md_file.exists()
+
+    html_text = html_file.read_text(encoding="utf-8")
+    md_text = md_file.read_text(encoding="utf-8")
+
+    assert "Full Technical Analysis & Specific-Run Math Audit" in html_text
+    assert "0.80" in html_text
+    assert "0.52" in html_text
+    assert "0.4000" in html_text
+    assert "$3.250/gal" in html_text
+    assert "OPEC Emergency Production Cut Announced" in html_text
+
+    assert "Midgley LLM Energy Price Forecasting Engine" in md_text
+    assert "- **Supply Disruption Score ($S$):** `0.80`" in md_text
+    assert "$M_5 = 0.8000 \\times 0.50000 = 0.4000$" in md_text
+
+    # Verify JSON payload exports in docs/runs/
+    latest_json = tmp_path / "docs" / "runs" / "latest.json"
+    index_json = tmp_path / "docs" / "runs" / "index.json"
+
+    assert latest_json.exists()
+    assert index_json.exists()
+
+    payload_data = json.loads(latest_json.read_text(encoding="utf-8"))
+    assert payload_data["factor_scores"]["supply_disruption"] == 0.80
+    assert payload_data["decay_math"]["m5"] == 0.4000
+    assert payload_data["primary_trigger"] == "OPEC Emergency Production Cut Announced"
+
+    card_html = build_last_run_audit_card_html(audit_data)
+    assert '<a href="technical_breakdown.html"' in card_html
+    assert "Technical Analysis" in card_html
+
 
 
 

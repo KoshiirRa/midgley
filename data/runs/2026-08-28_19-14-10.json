@@ -1,0 +1,49 @@
+{
+  "run_id": "2026-08-28_19-14-10",
+  "log_timestamp": "2026-08-28 14:00:00",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "OPEC Emergency Production Cut Announced",
+  "headline_items": [
+    {
+      "headline": "OPEC Emergency Production Cut Announced",
+      "url": "https://news.google.com",
+      "source": "Reuters"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.8,
+    "overall_price_pressure": 0.52,
+    "geopolitical_risk": 0.8,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.5,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.8,
+    "m1": 0.6964,
+    "m2": 0.6063,
+    "m3": 0.5278,
+    "m4": 0.4595,
+    "m5": 0.4
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.25,
+      "delta": 0.066,
+      "pct_change": 2.07
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.89,
+      "predicted_price": 3.78,
+      "delta": -0.11,
+      "pct_change": -2.83
+    }
+  ]
+}

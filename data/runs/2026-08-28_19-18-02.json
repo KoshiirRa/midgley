@@ -1,0 +1,54 @@
+{
+  "run_id": "2026-08-28_19-18-02",
+  "log_timestamp": "2026-08-28 14:00:00",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "OPEC Emergency Production Cut Announced",
+  "headline_items": [
+    {
+      "headline": "OPEC Emergency Production Cut Announced",
+      "url": "https://news.google.com",
+      "source": "Reuters"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.8,
+    "overall_price_pressure": 0.52,
+    "geopolitical_risk": 0.8,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.5,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.8,
+    "m1": 0.6964,
+    "m2": 0.6063,
+    "m3": 0.5278,
+    "m4": 0.4595,
+    "m5": 0.4
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.25,
+      "delta": 0.066,
+      "pct_change": 2.07
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.89,
+      "predicted_price": 3.78,
+      "delta": -0.11,
+      "pct_change": -2.83
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY: Upward price pressure detected across national wholesale RBOB futures (+$0.52/gal shock). Primary trigger 'OPEC Emergency Production Cut Announced' generated elevated supply disruption (S=0.80) and geopolitical risk (G=0.80). Exponential memory decay (t\u00bd=5.0d) models a 50.0% residual event retention factor acting on the Day-5 target forecast horizon.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS:\n\n1. Wholesale Baseline & Memory Decay Integration:\nStandardized Ridge regression (\u03b1=10.0) integrates macro futures momentum with fused qualitative event memory vectors. Initial shock score M\u2080=0.80 decays exponentially via decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9, yielding a daily retention factor \u03b3 \u2248 0.87055. By Day 5, exactly 50.0% of the initial event pressure (0.4000) remains active in the estimator state space.\n\n2. Regional Metro Calibration Breakdown:\n\u2022 Tulsa Metro (Cushing WTI Hub): Calibrated to WTI delivery logistics and West Tulsa refinery rack margins.\n\u2022 Newark Metro (PADD 1B Central Atlantic): Calibrated to PBF Delaware City refinery (180k bpd) and C&D Canal detour alerts.\n\u2022 Cincinnati Tri-State (OH/KY): Models Ohio/Kentucky dual-state fuel tax differential ($0.125/gal gap) and Catlettsburg KY refinery logistics.\n\u2022 Carolinas (Greenville & Charlotte, PADD 1C): Models Colonial Line 1/2 breakout hubs at Selma NC and Paw Creek terminal infrastructure.\n\u2022 Oakland & SF Bay Area (PADD 5 West Coast): Incorporates statutory California CARB excise tax, Cap-and-Trade carbon fees, and LCFS compliance overhead ($0.953/gal statutory total).",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS:\n\nKey downside/upside tail risks evaluated for this forecast window include:\n\u2022 NOAA Convective & Severe Weather Alerts: Regional refinery or terminal convective outages (Tornado/High Wind risk mapped via SPC/NWS).\n\u2022 Maritime Chokepoint Disruption: Escalations in Strait of Hormuz (21M bpd flow) or Suez Canal detours (+2.88% to +5.32% counterfactual shock).\n\u2022 Executive Social Feed & Weekend Gaps: Off-market social posts published while commodity exchanges are closed produce 1.42x open gap volatility."
+  }
+}
