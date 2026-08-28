@@ -34,17 +34,13 @@
                     <p class="text-xs text-slate-400 font-mono">Step-by-step econometric calculation ledger with exact substituted values</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-xs font-mono flex-wrap">
-                <!-- Run Selector Dropdown -->
-                <select id="runSelect" onchange="switchRun(this.value)" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 font-mono text-xs focus:outline-none focus:border-blue-500">
-                    <option value="latest">Latest Run (2026-08-28 19:14:10)</option>
-                </select>
+            <div class="flex items-center gap-3 text-xs font-mono">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
+                    <i class="fa-solid fa-clock mr-1 text-slate-400"></i>2026-08-28 19:03:38
+                </span>
                 <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">
                     DAILY_BATCH
                 </span>
-                <a id="jsonLink" href="runs/latest.json" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 transition flex items-center gap-1" title="Download Machine-Readable JSON Payload">
-                    <i class="fa-solid fa-code text-[10px]"></i> JSON Payload
-                </a>
                 <a href="technical_breakdown.md" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
                     <i class="fa-solid fa-file-lines mr-1"></i> Raw MD
                 </a>
@@ -61,18 +57,18 @@
                 <h2 class="text-sm font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
                     <i class="fa-solid fa-bolt text-amber-400"></i> Section 1: Execution Audit & Trigger Headline Context
                 </h2>
-                <span id="runIdDisplay" class="text-xs text-slate-500 font-mono">Run ID: 2026-08-28 19:14:10</span>
+                <span class="text-xs text-slate-500 font-mono">Run ID: 2026-08-28 19:03:38</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Primary Event Trigger</p>
-                    <div id="triggerText" class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm font-bold text-white font-mono leading-snug">
+                    <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm font-bold text-white font-mono leading-snug">
                         Scheduled Daily Batch Refresh (02:00 AM Central)
                     </div>
                 </div>
                 <div class="space-y-2">
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Active Ingested News Stream Links</p>
-                    <ul id="newsList" class="space-y-1.5 p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                    <ul class="space-y-1.5 p-3 rounded-xl bg-slate-950/80 border border-slate-800">
                         <li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html" target="_blank" class="hover:underline text-blue-300">NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh</a> <span class="text-slate-500">(CME_Group / NYMEX)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://api.weather.gov" target="_blank" class="hover:underline text-blue-300">NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion</a> <span class="text-slate-500">(NOAA_NWS_API)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://finlight.me" target="_blank" class="hover:underline text-blue-300">Executive Social Media Feed & OPEC Weekend Price Gap Analysis</a> <span class="text-slate-500">(Finlight_v2_API)</span></li>
                     </ul>
                 </div>
@@ -87,27 +83,27 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Supply Disruption (S)</span>
-                    <span id="scoreSupply" class="text-base font-extrabold text-rose-400">0.10</span>
+                    <span class="text-base font-extrabold text-rose-400">0.10</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Price Pressure Shock (ΔP)</span>
-                    <span id="scorePressure" class="text-base font-extrabold text-blue-400">+0.02</span>
+                    <span class="text-base font-extrabold text-blue-400">+0.02</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Geopolitical Risk (G)</span>
-                    <span id="scoreGeo" class="text-base font-extrabold text-amber-400">0.15</span>
+                    <span class="text-base font-extrabold text-amber-400">0.15</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Demand Sentiment (D)</span>
-                    <span id="scoreDemand" class="text-base font-extrabold text-slate-300">0.00</span>
+                    <span class="text-base font-extrabold text-slate-300">0.00</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">OPEC Action (O)</span>
-                    <span id="scoreOpec" class="text-base font-extrabold text-slate-300">0.00</span>
+                    <span class="text-base font-extrabold text-slate-300">0.00</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Decay Half-Life (t½)</span>
-                    <span id="scoreDecay" class="text-base font-extrabold text-emerald-400">5.0 Days</span>
+                    <span class="text-base font-extrabold text-emerald-400">5.0 Days</span>
                 </div>
             </div>
         </section>
@@ -205,10 +201,10 @@
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>Greenville, NC Retail</span>
-                <span class="text-blue-400">$3.136/gal (+$0.122/gal, +3.75%)</span>
+                <span class="text-blue-400">$3.409/gal (+$0.112/gal, +3.17%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\text{P}_{\text{Greenville, NC Retail}} = \$3.250 + (+\$0.122) = \$3.136/\text{gal}$$
+                $$\text{P}_{\text{Greenville, NC Retail}} = \$3.533 + (+\$0.112) = \$3.409/\text{gal}$$
             </p>
             
         </div>
@@ -225,20 +221,20 @@
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>Oakland, CA Retail</span>
-                <span class="text-blue-400">$4.778/gal ($-0.421/gal, -8.52%)</span>
+                <span class="text-blue-400">$5.451/gal (+$0.251/gal, +4.45%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\text{P}_{\text{Oakland, CA Retail}} = \$4.950 + (\$-0.421) = \$4.778/\text{gal}$$
+                $$\text{P}_{\text{Oakland, CA Retail}} = \$5.647 + (+\$0.251) = \$5.451/\text{gal}$$
             </p>
             <p class="text-amber-400/90 text-[10px] font-sans italic mt-1.5 flex items-center gap-1"><i class="fa-solid fa-circle-info text-[10px]"></i> Includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal</p>
         </div>
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>SF Bay Area Region</span>
-                <span class="text-blue-400">$4.874/gal ($-0.425/gal, -8.42%)</span>
+                <span class="text-blue-400">$5.451/gal (+$0.151/gal, +2.68%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\text{P}_{\text{SF Bay Area Region}} = \$5.050 + (\$-0.425) = \$4.874/\text{gal}$$
+                $$\text{P}_{\text{SF Bay Area Region}} = \$5.647 + (+\$0.151) = \$5.451/\text{gal}$$
             </p>
             <p class="text-amber-400/90 text-[10px] font-sans italic mt-1.5 flex items-center gap-1"><i class="fa-solid fa-circle-info text-[10px]"></i> Includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal</p>
         </div>
@@ -249,46 +245,8 @@
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500 font-mono">
-        <p>Midgley Project &bull; Technical Breakdown & Math Audit Ledger &bull; Log Timestamp: 2026-08-28 19:14:10</p>
+        <p>Midgley Project &bull; Technical Breakdown & Math Audit Ledger &bull; Log Timestamp: 2026-08-28 19:03:38</p>
     </footer>
-
-    <!-- Client-Side Dynamic Run Payload Switcher -->
-    <script>
-        async function loadRunIndex() {
-            try {
-                const res = await fetch('runs/index.json');
-                if (!res.ok) return;
-                const index = await res.json();
-                const sel = document.getElementById('runSelect');
-                sel.innerHTML = '';
-                index.forEach((r, idx) => {
-                    const opt = document.createElement('option');
-                    opt.value = r.run_id;
-                    opt.textContent = `${r.timestamp} (${r.run_type})`;
-                    sel.appendChild(opt);
-                });
-                const params = new URLSearchParams(window.location.search);
-                const activeRun = params.get('run_id');
-                if (activeRun) {
-                    sel.value = activeRun;
-                }
-            } catch (e) {
-                console.log('Run index load error:', e);
-            }
-        }
-
-        function switchRun(runId) {
-            if (!runId) return;
-            const url = new URL(window.location);
-            url.searchParams.set('run_id', runId);
-            window.history.pushState({}, '', url);
-            document.getElementById('jsonLink').href = `runs/${runId}.json`;
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadRunIndex();
-        });
-    </script>
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-08-28 18:52:01`  
+**Log Timestamp:** `2026-08-28 19:14:10`  
 **Run Mode:** `DAILY_BATCH`  
 **Primary Event Trigger:** Scheduled Daily Batch Refresh (02:00 AM Central)  
 
@@ -53,11 +53,11 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 - **Tulsa, OK Retail**: $P = \$3.890 + (+\$0.098) = \$3.747/\text{gal}$ (Delta: $+\$0.098/\text{gal}$, $+2.53\%)
 - **Newark, DE Retail**: $P = \$3.943 + (+\$0.099) = \$3.814/\text{gal}$ (Delta: $+\$0.099/\text{gal}$, $+2.51\%)
 - **Cincinnati, OH/KY**: $P = \$3.903 + (+\$0.101) = \$3.778/\text{gal}$ (Delta: $+\$0.101/\text{gal}$, $+2.58\%)
-- **Greenville, NC Retail**: $P = \$3.533 + (+\$0.112) = \$3.409/\text{gal}$ (Delta: $+\$0.112/\text{gal}$, $+3.17\%)
-- **Charlotte, NC Retail**: $P = \$3.754 + (+\$0.105) = \$3.627/\text{gal}$ (Delta: $+\$0.105/\text{gal}$, $+2.79\%)
-- **Oakland, CA Retail**: $P = \$5.647 + (+\$0.251) = \$5.451/\text{gal}$ (Delta: $+\$0.251/\text{gal}$, $+4.45\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
-- **SF Bay Area Region**: $P = \$5.647 + (+\$0.151) = \$5.451/\text{gal}$ (Delta: $+\$0.151/\text{gal}$, $+2.68\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **Greenville, NC Retail**: $P = \$3.250 + (+\$0.122) = \$3.136/\text{gal}$ (Delta: $+\$0.122/\text{gal}$, $+3.75\%)
+- **Charlotte, NC Retail**: $P = \$3.280 + (+\$0.121) = \$3.169/\text{gal}$ (Delta: $+\$0.121/\text{gal}$, $+3.68\%)
+- **Oakland, CA Retail**: $P = \$4.950 + (\$-0.421) = \$4.778/\text{gal}$ (Delta: $\$-0.421/\text{gal}$, $-8.52\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **SF Bay Area Region**: $P = \$5.050 + (\$-0.425) = \$4.874/\text{gal}$ (Delta: $\$-0.425/\text{gal}$, $-8.42\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-28 18:52:01.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-28 19:14:10.*

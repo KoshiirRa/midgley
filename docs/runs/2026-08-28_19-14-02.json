@@ -1,0 +1,107 @@
+{
+  "run_id": "2026-08-28_19-14-02",
+  "log_timestamp": "2026-08-28 19:05:45",
+  "run_type": "DAILY_BATCH",
+  "primary_trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)",
+  "headline_items": [
+    {
+      "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
+      "url": "https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html",
+      "source": "CME_Group / NYMEX"
+    },
+    {
+      "headline": "NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion",
+      "url": "https://api.weather.gov",
+      "source": "NOAA_NWS_API"
+    },
+    {
+      "headline": "Executive Social Media Feed & OPEC Weekend Price Gap Analysis",
+      "url": "https://finlight.me",
+      "source": "Finlight_v2_API"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.1,
+    "overall_price_pressure": 0.02,
+    "geopolitical_risk": 0.15,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.1,
+    "m1": 0.0871,
+    "m2": 0.0758,
+    "m3": 0.066,
+    "m4": 0.0574,
+    "m5": 0.05
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.3842,
+      "predicted_price": 3.1534,
+      "delta": 0.0,
+      "pct_change": 0.0
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.89,
+      "predicted_price": 3.7471,
+      "delta": 0.09830000000000005,
+      "pct_change": 2.526992287917739
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 3.943,
+      "predicted_price": 3.8145,
+      "delta": 0.09909999999999997,
+      "pct_change": 2.5133147349733695
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 3.903,
+      "predicted_price": 3.7776,
+      "delta": 0.10070000000000023,
+      "pct_change": 2.580066615424039
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 3.25,
+      "predicted_price": 3.1363,
+      "delta": 0.12179999999999991,
+      "pct_change": 3.7476923076923048
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 3.28,
+      "predicted_price": 3.1686,
+      "delta": 0.12070000000000025,
+      "pct_change": 3.679878048780496
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 4.95,
+      "predicted_price": 4.7779,
+      "delta": -0.4215,
+      "pct_change": -8.515151515151514
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 5.05,
+      "predicted_price": 4.8744,
+      "delta": -0.4250000000000007,
+      "pct_change": -8.41584158415843
+    }
+  ]
+}
