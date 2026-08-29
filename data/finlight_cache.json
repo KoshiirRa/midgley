@@ -1,9 +1,30 @@
 {
-  "timestamp": 1788020928.3462665,
-  "cached_at": "2026-08-29T16:28:48.346268",
+  "timestamp": 1788023215.3688273,
+  "cached_at": "2026-08-29T17:06:55.368829",
   "query": "(oil OR gasoline OR crude OR RBOB OR OPEC OR petroleum OR refinery OR Cushing OR outage OR inventory OR EIA OR Hormuz OR Red Sea OR Houthi OR Suez OR tanker OR sanctions OR Venezuela)",
   "count": 30,
   "articles": [
+    {
+      "link": "https://www.theguardian.com/business/2026/aug/29/european-gas-stores-lowest-13-years-eu-price",
+      "source": "www.theguardian.com",
+      "title": "\u2018Winter panic\u2019: EU gas stores at their lowest level in 13 years",
+      "summary": "As one of Europe\u2019s biggest consumers of gas the UK may be particularly exposed to heightened price volatilityEurope is on course to enter the cooler months with gas stores at their lowest level in 13 years, which has triggered \u201cwinter panic\u201d among energy traders, experts have warned.The EU\u2019s gas stocks were 63% full in the last week of August, well below the 80% average for late August over recent years and among the lowest levels ever recorded for this time of year. Continue reading...",
+      "publishDate": "2026-08-29T05:00:19.000Z",
+      "language": "en",
+      "categories": [
+        "business",
+        "energy",
+        "markets"
+      ],
+      "countries": [
+        "GB",
+        "RE"
+      ],
+      "images": [
+        "https://i.guim.co.uk/img/media/c5ebfab77c83c07b4de057c1add8490c44148f59/122_0_3612_2891/master/3612.jpg?width=465&dpr=1&s=none&crop=none",
+        "https://media.guim.co.uk/e3d43299e85f27e579437406d4cbfb596d9d0c94/0_0_3000_3000/500.jpg"
+      ]
+    },
     {
       "link": "https://www.aljazeera.com/video/newsfeed/2026/8/29/whats-in-the-us-venezuela-biggest-oil-deal-in-world-history",
       "source": "www.aljazeera.com",
@@ -528,25 +549,6 @@
         "GB"
       ],
       "images": []
-    },
-    {
-      "link": "https://www.wsj.com/politics/national-security/drain-on-u-s-munitions-from-iran-war-raises-fears-over-ability-to-deter-china-russia-c7d4512d",
-      "source": "www.wsj.com",
-      "title": "Drain on U.S. Munitions From Iran War Raises Fears Over Ability to Deter China, Russia",
-      "summary": "Defense Secretary Pete Hegseth is overseeing the shift of munitions using an \u201corders book\u201d under longstanding Pentagon procedures.",
-      "publishDate": "2026-08-29T01:00:00.000Z",
-      "language": "en",
-      "categories": [
-        "politics",
-        "geopolitics",
-        "security"
-      ],
-      "countries": [
-        "US"
-      ],
-      "images": [
-        "https://images.wsj.net/im-86559187?size=1.33"
-      ]
     }
   ]
 }
