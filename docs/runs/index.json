@@ -1,5 +1,35 @@
 [
   {
+    "run_id": "2026-08-29_02-54-56",
+    "timestamp": "2026-08-29 02:54:56",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-29_02-54-50",
+    "timestamp": "2026-08-29 02:54:03",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-29_02-53-51",
+    "timestamp": "2026-08-29 02:53:50",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-29_02-53-50",
+    "timestamp": "2026-08-29 02:53:50",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-29_02-53-43",
+    "timestamp": "2026-08-29 02:45:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Here\u2019s Where Tariff Costs Are Piling Up\u2014and Why Some States ..."
+  },
+  {
     "run_id": "2026-08-29_02-45-54",
     "timestamp": "2026-08-29 02:45:50",
     "run_type": "INTRADAY_REVISION",

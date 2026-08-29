@@ -937,21 +937,29 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     }
     run_index = [r for r in run_index if r.get("run_id") != file_ts]
     run_index.insert(0, new_entry)
-    run_index = run_index[:100]  # Retain top 100 historical runs
+    run_index = run_index[:100]
 
     with open(index_json_path, "w", encoding="utf-8") as f:
         json.dump(run_index, f, indent=2)
 
-    # Build regional calculation blocks with substituted values
     regional_calc_html = ""
     regional_calc_md = ""
     for r in region_deltas:
         name = r.get("name", "")
+        clean_name = name.replace("&", "\\&").replace("#", "\\#")
         b_price = r.get("base_price", 0.0)
         p_price = r.get("predicted_price", 0.0)
         d_val = r.get("delta", 0.0)
         pct_val = r.get("pct_change", 0.0)
-        sign = "+" if d_val > 0 else ""
+
+        if d_val < 0:
+            delta_math = f"(-\\${abs(d_val):.3f})"
+            delta_badge = f"-\\${abs(d_val):.3f}/gal"
+        else:
+            delta_math = f"(+\\${d_val:.3f})"
+            delta_badge = f"+\\${d_val:.3f}/gal"
+
+        pct_sign = "+" if pct_val > 0 else ""
 
         note_html = ""
         note_md = ""
@@ -963,17 +971,16 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>{name}</span>
-                <span class="text-blue-400">${p_price:.3f}/gal ({sign}${d_val:.3f}/gal, {sign}{pct_val:.2f}%)</span>
+                <span class="text-blue-400">${p_price:.3f}/gal ({delta_badge}, {pct_sign}{pct_val:.2f}%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\\text{{P}}_{{\\text{{{name}}}}} = \\${b_price:.3f} + ({sign}\\${d_val:.3f}) = \\${p_price:.3f}/\\text{{gal}}$$
+                $$\\text{{P}}_{{\\text{{{clean_name}}}}} = \\${b_price:.3f} + {delta_math} = \\${p_price:.3f}\\text{{/gal}}$$
             </p>
             {note_html}
         </div>"""
 
-        regional_calc_md += f"- **{name}**: $P = \\${b_price:.3f} + ({sign}\\${d_val:.3f}) = \\${p_price:.3f}/\\text{{gal}}$ (Delta: ${sign}\\${d_val:.3f}/\\text{{gal}}$, ${sign}{pct_val:.2f}\\%){note_md}\n"
+        regional_calc_md += f"- **{name}**: $P = \\${b_price:.3f} + {delta_math} = \\${p_price:.3f}\\text{{/gal}}$ (Delta: {delta_badge}, {pct_sign}{pct_val:.2f}\\%){note_md}\n"
 
-    # News items formatted
     news_html = ""
     news_md = ""
     for h in headline_items:
@@ -983,7 +990,6 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
         news_html += f'<li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="{h_url}" target="_blank" class="hover:underline text-blue-300">{h_text}</a> <span class="text-slate-500">({h_src})</span></li>'
         news_md += f"- [{h_text}]({h_url}) ({h_src})\n"
 
-    # HTML content
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -996,71 +1002,77 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" {KATEX_ONLOAD_SCRIPT}></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
     <style>
-        .gradient-bg {{ background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }}
-        .math-box {{ background: #090d16; border-left: 4px solid #3b82f6; overflow-x: auto; max-width: 100%; }}
-        .katex-display {{ overflow-x: auto; overflow-y: hidden; max-width: 100%; padding: 0.35rem 0.2rem; margin: 0.5em 0; }}
+        {KATEX_MOBILE_CSS}
+        .math-box {{
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+        }}
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
 
-    <!-- Header Navigation -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+    <!-- Top Navigation Header -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="Return to Public Dashboard">
-                    <i class="fa-solid fa-arrow-left"></i>
+                <a href="index.html" class="text-slate-400 hover:text-white transition-colors text-sm font-mono flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left text-xs"></i> Back to Dashboard
                 </a>
-                <div>
-                    <h1 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-code-branch text-blue-400"></i> Full Technical Analysis & Specific-Run Math Audit
-                    </h1>
-                    <p class="text-xs text-slate-400 font-mono">Step-by-step econometric calculation ledger with exact substituted values</p>
-                </div>
+                <span class="text-slate-700">|</span>
+                <h1 class="text-sm font-bold text-white font-mono flex items-center gap-2">
+                    <i class="fa-solid fa-square-root-variable text-blue-400"></i> Full Technical Analysis & Specific-Run Math Audit
+                </h1>
             </div>
-            <div class="flex items-center gap-3 text-xs font-mono flex-wrap">
-                <!-- Run Selector Dropdown -->
-                <select id="runSelect" onchange="switchRun(this.value)" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 font-mono text-xs focus:outline-none focus:border-blue-500">
-                    <option value="latest">Latest Run ({log_ts})</option>
+
+            <!-- Run Selector Dropdown & Download Buttons -->
+            <div class="flex items-center gap-2">
+                <select id="runSelect" onchange="switchRun(this.value)" class="bg-slate-800 text-slate-200 text-xs font-mono px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500">
+                    <option value="{file_ts}">{log_ts} ({run_type})</option>
                 </select>
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">
-                    {run_type}
-                </span>
-                <a id="jsonLink" href="runs/latest.json" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 transition flex items-center gap-1" title="Download Machine-Readable JSON Payload">
-                    <i class="fa-solid fa-code text-[10px]"></i> JSON Payload
+                <a id="jsonLink" href="runs/latest.json" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 transition text-xs font-mono flex items-center gap-1">
+                    <i class="fa-solid fa-code"></i> JSON Payload
                 </a>
-                <a href="technical_breakdown.md" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
-                    <i class="fa-solid fa-file-lines mr-1"></i> Raw MD
+                <a href="technical_breakdown.md" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition text-xs font-mono flex items-center gap-1">
+                    <i class="fa-brands fa-markdown"></i> Markdown
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Grid -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full space-y-8">
-        
-        <!-- Section 1: Run Metadata & Trigger Audit -->
-        <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h2 class="text-sm font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
-                    <i class="fa-solid fa-bolt text-amber-400"></i> Section 1: Execution Audit & Trigger Headline Context
-                </h2>
-                <span id="runIdDisplay" class="text-xs text-slate-500 font-mono">Run ID: {log_ts}</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                    <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Primary Event Trigger</p>
-                    <div id="triggerText" class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm font-bold text-white font-mono leading-snug">
-                        {trigger_text}
-                    </div>
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+
+        <!-- Banner Card -->
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+            <div class="flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="text-xs text-blue-400 font-mono uppercase tracking-wider font-bold">Execution Ledger Audit</span>
+                    <h2 class="text-xl font-bold text-white font-mono">Forecasting Engine Specific-Run Math Audit</h2>
                 </div>
-                <div class="space-y-2">
-                    <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Active Ingested News Stream Links</p>
-                    <ul id="newsList" class="space-y-1.5 p-3 rounded-xl bg-slate-950/80 border border-slate-800">
-                        {news_html}
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                This report documents the exact step-by-step mathematical calculations and feature vector scores executed during run <code class="text-blue-300">{log_ts}</code>. All values below represent actual substituted numerical parameters generated for this specific forecast execution.
+            </p>
+        </div>
+
+        <!-- Section 1: Trigger & News Ingestion Context -->
+        <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-blue-400 border-b border-slate-800 pb-3 flex items-center gap-2">
+                <i class="fa-solid fa-newspaper text-amber-400"></i> Section 1: Execution Audit & Trigger Headline Context
+            </h2>
+            <div class="space-y-3 font-mono text-xs">
+                <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+                    <span class="text-slate-500 uppercase text-[10px] block">Primary Event Trigger</span>
+                    <p class="text-amber-300 font-bold text-sm">{trigger_text}</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <span class="text-slate-500 uppercase text-[10px] block">Active Ingested News Bulletins ({len(headline_items)})</span>
+                    <ul class="space-y-1.5">
+                        {news_html if news_html else '<li class="text-slate-500 italic">No active high-impact headlines ingested during this batch run.</li>'}
                     </ul>
                 </div>
             </div>
@@ -1074,27 +1086,27 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Supply Disruption (S)</span>
-                    <span id="scoreSupply" class="text-base font-extrabold text-rose-400">{supply_val:.2f}</span>
+                    <span class="text-base font-extrabold text-rose-400">{supply_val:.2f}</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Price Pressure Shock (ΔP)</span>
-                    <span id="scorePressure" class="text-base font-extrabold text-blue-400">{pressure_val:+.2f}</span>
+                    <span class="text-base font-extrabold text-blue-400">{pressure_val:+.2f}</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Geopolitical Risk (G)</span>
-                    <span id="scoreGeo" class="text-base font-extrabold text-amber-400">{geo_val:.2f}</span>
+                    <span class="text-base font-extrabold text-amber-400">{geo_val:.2f}</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Demand Sentiment (D)</span>
-                    <span id="scoreDemand" class="text-base font-extrabold text-slate-300">{demand_val:.2f}</span>
+                    <span class="text-base font-extrabold text-slate-300">{demand_val:.2f}</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">OPEC Action (O)</span>
-                    <span id="scoreOpec" class="text-base font-extrabold text-slate-300">{opec_val:.2f}</span>
+                    <span class="text-base font-extrabold text-slate-300">{opec_val:.2f}</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Decay Half-Life (t½)</span>
-                    <span id="scoreDecay" class="text-base font-extrabold text-emerald-400">{decay_half_life:.1f} Days</span>
+                    <span class="text-base font-extrabold text-emerald-400">{decay_half_life:.1f} Days</span>
                 </div>
             </div>
         </section>
@@ -1125,19 +1137,6 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                             <li>&bull; <strong>Day 5 (Target Forecast Horizon)</strong>: $$M_5 = {m0:.4f} \\times 0.50000 = {m5:.4f}$$</li>
                         </ul>
                     </div>
-
-                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 flex flex-col justify-between">
-                        <div>
-                            <p class="text-slate-300 font-bold">Standardized Ridge Estimator Contribution:</p>
-                            <p class="text-slate-400 text-[11px] mt-1 leading-relaxed">
-                                $$\\hat{{y}}_{{\\text{{wholesale, 5d}}}} = P_{{\\text{{base, Nat}}}} + \\Delta P_{{\\text{{shock}}}}$$
-                                Regularization parameter \\(\\alpha = 10.0\\) balances macro futures momentum with fused event memory score vector (\\(M_0 = {m0:.2f}\\), \\(\\Delta P = {pressure_val:+.2f}\\)).
-                            </p>
-                        </div>
-                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-emerald-400 font-bold">
-                            Half-Life Validation: Exactly 50.0% residual event pressure ({m5:.4f}) acts on the day-5 target horizon.
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -1162,47 +1161,41 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
             </div>
             
             <div class="space-y-6 font-mono text-xs leading-relaxed">
-                <!-- Summary Card -->
                 <div class="p-4 rounded-xl bg-slate-950/90 border-l-4 border-amber-400 space-y-2">
-                    <p class="text-amber-300 font-bold uppercase tracking-wide flex items-center gap-2">
-                        <i class="fa-solid fa-bullhorn text-amber-400"></i> Executive Forecast Summary
-                    </p>
-                    <p class="text-slate-300 leading-relaxed font-sans text-xs">
-                        {synopsis['summary']}
-                    </p>
+                    <p class="text-amber-300 font-bold uppercase tracking-wide">Executive Forecast Summary</p>
+                    <p class="text-slate-300 leading-relaxed font-sans text-xs">{synopsis['summary']}</p>
                 </div>
-
-                <!-- Detailed Technical Discussion -->
                 <div class="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                    <p class="text-blue-400 font-bold uppercase tracking-wide flex items-center gap-2 border-b border-slate-800 pb-2">
-                        <i class="fa-solid fa-microscope"></i> Technical Discussion & Market Dynamics
-                    </p>
-                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">
-{synopsis['technical_discussion']}
-                    </div>
+                    <p class="text-blue-400 font-bold uppercase tracking-wide border-b border-slate-800 pb-2">Technical Discussion & Market Dynamics</p>
+                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">{synopsis['technical_discussion']}</div>
                 </div>
-
-                <!-- Forecast Uncertainty & Risk Scenarios -->
                 <div class="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                    <p class="text-rose-400 font-bold uppercase tracking-wide flex items-center gap-2 border-b border-slate-800 pb-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Forecast Uncertainty & Counterfactual Catalysts
-                    </p>
-                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">
-{synopsis['risks_scenarios']}
-                    </div>
+                    <p class="text-rose-400 font-bold uppercase tracking-wide border-b border-slate-800 pb-2">Forecast Uncertainty & Counterfactual Catalysts</p>
+                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">{synopsis['risks_scenarios']}</div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500 font-mono">
         <p>Midgley Project &bull; Technical Breakdown & Math Audit Ledger &bull; Log Timestamp: {log_ts}</p>
     </footer>
 
-    <!-- Client-Side Dynamic Run Payload Switcher -->
+    <!-- Client-Side Dynamic Run Payload Switcher & KaTeX Auto-Renderer -->
     <script>
+        function renderMath() {{
+            if (typeof renderMathInElement === 'function') {{
+                renderMathInElement(document.body, {{
+                    delimiters: [
+                        {{left: '$$', right: '$$', display: true}},
+                        {{left: '\\\\(', right: '\\\\)', display: false}}
+                    ],
+                    throwOnError: false
+                }});
+            }}
+        }}
+
         async function loadRunIndex() {{
             try {{
                 const res = await fetch('runs/index.json');
@@ -1210,7 +1203,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 const index = await res.json();
                 const sel = document.getElementById('runSelect');
                 sel.innerHTML = '';
-                index.forEach((r, idx) => {{
+                index.forEach((r) => {{
                     const opt = document.createElement('option');
                     opt.value = r.run_id;
                     opt.textContent = `${{r.timestamp}} (${{r.run_type}})`;
@@ -1218,12 +1211,8 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 }});
                 const params = new URLSearchParams(window.location.search);
                 const activeRun = params.get('run_id');
-                if (activeRun) {{
-                    sel.value = activeRun;
-                }}
-            }} catch (e) {{
-                console.log('Run index load error:', e);
-            }}
+                if (activeRun) sel.value = activeRun;
+            }} catch (e) {{ console.log('Run index load error:', e); }}
         }}
 
         function switchRun(runId) {{
@@ -1235,15 +1224,14 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
         }}
 
         document.addEventListener('DOMContentLoaded', () => {{
+            renderMath();
             loadRunIndex();
         }});
     </script>
-
 </body>
 </html>
 """
 
-    # Markdown content
     md_content = f"""# Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
 **Log Timestamp:** `{log_ts}`  
