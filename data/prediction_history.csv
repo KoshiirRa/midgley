@@ -3242,7 +3242,6 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-28 19:20:20,2025-09-29,BayArea_CA,v1.4-BayArea-Ridge,4.1688,4.1214,DOWN,4.1451,DOWN,0.0237,1.0,DAILY_BATCH,
 2026-08-28 19:20:21,2026-09-01,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.7779,DOWN,,,,,DAILY_BATCH,
 2026-08-28 19:20:21,2026-09-01,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.8744,DOWN,,,,,DAILY_BATCH,
-2026-08-29 02:45:50,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,Here’s Where Tariff Costs Are Piling Up—and Why Some States Are Hit Much Harder - Investopedia
 2026-08-29 02:54:55,2025-09-29,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,2.2508,2.2025,DOWN,2.2508,UP,0.0483,0.0,DAILY_BATCH,
 2026-08-29 02:54:55,2025-09-30,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,2.2342,2.1793,DOWN,2.2342,UP,0.0549,0.0,DAILY_BATCH,
 2026-08-29 02:54:55,2025-10-01,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,2.2696,2.2156,DOWN,2.2696,UP,0.054,0.0,DAILY_BATCH,
@@ -4161,3 +4160,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 02:55:07,2026-08-26,BayArea_CA,v1.4-BayArea-Ridge,5.4979,5.3781,DOWN,5.4701,DOWN,0.092,1.0,DAILY_BATCH,
 2026-08-29 02:55:08,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.7729,DOWN,,,,,DAILY_BATCH,
 2026-08-29 02:55:08,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.8693,DOWN,,,,,DAILY_BATCH,
+2026-08-29 04:45:34,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2069,UP,,,,,INTRADAY_REVISION,Canada Oil Outages and Bad Weather to Tighten Inventories at Key US Storage Hub - EnergyNow

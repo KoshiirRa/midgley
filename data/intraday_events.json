@@ -334,5 +334,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-29T04:45:34.391722",
+    "headline": "Canada Oil Outages and Bad Weather to Tighten Inventories at Key US Storage Hub - EnergyNow",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOTWdyVlNlQnF3elNjZThHSmxHdG0yN3ZqcVg1Tll2b1l1ZDA1WkdyWVZ2MVNMX0dWWlV1NzhWUk5JNzVLOW93bmlKVGFVc29kWlNOcG53YXNxMVBJa2QzVTBsX0VNb3NTTUxZWFZuMjRuWjJGZVh3dUpXZjVJN0VGZWRkS19wZDRCcktWcHlzWlp6TXhVWUlObGxuN0lPMk1NSUZLb3JTeHJfTm5uY0E?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    }
   }
 ]
