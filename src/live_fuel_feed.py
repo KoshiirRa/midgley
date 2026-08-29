@@ -470,7 +470,20 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
     if use_cache and result:
         global_cache.set(cache_key, result, ttl_seconds=900)
 
+    try:
+        from src.connector_telemetry import log_connector_event
+        log_connector_event(
+            connector_name=result.get("source", "RetailFuelFeed"),
+            target=region_code,
+            status="SUCCESS" if result and result.get("price") else "ERROR",
+            data_age_hours=result.get("data_age_hours", 0.0),
+            is_stale=result.get("is_stale", False)
+        )
+    except Exception:
+        pass
+
     return result
+
 
 
 
