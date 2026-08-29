@@ -5,25 +5,25 @@
   "primary_trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)",
   "headline_items": [
     {
-      "headline": "Oil, Migration, War & Drugs: How India, Canada Revealed Trump\u2019s Tariff Policy Beyond Trade - The Times of India",
-      "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxOSEZ1MVQxZ2xhVm5TaEg0bmt1NENpR2VUNTZSaFBSQ2JmbGhERi1OQXVveHg0alQwaW93TTQ0ZW5OTlBhcWI4LVRLSUlraThwNmhTcFFqMjNPWV9JU3dxekI4c3NMYkY4RWNtRWx2M09nQXZpTkg4V3JVdjhpQjBwWWVWT285aVVxN2xYUmRBUlV5S0ljQ2RZYmVyQ0V5TkRQWjF0UkVhUV9YV1pPelZ0Q1dnc3lfdW52YjNnSy1Ua1NONW4yVzZTZ293R3RiTUVoWFNENXViWG9Xc0Z3MFBZbm9PXzNmQkFvMkF1NE9oYndwRzDSAfgBQVVfeXFMUFU5Qy11SklaRkhzZ1pMcmNHcnd5WWVXSVhYSGh2Q29pN2VwQjFOVjZJdjRzYlFwS2YtME1UVGstUXVUN0QyUGFOcmhxVkdsandLUi1oQnRYWklDaVFUSlZxbHA4NFh0SHhsUkdFSU9QUFFEeW1fdVNaVjZscDQ2UkpWZGNtekJ1cFhIUFFQWWNNYzZFazNSVU1nNHdFZVNkYWotQjlWQUtSTDVCQzZiNjU0bHJIQV9PU25OT2szLTAyMGpRUFRHdlZkZERiUC1wTDVRNktGdmU0cVNadllJbkNUNjF2TEdwbkxEZlZfby0xV1Ffa3VDczI?oc=5",
-      "source": "RSS_Feed"
+      "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
+      "url": "https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html",
+      "source": "CME_Group / NYMEX"
     },
     {
-      "headline": "Alberta premier doubles down on diplomacy with Americans to stave off U.S. tariffs - CBC",
-      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPb2dBay0wRHhIejRfdHhWczIzc0QwcVJTbEFCSnhIOTJXbG5BUmg3VFNGbFNycUxYdUF2YnVNLUZLQzJNUWI5MGNkRjJBcWNQV0tVM2NXWW1TR0g4WE1vcUtlb2owOTFhdHFUX09vUmdLdlRnaG9oOUNIQnZVcjcwVEtDd3hzdkJLWm9iNg?oc=5",
-      "source": "RSS_Feed"
+      "headline": "NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion",
+      "url": "https://api.weather.gov",
+      "source": "NOAA_NWS_API"
     },
     {
-      "headline": "Alberta Premier rejects oil and gas export tax in U.S. tariff tussle during visit to Grande Prairie - Edmonton Journal",
-      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNMEhDNHhNRHdFYVNRYldxaWFQZ3lremhtQndySkJaeUhFcGFfTGRnYTFzU2NUWlBZNzU3WkVIX2RFdTQxNnpWYzk4SVhqS2dJOHlzVERESUpIbnZ0Vk5Nc0dDQmZhQmpfVGtWS3dLSDRWakdZQUZJc3MxckR5bkpLYV9OLU5BN1E0bTVsYXd3TmRXTGtGQkUtQS1OWThmN1hndWtNQkJsN3RSazNDWWcta21OWVE3Zw?oc=5",
-      "source": "RSS_Feed"
+      "headline": "Executive Social Media Feed & OPEC Weekend Price Gap Analysis",
+      "url": "https://finlight.me",
+      "source": "Finlight_v2_API"
     }
   ],
   "factor_scores": {
-    "supply_disruption": 0.8,
-    "overall_price_pressure": 0.52,
-    "geopolitical_risk": 0.8,
+    "supply_disruption": 0.1,
+    "overall_price_pressure": 0.02,
+    "geopolitical_risk": 0.15,
     "demand_sentiment": 0.0,
     "opec_action": 0.0,
     "decay_half_life": 5.0
@@ -31,12 +31,12 @@
   "decay_math": {
     "decay_constant": 0.13863,
     "retention_daily": 0.87055,
-    "m0": 0.8,
-    "m1": 0.6964,
-    "m2": 0.6063,
-    "m3": 0.5278,
-    "m4": 0.4595,
-    "m5": 0.4
+    "m0": 0.1,
+    "m1": 0.0871,
+    "m2": 0.0758,
+    "m3": 0.066,
+    "m4": 0.0574,
+    "m5": 0.05
   },
   "regional_calibrations": [
     {
