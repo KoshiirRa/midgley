@@ -516,5 +516,33 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.4
     }
+  },
+  {
+    "timestamp": "2026-08-29T18:15:34.001268",
+    "headline": "Alberta premier doubles down on diplomacy with Americans to stave off U.S. tariffs - CBC",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPb2dBay0wRHhIejRfdHhWczIzc0QwcVJTbEFCSnhIOTJXbG5BUmg3VFNGbFNycUxYdUF2YnVNLUZLQzJNUWI5MGNkRjJBcWNQV0tVM2NXWW1TR0g4WE1vcUtlb2owOTFhdHFUX09vUmdLdlRnaG9oOUNIQnZVcjcwVEtDd3hzdkJLWm9iNg?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-08-29T18:15:39.018248",
+    "headline": "Alberta Premier rejects oil and gas export tax in U.S. tariff tussle during visit to Grande Prairie - Edmonton Journal",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNMEhDNHhNRHdFYVNRYldxaWFQZ3lremhtQndySkJaeUhFcGFfTGRnYTFzU2NUWlBZNzU3WkVIX2RFdTQxNnpWYzk4SVhqS2dJOHlzVERESUpIbnZ0Vk5Nc0dDQmZhQmpfVGtWS3dLSDRWakdZQUZJc3MxckR5bkpLYV9OLU5BN1E0bTVsYXd3TmRXTGtGQkUtQS1OWThmN1hndWtNQkJsN3RSazNDWWcta21OWVE3Zw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
