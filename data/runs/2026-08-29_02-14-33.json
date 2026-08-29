@@ -1,0 +1,54 @@
+{
+  "run_id": "2026-08-29_02-14-33",
+  "log_timestamp": "2026-08-28 14:00:00",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "OPEC Emergency Production Cut Announced",
+  "headline_items": [
+    {
+      "headline": "OPEC Emergency Production Cut Announced",
+      "url": "https://news.google.com",
+      "source": "Reuters"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.8,
+    "overall_price_pressure": 0.52,
+    "geopolitical_risk": 0.8,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.5,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.8,
+    "m1": 0.6964,
+    "m2": 0.6063,
+    "m3": 0.5278,
+    "m4": 0.4595,
+    "m5": 0.4
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.25,
+      "delta": 0.066,
+      "pct_change": 2.07
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.89,
+      "predicted_price": 3.78,
+      "delta": -0.11,
+      "pct_change": -2.83
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-08-28 14:00:00]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'OPEC Emergency Production Cut Announced' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t\u00bd=5.0d) models Day-1 retained shock M\u2081=0.6964 and Day-5 horizon retention M\u2085=0.4000.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-08-28 14:00:00 (Mode: INTRADAY_REVISION), primary event trigger 'OPEC Emergency Production Cut Announced' was processed by the extraction engine. Inspiration stream ingested 1 headline bulletins from sources (Reuters). Ingested factor vector: Supply Disruption S=0.80, Price Pressure \u0394P=+0.52, Geopolitical Risk G=0.80. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.8000\n  - Day 1: M\u2081 = 0.6964\n  - Day 5: M\u2085 = 0.4000 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.250/gal (+$0.066/gal, +2.07%)\n  \u2022 Tulsa, OK Retail: $3.780/gal ($-0.110/gal, -2.83%)\n\nLargest upward shift for this run: National Wholesale at $3.250/gal (+0.066/gal). Largest downward shift for this run: Tulsa, OK Retail at $3.780/gal (-0.110/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-08-28 14:00:00]:\n\u2022 Execution Context: Run type 'INTRADAY_REVISION' triggered by 'OPEC Emergency Production Cut Announced'. Overall price pressure vector sits at \u0394P=+0.52/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+  }
+}
