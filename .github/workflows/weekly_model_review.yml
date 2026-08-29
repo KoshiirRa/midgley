@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "weekly-review-${{ github.ref }}"
   cancel-in-progress: false
 
 jobs:

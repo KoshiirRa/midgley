@@ -244,24 +244,28 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
         ticker = yf.Ticker("RB=F")
         hist = ticker.history(period="5d")
         if not hist.empty and 'Close' in hist.columns:
-            latest_rbob = float(hist['Close'].iloc[-1])
-            margins = {
-                "National": 0.0,
-                "Tulsa_OK": 0.706,
-                "Newark_DE": 0.166,
-                "Cincinnati_OH": 0.266,
-                "Cincinnati_KY": 0.141,
-                "Oakland_CA": 2.366,
-                "BayArea_CA": 2.466,
-                "SanFrancisco_CA": 2.466,
-                "SanJose_CA": 2.296,
-                "NorthBay_CA": 2.196,
-                "Greenville_NC": 0.490,
-                "Charlotte_NC": 0.520
-            }
-            offset = margins.get(region_code, 0.50)
-            est_price = latest_rbob + offset
-            return {"average_price": round(est_price, 3), "source": "EIA/yfinance RBOB Benchmark"}
+            close_vals = hist['Close'].values
+            valid_vals = [float(v) for v in close_vals.flatten() if pd.notna(v) and float(v) > 0]
+            if valid_vals:
+                latest_rbob = valid_vals[-1]
+                margins = {
+                    "National": 0.0,
+                    "Tulsa_OK": 0.706,
+                    "Newark_DE": 0.166,
+                    "Cincinnati_OH": 0.266,
+                    "Cincinnati_KY": 0.141,
+                    "Oakland_CA": 2.366,
+                    "BayArea_CA": 2.466,
+                    "SanFrancisco_CA": 2.466,
+                    "SanJose_CA": 2.296,
+                    "NorthBay_CA": 2.196,
+                    "Greenville_NC": 0.490,
+                    "Charlotte_NC": 0.520
+                }
+                offset = margins.get(region_code, 0.50)
+                est_price = latest_rbob + offset
+                if pd.notna(est_price) and est_price > 0:
+                    return {"average_price": round(est_price, 3), "source": "EIA/yfinance RBOB Benchmark"}
     except Exception as e:
         logger.debug(f"yfinance retail benchmark notice for {region_code}: {e}")
     return None
@@ -282,7 +286,7 @@ def fetch_history_last_known_price(region_code: str) -> dict:
                     reg_df = reg_df[reg_df['current_base_price'] > 4.50]
                 if not reg_df.empty:
                     last_price = float(reg_df.iloc[-1]['current_base_price'])
-                    if last_price > 0:
+                    if pd.notna(last_price) and last_price > 0:
                         return {"average_price": round(last_price, 3), "source": "prediction_history.csv History"}
         except Exception as e:
             logger.debug(f"Could not read prediction_history.csv for {region_code}: {e}")
@@ -302,7 +306,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
     cache_key = f"live_price_{region_code}"
     if use_cache:
         cached_res = global_cache.get(cache_key)
-        if cached_res:
+        if cached_res and cached_res.get('price') and pd.notna(cached_res.get('price')):
             logger.info(f"Cache hit for {region_code}: ${cached_res.get('price'):.3f}/gal (Age: {cached_res.get('_cache_age_seconds')}s)")
             return cached_res
 
@@ -315,7 +319,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
 
     # Step 1: Live GasBuddy GraphQL API
     gb_res = fetch_gasbuddy_prices_by_zip(zip_code)
-    if gb_res and gb_res.get("average_price"):
+    if gb_res and gb_res.get("average_price") and pd.notna(gb_res.get("average_price")):
         price = gb_res["average_price"]
         source = gb_res["source"]
         logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
@@ -324,7 +328,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
     # Step 2: AAA Metro Web Scraper
     if not result:
         aaa_res = fetch_aaa_metro_price(region_code)
-        if aaa_res and aaa_res.get("average_price"):
+        if aaa_res and aaa_res.get("average_price") and pd.notna(aaa_res.get("average_price")):
             price = aaa_res["average_price"]
             source = aaa_res["source"]
             logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
@@ -333,7 +337,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
     # Step 3: EIA / yfinance Benchmark Calculation
     if not result:
         eia_res = fetch_eia_or_yfinance_price(region_code)
-        if eia_res and eia_res.get("average_price"):
+        if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
             price = eia_res["average_price"]
             source = eia_res["source"]
             logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
@@ -342,7 +346,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
     # Step 4: Last Known prediction_history.csv Price
     if not result:
         hist_res = fetch_history_last_known_price(region_code)
-        if hist_res and hist_res.get("average_price"):
+        if hist_res and hist_res.get("average_price") and pd.notna(hist_res.get("average_price")):
             price = hist_res["average_price"]
             source = hist_res["source"]
             logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
