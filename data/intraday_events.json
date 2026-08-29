@@ -558,5 +558,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.18
     }
+  },
+  {
+    "timestamp": "2026-08-29T21:45:33.840677",
+    "headline": "Alberta premier says oil tariff would be emotional, not logical - CBC",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFAtRHl0RlRGVl91WFJwOWFvNzlJajlqV0pXSnNtVmhiY0tBeHRnaWNpZ2FibjI2Z1kxUnhta0Z5T0k5ZUhnV2hOVWVHODkxcGxkcm5lNU9uRjZpdw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]

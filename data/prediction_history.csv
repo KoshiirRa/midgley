@@ -3268,7 +3268,6 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 17:11:59,2026-08-26,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.6767,3.571,DOWN,3.7451,UP,0.1741,0.0,DAILY_BATCH,
 2026-08-29 17:12:00,2026-09-02,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,3.878,3.7555,DOWN,,,,,DAILY_BATCH,
 2026-08-29 17:12:00,2026-09-02,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.713,3.5958,DOWN,,,,,DAILY_BATCH,
-2026-08-29 18:45:33,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2069,UP,,,,,INTRADAY_REVISION,OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com
 2026-08-29 21:18:39,2025-09-29,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,1.9146,1.8741,DOWN,2.5451,UP,0.671,0.0,DAILY_BATCH,
 2026-08-29 21:18:39,2025-09-30,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,1.898,1.85,DOWN,2.5229,UP,0.6729,0.0,DAILY_BATCH,
 2026-08-29 21:18:39,2025-10-01,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,1.9334,1.8884,DOWN,1.9334,UP,0.045,0.0,DAILY_BATCH,
@@ -4187,3 +4186,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 21:18:48,2026-08-26,BayArea_CA,v1.4-BayArea-Ridge,5.4979,5.3794,DOWN,5.4701,DOWN,0.0907,1.0,DAILY_BATCH,
 2026-08-29 21:18:49,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.7747,DOWN,,,,,DAILY_BATCH,
 2026-08-29 21:18:49,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.8712,DOWN,,,,,DAILY_BATCH,
+2026-08-29 21:45:33,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,"Alberta premier says oil tariff would be emotional, not logical - CBC"
