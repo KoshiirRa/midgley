@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "test_cf_token_xyz987"}'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mathematical & Algorithmic Foundations - Midgley Project</title>
@@ -121,6 +122,26 @@
             <p class="text-slate-300 text-base leading-relaxed">
                 Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.4 Finlight-LLM</strong>.
             </p>
+            
+            <!-- Research Citations Ledger Link Card -->
+            <div class="pt-2">
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            <i class="fa-solid fa-book-bookmark text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                Peer-Reviewed Research Literature Index <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
+                            </h4>
+                            <p class="text-xs text-slate-400">View the running citation ledger referencing peer-reviewed arXiv papers (Context Routing Diagnostics, Alibaba CEDAR Residual Decomposition, TraceBench, SAGE, SPALT) whose methodologies are implemented in Midgley.</p>
+                        </div>
+                    </div>
+                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shrink-0 shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> View RESEARCH_CITATIONS.md
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Section 1: Refining Crack Spreads -->
@@ -350,6 +371,34 @@
                     <strong>Refining Crack Spread:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>
                     <strong>Physical Risk Shocks:</strong> Hayward Fault Seismic (\(+\$0.420/\text{gal}\)), PG&amp;E PSPS Red Flag Wildfire Blackout (\(+\$0.350/\text{gal}\)), and PTWC Tsunami Berth Closure (\(+\$0.165/\text{gal}\)).
                 </p>
+            </div>
+        </section>
+
+        <!-- Section 11: Academic Research & Citation Ledger -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-400">11</span>
+                <h3 class="text-2xl font-bold text-white">Peer-Reviewed Research &amp; Academic Citation Ledger</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Midgley actively integrates theoretical theorems, diagnostic algorithms, and multi-agent architectural paradigms from peer-reviewed scientific literature. All implemented research papers are indexed in our persistent repository ledger:
+            </p>
+
+            <div class="p-6 rounded-2xl bg-slate-900 border border-blue-500/30 space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <h4 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-scroll text-blue-400"></i> RESEARCH_CITATIONS.md
+                        </h4>
+                        <p class="text-xs text-slate-400">
+                            Includes arXiv pre-prints, theoretical bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR two-stage residual formulas (\(\mathbf{s}_{t+1} = f_\theta(\mathbf{s}) + \epsilon_t\)), TraceBench LLM agent benchmarking, and SPALT spatio-temporal locality tree references.
+                        </p>
+                    </div>
+                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shrink-0 shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open RESEARCH_CITATIONS.md on GitHub
+                    </a>
+                </div>
             </div>
         </section>
 

@@ -116,3 +116,28 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         "test_dates": test_df['date'].values,
         "current_prices": np.array(y_current)
     }
+
+
+def predict_with_cedar_residual_decomposition(
+    model_quant, 
+    X_features: pd.DataFrame, 
+    residual_event_delta: float = 0.0
+) -> np.ndarray:
+    """
+    Implements Alibaba CEDAR's Two-Stage Prediction Formula (Meng et al., arXiv:2608.25871v1):
+    s_{t+1} = f_theta(s_{<=t}, a_{<=t+1}) + epsilon_t
+    
+    Parameters:
+    - model_quant: Trained Stage I quantitative baseline model f_theta
+    - X_features: Feature DataFrame for current timestep
+    - residual_event_delta: Estimated residual shock perturbation epsilon_t ($/gal)
+    
+    Returns:
+    - Final adjusted forecast array incorporating event residual decomposition.
+    
+    Reference: Meng et al. (2026), 'CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition', arXiv:2608.25871v1
+    """
+    base_pred = model_quant.predict(X_features)
+    final_pred = base_pred + residual_event_delta
+    return final_pred
+
