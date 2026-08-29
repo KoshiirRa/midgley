@@ -87,6 +87,25 @@ class TestRetailGasPriceFeeds(unittest.TestCase):
         self.assertEqual(res["average_price"], 3.89)
         self.assertEqual(res["source"], "Google Places API")
 
+    def test_data_age_controls(self):
+        """Verify data age calculation and staleness detection flag (> 24.0h)."""
+        from src.live_fuel_feed import calculate_data_age_hours, validate_price_payload_freshness
+        from datetime import datetime, timedelta
+
+        # Fresh timestamp (now)
+        now_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        fresh_payload = validate_price_payload_freshness({"region": "Tulsa_OK", "price": 3.89, "timestamp": now_ts})
+        self.assertFalse(fresh_payload["is_stale"])
+        self.assertLessEqual(fresh_payload["data_age_hours"], 0.1)
+
+        # Stale timestamp (36 hours ago)
+        stale_dt = datetime.now() - timedelta(hours=36)
+        stale_ts = stale_dt.strftime("%Y-%m-%d %H:%M:%S")
+        stale_payload = validate_price_payload_freshness({"region": "Tulsa_OK", "price": 3.89, "timestamp": stale_ts})
+        self.assertTrue(stale_payload["is_stale"])
+        self.assertGreaterEqual(stale_payload["data_age_hours"], 35.0)
+
 
 if __name__ == "__main__":
     unittest.main()
+
