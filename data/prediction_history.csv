@@ -2123,7 +2123,6 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 03:06:35,2026-08-30,BayArea_CA,v1.4-BayArea-Ridge,5.4029,5.3512,DOWN,,,,,DAILY_BATCH,
 2026-08-29 03:06:35,2026-08-31,BayArea_CA,v1.4-BayArea-Ridge,5.4701,5.4187,DOWN,,,,,DAILY_BATCH,
 2026-08-29 03:06:35,2026-09-01,BayArea_CA,v1.4-BayArea-Ridge,5.5342,5.4637,DOWN,,,,,DAILY_BATCH,
-2026-08-29 16:47:58,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2859,UP,,,,,INTRADAY_REVISION,Bloomberg Money Minute: S Stocks Fall On Mideast Tensions; Google AI Chip; US Tariff Cut Sf Giants (hUPdqsrSG2) - Mshale
 2026-08-29 17:08:43,2025-09-30,National,v1.4-Finlight-National-Ridge,2.0022,1.9481,DOWN,1.9729,DOWN,0.0248,1.0,DAILY_BATCH,
 2026-08-29 17:08:43,2025-10-01,National,v1.4-Finlight-National-Ridge,2.0376,1.9825,DOWN,1.8859,DOWN,0.0966,1.0,DAILY_BATCH,
 2026-08-29 17:08:43,2025-10-04,National,v1.4-Finlight-National-Ridge,1.9951,1.9547,DOWN,,,,,DAILY_BATCH,
@@ -4187,3 +4186,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 17:14:52,2026-08-26,BayArea_CA,v1.4-BayArea-Ridge,5.4979,5.3839,DOWN,5.4701,DOWN,0.0862,1.0,DAILY_BATCH,
 2026-08-29 17:14:53,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,5.667,5.474,DOWN,,,,,DAILY_BATCH,
 2026-08-29 17:14:53,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.667,5.474,DOWN,,,,,DAILY_BATCH,
+2026-08-29 17:17:32,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.0821,DOWN,,,,,INTRADAY_REVISION,"With the US and Canada locked in a trade war, fears of a recession lurk - Al Jazeera"

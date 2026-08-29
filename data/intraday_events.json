@@ -488,5 +488,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.8
     }
+  },
+  {
+    "timestamp": "2026-08-29T17:17:32.211662",
+    "headline": "With the US and Canada locked in a trade war, fears of a recession lurk - Al Jazeera",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNTGt2QVppdi0xMkFKSGJuSk1TOEhLLUJib2FCS2pzeWZ2VVYzQlRTb0ZmVGlPYi12QzdBNWhsVjZxUy1OdTdUMzNzcmc5bW9zRUxfTzQ0Tldpb1dhQXEyOUpFLXJVMUp3QkxiWWRHekJwLXY1NGMtU1ZaX3kwZV9scldkUkhraHczZVo3QndMdlZsZEZmaDRWZ19NZkZNbDE4TmZxdjQxdEFIeTYtcEszenVRZlfSAboBQVVfeXFMUEhrVWI1NWJ1Y1JhUE45bDVpb0laaklUYW5CTTgwRzNjekdVZnpQUXFqZTlpRGtEcm16S1pLRFBodDV4cldVNE05Y3hvZXNRN1phSV94SjNyMlBwOW5zTk5tQVVXVDFwNDl6NS1ucnl2ZlZaUF9GR3Zaa3VvOWdCdWwzZk1SOHZ0d0RpeXV4aDFHZncyTzBjMDRsSjdRSjBMQWJoWGEwZzY2T1VPai15S1FuS20tNEh6TDhn?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.9,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.8
+    }
   }
 ]
