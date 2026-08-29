@@ -516,5 +516,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.4
     }
+  },
+  {
+    "timestamp": "2026-08-29T20:47:46.672081",
+    "headline": "Trump ups the ante in India trade talks with 25% tariff threat - The Guardian Nigeria News",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOT2YyRnUxY0Nqb1JfXzF5VmFMV1dkN05vMHlmQUloX3hBTDRzczQtOTFSdXVrTUVpeWg3SGV6czNYOGJkeHRKWUYxU0RSTm9fRVlkclNhNFllRGN3clVvdHBlMWtuenFpR0VSZTlhbThWMWJPYTMzQk1iY0N0M29SZHZReWRKMnVNNVNSb3dR?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.4,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    }
   }
 ]
