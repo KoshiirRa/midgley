@@ -66,7 +66,7 @@
             <!-- Run Selector Dropdown & Download Buttons -->
             <div class="flex items-center gap-2">
                 <select id="runSelect" onchange="switchRun(this.value)" class="bg-slate-800 text-slate-200 text-xs font-mono px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500">
-                    <option value="2026-08-29_18-45-36">2026-08-29 18:45:33 (INTRADAY_REVISION)</option>
+                    <option value="2026-08-29_18-45-10">2026-08-29 18:45:10 (DAILY_BATCH)</option>
                 </select>
                 <a id="jsonLink" href="runs/latest.json" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 transition text-xs font-mono flex items-center gap-1">
                     <i class="fa-solid fa-code"></i> JSON Payload
@@ -90,7 +90,7 @@
                 </div>
             </div>
             <p class="text-xs text-slate-400 leading-relaxed font-sans">
-                This report documents the exact step-by-step mathematical calculations and feature vector scores executed during run <code class="text-blue-300">2026-08-29 18:45:33</code>. All values below represent actual substituted numerical parameters generated for this specific forecast execution.
+                This report documents the exact step-by-step mathematical calculations and feature vector scores executed during run <code class="text-blue-300">2026-08-29 18:45:10</code>. All values below represent actual substituted numerical parameters generated for this specific forecast execution.
             </p>
         </div>
 
@@ -102,12 +102,12 @@
             <div class="space-y-3 font-mono text-xs">
                 <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
                     <span class="text-slate-500 uppercase text-[10px] block">Primary Event Trigger</span>
-                    <p class="text-amber-300 font-bold text-sm">OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com</p>
+                    <p class="text-amber-300 font-bold text-sm">Scheduled Daily Batch Refresh (02:00 AM Central)</p>
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
                     <span class="text-slate-500 uppercase text-[10px] block">Active Ingested News Bulletins (3)</span>
                     <ul class="space-y-1.5">
-                        <li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxNNi1hNENRQkt3V3VWaGlla2FUQVJiNERUMVFmTVdjYzFNeUpMYjljbkhKS0tRUUFHZjJtVFI2X1U5UVZ1RklnQnoxYnNILXo2enNyd3hYUlZtQk1ZZE1mbmExQnRjN3E1b3RhSDBKTGpvUFljYkQwYnctR2RJLUdKdEdSclZEVUk5dEo1dWhNYWZpMUdyQ2RaUFYzeWRwSEc1UTBOdkVPT0l5MWg5Vmc?oc=5" target="_blank" class="hover:underline text-blue-300">OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com</a> <span class="text-slate-500">(RSS_Feed)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxNMEhDNHhNRHdFYVNRYldxaWFQZ3lremhtQndySkJaeUhFcGFfTGRnYTFzU2NUWlBZNzU3WkVIX2RFdTQxNnpWYzk4SVhqS2dJOHlzVERESUpIbnZ0Vk5Nc0dDQmZhQmpfVGtWS3dLSDRWakdZQUZJc3MxckR5bkpLYV9OLU5BN1E0bTVsYXd3TmRXTGtGQkUtQS1OWThmN1hndWtNQkJsN3RSazNDWWcta21OWVE3Zw?oc=5" target="_blank" class="hover:underline text-blue-300">Alberta Premier rejects oil and gas export tax in U.S. tariff tussle during visit to Grande Prairie - Edmonton Journal</a> <span class="text-slate-500">(RSS_Feed)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxPb2dBay0wRHhIejRfdHhWczIzc0QwcVJTbEFCSnhIOTJXbG5BUmg3VFNGbFNycUxYdUF2YnVNLUZLQzJNUWI5MGNkRjJBcWNQV0tVM2NXWW1TR0g4WE1vcUtlb2owOTFhdHFUX09vUmdLdlRnaG9oOUNIQnZVcjcwVEtDd3hzdkJLWm9iNg?oc=5" target="_blank" class="hover:underline text-blue-300">Alberta premier doubles down on diplomacy with Americans to stave off U.S. tariffs - CBC</a> <span class="text-slate-500">(RSS_Feed)</span></li>
+                        <li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html" target="_blank" class="hover:underline text-blue-300">NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh</a> <span class="text-slate-500">(CME_Group / NYMEX)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://api.weather.gov" target="_blank" class="hover:underline text-blue-300">NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion</a> <span class="text-slate-500">(NOAA_NWS_API)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://finlight.me" target="_blank" class="hover:underline text-blue-300">Executive Social Media Feed & OPEC Weekend Price Gap Analysis</a> <span class="text-slate-500">(Finlight_v2_API)</span></li>
                     </ul>
                 </div>
             </div>
@@ -121,15 +121,15 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Supply Disruption (S)</span>
-                    <span class="text-base font-extrabold text-rose-400">0.50</span>
+                    <span class="text-base font-extrabold text-rose-400">0.10</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Price Pressure Shock (ΔP)</span>
-                    <span class="text-base font-extrabold text-blue-400">+0.18</span>
+                    <span class="text-base font-extrabold text-blue-400">+0.02</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Geopolitical Risk (G)</span>
-                    <span class="text-base font-extrabold text-amber-400">0.00</span>
+                    <span class="text-base font-extrabold text-amber-400">0.15</span>
                 </div>
                 <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono space-y-1">
                     <span class="text-[10px] text-slate-400 uppercase block">Demand Sentiment (D)</span>
@@ -164,12 +164,12 @@
                     <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
                         <p class="text-slate-300 font-bold">Numerical Step-by-Step Shock Retention Schedule:</p>
                         <ul class="space-y-1.5 text-slate-400 text-[11px]">
-                            <li>&bull; <strong>Day 0 (Initial Shock Target)</strong>: $$M_0 = 0.5000$$</li>
-                            <li>&bull; <strong>Day 1 Decayed Shock</strong>: $$M_1 = 0.5000 \times 0.87055 = 0.4353$$</li>
-                            <li>&bull; <strong>Day 2 Decayed Shock</strong>: $$M_2 = 0.5000 \times (0.87055)^2 = 0.3789$$</li>
-                            <li>&bull; <strong>Day 3 Decayed Shock</strong>: $$M_3 = 0.5000 \times (0.87055)^3 = 0.3299$$</li>
-                            <li>&bull; <strong>Day 4 Decayed Shock</strong>: $$M_4 = 0.5000 \times (0.87055)^4 = 0.2872$$</li>
-                            <li>&bull; <strong>Day 5 (Target Forecast Horizon)</strong>: $$M_5 = 0.5000 \times 0.50000 = 0.2500$$</li>
+                            <li>&bull; <strong>Day 0 (Initial Shock Target)</strong>: $$M_0 = 0.1000$$</li>
+                            <li>&bull; <strong>Day 1 Decayed Shock</strong>: $$M_1 = 0.1000 \times 0.87055 = 0.0871$$</li>
+                            <li>&bull; <strong>Day 2 Decayed Shock</strong>: $$M_2 = 0.1000 \times (0.87055)^2 = 0.0758$$</li>
+                            <li>&bull; <strong>Day 3 Decayed Shock</strong>: $$M_3 = 0.1000 \times (0.87055)^3 = 0.0660$$</li>
+                            <li>&bull; <strong>Day 4 Decayed Shock</strong>: $$M_4 = 0.1000 \times (0.87055)^4 = 0.0574$$</li>
+                            <li>&bull; <strong>Day 5 (Target Forecast Horizon)</strong>: $$M_5 = 0.1000 \times 0.50000 = 0.0500$$</li>
                         </ul>
                     </div>
                 </div>
@@ -186,10 +186,10 @@
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>National Wholesale</span>
-                <span class="text-blue-400">$3.207/gal (-\$0.008/gal, -0.26%)</span>
+                <span class="text-blue-400">$3.250/gal (+\$0.035/gal, +1.10%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\text{P}_{\text{National Wholesale}} = \$3.184 + (-\$0.008) = \$3.207\text{/gal}$$
+                $$\text{P}_{\text{National Wholesale}} = \$3.184 + (+\$0.035) = \$3.250\text{/gal}$$
             </p>
             
         </div>
@@ -226,10 +226,10 @@
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>Greenville, NC Retail</span>
-                <span class="text-blue-400">$3.132/gal (+\$0.040/gal, +1.22%)</span>
+                <span class="text-blue-400">$3.137/gal (+\$0.040/gal, +1.22%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\text{P}_{\text{Greenville, NC Retail}} = \$3.250 + (+\$0.040) = \$3.132\text{/gal}$$
+                $$\text{P}_{\text{Greenville, NC Retail}} = \$3.250 + (+\$0.040) = \$3.137\text{/gal}$$
             </p>
             
         </div>
@@ -246,20 +246,20 @@
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>Oakland, CA Retail</span>
-                <span class="text-blue-400">$4.775/gal (-\$0.505/gal, -10.20%)</span>
+                <span class="text-blue-400">$4.773/gal (-\$0.505/gal, -10.21%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\text{P}_{\text{Oakland, CA Retail}} = \$4.950 + (-\$0.505) = \$4.775\text{/gal}$$
+                $$\text{P}_{\text{Oakland, CA Retail}} = \$4.950 + (-\$0.505) = \$4.773\text{/gal}$$
             </p>
             <p class="text-amber-400/90 text-[10px] font-sans italic mt-1.5 flex items-center gap-1"><i class="fa-solid fa-circle-info text-[10px]"></i> Includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal</p>
         </div>
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
                 <span>SF Bay Area Region</span>
-                <span class="text-blue-400">$4.871/gal (-\$0.508/gal, -10.06%)</span>
+                <span class="text-blue-400">$4.869/gal (-\$0.509/gal, -10.08%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-                $$\text{P}_{\text{SF Bay Area Region}} = \$5.050 + (-\$0.508) = \$4.871\text{/gal}$$
+                $$\text{P}_{\text{SF Bay Area Region}} = \$5.050 + (-\$0.509) = \$4.869\text{/gal}$$
             </p>
             <p class="text-amber-400/90 text-[10px] font-sans italic mt-1.5 flex items-center gap-1"><i class="fa-solid fa-circle-info text-[10px]"></i> Includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal</p>
         </div>
@@ -272,45 +272,45 @@
                 <h2 class="text-sm font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
                     <i class="fa-solid fa-file-contract text-amber-400"></i> Section 5: NOAA SPC-Style Quantitative & Narrative Synopsis
                 </h2>
-                <span class="text-xs text-slate-500 font-mono">Issued: 2026-08-29 18:45:33</span>
+                <span class="text-xs text-slate-500 font-mono">Issued: 2026-08-29 18:45:10</span>
             </div>
             
             <div class="space-y-6 font-mono text-xs leading-relaxed">
                 <div class="p-4 rounded-xl bg-slate-950/90 border-l-4 border-amber-400 space-y-2">
                     <p class="text-amber-300 font-bold uppercase tracking-wide">Executive Forecast Summary</p>
-                    <p class="text-slate-300 leading-relaxed font-sans text-xs">SUMMARY FOR RUN [2026-08-29 18:45:33]: Elevated upward price shock (+$0.18/gal) observed across wholesale futures. Event trigger 'OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com' drove supply disruption to S=0.50 and geopolitical risk to G=0.00. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.4353 and Day-5 horizon retention M₅=0.2500.</p>
+                    <p class="text-slate-300 leading-relaxed font-sans text-xs">SUMMARY FOR RUN [2026-08-29 18:45:10]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Scheduled Daily Batch Refresh (02:00 AM Central)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.</p>
                 </div>
                 <div class="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
                     <p class="text-blue-400 font-bold uppercase tracking-wide border-b border-slate-800 pb-2">Technical Discussion & Market Dynamics</p>
                     <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-08-29 18:45:33 (Mode: INTRADAY_REVISION), primary event trigger 'OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.50, Price Pressure ΔP=+0.18, Geopolitical Risk G=0.00. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.5000
-  - Day 1: M₁ = 0.4353
-  - Day 5: M₅ = 0.2500 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-08-29 18:45:10 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (CME_Group / NYMEX, Finlight_v2_API, NOAA_NWS_API). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.1000
+  - Day 1: M₁ = 0.0871
+  - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.207/gal ($-0.008/gal, -0.26%)
+  • National Wholesale: $3.250/gal (+$0.035/gal, +1.10%)
   • Tulsa, OK Retail: $3.624/gal (+$0.023/gal, +0.60%)
   • Newark, DE Retail: $3.789/gal (+$0.015/gal, +0.37%)
   • Cincinnati, OH/KY: $3.756/gal (+$0.019/gal, +0.50%)
-  • Greenville, NC Retail: $3.132/gal (+$0.040/gal, +1.22%)
+  • Greenville, NC Retail: $3.137/gal (+$0.040/gal, +1.22%)
   • Charlotte, NC Retail: $3.163/gal (+$0.039/gal, +1.18%)
-  • Oakland, CA Retail: $4.775/gal ($-0.505/gal, -10.20%)
-  • SF Bay Area Region: $4.871/gal ($-0.508/gal, -10.06%)
+  • Oakland, CA Retail: $4.773/gal ($-0.505/gal, -10.21%)
+  • SF Bay Area Region: $4.869/gal ($-0.509/gal, -10.08%)
 
-Largest upward shift for this run: Greenville, NC Retail at $3.132/gal (+0.040/gal). Largest downward shift for this run: SF Bay Area Region at $4.871/gal (-0.508/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.</div>
+Largest upward shift for this run: Greenville, NC Retail at $3.137/gal (+0.040/gal). Largest downward shift for this run: SF Bay Area Region at $4.869/gal (-0.509/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.</div>
                 </div>
                 <div class="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
                     <p class="text-rose-400 font-bold uppercase tracking-wide border-b border-slate-800 pb-2">Forecast Uncertainty & Counterfactual Catalysts</p>
                     <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-08-29 18:45:33]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com'. Overall price pressure vector sits at ΔP=+0.18/gal.
+Evaluated tail-risk catalysts specific to execution [2026-08-29 18:45:10]:
+• Execution Context: Run type 'DAILY_BATCH' triggered by 'Scheduled Daily Batch Refresh (02:00 AM Central)'. Overall price pressure vector sits at ΔP=+0.02/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.00. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.</div>
                 </div>
             </div>
@@ -319,7 +319,7 @@ Evaluated tail-risk catalysts specific to execution [2026-08-29 18:45:33]:
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500 font-mono">
-        <p>Midgley Project &bull; Technical Breakdown & Math Audit Ledger &bull; Log Timestamp: 2026-08-29 18:45:33</p>
+        <p>Midgley Project &bull; Technical Breakdown & Math Audit Ledger &bull; Log Timestamp: 2026-08-29 18:45:10</p>
     </footer>
 
     <!-- Client-Side Dynamic Run Payload Switcher & KaTeX Auto-Renderer -->
