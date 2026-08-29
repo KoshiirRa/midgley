@@ -119,8 +119,16 @@ class TestRetailGasPriceFeeds(unittest.TestCase):
         report = generate_telemetry_report(days=7)
         self.assertIn("Connector Performance & Data Freshness Audit Report", report)
 
+    def test_telemetry_monitor_audit(self):
+        """Verify telemetry monitor audit execution."""
+        from src.telemetry_monitor import audit_telemetry_and_report_issues
+        res = audit_telemetry_and_report_issues(days=3)
+        self.assertIn("status", res)
+        self.assertIn("is_degraded", res)
+
 
 if __name__ == "__main__":
     unittest.main()
+
 
 
