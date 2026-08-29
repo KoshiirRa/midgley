@@ -502,5 +502,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.8
     }
+  },
+  {
+    "timestamp": "2026-08-29T17:46:37.523944",
+    "headline": "Oil, Migration, War & Drugs: How India, Canada Revealed Trump\u2019s Tariff Policy Beyond Trade - The Times of India",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxOSEZ1MVQxZ2xhVm5TaEg0bmt1NENpR2VUNTZSaFBSQ2JmbGhERi1OQXVveHg0alQwaW93TTQ0ZW5OTlBhcWI4LVRLSUlraThwNmhTcFFqMjNPWV9JU3dxekI4c3NMYkY4RWNtRWx2M09nQXZpTkg4V3JVdjhpQjBwWWVWT285aVVxN2xYUmRBUlV5S0ljQ2RZYmVyQ0V5TkRQWjF0UkVhUV9YV1pPelZ0Q1dnc3lfdW52YjNnSy1Ua1NONW4yVzZTZ293R3RiTUVoWFNENXViWG9Xc0Z3MFBZbm9PXzNmQkFvMkF1NE9oYndwRzA?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.1,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    }
   }
 ]
