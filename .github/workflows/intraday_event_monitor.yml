@@ -1,0 +1,83 @@
+name: Intraday Anomaly Edge Dispatch & Dashboard Deployment
+
+on:
+  repository_dispatch:
+    types: [intraday_anomaly]
+  workflow_dispatch:
+    inputs:
+      headline:
+        description: 'Headline text to evaluate'
+        required: false
+        default: ''
+      source:
+        description: 'Source identifier'
+        required: false
+        default: 'Manual_Dispatch'
+      url:
+        description: 'Article URL'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  intraday-monitor-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Process Intraday Event
+        env:
+          HEADLINE: ${{ github.event.client_payload.headline || inputs.headline }}
+          SOURCE: ${{ github.event.client_payload.source || inputs.source || 'Cloudflare_Worker' }}
+          URL: ${{ github.event.client_payload.url || inputs.url }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          FINLIGHT_API_KEY: ${{ secrets.FINLIGHT_API_KEY }}
+          CLOUDFLARE_ANALYTICS_TOKEN: ${{ secrets.CLOUDFLARE_ANALYTICS_TOKEN }}
+        run: |
+          if [ -n "$HEADLINE" ]; then
+            python -m src.intraday_event_monitor --headline "$HEADLINE" --source "$SOURCE" --url "$URL"
+          else
+            python -m src.intraday_event_monitor
+          fi
+
+      - name: Commit Updated README, Dashboard & Prediction Logs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update"
+          file_pattern: "README.md docs/ data/ prediction_history.csv"
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
