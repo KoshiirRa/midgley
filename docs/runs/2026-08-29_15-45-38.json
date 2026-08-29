@@ -1,0 +1,112 @@
+{
+  "run_id": "2026-08-29_15-45-38",
+  "log_timestamp": "2026-08-29 15:45:34",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "Canada Oil Outages and Bad Weather to Tighten Inventories at Key US Storage Hub - EnergyNow",
+  "headline_items": [
+    {
+      "headline": "Canada Oil Outages and Bad Weather to Tighten Inventories at Key US Storage Hub - EnergyNow",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOTWdyVlNlQnF3elNjZThHSmxHdG0yN3ZqcVg1Tll2b1l1ZDA1WkdyWVZ2MVNMX0dWWlV1NzhWUk5JNzVLOW93bmlKVGFVc29kWlNOcG53YXNxMVBJa2QzVTBsX0VNb3NTTUxZWFZuMjRuWjJGZVh3dUpXZjVJN0VGZWRkS19wZDRCcktWcHlzWlp6TXhVWUlObGxuN0lPMk1NSUZLb3JTeHJfTm5uY0E?oc=5",
+      "source": "RSS_Feed"
+    },
+    {
+      "headline": "Here\u2019s Where Tariff Costs Are Piling Up\u2014and Why Some States Are Hit Much Harder - Investopedia",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOc1ExLU1KOHJibmVnaUZscnFKYmpscVhfLTRmRmhMWmpveEpCOVIyUEpzOXpWUUFWNDVaanFQa1YtTm5acUhYU01xMDFXQndBYWtMZHBrbW9LRmRlWldySVFDd3laZUlCd2RjOGlhYXluNVZXZ0xiNHMxNXNVSEU0OFlFbUVGcXdUd2lFSjJSRVJOV3lLd25wQ3JhNTNqbnVUMTlNZFNmRHZHbUpCRjYwLTVCNmd6UjVXcGJWbU5zMm4?oc=5",
+      "source": "RSS_Feed"
+    },
+    {
+      "headline": "For specialty food importer, tariffs are still front and center - marketplace.org",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQVFkWWp5RThleVFLSUdac0RpZzAzVGJYRkdMM0pDbnFQeU1DYkVCU29HZFowRDJMRFhycXdtOFJZMlRiZkd3ekVRVEtLRWo2MDUtWkg3c25QOFVMYlFGaFBwZU5HZzJERzdvdE56TGlqMGF6MXlZaG9Fa2YzdE82bTJ1UXJpbXRuN3lTdXJJN3BIU1RKYjB6emRHX2NxT2NZZDRhd21oNnlWVlk?oc=5",
+      "source": "RSS_Feed"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.5,
+    "overall_price_pressure": 0.18,
+    "geopolitical_risk": 0.0,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.5,
+    "m1": 0.4353,
+    "m2": 0.3789,
+    "m3": 0.3299,
+    "m4": 0.2872,
+    "m5": 0.25
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.2069,
+      "delta": 0.15410000000000013,
+      "pct_change": 4.839824120603018
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.89,
+      "predicted_price": 3.7614,
+      "delta": -0.3178000000000001,
+      "pct_change": -8.16966580976864
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 3.943,
+      "predicted_price": 4.0355,
+      "delta": -0.16500000000000004,
+      "pct_change": -4.184630991630739
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 3.903,
+      "predicted_price": 4.0025,
+      "delta": -0.17249999999999943,
+      "pct_change": -4.419677171406596
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 3.538,
+      "predicted_price": 3.6117,
+      "delta": -0.1915,
+      "pct_change": -5.412662521198418
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 3.754,
+      "predicted_price": 3.8125,
+      "delta": -0.2051999999999996,
+      "pct_change": -5.466169419286084
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 5.647,
+      "predicted_price": 5.7655,
+      "delta": 0.4018000000000006,
+      "pct_change": 7.115282450858873
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 5.647,
+      "predicted_price": 5.7655,
+      "delta": 0.30180000000000007,
+      "pct_change": 5.344430671152826
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-08-29 15:45:34]: Elevated upward price shock (+$0.18/gal) observed across wholesale futures. Event trigger 'Canada Oil Outages and Bad Weather to Tighten Inventories at Key US Storage Hub - EnergyNow' drove supply disruption to S=0.50 and geopolitical risk to G=0.00. Exponential decay (t\u00bd=5.0d) models Day-1 retained shock M\u2081=0.4353 and Day-5 horizon retention M\u2085=0.2500.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-08-29 15:45:34 (Mode: INTRADAY_REVISION), primary event trigger 'Canada Oil Outages and Bad Weather to Tighten Inventories at Key US Storage Hub - EnergyNow' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.50, Price Pressure \u0394P=+0.18, Geopolitical Risk G=0.00. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.5000\n  - Day 1: M\u2081 = 0.4353\n  - Day 5: M\u2085 = 0.2500 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.207/gal (+$0.154/gal, +4.84%)\n  \u2022 Tulsa, OK Retail: $3.761/gal ($-0.318/gal, -8.17%)\n  \u2022 Newark, DE Retail: $4.035/gal ($-0.165/gal, -4.18%)\n  \u2022 Cincinnati, OH/KY: $4.003/gal ($-0.172/gal, -4.42%)\n  \u2022 Greenville, NC Retail: $3.612/gal ($-0.192/gal, -5.41%)\n  \u2022 Charlotte, NC Retail: $3.812/gal ($-0.205/gal, -5.47%)\n  \u2022 Oakland, CA Retail: $5.766/gal (+$0.402/gal, +7.12%)\n  \u2022 SF Bay Area Region: $5.766/gal (+$0.302/gal, +5.34%)\n\nLargest upward shift for this run: Oakland, CA Retail at $5.766/gal (+0.402/gal). Largest downward shift for this run: Tulsa, OK Retail at $3.761/gal (-0.318/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-08-29 15:45:34]:\n\u2022 Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Canada Oil Outages and Bad Weather to Tighten Inventories at Key US Storage Hub - EnergyNow'. Overall price pressure vector sits at \u0394P=+0.18/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.00. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+  }
+}
