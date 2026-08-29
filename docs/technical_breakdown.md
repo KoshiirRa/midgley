@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-08-29 15:31:02`  
+**Log Timestamp:** `2026-08-29 15:46:11`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India  
+**Primary Event Trigger:** US-Canada tariff war squeezes Korean autos, opens crude door - Aju Press  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India
+- **Headline Trigger:** US-Canada tariff war squeezes Korean autos, opens crude door - Aju Press
 - **Active Ingested News Links:**
-- [India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India](https://news.google.com/rss/articles/CBMi_AFBVV95cUxOYVFrU3J0R2dDV2laRTlZcGYxakVLcGlfTDZWZno2UVpTaW5yalF5QTc5eWNxZGhNMld1Q00xSEdoeTlCYy16RUJIYWZHbjA5QTVYRHM5SG9fSlk5aFJwWklJQXF3MmNlN0JFT3dvLUhXTFhrM1JEVjhuM05jQ3N0ekFWaE9qWndFOFczdWo3V2d2Y3l5bWhTR3FOSTJZV0l3OWVfcTNQYUJ3TElGNzBXOThER3cyTTVHYzBOWHhCVzNTMDBBNEhWTWVBbXlGWXVYc0o2U05UN0t4WGZFYVhPaDY4R2pZZUdYbTNlWHBkMF9kTHpoY2U5Slpic2nSAYICQVVfeXFMTWwxQ1psdDlWOVVLdXA2U0htdUN2TnlLVlBmWm1wbUJOVDdWNTFsMWd2My1sekx4UktFZkRFNy1CajN3cTdpbGwzc0REZGszZlN2RXdSSjhFeVlUUGdIa0dMaW1XQmVFaDJKLUV1aHA2NVFwRFg0cjRQUnNDZDMyWko1ZUF1bk45dWNVVEFnZ1pIdEdxeVhHT1FBdUlzQU9XWEhoUGR2MFVhMkpra3hnalNId2tNeUw0VnU0ZkRiUGVuVGd1cEx0VEFzWmpmSHNPVWc3RG9kemVTcTJoa2Fsa1hkUDFUZjhWSUFJbHYxU2tCU19uSjFaTmIwUGVQWi1MYlhB?oc=5) (RSS_Feed)
 - [US-Canada tariff war squeezes Korean autos, opens crude door - Aju Press](https://news.google.com/rss/articles/CBMiW0FVX3lxTE1PcFlnb1hrMGVGMW5LeGhLN3pGWGVTT3kyYUppUVFGS1lHSFh4VEgzcmttbktaVGl0aUFLbGdqcFJrcjJIcGRGR0w5d29URmJtZGIyTGM4cjRhU03SAVdBVV95cUxNV25ZbzVlZmtNRkJDOTlhdW50d0ZSb0tCeXNmVnFYeFJvRkhjTnJxNjNlMWEtYXNxTUMxMFYzTVNlZUNqTUdmYVBVNUxWeGFVc1M2TDRuM1k?oc=5) (RSS_Feed)
 - [NELSON: Danielle Smith Faces Canada's Wrath Over Trump Tariff Fight - Calgary Herald](https://news.google.com/rss/articles/CBMirwFBVV95cUxQaVF1ejBreUdQUFBFNmRoMWFCVGxOXy0yZnlaQXVaTGdobUJ5UUdORjZwTkJCamxmSmVMYV8tNzNwYk9RcldLYXVPeVVFS1ZYWjBlT1ozWTMtN2wtZ3Q2OHR5b2VNYnV5aUJiOENyd0dVODRNaURoSkZwcHBnVlFxc0J1UDYzT3gxS3VVbnJsY25kdjBfVEYxVGhic3FWWkZWbklzcVQtc3QxSFhPTC1R?oc=5) (RSS_Feed)
+- [Fed's Collins: Absent new tariff and oil shocks, there is reason to believe inflation will ease - investingLive](https://news.google.com/rss/articles/CBMizwFBVV95cUxQQXNvSUYwdFd3RXlPNWR3MHBZaXJkdmM3WW0waWxlVmh6Rm9XWVZlRFVFSmN4NXdJT2xlVENEWEZqYjlKcDU0RmJCUjRnSExyV1hNSmxSbU11Y0p2V1dIWHptMThtWjk5QTg4VTdJYXBvOWNHekloV0VWMERsWGh6RTVKV3pVeVV1SFJrdnh0c0llbnFQT01zNl9VV2gxanBUTjBLTWxNVUVxbVNManpKcEkyOWhRUFZFNmRPTzl0aTZ1dmFXb2dObm1SU1o4bWs?oc=5) (RSS_Feed)
 
 
 ---
@@ -49,14 +49,14 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (+\$0.013) = \$3.250\text{/gal}$ (Delta: +\$0.013/gal, +0.41\%)
-- **Tulsa, OK Retail**: $P = \$3.751 + (+\$0.020) = \$3.595\text{/gal}$ (Delta: +\$0.020/gal, +0.52\%)
-- **Newark, DE Retail**: $P = \$3.934 + (+\$0.017) = \$3.804\text{/gal}$ (Delta: +\$0.017/gal, +0.43\%)
-- **Cincinnati, OH/KY**: $P = \$3.878 + (+\$0.019) = \$3.753\text{/gal}$ (Delta: +\$0.019/gal, +0.50\%)
-- **Greenville, NC Retail**: $P = \$3.250 + (-\$0.296) = \$3.137\text{/gal}$ (Delta: -\$0.296/gal, -9.12\%)
-- **Charlotte, NC Retail**: $P = \$3.280 + (-\$0.298) = \$3.172\text{/gal}$ (Delta: -\$0.298/gal, -9.08\%)
-- **Oakland, CA Retail**: $P = \$4.950 + (-\$0.505) = \$4.773\text{/gal}$ (Delta: -\$0.505/gal, -10.21\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
-- **SF Bay Area Region**: $P = \$5.050 + (-\$0.509) = \$4.869\text{/gal}$ (Delta: -\$0.509/gal, -10.08\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **National Wholesale**: $P = \$3.184 + (+\$0.197) = \$3.250\text{/gal}$ (Delta: +\$0.197/gal, +6.20\%)
+- **Tulsa, OK Retail**: $P = \$3.890 + (-\$0.318) = \$3.761\text{/gal}$ (Delta: -\$0.318/gal, -8.17\%)
+- **Newark, DE Retail**: $P = \$3.943 + (-\$0.165) = \$4.035\text{/gal}$ (Delta: -\$0.165/gal, -4.18\%)
+- **Cincinnati, OH/KY**: $P = \$3.903 + (-\$0.172) = \$4.003\text{/gal}$ (Delta: -\$0.172/gal, -4.42\%)
+- **Greenville, NC Retail**: $P = \$3.538 + (-\$0.192) = \$3.612\text{/gal}$ (Delta: -\$0.192/gal, -5.41\%)
+- **Charlotte, NC Retail**: $P = \$3.754 + (-\$0.205) = \$3.812\text{/gal}$ (Delta: -\$0.205/gal, -5.47\%)
+- **Oakland, CA Retail**: $P = \$5.647 + (+\$0.402) = \$5.766\text{/gal}$ (Delta: +\$0.402/gal, +7.12\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **SF Bay Area Region**: $P = \$5.647 + (+\$0.302) = \$5.766\text{/gal}$ (Delta: +\$0.302/gal, +5.34\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 
 
 ---
@@ -64,38 +64,38 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-08-29 15:31:02]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-08-29 15:46:11]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'US-Canada tariff war squeezes Korean autos, opens crude door - Aju Press' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-08-29 15:31:02 (Mode: INTRADAY_REVISION), primary event trigger 'India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-08-29 15:46:11 (Mode: INTRADAY_REVISION), primary event trigger 'US-Canada tariff war squeezes Korean autos, opens crude door - Aju Press' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.250/gal (+$0.013/gal, +0.41%)
-  • Tulsa, OK Retail: $3.595/gal (+$0.020/gal, +0.52%)
-  • Newark, DE Retail: $3.804/gal (+$0.017/gal, +0.43%)
-  • Cincinnati, OH/KY: $3.753/gal (+$0.019/gal, +0.50%)
-  • Greenville, NC Retail: $3.137/gal ($-0.296/gal, -9.12%)
-  • Charlotte, NC Retail: $3.172/gal ($-0.298/gal, -9.08%)
-  • Oakland, CA Retail: $4.773/gal ($-0.505/gal, -10.21%)
-  • SF Bay Area Region: $4.869/gal ($-0.509/gal, -10.08%)
+  • National Wholesale: $3.250/gal (+$0.197/gal, +6.20%)
+  • Tulsa, OK Retail: $3.761/gal ($-0.318/gal, -8.17%)
+  • Newark, DE Retail: $4.035/gal ($-0.165/gal, -4.18%)
+  • Cincinnati, OH/KY: $4.003/gal ($-0.172/gal, -4.42%)
+  • Greenville, NC Retail: $3.612/gal ($-0.192/gal, -5.41%)
+  • Charlotte, NC Retail: $3.812/gal ($-0.205/gal, -5.47%)
+  • Oakland, CA Retail: $5.766/gal (+$0.402/gal, +7.12%)
+  • SF Bay Area Region: $5.766/gal (+$0.302/gal, +5.34%)
 
-Largest upward shift for this run: Tulsa, OK Retail at $3.595/gal (+0.020/gal). Largest downward shift for this run: SF Bay Area Region at $4.869/gal (-0.509/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: Oakland, CA Retail at $5.766/gal (+0.402/gal). Largest downward shift for this run: Tulsa, OK Retail at $3.761/gal (-0.318/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-08-29 15:31:02]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-08-29 15:46:11]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'US-Canada tariff war squeezes Korean autos, opens crude door - Aju Press'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-29 15:31:02.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-29 15:46:11.*
