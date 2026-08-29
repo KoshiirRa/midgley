@@ -530,5 +530,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.4
     }
+  },
+  {
+    "timestamp": "2026-08-29T21:17:40.733163",
+    "headline": "Duane Bratt: Trump trade war exposes Danielle Smith\u2019s Alberta balancing act - Thoughtful Journalism - Energi Media",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQVFFpNW94SkRJRlVKMWRkM005ZllYaXlXLWdfOU5jWFFtVHNwZHp0WF9XcTloTjZUT2xFVF9aSFctZElXRkMyX1ZialRQLVIwOThEb1k2RF9SWnpuUG9NUnptVmRCTXJBMmxwOFRaV1MwNjNKelRFZEVidFJQMGVScmhlTE4?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.5,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.7,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.7
+    }
   }
 ]
