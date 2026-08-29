@@ -1,6 +1,6 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-08-29 02:34:58`  
+**Log Timestamp:** `2026-08-29 02:50:31`  
 **Run Mode:** `DAILY_BATCH`  
 **Primary Event Trigger:** Scheduled Daily Batch Refresh (02:00 AM Central)  
 
@@ -49,14 +49,14 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.384 + (\$0.000) = \$3.153/\text{gal}$ (Delta: $\$0.000/\text{gal}$, $0.00\%)
-- **Tulsa, OK Retail**: $P = \$3.890 + (+\$0.098) = \$3.747/\text{gal}$ (Delta: $+\$0.098/\text{gal}$, $+2.53\%)
-- **Newark, DE Retail**: $P = \$3.943 + (+\$0.099) = \$3.814/\text{gal}$ (Delta: $+\$0.099/\text{gal}$, $+2.51\%)
-- **Cincinnati, OH/KY**: $P = \$3.903 + (+\$0.101) = \$3.778/\text{gal}$ (Delta: $+\$0.101/\text{gal}$, $+2.58\%)
-- **Greenville, NC Retail**: $P = \$3.250 + (\$-0.296) = \$3.137/\text{gal}$ (Delta: $\$-0.296/\text{gal}$, $-9.12\%)
-- **Charlotte, NC Retail**: $P = \$3.280 + (\$-0.298) = \$3.172/\text{gal}$ (Delta: $\$-0.298/\text{gal}$, $-9.08\%)
-- **Oakland, CA Retail**: $P = \$4.950 + (\$-0.505) = \$4.773/\text{gal}$ (Delta: $\$-0.505/\text{gal}$, $-10.21\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
-- **SF Bay Area Region**: $P = \$5.050 + (\$-0.509) = \$4.869/\text{gal}$ (Delta: $\$-0.509/\text{gal}$, $-10.08\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **National Wholesale**: $P = \$3.048 + (\$-0.338) = \$2.970/\text{gal}$ (Delta: $\$-0.338/\text{gal}$, $-11.09\%)
+- **Tulsa, OK Retail**: $P = \$3.890 + (\$-0.318) = \$3.763/\text{gal}$ (Delta: $\$-0.318/\text{gal}$, $-8.16\%)
+- **Newark, DE Retail**: $P = \$3.943 + (\$-0.317) = \$3.881/\text{gal}$ (Delta: $\$-0.317/\text{gal}$, $-8.05\%)
+- **Cincinnati, OH/KY**: $P = \$3.903 + (\$-0.397) = \$3.776/\text{gal}$ (Delta: $\$-0.397/\text{gal}$, $-10.18\%)
+- **Greenville, NC Retail**: $P = \$3.538 + (\$-0.335) = \$3.468/\text{gal}$ (Delta: $\$-0.335/\text{gal}$, $-9.46\%)
+- **Charlotte, NC Retail**: $P = \$3.754 + (\$-0.271) = \$3.743/\text{gal}$ (Delta: $\$-0.271/\text{gal}$, $-7.22\%)
+- **Oakland, CA Retail**: $P = \$5.647 + (+\$0.277) = \$5.639/\text{gal}$ (Delta: $+\$0.277/\text{gal}$, $+4.91\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **SF Bay Area Region**: $P = \$5.647 + (+\$0.177) = \$5.639/\text{gal}$ (Delta: $+\$0.177/\text{gal}$, $+3.13\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 
 
 ---
@@ -64,38 +64,38 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-08-29 02:34:58]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Scheduled Daily Batch Refresh (02:00 AM Central)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.
+SUMMARY FOR RUN [2026-08-29 02:50:31]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Scheduled Daily Batch Refresh (02:00 AM Central)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-08-29 02:34:58 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (NOAA_NWS_API, CME_Group / NYMEX, Finlight_v2_API). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-08-29 02:50:31 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (NOAA_NWS_API, Finlight_v2_API, CME_Group / NYMEX). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.1000
   - Day 1: M₁ = 0.0871
   - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.153/gal ($0.000/gal, 0.00%)
-  • Tulsa, OK Retail: $3.747/gal (+$0.098/gal, +2.53%)
-  • Newark, DE Retail: $3.814/gal (+$0.099/gal, +2.51%)
-  • Cincinnati, OH/KY: $3.778/gal (+$0.101/gal, +2.58%)
-  • Greenville, NC Retail: $3.137/gal ($-0.296/gal, -9.12%)
-  • Charlotte, NC Retail: $3.172/gal ($-0.298/gal, -9.08%)
-  • Oakland, CA Retail: $4.773/gal ($-0.505/gal, -10.21%)
-  • SF Bay Area Region: $4.869/gal ($-0.509/gal, -10.08%)
+  • National Wholesale: $2.970/gal ($-0.338/gal, -11.09%)
+  • Tulsa, OK Retail: $3.763/gal ($-0.318/gal, -8.16%)
+  • Newark, DE Retail: $3.881/gal ($-0.317/gal, -8.05%)
+  • Cincinnati, OH/KY: $3.776/gal ($-0.397/gal, -10.18%)
+  • Greenville, NC Retail: $3.468/gal ($-0.335/gal, -9.46%)
+  • Charlotte, NC Retail: $3.743/gal ($-0.271/gal, -7.22%)
+  • Oakland, CA Retail: $5.639/gal (+$0.277/gal, +4.91%)
+  • SF Bay Area Region: $5.639/gal (+$0.177/gal, +3.13%)
 
-Largest upward shift for this run: Cincinnati, OH/KY at $3.778/gal (+0.101/gal). Largest downward shift for this run: SF Bay Area Region at $4.869/gal (-0.509/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: Oakland, CA Retail at $5.639/gal (+0.277/gal). Largest downward shift for this run: Cincinnati, OH/KY at $3.776/gal (-0.397/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-08-29 02:34:58]:
+Evaluated tail-risk catalysts specific to execution [2026-08-29 02:50:31]:
 • Execution Context: Run type 'DAILY_BATCH' triggered by 'Scheduled Daily Batch Refresh (02:00 AM Central)'. Overall price pressure vector sits at ΔP=+0.02/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-29 02:34:58.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-29 02:50:31.*
