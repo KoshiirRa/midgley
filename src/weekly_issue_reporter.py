@@ -670,7 +670,7 @@ def create_github_issue():
             env["GH_TOKEN"] = token
             env["GITHUB_TOKEN"] = token
 
-        cmd = ["gh", "issue", "create", "--repo", "KoshiirRa/midgley", "--title", title, "--body-file", issue_file]
+        cmd = ["gh", "issue", "create", "--repo", "KoshiirRa/midgley", "--title", title, "--body-file", issue_file, "--label", "weekly-review"]
         result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
         issue_url = result.stdout.strip()
         logger.info(f"GitHub Issue created successfully via gh CLI: {issue_url}")
@@ -697,7 +697,8 @@ def create_github_issue():
         }
         payload = json.dumps({
             "title": title,
-            "body": report_md
+            "body": report_md,
+            "labels": ["weekly-review"]
         }).encode("utf-8")
 
         req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
