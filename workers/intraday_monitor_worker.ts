@@ -170,8 +170,10 @@ export async function runMonitoringCycle(env: Env): Promise<CycleSummary> {
   }
 
   const dispatches: DispatchResult[] = [];
-  for (const anomaly of anomalies.slice(0, 5)) {
-    const res = await dispatchGitHubEvent(env, anomaly.title, anomaly.link);
+  if (anomalies.length > 0) {
+    // Send 1 dispatch for the primary anomaly detected in this cycle to avoid launching multiple parallel GitHub Action runs that cancel each other
+    const primary = anomalies[0];
+    const res = await dispatchGitHubEvent(env, primary.title, primary.link);
     dispatches.push(res);
   }
 

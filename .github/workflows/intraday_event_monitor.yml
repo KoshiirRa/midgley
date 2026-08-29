@@ -68,7 +68,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update"
-          file_pattern: "README.md docs/ data/ prediction_history.csv"
+          file_pattern: "README.md docs/ data/"
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v6
