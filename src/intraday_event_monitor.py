@@ -267,8 +267,32 @@ class IntradayEventMonitor:
             logger.warning(f"Failed to write anomaly log '{ANOMALY_LOG_FILE}': {e}")
 
 
-if __name__ == "__main__":
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Multi-Layer Intraday Event Monitor")
+    parser.add_argument("--headline", type=str, default="", help="Single headline string to process")
+    parser.add_argument("--source", type=str, default="Cloudflare_Worker", help="Headline source identifier")
+    parser.add_argument("--url", type=str, default="", help="Headline URL")
+    parser.add_argument("--skip-dedup", action="store_true", help="Skip 24h deduplication check")
+    args = parser.parse_args()
+
     logging.basicConfig(level=logging.INFO)
     monitor = IntradayEventMonitor()
-    res = monitor.run_polling_cycle()
+
+    if args.headline:
+        res = monitor.process_incoming_headline(
+            headline=args.headline,
+            source=args.source,
+            url=args.url,
+            skip_dedup=args.skip_dedup
+        )
+    else:
+        res = monitor.run_polling_cycle()
+
     print(json.dumps(res, indent=2))
+    return res
+
+
+if __name__ == "__main__":
+    main()
+

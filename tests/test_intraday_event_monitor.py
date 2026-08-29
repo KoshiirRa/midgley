@@ -96,7 +96,31 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertFalse(res["is_anomaly"])
         self.assertTrue(res.get("duplicate"))
 
+    @patch("sys.argv", ["intraday_event_monitor", "--headline", "Emergency Tariff Announcement", "--source", "Cloudflare_Worker", "--url", "https://example.com/tariff"])
+    @patch("src.intraday_event_monitor.IntradayEventMonitor.process_incoming_headline")
+    def test_cli_headline_dispatch_processing(self, mock_process):
+        from src.intraday_event_monitor import main
+        mock_process.return_value = {"is_anomaly": True}
+        res = main()
+        mock_process.assert_called_once_with(
+            headline="Emergency Tariff Announcement",
+            source="Cloudflare_Worker",
+            url="https://example.com/tariff",
+            skip_dedup=False
+        )
+        self.assertTrue(res["is_anomaly"])
+
+    @patch("sys.argv", ["intraday_event_monitor"])
+    @patch("src.intraday_event_monitor.IntradayEventMonitor.run_polling_cycle")
+    def test_cli_default_polling_cycle(self, mock_polling):
+        from src.intraday_event_monitor import main
+        mock_polling.return_value = {"status": "success", "anomalies_detected": 0}
+        res = main()
+        mock_polling.assert_called_once()
+        self.assertEqual(res["status"], "success")
+
 
 if __name__ == "__main__":
     unittest.main()
+
 
