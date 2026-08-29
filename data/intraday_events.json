@@ -544,5 +544,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.7
     }
+  },
+  {
+    "timestamp": "2026-08-29T21:47:40.946756",
+    "headline": "Trump vs Carney: Cars, homes, booze and more caught in US-Canada tariff war - The Times of India",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxON0RUNnVScmQtWFAtV3ItUDhQTUtDcTE3OFdtLVVYOFA4Z2VwVTdNaUd1N0xROVBWZUdsTTlKMWdZUXRtS01fLXJkdGZrRFl2bzlfWnN1ZVlacW5YNFdCRHBLV3gwWW80UWxFT1JPaEtHRFBObE12b2R5Vm1hZy1oM19DdnhGUUxZM3p6aHJOdnhXNmVleEhVVFlHYjR4MzlYeFhsdk9XYzVKR0hVQWdLRnQyUHJsZkJoeVFSQlB6TEZBWUlHQzhYSFR3QkpoVDdPLWViUWFkVTNRODN5TkdyWDA0dnZWcFdLajFGNmhTNU5mM19td05LU0VB0gH_AUFVX3lxTE04a3ZmVUxmRnJJQjdyMmVveHNCVHRVd1l1bTd2NnliVXhEOURGU0s1NlFKSm9OT1lwbXo3NHFRYzMxLVQ2dFNGWTNkZnYxV3RKWTFISmlnQ20tMTRHVmU5T2dXeWpIRnVNTUxldUQweUhORjltVHZLVHhNQmpURjRRLW41eGRHWVgta0hBNm5UV24xSU1CbzB3c0RheFpyRXI2UjZvQkJKVUxGalFaamlDMTNLQUpPeldHQWRBZTNON05pWEs1RmFjNFB2SnE5bEUzclNfdWNGNVBCM1RNSDFxMlpkdDNxZXdpVFVPTjB4S1F3VTZQaDFISTlkeUtjRQ?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.6,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    }
   }
 ]
