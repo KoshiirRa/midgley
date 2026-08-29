@@ -54,72 +54,83 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers (including Section 10 multiline `aligned` CARB tax breakdown).
 
-
 ---
 
 ## 🏗️ Architecture Overview
 
+```mermaid
+flowchart TD
+    subgraph FEEDS["Unstructured News, NOAA Weather & Physical Data Feeds"]
+        F1["Geopolitical Headlines & OPEC Press Releases"]
+        F2["NOAA NWS & SPC Weather Alerts (t.wxs.us)"]
+        F3["Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)"]
+        F4["Executive Social Feed (Trump Twitter / Truth Social)"]
+        F5["Physical Alternative Feeds (Cboe OVX & Baker Hughes)"]
+    end
+
+    subgraph EXTRACTOR["1. Event, Weather & Physical Extraction Agent"]
+        E1["Google Gemini 2.5 Flash / Domain NLP Lexicon"]
+        E2["intraday_event_monitor.py & finlight_feed.py"]
+        E3["noaa_weather.py (Token-Efficient Ingestion & SPC Mapping)"]
+    end
+
+    subgraph FUSION["2. Exponential Memory Fusion Agent"]
+        M1["Continuous Decay Accumulator (t½ = 4.0 to 5.0 Days)"]
+    end
+
+    subgraph MODEL["3. Quantitative Forecasting Agent"]
+        Q1["Standardized Ridge (α=10.0) / XGBoost Estimator"]
+        Q2["Main Model: National Wholesale RBOB Futures"]
+    end
+
+    subgraph METRO["4. Localized Metro Area Calibration Agents"]
+        L1["Tulsa Metro (tulsa_main.py - Cushing WTI & HF Sinclair Outages)"]
+        L2["Newark Metro (newark_main.py - PADD 1B & C&D Canal Detours)"]
+        L3["Cincinnati Tri-State (cincinnati_main.py - Dual-State Tax Gap)"]
+        L4["Greenville NC (greenville_main.py - Colonial Line 1/2 Hubs)"]
+        L5["Charlotte NC (charlotte_main.py - Paw Creek Distribution Hub)"]
+        L6["Oakland & SF Bay Area (oakland_main.py - CARB Burden & Physical Risks)"]
+    end
+
+    subgraph SIMULATOR["5. Synthesis & Scenario Simulator Agent"]
+        S1["Simulates Refinery Outages, Hormuz Blockades & Weekend Posts"]
+    end
+
+    subgraph MLOPS["6. MLOps Prediction Logging Agent"]
+        P1["prediction_logger.py → data/prediction_history.csv"]
+    end
+
+    subgraph REVIEW["7. Model Performance Review & Feedback Loop Agent"]
+        R1[".github/workflows/weekly_model_review.yml"]
+        R2["weekly_issue_reporter.py, catalog_monitor.py & arxiv_monitor.py"]
+    end
+
+    subgraph DASHBOARD["8. Public Web Dashboard & Presentation Agent"]
+        D1["src/dashboard_generator.py → koshiirra.github.io/midgley"]
+    end
+
+    FEEDS -->|Unstructured Streams| EXTRACTOR
+    EXTRACTOR -->|Structured Bounded Vectors| FUSION
+    FUSION -->|Unified Feature Matrix| MODEL
+    MODEL -->|Base Commodity Forecast| METRO
+    METRO -->|Localized Metro Forecasts| SIMULATOR
+    SIMULATOR -->|Real-Time Adjusted Forecasts| MLOPS
+    MLOPS -->|Persistent Prediction History| REVIEW
+    REVIEW -->|Empirical Diagnostic Feedback Signal| MODEL
+    MLOPS -->|Out-of-Time Forecast Data| DASHBOARD
+    REVIEW -->|Weekly Accuracy & Issue Reports| DASHBOARD
 ```
-               ┌─────────────────────────────────────────────────────────────┐
-               │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │
-               │  • Global Geopolitical Bulletins & OPEC Press Releases       │
-               │  • NOAA NWS API (api.weather.gov) - Multi-Basin & Regional Alerts │
-               │  • Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)   │
-               │  • Executive Social Feed (Trump Twitter / Truth Social)     │
-               │  • Physical Alternative Feeds (Cboe OVX & Baker Hughes)     │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │
-                                              ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │               EVENT & WEATHER EXTRACTION AGENT              │
-               │        (Google Gemini 2.5 Flash / Domain NLP Lexicon)       │
-               │ • Geopolitical Risk  • Supply Disruption  • OPEC Action     │
-               │ • NOAA Tornado Risk  • NOAA Polar Vortex  • Hurricane Track │
-               │ • Weekend Gap Multiplier (1.42x Monday Open Volatility)     │
-               │ • Cboe OVX Tail Risk • Baker Hughes Drilling Rig Pipeline   │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │ Bounded Factor Vectors
-                                              ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │              EXPONENTIAL MEMORY FUSION AGENT                │
-               │       (Decays Shocks with Half-Life t1/2 = 4 to 5 Days)     │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │ Unified Feature Matrix
-                                              ▼
-                ┌─────────────────────────────────────────────────────────────┐
-                │              QUANTITATIVE FORECASTING AGENT                 │◄──────────────────┐
-                │          (Standardized Ridge / XGBoost Estimator)           │                   │
-                │          Main Model: National Wholesale RBOB Futures        │                   │
-                └──────────────────────────────┬──────────────────────────────┘                   │
-                                               │ Base Wholesale Commodity Forecast                │
-                                               ▼                                                  │
-                ┌─────────────────────────────────────────────────────────────┐                   │
-                │            LOCALIZED METRO AREA CALIBRATION MODELS          │                   │
-                │ • Tulsa Metro (tulsa_main.py - Live $3.89/gal, Cushing WTI) │                   │
-                │ • Newark Metro (newark_main.py - $3.35/gal, C&D Canal)     │                   │
-                │ • Cincinnati Metro (cincinnati_main.py - Dual-State Tax)    │                   │
-                └──────────────────────────────┬──────────────────────────────┘                   │
-                                              ▼                                                  │
-               ┌─────────────────────────────────────────────────────────────┐                   │
-               │             MLOps PREDICTION TRACKER & LOGGING              │                   │
-               │        (src/prediction_logger.py -> prediction_history.csv)│                   │
-               │  Logs Out-of-Time Forecasts & Backfills Actual Market Prices│                   │
-               └──────────────────────────────┬──────────────────────────────┘                   │
-                                              │ Persistent Prediction History                    │
-                                              ▼                                                  │
-               ┌─────────────────────────────────────────────────────────────┐                   │
-               │    WEEKLY MODEL PERFORMANCE REVIEW & CONTINUOUS FEEDBACK    │                   │
-               │         (.github/workflows/weekly_model_review.yml)         │                   │
-               │  Evaluates Rolling Error Metrics & Computes Validation Loss │                   │
-               │  Automated Saturday (08:00 AM Central / 13:00 UTC) Runner   │                   │
-               └──────────────────────────────┬──────────────────────────────┘                   │
-                                              │ Empirical Feedback Signal ───────────────────────┘
-                                              ▼
-               ┌─────────────────────────────────────────────────────────────┐
-               │         PUBLIC GITHUB PAGES WEB DASHBOARD DEPLOYER          │
-               │   (src/dashboard_generator.py -> koshiirra.github.io/midgley)│
-               └─────────────────────────────────────────────────────────────┘
-```
+
+### System Component Breakdown
+
+* **1. Event, Weather & Physical Extraction Agent ([`src/event_analyzer.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/event_analyzer.py), [`src/finlight_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/finlight_feed.py), [`src/noaa_weather.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/noaa_weather.py), [`src/geopolitical_feeds.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/geopolitical_feeds.py), [`src/executive_social_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/executive_social_feed.py), & [`src/alternative_data_feeds.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/alternative_data_feeds.py)):** Ingests live financial media headlines (`finlight.me`), raw news bulletins, NOAA alerts (`t.wxs.us`), maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact vectors using Google Gemini 2.5 Flash with a 100% offline rule-based lexicon safety fallback. Enforces a 150 call/month hard quota safety valve (`data/finlight_quota.json`) and 24-hour headline deduplication (`src/intraday_event_monitor.py`).
+* **2. Exponential Memory Fusion Agent ([`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py)):** Models point-shock persistence over 2–3 weeks using a continuous mathematical decay accumulator ($\mathbf{M}_t = \mathbf{M}_{t-1} \cdot e^{-\frac{\ln 2}{t_{1/2}}} + \mathbf{V}_t$) with $t_{1/2} = 5.0\text{ days}$ for national macroeconomic/social events and $t_{1/2} = 4.0\text{ days}$ for regional NOAA weather shocks.
+* **3. Quantitative Forecasting Agent ([`src/models.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/models.py)):** Fits regularized linear pipelines (StandardScaler + Ridge Regression $\alpha=10.0$) and XGBoost regressors on 80/20 chronological splits to predict wholesale RBOB futures return shocks.
+* **4. Localized Metro Area Calibration Agents ([`src/locations/`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/locations/)):** Subpackage calibration modules (`tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`) that adjust wholesale commodity baselines to regional retail pump prices, dynamic rack margins, delivery hub logistics, state fuel tax gaps, and infrastructure shocks.
+* **5. Synthesis & Scenario Simulator Agent ([`src/locations/<location>/main.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/locations/)):** Runs counterfactual "What-If" simulations (e.g. HF Sinclair EF-3 tornado shocks, Cushing pipeline spills, Hormuz blockades, Hayward Fault quakes, PG&E PSPS power shutoffs, and weekend tariff announcements).
+* **6. MLOps Prediction Logging Agent ([`src/prediction_logger.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/prediction_logger.py)):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv` and automatically backfills actual ground-truth prices from `yfinance` as target dates arrive.
+* **7. Model Performance Review & Feedback Loop Agent ([`.github/workflows/weekly_model_review.yml`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/.github/workflows/weekly_model_review.yml), [`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py), [`src/catalog_monitor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/catalog_monitor.py) & [`src/arxiv_monitor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/arxiv_monitor.py)):** Automated Saturday runner (08:00 AM Central / 13:00 UTC) evaluating rolling MAE/RMSE metrics, performing LLM self-reviews of open GitHub issues, monitoring developer catalogs & arXiv research preprints, and feeding empirical diagnostic signals back into model recalibration.
+* **8. Public Web Dashboard & Presentation Agent ([`src/dashboard_generator.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/dashboard_generator.py)):** Builds the multi-page responsive public web app deployed automatically to GitHub Pages ([koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)), including interactive technical breakdown pages (`docs/technical_breakdown.html`) and run JSON payloads (`docs/runs/`).
 
 ---
 
