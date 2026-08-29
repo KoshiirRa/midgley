@@ -474,5 +474,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-29T16:47:58.646685",
+    "headline": "Bloomberg Money Minute: S Stocks Fall On Mideast Tensions; Google AI Chip; US Tariff Cut Sf Giants (hUPdqsrSG2) - Mshale",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1SYWRza3ZYN1pRREZ0QnRKZE50Nm5HT0E3QTliT2VUQnV3aHhiM3ZuTktYODh3enJUODNLbTZfVThkV3NwSjVveVdjdEliZzVyMHJIcjNZeldIMGc?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.4,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    }
   }
 ]
