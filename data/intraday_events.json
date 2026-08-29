@@ -572,5 +572,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-29T23:30:34.022580",
+    "headline": "Trump executive order renames Lake Ontario as U.S.-Canada tariff war intensifies - ClickOnDetroit | WDIV Local 4",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOWVBsY19NSGE0OTQzRGJTdTZLdGZEcWZMb3BXLWY4U0lYZURWT2lrM1d4V3lUcjctVDNILTlZc0JuYVJLbUdPNjJ1Y3VSVWtCcU16aDg3V25rXzlMdkZUR0hZbkZnMDhsajVlMEZ2dk15UGNlX2pnYkR1WmdvRkZJS0owTXEzSlI2WTVka1NtNTFidHE0c0ZId1Q0S1pxZENWYzRBVW13dTFfUUsxSzVqNjNHQngtRjJtR1g2VGNFZm9xWTR1a0Ywcmppc19HQQ?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
