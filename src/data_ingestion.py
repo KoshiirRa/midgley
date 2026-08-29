@@ -7,6 +7,10 @@ Venezuela heavy crude / OFAC sanctions feeds, Executive Social Media (Trump Twit
 and Key Market Movers (Saudi Energy Minister, Fed Chair Powell, DOE SPR, IEA Birol).
 """
 
+import os
+import json
+import urllib.request
+from typing import Tuple, Dict, Any, List
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -359,6 +363,398 @@ class EIAStateMetroRetailConnector:
             "cost_per_query": 0.0,
             "timestamp": timestamp_str
         }
+
+
+ALPHA_VANTAGE_QUOTA_FILE = os.path.join("data", "alpha_vantage_quota.json")
+ALPHA_VANTAGE_CACHE_FILE = os.path.join("data", "alpha_vantage_cache.json")
+ALPHA_VANTAGE_MAX_DAILY_CALLS = 25
+
+
+class AlphaVantageDataConnector:
+    """
+    Alpha Vantage Energy & Petroleum Data Feed Connector (Issue #130).
+    Provides zero-cost secondary commodity market failover (WTI/Brent) and ingests two new signals:
+    - Signal 1: Energy Select Sector SPDR Fund (XLE) daily price/returns.
+    - Signal 2: Technical Momentum Indicators (XLE / WTI RSI & VWAP).
+
+    Features:
+    - Trading-Hours-Aware Scheduling: Outside US market hours (Mon-Fri 08:00-17:00 EST), API calls are gated
+      to at most 1 fetch per day, reusing cached responses for subsequent off-hours runs.
+    - Persistent Daily Quota Safety Valve: Enforces a strict 25 calls/day cap (data/alpha_vantage_quota.json).
+    - Disk Response Cache: Preserves response payloads (data/alpha_vantage_cache.json).
+    - Zero-Cost Fallback: Operates seamlessly in offline/fallback benchmark mode when API key is missing or quota is exhausted.
+    """
+    def __init__(self, api_key: str = None):
+        self.api_key = api_key or os.environ.get("ALPHA_VANTAGE_API_KEY")
+        self.is_free_alternative = True
+        self.cost_per_query = 0.0
+        self.max_daily_calls = ALPHA_VANTAGE_MAX_DAILY_CALLS
+
+    def is_trading_hours(self, now_dt: datetime = None) -> bool:
+        """
+        Checks if current time is within US Energy & Equity Commodity Trading Hours
+        (08:00 AM - 05:00 PM EST, Monday through Friday).
+        """
+        if now_dt is None:
+            now_dt = datetime.now()
+        if now_dt.weekday() >= 5:  # Saturday/Sunday
+            return False
+        return 8 <= now_dt.hour < 17
+
+    def _check_and_increment_quota(self) -> Tuple[bool, dict]:
+        os.makedirs("data", exist_ok=True)
+        now = datetime.now()
+        day_key = now.strftime("%Y-%m-%d")
+
+        data = {
+            "daily_calls": {},
+            "last_call": None
+        }
+
+        if os.path.exists(ALPHA_VANTAGE_QUOTA_FILE):
+            try:
+                with open(ALPHA_VANTAGE_QUOTA_FILE, "r", encoding="utf-8") as f:
+                    loaded = json.load(f)
+                    if isinstance(loaded, dict):
+                        data = loaded
+            except Exception as e:
+                logger.warning(f"Could not read Alpha Vantage quota ledger '{ALPHA_VANTAGE_QUOTA_FILE}': {e}")
+
+        today_calls = data.get("daily_calls", {}).get(day_key, 0)
+
+        if today_calls >= self.max_daily_calls:
+            logger.warning(
+                f"🚨 ALPHA VANTAGE API SAFETY VALVE TRIPPED! "
+                f"Today calls: {today_calls}/{self.max_daily_calls}. "
+                f"Blocking outgoing HTTP call to enforce 25 calls/day quota limit."
+            )
+            return False, {
+                "allowed": False,
+                "today_calls": today_calls,
+                "max_daily_calls": self.max_daily_calls,
+                "safety_valve_active": True
+            }
+
+        # Increment quota
+        if "daily_calls" not in data or not isinstance(data["daily_calls"], dict):
+            data["daily_calls"] = {}
+        data["daily_calls"][day_key] = today_calls + 1
+        data["last_call"] = now.isoformat()
+
+        try:
+            with open(ALPHA_VANTAGE_QUOTA_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Could not write Alpha Vantage quota ledger '{ALPHA_VANTAGE_QUOTA_FILE}': {e}")
+
+        return True, {
+            "allowed": True,
+            "today_calls": today_calls + 1,
+            "max_daily_calls": self.max_daily_calls,
+            "safety_valve_active": False
+        }
+
+    def get_quota_status(self) -> dict:
+        day_key = datetime.now().strftime("%Y-%m-%d")
+        today_calls = 0
+        if os.path.exists(ALPHA_VANTAGE_QUOTA_FILE):
+            try:
+                with open(ALPHA_VANTAGE_QUOTA_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    today_calls = data.get("daily_calls", {}).get(day_key, 0)
+            except Exception:
+                pass
+        return {
+            "today_calls": today_calls,
+            "max_daily_calls": ALPHA_VANTAGE_MAX_DAILY_CALLS,
+            "remaining_calls": max(0, ALPHA_VANTAGE_MAX_DAILY_CALLS - today_calls),
+            "safety_valve_active": today_calls >= ALPHA_VANTAGE_MAX_DAILY_CALLS
+        }
+
+    def _get_cached_response(self, cache_key: str) -> dict:
+        if os.path.exists(ALPHA_VANTAGE_CACHE_FILE):
+            try:
+                with open(ALPHA_VANTAGE_CACHE_FILE, "r", encoding="utf-8") as f:
+                    cache_data = json.load(f)
+                    if isinstance(cache_data, dict) and cache_key in cache_data:
+                        return cache_data[cache_key]
+            except Exception:
+                pass
+        return None
+
+    def _save_cache_response(self, cache_key: str, payload: dict):
+        os.makedirs("data", exist_ok=True)
+        cache_data = {}
+        if os.path.exists(ALPHA_VANTAGE_CACHE_FILE):
+            try:
+                with open(ALPHA_VANTAGE_CACHE_FILE, "r", encoding="utf-8") as f:
+                    loaded = json.load(f)
+                    if isinstance(loaded, dict):
+                        cache_data = loaded
+            except Exception:
+                pass
+        cache_data[cache_key] = payload
+        try:
+            with open(ALPHA_VANTAGE_CACHE_FILE, "w", encoding="utf-8") as f:
+                json.dump(cache_data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Could not save Alpha Vantage cache '{ALPHA_VANTAGE_CACHE_FILE}': {e}")
+
+    def fetch_commodity_series(self, symbol: str = "WTI", interval: str = "daily") -> dict:
+        """
+        Secondary zero-cost commodity market failover feed (WTI or BRENT crude).
+        """
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        day_str = datetime.now().strftime("%Y-%m-%d")
+        sym = str(symbol).upper()
+        cache_key = f"commodity_{sym}_{interval}_{day_str}"
+
+        # Off-hours caching check
+        if not self.is_trading_hours():
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["cached_off_hours"] = True
+                return cached
+
+        # Check quota
+        allowed, quota_info = self._check_and_increment_quota()
+        if not allowed:
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["safety_valve_active"] = True
+                return cached
+            return self._fallback_commodity_benchmark(sym, timestamp_str)
+
+        # Attempt live API call if key present
+        if self.api_key:
+            url = f"https://www.alphavantage.co/query?function={sym}&interval={interval}&apikey={self.api_key}"
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "Midgley-AlphaVantageConnector/1.0"})
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    if resp.status == 200:
+                        raw = resp.read().decode("utf-8")
+                        parsed = json.loads(raw)
+                        data_points = parsed.get("data", [])
+                        if data_points:
+                            latest = data_points[0]
+                            res = {
+                                "symbol": sym,
+                                "latest_date": latest.get("date"),
+                                "value": float(latest.get("value", 75.0)),
+                                "source": f"Alpha Vantage REST API ({sym})",
+                                "is_free_alternative": True,
+                                "cost_per_query": 0.0,
+                                "timestamp": timestamp_str,
+                                "status": "SUCCESS"
+                            }
+                            self._save_cache_response(cache_key, res)
+                            return res
+            except Exception as e:
+                logger.debug(f"Alpha Vantage API notice ({sym}): {e}")
+
+        # Fallback benchmark
+        res = self._fallback_commodity_benchmark(sym, timestamp_str)
+        self._save_cache_response(cache_key, res)
+        return res
+
+    def _fallback_commodity_benchmark(self, symbol: str, timestamp_str: str) -> dict:
+        benchmarks = {"WTI": 75.250, "BRENT": 79.450, "NATURAL_GAS": 2.450}
+        val = benchmarks.get(symbol, 75.250)
+        return {
+            "symbol": symbol,
+            "latest_date": datetime.now().strftime("%Y-%m-%d"),
+            "value": val,
+            "source": f"Alpha Vantage Benchmark Anchor ({symbol})",
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": timestamp_str,
+            "status": "FALLBACK"
+        }
+
+    def fetch_energy_equity_series(self, symbol: str = "XLE") -> dict:
+        """
+        Ingests Signal 1: Energy Select Sector SPDR Fund (XLE) daily price & return.
+        """
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        day_str = datetime.now().strftime("%Y-%m-%d")
+        sym = str(symbol).upper()
+        cache_key = f"equity_{sym}_{day_str}"
+
+        # Off-hours caching check
+        if not self.is_trading_hours():
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["cached_off_hours"] = True
+                return cached
+
+        # Check quota
+        allowed, quota_info = self._check_and_increment_quota()
+        if not allowed:
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["safety_valve_active"] = True
+                return cached
+            return self._fallback_equity_benchmark(sym, timestamp_str)
+
+        # Live API attempt if key present
+        if self.api_key:
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={sym}&apikey={self.api_key}"
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "Midgley-AlphaVantageConnector/1.0"})
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    if resp.status == 200:
+                        parsed = json.loads(resp.read().decode("utf-8"))
+                        ts_data = parsed.get("Time Series (Daily)", {})
+                        if ts_data:
+                            dates = sorted(ts_data.keys(), reverse=True)
+                            latest_date = dates[0]
+                            close_price = float(ts_data[latest_date]["4. close"])
+                            prev_close = float(ts_data[dates[1]]["4. close"]) if len(dates) > 1 else close_price
+                            pct_change = round(((close_price - prev_close) / prev_close) * 100.0, 2)
+                            res = {
+                                "symbol": sym,
+                                "latest_date": latest_date,
+                                "close_price": close_price,
+                                "daily_change_pct": pct_change,
+                                "source": f"Alpha Vantage TIME_SERIES_DAILY ({sym})",
+                                "is_free_alternative": True,
+                                "cost_per_query": 0.0,
+                                "timestamp": timestamp_str,
+                                "status": "SUCCESS"
+                            }
+                            self._save_cache_response(cache_key, res)
+                            return res
+            except Exception as e:
+                logger.debug(f"Alpha Vantage equity fetch notice ({sym}): {e}")
+
+        res = self._fallback_equity_benchmark(sym, timestamp_str)
+        self._save_cache_response(cache_key, res)
+        return res
+
+    def _fallback_equity_benchmark(self, symbol: str, timestamp_str: str) -> dict:
+        return {
+            "symbol": symbol,
+            "latest_date": datetime.now().strftime("%Y-%m-%d"),
+            "close_price": 89.450,
+            "daily_change_pct": 0.35,
+            "source": f"Alpha Vantage Energy Equity Benchmark ({symbol})",
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": timestamp_str,
+            "status": "FALLBACK"
+        }
+
+    def fetch_technical_indicator(self, symbol: str = "XLE", function: str = "RSI", time_period: int = 14) -> dict:
+        """
+        Ingests Signal 2: Pre-computed Technical Indicators (RSI, VWAP) for Energy Sector Equities.
+        """
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        day_str = datetime.now().strftime("%Y-%m-%d")
+        sym = str(symbol).upper()
+        fn = str(function).upper()
+        cache_key = f"indicator_{sym}_{fn}_{time_period}_{day_str}"
+
+        # Off-hours caching check
+        if not self.is_trading_hours():
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["cached_off_hours"] = True
+                return cached
+
+        # Check quota
+        allowed, quota_info = self._check_and_increment_quota()
+        if not allowed:
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["safety_valve_active"] = True
+                return cached
+            return self._fallback_indicator_benchmark(sym, fn, time_period, timestamp_str)
+
+        # Live API attempt if key present
+        if self.api_key:
+            url = f"https://www.alphavantage.co/query?function={fn}&symbol={sym}&interval=daily&time_period={time_period}&series_type=close&apikey={self.api_key}"
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "Midgley-AlphaVantageConnector/1.0"})
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    if resp.status == 200:
+                        parsed = json.loads(resp.read().decode("utf-8"))
+                        ind_key = f"Technical Analysis: {fn}"
+                        data_block = parsed.get(ind_key, {})
+                        if data_block:
+                            latest_date = sorted(data_block.keys(), reverse=True)[0]
+                            val = float(data_block[latest_date].get(fn, 54.20))
+                            interpretation = "NEUTRAL"
+                            if val >= 70.0:
+                                interpretation = "OVERBOUGHT"
+                            elif val <= 30.0:
+                                interpretation = "OVERSOLD"
+                            res = {
+                                "symbol": sym,
+                                "indicator": fn,
+                                "time_period": time_period,
+                                "latest_date": latest_date,
+                                "value": val,
+                                "interpretation": interpretation,
+                                "source": f"Alpha Vantage Technical Indicator ({fn})",
+                                "is_free_alternative": True,
+                                "cost_per_query": 0.0,
+                                "timestamp": timestamp_str,
+                                "status": "SUCCESS"
+                            }
+                            self._save_cache_response(cache_key, res)
+                            return res
+            except Exception as e:
+                logger.debug(f"Alpha Vantage technical indicator fetch notice ({sym}): {e}")
+
+        res = self._fallback_indicator_benchmark(sym, fn, time_period, timestamp_str)
+        self._save_cache_response(cache_key, res)
+        return res
+
+    def _fallback_indicator_benchmark(self, symbol: str, function: str, time_period: int, timestamp_str: str) -> dict:
+        val = 54.200 if function == "RSI" else 88.900
+        return {
+            "symbol": symbol,
+            "indicator": function,
+            "time_period": time_period,
+            "latest_date": datetime.now().strftime("%Y-%m-%d"),
+            "value": val,
+            "interpretation": "NEUTRAL",
+            "source": f"Alpha Vantage Technical Benchmark ({function})",
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": timestamp_str,
+            "status": "FALLBACK"
+        }
+
+    def fetch_market_failover_feed(self) -> dict:
+        """
+        Unified market failover & dual-signal feed aggregator.
+        Combines secondary WTI/Brent failover prices with Signal 1 (XLE equity) and Signal 2 (RSI technicals).
+        """
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        wti = self.fetch_commodity_series("WTI")
+        brent = self.fetch_commodity_series("BRENT")
+        xle = self.fetch_energy_equity_series("XLE")
+        rsi = self.fetch_technical_indicator("XLE", "RSI", 14)
+        quota_status = self.get_quota_status()
+
+        return {
+            "source": "Alpha Vantage Market Failover & Energy Signals Connector (Zero-Cost)",
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": timestamp_str,
+            "commodities": {
+                "WTI": wti,
+                "BRENT": brent
+            },
+            "signals": {
+                "signal_1_energy_equity": xle,
+                "signal_2_technical_rsi": rsi
+            },
+            "quota_status": quota_status,
+            "status": "SUCCESS"
+        }
+
 
 
 
