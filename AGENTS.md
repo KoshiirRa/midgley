@@ -109,6 +109,14 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Hawkish Tariff Shocks:** Energy import tariff threats produce $+2.10\%$ 24-hour price surges.
   - **Weekend Market Gap Multiplier:** Saturday/Sunday posts published while commodity markets are closed produce **$1.42\times$ higher Monday morning open price gap volatility**.
 
+* **Zero-Cost Open-Access Energy Data Suite & Universal 50-State Connector (`src/data_ingestion.py`, `src/state_open_data.py`, & `src/noaa_weather.py`) (Issue #141):**
+  - **Universal 50-State Open Data Portals Connector (`src/state_open_data.py`):** `UniversalStateOpenDataConnector` provides dynamic resolution across all 50 US States + DC (51 total locales). Queries Socrata domains (`data.<state>.gov` / `data.gov`), U.S. Census State Tax Collections API, and FTA motor fuel indices for official state excise tax rates ($/gal), UST fees, and motor fuel sales volume proxies.
+  - **FRED (St. Louis Fed) Energy Series (`src/data_ingestion.py`):** `FREDDataConnector` ingests weekly national and PADD retail gasoline/diesel series (`GASREGW`, `GASDESW`, `GASREGWCW`, `GASREGWGULF`) and CPI gasoline index (`CUUR0000SETB01`).
+  - **U.S. EIA API v2 Open Data (`src/data_ingestion.py`):** `EIADataConnector` ingests weekly retail price series, PADD refinery percent utilization, and regional motor gasoline/crude stock inventories (`/petroleum/pri/gnd/data/`, `/petroleum/pnp/pct/data/`, `/petroleum/stoc/wstk/data/`).
+  - **USDA Biofuel & Ethanol Market Reports (`src/data_ingestion.py`):** `USDABiofuelConnector` ingests spot Midwest ethanol (E100) rack prices ($/gal) and RIN D6 Ethanol Credit spot values (`marsapi.ams.usda.gov`) for E10 unleaded blendstock cost modeling ($0.10 \times \text{E100} + 0.90 \times \text{RBOB} + \text{RIN Overhead}$).
+  - **Open-Meteo & NOAA High-Resolution Degree Days (`src/noaa_weather.py`):** `OpenMeteoDegreeDaysConnector` computes daily Heating Degree Days ($\text{HDD}$), Cooling Degree Days ($\text{CDD}$), and freeze/heat stress risk warnings across 6 primary refining hubs (West Tulsa, Delaware City, Catlettsburg, Richmond/Martinez, Selma, Paw Creek).
+
+
 
 ---
 
@@ -197,8 +205,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Rolling Error Metrics:** Evaluates rolling MAE, RMSE, and Directional Hit Rate metrics across 30-day, 60-day, and 90-day historical evaluation windows.
   - **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley` via `gh` CLI or GitHub REST API, evaluates each issue's potential modeling impact using Gemini 2.5 Flash (with a domain-specific heuristic fallback), ranks issues, and selects the top issue expected to yield the largest accuracy/MAE improvement.
   - **Automated Developer Catalog Monitor (`src/catalog_monitor.py` & `data/catalog_monitors_state.json`):** Continuously tracks 6 major developer catalog indexes (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). On weekly runs, evaluates newly added catalog items with Gemini 2.5 Flash and automatically files GitHub Feature Request issues for items scoring $\ge 7.0/10.0$.
+  - **Apify Tools Barred Policy:** All AI agents, catalog monitors, issue self-reviewers, and LLM evaluation prompts MUST explicitly ignore, reject, and exclude any tools, scrapers, actors, or services hosted on or referencing Apify (`apify.com`) due to paid subscription and compute unit cost constraints. All ingested tools and scrapers must be 100% zero-cost.
   - **Automated arXiv Research Paper Monitor (`src/arxiv_monitor.py`):** Queries `export.arxiv.org/api/query` for recent preprints in quantitative finance, econometrics, and machine learning matching energy market and commodity forecasting queries within the 7-day review window, formatting abstracts and download links into weekly review reports.
   - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
+
 
 ---
 

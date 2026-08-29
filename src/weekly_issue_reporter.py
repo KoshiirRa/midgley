@@ -250,6 +250,17 @@ def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -
     ranked = []
     for issue in issues:
         text = (issue["title"] + " " + issue["body"]).lower()
+        if "apify" in text:
+            ranked.append({
+                "number": issue["number"],
+                "title": issue["title"],
+                "html_url": issue["html_url"],
+                "impact_score": 0.0,
+                "category": "Barred Platform",
+                "body": issue["body"]
+            })
+            continue
+
         score = 2.0
         category = "General Improvement"
 
@@ -334,6 +345,8 @@ def evaluate_open_issues_for_modelling(issues: list, nat_mae: float = 0.1069, tu
             prompt = f"""
 You are an expert energy quantitative modeling engineer and lead AI architect.
 Review the following list of open GitHub issues for the KoshiirRa/midgley project repository and decide which issue would provide the BIGGEST improvement to energy price forecasting modeling (accuracy, MAE, directional hit rate, regional refining dynamics, physical feeds, or feature engineering).
+
+CRITICAL RULE: Ignore and assign impact_score 0.0 to any issue proposing tools, scrapers, or services hosted on Apify (apify.com) due to paid platform constraints.
 
 Current Model Performance Metrics:
 - National Wholesale RBOB MAE: ${nat_mae:.4f}/gal

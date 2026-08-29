@@ -146,6 +146,17 @@ def evaluate_item_heuristic(item: dict) -> dict:
     Scored on a scale of 0.0 - 10.0.
     """
     text = (item["title"] + " " + item["description"] + " " + item["url"]).lower()
+    
+    # Explicitly bar Apify tools and scrapers due to paid platform/compute unit constraints
+    if "apify" in text:
+        return {
+            "impact_score": 0.0,
+            "category": "Barred Platform",
+            "target_component": "N/A",
+            "is_worthwhile": False,
+            "reasoning": "Apify tools and scrapers are explicitly barred from ingestion due to paid subscription/compute cost constraints."
+        }
+
     score = 2.0
     category = "General Infrastructure"
     target_component = "src/data_ingestion.py"
@@ -198,6 +209,16 @@ def evaluate_item_with_llm(item: dict) -> dict:
     Evaluates new catalog item using Google Gemini Flash via google-genai SDK if GEMINI_API_KEY is present,
     falling back seamlessly to evaluate_item_heuristic().
     """
+    text = (item["title"] + " " + item["description"] + " " + item["url"]).lower()
+    if "apify" in text:
+        return {
+            "impact_score": 0.0,
+            "category": "Barred Platform",
+            "target_component": "N/A",
+            "is_worthwhile": False,
+            "reasoning": "Apify tools and scrapers are explicitly barred from ingestion due to paid subscription/compute cost constraints."
+        }
+
     gemini_key = os.environ.get("GEMINI_API_KEY")
     if not gemini_key:
         return evaluate_item_heuristic(item)
@@ -206,6 +227,8 @@ def evaluate_item_with_llm(item: dict) -> dict:
         from google import genai
         client = genai.Client(api_key=gemini_key)
         prompt = f"""You are an expert MLOps & Energy Quantitative Analyst evaluating a new software tool/API for the Midgley Unleaded Gasoline Price Prediction Engine.
+
+CRITICAL RULE: Apify tools, scrapers, and actors MUST BE REJECTED AND IGNORED. If the candidate tool is hosted on Apify (apify.com) or references Apify in its title, URL, or description, set impact_score to 0.0 and is_worthwhile to false.
 
 Evaluate the following candidate tool:
 - Title: {item['title']}
@@ -236,6 +259,7 @@ Respond strictly in valid JSON format with:
         eval_data["impact_score"] = float(eval_data.get("impact_score", 5.0))
         eval_data["is_worthwhile"] = eval_data.get("is_worthwhile", eval_data["impact_score"] >= 7.0)
         return eval_data
+
     except Exception as e:
         logger.debug(f"Gemini LLM evaluation notice ({e}). Falling back to heuristic scorer...")
         return evaluate_item_heuristic(item)
