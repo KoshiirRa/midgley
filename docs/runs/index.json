@@ -1,5 +1,29 @@
 [
   {
+    "run_id": "2026-08-29_17-46-43",
+    "timestamp": "2026-08-29 17:46:37",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil, Migration, War & Drugs: How India, Canada Revealed Trum..."
+  },
+  {
+    "run_id": "2026-08-29_17-17-36",
+    "timestamp": "2026-08-29 17:17:32",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "With the US and Canada locked in a trade war, fears of a rec..."
+  },
+  {
+    "run_id": "2026-08-29_17-14-54",
+    "timestamp": "2026-08-29 17:14:53",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-29_16-48-02",
+    "timestamp": "2026-08-29 16:47:58",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Bloomberg Money Minute: S Stocks Fall On Mideast Tensions; G..."
+  },
+  {
     "run_id": "2026-08-29_16-30-46",
     "timestamp": "2026-08-29 16:30:45",
     "run_type": "DAILY_BATCH",

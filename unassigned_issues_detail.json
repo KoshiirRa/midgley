@@ -1,0 +1,856 @@
+[
+  {
+    "body": "## Summary & Context\n\nTo support continuous model evaluation, feature attribution, and error diagnosis over rolling horizons, this issue proposes extending the prediction logging schema in `src/prediction_logger.py` (`data/prediction_history.csv`) and the intraday monitoring ledger (`data/intraday_events.json`).\n\nCurrently, `prediction_history.csv` logs basic forecast target dates, 5-day predictions, base prices, and backfilled actual outcomes. However, when forecast errors occur, the current schema lacks the feature snapshots and provenance data required to isolate *why* an error occurred.\n\n## Proposed Data Points & Schema Additions\n\n### 1. Feature Snapshot & LLM Attribution Vectors\n- `llm_price_pressure`: Raw price pressure score extracted from news at forecast time.\n- `llm_supply_disruption`: Raw supply disruption score extracted from news.\n- `crack_spread_at_forecast`: WTI crude vs. RBOB gasoline margin ($/gal) at forecast time.\n- `ovx_volatility_index`: Cboe crude oil volatility index snapshot.\n- `decayed_shock_memory`: Accumulated exponential memory score ($M_t$) incorporating half-life decay ($t_{1/2}=5.0\\text{d}$).\n\n### 2. Regional Margin Calibration vs. Base Commodity Split\n- `uncalibrated_national_futures_pred`: Raw base futures forecast before local calibration.\n- `regional_rack_margin_offset`: Dynamic regional margin/tax offset applied to base futures.\n- `active_scenario_shock`: Name of any active counterfactual scenario (e.g. `None`, `Hormuz_Blockade`, `Hayward_Fault_Quake`).\n\n### 3. Ablation Comparison Delta (Baseline Quant vs. Hybrid LLM)\n- `quant_baseline_5d_price`: Pure quantitative model prediction (technical features only).\n- `llm_augmentation_delta`: Price impact added strictly by LLM intelligence (`predicted_5d_price - quant_baseline_5d_price`).\n\n### 4. Prediction Uncertainty & Confidence Intervals\n- `prediction_lower_95ci`: 95% confidence interval lower bound.\n- `prediction_upper_95ci`: 95% confidence interval upper bound.\n- `within_95ci_hit`: Binary flag (`1` if `actual_5d_price` landed within lower and upper bounds).\n\n### 5. Data Feed Provenance & Fallback Audit\n- `data_source_provenance`: Live feed source used (`GasBuddy_GraphQL`, `AAA_Scraper`, `yfinance`, `History_Fallback`).\n- `llm_provider_tier`: Extraction engine used (`Gemini-2.5-Flash`, `OpenAI-gpt-4o-mini`, `Offline_Lexicon_Tier3`).\n\n## Implementation Scope\n- [ ] Update `columns` list and dataframe construction in `src/prediction_logger.py` (`ensure_history_store()` and `log_predictions()`).\n- [ ] Update regional calibration entrypoints (`src/locations/<location>/main.py`) to pass extended feature vectors to `log_predictions()`.\n- [ ] Update `src/weekly_issue_reporter.py` to aggregate new feature attribution metrics in weekly GitHub Actions reviews.\n- [ ] Update unit tests in `tests/test_dashboard_generator.py` and `tests/test_live_fuel_feed.py`.",
+    "createdAt": "2026-08-27T19:44:23Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 124,
+    "title": "[Feature Request] Implement Extended MLOps Prediction History Schema & Observability Metrics Engine",
+    "url": "https://github.com/KoshiirRa/midgley/issues/124"
+  },
+  {
+    "body": "## Context & Motivation\nInterstate refined petroleum product pipelines\u2014such as **Colonial Pipeline Line 1 & Line 2** (servicing PADD 1C Charlotte & Greenville), **Kinder Morgan SFPP** (servicing PADD 5 Oakland/SF Bay Area), and **Plantation Pipeline**\u2014operate under Federal Energy Regulatory Commission (FERC) regulatory jurisdiction.\n\nPipeline operators file annual reports (FERC Form 6) detailing pipeline throughput volumes, operating revenues, and tariff adjustments governed by the **FERC Index of Oil Pipeline Rates** (tied to PPI-FG).\n\nCurrently, Midgley models regional pipeline transport differentials in localized metro calibration agents (\\src/locations/*/regional.py\\) using static rack margin offsets. Live ingestion of FERC Form 6 and FERC Open Data API (\\data.ferc.gov\\) filings will allow dynamic adjustment of baseline pipeline shipping overhead.\n\n## Proposed Solution\n1. Add a FERC data connector module (\\src/ferc_feed.py\\ or integrated within \\src/alternative_data_feeds.py\\) to query FERC Open Data API (\\data.ferc.gov\\) for interstate oil pipeline rate index changes and Form 6 filing updates.\n2. Map key pipeline operators to Midgley metro locales:\n   - **Colonial Pipeline Co.**: Charlotte, NC (Paw Creek) & Greenville, NC (Selma/Apex hubs)\n   - **Kinder Morgan SFPP LP**: Oakland, CA / SF Bay Area corridor\n   - **PBF Delaware City / Pipeline Links**: Newark, DE / PADD 1B\n3. Feed dynamic pipeline transport tariffs into regional metro calibration agents (\\src/locations/*/regional.py\\).\n4. Optionally monitor FERC eFiling RSS/API endpoints in \\src/intraday_event_monitor.py\\ for emergency pipeline tariff filings or capacity allocation cut notices.\n\n## Benefits\n- Automates annual pipeline tariff ceiling adjustments across all modeled regional metro locations.\n- Improves localized retail rack margin prediction accuracy.\n- Connects official regulatory filings directly to quantitative market estimators.",
+    "createdAt": "2026-08-27T05:43:38Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 123,
+    "title": "[Feature Request] Ingest FERC Form 6 & Open Data API for Interstate Oil Pipeline Tariffs & Throughput",
+    "url": "https://github.com/KoshiirRa/midgley/issues/123"
+  },
+  {
+    "body": "## Context & Motivation\nElectric grid natural gas power generation (\\ power burn\\) and hourly grid load directly influence regional natural gas spot pricing, hydrogen production costs, and power grid availability for regional petroleum refineries (e.g., HF Sinclair West Tulsa, PBF Delaware City, Chevron Richmond, Marathon Catlettsburg).\n\nThe EIA-930 Hourly Electric Grid Monitor dataset (utilized in [oldhero5/energex](https://github.com/oldhero5/energex)) provides hourly electricity demand, day-ahead load forecasts, net generation by fuel type (natural gas, nuclear, wind, solar), and interchange across all US Balancing Authorities (SPP, PJM, ERCOT, CAISO, MISO, NYISO).\n\n## Proposed Solution\n1. Add a connector (\\src/eia_grid_feed.py\\ or within \\src/alternative_data_feeds.py\\) to query the EIA-930 API for key regional Balancing Authorities corresponding to Midgley metro locales:\n   - **SPP** (Tulsa metro / Cushing)\n   - **PJM** (Newark DE / PADD 1B)\n   - **MISO / PJM** (Cincinnati OH / NKY)\n   - **CAISO** (Oakland / SF Bay Area)\n2. Extract regional natural gas power burn % and grid stress metrics.\n3. Integrate grid metrics as alternative feature inputs in localized metro calibration agents (\\src/locations/*/regional.py\\).\n\n## Benefits\n- Provides a leading physical indicator for natural gas feedstock & refinery operational electricity cost pressures.\n- Enhances regional rack margin precision in metro calibration models.",
+    "createdAt": "2026-08-27T05:35:01Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 122,
+    "title": "[Feature Request] Ingest EIA-930 Hourly Electric Grid Monitor for Regional Power Burn & Refining Feedstock Proxy",
+    "url": "https://github.com/KoshiirRa/midgley/issues/122"
+  },
+  {
+    "body": "## Context & Motivation\nGovernment energy sources like the US Energy Information Administration (EIA) routinely issue inline revisions and historical restatements (e.g., weekly crude stock levels, motor gasoline demand, refinery runs) weeks after first publication.\n\nInspired by the bitemporal data architecture pattern in [oldhero5/energex](https://github.com/oldhero5/energex), storing only valid period timestamps without tracking release dates (\\^Gs_of\\ / knowledge time) introduces subtle lookahead bias when backtesting or retraining quantitative models on historical EIA figures.\n\n## Proposed Solution\n1. Extend \\src/alternative_data_feeds.py\\ and EIA ingestion routines to attach an explicit \\^Gs_of\\ publication timestamp or vintage metadata tag to ingested EIA observation records.\n2. Implement an honesty flag (\\\u000bintage_reconstructed=True\\) when backfilling historical baselines vs live-logged observations.\n3. Ensure quantitative estimators (\\src/models.py\\) and feature engineering routines (\\src/feature_engineering.py\\) filter features by \\^Gs_of <= target_run_date\\ during historical backtests.\n\n## Benefits\n- Prevents lookahead leakage in quantitative model backtesting and retrains.\n- Ensures 100% point-in-time correct data integrity for EIA fundamental series.",
+    "createdAt": "2026-08-27T05:34:47Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 121,
+    "title": "[Feature Request] Implement Bitemporal Vintage Tracking (as_of) for EIA Data Ingestion",
+    "url": "https://github.com/KoshiirRa/midgley/issues/121"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:40:09Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuzQ",
+        "name": "dashboard",
+        "description": "Web frontend dashboard UI, visual layout components, card embeds",
+        "color": "E99695"
+      }
+    ],
+    "milestone": null,
+    "number": 120,
+    "title": "[Feature Request] Integrate QuantStats Performance Tear Sheets & Risk Metrics",
+    "url": "https://github.com/KoshiirRa/midgley/issues/120"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:40:04Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 119,
+    "title": "[Feature Request] Integrate CRNG Fat-Tail Volatility Engine for Scenario Simulation",
+    "url": "https://github.com/KoshiirRa/midgley/issues/119"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:39:59Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 118,
+    "title": "[Feature Request] Implement ArcticDB Datastore for Point-in-Time Accurate Time-Series Storage",
+    "url": "https://github.com/KoshiirRa/midgley/issues/118"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:39:55Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 117,
+    "title": "[Feature Request] Implement Purged & Combinatorial Cross-Validation (purgedcv) to Prevent Data Leakage",
+    "url": "https://github.com/KoshiirRa/midgley/issues/117"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:25:40Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUu9Q",
+        "name": "integration",
+        "description": "External ecosystem integrations (Home Assistant, LubeLogger, Android Auto)",
+        "color": "BF80FF"
+      }
+    ],
+    "milestone": null,
+    "number": 116,
+    "title": "[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)",
+    "url": "https://github.com/KoshiirRa/midgley/issues/116"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:15:32Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuzQ",
+        "name": "dashboard",
+        "description": "Web frontend dashboard UI, visual layout components, card embeds",
+        "color": "E99695"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUu9Q",
+        "name": "integration",
+        "description": "External ecosystem integrations (Home Assistant, LubeLogger, Android Auto)",
+        "color": "BF80FF"
+      }
+    ],
+    "milestone": null,
+    "number": 115,
+    "title": "[Feature Epic] Scientific Agent Skills Integration Roadmap (What-If Oracle, NetworkX Routing, Paperclip RAG, & Document Exports)",
+    "url": "https://github.com/KoshiirRa/midgley/issues/115"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:15:03Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuzQ",
+        "name": "dashboard",
+        "description": "Web frontend dashboard UI, visual layout components, card embeds",
+        "color": "E99695"
+      }
+    ],
+    "milestone": null,
+    "number": 114,
+    "title": "[Feature Request] Implement SHAP Feature Attribution Engine for Model Interpretability & Dashboard",
+    "url": "https://github.com/KoshiirRa/midgley/issues/114"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:14:58Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 113,
+    "title": "[Feature Request] Ingest FRED Macroeconomic & Energy Series via Database-Lookup Skill",
+    "url": "https://github.com/KoshiirRa/midgley/issues/113"
+  },
+  {
+    "body": "",
+    "createdAt": "2026-08-27T04:14:54Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 112,
+    "title": "[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting",
+    "url": "https://github.com/KoshiirRa/midgley/issues/112"
+  },
+  {
+    "body": "## Summary\nDeploy **\\Metabase\\** (\\github.com/metabase/metabase\\) (open-source Java/Docker BI server) on \\dev-vm\\ (\\10.42.42.54\\) to provide interactive SQL analytics and visual dashboards over \\data/prediction_history.csv\\.\n\n## Motivations & Value\n- **Interactive Forecast Analytics:** Enables interactive SQL queries and visual charts tracking 30-day, 60-day, and 90-day MAE, Directional Hit Rates, and metro retail price spreads.\n- **Self-Hosted Service:** Runs on \\dev-vm\\ alongside existing dashboard web services.\n\n## Acceptance Criteria\n- [ ] Deploy Metabase container on \\dev-vm\\.\n- [ ] Connect SQLite/CSV database connection to \\data/prediction_history.csv\\.\n- [ ] Build interactive dashboard cards for rolling accuracy and metro price spreads.",
+    "createdAt": "2026-08-25T16:57:44Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuzQ",
+        "name": "dashboard",
+        "description": "Web frontend dashboard UI, visual layout components, card embeds",
+        "color": "E99695"
+      }
+    ],
+    "milestone": null,
+    "number": 99,
+    "title": "[Feature Request] Deploy Self-Hosted Metabase BI Dashboard on Dev VM for Forecast Analytics",
+    "url": "https://github.com/KoshiirRa/midgley/issues/99"
+  },
+  {
+    "body": "## Summary\nIntegrate **\\Healthchecks\\** (\\github.com/healthchecks/healthchecks\\) (open-source cron monitoring service) into \\src/prediction_logger.py\\ and \\src/weekly_issue_reporter.py\\.\n\n## Motivations & Value\n- **Execution Heartbeats:** Listens for HTTP ping heartbeats at the conclusion of daily forecast runs (\\",
+    "createdAt": "2026-08-25T16:57:40Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 98,
+    "title": "[Feature Request] Implement Healthchecks Cron Monitoring for Daily & Weekly Pipeline Runs",
+    "url": "https://github.com/KoshiirRa/midgley/issues/98"
+  },
+  {
+    "body": "## Summary\nDeploy **\\Dagu\\** (\\github.com/dagucloud/dagu\\) (open-source Go binary / Docker container with Web UI) on \\dev-vm\\ (\\10.42.42.54\\) to orchestrate Midgley's daily data ingestion and quantitative modeling workflows.\n\n## Motivations & Value\n- **Declarative YAML DAGs:** Defines inter-task dependencies for daily data fetches (EIA, FRED, NOAA), quantitative model re-fits, prediction logging, and public dashboard updates.\n- **Web UI & Execution History:** Provides a clean web interface to monitor job runs and inspect logs on \\dev-vm\\.\n\n## Acceptance Criteria\n- [ ] Deploy Dagu service on \\dev-vm\\.\n- [ ] Configure declarative YAML DAG for daily forecast pipeline (\\",
+    "createdAt": "2026-08-25T16:57:29Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 96,
+    "title": "[Feature Request] Deploy Self-Hosted Dagu DAG Task Scheduler on Dev VM",
+    "url": "https://github.com/KoshiirRa/midgley/issues/96"
+  },
+  {
+    "body": "## Summary\nIntegrate **\\Feast\\** (\\github.com/feast-dev/feast\\) as an open-source feature store serving feature vectors to \\src/models.py\\ and \\src/feature_engineering.py\\.\n\n## Motivations & Value\n- **Point-in-Time Correctness:** Eliminates future data leakage during historical backtesting by enforcing strict point-in-time join semantics on event memory decay vectors.\n- **Unified Feature Serving:** Serves consistent feature views across training, evaluation, and daily live inference.\n\n## Acceptance Criteria\n- [ ] Implement Feast repository definition in \\data/\\ / \\src/\\.\n- [ ] Define feature views for EIA, FRED, NOAA, and LLM event shock decay.\n- [ ] Add unit test coverage verifying point-in-time joins.",
+    "createdAt": "2026-08-25T16:55:06Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 94,
+    "title": "[Feature Request] Implement Feast Feature Store for Point-in-Time Backtesting Correctness",
+    "url": "https://github.com/KoshiirRa/midgley/issues/94"
+  },
+  {
+    "body": "## Summary\nIntegrate **\\NeuralProphet\\** (\\github.com/ourownstory/neural_prophet\\) into \\src/models.py\\ as a hybrid neural time-series estimator combining PyTorch auto-autoregressive terms with exogenous LLM event shock decay vectors.\n\n## Motivations & Value\n- **Non-Linear Event Modeling:** Captures non-linear interactions between macroeconomic indicators and event memory decay vectors (\\{1/2} = 4.0\\\\text{ to }5.0\\\\text{ days}\\$).\n- **Model Diversity:** Adds a third quantitative estimator alongside Ridge Regression and XGBoost.\n\n## Acceptance Criteria\n- [ ] Implement NeuralProphet estimator class in \\src/models.py\\.\n- [ ] Train hybrid model on chronological 80/20 train/test splits.\n- [ ] Log out-of-time MAE and directional hit rates.",
+    "createdAt": "2026-08-25T16:55:02Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 93,
+    "title": "[Feature Request] Implement NeuralProphet Hybrid Estimator with Exogenous Shock Decay",
+    "url": "https://github.com/KoshiirRa/midgley/issues/93"
+  },
+  {
+    "body": "## Summary\nIntegrate **\\pandas-ta\\** (\\github.com/twopirllc/pandas-ta\\) into \\src/feature_engineering.py\\ to calculate technical indicators (RSI, Bollinger Bands, MACD, ATR, EMA crossovers) for NYMEX RBOB futures (\\RB=F\\) and Cushing WTI (\\CL=F\\).\n\n## Motivations & Value\n- **Technical Momentum Signals:** Provides short-term 1-day to 5-day trend persistence features for wholesale RBOB futures forecasting.\n- **Quantitative Integration:** Standardizes indicator calculations within pandas dataframe pipelines.\n\n## Acceptance Criteria\n- [ ] Implement \\pandas-ta\\ indicator extraction in \\src/feature_engineering.py\\.\n- [ ] Incorporate momentum features into Ridge and XGBoost estimator pipelines.\n- [ ] Add unit test coverage.",
+    "createdAt": "2026-08-25T16:54:58Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 92,
+    "title": "[Feature Request] Ingest pandas-ta Technical Momentum Indicators for RBOB & WTI Futures",
+    "url": "https://github.com/KoshiirRa/midgley/issues/92"
+  },
+  {
+    "body": "## Summary\nIntegrate **Coupler.io** (\\coupler.io\\) (100 runs/month free) into \\src/prediction_logger.py\\ to automatically replicate out-of-time forecast logs from \\data/prediction_history.csv\\ into external cloud spreadsheets (Google Sheets / Excel Online).\n\n## Motivations & Value\n- **Live Spreadsheet Syncing:** Provides automated cloud syncing of prediction history records for external executive dashboards and reporting.\n- **Zero Infrastructure Maintenance:** Handled via automated cloud connectors.\n\n## Acceptance Criteria\n- [ ] Implement Coupler.io sync trigger in \\src/prediction_logger.py\\.\n- [ ] Sync out-of-time prediction records to cloud spreadsheet target.\n- [ ] Verify test suite execution.",
+    "createdAt": "2026-08-25T16:35:36Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUu9Q",
+        "name": "integration",
+        "description": "External ecosystem integrations (Home Assistant, LubeLogger, Android Auto)",
+        "color": "BF80FF"
+      }
+    ],
+    "milestone": null,
+    "number": 90,
+    "title": "[Feature Request] Integrate Coupler.io Cloud Spreadsheet Sync for Prediction History",
+    "url": "https://github.com/KoshiirRa/midgley/issues/90"
+  },
+  {
+    "body": "## Summary\nIntegrate **Market Data API** (\\marketdata.app\\) (100 free requests/day) into \\src/energy_equities_feed.py\\ to retrieve quotes for energy sector equities and market benchmarks.\n\n## Motivations & Value\n- **Secondary Financial Feed:** Provides a secondary quotes provider backstopping \\yfinance\\ data for key refiners (\\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\, \\CVX\\).\n- **Zero Cost:** Free daily tier.\n\n## Acceptance Criteria\n- [ ] Implement Market Data API fallback client in \\src/energy_equities_feed.py\\.\n- [ ] Validate non-null equity quote retrieval.\n- [ ] Add unit test coverage.",
+    "createdAt": "2026-08-25T16:33:55Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 86,
+    "title": "[Feature Request] Ingest Market Data API for Energy Equities & Commodity Backstop",
+    "url": "https://github.com/KoshiirRa/midgley/issues/86"
+  },
+  {
+    "body": "## Summary\nIntegrate **Cube Cloud** (\\cube.dev\\) (1,000 free queries/day) into Midgley's quantitative architecture to serve as a headless semantic data modeling layer.\n\n## Motivations & Value\n- **Standardized Metric Definitions:** Centralizes retail rack margin equations, 321 crack spreads, and rolling error metrics across all 5 metro calibration agents (Tulsa, Newark, Cincinnati, Greenville, Oakland).\n- **Consistent Data API:** Provides a unified REST/GraphQL API for data visualization components and dashboard generators.\n\n## Acceptance Criteria\n- [ ] Implement Cube semantic schema definitions in \\src/\\.\n- [ ] Connect metro calibration agents to query unified semantic metrics.\n- [ ] Add unit test coverage.",
+    "createdAt": "2026-08-25T16:33:50Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 85,
+    "title": "[Feature Request] Implement Cube Cloud Headless Semantic Layer for Multi-Metro Fuel Metrics",
+    "url": "https://github.com/KoshiirRa/midgley/issues/85"
+  },
+  {
+    "body": "## Summary\nIntegrate **Trigger.dev** (\\\trigger.dev\\) (50,000 free durable executions/month) as a cloud background workflow runner for Midgley's daily forecasting (\\",
+    "createdAt": "2026-08-25T16:31:25Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 81,
+    "title": "[Feature Request] Implement Trigger.dev Resilient Cloud Cron Workflow Runner",
+    "url": "https://github.com/KoshiirRa/midgley/issues/81"
+  },
+  {
+    "body": "## Summary\nIntegrate **Weights & Biases (W&B)** (\\wandb.ai\\) (free tier for personal projects, 100 GB storage) into \\src/weekly_issue_reporter.py\\ and \\src/models.py\\ to log quantitative model training runs, rolling MAE/RMSE metrics, and backtest loss curves.\n\n## Motivations & Value\n- **MLOps Observability:** Provides visual dashboards for 30-day, 60-day, and 90-day rolling error metrics and model drift across national RBOB and regional metro estimators (Tulsa, Newark, Cincinnati, Greenville, Oakland).\n- **Automated Cloud Reporting:** Integrates directly into \\.github/workflows/weekly_model_review.yml\\ and local \\midgley-weekly-review.timer\\.\n\n## Acceptance Criteria\n- [ ] Add \\wandb\\ logging initialization to \\src/weekly_issue_reporter.py\\ and \\src/models.py\\.\n- [ ] Log rolling validation loss and hit rates to W&B project dashboard.\n- [ ] Verify test suite execution with optional W&B logging flag.",
+    "createdAt": "2026-08-25T16:31:21Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuJQ",
+        "name": "infrastructure",
+        "description": "Cloud runners, databases, cron workflow schedules, self-hosted services",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 80,
+    "title": "[Feature Request] Integrate Weights & Biases (W&B) for Rolling Model Drift & Validation Loss Tracking",
+    "url": "https://github.com/KoshiirRa/midgley/issues/80"
+  },
+  {
+    "body": "## Summary\nIntegrate the official **U.S. Bureau of Transportation Statistics (BTS) Open Data API** (\\\bts.gov\\) into \\src/\\ to track the Freight Transportation Services Index (TSI), truck tonnage index, and national commercial transportation activity.\n\n## Motivations & Value\n- **Physical Demand Proxy:** Commercial freight truck tonnage and transportation TSI serve as leading physical demand indicators for heavy fuel, diesel, and unleaded gasoline consumption.\n- **100% Free Public API:** Official government data source with zero cost and high reliability.\n\n## Acceptance Criteria\n- [ ] Implement BTS TSI data ingestion module in \\src/\\.\n- [ ] Add Freight TSI features to main quantitative model pipeline in \\src/feature_engineering.py\\.\n- [ ] Validate non-null feature vectors.",
+    "createdAt": "2026-08-25T16:02:19Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 74,
+    "title": "[Feature Request] Ingest U.S. BTS Freight Transportation Index & Tank Truck Demand Data",
+    "url": "https://github.com/KoshiirRa/midgley/issues/74"
+  },
+  {
+    "body": "## Summary\nIntegrate the **U.S. EPA AirNow API** (\\^Girnowapi.org\\) (free developer key, 500 req/hr) into \\src/\\ to track ground-level ozone action alerts and Air Quality Index (AQI) thresholds across target metropolitan regions.\n\n## Motivations & Value\n- **Regulatory Summer-Blend Transition:** Elevated summer ozone levels trigger environmental compliance enforcement and low-RVP summer-blend gasoline transition surcharges, directly expanding rack margins in California (Oakland/Bay Area) and the Ohio Valley (Cincinnati).\n- **Direct Environmental Indicator:** Provides real-time environmental regulatory pressure metrics.\n\n## Acceptance Criteria\n- [ ] Implement EPA AirNow API ingestion module in \\src/\\.\n- [ ] Map zip codes / monitoring stations for Oakland, Cincinnati, Tulsa, Newark, and Greenville.\n- [ ] Feed ozone action alerts into regional calibration agents.",
+    "createdAt": "2026-08-25T16:02:15Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 73,
+    "title": "[Feature Request] Ingest EPA AirNow Ozone Alerts for Summer-Blend Gas Compliance",
+    "url": "https://github.com/KoshiirRa/midgley/issues/73"
+  },
+  {
+    "body": "## Summary\nIntegrate the official, 100% free, keyless **U.S. Treasury Fiscal Data API** (\\\fiscaldata.treasury.gov\\) into \\src/\\ to extract macro yield curve dynamics (10Y-2Y spread) and TIPS real interest rates as predictive features for wholesale NYMEX RBOB futures forecasting.\n\n## Motivations & Value\n- **Macro Inflation Expectations:** TIPS real yields and yield curve slopes (\\\\text{Y} - 2\\text{Y}\\$) directly impact USD exchange rate strength and energy market demand sentiment.\n- **Zero API Cost / Keyless:** Official U.S. Treasury data requires no API keys, has generous public rate limits, and provides stable JSON endpoints.\n\n## Proposed Data Feed Specifications\n- **New Module:** \\src/treasury_yield_feed.py\\\n- **Key Features Created:**\n  - \\\treasury_yield_10y_2y_spread\\ (\\\\text{Y} - 2\\text{Y}\\$ spread)\n  - \\\tips_10y_real_yield\\ (10-Year TIPS Real Rate)\n- **Integration Target:** \\src/feature_engineering.py\\ (Quantitative Feature Matrix)\n\n## Acceptance Criteria\n- [ ] Implement \\src/treasury_yield_feed.py\\ with caching fallback.\n- [ ] Add Treasury yield curve features to main quantitative pipeline in \\src/feature_engineering.py\\.\n- [ ] Validate non-null feature vectors in daily forecast run (\\main.py\\).",
+    "createdAt": "2026-08-25T15:48:45Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUt3g",
+        "name": "data-ingestion",
+        "description": "External data feeds, REST APIs, NOAA alerts, macro & market data sources",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 66,
+    "title": "[Feature Request] Ingest U.S. Treasury Yield Curve & TIPS Inflation Metrics (Fiscal Data API)",
+    "url": "https://github.com/KoshiirRa/midgley/issues/66"
+  },
+  {
+    "body": "### Context & Motivation\nEnd users and AI agents frequently ask about gas prices by 5-digit US ZIP code rather than predefined metro area names.\n\n### Proposed Implementation\n1. Implement a lightweight local ZIP-code-to-Locale mapping dataset/function in \\src/live_fuel_feed.py\\.\n2. Resolve input ZIP codes to nearest supported metro locale, PADD region, and state fuel tax policy.\n3. Fallback gracefully to regional state average or GasBuddy local station search when ZIP is outside primary metro clusters.\n\n### Acceptance Criteria\n- Passing any valid 5-digit US ZIP code to \\/api/v1/prices/live?zip_code=...\\ correctly resolves the mapped locale context and fuel prices.",
+    "createdAt": "2026-08-24T21:10:16Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUu9Q",
+        "name": "integration",
+        "description": "External ecosystem integrations (Home Assistant, LubeLogger, Android Auto)",
+        "color": "BF80FF"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUvLA",
+        "name": "api",
+        "description": "REST API endpoints, JSON webhook gateways, and MCP server protocols",
+        "color": "D4C5F9"
+      }
+    ],
+    "milestone": null,
+    "number": 50,
+    "title": "feat(geocoding): Add ZIP Code to Locale & PADD Resolution Mapping Engine",
+    "url": "https://github.com/KoshiirRa/midgley/issues/50"
+  },
+  {
+    "body": "### Context & Motivation\nCurrently, locale codes and tax structures are implicit, requiring client applications to guess locale identifiers and make multiple single calls to forecast for several locations.\n\n### Proposed Implementation\n1. Add \\GET /api/v1/locales\\ returning available locale codes, \\\region_id\\, PADD region, state/local tax breakdowns, and status.\n2. Add \\POST /api/v1/forecast/batch\\ enabling clients to query forecasts for multiple locales in a single HTTP payload.\n3. Add batch support to \\/api/v1/combined/batch\\.\n\n### Acceptance Criteria\n- \\GET /api/v1/locales\\ provides complete metadata dictionary.\n- Batch endpoint successfully accepts an array of locale codes and returns combined forecast maps.",
+    "createdAt": "2026-08-24T21:10:01Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUvLA",
+        "name": "api",
+        "description": "REST API endpoints, JSON webhook gateways, and MCP server protocols",
+        "color": "D4C5F9"
+      }
+    ],
+    "milestone": null,
+    "number": 48,
+    "title": "feat(api): Add GET /locales Metadata Endpoint & POST /forecast/batch Endpoint",
+    "url": "https://github.com/KoshiirRa/midgley/issues/48"
+  },
+  {
+    "body": "### Context & Motivation\nHistorical MAE and directional hit rates must be continuously recomputed against actual market prices as target dates arrive to maintain empirical credibility.\n\n### Proposed Implementation\n1. Leverage \\src/prediction_logger.py\\ to calculate rolling 30/60/90-day MAE and hit rates broken down by horizon (1-day through 5-day) and locale.\n2. Create a dedicated \\GET /api/v1/forecast/scoreboard\\ endpoint.\n3. Render a dynamic Realized-vs-Predicted performance table and chart on the GitHub Pages dashboard (\\docs/\\).\n\n### Acceptance Criteria\n- Automated background task backfills actual prices and updates rolling performance metrics.\n- Scoreboard is publicly accessible via API and web dashboard.",
+    "createdAt": "2026-08-24T21:09:37Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5PQ",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuzQ",
+        "name": "dashboard",
+        "description": "Web frontend dashboard UI, visual layout components, card embeds",
+        "color": "E99695"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUvLA",
+        "name": "api",
+        "description": "REST API endpoints, JSON webhook gateways, and MCP server protocols",
+        "color": "D4C5F9"
+      }
+    ],
+    "milestone": null,
+    "number": 47,
+    "title": "feat(scoreboard): Implement Realized-vs-Predicted Rolling Scoreboard API & Dashboard Section",
+    "url": "https://github.com/KoshiirRa/midgley/issues/47"
+  },
+  {
+    "body": "### Context & Motivation\nThe multi-agent pipeline ingests news, NOAA weather, OPEC press releases, social media, and physical data, but end users need transparency into which specific factors moved the price prediction.\n\n### Proposed Implementation\n1. Extract directional dollar & percentage contribution weights for each feature category (RBOB futures, refinery utilization, weather events, regulatory taxes).\n2. Generate structured driver text summaries (e.g., \\'Tulsa +1.17%: RBOB futures up, refinery utilization down, weather neutral'\\).\n3. Include feature attribution arrays in \\/api/v1/forecast/predict\\ and \\/api/v1/combined\\.\n\n### Acceptance Criteria\n- API returns structured driver impacts showing signed contribution values.\n- Dashboard displays natural language driver breakdown per forecast run.",
+    "createdAt": "2026-08-24T21:02:51Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 46,
+    "title": "feat(explainability): Add Component-Level Feature Attribution & Driver Breakdown per Forecast",
+    "url": "https://github.com/KoshiirRa/midgley/issues/46"
+  },
+  {
+    "body": "### Context & Motivation\nSingle point price forecasts (\\.892/gal) lack risk quantification. Uncertainty naturally compounds as the forecast horizon extends from Day 1 to Day 5 and varies across geographic market volatility profiles.\n\n### Proposed Implementation\n1. Implement parametric or empirical residual-based P10, P50 (median), and P90 forecast bands.\n2. Scale interval width dynamically as horizon increases (\\(\\sigma \\propto \\sqrt{h}\\)).\n3. Return \\p10_price_per_gal\\, \\p50_price_per_gal\\, and \\p90_price_per_gal\\ fields in API forecast responses.\n4. Render shaded confidence bands on web dashboard forecast charts.\n\n### Acceptance Criteria\n- Day-5 prediction interval is wider than Day-1 prediction interval.\n- API returns P10/P50/P90 numbers in JSON payload for all supported locales.",
+    "createdAt": "2026-08-24T21:01:27Z",
+    "labels": [
+      {
+        "id": "LA_kwDOUBqoac8AAAACxxw5VA",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOUBqoac8AAAACyWUuiw",
+        "name": "modeling",
+        "description": "Quantitative models, time-series estimators, ML feature engineering, benchmarks",
+        "color": "1D76DB"
+      }
+    ],
+    "milestone": null,
+    "number": 44,
+    "title": "feat(models): Add P10/P50/P90 Prediction Interval Bands Scaling with Horizon",
+    "url": "https://github.com/KoshiirRa/midgley/issues/44"
+  }
+]

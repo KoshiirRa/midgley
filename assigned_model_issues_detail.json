@@ -1,0 +1,475 @@
+[
+  {
+    "number": 20,
+    "title": "feat(home-assistant): Add Home Assistant dashboard module & metro area gas price forecast integration",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "### Feature Proposal: Home Assistant Dashboard Module & Sensor Integration for Metro Area Gas Price Forecasting  #### \ud83d\ude80 Overview Develop a Home Assistant integration and Lovelace dashboard custom card (`midgley-gas-card`) that displays real-time and 5-day forecasted retail unleaded gasoline prices t"
+  },
+  {
+    "number": 21,
+    "title": "feat(android-auto): Android Auto in-dash gas price & 5-day forecast fuel assistant app",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "### Feature Proposal: Android Auto & Automotive In-Dash Fuel Price Assistant (`midgley-auto`)  #### \ud83d\ude97 Overview Develop an **Android Auto** (and Android Automotive OS) application utilizing the `androidx.car.app` Car App API to bring real-time regional unleaded gas prices and 5-day ML trend forecasts"
+  },
+  {
+    "number": 22,
+    "title": "feat(lubelogger): LubeLogger integration for predictive vehicle tank refill & fuel cost optimization",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "### Feature Proposal: LubeLogger Integration for Predictive Tank Refill & Fuel Cost Optimization  #### \ud83d\udee2\ufe0f Overview Integrate `midgley` with **[LubeLogger](https://github.com/hargata/lubelog)** (the self-hosted vehicle management platform) to predict precisely **when and how much** gas a user should "
+  },
+  {
+    "number": 34,
+    "title": "feat(oakland): Add Oakland, CA Metro Area (PADD 5 West Coast) Regional Forecasting & CARB Regulatory Display",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "dashboard"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Feature Request: Oakland, CA Metro Area Expansion (PADD 5 West Coast) & CARB Regulatory Cost Display  ### Summary Expand Midgley's regional forecasting capabilities by adding **Oakland, CA & the San Francisco Bay Area (PADD 5 West Coast)** as a dedicated regional model and public dashboard locale"
+  },
+  {
+    "number": 35,
+    "title": "feat(dashboard): Detail unique regional drivers & physical infrastructure factors across all metro dashboard pages",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Overview & Feature Description  Enhance all localized regional public web dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/oakland`, and `/bayarea`) to display dedicated visual cards detailing their unique regional econometric drivers, refining logistics, tax structures, delivery hub dynami"
+  },
+  {
+    "number": 37,
+    "title": "feat(embeds): Open Graph & Discord card embeds with auto-generated forecast preview images for regional pages",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Overview & Feature Description  When links to Midgley regional dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/oakland`, `/bayarea`, `/national`, or `/math`) are shared on **Discord**, **Twitter/X**, **Slack**, or **iMessage**, Discord currently renders either a plain link preview or an un"
+  },
+  {
+    "number": 40,
+    "title": "feat(security): Implement user authentication & access control for MCP Server & REST API Gateway",
+    "labels": [
+      "enhancement",
+      "api",
+      "security"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "### \ud83d\udd12 Feature Request: User Authentication & Access Control for MCP & REST API  #### Overview Implement an access control mechanism to restrict the Midgley Model Context Protocol (MCP) Server and REST API Gateway to approved users only.  #### Key Requirements 1. **API Key & Bearer Token Authenticati"
+  },
+  {
+    "number": 41,
+    "title": "feat(diesel): Expand Midgley to Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spread Modeling",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "current_milestone_id": 6,
+    "current_milestone_title": "Diesel Model v1.0 \"Diesel\"",
+    "body_snippet": "### \ud83d\ude9a Feature Proposal: Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spread Modeling  #### \ud83d\udee2\ufe0f Overview & Feature Vision Expand `midgley` beyond Unleaded RBOB Gasoline (`RB=F`) by introducing a full quantitative forecasting engine, physical feature pipeline, regional calibration agen"
+  },
+  {
+    "number": 43,
+    "title": "feat(evaluation): Add Naive Persistence Baseline & NYMEX Futures-Implied Benchmark Comparisons",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "current_milestone_id": 5,
+    "current_milestone_title": "Regular Model v2.0 \"Hubbert\"",
+    "body_snippet": "### Context & Motivation Evaluating model directional hit rate (e.g. 60.79%) in isolation does not demonstrate model superiority over trivial baselines, as a naive 'price stays flat' (persistence) guess wins ~40-50% of the time on a 5-day horizon.  ### Proposed Implementation 1. Compute and report t"
+  },
+  {
+    "number": 45,
+    "title": "refactor(cache): Implement Provenance Chains and Stale-While-Revalidate (SWR) Cache Architecture",
+    "labels": [
+      "bug",
+      "enhancement",
+      "infrastructure"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "### Context & Motivation Prevent state vs. metro level data leaking (e.g. California statewide price average appearing in Oakland metro responses) and replace raw cache age disclosures with robust cache status semantics.  ### Proposed Implementation 1. Add explicit provenance metadata (\\source\\, \\\re"
+  },
+  {
+    "number": 49,
+    "title": "feat(mcp): Expose Fuel Market Shock Simulation Tools & Scenario Catalog via MCP Server",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "current_milestone_id": 5,
+    "current_milestone_title": "Regular Model v2.0 \"Hubbert\"",
+    "body_snippet": "### Context & Motivation Counterfactual market shock simulation (refinery fires, Hormuz blockades, weather disasters) is a core Midgley engine feature, but needs complete feature parity and rich prompt templates in the Model Context Protocol (MCP) server interface.  ### Proposed Implementation 1. En"
+  },
+  {
+    "number": 52,
+    "title": "feat(docs/math): Leverage CodeCogs LaTeX rendering service for equation images across GitHub Markdown & web embeds",
+    "labels": [
+      "documentation",
+      "enhancement"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "### Summary & Context Currently, mathematical equations across the project\u2014including in `AGENTS.md`, `README.md`, GitHub pull requests/issues, and the public web dashboard (`docs/math.html`)\u2014rely on raw LaTeX text notation (`$$\\dots$$`, `\\(\\dots\\)`) or client-side JavaScript rendering via KaTeX.  Wh"
+  },
+  {
+    "number": 53,
+    "title": "feat(core-api): Monitor open-access research papers via CORE API during weekly self-review",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Feature Overview Integrate the [CORE API](https://core.ac.uk/services/api) (`https://api.core.ac.uk/v3/`) as an open-access research literature data source into the weekly model review pipeline (`.github/workflows/weekly_model_review.yml` and `src/weekly_issue_reporter.py`).   Similar to the arXi"
+  },
+  {
+    "number": 54,
+    "title": "feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "# \ud83d\udca8 Architecture Plan: Multi-Feed Air Quality (AQI) Ingestion & Refinery Outage Early Detection System  ## Executive Summary This feature establishes an **Air Quality (AQI) & Industrial Emissions Extraction Subsystem** (`src/aqi_feed.py`) in Midgley. By ingesting real-time air quality metrics ($\\tex"
+  },
+  {
+    "number": 55,
+    "title": "Feature: Ingest live USGS Earthquake API feeds (fdsnws/event/1/) for real-time seismic fuel market risk scoring",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "### Feature Overview Integrate direct API ingestion from the **USGS Earthquake Web Service API** ([https://earthquake.usgs.gov/fdsnws/event/1/](https://earthquake.usgs.gov/fdsnws/event/1/)) into the data ingestion pipeline (src/usgs_seismic.py, src/oakland_regional.py, src/noaa_weather.py) to replac"
+  },
+  {
+    "number": 56,
+    "title": "feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Feature Proposal: USGS Water Data Telemetry Integration (`api.waterdata.usgs.gov`)  Integrate real-time streamflow, gage height, water temperature, and specific conductance telemetry from the **USGS Water Data API** (`api.waterdata.usgs.gov` / `waterservices.usgs.gov`) into the Midgley Multi-Agen"
+  },
+  {
+    "number": 67,
+    "title": "[Feature Request] Ingest BriefTape AI-Summarized SEC 8-K & Policy Event Stream",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate **BriefTape** (\\\brieftape.com\\) REST API (10,000 free keyless calls/day) to ingest pre-summarized SEC 8-K filings for major refining tickers (\\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\, \\CVX\\) and Federal Reserve / BLS policy releases.  ## Motivations & Value - **Refinery Outage Intelli"
+  },
+  {
+    "number": 68,
+    "title": "[Feature Request] Ingest Congressional Energy Equity Trading Signals (CongressInvests API)",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate the **CongressInvests API** (\\congressinvests.com\\) (100 free keyless calls/day) to track STOCK Act disclosures by U.S. Senators and Representatives trading major energy and refining equities (\\CVX\\, \\XOM\\, \\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\).  ## Motivations & Value - **Insider"
+  },
+  {
+    "number": 69,
+    "title": "[Feature Request] Ingest SEC EDGAR Official Refinery 8-K Outage Filings (sec.gov API)",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Summary Integrate the official, 100% free **U.S. SEC EDGAR API** (\\data.sec.gov\\) into \\src/sec_edgar_feed.py\\ to track official Item 8.01 material event 8-K filings for major U.S. oil refining corporations (PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66).  ## Motivations & Valu"
+  },
+  {
+    "number": 70,
+    "title": "[Feature Request] Implement OpenFIGI Cross-Market Symbol Normalization Service",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "integration"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate the **OpenFIGI API** (\\openfigi.com\\) (25 free keyless calls/min) into \\src/symbol_mapper.py\\ to standardize financial instrument tickers across FRED, EIA, SEC CIKs, and NYMEX commodity futures.  ## Motivations & Value - **Cross-Source Entity Resolution:** Unifies symbol definit"
+  },
+  {
+    "number": 71,
+    "title": "[Feature Request] Ingest Tradestie Reddit Retail Energy Sentiment Feed",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate the **Tradestie Reddit API** (\\\tradestie.com\\) keyless endpoint into \\src/tradestie_sentiment_feed.py\\ to extract retail investor discussion sentiment and comment volume for energy tickers (\\XOM\\, \\CVX\\, \\MPC\\, \\VLO\\, \\USO\\).  ## Motivations & Value - **Alternative Retail Moment"
+  },
+  {
+    "number": 72,
+    "title": "[Feature Request] Ingest Open-Meteo High-Resolution Regional Temperature & Freeze Shocks",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Summary Integrate the official, 100% free, keyless **Open-Meteo API** (\\open-meteo.com\\) into \\src/noaa_weather.py\\ to extract high-resolution regional temperature grid forecasts, polar vortex anomalies, and freeze-off risks in Cushing WTI and Tulsa refining corridors.  ## Motivations & Value - *"
+  },
+  {
+    "number": 75,
+    "title": "[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Summary Integrate the **U.S. Census Bureau API** (\\^Gpi.census.gov\\) (100% free public government API) to fetch household vehicle availability, mean commute duration, and demographic density across our 5 target metro areas (Tulsa OK, Newark DE, Cincinnati OH, Greenville NC, Oakland/Bay Area CA). "
+  },
+  {
+    "number": 76,
+    "title": "[Feature Request] Ingest Frankfurter ECB Foreign Exchange Rates (USD Trade Index)",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Summary Integrate the **Frankfurter API** (\\\frankfurter.app\\) (100% free, keyless, unlimited currency conversion API) into \\src/\\ to track ECB foreign exchange rates (USD/EUR, USD/CAD, USD/CNY).  ## Motivations & Value - **Macro FX Impact:** Fluctuations in USD exchange rates against major tradin"
+  },
+  {
+    "number": 78,
+    "title": "[Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "# [Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers  This is a long-term roadmap issue to track ongoing enhancements, integrations, and new triggers for **Strategy 4 (Incoming Webhook Gateway)** on the Midgley API Gateway (\\POST /api/v1/events/webhook\\).  ## Overview"
+  },
+  {
+    "number": 79,
+    "title": "[Feature Request] Ingest AlphaAI Scored Insider & Financial News Event Stream",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate the **AlphaAI API & MCP Server** (\\^Glphai.io/developers\\) (20 free req/min, 100 req/day REST/MCP) into \\src/event_analyzer.py\\ to ingest per-ticker financial news impact scores and SEC Form 4 insider trade events for energy refiners (\\XOM\\, \\CVX\\, \\MPC\\, \\VLO\\, \\PSX\\, \\DINO\\, \\"
+  },
+  {
+    "number": 82,
+    "title": "[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate **Neon Serverless Postgres** (\\ eon.tech\\) or **Cloudflare D1** (\\cloudflare.com\\) (free tier) into \\src/prediction_logger.py\\ and \\src/lookup_cache.py\\ to maintain a cloud-synchronized relational store for out-of-time prediction history and symbol lookup caches.  ## Motivations"
+  },
+  {
+    "number": 83,
+    "title": "[Feature Request] Ingest Firecrawl Web-to-Markdown API for LLM Event Extraction",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 5,
+    "current_milestone_title": "Regular Model v2.0 \"Hubbert\"",
+    "body_snippet": "## Summary Integrate the **Firecrawl Web Scraping API** (\\\firecrawl.dev\\) (1,000 free credits/month) into \\src/event_analyzer.py\\ to convert raw HTML from news bulletins, state motor fuel tax portals, and refinery press releases into clean, LLM-ready Markdown.  ## Motivations & Value - **Clean LLM I"
+  },
+  {
+    "number": 84,
+    "title": "[Feature Request] Integrate Tavily AI Search API for Real-Time Anomaly Event RAG",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate the **Tavily AI Search API** (\\\tavily.com\\) (1,000 search queries/month free) into \\src/intraday_event_monitor.py\\ to execute targeted web searches when intraday anomaly triggers occur.  ## Motivations & Value - **RAG Search Engine for AI Agents:** Purpose-built for LLM RAG pipe"
+  },
+  {
+    "number": 87,
+    "title": "[Feature Request] Implement IPASIS API Gateway Security for Incoming Webhooks",
+    "labels": [
+      "enhancement",
+      "api",
+      "security"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate the **IPASIS API** (\\ipasis.com\\) (1,000 requests/day free, no credit card required) into \\src/api_server.py\\ to filter incoming push webhook traffic (\\POST /api/v1/events/webhook\\).  ## Motivations & Value - **Webhook Gateway Security:** Provides real-time IP reputation checks,"
+  },
+  {
+    "number": 88,
+    "title": "[Feature Request] Implement Shipyard Cloud Data Orchestration Runner",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Summary Integrate **Shipyard** (\\shipyardapp.com\\) (10 hours cloud runtime/month free) as an automated cloud data orchestration platform for Midgley's Python data ingestion scripts.  ## Motivations & Value - **Cloud Orchestration:** Automates multi-step data pipelines (EIA, FRED, NOAA NWS, BriefT"
+  },
+  {
+    "number": 89,
+    "title": "[Feature Request] Ingest SearchApi Google SERP Data for Geopolitical Event Extraction",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate **SearchApi** (\\searchapi.io\\) (100 free successful API calls/month) into \\src/intraday_event_monitor.py\\ to retrieve structured Google SERP JSON data for breaking energy news and geopolitical events.  ## Motivations & Value - **Structured SERP Extraction:** Delivers structured "
+  },
+  {
+    "number": 91,
+    "title": "[Feature Request] Interactive Fill-Up Timing & Estimated Savings Advisor Page",
+    "labels": [
+      "enhancement",
+      "dashboard"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "### Feature Description  Implement a dedicated **Fill-Up Timing & Estimated Savings Advisor** interactive page (\\docs/savings.html\\ / \\/savings\\) that uses Midgley's 5-day out-of-time price trajectory forecasts to calculate exact tank savings by waiting to fill up vs. buying fuel today.  ### Key Cap"
+  },
+  {
+    "number": 95,
+    "title": "[Feature Request] Implement GeoPandas Spatial Refinery Distance Buffering for Metro Agents",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Summary Integrate **\\GeoPandas\\** (\\github.com/geopandas/geopandas\\) into \\src/*_regional.py\\ to perform spatial distance-decay calculation from refineries and delivery hubs to regional retail gas station clusters.  ## Motivations & Value - **Geospatial Distance-Decay:** Calculates spatial distan"
+  },
+  {
+    "number": 97,
+    "title": "[Feature Request] Deploy Self-Hosted ArchiveBox for Historical News & Event Preservation",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure"
+    ],
+    "current_milestone_id": 4,
+    "current_milestone_title": "Regular Model v1.6 \"Ipatieff\"",
+    "body_snippet": "## Summary Deploy **\\ArchiveBox\\** (\\github.com/ArchiveBox/ArchiveBox\\) (open-source Python/Docker web archiving server) on \\dev-vm\\ to snapshot and preserve historical news articles, OPEC press releases, and refinery outage notices.  ## Motivations & Value - **Historical Text Preservation:** Create"
+  },
+  {
+    "number": 101,
+    "title": "[Feature Request] Implement Cloudflare Tunnels for Secure Dev VM Port & API Exposure",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling",
+      "security"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Summary Integrate **Cloudflare Tunnels** (\\\trycloudflare.com\\ / \\cloudflared\\) (100% free zero-trust tunneling, unlimited bandwidth) to securely expose \\dev-vm\\ web dashboard (port 8080) and FastAPI/MCP gateway (port 8000) to the internet.  ## Motivations & Value - **Zero-Trust Network Access:** "
+  },
+  {
+    "number": 102,
+    "title": "[Feature Request] Implement Kaggle GPU/TPU Open-Source LLM Quota Safety Fallback",
+    "labels": [
+      "enhancement",
+      "token-efficiency",
+      "infrastructure",
+      "modeling",
+      "dashboard"
+    ],
+    "current_milestone_id": 5,
+    "current_milestone_title": "Regular Model v2.0 \"Hubbert\"",
+    "body_snippet": "## Summary Integrate **Kaggle API & GPU/TPU Kernels** (30 free GPU hours/week + 20 TPU hours/week) as an automated secondary LLM fallback engine for \\src/event_analyzer.py\\.  ## Motivations & Value - **Zero-Cost LLM Quota Safety Valve:** Provides open-source LLM inference (e.g., Qwen 2.5 7B, Llama 3"
+  },
+  {
+    "number": 105,
+    "title": "feat(dashboard): Add Last Run Intelligence Audit Box to Overview Landing Page",
+    "labels": [
+      "enhancement",
+      "dashboard"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Feature Overview  Add an interactive **Last Run Intelligence & Impact Audit Box** on the public overview landing page (docs/index.html), positioned between the **Hero Section** and the **Active Forecast Locales Grid**.  ### Key Requirements 1. **Trigger Context:** Display what prompted the latest"
+  },
+  {
+    "number": 107,
+    "title": "[Feature Request] Implement System Telemetry & Observability Metrics Engine for Grafana (Token Usage, API Quotas, Latency & Errors)",
+    "labels": [
+      "enhancement",
+      "token-efficiency",
+      "infrastructure"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Terminology Note The industry standard terms for tracking non-mathematical compute performance, token consumption, API limits, runtime latencies, and system errors are: - **System Telemetry / Operational Telemetry** - **Observability** - **Operational Metrics (Compute/System Metrics)** - **Applic"
+  },
+  {
+    "number": 108,
+    "title": "[Feature Request] Optimize Call Duplication & API Quota Usage Between Dev VM and Production Environments",
+    "labels": [
+      "enhancement",
+      "token-efficiency",
+      "data-ingestion",
+      "infrastructure",
+      "api"
+    ],
+    "current_milestone_id": 3,
+    "current_milestone_title": "Regular Model v1.5 \"Houdry\"",
+    "body_snippet": "## Problem Statement  Midgley operates across dual environment modalities: 1. **Production Cloud Runners**: Scheduled GitHub Actions workflows (`gas_price_forecast.yml`, `weekly_model_review.yml`). 2. **Local Dev VM (`dev-vm`) & Workspaces**: `10.42.42.54` local dev server, background daemons, and d"
+  },
+  {
+    "number": 109,
+    "title": "[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "current_milestone_id": 5,
+    "current_milestone_title": "Regular Model v2.0 \"Hubbert\"",
+    "body_snippet": "## Summary Automatically discovered new candidate tool **[Open-Meteo Ensemble](https://open-meteo.com/en/docs/ensemble-api)** from developer catalog \\`public-apis\\`.  **Description:** Weather ensemble forecasts from multiple models | No | Yes | Yes  ## Modeling Evaluation & Value - **Modeling Catego"
+  }
+]

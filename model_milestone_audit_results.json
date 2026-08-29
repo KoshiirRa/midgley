@@ -1,0 +1,607 @@
+{
+  "summary": {
+    "total_analyzed": 41,
+    "kept_count": 23,
+    "reassigned_count": 18
+  },
+  "reassigned_issues": [
+    {
+      "number": 20,
+      "title": "feat(home-assistant): Add Home Assistant dashboard module & metro area gas price forecast integration",
+      "labels": [
+        "enhancement",
+        "integration"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Home Assistant custom Lovelace UI card & HA sensor component. External ecosystem UI integration."
+    },
+    {
+      "number": 21,
+      "title": "feat(android-auto): Android Auto in-dash gas price & 5-day forecast fuel assistant app",
+      "labels": [
+        "enhancement",
+        "integration"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Android Auto androidx.car.app UI & head unit display app. Mobile vehicle UI integration."
+    },
+    {
+      "number": 22,
+      "title": "feat(lubelogger): LubeLogger integration for predictive vehicle tank refill & fuel cost optimization",
+      "labels": [
+        "enhancement",
+        "integration"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "LubeLogger vehicle maintenance API integration & UI cost calculator."
+    },
+    {
+      "number": 35,
+      "title": "feat(dashboard): Detail unique regional drivers & physical infrastructure factors across all metro dashboard pages",
+      "labels": [
+        "documentation",
+        "enhancement",
+        "dashboard"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Dashboard frontend layout change displaying regional drivers across web pages (docs/)."
+    },
+    {
+      "number": 37,
+      "title": "feat(embeds): Open Graph & Discord card embeds with auto-generated forecast preview images for regional pages",
+      "labels": [
+        "documentation",
+        "enhancement",
+        "dashboard"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Open Graph & Discord preview card image generation for social embeds."
+    },
+    {
+      "number": 40,
+      "title": "feat(security): Implement user authentication & access control for MCP Server & REST API Gateway",
+      "labels": [
+        "enhancement",
+        "api",
+        "security"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "User authentication, JWT token auth, and API gateway access control."
+    },
+    {
+      "number": 45,
+      "title": "refactor(cache): Implement Provenance Chains and Stale-While-Revalidate (SWR) Cache Architecture",
+      "labels": [
+        "bug",
+        "enhancement",
+        "infrastructure"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Stale-While-Revalidate (SWR) cache architecture & provenance chain headers for API server."
+    },
+    {
+      "number": 52,
+      "title": "feat(docs/math): Leverage CodeCogs LaTeX rendering service for equation images across GitHub Markdown & web embeds",
+      "labels": [
+        "documentation",
+        "enhancement"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "CodeCogs LaTeX rendering service for equation images across Markdown docs & web embeds."
+    },
+    {
+      "number": 53,
+      "title": "feat(core-api): Monitor open-access research papers via CORE API during weekly self-review",
+      "labels": [
+        "documentation",
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Weekly review workflow & research paper monitoring tool."
+    },
+    {
+      "number": 78,
+      "title": "[Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers",
+      "labels": [
+        "enhancement",
+        "integration",
+        "api"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "REST API server webhook gateway & event trigger routing."
+    },
+    {
+      "number": 87,
+      "title": "[Feature Request] Implement IPASIS API Gateway Security for Incoming Webhooks",
+      "labels": [
+        "enhancement",
+        "api",
+        "security"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "HMAC security validation & API gateway network filtering."
+    },
+    {
+      "number": 88,
+      "title": "[Feature Request] Implement Shipyard Cloud Data Orchestration Runner",
+      "labels": [
+        "enhancement",
+        "infrastructure"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Cloud infrastructure orchestration runner for task deployment."
+    },
+    {
+      "number": 91,
+      "title": "[Feature Request] Interactive Fill-Up Timing & Estimated Savings Advisor Page",
+      "labels": [
+        "enhancement",
+        "dashboard"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Interactive web application advisor page (docs/) for consumer fill-up savings calculation."
+    },
+    {
+      "number": 97,
+      "title": "[Feature Request] Deploy Self-Hosted ArchiveBox for Historical News & Event Preservation",
+      "labels": [
+        "enhancement",
+        "data-ingestion",
+        "infrastructure"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Dev VM infrastructure archive tool for news preservation."
+    },
+    {
+      "number": 101,
+      "title": "[Feature Request] Implement Cloudflare Tunnels for Secure Dev VM Port & API Exposure",
+      "labels": [
+        "enhancement",
+        "data-ingestion",
+        "infrastructure",
+        "modeling",
+        "security"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Dev VM networking infrastructure exposing ports via Cloudflare Tunnel."
+    },
+    {
+      "number": 105,
+      "title": "feat(dashboard): Add Last Run Intelligence Audit Box to Overview Landing Page",
+      "labels": [
+        "enhancement",
+        "dashboard"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Dashboard UI component audit box on index.html landing page."
+    },
+    {
+      "number": 107,
+      "title": "[Feature Request] Implement System Telemetry & Observability Metrics Engine for Grafana (Token Usage, API Quotas, Latency & Errors)",
+      "labels": [
+        "enhancement",
+        "token-efficiency",
+        "infrastructure"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Grafana telemetry metrics engine, latency tracking, and API quota monitoring."
+    },
+    {
+      "number": 108,
+      "title": "[Feature Request] Optimize Call Duplication & API Quota Usage Between Dev VM and Production Environments",
+      "labels": [
+        "enhancement",
+        "token-efficiency",
+        "data-ingestion",
+        "infrastructure",
+        "api"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": true,
+      "recommended_action": "REASSIGN to v0.4",
+      "target_milestone": "v0.4",
+      "rationale": "Multi-environment call optimization & cache gateway (the explicit theme of Milestone #2 v0.4!)."
+    }
+  ],
+  "kept_issues": [
+    {
+      "number": 34,
+      "title": "feat(oakland): Add Oakland, CA Metro Area (PADD 5 West Coast) Regional Forecasting & CARB Regulatory Display",
+      "labels": [
+        "enhancement",
+        "modeling",
+        "dashboard"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.6 \"Ipatieff\"",
+      "target_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 41,
+      "title": "feat(diesel): Expand Midgley to Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spread Modeling",
+      "labels": [
+        "enhancement",
+        "modeling"
+      ],
+      "current_milestone": "Diesel Model v1.0 \"Diesel\"",
+      "current_milestone_id": 6,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Diesel Model v1.0 \"Diesel\"",
+      "target_milestone": "Diesel Model v1.0 \"Diesel\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 43,
+      "title": "feat(evaluation): Add Naive Persistence Baseline & NYMEX Futures-Implied Benchmark Comparisons",
+      "labels": [
+        "enhancement",
+        "modeling"
+      ],
+      "current_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "current_milestone_id": 5,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v2.0 \"Hubbert\"",
+      "target_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 49,
+      "title": "feat(mcp): Expose Fuel Market Shock Simulation Tools & Scenario Catalog via MCP Server",
+      "labels": [
+        "enhancement",
+        "integration",
+        "api"
+      ],
+      "current_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "current_milestone_id": 5,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v2.0 \"Hubbert\"",
+      "target_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 54,
+      "title": "feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 55,
+      "title": "Feature: Ingest live USGS Earthquake API feeds (fdsnws/event/1/) for real-time seismic fuel market risk scoring",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 56,
+      "title": "feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 67,
+      "title": "[Feature Request] Ingest BriefTape AI-Summarized SEC 8-K & Policy Event Stream",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 68,
+      "title": "[Feature Request] Ingest Congressional Energy Equity Trading Signals (CongressInvests API)",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 69,
+      "title": "[Feature Request] Ingest SEC EDGAR Official Refinery 8-K Outage Filings (sec.gov API)",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.6 \"Ipatieff\"",
+      "target_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 70,
+      "title": "[Feature Request] Implement OpenFIGI Cross-Market Symbol Normalization Service",
+      "labels": [
+        "enhancement",
+        "modeling",
+        "integration"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 71,
+      "title": "[Feature Request] Ingest Tradestie Reddit Retail Energy Sentiment Feed",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 72,
+      "title": "[Feature Request] Ingest Open-Meteo High-Resolution Regional Temperature & Freeze Shocks",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.6 \"Ipatieff\"",
+      "target_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 75,
+      "title": "[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.6 \"Ipatieff\"",
+      "target_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 76,
+      "title": "[Feature Request] Ingest Frankfurter ECB Foreign Exchange Rates (USD Trade Index)",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.6 \"Ipatieff\"",
+      "target_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 79,
+      "title": "[Feature Request] Ingest AlphaAI Scored Insider & Financial News Event Stream",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 82,
+      "title": "[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)",
+      "labels": [
+        "enhancement",
+        "infrastructure"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 83,
+      "title": "[Feature Request] Ingest Firecrawl Web-to-Markdown API for LLM Event Extraction",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "current_milestone_id": 5,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v2.0 \"Hubbert\"",
+      "target_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 84,
+      "title": "[Feature Request] Integrate Tavily AI Search API for Real-Time Anomaly Event RAG",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 89,
+      "title": "[Feature Request] Ingest SearchApi Google SERP Data for Geopolitical Event Extraction",
+      "labels": [
+        "enhancement",
+        "data-ingestion"
+      ],
+      "current_milestone": "Regular Model v1.5 \"Houdry\"",
+      "current_milestone_id": 3,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
+      "target_milestone": "Regular Model v1.5 \"Houdry\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 95,
+      "title": "[Feature Request] Implement GeoPandas Spatial Refinery Distance Buffering for Metro Agents",
+      "labels": [
+        "enhancement",
+        "modeling"
+      ],
+      "current_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "current_milestone_id": 4,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v1.6 \"Ipatieff\"",
+      "target_milestone": "Regular Model v1.6 \"Ipatieff\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 102,
+      "title": "[Feature Request] Implement Kaggle GPU/TPU Open-Source LLM Quota Safety Fallback",
+      "labels": [
+        "enhancement",
+        "token-efficiency",
+        "infrastructure",
+        "modeling",
+        "dashboard"
+      ],
+      "current_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "current_milestone_id": 5,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v2.0 \"Hubbert\"",
+      "target_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    },
+    {
+      "number": 109,
+      "title": "[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)",
+      "labels": [
+        "enhancement",
+        "data-ingestion",
+        "modeling"
+      ],
+      "current_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "current_milestone_id": 5,
+      "is_non_model": false,
+      "recommended_action": "KEEP in Regular Model v2.0 \"Hubbert\"",
+      "target_milestone": "Regular Model v2.0 \"Hubbert\"",
+      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+    }
+  ]
+}
