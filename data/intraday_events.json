@@ -362,5 +362,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-29T11:15:34.351238",
+    "headline": "Tariffs for oil? - The Kingston Whig Standard",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5fLWh3blR1N2xYX2Qxbkw1SlMxQ2tZRDJiQmpTeG8xRWJtUkxlU21NN3U1ZFFXZEdNNzVkaXRDSi02NzNtUUdHdHh6ekZsWTgxOS1Ybzg4TnF0VTA?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]

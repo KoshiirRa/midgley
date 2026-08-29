@@ -3025,7 +3025,6 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 02:55:07,2026-08-26,BayArea_CA,v1.4-BayArea-Ridge,5.4979,5.3781,DOWN,5.4701,DOWN,0.092,1.0,DAILY_BATCH,
 2026-08-29 02:55:08,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.7729,DOWN,,,,,DAILY_BATCH,
 2026-08-29 02:55:08,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.8693,DOWN,,,,,DAILY_BATCH,
-2026-08-29 06:45:34,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,Alberta Premier rejects oil and gas export tax in U.S. tariff tussle during visit to Grande Prairie - Edmonton Journal
 2026-08-29 07:00:35,2025-09-30,National,v1.4-Finlight-National-Ridge,2.0022,1.9459,DOWN,1.9729,DOWN,0.027,1.0,DAILY_BATCH,
 2026-08-29 07:00:35,2025-10-01,National,v1.4-Finlight-National-Ridge,2.0376,1.982,DOWN,1.8859,DOWN,0.0961,1.0,DAILY_BATCH,
 2026-08-29 07:00:35,2025-10-04,National,v1.4-Finlight-National-Ridge,1.9951,1.9569,DOWN,,,,,DAILY_BATCH,
@@ -4171,3 +4170,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 07:00:41,2026-08-26,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.6907,3.5829,DOWN,3.7451,UP,0.1622,0.0,DAILY_BATCH,
 2026-08-29 07:00:42,2026-09-02,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,3.903,3.7773,DOWN,,,,,DAILY_BATCH,
 2026-08-29 07:00:42,2026-09-02,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.727,3.6069,DOWN,,,,,DAILY_BATCH,
+2026-08-29 11:15:34,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,Tariffs for oil? - The Kingston Whig Standard
