@@ -558,5 +558,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.4
     }
+  },
+  {
+    "timestamp": "2026-08-29T22:16:40.090636",
+    "headline": "US And Iran Exchange Strikes, Trump Begins Rebuilding Tariff Wall | The Opening Trade 6/3/2026 Brock Stewart (7pxajata41) - Mshale",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBhWGRHRFJCNk9KdEd3X2NVZk1YOWpDREtjRHMxZnZvV0FUbWV5Q29ZUWhWMHhRdHBKaVJINFg2cWVJeDFoYkVpRWxvTmswNy1FbDFfOGd3TWxHSHM?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.8,
+      "demand_sentiment": -0.8,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.65
+    }
   }
 ]
