@@ -22,17 +22,26 @@ Gotta give credit where credit is due! 🎓
 ## 🔬 Implementation Details by Paper
 
 ### 1. `2608.25128v1` — Pre-Training Diagnostic ($\rho_h$ vs $\Delta$)
+
 * **Location:** [`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py) (`compute_autocorrelation_diagnostic()`)
 * **Equations:**
-  $$\text{MMSE}(X_{t+h} \mid X_t, C) = \sigma^2 (1 - \rho_h^2) \cdot 2^{-2\delta}$$
-  $$\text{RBU} = 1 - 2^{-2\delta}$$
-* **Logic:** Calculates rolling autocorrelation $\rho_h = \text{Corr}(X_t, X_{t+h})$. If $\rho_h > 0.95$, the diagnostic returns `SKIP_FUSION` (last-value shortcut dominates; event memory weight capped at 0.10). If $\rho_h \le 0.95$, returns `TRY_FUSION` (event memory half-life $t_{1/2} = 5.0\text{ days}$ fully active).
+
+$$\mathrm{MMSE}(X_{t+h} \mid X_t, C) = \sigma^2 (1 - \rho_h^2) \cdot 2^{-2\delta}$$
+
+$$\mathrm{RBU} = 1 - 2^{-2\delta}$$
+
+* **Logic:** Calculates rolling autocorrelation $\rho_h = \mathrm{Corr}(X_t, X_{t+h})$. If $\rho_h > 0.95$, the diagnostic returns `SKIP_FUSION` (last-value shortcut dominates; event memory weight capped at 0.10). If $\rho_h \le 0.95$, returns `TRY_FUSION` (event memory half-life $t_{1/2} = 5.0\text{ days}$ fully active).
 
 ### 2. `2608.25871v1` — CEDAR Two-Stage Residual Decomposition
+
 * **Location:** [`src/event_analyzer.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/event_analyzer.py) (`extract_event_residual_two_stage()`) & [`src/models.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/models.py) (`predict_with_residual_decomposition()`)
 * **Equations:**
-  $$\mathbf{s}_{t+1} = f_\theta(\mathbf{s}_{\le t}, \mathbf{a}_{\le t+1}) + \epsilon_t$$
-* **Logic:** Stage I predicts $\hat{y}_{\text{base}} = f_{\text{quant}}(X)$ using regularized Ridge regression on historical numerical features. Stage II prompts Gemini to perform Stage 1 Tag Extraction (filtering non-energy noise) and Stage 2 Regional Event Synthesis, outputting calibrated residual delta adjustments $\hat{\epsilon}_{\text{event}}$ that are added to $\hat{y}_{\text{base}}$.
+
+$$\mathbf{s}_{t+1} = f_\theta(\mathbf{s}_{\le t}, \mathbf{a}_{\le t+1}) + \epsilon_t$$
+
+$$\hat{y}_{\mathrm{final}} = f_{\mathrm{quant}}(X) + \hat{\epsilon}_{\mathrm{event}}$$
+
+* **Logic:** Stage I predicts $\hat{y}_{\mathrm{base}} = f_{\mathrm{quant}}(X)$ using regularized Ridge regression on historical numerical features. Stage II prompts Gemini to perform Stage 1 Tag Extraction (filtering non-energy noise) and Stage 2 Regional Event Synthesis, outputting calibrated residual delta adjustments $\hat{\epsilon}_{\mathrm{event}}$ that are added to $\hat{y}_{\mathrm{base}}$.
 
 ---
 
