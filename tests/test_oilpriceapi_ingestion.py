@@ -103,13 +103,16 @@ class TestOilPriceAPIIngestion(unittest.TestCase):
 
     def test_fetch_latest_price_benchmark_fallback(self):
         """Verify fallback benchmark response when API key is missing."""
-        connector = OilPriceAPIDataConnector()
-        res_wti = connector.fetch_latest_price("WTI_USD")
-        self.assertEqual(res_wti["code"], "WTI_USD")
-        self.assertGreater(res_wti["price"], 0.0)
-        self.assertEqual(res_wti["currency"], "USD")
-        self.assertEqual(res_wti["status"], "FALLBACK")
-        self.assertTrue(res_wti["is_free_alternative"])
+        connector = OilPriceAPIDataConnector(api_key=None)
+        connector.api_key = None
+        with patch("src.lookup_cache.global_cache.get", return_value=None), \
+             patch.object(connector, "_get_cached_response", return_value=None):
+            res_wti = connector.fetch_latest_price("WTI_USD")
+            self.assertEqual(res_wti["code"], "WTI_USD")
+            self.assertGreater(res_wti["price"], 0.0)
+            self.assertEqual(res_wti["currency"], "USD")
+            self.assertEqual(res_wti["status"], "FALLBACK")
+            self.assertTrue(res_wti["is_free_alternative"])
 
         res_rbob = connector.fetch_latest_price("RBOB_USD")
         self.assertEqual(res_rbob["code"], "RBOB_USD")

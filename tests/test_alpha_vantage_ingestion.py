@@ -80,8 +80,9 @@ class TestAlphaVantageIngestion(unittest.TestCase):
         with open(self.cache_path, "w", encoding="utf-8") as f:
             json.dump({cache_key: sample_payload}, f)
 
-        # Mock off-hours (is_trading_hours -> False)
-        with patch.object(connector, "is_trading_hours", return_value=False):
+        # Mock off-hours (is_trading_hours -> False) and bypass global_cache to test local file fixture
+        with patch.object(connector, "is_trading_hours", return_value=False), \
+             patch("src.lookup_cache.global_cache.get", return_value=None):
             res = connector.fetch_energy_equity_series("XLE")
             self.assertEqual(res["symbol"], "XLE")
             self.assertEqual(res["close_price"], 89.50)
