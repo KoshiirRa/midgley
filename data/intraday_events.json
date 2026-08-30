@@ -642,5 +642,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.85
     }
+  },
+  {
+    "timestamp": "2026-08-30T13:46:29.547231",
+    "headline": "India, China, Canada and more: 10 countries still under Trump\u2019s tariff squeeze and why - The Times of India",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOYVFrU3J0R2dDV2laRTlZcGYxakVLcGlfTDZWZno2UVpTaW5yalF5QTc5eWNxZGhNMld1Q00xSEdoeTlCYy16RUJIYWZHbjA5QTVYRHM5SG9fSlk5aFJwWklJQXF3MmNlN0JFT3dvLUhXTFhrM1JEVjhuM05jQ3N0ekFWaE9qWndFOFczdWo3V2d2Y3l5bWhTR3FOSTJZV0l3OWVfcTNQYUJ3TElGNzBXOThER3cyTTVHYzBOWHhCVzNTMDBBNEhWTWVBbXlGWXVYc0o2U05UN0t4WGZFYVhPaDY4R2pZZUdYbTNlWHBkMF9kTHpoY2U5Slpic2k?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.5,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    }
   }
 ]

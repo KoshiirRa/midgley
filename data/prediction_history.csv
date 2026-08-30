@@ -2124,7 +2124,6 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 03:06:35,2026-08-31,BayArea_CA,v1.4-BayArea-Ridge,5.4701,5.4187,DOWN,,,,,DAILY_BATCH,
 2026-08-29 03:06:35,2026-09-01,BayArea_CA,v1.4-BayArea-Ridge,5.5342,5.4637,DOWN,,,,,DAILY_BATCH,
 2026-08-29 22:16:40,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2668,UP,,,,,INTRADAY_REVISION,"US And Iran Exchange Strikes, Trump Begins Rebuilding Tariff Wall | The Opening Trade 6/3/2026 Brock Stewart (7pxajata41) - Mshale"
-2026-08-30 11:17:30,2026-09-04,National,v1.4-Finlight-Intraday,3.184,3.2923,UP,,,,,INTRADAY_REVISION,Mines cleared and oil flowing from Strait of Hormuz; US blockading Iran - todayville.com
 2026-08-30 12:59:20,2025-09-30,National,v1.4-Finlight-National-Ridge,2.0022,1.9499,DOWN,1.9729,DOWN,0.023,1.0,DAILY_BATCH,
 2026-08-30 12:59:20,2025-10-01,National,v1.4-Finlight-National-Ridge,2.0376,1.9842,DOWN,1.8859,DOWN,0.0983,1.0,DAILY_BATCH,
 2026-08-30 12:59:20,2025-10-04,National,v1.4-Finlight-National-Ridge,1.9951,1.9557,DOWN,,,,,DAILY_BATCH,
@@ -4188,3 +4187,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-30 13:05:29,2026-08-26,BayArea_CA,v1.4-BayArea-Ridge,5.4979,5.3847,DOWN,5.4701,DOWN,0.0854,1.0,DAILY_BATCH,
 2026-08-30 13:05:30,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,5.68,5.488,DOWN,,,,,DAILY_BATCH,
 2026-08-30 13:05:30,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.68,5.488,DOWN,,,,,DAILY_BATCH,
+2026-08-30 13:46:29,2026-09-04,National,v1.4-Finlight-Intraday,3.184,3.1331,DOWN,,,,,INTRADAY_REVISION,"India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India"
