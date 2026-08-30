@@ -1,6 +1,10 @@
 """
 Social Embed Image Generator (src/social_embed_generator.py)
 Generates high-resolution 1200x630px dark-mode preview card PNGs for Open Graph & Discord embeds across all Midgley web dashboard routes.
+
+DEV vs PRODUCTION ENVIRONMENT NOTE:
+All Open Graph (og:image) and Twitter Card (twitter:image) metadata tags injected into docs/*.html resolve to absolute production URLs (https://koshiirra.github.io/midgley/assets/embeds/<locale>.png).
+Consequently, embed card images will only render in production (GitHub Pages) when crawled by Discord, Twitter/X, or Slack, and will not preview local uncommitted dev changes when viewing locally via dev-vm:8080 or file://.
 """
 
 import os

@@ -213,10 +213,19 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`)
+### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py` & `src/social_embed_generator.py`)
 
-* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`).
+* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
 * **Dynamic Overview Card Engine:** Dynamically queries real-time live retail pump prices via `fetch_live_metro_retail_price()` for all regional metro cards (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Oakland_CA`, `BayArea_CA`), while preserving NYMEX RBOB commodity futures benchmark pricing ($3.184/gal - $3.270/gal) for the **National Wholesale** contract card.
+* **Automated Social Preview Image Generator (`src/social_embed_generator.py`):**
+  - Uses Matplotlib (`Agg` backend) to generate 10 dark-mode social preview cards (`1200x630px` PNG) in `docs/assets/embeds/` (`national.png`, `tulsa.png`, `newark.png`, `cincinnati.png`, `greenville.png`, `charlotte.png`, `oakland.png`, `bayarea.png`, `overview.png`, `math.png`).
+  - Left panel displays current base price, 5-day projected price, expected delta badge (`+$0.173 (+4.45%)` or `-$0.127 (-3.39%)`), directional color styling (`#10b981` green for drop, `#ef4444` red for surge, `#0ea5e9` sky blue for stable), model directional accuracy, rack margin / tax overhead, and top market driver tagline.
+  - Right panel displays 15-day historical sparkline transitioning into 5-day forecast trajectory with confidence interval shading.
+* **Open Graph & Twitter Card Metadata Tag Injection (`get_head_meta_tags()`):**
+  - Injects Open Graph (`og:site_name`, `og:type`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width="1200"`, `og:image:height="630"`, `og:image:type="image/png"`), Twitter Card (`twitter:card="summary_large_image"`), and Discord accent color (`<meta name="theme-color">`) tags into `<head>` across all 11 HTML dashboard pages.
+* **Dev Environment vs. Production Social Preview Behavior:**
+  - **Production-Only Image Resolution:** All Open Graph (`og:image`) and Twitter Card (`twitter:image`) metadata tags injected into `docs/*.html` resolve to absolute production URLs (`https://koshiirra.github.io/midgley/assets/embeds/<locale>.png`).
+  - **Dev Environment Limitation:** When testing or previewing pages locally in development environments (`dev-vm` on port 8080, `file://`, or local web servers), social link preview cards will point to production-hosted assets on GitHub Pages and will **not** preview local uncommitted dev changes unless deployed to production.
 * **Route Structure & Hierarchy:**
   - **Overview Landing Page (`/` / `docs/index.html`):** Executive overview of the Midgley engine, featuring the dynamic **Last Run Intelligence & Impact Audit Component** (GitHub Issue #105) positioned between the Hero Banner and Active Forecast Locales. Parses `prediction_history.csv` and `intraday_events.json` to display Trigger Context (with linked headline feeds), Mathematical Impact (score bars, half-life $t_{1/2}=5.0\text{d}$, and plain English impact analysis), and Prediction Revisions Delta across all 8 modeled regions with trend direction arrows (`↑`, `↓`, `→`). Includes clickable **Technical Analysis** header routing directly to `technical_breakdown.html`.
   - **Technical Analysis & Specific-Run Math Audit Engine (`/technical_breakdown` / `docs/technical_breakdown.html` & `.md`):** Generates full step-by-step mathematical audits with exact substituted numerical values for every run ($M_0 \dots M_5$, Ridge parameters, 8 regional metro equations, and CARB excise tax notes). Features **Section 5: NOAA SPC-Style Quantitative & Narrative Synopsis** providing run-specific executive summaries, technical market discussion, and catalyst uncertainty scenarios, alongside a **Historical Run Selector Dropdown** and machine-readable JSON exports (`docs/runs/latest.json`, `docs/runs/<run_id>.json`, `docs/runs/index.json`).

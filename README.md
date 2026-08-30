@@ -53,6 +53,7 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/oakland` (Oakland CA Retail)**: Dedicated Oakland / East Bay retail gas forecast featuring CARB regulatory breakdown ($0.953/gal tax burden) and physical risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
 - **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers (including Section 10 multiline `aligned` CARB tax breakdown).
+- **Automated Social Embed Cards**: Dynamic 1200x630px dark-mode Open Graph preview card PNGs (`docs/assets/embeds/*.png`) rendered for Discord, Twitter/X, and Slack link previews. *(Note: Social preview cards resolve to absolute production URLs `https://koshiirra.github.io/midgley/assets/embeds/<locale>.png` and will render live cards in production GitHub Pages).*
 
 ---
 
