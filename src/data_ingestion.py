@@ -224,11 +224,21 @@ class FREDDataConnector:
         }
 
     def fetch_series(self, series_id: str = "GASREGW") -> dict:
+        cache_key = f"fred_{series_id}"
+        try:
+            from src.lookup_cache import global_cache
+            cached = global_cache.get(cache_key)
+            if cached:
+                return cached
+        except Exception:
+            pass
+
         import urllib.request
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
         headers = {"User-Agent": "Midgley-FREDConnector/1.0"}
         
+        result = None
         try:
             req = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(req, timeout=5) as response:
@@ -238,7 +248,7 @@ class FREDDataConnector:
                         last_line = lines[-1].split(',')
                         if len(last_line) == 2 and last_line[1] != '.':
                             val = float(last_line[1])
-                            return {
+                            result = {
                                 "series_id": series_id,
                                 "name": self.series_map.get(series_id, series_id),
                                 "latest_date": last_line[0],
@@ -251,18 +261,27 @@ class FREDDataConnector:
         except Exception as e:
             logger.debug(f"FRED series fetch notice ({series_id}): {e}")
             
-        fallback_vals = {"GASREGW": 3.184, "GASDESW": 3.784, "GASREGWCW": 5.184, "GASREGWGULF": 2.850, "CUUR0000SETB01": 312.5}
-        val = fallback_vals.get(series_id, 3.184)
-        return {
-            "series_id": series_id,
-            "name": self.series_map.get(series_id, series_id),
-            "latest_date": datetime.now().strftime("%Y-%m-%d"),
-            "value": val,
-            "source": "FRED Benchmark Anchor (Zero-Cost)",
-            "is_free_alternative": True,
-            "cost_per_query": 0.0,
-            "timestamp": timestamp_str
-        }
+        if not result:
+            fallback_vals = {"GASREGW": 3.184, "GASDESW": 3.784, "GASREGWCW": 5.184, "GASREGWGULF": 2.850, "CUUR0000SETB01": 312.5}
+            val = fallback_vals.get(series_id, 3.184)
+            result = {
+                "series_id": series_id,
+                "name": self.series_map.get(series_id, series_id),
+                "latest_date": datetime.now().strftime("%Y-%m-%d"),
+                "value": val,
+                "source": "FRED Benchmark Anchor (Zero-Cost)",
+                "is_free_alternative": True,
+                "cost_per_query": 0.0,
+                "timestamp": timestamp_str
+            }
+
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(cache_key, result, ttl_seconds=86400 * 7)
+        except Exception:
+            pass
+
+        return result
 
 
 class EIADataConnector:
@@ -275,8 +294,17 @@ class EIADataConnector:
         self.cost_per_query = 0.0
 
     def fetch_padd_inventory_and_refinery_data(self) -> dict:
+        cache_key = "eia_padd_refinery_inventory"
+        try:
+            from src.lookup_cache import global_cache
+            cached = global_cache.get(cache_key)
+            if cached:
+                return cached
+        except Exception:
+            pass
+
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return {
+        result = {
             "source": "U.S. Energy Information Administration API v2 (Zero-Cost)",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
@@ -296,6 +324,14 @@ class EIADataConnector:
             "status": "SUCCESS"
         }
 
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(cache_key, result, ttl_seconds=86400 * 7)
+        except Exception:
+            pass
+
+        return result
+
 
 class USDABiofuelConnector:
     """
@@ -307,8 +343,17 @@ class USDABiofuelConnector:
         self.cost_per_query = 0.0
 
     def fetch_ethanol_blendstock_costs(self) -> dict:
+        cache_key = "usda_ethanol_blendstock"
+        try:
+            from src.lookup_cache import global_cache
+            cached = global_cache.get(cache_key)
+            if cached:
+                return cached
+        except Exception:
+            pass
+
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return {
+        result = {
             "source": "USDA Agricultural Marketing Service (Zero-Cost)",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
@@ -318,6 +363,14 @@ class USDABiofuelConnector:
             "calculated_e10_blendstock_offset_per_gal": -0.118,
             "status": "SUCCESS"
         }
+
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(cache_key, result, ttl_seconds=86400 * 7)
+        except Exception:
+            pass
+
+        return result
 
 
 class EIAStateMetroRetailConnector:
@@ -340,10 +393,19 @@ class EIAStateMetroRetailConnector:
         }
 
     def fetch_state_retail_price(self, state_code: str = "CA") -> dict:
-        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         st = str(state_code).upper()
+        cache_key = f"eia_state_retail_{st}"
+        try:
+            from src.lookup_cache import global_cache
+            cached = global_cache.get(cache_key)
+            if cached:
+                return cached
+        except Exception:
+            pass
+
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         price = self.state_prices.get(st, 3.250)
-        return {
+        result = {
             "state_code": st,
             "price": price,
             "source": f"U.S. EIA API v2 Weekly Survey ({st})",
@@ -352,10 +414,27 @@ class EIAStateMetroRetailConnector:
             "timestamp": timestamp_str
         }
 
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(cache_key, result, ttl_seconds=86400 * 7)
+        except Exception:
+            pass
+
+        return result
+
     def fetch_metro_retail_price(self, metro_name: str = "SanFrancisco") -> dict:
+        cache_key = f"eia_metro_retail_{metro_name}"
+        try:
+            from src.lookup_cache import global_cache
+            cached = global_cache.get(cache_key)
+            if cached:
+                return cached
+        except Exception:
+            pass
+
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         price = self.metro_prices.get(metro_name, 3.450)
-        return {
+        result = {
             "metro_name": metro_name,
             "price": price,
             "source": f"U.S. EIA API v2 Metro Survey ({metro_name})",
@@ -363,6 +442,14 @@ class EIAStateMetroRetailConnector:
             "cost_per_query": 0.0,
             "timestamp": timestamp_str
         }
+
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(cache_key, result, ttl_seconds=86400 * 7)
+        except Exception:
+            pass
+
+        return result
 
 
 ALPHA_VANTAGE_QUOTA_FILE = os.path.join("data", "alpha_vantage_quota.json")
@@ -472,6 +559,15 @@ class AlphaVantageDataConnector:
         }
 
     def _get_cached_response(self, cache_key: str) -> dict:
+        # Check Tier 1-3 Multi-Tier Cache Gateway (Issue #108 / src/lookup_cache.py)
+        try:
+            from src.lookup_cache import global_cache
+            gateway_val = global_cache.get(f"alphavant_{cache_key}")
+            if gateway_val:
+                return gateway_val
+        except Exception:
+            pass
+
         if os.path.exists(ALPHA_VANTAGE_CACHE_FILE):
             try:
                 with open(ALPHA_VANTAGE_CACHE_FILE, "r", encoding="utf-8") as f:
@@ -483,6 +579,13 @@ class AlphaVantageDataConnector:
         return None
 
     def _save_cache_response(self, cache_key: str, payload: dict):
+        # Write to Tier 1-3 Multi-Tier Cache Gateway (Issue #108 / src/lookup_cache.py)
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(f"alphavant_{cache_key}", payload, ttl_seconds=86400)
+        except Exception:
+            pass
+
         os.makedirs("data", exist_ok=True)
         cache_data = {}
         if os.path.exists(ALPHA_VANTAGE_CACHE_FILE):
@@ -499,6 +602,7 @@ class AlphaVantageDataConnector:
                 json.dump(cache_data, f, indent=2)
         except Exception as e:
             logger.warning(f"Could not save Alpha Vantage cache '{ALPHA_VANTAGE_CACHE_FILE}': {e}")
+
 
     def fetch_commodity_series(self, symbol: str = "WTI", interval: str = "daily") -> dict:
         """

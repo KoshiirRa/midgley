@@ -302,8 +302,26 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Strict Separation:** Issues MUST NOT cross release tracks. Non-model UI/API issues belong in the Software/UI Track; forecasting/math issues belong in the Model Engine Track; and automated review/telemetry/meta-agent issues belong in the Weekly Self-Review Track.
 * **Automated Agent Issue Creation & Milestone Triage Protocol:**
   - **Mandatory Domain Labeling:** ALL issues created or triaged by any AI agent (including `catalog_monitor.py`, `weekly_issue_reporter.py`, `arxiv_monitor.py`, or interactive assistant sessions) MUST be assigned appropriate domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`, `token-efficiency`).
-  - **Mandatory Release Track Milestone Assignment:** Every issue created by an agent MUST be assigned to an appropriate open milestone within its designated Release Track (Track 1: Software/UI `v0.X`, Track 2: Model Engine `Regular Model vX.Y`, or Track 3: Weekly Self-Review `Weekly Review vX.Y`).
   - **Auto-Creation of Missing Milestones:** If no open milestone currently exists within the designated Release Track, the agent or automated script MUST automatically create a new milestone on GitHub (via `gh api repos/{repo}/milestones -f title="..." -f description="..."` or GitHub REST API) before creating or triaging the issue.
+
+---
+
+### 15. Mandatory New Data Source & Issue #108 Multi-Tier Caching System Directives (`src/lookup_cache.py`)
+
+* **Role:** Enforces standard integration patterns for all new and existing data sources, REST APIs, web scrapers, and open-data feeds to ensure full support for the 3-Tier Caching & Quota Synchronization System (Issue #108 / `src/lookup_cache.py`).
+* **Core Data Ingestion & Caching Directives:**
+  1. **Primary Multi-Tier Cache Gateway Integration:** ALL new data connectors, API feeds, web scrapers, and open-data modules MUST import and utilize the global cache singleton (`from src.lookup_cache import global_cache`). Data fetch routines MUST query `global_cache.get(cache_key)` prior to making external HTTP/REST network requests or disk reads.
+  2. **Key Namespacing Strategy:** Every data connector MUST prefix its cache keys using a standard service domain namespace (e.g. `oilpriceapi_{key}`, `alphavant_{key}`, `eia_{series_id}`, `fred_{series_id}`, `socrata_{state}_{dataset}`, `noaa_{location}`, `finlight:{key}`) to prevent key collisions in the unified edge/local storage datastore.
+  3. **TTL Enforcement & Dynamic Expiration:** Response payloads MUST be written to `global_cache` using `global_cache.set(cache_key, payload, ttl_seconds=...)` with TTL values matched to the source update frequency:
+     - *Real-time Retail Pump Prices / Web Scrapers:* 15 minutes (900 seconds)
+     - *Weather Bulletins / SPC Convective Outlooks:* 1 hour (3600 seconds)
+     - *Daily Financial / Commodity Spot Prices & Open Data Feeds:* 24 hours (86400 seconds)
+     - *Monthly/Weekly Macro Series & Quota Ledgers:* 30–60 days (2,592,000 – 5,184,000 seconds)
+  4. **Multi-Environment Quota Ledger Synchronization:** For rate-limited APIs or quota-bound endpoints, data connectors MUST synchronize usage counters across both local Dev VM (`10.42.42.54`) and Production GitHub Actions runners using `global_cache.get_quota_ledger(service)` and `global_cache.update_quota_ledger(service, ...)` stored at key `quota:{service}:current`.
+  5. **3-Tier Cascade & Local Disk Fallback:** Connectors MUST preserve the 3-tier resolution cascade (Tier 1 Turso Edge SQLite -> Tier 2 Cloudflare D1/R2 Worker -> Tier 3 Local SQLite `data/lookup_cache.sqlite` + In-Memory Fast Dict) and maintain secondary local JSON disk cache fallbacks (`data/{source}_cache.json`) for 100% offline benchmark execution.
+  6. **Defensive Failure Isolation:** Calls to `global_cache` MUST be wrapped defensively in `try/except` blocks so that temporary edge connection failures, missing credentials, or database locks never interrupt core forecasting or data ingestion execution.
+  7. **Trading-Hours & Off-Hours Optimization:** Data connectors fetching financial or market-sensitive series SHOULD combine `global_cache` with trading-hours awareness (`is_trading_hours()`) to gate off-hours API calls and eliminate redundant network traffic outside trading windows.
+
 
 
 

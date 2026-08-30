@@ -204,3 +204,39 @@ src/locations/
 ```
 
 Root entrypoints (`main.py`, `tulsa_main.py`, `newark_main.py`, etc.), notebook build scripts (`build_*.py`), and `src/*_regional.py` modules operate as lightweight delegation shims to `src/locations/`, maintaining 100% backward compatibility for all existing scripts, workflows, and systemd services.
+
+---
+
+## 10. Multi-Tier Lookup Cache Gateway Architecture (Issue #108 / `src/lookup_cache.py`)
+
+All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/USDA series, NOAA weather endpoints, commodity spot feeds, and financial news/scrapers) are integrated with the **3-Tier Lookup Cache Gateway** (`src/lookup_cache.py`). This architecture eliminates redundant API requests and synchronizes quota limits across local Dev VM (`10.42.42.54`) and GitHub Actions runners:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    EXTERNAL DATA CONNECTORS & FEEDS                         │
+│  • EIA, FRED, USDA, OilpriceAPI, Alpha Vantage, Socrata Open Data           │
+│  • GasBuddy, AAA Web Scrapers, NOAA Weather, Finlight Energy News           │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              MULTI-TIER LOOKUP CACHE GATEWAY (`src/lookup_cache.py`)        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ • Tier 1 (Primary Edge): Turso Edge SQLite REST API (TURSO_DATABASE_URL)    │
+│ • Tier 2 (Backup Edge):  Cloudflare D1/R2 Edge Worker (CLOUDFLARE_CACHE_URL)  │
+│ • Tier 3 (Local Core):   SQLite Datastore (`data/lookup_cache.sqlite`) +    │
+│                          In-Memory Fast Dict (`global_cache`)              │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      LOCAL DISK JSON FALLBACK                               │
+│             (`data/{source}_cache.json` / Offline Benchmark)                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Key Technical Specifications:
+* **Key Namespacing:** Prefixed by service domain (e.g., `oilpriceapi_{key}`, `alphavant_{key}`, `eia_{series_id}`, `fred_{series_id}`, `socrata_{state}_{dataset}`).
+* **TTL Policy:** Standardized by data type (15 minutes for live retail scrapers, 1 hour for weather alerts, 24 hours for commodity spot prices, 60 days for quota ledgers).
+* **Quota Synchronization:** Dual-environment quota ledger sync via `global_cache.get_quota_ledger(service)` and `global_cache.update_quota_ledger(service, ...)`.
+
