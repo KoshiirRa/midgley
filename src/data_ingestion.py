@@ -873,6 +873,16 @@ class OilPriceAPIDataConnector:
         }
 
     def _get_cached_response(self, cache_key: str) -> dict:
+        # Check Tier 1-3 Multi-Tier Cache Gateway (Issue #108 / src/lookup_cache.py)
+        try:
+            from src.lookup_cache import global_cache
+            gateway_val = global_cache.get(f"oilpriceapi_{cache_key}")
+            if gateway_val:
+                return gateway_val
+        except Exception:
+            pass
+
+        # Local JSON disk response cache fallback
         if os.path.exists(OILPRICEAPI_CACHE_FILE):
             try:
                 with open(OILPRICEAPI_CACHE_FILE, "r", encoding="utf-8") as f:
@@ -884,6 +894,14 @@ class OilPriceAPIDataConnector:
         return None
 
     def _save_cache_response(self, cache_key: str, payload: dict):
+        # Write to Tier 1-3 Multi-Tier Cache Gateway (Issue #108 / src/lookup_cache.py)
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(f"oilpriceapi_{cache_key}", payload, ttl_seconds=86400)
+        except Exception:
+            pass
+
+        # Write to local JSON disk response cache file
         os.makedirs("data", exist_ok=True)
         cache_data = {}
         if os.path.exists(OILPRICEAPI_CACHE_FILE):

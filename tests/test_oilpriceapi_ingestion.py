@@ -30,12 +30,15 @@ class TestOilPriceAPIIngestion(unittest.TestCase):
 
         self.quota_patcher = patch("src.data_ingestion.OILPRICEAPI_QUOTA_FILE", self.quota_path)
         self.cache_patcher = patch("src.data_ingestion.OILPRICEAPI_CACHE_FILE", self.cache_path)
+        self.lookup_patcher = patch("src.lookup_cache.global_cache.get", return_value=None)
         self.quota_patcher.start()
         self.cache_patcher.start()
+        self.lookup_patcher.start()
 
     def tearDown(self):
         self.quota_patcher.stop()
         self.cache_patcher.stop()
+        self.lookup_patcher.stop()
         self.test_dir.cleanup()
 
     def test_connector_initialization(self):
