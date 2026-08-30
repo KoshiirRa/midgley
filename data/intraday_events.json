@@ -572,5 +572,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.65
     }
+  },
+  {
+    "timestamp": "2026-08-30T01:02:37.167524",
+    "headline": "USD/CAD reversal risk builds ahead of tariff deadline - stonex.com",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNLTRuNk50STNuWDhIWDRLZ05LUkE1VlBjcFVNd1kxU185YUhQcFNNRkFIWWF4YWtWQ3hoeVl1U0dVejdvOGJqLUFTWWdHQzFfNEx0MFl1VklQdTg4QnZtVE92QjViYWJER2ZVMFhxSm5kdlRKS2Z6UllfZlYtMl9LLUtpajFsSVRRd0huU0dNeFVid0Zwcm5kU19HeTBSaWRxaWVZ?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.5,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.4,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.5
+    }
   }
 ]
