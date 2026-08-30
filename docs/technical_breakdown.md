@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-08-30 03:00:52`  
+**Log Timestamp:** `2026-08-30 15:45:35`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Here’s Where Tariff Costs Are Piling Up—and Why Some States Are Hit Much Harder - Investopedia  
+**Primary Event Trigger:** G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Here’s Where Tariff Costs Are Piling Up—and Why Some States Are Hit Much Harder - Investopedia
+- **Headline Trigger:** G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga
 - **Active Ingested News Links:**
+- [G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga](https://news.google.com/rss/articles/CBMizgFBVV95cUxOYnBQQmtwNFpUU21mYnIwaDV4TlhHTl9ybDhYVnZ6eUpHdEt2U0I1eVkyX2ZhUWo3RFhFOFF2WGpZY19JM3I4QWtXcXlmc0dobzcxdnEybjZpdlpUdHUzT20xcFJibnFSZ0FjTDNKMjlQcFE3T05LQ21mSkNxZlJlbDVRNnZKcTZfVU5EVFhpUjVpVDFCTS1uYVdGSnpfUDlrSGFsUFdxN3ExZXpUZndDZ0ptM3dWbmc0ODJWZDVhTmFaUXppTkIxSFZ3ZVlqUQ?oc=5) (RSS_Feed)
 - [Here’s Where Tariff Costs Are Piling Up—and Why Some States Are Hit Much Harder - Investopedia](https://news.google.com/rss/articles/CBMiwAFBVV95cUxOc1ExLU1KOHJibmVnaUZscnFKYmpscVhfLTRmRmhMWmpveEpCOVIyUEpzOXpWUUFWNDVaanFQa1YtTm5acUhYU01xMDFXQndBYWtMZHBrbW9LRmRlWldySVFDd3laZUlCd2RjOGlhYXluNVZXZ0xiNHMxNXNVSEU0OFlFbUVGcXdUd2lFSjJSRVJOV3lLd25wQ3JhNTNqbnVUMTlNZFNmRHZHbUpCRjYwLTVCNmd6UjVXcGJWbU5zMm4?oc=5) (RSS_Feed)
 - [Alberta Premier rejects oil and gas export tax in U.S. tariff tussle during visit to Grande Prairie - Yahoo News Canada](https://news.google.com/rss/articles/CBMifEFVX3lxTE5sNjY0Yk9UWkwwM3FJUVpOTm9tRXo2YWxRYVF1OHNmWnhtaGhVNVNRamthOV9GZEJFMnFMWUV5OWZzanN2enNPWGJYd0ROVU5FWGE5OUN6akx1TGhQZUFqRk9pWEVzMF9UUTl0WVA2ZWwyQ0c3MW5YWHBhYXQ?oc=5) (RSS_Feed)
-- [Access Restored to Wikipedia in Russia After Overnight Outage - The Moscow Times](https://news.google.com/rss/articles/CBMirwFBVV95cUxOaXNsYTRTaWZIcGllb0hKX29QT3Vid08teWEwc0VxMlJTOEstdkJYZ2J0akpFVkRTTXpmTlZqbWxubFYyS2ctYm5TcUVMRDdBYUN1UTdoRTFkc2FoQUlIRlN5TjFtSkNaT0xaMmdvVXplQXJRZjNEN3R0OHpjNHdJR3B4NXJiV3dIZGEzUHZSR1pEQTBRT3Z5eWFoZHVUTzlPUlJ1enY3eVZldTVORTBr?oc=5) (RSS_Feed)
 
 
 ---
@@ -64,13 +64,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-08-30 03:00:52]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Here’s Where Tariff Costs Are Piling Up—and Why Some States Are Hit Much Harder - Investopedia' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-08-30 15:45:35]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-08-30 03:00:52 (Mode: INTRADAY_REVISION), primary event trigger 'Here’s Where Tariff Costs Are Piling Up—and Why Some States Are Hit Much Harder - Investopedia' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-08-30 15:45:35 (Mode: INTRADAY_REVISION), primary event trigger 'G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -91,11 +91,11 @@ Largest upward shift for this run: National Wholesale at $3.250/gal (+0.043/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-08-30 03:00:52]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Here’s Where Tariff Costs Are Piling Up—and Why Some States Are Hit Much Harder - Investopedia'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-08-30 15:45:35]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-30 03:00:52.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-30 15:45:35.*
