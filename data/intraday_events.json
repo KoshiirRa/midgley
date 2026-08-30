@@ -656,5 +656,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.4
     }
+  },
+  {
+    "timestamp": "2026-08-30T14:46:29.976476",
+    "headline": "G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOYnBQQmtwNFpUU21mYnIwaDV4TlhHTl9ybDhYVnZ6eUpHdEt2U0I1eVkyX2ZhUWo3RFhFOFF2WGpZY19JM3I4QWtXcXlmc0dobzcxdnEybjZpdlpUdHUzT20xcFJibnFSZ0FjTDNKMjlQcFE3T05LQ21mSkNxZlJlbDVRNnZKcTZfVU5EVFhpUjVpVDFCTS1uYVdGSnpfUDlrSGFsUFdxN3ExZXpUZndDZ0ptM3dWbmc0ODJWZDVhTmFaUXppTkIxSFZ3ZVlqUQ?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.6,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.6
+    }
   }
 ]
