@@ -42,10 +42,15 @@ const RSS_FEEDS = [
   "https://www.cnbc.com/id/19854911/device/rss/rss.html"
 ];
 
+const EXCLUDE_KEYWORDS = [
+  "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage"
+];
+
 const TRIGGER_KEYWORDS = [
-  "tariff", "retaliat", "trade war", "opec emergency", "pipeline halt",
-  "explosion", "tornado", "blackout", "blockade", "sanction", "outage",
-  "refinery outage", "refinery halt", "strait of hormuz", "red sea attack", "spill"
+  "tariff", "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
+  "explosion", "tornado", "blackout", "blockade", "sanction",
+  "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
+  "strait of hormuz", "red sea attack", "spill"
 ];
 
 const TRIGGER_REGEX = new RegExp(
@@ -85,7 +90,41 @@ function parseRSSItems(xmlText: string): RSSItem[] {
 }
 
 export function isAnomalyHeadline(title: string): boolean {
+  const lower = title.toLowerCase();
+  if (EXCLUDE_KEYWORDS.some(k => lower.includes(k))) {
+    return false;
+  }
   return TRIGGER_REGEX.test(title);
+}
+
+export async function isHeadlineDispatchedInCache(headline: string): Promise<boolean> {
+  try {
+    if (typeof caches === "undefined" || !caches.default) return false;
+    const cleanKey = headline.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 80);
+    const dummyUrl = `https://midgley-cache.internal/dispatched/${cleanKey}`;
+    const req = new Request(dummyUrl);
+    const cachedResp = await caches.default.match(req);
+    return !!cachedResp;
+  } catch {
+    return false;
+  }
+}
+
+export async function markHeadlineDispatchedInCache(headline: string): Promise<void> {
+  try {
+    if (typeof caches === "undefined" || !caches.default) return;
+    const cleanKey = headline.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 80);
+    const dummyUrl = `https://midgley-cache.internal/dispatched/${cleanKey}`;
+    const req = new Request(dummyUrl);
+    const resp = new Response("dispatched", {
+      headers: {
+        "Cache-Control": "public, max-age=86400"
+      }
+    });
+    await caches.default.put(req, resp);
+  } catch {
+    // Ignore cache write errors in non-worker environments
+  }
 }
 
 async function dispatchGitHubEvent(env: Env, headline: string, url: string): Promise<DispatchResult> {
@@ -170,11 +209,18 @@ export async function runMonitoringCycle(env: Env): Promise<CycleSummary> {
   }
 
   const dispatches: DispatchResult[] = [];
-  if (anomalies.length > 0) {
-    // Send 1 dispatch for the primary anomaly detected in this cycle to avoid launching multiple parallel GitHub Action runs that cancel each other
-    const primary = anomalies[0];
-    const res = await dispatchGitHubEvent(env, primary.title, primary.link);
+  for (const anomaly of anomalies) {
+    const alreadyDispatched = await isHeadlineDispatchedInCache(anomaly.title);
+    if (alreadyDispatched) {
+      continue;
+    }
+
+    const res = await dispatchGitHubEvent(env, anomaly.title, anomaly.link);
+    if (res.dispatched) {
+      await markHeadlineDispatchedInCache(anomaly.title);
+    }
     dispatches.push(res);
+    break; // Enforce single dispatch per 15-minute cycle
   }
 
   return {
