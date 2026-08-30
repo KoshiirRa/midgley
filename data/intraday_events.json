@@ -600,5 +600,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.4
     }
+  },
+  {
+    "timestamp": "2026-08-30T03:32:26.784613",
+    "headline": "The auto trade war Trump started is slowly destroying the industry he promised to save - Toronto Star",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMiigJBVV95cUxOcUhKYl9vRzJqMWdMdHIwZ21oaGpac0VMdUFNdmhpdmZZSXlMdW9MMzNxWnNQRE1SaVVSaUlvdnFHWFRFMXRDeWE4bk9CVHpPbGV1Yk83LUJiNnhuQVl2R3VyNzQ5NXBoazVScGdmX0RFNTRvczVKanluU3F1enRDd0VtdllxOURSTGlHUG1kODZzcjdtakJhVkc3RVZISnViSE9SQWJqWVpWZ1JLd2dBalhoTTg3LUd0bmZ5bEdEWnFhc3lKakxyNGZjRlpGMDlpcDI3QS1IXzA4Ym1xMGdBZzFwMFQzUWtCelZ3X280UTlhMklzNlJ4MzBjWlhoaTMyWVZpbENhSHdhUQ?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.5,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.7,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.7
+    }
   }
 ]
