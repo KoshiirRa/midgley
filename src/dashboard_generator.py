@@ -165,6 +165,41 @@ def get_analytics_script() -> str:
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "{token}"}}'></script>"""
 
 
+def get_head_meta_tags(
+    title: str,
+    description: str,
+    canonical_path: str = "",
+    image_filename: str = "overview.png",
+    theme_color: str = "#0ea5e9"
+) -> str:
+    """Generates standard Open Graph, Twitter Card, and Discord theme metadata tags for HTML <head>."""
+    base_url = "https://koshiirra.github.io/midgley"
+    
+    clean_path = canonical_path.lstrip('/')
+    page_url = f"{base_url}/{clean_path}" if clean_path else f"{base_url}/"
+    image_url = f"{base_url}/assets/embeds/{image_filename}"
+
+    return f"""    <!-- Open Graph / Discord Social Embed Metadata -->
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{title}">
+    <meta property="og:description" content="{description}">
+    <meta property="og:url" content="{page_url}">
+    <meta property="og:image" content="{image_url}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{title}">
+    <meta name="twitter:description" content="{description}">
+    <meta name="twitter:image" content="{image_url}">
+
+    <!-- Discord Theme Accent Color -->
+    <meta name="theme-color" content="{theme_color}">"""
+
+
 def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -990,10 +1025,19 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
         news_html += f'<li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="{h_url}" target="_blank" class="hover:underline text-blue-300">{h_text}</a> <span class="text-slate-500">({h_src})</span></li>'
         news_md += f"- [{h_text}]({h_url}) ({h_src})\n"
 
+    head_meta_tech = get_head_meta_tags(
+        title="Technical Analysis & Specific-Run Math Audit - Midgley AI",
+        description="Specific-run step-by-step mathematical audit with numerical substitutions for exponential memory decay, Ridge parameters, and regional metro equations.",
+        canonical_path="technical_breakdown.html",
+        image_filename="math.png",
+        theme_color="#0ea5e9"
+    )
+
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {get_analytics_script()}
+{head_meta_tech}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Technical Analysis & Specific-Run Math Audit - Midgley</title>
@@ -1419,14 +1463,29 @@ def generate_public_dashboard():
     audit_card_html = build_last_run_audit_card_html(audit_data)
     generate_technical_breakdown_file(audit_data, docs_dir=DOCS_DIR)
 
+    # Generate Social Embed Preview Cards (docs/assets/embeds/*.png)
+    try:
+        from src.social_embed_generator import generate_social_embed_images
+        generate_social_embed_images(output_dir=os.path.join(DOCS_DIR, "assets", "embeds"))
+    except Exception as embed_err:
+        logger.warning(f"Could not generate social embed preview cards: {embed_err}")
+
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
     last_run_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     nav_overview = get_nav_header("overview")
+    head_meta_index = get_head_meta_tags(
+        title="Midgley - Multi-Agent Gas Price Forecasting Engine",
+        description="Real-time unleaded gasoline price forecasting engine integrating NOAA weather models, global maritime chokepoints, executive social media, and alternative physical data.",
+        canonical_path="index.html",
+        image_filename="overview.png",
+        theme_color="#0ea5e9"
+    )
     index_html = f"""<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
 {get_analytics_script()}
+{head_meta_index}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Midgley - Multi-Agent Gas Price Forecasting Engine</title>
@@ -2096,10 +2155,24 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_national_html(rel_prefix: str = "") -> str:
         nav_national = get_nav_header("national", rel_prefix)
+        nat_base = prices_map['National']['base']
+        nat_pred = prices_map['National']['pred']
+        nat_delta = nat_pred - nat_base
+        nat_pct = (nat_delta / nat_base * 100.0) if nat_base > 0 else 0.0
+        nat_sign = "+" if nat_delta > 0 else ""
+        nat_color = "#10b981" if nat_pct < -0.2 else ("#ef4444" if nat_pct > 0.2 else "#0ea5e9")
+        head_meta_national = get_head_meta_tags(
+            title=f"National Wholesale RBOB Forecast (${nat_base:.3f} → ${nat_pred:.3f} | {nat_sign}{nat_pct:.2f}%) - Midgley AI",
+            description=f"5-day forecast for National Wholesale RBOB futures. Baseline ${nat_base:.3f}/gal, projected target ${nat_pred:.3f}/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.",
+            canonical_path="national.html" if rel_prefix == "" else "national/index.html",
+            image_filename="national.png",
+            theme_color=nat_color
+        )
         return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>National Wholesale RBOB Forecast - Midgley</title>
@@ -2270,7 +2343,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national)
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -2282,10 +2355,24 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_tulsa_html(rel_prefix: str = "") -> str:
         nav_tulsa = get_nav_header("tulsa", rel_prefix)
+        tul_base = prices_map['Tulsa_OK']['base']
+        tul_pred = prices_map['Tulsa_OK']['pred']
+        tul_delta = tul_pred - tul_base
+        tul_pct = (tul_delta / tul_base * 100.0) if tul_base > 0 else 0.0
+        tul_sign = "+" if tul_delta > 0 else ""
+        tul_color = "#10b981" if tul_pct < -0.2 else ("#ef4444" if tul_pct > 0.2 else "#0ea5e9")
+        head_meta_tulsa = get_head_meta_tags(
+            title=f"Tulsa Metro Gas Price Forecast (${tul_base:.3f} → ${tul_pred:.3f} | {tul_sign}{tul_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Tulsa OK metro. Baseline ${tul_base:.3f}/gal, projected target ${tul_pred:.3f}/gal. Cushing WTI hub & West Tulsa HF Sinclair refinery model.",
+            canonical_path="tulsa.html" if rel_prefix == "" else "tulsa/index.html",
+            image_filename="tulsa.png",
+            theme_color=tul_color
+        )
         return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tulsa Retail Gas Forecast - Midgley</title>
@@ -2457,7 +2544,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa)
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -2469,10 +2556,24 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_newark_html(rel_prefix: str = "") -> str:
         nav_newark = get_nav_header("newark", rel_prefix)
+        new_base = prices_map['Newark_DE']['base']
+        new_pred = prices_map['Newark_DE']['pred']
+        new_delta = new_pred - new_base
+        new_pct = (new_delta / new_base * 100.0) if new_base > 0 else 0.0
+        new_sign = "+" if new_delta > 0 else ""
+        new_color = "#10b981" if new_pct < -0.2 else ("#ef4444" if new_pct > 0.2 else "#0ea5e9")
+        head_meta_newark = get_head_meta_tags(
+            title=f"Newark DE Metro Gas Price Forecast (${new_base:.3f} → ${new_pred:.3f} | {new_sign}{new_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Newark DE metro. Baseline ${new_base:.3f}/gal, projected target ${new_pred:.3f}/gal. PBF Delaware City refinery & C&D Canal detour model.",
+            canonical_path="newark.html" if rel_prefix == "" else "newark/index.html",
+            image_filename="newark.png",
+            theme_color=new_color
+        )
         return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Newark Retail Gas Forecast - Midgley</title>
@@ -2644,7 +2745,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark)
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -2656,10 +2757,24 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_cincinnati_html(rel_prefix: str = "") -> str:
         nav_cincinnati = get_nav_header("cincinnati", rel_prefix)
+        cin_base = prices_map['Cincinnati_OH']['base']
+        cin_pred = prices_map['Cincinnati_OH']['pred']
+        cin_delta = cin_pred - cin_base
+        cin_pct = (cin_delta / cin_base * 100.0) if cin_base > 0 else 0.0
+        cin_sign = "+" if cin_delta > 0 else ""
+        cin_color = "#10b981" if cin_pct < -0.2 else ("#ef4444" if cin_pct > 0.2 else "#0ea5e9")
+        head_meta_cincinnati = get_head_meta_tags(
+            title=f"Cincinnati Tri-State Gas Price Forecast (${cin_base:.3f} → ${cin_pred:.3f} | {cin_sign}{cin_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Cincinnati OH/KY tri-state. Baseline ${cin_base:.3f}/gal, projected target ${cin_pred:.3f}/gal. Ohio/KY dual-state tax gap & Marathon Catlettsburg model.",
+            canonical_path="cincinnati.html" if rel_prefix == "" else "cincinnati/index.html",
+            image_filename="cincinnati.png",
+            theme_color=cin_color
+        )
         return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cincinnati OH/KY Cross-River Gas Forecast - Midgley</title>
@@ -2877,7 +2992,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati)
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -2889,10 +3004,24 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_greenville_html(rel_prefix: str = "") -> str:
         nav_greenville = get_nav_header("greenville", rel_prefix)
+        grn_base = prices_map['Greenville_NC']['base']
+        grn_pred = prices_map['Greenville_NC']['pred']
+        grn_delta = grn_pred - grn_base
+        grn_pct = (grn_delta / grn_base * 100.0) if grn_base > 0 else 0.0
+        grn_sign = "+" if grn_delta > 0 else ""
+        grn_color = "#10b981" if grn_pct < -0.2 else ("#ef4444" if grn_pct > 0.2 else "#0ea5e9")
+        head_meta_greenville = get_head_meta_tags(
+            title=f"Greenville NC Retail Gas Forecast (${grn_base:.3f} → ${grn_pred:.3f} | {grn_sign}{grn_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Greenville NC metro. Baseline ${grn_base:.3f}/gal, projected target ${grn_pred:.3f}/gal. Colonial Pipeline Selma hub & Tar River flooding model.",
+            canonical_path="greenville.html" if rel_prefix == "" else "greenville/index.html",
+            image_filename="greenville.png",
+            theme_color=grn_color
+        )
         return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greenville, NC Retail Gas Forecast - Midgley</title>
@@ -3025,7 +3154,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville)
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -3037,10 +3166,24 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_charlotte_html(rel_prefix: str = "") -> str:
         nav_charlotte = get_nav_header("charlotte", rel_prefix)
+        clt_base = prices_map['Charlotte_NC']['base']
+        clt_pred = prices_map['Charlotte_NC']['pred']
+        clt_delta = clt_pred - clt_base
+        clt_pct = (clt_delta / clt_base * 100.0) if clt_base > 0 else 0.0
+        clt_sign = "+" if clt_delta > 0 else ""
+        clt_color = "#10b981" if clt_pct < -0.2 else ("#ef4444" if clt_pct > 0.2 else "#0ea5e9")
+        head_meta_charlotte = get_head_meta_tags(
+            title=f"Charlotte NC Retail Gas Forecast (${clt_base:.3f} → ${clt_pred:.3f} | {clt_sign}{clt_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Charlotte NC metro. Baseline ${clt_base:.3f}/gal, projected target ${clt_pred:.3f}/gal. Paw Creek terminal & NC/SC cross-border tax gap model.",
+            canonical_path="charlotte.html" if rel_prefix == "" else "charlotte/index.html",
+            image_filename="charlotte.png",
+            theme_color=clt_color
+        )
         return r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Charlotte, NC Retail Gas Forecast - Midgley</title>
@@ -3173,7 +3316,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte)
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -3189,6 +3332,7 @@ def generate_public_dashboard():
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oakland, CA Retail Gas Forecast & CARB Display - Midgley</title>
@@ -3404,11 +3548,21 @@ def generate_public_dashboard():
 """
         oak_base = prices_map['Oakland_CA']['base']
         oak_pred = prices_map['Oakland_CA']['pred']
-        oak_pct = ((oak_pred - oak_base) / oak_base) * 100
+        oak_delta = oak_pred - oak_base
+        oak_pct = ((oak_pred - oak_base) / oak_base) * 100 if oak_base > 0 else 0.0
+        oak_sign = "+" if oak_delta > 0 else ""
+        oak_color = "#10b981" if oak_pct < -0.2 else ("#ef4444" if oak_pct > 0.2 else "#0ea5e9")
+        head_meta_oakland = get_head_meta_tags(
+            title=f"Oakland CA Metro Gas Price Forecast (${oak_base:.3f} → ${oak_pred:.3f} | {oak_sign}{oak_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Oakland CA metro. Baseline ${oak_base:.3f}/gal, projected target ${oak_pred:.3f}/gal. Chevron Richmond refinery & $0.953/gal CARB tax model.",
+            canonical_path="oakland.html" if rel_prefix == "" else "oakland/index.html",
+            image_filename="oakland.png",
+            theme_color=oak_color
+        )
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -3424,6 +3578,7 @@ def generate_public_dashboard():
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SF Bay Area 9-County Gas Price Matrix - Midgley</title>
@@ -3702,6 +3857,17 @@ def generate_public_dashboard():
         sj_chart = [round(sj_base - 0.20, 2), round(sj_base - 0.13, 2), round(sj_base - 0.05, 2), round(sj_base + 0.10, 2), round(sj_base + 0.17, 2), round(sj_base + 0.13, 2), round(sj_base + 0.03, 2), round(sj_base, 2)]
         northbay_chart = [round(northbay_base - 0.20, 2), round(northbay_base - 0.13, 2), round(northbay_base - 0.05, 2), round(northbay_base + 0.10, 2), round(northbay_base + 0.17, 2), round(northbay_base + 0.13, 2), round(northbay_base + 0.03, 2), round(northbay_base, 2)]
 
+        bay_delta = bay_pred - bay_base
+        bay_sign = "+" if bay_delta > 0 else ""
+        bay_color = "#10b981" if bay_pct < -0.2 else ("#ef4444" if bay_pct > 0.2 else "#0ea5e9")
+        head_meta_bayarea = get_head_meta_tags(
+            title=f"SF Bay Area 9-County Gas Price Forecast (${bay_base:.3f} → ${bay_pred:.3f} | {bay_sign}{bay_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for 9-County San Francisco Bay Area. Baseline ${bay_base:.3f}/gal, projected target ${bay_pred:.3f}/gal. PADD 5 West Coast refining island model.",
+            canonical_path="bayarea.html" if rel_prefix == "" else "bayarea/index.html",
+            image_filename="bayarea.png",
+            theme_color=bay_color
+        )
+
         return (
             html_str.replace("{{NAV_BAYAREA}}", nav_bayarea)
             .replace("PREFIX", rel_prefix)
@@ -3727,6 +3893,7 @@ def generate_public_dashboard():
             .replace("{{NORTHBAY_CHART_DATA}}", ", ".join(str(x) for x in northbay_chart))
             .replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
             .replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+            .replace("{{HEAD_META}}", head_meta_bayarea)
         )
 
     with open(BAYAREA_PATH, "w", encoding="utf-8") as f:
@@ -3739,10 +3906,18 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
 
     nav_math = get_nav_header("math")
+    head_meta_math = get_head_meta_tags(
+        title="Technical Analysis & Specific-Run Math Audit - Midgley AI",
+        description="Educational mathematical breakdown guide detailing formulas for all 9 feature layers, continuous shock decay, and regularized Ridge Estimator.",
+        canonical_path="math.html",
+        image_filename="math.png",
+        theme_color="#0ea5e9"
+    )
     math_html = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mathematical & Algorithmic Foundations - Midgley Project</title>
@@ -4064,8 +4239,8 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_MATH}}", nav_math).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
-    math_html = math_html.replace("{{NAV_MATH}}", nav_math).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
+""".replace("{{NAV_MATH}}", nav_math).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_math)
+    math_html = math_html.replace("{{NAV_MATH}}", nav_math).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_math)
 
     with open(MATH_PATH, "w", encoding="utf-8") as f:
         f.write(math_html)
