@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-08-30_13-05-31",
+    "timestamp": "2026-08-30 13:05:30",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-08-30_11-17-32",
     "timestamp": "2026-08-30 11:17:30",
     "run_type": "INTRADAY_REVISION",
