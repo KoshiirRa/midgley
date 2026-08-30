@@ -69,6 +69,7 @@ jobs:
         with:
           commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update [skip ci]"
           file_pattern: "README.md docs/ data/"
+          push_options: '--force'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v6
