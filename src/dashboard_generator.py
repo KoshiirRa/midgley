@@ -15,6 +15,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timezone
 import logging
+from src.regional_metadata import render_regional_driver_cards_html
 
 logger = logging.getLogger(__name__)
 
@@ -2478,23 +2479,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
-        <!-- Tulsa Regional Refining & Logistics Specifications -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-warehouse text-emerald-400"></i> Regional Infrastructure & Rack Margins
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Cushing WTI Hub Proximity</h4>
-                    <p>Located 50 miles west of Tulsa, Cushing, OK is the physical delivery point for NYMEX WTI crude. Localized rack margins reflect regional crude access and local refining competition.</p>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
-                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">Tulsa Dynamic Rack Margin</h4>
-                    <p>$$\text{Rack Margin} = P_{\text{Tulsa Retail}} - P_{\text{Wholesale RBOB}} = \$3.890 - \$3.184 = \$0.706/\text{gal}$$</p>
-                    <p class="text-slate-400 pt-1">Calibrates predicted wholesale returns directly into local pump station prices.</p>
-                </div>
-            </div>
-        </div>
+        {{REGIONAL_CARDS}}
 
     </main>
 
@@ -2544,7 +2529,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa)
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -2679,23 +2664,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
-        <!-- Newark Regional Refining & Logistics Specifications -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-warehouse text-blue-400"></i> Regional Infrastructure & Delaware State Fuel Tax
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">PBF Delaware City Hub Proximity</h4>
-                    <p>Located 12 miles south of Newark, DE, the Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering. Delaware state fuel tax is maintained at $0.23/gal.</p>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
-                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Newark Dynamic Rack Margin</h4>
-                    <p>$$\text{Rack Margin} = P_{\text{Newark Retail}} - P_{\text{Wholesale RBOB}} = \$3.350 - \$3.184 = \$0.166/\text{gal}$$</p>
-                    <p class="text-slate-400 pt-1">Calibrates predicted wholesale returns directly into local New Castle County pump station prices.</p>
-                </div>
-            </div>
-        </div>
+        {{REGIONAL_CARDS}}
 
     </main>
 
@@ -2745,7 +2714,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark)
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -2917,24 +2886,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
-        <!-- Regional Logistics & Infrastructure Specifications -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-warehouse text-purple-400"></i> Tri-State Petroleum Supply Chain & Tax Mechanics
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-purple-300 uppercase tracking-wider">Refining & River Logistics</h4>
-                    <p>Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo, IL confluence from Gulf Coast refiners, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.</p>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
-                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Dual-State Rack Margin Equations</h4>
-                    <p>$$\text{Rack Margin}_{\text{OH}} = P_{\text{OH Retail}} - P_{\text{Wholesale RBOB}} = \$3.450 - \$3.184 = \$0.266/\text{gal}$$</p>
-                    <p>$$\text{Rack Margin}_{\text{KY}} = P_{\text{KY Retail}} - P_{\text{Wholesale RBOB}} = \$3.325 - \$3.184 = \$0.141/\text{gal}$$</p>
-                    <p class="text-slate-400 pt-1">Reflects the $0.125/gal state fuel tax differential (OH: $0.385 vs KY: $0.260).</p>
-                </div>
-            </div>
-        </div>
+        {{REGIONAL_CARDS}}
 
     </main>
 
@@ -2992,7 +2944,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati)
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -3086,41 +3038,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
-        <!-- Regional Dynamics Overview -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-network-wired text-green-400"></i> PADD 1C Infrastructure & Selma Hub Dynamics
-                </h3>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Greenville, NC (Pitt County) sits within the PADD 1C Lower Atlantic petroleum distribution corridor. Gasoline supplies originate from Gulf Coast refiners via <strong>Colonial Pipeline (Line 1 Gasoline / Line 2 Distillates)</strong>, breaking out at major junction tank farms in <strong>Selma, NC</strong> (55 miles west) and <strong>Apex, NC</strong> before tank-truck dispatch across Eastern NC.
-                </p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
-                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
-                        <strong class="text-green-300 block mb-1">Colonial Pipeline Breakout Hubs</strong>
-                        <span class="text-slate-400">Selma & Apex NC tank farms act as primary wholesale rack pricing hubs for Pitt, Lenoir & Beaufort counties.</span>
-                    </div>
-                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
-                        <strong class="text-green-300 block mb-1">NC Motor Fuel Tax Burden</strong>
-                        <span class="text-slate-400">NC state motor fuel tax ($0.404/gal variable formula + 18.4¢ federal = 58.8¢ total tax burden).</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Weather & Hurricane Risk -->
-            <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-cloud-bolt text-amber-400"></i> Pitt County NOAA Alerts
-                </h3>
-                <p class="text-xs text-slate-300">
-                    NOAA NWS zone <strong>NCZ081</strong> alerts track Atlantic hurricane landfall storm surges, Pamlico Sound coastal flooding, and Tar River basin crest levels that disrupt truck delivery routes on US-264 & NC-11.
-                </p>
-                <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-200">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>
-                    <strong>Tar River Flood Crest Factor:</strong> High-water events suspend tank truck dispatch and risk underground storage tank buoyancy.
-                </div>
-            </div>
-        </div>
+        {{REGIONAL_CARDS}}
 
         <!-- Counterfactual Shock Scenario Simulations -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
@@ -3154,7 +3072,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville)
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -3248,41 +3166,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
-        <!-- Regional Dynamics Overview -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-network-wired text-cyan-400"></i> Paw Creek Petroleum Distribution Hub Dynamics
-                </h3>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Charlotte, NC (Mecklenburg County) serves as the primary refined petroleum distribution node for western North Carolina and upper South Carolina. Major refined product flows arrive via <strong>Colonial Pipeline Line 1 (Gasoline)</strong> and <strong>Plantation Pipeline</strong>, breaking out at the <strong>Paw Creek Petroleum Distribution Hub</strong> in West Charlotte.
-                </p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
-                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
-                        <strong class="text-cyan-300 block mb-1">Paw Creek Tank Farm Breakout</strong>
-                        <span class="text-slate-400">Paw Creek tank farms serve as the main wholesale rack pricing and rack delivery hub for Mecklenburg and York counties.</span>
-                    </div>
-                    <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
-                        <strong class="text-cyan-300 block mb-1">NC / SC Cross-Border Tax Differential</strong>
-                        <span class="text-slate-400">NC motor fuel tax ($0.404/gal) vs SC motor fuel tax ($0.288/gal) creates a persistent ~$0.116/gal cross-border tax gap with Fort Mill & Rock Hill, SC.</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Weather & Piedmont Risk -->
-            <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-cloud-bolt text-amber-400"></i> Mecklenburg County NOAA Alerts
-                </h3>
-                <p class="text-xs text-slate-300">
-                    NOAA NWS zone <strong>NCZ071</strong> alerts track inland hurricane wind gusts, Catawba River basin flash flood emergencies, and winter ice storms that lock down I-85 & I-77 freight corridors.
-                </p>
-                <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-200">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>
-                    <strong>Piedmont Ice & Transit Factor:</strong> Winter freezing rain events coat interstate corridors, halting tank truck dispatch out of Paw Creek.
-                </div>
-            </div>
-        </div>
+        {{REGIONAL_CARDS}}
 
         <!-- Counterfactual Shock Scenario Simulations -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
@@ -3316,7 +3200,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte)
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -3416,6 +3300,8 @@ def generate_public_dashboard():
 
             </div>
         </div>
+
+        {{REGIONAL_CARDS}}
 
         <!-- CARB REGULATORY BREAKDOWN CARD -->
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
@@ -3562,7 +3448,7 @@ def generate_public_dashboard():
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland)
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca'))
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -3757,6 +3643,8 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{REGIONAL_CARDS}}
+
         <!-- CHART SECTION -->
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white">9-County SF Bay Area Regional Gas Price Trends & Sub-Locale Forecasts</h3>
@@ -3894,6 +3782,7 @@ def generate_public_dashboard():
             .replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
             .replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
             .replace("{{HEAD_META}}", head_meta_bayarea)
+            .replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('bayarea_ca'))
         )
 
     with open(BAYAREA_PATH, "w", encoding="utf-8") as f:

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "charlotte_nc",
+  "display_name": "Charlotte, NC Metro Retail",
+  "padd_region": "PADD 1C Lower Atlantic",
+  "primary_city": "Charlotte, NC",
+  "counties": ["Mecklenburg", "York"],
+  "baseline_price": 3.280,
+  "icon_class": "fa-network-wired",
+  "theme_color": "cyan",
+  "econometric_drivers": {
+    "title": "Cross-Border Tax Econometric Drivers",
+    "description": "NC ($0.404/gal) vs SC ($0.288/gal) motor fuel tax differential creates a persistent ~$0.116/gal cross-border price gap with Fort Mill & Rock Hill, SC."
+  },
+  "refining_logistics": {
+    "title": "Paw Creek Hub & Dual Pipelines",
+    "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
+    "primary_refinery": "Paw Creek Petroleum Distribution Hub",
+    "capacity_bpd": 950000,
+    "pipelines": ["Colonial Pipeline Line 1", "Plantation Pipeline"]
+  },
+  "tax_structure": {
+    "title": "NC/SC Tax Structure & Overhead",
+    "description": "NC Motor Fuel Tax ($0.404/gal) + Federal ($0.184/gal) = $0.588/gal total in NC, vs $0.472/gal total across the South Carolina border line.",
+    "state_tax_per_gal": 0.404,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.588,
+    "notes": "Cross-border tax differential with South Carolina ($0.288/gal)"
+  },
+  "infrastructure_delivery": {
+    "title": "Interstate Delivery & Weather Risk",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{Charlotte Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.280 - \\$3.184 = \\$0.096/\\text{gal}",
+    "description": "I-85 & I-77 freight corridor distribution across Mecklenburg and York counties, evaluated against NOAA NCZ071 Piedmont winter ice storm alerts.",
+    "hub_distance_miles": 8,
+    "hub_name": "Paw Creek Petroleum Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Paw Creek Hub Power Blackout",
+      "subtitle": "West Charlotte Substation Outage",
+      "price_impact_per_gal": 0.185,
+      "pct_impact": 5.64,
+      "description": "Halts automated rack loading at West Charlotte distribution hub"
+    },
+    {
+      "name": "Colonial Line 1 Batch Throttling",
+      "subtitle": "Emergency Transit Reduction",
+      "price_impact_per_gal": 0.165,
+      "pct_impact": 5.03,
+      "description": "Reduces wholesale gasoline deliveries to Charlotte terminals"
+    },
+    {
+      "name": "Winter Ice Storm Transit Lockdown",
+      "subtitle": "Piedmont Freezing Rain Alert",
+      "price_impact_per_gal": 0.140,
+      "pct_impact": 4.27,
+      "description": "Locks down I-85 & I-77 logistics corridors across Mecklenburg County"
+    }
+  ]
+}

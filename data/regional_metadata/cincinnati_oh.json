@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "cincinnati_oh",
+  "display_name": "Cincinnati, OH & KY Tri-State",
+  "padd_region": "PADD 2 Mid-Continent / Ohio Valley",
+  "primary_city": "Cincinnati, OH",
+  "counties": ["Hamilton", "Kenton", "Boone"],
+  "baseline_price": 3.450,
+  "icon_class": "fa-warehouse",
+  "theme_color": "purple",
+  "econometric_drivers": {
+    "title": "Tri-State Econometric Drivers & Cross-River Arbitrage",
+    "description": "Models consumer cross-river refuel switching between Hamilton County OH and Northern Kentucky (Kenton/Boone counties) driven by the persistent $0.125/gal state fuel tax differential."
+  },
+  "refining_logistics": {
+    "title": "Refining & River Inland Waterway Logistics",
+    "description": "Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo IL confluence, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.",
+    "primary_refinery": "Marathon Catlettsburg KY Refinery",
+    "capacity_bpd": 291000,
+    "pipelines": ["Buckeye Pipeline", "Ohio River Marine Barge Corridor"]
+  },
+  "tax_structure": {
+    "title": "Dual-State Tax Structure & Statutory Fees",
+    "description": "Ohio state fuel tax ($0.385/gal) vs Kentucky state fuel tax ($0.260/gal) combined with US Federal excise tax ($0.184/gal) creates total tax loads of $0.569/gal in OH vs $0.444/gal in KY.",
+    "state_tax_per_gal": 0.385,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.569,
+    "notes": "Ohio $0.385/gal vs Kentucky $0.260/gal creates persistent $0.125/gal cross-river gap"
+  },
+  "infrastructure_delivery": {
+    "title": "Dual-State Delivery Hub & Rack Margin Equations",
+    "equation_latex": "\\text{Rack Margin}_{\\text{OH}} = P_{\\text{OH Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.450 - \\$3.184 = \\$0.266/\\text{gal}",
+    "description": "Reflects the $0.125/gal state fuel tax differential across the Ohio River metropolitan boundary.",
+    "hub_distance_miles": 15,
+    "hub_name": "Mile 470 Ohio River Terminal Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Catlettsburg Refinery Outage",
+      "subtitle": "Marathon Hydrocracker Trip",
+      "price_impact_per_gal": 0.165,
+      "pct_impact": 4.78,
+      "description": "Tights Tri-State unleaded rack availability"
+    },
+    {
+      "name": "Ohio River Lockout",
+      "subtitle": "Markland Locks Ice Jam",
+      "price_impact_per_gal": 0.112,
+      "pct_impact": 3.25,
+      "description": "Forces expensive rail transport"
+    },
+    {
+      "name": "Lower Mississippi Low Water",
+      "subtitle": "Memphis Draft Restrictions",
+      "price_impact_per_gal": 0.145,
+      "pct_impact": 4.20,
+      "description": "Restricts Gulf Coast barge tow capacity"
+    }
+  ]
+}

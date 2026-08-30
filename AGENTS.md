@@ -165,6 +165,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - Models statutory **CARB & CA state tax burden ($0.953/gal total)**: 63.4¢ state excise tax, ~25¢ Cap-and-Trade carbon fees, ~18.5¢ LCFS credit overhead, and ~15¢ local sales tax/UST fees.
   - Integrates Chevron Richmond Refinery dynamics (245,000 bpd capacity), PBF Martinez, Valero Benicia, Kinder Morgan SFPP pipeline corridors, **USGS Hayward/San Andreas Fault seismic risks**, **CAL FIRE & PG&E Public Safety Power Shutoff (PSPS) refinery blackout risks**, **NOAA PTWC Tsunami advisories**, and **NHC EPAC Tropical Storm Remnants**.
 
+* **Mandatory Regional Dashboard Visual Card Standard & Metadata Storage Specification (Issue #35 & Decoupled Storage Architecture):**
+  - ALL localized regional public web dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/greenville`, `/charlotte`, `/oakland`, `/bayarea`) MUST display dedicated visual cards detailing their unique regional econometric drivers, refining logistics, tax structures, and physical delivery hub dynamics.
+  - **Decoupled JSON Storage Specification:** Regional econometric descriptions, refinery capacities, tax structures, delivery hub dynamics, and shock scenarios MUST NOT be hardcoded directly into HTML template strings inside `src/dashboard_generator.py`. Instead, all regional metadata profiles MUST be maintained as structured JSON files under `data/regional_metadata/<region_id>.json` (e.g., `tulsa_ok.json`, `newark_de.json`, `cincinnati_oh.json`, `greenville_nc.json`, `charlotte_nc.json`, `oakland_ca.json`, `bayarea_ca.json`).
+  - **Mandatory Guidance when New Regions are Added:** Whenever a new regional calibration agent / metro locale is added to Midgley (e.g., in `src/locations/<new_location>/`):
+    1. Create a JSON profile file at `data/regional_metadata/<region_id>.json` following the schema defined in `src/regional_metadata.py` covering all 4 core dimensions (`econometric_drivers`, `refining_logistics`, `tax_structure`, `infrastructure_delivery`) and `shock_scenarios`.
+    2. Import `render_regional_driver_cards_html` from `src.regional_metadata` inside `src/dashboard_generator.py` and replace `{{REGIONAL_CARDS}}` in the HTML template string to dynamically render the visual cards onto the regional dashboard page.
+
 ---
 
 ### 5. Synthesis & Scenario Simulator Agent (`src/locations/<location>/main.py`)
@@ -213,9 +220,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py` & `src/social_embed_generator.py`)
+### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`, `src/regional_metadata.py` & `src/social_embed_generator.py`)
 
-* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
+* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), loads decoupled regional metadata profiles from `data/regional_metadata/` via `src/regional_metadata.py`, renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
 * **Dynamic Overview Card Engine:** Dynamically queries real-time live retail pump prices via `fetch_live_metro_retail_price()` for all regional metro cards (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Oakland_CA`, `BayArea_CA`), while preserving NYMEX RBOB commodity futures benchmark pricing ($3.184/gal - $3.270/gal) for the **National Wholesale** contract card.
 * **Automated Social Preview Image Generator (`src/social_embed_generator.py`):**
   - Uses Matplotlib (`Agg` backend) to generate 10 dark-mode social preview cards (`1200x630px` PNG) in `docs/assets/embeds/` (`national.png`, `tulsa.png`, `newark.png`, `cincinnati.png`, `greenville.png`, `charlotte.png`, `oakland.png`, `bayarea.png`, `overview.png`, `math.png`).

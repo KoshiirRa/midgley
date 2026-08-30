@@ -13,6 +13,7 @@ from src.dashboard_generator import (
     NEWARK_PATH,
     CINCINNATI_PATH,
     GREENVILLE_PATH,
+    CHARLOTTE_PATH,
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
@@ -387,6 +388,36 @@ def test_cloudflare_analytics_injection():
             os.environ["CLOUDFLARE_ANALYTICS_TOKEN"] = old_env
         else:
             os.environ.pop("CLOUDFLARE_ANALYTICS_TOKEN", None)
+
+
+def test_all_regional_dashboard_pages_have_dedicated_driver_cards():
+    """Verify Issue #35: Ensure that ALL localized regional public web dashboard pages
+    (Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, and Bay Area)
+    display dedicated visual cards detailing their unique regional econometric drivers,
+    refining logistics, tax structures, and physical delivery hub dynamics.
+    """
+    generate_public_dashboard()
+
+    regional_paths = [
+        TULSA_PATH,
+        NEWARK_PATH,
+        CINCINNATI_PATH,
+        GREENVILLE_PATH,
+        CHARLOTTE_PATH,
+        OAKLAND_PATH,
+        BAYAREA_PATH,
+    ]
+
+    for path in regional_paths:
+        assert os.path.exists(path), f"Regional page missing: {path}"
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Check for dedicated visual card header section
+        assert "Regional Econometric Drivers & Physical Infrastructure Factors" in content, (
+            f"Missing dedicated driver & infrastructure card header in {path}"
+        )
+
 
 
 

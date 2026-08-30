@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "oakland_ca",
+  "display_name": "Oakland, CA Metro Retail",
+  "padd_region": "PADD 5 West Coast",
+  "primary_city": "Oakland, CA",
+  "counties": ["Alameda", "Contra Costa"],
+  "baseline_price": 4.950,
+  "icon_class": "fa-warehouse",
+  "theme_color": "amber",
+  "econometric_drivers": {
+    "title": "PADD 5 West Coast Econometric Levers",
+    "description": "Oakland operates within the isolated PADD 5 West Coast pricing island where retail prices reflect strict CARB CaRFG summer/winter blend specifications, regional refining tightness, and waterborne import premiums."
+  },
+  "refining_logistics": {
+    "title": "Chevron Richmond Refining & Pipeline Logistics",
+    "description": "Located 12 miles north of Oakland, Chevron's 245,000 bpd Richmond Refinery, alongside PBF Martinez and Valero Benicia, supplies East Bay retail stations via the Kinder Morgan SFPP pipeline corridor.",
+    "primary_refinery": "Chevron Richmond Refinery",
+    "capacity_bpd": 245000,
+    "pipelines": ["Kinder Morgan SFPP North/South Line"]
+  },
+  "tax_structure": {
+    "title": "CARB Environmental Tax & Regulatory Overhead",
+    "description": "California imposes $0.953/gal state environmental tax/fee burden ($0.634 excise + $0.250 Cap-and-Trade + $0.185 LCFS + $0.150 sales/UST), yielding $1.407/gal total statutory tax with Federal excise.",
+    "state_tax_per_gal": 0.953,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 1.407,
+    "notes": "Highest regulatory and environmental tax overhead in the nation"
+  },
+  "infrastructure_delivery": {
+    "title": "Physical Hazard & Delivery Hub Dynamics",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{Oakland Retail}} - P_{\\text{Wholesale RBOB}} = \\$4.950 - \\$3.184 = \\$1.766/\\text{gal}",
+    "description": "East Bay rack truck and pipeline distribution monitored against USGS Hayward Fault (M>=6.0) seismic risks, PG&E PSPS Red Flag wildfire power cuts, and PTWC Tsunami marine berth closures.",
+    "hub_distance_miles": 12,
+    "hub_name": "Chevron Richmond Marine Berth & SFPP Terminal"
+  },
+  "shock_scenarios": [
+    {
+      "name": "USGS Hayward Quake (M>=6.0)",
+      "subtitle": "Pipeline Shutoff & Hydrocracker Trip",
+      "price_impact_per_gal": 0.420,
+      "pct_impact": 8.48,
+      "description": "Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips"
+    },
+    {
+      "name": "PG&E PSPS Wildfire Shutoff",
+      "subtitle": "Diablo Wind Red Flag Power Cut",
+      "price_impact_per_gal": 0.350,
+      "pct_impact": 7.07,
+      "description": "Diablo wind Red Flag power cuts force emergency flaring & 2-week unit restarts"
+    },
+    {
+      "name": "NOAA PTWC Tsunami Alert",
+      "subtitle": "Carquinez Strait Berth Closure",
+      "price_impact_per_gal": 0.165,
+      "pct_impact": 3.33,
+      "description": "Golden Gate & Carquinez Strait crude tanker berth closures delay ANS discharges"
+    }
+  ]
+}
