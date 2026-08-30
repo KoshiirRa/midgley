@@ -824,5 +824,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.6
     }
+  },
+  {
+    "timestamp": "2026-08-30T17:46:33.084544",
+    "headline": "Video Trump\u2019s changing tariff policy draws bipartisan criticism - ABC News - Breaking News, Latest News and Videos",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE96REVtUjZIMlNwdXktRmxkdnZySWVJQ1BYNDN1WnU0cWc1SjdyaWx2SUxXUDlSRlBOb1RZeDZBbWRQZXY4anVkUGc1dWU?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.4,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    }
   }
 ]
