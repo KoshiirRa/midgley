@@ -1,27 +1,27 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-08-30 16:04:43`  
-**Run Mode:** `DAILY_BATCH`  
-**Primary Event Trigger:** Scheduled Daily Batch Refresh (02:00 AM Central)  
+**Log Timestamp:** `2026-08-30 16:15:36`  
+**Run Mode:** `INTRADAY_REVISION`  
+**Primary Event Trigger:** U.S. Treasury's Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil - CNBC  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Scheduled Daily Batch Refresh (02:00 AM Central)
+- **Headline Trigger:** U.S. Treasury's Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil - CNBC
 - **Active Ingested News Links:**
-- [NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh](https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html) (CME_Group / NYMEX)
-- [NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion](https://api.weather.gov) (NOAA_NWS_API)
-- [Executive Social Media Feed & OPEC Weekend Price Gap Analysis](https://finlight.me) (Finlight_v2_API)
+- [U.S. Treasury's Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil - CNBC](https://news.google.com/rss/articles/CBMipwFBVV95cUxONXpzTzFUZ3Jud096M1JzNjZ4VjFHLXc4aXhzNTJ0MmJTOHNkMnFsekdrWkVnY1pwVUhxYkREdjg4ci1ockg3LVg1aXA5QWdCMnlTLU5GUjRSUUkxZWthS0JkWTdoMTRFcEZtTG0zNExXSzlwVjZnbG9WVWtpSzdWbHZTT0RCWnMtdlNzYzRIcGhSM1o3QldsUlRDc25TT0pPc1prNThEc9IBrAFBVV95cUxPZlYyZDJOb0ZzV01JbFRFYTBLbm56V0dfRjQ2UHRUM01oMXhFUnRBeW0yVC03TTduMy12ZnQtVzRWTGpfVHZkbW94YWRpZm8xOXJXQzNVRERVaXNicVd2OFFIc0pvakZnS2x0TzlWNHFmWndaYTdNWjFfWUJVeFdMSWdfUTRETUtMcWctd0RtQkpjZUl3SkZrQ1hyRjY3cWJ4WjFDU0M0dUVYRUZy?oc=5) (RSS_Feed)
+- [India, China, Canada and more: 10 countries still under Trump’s tariff squeeze and why - The Times of India](https://news.google.com/rss/articles/CBMi_AFBVV95cUxOYVFrU3J0R2dDV2laRTlZcGYxakVLcGlfTDZWZno2UVpTaW5yalF5QTc5eWNxZGhNMld1Q00xSEdoeTlCYy16RUJIYWZHbjA5QTVYRHM5SG9fSlk5aFJwWklJQXF3MmNlN0JFT3dvLUhXTFhrM1JEVjhuM05jQ3N0ekFWaE9qWndFOFczdWo3V2d2Y3l5bWhTR3FOSTJZV0l3OWVfcTNQYUJ3TElGNzBXOThER3cyTTVHYzBOWHhCVzNTMDBBNEhWTWVBbXlGWXVYc0o2U05UN0t4WGZFYVhPaDY4R2pZZUdYbTNlWHBkMF9kTHpoY2U5Slpic2k?oc=5) (RSS_Feed)
+- [G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Venezuela Oil Deal Dents Cohesion - Benzinga](https://news.google.com/rss/articles/CBMizgFBVV95cUxOYnBQQmtwNFpUU21mYnIwaDV4TlhHTl9ybDhYVnZ6eUpHdEt2U0I1eVkyX2ZhUWo3RFhFOFF2WGpZY19JM3I4QWtXcXlmc0dobzcxdnEybjZpdlpUdHUzT20xcFJibnFSZ0FjTDNKMjlQcFE3T05LQ21mSkNxZlJlbDVRNnZKcTZfVU5EVFhpUjVpVDFCTS1uYVdGSnpfUDlrSGFsUFdxN3ExZXpUZndDZ0ptM3dWbmc0ODJWZDVhTmFaUXppTkIxSFZ3ZVlqUQ?oc=5) (RSS_Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.10`
-- **Price Pressure Shock ($\Delta P$):** `+0.02`
-- **Geopolitical Risk Score ($G$):** `0.15`
+- **Supply Disruption Score ($S$):** `0.80`
+- **Price Pressure Shock ($\Delta P$):** `+0.52`
+- **Geopolitical Risk Score ($G$):** `0.80`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -37,13 +37,13 @@ Decay Parameter Substitutions:
 - Decay constant: $\lambda = \frac{\ln(2)}{5.0} = 0.13863 \text{ day}^{-1}$
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
-Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.1000$
-- **Day 1 Decayed Shock**: $M_1 = 0.1000 \times 0.87055 = 0.0871$
-- **Day 2 Decayed Shock**: $M_2 = 0.1000 \times (0.87055)^2 = 0.0758$
-- **Day 3 Decayed Shock**: $M_3 = 0.1000 \times (0.87055)^3 = 0.0660$
-- **Day 4 Decayed Shock**: $M_4 = 0.1000 \times (0.87055)^4 = 0.0574$
-- **Day 5 (Target Horizon)**: $M_5 = 0.1000 \times 0.50000 = 0.0500$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.8000$
+- **Day 1 Decayed Shock**: $M_1 = 0.8000 \times 0.87055 = 0.6964$
+- **Day 2 Decayed Shock**: $M_2 = 0.8000 \times (0.87055)^2 = 0.6063$
+- **Day 3 Decayed Shock**: $M_3 = 0.8000 \times (0.87055)^3 = 0.5278$
+- **Day 4 Decayed Shock**: $M_4 = 0.8000 \times (0.87055)^4 = 0.4595$
+- **Day 5 (Target Horizon)**: $M_5 = 0.8000 \times 0.50000 = 0.4000$ (50.0% residual event memory)
 
 ---
 
@@ -64,16 +64,16 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-08-30 16:04:43]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Scheduled Daily Batch Refresh (02:00 AM Central)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.
+SUMMARY FOR RUN [2026-08-30 16:15:36]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'U.S. Treasury's Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil - CNBC' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-08-30 16:04:43 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Finlight_v2_API, NOAA_NWS_API, CME_Group / NYMEX). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.1000
-  - Day 1: M₁ = 0.0871
-  - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-08-30 16:15:36 (Mode: INTRADAY_REVISION), primary event trigger 'U.S. Treasury's Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil - CNBC' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.8000
+  - Day 1: M₁ = 0.6964
+  - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
@@ -91,11 +91,11 @@ Largest upward shift for this run: National Wholesale at $3.250/gal (+0.043/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-08-30 16:04:43]:
-• Execution Context: Run type 'DAILY_BATCH' triggered by 'Scheduled Daily Batch Refresh (02:00 AM Central)'. Overall price pressure vector sits at ΔP=+0.02/gal.
+Evaluated tail-risk catalysts specific to execution [2026-08-30 16:15:36]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'U.S. Treasury's Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil - CNBC'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-30 16:04:43.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-08-30 16:15:36.*
