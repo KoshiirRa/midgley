@@ -628,5 +628,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.7
     }
+  },
+  {
+    "timestamp": "2026-08-30T11:17:30.421433",
+    "headline": "Mines cleared and oil flowing from Strait of Hormuz; US blockading Iran - todayville.com",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPaERYS0RQWVpFZmRXVlVBcVpuTjE2VE02eFBJMnZkdEV6ckU3UmN5a2t4ZTJTY3Z2MDRidDFuQmRVZG5IVWRuY1I5b3JpNXJ3b2hJNlo1VkNfX2xXODB0aXpZVl9nXzQ5YVljTjlxcWd2QlRqbUxGcUVXS0hSNnU3MVlxdUUyYXhkeVloTGRneGdXdWtrQ182SG44MG5XYVV0Skp0N05oM29ZQQ?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.8,
+      "demand_sentiment": -0.7,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.85
+    }
   }
 ]
