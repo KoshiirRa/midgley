@@ -586,5 +586,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.5
     }
+  },
+  {
+    "timestamp": "2026-08-30T03:16:27.626816",
+    "headline": "Tariff Battle With Canada Intensifies - news8000.com",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQS1hpOHh6SWxTcTdNS1dFNjhwTVJMMHZjWUNQRHY5UUdjdHpJa0h3Sy1acWt5TTBUeG80RUtPUC1sdGkyQl9zd3MtNVV0T0tBR0ZUZFVzZDI3VVk0bGFnd0Z6MXkyM0hvbHVQd1o3REJoTVRqWS1PYUdvWDZpREFHV2FQSm9seGtuM1NHQjA1aUxFN1RMZXdPbTZxNWhPeVdwSkdEWTN2a3N0MHBUN3VSd3UyRld1dw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.5,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    }
   }
 ]
