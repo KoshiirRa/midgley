@@ -67,6 +67,10 @@ class LookupCache:
         turso_token = os.environ.get("TURSO_AUTH_TOKEN")
         cf_url = os.environ.get("CLOUDFLARE_CACHE_URL")
         cf_token = os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+        if turso_url and turso_url.startswith("turso://"):
+            turso_url = "https://" + turso_url[8:]
+        if cf_url and cf_url.startswith("http://"):
+            cf_url = "https://" + cf_url[7:]
         return turso_url, turso_token, cf_url, cf_token
 
     def _turso_get(self, key: str, turso_url: str, turso_token: str) -> Optional[Tuple[str, float, float]]:
