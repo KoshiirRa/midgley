@@ -670,5 +670,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.6
     }
+  },
+  {
+    "timestamp": "2026-08-30T15:01:40.150377",
+    "headline": "Ontario's premier says trade war would be 'devastating' for US and Canada - ABC News - Breaking News, Latest News and Videos",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOaDU2Z1JYQkRIOVlnUTAyOHpyN0Rnc1RiTUFFQVdwQWFBX2FVV0Ewc3lNMDFCN3B6ZkhsNzZwSGl6Z3hPblJkWDMxUGFzY3VEMUJXNkM3ZURuaDBwaWw5ZGU0ZW9US25fNWs2MnBoeTNDQzFjOFZiVmNkTFA1RnRqdFlMaWNLbmhrcF80cHBXVnNRZlR5ck40R3h1OHfSAaIBQVVfeXFMTjZNVkZvUmQ3Z2dnQk5HMEc3VDNMVmV3WnVjZ1ZPOVdVSG90VXlHLTY1NzRpQ1dLT0ZUTEs5X0JmV0hMNUVCQjlubDEwZFV1NERfWXN5bnhMT0JIZm5TZG1VNHlLQWJWekxLR0dpY0F4a3g3ckVmUldSQ05fUGpYdWdBSnlxZHBMUXVFcGJNcW5YbzBhLTJJdVh3QTNrN0RVdnZB?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.1,
+      "demand_sentiment": -0.8,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.6
+    }
   }
 ]
