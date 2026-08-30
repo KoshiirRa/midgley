@@ -73,9 +73,38 @@ class LookupCache:
             cf_url = "https://" + cf_url[7:]
         return turso_url, turso_token, cf_url, cf_token
 
+    def _turso_ensure_table(self, turso_url: str, turso_token: str):
+        """Ensures the lookup_cache table exists on remote Turso Edge SQLite."""
+        if getattr(self, "_turso_table_initialized", False):
+            return
+        try:
+            endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
+            headers = {
+                "Authorization": f"Bearer {turso_token}",
+                "Content-Type": "application/json",
+            }
+            body = json.dumps({
+                "requests": [
+                    {
+                        "type": "execute",
+                        "stmt": {
+                            "sql": "CREATE TABLE IF NOT EXISTS lookup_cache (key TEXT PRIMARY KEY, value TEXT NOT NULL, created_at REAL NOT NULL, expires_at REAL NOT NULL)"
+                        },
+                    },
+                    {"type": "close"}
+                ]
+            }).encode("utf-8")
+            req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as resp:
+                if resp.status == 200:
+                    self._turso_table_initialized = True
+        except Exception as e:
+            logger.warning(f"Turso table initialization notice: {e}")
+
     def _turso_get(self, key: str, turso_url: str, turso_token: str) -> Optional[Tuple[str, float, float]]:
         """Queries Tier 1 Turso Edge SQLite via HTTPS REST API."""
         try:
+            self._turso_ensure_table(turso_url, turso_token)
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
             headers = {
                 "Authorization": f"Bearer {turso_token}",
@@ -89,7 +118,8 @@ class LookupCache:
                             "sql": "SELECT value, created_at, expires_at FROM lookup_cache WHERE key = ?",
                             "args": [{"type": "text", "value": key}],
                         },
-                    }
+                    },
+                    {"type": "close"}
                 ]
             }).encode("utf-8")
 
@@ -102,19 +132,19 @@ class LookupCache:
                         rows = results[0].get("response", {}).get("result", {}).get("rows", [])
                         if rows:
                             row = rows[0]
-                            # row format: [{"type":"text","value":...}, ...]
                             val_str = row[0].get("value")
                             created_at = float(row[1].get("value", 0))
                             expires_at = float(row[2].get("value", 0))
                             return val_str, created_at, expires_at
         except Exception as e:
-            logger.debug(f"Turso Edge cache fetch notice ({e})")
+            logger.warning(f"Turso Edge cache fetch notice: {e}")
             self.stats["errors"] += 1
         return None
 
     def _turso_set(self, key: str, val_str: str, created_at: float, expires_at: float, turso_url: str, turso_token: str):
         """Writes entry to Tier 1 Turso Edge SQLite via HTTPS REST API."""
         try:
+            self._turso_ensure_table(turso_url, turso_token)
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
             headers = {
                 "Authorization": f"Bearer {turso_token}",
@@ -129,11 +159,12 @@ class LookupCache:
                             "args": [
                                 {"type": "text", "value": key},
                                 {"type": "text", "value": val_str},
-                                {"type": "float", "value": created_at},
-                                {"type": "float", "value": expires_at},
+                                {"type": "float", "value": float(created_at)},
+                                {"type": "float", "value": float(expires_at)},
                             ],
                         },
-                    }
+                    },
+                    {"type": "close"}
                 ]
             }).encode("utf-8")
 
@@ -141,7 +172,7 @@ class LookupCache:
             with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as resp:
                 pass
         except Exception as e:
-            logger.debug(f"Turso Edge cache write notice ({e})")
+            logger.warning(f"Turso Edge cache write notice: {e}")
             self.stats["errors"] += 1
 
     def _cloudflare_get(self, key: str, cf_url: str, cf_token: str = None) -> Optional[Tuple[str, float, float]]:
