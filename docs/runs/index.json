@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-08-30_16-36-42",
+    "timestamp": "2026-08-30 16:30:40",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Tariffs for oil? - Kingston Whig"
+  },
+  {
+    "run_id": "2026-08-30_16-36-32",
+    "timestamp": ">>>>>>> origin/main",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-08-30_16-30-49",
     "timestamp": "2026-08-30 16:30:40",
     "run_type": "INTRADAY_REVISION",

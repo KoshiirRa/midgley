@@ -1,0 +1,112 @@
+{
+  "run_id": "2026-08-29_21-17-44",
+  "log_timestamp": "2026-08-29 21:17:40",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "Duane Bratt: Trump trade war exposes Danielle Smith\u2019s Alberta balancing act - Thoughtful Journalism - Energi Media",
+  "headline_items": [
+    {
+      "headline": "Duane Bratt: Trump trade war exposes Danielle Smith\u2019s Alberta balancing act - Thoughtful Journalism - Energi Media",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQVFFpNW94SkRJRlVKMWRkM005ZllYaXlXLWdfOU5jWFFtVHNwZHp0WF9XcTloTjZUT2xFVF9aSFctZElXRkMyX1ZialRQLVIwOThEb1k2RF9SWnpuUG9NUnptVmRCTXJBMmxwOFRaV1MwNjNKelRFZEVidFJQMGVScmhlTE4?oc=5",
+      "source": "Cloudflare_Worker"
+    },
+    {
+      "headline": "Trump ups the ante in India trade talks with 25% tariff threat - The Guardian Nigeria News",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOT2YyRnUxY0Nqb1JfXzF5VmFMV1dkN05vMHlmQUloX3hBTDRzczQtOTFSdXVrTUVpeWg3SGV6czNYOGJkeHRKWUYxU0RSTm9fRVlkclNhNFllRGN3clVvdHBlMWtuenFpR0VSZTlhbThWMWJPYTMzQk1iY0N0M29SZHZReWRKMnVNNVNSb3dR?oc=5",
+      "source": "Cloudflare_Worker"
+    },
+    {
+      "headline": "Oil, Migration, War & Drugs: How India, Canada Revealed Trump\u2019s Tariff Policy Beyond Trade - The Times of India",
+      "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxOSEZ1MVQxZ2xhVm5TaEg0bmt1NENpR2VUNTZSaFBSQ2JmbGhERi1OQXVveHg0alQwaW93TTQ0ZW5OTlBhcWI4LVRLSUlraThwNmhTcFFqMjNPWV9JU3dxekI4c3NMYkY4RWNtRWx2M09nQXZpTkg4V3JVdjhpQjBwWWVWT285aVVxN2xYUmRBUlV5S0ljQ2RZYmVyQ0V5TkRQWjF0UkVhUV9YV1pPelZ0Q1dnc3lfdW52YjNnSy1Ua1NONW4yVzZTZ293R3RiTUVoWFNENXViWG9Xc0Z3MFBZbm9PXzNmQkFvMkF1NE9oYndwRzA?oc=5",
+      "source": "Cloudflare_Worker"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.0,
+    "overall_price_pressure": -0.7,
+    "geopolitical_risk": 0.5,
+    "demand_sentiment": -0.7,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.0,
+    "m1": 0.0,
+    "m2": 0.0,
+    "m3": 0.0,
+    "m4": 0.0,
+    "m5": 0.0
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.0948,
+      "delta": -0.12049999999999983,
+      "pct_change": -3.784547738693462
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.751,
+      "predicted_price": 3.6237,
+      "delta": 0.02259999999999973,
+      "pct_change": 0.6025059984004194
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 3.934,
+      "predicted_price": 3.7889,
+      "delta": 0.014699999999999935,
+      "pct_change": 0.3736654804270446
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 3.878,
+      "predicted_price": 3.7555,
+      "delta": 0.01949999999999985,
+      "pct_change": 0.5028365136668348
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 3.874,
+      "predicted_price": 3.7329,
+      "delta": 0.01709999999999967,
+      "pct_change": 0.4414042333505335
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 3.742,
+      "predicted_price": 3.6084,
+      "delta": 0.022299999999999986,
+      "pct_change": 0.5959380010689467
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 5.667,
+      "predicted_price": 5.474,
+      "delta": 0.19010000000000016,
+      "pct_change": 3.3545085583201018
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 5.667,
+      "predicted_price": 5.474,
+      "delta": 0.09010000000000051,
+      "pct_change": 1.589906476089651
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-08-29 21:17:40]: Downward price pressure (-0.70/gal shock) detected following 'Duane Bratt: Trump trade war exposes Danielle Smith\u2019s Alberta balancing act - Thoughtful Journalism - Energi Media'. Supply disruption score S=0.00 and geopolitical risk G=0.50 indicate easing market tightness. Residual event memory decays from initial M\u2080=0.0000 to Day-5 retention M\u2085=0.0000.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-08-29 21:17:40 (Mode: INTRADAY_REVISION), primary event trigger 'Duane Bratt: Trump trade war exposes Danielle Smith\u2019s Alberta balancing act - Thoughtful Journalism - Energi Media' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Cloudflare_Worker). Ingested factor vector: Supply Disruption S=0.00, Price Pressure \u0394P=-0.70, Geopolitical Risk G=0.50. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.0000\n  - Day 1: M\u2081 = 0.0000\n  - Day 5: M\u2085 = 0.0000 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.095/gal ($-0.120/gal, -3.78%)\n  \u2022 Tulsa, OK Retail: $3.624/gal (+$0.023/gal, +0.60%)\n  \u2022 Newark, DE Retail: $3.789/gal (+$0.015/gal, +0.37%)\n  \u2022 Cincinnati, OH/KY: $3.756/gal (+$0.019/gal, +0.50%)\n  \u2022 Greenville, NC Retail: $3.733/gal (+$0.017/gal, +0.44%)\n  \u2022 Charlotte, NC Retail: $3.608/gal (+$0.022/gal, +0.60%)\n  \u2022 Oakland, CA Retail: $5.474/gal (+$0.190/gal, +3.35%)\n  \u2022 SF Bay Area Region: $5.474/gal (+$0.090/gal, +1.59%)\n\nLargest upward shift for this run: Oakland, CA Retail at $5.474/gal (+0.190/gal). Largest downward shift for this run: National Wholesale at $3.095/gal (-0.120/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-08-29 21:17:40]:\n\u2022 Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Duane Bratt: Trump trade war exposes Danielle Smith\u2019s Alberta balancing act - Thoughtful Journalism - Energi Media'. Overall price pressure vector sits at \u0394P=-0.70/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.50. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+  }
+}
