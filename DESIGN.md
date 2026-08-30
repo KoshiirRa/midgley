@@ -142,3 +142,12 @@ Follow the Midgley Vintage Fuel Design System (DESIGN.md):
 - Typography: Georgia/serif for lab headers, Courier/JetBrains Mono for mechanical counter readouts ($3.890/gal).
 - Card Frame: Brass rivet borders (border-[#785327]/60) with mechanical price counter boxes (bg-[#0A0705] border-2 border-[#573A1B]).
 ```
+
+---
+
+## 8. Decoupled Regional Metadata & Visual Card Architecture
+
+All regional driver cards, refining logistics, state/local tax structures, physical infrastructure delivery dynamics, and shock scenario definitions MUST adhere to the **Regional Storage Specification**:
+- **Profiles Directory**: Maintain structured JSON files under `data/regional_metadata/<region_id>.json` (`tulsa_ok.json`, `newark_de.json`, `cincinnati_oh.json`, `greenville_nc.json`, `charlotte_nc.json`, `oakland_ca.json`, `bayarea_ca.json`).
+- **Card Rendering**: Use `render_regional_driver_cards_html(region_id)` from [`src/regional_metadata.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/regional_metadata.py) inside [`src/dashboard_generator.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/dashboard_generator.py) to dynamically construct responsive Tailwind visual cards covering all 4 core dimensions. Never hardcode prose driver descriptions inside Python HTML template strings.
+

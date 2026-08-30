@@ -99,7 +99,16 @@ class UniversalStateOpenDataConnector:
         """
         code = self.resolve_state(state_input)
         meta = STATE_METADATA.get(code, STATE_METADATA["OK"])
+        cache_key = f"socrata_fuel_tax_{code}"
         
+        try:
+            from src.lookup_cache import global_cache
+            cached = global_cache.get(cache_key)
+            if cached:
+                return cached
+        except Exception:
+            pass
+
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         total_tax = meta.get("carb_total", meta["tax_rate"])
@@ -120,7 +129,7 @@ class UniversalStateOpenDataConnector:
             except Exception:
                 pass
 
-        return {
+        result = {
             "state_code": code,
             "state_name": meta["name"],
             "fips_code": meta["fips"],
@@ -133,6 +142,15 @@ class UniversalStateOpenDataConnector:
             "cost_per_query": 0.0,
             "timestamp": timestamp_str
         }
+
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(cache_key, result, ttl_seconds=86400 * 30)
+        except Exception:
+            pass
+
+        return result
+
 
     def get_all_states_tax_matrix(self) -> dict:
         """Returns tax rates and metadata across all 50 US States + DC."""

@@ -114,6 +114,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **FRED (St. Louis Fed) Energy Series (`src/data_ingestion.py`):** `FREDDataConnector` ingests weekly national and PADD retail gasoline/diesel series (`GASREGW`, `GASDESW`, `GASREGWCW`, `GASREGWGULF`) and CPI gasoline index (`CUUR0000SETB01`).
   - **U.S. EIA API v2 Open Data (`src/data_ingestion.py`):** `EIADataConnector` ingests weekly retail price series, PADD refinery percent utilization, and regional motor gasoline/crude stock inventories (`/petroleum/pri/gnd/data/`, `/petroleum/pnp/pct/data/`, `/petroleum/stoc/wstk/data/`).
   - **USDA Biofuel & Ethanol Market Reports (`src/data_ingestion.py`):** `USDABiofuelConnector` ingests spot Midwest ethanol (E100) rack prices ($/gal) and RIN D6 Ethanol Credit spot values (`marsapi.ams.usda.gov`) for E10 unleaded blendstock cost modeling ($0.10 \times \text{E100} + 0.90 \times \text{RBOB} + \text{RIN Overhead}$).
+  - **OilpriceAPI Energy & Petroleum Data Feed (`src/data_ingestion.py`) (Issue #128):** `OilPriceAPIDataConnector` provides REST API & Python SDK ingestion for real-time oil and energy commodity spot prices (`WTI_USD`, `BRENT_USD`, `RBOB_USD`, `NG_USD`, `HO_USD`, `RAL_USD`, `COAL_USD`) with persistent 25 call/day safety valve (`data/oilpriceapi_quota.json`), off-hours cache (`data/oilpriceapi_cache.json`), and offline benchmark fallback mode (`status: FALLBACK`).
   - **Open-Meteo & NOAA High-Resolution Degree Days (`src/noaa_weather.py`):** `OpenMeteoDegreeDaysConnector` computes daily Heating Degree Days ($\text{HDD}$), Cooling Degree Days ($\text{CDD}$), and freeze/heat stress risk warnings across 6 primary refining hubs (West Tulsa, Delaware City, Catlettsburg, Richmond/Martinez, Selma, Paw Creek).
 
 
@@ -164,6 +165,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - Models statutory **CARB & CA state tax burden ($0.953/gal total)**: 63.4¢ state excise tax, ~25¢ Cap-and-Trade carbon fees, ~18.5¢ LCFS credit overhead, and ~15¢ local sales tax/UST fees.
   - Integrates Chevron Richmond Refinery dynamics (245,000 bpd capacity), PBF Martinez, Valero Benicia, Kinder Morgan SFPP pipeline corridors, **USGS Hayward/San Andreas Fault seismic risks**, **CAL FIRE & PG&E Public Safety Power Shutoff (PSPS) refinery blackout risks**, **NOAA PTWC Tsunami advisories**, and **NHC EPAC Tropical Storm Remnants**.
 
+* **Mandatory Regional Dashboard Visual Card Standard & Metadata Storage Specification (Issue #35 & Decoupled Storage Architecture):**
+  - ALL localized regional public web dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/greenville`, `/charlotte`, `/oakland`, `/bayarea`) MUST display dedicated visual cards detailing their unique regional econometric drivers, refining logistics, tax structures, and physical delivery hub dynamics.
+  - **Decoupled JSON Storage Specification:** Regional econometric descriptions, refinery capacities, tax structures, delivery hub dynamics, and shock scenarios MUST NOT be hardcoded directly into HTML template strings inside `src/dashboard_generator.py`. Instead, all regional metadata profiles MUST be maintained as structured JSON files under `data/regional_metadata/<region_id>.json` (e.g., `tulsa_ok.json`, `newark_de.json`, `cincinnati_oh.json`, `greenville_nc.json`, `charlotte_nc.json`, `oakland_ca.json`, `bayarea_ca.json`).
+  - **Mandatory Guidance when New Regions are Added:** Whenever a new regional calibration agent / metro locale is added to Midgley (e.g., in `src/locations/<new_location>/`):
+    1. Create a JSON profile file at `data/regional_metadata/<region_id>.json` following the schema defined in `src/regional_metadata.py` covering all 4 core dimensions (`econometric_drivers`, `refining_logistics`, `tax_structure`, `infrastructure_delivery`) and `shock_scenarios`.
+    2. Import `render_regional_driver_cards_html` from `src.regional_metadata` inside `src/dashboard_generator.py` and replace `{{REGIONAL_CARDS}}` in the HTML template string to dynamically render the visual cards onto the regional dashboard page.
+
 ---
 
 ### 5. Synthesis & Scenario Simulator Agent (`src/locations/<location>/main.py`)
@@ -204,7 +212,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Continuous Feedback Loop & Self-Review Mechanism:**
   - **Rolling Error Metrics:** Evaluates rolling MAE, RMSE, and Directional Hit Rate metrics across 30-day, 60-day, and 90-day historical evaluation windows.
   - **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley` via `gh` CLI or GitHub REST API, evaluates each issue's potential modeling impact using Gemini 2.5 Flash (with a domain-specific heuristic fallback), ranks issues, and selects the top issue expected to yield the largest accuracy/MAE improvement.
-  - **Automated Developer Catalog Monitor (`src/catalog_monitor.py` & `data/catalog_monitors_state.json`):** Continuously tracks 6 major developer catalog indexes (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). On weekly runs, evaluates newly added catalog items with Gemini 2.5 Flash and automatically files GitHub Feature Request issues for items scoring $\ge 7.0/10.0$.
+  - **Automated Developer Catalog Monitor (`src/catalog_monitor.py`, `data/catalog_monitors_state.json` & [`docs/research_sources.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/research_sources.md)):** Continuously tracks 10 major developer catalog indexes (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`, `awesome-quant`, `awesome-python`, `awesome-nodejs`, `api-mega-list`), detailed in [`docs/research_sources.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/research_sources.md). On weekly runs, evaluates newly added catalog items with Gemini 2.5 Flash and automatically files GitHub Feature Request issues for items scoring $\ge 7.0/10.0$.
   - **Apify Tools Barred Policy:** All AI agents, catalog monitors, issue self-reviewers, and LLM evaluation prompts MUST explicitly ignore, reject, and exclude any tools, scrapers, actors, or services hosted on or referencing Apify (`apify.com`) due to paid subscription and compute unit cost constraints. All ingested tools and scrapers must be 100% zero-cost.
   - **Automated arXiv Research Paper Monitor (`src/arxiv_monitor.py`):** Queries `export.arxiv.org/api/query` for recent preprints in quantitative finance, econometrics, and machine learning matching energy market and commodity forecasting queries within the 7-day review window, formatting abstracts and download links into weekly review reports.
   - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
@@ -212,10 +220,19 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`)
+### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`, `src/regional_metadata.py` & `src/social_embed_generator.py`)
 
-* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`).
+* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), loads decoupled regional metadata profiles from `data/regional_metadata/` via `src/regional_metadata.py`, renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
 * **Dynamic Overview Card Engine:** Dynamically queries real-time live retail pump prices via `fetch_live_metro_retail_price()` for all regional metro cards (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Oakland_CA`, `BayArea_CA`), while preserving NYMEX RBOB commodity futures benchmark pricing ($3.184/gal - $3.270/gal) for the **National Wholesale** contract card.
+* **Automated Social Preview Image Generator (`src/social_embed_generator.py`):**
+  - Uses Matplotlib (`Agg` backend) to generate 10 dark-mode social preview cards (`1200x630px` PNG) in `docs/assets/embeds/` (`national.png`, `tulsa.png`, `newark.png`, `cincinnati.png`, `greenville.png`, `charlotte.png`, `oakland.png`, `bayarea.png`, `overview.png`, `math.png`).
+  - Left panel displays current base price, 5-day projected price, expected delta badge (`+$0.173 (+4.45%)` or `-$0.127 (-3.39%)`), directional color styling (`#10b981` green for drop, `#ef4444` red for surge, `#0ea5e9` sky blue for stable), model directional accuracy, rack margin / tax overhead, and top market driver tagline.
+  - Right panel displays 15-day historical sparkline transitioning into 5-day forecast trajectory with confidence interval shading.
+* **Open Graph & Twitter Card Metadata Tag Injection (`get_head_meta_tags()`):**
+  - Injects Open Graph (`og:site_name`, `og:type`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width="1200"`, `og:image:height="630"`, `og:image:type="image/png"`), Twitter Card (`twitter:card="summary_large_image"`), and Discord accent color (`<meta name="theme-color">`) tags into `<head>` across all 11 HTML dashboard pages.
+* **Dev Environment vs. Production Social Preview Behavior:**
+  - **Production-Only Image Resolution:** All Open Graph (`og:image`) and Twitter Card (`twitter:image`) metadata tags injected into `docs/*.html` resolve to absolute production URLs (`https://koshiirra.github.io/midgley/assets/embeds/<locale>.png`).
+  - **Dev Environment Limitation:** When testing or previewing pages locally in development environments (`dev-vm` on port 8080, `file://`, or local web servers), social link preview cards will point to production-hosted assets on GitHub Pages and will **not** preview local uncommitted dev changes unless deployed to production.
 * **Route Structure & Hierarchy:**
   - **Overview Landing Page (`/` / `docs/index.html`):** Executive overview of the Midgley engine, featuring the dynamic **Last Run Intelligence & Impact Audit Component** (GitHub Issue #105) positioned between the Hero Banner and Active Forecast Locales. Parses `prediction_history.csv` and `intraday_events.json` to display Trigger Context (with linked headline feeds), Mathematical Impact (score bars, half-life $t_{1/2}=5.0\text{d}$, and plain English impact analysis), and Prediction Revisions Delta across all 8 modeled regions with trend direction arrows (`↑`, `↓`, `→`). Includes clickable **Technical Analysis** header routing directly to `technical_breakdown.html`.
   - **Technical Analysis & Specific-Run Math Audit Engine (`/technical_breakdown` / `docs/technical_breakdown.html` & `.md`):** Generates full step-by-step mathematical audits with exact substituted numerical values for every run ($M_0 \dots M_5$, Ridge parameters, 8 regional metro equations, and CARB excise tax notes). Features **Section 5: NOAA SPC-Style Quantitative & Narrative Synopsis** providing run-specific executive summaries, technical market discussion, and catalyst uncertainty scenarios, alongside a **Historical Run Selector Dropdown** and machine-readable JSON exports (`docs/runs/latest.json`, `docs/runs/<run_id>.json`, `docs/runs/index.json`).
@@ -301,8 +318,26 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Strict Separation:** Issues MUST NOT cross release tracks. Non-model UI/API issues belong in the Software/UI Track; forecasting/math issues belong in the Model Engine Track; and automated review/telemetry/meta-agent issues belong in the Weekly Self-Review Track.
 * **Automated Agent Issue Creation & Milestone Triage Protocol:**
   - **Mandatory Domain Labeling:** ALL issues created or triaged by any AI agent (including `catalog_monitor.py`, `weekly_issue_reporter.py`, `arxiv_monitor.py`, or interactive assistant sessions) MUST be assigned appropriate domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`, `token-efficiency`).
-  - **Mandatory Release Track Milestone Assignment:** Every issue created by an agent MUST be assigned to an appropriate open milestone within its designated Release Track (Track 1: Software/UI `v0.X`, Track 2: Model Engine `Regular Model vX.Y`, or Track 3: Weekly Self-Review `Weekly Review vX.Y`).
   - **Auto-Creation of Missing Milestones:** If no open milestone currently exists within the designated Release Track, the agent or automated script MUST automatically create a new milestone on GitHub (via `gh api repos/{repo}/milestones -f title="..." -f description="..."` or GitHub REST API) before creating or triaging the issue.
+
+---
+
+### 15. Mandatory New Data Source & Issue #108 Multi-Tier Caching System Directives (`src/lookup_cache.py`)
+
+* **Role:** Enforces standard integration patterns for all new and existing data sources, REST APIs, web scrapers, and open-data feeds to ensure full support for the 3-Tier Caching & Quota Synchronization System (Issue #108 / `src/lookup_cache.py`).
+* **Core Data Ingestion & Caching Directives:**
+  1. **Primary Multi-Tier Cache Gateway Integration:** ALL new data connectors, API feeds, web scrapers, and open-data modules MUST import and utilize the global cache singleton (`from src.lookup_cache import global_cache`). Data fetch routines MUST query `global_cache.get(cache_key)` prior to making external HTTP/REST network requests or disk reads.
+  2. **Key Namespacing Strategy:** Every data connector MUST prefix its cache keys using a standard service domain namespace (e.g. `oilpriceapi_{key}`, `alphavant_{key}`, `eia_{series_id}`, `fred_{series_id}`, `socrata_{state}_{dataset}`, `noaa_{location}`, `finlight:{key}`) to prevent key collisions in the unified edge/local storage datastore.
+  3. **TTL Enforcement & Dynamic Expiration:** Response payloads MUST be written to `global_cache` using `global_cache.set(cache_key, payload, ttl_seconds=...)` with TTL values matched to the source update frequency:
+     - *Real-time Retail Pump Prices / Web Scrapers:* 15 minutes (900 seconds)
+     - *Weather Bulletins / SPC Convective Outlooks:* 1 hour (3600 seconds)
+     - *Daily Financial / Commodity Spot Prices & Open Data Feeds:* 24 hours (86400 seconds)
+     - *Monthly/Weekly Macro Series & Quota Ledgers:* 30–60 days (2,592,000 – 5,184,000 seconds)
+  4. **Multi-Environment Quota Ledger Synchronization:** For rate-limited APIs or quota-bound endpoints, data connectors MUST synchronize usage counters across both local Dev VM (`10.42.42.54`) and Production GitHub Actions runners using `global_cache.get_quota_ledger(service)` and `global_cache.update_quota_ledger(service, ...)` stored at key `quota:{service}:current`.
+  5. **3-Tier Cascade & Local Disk Fallback:** Connectors MUST preserve the 3-tier resolution cascade (Tier 1 Turso Edge SQLite -> Tier 2 Cloudflare D1/R2 Worker -> Tier 3 Local SQLite `data/lookup_cache.sqlite` + In-Memory Fast Dict) and maintain secondary local JSON disk cache fallbacks (`data/{source}_cache.json`) for 100% offline benchmark execution.
+  6. **Defensive Failure Isolation:** Calls to `global_cache` MUST be wrapped defensively in `try/except` blocks so that temporary edge connection failures, missing credentials, or database locks never interrupt core forecasting or data ingestion execution.
+  7. **Trading-Hours & Off-Hours Optimization:** Data connectors fetching financial or market-sensitive series SHOULD combine `global_cache` with trading-hours awareness (`is_trading_hours()`) to gate off-hours API calls and eliminate redundant network traffic outside trading windows.
+
 
 
 

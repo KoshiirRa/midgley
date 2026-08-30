@@ -21,5 +21,11 @@ secrets/
 .vscode/
 .idea/
 
+# Databases & Local Caches
+*.sqlite
+data/alpha_vantage_*.json
+data/oilpriceapi_*.json
+data/finlight_*.json
+
 # Scratch & Temporary Agent Workspaces
 scratch/

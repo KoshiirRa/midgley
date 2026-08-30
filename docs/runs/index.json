@@ -1,296 +1,248 @@
 [
   {
-    "run_id": "2026-08-30_15-01-43",
-    "timestamp": "2026-08-30 15:01:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Ontario's premier says trade war would be 'devastating' for ..."
-  },
-  {
-    "run_id": "2026-08-30_14-46-33",
-    "timestamp": "2026-08-30 14:46:29",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Vene..."
-  },
-  {
-    "run_id": "2026-08-30_13-46-32",
-    "timestamp": "2026-08-30 13:46:29",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India, China, Canada and more: 10 countries still under Trum..."
-  },
-  {
-    "run_id": "2026-08-30_13-05-31",
-    "timestamp": "2026-08-30 13:05:30",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_11-17-32",
-    "timestamp": "2026-08-30 11:17:30",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Mines cleared and oil flowing from Strait of Hormuz; US bloc..."
-  },
-  {
-    "run_id": "2026-08-30_10-46-25",
-    "timestamp": "2026-08-30 10:46:21",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal..."
-  },
-  {
-    "run_id": "2026-08-30_03-32-30",
-    "timestamp": "2026-08-30 03:32:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "The auto trade war Trump started is slowly destroying the in..."
-  },
-  {
-    "run_id": "2026-08-30_03-16-32",
-    "timestamp": "2026-08-30 03:16:27",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariff Battle With Canada Intensifies - news8000.com"
-  },
-  {
-    "run_id": "2026-08-30_01-02-39",
-    "timestamp": "2026-08-30 01:02:37",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "USD/CAD reversal risk builds ahead of tariff deadline - ston..."
-  },
-  {
-    "run_id": "2026-08-29_22-16-44",
-    "timestamp": "2026-08-29 22:16:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US And Iran Exchange Strikes, Trump Begins Rebuilding Tariff..."
-  },
-  {
-    "run_id": "2026-08-29_21-47-45",
-    "timestamp": "2026-08-29 21:47:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Trump vs Carney: Cars, homes, booze and more caught in US-Ca..."
-  },
-  {
-    "run_id": "2026-08-29_21-17-44",
-    "timestamp": "2026-08-29 21:17:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Duane Bratt: Trump trade war exposes Danielle Smith\u2019s Albert..."
-  },
-  {
-    "run_id": "2026-08-29_20-47-52",
-    "timestamp": "2026-08-29 20:47:46",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Trump ups the ante in India trade talks with 25% tariff thre..."
-  },
-  {
-    "run_id": "2026-08-29_17-46-43",
-    "timestamp": "2026-08-29 17:46:37",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Oil, Migration, War & Drugs: How India, Canada Revealed Trum..."
-  },
-  {
-    "run_id": "2026-08-29_17-17-36",
-    "timestamp": "2026-08-29 17:17:32",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "With the US and Canada locked in a trade war, fears of a rec..."
-  },
-  {
-    "run_id": "2026-08-29_17-14-54",
-    "timestamp": "2026-08-29 17:14:53",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_16-48-02",
-    "timestamp": "2026-08-29 16:47:58",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Bloomberg Money Minute: S Stocks Fall On Mideast Tensions; G..."
-  },
-  {
-    "run_id": "2026-08-29_16-30-46",
-    "timestamp": "2026-08-29 16:30:45",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_16-06-29",
-    "timestamp": "2026-08-29 16:06:28",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_15-46-15",
-    "timestamp": "2026-08-29 15:46:11",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US-Canada tariff war squeezes Korean autos, opens crude door..."
-  },
-  {
-    "run_id": "2026-08-29_15-46-11",
-    "timestamp": "2026-08-29 15:46:07",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "NELSON: Danielle Smith Faces Canada's Wrath Over Trump Tarif..."
-  },
-  {
-    "run_id": "2026-08-29_15-46-07",
-    "timestamp": "2026-08-29 15:46:03",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Fed's Collins: Absent new tariff and oil shocks, there is re..."
-  },
-  {
-    "run_id": "2026-08-29_15-46-03",
-    "timestamp": "2026-08-29 15:45:59",
+    "run_id": "2026-08-30_16-36-42",
+    "timestamp": "2026-08-30 16:30:40",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Tariffs for oil? - Kingston Whig"
   },
   {
-    "run_id": "2026-08-29_15-45-59",
-    "timestamp": "2026-08-29 15:45:55",
+    "run_id": "2026-08-30_16-36-32",
+    "timestamp": ">>>>>>> origin/main",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-30-49",
+    "timestamp": "2026-08-30 16:30:40",
     "run_type": "INTRADAY_REVISION",
-    "trigger": "MART Raises Tariff For Oil Product Transportation By Zapad-T..."
+    "trigger": "Tariffs for oil? - Kingston Whig"
   },
   {
-    "run_id": "2026-08-29_15-45-55",
-    "timestamp": "2026-08-29 15:45:51",
+    "run_id": "2026-08-30_16-15-45",
+    "timestamp": "2026-08-30 16:15:36",
     "run_type": "INTRADAY_REVISION",
-    "trigger": "Canada's new tariffs hit pipeline steel even as it spares oi..."
+    "trigger": "U.S. Treasury's Bessent faces G20 diplomacy test amid tariff..."
   },
   {
-    "run_id": "2026-08-29_15-45-51",
-    "timestamp": "2026-08-29 15:45:47",
+    "run_id": "2026-08-30_16-04-58",
+    "timestamp": "2026-08-30 16:04:43",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-03-48",
+    "timestamp": "2026-08-30 16:03:36",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-03-46",
+    "timestamp": "2026-08-30 16:03:36",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-03-44",
+    "timestamp": "2026-08-30 16:03:36",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-03-42",
+    "timestamp": "2026-08-30 16:03:36",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-03-39",
+    "timestamp": "2026-08-30 16:03:36",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-03-37",
+    "timestamp": "2026-08-30 16:03:36",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-01-58",
+    "timestamp": "2026-08-30 16:01:43",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-00-49",
+    "timestamp": "2026-08-30 16:00:34",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-00-47",
+    "timestamp": "2026-08-30 16:00:34",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-00-45",
+    "timestamp": "2026-08-30 16:00:34",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-00-43",
+    "timestamp": "2026-08-30 16:00:34",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-00-40",
+    "timestamp": "2026-08-30 16:00:34",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_16-00-38",
+    "timestamp": "2026-08-30 16:00:34",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-59-30",
+    "timestamp": "2026-08-30 15:59:15",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-59-04",
+    "timestamp": "2026-08-30 15:58:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-58-22",
+    "timestamp": "2026-08-30 15:58:22",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-58-20",
+    "timestamp": "2026-08-30 15:58:05",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-58-18",
+    "timestamp": "2026-08-30 15:58:05",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-58-15",
+    "timestamp": "2026-08-30 15:58:05",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-58-14",
+    "timestamp": "2026-08-30 15:58:05",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-58-13",
+    "timestamp": "2026-08-30 15:58:05",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-58-11",
+    "timestamp": "2026-08-30 15:58:05",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-57-53",
+    "timestamp": "2026-08-30 15:57:41",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-57-50",
+    "timestamp": "2026-08-30 15:57:41",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-57-48",
+    "timestamp": "2026-08-30 15:57:41",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-57-46",
+    "timestamp": "2026-08-30 15:57:41",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-57-44",
+    "timestamp": "2026-08-30 15:57:41",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-57-42",
+    "timestamp": "2026-08-30 15:57:41",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-54-16",
+    "timestamp": "2026-08-30 15:54:00",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-53-07",
+    "timestamp": "2026-08-30 15:52:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-53-04",
+    "timestamp": "2026-08-30 15:52:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-53-02",
+    "timestamp": "2026-08-30 15:52:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-53-00",
+    "timestamp": "2026-08-30 15:52:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-52-58",
+    "timestamp": "2026-08-30 15:52:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-52-56",
+    "timestamp": "2026-08-30 15:52:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-08-30_15-45-45",
+    "timestamp": "2026-08-30 15:45:35",
     "run_type": "INTRADAY_REVISION",
-    "trigger": "Alberta Premier Danielle Smith is spot on: the new American ..."
-  },
-  {
-    "run_id": "2026-08-29_15-45-47",
-    "timestamp": "2026-08-29 15:45:43",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Outage at South Africa\u2019s Natref refinery - ship.energy"
-  },
-  {
-    "run_id": "2026-08-29_15-45-43",
-    "timestamp": "2026-08-29 15:45:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Sasol warns on jet fuel supply after Natref outage - Quantum..."
-  },
-  {
-    "run_id": "2026-08-29_15-45-38",
-    "timestamp": "2026-08-29 15:45:34",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Canada Oil Outages and Bad Weather to Tighten Inventories at..."
-  },
-  {
-    "run_id": "2026-08-29_03-06-35",
-    "timestamp": "2026-08-29 03:06:35",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_02-55-47",
-    "timestamp": "2026-08-29 02:55:08",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_02-54-56",
-    "timestamp": "2026-08-29 02:54:56",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_02-54-50",
-    "timestamp": "2026-08-29 02:54:03",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_02-53-51",
-    "timestamp": "2026-08-29 02:53:50",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_02-53-50",
-    "timestamp": "2026-08-29 02:53:50",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-29_02-53-43",
-    "timestamp": "2026-08-29 02:45:50",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Here\u2019s Where Tariff Costs Are Piling Up\u2014and Why Some States ..."
-  },
-  {
-    "run_id": "2026-08-29_02-45-54",
-    "timestamp": "2026-08-29 02:45:50",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Here\u2019s Where Tariff Costs Are Piling Up\u2014and Why Some States ..."
-  },
-  {
-    "run_id": "2026-08-29_02-45-50",
-    "timestamp": "2026-08-29 02:45:46",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "For specialty food importer, tariffs are still front and cen..."
-  },
-  {
-    "run_id": "2026-08-29_02-45-46",
-    "timestamp": "2026-08-29 02:45:42",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Alberta Premier rejects oil and gas export tax in U.S. tarif..."
-  },
-  {
-    "run_id": "2026-08-29_02-45-42",
-    "timestamp": "2026-08-29 02:45:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Access Restored to Wikipedia in Russia After Overnight Outag..."
-  },
-  {
-    "run_id": "2026-08-29_02-45-39",
-    "timestamp": "2026-08-29 02:45:34",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Venezuela\u2019s largest refinery shutdown after power outage:Rep..."
-  },
-  {
-    "run_id": "2026-08-29_02-34-43",
-    "timestamp": "2026-08-29 02:34:41",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-28_19-20-11",
-    "timestamp": "2026-08-28 19:20:10",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-28_19-20-10",
-    "timestamp": "2026-08-28 19:20:10",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-28_19-20-03",
-    "timestamp": "2026-08-28 19:18:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-28_19-18-02",
-    "timestamp": "2026-08-28 19:18:02",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-28_19-17-53",
-    "timestamp": "2026-08-28 19:14:21",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-28_19-14-10",
-    "timestamp": "2026-08-28 19:14:10",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-28_19-14-02",
-    "timestamp": "2026-08-28 19:05:45",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    "trigger": "G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Vene..."
   }
 ]

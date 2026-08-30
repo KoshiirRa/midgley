@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "greenville_nc",
+  "display_name": "Greenville, NC Metro Retail",
+  "padd_region": "PADD 1C Lower Atlantic",
+  "primary_city": "Greenville, NC",
+  "counties": ["Pitt", "Lenoir", "Beaufort"],
+  "baseline_price": 3.250,
+  "icon_class": "fa-network-wired",
+  "theme_color": "green",
+  "econometric_drivers": {
+    "title": "PADD 1C Econometric Drivers",
+    "description": "Retail pump prices track Gulf Coast RBOB spot indices plus Colonial Pipeline batch transit tariffs and local eastern NC jobber distributor margins."
+  },
+  "refining_logistics": {
+    "title": "Refining & Pipeline Logistics",
+    "description": "Colonial Line 1 feeds Selma & Apex breakout hubs, supplemented by Port of Wilmington marine oil terminal imports for Coastal Carolina.",
+    "primary_refinery": "Selma NC & Apex NC Breakout Hub Tank Farms",
+    "capacity_bpd": 850000,
+    "pipelines": ["Colonial Pipeline Line 1", "Colonial Pipeline Line 2"]
+  },
+  "tax_structure": {
+    "title": "NC Motor Fuel Tax Structure",
+    "description": "NC state motor fuel tax ($0.404/gal) + Federal excise tax ($0.184/gal) creates a total statutory tax burden of $0.588/gal.",
+    "state_tax_per_gal": 0.404,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.588,
+    "notes": "North Carolina variable formula state fuel tax"
+  },
+  "infrastructure_delivery": {
+    "title": "Delivery Hub & NOAA Risk Factors",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{Greenville Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.250 - \\$3.184 = \\$0.066/\\text{gal}",
+    "description": "Selma hub tank-truck dispatch via US-264 & NC-11 corridors to Pitt, Lenoir & Beaufort counties, monitored against Tar River crests.",
+    "hub_distance_miles": 55,
+    "hub_name": "Selma NC Breakout Tank Farm"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Colonial Pipeline Mainline Outage",
+      "subtitle": "Line 1 Emergency Shutdown",
+      "price_impact_per_gal": 0.245,
+      "pct_impact": 7.54,
+      "description": "Halts batch shipments into Selma NC breakout tank farms"
+    },
+    {
+      "name": "Category 3 Atlantic Hurricane Landfall",
+      "subtitle": "Pamlico Sound Surge Flooding",
+      "price_impact_per_gal": 0.215,
+      "pct_impact": 6.62,
+      "description": "Floods US-264 distribution highways & Tar River basin"
+    },
+    {
+      "name": "Selma Hub Tank Farm Power Outage",
+      "subtitle": "Duke Energy Substation Outage",
+      "price_impact_per_gal": 0.185,
+      "pct_impact": 5.69,
+      "description": "Suspends automated rack loading"
+    }
+  ]
+}

@@ -479,7 +479,18 @@ def trigger_event_polling():
 
 
 
+@app.get("/api/v1/system/telemetry", summary="Get Zero-Cost Connector Health & Telemetry Summary", tags=["System & Health"])
+def get_connector_telemetry(days: int = Query(7, ge=1, le=90, description="Rolling telemetry window in days")):
+    """
+    Returns performance metrics, success rates (%), average response latency (ms),
+    average data age (hours), and stale payload counts across all zero-cost data connectors.
+    """
+    from src.connector_telemetry import get_telemetry_summary
+    return get_telemetry_summary(days=days)
+
+
 @app.get("/.well-known/ai-plugin.json", include_in_schema=False)
+
 def get_ai_plugin_manifest():
     """Returns OpenAI GPT Action Plugin Manifest."""
     return {

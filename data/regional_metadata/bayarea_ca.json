@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "bayarea_ca",
+  "display_name": "SF Bay Area 9-County Region",
+  "padd_region": "PADD 5 West Coast",
+  "primary_city": "San Francisco, CA",
+  "counties": ["San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Marin", "Solano", "Napa", "Sonoma"],
+  "baseline_price": 5.050,
+  "icon_class": "fa-warehouse",
+  "theme_color": "cyan",
+  "econometric_drivers": {
+    "title": "9-County Sub-Locale Econometric Gradient",
+    "description": "San Francisco municipal tax premium vs North Bay Benicia refinery fence-line discount vs Silicon Valley tech commute corridor demand dynamics."
+  },
+  "refining_logistics": {
+    "title": "Carquinez Strait Refining & Marine Terminals",
+    "description": "Carquinez Strait & Suisun Bay refining complex (Chevron Richmond, PBF Martinez, Valero Benicia, Rodeo Renewable), marine oil terminals, and crude lightering berths.",
+    "primary_refinery": "Carquinez Strait Refining Complex",
+    "capacity_bpd": 720000,
+    "pipelines": ["Kinder Morgan SFPP Bay Area Spine"]
+  },
+  "tax_structure": {
+    "title": "CARB Regulatory Tax & Bay Area Surcharges",
+    "description": "California statewide $0.953/gal state regulatory fee load plus county/city local sales tax variations across San Francisco, Santa Clara, Alameda, and Solano counties.",
+    "state_tax_per_gal": 0.953,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 1.407,
+    "notes": "Includes 8.625% SF municipal sales tax and local transportation surcharges"
+  },
+  "infrastructure_delivery": {
+    "title": "Transit Corridor & Geological Fault Infrastructure",
+    "equation_latex": "\\text{Rack Margin}_{\\text{BayArea}} = P_{\\text{BayArea Retail}} - P_{\\text{Wholesale RBOB}} = \\$5.050 - \\$3.184 = \\$1.866/\\text{gal}",
+    "description": "5 major San Francisco Bay transport bridges, Kinder Morgan SFPP pipeline distribution network, and USGS Bay Area fault line hazards.",
+    "hub_distance_miles": 15,
+    "hub_name": "Carquinez Strait Oil Terminal Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Hayward & San Andreas Seismic Event",
+      "subtitle": "Bay Bridge & Pipeline Corridor Lockout",
+      "price_impact_per_gal": 0.450,
+      "pct_impact": 8.91,
+      "description": "Throttles fuel truck passage across San Francisco Bay bridges"
+    },
+    {
+      "name": "Benicia Refinery Flaring Incident",
+      "subtitle": "Valero Coking Unit Shutdown",
+      "price_impact_per_gal": 0.285,
+      "pct_impact": 5.64,
+      "description": "Spikes North Bay and East Bay rack prices"
+    }
+  ]
+}

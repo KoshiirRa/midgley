@@ -38,11 +38,17 @@ FREE_RSS_FEEDS = [
     "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml"
 ]
 
+# Excluded Keywords to Filter Non-Energy Outages & Noise
+EXCLUDE_KEYWORDS = [
+    "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage"
+]
+
 # High-Risk Keyword Lexicon for Stage 1 Cascading Gate
 TRIGGER_KEYWORDS = [
-    "tariff", "retaliat", "trade war", "opec emergency", "pipeline halt",
-    "explosion", "tornado", "blackout", "blockade", "sanction", "outage",
-    "strait of hormuz", "red sea attack", "refinery halt", "spill"
+    "tariff", "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
+    "explosion", "tornado", "blackout", "blockade", "sanction",
+    "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
+    "strait of hormuz", "red sea attack", "spill"
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -99,6 +105,9 @@ class IntradayEventMonitor:
         via Tiered LLM / Lexicon failover. Returns (is_anomaly, scores).
         """
         text_lower = headline.lower()
+        if any(ex in text_lower for ex in EXCLUDE_KEYWORDS):
+            return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+
         has_keyword = any(kw in text_lower for kw in TRIGGER_KEYWORDS)
 
         if not has_keyword:
@@ -176,7 +185,10 @@ class IntradayEventMonitor:
                 }
 
         is_anomaly, scores = self.evaluate_headline_anomaly(headline)
-        clean_scores = {k: float(v) for k, v in scores.items()}
+        clean_scores = {
+            k: float(v) for k, v in scores.items()
+            if not k.startswith("_") and isinstance(v, (int, float))
+        }
         is_anomaly_bool = bool(is_anomaly)
 
         result = {
@@ -239,6 +251,8 @@ class IntradayEventMonitor:
             res = self.process_incoming_headline(headline, source=item.get("source", "RSS"), url=url)
             if res["is_anomaly"]:
                 anomalies_found.append(res)
+                # Process primary anomaly per polling cycle to avoid multiple sequential dashboard rebuilds
+                break
 
         return {
             "status": "success",

@@ -105,7 +105,30 @@ class TestRetailGasPriceFeeds(unittest.TestCase):
         self.assertTrue(stale_payload["is_stale"])
         self.assertGreaterEqual(stale_payload["data_age_hours"], 35.0)
 
+    def test_connector_telemetry_logger(self):
+        """Verify connector telemetry logger summary and report generation."""
+        from src.connector_telemetry import log_connector_event, get_telemetry_summary, generate_telemetry_report
+
+        record = log_connector_event("TestConnector", "Tulsa_OK", status="SUCCESS", latency_ms=45.2, data_age_hours=0.5, is_stale=False)
+        self.assertIsNotNone(record)
+
+        summary = get_telemetry_summary(days=7)
+        self.assertIn("total_calls", summary)
+        self.assertIn("success_rate_pct", summary)
+
+        report = generate_telemetry_report(days=7)
+        self.assertIn("Connector Performance & Data Freshness Audit Report", report)
+
+    def test_telemetry_monitor_audit(self):
+        """Verify telemetry monitor audit execution."""
+        from src.telemetry_monitor import audit_telemetry_and_report_issues
+        res = audit_telemetry_and_report_issues(days=3)
+        self.assertIn("status", res)
+        self.assertIn("is_degraded", res)
+
 
 if __name__ == "__main__":
     unittest.main()
+
+
 

@@ -1,0 +1,112 @@
+{
+  "run_id": "2026-08-30_15-32-58",
+  "log_timestamp": "2026-08-30 15:31:15",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal Consolidation And Growth Asteroid 2026 Jh2 Earth Approach (acD5BUwRO6) - Mshale",
+  "headline_items": [
+    {
+      "headline": "Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal Consolidation And Growth Asteroid 2026 Jh2 Earth Approach (acD5BUwRO6) - Mshale",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE51ZTRaVmJYaUNNS2dlX1BGVEhnUFJtN3FfYWJuY2NXMDdGS2V1Z0N5VHlYckM4cDFWX1NIaFVwZjZjV09Sd0tCZXhHNHRsNkhMU3VDLUZfZ1o0OTQ?oc=5",
+      "source": "RSS_Feed"
+    },
+    {
+      "headline": "U.S. Treasury's Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil - CNBC",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxONXpzTzFUZ3Jud096M1JzNjZ4VjFHLXc4aXhzNTJ0MmJTOHNkMnFsekdrWkVnY1pwVUhxYkREdjg4ci1ockg3LVg1aXA5QWdCMnlTLU5GUjRSUUkxZWthS0JkWTdoMTRFcEZtTG0zNExXSzlwVjZnbG9WVWtpSzdWbHZTT0RCWnMtdlNzYzRIcGhSM1o3QldsUlRDc25TT0pPc1prNThEc9IBrAFBVV95cUxPZlYyZDJOb0ZzV01JbFRFYTBLbm56V0dfRjQ2UHRUM01oMXhFUnRBeW0yVC03TTduMy12ZnQtVzRWTGpfVHZkbW94YWRpZm8xOXJXQzNVRERVaXNicVd2OFFIc0pvakZnS2x0TzlWNHFmWndaYTdNWjFfWUJVeFdMSWdfUTRETUtMcWctd0RtQkpjZUl3SkZrQ1hyRjY3cWJ4WjFDU0M0dUVYRUZy?oc=5",
+      "source": "RSS_Feed"
+    },
+    {
+      "headline": "India, China, Canada and more: 10 countries still under Trump\u2019s tariff squeeze and why - The Times of India",
+      "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOYVFrU3J0R2dDV2laRTlZcGYxakVLcGlfTDZWZno2UVpTaW5yalF5QTc5eWNxZGhNMld1Q00xSEdoeTlCYy16RUJIYWZHbjA5QTVYRHM5SG9fSlk5aFJwWklJQXF3MmNlN0JFT3dvLUhXTFhrM1JEVjhuM05jQ3N0ekFWaE9qWndFOFczdWo3V2d2Y3l5bWhTR3FOSTJZV0l3OWVfcTNQYUJ3TElGNzBXOThER3cyTTVHYzBOWHhCVzNTMDBBNEhWTWVBbXlGWXVYc0o2U05UN0t4WGZFYVhPaDY4R2pZZUdYbTNlWHBkMF9kTHpoY2U5Slpic2k?oc=5",
+      "source": "RSS_Feed"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.8,
+    "overall_price_pressure": 0.52,
+    "geopolitical_risk": 0.8,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.8,
+    "m1": 0.6964,
+    "m2": 0.6063,
+    "m3": 0.5278,
+    "m4": 0.4595,
+    "m5": 0.4
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.2502,
+      "delta": 0.043299999999999894,
+      "pct_change": 1.3599246231155744
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.751,
+      "predicted_price": 3.6237,
+      "delta": 0.02259999999999973,
+      "pct_change": 0.6025059984004194
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 3.934,
+      "predicted_price": 3.7889,
+      "delta": 0.014699999999999935,
+      "pct_change": 0.3736654804270446
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 3.878,
+      "predicted_price": 3.7555,
+      "delta": 0.01949999999999985,
+      "pct_change": 0.5028365136668348
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 3.25,
+      "predicted_price": 3.1324,
+      "delta": 0.03980000000000006,
+      "pct_change": 1.2246153846153862
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 3.28,
+      "predicted_price": 3.1628,
+      "delta": 0.03869999999999996,
+      "pct_change": 1.1798780487804865
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 4.95,
+      "predicted_price": 4.7747,
+      "delta": -0.5046999999999997,
+      "pct_change": -10.19595959595959
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 5.05,
+      "predicted_price": 4.8712,
+      "delta": -0.5082000000000004,
+      "pct_change": -10.063366336633672
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-08-30 15:31:15]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal Consolidation And Growth Asteroid 2026 Jh2 Earth Approach (acD5BUwRO6) - Mshale' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t\u00bd=5.0d) models Day-1 retained shock M\u2081=0.6964 and Day-5 horizon retention M\u2085=0.4000.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-08-30 15:31:15 (Mode: INTRADAY_REVISION), primary event trigger 'Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal Consolidation And Growth Asteroid 2026 Jh2 Earth Approach (acD5BUwRO6) - Mshale' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure \u0394P=+0.52, Geopolitical Risk G=0.80. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.8000\n  - Day 1: M\u2081 = 0.6964\n  - Day 5: M\u2085 = 0.4000 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.250/gal (+$0.043/gal, +1.36%)\n  \u2022 Tulsa, OK Retail: $3.624/gal (+$0.023/gal, +0.60%)\n  \u2022 Newark, DE Retail: $3.789/gal (+$0.015/gal, +0.37%)\n  \u2022 Cincinnati, OH/KY: $3.756/gal (+$0.019/gal, +0.50%)\n  \u2022 Greenville, NC Retail: $3.132/gal (+$0.040/gal, +1.22%)\n  \u2022 Charlotte, NC Retail: $3.163/gal (+$0.039/gal, +1.18%)\n  \u2022 Oakland, CA Retail: $4.775/gal ($-0.505/gal, -10.20%)\n  \u2022 SF Bay Area Region: $4.871/gal ($-0.508/gal, -10.06%)\n\nLargest upward shift for this run: National Wholesale at $3.250/gal (+0.043/gal). Largest downward shift for this run: SF Bay Area Region at $4.871/gal (-0.508/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-08-30 15:31:15]:\n\u2022 Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal Consolidation And Growth Asteroid 2026 Jh2 Earth Approach (acD5BUwRO6) - Mshale'. Overall price pressure vector sits at \u0394P=+0.52/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+  }
+}

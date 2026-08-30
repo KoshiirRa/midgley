@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "tulsa_ok",
+  "display_name": "Tulsa, OK Metro Retail",
+  "padd_region": "PADD 2 Mid-Continent",
+  "primary_city": "Tulsa, OK",
+  "counties": ["Tulsa", "Creek", "Rogers"],
+  "baseline_price": 3.890,
+  "icon_class": "fa-warehouse",
+  "theme_color": "emerald",
+  "econometric_drivers": {
+    "title": "Cushing WTI Econometric Drivers",
+    "description": "Located 50 miles west of Tulsa, Cushing, OK is the physical delivery point for NYMEX WTI crude. Localized rack margins reflect direct crude benchmark access, regional crack spreads, and Mid-Continent market competition."
+  },
+  "refining_logistics": {
+    "title": "West Tulsa Refining & Supply Logistics",
+    "description": "HF Sinclair West Tulsa Refinery (125,000 bpd capacity) processes sweet/sour crude streams, dispatching refined unleaded blendstock across Magellan Pipeline terminals to local jobbers and retail stations.",
+    "primary_refinery": "HF Sinclair West Tulsa Refinery",
+    "capacity_bpd": 125000,
+    "pipelines": ["Magellan Pipeline", "Explorer Pipeline"]
+  },
+  "tax_structure": {
+    "title": "Oklahoma Tax Structure & Statutory Overhead",
+    "description": "Oklahoma state motor fuel tax ($0.190/gal) plus US Federal excise tax ($0.184/gal) and UST fees create a total statutory tax burden of $0.374/gal—the lowest tax overhead among Midgley metro benchmarks.",
+    "state_tax_per_gal": 0.190,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.374,
+    "notes": "Lowest statutory tax overhead among Midgley metro benchmarks"
+  },
+  "infrastructure_delivery": {
+    "title": "Tulsa Delivery Hub & Dynamic Rack Margin",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{Tulsa Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.890 - \\$3.184 = \\$0.706/\\text{gal}",
+    "description": "Calibrates wholesale futures returns directly into Creek, Tulsa & Rogers county tank truck dispatch prices.",
+    "hub_distance_miles": 50,
+    "hub_name": "Cushing WTI Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "EF-3 Tornado Outbreak",
+      "subtitle": "West Tulsa HF Sinclair Strike",
+      "price_impact_per_gal": 0.173,
+      "pct_impact": 4.58,
+      "description": "Halts 125,000 bpd refinery loading racks"
+    },
+    {
+      "name": "Cushing Freeze Warning",
+      "subtitle": "Payne County Sub-Zero Freeze",
+      "price_impact_per_gal": 0.145,
+      "pct_impact": 3.84,
+      "description": "Disrupts crude tank farm pumping velocity"
+    },
+    {
+      "name": "Keystone Pipeline Spill",
+      "subtitle": "Cushing Delivery Feeder Cut",
+      "price_impact_per_gal": 0.173,
+      "pct_impact": 4.58,
+      "description": "Temporary Canadian crude influx drop"
+    }
+  ]
+}

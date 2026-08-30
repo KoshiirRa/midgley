@@ -120,6 +120,33 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertEqual(res["status"], "success")
 
 
+    def test_evaluate_headline_non_energy_outage_exclusion(self):
+        headline = "Access Restored to Wikipedia in Russia After Overnight Outage"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(headline)
+        self.assertFalse(is_anomaly)
+
+    @patch("src.intraday_event_monitor.IntradayEventMonitor.fetch_rss_headlines")
+    def test_run_polling_cycle_batches_primary_anomaly(self, mock_fetch):
+        mock_fetch.return_value = [
+            {
+                "headline": "Canada Announces Retaliatory Tariffs as Trade War Escalates",
+                "published": "2026-08-27T10:00:00",
+                "url": "https://news.google.com/articles/tariffs_test1",
+                "source": "RSS_Feed"
+            },
+            {
+                "headline": "Gulf Coast Refinery Outage Halts Fuel Shipments",
+                "published": "2026-08-27T10:05:00",
+                "url": "https://news.google.com/articles/tariffs_test2",
+                "source": "RSS_Feed"
+            }
+        ]
+
+        res = self.monitor.run_polling_cycle()
+        # Should detect exactly 1 anomaly per cycle to avoid multiple sequential dashboard builds
+        self.assertEqual(res["anomalies_detected"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
 

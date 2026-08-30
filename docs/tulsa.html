@@ -1,8 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1ae2ce4322b14229bad5f1c4bf222a01"}'></script>
+
+    <!-- Open Graph / Discord Social Embed Metadata -->
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Tulsa Metro Gas Price Forecast ($3.731 → $3.609 | -3.27%) - Midgley AI">
+    <meta property="og:description" content="5-day retail gas price forecast for Tulsa OK metro. Baseline $3.731/gal, projected target $3.609/gal. Cushing WTI hub & West Tulsa HF Sinclair refinery model.">
+    <meta property="og:url" content="https://koshiirra.github.io/midgley/tulsa.html">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/tulsa.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tulsa Metro Gas Price Forecast ($3.731 → $3.609 | -3.27%) - Midgley AI">
+    <meta name="twitter:description" content="5-day retail gas price forecast for Tulsa OK metro. Baseline $3.731/gal, projected target $3.609/gal. Cushing WTI hub & West Tulsa HF Sinclair refinery model.">
+    <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/tulsa.png">
+
+    <!-- Discord Theme Accent Color -->
+    <meta name="theme-color" content="#10b981">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tulsa Retail Gas Forecast - Midgley</title>
@@ -57,7 +75,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.1</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.1-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -195,20 +213,28 @@
             </div>
         </div>
 
-        <!-- Tulsa Regional Refining & Logistics Specifications -->
+                <!-- Regional Econometric Drivers & Physical Infrastructure Factors -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-warehouse text-emerald-400"></i> Regional Infrastructure & Rack Margins
+                <i class="fa-solid fa-warehouse text-emerald-400"></i> Regional Econometric Drivers & Physical Infrastructure Factors
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Cushing WTI Hub Proximity</h4>
-                    <p>Located 50 miles west of Tulsa, Cushing, OK is the physical delivery point for NYMEX WTI crude. Localized rack margins reflect regional crude access and local refining competition.</p>
+                    <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Cushing WTI Econometric Drivers</h4>
+                    <p>Located 50 miles west of Tulsa, Cushing, OK is the physical delivery point for NYMEX WTI crude. Localized rack margins reflect direct crude benchmark access, regional crack spreads, and Mid-Continent market competition.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">West Tulsa Refining & Supply Logistics</h4>
+                    <p>HF Sinclair West Tulsa Refinery (125,000 bpd capacity) processes sweet/sour crude streams, dispatching refined unleaded blendstock across Magellan Pipeline terminals to local jobbers and retail stations.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-amber-300 uppercase tracking-wider">Oklahoma Tax Structure & Statutory Overhead</h4>
+                    <p>Oklahoma state motor fuel tax ($0.190/gal) plus US Federal excise tax ($0.184/gal) and UST fees create a total statutory tax burden of $0.374/gal—the lowest tax overhead among Midgley metro benchmarks.</p>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
-                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">Tulsa Dynamic Rack Margin</h4>
+                    <h4 class="font-bold text-purple-300 uppercase tracking-wider">Tulsa Delivery Hub & Dynamic Rack Margin</h4>
                     <p>$$\text{Rack Margin} = P_{\text{Tulsa Retail}} - P_{\text{Wholesale RBOB}} = \$3.890 - \$3.184 = \$0.706/\text{gal}$$</p>
-                    <p class="text-slate-400 pt-1">Calibrates predicted wholesale returns directly into local pump station prices.</p>
+                    <p class="text-slate-400 pt-1">Calibrates wholesale futures returns directly into Creek, Tulsa & Rogers county tank truck dispatch prices.</p>
                 </div>
             </div>
         </div>
