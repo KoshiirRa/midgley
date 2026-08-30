@@ -52,28 +52,38 @@ Real-world event news persistence is modeled via exponential memory decay ($t_{1
 
 ## 2. Two-Tiered NOAA Weather Integration Architecture
 
+The forecasting engine integrates a **two-tiered weather ingestion model** via the NOAA NWS API (`api.weather.gov`) and lightweight terminal connector `t.wxs.us`, combining macro energy basin risks with localized metro-level convective, freeze, and flood threats:
+
 ```
                ┌─────────────────────────────────────────────────────────────┐
-               │                     NOAA WEATHER SERVICE API                │
-               │                        (api.weather.gov)                    │
+               │                 NOAA NWS & SPC WEATHER API                  │
+               │                   (api.weather.gov / t.wxs.us)              │
                └──────────────────────────────┬──────────────────────────────┘
                                               │
                    ┌──────────────────────────┴──────────────────────────┐
                    ▼                                                     ▼
    ┌───────────────────────────────┐                     ┌───────────────────────────────┐
-   │ TIER 1: NATIONAL BASINS       │                     │ TIER 2: LOCALIZED TULSA       │
-   │ • Gulf Coast Hurricanes (NHC) │                     │ • Tulsa County (OKZ060)       │
-   │ • Permian Basin Freeze Alerts │                     │   Tornado Warnings (NWS/SPC)  │
-   │ • Bakken Shale Polar Vortexes │                     │ • Cushing/Payne (OKZ066)      │
-   │                               │                     │   Tank Farm Freeze Warnings   │
+   │ TIER 1: NATIONAL BASINS       │                     │ TIER 2: LOCALIZED METROS      │
+   │ • Gulf Coast Hurricanes (NHC) │                     │ • Tulsa OK (OKZ060 / OKZ066)  │
+   │ • Permian Basin Freeze Alerts │                     │ • Newark DE (Delaware City)   │
+   │ • Bakken Shale Polar Vortexes │                     │ • Cincinnati OH/KY (Miss River)│
+   │                               │                     │ • Greenville NC (NCZ081 Floods)│
+   │                               │                     │ • Charlotte NC (NCZ071 Hub)   │
+   │                               │                     │ • Oakland & Bay Area (PSPS)   │
    └───────────────┬───────────────┘                     └───────────────┬───────────────┘
                    │                                                     │
                    ▼                                                     ▼
    ┌───────────────────────────────┐                     ┌───────────────────────────────┐
-   │ NATIONAL MODEL (main.py)      │                     │ TULSA MODEL (tulsa_main.py)   │
-   │ • Directional Acc: 60.79%     │                     │ • Directional Acc: 58.15%     │
-   └───────────────────────────────┘                     └───────────────────────────────┘
+   │ NATIONAL MODEL                │                     │ LOCALIZED METRO CALIBRATION   │
+   │ (src/locations/national)      │                     │ (src/locations/<location>)    │
+   │ • RBOB Wholesale Futures      │                     │ • Tulsa, Newark, Cincinnati,  │
+   │ • Directional Acc: 60.79%     │                     │   Greenville, Charlotte,      │
+   │                               │                     │   Oakland & SF Bay Area       │
+   └───────────────────────────────┘                     └───────────────┬───────────────┘
 ```
+
+* **Token-Efficient Ingestion Engine (`t.wxs.us`):** Pre-filters NWS alerts and SPC convective outlooks down to ~150–300 tokens per request (a 90%–95% token savings vs raw 3,500-token GeoJSON feature maps).
+* **Deterministic Risk Mapping:** Maps SPC convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) directly into numerical impact feature vectors without LLM latency or token cost.
 
 ---
 
@@ -124,26 +134,40 @@ The weekly model performance review runs automatically on Saturday mornings (08:
 
 ## 6. Multi-Page Web Architecture & Routing (`src/dashboard_generator.py`)
 
-The public presentation layer is compiled by `src/dashboard_generator.py` into static HTML artifacts in `docs/`:
+The public presentation layer is compiled by `src/dashboard_generator.py` into static HTML artifacts and Open Graph social preview cards in `docs/`:
 
 ```
-                               ┌───────────────────────────────┐
-                               │     docs/index.html (/)       │
-                               │  Midgley Overview Landing     │
-                               │  Summary Forecast Cards Grid  │
-                               └──────────────┬────────────────┘
-                                              │
-           ┌──────────────────────────────────┼──────────────────────────────────┐
-           ▼                                  ▼                                  ▼
-┌─────────────────────┐            ┌─────────────────────┐            ┌─────────────────────┐
-│  docs/national.html │            │   docs/tulsa.html   │            │   docs/math.html    │
-│    (/national)      │            │      (/tulsa)       │            │       (/math)       │
-│ National Wholesale  │            │ Tulsa Retail Gas    │            │ KaTeX Math & Vector │
-│ Futures Analytics   │            │ Metro Dropdown Menu │            │ Layer Architecture  │
-└─────────────────────┘            └─────────────────────┘            └─────────────────────┘
+                               ┌──────────────────────────────────┐
+                               │       docs/index.html (/)        │
+                               │    Midgley Overview Landing      │
+                               │  Summary Forecast Cards Grid     │
+                               └────────────────┬─────────────────┘
+                                                │
+       ┌───────────────────────────────┬────────┴────────┬───────────────────────────────┐
+       ▼                               ▼                 ▼                               ▼
+┌──────────────┐              ┌──────────────────┐ ┌──────────────┐              ┌──────────────┐
+│ /national    │              │ METRO AREAS MENU │ │ /math        │              │ /reports     │
+│ Wholesale    │              ├──────────────────┤ │ KaTeX Math   │              │ Technical    │
+│ RBOB Futures │              │ • /tulsa (OK)    │ │ Equations &  │              │ Run Reports  │
+│ Analytics    │              │ • /newark (DE)   │ │ 10-Layer     │              │ & Run JSONs  │
+└──────────────┘              │ • /cincinnati(OH)│ │ Architecture │              └──────────────┘
+                              │ • /greenville(NC)│ └──────────────┘
+                              │ • /charlotte (NC)│
+                              │ • /oakland (CA)  │
+                              │ • /bayarea (CA)  │
+                              └────────┬─────────┘
+                                       │
+                                       ▼
+                       ┌────────────────────────────────┐
+                       │ data/regional_metadata/*.json  │
+                       │ Decoupled JSON Driver Cards    │
+                       │ (render_regional_driver_cards) │
+                       └────────────────────────────────┘
 ```
 
-Static web compatibility is preserved across both direct file routes (`/national.html`, `/tulsa.html`) and clean directory routes (`/national`, `/tulsa`) by outputting matching `index.html` files in subdirectory paths (`docs/national/index.html` and `docs/tulsa/index.html`).
+Static web routing compatibility is preserved across both direct file routes (`/<page>.html`) and clean directory routes (`/<page>/index.html`) by outputting dual matching file trees (e.g. `docs/tulsa.html` and `docs/tulsa/index.html`). 
+
+Visual driver cards detailing regional econometric factors, refining logistics, statutory tax burdens, and delivery hub equations are rendered dynamically from decoupled JSON profiles (`data/regional_metadata/<region_id>.json`) via `render_regional_driver_cards_html()`, decoupling UI HTML templates from domain metadata.
 
 ---
 
@@ -154,6 +178,7 @@ To support rapid iteration and local testing, a dedicated Linux dev environment 
 * **Permanent `dev` Branch:** A permanent development branch (`origin/dev`) is maintained in the project workspace.
 * **Systemd User Service (`midgley-dev.service`):** Runs `python3 -m http.server 8080 --directory docs` as a background user service under systemd.
 * **Service Persistence & Linger:** User linger is enabled (`loginctl enable-linger`), allowing the dev web server to start automatically at system boot and persist without an open SSH session. Automatic restart (`Restart=always`) ensures high availability against process crashes.
+* **Self-Hosting Guide:** Full systemd service definitions, edge cache configurations, and deployment procedures are documented in [`docs/SELF_HOSTING.md`](SELF_HOSTING.md).
 
 ---
 
@@ -192,6 +217,11 @@ src/locations/
 │   ├── regional.py
 │   └── notebook_builder.py
 ├── greenville/                # Greenville Metro, NC location package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── regional.py
+│   └── notebook_builder.py
+├── charlotte/                 # Charlotte Metro, NC location package
 │   ├── __init__.py
 │   ├── main.py
 │   ├── regional.py

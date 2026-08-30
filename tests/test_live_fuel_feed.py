@@ -120,7 +120,7 @@ class TestLiveFuelFeed(unittest.TestCase):
         global_cache.clear()
         # 1. When GasBuddy succeeds, return GasBuddy
         mock_gb.return_value = {"average_price": 3.99, "source": "GasBuddy GraphQL (Zip 74103)"}
-        res1 = fetch_live_metro_retail_price("Tulsa_OK")
+        res1 = fetch_live_metro_retail_price("Tulsa_OK", use_cache=False)
         self.assertEqual(res1["price"], 3.99)
         self.assertIn("GasBuddy", res1["source"])
 
@@ -128,7 +128,7 @@ class TestLiveFuelFeed(unittest.TestCase):
         global_cache.clear()
         mock_gb.return_value = None
         mock_aaa.return_value = {"average_price": 3.95, "source": "AAA Web Scraper (OK)"}
-        res2 = fetch_live_metro_retail_price("Tulsa_OK")
+        res2 = fetch_live_metro_retail_price("Tulsa_OK", use_cache=False)
         self.assertEqual(res2["price"], 3.95)
         self.assertIn("AAA", res2["source"])
 
@@ -136,7 +136,7 @@ class TestLiveFuelFeed(unittest.TestCase):
         global_cache.clear()
         mock_aaa.return_value = None
         mock_eia.return_value = {"average_price": 3.92, "source": "EIA/yfinance RBOB Benchmark"}
-        res3 = fetch_live_metro_retail_price("Tulsa_OK")
+        res3 = fetch_live_metro_retail_price("Tulsa_OK", use_cache=False)
         self.assertEqual(res3["price"], 3.92)
         self.assertIn("EIA", res3["source"])
 
@@ -144,14 +144,14 @@ class TestLiveFuelFeed(unittest.TestCase):
         global_cache.clear()
         mock_eia.return_value = None
         mock_hist.return_value = {"average_price": 3.88, "source": "prediction_history.csv History"}
-        res4 = fetch_live_metro_retail_price("Tulsa_OK")
+        res4 = fetch_live_metro_retail_price("Tulsa_OK", use_cache=False)
         self.assertEqual(res4["price"], 3.88)
         self.assertIn("prediction_history.csv", res4["source"])
 
         # 5. When all fail, fallback to static anchor constant ($3.890 for Tulsa)
         global_cache.clear()
         mock_hist.return_value = None
-        res5 = fetch_live_metro_retail_price("Tulsa_OK")
+        res5 = fetch_live_metro_retail_price("Tulsa_OK", use_cache=False)
         self.assertEqual(res5["price"], 3.890)
         self.assertIn("Static Anchor", res5["source"])
 

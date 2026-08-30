@@ -24,8 +24,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: "intraday-event-monitor-workflow"
+  cancel-in-progress: true
 
 jobs:
   intraday-monitor-and-deploy:
@@ -33,12 +33,12 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
@@ -65,9 +65,9 @@ jobs:
           fi
 
       - name: Commit Updated README, Dashboard & Prediction Logs
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update"
+          commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update [skip ci]"
           file_pattern: "README.md docs/ data/"
 
       - name: Setup GitHub Pages

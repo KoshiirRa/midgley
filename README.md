@@ -163,7 +163,19 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 12. **Automated Nightly Dev Releases (`.github/workflows/nightly_dev_release.yml`):** Automatically builds, tags (`dev-YYYY-MM-DD`), and documents GitHub pre-releases tracking whatever is on the `dev` branch every night at 3:00 AM Central Time (08:00 UTC).
 13. **3-Tier Multi-Tier Cache Gateway & Quota Sync (`src/lookup_cache.py`):** High-availability cascading cache (Turso Edge SQLite -> Cloudflare D1 Worker -> Local SQLite `data/lookup_cache.sqlite`) with SHA-256 headline deduplication ($0 token cost on repeated headlines) and cross-runner API quota ledger sync (`quota:finlight:current`).
 
+---
 
+## 🛠️ Self-Hosting & Multi-Metro Regional Extension
+
+For operators and developers wishing to host their own custom instance of Midgley or extend the forecasting framework to new metropolitan regions:
+
+👉 **Read the complete [Self-Hosting & Multi-Metro Regional Setup Guide (`docs/SELF_HOSTING.md`)](docs/SELF_HOSTING.md)**
+
+Key guide coverage includes:
+* **Standalone Server & VM Deployment:** Systemd user service & timer unit files (`midgley-api.service`, `midgley-dev.service`, `midgley-daily-forecast.timer`, `midgley-weekly-review.timer`).
+* **3-Tier Edge Cache Configuration:** Step-by-step setup for Turso Edge SQLite, Cloudflare D1/Worker, and local SQLite fallbacks.
+* **LLM Discovery Prompts:** Ready-to-use LLM system prompt templates for researching econometric anchors, statutory fuel tax structures, refinery logistics, and NOAA weather alerts.
+* **7-Step Developer Tutorial:** Comprehensive guide for adding new metro calibration subpackages (`src/locations/<location>/`) and decoupled JSON profiles (`data/regional_metadata/`).
 
 ---
 
