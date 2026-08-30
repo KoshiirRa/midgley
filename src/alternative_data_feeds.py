@@ -14,6 +14,7 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import logging
+from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
 
@@ -46,11 +47,19 @@ ALTERNATIVE_DATA_SOURCES = {
 
 def fetch_cboe_crude_volatility_ovx(start_date: str = "2022-01-01", end_date: str = None) -> pd.DataFrame:
     """
-    Fetches the Cboe Crude Oil Volatility Index (ticker: ^OVX) using yfinance.
+    Fetches the Cboe Crude Oil Volatility Index (ticker: ^OVX) using yfinance with daily lookup caching.
     """
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
-        
+
+    cache_key = f"altdata:cboe_ovx:{start_date}:{end_date}"
+    cached = global_cache.get(cache_key)
+    if cached and "records" in cached:
+        logger.info("Loaded Cboe OVX volatility index from lookup cache.")
+        df = pd.DataFrame(cached["records"])
+        df['date'] = pd.to_datetime(df['date'])
+        return df
+
     logger.info(f"Fetching Cboe Crude Oil Volatility Index (^OVX) from {start_date} to {end_date}...")
     try:
         ovx_data = yf.download("^OVX", start=start_date, end=end_date, progress=False)
@@ -61,7 +70,12 @@ def fetch_cboe_crude_volatility_ovx(start_date: str = "2022-01-01", end_date: st
             
         df = pd.DataFrame({'date': close_series.index, 'ovx_volatility_index': close_series.values})
         df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None)
-        return df.sort_values('date').ffill().bfill().reset_index(drop=True)
+        res_df = df.sort_values('date').ffill().bfill().reset_index(drop=True)
+        
+        # Save to lookup cache (24 hours TTL)
+        records = res_df.assign(date=res_df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records")
+        global_cache.set(cache_key, {"records": records}, ttl_seconds=86400)
+        return res_df
     except Exception as e:
         logger.warning(f"Could not fetch ^OVX volatility index: {e}")
         return pd.DataFrame()

@@ -14,27 +14,35 @@ from src.finlight_feed import (
     fetch_finlight_articles,
     get_finlight_energy_events,
     UNIFIED_ENERGY_QUERY,
-    CACHE_FILE
+    CACHE_FILE,
+    QUOTA_FILE
 )
+
+
+from src.lookup_cache import global_cache
 
 
 class TestFinlightFeed(unittest.TestCase):
 
     def setUp(self):
-        """Removes temporary cache file before each test."""
-        if os.path.exists(CACHE_FILE):
-            try:
-                os.remove(CACHE_FILE)
-            except Exception:
-                pass
+        """Removes temporary cache file and clears lookup cache before each test."""
+        global_cache.clear()
+        for f in (CACHE_FILE, QUOTA_FILE):
+            if os.path.exists(f):
+                try:
+                    os.remove(f)
+                except Exception:
+                    pass
 
     def tearDown(self):
-        """Removes temporary cache file after each test."""
-        if os.path.exists(CACHE_FILE):
-            try:
-                os.remove(CACHE_FILE)
-            except Exception:
-                pass
+        """Removes temporary cache file and clears lookup cache after each test."""
+        global_cache.clear()
+        for f in (CACHE_FILE, QUOTA_FILE):
+            if os.path.exists(f):
+                try:
+                    os.remove(f)
+                except Exception:
+                    pass
 
     def test_unified_query_structure(self):
         """Verify single consolidated energy query string contains core keywords."""

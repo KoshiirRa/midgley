@@ -68,3 +68,24 @@ def test_get_all_metro_spc_convective_outlooks(mock_fetch):
         assert metro_name in outlooks
         assert "convective_risk_score" in outlooks[metro_name]
         assert "summary_token_compact" in outlooks[metro_name]
+
+
+@patch("src.noaa_weather.urllib.request.urlopen")
+def test_fetch_live_noaa_alerts_caching(mock_urlopen):
+    from src.noaa_weather import fetch_live_noaa_alerts
+    from src.lookup_cache import global_cache
+
+    global_cache.clear()
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.read.return_value = b'{"features": []}'
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    # 1st call fetches via HTTP
+    alerts1 = fetch_live_noaa_alerts(["OK"])
+    assert mock_urlopen.call_count == 1
+
+    # 2nd call hits lookup cache (0 HTTP requests)
+    alerts2 = fetch_live_noaa_alerts(["OK"])
+    assert mock_urlopen.call_count == 1
+

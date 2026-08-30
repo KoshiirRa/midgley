@@ -12,6 +12,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import logging
+from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
 
@@ -21,12 +22,19 @@ USER_AGENT = "(MidgleyGasPriceForecaster, contact@example.com)"
 
 def fetch_live_noaa_alerts(zones: list = None) -> list:
     """
-    Fetches active severe weather alerts from NOAA NWS API for specified state/zone codes.
+    Fetches active severe weather alerts from NOAA NWS API for specified state/zone codes with hourly lookup cache.
     Default zones: 'OK' (Oklahoma), 'TX' (Texas), 'LA' (Louisiana).
     """
     if zones is None:
         zones = ["OK", "TX", "LA"]
         
+    hour_bucket = datetime.now().strftime("%Y-%m-%d-%H")
+    cache_key = f"noaa_alerts:{'-'.join(sorted(zones))}:{hour_bucket}"
+    cached = global_cache.get(cache_key)
+    if cached and "alerts" in cached:
+        logger.info(f"Loaded NOAA weather alerts for {zones} from lookup cache.")
+        return cached["alerts"]
+
     alerts = []
     headers = {"User-Agent": USER_AGENT, "Accept": "application/geo+json"}
     
@@ -53,6 +61,7 @@ def fetch_live_noaa_alerts(zones: list = None) -> list:
         except Exception as e:
             logger.debug(f"NOAA API live fetch for zone {zone} notice: {e}")
             
+    global_cache.set(cache_key, {"alerts": alerts}, ttl_seconds=3600)
     return alerts
 
 

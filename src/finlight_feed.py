@@ -13,10 +13,12 @@ import os
 import time
 import requests
 import json
+import hashlib
 import pandas as pd
 from datetime import datetime
 from typing import Tuple, Dict, Any, List
 import logging
+from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +32,8 @@ MAX_DAILY_CALLS = 10     # Soft daily cap to prevent burst exhaustion
 
 def _check_and_increment_quota() -> Tuple[bool, dict]:
     """
-    Checks data/finlight_quota.json ledger against MAX_MONTHLY_CALLS and MAX_DAILY_CALLS caps.
+    Checks data/finlight_quota.json and global multi-tier cache ledger against
+    MAX_MONTHLY_CALLS and MAX_DAILY_CALLS caps.
     If under limits, increments usage and returns (True, status).
     If limit reached, returns (False, status) to trigger the safety valve intercept.
     """
@@ -55,6 +58,16 @@ def _check_and_increment_quota() -> Tuple[bool, dict]:
         except Exception as e:
             logger.warning(f"Could not read quota ledger '{QUOTA_FILE}': {e}")
 
+    # Check shared edge cache ledger and merge higher count
+    edge_ledger = global_cache.get_quota_ledger("finlight")
+    if edge_ledger and edge_ledger.get("current_month") == month_key:
+        edge_monthly = edge_ledger.get("monthly_calls", 0)
+        edge_daily = edge_ledger.get("daily_calls", {}).get(day_key, 0)
+        data["monthly_calls"] = max(data.get("monthly_calls", 0), edge_monthly)
+        if "daily_calls" not in data or not isinstance(data["daily_calls"], dict):
+            data["daily_calls"] = {}
+        data["daily_calls"][day_key] = max(data["daily_calls"].get(day_key, 0), edge_daily)
+
     monthly_calls = data.get("monthly_calls", 0)
     today_calls = data.get("daily_calls", {}).get(day_key, 0)
 
@@ -73,10 +86,12 @@ def _check_and_increment_quota() -> Tuple[bool, dict]:
         }
 
     # Increment quota
-    data["monthly_calls"] = monthly_calls + 1
+    new_monthly = monthly_calls + 1
+    new_today = today_calls + 1
+    data["monthly_calls"] = new_monthly
     if "daily_calls" not in data or not isinstance(data["daily_calls"], dict):
         data["daily_calls"] = {}
-    data["daily_calls"][day_key] = today_calls + 1
+    data["daily_calls"][day_key] = new_today
     data["last_call"] = now.isoformat()
 
     try:
@@ -85,10 +100,13 @@ def _check_and_increment_quota() -> Tuple[bool, dict]:
     except Exception as e:
         logger.warning(f"Could not write quota ledger '{QUOTA_FILE}': {e}")
 
+    # Sync to edge cache ledger
+    global_cache.update_quota_ledger("finlight", new_monthly, new_today, month_key, day_key)
+
     return True, {
         "allowed": True,
-        "monthly_calls": data["monthly_calls"],
-        "today_calls": data["daily_calls"][day_key],
+        "monthly_calls": new_monthly,
+        "today_calls": new_today,
         "max_monthly": MAX_MONTHLY_CALLS,
         "max_daily": MAX_DAILY_CALLS
     }
@@ -111,6 +129,11 @@ def get_finlight_quota_status() -> dict:
                     today_calls = data.get("daily_calls", {}).get(day_key, 0)
         except Exception:
             pass
+
+    edge_ledger = global_cache.get_quota_ledger("finlight")
+    if edge_ledger and edge_ledger.get("current_month") == month_key:
+        monthly_calls = max(monthly_calls, edge_ledger.get("monthly_calls", 0))
+        today_calls = max(today_calls, edge_ledger.get("daily_calls", {}).get(day_key, 0))
 
     return {
         "month": month_key,
@@ -158,9 +181,16 @@ ENERGY_QUERIES = [UNIFIED_ENERGY_QUERY]
 
 def _read_cache(ttl_seconds: int = CACHE_TTL_SECONDS) -> tuple:
     """
-    Reads cached articles from data/finlight_cache.json if valid and within TTL.
+    Reads cached articles from global_cache or data/finlight_cache.json if valid and within TTL.
     Returns (articles: list, is_valid: bool).
     """
+    # Check multi-tier global_cache first
+    cached_edge = global_cache.get("finlight:latest_articles")
+    if cached_edge:
+        articles = cached_edge.get("articles", [])
+        logger.info(f"Loaded {len(articles)} articles from multi-tier lookup cache.")
+        return articles, True
+
     if not os.path.exists(CACHE_FILE):
         return [], False
 
@@ -185,17 +215,20 @@ def _read_cache(ttl_seconds: int = CACHE_TTL_SECONDS) -> tuple:
 
 def _write_cache(articles: list, query: str = UNIFIED_ENERGY_QUERY):
     """
-    Writes articles to data/finlight_cache.json with current timestamp.
+    Writes articles to data/finlight_cache.json and multi-tier global_cache with current timestamp.
     """
+    cache_data = {
+        "timestamp": time.time(),
+        "cached_at": datetime.now().isoformat(),
+        "query": query,
+        "count": len(articles),
+        "articles": articles
+    }
+    # Save to multi-tier lookup cache
+    global_cache.set("finlight:latest_articles", cache_data, ttl_seconds=CACHE_TTL_SECONDS)
+
     try:
         os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
-        cache_data = {
-            "timestamp": time.time(),
-            "cached_at": datetime.now().isoformat(),
-            "query": query,
-            "count": len(articles),
-            "articles": articles
-        }
         with open(CACHE_FILE, "w", encoding="utf-8") as f:
             json.dump(cache_data, f, indent=2)
         logger.debug(f"Saved {len(articles)} articles to disk cache '{CACHE_FILE}'.")

@@ -8,9 +8,11 @@ and a robust deterministic rule-based fallback.
 import os
 import re
 import json
+import hashlib
 import pandas as pd
 import numpy as np
 import logging
+from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
 
@@ -114,13 +116,23 @@ def _try_anthropic_single(headline: str) -> dict:
         return None
 
 
+def _get_headline_sha256(headline: str) -> str:
+    return hashlib.sha256(headline.strip().encode("utf-8")).hexdigest()
+
+
 def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     """
     Scores a single headline using Tier 1 Gemini API, Tier 2 OpenAI/Claude secondary APIs,
-    or Tier 3 in-memory/rule-based lexicon fallback.
+    or Tier 3 in-memory/rule-based lexicon fallback, with multi-tier lookup caching.
     """
     if headline in _LLM_SCORE_CACHE:
         return _LLM_SCORE_CACHE[headline]
+
+    sha_key = f"llm_score:{_get_headline_sha256(headline)}"
+    cached = global_cache.get(sha_key)
+    if cached:
+        _LLM_SCORE_CACHE[headline] = cached
+        return cached
         
     if api_key is None:
         api_key = os.environ.get("GEMINI_API_KEY")
@@ -160,6 +172,7 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
                 "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
             }
             _LLM_SCORE_CACHE[headline] = scores
+            global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
             return scores
         except Exception as e:
             logger.debug(f"Gemini single API call notice ({e}). Checking Tier 2 secondary providers...")
@@ -168,20 +181,33 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     sec_scores = _try_openai_single(headline) or _try_anthropic_single(headline)
     if sec_scores:
         _LLM_SCORE_CACHE[headline] = sec_scores
+        global_cache.set(sha_key, sec_scores, ttl_seconds=86400 * 30)
         return sec_scores
             
     # Tier 3: Safety Net Offline Rule-Based Lexicon Extractor
     scores = extract_event_features_rule_based(headline)
     _LLM_SCORE_CACHE[headline] = scores
+    global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
     return scores
 
 
 
 def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> list:
     """
-    Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 2.5 Flash API call!
+    Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 2.5 Flash API call,
+    leveraging multi-tier lookup caching with SHA-256 digests.
     """
-    uncached = [h for h in headlines if h not in _LLM_SCORE_CACHE]
+    # Check in-memory and multi-tier lookup cache first
+    uncached = []
+    for h in headlines:
+        if h in _LLM_SCORE_CACHE:
+            continue
+        sha_key = f"llm_score:{_get_headline_sha256(h)}"
+        cached = global_cache.get(sha_key)
+        if cached:
+            _LLM_SCORE_CACHE[h] = cached
+        else:
+            uncached.append(h)
     
     if uncached:
         if api_key is None:
@@ -220,13 +246,16 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> li
                 
                 if isinstance(parsed_list, list) and len(parsed_list) == len(uncached):
                     for h, parsed in zip(uncached, parsed_list):
-                        _LLM_SCORE_CACHE[h] = {
+                        scores = {
                             "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
                             "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
                             "demand_sentiment": float(parsed.get("demand_sentiment", 0.0)),
                             "opec_action": float(parsed.get("opec_action", 0.0)),
                             "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
                         }
+                        _LLM_SCORE_CACHE[h] = scores
+                        sha_key = f"llm_score:{_get_headline_sha256(h)}"
+                        global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
                     logger.info(f"  -> Single-Batch LLM extractions complete in 1 request!")
                 else:
                     logger.warning("Batch size mismatch from LLM. Falling back to itemized processing.")
@@ -241,6 +270,8 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> li
         else:
             scores = extract_event_features_rule_based(h)
             _LLM_SCORE_CACHE[h] = scores
+            sha_key = f"llm_score:{_get_headline_sha256(h)}"
+            global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
             results.append(scores)
             
     return results
