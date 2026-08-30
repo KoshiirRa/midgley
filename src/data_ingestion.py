@@ -756,5 +756,287 @@ class AlphaVantageDataConnector:
         }
 
 
+OILPRICEAPI_QUOTA_FILE = os.path.join("data", "oilpriceapi_quota.json")
+OILPRICEAPI_CACHE_FILE = os.path.join("data", "oilpriceapi_cache.json")
+OILPRICEAPI_MAX_DAILY_CALLS = 25
+
+
+class OilPriceAPIDataConnector:
+    """
+    OilpriceAPI Energy & Petroleum Data Feed Connector (Issue #128).
+    Candidate tool discovered from awesome-quant developer catalog.
+    Provides Python REST API wrapper / connector for real-time oil and energy commodity spot prices
+    (WTI Crude, Brent Crude, RBOB Unleaded Gasoline, Natural Gas, Heating Oil, Urals Crude, Coal).
+    
+    Features:
+    - Trading-Hours-Aware Scheduling: Outside US commodity market hours (Mon-Fri 08:00-17:00 EST), API calls
+      are gated to reuse cached responses for subsequent off-hours runs.
+    - Persistent Daily Quota Safety Valve: Enforces a strict 25 calls/day cap (data/oilpriceapi_quota.json).
+    - Disk Response Cache: Preserves response payloads (data/oilpriceapi_cache.json).
+    - Zero-Cost Fallback: Operates seamlessly in offline/fallback benchmark mode when API key is missing or quota is exhausted.
+    - Connector Telemetry: Instrument execution events via src/connector_telemetry.py.
+    """
+    def __init__(self, api_key: str = None):
+        self.api_key = api_key or os.environ.get("OILPRICE_API_KEY") or os.environ.get("OILPRICEAPI_KEY")
+        self.is_free_alternative = True
+        self.cost_per_query = 0.0
+        self.max_daily_calls = OILPRICEAPI_MAX_DAILY_CALLS
+        self.benchmark_prices = {
+            "WTI_USD": {"name": "WTI Crude Oil ($/bbl)", "value": 75.250, "unit": "USD/bbl"},
+            "BRENT_USD": {"name": "Brent Crude Oil ($/bbl)", "value": 79.450, "unit": "USD/bbl"},
+            "RBOB_USD": {"name": "RBOB Gasoline Futures ($/gal)", "value": 2.420, "unit": "USD/gal"},
+            "NG_USD": {"name": "Natural Gas ($/MMBtu)", "value": 2.450, "unit": "USD/MMBtu"},
+            "HO_USD": {"name": "Heating Oil ($/gal)", "value": 2.550, "unit": "USD/gal"},
+            "RAL_USD": {"name": "Urals Crude Oil ($/bbl)", "value": 68.500, "unit": "USD/bbl"},
+            "COAL_USD": {"name": "Coal ($/ton)", "value": 115.000, "unit": "USD/ton"}
+        }
+
+    def is_trading_hours(self, now_dt: datetime = None) -> bool:
+        """
+        Checks if current time is within US Energy Commodity Trading Hours
+        (08:00 AM - 05:00 PM EST, Monday through Friday).
+        """
+        if now_dt is None:
+            now_dt = datetime.now()
+        if now_dt.weekday() >= 5:  # Saturday/Sunday
+            return False
+        return 8 <= now_dt.hour < 17
+
+    def _check_and_increment_quota(self) -> Tuple[bool, dict]:
+        os.makedirs("data", exist_ok=True)
+        now = datetime.now()
+        day_key = now.strftime("%Y-%m-%d")
+
+        data = {
+            "daily_calls": {},
+            "last_call": None
+        }
+
+        if os.path.exists(OILPRICEAPI_QUOTA_FILE):
+            try:
+                with open(OILPRICEAPI_QUOTA_FILE, "r", encoding="utf-8") as f:
+                    loaded = json.load(f)
+                    if isinstance(loaded, dict):
+                        data = loaded
+            except Exception as e:
+                logger.warning(f"Could not read OilpriceAPI quota ledger '{OILPRICEAPI_QUOTA_FILE}': {e}")
+
+        today_calls = data.get("daily_calls", {}).get(day_key, 0)
+
+        if today_calls >= self.max_daily_calls:
+            logger.warning(
+                f"🚨 OILPRICEAPI API SAFETY VALVE TRIPPED! "
+                f"Today calls: {today_calls}/{self.max_daily_calls}. "
+                f"Blocking outgoing HTTP call to enforce 25 calls/day quota limit."
+            )
+            return False, {
+                "allowed": False,
+                "today_calls": today_calls,
+                "max_daily_calls": self.max_daily_calls,
+                "safety_valve_active": True
+            }
+
+        # Increment quota
+        if "daily_calls" not in data or not isinstance(data["daily_calls"], dict):
+            data["daily_calls"] = {}
+        data["daily_calls"][day_key] = today_calls + 1
+        data["last_call"] = now.isoformat()
+
+        try:
+            with open(OILPRICEAPI_QUOTA_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Could not write OilpriceAPI quota ledger '{OILPRICEAPI_QUOTA_FILE}': {e}")
+
+        return True, {
+            "allowed": True,
+            "today_calls": today_calls + 1,
+            "max_daily_calls": self.max_daily_calls,
+            "safety_valve_active": False
+        }
+
+    def get_quota_status(self) -> dict:
+        day_key = datetime.now().strftime("%Y-%m-%d")
+        today_calls = 0
+        if os.path.exists(OILPRICEAPI_QUOTA_FILE):
+            try:
+                with open(OILPRICEAPI_QUOTA_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    today_calls = data.get("daily_calls", {}).get(day_key, 0)
+            except Exception:
+                pass
+        return {
+            "today_calls": today_calls,
+            "max_daily_calls": OILPRICEAPI_MAX_DAILY_CALLS,
+            "remaining_calls": max(0, OILPRICEAPI_MAX_DAILY_CALLS - today_calls),
+            "safety_valve_active": today_calls >= OILPRICEAPI_MAX_DAILY_CALLS
+        }
+
+    def _get_cached_response(self, cache_key: str) -> dict:
+        if os.path.exists(OILPRICEAPI_CACHE_FILE):
+            try:
+                with open(OILPRICEAPI_CACHE_FILE, "r", encoding="utf-8") as f:
+                    cache_data = json.load(f)
+                    if isinstance(cache_data, dict) and cache_key in cache_data:
+                        return cache_data[cache_key]
+            except Exception:
+                pass
+        return None
+
+    def _save_cache_response(self, cache_key: str, payload: dict):
+        os.makedirs("data", exist_ok=True)
+        cache_data = {}
+        if os.path.exists(OILPRICEAPI_CACHE_FILE):
+            try:
+                with open(OILPRICEAPI_CACHE_FILE, "r", encoding="utf-8") as f:
+                    loaded = json.load(f)
+                    if isinstance(loaded, dict):
+                        cache_data = loaded
+            except Exception:
+                pass
+        cache_data[cache_key] = payload
+        try:
+            with open(OILPRICEAPI_CACHE_FILE, "w", encoding="utf-8") as f:
+                json.dump(cache_data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Could not save OilpriceAPI cache '{OILPRICEAPI_CACHE_FILE}': {e}")
+
+    def fetch_latest_price(self, by_code: str = "WTI_USD") -> dict:
+        """
+        Fetches the latest spot price for an energy commodity code (e.g., WTI_USD, BRENT_USD, RBOB_USD).
+        """
+        start_time = datetime.now()
+        timestamp_str = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        day_str = start_time.strftime("%Y-%m-%d")
+        code = str(by_code).upper()
+        cache_key = f"latest_{code}_{day_str}"
+
+        # Off-hours caching check
+        if not self.is_trading_hours():
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["cached_off_hours"] = True
+                self._log_telemetry("OilPriceAPIConnector", code, "SUCCESS", 0.5, 0.0, False, "Served from off-hours cache")
+                return cached
+
+        # Check quota
+        allowed, quota_info = self._check_and_increment_quota()
+        if not allowed:
+            cached = self._get_cached_response(cache_key)
+            if cached:
+                cached["safety_valve_active"] = True
+                self._log_telemetry("OilPriceAPIConnector", code, "SUCCESS", 0.5, 0.0, False, "Served from cache via safety valve")
+                return cached
+            fb = self._fallback_price_benchmark(code, timestamp_str)
+            self._log_telemetry("OilPriceAPIConnector", code, "FALLBACK", 1.0, 0.0, False, "Quota exhausted, served benchmark fallback")
+            return fb
+
+        # Attempt live API call if key present
+        if self.api_key:
+            url = f"https://api.oilpriceapi.com/v1/prices/latest?by_code={code}"
+            headers = {
+                "Authorization": f"Token {self.api_key}",
+                "User-Agent": "Midgley-OilPriceAPIConnector/1.0",
+                "Content-Type": "application/json"
+            }
+            try:
+                req = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    latency = (datetime.now() - start_time).total_seconds() * 1000.0
+                    if resp.status == 200:
+                        raw = resp.read().decode("utf-8")
+                        parsed = json.loads(raw)
+                        p_data = parsed.get("data", {})
+                        if p_data:
+                            val = float(p_data.get("price", self.benchmark_prices.get(code, {}).get("value", 75.0)))
+                            created_at = p_data.get("created_at", timestamp_str)
+                            res = {
+                                "code": code,
+                                "name": self.benchmark_prices.get(code, {}).get("name", code),
+                                "price": val,
+                                "formatted": p_data.get("formatted", f"${val:.2f}"),
+                                "currency": p_data.get("currency", "USD"),
+                                "created_at": created_at,
+                                "source": f"OilpriceAPI REST ({code})",
+                                "is_free_alternative": True,
+                                "cost_per_query": 0.0,
+                                "timestamp": timestamp_str,
+                                "status": "SUCCESS"
+                            }
+                            self._save_cache_response(cache_key, res)
+                            self._log_telemetry("OilPriceAPIConnector", code, "SUCCESS", latency, 0.0, False, "Live REST API fetch success")
+                            return res
+            except Exception as e:
+                logger.debug(f"OilpriceAPI REST notice ({code}): {e}")
+
+        # Fallback benchmark anchor
+        res = self._fallback_price_benchmark(code, timestamp_str)
+        self._save_cache_response(cache_key, res)
+        self._log_telemetry("OilPriceAPIConnector", code, "FALLBACK", 1.0, 0.0, False, "API offline or unconfigured, served benchmark anchor")
+        return res
+
+    def _fallback_price_benchmark(self, code: str, timestamp_str: str) -> dict:
+        meta = self.benchmark_prices.get(code, {"name": code, "value": 75.0, "unit": "USD"})
+        val = meta["value"]
+        return {
+            "code": code,
+            "name": meta["name"],
+            "price": val,
+            "formatted": f"${val:.2f}",
+            "currency": "USD",
+            "created_at": datetime.now().strftime("%Y-%m-%d"),
+            "source": f"OilpriceAPI Benchmark Anchor ({code})",
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": timestamp_str,
+            "status": "FALLBACK"
+        }
+
+    def fetch_all_spot_prices(self) -> dict:
+        """
+        Sweeps all supported energy commodity codes (WTI, BRENT, RBOB, NG, HO, RAL, COAL)
+        into a single response payload.
+        """
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        prices = {}
+        for code in self.benchmark_prices.keys():
+            prices[code] = self.fetch_latest_price(code)
+        
+        return {
+            "source": "OilpriceAPI Multi-Commodity Spot Feed Connector",
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": timestamp_str,
+            "spot_prices": prices,
+            "quota_status": self.get_quota_status(),
+            "status": "SUCCESS"
+        }
+
+    def fetch_market_failover_feed(self) -> dict:
+        """
+        Unified market failover feed interface.
+        """
+        return self.fetch_all_spot_prices()
+
+    def _log_telemetry(self, name: str, target: str, status: str, latency: float, age: float, stale: bool, details: str):
+        try:
+            from src.connector_telemetry import log_connector_event
+            log_connector_event(name, target, status, latency, age, stale, details)
+        except Exception:
+            pass
+
+
+def fetch_oilpriceapi_prices(by_code: str = None) -> dict:
+    """
+    Convenience function for retrieving OilpriceAPI spot prices.
+    If by_code is provided, returns that single commodity code; otherwise sweeps all codes.
+    """
+    connector = OilPriceAPIDataConnector()
+    if by_code:
+        return connector.fetch_latest_price(by_code)
+    return connector.fetch_all_spot_prices()
+
+
+
 
 
