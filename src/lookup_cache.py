@@ -16,6 +16,12 @@ import urllib.error
 import logging
 from typing import Optional, Dict, Any, Tuple
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_CACHE_DB = os.path.join("data", "lookup_cache.sqlite")
