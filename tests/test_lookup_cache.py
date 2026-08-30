@@ -17,9 +17,12 @@ class TestLookupCache(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.db_path = os.path.join(self.temp_dir.name, "test_cache.sqlite")
+        self.edge_patcher = patch.object(LookupCache, "_get_edge_credentials", return_value=(None, None, None, None))
+        self.edge_patcher.start()
         self.cache = LookupCache(db_path=self.db_path)
 
     def tearDown(self):
+        self.edge_patcher.stop()
         try:
             self.temp_dir.cleanup()
         except Exception:

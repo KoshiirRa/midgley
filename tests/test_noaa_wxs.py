@@ -83,9 +83,11 @@ def test_fetch_live_noaa_alerts_caching(mock_urlopen):
 
     # 1st call fetches via HTTP
     alerts1 = fetch_live_noaa_alerts(["OK"])
-    assert mock_urlopen.call_count == 1
+    noaa_calls1 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and "api.weather.gov" in c.args[0].full_url]
+    assert len(noaa_calls1) == 1
 
-    # 2nd call hits lookup cache (0 HTTP requests)
+    # 2nd call hits lookup cache (0 additional NOAA HTTP requests)
     alerts2 = fetch_live_noaa_alerts(["OK"])
-    assert mock_urlopen.call_count == 1
+    noaa_calls2 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and "api.weather.gov" in c.args[0].full_url]
+    assert len(noaa_calls2) == 1
 

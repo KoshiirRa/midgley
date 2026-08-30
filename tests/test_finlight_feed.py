@@ -93,6 +93,7 @@ class TestFinlightFeed(unittest.TestCase):
         }
         with open(CACHE_FILE, "w", encoding="utf-8") as f:
             json.dump(cache_data, f)
+        global_cache.set("finlight:latest_articles", cache_data)
 
         mock_response = MagicMock()
         mock_response.status_code = 429

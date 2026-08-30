@@ -203,7 +203,7 @@ class LookupCache:
         """Queries Tier 2 Cloudflare D1/R2 Worker REST API."""
         try:
             endpoint = f"{cf_url.rstrip('/')}/api/v1/cache/{urllib.parse.quote(key)}"
-            headers = {}
+            headers = {"User-Agent": "MidgleyCacheGateway/1.0"}
             if cf_token:
                 headers["Authorization"] = f"Bearer {cf_token}"
             req = urllib.request.Request(endpoint, headers=headers, method="GET")
@@ -215,7 +215,7 @@ class LookupCache:
                     expires_at = float(data.get("expires_at", time.time() + DEFAULT_TTL_SECONDS))
                     return val_str, created_at, expires_at
         except Exception as e:
-            logger.debug(f"Cloudflare Edge cache fetch notice ({e})")
+            logger.warning(f"Cloudflare Edge cache fetch notice: {e}")
             self.stats["errors"] += 1
         return None
 
@@ -223,7 +223,10 @@ class LookupCache:
         """Writes entry to Tier 2 Cloudflare D1/R2 Worker REST API."""
         try:
             endpoint = f"{cf_url.rstrip('/')}/api/v1/cache"
-            headers = {"Content-Type": "application/json"}
+            headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "MidgleyCacheGateway/1.0"
+            }
             if cf_token:
                 headers["Authorization"] = f"Bearer {cf_token}"
             payload = {
@@ -236,7 +239,7 @@ class LookupCache:
             with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as resp:
                 pass
         except Exception as e:
-            logger.debug(f"Cloudflare Edge cache write notice ({e})")
+            logger.warning(f"Cloudflare Edge cache write notice: {e}")
             self.stats["errors"] += 1
 
     def get(self, key: str) -> Optional[Dict[str, Any]]:
@@ -391,7 +394,7 @@ class LookupCache:
         return payload
 
     def clear(self):
-        """Clears all cached entries from local storage."""
+        """Clears all cached entries from local storage and remote edge tiers."""
         if self._use_sqlite:
             try:
                 with sqlite3.connect(self.db_path) as conn:
@@ -400,6 +403,44 @@ class LookupCache:
             except Exception as e:
                 logger.warning(f"Error clearing SQLite cache: {e}")
         self._memory_cache.clear()
+
+        turso_url, turso_token, cf_url, cf_token = self._get_edge_credentials()
+        if turso_url and turso_token:
+            try:
+                endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
+                headers = {
+                    "Authorization": f"Bearer {turso_token}",
+                    "Content-Type": "application/json",
+                }
+                body = json.dumps({
+                    "requests": [
+                        {"type": "execute", "stmt": {"sql": "DELETE FROM lookup_cache"}},
+                        {"type": "close"}
+                    ]
+                }).encode("utf-8")
+                req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
+                with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as resp:
+                    pass
+            except Exception as e:
+                logger.warning(f"Turso clear notice: {e}")
+
+        if cf_url:
+            try:
+                endpoint = f"{cf_url.rstrip('/')}/api/v1/cache"
+                headers = {"User-Agent": "MidgleyCacheGateway/1.0"}
+                if cf_token:
+                    headers["Authorization"] = f"Bearer {cf_token}"
+                req = urllib.request.Request(endpoint, headers=headers, method="DELETE")
+                with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as resp:
+                    pass
+            except urllib.error.HTTPError as e:
+                if e.code == 405:
+                    # If Worker does not support DELETE method yet, overwrite in-memory state
+                    logger.debug("Cloudflare Worker DELETE method not configured.")
+                else:
+                    logger.warning(f"Cloudflare clear notice: {e}")
+            except Exception as e:
+                logger.warning(f"Cloudflare clear notice: {e}")
 
     def purge_expired(self):
         """Purges expired items from cache."""
