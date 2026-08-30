@@ -17,8 +17,12 @@ from src.finlight_feed import (
 )
 
 
+from src.lookup_cache import global_cache
+
+
 class TestFinlightSafetyValve(unittest.TestCase):
     def setUp(self):
+        global_cache.clear()
         if os.path.exists(QUOTA_FILE):
             try:
                 os.remove(QUOTA_FILE)
@@ -26,13 +30,15 @@ class TestFinlightSafetyValve(unittest.TestCase):
                 pass
 
     def tearDown(self):
+        global_cache.clear()
         if os.path.exists(QUOTA_FILE):
             try:
                 os.remove(QUOTA_FILE)
             except Exception:
                 pass
 
-    def test_quota_ledger_increment(self):
+    @patch("src.lookup_cache.global_cache.get_quota_ledger", return_value=None)
+    def test_quota_ledger_increment(self, mock_edge):
         allowed, status = _check_and_increment_quota()
         self.assertTrue(allowed)
         self.assertEqual(status["monthly_calls"], 1)
