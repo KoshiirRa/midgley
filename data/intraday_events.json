@@ -12,5 +12,47 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.7
     }
+  },
+  {
+    "timestamp": "2026-08-30T19:45:38.861586",
+    "headline": "Fact Check Team: What Canadian goods are on the chopping block in Trump\u2019s new 50% tariffs? - KABB",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMinAJBVV95cUxNWTZYTkRBRHlnQTVoOV9sc0FPbTlHTlhhV0IzUm9SaWQ4T19NYlVLYWVNcC1tSUlMNmczTmkzd3NkYy1naXJTb3NuVm83VHExQktQSDZTQ0JOLWEzaFRTcG13dlVjMHcza3U4SDlOMGFjWFBtWnk4Vi1MemNRWE9wbkJVSWlFd3lQVVpBTktRTFV2ZUVQOFZsZ2pfRkRVcWZPbW55TVllQTI5c0psWGZCeEF4T05yUENUQjdsQmJmVWppRFZnZ2xtYW1wOF9UZVRRTXFNeEFqNEFGSEdkVnUzYldTakV6TnJiYng5b3Z5TTEzTmpYSHhmZzNpSUNFWlVKazRMNC03dWoxcVdTb3RwVGJQdTJsSmhwZGVwNg?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-08-30T20:15:39.046076",
+    "headline": "Moe backs targeted counter-tariffs, warns against export taxes on Saskatchewan resources - DiscoverMooseJaw",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQNWwzanB5QUV3R2xEQ043Q1pDQWpWOHBBOXVoZ3VzNFFfN01XYURkMEdzRGtSelNzamVvWnpybklrOUNyazgwbW1KOU96TUprOVQzWXRvNE1QamtPUmhRUjc0N05tRWM3bTY5RXBQVzM1cDA2WVBUX0FxLXZGazRkZzB4WHVDYlQ2RmhNUzg2cWtlX19MTlRlV2JOSXJud1kyLWV5OG5keVVpelBROFd0VW9EZ1BROE1tUFZzeVlSNFNyeHh1TUNsUg?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-08-30T23:00:39.054992",
+    "headline": "Tanker Market: Unplanned US Refinery Outages Could Impact Freight Trade - Hellenic Shipping News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQblBkakoxTkN1c1N0LV9ucEJDbkItMTJLRHZQSC1GQVRDQ045TTBERHdHVFFqd2g2TWltUldqNEpGczBXTU83RFlaTnp4UzJMRmo0VmFIOFJnUThLS01SaDN1MXNNMzV4SWNKQTgzMWFiSVVsbVcyWlhrNjFQWVZId2YtVTBqLXhDRlBCQzRKRE0yWnBqaDc2blNRVXJqdmhpLXRjbDJPY3pDRkQt?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    }
   }
 ]

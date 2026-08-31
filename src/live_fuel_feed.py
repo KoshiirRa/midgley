@@ -60,9 +60,11 @@ def validate_price_payload_freshness(payload: dict, max_allowed_hours: float = M
     payload["max_allowed_age_hours"] = max_allowed_hours
 
     if is_stale:
+        region = str(payload.get('region', 'Unknown'))
+        src_name = str(payload.get('source', 'Unknown'))
         logger.warning(
-            f"STALE RETAIL PRICE WARNING for {payload.get('region', 'Unknown')}: "
-            f"Data age is {age_hours:.1f} hours (Source: {payload.get('source', 'Unknown')}), "
+            f"STALE RETAIL PRICE WARNING for {region}: "
+            f"Data age is {age_hours:.1f} hours (Source: {src_name}), "
             f"exceeding max staleness threshold of {max_allowed_hours:.1f} hours."
         )
     return payload
@@ -221,7 +223,7 @@ def fetch_gasbuddy_prices_by_zip(zip_code: str = "74103") -> dict:
                     logger.info(f"Fetched {len(station_prices)} GasBuddy stations for zip {zip_code}. Avg Regular: ${avg_price:.3f}/gal")
                     return {"average_price": round(avg_price, 3), "stations": station_prices, "source": f"GasBuddy GraphQL (Zip {zip_code})"}
     except Exception as e:
-        logger.debug(f"GasBuddy GraphQL query notice for zip {zip_code}: {e}")
+        logger.debug(f"GasBuddy GraphQL query notice for zip {zip_code}: {type(e).__name__}")
         
     return None
 
@@ -273,10 +275,10 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
                                                     logger.info(f"AAA scraper matched metro '{kw}' for {region_code}: ${val:.3f}/gal")
                                                     return {"average_price": round(val, 3), "source": f"AAA Web Scraper ({kw}, {state})"}
                 except Exception as parse_err:
-                    logger.debug(f"BS4 parsing notice for {region_code}: {parse_err}")
+                    logger.debug(f"BS4 parsing notice for {region_code}: {type(parse_err).__name__}")
 
     except Exception as e:
-        logger.debug(f"AAA web scraper notice for {region_code}: {e}")
+        logger.debug(f"AAA web scraper notice for {region_code}: {type(e).__name__}")
     return None
 
 
@@ -325,7 +327,7 @@ def fetch_aaa_fuel_prices_all_grades(region_code: str = "National") -> dict:
                                 logger.info(f"Fetched multi-grade AAA prices for {region_code}: {result['grades']}")
                                 return result
     except Exception as e:
-        logger.debug(f"AAA multi-grade scraper notice for {region_code}: {e}")
+        logger.debug(f"AAA multi-grade scraper notice for {region_code}: {type(e).__name__}")
         
     # Fallback to single regular price lookup or static anchor
     single_res = fetch_live_metro_retail_price(region_code, use_cache=False)
@@ -372,7 +374,7 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                 if pd.notna(est_price) and est_price > 0:
                     return {"average_price": round(est_price, 3), "source": "EIA/yfinance RBOB Benchmark"}
     except Exception as e:
-        logger.debug(f"yfinance retail benchmark notice for {region_code}: {e}")
+        logger.debug(f"yfinance retail benchmark notice for {region_code}: {type(e).__name__}")
     return None
 
 
@@ -394,7 +396,7 @@ def fetch_history_last_known_price(region_code: str) -> dict:
                     if pd.notna(last_price) and last_price > 0:
                         return {"average_price": round(last_price, 3), "source": "prediction_history.csv History"}
         except Exception as e:
-            logger.debug(f"Could not read prediction_history.csv for {region_code}: {e}")
+            logger.debug(f"Could not read prediction_history.csv for {region_code}: {type(e).__name__}")
     return None
 
 
@@ -507,7 +509,7 @@ def fetch_google_maps_fuel_prices(place_id: str = None, api_key: str = None) -> 
         api_key = os.environ.get("GOOGLE_MAPS_API_KEY") or os.environ.get("PLACES_API_KEY")
         
     if not api_key:
-        logger.debug("GOOGLE_MAPS_API_KEY not found in environment.")
+        logger.debug("Google Maps API configuration notice: credentials non-present in environment.")
         return {"status": "NO_API_KEY", "message": "Set GOOGLE_MAPS_API_KEY to enable live Google Maps station queries."}
         
     url = f"https://places.googleapis.com/v1/places/{place_id}" if place_id else "https://places.googleapis.com/v1/places:searchText"
@@ -541,7 +543,7 @@ def fetch_google_maps_fuel_prices(place_id: str = None, api_key: str = None) -> 
                     avg_p = sum(x['price'] for x in prices) / len(prices)
                     return {"average_price": round(avg_p, 3), "prices": prices, "source": "Google Places API"}
     except Exception as e:
-        logger.debug(f"Google Places API query notice: {e}")
+        logger.debug(f"Google Places API query notice: {type(e).__name__}")
         
     return {"status": "ERROR", "message": "Could not query Google Places API."}
 
