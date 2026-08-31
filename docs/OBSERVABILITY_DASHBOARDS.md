@@ -56,16 +56,18 @@ In Axiom, navigate to **Dashboards -> Create Dashboard -> Add Element**:
 
 ## 🔔 Axiom Alert Rules (Monitors)
 
-In Axiom, navigate to **Monitors -> Create Monitor**:
+In Axiom, navigate to **Monitors -> New monitor** (top right dropdown):
 
 1. **RSS Feed Fetch Error Spike:**
+   * **Monitor Type:** Select **`Threshold monitor`**
    * **APL Query:** `['midgley-workers'] | where event == "rss_fetch_error"`
    * **Trigger Condition:** `count() > 5` within 30 minutes.
    * **Action:** Email / Slack notification.
 
 2. **Geopolitical Anomaly Alert:**
+   * **Monitor Type:** Select **`Match monitor`** (or **`Threshold monitor`** with `count() >= 1`)
    * **APL Query:** `['midgley-workers'] | where summary.anomalies_detected > 0`
-   * **Trigger Condition:** `count() >= 1`.
+   * **Trigger Condition:** Triggers on any event matching `anomalies_detected > 0`.
    * **Action:** Slack / Discord alert.
 
 ---
