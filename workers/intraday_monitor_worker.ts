@@ -67,11 +67,11 @@ function parseRSSItems(xmlText: string): RSSItem[] {
     const titleMatch = itemXml.match(/<title>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/title>/i);
     let title = titleMatch ? (titleMatch[1] || titleMatch[2] || "").trim() : "";
     title = title
-      .replace(/&amp;/g, "&")
       .replace(/&lt;/g, "<")
       .replace(/&gt;/g, ">")
       .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'");
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, "&");
 
     const linkMatch =
       itemXml.match(/<link(?:\s+href=["']([^"']+)["'])?[^>]*>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))?<\/link>/i) ||
