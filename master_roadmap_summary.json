@@ -1,0 +1,932 @@
+[
+  {
+    "number": 20,
+    "title": "feat(home-assistant): Add Home Assistant dashboard module & metro area gas price forecast integration",
+    "status": "Inbox",
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "body_preview": "### Feature Proposal: Home Assistant Dashboard Module & Sensor Integration for Metro Area Gas Price Forecasting\n\n#### \ud83d\ude80 Overview\nDevelop a Home Assistant integration and Lovelace dashboard custom card (`midgley-gas-card`) that displays real-time and 5-day forecasted retail unleaded gasoline prices t..."
+  },
+  {
+    "number": 21,
+    "title": "feat(android-auto): Android Auto in-dash gas price & 5-day forecast fuel assistant app",
+    "status": "Inbox",
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "body_preview": "### Feature Proposal: Android Auto & Automotive In-Dash Fuel Price Assistant (`midgley-auto`)\n\n#### \ud83d\ude97 Overview\nDevelop an **Android Auto** (and Android Automotive OS) application utilizing the `androidx.car.app` Car App API to bring real-time regional unleaded gas prices and 5-day ML trend forecasts..."
+  },
+  {
+    "number": 22,
+    "title": "feat(lubelogger): LubeLogger integration for predictive vehicle tank refill & fuel cost optimization",
+    "status": "Inbox",
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "body_preview": "### Feature Proposal: LubeLogger Integration for Predictive Tank Refill & Fuel Cost Optimization\n\n#### \ud83d\udee2\ufe0f Overview\nIntegrate `midgley` with **[LubeLogger](https://github.com/hargata/lubelog)** (the self-hosted vehicle management platform) to predict precisely **when and how much** gas a user should ..."
+  },
+  {
+    "number": 34,
+    "title": "feat(oakland): Add Oakland, CA Metro Area (PADD 5 West Coast) Regional Forecasting & CARB Regulatory Display",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "dashboard"
+    ],
+    "body_preview": "## Feature Request: Oakland, CA Metro Area Expansion (PADD 5 West Coast) & CARB Regulatory Cost Display\n\n### Summary\nExpand Midgley's regional forecasting capabilities by adding **Oakland, CA & the San Francisco Bay Area (PADD 5 West Coast)** as a dedicated regional model and public dashboard locale..."
+  },
+  {
+    "number": 35,
+    "title": "feat(dashboard): Detail unique regional drivers & physical infrastructure factors across all metro dashboard pages",
+    "status": "Ready",
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "body_preview": "## Overview & Feature Description\n\nEnhance all localized regional public web dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/oakland`, and `/bayarea`) to display dedicated visual cards detailing their unique regional econometric drivers, refining logistics, tax structures, delivery hub dynami..."
+  },
+  {
+    "number": 37,
+    "title": "feat(embeds): Open Graph & Discord card embeds with auto-generated forecast preview images for regional pages",
+    "status": "Ready",
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "body_preview": "## Overview & Feature Description\n\nWhen links to Midgley regional dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/oakland`, `/bayarea`, `/national`, or `/math`) are shared on **Discord**, **Twitter/X**, **Slack**, or **iMessage**, Discord currently renders either a plain link preview or an un..."
+  },
+  {
+    "number": 40,
+    "title": "feat(security): Implement user authentication & access control for MCP Server & REST API Gateway",
+    "status": "Ready",
+    "milestone": "v0.4",
+    "labels": [
+      "enhancement",
+      "api",
+      "security"
+    ],
+    "body_preview": "### \ud83d\udd12 Feature Request: User Authentication & Access Control for MCP & REST API\n\n#### Overview\nImplement an access control mechanism to restrict the Midgley Model Context Protocol (MCP) Server and REST API Gateway to approved users only.\n\n#### Key Requirements\n1. **API Key & Bearer Token Authenticati..."
+  },
+  {
+    "number": 41,
+    "title": "feat(diesel): Expand Midgley to Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spread Modeling",
+    "status": "Ready",
+    "milestone": "Diesel Model v1.0 \"Diesel\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": "### \ud83d\ude9a Feature Proposal: Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spread Modeling\n\n#### \ud83d\udee2\ufe0f Overview & Feature Vision\nExpand `midgley` beyond Unleaded RBOB Gasoline (`RB=F`) by introducing a full quantitative forecasting engine, physical feature pipeline, regional calibration agen..."
+  },
+  {
+    "number": 43,
+    "title": "feat(evaluation): Add Naive Persistence Baseline & NYMEX Futures-Implied Benchmark Comparisons",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": "### Context & Motivation\nEvaluating model directional hit rate (e.g. 60.79%) in isolation does not demonstrate model superiority over trivial baselines, as a naive 'price stays flat' (persistence) guess wins ~40-50% of the time on a 5-day horizon.\n\n### Proposed Implementation\n1. Compute and report t..."
+  },
+  {
+    "number": 44,
+    "title": "feat(models): Add P10/P50/P90 Prediction Interval Bands Scaling with Horizon",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": "### Context & Motivation\nSingle point price forecasts (\\.892/gal) lack risk quantification. Uncertainty naturally compounds as the forecast horizon extends from Day 1 to Day 5 and varies across geographic market volatility profiles.\n\n### Proposed Implementation\n1. Implement parametric or empirical r..."
+  },
+  {
+    "number": 45,
+    "title": "refactor(cache): Implement Provenance Chains and Stale-While-Revalidate (SWR) Cache Architecture",
+    "status": "Ready",
+    "milestone": "v0.4",
+    "labels": [
+      "bug",
+      "enhancement",
+      "infrastructure"
+    ],
+    "body_preview": "### Context & Motivation\nPrevent state vs. metro level data leaking (e.g. California statewide price average appearing in Oakland metro responses) and replace raw cache age disclosures with robust cache status semantics.\n\n### Proposed Implementation\n1. Add explicit provenance metadata (\\source\\, \\\re..."
+  },
+  {
+    "number": 46,
+    "title": "feat(explainability): Add Component-Level Feature Attribution & Driver Breakdown per Forecast",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": "### Context & Motivation\nThe multi-agent pipeline ingests news, NOAA weather, OPEC press releases, social media, and physical data, but end users need transparency into which specific factors moved the price prediction.\n\n### Proposed Implementation\n1. Extract directional dollar & percentage contribu..."
+  },
+  {
+    "number": 47,
+    "title": "feat(scoreboard): Implement Realized-vs-Predicted Rolling Scoreboard API & Dashboard Section",
+    "status": "Ready",
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard",
+      "api"
+    ],
+    "body_preview": "### Context & Motivation\nHistorical MAE and directional hit rates must be continuously recomputed against actual market prices as target dates arrive to maintain empirical credibility.\n\n### Proposed Implementation\n1. Leverage \\src/prediction_logger.py\\ to calculate rolling 30/60/90-day MAE and hit r..."
+  },
+  {
+    "number": 48,
+    "title": "feat(api): Add GET /locales Metadata Endpoint & POST /forecast/batch Endpoint",
+    "status": "Inbox",
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "api"
+    ],
+    "body_preview": "### Context & Motivation\nCurrently, locale codes and tax structures are implicit, requiring client applications to guess locale identifiers and make multiple single calls to forecast for several locations.\n\n### Proposed Implementation\n1. Add \\GET /api/v1/locales\\ returning available locale codes, \\\r..."
+  },
+  {
+    "number": 49,
+    "title": "feat(mcp): Expose Fuel Market Shock Simulation Tools & Scenario Catalog via MCP Server",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "body_preview": "### Context & Motivation\nCounterfactual market shock simulation (refinery fires, Hormuz blockades, weather disasters) is a core Midgley engine feature, but needs complete feature parity and rich prompt templates in the Model Context Protocol (MCP) server interface.\n\n### Proposed Implementation\n1. En..."
+  },
+  {
+    "number": 50,
+    "title": "feat(geocoding): Add ZIP Code to Locale & PADD Resolution Mapping Engine",
+    "status": "Inbox",
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "body_preview": "### Context & Motivation\nEnd users and AI agents frequently ask about gas prices by 5-digit US ZIP code rather than predefined metro area names.\n\n### Proposed Implementation\n1. Implement a lightweight local ZIP-code-to-Locale mapping dataset/function in \\src/live_fuel_feed.py\\.\n2. Resolve input ZIP ..."
+  },
+  {
+    "number": 52,
+    "title": "feat(docs/math): Leverage CodeCogs LaTeX rendering service for equation images across GitHub Markdown & web embeds",
+    "status": "Ready",
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement"
+    ],
+    "body_preview": "### Summary & Context\nCurrently, mathematical equations across the project\u2014including in `AGENTS.md`, `README.md`, GitHub pull requests/issues, and the public web dashboard (`docs/math.html`)\u2014rely on raw LaTeX text notation (`$$\\dots$$`, `\\(\\dots\\)`) or client-side JavaScript rendering via KaTeX.\n\nWh..."
+  },
+  {
+    "number": 53,
+    "title": "feat(core-api): Monitor open-access research papers via CORE API during weekly self-review",
+    "status": "Ready",
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Feature Overview\nIntegrate the [CORE API](https://core.ac.uk/services/api) (`https://api.core.ac.uk/v3/`) as an open-access research literature data source into the weekly model review pipeline (`.github/workflows/weekly_model_review.yml` and `src/weekly_issue_reporter.py`). \n\nSimilar to the arXi..."
+  },
+  {
+    "number": 54,
+    "title": "feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "# \ud83d\udca8 Architecture Plan: Multi-Feed Air Quality (AQI) Ingestion & Refinery Outage Early Detection System\n\n## Executive Summary\nThis feature establishes an **Air Quality (AQI) & Industrial Emissions Extraction Subsystem** (`src/aqi_feed.py`) in Midgley. By ingesting real-time air quality metrics ($\\tex..."
+  },
+  {
+    "number": 55,
+    "title": "Feature: Ingest live USGS Earthquake API feeds (fdsnws/event/1/) for real-time seismic fuel market risk scoring",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "### Feature Overview\nIntegrate direct API ingestion from the **USGS Earthquake Web Service API** ([https://earthquake.usgs.gov/fdsnws/event/1/](https://earthquake.usgs.gov/fdsnws/event/1/)) into the data ingestion pipeline (src/usgs_seismic.py, src/oakland_regional.py, src/noaa_weather.py) to replac..."
+  },
+  {
+    "number": 56,
+    "title": "feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Feature Proposal: USGS Water Data Telemetry Integration (`api.waterdata.usgs.gov`)\n\nIntegrate real-time streamflow, gage height, water temperature, and specific conductance telemetry from the **USGS Water Data API** (`api.waterdata.usgs.gov` / `waterservices.usgs.gov`) into the Midgley Multi-Agen..."
+  },
+  {
+    "number": 66,
+    "title": "[Feature Request] Ingest U.S. Treasury Yield Curve & TIPS Inflation Metrics (Fiscal Data API)",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the official, 100% free, keyless **U.S. Treasury Fiscal Data API** (\\\fiscaldata.treasury.gov\\) into \\src/\\ to extract macro yield curve dynamics (10Y-2Y spread) and TIPS real interest rates as predictive features for wholesale NYMEX RBOB futures forecasting.\n\n## Motivations & Va..."
+  },
+  {
+    "number": 67,
+    "title": "[Feature Request] Ingest BriefTape AI-Summarized SEC 8-K & Policy Event Stream",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate **BriefTape** (\\\brieftape.com\\) REST API (10,000 free keyless calls/day) to ingest pre-summarized SEC 8-K filings for major refining tickers (\\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\, \\CVX\\) and Federal Reserve / BLS policy releases.\n\n## Motivations & Value\n- **Refinery Outage Intelli..."
+  },
+  {
+    "number": 68,
+    "title": "[Feature Request] Ingest Congressional Energy Equity Trading Signals (CongressInvests API)",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **CongressInvests API** (\\congressinvests.com\\) (100 free keyless calls/day) to track STOCK Act disclosures by U.S. Senators and Representatives trading major energy and refining equities (\\CVX\\, \\XOM\\, \\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\).\n\n## Motivations & Value\n- **Insider..."
+  },
+  {
+    "number": 69,
+    "title": "[Feature Request] Ingest SEC EDGAR Official Refinery 8-K Outage Filings (sec.gov API)",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the official, 100% free **U.S. SEC EDGAR API** (\\data.sec.gov\\) into \\src/sec_edgar_feed.py\\ to track official Item 8.01 material event 8-K filings for major U.S. oil refining corporations (PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66).\n\n## Motivations & Valu..."
+  },
+  {
+    "number": 70,
+    "title": "[Feature Request] Implement OpenFIGI Cross-Market Symbol Normalization Service",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "integration"
+    ],
+    "body_preview": "## Summary\nIntegrate the **OpenFIGI API** (\\openfigi.com\\) (25 free keyless calls/min) into \\src/symbol_mapper.py\\ to standardize financial instrument tickers across FRED, EIA, SEC CIKs, and NYMEX commodity futures.\n\n## Motivations & Value\n- **Cross-Source Entity Resolution:** Unifies symbol definit..."
+  },
+  {
+    "number": 71,
+    "title": "[Feature Request] Ingest Tradestie Reddit Retail Energy Sentiment Feed",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **Tradestie Reddit API** (\\\tradestie.com\\) keyless endpoint into \\src/tradestie_sentiment_feed.py\\ to extract retail investor discussion sentiment and comment volume for energy tickers (\\XOM\\, \\CVX\\, \\MPC\\, \\VLO\\, \\USO\\).\n\n## Motivations & Value\n- **Alternative Retail Moment..."
+  },
+  {
+    "number": 72,
+    "title": "[Feature Request] Ingest Open-Meteo High-Resolution Regional Temperature & Freeze Shocks",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the official, 100% free, keyless **Open-Meteo API** (\\open-meteo.com\\) into \\src/noaa_weather.py\\ to extract high-resolution regional temperature grid forecasts, polar vortex anomalies, and freeze-off risks in Cushing WTI and Tulsa refining corridors.\n\n## Motivations & Value\n- *..."
+  },
+  {
+    "number": 73,
+    "title": "[Feature Request] Ingest EPA AirNow Ozone Alerts for Summer-Blend Gas Compliance",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **U.S. EPA AirNow API** (\\^Girnowapi.org\\) (free developer key, 500 req/hr) into \\src/\\ to track ground-level ozone action alerts and Air Quality Index (AQI) thresholds across target metropolitan regions.\n\n## Motivations & Value\n- **Regulatory Summer-Blend Transition:** Elev..."
+  },
+  {
+    "number": 74,
+    "title": "[Feature Request] Ingest U.S. BTS Freight Transportation Index & Tank Truck Demand Data",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the official **U.S. Bureau of Transportation Statistics (BTS) Open Data API** (\\\bts.gov\\) into \\src/\\ to track the Freight Transportation Services Index (TSI), truck tonnage index, and national commercial transportation activity.\n\n## Motivations & Value\n- **Physical Demand Proxy..."
+  },
+  {
+    "number": 75,
+    "title": "[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **U.S. Census Bureau API** (\\^Gpi.census.gov\\) (100% free public government API) to fetch household vehicle availability, mean commute duration, and demographic density across our 5 target metro areas (Tulsa OK, Newark DE, Cincinnati OH, Greenville NC, Oakland/Bay Area CA).\n..."
+  },
+  {
+    "number": 76,
+    "title": "[Feature Request] Ingest Frankfurter ECB Foreign Exchange Rates (USD Trade Index)",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **Frankfurter API** (\\\frankfurter.app\\) (100% free, keyless, unlimited currency conversion API) into \\src/\\ to track ECB foreign exchange rates (USD/EUR, USD/CAD, USD/CNY).\n\n## Motivations & Value\n- **Macro FX Impact:** Fluctuations in USD exchange rates against major tradin..."
+  },
+  {
+    "number": 78,
+    "title": "[Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers",
+    "status": "Ready",
+    "milestone": "v0.4",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "body_preview": "# [Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers\n\nThis is a long-term roadmap issue to track ongoing enhancements, integrations, and new triggers for **Strategy 4 (Incoming Webhook Gateway)** on the Midgley API Gateway (\\POST /api/v1/events/webhook\\).\n\n## Overview..."
+  },
+  {
+    "number": 79,
+    "title": "[Feature Request] Ingest AlphaAI Scored Insider & Financial News Event Stream",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **AlphaAI API & MCP Server** (\\^Glphai.io/developers\\) (20 free req/min, 100 req/day REST/MCP) into \\src/event_analyzer.py\\ to ingest per-ticker financial news impact scores and SEC Form 4 insider trade events for energy refiners (\\XOM\\, \\CVX\\, \\MPC\\, \\VLO\\, \\PSX\\, \\DINO\\, \\..."
+  },
+  {
+    "number": 80,
+    "title": "[Feature Request] Integrate Weights & Biases (W&B) for Rolling Model Drift & Validation Loss Tracking",
+    "status": "Ready",
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body_preview": "## Summary\nIntegrate **Weights & Biases (W&B)** (\\wandb.ai\\) (free tier for personal projects, 100 GB storage) into \\src/weekly_issue_reporter.py\\ and \\src/models.py\\ to log quantitative model training runs, rolling MAE/RMSE metrics, and backtest loss curves.\n\n## Motivations & Value\n- **MLOps Observ..."
+  },
+  {
+    "number": 81,
+    "title": "[Feature Request] Implement Trigger.dev Resilient Cloud Cron Workflow Runner",
+    "status": "Inbox",
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body_preview": "## Summary\nIntegrate **Trigger.dev** (\\\trigger.dev\\) (50,000 free durable executions/month) as a cloud background workflow runner for Midgley's daily forecasting (\\..."
+  },
+  {
+    "number": 82,
+    "title": "[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body_preview": "## Summary\nIntegrate **Neon Serverless Postgres** (\\\neon.tech\\) or **Cloudflare D1** (\\cloudflare.com\\) (free tier) into \\src/prediction_logger.py\\ and \\src/lookup_cache.py\\ to maintain a cloud-synchronized relational store for out-of-time prediction history and symbol lookup caches.\n\n## Motivations..."
+  },
+  {
+    "number": 83,
+    "title": "[Feature Request] Ingest Firecrawl Web-to-Markdown API for LLM Event Extraction",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **Firecrawl Web Scraping API** (\\\firecrawl.dev\\) (1,000 free credits/month) into \\src/event_analyzer.py\\ to convert raw HTML from news bulletins, state motor fuel tax portals, and refinery press releases into clean, LLM-ready Markdown.\n\n## Motivations & Value\n- **Clean LLM I..."
+  },
+  {
+    "number": 84,
+    "title": "[Feature Request] Integrate Tavily AI Search API for Real-Time Anomaly Event RAG",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate the **Tavily AI Search API** (\\\tavily.com\\) (1,000 search queries/month free) into \\src/intraday_event_monitor.py\\ to execute targeted web searches when intraday anomaly triggers occur.\n\n## Motivations & Value\n- **RAG Search Engine for AI Agents:** Purpose-built for LLM RAG pipe..."
+  },
+  {
+    "number": 85,
+    "title": "[Feature Request] Implement Cube Cloud Headless Semantic Layer for Multi-Metro Fuel Metrics",
+    "status": "Inbox",
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body_preview": "## Summary\nIntegrate **Cube Cloud** (\\cube.dev\\) (1,000 free queries/day) into Midgley's quantitative architecture to serve as a headless semantic data modeling layer.\n\n## Motivations & Value\n- **Standardized Metric Definitions:** Centralizes retail rack margin equations, 321 crack spreads, and roll..."
+  },
+  {
+    "number": 86,
+    "title": "[Feature Request] Ingest Market Data API for Energy Equities & Commodity Backstop",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate **Market Data API** (\\marketdata.app\\) (100 free requests/day) into \\src/energy_equities_feed.py\\ to retrieve quotes for energy sector equities and market benchmarks.\n\n## Motivations & Value\n- **Secondary Financial Feed:** Provides a secondary quotes provider backstopping \\yfina..."
+  },
+  {
+    "number": 87,
+    "title": "[Feature Request] Implement IPASIS API Gateway Security for Incoming Webhooks",
+    "status": "Ready",
+    "milestone": "v0.4",
+    "labels": [
+      "enhancement",
+      "api",
+      "security"
+    ],
+    "body_preview": "## Summary\nIntegrate the **IPASIS API** (\\ipasis.com\\) (1,000 requests/day free, no credit card required) into \\src/api_server.py\\ to filter incoming push webhook traffic (\\POST /api/v1/events/webhook\\).\n\n## Motivations & Value\n- **Webhook Gateway Security:** Provides real-time IP reputation checks,..."
+  },
+  {
+    "number": 88,
+    "title": "[Feature Request] Implement Shipyard Cloud Data Orchestration Runner",
+    "status": "Inbox",
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body_preview": "## Summary\nIntegrate **Shipyard** (\\shipyardapp.com\\) (10 hours cloud runtime/month free) as an automated cloud data orchestration platform for Midgley's Python data ingestion scripts.\n\n## Motivations & Value\n- **Cloud Orchestration:** Automates multi-step data pipelines (EIA, FRED, NOAA NWS, BriefT..."
+  },
+  {
+    "number": 89,
+    "title": "[Feature Request] Ingest SearchApi Google SERP Data for Geopolitical Event Extraction",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nIntegrate **SearchApi** (\\searchapi.io\\) (100 free successful API calls/month) into \\src/intraday_event_monitor.py\\ to retrieve structured Google SERP JSON data for breaking energy news and geopolitical events.\n\n## Motivations & Value\n- **Structured SERP Extraction:** Delivers structured ..."
+  },
+  {
+    "number": 90,
+    "title": "[Feature Request] Integrate Coupler.io Cloud Spreadsheet Sync for Prediction History",
+    "status": "Inbox",
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "integration"
+    ],
+    "body_preview": "## Summary\nIntegrate **Coupler.io** (\\coupler.io\\) (100 runs/month free) into \\src/prediction_logger.py\\ to automatically replicate out-of-time forecast logs from \\data/prediction_history.csv\\ into external cloud spreadsheets (Google Sheets / Excel Online).\n\n## Motivations & Value\n- **Live Spreadshe..."
+  },
+  {
+    "number": 91,
+    "title": "[Feature Request] Interactive Fill-Up Timing & Estimated Savings Advisor Page",
+    "status": "Ready",
+    "milestone": "v0.5",
+    "labels": [
+      "enhancement",
+      "dashboard"
+    ],
+    "body_preview": "### Feature Description\n\nImplement a dedicated **Fill-Up Timing & Estimated Savings Advisor** interactive page (\\docs/savings.html\\ / \\/savings\\) that uses Midgley's 5-day out-of-time price trajectory forecasts to calculate exact tank savings by waiting to fill up vs. buying fuel today.\n\n### Key Cap..."
+  },
+  {
+    "number": 92,
+    "title": "[Feature Request] Ingest pandas-ta Technical Momentum Indicators for RBOB & WTI Futures",
+    "status": "Ready",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body_preview": "## Summary\nIntegrate **\\pandas-ta\\** (\\github.com/twopirllc/pandas-ta\\) into \\src/feature_engineering.py\\ to calculate technical indicators (RSI, Bollinger Bands, MACD, ATR, EMA crossovers) for NYMEX RBOB futures (\\RB=F\\) and Cushing WTI (\\CL=F\\).\n\n## Motivations & Value\n- **Technical Momentum Signa..."
+  },
+  {
+    "number": 93,
+    "title": "[Feature Request] Implement NeuralProphet Hybrid Estimator with Exogenous Shock Decay",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": "## Summary\nIntegrate **\\NeuralProphet\\** (\\github.com/ourownstory/neural_prophet\\) into \\src/models.py\\ as a hybrid neural time-series estimator combining PyTorch auto-autoregressive terms with exogenous LLM event shock decay vectors.\n\n## Motivations & Value\n- **Non-Linear Event Modeling:** Captures..."
+  },
+  {
+    "number": 94,
+    "title": "[Feature Request] Implement Feast Feature Store for Point-in-Time Backtesting Correctness",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body_preview": "## Summary\nIntegrate **\\Feast\\** (\\github.com/feast-dev/feast\\) as an open-source feature store serving feature vectors to \\src/models.py\\ and \\src/feature_engineering.py\\.\n\n## Motivations & Value\n- **Point-in-Time Correctness:** Eliminates future data leakage during historical backtesting by enforc..."
+  },
+  {
+    "number": 95,
+    "title": "[Feature Request] Implement GeoPandas Spatial Refinery Distance Buffering for Metro Agents",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": "## Summary\nIntegrate **\\GeoPandas\\** (\\github.com/geopandas/geopandas\\) into \\src/*_regional.py\\ to perform spatial distance-decay calculation from refineries and delivery hubs to regional retail gas station clusters.\n\n## Motivations & Value\n- **Geospatial Distance-Decay:** Calculates spatial distan..."
+  },
+  {
+    "number": 96,
+    "title": "[Feature Request] Deploy Self-Hosted Dagu DAG Task Scheduler on Dev VM",
+    "status": "Inbox",
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body_preview": "## Summary\nDeploy **\\Dagu\\** (\\github.com/dagucloud/dagu\\) (open-source Go binary / Docker container with Web UI) on \\dev-vm\\ (\\10.42.42.54\\) to orchestrate Midgley's daily data ingestion and quantitative modeling workflows.\n\n## Motivations & Value\n- **Declarative YAML DAGs:** Defines inter-task dep..."
+  },
+  {
+    "number": 97,
+    "title": "[Feature Request] Deploy Self-Hosted ArchiveBox for Historical News & Event Preservation",
+    "status": "Ready",
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure"
+    ],
+    "body_preview": "## Summary\nDeploy **\\ArchiveBox\\** (\\github.com/ArchiveBox/ArchiveBox\\) (open-source Python/Docker web archiving server) on \\dev-vm\\ to snapshot and preserve historical news articles, OPEC press releases, and refinery outage notices.\n\n## Motivations & Value\n- **Historical Text Preservation:** Create..."
+  },
+  {
+    "number": 98,
+    "title": "[Feature Request] Implement Healthchecks Cron Monitoring for Daily & Weekly Pipeline Runs",
+    "status": "Ready",
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body_preview": "## Summary\nIntegrate **\\Healthchecks\\** (\\github.com/healthchecks/healthchecks\\) (open-source cron monitoring service) into \\src/prediction_logger.py\\ and \\src/weekly_issue_reporter.py\\.\n\n## Motivations & Value\n- **Execution Heartbeats:** Listens for HTTP ping heartbeats at the conclusion of daily f..."
+  },
+  {
+    "number": 99,
+    "title": "[Feature Request] Deploy Self-Hosted Metabase BI Dashboard on Dev VM for Forecast Analytics",
+    "status": "Inbox",
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "dashboard"
+    ],
+    "body_preview": "## Summary\nDeploy **\\Metabase\\** (\\github.com/metabase/metabase\\) (open-source Java/Docker BI server) on \\dev-vm\\ (\\10.42.42.54\\) to provide interactive SQL analytics and visual dashboards over \\data/prediction_history.csv\\.\n\n## Motivations & Value\n- **Interactive Forecast Analytics:** Enables inter..."
+  },
+  {
+    "number": 100,
+    "title": "[Feature Request] Implement Vintage 1920s Petroleum & Mechanical Gas Pump Design System (DESIGN.md)",
+    "status": "Ready",
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "body_preview": "### Feature Description\n\nLow-priority enhancement request to evaluate and implement a formal **\\DESIGN.md\\** design system specification for the Midgley Unleaded Gas Price Prediction Engine and public web dashboard (\\docs/\\).\n\n### Concept & Inspiration\n\n- **Namesake Homage**: 1920s Thomas Midgley Jr..."
+  },
+  {
+    "number": 102,
+    "title": "[Feature Request] Implement Kaggle GPU/TPU Open-Source LLM Quota Safety Fallback",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "token-efficiency",
+      "infrastructure",
+      "modeling",
+      "dashboard"
+    ],
+    "body_preview": "## Summary\nIntegrate **Kaggle API & GPU/TPU Kernels** (30 free GPU hours/week + 20 TPU hours/week) as an automated secondary LLM fallback engine for \\src/event_analyzer.py\\.\n\n## Motivations & Value\n- **Zero-Cost LLM Quota Safety Valve:** Provides open-source LLM inference (e.g., Qwen 2.5 7B, Llama 3..."
+  },
+  {
+    "number": 105,
+    "title": "feat(dashboard): Add Last Run Intelligence Audit Box to Overview Landing Page",
+    "status": "In Progress",
+    "milestone": "v0.5",
+    "labels": [
+      "enhancement",
+      "dashboard"
+    ],
+    "body_preview": "## Feature Overview\n\nAdd an interactive **Last Run Intelligence & Impact Audit Box** on the public overview landing page (docs/index.html), positioned between the **Hero Section** and the **Active Forecast Locales Grid**.\n\n### Key Requirements\n1. **Trigger Context:** Display what prompted the latest..."
+  },
+  {
+    "number": 107,
+    "title": "[Feature Request] Implement System Telemetry & Observability Metrics Engine for Grafana (Token Usage, API Quotas, Latency & Errors)",
+    "status": "Ready",
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "token-efficiency",
+      "infrastructure"
+    ],
+    "body_preview": "## Terminology Note\nThe industry standard terms for tracking non-mathematical compute performance, token consumption, API limits, runtime latencies, and system errors are:\n- **System Telemetry / Operational Telemetry**\n- **Observability**\n- **Operational Metrics (Compute/System Metrics)**\n- **Applic..."
+  },
+  {
+    "number": 109,
+    "title": "[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body_preview": "## Summary\nAutomatically discovered new candidate tool **[Open-Meteo Ensemble](https://open-meteo.com/en/docs/ensemble-api)** from developer catalog \\`public-apis\\`.\n\n**Description:** Weather ensemble forecasts from multiple models | No | Yes | Yes\n\n## Modeling Evaluation & Value\n- **Modeling Catego..."
+  },
+  {
+    "number": 112,
+    "title": "[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 113,
+    "title": "[Feature Request] Ingest FRED Macroeconomic & Energy Series via Database-Lookup Skill",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 114,
+    "title": "[Feature Request] Implement SHAP Feature Attribution Engine for Model Interpretability & Dashboard",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "dashboard"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 115,
+    "title": "[Feature Epic] Scientific Agent Skills Integration Roadmap (What-If Oracle, NetworkX Routing, Paperclip RAG, & Document Exports)",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling",
+      "dashboard",
+      "integration"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 116,
+    "title": "[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling",
+      "integration"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 117,
+    "title": "[Feature Request] Implement Purged & Combinatorial Cross-Validation (purgedcv) to Prevent Data Leakage",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 118,
+    "title": "[Feature Request] Implement ArcticDB Datastore for Point-in-Time Accurate Time-Series Storage",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 119,
+    "title": "[Feature Request] Integrate CRNG Fat-Tail Volatility Engine for Scenario Simulation",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 120,
+    "title": "[Feature Request] Integrate QuantStats Performance Tear Sheets & Risk Metrics",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "dashboard"
+    ],
+    "body_preview": ""
+  },
+  {
+    "number": 121,
+    "title": "[Feature Request] Implement Bitemporal Vintage Tracking (as_of) for EIA Data Ingestion",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling"
+    ],
+    "body_preview": "## Context & Motivation\nGovernment energy sources like the US Energy Information Administration (EIA) routinely issue inline revisions and historical restatements (e.g., weekly crude stock levels, motor gasoline demand, refinery runs) weeks after first publication.\n\nInspired by the bitemporal data a..."
+  },
+  {
+    "number": 122,
+    "title": "[Feature Request] Ingest EIA-930 Hourly Electric Grid Monitor for Regional Power Burn & Refining Feedstock Proxy",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body_preview": "## Context & Motivation\nElectric grid natural gas power generation (\\ power burn\\) and hourly grid load directly influence regional natural gas spot pricing, hydrogen production costs, and power grid availability for regional petroleum refineries (e.g., HF Sinclair West Tulsa, PBF Delaware City, Che..."
+  },
+  {
+    "number": 123,
+    "title": "[Feature Request] Ingest FERC Form 6 & Open Data API for Interstate Oil Pipeline Tariffs & Throughput",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body_preview": "## Context & Motivation\nInterstate refined petroleum product pipelines\u2014such as **Colonial Pipeline Line 1 & Line 2** (servicing PADD 1C Charlotte & Greenville), **Kinder Morgan SFPP** (servicing PADD 5 Oakland/SF Bay Area), and **Plantation Pipeline**\u2014operate under Federal Energy Regulatory Commissi..."
+  },
+  {
+    "number": 124,
+    "title": "[Feature Request] Implement Extended MLOps Prediction History Schema & Observability Metrics Engine",
+    "status": "Ready",
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body_preview": "## Summary & Context\n\nTo support continuous model evaluation, feature attribution, and error diagnosis over rolling horizons, this issue proposes extending the prediction logging schema in `src/prediction_logger.py` (`data/prediction_history.csv`) and the intraday monitoring ledger (`data/intraday_e..."
+  },
+  {
+    "number": 127,
+    "title": "[Feature Request] Evaluate Microsoft Qlib & RD-Agent Architecture for Automated Alpha Factor Discovery & Dynamic Domain Adaptation",
+    "status": "Ready",
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling",
+      "integration"
+    ],
+    "body_preview": "### Summary\nEvaluate and ingest architectural patterns from Microsoft Research's **Qlib** quantitative platform ([microsoft/qlib](https://github.com/microsoft/qlib)) and **RD-Agent** ([microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)) into the midgley quantitative fuel price prediction fra..."
+  },
+  {
+    "number": 129,
+    "title": "[Feature Request] Ingest disclosure-alpha (LLM & RAG Event Extraction)",
+    "status": "Inbox",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "dashboard",
+      "api"
+    ],
+    "body_preview": "## Summary\r\nAutomatically discovered new candidate tool **[disclosure-alpha](https://github.com/alwank/disclosure-alpha)** from developer catalog \\`awesome-quant\\`.\r\n\r\n**Description:** Deterministic SEC filing analytics for 10-K/10-Q: section extraction, tone and boilerplate metrics, year-over-year ..."
+  },
+  {
+    "number": 141,
+    "title": "[Feature Request] Ingest Zero-Cost Energy Data Feeds (FRED, EIA v2, Universal State Open Data, USDA Biofuels, Open-Meteo)",
+    "status": "In Progress",
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling",
+      "api"
+    ],
+    "body_preview": "## Summary\nSupersedes closed issue #134 (which proposed the paid Apify `crawlerbros/fuel-prices-scraper`). In accordance with project policy barring paid Apify tools due to subscription and compute unit costs, this issue tracks the ingestion of 5 zero-cost, open-access fuel and energy data sources t..."
+  },
+  {
+    "number": 142,
+    "title": "[main] \ud83d\udcca Weekly Model Review Report & Performance Audit (2026-08-29)",
+    "status": "In Progress",
+    "milestone": "No Milestone",
+    "labels": [
+      "weekly-review"
+    ],
+    "body_preview": "# \ud83d\udcca Weekly Model Review & Performance Audit (2026-08-29)\n\n### \ud83e\udd16 Model Version: `v1.4 Finlight-LLM` | **Branch:** `main`\n\n---\n\n## \ud83d\udcc8 Rolling Accuracy & Performance Summary\n\n| Region / Target | Model Architecture | Evaluated Days | Mean Absolute Error (MAE) | Directional Hit Rate | Status |\n| :--- | :-..."
+  },
+  {
+    "number": 143,
+    "title": "[Feature] Ingest Direct CFTC Commitment of Traders (COT) Energy Positioning Data",
+    "status": "Ready",
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body_preview": "## Summary\nImplement a direct, lightweight Python data connector in  to ingest official CFTC Commitment of Traders (COT) report positioning for NYMEX WTI Crude Oil () and NYMEX RBOB Gasoline () futures. Replaces initial evaluation in #131 with a zero-dependency Tier-S API integration.\n\n## Quantitati..."
+  },
+  {
+    "number": 145,
+    "title": "[Feature Request] Implement Alibaba CEDAR Two-Stage Residual Decomposition & Cross-Attention Alignment (arXiv:2608.25871v1)",
+    "status": "No Status",
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "integration"
+    ],
+    "body_preview": "## \ud83d\udccc Feature Description\nImplement Alibaba 1688's Two-Stage Decoupled Residual Decomposition architecture from Meng et al. (arXiv:2608.25871v1): *CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition*.\n\n### \ud83e\uddee Two-Stage System Formulation\n- Formally decouples quantitative b..."
+  },
+  {
+    "number": 146,
+    "title": "[Feature Request] Ingest Lacuna (LLM & RAG Event Extraction)",
+    "status": "No Status",
+    "milestone": "No Milestone",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body_preview": "## Summary\nAutomatically discovered new candidate tool **[Lacuna](https://github.com/eyenoticeall/Lacuna)** from developer catalog \\`awesome-quant\\`.\n\n**Description:** `Python` `Rust` - Engine-agnostic quantitative research validation for detecting leakage, overfitting, fragile results, unrealistic ..."
+  },
+  {
+    "number": 147,
+    "title": "[Feature Request] Ingest QFO Quant Platform (LLM & RAG Event Extraction)",
+    "status": "No Status",
+    "milestone": "No Milestone",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "integration"
+    ],
+    "body_preview": "## Summary\nAutomatically discovered new candidate tool **[QFO Quant Platform](https://www.qfo-quant-platform.com/)** from developer catalog \\`awesome-quant\\`.\n\n**Description:** `Python` `React` `A-shares` - Local-first quantitative research and backtesting platform with data synchronization, multi-a..."
+  }
+]

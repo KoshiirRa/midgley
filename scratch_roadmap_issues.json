@@ -1,0 +1,1172 @@
+[
+  {
+    "number": 147,
+    "title": "[Feature Request] Ingest QFO Quant Platform (LLM & RAG Event Extraction)",
+    "status": "",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": null,
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "integration"
+    ],
+    "body": "## Summary\nAutomatically discovered new candidate tool **[QFO Quant Platform](https://www.qfo-quant-platform.com/)** from developer catalog \\`awesome-quant\\`.\n\n**Description:** `Python` `React` `A-shares` - Local-first quantitative research and backtesting platform with data synchronization, multi-asset screening, factor analysis, portfolio optimization, risk analysis, and optional LLM-assisted news analysis. [GitHub](https://github.com/yeh2017/QFO-Quant-Platform)\n\n## Modeling Evaluation & Value\n- **Modeling Category:** \\`LLM & RAG Event Extraction\\`\n- **Estimated Impact Score:** **\\`7.4/10.0\\`**\n- **Architecture Target:** \\`src/event_analyzer.py\\`\n- **Rationale:** Item matched 2 high-priority energy/modeling keywords and 1 infrastructure keywords.\n- **Assigned Labels:** \\`enhancement,data-ingestion,integration\\`\n\n## Acceptance Criteria\n- [ ] Implement QFO Quant Platform client/connector in \\`src/event_analyzer.py\\`.\n- [ ] Add integration test suite.\n- [ ] Verify non-null data retrieval."
+  },
+  {
+    "number": 146,
+    "title": "[Feature Request] Ingest Lacuna (LLM & RAG Event Extraction)",
+    "status": "",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": null,
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body": "## Summary\nAutomatically discovered new candidate tool **[Lacuna](https://github.com/eyenoticeall/Lacuna)** from developer catalog \\`awesome-quant\\`.\n\n**Description:** `Python` `Rust` - Engine-agnostic quantitative research validation for detecting leakage, overfitting, fragile results, unrealistic costs, and missing point-in-time evidence.\n\n## Modeling Evaluation & Value\n- **Modeling Category:** \\`LLM & RAG Event Extraction\\`\n- **Estimated Impact Score:** **\\`8.4/10.0\\`**\n- **Architecture Target:** \\`src/event_analyzer.py\\`\n- **Rationale:** Item matched 2 high-priority energy/modeling keywords and 2 infrastructure keywords.\n- **Assigned Labels:** \\`enhancement,infrastructure\\`\n\n## Acceptance Criteria\n- [ ] Implement Lacuna client/connector in \\`src/event_analyzer.py\\`.\n- [ ] Add integration test suite.\n- [ ] Verify non-null data retrieval."
+  },
+  {
+    "number": 145,
+    "title": "[Feature Request] Implement Alibaba CEDAR Two-Stage Residual Decomposition & Cross-Attention Alignment (arXiv:2608.25871v1)",
+    "status": "",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "integration"
+    ],
+    "body": "## \ud83d\udccc Feature Description\nImplement Alibaba 1688's Two-Stage Decoupled Residual Decomposition architecture from Meng et al. (arXiv:2608.25871v1): *CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition*.\n\n### \ud83e\uddee Two-Stage System Formulation\n- Formally decouples quantitative baseline state transitions from qualitative event shock perturbations:\n  $$\\mathbf{s}_{t+1} = f_\\theta(\\mathbf{s}_{\\leq t}, \\mathbf{a}_{\\leq t+1}) + \\epsilon_t$$\n- Stage 1: Noise Filtering & Energy Tag Extraction (discards non-commercial entertainment/gossip noise).\n- Stage 2: Regional Synthesis with Scheduled Calendar Events to estimate residual shock perturbation $\\epsilon_t$.\n\n### \ud83d\udee0\ufe0f Work Done & Implemented Code\n- Added `extract_event_residual_cedar_two_stage()` to [`src/event_analyzer.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/event_analyzer.py).\n- Added `predict_with_cedar_residual_decomposition()` to [`src/models.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/models.py).\n- Documented two-stage formula and architecture in [`RESEARCH_CITATIONS.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/RESEARCH_CITATIONS.md) and [`docs/math.html`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/math.html).\n- Added unit tests in [`tests/test_paper_implementations.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_paper_implementations.py) (100% pass on dev-vm).\n"
+  },
+  {
+    "number": 143,
+    "title": "[Feature] Ingest Direct CFTC Commitment of Traders (COT) Energy Positioning Data",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nImplement a direct, lightweight Python data connector in  to ingest official CFTC Commitment of Traders (COT) report positioning for NYMEX WTI Crude Oil () and NYMEX RBOB Gasoline () futures. Replaces initial evaluation in #131 with a zero-dependency Tier-S API integration.\n\n## Quantitative Rationale & Model Value\n- **Signal Value:** Measures Managed Money (Hedge Fund) net positioning, commercial refiner/producer hedging, and 3-year rolling position Z-scores.\n- **Trend Momentum (1\u20132 Week Horizon):** $+10,000$ contract net long expansion correlates ( \\approx 0.18 - 0.24$) with $+2.5\\text{\u00a2} - 4.5\\text{\u00a2}/\\text{gal}$ 5-to-10 day forward wholesale RBOB returns.\n- **Contrarian Extreme & Short Squeeze Indicator:** Identifies overcrowded long liquidations ( > +2.0$) and short squeeze vulnerability ( < -2.0$, driving $+15\\text{\u00a2} - 30\\text{\u00a2}/\\text{gal}$ upward spikes).\n- **Out-of-Sample Lead Window:** Friday COT release provides a 5\u201314 day forward lead window before retail pump prices catch up.\n\n## Key Data Feeds & Endpoints\n- **Source:** Official  Socrata REST API (Tier-S Official API, free, zero-auth).\n- **Target Commodities:**\n  - : WTI Crude Oil (NYMEX)\n  - : RBOB Gasoline Blendstock (NYMEX)\n- **Target Architecture:**  -> \n\n## Derived Feature Matrix Objectives\n1. : Net speculative position ().\n2. : Rolling 3-year Z-score for extreme crowding / squeeze detection.\n3. : Refiner & merchant hedging signal.\n4. : 1-week net position shift.\n\n## Acceptance Criteria\n- [ ] Implement  in  targeting .\n- [ ] Merge derived COT positioning features in .\n- [ ] Add unit test suite in .\n- [ ] Verify non-null out-of-time data retrieval."
+  },
+  {
+    "number": 142,
+    "title": "[main] \ud83d\udcca Weekly Model Review Report & Performance Audit (2026-08-29)",
+    "status": "In Progress",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": null,
+    "labels": [
+      "weekly-review"
+    ],
+    "body": "# \ud83d\udcca Weekly Model Review & Performance Audit (2026-08-29)\n\n### \ud83e\udd16 Model Version: `v1.4 Finlight-LLM` | **Branch:** `main`\n\n---\n\n## \ud83d\udcc8 Rolling Accuracy & Performance Summary\n\n| Region / Target | Model Architecture | Evaluated Days | Mean Absolute Error (MAE) | Directional Hit Rate | Status |\n| :--- | :--- | :---: | :---: | :---: | :---: |\n| **Tulsa, OK Metro Retail** | Localized NOAA + Cushing Crack Spread Base | 401 | **`$0.4431/gal`** | **`59.10%`** | \ud83d\udfe2 Optimal |\n| **Newark, DE Metro Retail (PADD 1B)** | Delaware City Refinery + C&D Canal Detour Proxy | 269 | **`$0.1389/gal`** | **`46.47%`** | \ud83d\udfe2 Optimal |\n| **Cincinnati, OH Tri-State Retail** | Dual-State Tax Differential + Catlettsburg Refinery | 269 | **`$0.1522/gal`** | **`52.79%`** | \ud83d\udfe2 Optimal |\n| **Cincinnati, KY Tri-State Retail** | Kentucky State Tax + Ohio River Barge Bottleneck | 269 | **`$0.1234/gal`** | **`65.43%`** | \ud83d\udfe2 Optimal |\n| **Oakland, CA Metro Retail (PADD 5)** | CARB Tax Burden + Chevron Richmond Outage Proxy | 267 | **`$0.1054/gal`** | **`57.68%`** | \ud83d\udfe2 Optimal |\n| **SF Bay Area 9-County Metro Retail** | SFPP Pipeline Corridor + Hayward Fault Seismic Alert | 267 | **`$0.1054/gal`** | **`57.68%`** | \ud83d\udfe2 Optimal |\n| **National Wholesale (RBOB)** | Ridge ($\\alpha=10.0$) + Gemini 2.5 Flash + Physics Feeds | 404 | **`$0.1076/gal`** | **`58.17%`** | \ud83d\udfe2 Optimal |\n| **Greenville_NC Retail** | Localized Ridge + LLM Event Vector Engine | 136 | **`$0.1226/gal`** | **`65.44%`** | \ud83d\udfe2 Optimal |\n| **Charlotte_NC Retail** | Localized Ridge + LLM Event Vector Engine | 136 | **`$0.0625/gal`** | **`66.91%`** | \ud83d\udfe2 Optimal |\n\n\n---\n\n## \ud83d\udd2e Active 5-Day Out-of-Time Forecasts\n\n| Region | Current Base Price | 5-Day Forecast Target | Projected Direction | Forecast Target Date |\n| :--- | :--- | :--- | :--- | :--- |\n| **BayArea_CA** | `$5.667/gal` | **`$5.474/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **Charlotte_NC** | `$3.742/gal` | **`$3.608/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **Cincinnati_KY** | `$3.713/gal` | **`$3.596/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **Cincinnati_OH** | `$3.878/gal` | **`$3.756/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **Greenville_NC** | `$3.874/gal` | **`$3.733/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **National** | `$3.384/gal` | **`$3.215/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **Newark_DE** | `$3.934/gal` | **`$3.789/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **Oakland_CA** | `$5.667/gal` | **`$5.474/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n| **Tulsa_OK** | `$3.751/gal` | **`$3.624/gal`** | DOWN \ud83d\udcc9 | `2026-09-02` |\n\n\n---\n\n## \ud83e\udde0 Model Recommendations & Diagnostics\n\n- \u2705 **National Model Calibration:** Ridge $\\alpha=10.0$ parameter is performing in optimal range ($MAE < \\$0.12/gal$). Maintain baseline feature weights.\n- \u2705 **Tulsa Regional Calibration:** Cushing WTI Crack Spread proxy is successfully anchoring retail pump prices within expected rack margin boundaries.\n- \ud83d\udef0\ufe0f **Alternative Data Signal:** Cboe OVX volatility and Baker Hughes active rig counts show strong lead stability for 5-day horizon forecasts.\n\n---\n\n## \ud83c\udfaf High-Impact Issue Analysis & Self-Review\n\n### \ud83d\udca1 Highest-Impact Modeling Issue: **[#141](https://github.com/KoshiirRa/midgley/issues/141) - [Feature Request] Ingest Zero-Cost Energy Data Feeds (FRED, EIA v2, Universal State Open Data, USDA Biofuels, Open-Meteo)**\n\n- **Modeling Category:** `Refining & Physical Feeds`\n- **Estimated Impact Score:** **`9.8/10.0`**\n- **Why this improves modeling:** Issue #141 ('[Feature Request] Ingest Zero-Cost Energy Data Feeds (FRED, EIA v2, Universal State Open Data, USDA Biofuels, Open-Meteo)') targets critical domain area 'Refining & Physical Feeds'. Enhancing this area directly addresses forecasting variance and provides the largest potential reduction to current errors (National MAE $0.1076, Tulsa MAE $0.4431).\n- **Recommended Action:** Prioritize resolving issue #141 by adding appropriate domain feature vectors or refining loss calibration.\n\n#### \ud83d\udccb Open Issues Ranked by Modeling Priority\n\n| Issue | Title | Category | Impact Score |\n| :---: | :--- | :--- | :---: |\n| [#141](https://github.com/KoshiirRa/midgley/issues/141) | **[Feature Request] Ingest Zero-Cost Energy Data Feeds (FRED, EIA v2, Universal State Open Data, USDA Biofuels, Open-Meteo)** | `Refining & Physical Feeds` | **`9.8/10.0`** |\n| [#127](https://github.com/KoshiirRa/midgley/issues/127) | **[Feature Request] Evaluate Microsoft Qlib & RD-Agent Architecture for Automated Alpha Factor Discovery & Dynamic Domain Adaptation** | `Refining & Physical Feeds` | **`9.8/10.0`** |\n| [#126](https://github.com/KoshiirRa/midgley/issues/126) | **[UI Improvement] Add Dashboard Cadence Badges & Explanations for Weekly Saturday MAE/Hit Rate Recalibration** | `Model Calibration & Loss` | **`9.8/10.0`** |\n| [#124](https://github.com/KoshiirRa/midgley/issues/124) | **[Feature Request] Implement Extended MLOps Prediction History Schema & Observability Metrics Engine** | `Model Calibration & Loss` | **`9.8/10.0`** |\n| [#123](https://github.com/KoshiirRa/midgley/issues/123) | **[Feature Request] Ingest FERC Form 6 & Open Data API for Interstate Oil Pipeline Tariffs & Throughput** | `Model Calibration & Loss` | **`9.8/10.0`** |\n| [#122](https://github.com/KoshiirRa/midgley/issues/122) | **[Feature Request] Ingest EIA-930 Hourly Electric Grid Monitor for Regional Power Burn & Refining Feedstock Proxy** | `Refining & Physical Feeds` | **`9.8/10.0`** |\n| [#109](https://github.com/KoshiirRa/midgley/issues/109) | **[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)** | `Refining & Physical Feeds` | **`9.8/10.0`** |\n| [#108](https://github.com/KoshiirRa/midgley/issues/108) | **[Feature Request] Optimize Call Duplication & API Quota Usage Between Dev VM and Production Environments** | `Refining & Physical Feeds` | **`9.8/10.0`** |\n| [#107](https://github.com/KoshiirRa/midgley/issues/107) | **[Feature Request] Implement System Telemetry & Observability Metrics Engine for Grafana (Token Usage, API Quotas, Latency & Errors)** | `Refining & Physical Feeds` | **`9.8/10.0`** |\n| [#105](https://github.com/KoshiirRa/midgley/issues/105) | **feat(dashboard): Add Last Run Intelligence Audit Box to Overview Landing Page** | `Model Calibration & Loss` | **`9.8/10.0`** |\n| [#129](https://github.com/KoshiirRa/midgley/issues/129) | **[Feature Request] Ingest disclosure-alpha (LLM & RAG Event Extraction)** | `Refining & Physical Feeds` | **`9.7/10.0`** |\n| [#132](https://github.com/KoshiirRa/midgley/issues/132) | **[Feature Request] Ingest je-suis-tm/web-scraping (LLM & RAG Event Extraction)** | `Feature Engineering` | **`9.0/10.0`** |\n| [#131](https://github.com/KoshiirRa/midgley/issues/131) | **[Feature Request] Ingest global-stock-data (Energy & Petroleum Data Feed)** | `Feature Engineering` | **`8.9/10.0`** |\n| [#121](https://github.com/KoshiirRa/midgley/issues/121) | **[Feature Request] Implement Bitemporal Vintage Tracking (as_of) for EIA Data Ingestion** | `Refining & Physical Feeds` | **`8.9/10.0`** |\n| [#133](https://github.com/KoshiirRa/midgley/issues/133) | **[Feature Request] Ingest pathway (LLM & RAG Event Extraction)** | `Feature Engineering` | **`8.2/10.0`** |\n| [#130](https://github.com/KoshiirRa/midgley/issues/130) | **[Feature Request] Ingest alpha_vantage (Energy & Petroleum Data Feed)** | `Feature Engineering` | **`8.2/10.0`** |\n| [#128](https://github.com/KoshiirRa/midgley/issues/128) | **[Feature Request] Ingest oilpriceapi (Energy & Petroleum Data Feed)** | `Feature Engineering` | **`8.2/10.0`** |\n| [#112](https://github.com/KoshiirRa/midgley/issues/112) | **[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting** | `Feature Engineering` | **`6.5/10.0`** |\n| [#100](https://github.com/KoshiirRa/midgley/issues/100) | **[Feature Request] Implement Vintage 1920s Petroleum & Mechanical Gas Pump Design System (DESIGN.md)** | `Refining & Physical Feeds` | **`6.5/10.0`** |\n| [#114](https://github.com/KoshiirRa/midgley/issues/114) | **[Feature Request] Implement SHAP Feature Attribution Engine for Model Interpretability & Dashboard** | `Feature Engineering` | **`5.0/10.0`** |\n| [#118](https://github.com/KoshiirRa/midgley/issues/118) | **[Feature Request] Implement ArcticDB Datastore for Point-in-Time Accurate Time-Series Storage** | `Feature Engineering` | **`4.3/10.0`** |\n| [#117](https://github.com/KoshiirRa/midgley/issues/117) | **[Feature Request] Implement Purged & Combinatorial Cross-Validation (purgedcv) to Prevent Data Leakage** | `Feature Engineering` | **`4.3/10.0`** |\n| [#113](https://github.com/KoshiirRa/midgley/issues/113) | **[Feature Request] Ingest FRED Macroeconomic & Energy Series via Database-Lookup Skill** | `Feature Engineering` | **`4.3/10.0`** |\n| [#102](https://github.com/KoshiirRa/midgley/issues/102) | **[Feature Request] Implement Kaggle GPU/TPU Open-Source LLM Quota Safety Fallback** | `Feature Engineering` | **`4.3/10.0`** |\n| [#101](https://github.com/KoshiirRa/midgley/issues/101) | **[Feature Request] Implement Cloudflare Tunnels for Secure Dev VM Port & API Exposure** | `Feature Engineering` | **`4.3/10.0`** |\n| [#120](https://github.com/KoshiirRa/midgley/issues/120) | **[Feature Request] Integrate QuantStats Performance Tear Sheets & Risk Metrics** | `Feature Engineering` | **`3.5/10.0`** |\n| [#119](https://github.com/KoshiirRa/midgley/issues/119) | **[Feature Request] Integrate CRNG Fat-Tail Volatility Engine for Scenario Simulation** | `Feature Engineering` | **`3.5/10.0`** |\n| [#116](https://github.com/KoshiirRa/midgley/issues/116) | **[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)** | `Feature Engineering` | **`3.5/10.0`** |\n| [#115](https://github.com/KoshiirRa/midgley/issues/115) | **[Feature Epic] Scientific Agent Skills Integration Roadmap (What-If Oracle, NetworkX Routing, Paperclip RAG, & Document Exports)** | `Feature Engineering` | **`3.5/10.0`** |\n\n\n---\n\n## \ud83c\udff7\ufe0f Automated Repository Issue Tagging & Classification Audit\n\n\u2705 All open repository issues are fully tagged with standard domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`).\n\n---\n\n## \ud83d\udd0d Automated Developer Catalog Monitor & Discovered Integrations\n\n\u2705 Monitored **10 developer catalogs** (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). All catalog state entries are up-to-date with 0 new additions.\n\n---\n\n## \ud83d\udcda Relevant Recent arXiv Research Papers\n\nThe following research papers were published to arXiv within the last 7 days and may contain relevant methodological or empirical insights for the Midgley forecasting architecture:\n\n### \ud83d\udcc4 [TraceBench: Controlled Evaluation of LLM Agents for Time-Series Root-Cause Attribution](https://arxiv.org/abs/2608.27182v1)\n- **Authors:** Tommaso Bendinelli, Artur Dox, Christian Holz\n- **Published:** `2026-08-27` | **PDF:** [Download](https://arxiv.org/pdf/2608.27182v1)\n- **Abstract Snippet:** LLM agents are increasingly applied to anomaly detection and root-cause analysis in time-series observations collected from real-world systems; however, their performance on these tasks has not been systematically evaluated under controlled condit...\n\n### \ud83d\udcc4 [Graph-Based Pseudo-multimodal Contrastive Learning for 12-Lead ECG Representations](https://arxiv.org/abs/2608.26964v1)\n- **Authors:** Mengyu Wang, Kozo Okada, Takafumi Goto et al.\n- **Published:** `2026-08-27` | **PDF:** [Download](https://arxiv.org/pdf/2608.26964v1)\n- **Abstract Snippet:** 12-lead electrocardiogram (ECG) is a standard, non-invasive examination widely used for diagnosing coronary artery disease, where clinical interpretation relies on comparing waveform patterns across multiple leads. However, most existing ECG analy...\n\n### \ud83d\udcc4 [SAGE: Variate-Wise Semantic Augmentation for Vision-Language Time Series Forecasting](https://arxiv.org/abs/2608.26829v1)\n- **Authors:** Haizhao Fan, Xinyi Le\n- **Published:** `2026-08-27` | **PDF:** [Download](https://arxiv.org/pdf/2608.26829v1)\n- **Abstract Snippet:** Time series forecasting models operate on raw numerical sequences, lacking the semantic knowledge that domain experts implicitly leverage, such as the physical meaning of each variable, its statistical behavior, and its temporal dynamics. Recent e...\n\n### \ud83d\udcc4 [Self-Augmented Diffusion Guidance for Physics-Informed Generation](https://arxiv.org/abs/2608.26748v1)\n- **Authors:** Akira Osaka, Naoya Takeishi, Takehisa Yairi\n- **Published:** `2026-08-27` | **PDF:** [Download](https://arxiv.org/pdf/2608.26748v1)\n- **Abstract Snippet:** Diffusion models can be used to generate spatiotemporal signals of physical phenomena, such as time-series images of fluid dynamics. However, a major limitation of standard diffusion models is that they do not incorporate constraints derived from ...\n\n### \ud83d\udcc4 [LLM Agents for Time-Series: A Survey](https://arxiv.org/abs/2608.26226v1)\n- **Authors:** Yilong Chen, Xiao Qin, Chenghao Liu et al.\n- **Published:** `2026-08-26` | **PDF:** [Download](https://arxiv.org/pdf/2608.26226v1)\n- **Abstract Snippet:** LLM-based agents are increasingly being developed for time-series problems, but their design choices vary substantially across task settings. This survey adopts a problem-driven taxonomy that organizes these systems by the time-series problems the...\n\n### \ud83d\udcc4 [Towards A Unified Information Bottleneck Framework for Time Series Explanations](https://arxiv.org/abs/2608.25897v1)\n- **Authors:** Xu Zheng, Zichuan Liu, Zhuomin Chen et al.\n- **Published:** `2026-08-26` | **PDF:** [Download](https://arxiv.org/pdf/2608.25897v1)\n- **Abstract Snippet:** Explaining deep learning models operating on time series data is crucial in various applications that require transparent and interpretable insights into model behavior. {Existing explanation methods generally fall into two categories: attribution...\n\n### \ud83d\udcc4 [Scalable Multi-GPU Simulation of 3D Multicellular Growth with RNN-Based Workload Balancing](https://arxiv.org/abs/2608.25890v1)\n- **Authors:** Matvey Moisseyev, Huijing Du, Dandan Zheng et al.\n- **Published:** `2026-08-26` | **PDF:** [Download](https://arxiv.org/pdf/2608.25890v1)\n- **Abstract Snippet:** Detailed multicellular growth simulations based on subcellular element models (SEMs) can capture complex tissue development, but their element-level interactions impose substantial computational cost. This work presents a scalable multi-GPU framew...\n\n### \ud83d\udcc4 [CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition](https://arxiv.org/abs/2608.25871v1)\n- **Authors:** Junjie Meng, Ranxu Zhang, Zi-an Zhang et al.\n- **Published:** `2026-08-26` | **PDF:** [Download](https://arxiv.org/pdf/2608.25871v1)\n- **Abstract Snippet:** Forecasting in large-scale e-commerce marketplaces is increasingly required to support planning: merchants need to evaluate sales outcomes under future action sequences such as budget schedules, rather than passively predicting what happens next. ...\n\n### \ud83d\udcc4 [Modeling spatio-temporal locality in multi-step forecasting of geo-referenced time series](https://arxiv.org/abs/2608.25698v1)\n- **Authors:** Annunziata D'Aversa, Gianvito Pio, Michelangelo Ceci\n- **Published:** `2026-08-26` | **PDF:** [Download](https://arxiv.org/pdf/2608.25698v1)\n- **Abstract Snippet:** Forecasting future measurements from geographically distributed sensors is essential across many domains. However, the spatial distribution of these sensors raises multiple challenges, primarily due to spatial autocorrelation phenomena, that intro...\n\n### \ud83d\udcc4 [When Does Context Routing Help? A Systematic Study of Multi-Modal Fusion in Time Series Forecasting](https://arxiv.org/abs/2608.25128v1)\n- **Authors:** Ruizhe Zhou, Gaoyuan Du, Xiaoyang Liu et al.\n- **Published:** `2026-08-25` | **PDF:** [Download](https://arxiv.org/pdf/2608.25128v1)\n- **Abstract Snippet:** Multi-modal time series forecasting methods integrate auxiliary context into temporal predictions through increasingly sophisticated fusion mechanisms. A growing body of work reports substantial gains, yet it is often unclear whether they reflect ...\n\n\n---\n\n*Automated Weekly Performance Review generated by `src/weekly_issue_reporter.py` via GitHub Actions Cloud Runner.*\n"
+  },
+  {
+    "number": 141,
+    "title": "[Feature Request] Ingest Zero-Cost Energy Data Feeds (FRED, EIA v2, Universal State Open Data, USDA Biofuels, Open-Meteo)",
+    "status": "In Progress",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling",
+      "api"
+    ],
+    "body": "## Summary\nSupersedes closed issue #134 (which proposed the paid Apify `crawlerbros/fuel-prices-scraper`). In accordance with project policy barring paid Apify tools due to subscription and compute unit costs, this issue tracks the ingestion of 5 zero-cost, open-access fuel and energy data sources to validate and improve model forecasting accuracy:\n\n1. **FRED (St. Louis Fed) API**: Weekly national & PADD retail gasoline/diesel series (`GASREGW`, `GASDESW`, `GASREGWCW`, `GASREGWGULF`) and CPI gasoline index (`CUUR0000SETB01`).\n2. **U.S. EIA API v2 (`api.eia.gov`)**: Direct weekly retail price series, refinery percent utilization, and PADD-level fuel/crude stock inventories (`/petroleum/pri/gnd/data/`, `/petroleum/pnp/pct/data/`, `/petroleum/stoc/wstk/data/`).\n3. **Universal State Open Data Portals Connector (`src/state_open_data.py`)**: A generalized zero-cost open data client querying Socrata (`data.<state>.gov` / `data.gov`), CKAN, and state revenue APIs for fuel tax rates, excise updates, and motor fuel sales volumes across **all 50 US States** (extending beyond initial target states).\n4. **USDA Biofuel & Ethanol Market Reports (`marsapi.ams.usda.gov`)**: Spot Midwest ethanol rack prices ($/gal) and RIN D6 Ethanol Credit spot values for E10 unleaded blendstock cost modeling.\n5. **Open-Meteo & NOAA High-Resolution Degree Days (`api.open-meteo.com`)**: High-resolution Heating Degree Days (HDD), Cooling Degree Days (CDD), and regional temperature shocks across major refining hubs.\n\n## Modeling Evaluation & Value\n- **Modeling Category:** `Energy & Petroleum Data Feed`\n- **Estimated Impact Score:** **`9.9/10.0`**\n- **Architecture Target:** `src/data_ingestion.py`, `src/state_open_data.py`, `src/noaa_weather.py`\n- **Assigned Labels:** `enhancement,data-ingestion,modeling,api`\n\n## Acceptance Criteria\n- [x] Implement `FREDDataConnector` in `src/data_ingestion.py`.\n- [x] Implement `EIADataConnector` in `src/data_ingestion.py`.\n- [x] Implement `UniversalStateOpenDataConnector` in `src/state_open_data.py` capable of dynamic state postal/FIPS resolution for all 50 states.\n- [x] Implement `USDABiofuelConnector` in `src/data_ingestion.py`.\n- [x] Implement `OpenMeteoDegreeDaysConnector` in `src/noaa_weather.py`.\n- [ ] Add unit test suite in `tests/test_zero_cost_energy_feeds.py`.\n- [ ] Verify non-null data retrieval across all 5 connectors."
+  },
+  {
+    "number": 129,
+    "title": "[Feature Request] Ingest disclosure-alpha (LLM & RAG Event Extraction)",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "dashboard",
+      "api"
+    ],
+    "body": "## Summary\r\nAutomatically discovered new candidate tool **[disclosure-alpha](https://github.com/alwank/disclosure-alpha)** from developer catalog \\`awesome-quant\\`.\r\n\r\n**Description:** Deterministic SEC filing analytics for 10-K/10-Q: section extraction, tone and boilerplate metrics, year-over-year diff, and reproducible disclosure risk scores. CLI, Python SDK, HTTP panel screener, and MCP - no LLM required.\r\n\r\n## Modeling Evaluation & Value\r\n- **Modeling Category:** \\`LLM & RAG Event Extraction\\`\r\n- **Estimated Impact Score:** **\\`9.8/10.0\\`**\r\n- **Architecture Target:** \\`src/event_analyzer.py\\`\r\n- **Rationale:** Provides zero-token deterministic SEC 10-K/10-Q/8-K filing text analytics, year-over-year diffs, and disclosure risk scores for refinery operator filings (PBF, HF Sinclair, Marathon) to feed deterministic NLP risk vectors into src/event_analyzer.py without LLM prompt overhead.\r\n- **Assigned Labels:** \\`enhancement,data-ingestion,dashboard,api\\`\r\n\r\n## Acceptance Criteria\r\n- [ ] Implement disclosure-alpha client/connector in \\`src/event_analyzer.py\\`.\r\n- [ ] Add integration test suite.\r\n- [ ] Verify non-null data retrieval."
+  },
+  {
+    "number": 127,
+    "title": "[Feature Request] Evaluate Microsoft Qlib & RD-Agent Architecture for Automated Alpha Factor Discovery & Dynamic Domain Adaptation",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling",
+      "integration"
+    ],
+    "body": "### Summary\nEvaluate and ingest architectural patterns from Microsoft Research's **Qlib** quantitative platform ([microsoft/qlib](https://github.com/microsoft/qlib)) and **RD-Agent** ([microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)) into the midgley quantitative fuel price prediction framework.\n\n### Background & Rationale\nMicrosoft Qlib provides state-of-the-art quantitative infrastructure for financial and commodity time-series forecasting. Combining Qlib with RD-Agent enables **automated factor discovery**, **factor-model co-optimization**, and **dynamic domain adaptation (DDG-DA)** to handle non-stationary market distributions (regime shifts). Empirical benchmarks show RD-Agent(Q) achieving ~2x higher annualized returns with ~70% fewer factors compared to static rule sets.\n\n### Key Objectives & Proposed Implementation\n\n1. **Automated LLM Factor Mining (RD-Agent Pattern):**\n   - Implement an autonomous factor discovery sub-agent loop using Gemini 2.5 Flash.\n   - Formulate financial hypotheses on non-linear interactions across alternative data streams (Cboe OVX volatility, Baker Hughes rig counts, NOAA convective weather risk scores, Cushing WTI spreads, and regional rack margins).\n   - Automatically write, test, evaluate, and prune candidate factor expressions in Python.\n\n2. **Market Dynamics & Concept Drift Adaptation (DDG-DA):**\n   - Evaluate Qlib's Dynamic Data Grouping Domain Adaptation framework to dynamically re-weight base estimators (Ridge / XGBoost) during structural market breaks (e.g., OPEC emergency production shifts, major pipeline blockades, or policy updates).\n\n3. **Symbolic Domain Expressions & Point-in-Time Integrity:**\n   - Benchmark Qlib-style rolling symbolic expressions (e.g., $close / Ref(, 1) - 1, rolling z-scores) for lightweight, high-performance feature calculations.\n   - Integrate point-in-time calculation constraints to eliminate look-ahead leakage during multi-horizon out-of-time backtesting.\n\n### Acceptance Criteria\n- [ ] Research prototype demonstrating LLM factor discovery with automatic factor scoring and backtest validation.\n- [ ] Benchmark comparing dynamic domain adaptation vs baseline Ridge/XGBoost regular models.\n- [ ] Integration documentation added to docs/ and AGENTS.md.\n\n### References\n- GitHub Repository: [microsoft/qlib](https://github.com/microsoft/qlib)\n- RD-Agent Framework: [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)"
+  },
+  {
+    "number": 124,
+    "title": "[Feature Request] Implement Extended MLOps Prediction History Schema & Observability Metrics Engine",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body": "## Summary & Context\n\nTo support continuous model evaluation, feature attribution, and error diagnosis over rolling horizons, this issue proposes extending the prediction logging schema in `src/prediction_logger.py` (`data/prediction_history.csv`) and the intraday monitoring ledger (`data/intraday_events.json`).\n\nCurrently, `prediction_history.csv` logs basic forecast target dates, 5-day predictions, base prices, and backfilled actual outcomes. However, when forecast errors occur, the current schema lacks the feature snapshots and provenance data required to isolate *why* an error occurred.\n\n## Proposed Data Points & Schema Additions\n\n### 1. Feature Snapshot & LLM Attribution Vectors\n- `llm_price_pressure`: Raw price pressure score extracted from news at forecast time.\n- `llm_supply_disruption`: Raw supply disruption score extracted from news.\n- `crack_spread_at_forecast`: WTI crude vs. RBOB gasoline margin ($/gal) at forecast time.\n- `ovx_volatility_index`: Cboe crude oil volatility index snapshot.\n- `decayed_shock_memory`: Accumulated exponential memory score ($M_t$) incorporating half-life decay ($t_{1/2}=5.0\\text{d}$).\n\n### 2. Regional Margin Calibration vs. Base Commodity Split\n- `uncalibrated_national_futures_pred`: Raw base futures forecast before local calibration.\n- `regional_rack_margin_offset`: Dynamic regional margin/tax offset applied to base futures.\n- `active_scenario_shock`: Name of any active counterfactual scenario (e.g. `None`, `Hormuz_Blockade`, `Hayward_Fault_Quake`).\n\n### 3. Ablation Comparison Delta (Baseline Quant vs. Hybrid LLM)\n- `quant_baseline_5d_price`: Pure quantitative model prediction (technical features only).\n- `llm_augmentation_delta`: Price impact added strictly by LLM intelligence (`predicted_5d_price - quant_baseline_5d_price`).\n\n### 4. Prediction Uncertainty & Confidence Intervals\n- `prediction_lower_95ci`: 95% confidence interval lower bound.\n- `prediction_upper_95ci`: 95% confidence interval upper bound.\n- `within_95ci_hit`: Binary flag (`1` if `actual_5d_price` landed within lower and upper bounds).\n\n### 5. Data Feed Provenance & Fallback Audit\n- `data_source_provenance`: Live feed source used (`GasBuddy_GraphQL`, `AAA_Scraper`, `yfinance`, `History_Fallback`).\n- `llm_provider_tier`: Extraction engine used (`Gemini-2.5-Flash`, `OpenAI-gpt-4o-mini`, `Offline_Lexicon_Tier3`).\n\n## Implementation Scope\n- [ ] Update `columns` list and dataframe construction in `src/prediction_logger.py` (`ensure_history_store()` and `log_predictions()`).\n- [ ] Update regional calibration entrypoints (`src/locations/<location>/main.py`) to pass extended feature vectors to `log_predictions()`.\n- [ ] Update `src/weekly_issue_reporter.py` to aggregate new feature attribution metrics in weekly GitHub Actions reviews.\n- [ ] Update unit tests in `tests/test_dashboard_generator.py` and `tests/test_live_fuel_feed.py`."
+  },
+  {
+    "number": 123,
+    "title": "[Feature Request] Ingest FERC Form 6 & Open Data API for Interstate Oil Pipeline Tariffs & Throughput",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body": "## Context & Motivation\nInterstate refined petroleum product pipelines\u2014such as **Colonial Pipeline Line 1 & Line 2** (servicing PADD 1C Charlotte & Greenville), **Kinder Morgan SFPP** (servicing PADD 5 Oakland/SF Bay Area), and **Plantation Pipeline**\u2014operate under Federal Energy Regulatory Commission (FERC) regulatory jurisdiction.\n\nPipeline operators file annual reports (FERC Form 6) detailing pipeline throughput volumes, operating revenues, and tariff adjustments governed by the **FERC Index of Oil Pipeline Rates** (tied to PPI-FG).\n\nCurrently, Midgley models regional pipeline transport differentials in localized metro calibration agents (\\src/locations/*/regional.py\\) using static rack margin offsets. Live ingestion of FERC Form 6 and FERC Open Data API (\\data.ferc.gov\\) filings will allow dynamic adjustment of baseline pipeline shipping overhead.\n\n## Proposed Solution\n1. Add a FERC data connector module (\\src/ferc_feed.py\\ or integrated within \\src/alternative_data_feeds.py\\) to query FERC Open Data API (\\data.ferc.gov\\) for interstate oil pipeline rate index changes and Form 6 filing updates.\n2. Map key pipeline operators to Midgley metro locales:\n   - **Colonial Pipeline Co.**: Charlotte, NC (Paw Creek) & Greenville, NC (Selma/Apex hubs)\n   - **Kinder Morgan SFPP LP**: Oakland, CA / SF Bay Area corridor\n   - **PBF Delaware City / Pipeline Links**: Newark, DE / PADD 1B\n3. Feed dynamic pipeline transport tariffs into regional metro calibration agents (\\src/locations/*/regional.py\\).\n4. Optionally monitor FERC eFiling RSS/API endpoints in \\src/intraday_event_monitor.py\\ for emergency pipeline tariff filings or capacity allocation cut notices.\n\n## Benefits\n- Automates annual pipeline tariff ceiling adjustments across all modeled regional metro locations.\n- Improves localized retail rack margin prediction accuracy.\n- Connects official regulatory filings directly to quantitative market estimators."
+  },
+  {
+    "number": 122,
+    "title": "[Feature Request] Ingest EIA-930 Hourly Electric Grid Monitor for Regional Power Burn & Refining Feedstock Proxy",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body": "## Context & Motivation\nElectric grid natural gas power generation (\\ power burn\\) and hourly grid load directly influence regional natural gas spot pricing, hydrogen production costs, and power grid availability for regional petroleum refineries (e.g., HF Sinclair West Tulsa, PBF Delaware City, Chevron Richmond, Marathon Catlettsburg).\n\nThe EIA-930 Hourly Electric Grid Monitor dataset (utilized in [oldhero5/energex](https://github.com/oldhero5/energex)) provides hourly electricity demand, day-ahead load forecasts, net generation by fuel type (natural gas, nuclear, wind, solar), and interchange across all US Balancing Authorities (SPP, PJM, ERCOT, CAISO, MISO, NYISO).\n\n## Proposed Solution\n1. Add a connector (\\src/eia_grid_feed.py\\ or within \\src/alternative_data_feeds.py\\) to query the EIA-930 API for key regional Balancing Authorities corresponding to Midgley metro locales:\n   - **SPP** (Tulsa metro / Cushing)\n   - **PJM** (Newark DE / PADD 1B)\n   - **MISO / PJM** (Cincinnati OH / NKY)\n   - **CAISO** (Oakland / SF Bay Area)\n2. Extract regional natural gas power burn % and grid stress metrics.\n3. Integrate grid metrics as alternative feature inputs in localized metro calibration agents (\\src/locations/*/regional.py\\).\n\n## Benefits\n- Provides a leading physical indicator for natural gas feedstock & refinery operational electricity cost pressures.\n- Enhances regional rack margin precision in metro calibration models."
+  },
+  {
+    "number": 121,
+    "title": "[Feature Request] Implement Bitemporal Vintage Tracking (as_of) for EIA Data Ingestion",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling"
+    ],
+    "body": "## Context & Motivation\nGovernment energy sources like the US Energy Information Administration (EIA) routinely issue inline revisions and historical restatements (e.g., weekly crude stock levels, motor gasoline demand, refinery runs) weeks after first publication.\n\nInspired by the bitemporal data architecture pattern in [oldhero5/energex](https://github.com/oldhero5/energex), storing only valid period timestamps without tracking release dates (\\^Gs_of\\ / knowledge time) introduces subtle lookahead bias when backtesting or retraining quantitative models on historical EIA figures.\n\n## Proposed Solution\n1. Extend \\src/alternative_data_feeds.py\\ and EIA ingestion routines to attach an explicit \\^Gs_of\\ publication timestamp or vintage metadata tag to ingested EIA observation records.\n2. Implement an honesty flag (\\\u000bintage_reconstructed=True\\) when backfilling historical baselines vs live-logged observations.\n3. Ensure quantitative estimators (\\src/models.py\\) and feature engineering routines (\\src/feature_engineering.py\\) filter features by \\^Gs_of <= target_run_date\\ during historical backtests.\n\n## Benefits\n- Prevents lookahead leakage in quantitative model backtesting and retrains.\n- Ensures 100% point-in-time correct data integrity for EIA fundamental series."
+  },
+  {
+    "number": 120,
+    "title": "[Feature Request] Integrate QuantStats Performance Tear Sheets & Risk Metrics",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "dashboard"
+    ],
+    "body": ""
+  },
+  {
+    "number": 119,
+    "title": "[Feature Request] Integrate CRNG Fat-Tail Volatility Engine for Scenario Simulation",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": ""
+  },
+  {
+    "number": 118,
+    "title": "[Feature Request] Implement ArcticDB Datastore for Point-in-Time Accurate Time-Series Storage",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure"
+    ],
+    "body": ""
+  },
+  {
+    "number": 117,
+    "title": "[Feature Request] Implement Purged & Combinatorial Cross-Validation (purgedcv) to Prevent Data Leakage",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": ""
+  },
+  {
+    "number": 116,
+    "title": "[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling",
+      "integration"
+    ],
+    "body": ""
+  },
+  {
+    "number": 115,
+    "title": "[Feature Epic] Scientific Agent Skills Integration Roadmap (What-If Oracle, NetworkX Routing, Paperclip RAG, & Document Exports)",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure",
+      "modeling",
+      "dashboard",
+      "integration"
+    ],
+    "body": ""
+  },
+  {
+    "number": 114,
+    "title": "[Feature Request] Implement SHAP Feature Attribution Engine for Model Interpretability & Dashboard",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "dashboard"
+    ],
+    "body": ""
+  },
+  {
+    "number": 113,
+    "title": "[Feature Request] Ingest FRED Macroeconomic & Energy Series via Database-Lookup Skill",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body": ""
+  },
+  {
+    "number": 112,
+    "title": "[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": ""
+  },
+  {
+    "number": 109,
+    "title": "[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body": "## Summary\nAutomatically discovered new candidate tool **[Open-Meteo Ensemble](https://open-meteo.com/en/docs/ensemble-api)** from developer catalog \\`public-apis\\`.\n\n**Description:** Weather ensemble forecasts from multiple models | No | Yes | Yes\n\n## Modeling Evaluation & Value\n- **Modeling Category:** \\`NOAA & Weather Intelligence\\`\n- **Estimated Impact Score:** **\\`7.4/10.0\\`**\n- **Architecture Target:** \\`src/noaa_weather.py\\`\n- **Rationale:** Item matched 2 high-priority energy/modeling keywords and 1 infrastructure keywords.\n- **Assigned Labels:** \\`enhancement,data-ingestion,modeling\\`\n\n## Acceptance Criteria\n- [ ] Implement Open-Meteo Ensemble client/connector in \\`src/noaa_weather.py\\`.\n- [ ] Add integration test suite.\n- [ ] Verify non-null data retrieval."
+  },
+  {
+    "number": 107,
+    "title": "[Feature Request] Implement System Telemetry & Observability Metrics Engine for Grafana (Token Usage, API Quotas, Latency & Errors)",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "token-efficiency",
+      "infrastructure"
+    ],
+    "body": "## Terminology Note\nThe industry standard terms for tracking non-mathematical compute performance, token consumption, API limits, runtime latencies, and system errors are:\n- **System Telemetry / Operational Telemetry**\n- **Observability**\n- **Operational Metrics (Compute/System Metrics)**\n- **Application Performance Monitoring (APM)**\n\nThis issue proposes introducing a central telemetry collector to feed real-time compute performance metrics into Grafana dashboards.\n\n---\n\n## Summary\nImplement a central **Telemetry & Observability Engine** (`src/telemetry.py` or `/metrics` exporter) across the multi-agent pipeline to track operational compute performance, LLM token consumption, API quota burn rates, execution runtime latencies, and system exceptions\u2014with built-in support for **Multi-Environment Telemetry (`dev` vs `prod`)**.\n\n---\n\n## Multi-Environment Tracking (`dev` vs `prod`)\n\nTo allow tracking dev work on feature/dev branches separately from live production executions in Grafana dashboards:\n- **Global Metric Labels:** Every emitted metric will automatically include an `environment` label (`environment=\"dev\"` or `environment=\"prod\"`), determined dynamically via the `MIDGLEY_ENV` environment variable (defaulting to `dev` for local/VM runs and `prod` for scheduled GitHub Actions cloud runs).\n- **Grafana Variable Dropdown:** Dashboards will feature an `Environment` template variable ($environment) allowing filtering by `prod`, `dev`, or `all`.\n\n---\n\n## Key Metric Categories (Grafana Dashboard Feed Candidates)\n\n### 1. LLM & Token Consumption Telemetry\n- `llm_tokens_consumed_total{environment, vendor, model, type}`: Count of prompt tokens, completion tokens, and total tokens used by extraction and review agents (Gemini 2.5 Flash, OpenAI gpt-4o-mini, Anthropic Claude).\n- `llm_estimated_cost_usd_total{environment, vendor, model}`: Aggregated dollar cost estimate based on token counts.\n- `llm_tier_fallback_activations_total{environment, from_tier, to_tier}`: Number of times the extraction agent fell back (e.g. Tier 1 Gemini -> Tier 3 Lexicon).\n\n### 2. API Quota & Rate Limit Telemetry\n- `api_quota_consumption_current{environment, service}`: Live quota usage counter (e.g., Finlight.me hard safety cap at 150 calls/month).\n- `api_quota_remaining_ratio{environment, service}`: Percentage of available API quota remaining before automatic throttling.\n- `api_http_requests_total{environment, service, status_code}`: Total HTTP requests made to external data sources (NOAA NWS, SPC convective endpoints via `wxs.us`, yfinance, arXiv).\n- `api_rate_limit_throttling_total{environment, service}`: Count of HTTP 429 rate limit responses or retry loops triggered.\n\n### 3. Pipeline Runtime & Execution Latency Telemetry\n- `pipeline_execution_duration_seconds{environment, stage}`: End-to-end and stage-by-stage execution timings (Event Extraction, Feature Fusion, Quantitative Estimation, Metro Regional Calibration Agents, Web Dashboard Generation).\n- `agent_task_latency_seconds{environment, agent_name}`: Execution latency per regional calibration agent (Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland).\n\n### 4. Operational Health & Error Telemetry\n- `pipeline_errors_total{environment, module, error_type}`: Counter for uncaught exceptions, network timeouts, schema parsing failures, and data validation errors.\n- `pipeline_run_status{environment, run_type}`: Binary gauge (1 = success, 0 = failure) for daily forecast runs and weekly model performance reviews.\n\n### 5. System Compute Telemetry\n- `process_cpu_seconds_total{environment}`: CPU usage during pipeline execution.\n- `process_resident_memory_bytes{environment}`: RAM memory footprint during data processing on `dev-vm` vs cloud runner.\n\n---\n\n## Exporter & Integration Targets (Grafana Feed Options)\n\n1. **Prometheus Endpoint (Recommended):** Expose a `GET /metrics` endpoint on `src/api_server.py` using `prometheus_client` or write static `data/telemetry.prom` for Prometheus Node Exporter textfile collector.\n2. **Grafana Loki / JSON Log Stream:** Emit structured JSON telemetry lines (`logs/telemetry.log`) tagged with `\"environment\": \"dev\"` or `\"prod\"`, ingested by Promtail / Loki.\n3. **OpenTelemetry (OTel):** Emit OTel trace spans and metric instruments to an OpenTelemetry Collector tagged with `deployment.environment`.\n\n---\n\n## Acceptance Criteria\n- [ ] Create central telemetry collector module (`src/telemetry.py`).\n- [ ] Support `MIDGLEY_ENV` environment variable (`dev` vs `prod`) and attach `environment` label to all metrics and log entries.\n- [ ] Instrument LLM token counting and vendor model breakdown across `src/event_analyzer.py`.\n- [ ] Instrument API quota tracking for Finlight (`src/finlight_feed.py`), NOAA (`src/noaa_weather.py`), and market feeds.\n- [ ] Record timing metrics for pipeline execution stages and sub-agents.\n- [ ] Expose `/metrics` endpoint compatible with Prometheus scraping for Grafana.\n- [ ] Export sample Grafana Dashboard JSON definition (`grafana/dashboard_observability.json`) with an `Environment` multi-select dropdown filter (`prod`, `dev`).\n\n---\n\n## Motivations & Value\n- **Environment Isolation:** Enables clear side-by-side comparison of dev testing vs production automated runs without polluting production metrics.\n- **Quota Safety:** Prevents unexpected API lockouts or bill shocks across free-tier and paid LLM/weather APIs.\n- **Performance Optimization:** Identifies pipeline bottlenecks and latency regressions across regional agent executions.\n- **Grafana Dashboard Integration:** Provides standard metrics streams for single-pane-of-glass operational monitoring.\n"
+  },
+  {
+    "number": 105,
+    "title": "feat(dashboard): Add Last Run Intelligence Audit Box to Overview Landing Page",
+    "status": "In Progress",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.5",
+    "labels": [
+      "enhancement",
+      "dashboard"
+    ],
+    "body": "## Feature Overview\n\nAdd an interactive **Last Run Intelligence & Impact Audit Box** on the public overview landing page (docs/index.html), positioned between the **Hero Section** and the **Active Forecast Locales Grid**.\n\n### Key Requirements\n1. **Trigger Context:** Display what prompted the latest run (e.g., Scheduled Daily Batch vs. Intraday RSS Anomaly Event with headline trigger).\n2. **Mathematical Model Impact:** Render the underlying vector impact scores (e.g., Supply Disruption score $\\text{supply\\_disruption} = 0.50$, Overall Price Pressure shock $+0.18$, LLM Memory decay half-life {1/2} = 5.0\\text{d}$).\n3. **Prediction Revisions Delta:** Show the net mathematical delta in target forecasts (e.g., Wholesale RBOB shifting $+0.72\\%$ or $+\\.023/\\text{gal}$) across affected regions.\n4. **Feasibility:** Fully backed by existing data streams in data/intraday_events.json and data/prediction_history.csv.\n\n### Design & Implementation Scope\n- Update src/dashboard_generator.py to parse recent run records from prediction_history.csv & intraday_events.json.\n- Render a clean Tailwind CSS card component in docs/index.html between Hero and Metro Cards."
+  },
+  {
+    "number": 102,
+    "title": "[Feature Request] Implement Kaggle GPU/TPU Open-Source LLM Quota Safety Fallback",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "token-efficiency",
+      "infrastructure",
+      "modeling",
+      "dashboard"
+    ],
+    "body": "## Summary\nIntegrate **Kaggle API & GPU/TPU Kernels** (30 free GPU hours/week + 20 TPU hours/week) as an automated secondary LLM fallback engine for \\src/event_analyzer.py\\.\n\n## Motivations & Value\n- **Zero-Cost LLM Quota Safety Valve:** Provides open-source LLM inference (e.g., Qwen 2.5 7B, Llama 3 8B, Gemma 2 9B) running on Kaggle GPU/TPU notebook kernels via Kaggle API (\\kaggle kernels push\\).\n- **Quota Failover:** Serves as a Tier 1.5 / Tier 2 fallback layer whenever Google Gemini 2.5 Flash free-tier API tokens or daily quotas are exhausted, preventing fallthrough to basic rule lexicons.\n\n## Acceptance Criteria\n- [ ] Implement Kaggle Kernel API launcher script in \\src/\\.\n- [ ] Integrate Kaggle open-source LLM inference endpoint into \\src/event_analyzer.py\\ failover hierarchy.\n- [ ] Add unit test suite for Kaggle API fallback trigger."
+  },
+  {
+    "number": 100,
+    "title": "[Feature Request] Implement Vintage 1920s Petroleum & Mechanical Gas Pump Design System (DESIGN.md)",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "body": "### Feature Description\n\nLow-priority enhancement request to evaluate and implement a formal **\\DESIGN.md\\** design system specification for the Midgley Unleaded Gas Price Prediction Engine and public web dashboard (\\docs/\\).\n\n### Concept & Inspiration\n\n- **Namesake Homage**: 1920s Thomas Midgley Jr. chemical engineering heritage (Dayton Engineering Laboratories / DELCO).\n- **Aesthetic**: Vintage petroleum research laboratory & mechanical rolling gas pump terminal styling.\n- **Palette & Tokens**: Mahogany Charcoal (\\#0D0907\\), Weathered Slate (\\#17120F\\), Antique Brass Rivet Borders (\\#785327\\), Sepia Text (\\#FEF3C7\\), and Vintage Amber (\\#F59E0B\\).\n- **Typography & Readouts**: Industrial Typewriter typography (\\Courier Prime\\/\\Georgia\\) and mechanical 3-decimal gas pump counter boxes (\\$3.890/gal\\).\n\n### Priority & Status\n\n- **Priority**: Low-priority enhancement / backlog item."
+  },
+  {
+    "number": 99,
+    "title": "[Feature Request] Deploy Self-Hosted Metabase BI Dashboard on Dev VM for Forecast Analytics",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "dashboard"
+    ],
+    "body": "## Summary\nDeploy **\\Metabase\\** (\\github.com/metabase/metabase\\) (open-source Java/Docker BI server) on \\dev-vm\\ (\\10.42.42.54\\) to provide interactive SQL analytics and visual dashboards over \\data/prediction_history.csv\\.\n\n## Motivations & Value\n- **Interactive Forecast Analytics:** Enables interactive SQL queries and visual charts tracking 30-day, 60-day, and 90-day MAE, Directional Hit Rates, and metro retail price spreads.\n- **Self-Hosted Service:** Runs on \\dev-vm\\ alongside existing dashboard web services.\n\n## Acceptance Criteria\n- [ ] Deploy Metabase container on \\dev-vm\\.\n- [ ] Connect SQLite/CSV database connection to \\data/prediction_history.csv\\.\n- [ ] Build interactive dashboard cards for rolling accuracy and metro price spreads."
+  },
+  {
+    "number": 98,
+    "title": "[Feature Request] Implement Healthchecks Cron Monitoring for Daily & Weekly Pipeline Runs",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body": "## Summary\nIntegrate **\\Healthchecks\\** (\\github.com/healthchecks/healthchecks\\) (open-source cron monitoring service) into \\src/prediction_logger.py\\ and \\src/weekly_issue_reporter.py\\.\n\n## Motivations & Value\n- **Execution Heartbeats:** Listens for HTTP ping heartbeats at the conclusion of daily forecast runs (\\"
+  },
+  {
+    "number": 97,
+    "title": "[Feature Request] Deploy Self-Hosted ArchiveBox for Historical News & Event Preservation",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "infrastructure"
+    ],
+    "body": "## Summary\nDeploy **\\ArchiveBox\\** (\\github.com/ArchiveBox/ArchiveBox\\) (open-source Python/Docker web archiving server) on \\dev-vm\\ to snapshot and preserve historical news articles, OPEC press releases, and refinery outage notices.\n\n## Motivations & Value\n- **Historical Text Preservation:** Creates permanent HTML, PDF, and screenshot snapshots of external web sources used in qualitative event shock modeling.\n- **Backtesting Integrity:** Ensures raw historical text feeds remain accessible for long-term model backtests.\n\n## Acceptance Criteria\n- [ ] Deploy ArchiveBox instance on \\dev-vm\\.\n- [ ] Connect \\src/event_analyzer.py\\ to submit fetched article URLs to ArchiveBox.\n- [ ] Add unit test coverage."
+  },
+  {
+    "number": 96,
+    "title": "[Feature Request] Deploy Self-Hosted Dagu DAG Task Scheduler on Dev VM",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body": "## Summary\nDeploy **\\Dagu\\** (\\github.com/dagucloud/dagu\\) (open-source Go binary / Docker container with Web UI) on \\dev-vm\\ (\\10.42.42.54\\) to orchestrate Midgley's daily data ingestion and quantitative modeling workflows.\n\n## Motivations & Value\n- **Declarative YAML DAGs:** Defines inter-task dependencies for daily data fetches (EIA, FRED, NOAA), quantitative model re-fits, prediction logging, and public dashboard updates.\n- **Web UI & Execution History:** Provides a clean web interface to monitor job runs and inspect logs on \\dev-vm\\.\n\n## Acceptance Criteria\n- [ ] Deploy Dagu service on \\dev-vm\\.\n- [ ] Configure declarative YAML DAG for daily forecast pipeline (\\"
+  },
+  {
+    "number": 95,
+    "title": "[Feature Request] Implement GeoPandas Spatial Refinery Distance Buffering for Metro Agents",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": "## Summary\nIntegrate **\\GeoPandas\\** (\\github.com/geopandas/geopandas\\) into \\src/*_regional.py\\ to perform spatial distance-decay calculation from refineries and delivery hubs to regional retail gas station clusters.\n\n## Motivations & Value\n- **Geospatial Distance-Decay:** Calculates spatial distance-decay weights for regional refinery outages (HF Sinclair West Tulsa, PBF Delaware City, Marathon Catlettsburg, Chevron Richmond) to local metro retail pump prices across Tulsa, Newark, Cincinnati, Greenville, and Oakland.\n- **Infrastructure Mapping:** Maps pipeline corridors and marine terminals spatially.\n\n## Acceptance Criteria\n- [ ] Implement GeoPandas spatial buffering in regional metro calibration modules.\n- [ ] Calculate distance-decay factors for refinery shock propagation.\n- [ ] Add unit test coverage."
+  },
+  {
+    "number": 94,
+    "title": "[Feature Request] Implement Feast Feature Store for Point-in-Time Backtesting Correctness",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body": "## Summary\nIntegrate **\\Feast\\** (\\github.com/feast-dev/feast\\) as an open-source feature store serving feature vectors to \\src/models.py\\ and \\src/feature_engineering.py\\.\n\n## Motivations & Value\n- **Point-in-Time Correctness:** Eliminates future data leakage during historical backtesting by enforcing strict point-in-time join semantics on event memory decay vectors.\n- **Unified Feature Serving:** Serves consistent feature views across training, evaluation, and daily live inference.\n\n## Acceptance Criteria\n- [ ] Implement Feast repository definition in \\data/\\ / \\src/\\.\n- [ ] Define feature views for EIA, FRED, NOAA, and LLM event shock decay.\n- [ ] Add unit test coverage verifying point-in-time joins."
+  },
+  {
+    "number": 93,
+    "title": "[Feature Request] Implement NeuralProphet Hybrid Estimator with Exogenous Shock Decay",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": "## Summary\nIntegrate **\\NeuralProphet\\** (\\github.com/ourownstory/neural_prophet\\) into \\src/models.py\\ as a hybrid neural time-series estimator combining PyTorch auto-autoregressive terms with exogenous LLM event shock decay vectors.\n\n## Motivations & Value\n- **Non-Linear Event Modeling:** Captures non-linear interactions between macroeconomic indicators and event memory decay vectors (\\{1/2} = 4.0\\\\text{ to }5.0\\\\text{ days}\\$).\n- **Model Diversity:** Adds a third quantitative estimator alongside Ridge Regression and XGBoost.\n\n## Acceptance Criteria\n- [ ] Implement NeuralProphet estimator class in \\src/models.py\\.\n- [ ] Train hybrid model on chronological 80/20 train/test splits.\n- [ ] Log out-of-time MAE and directional hit rates."
+  },
+  {
+    "number": 92,
+    "title": "[Feature Request] Ingest pandas-ta Technical Momentum Indicators for RBOB & WTI Futures",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling"
+    ],
+    "body": "## Summary\nIntegrate **\\pandas-ta\\** (\\github.com/twopirllc/pandas-ta\\) into \\src/feature_engineering.py\\ to calculate technical indicators (RSI, Bollinger Bands, MACD, ATR, EMA crossovers) for NYMEX RBOB futures (\\RB=F\\) and Cushing WTI (\\CL=F\\).\n\n## Motivations & Value\n- **Technical Momentum Signals:** Provides short-term 1-day to 5-day trend persistence features for wholesale RBOB futures forecasting.\n- **Quantitative Integration:** Standardizes indicator calculations within pandas dataframe pipelines.\n\n## Acceptance Criteria\n- [ ] Implement \\pandas-ta\\ indicator extraction in \\src/feature_engineering.py\\.\n- [ ] Incorporate momentum features into Ridge and XGBoost estimator pipelines.\n- [ ] Add unit test coverage."
+  },
+  {
+    "number": 91,
+    "title": "[Feature Request] Interactive Fill-Up Timing & Estimated Savings Advisor Page",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.5",
+    "labels": [
+      "enhancement",
+      "dashboard"
+    ],
+    "body": "### Feature Description\n\nImplement a dedicated **Fill-Up Timing & Estimated Savings Advisor** interactive page (\\docs/savings.html\\ / \\/savings\\) that uses Midgley's 5-day out-of-time price trajectory forecasts to calculate exact tank savings by waiting to fill up vs. buying fuel today.\n\n### Key Capabilities\n\n1. **Optimal Recommendation Engine**:\n   - Computes whether drivers should fill up immediately (\\\ud83d\udd34 FILL UP TODAY\\) or wait for an upcoming price trough (\\\ud83d\udfe2 WAIT TO FILL UP\\).\n   - Highlights exact optimal fill-up day (e.g. Day 3) and net tank savings ($/tank and $/gal).\n\n2. **Vehicle & Fleet Tank Presets**:\n   - Compact Car (12 gal), Sedan/SUV (15 gal), Pickup (24 gal), Commercial Fleet (100\u201310,000 gal), and custom gallon inputs.\n\n3. **5-Day Trajectory Breakdown Matrix**:\n   - Day 0 through Day 5 price progression, total tank cost, and net dollar savings/losses.\n\n### Cross-Linked Related Issues\n\nThis enhancement is closely tied thematically to vehicle fuel management & in-dash timing alerts:\n- Cross-linked with **#22** (\\\feat(lubelogger): LubeLogger integration for predictive vehicle tank refill & fuel cost optimization\\) \u2014 supplying optimal fill-up recommendation signals to LubeLogger fuel logs.\n- Cross-linked with **#21** (\\\feat(android-auto): Android Auto in-dash gas price & 5-day forecast fuel assistant app\\) \u2014 pushing fill-up timing & savings alerts directly to Android Auto in-dash displays."
+  },
+  {
+    "number": 90,
+    "title": "[Feature Request] Integrate Coupler.io Cloud Spreadsheet Sync for Prediction History",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "integration"
+    ],
+    "body": "## Summary\nIntegrate **Coupler.io** (\\coupler.io\\) (100 runs/month free) into \\src/prediction_logger.py\\ to automatically replicate out-of-time forecast logs from \\data/prediction_history.csv\\ into external cloud spreadsheets (Google Sheets / Excel Online).\n\n## Motivations & Value\n- **Live Spreadsheet Syncing:** Provides automated cloud syncing of prediction history records for external executive dashboards and reporting.\n- **Zero Infrastructure Maintenance:** Handled via automated cloud connectors.\n\n## Acceptance Criteria\n- [ ] Implement Coupler.io sync trigger in \\src/prediction_logger.py\\.\n- [ ] Sync out-of-time prediction records to cloud spreadsheet target.\n- [ ] Verify test suite execution."
+  },
+  {
+    "number": 89,
+    "title": "[Feature Request] Ingest SearchApi Google SERP Data for Geopolitical Event Extraction",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate **SearchApi** (\\searchapi.io\\) (100 free successful API calls/month) into \\src/intraday_event_monitor.py\\ to retrieve structured Google SERP JSON data for breaking energy news and geopolitical events.\n\n## Motivations & Value\n- **Structured SERP Extraction:** Delivers structured organic search results, news carousels, and publication dates directly to the Gemini Flash event extraction agent.\n- **Geopolitical News Verification:** Verifies global maritime disruptions (Strait of Hormuz, Red Sea) and pipeline emergency notices.\n\n## Acceptance Criteria\n- [ ] Implement SearchApi client module in \\src/\\.\n- [ ] Connect structured search results to \\src/event_analyzer.py\\.\n- [ ] Add unit test suite."
+  },
+  {
+    "number": 88,
+    "title": "[Feature Request] Implement Shipyard Cloud Data Orchestration Runner",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body": "## Summary\nIntegrate **Shipyard** (\\shipyardapp.com\\) (10 hours cloud runtime/month free) as an automated cloud data orchestration platform for Midgley's Python data ingestion scripts.\n\n## Motivations & Value\n- **Cloud Orchestration:** Automates multi-step data pipelines (EIA, FRED, NOAA NWS, BriefTape, Treasury API) in a managed cloud environment.\n- **Low-Code Python Support:** Directly executes repository Python scripts with native error notifications and retries.\n\n## Acceptance Criteria\n- [ ] Implement Shipyard blueprint configuration for daily data ingestion.\n- [ ] Connect daily workflow to trigger quantitative model updates.\n- [ ] Add setup documentation."
+  },
+  {
+    "number": 87,
+    "title": "[Feature Request] Implement IPASIS API Gateway Security for Incoming Webhooks",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.4",
+    "labels": [
+      "enhancement",
+      "api",
+      "security"
+    ],
+    "body": "## Summary\nIntegrate the **IPASIS API** (\\ipasis.com\\) (1,000 requests/day free, no credit card required) into \\src/api_server.py\\ to filter incoming push webhook traffic (\\POST /api/v1/events/webhook\\).\n\n## Motivations & Value\n- **Webhook Gateway Security:** Provides real-time IP reputation checks, bot detection, and proxy/Tor filtering to prevent malicious payload injections or spamming of event triggers.\n- **Keyless Security Tier:** Generous 1,000 requests/day free allowance.\n\n## Acceptance Criteria\n- [ ] Implement IPASIS verification middleware in \\src/api_server.py\\.\n- [ ] Filter unauthorized or high-risk IP origins.\n- [ ] Add unit test coverage."
+  },
+  {
+    "number": 86,
+    "title": "[Feature Request] Ingest Market Data API for Energy Equities & Commodity Backstop",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate **Market Data API** (\\marketdata.app\\) (100 free requests/day) into \\src/energy_equities_feed.py\\ to retrieve quotes for energy sector equities and market benchmarks.\n\n## Motivations & Value\n- **Secondary Financial Feed:** Provides a secondary quotes provider backstopping \\yfinance\\ data for key refiners (\\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\, \\CVX\\).\n- **Zero Cost:** Free daily tier.\n\n## Acceptance Criteria\n- [ ] Implement Market Data API fallback client in \\src/energy_equities_feed.py\\.\n- [ ] Validate non-null equity quote retrieval.\n- [ ] Add unit test coverage."
+  },
+  {
+    "number": 85,
+    "title": "[Feature Request] Implement Cube Cloud Headless Semantic Layer for Multi-Metro Fuel Metrics",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body": "## Summary\nIntegrate **Cube Cloud** (\\cube.dev\\) (1,000 free queries/day) into Midgley's quantitative architecture to serve as a headless semantic data modeling layer.\n\n## Motivations & Value\n- **Standardized Metric Definitions:** Centralizes retail rack margin equations, 321 crack spreads, and rolling error metrics across all 5 metro calibration agents (Tulsa, Newark, Cincinnati, Greenville, Oakland).\n- **Consistent Data API:** Provides a unified REST/GraphQL API for data visualization components and dashboard generators.\n\n## Acceptance Criteria\n- [ ] Implement Cube semantic schema definitions in \\src/\\.\n- [ ] Connect metro calibration agents to query unified semantic metrics.\n- [ ] Add unit test coverage."
+  },
+  {
+    "number": 84,
+    "title": "[Feature Request] Integrate Tavily AI Search API for Real-Time Anomaly Event RAG",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **Tavily AI Search API** (\\\tavily.com\\) (1,000 search queries/month free) into \\src/intraday_event_monitor.py\\ to execute targeted web searches when intraday anomaly triggers occur.\n\n## Motivations & Value\n- **RAG Search Engine for AI Agents:** Purpose-built for LLM RAG pipelines, returning contextual snippets for breaking energy crisis topics (e.g., *'Cushing WTI pipeline leak'*, *'Delaware City PBF refinery outage'*, *'Tar River flooding Greenville'*).\n- **Autonomous Verification:** Allows the Intraday Event Monitor to autonomously verify breaking energy headlines.\n\n## Acceptance Criteria\n- [ ] Implement Tavily Search API client in \\src/intraday_event_monitor.py\\.\n- [ ] Trigger search verification when breaking anomaly keywords trip threshold.\n- [ ] Add unit test suite."
+  },
+  {
+    "number": 83,
+    "title": "[Feature Request] Ingest Firecrawl Web-to-Markdown API for LLM Event Extraction",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **Firecrawl Web Scraping API** (\\\firecrawl.dev\\) (1,000 free credits/month) into \\src/event_analyzer.py\\ to convert raw HTML from news bulletins, state motor fuel tax portals, and refinery press releases into clean, LLM-ready Markdown.\n\n## Motivations & Value\n- **Clean LLM Input:** Strips HTML clutter and navigation noise, providing clean Markdown text directly to Gemini Flash for qualitative impact scoring.\n- **JavaScript Rendering Support:** Handles JS-rendered news portals and corporate release sites seamlessly.\n\n## Acceptance Criteria\n- [ ] Implement Firecrawl scraper connector in \\src/\\.\n- [ ] Connect clean Markdown output to \\src/event_analyzer.py\\.\n- [ ] Add unit tests."
+  },
+  {
+    "number": 82,
+    "title": "[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body": "## Summary\nIntegrate **Neon Serverless Postgres** (\\\neon.tech\\) or **Cloudflare D1** (\\cloudflare.com\\) (free tier) into \\src/prediction_logger.py\\ and \\src/lookup_cache.py\\ to maintain a cloud-synchronized relational store for out-of-time prediction history and symbol lookup caches.\n\n## Motivations & Value\n- **Cross-Environment Sync:** Synchronizes prediction logs and cache entries across Windows host (\\CASTER7\\), \\dev-vm\\, and GitHub Actions cloud runners without risk of merge conflicts on CSV/SQLite files.\n- **SQL Analytics API:** Allows instant SQL querying of prediction accuracy and backtest metrics.\n\n## Acceptance Criteria\n- [ ] Implement cloud SQL sync connector in \\src/prediction_logger.py\\ and \\src/lookup_cache.py\\.\n- [ ] Provide automatic fallback to local CSV/SQLite storage when offline.\n- [ ] Verify test suite coverage."
+  },
+  {
+    "number": 81,
+    "title": "[Feature Request] Implement Trigger.dev Resilient Cloud Cron Workflow Runner",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.7",
+    "labels": [
+      "enhancement",
+      "infrastructure"
+    ],
+    "body": "## Summary\nIntegrate **Trigger.dev** (\\\trigger.dev\\) (50,000 free durable executions/month) as a cloud background workflow runner for Midgley's daily forecasting (\\"
+  },
+  {
+    "number": 80,
+    "title": "[Feature Request] Integrate Weights & Biases (W&B) for Rolling Model Drift & Validation Loss Tracking",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "enhancement",
+      "infrastructure",
+      "modeling"
+    ],
+    "body": "## Summary\nIntegrate **Weights & Biases (W&B)** (\\wandb.ai\\) (free tier for personal projects, 100 GB storage) into \\src/weekly_issue_reporter.py\\ and \\src/models.py\\ to log quantitative model training runs, rolling MAE/RMSE metrics, and backtest loss curves.\n\n## Motivations & Value\n- **MLOps Observability:** Provides visual dashboards for 30-day, 60-day, and 90-day rolling error metrics and model drift across national RBOB and regional metro estimators (Tulsa, Newark, Cincinnati, Greenville, Oakland).\n- **Automated Cloud Reporting:** Integrates directly into \\.github/workflows/weekly_model_review.yml\\ and local \\midgley-weekly-review.timer\\.\n\n## Acceptance Criteria\n- [ ] Add \\wandb\\ logging initialization to \\src/weekly_issue_reporter.py\\ and \\src/models.py\\.\n- [ ] Log rolling validation loss and hit rates to W&B project dashboard.\n- [ ] Verify test suite execution with optional W&B logging flag."
+  },
+  {
+    "number": 79,
+    "title": "[Feature Request] Ingest AlphaAI Scored Insider & Financial News Event Stream",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **AlphaAI API & MCP Server** (\\^Glphai.io/developers\\) (20 free req/min, 100 req/day REST/MCP) into \\src/event_analyzer.py\\ to ingest per-ticker financial news impact scores and SEC Form 4 insider trade events for energy refiners (\\XOM\\, \\CVX\\, \\MPC\\, \\VLO\\, \\PSX\\, \\DINO\\, \\PBF\\).\n\n## Motivations & Value\n- **Per-Ticker Impact Scoring:** Pre-scored 1-10 relevance and sentiment metrics per news article and insider filing, saving Gemini token budget.\n- **REST & MCP Native:** Supports both standard REST API calls and native Model Context Protocol (MCP) integrations.\n\n## Acceptance Criteria\n- [ ] Implement AlphaAI feed module in \\src/\\.\n- [ ] Incorporate per-ticker impact vectors into the 4-day half-life memory decay engine (\\src/feature_engineering.py\\).\n- [ ] Add unit tests."
+  },
+  {
+    "number": 78,
+    "title": "[Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.4",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "body": "# [Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers\n\nThis is a long-term roadmap issue to track ongoing enhancements, integrations, and new triggers for **Strategy 4 (Incoming Webhook Gateway)** on the Midgley API Gateway (\\POST /api/v1/events/webhook\\).\n\n## Overview & Scope\nWhile the baseline webhook endpoint is active on \\src/api_server.py\\, Strategy 4 serves as an evolving ingestion hub for real-time push alerts from external services, custom market bots, and third-party event streams.\n\n---\n\n## Planned Enhancements & Roadmap Tasks\n\n### 1. External Push Integrations\n- [ ] **Google Alerts / IFTTT:** Connect RSS-to-Webhook applets pushing energy breaking news alerts.\n- [ ] **Zapier / Make.com:** Webhook triggers for executive social media posts (Truth Social / X).\n- [ ] **TradingView / Custom Market Alerts:** Ingest technical break-outs, crack-spread spikes, and crude futures volatility alerts.\n\n### 2. Gateway Security & Ingestion Integrity\n- [ ] **HMAC-SHA256 Signature Verification:** Add optional \\X-Midgley-Signature\\ header validation to verify webhook request authenticity.\n- [ ] **Custom Payload Transformers:** Support flexible JSON payloads (e.g. mapping \\\title\\, \\\text\\, \\summary\\, \\\tweet_content\\ to standard headline vectors).\n\n### 3. Ongoing Trigger Rule Expansion\n- [ ] Continuously expand domain keyword lexicons in \\src/intraday_event_monitor.py\\ as new macroeconomic, geopolitical, and physical market catalysts emerge.\n- [ ] Implement locale-specific webhook routing (e.g. routing refinery alerts directly to regional calibration agents).\n"
+  },
+  {
+    "number": 76,
+    "title": "[Feature Request] Ingest Frankfurter ECB Foreign Exchange Rates (USD Trade Index)",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **Frankfurter API** (\\\frankfurter.app\\) (100% free, keyless, unlimited currency conversion API) into \\src/\\ to track ECB foreign exchange rates (USD/EUR, USD/CAD, USD/CNY).\n\n## Motivations & Value\n- **Macro FX Impact:** Fluctuations in USD exchange rates against major trading partner currencies directly impact global crude oil purchasing power and export demand for U.S. refined products.\n- **Keyless & Unlimited:** Lightweight REST API built on European Central Bank historical time series.\n\n## Acceptance Criteria\n- [ ] Implement Frankfurter FX API ingestion module in \\src/\\.\n- [ ] Extract USD/EUR and USD/CAD daily exchange rates into \\src/feature_engineering.py\\.\n- [ ] Verify test suite coverage."
+  },
+  {
+    "number": 75,
+    "title": "[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **U.S. Census Bureau API** (\\^Gpi.census.gov\\) (100% free public government API) to fetch household vehicle availability, mean commute duration, and demographic density across our 5 target metro areas (Tulsa OK, Newark DE, Cincinnati OH, Greenville NC, Oakland/Bay Area CA).\n\n## Motivations & Value\n- **Retail Demand Elasticity:** Metro-level vehicle ownership per household and commuting patterns calibrate local retail pump price sensitivity to wholesale commodity shocks.\n- **Zero API Cost:** Free public government API.\n\n## Acceptance Criteria\n- [ ] Implement Census Bureau API ingestion module for MSA-level demographics.\n- [ ] Integrate commuter/vehicle density factors into \\\tulsa_regional.py\\, \\\newark_regional.py\\, \\cincinnati_regional.py\\, \\greenville_regional.py\\, and \\oakland_regional.py\\.\n- [ ] Add unit tests."
+  },
+  {
+    "number": 74,
+    "title": "[Feature Request] Ingest U.S. BTS Freight Transportation Index & Tank Truck Demand Data",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the official **U.S. Bureau of Transportation Statistics (BTS) Open Data API** (\\\bts.gov\\) into \\src/\\ to track the Freight Transportation Services Index (TSI), truck tonnage index, and national commercial transportation activity.\n\n## Motivations & Value\n- **Physical Demand Proxy:** Commercial freight truck tonnage and transportation TSI serve as leading physical demand indicators for heavy fuel, diesel, and unleaded gasoline consumption.\n- **100% Free Public API:** Official government data source with zero cost and high reliability.\n\n## Acceptance Criteria\n- [ ] Implement BTS TSI data ingestion module in \\src/\\.\n- [ ] Add Freight TSI features to main quantitative model pipeline in \\src/feature_engineering.py\\.\n- [ ] Validate non-null feature vectors."
+  },
+  {
+    "number": 73,
+    "title": "[Feature Request] Ingest EPA AirNow Ozone Alerts for Summer-Blend Gas Compliance",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **U.S. EPA AirNow API** (\\^Girnowapi.org\\) (free developer key, 500 req/hr) into \\src/\\ to track ground-level ozone action alerts and Air Quality Index (AQI) thresholds across target metropolitan regions.\n\n## Motivations & Value\n- **Regulatory Summer-Blend Transition:** Elevated summer ozone levels trigger environmental compliance enforcement and low-RVP summer-blend gasoline transition surcharges, directly expanding rack margins in California (Oakland/Bay Area) and the Ohio Valley (Cincinnati).\n- **Direct Environmental Indicator:** Provides real-time environmental regulatory pressure metrics.\n\n## Acceptance Criteria\n- [ ] Implement EPA AirNow API ingestion module in \\src/\\.\n- [ ] Map zip codes / monitoring stations for Oakland, Cincinnati, Tulsa, Newark, and Greenville.\n- [ ] Feed ozone action alerts into regional calibration agents."
+  },
+  {
+    "number": 72,
+    "title": "[Feature Request] Ingest Open-Meteo High-Resolution Regional Temperature & Freeze Shocks",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the official, 100% free, keyless **Open-Meteo API** (\\open-meteo.com\\) into \\src/noaa_weather.py\\ to extract high-resolution regional temperature grid forecasts, polar vortex anomalies, and freeze-off risks in Cushing WTI and Tulsa refining corridors.\n\n## Motivations & Value\n- **Wellhead Freeze-Offs:** Extreme winter temperature drops in the Mid-Continent (Tulsa/Cushing) freeze oil/gas production equipment and disrupt refinery operations.\n- **Zero API Cost / Keyless:** Provides up to 10,000 free keyless requests per day with 16-day global ensemble forecasts.\n\n## Acceptance Criteria\n- [ ] Implement Open-Meteo API querying in \\src/noaa_weather.py\\.\n- [ ] Compute regional temperature anomaly features for Tulsa, Newark, Cincinnati, Greenville, and Oakland.\n- [ ] Incorporate freeze-off shock multipliers into \\src/feature_engineering.py\\."
+  },
+  {
+    "number": 71,
+    "title": "[Feature Request] Ingest Tradestie Reddit Retail Energy Sentiment Feed",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **Tradestie Reddit API** (\\\tradestie.com\\) keyless endpoint into \\src/tradestie_sentiment_feed.py\\ to extract retail investor discussion sentiment and comment volume for energy tickers (\\XOM\\, \\CVX\\, \\MPC\\, \\VLO\\, \\USO\\).\n\n## Motivations & Value\n- **Alternative Retail Momentum:** Provides empirical qualitative sentiment vectors complementing executive social media feeds.\n\n## Acceptance Criteria\n- [ ] Implement \\src/tradestie_sentiment_feed.py\\.\n- [ ] Incorporate sentiment metrics into \\src/feature_engineering.py\\."
+  },
+  {
+    "number": 70,
+    "title": "[Feature Request] Implement OpenFIGI Cross-Market Symbol Normalization Service",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "integration"
+    ],
+    "body": "## Summary\nIntegrate the **OpenFIGI API** (\\openfigi.com\\) (25 free keyless calls/min) into \\src/symbol_mapper.py\\ to standardize financial instrument tickers across FRED, EIA, SEC CIKs, and NYMEX commodity futures.\n\n## Motivations & Value\n- **Cross-Source Entity Resolution:** Unifies symbol definitions across heterogeneous data providers.\n- **Cache-Backed:** Stores mappings in \\data/lookup_cache.sqlite\\ to prevent unnecessary network calls.\n\n## Acceptance Criteria\n- [ ] Implement \\src/symbol_mapper.py\\ utilizing OpenFIGI REST API.\n- [ ] Add symbol translation support for commodity futures and refiner equities."
+  },
+  {
+    "number": 69,
+    "title": "[Feature Request] Ingest SEC EDGAR Official Refinery 8-K Outage Filings (sec.gov API)",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the official, 100% free **U.S. SEC EDGAR API** (\\data.sec.gov\\) into \\src/sec_edgar_feed.py\\ to track official Item 8.01 material event 8-K filings for major U.S. oil refining corporations (PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66).\n\n## Motivations & Value\n- **Direct Government Source:** 10 req/sec limit, zero API key required, highly reliable official corporate disclosure feed.\n- **Refinery Outage Detection:** Directly feeds material 8-K outage notices into the Regional Metro Calibration Agents (Tulsa, Newark, Cincinnati, Oakland).\n\n## Acceptance Criteria\n- [ ] Implement \\src/sec_edgar_feed.py\\ with custom User-Agent headers.\n- [ ] Map CIK numbers for top U.S. refiners.\n- [ ] Parse 8-K filing events into \\src/event_analyzer.py\\."
+  },
+  {
+    "number": 68,
+    "title": "[Feature Request] Ingest Congressional Energy Equity Trading Signals (CongressInvests API)",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the **CongressInvests API** (\\congressinvests.com\\) (100 free keyless calls/day) to track STOCK Act disclosures by U.S. Senators and Representatives trading major energy and refining equities (\\CVX\\, \\XOM\\, \\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\).\n\n## Motivations & Value\n- **Insider Regulatory Sentiment:** Trades by Congressional lawmakers on energy and natural resources committees serve as empirical leading indicators for upcoming policy, tariff, or environmental regulatory shifts affecting domestic refining.\n- **Keyless Integration:** 100 requests/day allows daily polling of all 7 key refining tickers with zero authentication overhead.\n\n## Proposed Data Feed Specifications\n- **New Module:** \\src/congressional_trades_feed.py\\\n- **Target Endpoint:** \\GET https://congressinfor-production.up.railway.app/trades/{ticker}\\\n- **Feature Output:** \\congressional_energy_net_sentiment\\ (weighted by transaction size and recency decay).\n\n## Acceptance Criteria\n- [ ] Implement \\src/congressional_trades_feed.py\\ polling 7 refining tickers.\n- [ ] Create exponentially decayed sentiment score in \\src/feature_engineering.py\\.\n- [ ] Add unit test verifying API response parsing."
+  },
+  {
+    "number": 67,
+    "title": "[Feature Request] Ingest BriefTape AI-Summarized SEC 8-K & Policy Event Stream",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate **BriefTape** (\\\brieftape.com\\) REST API (10,000 free keyless calls/day) to ingest pre-summarized SEC 8-K filings for major refining tickers (\\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\, \\CVX\\) and Federal Reserve / BLS policy releases.\n\n## Motivations & Value\n- **Refinery Outage Intelligence:** Ingests SEC 8-K material event disclosures (unplanned refinery fires, hydrocracker outages, unit turnarounds) without consuming LLM token quota.\n- **Pre-Scored Sentiment:** Provides structured ticker-tagged sentiment scores and AI summaries directly from \\https://api.brieftape.com/v1/news\\.\n\n## Proposed Data Feed Specifications\n- **New Module:** \\src/brieftape_feed.py\\\n- **Target Endpoint:** \\GET https://api.brieftape.com/v1/news?category=sec_8k,fed\\\n- **Integration Target:** \\src/event_analyzer.py\\ & \\src/feature_engineering.py\\ (Exponential Memory Fusion Agent)\n\n## Acceptance Criteria\n- [ ] Implement \\src/brieftape_feed.py\\ querying refining tickers (\\MPC\\, \\PSX\\, \\VLO\\, \\DINO\\, \\PBF\\, \\CVX\\).\n- [ ] Fuse BriefTape sentiment vectors into the 4-day half-life memory decay engine.\n- [ ] Verify test suite coverage."
+  },
+  {
+    "number": 66,
+    "title": "[Feature Request] Ingest U.S. Treasury Yield Curve & TIPS Inflation Metrics (Fiscal Data API)",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Summary\nIntegrate the official, 100% free, keyless **U.S. Treasury Fiscal Data API** (\\\fiscaldata.treasury.gov\\) into \\src/\\ to extract macro yield curve dynamics (10Y-2Y spread) and TIPS real interest rates as predictive features for wholesale NYMEX RBOB futures forecasting.\n\n## Motivations & Value\n- **Macro Inflation Expectations:** TIPS real yields and yield curve slopes (\\\\text{Y} - 2\\text{Y}\\$) directly impact USD exchange rate strength and energy market demand sentiment.\n- **Zero API Cost / Keyless:** Official U.S. Treasury data requires no API keys, has generous public rate limits, and provides stable JSON endpoints.\n\n## Proposed Data Feed Specifications\n- **New Module:** \\src/treasury_yield_feed.py\\\n- **Key Features Created:**\n  - \\\treasury_yield_10y_2y_spread\\ (\\\\text{Y} - 2\\text{Y}\\$ spread)\n  - \\\tips_10y_real_yield\\ (10-Year TIPS Real Rate)\n- **Integration Target:** \\src/feature_engineering.py\\ (Quantitative Feature Matrix)\n\n## Acceptance Criteria\n- [ ] Implement \\src/treasury_yield_feed.py\\ with caching fallback.\n- [ ] Add Treasury yield curve features to main quantitative pipeline in \\src/feature_engineering.py\\.\n- [ ] Validate non-null feature vectors in daily forecast run (\\main.py\\)."
+  },
+  {
+    "number": 56,
+    "title": "feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Feature Proposal: USGS Water Data Telemetry Integration (`api.waterdata.usgs.gov`)\n\nIntegrate real-time streamflow, gage height, water temperature, and specific conductance telemetry from the **USGS Water Data API** (`api.waterdata.usgs.gov` / `waterservices.usgs.gov`) into the Midgley Multi-Agent Unleaded Gas Price Prediction framework.\n\n### Hydro-Economic Rationale\nInland river systems are critical supply arteries for crude oil and refined petroleum products:\n1. **Low-Water Draft Restrictions & Barge Tow Bottlenecks:**\n   - Mississippi River (Cairo IL `03612500` & Memphis `07032000`) and Ohio River (`03255000`) stage levels dictate barge draft limits. Low water restricts barge capacity by 20\u201330%, widening PADD 2 / Midwest wholesale-to-retail rack margins (+$0.05 to +$0.145/gal).\n2. **Refinery Cooling Tower Thermal Limits:**\n   - Summer river water temperatures (`00010`) above 28\u00b0C reduce cooling efficiency and trigger EPA thermal discharge compliance cutbacks, lowering refinery throughput.\n3. **Estuarine Salt-Front Intrusion:**\n   - Specific conductance (`00095`) tracks salt-water intrusion in Delaware Bay / C&D Canal near PBF Delaware City Refinery.\n\n---\n\n### Implementation Architecture\n\n#### 1. Physical Feed Ingestion Module (`src/usgs_water_feed.py`)\n- Query USGS parameters:\n  - `00060`: Discharge / Streamflow (cfs)\n  - `00065`: Gage Height (ft)\n  - `00010`: Water Temperature (\u00b0C)\n  - `00095`: Specific Conductance (\u00b5S/cm)\n- Key monitoring sites:\n  - `03612500`: Ohio River at Cairo, IL (Mississippi Confluence)\n  - `07032000`: Mississippi River at Memphis, TN\n  - `03255000`: Ohio River at Cincinnati, OH\n  - `07179000`: Arkansas River at Tulsa, OK\n  - `01477050`: Delaware River at Chester, PA (C&D Canal / PADD 1B)\n- SQLite 15-minute TTL caching (`src/lookup_cache.py`).\n\n#### 2. Feature Fusion & Regional Calibration\n- Merge `Hydrological_Barge_Bottleneck_Index` into Exponential Memory Fusion Agent (`src/feature_engineering.py`) with decay $t_{1/2} = 4.0\\text{ days}$.\n- Calibrate `src/cincinnati_regional.py`, `src/tulsa_regional.py`, and `src/newark_regional.py` to ingest real-time river stage levels.\n\n#### 3. Scenario Simulator & API/MCP Extensions\n- Add counterfactual scenario triggers in `main.py`, `cincinnati_main.py`, `tulsa_main.py`, and `newark_main.py`:\n  - `Mississippi_River_Low_Water_Bottleneck`: +$0.145/gal (+4.20% rack margin expansion)\n  - `Ohio_River_Flood_Lock_Closure`: +$0.120/gal (+3.50% surge)\n  - `Summer_Refinery_Thermal_Cutback`: +$0.085/gal (+2.50% crack spread surge)\n- Expose `/api/v1/usgs/water_levels` REST endpoint (`src/api_server.py`) and MCP tool `get_usgs_water_telemetry` (`src/mcp_server.py`).\n- Add navigation status widgets to public web dashboard (`src/dashboard_generator.py`).\n\n---\n\n### Verification\n- Add automated unit tests (`tests/test_usgs_water_feed.py`).\n- Out-of-time historical backtesting across 30/60/90-day evaluation windows.\n"
+  },
+  {
+    "number": 55,
+    "title": "Feature: Ingest live USGS Earthquake API feeds (fdsnws/event/1/) for real-time seismic fuel market risk scoring",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "### Feature Overview\nIntegrate direct API ingestion from the **USGS Earthquake Web Service API** ([https://earthquake.usgs.gov/fdsnws/event/1/](https://earthquake.usgs.gov/fdsnws/event/1/)) into the data ingestion pipeline (src/usgs_seismic.py, src/oakland_regional.py, src/noaa_weather.py) to replace static seismic benchmarks with live automated USGS earthquake monitoring.\n\n### Technical Specification & Architecture\n\n1. **Live USGS GeoJSON Ingestion (src/usgs_seismic.py):**\n   - **Query Endpoint:** https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson\n   - **Spatial Bounding Box (PADD 5 / SF Bay Area Refining Corridor):**\n     - minlatitude: 36.5\n     - maxlatitude: 38.8\n     - minlongitude: -123.5\n     - maxlongitude: -121.5\n   - **Magnitude Filter:** minmagnitude: 4.5 (threshold for pipeline emergency shutoffs and refinery safety inspections).\n   - **Temporal Scope:** Rolling 30-day window with 15-minute response caching (src/lookup_cache.py).\n\n2. **Proximity & Infrastructure Impact Scoring:**\n   - Map event epicenters against proximity to critical refining & delivery infrastructure:\n     - **Chevron Richmond Refinery** (245,000 bpd capacity)\n     - **PBF Martinez & Valero Benicia Refineries**\n     - **Kinder Morgan SFPP Pipeline & Terminal Corridors**\n     - **Carquinez Strait Marine Crude Tanker Terminals**\n\n3. **LLM Event Fusion Pipeline:**\n   - Format live USGS GeoJSON payload into standardized event headlines.\n   - Pass formatted headlines to the **LLM Event Extraction Agent** (^[xtract_batch_event_features_llm / ^[xtract_event_features_rule_based) in src/event_analyzer.py to generate supply_disruption and overall_price_pressure score vectors.\n\n4. **Counterfactual Simulator & API Server Integration:**\n   - Update hayward_quake scenario in oakland_main.py and src/api_server.py to ingest real-time USGS baseline seismic data."
+  },
+  {
+    "number": 54,
+    "title": "feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.5 \"Houdry\"",
+    "labels": [
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "# \ud83d\udca8 Architecture Plan: Multi-Feed Air Quality (AQI) Ingestion & Refinery Outage Early Detection System\n\n## Executive Summary\nThis feature establishes an **Air Quality (AQI) & Industrial Emissions Extraction Subsystem** (`src/aqi_feed.py`) in Midgley. By ingesting real-time air quality metrics ($\\text{PM}_{2.5}$, $\\text{PM}_{10}$, $\\text{SO}_2$, $\\text{NO}_2$, $\\text{O}_3$) from **both government (EPA AirNow) and independent hyper-local sensor networks (PurpleAir, OpenAQ, WAQI)**, Midgley will leverage atmospheric anomalies downwind of core refining hubs as leading indicators for **unplanned refinery outages** and **statutory seasonal fuel blend transitions (Reid Vapor Pressure / RVP mandates)**.\n\n---\n\n## 1. Multi-Feed Air Quality Evaluation & Comparison\n\n| Data Feed | Operator / Type | Target Parameters | Spatial Density / Coverage | Update Freq | Primary Utility in Midgley |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **PurpleAir API** | **Independent / Crowdsourced** | $\\text{PM}_{1.0}, \\text{PM}_{2.5}, \\text{PM}_{10}$, Temp, Humidity | **Hyper-dense** ($25,000+$ optical sensors, fence-line refining communities) | **Real-time** ($1\\text{ to }2\\text{ min}$) | **Fence-line flaring & particulate smoke anomalies** downwind of refineries |\n| **OpenAQ API** | **Independent / Non-Profit** | $\\text{SO}_2, \\text{NO}_2, \\text{O}_3, \\text{PM}_{2.5}, \\text{PM}_{10}, \\text{CO}$ | Global open-data network (gov + community sensors) | 10\u201360 min | **Direct chemical gas indicators** ($\\text{SO}_2/\\text{NO}_2$) for catalytic cracker flaring |\n| **EPA AirNow API** | **US Government (EPA/NWS)** | $\\text{AQI}, \\text{O}_3, \\text{PM}_{2.5}, \\text{PM}_{10}$ | County / Zip level US municipal monitors | 1 hour | **Statutory Ozone Non-Attainment tracking & RVP summer-blend enforcement** |\n| **World Air Quality (WAQI / AQICN)** | **Independent / International** | $\\text{AQI}, \\text{O}_3, \\text{NO}_2, \\text{SO}_2, \\text{PM}_{2.5}$ | $30,000+$ global official & institutional stations | Real-time | Geo-bounding box fallback for regional metro models |\n| **Sentinel-5P TROPOMI / Copernicus** | **ESA Remote Sensing** | Tropospheric $\\text{SO}_2, \\text{NO}_2, \\text{CH}_4$ columns | Global 3.5km x 5.5km satellite grid | Daily orbital pass | Orbital verification of massive Permian/Gulf flaring plumes |\n\n### Recommended Tri-Tiered Strategy\nMidgley will implement a **tri-tiered fallback and cross-validation model**:\n1. **Tier 1 (Hyper-Local Fence-Line Detection):** **PurpleAir API** for sub-minute particulate surge detection downwind of refining targets.\n2. **Tier 2 (Chemical Gas Verification):** **OpenAQ API** for $\\text{SO}_2$ and $\\text{NO}_2$ chemical verification to rule out non-refinery smoke (e.g. agricultural burning or wildfires).\n3. **Tier 3 (Regulatory Baseline & Fallback):** **EPA AirNow API** & **WAQI** for statutory Ozone Action Day tracking and fallback coverage.\n\n---\n\n## 2. Target Refining Hub Lat/Lon Coordinates & Fence-Line Sensor Polygons\n\nThe ingestion engine will continuously monitor 15 km radii downwind of Midgley's key refining hubs:\n\n1. **West Tulsa, OK Hub (Tulsa Metro Calibration):**\n   - **Target:** HF Sinclair West Tulsa Refinery ($125,000\\text{ bpd}$)\n   - **Coordinates:** $36.1384^\\circ\\text{ N}, 96.0125^\\circ\\text{ W}$ (Tulsa County, OKZ060)\n   - **Monitors:** PurpleAir Tulsa sensors + EPA Site `40-143-0112`.\n2. **SF Bay Area Refining Corridor (Oakland / Bay Area Calibration):**\n   - **Targets:** Chevron Richmond ($245,000\\text{ bpd}$), PBF Martinez ($156,000\\text{ bpd}$), Valero Benicia ($145,000\\text{ bpd}$)\n   - **Coordinates:** $37.9542^\\circ\\text{ N}, 122.3853^\\circ\\text{ W}$ & $38.0194^\\circ\\text{ N}, 122.1342^\\circ\\text{ W}$ (Contra Costa County)\n   - **Monitors:** Dense PurpleAir Bay Area fence-line sensors + BAAQMD / OpenAQ stations.\n3. **Delaware City Hub (Newark Metro Calibration):**\n   - **Target:** PBF Delaware City Refinery ($180,000\\text{ bpd}$)\n   - **Coordinates:** $39.5636^\\circ\\text{ N}, 75.6322^\\circ\\text{ W}$ (New Castle County, DE)\n   - **Monitors:** PurpleAir New Castle sensors + DNREC / OpenAQ station.\n4. **Catlettsburg Hub (Cincinnati Tri-State Calibration):**\n   - **Target:** Marathon Catlettsburg Refinery ($291,000\\text{ bpd}$)\n   - **Coordinates:** $38.3972^\\circ\\text{ N}, 82.5978^\\circ\\text{ W}$ (Boyd County, KY / Tri-State)\n   - **Monitors:** OpenAQ Boyd County KY + PurpleAir Ashland/Huntington sensors.\n\n---\n\n## 3. Mathematical & Algorithmic Design\n\n### A. Anomaly Detection Score ($Z_{\\text{AQI}}$)\nFor each target refining hub $h$, baseline mean $\\mu_{h}$ and standard deviation $\\sigma_{h}$ are calculated over a rolling 30-day window for $\\text{PM}_{2.5}$ and $\\text{SO}_2$:\n\n\\[\nZ_{h, t} = \\frac{X_{h, t} - \\mu_{h, 30\\text{d}}}{\\sigma_{h, 30\\text{d}}}\n\\]\n\n* **Unplanned Outage Trigger:** If $Z_{\\text{PM2.5}} > 3.5$ AND $Z_{\\text{SO2}} > 2.5$ for $\\ge 2$ consecutive readings, emit an **Unplanned Refinery Outage Alert**.\n* **Impact Mapping:** $+\\$0.15\\text{ to }+\\$0.35/\\text{gal}$ regional rack margin surge depending on refinery capacity.\n\n### B. Exponential Memory Fusion Integration\nThe resulting anomaly score vector feeds into `src/feature_engineering.py` decaying with a half-life $t_{1/2} = 4.0\\text{ days}$:\n\n\\[\n\\text{Memory}_{\\text{AQI}, t} = \\text{Memory}_{\\text{AQI}, t-1} \\times e^{-\\frac{\\ln(2)}{4.0}} + \\text{Shock}_{\\text{AQI}, t}\n\\]\n\n---\n\n## 4. Proposed Architecture & Component Scope\n\n### Component 1: Ingestion & API Feed Layer\n* **`[NEW]` `src/aqi_feed.py`**\n  - Implement `fetch_purpleair_sensors(lat, lon, radius_km)`\n  - Implement `fetch_openaq_measurements(lat, lon, radius_km)`\n  - Implement `fetch_airnow_aqi(zip_code)`\n  - Implement `compute_hub_aqi_anomaly_index()`\n\n### Component 2: Feature Engineering & Pipeline Integration\n* **`[MODIFY]` `src/feature_engineering.py`**\n  - Add `aqi_outage_decay_score` column to unified feature matrix.\n* **`[MODIFY]` `src/lookup_cache.py`**\n  - Add 15-minute TTL cache wrapper for PurpleAir & OpenAQ HTTP requests to prevent API rate limits.\n\n### Component 3: Regional Calibration Agents & API Gateway\n* **`[MODIFY]` `src/oakland_regional.py`**\n* **`[MODIFY]` `src/tulsa_regional.py`**\n* **`[MODIFY]` `src/newark_regional.py`**\n* **`[MODIFY]` `src/cincinnati_regional.py`**\n  - Integrate real-time fence-line AQI anomaly features into local margin estimators.\n* **`[MODIFY]` `src/api_server.py` & `src/mcp_server.py`**\n  - Expose `/api/v1/aqi/live` endpoint and `get_refinery_aqi_anomalies` MCP tool.\n\n---\n\n## 5. Verification & Testing Strategy\n\n### Unit & Integration Tests\n* Build `tests/test_aqi_feed.py` with mocked PurpleAir, OpenAQ, and AirNow JSON responses.\n* Test spatial boundary filtering ($15\\text{ km}$ radius around refineries).\n* Verify statistical anomaly detection ($Z$-score calculation over synthetic baseline).\n\n### Backtest Validation\n* Backtest 2022\u20132026 historical refinery outage events (e.g. Chevron Richmond 2022 flaring incident, PBF Martinez 2023 spent catalyst release) against AQI historical archives to quantify lead time improvement over mainstream news feeds.\n"
+  },
+  {
+    "number": 53,
+    "title": "feat(core-api): Monitor open-access research papers via CORE API during weekly self-review",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Weekly Review v1.0 \"Audit\"",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "data-ingestion"
+    ],
+    "body": "## Feature Overview\nIntegrate the [CORE API](https://core.ac.uk/services/api) (`https://api.core.ac.uk/v3/`) as an open-access research literature data source into the weekly model review pipeline (`.github/workflows/weekly_model_review.yml` and `src/weekly_issue_reporter.py`). \n\nSimilar to the arXiv paper monitoring capability ([#51](https://github.com/KoshiirRa/midgley/issues/51)), CORE provides programmatic access to the world's largest aggregator of open access research outputs across thousands of institutional repositories and academic publishers. Adding CORE allows Agent 7 (Model Performance Review & Feedback Loop Agent) to discover emerging research papers on energy commodity forecasting, refined product crack spreads, macroeconomic oil shock modeling, and LLM-based financial time-series prediction that may not appear on arXiv.\n\n---\n\n## Detailed Technical Specification\n\n### 1. Data Source Metadata & API Integration\n- **Provider:** [CORE (COnnecting REpositories)](https://core.ac.uk/services/api)\n- **API Base Endpoint:** `https://api.core.ac.uk/v3/search/works`\n- **Authentication:** Supports API Key via request header `Authorization: Bearer <CORE_API_KEY>` or query parameter (`CORE_API_KEY` stored in repository secrets / environment variable). Fallback to graceful mock/unauthenticated handling if key is absent.\n- **Search Topics & Domain Queries:**\n  - `\"gasoline price forecasting\"` OR `\"RBOB futures\"`\n  - `\"oil market volatility\"` OR `\"refining rack margin\"`\n  - `\"time series LLM sentiment energy\"` OR `\"commodity price machine learning\"`\n\n### 2. Architecture & Data Flow\n```\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 CORE API (https://core.ac.uk/services/api)             \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502 JSON V3 Response (Articles, DOIs, PDFs)\n                             \u25bc\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 1. CORE Monitor Module (src/core_monitor.py)           \u2502\n \u2502  - Query endpoint & 7-day publication window filter     \u2502\n \u2502  - Parse metadata (Title, Authors, Abstract, DOI, PDF) \u2502\n \u2502  - Graceful timeout (10s limit) fallback handling      \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502 Formatted Markdown Section\n                             \u25bc\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 2. Weekly Issue Reporter (src/weekly_issue_reporter.py)\u2502\n \u2502  - Appends \"\ud83d\udd2c Relevant CORE Open-Access Papers\"       \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502 GitHub Issue Payload\n                             \u25bc\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 3. GitHub Actions Weekly Review Workflow (.github)     \u2502\n \u2502  - Runs every Saturday 08:00 AM Central / 13:00 UTC    \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n---\n\n## Requirements & Scope of Work\n\n- [ ] **Core Module (`src/core_monitor.py`):**\n  - Implement `fetch_recent_core_articles(days_back: int = 7, max_results: int = 10) -> List[Dict[str, Any]]` using `urllib` / `requests`.\n  - Extract article ID, title, authors, publication date, abstract preview, repository/DOI link, and direct download links.\n  - Implement `format_core_markdown_section(days_back: int = 7) -> str` to render clean Markdown tables or bullet lists.\n- [ ] **Weekly Review Reporter Integration (`src/weekly_issue_reporter.py`):**\n  - Call `format_core_markdown_section()` within `generate_weekly_markdown_report()`.\n  - Append the output alongside arXiv literature in the weekly issue body.\n- [ ] **Resilience & Fault Tolerance:**\n  - Wrap API calls with a strict 10-second timeout.\n  - On API rate limit, HTTP error, or network interruption, log a warning and return empty literature results without failing the weekly review run.\n- [ ] **Unit & Integration Tests (`tests/test_core_monitor.py`):**\n  - Test mock JSON response parsing for CORE V3 API.\n  - Test 7-day date filtering logic.\n  - Test graceful fallback when network request fails or API key is missing.\n- [ ] **Documentation (`docs/core_monitoring_spec.md`):**\n  - Create specification document detailing CORE API endpoints, authentication setup, query construction, and maintenance guidelines.\n\n---\n\n## Related Issues & References\n- Similar to arXiv monitoring specification: [#51](https://github.com/KoshiirRa/midgley/issues/51)\n- CORE API Documentation: [https://core.ac.uk/services/api](https://core.ac.uk/services/api)\n"
+  },
+  {
+    "number": 52,
+    "title": "feat(docs/math): Leverage CodeCogs LaTeX rendering service for equation images across GitHub Markdown & web embeds",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement"
+    ],
+    "body": "### Summary & Context\nCurrently, mathematical equations across the project\u2014including in `AGENTS.md`, `README.md`, GitHub pull requests/issues, and the public web dashboard (`docs/math.html`)\u2014rely on raw LaTeX text notation (`$$\\dots$$`, `\\(\\dots\\)`) or client-side JavaScript rendering via KaTeX.\n\nWhile KaTeX provides interactive rendering in modern web browsers, raw LaTeX syntax fails to render cleanly in many external contexts:\n- **GitHub Markdown previews** in mobile apps, email notifications, and third-party RSS/Markdown engines.\n- **Discord / Slack / Teams embeds** when sharing model documentation, decay half-lives, and forecast equations.\n- **Static API & MCP responses** where clients need rendered vector graphic images (SVG) or raster images (PNG) without requiring client-side JS execution.\n\nTo solve this, we propose integrating the **CodeCogs LaTeX Rendering Engine** ([Documentation](https://editor.codecogs.com/docs/4-LaTeX_rendering.php)) to dynamically render high-resolution vector (SVG) and raster (PNG) equation images for documentation, static web fallbacks, and API integrations.\n\n---\n\n### Key Capabilities of CodeCogs LaTeX Service\nPer the [CodeCogs Documentation](https://editor.codecogs.com/docs/4-LaTeX_rendering.php):\n- **Base Endpoint Syntax:** `https://latex.codecogs.com/{type}.{format}?{LaTeX_markup}`\n- **Supported Output Formats (`type`):**\n  - `svg`: Scalable Vector Graphic (crisp on high-DPI / retina displays, recommended default).\n  - `png`: Portable Network Graphics (universal raster image support).\n  - `gif`: Graphics Interchange Format with baseline offset header.\n  - `json`: Returns base64-encoded image string with equation metadata (`width`, `height`, `url`, `base64`).\n- **Supported Receiving Modes (`format`):**\n  - `image`: Direct image HTTP stream.\n  - `json`: JSON object containing base64 payload.\n  - `download`: Triggers inline browser file download.\n- **In-line Styling Control Parameters:**\n  - Font scaling: `\\tiny`, `\\small`, `\\large`, `\\LARGE`, `\\huge`\n  - Dots per inch (DPI): `\\dpi{150}`, `\\dpi{300}`\n  - Color styling: `\\fg{#}` (foreground color hex) and `\\bg{#}` (background color hex/preset)\n\n---\n\n### Proposed Implementation Plan\n\n#### 1. Python LaTeX URL Generator Utility (`src/utils/latex_renderer.py`)\nCreate a dedicated utility module to parse LaTeX math strings and format clean, URL-encoded CodeCogs render endpoints:\n```python\ndef build_codecogs_url(latex: str, output_type: str = \"svg\", fg_color: str = \"FFFFFF\", bg_color: str = \"transparent\", dpi: int = 150) -> str:\n    \"\"\"Generates a CodeCogs LaTeX equation rendering URL.\"\"\"\n    ...\n```\n\n#### 2. Documentation & GitHub Markdown Enhancements (`README.md` & `AGENTS.md`)\nReplace or supplement raw text LaTeX expressions in markdown files with SVG image tags using CodeCogs rendering, ensuring equations render natively across all GitHub platforms, mobile apps, and external Markdown viewports:\n```html\n<!-- Example: Exponential Memory Fusion Decay Formula -->\n<img src=\"https://latex.codecogs.com/svg.image?\\dpi{150}\\fg{00D2FF}\\text{Memory}_t%20=%20\\text{Memory}_{t-1}%20\\times%20e^{-\\frac{\\ln(2)}{t_{1/2}}}%20+%20\\text{NewShock}_t\" alt=\"Exponential Memory Decay Equation\" />\n```\n\n#### 3. Public Web Dashboard Export & Fallback (`src/dashboard_generator.py` & `docs/math.html`)\n- Add a \"Copy CodeCogs Image Tag\" / \"Download Equation SVG\" feature to each math section in `docs/math.html`.\n- Provide an inline SVG image fallback for environments where CDN JavaScript execution (KaTeX) is disabled or blocked.\n\n#### 4. REST API & MCP Server Integration (`src/api_server.py` & `src/mcp_server.py`)\n- Expose a new REST API endpoint `GET /api/v1/math/render` that accepts a LaTeX formula string and returns the formatted CodeCogs SVG/PNG URL along with optional base64 JSON payload.\n- Expose an MCP tool `get_equation_image` enabling LLMs and AI agents to fetch equation image links for rich UI presentation.\n\n---\n\n### Acceptance Criteria\n- [ ] Implement `src/utils/latex_renderer.py` helper function with URL encoding, styling parameters (`\\fg`, `\\bg`, `\\dpi`), and unit test suite.\n- [ ] Embed CodeCogs SVG equations into `README.md` and `AGENTS.md` for core model equations (Memory Fusion, Ridge Regression, Regional Metro Rack Margins).\n- [ ] Update `src/dashboard_generator.py` to add CodeCogs SVG export links and static fallbacks to `docs/math.html`.\n- [ ] Add REST API `/api/v1/math/render` and MCP tool `get_equation_image` for external client integration.\n- [ ] Validate image rendering across dark and light GitHub themes.\n"
+  },
+  {
+    "number": 50,
+    "title": "feat(geocoding): Add ZIP Code to Locale & PADD Resolution Mapping Engine",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "body": "### Context & Motivation\nEnd users and AI agents frequently ask about gas prices by 5-digit US ZIP code rather than predefined metro area names.\n\n### Proposed Implementation\n1. Implement a lightweight local ZIP-code-to-Locale mapping dataset/function in \\src/live_fuel_feed.py\\.\n2. Resolve input ZIP codes to nearest supported metro locale, PADD region, and state fuel tax policy.\n3. Fallback gracefully to regional state average or GasBuddy local station search when ZIP is outside primary metro clusters.\n\n### Acceptance Criteria\n- Passing any valid 5-digit US ZIP code to \\/api/v1/prices/live?zip_code=...\\ correctly resolves the mapped locale context and fuel prices."
+  },
+  {
+    "number": 49,
+    "title": "feat(mcp): Expose Fuel Market Shock Simulation Tools & Scenario Catalog via MCP Server",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "integration",
+      "api"
+    ],
+    "body": "### Context & Motivation\nCounterfactual market shock simulation (refinery fires, Hormuz blockades, weather disasters) is a core Midgley engine feature, but needs complete feature parity and rich prompt templates in the Model Context Protocol (MCP) server interface.\n\n### Proposed Implementation\n1. Ensure \\simulate_fuel_market_shock\\ MCP tool supports full scenario parameter customization and return structures.\n2. Add an MCP resource \\\resource://midgley/scenarios\\ listing all available simulation scenarios and their shock profiles.\n3. Add prompt template \\prompt://midgley/simulate_shock\\ for AI assistant scenario briefing generation.\n\n### Acceptance Criteria\n- MCP clients (Claude Desktop, Antigravity, etc.) can discover and run shock simulations via standard MCP protocol calls.\n- Scenario catalog accessible via MCP resource endpoints."
+  },
+  {
+    "number": 48,
+    "title": "feat(api): Add GET /locales Metadata Endpoint & POST /forecast/batch Endpoint",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "api"
+    ],
+    "body": "### Context & Motivation\nCurrently, locale codes and tax structures are implicit, requiring client applications to guess locale identifiers and make multiple single calls to forecast for several locations.\n\n### Proposed Implementation\n1. Add \\GET /api/v1/locales\\ returning available locale codes, \\\region_id\\, PADD region, state/local tax breakdowns, and status.\n2. Add \\POST /api/v1/forecast/batch\\ enabling clients to query forecasts for multiple locales in a single HTTP payload.\n3. Add batch support to \\/api/v1/combined/batch\\.\n\n### Acceptance Criteria\n- \\GET /api/v1/locales\\ provides complete metadata dictionary.\n- Batch endpoint successfully accepts an array of locale codes and returns combined forecast maps."
+  },
+  {
+    "number": 47,
+    "title": "feat(scoreboard): Implement Realized-vs-Predicted Rolling Scoreboard API & Dashboard Section",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard",
+      "api"
+    ],
+    "body": "### Context & Motivation\nHistorical MAE and directional hit rates must be continuously recomputed against actual market prices as target dates arrive to maintain empirical credibility.\n\n### Proposed Implementation\n1. Leverage \\src/prediction_logger.py\\ to calculate rolling 30/60/90-day MAE and hit rates broken down by horizon (1-day through 5-day) and locale.\n2. Create a dedicated \\GET /api/v1/forecast/scoreboard\\ endpoint.\n3. Render a dynamic Realized-vs-Predicted performance table and chart on the GitHub Pages dashboard (\\docs/\\).\n\n### Acceptance Criteria\n- Automated background task backfills actual prices and updates rolling performance metrics.\n- Scoreboard is publicly accessible via API and web dashboard."
+  },
+  {
+    "number": 46,
+    "title": "feat(explainability): Add Component-Level Feature Attribution & Driver Breakdown per Forecast",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": "### Context & Motivation\nThe multi-agent pipeline ingests news, NOAA weather, OPEC press releases, social media, and physical data, but end users need transparency into which specific factors moved the price prediction.\n\n### Proposed Implementation\n1. Extract directional dollar & percentage contribution weights for each feature category (RBOB futures, refinery utilization, weather events, regulatory taxes).\n2. Generate structured driver text summaries (e.g., \\'Tulsa +1.17%: RBOB futures up, refinery utilization down, weather neutral'\\).\n3. Include feature attribution arrays in \\/api/v1/forecast/predict\\ and \\/api/v1/combined\\.\n\n### Acceptance Criteria\n- API returns structured driver impacts showing signed contribution values.\n- Dashboard displays natural language driver breakdown per forecast run."
+  },
+  {
+    "number": 45,
+    "title": "refactor(cache): Implement Provenance Chains and Stale-While-Revalidate (SWR) Cache Architecture",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.4",
+    "labels": [
+      "bug",
+      "enhancement",
+      "infrastructure"
+    ],
+    "body": "### Context & Motivation\nPrevent state vs. metro level data leaking (e.g. California statewide price average appearing in Oakland metro responses) and replace raw cache age disclosures with robust cache status semantics.\n\n### Proposed Implementation\n1. Add explicit provenance metadata (\\source\\, \\\region_id\\, \\padd\\, \\granularity_type\\) to all live price objects.\n2. Flag granularity mismatches (e.g., STATE level vs. METRO level) explicitly in API responses.\n3. Refactor \\src/lookup_cache.py\\ to use a Stale-While-Revalidate (SWR) pattern (serve cached data instantly while refreshing in the background).\n\n### Acceptance Criteria\n- Provenance chain object returned in \\/api/v1/prices/live\\ and \\/api/v1/combined\\.\n- Granularity mismatch detection prevents state fallbacks from being served silently as metro data.\n- Cache uses SWR background fetching without blocking requests."
+  },
+  {
+    "number": 44,
+    "title": "feat(models): Add P10/P50/P90 Prediction Interval Bands Scaling with Horizon",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": "### Context & Motivation\nSingle point price forecasts (\\.892/gal) lack risk quantification. Uncertainty naturally compounds as the forecast horizon extends from Day 1 to Day 5 and varies across geographic market volatility profiles.\n\n### Proposed Implementation\n1. Implement parametric or empirical residual-based P10, P50 (median), and P90 forecast bands.\n2. Scale interval width dynamically as horizon increases (\\(\\sigma \\propto \\sqrt{h}\\)).\n3. Return \\p10_price_per_gal\\, \\p50_price_per_gal\\, and \\p90_price_per_gal\\ fields in API forecast responses.\n4. Render shaded confidence bands on web dashboard forecast charts.\n\n### Acceptance Criteria\n- Day-5 prediction interval is wider than Day-1 prediction interval.\n- API returns P10/P50/P90 numbers in JSON payload for all supported locales."
+  },
+  {
+    "number": 43,
+    "title": "feat(evaluation): Add Naive Persistence Baseline & NYMEX Futures-Implied Benchmark Comparisons",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v2.0 \"Hubbert\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": "### Context & Motivation\nEvaluating model directional hit rate (e.g. 60.79%) in isolation does not demonstrate model superiority over trivial baselines, as a naive 'price stays flat' (persistence) guess wins ~40-50% of the time on a 5-day horizon.\n\n### Proposed Implementation\n1. Compute and report the Naive Persistence Baseline (P_{t+5} = P_t) directional hit rate alongside model forecasts.\n2. Compute NYMEX RBOB Futures-implied directional baseline (RBOB_{t+5} - RBOB_t).\n3. Include baseline performance metrics in API forecast endpoints (\\/api/v1/forecast/predict\\), evaluation scripts (\\prediction_logger.py\\), and public dashboard charts.\n\n### Acceptance Criteria\n- Baseline hit rates explicitly reported in model evaluation pipelines.\n- Model hit rate vs. persistence baseline differential logged and displayed on the web dashboard."
+  },
+  {
+    "number": 41,
+    "title": "feat(diesel): Expand Midgley to Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spread Modeling",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Diesel Model v1.0 \"Diesel\"",
+    "labels": [
+      "enhancement",
+      "modeling"
+    ],
+    "body": "### \ud83d\ude9a Feature Proposal: Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spread Modeling\n\n#### \ud83d\udee2\ufe0f Overview & Feature Vision\nExpand `midgley` beyond Unleaded RBOB Gasoline (`RB=F`) by introducing a full quantitative forecasting engine, physical feature pipeline, regional calibration agent, and scenario simulator for **Ultra-Low Sulfur Diesel (ULSD)** (`HO=F` NY Harbor ULSD futures).\n\nDiesel fuel powers global commercial logistics, long-haul trucking fleets, agricultural harvesting, freight rail, maritime shipping, and emergency industrial generation. Modeling diesel brings a crucial economic and physical energy dimension to the `midgley` multi-agent framework!\n\n#### \ud83d\udca1 Problem & Value Proposition\nGasoline (`RB=F`) and Diesel (`HO=F`) exhibit distinct fundamental supply-demand dynamics and seasonal cycles:\n- **Seasonal Divergence**: Gasoline demand peaks during the summer driving season (May\u2013September), while diesel demand peaks during the autumn agricultural harvest (Sept\u2013Nov) and winter heating/freight season (Nov\u2013March due to residential heating oil pool overlap).\n- **Cracking Dynamics**: Unleaded gas is driven by the RBOB-WTI crack spread, whereas diesel is governed by the **ULSD Distillate Crack Spread** ($\\text{HO=F} - \\text{CL=F}/42$) and 3-2-1 refinery yield economics.\n- **Regulatory Overhead**: Federal diesel excise tax ($0.244/gal) exceeds federal gasoline tax ($0.184/gal), while state-level renewable fuel mandates (D4 Biomass-Based Diesel RINs and CARB Renewable Diesel / RD99 standards) introduce unique price spread behaviors.\n\nAdding diesel forecasting allows fleet operators, trucking managers, agricultural producers, and energy analysts to anticipate 5-day ULSD wholesale and retail price trajectories and optimize fuel procurement strategies.\n\n#### \ud83d\udee0\ufe0f Key Technical & Architectural Modules\n\n1. **Distillate Market Data Ingestion (`src/data_ingestion.py` & `src/live_fuel_feed.py`)**:\n   - Ingest NYMEX Ultra-Low Sulfur Diesel / Heating Oil futures (`HO=F`).\n   - Fetch EIA Weekly Distillate Fuel Oil Inventories, PADD-level stocks, and refinery distillate production rates.\n   - Track USGC, NY Harbor, and Los Angeles ULSD spot prices.\n\n2. **Distillate Crack Spread & Physical Feature Engineering (`src/feature_engineering.py`)**:\n   - **3-2-1 Crack Spread**:\n     $$\\text{Crack}_{3-2-1} = \\frac{2 \\times \\text{RBOB} + 1 \\times \\text{ULSD} - 3 \\times \\text{WTI}}{3}$$\n   - **Distillate-to-Gasoline Price Ratio**: $\\text{Ratio} = \\frac{\\text{HO=F}}{\\text{RB=F}}$\n   - **Commercial Freight & Transport Metrics**: Integration of freight indicators (Cass Freight Index, ATA Truck Tonnage Index), rail intermodal volume, and agricultural harvest seasonal masks.\n   - **Heating Oil Competition & Weather Dynamics (`src/noaa_weather.py`)**: Heating Degree Days (HDD) tracking winter polar vortex shocks draining Northeast distillate inventories.\n\n3. **Quantitative ULSD Forecasting Engine (`src/models.py`)**:\n   - Fit regularized Ridge ($\\alpha=10.0$) and XGBoost regressors tailored to ULSD time series.\n   - Generate 5-day out-of-time ULSD wholesale commodity forecasts ($/gal).\n\n4. **Regional Diesel Metro Calibration Agents (`src/diesel_regional.py`)**:\n   - **Midwest / Tulsa Metro**: Calibrated to agricultural harvest demand spikes, Cushing/Chicago rack margins, and PADD 2 inventory draws.\n   - **Northeast / Newark Metro**: Calibrated to PADD 1 Atlantic distillate supply, Colonial Pipeline Line 2 (distillates line) throughput, and home heating oil competition.\n   - **West Coast / Oakland Metro**: Calibrated to CARB ULSD specifications, LCFS carbon credit overhead, D4 RIN pricing, and Renewable Diesel (RD99/B20) blending dynamics.\n\n5. **Counterfactual Diesel Physical & Geopolitical Shock Simulator (`main.py` / `src/diesel_shocks.py`)**:\n   - \ud83d\ude9b *Colonial Pipeline Line 2 Unplanned Distillate Outage*: +$0.285/gal (+7.2%)\n   - \u2744\ufe0f *Northeast Polar Vortex & Heating Oil Supply Crunch*: +$0.340/gal (+8.5%)\n   - \ud83c\udf3e *Midwest Autumn Harvest Demand Surge & Rack Bottleneck*: +$0.195/gal (+4.8%)\n   - \ud83d\udea2 *IMO 2020 LSMGO Marine Fuel Rerouting Spike*: +$0.220/gal (+5.5%)\n   - \u26a1 *Winter Grid Emergency & Backup Diesel Generator Demand Surge*: +$0.250/gal (+6.2%)\n\n6. **Public Web Dashboard, REST API & MCP Server (`docs/diesel.html`, `src/api_server.py`, `src/mcp_server.py`)**:\n   - Web application route `/diesel` (`docs/diesel.html`): Interactive ULSD charts, 5-day predictions, distillate crack spreads, and freight/weather indicators.\n   - REST API endpoints: `/api/v1/diesel/live`, `/api/v1/diesel/forecast`, `/api/v1/diesel/simulate`.\n   - MCP tools: `get_live_diesel_prices`, `get_diesel_forecast`, `simulate_diesel_market_shock`.\n\n#### \ud83c\udfd7\ufe0f Architecture & Data Flow\n\n```\n[ NYMEX HO=F ULSD Futures & Spot Data ] \u2500\u2500\u2510\n[ EIA Distillate Inventories & PADD Stocks ] \u251c\u2500\u25ba [ Distillate Feature Engineering ]\n[ Freight Activity & NOAA Weather (HDD) ] \u2500\u2500\u2518          \u2502\n                                                        \u25bc\n                                           [ ULSD Quantitative Estimator ]\n                                                        \u2502\n                                                        \u25bc\n                                           [ Regional Diesel Calibration ]\n                                           (Tulsa, Newark, Oakland)\n                                                        \u2502\n                                                        \u25bc\n                                           [ Diesel Shock Simulator ]\n                                                        \u2502\n                                      \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n                                      \u25bc                                   \u25bc\n                          [ Web Dashboard /diesel ]          [ REST API & MCP Server ]\n```\n\n#### \ud83d\udccb Implementation Tasks\n- [ ] Add `HO=F` futures and EIA distillate inventory ingestion to `src/data_ingestion.py`.\n- [ ] Implement Distillate Crack Spread & Freight/Weather feature transformers in `src/feature_engineering.py`.\n- [ ] Train quantitative ULSD Ridge and XGBoost forecasting models in `src/models.py`.\n- [ ] Develop Regional Diesel Metro Calibration Engine (`src/diesel_regional.py`).\n- [ ] Incorporate counterfactual diesel market shock scenarios into the simulation engine.\n- [ ] Extend MLOps prediction logging to track out-of-time ULSD forecasts in `src/prediction_logger.py`.\n- [ ] Expose REST API endpoints and MCP Server tools for diesel prices, forecasts, and shock simulations.\n- [ ] Build responsive Public Web Dashboard page for Diesel (`docs/diesel.html` & `/diesel`).\n- [ ] Write unit and integration tests for diesel feature engineering and regional calibration (`tests/test_diesel_regional.py`).\n"
+  },
+  {
+    "number": 40,
+    "title": "feat(security): Implement user authentication & access control for MCP Server & REST API Gateway",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.4",
+    "labels": [
+      "enhancement",
+      "api",
+      "security"
+    ],
+    "body": "### \ud83d\udd12 Feature Request: User Authentication & Access Control for MCP & REST API\n\n#### Overview\nImplement an access control mechanism to restrict the Midgley Model Context Protocol (MCP) Server and REST API Gateway to approved users only.\n\n#### Key Requirements\n1. **API Key & Bearer Token Authentication**:\n   - Validate incoming requests to /api/v1/* and /mcp/* endpoints against an authorized user/key registry.\n   - Support X-API-Key and Authorization: Bearer <token> headers.\n2. **MCP SSE Transport Security**:\n   - Secure the SSE connection (/mcp/sse) and POST message endpoint (/mcp/messages) with token verification.\n3. **Per-User Rate Limiting**:\n   - Enforce rate limits (e.g. 60 req/min) per user API key.\n4. **Key Management CLI Utility**:\n   - Simple admin script to generate, list, and revoke access keys for approved users.\n\n#### Note\nThis issue is tracked for future execution after initial production deployment."
+  },
+  {
+    "number": 37,
+    "title": "feat(embeds): Open Graph & Discord card embeds with auto-generated forecast preview images for regional pages",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "body": "## Overview & Feature Description\n\nWhen links to Midgley regional dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/oakland`, `/bayarea`, `/national`, or `/math`) are shared on **Discord**, **Twitter/X**, **Slack**, or **iMessage**, Discord currently renders either a plain link preview or an unformatted text snippet without rich visual elements.\n\nThis enhancement introduces automated **Open Graph (OG)** metadata injection and a dedicated **Social Preview Image Generator** (`src/social_embed_generator.py`). Every daily model run will automatically compile high-resolution dark-mode preview cards (`1200x630px`) containing the 5-day predicted gas price curve, base pump price, price target delta, rack margins, key regional infrastructure shocks, and model accuracy metrics.\n\n---\n\n## Targeted Embed Features & Social Metadata\n\n### 1. Open Graph & Discord HTML Metadata Injection (`src/dashboard_generator.py`)\nEach page under `docs/` (`docs/index.html`, `docs/national.html`, `docs/tulsa.html`, `docs/newark.html`, `docs/cincinnati.html`, `docs/oakland.html`, `docs/bayarea.html`, `docs/math.html`, and their subfolder route variants) will include complete `<head>` social metadata:\n\n- **Dynamic Title**: e.g., `Tulsa Metro Gas Price Forecast ($3.890 \u2192 $4.063 | +4.45%) - Midgley AI`\n- **Dynamic Description**: Summarizes current retail baseline, 5-day projected price target, top driving shock factor, and directional hit rate.\n- **Discord Theme Color**: Accent bar color (`#0ea5e9` sky blue / `#10b981` emerald green for price drops / `#ef4444` red for price surges).\n- **Open Graph Tags**: `og:site_name`, `og:type=\"website\"`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width=\"1200\"`, `og:image:height=\"630\"`, `og:image:type=\"image/png\"`.\n- **Twitter Card Tags**: `twitter:card=\"summary_large_image\"`, `twitter:title`, `twitter:description`, `twitter:image`.\n\n---\n\n## Technical Solution & Architecture Plan\n\n```\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502                   1. MASTER PIPELINE RUN (run_all.py)                    \u2502\n\u2502   Executes National & Regional Models (Tulsa, Newark, Cincinnati, Oakland)\u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                                     \u2502 Forecast Data & Price Vectors\n                                     \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502             2. SOCIAL EMBED IMAGE GENERATOR (`src/social_embed_generator.py`)\n\u2502 \u2022 Renders 1200x630 px Dark Mode Cards (Slate 950 #0f172a) via Matplotlib \u2502\n\u2502 \u2022 Plots 5-Day Predicted Sparkline vs Historical Actuals                  \u2502\n\u2502 \u2022 Displays Base Pump Price, Target Price, Delta %, & Rack Margin         \u2502\n\u2502 \u2022 Exports PNGs to `docs/assets/embeds/*.png`                            \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                                     \u2502 Generated PNG Artifacts\n                                     \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502             3. DASHBOARD GENERATOR (`src/dashboard_generator.py`)       \u2502\n\u2502 \u2022 Injects dynamic OG / Twitter / Discord meta tags into page <head>     \u2502\n\u2502 \u2022 Binds `og:image` to absolute GitHub Pages URL                        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                                     \u2502 HTML + Asset Pages\n                                     \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502              4. DISCORD / SOCIAL MEDIA EMBED RENDER                      \u2502\n\u2502 When link is pasted in Discord:                                           \u2502\n\u2502  - Displays Rich Slate Card with Theme Color                             \u2502\n\u2502  - Displays Large 1200x630 Forecast Chart Image                          \u2502\n\u2502  - Displays Live Price Target ($3.890 -> $4.063) & Directional Hit Rate   \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n### 2. Social Preview Image Generator (`src/social_embed_generator.py`)\nUsing `matplotlib` and custom styling matching Midgley's web palette:\n- **Canvas Dimensions**: `1200 x 630` pixels (standard 1.91:1 aspect ratio for Discord large embeds & Twitter summary cards).\n- **Background & Card Containers**: Dark Slate background (`#0f172a`) with rounded Slate 900 (`#1e293b`) card containers.\n- **Embedded Sparkline Chart**: Line plot illustrating 30-day historical actuals transitioning into the 5-day predicted price trajectory with confidence intervals / directional arrows.\n- **Metrics Callout Grid**:\n  - **Current Pump Price**: e.g., `$3.890/gal`\n  - **5-Day Projected Target**: e.g., `$4.063/gal` (`+$0.173` / `+4.45%`)\n  - **Directional Accuracy**: e.g., `58.15%`\n  - **Dynamic Rack Margin**: e.g., `$0.706/gal`\n  - **Top Driver Alert**: e.g., `\u26a1 West Tulsa HF Sinclair EF-3 Tornado Shock`\n\n### 3. File & Route Matrix (`docs/assets/embeds/`)\n\n| Locale / Route | Page URL | Generated Embed Image Path | Image Canonical URL |\n| :--- | :--- | :--- | :--- |\n| **National Wholesale** | `/national` | `docs/assets/embeds/national.png` | `https://koshiirra.github.io/midgley/assets/embeds/national.png` |\n| **Tulsa Metro** | `/tulsa` | `docs/assets/embeds/tulsa.png` | `https://koshiirra.github.io/midgley/assets/embeds/tulsa.png` |\n| **Newark DE Metro** | `/newark` | `docs/assets/embeds/newark.png` | `https://koshiirra.github.io/midgley/assets/embeds/newark.png` |\n| **Cincinnati Tri-State** | `/cincinnati` | `docs/assets/embeds/cincinnati.png` | `https://koshiirra.github.io/midgley/assets/embeds/cincinnati.png` |\n| **Oakland CA Metro** | `/oakland` | `docs/assets/embeds/oakland.png` | `https://koshiirra.github.io/midgley/assets/embeds/oakland.png` |\n| **SF Bay Area 9-County** | `/bayarea` | `docs/assets/embeds/bayarea.png` | `https://koshiirra.github.io/midgley/assets/embeds/bayarea.png` |\n| **Overview Landing** | `/` | `docs/assets/embeds/overview.png` | `https://koshiirra.github.io/midgley/assets/embeds/overview.png` |\n\n---\n\n## Tasks & Checklist\n\n- [ ] Create `src/social_embed_generator.py` using `matplotlib` to render dark-mode 1200x630 PNG preview images for all 6 model locales.\n- [ ] Add `generate_social_embed_images()` execution step to `run_all.py`.\n- [ ] Update `src/dashboard_generator.py` to inject dynamic `<meta property=\"og:*\">`, `<meta name=\"twitter:*\">`, and `<meta name=\"theme-color\">` tags into HTML `<head>` templates across all pages.\n- [ ] Add unit tests in `tests/test_social_embed_generator.py` asserting PNG creation, image dimensions (1200x630 px), and meta tag presence in generated HTML files.\n- [ ] Verify image rendering and metadata output locally and on GitHub Pages (`docs/`).\n"
+  },
+  {
+    "number": 35,
+    "title": "feat(dashboard): Detail unique regional drivers & physical infrastructure factors across all metro dashboard pages",
+    "status": "Ready",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.5",
+    "labels": [
+      "documentation",
+      "enhancement",
+      "dashboard"
+    ],
+    "body": "## Overview & Feature Description\n\nEnhance all localized regional public web dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/oakland`, and `/bayarea`) to display dedicated visual cards detailing their unique regional econometric drivers, refining logistics, tax structures, delivery hub dynamics, and localized physical risk factors.\n\n---\n\n## Targeted Regional Pages & Local Driver Requirements\n\n### 1. Tulsa Metro Retail (`/tulsa` & `docs/tulsa.html`)\n- **Cushing WTI Hub Logistics**: Physical crude delivery hub interconnections and storage capacity utilization.\n- **West Tulsa HF Sinclair Refinery**: Local refining dynamics (125,000 bpd capacity), EF-3 tornado risk alerts, and PADD 2 Group 3 spot rack margins.\n\n### 2. Newark Delaware Metro Retail (`/newark` & `docs/newark.html`)\n- **PBF Delaware City Refinery**: PADD 1B Central Atlantic refining dynamics (180,000 bpd capacity).\n- **Delaware Bay Lightering**: Big Stone Anchorage deepwater tanker lightering advisories.\n- **C&D Canal Detour Events**: 300 nm marine barge detour around Delmarva Peninsula (+$0.097/gal rack margin expansion).\n\n### 3. Cincinnati OH / NKY Tri-State (`/cincinnati` & `docs/cincinnati.html`)\n- **Dual-State Tax Differential**: Persistent cross-river retail price gap between Ohio state motor fuel tax ($0.385/gal) and Kentucky state motor fuel tax ($0.260/gal).\n- **Ohio & Mississippi River Logistics**: Marathon Catlettsburg KY refinery dynamics (291,000 bpd capacity) and Lower Mississippi River low-water barge bottleneck restrictions (Cairo, IL confluence & Memphis draft limits).\n\n### 4. Oakland CA Metro Retail (`/oakland` & `docs/oakland.html`)\n- **CARB Regulatory Breakdown**: Explicit statutory breakdown card for California's $0.953/gal state tax/fee burden ($0.634 state excise, ~$0.250 Cap-and-Trade, ~$0.185 LCFS overhead, ~$0.150 local sales/UST fees).\n- **Chevron Richmond Crack Spread**: PADD 5 refining crack spread (`oakland_retail - brent / 42`).\n- **Physical Hazard Suite**: Dedicated risk cards for USGS Hayward fault quakes ($M \\ge 6.0$), CAL FIRE & PG&E Public Safety Power Shutoff (PSPS) wildfire blackouts, and NOAA PTWC Pacific tsunami alerts.\n\n### 5. SF Bay Area 9-County Region (`/bayarea` & `docs/bayarea.html`)\n- **9-County Price Matrix**: Detailed price card comparing San Francisco ($5.120), San Jose / Silicon Valley ($4.980), Oakland ($4.950), and North Bay / Solano ($4.850).\n- **PADD 5 Refining Island**: West Coast isolation (zero interstate product pipelines crossing Sierra Nevada) and Carquinez Strait crude tanker berth logistics.\n\n---\n\n## Implementation Tasks\n\n- [ ] Create standardized modular CSS layout component for `Unique Regional Drivers & Infrastructure Matrix` card.\n- [ ] Inject locale-specific data feeds and dynamic indicator badges into `src/dashboard_generator.py`.\n- [ ] Verify responsive layout across mobile, tablet, and desktop viewports on GitHub Pages (`docs/`).\n- [ ] Add unit tests in `tests/test_dashboard_generator.py` asserting presence of unique regional factor cards across all regional HTML pages.\n"
+  },
+  {
+    "number": 34,
+    "title": "feat(oakland): Add Oakland, CA Metro Area (PADD 5 West Coast) Regional Forecasting & CARB Regulatory Display",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "Regular Model v1.6 \"Ipatieff\"",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "dashboard"
+    ],
+    "body": "## Feature Request: Oakland, CA Metro Area Expansion (PADD 5 West Coast) & CARB Regulatory Cost Display\n\n### Summary\nExpand Midgley's regional forecasting capabilities by adding **Oakland, CA & the San Francisco Bay Area (PADD 5 West Coast)** as a dedicated regional model and public dashboard locale. With a baseline pump price anchor of **~$4.950/gal** (compared to $3.890 in Tulsa, $3.350 in Newark, and $3.450 in Cincinnati), Oakland represents the highest-cost, most highly-regulated regional market in the nation, providing a stark baseline comparison (\"scare factor\") for users across all other metropolitan areas.\n\n### Regional Infrastructure, PADD 5 Isolation & Regulatory Cost Drivers\n1. **Unprecedented Tax & Environmental Regulatory Burden**:\n   - **California Excise Tax**: 63.4\u00a2/gal (adjusted July 1, 2026).\n   - **Cap-and-Trade (Cap-and-Invest) Program**: ~25.0\u00a2/gal carbon allowance cost.\n   - **Low Carbon Fuel Standard (LCFS)**: ~18.5\u00a2/gal compliance credit deficit cost.\n   - **State/Local Sales Taxes & Underground Storage Tank Fee**: ~15.0\u00a2/gal.\n   - **Federal Excise Tax**: 18.4\u00a2/gal.\n   - **Total Regulatory & Tax Burden**: **~95.3\u00a2/gal** embedded into every gallon at Oakland pumps (vs $0.190 in OK or $0.385 in OH).\n2. **PADD 5 \"Refining Island\" Geographic Isolation**:\n   - Zero interstate refined product pipelines cross the Rocky Mountains or Sierra Nevada into California.\n   - San Francisco Bay Area refined product deficits cannot be backfilled from Gulf Coast (PADD 3) or Midwest (PADD 2) pipeline infrastructure; shortfalls must be imported via ocean oil tankers from Asia/Middle East (3+ week transit) or Alaska North Slope (ANS) crude maritime routes.\n3. **SF Bay Area Refining Hub & Local Infrastructure**:\n   - **Chevron Richmond Refinery** (Contra Costa County, 245,000 bpd capacity): Directly adjacent to Oakland; primary regional producer of CARB Reformulated Gasoline (CaRFG).\n   - **PBF Energy Martinez Refinery** (156,000 bpd capacity) & **Valero Benicia Refinery** (145,000 bpd capacity).\n   - **Marathon Martinez Facility**: Converted to renewable diesel, contracting total regional crude refining capacity.\n4. **Distribution Logistics**:\n   - **Kinder Morgan SFPP (Santa Fe Pacific Pipeline) System**: Originates at Richmond/Concord terminals, distributing fuel across Northern California and Nevada (Reno/Sparks).\n5. **CARB Reformulated Gasoline (CaRFG) Transition**:\n   - Seasonal transition to CaRFG summer blend (effective April 1) adds +15\u00a2\u201325\u00a2/gal refining premium and surges volatility during spring refinery maintenance turnarounds.\n6. **Localized Weather & Infrastructure Shocks**:\n   - Atmospheric river winter storms & refinery grid disruptions (PG&E PSPS power outages).\n   - NOAA Alerts for Alameda County (CAZ508) and Contra Costa County (CAZ511).\n\n### Implementation Plan\n- [ ] `src/oakland_regional.py`: Oakland market data ingestion ($4.950/gal anchor), Richmond refinery crack spread calculation, CARB regulatory cost layer, SF Bay regional events, and NOAA CAZ508 weather dataset.\n- [ ] `oakland_main.py`: Standalone 6-step regional forecasting pipeline with Oakland shock scenario simulations (Chevron Richmond flaring outage, CaRFG summer blend switch, atmospheric river grid failure).\n- [ ] `build_oakland_notebook.py` & `notebooks/oakland_gas_price_llm_forecasting.ipynb`: Programmatic notebook generator and interactive Jupyter notebook.\n- [ ] `src/prediction_logger.py`: Add `Oakland_CA` out-of-time forecast tracking & backfill support.\n- [ ] `src/dashboard_generator.py`: Generate `docs/oakland.html` and `docs/oakland/index.html` with CARB Regulatory Breakdown card, update navbar dropdown & multi-locale overview cards on `docs/index.html`.\n- [ ] `run_all.py`: Update master orchestrator to execute Oakland model.\n- [ ] `tests/test_oakland_regional.py`: Comprehensive test suite for Oakland module and execution pipeline.\n- [ ] Documentation updates (`README.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/API.md`, `docs/math.html`).\n"
+  },
+  {
+    "number": 22,
+    "title": "feat(lubelogger): LubeLogger integration for predictive vehicle tank refill & fuel cost optimization",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "body": "### Feature Proposal: LubeLogger Integration for Predictive Tank Refill & Fuel Cost Optimization\n\n#### \ud83d\udee2\ufe0f Overview\nIntegrate `midgley` with **[LubeLogger](https://github.com/hargata/lubelog)** (the self-hosted vehicle management platform) to predict precisely **when and how much** gas a user should put in their vehicle to minimize total fuel expenditure.\n\n#### \ud83d\udca1 Problem & Value Proposition\nStandard fuel tracking tools only look backwards (recording historical fill-up costs and MPG). Meanwhile, gas price forecasts only look forward at market prices. \n\nBy combining **LubeLogger's vehicle telemetry** (tank capacity, current estimated fuel level, average MPG, and daily driving rate) with **`midgley`'s 5-day regional price forecasts**, the system can answer the ultimate driver question: \n> *\"Given my current tank level and daily commute, should I fill up today, wait a few days for a price dip, or put in a temporary splash of gas to bridge until prices drop?\"*\n\n#### \ud83d\udee0\ufe0f Key Integration Capabilities\n\n1. **LubeLogger API Sync (`src/lubelogger_client.py`)**:\n   - Connects to LubeLogger's REST API (`/api/vehicle/fuellogs`, `/api/vehicle`) to pull vehicle specs, last odometer reading, fuel log history, average consumption (MPG or L/100km), and tank capacity.\n   - Estimates current tank fuel level (%) and remaining range based on days/miles elapsed since last logged fill-up.\n\n2. **Cost-Optimal Tank Refill Algorithm (`src/refill_optimizer.py`)**:\n   - Evaluates vehicle range decay against `midgley`'s 5-day regional metro price trajectory ($/gal).\n   - Generates actionable refill strategies:\n     - \ud83d\ude80 **Early Fill Recommendation**: Tank is at ~45%, but local gas prices are forecasted to jump +$0.15/gal in 48 hours (e.g., weekend gap or supply shock). \u2794 *Recommendation: Fill up full tank today before price hike.*\n     - \u23f3 **Deferred Fill Recommendation**: Tank is low (~20%), but prices are projected to drop -$0.20/gal over the next 4 days. \u2794 *Recommendation: Put \\$10 (2-3 gal) in today to bridge commute, then full fill-up on Tuesday at lowest projected price.*\n     - \ud83d\udfe2 **Standard Fill Window**: Prices stable; fill up as normal when tank reaches reserve threshold.\n\n3. **Notification & Automation Triggers**:\n   - Webhook & Push Notifications (Telegram, Apprise, Home Assistant, or Email) when an optimal fill-up window opens.\n   - Optional LubeLogger dashboard widget / sidecar service integration.\n\n#### \ud83c\udfd7\ufe0f Architecture & Data Flow\n\n```\n[ LubeLogger REST API ] \n  (Fuel Logs, Odometer, Tank Capacity, MPG)\n          \u2502\n          \u25bc\n[ midgley Refill Optimizer ] \u25c4\u2500\u2500\u2500\u2500\u2500 [ midgley 5-Day Metro Forecast Engine ]\n          \u2502\n          \u25bc\n[ Predictive Refill Action & Cost Optimization Alert ]\n  \u2022 Recommended Fill Date & Target Price\n  \u2022 Projected $ Savings vs Immediate Full Fill\n```\n\n#### \ud83d\udccb Tasks to Complete\n- [ ] Implement LubeLogger API client wrapper (`src/lubelogger_client.py`).\n- [ ] Develop vehicle consumption & range decay estimator (`src/vehicle_telemetry.py`).\n- [ ] Build cost-optimal refill strategy calculator (`src/refill_optimizer.py`).\n- [ ] Add CLI command and configuration section in `config.yaml` / `.env` for LubeLogger API keys and vehicle IDs.\n- [ ] Create Home Assistant & webhook notification integration for LubeLogger refill alerts.\n"
+  },
+  {
+    "number": 21,
+    "title": "feat(android-auto): Android Auto in-dash gas price & 5-day forecast fuel assistant app",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "body": "### Feature Proposal: Android Auto & Automotive In-Dash Fuel Price Assistant (`midgley-auto`)\n\n#### \ud83d\ude97 Overview\nDevelop an **Android Auto** (and Android Automotive OS) application utilizing the `androidx.car.app` Car App API to bring real-time regional unleaded gas prices and 5-day ML trend forecasts directly to the vehicle dashboard display.\n\n#### \ud83d\udca1 Key Concept & Driver Use Cases\nWhen drivers are on the road, deciding whether to fill up today or wait a few days can lead to tangible savings\u2014especially during multi-day road trips or weekly commutes across different metropolitan refining hubs. \n\n`midgley-auto` acts as an intelligent **in-car fuel advisor**, giving drivers instant, distraction-free actionable guidance right on their car's head unit.\n\n#### \ud83d\udee0\ufe0f Key Capabilities & Car UI Design\n\n1. **Geo-Aware Metro Forecast Auto-Switching**:\n   - Uses device vehicle GPS to dynamically detect current Metropolitan Statistical Areas (MSAs).\n   - Seamlessly transitions forecasts as the driver moves between refining hubs (e.g., Tulsa Metro \u2794 Oklahoma City \u2794 Dallas-Fort Worth).\n\n2. **In-Dash Smart Fill Recommendation (`PlaceListMapTemplate` / `PaneTemplate`)**:\n   - **Driver Action Signal**: Clean, prominent color-coded recommendation on the car display:\n     - \ud83d\udfe2 **FILL UP NOW**: Price surge (+3% to +5%) projected within 24\u201348 hours (e.g., weekend gap or refinery shock).\n     - \ud83d\udfe1 **NEUTRAL / STABLE**: Prices steady (\u00b10.5%).\n     - \ud83d\udd35 **WAIT TO FILL**: Price drop (-2% to -5%) projected over the next 3\u20135 days.\n   - **5-Day Trend Summary**: Visual indicator showing current vs projected price ($/gal).\n\n3. **Android Auto Voice & Google Assistant Actions**:\n   - Driver hands-free voice query: *\"What's the gas price forecast in Tulsa?\"* or *\"Should I get gas today?\"*.\n   - Instant audio summary powered by `midgley`'s regional inference engine.\n\n4. **Refining & Weather Distruption Car Notifications**:\n   - Driver heads-up alerts on vehicle screen when entering a region affected by active NOAA severe weather events or pipeline/refinery supply disruptions (e.g., EF-3 Tornado near West Tulsa HF Sinclair refinery).\n\n#### \ud83c\udfd7\ufe0f Proposed Architecture & Tech Stack\n\n```\n[ Android Auto Head Unit (AndroidX Car App Library) ]\n                         \u2502\n                         \u25bc Vehicle GPS & Voice Commands\n[ midgley Android App / Background Service ]\n                         \u2502\n                         \u25bc Mobile REST Client\n[ midgley Metro Forecast API (`docs/API.md`) ]\n```\n\n#### \ud83d\udccb Tasks to Complete\n- [ ] Spec out Android Automotive & Android Auto manifest requirements (`androidx.car.app`).\n- [ ] Create `CarScreen` and `PaneTemplate` UI mockups compliant with Google Android Auto Driver Distraction Guidelines.\n- [ ] Implement mobile Android location listener with Metro Resolver (`MetroLocationService`).\n- [ ] Integrate App Actions & Google Assistant voice shortcut triggers.\n- [ ] Build companion Android phone app settings screen for custom price alert thresholds.\n"
+  },
+  {
+    "number": 20,
+    "title": "feat(home-assistant): Add Home Assistant dashboard module & metro area gas price forecast integration",
+    "status": "Inbox",
+    "projects": [
+      "Project Midgley - Master Roadmap"
+    ],
+    "milestone": "v0.6",
+    "labels": [
+      "enhancement",
+      "integration"
+    ],
+    "body": "### Feature Proposal: Home Assistant Dashboard Module & Sensor Integration for Metro Area Gas Price Forecasting\n\n#### \ud83d\ude80 Overview\nDevelop a Home Assistant integration and Lovelace dashboard custom card (`midgley-gas-card`) that displays real-time and 5-day forecasted retail unleaded gasoline prices tailored to the user's metropolitan area.\n\n#### \ud83d\udccd Location & Metro Resolution\nInstead of treating gas price dynamics as isolated static point-estimates per ZIP code, the module maps the user's Home Assistant location (ZIP code or GPS coordinates) to its associated **Metropolitan Statistical Area / Regional Refining Hub** (e.g., mapping ZIP `74103` -> Tulsa Metro, OK). This enables the module to utilize `midgley`'s regional refining crack spread models and Cushing/Tulsa calibration dynamics.\n\n#### \ud83d\udca1 Key Features & Capabilities\n\n1. **Lovelace Custom Card (`midgley-gas-card`)**:\n   - **Current Retail Pump Price**: Live display of regional pump price ($/gal).\n   - **5-Day Forecast & Trend Direction**: Projected 5-day price target with visual direction indicators (\ud83d\udcc8 UP, \ud83d\udcc9 DOWN, \u27a1\ufe0f STABLE).\n   - **Regional Disruption & Shock Alerts**: Highlighting NOAA severe weather alerts, refinery outages, or geopolitical supply shocks impacting the local metro market.\n   - **Historical Trend Sparkline**: Mini chart showing recent 7-day actuals vs. model forecasts.\n\n2. **Home Assistant Native Sensors (`sensor.midgley_*`)**:\n   - `sensor.midgley_gas_price_current`: Current regional retail price.\n   - `sensor.midgley_gas_price_forecast_5d`: Projected price in 5 days.\n   - `sensor.midgley_gas_price_trend`: Directional signal (`upward`, `downward`, `neutral`).\n   - `binary_sensor.midgley_fill_recommendation`: Trigger `on` when prices are forecasted to jump by >3% over the next 48 hours (enabling automation rules like *\"Notify phones to fill tank before weekend price surge\"*).\n\n3. **Backend API Endpoint & HACS Distribution**:\n   - Expose lightweight REST / JSON endpoint from `midgley` (or static GitHub Pages artifact `api/v1/metro/{metro_id}.json`).\n   - Package Home Assistant integration for easy installation via HACS (Home Assistant Community Store).\n\n#### \ud83d\udee0\ufe0f Architecture & Data Flow\n```\n[ Home Assistant (User ZIP / GPS) ] \n               \u2502\n               \u25bc Maps ZIP to Metro Region\n[ midgley Metro Resolver API / JSON ] \n               \u2502\n               \u25bc Queries 5-Day ML Regional Model\n[ Lovelace UI Card & HA Automation Sensors ]\n```\n\n#### \ud83d\udccb Tasks to Complete\n- [ ] Design JSON API specification for regional forecast outputs (`docs/API.md`).\n- [ ] Implement ZIP-to-Metro mapping lookup table / resolver module (`src/metro_resolver.py`).\n- [ ] Create HACS-compatible Home Assistant custom component (`custom_components/midgley_gas`).\n- [ ] Develop Lovelace custom card UI component (`midgley-gas-card.js`).\n- [ ] Add example HA automations and documentation.\n"
+  }
+]
