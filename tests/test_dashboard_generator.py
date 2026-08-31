@@ -419,6 +419,63 @@ def test_all_regional_dashboard_pages_have_dedicated_driver_cards():
         )
 
 
+def test_issue_154_dom_xss_sanitization(tmp_path):
+    """Verify Issue #154: Ensure that generated technical breakdown reports sanitize DOM inputs,
+    avoid unsafe .innerHTML assignments, use encodeURIComponent in switchRun(), and HTML-escape
+    headline triggers and bulletins.
+    """
+    from src.dashboard_generator import generate_technical_breakdown_file
+
+    audit_data = {
+        "run_type": "INTRADAY_REVISION",
+        "headline_trigger": "<script>alert('xss_trigger')</script>",
+        "log_timestamp": "2026-08-30 20:00:00",
+        "scores": {
+            "supply_disruption": 0.50,
+            "overall_price_pressure": 0.20,
+            "geopolitical_risk": 0.10,
+            "demand_sentiment": 0.00,
+            "opec_action": 0.00
+        },
+        "decay_half_life": 5.0,
+        "headline_items": [
+            {
+                "headline": "<b>Refinery Outage</b> <img src=x onerror=alert(1)>",
+                "url": "https://example.com/test?q=<script>",
+                "source": "<b>Test_Source</b>"
+            }
+        ],
+        "region_deltas": [
+            {"key": "Tulsa_OK", "name": "Tulsa & Metro <OK>", "base_price": 3.89, "predicted_price": 3.75, "delta": -0.14, "pct_change": -3.6}
+        ]
+    }
+
+    docs_dir = str(tmp_path / "docs")
+    generate_technical_breakdown_file(audit_data, docs_dir=docs_dir)
+
+    html_file = tmp_path / "docs" / "technical_breakdown.html"
+    assert html_file.exists()
+
+    content = html_file.read_text(encoding="utf-8")
+
+    # 1. Verify no unsafe innerHTML = '' DOM sink exists
+    assert "sel.innerHTML = '';" not in content
+    assert "sel.replaceChildren()" in content
+
+    # 2. Verify encodeURIComponent is used in switchRun
+    assert "encodeURIComponent(runId)" in content
+
+    # 3. Verify HTML-escaping of un-sanitized triggers and news bulletins
+    assert "<script>alert('xss_trigger')</script>" not in content
+    assert "&lt;script&gt;alert(&#x27;xss_trigger&#x27;)&lt;/script&gt;" in content
+
+    assert "<b>Refinery Outage</b>" not in content
+    assert "&lt;b&gt;Refinery Outage&lt;/b&gt;" in content
+
+    assert "&lt;b&gt;Test_Source&lt;/b&gt;" in content
+
+
+
 
 
 

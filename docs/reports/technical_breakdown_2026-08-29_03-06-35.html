@@ -343,7 +343,8 @@ Evaluated tail-risk catalysts specific to execution [2026-08-29 03:06:35]:
                 if (!res.ok) return;
                 const index = await res.json();
                 const sel = document.getElementById('runSelect');
-                sel.innerHTML = '';
+                if (!sel) return;
+                sel.replaceChildren();
                 index.forEach((r) => {
                     const opt = document.createElement('option');
                     opt.value = r.run_id;
@@ -352,16 +353,23 @@ Evaluated tail-risk catalysts specific to execution [2026-08-29 03:06:35]:
                 });
                 const params = new URLSearchParams(window.location.search);
                 const activeRun = params.get('run_id');
-                if (activeRun) sel.value = activeRun;
+                if (activeRun) {
+                    sel.value = activeRun;
+                    switchRun(activeRun);
+                }
             } catch (e) { console.log('Run index load error:', e); }
         }
 
         function switchRun(runId) {
             if (!runId) return;
+            const cleanRunId = encodeURIComponent(runId);
             const url = new URL(window.location);
-            url.searchParams.set('run_id', runId);
+            url.searchParams.set('run_id', cleanRunId);
             window.history.pushState({}, '', url);
-            document.getElementById('jsonLink').href = `runs/${runId}.json`;
+            const jsonLink = document.getElementById('jsonLink');
+            if (jsonLink) {
+                jsonLink.href = `runs/${cleanRunId}.json`;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {

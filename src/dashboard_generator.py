@@ -11,6 +11,7 @@ for public deployment to GitHub Pages.
 import os
 import subprocess
 import json
+import html
 import pandas as pd
 import numpy as np
 from datetime import datetime, timezone
@@ -589,12 +590,16 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
         if not h_url or is_dummy_url:
             h_url = f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
 
+        h_text_esc = html.escape(h_text)
+        h_url_esc = html.escape(h_url)
+        h_src_esc = html.escape(h_src)
+
         headline_links_html += f"""
-                        <a href="{h_url}" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 hover:border-blue-500/40 transition">
+                        <a href="{h_url_esc}" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 hover:border-blue-500/40 transition">
                             <i class="fa-solid fa-arrow-up-right-from-square text-xs text-blue-400 mt-0.5 group-hover:text-blue-300 shrink-0"></i>
                             <div class="flex-1 min-w-0">
-                                <p class="text-xs text-slate-200 group-hover:text-white font-medium line-clamp-2">{h_text}</p>
-                                <span class="text-[10px] text-slate-500 font-mono mt-0.5 block">{h_src}</span>
+                                <p class="text-xs text-slate-200 group-hover:text-white font-medium line-clamp-2">{h_text_esc}</p>
+                                <span class="text-[10px] text-slate-500 font-mono mt-0.5 block">{h_src_esc}</span>
                             </div>
                         </a>"""
 
@@ -618,9 +623,11 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
             color_cls = "text-slate-400"
             arrow = '<i class="fa-solid fa-arrow-right text-slate-400 ml-1 font-bold"></i>'
 
+        name_esc = html.escape(name)
+
         region_rows_html += f"""
                         <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
-                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">{name}</span>
+                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">{name_esc}</span>
                             <div class="text-right font-mono text-xs font-semibold {color_cls} flex items-center justify-end gap-0.5">
                                 <span>{delta_str} ({pct_str})</span>
                                 {arrow}
@@ -978,10 +985,18 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     with open(index_json_path, "w", encoding="utf-8") as f:
         json.dump(run_index, f, indent=2)
 
+    trigger_text_esc = html.escape(trigger_text)
+    log_ts_esc = html.escape(log_ts)
+    run_type_esc = html.escape(run_type)
+    syn_summary_esc = html.escape(synopsis.get('summary', ''))
+    syn_tech_esc = html.escape(synopsis.get('technical_discussion', ''))
+    syn_risks_esc = html.escape(synopsis.get('risks_scenarios', ''))
+
     regional_calc_html = ""
     regional_calc_md = ""
     for r in region_deltas:
         name = r.get("name", "")
+        name_esc = html.escape(name)
         clean_name = name.replace("&", "\\&").replace("#", "\\#")
         b_price = r.get("base_price", 0.0)
         p_price = r.get("predicted_price", 0.0)
@@ -1006,7 +1021,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
         regional_calc_html += f"""
         <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 font-mono text-xs">
             <div class="flex justify-between items-center text-slate-200 font-bold border-b border-slate-800 pb-1.5">
-                <span>{name}</span>
+                <span>{name_esc}</span>
                 <span class="text-blue-400">${p_price:.3f}/gal ({delta_badge}, {pct_sign}{pct_val:.2f}%)</span>
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
@@ -1023,7 +1038,10 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
         h_text = h.get("headline", "")
         h_url = h.get("url", "")
         h_src = h.get("source", "Energy_News")
-        news_html += f'<li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="{h_url}" target="_blank" class="hover:underline text-blue-300">{h_text}</a> <span class="text-slate-500">({h_src})</span></li>'
+        h_text_esc = html.escape(h_text)
+        h_url_esc = html.escape(h_url)
+        h_src_esc = html.escape(h_src)
+        news_html += f'<li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="{h_url_esc}" target="_blank" class="hover:underline text-blue-300">{h_text_esc}</a> <span class="text-slate-500">({h_src_esc})</span></li>'
         news_md += f"- [{h_text}]({h_url}) ({h_src})\n"
 
     head_meta_tech = get_head_meta_tags(
@@ -1100,7 +1118,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 </div>
             </div>
             <p class="text-xs text-slate-400 leading-relaxed font-sans">
-                This report documents the exact step-by-step mathematical calculations and feature vector scores executed during run <code class="text-blue-300">{log_ts}</code>. All values below represent actual substituted numerical parameters generated for this specific forecast execution.
+                This report documents the exact step-by-step mathematical calculations and feature vector scores executed during run <code class="text-blue-300">{log_ts_esc}</code>. All values below represent actual substituted numerical parameters generated for this specific forecast execution.
             </p>
         </div>
 
@@ -1112,7 +1130,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
             <div class="space-y-3 font-mono text-xs">
                 <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
                     <span class="text-slate-500 uppercase text-[10px] block">Primary Event Trigger</span>
-                    <p class="text-amber-300 font-bold text-sm">{trigger_text}</p>
+                    <p class="text-amber-300 font-bold text-sm">{trigger_text_esc}</p>
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
                     <span class="text-slate-500 uppercase text-[10px] block">Active Ingested News Bulletins ({len(headline_items)})</span>
@@ -1202,21 +1220,21 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 <h2 class="text-sm font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
                     <i class="fa-solid fa-file-contract text-amber-400"></i> Section 5: NOAA SPC-Style Quantitative & Narrative Synopsis
                 </h2>
-                <span class="text-xs text-slate-500 font-mono">Issued: {log_ts}</span>
+                <span class="text-xs text-slate-500 font-mono">Issued: {log_ts_esc}</span>
             </div>
             
             <div class="space-y-6 font-mono text-xs leading-relaxed">
                 <div class="p-4 rounded-xl bg-slate-950/90 border-l-4 border-amber-400 space-y-2">
                     <p class="text-amber-300 font-bold uppercase tracking-wide">Executive Forecast Summary</p>
-                    <p class="text-slate-300 leading-relaxed font-sans text-xs">{synopsis['summary']}</p>
+                    <p class="text-slate-300 leading-relaxed font-sans text-xs">{syn_summary_esc}</p>
                 </div>
                 <div class="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
                     <p class="text-blue-400 font-bold uppercase tracking-wide border-b border-slate-800 pb-2">Technical Discussion & Market Dynamics</p>
-                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">{synopsis['technical_discussion']}</div>
+                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">{syn_tech_esc}</div>
                 </div>
                 <div class="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
                     <p class="text-rose-400 font-bold uppercase tracking-wide border-b border-slate-800 pb-2">Forecast Uncertainty & Counterfactual Catalysts</p>
-                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">{synopsis['risks_scenarios']}</div>
+                    <div class="text-slate-300 whitespace-pre-wrap font-sans text-xs leading-relaxed">{syn_risks_esc}</div>
                 </div>
             </div>
         </section>
@@ -1224,7 +1242,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500 font-mono">
-        <p>Midgley Project &bull; Technical Breakdown & Math Audit Ledger &bull; Log Timestamp: {log_ts}</p>
+        <p>Midgley Project &bull; Technical Breakdown & Math Audit Ledger &bull; Log Timestamp: {log_ts_esc}</p>
     </footer>
 
     <!-- Client-Side Dynamic Run Payload Switcher & KaTeX Auto-Renderer -->
@@ -1247,7 +1265,8 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 if (!res.ok) return;
                 const index = await res.json();
                 const sel = document.getElementById('runSelect');
-                sel.innerHTML = '';
+                if (!sel) return;
+                sel.replaceChildren();
                 index.forEach((r) => {{
                     const opt = document.createElement('option');
                     opt.value = r.run_id;
@@ -1256,16 +1275,23 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 }});
                 const params = new URLSearchParams(window.location.search);
                 const activeRun = params.get('run_id');
-                if (activeRun) sel.value = activeRun;
+                if (activeRun) {{
+                    sel.value = activeRun;
+                    switchRun(activeRun);
+                }}
             }} catch (e) {{ console.log('Run index load error:', e); }}
         }}
 
         function switchRun(runId) {{
             if (!runId) return;
+            const cleanRunId = encodeURIComponent(runId);
             const url = new URL(window.location);
-            url.searchParams.set('run_id', runId);
+            url.searchParams.set('run_id', cleanRunId);
             window.history.pushState({{}}, '', url);
-            document.getElementById('jsonLink').href = `runs/${{runId}}.json`;
+            const jsonLink = document.getElementById('jsonLink');
+            if (jsonLink) {{
+                jsonLink.href = `runs/${{cleanRunId}}.json`;
+            }}
         }}
 
         document.addEventListener('DOMContentLoaded', () => {{
