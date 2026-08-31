@@ -517,4 +517,4 @@ systemctl --user list-timers --all
 
 ---
 
-*Midgley Version: `v0.3.2` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.3.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
