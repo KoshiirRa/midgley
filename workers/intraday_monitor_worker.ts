@@ -3,13 +3,16 @@
  * (workers/intraday_monitor_worker.ts)
  *
  * Polls energy RSS feeds every 15 minutes, evaluates fast-path trigger keywords,
- * and sends GitHub Repository Dispatch events to main repository workflow.
+ * sends GitHub Repository Dispatch events, and exports trace/log telemetry to Axiom & Sentry.
  */
 
 export interface Env {
   GH_PAT?: string;
   REPO_OWNER?: string;
   REPO_NAME?: string;
+  SENTRY_DSN?: string;
+  AXIOM_TOKEN?: string;
+  AXIOM_DATASET?: string;
 }
 
 export interface RSSItem {
@@ -58,6 +61,84 @@ const TRIGGER_REGEX = new RegExp(
   "i"
 );
 
+/**
+ * Axiom Event Ingest Helper (Option A2)
+ */
+export async function logToAxiom(env: Env, ctx: any, eventData: Record<string, any>): Promise<void> {
+  const token = env.AXIOM_TOKEN;
+  const dataset = env.AXIOM_DATASET || "midgley-workers";
+  if (!token) return;
+
+  const url = `https://api.axiom.co/v1/datasets/${dataset}/ingest`;
+  const payload = JSON.stringify([{
+    ...eventData,
+    _time: new Date().toISOString(),
+    service: "midgley-intraday-monitor"
+  }]);
+
+  const p = fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: payload
+  }).catch(e => console.warn(`[Axiom Ingest Error] ${e.message || String(e)}`));
+
+  if (ctx && typeof ctx.waitUntil === "function") {
+    ctx.waitUntil(p);
+  } else {
+    await p;
+  }
+}
+
+/**
+ * Sentry Exception Capture Helper (Option A2)
+ */
+export async function captureSentryException(env: Env, ctx: any, error: any, extraInfo?: Record<string, any>): Promise<void> {
+  const dsn = env.SENTRY_DSN;
+  if (!dsn) return;
+
+  try {
+    const match = dsn.match(/^https:\/\/([^@]+)@([^/]+)\/(\d+)$/);
+    if (!match) return;
+
+    const [, key, host, projectId] = match;
+    const storeUrl = `https://${host}/api/${projectId}/store/`;
+    const payload = JSON.stringify({
+      event_id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now()),
+      timestamp: new Date().toISOString(),
+      platform: "javascript",
+      exception: {
+        values: [
+          {
+            type: error?.name || "Error",
+            value: error?.message || String(error)
+          }
+        ]
+      },
+      extra: extraInfo || {}
+    });
+
+    const p = fetch(storeUrl, {
+      method: "POST",
+      headers: {
+        "X-Sentry-Auth": `Sentry sentry_version=7, sentry_key=${key}, sentry_client=midgley-worker/1.0`,
+        "Content-Type": "application/json"
+      },
+      body: payload
+    }).catch(e => console.warn(`[Sentry Ingest Error] ${e.message || String(e)}`));
+
+    if (ctx && typeof ctx.waitUntil === "function") {
+      ctx.waitUntil(p);
+    } else {
+      await p;
+    }
+  } catch {
+    // Ignore error
+  }
+}
+
 function parseRSSItems(xmlText: string): RSSItem[] {
   const items: RSSItem[] = [];
   const itemRegex = /<(?:item|entry)[\s\S]*?<\/(?:item|entry)>/gi;
@@ -104,8 +185,15 @@ export async function isHeadlineDispatchedInCache(headline: string): Promise<boo
     const dummyUrl = `https://midgley-cache.internal/dispatched/${cleanKey}`;
     const req = new Request(dummyUrl);
     const cachedResp = await caches.default.match(req);
-    return !!cachedResp;
-  } catch {
+    const isHit = !!cachedResp;
+    if (isHit) {
+      console.log(`[Cache HIT] Headline already dispatched: "${cleanKey}"`);
+    } else {
+      console.log(`[Cache MISS] Headline not yet dispatched: "${cleanKey}"`);
+    }
+    return isHit;
+  } catch (err: any) {
+    console.warn(`[Cache ERROR] Failed checking edge cache for "${headline}": ${err.message || String(err)}`);
     return false;
   }
 }
@@ -122,8 +210,9 @@ export async function markHeadlineDispatchedInCache(headline: string): Promise<v
       }
     });
     await caches.default.put(req, resp);
-  } catch {
-    // Ignore cache write errors in non-worker environments
+    console.log(`[Cache STORE] Marked headline dispatched in edge cache: "${cleanKey}"`);
+  } catch (err: any) {
+    console.warn(`[Cache ERROR] Failed writing to edge cache for "${headline}": ${err.message || String(err)}`);
   }
 }
 
@@ -178,7 +267,7 @@ async function dispatchGitHubEvent(env: Env, headline: string, url: string): Pro
   }
 }
 
-export async function runMonitoringCycle(env: Env): Promise<CycleSummary> {
+export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSummary> {
   let totalHeadlines = 0;
   const anomalies: RSSItem[] = [];
   const seenHeadlines = new Set<string>();
@@ -188,7 +277,10 @@ export async function runMonitoringCycle(env: Env): Promise<CycleSummary> {
       const resp = await fetch(feedUrl, {
         headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Midgley-Worker/1.0" }
       });
-      if (!resp.ok) continue;
+      if (!resp.ok) {
+        console.warn(`[RSS Warning] HTTP ${resp.status} fetching feed: ${feedUrl}`);
+        continue;
+      }
 
       const xml = await resp.text();
       const items = parseRSSItems(xml);
@@ -203,8 +295,9 @@ export async function runMonitoringCycle(env: Env): Promise<CycleSummary> {
           anomalies.push(item);
         }
       }
-    } catch (e) {
-      // Log or swallow feed error to continue processing other feeds
+    } catch (e: any) {
+      console.error(`[RSS Feed Error] Failed fetching ${feedUrl}: ${e.message || String(e)}`);
+      await captureSentryException(env, ctx, e, { feedUrl });
     }
   }
 
@@ -217,13 +310,17 @@ export async function runMonitoringCycle(env: Env): Promise<CycleSummary> {
 
     const res = await dispatchGitHubEvent(env, anomaly.title, anomaly.link);
     if (res.dispatched) {
+      console.log(`[GitHub Dispatch Success] Event dispatched for: "${anomaly.title}"`);
       await markHeadlineDispatchedInCache(anomaly.title);
+    } else {
+      console.error(`[GitHub Dispatch Failed] Error: ${res.error}`);
+      await captureSentryException(env, ctx, new Error(res.error || "GitHub Dispatch Failed"), { anomalyTitle: anomaly.title });
     }
     dispatches.push(res);
     break; // Enforce single dispatch per 15-minute cycle
   }
 
-  return {
+  const summary: CycleSummary = {
     status: "success",
     timestamp: new Date().toISOString(),
     feeds_scanned: RSS_FEEDS.length,
@@ -231,31 +328,55 @@ export async function runMonitoringCycle(env: Env): Promise<CycleSummary> {
     anomalies_detected: anomalies.length,
     dispatches
   };
+
+  console.log(`[Cycle Summary] ${JSON.stringify(summary)}`);
+
+  // Telemetry Ingestion to Axiom (Option A2)
+  await logToAxiom(env, ctx, {
+    event: "intraday_monitoring_cycle",
+    summary
+  });
+
+  return summary;
 }
 
 export default {
   async scheduled(controller: any, env: Env, ctx: any): Promise<void> {
-    ctx.waitUntil(runMonitoringCycle(env));
+    try {
+      ctx.waitUntil(runMonitoringCycle(env, ctx));
+    } catch (err: any) {
+      console.error(`[Scheduled Exception] ${err.message || String(err)}`);
+      await captureSentryException(env, ctx, err, { trigger: "scheduled" });
+    }
   },
 
   async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
     const url = new URL(request.url);
 
-    if (url.pathname === "/run" || url.pathname === "/trigger") {
-      const summary = await runMonitoringCycle(env);
-      return new Response(JSON.stringify(summary, null, 2), {
+    try {
+      if (url.pathname === "/run" || url.pathname === "/trigger") {
+        const summary = await runMonitoringCycle(env, ctx);
+        return new Response(JSON.stringify(summary, null, 2), {
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      return new Response(
+        JSON.stringify({
+          status: "active",
+          service: "midgley-intraday-monitor",
+          timestamp: new Date().toISOString(),
+          endpoints: ["/run", "/trigger", "/status"]
+        }, null, 2),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    } catch (err: any) {
+      console.error(`[Fetch Exception] ${err.message || String(err)}`);
+      await captureSentryException(env, ctx, err, { pathname: url.pathname });
+      return new Response(JSON.stringify({ error: err.message || String(err) }), {
+        status: 500,
         headers: { "Content-Type": "application/json" }
       });
     }
-
-    return new Response(
-      JSON.stringify({
-        status: "active",
-        service: "midgley-intraday-monitor",
-        timestamp: new Date().toISOString(),
-        endpoints: ["/run", "/trigger", "/status"]
-      }, null, 2),
-      { headers: { "Content-Type": "application/json" } }
-    );
   }
 };

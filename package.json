@@ -1,0 +1,18 @@
+{
+  "name": "midgley-workers",
+  "version": "1.0.0",
+  "description": "Midgley Cloudflare Edge Workers for Intraday Event Monitoring and Edge Cache Gateway",
+  "main": "workers/intraday_monitor_worker.ts",
+  "scripts": {
+    "test": "echo \"No JS test runner specified\" && exit 0"
+  },
+  "dependencies": {
+    "@axiomhq/cloudflare-workers": "^0.3.0",
+    "@sentry/cloudflare": "^8.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240901.0",
+    "typescript": "^5.0.0",
+    "wrangler": "^3.75.0"
+  }
+}
