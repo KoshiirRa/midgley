@@ -142,23 +142,29 @@ export async function captureSentryException(env: Env, ctx: any, error: any, ext
 /**
  * Sentry Cron Check-In Helper (Option A2)
  */
-export async function sendSentryCronCheckIn(env: Env, ctx: any, status: "ok" | "in_progress" | "error" = "ok", monitorSlug?: string): Promise<void> {
+export async function sendSentryCronCheckIn(
+  env: Env,
+  ctx: any,
+  status: "ok" | "in_progress" | "error" = "ok",
+  checkInId?: string,
+  monitorSlug?: string
+): Promise<string> {
   const dsn = env.SENTRY_DSN;
   const slug = monitorSlug || (env as any).SENTRY_CRON_SLUG || "midgley-intraday-monitor";
-  if (!dsn) return;
+  if (!dsn) return "";
 
   try {
     const match = dsn.match(/^https:\/\/([^@]+)@([^/]+)\/(\d+)$/);
-    if (!match) return;
+    if (!match) return "";
 
     const [, key, host, projectId] = match;
     const event_id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
-    const check_in_id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
+    const id = checkInId || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now()));
 
     const header = JSON.stringify({ event_id, dsn });
     const item_header = JSON.stringify({ type: "check_in" });
     const item_payload = JSON.stringify({
-      check_in_id,
+      check_in_id: id,
       monitor_slug: slug,
       status
     });
@@ -180,8 +186,9 @@ export async function sendSentryCronCheckIn(env: Env, ctx: any, status: "ok" | "
     } else {
       await p;
     }
+    return id;
   } catch {
-    // Ignore error
+    return "";
   }
 }
 
@@ -314,80 +321,94 @@ async function dispatchGitHubEvent(env: Env, headline: string, url: string): Pro
 }
 
 export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSummary> {
+  const checkInId1 = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
+  const checkInId2 = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
+
+  // 1. Send Sentry Cron Check-In (in_progress at start)
+  await sendSentryCronCheckIn(env, ctx, "in_progress", checkInId1);
+  await sendSentryCronCheckIn(env, ctx, "in_progress", checkInId2, "new-monitor");
+
   let totalHeadlines = 0;
   const anomalies: RSSItem[] = [];
   const seenHeadlines = new Set<string>();
 
-  for (const feedUrl of RSS_FEEDS) {
-    try {
-      const resp = await fetch(feedUrl, {
-        headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Midgley-Worker/1.0" }
-      });
-      if (!resp.ok) {
-        console.warn(`[RSS Warning] HTTP ${resp.status} fetching feed: ${feedUrl}`);
+  try {
+    for (const feedUrl of RSS_FEEDS) {
+      try {
+        const resp = await fetch(feedUrl, {
+          headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Midgley-Worker/1.0" }
+        });
+        if (!resp.ok) {
+          console.warn(`[RSS Warning] HTTP ${resp.status} fetching feed: ${feedUrl}`);
+          continue;
+        }
+
+        const xml = await resp.text();
+        const items = parseRSSItems(xml);
+        totalHeadlines += items.length;
+
+        for (const item of items) {
+          const key = item.title.toLowerCase();
+          if (seenHeadlines.has(key)) continue;
+          seenHeadlines.add(key);
+
+          if (isAnomalyHeadline(item.title)) {
+            anomalies.push(item);
+          }
+        }
+      } catch (e: any) {
+        console.error(`[RSS Feed Error] Failed fetching ${feedUrl}: ${e.message || String(e)}`);
+        await captureSentryException(env, ctx, e, { feedUrl });
+      }
+    }
+
+    const dispatches: DispatchResult[] = [];
+    for (const anomaly of anomalies) {
+      const alreadyDispatched = await isHeadlineDispatchedInCache(anomaly.title);
+      if (alreadyDispatched) {
         continue;
       }
 
-      const xml = await resp.text();
-      const items = parseRSSItems(xml);
-      totalHeadlines += items.length;
-
-      for (const item of items) {
-        const key = item.title.toLowerCase();
-        if (seenHeadlines.has(key)) continue;
-        seenHeadlines.add(key);
-
-        if (isAnomalyHeadline(item.title)) {
-          anomalies.push(item);
-        }
+      const res = await dispatchGitHubEvent(env, anomaly.title, anomaly.link);
+      if (res.dispatched) {
+        console.log(`[GitHub Dispatch Success] Event dispatched for: "${anomaly.title}"`);
+        await markHeadlineDispatchedInCache(anomaly.title);
+      } else {
+        console.error(`[GitHub Dispatch Failed] Error: ${res.error}`);
+        await captureSentryException(env, ctx, new Error(res.error || "GitHub Dispatch Failed"), { anomalyTitle: anomaly.title });
       }
-    } catch (e: any) {
-      console.error(`[RSS Feed Error] Failed fetching ${feedUrl}: ${e.message || String(e)}`);
-      await captureSentryException(env, ctx, e, { feedUrl });
+      dispatches.push(res);
+      break; // Enforce single dispatch per 15-minute cycle
     }
+
+    const summary: CycleSummary = {
+      status: "success",
+      timestamp: new Date().toISOString(),
+      feeds_scanned: RSS_FEEDS.length,
+      headlines_parsed: totalHeadlines,
+      anomalies_detected: anomalies.length,
+      dispatches
+    };
+
+    console.log(`[Cycle Summary] ${JSON.stringify(summary)}`);
+
+    // Telemetry Ingestion to Axiom (Option A2)
+    await logToAxiom(env, ctx, {
+      event: "intraday_monitoring_cycle",
+      ...summary
+    });
+
+    // 2. Send Sentry Cron Check-In (ok at completion with matching ID)
+    await sendSentryCronCheckIn(env, ctx, "ok", checkInId1);
+    await sendSentryCronCheckIn(env, ctx, "ok", checkInId2, "new-monitor");
+
+    return summary;
+  } catch (err: any) {
+    // Send Sentry Cron Check-In (error at failure with matching ID)
+    await sendSentryCronCheckIn(env, ctx, "error", checkInId1);
+    await sendSentryCronCheckIn(env, ctx, "error", checkInId2, "new-monitor");
+    throw err;
   }
-
-  const dispatches: DispatchResult[] = [];
-  for (const anomaly of anomalies) {
-    const alreadyDispatched = await isHeadlineDispatchedInCache(anomaly.title);
-    if (alreadyDispatched) {
-      continue;
-    }
-
-    const res = await dispatchGitHubEvent(env, anomaly.title, anomaly.link);
-    if (res.dispatched) {
-      console.log(`[GitHub Dispatch Success] Event dispatched for: "${anomaly.title}"`);
-      await markHeadlineDispatchedInCache(anomaly.title);
-    } else {
-      console.error(`[GitHub Dispatch Failed] Error: ${res.error}`);
-      await captureSentryException(env, ctx, new Error(res.error || "GitHub Dispatch Failed"), { anomalyTitle: anomaly.title });
-    }
-    dispatches.push(res);
-    break; // Enforce single dispatch per 15-minute cycle
-  }
-
-  const summary: CycleSummary = {
-    status: "success",
-    timestamp: new Date().toISOString(),
-    feeds_scanned: RSS_FEEDS.length,
-    headlines_parsed: totalHeadlines,
-    anomalies_detected: anomalies.length,
-    dispatches
-  };
-
-  console.log(`[Cycle Summary] ${JSON.stringify(summary)}`);
-
-  // Telemetry Ingestion to Axiom (Option A2)
-  await logToAxiom(env, ctx, {
-    event: "intraday_monitoring_cycle",
-    ...summary
-  });
-
-  // Sentry Cron Check-In (Option A2)
-  await sendSentryCronCheckIn(env, ctx, "ok");
-  await sendSentryCronCheckIn(env, ctx, "ok", "new-monitor");
-
-  return summary;
 }
 
 export default {
