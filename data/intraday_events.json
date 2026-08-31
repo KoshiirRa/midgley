@@ -68,5 +68,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-31T16:30:37.855210",
+    "headline": "US-Canada tariff war: Who wins, who loses? - Anadolu Ajans\u0131",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOR21uNmFjQWtNMFdIb1BzNHhzdWxOLXlsbGJWRFcybXZBWnA2dER0enlYbXNFZ1d5cEQ1LWsxWkxTZGRNb3lNa2F3U2RDM2dFREtYWS1VMUpycWQwOEVydzBMbW8zbmJVZzBjc1JlMkhmNGZnSzJCal96LUxJVHUtTHltNEltZmNw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
