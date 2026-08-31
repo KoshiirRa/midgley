@@ -74,7 +74,7 @@ In Axiom, navigate to **Monitors -> New monitor** (top right dropdown):
    * **APL Query:**
      ```kql
      ['midgley-workers']
-     | where summary.anomalies_detected > 0
+     | where anomalies_detected > 0
      | summarize count()
      ```
    * **Trigger Condition:** `count() >= 1` within 15 minutes.

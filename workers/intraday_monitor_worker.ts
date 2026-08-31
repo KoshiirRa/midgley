@@ -334,7 +334,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
   // Telemetry Ingestion to Axiom (Option A2)
   await logToAxiom(env, ctx, {
     event: "intraday_monitoring_cycle",
-    summary
+    ...summary
   });
 
   return summary;
