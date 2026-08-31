@@ -4192,3 +4192,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-31 15:18:56,2026-08-26,BayArea_CA,v1.4-BayArea-Ridge,5.4979,5.3871,DOWN,5.4701,DOWN,0.083,1.0,DAILY_BATCH,
 2026-08-31 15:18:56,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,5.69,5.5017,DOWN,,,,,DAILY_BATCH,
 2026-08-31 15:18:56,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.69,5.5017,DOWN,,,,,DAILY_BATCH,
+2026-08-31 16:10:31,2026-09-05,National,v1.4-Finlight-Intraday,3.184,3.1331,DOWN,,,,,INTRADAY_REVISION,"US-Canada tariff war: Who wins, who loses? - Anadolu Ajansı"
