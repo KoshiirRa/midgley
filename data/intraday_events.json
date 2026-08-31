@@ -236,5 +236,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-08-31T23:15:38.727224",
+    "headline": "Tanker Market: Unplanned US Refinery Outages Could Impact Freight Trade - Hellenic Shipping News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQblBkakoxTkN1c1N0LV9ucEJDbkItMTJLRHZQSC1GQVRDQ045TTBERHdHVFFqd2g2TWltUldqNEpGczBXTU83RFlaTnp4UzJMRmo0VmFIOFJnUThLS01SaDN1MXNNMzV4SWNKQTgzMWFiSVVsbVcyWlhrNjFQWVZId2YtVTBqLXhDRlBCQzRKRE0yWnBqaDc2blNRVXJqdmhpLXRjbDJPY3pDRkQt?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    }
   }
 ]
