@@ -82,20 +82,27 @@ In Axiom, navigate to **Monitors -> New monitor** (top right dropdown):
 
 ---
 
-## 🛡️ Sentry Alert Rules & GitHub Integration
+## 🛡️ Sentry Alert & Monitor Setup
 
-In Sentry, navigate to **Alerts -> Create Alert Rule**:
+In Sentry, navigate to **Alerts -> Create Alert** or **Monitors -> New Monitor**:
 
-1. **Rule 1: New Critical Worker Exception:**
-   * **Condition:** When a new issue is created or changes state from resolved.
-   * **Filter:** `service:midgley-intraday-monitor` OR `service:midgley-cache-worker`.
-   * **Action:** Immediate Slack / Email notification.
+### 1. Issue Alert (For Uncaught Worker Exceptions)
+* **Creation Link:** Click **`Create an issue alert`** link at the bottom of the *New Monitor* screen.
+* **When:** An issue is first seen (New Issue) or regresses from resolved.
+* **Filter:** `environment:production` or `service:midgley-intraday-monitor` / `service:midgley-cache-worker`.
+* **Action:** Send notification via Email / Slack / Discord.
 
-2. **Rule 2: GitHub API Dispatch Failure Spike:**
-   * **Condition:** Event count > 3 in 15 minutes.
-   * **Filter:** Issue title contains `GitHub Dispatch Failed` or `GH_PAT`.
-   * **Action:** High-priority developer alert.
+### 2. Cron Monitor (For 15-Minute Intraday Worker Heartbeat)
+* **Monitor Type:** Select **`Cron`** (3rd card option)
+* **Schedule:** `*/15 * * * *` (Every 15 minutes)
+* **Margin of Error:** 5 minutes
+* **Description:** Alerts if `midgley-intraday-monitor` fails to run or misses its 15-minute scheduled execution on Cloudflare edge.
 
-3. **Auto-Create GitHub Issues:**
-   * Navigate to **Settings -> Integrations -> GitHub**.
-   * Enable **Issue Link / Auto-create** for `KoshiirRa/midgley`.
+### 3. Metric Monitor (For Error Spike Thresholds)
+* **Monitor Type:** Select **`Metric`** (1st card option)
+* **Metric:** `count()` of error events > 5 in 15 minutes.
+* **Action:** High-priority developer notification.
+
+### 4. Auto-Create GitHub Issues
+* Navigate to **Settings -> Integrations -> GitHub**.
+* Enable **Issue Link / Auto-create** for repository `KoshiirRa/midgley`.
