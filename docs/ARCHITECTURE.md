@@ -270,3 +270,39 @@ All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/U
 * **TTL Policy:** Standardized by data type (15 minutes for live retail scrapers, 1 hour for weather alerts, 24 hours for commodity spot prices, 60 days for quota ledgers).
 * **Quota Synchronization:** Dual-environment quota ledger sync via `global_cache.get_quota_ledger(service)` and `global_cache.update_quota_ledger(service, ...)`.
 
+---
+
+## Cloudflare Edge Workers & Option A2 Telemetry Architecture
+
+Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-tier edge caching:
+
+1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):**
+   * Executes every 15 minutes via Cloudflare Cron Triggers (`*/15 * * * *`).
+   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection, deduplicates dispatched items against Cloudflare Cache API (`caches.default`), and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
+
+2. **`midgley-cache-worker` ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):**
+   * Acts as Tier 2 Edge Cache Gateway over Cloudflare D1 database (`midgley-cache-d1`).
+   * Serves `/api/v1/cache/:key` GET/POST endpoints and `/status` health probes with optional Bearer Token authentication.
+
+### Option A2 Observability & Telemetry Engine
+
+```
+                             ┌──────────────────────────────────┐
+                             │    CLOUDFLARE WORKER INVOCATION  │
+                             └────────────────┬─────────────────┘
+                                              │
+                 ┌────────────────────────────┼────────────────────────────┐
+                 │                            │                            │
+                 ▼                            ▼                            ▼
+  ┌─────────────────────────────┐ ┌─────────────────────────────┐ ┌─────────────────────────────┐
+  │ CLOUDFLARE DASHBOARD LOGS   │ │    AXIOM LOG ANALYTICS      │ │  SENTRY CRASH REPORTING     │
+  │ • Real-time tail logs       │ │ • 30-day searchable events  │ │ • Uncaught exception stack  │
+  │ • Invocation trace graphs   │ │ • `logToAxiom()` HTTPS REST │ │   traces & sourcemaps       │
+  │ • Native persistent logs    │ │ • Dataset: `midgley-workers`│ │ • `captureSentryException()`│
+  └─────────────────────────────┘ └─────────────────────────────┘ └─────────────────────────────┘
+```
+
+* **Cloudflare Native Observability:** Configured in `wrangler.toml` and `wrangler.cache.toml` with `[observability]` (`enabled = true`, `head_sampling_rate = 1.0`, `persist = true`).
+* **Axiom Log Analytics (`logToAxiom`):** Ingests structured JSON cycle summaries, RSS warnings, GitHub dispatches, and cache hits/misses directly to Axiom dataset `midgley-workers` via `ctx.waitUntil()` async flushes (0 HTTP latency penalty, $0 subscription cost).
+* **Sentry Crash Reporting (`captureSentryException`):** Captures unhandled runtime errors, network timeouts, and GitHub dispatch failures with stack trace context.
+
