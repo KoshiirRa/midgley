@@ -3,6 +3,7 @@ Unit Tests for wxs.us Weather & SPC Convective Outlook Integration (tests/test_n
 """
 
 import pytest
+from urllib.parse import urlparse
 from unittest.mock import patch, MagicMock
 from src.noaa_weather import (
     fetch_wxs_weather_data,
@@ -83,11 +84,11 @@ def test_fetch_live_noaa_alerts_caching(mock_urlopen):
 
     # 1st call fetches via HTTP
     alerts1 = fetch_live_noaa_alerts(["OK"])
-    noaa_calls1 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and "api.weather.gov" in c.args[0].full_url]
+    noaa_calls1 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and urlparse(c.args[0].full_url).hostname == "api.weather.gov"]
     assert len(noaa_calls1) == 1
 
     # 2nd call hits lookup cache (0 additional NOAA HTTP requests)
     alerts2 = fetch_live_noaa_alerts(["OK"])
-    noaa_calls2 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and "api.weather.gov" in c.args[0].full_url]
+    noaa_calls2 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and urlparse(c.args[0].full_url).hostname == "api.weather.gov"]
     assert len(noaa_calls2) == 1
 

@@ -4,6 +4,16 @@ import json
 import pytest
 from unittest.mock import patch, MagicMock
 
+if "google.genai" not in sys.modules:
+    mock_genai_mod = MagicMock()
+    sys.modules["google.genai"] = mock_genai_mod
+    sys.modules["google.genai.types"] = MagicMock()
+    try:
+        import google
+        google.genai = mock_genai_mod
+    except ImportError:
+        pass
+
 # Add project root to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
