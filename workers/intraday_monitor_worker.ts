@@ -139,6 +139,52 @@ export async function captureSentryException(env: Env, ctx: any, error: any, ext
   }
 }
 
+/**
+ * Sentry Cron Check-In Helper (Option A2)
+ */
+export async function sendSentryCronCheckIn(env: Env, ctx: any, status: "ok" | "in_progress" | "error" = "ok", monitorSlug?: string): Promise<void> {
+  const dsn = env.SENTRY_DSN;
+  const slug = monitorSlug || (env as any).SENTRY_CRON_SLUG || "midgley-intraday-monitor";
+  if (!dsn) return;
+
+  try {
+    const match = dsn.match(/^https:\/\/([^@]+)@([^/]+)\/(\d+)$/);
+    if (!match) return;
+
+    const [, key, host, projectId] = match;
+    const event_id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
+    const check_in_id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
+
+    const header = JSON.stringify({ event_id, dsn });
+    const item_header = JSON.stringify({ type: "check_in" });
+    const item_payload = JSON.stringify({
+      check_in_id,
+      monitor_slug: slug,
+      status
+    });
+
+    const envelope = `${header}\n${item_header}\n${item_payload}\n`;
+    const storeUrl = `https://${host}/api/${projectId}/envelope/`;
+
+    const p = fetch(storeUrl, {
+      method: "POST",
+      headers: {
+        "X-Sentry-Auth": `Sentry sentry_version=7, sentry_key=${key}`,
+        "Content-Type": "application/x-sentry-envelope"
+      },
+      body: envelope
+    }).catch(e => console.warn(`[Sentry Cron Error] ${e.message || String(e)}`));
+
+    if (ctx && typeof ctx.waitUntil === "function") {
+      ctx.waitUntil(p);
+    } else {
+      await p;
+    }
+  } catch {
+    // Ignore error
+  }
+}
+
 function parseRSSItems(xmlText: string): RSSItem[] {
   const items: RSSItem[] = [];
   const itemRegex = /<(?:item|entry)[\s\S]*?<\/(?:item|entry)>/gi;
@@ -336,6 +382,10 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
     event: "intraday_monitoring_cycle",
     ...summary
   });
+
+  // Sentry Cron Check-In (Option A2)
+  await sendSentryCronCheckIn(env, ctx, "ok");
+  await sendSentryCronCheckIn(env, ctx, "ok", "new-monitor");
 
   return summary;
 }
