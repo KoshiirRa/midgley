@@ -29,3 +29,8 @@ data/finlight_*.json
 
 # Scratch & Temporary Agent Workspaces
 scratch/
+
+# Generated Execution Reports & Output Logs
+docs/reports/
+data/reports/
+
