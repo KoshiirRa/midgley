@@ -34,6 +34,7 @@ export interface CycleSummary {
   feeds_scanned: number;
   headlines_parsed: number;
   anomalies_detected: number;
+  headlines?: string[];
   dispatches: DispatchResult[];
 }
 
@@ -330,6 +331,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
 
   let totalHeadlines = 0;
   const anomalies: RSSItem[] = [];
+  const parsedHeadlines: string[] = [];
   const seenHeadlines = new Set<string>();
 
   try {
@@ -351,6 +353,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
           const key = item.title.toLowerCase();
           if (seenHeadlines.has(key)) continue;
           seenHeadlines.add(key);
+          parsedHeadlines.push(item.title);
 
           if (isAnomalyHeadline(item.title)) {
             anomalies.push(item);
@@ -387,6 +390,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
       feeds_scanned: RSS_FEEDS.length,
       headlines_parsed: totalHeadlines,
       anomalies_detected: anomalies.length,
+      headlines: parsedHeadlines,
       dispatches
     };
 
