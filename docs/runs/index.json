@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-01_23-15-54",
+    "timestamp": "2026-09-01 23:15:43",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Trump Tariff Reversal Could Cut Costs for US Energy Firms Bu..."
+  },
+  {
     "run_id": "2026-09-01_21-30-55",
     "timestamp": "2026-09-01 21:30:45",
     "run_type": "INTRADAY_REVISION",
@@ -590,12 +596,6 @@
   {
     "run_id": "2026-08-30_15-59-30",
     "timestamp": "2026-08-30 15:59:15",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-59-04",
-    "timestamp": "2026-08-30 15:58:51",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   }

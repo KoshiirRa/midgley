@@ -404,5 +404,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-01T23:15:43.103465",
+    "headline": "Trump Tariff Reversal Could Cut Costs for US Energy Firms But Will Likely Leave Broader Flows Unchanged - EnergyNow",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNbWVpWU1aazVlMlhNczhWQjVXajY0U00zdU5WZzZwMFFNdkxDZEgwQnhjRVFaLUNYc0czY3h5QzdkOXdMajkyVVByaURNOFQ4dVEwTk9yaWtIQ2ZFTkpCNTA5OWxvQTVxcEluMzU5T0ZRZElRay11eC1LWmY3ZllYQUFFTGplQ2hDanVJZ3NSTEFJbnhMTDAybkQ5SnFQZTZlbS1pR1B3VXFCb2RqNkJUXzI5WGxxVmdWSU1HTEwtZTJlbXhwR3l2YWdOOUd4dw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
