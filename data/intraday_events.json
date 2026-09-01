@@ -320,5 +320,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-01T14:00:42.520117",
+    "headline": "U.S. to launch tariff review on Chinese candles and polyethylene shopping bags ahead of 40-year mark? - ChemNet News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9KdU1zMTdHT2dWVUtWaEVFNjRNS01Wam45WWpMU0tidW81RmF6bGFTTFh6aXczUWtROUFuNkx5THpva3d5amE4SU9YNWxTNFhh?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
