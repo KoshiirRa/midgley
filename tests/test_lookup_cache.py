@@ -82,6 +82,14 @@ class TestLookupCache(unittest.TestCase):
         self.assertIn("in_memory_keys", stats)
         self.assertIn("turso_configured", stats)
 
+    def test_cloudflare_get_404_cache_miss(self):
+        from urllib.error import HTTPError
+        with patch("urllib.request.urlopen", side_effect=HTTPError("http://cf/cache", 404, "Not Found", {}, None)):
+            res = self.cache._cloudflare_get("missing_key", "https://cf.example.com")
+            self.assertIsNone(res)
+            self.assertEqual(self.cache.stats["errors"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
+

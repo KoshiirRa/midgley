@@ -214,6 +214,12 @@ class LookupCache:
                     created_at = float(data.get("created_at", time.time()))
                     expires_at = float(data.get("expires_at", time.time() + DEFAULT_TTL_SECONDS))
                     return val_str, created_at, expires_at
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                logger.debug(f"Cloudflare Edge cache miss for key '{key}': HTTP 404")
+            else:
+                logger.warning(f"Cloudflare Edge cache fetch notice: {e}")
+                self.stats["errors"] += 1
         except Exception as e:
             logger.warning(f"Cloudflare Edge cache fetch notice: {e}")
             self.stats["errors"] += 1
