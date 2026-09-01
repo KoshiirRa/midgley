@@ -362,5 +362,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-01T20:45:43.492785",
+    "headline": "Canada\u2019s TSX Slips As Oil Jumps And Tariff Worries Grow - Finimize",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNODFuT3puSGlxQ2I0YldMRWw2Q1JWV1VxX1RXLTV0Z3FZY2NtR1NGNHppeWdfMk8tM2t0ZElNZG5iZXdxU21QMENVSkNUWFFlSVBZQ1FFNUFLOGZUYkVFZUlGWkVua29ySjMzX21sQ2xCOFF6dmpQb2FxeGlKUWdaaGlZbFVTcmZnVGg4?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
