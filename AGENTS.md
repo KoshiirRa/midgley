@@ -250,6 +250,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **National Wholesale RBOB Page (`/national` / `docs/national.html` & `docs/national/index.html`):** Dedicated commodity futures page with NYMEX RBOB predictions chart, out-of-time error metrics, global maritime & geopolitical shock scenarios (Hormuz/Suez), and technical driver breakdowns. Accessible via **`National Wholesale`** in the top navbar.
   - **Tulsa Metro Retail Gas Page (`/tulsa` / `docs/tulsa.html` & `docs/tulsa/index.html`):** Dedicated regional retail page calibrated to live pump prices ($3.89/gal), Cushing WTI delivery hub dynamics, West Tulsa HF Sinclair refinery tornado/freeze shock scenarios, and dynamic rack margins ($0.706/gal). Accessible via the top nav **`Metro Areas`** dropdown menu.
   - **Educational Math Guide (`/math` / `docs/math.html`):** Educational reference detailing equations and vector spaces across all 10 feature layers rendered via KaTeX (including Section 10 multiline `aligned` CARB tax breakdown).
+  - **Fill-Up Timing & Estimated Savings Advisor (`/savings` / `docs/savings.html` & `docs/savings/index.html`) (Issue #91):** Interactive tank fill savings calculator and recommendation engine (`🔴 FILL UP TODAY` vs `🟢 WAIT TO FILL UP`), vehicle presets (Compact 12g, Sedan 15g, Pickup 24g, Fleet 100g), 5-day trajectory table, and LubeLogger (Issue #22) / Android Auto (Issue #21) cross-link integrations.
 
 ---
 
