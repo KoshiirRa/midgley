@@ -642,5 +642,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-02T14:15:40.002592",
+    "headline": "How do tariffs work? - CBC",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1KbE5MenZvVko2OG01Q0M3WjRFdFByZzZHZmxDdnVJWFktWjMxaDFjM1BZT2NnQmtKOXZZcDNBajZfeXRKOVJIM0N3YmJCNFFqMzgzVkg1THVjRUp6S3U2cVh2Sy15aEl5bnlUMXFQQi0?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
