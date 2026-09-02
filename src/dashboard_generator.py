@@ -653,8 +653,14 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
                     </h3>
                 </div>
 
-                <!-- Trigger Badge -->
-                <div>
+                <!-- Trigger Badge & Quick Links -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="{rel_prefix}quantstats_tearsheet.html" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center gap-1">
+                        <i class="fa-solid fa-chart-pie text-emerald-400"></i> QuantStats
+                    </a>
+                    <a href="{rel_prefix}savings.html" class="px-2.5 py-1 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-semibold border border-emerald-500/30 transition flex items-center gap-1">
+                        <i class="fa-solid fa-gas-pump text-emerald-400"></i> Savings
+                    </a>
                     {badge_html}
                 </div>
             </div>
