@@ -1253,6 +1253,38 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
             </div>
         </section>
 
+        <!-- Section 6: Advanced Quantitative Feature & Physical Data Equations -->
+        <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-blue-400 border-b border-slate-800 pb-3 flex items-center gap-2">
+                <i class="fa-solid fa-atom text-emerald-400"></i> Section 6: Advanced Quantitative Feature & Physical Data Formulas
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">3-2-1 Refining Crack Spread Formula (Issue #169):</p>
+                    <p class="text-blue-300">$$\\text{{Crack}}_{{321}} (\\$/\\text{{bbl}}) = \\frac{{2 \\times (P_{{\\text{{RBOB}}}} \\times 42) + 1 \\times (P_{{\\text{{HO}}}} \\times 42) - 3 \\times P_{{\\text{{WTI}}}}}}{{3}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Models refiner yield switching between gasoline and distillate heating oil.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Stacking Ensemble Quantile Bands (Issue #170):</p>
+                    <p class="text-blue-300">$$P_{{10}} = P_{{50}} - 1.2815\\sigma, \\quad P_{{90}} = P_{{50}} + 1.2815\\sigma$$</p>
+                    <p class="text-slate-400 text-[11px]">Computes 80% probabilistic confidence intervals using RidgeCV meta-learner variance.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">EIA-930 Electric Grid Stress Anomaly Z-Score (Issue #179):</p>
+                    <p class="text-blue-300">$$Z_{{\\text{{Grid}}}} = \\frac{{\\text{{Load}}_{{\\text{{RTO}}}} - \\mu_{{24\\text{{h}}}}}}{{\\sigma_{{24\\text{{h}}}}}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Monitors ERCOT, MISO, PJM & CAISO grid load spikes near major refining hubs.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">NHC Hurricane & Colonial Pipeline Threat Index (Issue #177):</p>
+                    <p class="text-blue-300">$$\\text{{Score}}_{{\\text{{Refinery}}}} = \\text{{Threat}}_{{\\text{{NHC}}}} \\times (1.5 \\text{{ if Gulf Coast else }} 1.0)$$</p>
+                    <p class="text-slate-400 text-[11px]">Projects Gulf refining hub and Colonial Pipeline Line 1/2 intake risk scores.</p>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500 font-mono">
@@ -1284,7 +1316,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 index.forEach((r) => {{
                     const opt = document.createElement('option');
                     opt.value = r.run_id;
-                    opt.textContent = `${{r.timestamp}} (${{r.run_type}})`;
+                    opt.textContent = r.timestamp + ' (' + r.run_type + ')';
                     sel.appendChild(opt);
                 }});
                 const params = new URLSearchParams(window.location.search);
