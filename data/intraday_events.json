@@ -768,5 +768,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-02T23:00:01.738058",
+    "headline": "From Partnership to Penalty: US Tariffs Shadow India Trade Deal - The Diplomat \u2013 Asia-Pacific",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPZlBmVVo2RmFzd1hzLXNKZFBkckdMdWxlYUdiM3E5MzlYQ2s2dGUxT0tjYUVQSFNHNEE0MWhqdWQ1VjVneVJ5SEFfa09LaXhiRFFZQ0wxeWl3NF80aFJZZnlaRFk3Q0x6dmV6OE9UMTRGRVMwQW5WX3c1MmhwQmllNGtKNW5lZHdKY0NYNVNHUGs3cjBnU0R4ZFA2MA?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
