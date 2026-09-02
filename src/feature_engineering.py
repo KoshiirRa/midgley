@@ -10,7 +10,7 @@ import numpy as np
 import logging
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
-from src.data_ingestion import CFTCDataConnector
+from src.data_ingestion import CFTCDataConnector, FERCDataConnector
 
 logger = logging.getLogger(__name__)
 
@@ -145,6 +145,21 @@ def create_feature_matrix(
         df['cot_commercial_hedger_ratio'] = 0.0
         df['cot_net_position_delta_1w'] = 0.0
 
+    # Merge FERC Form 6 Interstate Pipeline Tariff Data (Issue #123)
+    try:
+        ferc_connector = FERCDataConnector()
+        ferc_data = ferc_connector.fetch_pipeline_tariff_data()
+        df['ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', 2.15)
+        df['ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', 1.85)
+        df['ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', 1.62)
+        df['ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', 1.8733)
+    except Exception as e:
+        logger.warning(f"Could not merge FERC pipeline tariff data: {e}")
+        df['ferc_colonial_line1_tariff_per_bbl'] = 0.0
+        df['ferc_plantation_tariff_per_bbl'] = 0.0
+        df['ferc_explorer_tariff_per_bbl'] = 0.0
+        df['ferc_pipeline_tariff_index_5d'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     
@@ -241,6 +256,8 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'hdd_5d_rolling', 'cdd_5d_rolling', 'freeze_warning_flag',
         'cot_rbob_net_speculative', 'cot_rbob_zscore_3y',
         'cot_commercial_hedger_ratio', 'cot_net_position_delta_1w',
+        'ferc_colonial_line1_tariff_per_bbl', 'ferc_plantation_tariff_per_bbl',
+        'ferc_explorer_tariff_per_bbl', 'ferc_pipeline_tariff_index_5d',
         'sin_day', 'cos_day'
     ]
     quant_features = [f for f in quant_features if f in df.columns]
