@@ -698,5 +698,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-02T19:15:11.076597",
+    "headline": "Reducing India\u2019s exposure to U.S. tariff risks - The Hindu",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNakw2cU01SzdYR3Myb0g2MzlDd3RYcW5xaGEzaVlwMUFWaVp2Q3NPeGdMWGRTQ0xkeGpQSFI2X1BJYUlfRE1xYUVsQTI2d1pKcXB3eXdtU3lTcFRWSEtxS3FKOTFNX01rU2o5U0NuYXFwVTIxbktQR3NidjlTMl9Pd0IxV0hEU091M2FOZkxlUUZ2Z2VfZldlaFpva1EwVkQ5T2k1OdIBqwFBVV95cUxNTlBDSzN1QkxLRUhsc0FvUzFkdm1NdXF5R3VrajRsR1QtdVcyV1dodHlrWndqQzF4QzIxU2J1ZXdSQnZwX2hrYnJJVS04eXdDaExDQkgxLWZYMl83TWNtX3pZOS0wUmdyWXpwc0JKbm9oLWg0RWlUTm5ka1k4b3JqQVNIRjhXWjJMWEsydlpzY2VfZ0tyVnVNXzRhWnh5cjA2WEVvR3F3REZ5ajg?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
