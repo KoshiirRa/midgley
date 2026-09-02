@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-02_04-45-45",
+    "timestamp": "2026-09-02 04:45:35",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Bessent says G20 countries should also use tariffs to protec..."
+  },
+  {
     "run_id": "2026-09-02_03-45-46",
     "timestamp": "2026-09-02 03:45:36",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-08-30_16-00-49",
-    "timestamp": "2026-08-30 16:00:34",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_16-00-47",
     "timestamp": "2026-08-30 16:00:34",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
