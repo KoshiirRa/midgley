@@ -43,6 +43,26 @@ def evaluate_predictions(y_true: pd.Series, y_pred: np.ndarray, y_current: pd.Se
     }
 
 
+def evaluate_baseline_comparisons(y_true: pd.Series, y_current: pd.Series, ma_5d: pd.Series = None) -> dict:
+    """
+    Computes Naive Persistence (P_{t+h} = P_t) and 5-Day Moving Average benchmark metrics (Issue #43).
+    """
+    y_curr_arr = np.array(y_current)
+    pred_persistence = y_curr_arr
+    metrics_persistence = evaluate_predictions(y_true, pred_persistence, y_current)
+    
+    metrics_ma = None
+    if ma_5d is not None:
+        pred_ma = np.array(ma_5d)
+        metrics_ma = evaluate_predictions(y_true, pred_ma, y_current)
+        
+    return {
+        "metrics_persistence": metrics_persistence,
+        "metrics_moving_avg": metrics_ma,
+        "predictions_persistence": pred_persistence
+    }
+
+
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
@@ -88,6 +108,16 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
     # 3. Calculate Improvement Metrics
     mae_imp = ((metrics_quant['MAE'] - metrics_hybrid['MAE']) / metrics_quant['MAE']) * 100.0
     rmse_imp = ((metrics_quant['RMSE'] - metrics_hybrid['RMSE']) / metrics_quant['RMSE']) * 100.0
+
+    # 4. Compute Benchmark Baseline Comparisons (Issue #43)
+    ma_5d = test_df['gas_ma_7'] if 'gas_ma_7' in test_df.columns else None
+    baselines = evaluate_baseline_comparisons(y_test, y_current, ma_5d)
+    metrics_persistence = baselines['metrics_persistence']
+    metrics_moving_avg = baselines['metrics_moving_avg']
+    
+    pers_mae = metrics_persistence['MAE']
+    hyb_mae = metrics_hybrid['MAE']
+    model_uplift_over_persistence_pct = round(((pers_mae - hyb_mae) / pers_mae) * 100.0, 2) if pers_mae > 0 else 0.0
     
     # Feature Importance for Hybrid Model
     feature_importance = {}
@@ -107,11 +137,15 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         "model_hybrid": model_hybrid,
         "metrics_quant": metrics_quant,
         "metrics_hybrid": metrics_hybrid,
+        "metrics_persistence": metrics_persistence,
+        "metrics_moving_avg": metrics_moving_avg,
         "mae_improvement_pct": round(mae_imp, 2),
         "rmse_improvement_pct": round(rmse_imp, 2),
+        "model_uplift_over_persistence_pct": model_uplift_over_persistence_pct,
         "feature_importance": feature_importance,
         "predictions_quant": pred_quant,
         "predictions_hybrid": pred_hybrid,
+        "predictions_persistence": baselines['predictions_persistence'],
         "y_test": np.array(y_test),
         "test_dates": test_df['date'].values,
         "current_prices": np.array(y_current)
