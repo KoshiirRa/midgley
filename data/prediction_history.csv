@@ -3293,7 +3293,6 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-09-02 07:01:51,2026-08-30,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.8248,3.7611,DOWN,,,,,DAILY_BATCH,
 2026-09-02 07:01:51,2026-09-06,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,3.821,3.7462,DOWN,,,,,DAILY_BATCH,
 2026-09-02 07:01:51,2026-09-06,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.707,3.6345,DOWN,,,,,DAILY_BATCH,
-2026-09-02 14:15:40,2026-09-07,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,How do tariffs work? - CBC
 2026-09-02 15:37:18,2025-10-01,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,2.1825,2.1201,DOWN,2.1825,UP,0.0624,0.0,DAILY_BATCH,
 2026-09-02 15:37:18,2025-10-04,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,2.14,2.0976,DOWN,,,,,DAILY_BATCH,
 2026-09-02 15:37:18,2025-10-05,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,2.1178,2.0812,DOWN,,,,,DAILY_BATCH,
@@ -4214,3 +4213,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-09-02 15:39:01,2026-08-30,BayArea_CA,v1.4-BayArea-Ridge,5.4029,5.3327,DOWN,,,,,DAILY_BATCH,
 2026-09-02 15:39:01,2026-09-06,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.8432,DOWN,,,,,DAILY_BATCH,
 2026-09-02 15:39:01,2026-09-06,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.9411,DOWN,,,,,DAILY_BATCH,
+2026-09-02 16:45:09,2026-09-07,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,Tariffs spat: Carney bets Canada can defy Trump - DW.com
