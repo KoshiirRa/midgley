@@ -502,5 +502,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-02T05:15:35.117625",
+    "headline": "From partnership to penalty: US tariffs shadow India trade deal - 360info.org",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPazRsb0VyX1I4Ym9ZaGdSRFRDTkFEVEJPU0tWYWR6SV9JT19iUk1wSUE4bGx4R1lpU2FHeDRJTFZLRFBIWTk4TWd5SjBvSUZMVlNJR0FpUWlnMjNPYWFRUV9yUFRVNFBJdVg5LUVSa3Q3THlaVVV6ai1MYXhvbkg5NUo5dkhibHZnVnM4?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
