@@ -544,5 +544,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-02T07:45:38.699572",
+    "headline": "India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBodllKVTdtcFFvQzd2YVRwQU9ubmZPaDRlU0t2MFZ3WWRDMkppSUJLemtBMlMwTXZZVjJrUlhBRTRERTdDV0IzVzFkcy1hM1hNRGFtVmxHZkxmODJkbl9kaHVicXRQdEJQZU43RTczQm9ENmFiZlHSAXZBVV95cUxQaHZZSlU3bXBRb0M3dmFUcEFPbm5mT2g0ZVNLdjBWd1lkQzJKaUlCS3prQTJTME12WVYya1JYQUU0REU3Q1dCM1cxZHMtYTNYTURhbVZsR2ZMZjgyZG5fZGh1YnF0UHRCUGVON0U3M0JvRDZhYmZR?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]

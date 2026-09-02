@@ -2144,7 +2144,6 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-09-01 07:02:45,2026-09-05,Oakland_CA,v1.4-Oakland-Ridge,5.69,5.5222,DOWN,,,,,DAILY_BATCH,
 2026-09-01 07:02:45,2026-09-05,BayArea_CA,v1.4-BayArea-Ridge,5.69,5.5222,DOWN,,,,,DAILY_BATCH,
 2026-09-01 23:30:43,2026-09-06,National,v1.4-Finlight-Intraday,3.184,3.2069,UP,,,,,INTRADAY_REVISION,Tanker Market: Unplanned US Refinery Outages Could Impact Freight Trade - Hellenic Shipping News
-2026-09-02 06:45:37,2026-09-07,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,"Trump's 50% tariffs on Canada take effect as Carney vows to retaliate - ABC News - Breaking News, Latest News and Videos"
 2026-09-02 07:01:07,2025-10-01,National,v1.4-Finlight-National-Ridge,2.0376,1.9932,DOWN,1.8859,DOWN,0.1073,1.0,DAILY_BATCH,
 2026-09-02 07:01:07,2025-10-04,National,v1.4-Finlight-National-Ridge,1.9951,1.9636,DOWN,,,,,DAILY_BATCH,
 2026-09-02 07:01:07,2025-10-05,National,v1.4-Finlight-National-Ridge,1.9729,1.9604,DOWN,,,,,DAILY_BATCH,
@@ -4214,3 +4213,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-09-02 07:02:36,2026-08-30,BayArea_CA,v1.4-BayArea-Ridge,5.4029,5.3363,DOWN,,,,,DAILY_BATCH,
 2026-09-02 07:02:37,2026-09-06,Oakland_CA,v1.4-Oakland-Ridge,5.703,5.5863,DOWN,,,,,DAILY_BATCH,
 2026-09-02 07:02:37,2026-09-06,BayArea_CA,v1.4-BayArea-Ridge,5.703,5.5863,DOWN,,,,,DAILY_BATCH,
+2026-09-02 07:45:39,2026-09-07,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe
