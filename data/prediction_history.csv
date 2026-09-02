@@ -4598,3 +4598,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-09-02 23:14:31,2026-09-01,BayArea_CA,v1.4-BayArea-Ridge,5.4029,5.279,DOWN,5.2851,DOWN,0.0061,1.0,DAILY_BATCH,
 2026-09-02 23:14:31,2026-09-08,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.7615,DOWN,,,,,DAILY_BATCH,
 2026-09-02 23:14:31,2026-09-08,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.8576,DOWN,,,,,DAILY_BATCH,
+2026-09-02 23:30:09,2026-09-09,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,Trump Tariff Reversal Could Cut Costs for US Energy Firms But Will Likely Leave Broader Flows Unchanged - EnergyNow
