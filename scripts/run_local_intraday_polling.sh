@@ -30,6 +30,7 @@ if [ -d ".git" ]; then
     if ! git diff-index --quiet HEAD --; then
         git commit -m "chmod: Intraday event anomaly revision & public dashboard update [skip ci]" || true
         echo "Committed intraday forecast revisions to dev branch."
+        git push origin dev || echo "Warning: Failed to push intraday forecast revisions to origin dev."
     fi
 fi
 
