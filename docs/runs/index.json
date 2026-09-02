@@ -1,5 +1,47 @@
 [
   {
+    "run_id": "2026-09-02_23-43-47",
+    "timestamp": "2026-09-02 23:43:26",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_23-42-27",
+    "timestamp": "2026-09-02 23:42:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_23-42-24",
+    "timestamp": "2026-09-02 23:42:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_23-42-22",
+    "timestamp": "2026-09-02 23:42:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_23-42-20",
+    "timestamp": "2026-09-02 23:42:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_23-42-18",
+    "timestamp": "2026-09-02 23:42:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_23-42-16",
+    "timestamp": "2026-09-02 23:42:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-02_23-30-20",
     "timestamp": "2026-09-02 23:30:09",
     "run_type": "INTRADAY_REVISION",
@@ -556,47 +598,5 @@
     "timestamp": "2026-08-31 17:15:38",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Alberta Premier rejects oil and gas export tax in U.S. tarif..."
-  },
-  {
-    "run_id": "2026-08-31_17-00-48",
-    "timestamp": "2026-08-31 17:00:38",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Alberta at a crossroads: How US tariffs are reopening an old..."
-  },
-  {
-    "run_id": "2026-08-31_16-45-46",
-    "timestamp": "2026-08-31 16:45:38",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "What new tariff walls in U.S.-Canada trade war mean for the ..."
-  },
-  {
-    "run_id": "2026-08-31_16-30-48",
-    "timestamp": "2026-08-31 16:30:38",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US-Canada tariff war: Who wins, who loses? - Anadolu Ajans\u0131"
-  },
-  {
-    "run_id": "2026-08-31_16-15-47",
-    "timestamp": "2026-08-31 16:15:37",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariffs spat: Carney bets Canada can defy Trump - DW.com"
-  },
-  {
-    "run_id": "2026-08-31_01-01-02",
-    "timestamp": "2026-08-31 00:59:35",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-31_01-01-00",
-    "timestamp": "2026-08-31 00:59:35",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-31_01-00-58",
-    "timestamp": "2026-08-31 00:59:35",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   }
 ]
