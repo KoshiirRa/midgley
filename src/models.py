@@ -63,6 +63,60 @@ def evaluate_baseline_comparisons(y_true: pd.Series, y_current: pd.Series, ma_5d
     }
 
 
+def compute_quantstats_risk_metrics(returns: np.ndarray, rf_rate: float = 0.0) -> dict:
+    """
+    Computes QuantStats-equivalent portfolio risk & performance metrics (Issue #120):
+    - Sharpe Ratio, Sortino Ratio, Max Drawdown (%), Calmar Ratio, Tail Ratio, Win Rate (%), Profit Factor.
+    """
+    returns_arr = np.array(returns, dtype=float)
+    returns_arr = returns_arr[~np.isnan(returns_arr)]
+    
+    if len(returns_arr) == 0:
+        return {
+            "sharpe": 0.0, "sortino": 0.0, "max_drawdown_pct": 0.0,
+            "calmar": 0.0, "tail_ratio": 1.0, "win_rate_pct": 0.0, "profit_factor": 1.0
+        }
+        
+    mean_ret = np.mean(returns_arr) - rf_rate
+    std_ret = np.std(returns_arr)
+    
+    sharpe = (mean_ret / std_ret * np.sqrt(252)) if std_ret > 0 else 0.0
+    
+    downside_returns = returns_arr[returns_arr < 0]
+    downside_std = np.std(downside_returns) if len(downside_returns) > 0 else 0.0
+    sortino = (mean_ret / downside_std * np.sqrt(252)) if downside_std > 0 else 0.0
+    
+    cum_returns = np.cumprod(1 + returns_arr)
+    running_max = np.maximum.accumulate(cum_returns)
+    drawdowns = (cum_returns - running_max) / running_max
+    max_dd_pct = float(np.min(drawdowns)) * 100.0 if len(drawdowns) > 0 else 0.0
+    
+    annualized_return = (cum_returns[-1] ** (252 / max(1, len(returns_arr))) - 1) if len(returns_arr) > 0 else 0.0
+    calmar = (annualized_return / (abs(max_dd_pct) / 100.0)) if abs(max_dd_pct) > 0 else 0.0
+    
+    p95 = np.percentile(returns_arr, 95)
+    p5 = abs(np.percentile(returns_arr, 5))
+    tail_ratio = (p95 / p5) if p5 > 0 else 1.0
+    
+    wins = returns_arr[returns_arr > 0]
+    losses = returns_arr[returns_arr < 0]
+    win_rate_pct = (len(wins) / len(returns_arr) * 100.0) if len(returns_arr) > 0 else 0.0
+    
+    gross_profit = np.sum(wins) if len(wins) > 0 else 0.0
+    gross_loss = abs(np.sum(losses)) if len(losses) > 0 else 0.0
+    profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else 1.0
+    
+    return {
+        "sharpe": round(float(sharpe), 2),
+        "sortino": round(float(sortino), 2),
+        "max_drawdown_pct": round(float(max_dd_pct), 2),
+        "calmar": round(float(calmar), 2),
+        "tail_ratio": round(float(tail_ratio), 2),
+        "win_rate_pct": round(float(win_rate_pct), 2),
+        "profit_factor": round(float(profit_factor), 2)
+    }
+
+
 from sklearn.ensemble import StackingRegressor
 from sklearn.linear_model import Ridge, ElasticNet, RidgeCV
 from sklearn.preprocessing import StandardScaler
@@ -159,6 +213,10 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
     # 5. Compute Quantile Uncertainty Bands (Issue #170)
     quantiles = compute_quantile_uncertainty_bands(pred_hybrid, residual_std=metrics_hybrid.get('RMSE', 0.05))
 
+    # 6. Compute QuantStats Risk & Performance Metrics (Issue #120)
+    hybrid_returns = (pred_hybrid - np.array(y_current)) / np.array(y_current)
+    risk_metrics = compute_quantstats_risk_metrics(hybrid_returns)
+
     # Feature Importance for Hybrid Model
     feature_importance = {}
     estimator = model_hybrid.named_steps['ridge'] if hasattr(model_hybrid, 'named_steps') and 'ridge' in model_hybrid.named_steps else model_hybrid
@@ -182,6 +240,7 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         "mae_improvement_pct": round(mae_imp, 2),
         "rmse_improvement_pct": round(rmse_imp, 2),
         "model_uplift_over_persistence_pct": model_uplift_over_persistence_pct,
+        "risk_metrics": risk_metrics,
         "feature_importance": feature_importance,
         "predictions_quant": pred_quant,
         "predictions_hybrid": pred_hybrid,

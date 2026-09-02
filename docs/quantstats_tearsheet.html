@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantStats Performance Tear Sheet | Midgley AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 gap-4">
+            <div>
+                <div class="flex items-center gap-3">
+                    <a href="../" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-left"></i> Main Dashboard</a>
+                    <span class="text-slate-600">|</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">Issue #120</span>
+                </div>
+                <h1 class="text-3xl font-extrabold text-white mt-2 flex items-center gap-3">
+                    <i class="fa-solid fa-chart-pie text-emerald-400"></i> QuantStats Performance Tear Sheet
+                </h1>
+                <p class="text-sm text-slate-400 mt-1">Institutional risk metrics & out-of-time model backtest tear sheet.</p>
+            </div>
+        </header>
+
+        <!-- Risk Metric Cards Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block uppercase font-mono">Sharpe Ratio</span>
+                <span class="text-xl font-black text-emerald-400 mt-1 block">0.37</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block uppercase font-mono">Sortino Ratio</span>
+                <span class="text-xl font-black text-emerald-400 mt-1 block">0.58</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block uppercase font-mono">Max Drawdown</span>
+                <span class="text-xl font-black text-rose-400 mt-1 block">-12.72%</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block uppercase font-mono">Calmar Ratio</span>
+                <span class="text-xl font-black text-amber-400 mt-1 block">0.40</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block uppercase font-mono">Tail Ratio</span>
+                <span class="text-xl font-black text-blue-400 mt-1 block">1.00</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block uppercase font-mono">Win Rate</span>
+                <span class="text-xl font-black text-purple-400 mt-1 block">50.0%</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block uppercase font-mono">Profit Factor</span>
+                <span class="text-xl font-black text-cyan-400 mt-1 block">1.06</span>
+            </div>
+        </div>
+
+        <!-- Strategy Description -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-blue-400"></i> Model Risk Management Overview
+            </h2>
+            <p class="text-sm text-slate-300 leading-relaxed">
+                Midgley's 5-day out-of-time forecasting returns are continuously evaluated against baseline buy-and-hold RBOB gasoline futures to compute risk-adjusted performance statistics.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
