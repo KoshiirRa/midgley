@@ -63,8 +63,42 @@ def evaluate_baseline_comparisons(y_true: pd.Series, y_current: pd.Series, ma_5d
     }
 
 
+from sklearn.ensemble import StackingRegressor
+from sklearn.linear_model import Ridge, ElasticNet, RidgeCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
+
+def build_stacking_ensemble_pipeline():
+    """
+    Builds a Stacking Ensemble Regressor combining Ridge, ElasticNet, RandomForest, and XGBoost base estimators (Issue #170).
+    """
+    estimators = [
+        ('ridge', make_pipeline(StandardScaler(), Ridge(alpha=10.0))),
+        ('elasticnet', make_pipeline(StandardScaler(), ElasticNet(alpha=0.1, l1_ratio=0.5, random_state=42))),
+        ('rf', RandomForestRegressor(n_estimators=50, max_depth=5, random_state=42))
+    ]
+    if HAS_XGBOOST:
+        estimators.append(('xgb', XGBRegressor(n_estimators=50, max_depth=3, learning_rate=0.03, random_state=42)))
+        
+    final_estimator = RidgeCV()
+    return StackingRegressor(estimators=estimators, final_estimator=final_estimator, cv=5)
+
+
+def compute_quantile_uncertainty_bands(y_pred: np.ndarray, residual_std: float = 0.05) -> dict:
+    """
+    Computes P10 (downside risk), P50 (median forecast), and P90 (upside risk) quantile prediction bands (Issue #170).
+    Uses 1.2815 * sigma for 80% coverage interval [P10, P90].
+    """
+    z_80 = 1.2815
+    p50 = np.array(y_pred)
+    p10 = p50 - z_80 * residual_std
+    p90 = p50 + z_80 * residual_std
+    return {
+        "p10": np.round(p10, 4),
+        "p50": np.round(p50, 4),
+        "p90": np.round(p90, 4)
+    }
+
 
 def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dict:
     """
@@ -84,7 +118,10 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
     
     logger.info(f"Training forecasting models using algorithm: {model_type}...")
     
-    if model_type == "xgboost" and HAS_XGBOOST:
+    if model_type == "stacking":
+        model_quant = build_stacking_ensemble_pipeline()
+        model_hybrid = build_stacking_ensemble_pipeline()
+    elif model_type == "xgboost" and HAS_XGBOOST:
         model_quant = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
         model_hybrid = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
     elif model_type == "rf":
@@ -119,6 +156,9 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
     hyb_mae = metrics_hybrid['MAE']
     model_uplift_over_persistence_pct = round(((pers_mae - hyb_mae) / pers_mae) * 100.0, 2) if pers_mae > 0 else 0.0
     
+    # 5. Compute Quantile Uncertainty Bands (Issue #170)
+    quantiles = compute_quantile_uncertainty_bands(pred_hybrid, residual_std=metrics_hybrid.get('RMSE', 0.05))
+
     # Feature Importance for Hybrid Model
     feature_importance = {}
     estimator = model_hybrid.named_steps['ridge'] if hasattr(model_hybrid, 'named_steps') and 'ridge' in model_hybrid.named_steps else model_hybrid
@@ -145,6 +185,9 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         "feature_importance": feature_importance,
         "predictions_quant": pred_quant,
         "predictions_hybrid": pred_hybrid,
+        "predictions_p10": quantiles["p10"],
+        "predictions_p50": quantiles["p50"],
+        "predictions_p90": quantiles["p90"],
         "predictions_persistence": baselines['predictions_persistence'],
         "y_test": np.array(y_test),
         "test_dates": test_df['date'].values,
