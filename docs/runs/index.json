@@ -1,5 +1,47 @@
 [
   {
+    "run_id": "2026-09-02_15-39-35",
+    "timestamp": "2026-09-02 15:39:01",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_15-37-36",
+    "timestamp": "2026-09-02 15:37:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_15-37-34",
+    "timestamp": "2026-09-02 15:37:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_15-37-31",
+    "timestamp": "2026-09-02 15:37:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_15-37-29",
+    "timestamp": "2026-09-02 15:37:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_15-37-27",
+    "timestamp": "2026-09-02 15:37:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-02_15-37-25",
+    "timestamp": "2026-09-02 15:37:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-02_15-08-56",
     "timestamp": "2026-09-02 14:15:40",
     "run_type": "INTRADAY_REVISION",
@@ -556,47 +598,5 @@
     "timestamp": "2026-08-31 00:50:22",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-31_00-50-25",
-    "timestamp": "2026-08-31 00:50:22",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-31_00-50-23",
-    "timestamp": "2026-08-31 00:50:22",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_23-00-49",
-    "timestamp": "2026-08-30 23:00:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tanker Market: Unplanned US Refinery Outages Could Impact Fr..."
-  },
-  {
-    "run_id": "2026-08-30_20-15-49",
-    "timestamp": "2026-08-30 20:15:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Moe backs targeted counter-tariffs, warns against export tax..."
-  },
-  {
-    "run_id": "2026-08-30_19-45-48",
-    "timestamp": "2026-08-30 19:45:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Fact Check Team: What Canadian goods are on the chopping blo..."
-  },
-  {
-    "run_id": "2026-08-30_19-00-48",
-    "timestamp": "2026-08-30 19:00:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "What new tariff walls in U.S.-Canada trade war mean for the ..."
-  },
-  {
-    "run_id": "2026-08-30_17-45-48",
-    "timestamp": "2026-08-30 17:45:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Video Trump\u2019s changing tariff policy draws bipartisan critic..."
   }
 ]
