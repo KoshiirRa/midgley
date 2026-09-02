@@ -1,27 +1,27 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-02 02:15:35`  
-**Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Indian Prime Minister Modi asks Putin to end Ukraine war amid U.S. tariff threat on Russian oil - CNBC  
+**Log Timestamp:** `2026-09-02 12:11:17`  
+**Run Mode:** `DAILY_BATCH`  
+**Primary Event Trigger:** Scheduled Daily Batch Refresh (02:00 AM Central)  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Indian Prime Minister Modi asks Putin to end Ukraine war amid U.S. tariff threat on Russian oil - CNBC
+- **Headline Trigger:** Scheduled Daily Batch Refresh (02:00 AM Central)
 - **Active Ingested News Links:**
-- [Indian Prime Minister Modi asks Putin to end Ukraine war amid U.S. tariff threat on Russian oil - CNBC](https://news.google.com/rss/articles/CBMiggFBVV95cUxNN2xOMTZWRlBPVG9URC1jc01hN2Ytd2daYmJCS0lvYlJaOGs5U3Jwcm55ZXlBenpQcERvcUdLdERXTF95RmM2TThVXzNZSDZVWHdQdUp2UW1oMjVSRnlxZzRPenVmVmpsWnNmMFZIOV9IYUljSEVhcFJYOUZZaG5LOVlR0gGHAUFVX3lxTFBIT0hRTmZMMTQ2MnlLV2Y2UU1IYVRZZktxNl9PcVl2VURxWlRZVFQxN2s4RDRNT2JJa2F3VFJpQ08wZEhadTVzOFFPdHh5MDNwZUZQMC1mQ085X1hpZjJXSkxvVHFpM3NVWWF6blRQbkxBTTBaMGlkcVdZUEtqbXNVZFVSWnRUVQ?oc=5) (RSS_Feed)
-- [Given No Choice by Trump – Canada Embraces Asia to Save Auto Heartland Squeezed by U.S. Tariffs - EnergyNow.com](https://news.google.com/rss/articles/CBMinwFBVV95cUxPbnVaMlhXOGpTUFFhTzI0a0U2a3Z4ajJ4VVRFamJyVU9DRldSZkhXWFBTN0c5NWp5RkRnNVJsY0k3XzN4MnlYaXJaaDZ6WUtlSGJPaGpHUTU2SHMxX1VlOWNWMk1yWFd0UUdfWGlBS0xIS3AtMWlRLV96eGJDNkRGZ2JOS2U0QWZCbzEyUTBaM2x0NWF2QkYwbGhmRU56V2s?oc=5) (RSS_Feed)
-- [Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal Consolidation And Growth Asteroid 2026 Jh2 Earth Approach (acD5BUwRO6) - Mshale](https://news.google.com/rss/articles/CBMiW0FVX3lxTE51ZTRaVmJYaUNNS2dlX1BGVEhnUFJtN3FfYWJuY2NXMDdGS2V1Z0N5VHlYckM4cDFWX1NIaFVwZjZjV09Sd0tCZXhHNHRsNkhMU3VDLUZfZ1o0OTQ?oc=5) (RSS_Feed)
+- [NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh](https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html) (CME_Group / NYMEX)
+- [NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion](https://api.weather.gov) (NOAA_NWS_API)
+- [Executive Social Media Feed & OPEC Weekend Price Gap Analysis](https://finlight.me) (Finlight_v2_API)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.80`
-- **Price Pressure Shock ($\Delta P$):** `+0.52`
-- **Geopolitical Risk Score ($G$):** `0.80`
+- **Supply Disruption Score ($S$):** `0.10`
+- **Price Pressure Shock ($\Delta P$):** `+0.02`
+- **Geopolitical Risk Score ($G$):** `0.15`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -37,26 +37,26 @@ Decay Parameter Substitutions:
 - Decay constant: $\lambda = \frac{\ln(2)}{5.0} = 0.13863 \text{ day}^{-1}$
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
-Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.8000$
-- **Day 1 Decayed Shock**: $M_1 = 0.8000 \times 0.87055 = 0.6964$
-- **Day 2 Decayed Shock**: $M_2 = 0.8000 \times (0.87055)^2 = 0.6063$
-- **Day 3 Decayed Shock**: $M_3 = 0.8000 \times (0.87055)^3 = 0.5278$
-- **Day 4 Decayed Shock**: $M_4 = 0.8000 \times (0.87055)^4 = 0.4595$
-- **Day 5 (Target Horizon)**: $M_5 = 0.8000 \times 0.50000 = 0.4000$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.1000$
+- **Day 1 Decayed Shock**: $M_1 = 0.1000 \times 0.87055 = 0.0871$
+- **Day 2 Decayed Shock**: $M_2 = 0.1000 \times (0.87055)^2 = 0.0758$
+- **Day 3 Decayed Shock**: $M_3 = 0.1000 \times (0.87055)^3 = 0.0660$
+- **Day 4 Decayed Shock**: $M_4 = 0.1000 \times (0.87055)^4 = 0.0574$
+- **Day 5 (Target Horizon)**: $M_5 = 0.1000 \times 0.50000 = 0.0500$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (+\$0.043) = \$3.250\text{/gal}$ (Delta: +\$0.043/gal, +1.36\%)
-- **Tulsa, OK Retail**: $P = \$3.700 + (+\$0.153) = \$3.588\text{/gal}$ (Delta: +\$0.153/gal, +4.14\%)
-- **Newark, DE Retail**: $P = \$3.935 + (+\$0.147) = \$3.824\text{/gal}$ (Delta: +\$0.147/gal, +3.75\%)
-- **Cincinnati, OH/KY**: $P = \$3.846 + (+\$0.150) = \$3.738\text{/gal}$ (Delta: +\$0.150/gal, +3.90\%)
-- **Greenville, NC Retail**: $P = \$3.602 + (+\$0.156) = \$3.494\text{/gal}$ (Delta: +\$0.156/gal, +4.34\%)
-- **Charlotte, NC Retail**: $P = \$3.732 + (+\$0.153) = \$3.622\text{/gal}$ (Delta: +\$0.153/gal, +4.09\%)
-- **Oakland, CA Retail**: $P = \$5.690 + (+\$0.298) = \$5.522\text{/gal}$ (Delta: +\$0.298/gal, +5.23\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
-- **SF Bay Area Region**: $P = \$5.690 + (+\$0.198) = \$5.522\text{/gal}$ (Delta: +\$0.198/gal, +3.48\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **National Wholesale**: $P = \$3.135 + (-\$0.236) = \$3.092\text{/gal}$ (Delta: -\$0.236/gal, -7.54\%)
+- **Tulsa, OK Retail**: $P = \$3.694 + (-\$0.126) = \$3.627\text{/gal}$ (Delta: -\$0.126/gal, -3.41\%)
+- **Newark, DE Retail**: $P = \$3.968 + (-\$0.239) = \$3.924\text{/gal}$ (Delta: -\$0.239/gal, -6.03\%)
+- **Cincinnati, OH/KY**: $P = \$3.804 + (-\$0.247) = \$3.758\text{/gal}$ (Delta: -\$0.247/gal, -6.49\%)
+- **Greenville, NC Retail**: $P = \$3.621 + (-\$0.255) = \$3.561\text{/gal}$ (Delta: -\$0.255/gal, -7.03\%)
+- **Charlotte, NC Retail**: $P = \$3.837 + (-\$0.255) = \$3.778\text{/gal}$ (Delta: -\$0.255/gal, -6.65\%)
+- **Oakland, CA Retail**: $P = \$5.737 + (+\$0.291) = \$5.675\text{/gal}$ (Delta: +\$0.291/gal, +5.08\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **SF Bay Area Region**: $P = \$5.737 + (+\$0.191) = \$5.675\text{/gal}$ (Delta: +\$0.191/gal, +3.33\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 
 
 ---
@@ -64,38 +64,38 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-02 02:15:35]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Indian Prime Minister Modi asks Putin to end Ukraine war amid U.S. tariff threat on Russian oil - CNBC' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-02 12:11:17]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Scheduled Daily Batch Refresh (02:00 AM Central)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-02 02:15:35 (Mode: INTRADAY_REVISION), primary event trigger 'Indian Prime Minister Modi asks Putin to end Ukraine war amid U.S. tariff threat on Russian oil - CNBC' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.8000
-  - Day 1: M₁ = 0.6964
-  - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-02 12:11:17 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (NOAA_NWS_API, Finlight_v2_API, CME_Group / NYMEX). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.1000
+  - Day 1: M₁ = 0.0871
+  - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.250/gal (+$0.043/gal, +1.36%)
-  • Tulsa, OK Retail: $3.588/gal (+$0.153/gal, +4.14%)
-  • Newark, DE Retail: $3.824/gal (+$0.147/gal, +3.75%)
-  • Cincinnati, OH/KY: $3.738/gal (+$0.150/gal, +3.90%)
-  • Greenville, NC Retail: $3.494/gal (+$0.156/gal, +4.34%)
-  • Charlotte, NC Retail: $3.622/gal (+$0.153/gal, +4.09%)
-  • Oakland, CA Retail: $5.522/gal (+$0.298/gal, +5.23%)
-  • SF Bay Area Region: $5.522/gal (+$0.198/gal, +3.48%)
+  • National Wholesale: $3.092/gal ($-0.236/gal, -7.54%)
+  • Tulsa, OK Retail: $3.627/gal ($-0.126/gal, -3.41%)
+  • Newark, DE Retail: $3.924/gal ($-0.239/gal, -6.03%)
+  • Cincinnati, OH/KY: $3.758/gal ($-0.247/gal, -6.49%)
+  • Greenville, NC Retail: $3.561/gal ($-0.255/gal, -7.03%)
+  • Charlotte, NC Retail: $3.778/gal ($-0.255/gal, -6.65%)
+  • Oakland, CA Retail: $5.675/gal (+$0.291/gal, +5.08%)
+  • SF Bay Area Region: $5.675/gal (+$0.191/gal, +3.33%)
 
-Largest upward shift for this run: Oakland, CA Retail at $5.522/gal (+0.298/gal). Largest downward shift for this run: National Wholesale at $3.250/gal (+0.043/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: Oakland, CA Retail at $5.675/gal (+0.291/gal). Largest downward shift for this run: Charlotte, NC Retail at $3.778/gal (-0.255/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-02 02:15:35]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Indian Prime Minister Modi asks Putin to end Ukraine war amid U.S. tariff threat on Russian oil - CNBC'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-02 12:11:17]:
+• Execution Context: Run type 'DAILY_BATCH' triggered by 'Scheduled Daily Batch Refresh (02:00 AM Central)'. Overall price pressure vector sits at ΔP=+0.02/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-02 02:15:35.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-02 12:11:17.*
