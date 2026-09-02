@@ -516,5 +516,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-02T05:45:37.063081",
+    "headline": "Indian PM Modi implores Putin to end Ukraine war amid U.S. tariff threat on Russian oil - CNBC",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQSE9IUU5mTDE0NjJ5S1dmNlFNSGFUWWZLcTZfT3FZdlVEcVpUWVRUMTdrOEQ0TU9iSWthd1RSaUNPMGRIWnU1czhRT3R4eTAzcGVGUDAtZkNPOV9YaWYyV0pMb1RxaTNzVVlhem5UUG5MQU0wWjBpZHFXWVBLam1zVWRVUlp0VFXSAYcBQVVfeXFMUEhPSFFOZkwxNDYyeUtXZjZRTUhhVFlmS3E2X09xWXZVRHFaVFlUVDE3azhENE1PYklrYXdUUmlDTzBkSFp1NXM4UU90eHkwM3BlRlAwLWZDTzlfWGlmMldKTG9UcWkzc1VZYXpuVFBuTEFNMFowaWRxV1lQS2ptc1VkVVJadFRV?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
