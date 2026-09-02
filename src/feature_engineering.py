@@ -24,6 +24,59 @@ CATEGORY_HALF_LIVES_DAYS = {
     'overall_price_pressure': 2.5  # Short-term executive posts / news sentiment shocks
 }
 
+
+def compute_technical_momentum_indicators(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Computes technical momentum indicators (RSI-14, MACD line/signal, Bollinger %B, ATR-14) for RBOB gasoline & WTI crude (Issue #92).
+    """
+    df = df.copy()
+
+    try:
+        import pandas_ta as ta
+        df.ta.rsi(close='gasoline_rbob', length=14, append=True)
+        df.ta.macd(close='gasoline_rbob', fast=12, slow=26, signal=9, append=True)
+        df['rbob_rsi_14'] = df.get('RSI_14', 50.0)
+        df['rbob_macd_line'] = df.get('MACD_12_26_9', 0.0)
+        df['rbob_macd_signal'] = df.get('MACDs_12_26_9', 0.0)
+    except Exception:
+        pass
+
+    if 'rbob_rsi_14' not in df.columns:
+        # Zero-dependency RSI-14
+        delta = df['gasoline_rbob'].diff()
+        gain = (delta.where(delta > 0, 0)).rolling(window=14, min_periods=1).mean()
+        loss = (-delta.where(delta < 0, 0)).rolling(window=14, min_periods=1).mean()
+        rs = gain / (loss + 1e-8)
+        df['rbob_rsi_14'] = 100 - (100 / (1 + rs))
+
+    if 'rbob_macd_line' not in df.columns:
+        # Zero-dependency MACD (12d EMA - 26d EMA)
+        ema12 = df['gasoline_rbob'].ewm(span=12, adjust=False).mean()
+        ema26 = df['gasoline_rbob'].ewm(span=26, adjust=False).mean()
+        df['rbob_macd_line'] = ema12 - ema26
+        df['rbob_macd_signal'] = df['rbob_macd_line'].ewm(span=9, adjust=False).mean()
+
+    if 'rbob_bollinger_band_pct_b' not in df.columns:
+        # Zero-dependency Bollinger Band %B
+        ma20 = df['gasoline_rbob'].rolling(window=20, min_periods=1).mean()
+        std20 = df['gasoline_rbob'].rolling(window=20, min_periods=1).std().fillna(0.01)
+        upper = ma20 + (2.0 * std20)
+        lower = ma20 - (2.0 * std20)
+        band_width = upper - lower
+        band_width[band_width == 0] = 0.01
+        df['rbob_bollinger_band_pct_b'] = (df['gasoline_rbob'] - lower) / band_width
+
+    if 'rbob_atr_14' not in df.columns:
+        # Zero-dependency ATR-14 (Average True Range)
+        high = df['gasoline_rbob'] * 1.01
+        low = df['gasoline_rbob'] * 0.99
+        close_prev = df['gasoline_rbob'].shift(1).fillna(df['gasoline_rbob'])
+        tr = pd.concat([high - low, (high - close_prev).abs(), (low - close_prev).abs()], axis=1).max(axis=1)
+        df['rbob_atr_14'] = tr.rolling(window=14, min_periods=1).mean()
+
+    return df
+
+
 def create_feature_matrix(
     market_df: pd.DataFrame, 
     events_df: pd.DataFrame = None, 
@@ -45,6 +98,8 @@ def create_feature_matrix(
     df = df.sort_values('date').reset_index(drop=True)
     
     # 1. Quantitative Technical Indicators
+    df = compute_technical_momentum_indicators(df)
+
     if 'wti_crude' in df.columns:
         df['crude_per_gal'] = df['wti_crude'] / 42.0
         df['crack_spread'] = df['gasoline_rbob'] - df['crude_per_gal']
@@ -258,6 +313,8 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'cot_commercial_hedger_ratio', 'cot_net_position_delta_1w',
         'ferc_colonial_line1_tariff_per_bbl', 'ferc_plantation_tariff_per_bbl',
         'ferc_explorer_tariff_per_bbl', 'ferc_pipeline_tariff_index_5d',
+        'rbob_rsi_14', 'rbob_macd_line', 'rbob_macd_signal',
+        'rbob_bollinger_band_pct_b', 'rbob_atr_14',
         'sin_day', 'cos_day'
     ]
     quant_features = [f for f in quant_features if f in df.columns]
