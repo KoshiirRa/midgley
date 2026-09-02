@@ -368,6 +368,19 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Android Auto Repository Routing Rule:** Any GitHub issues, bug reports, feature requests, UI enhancements, or hardware integration proposals specifically regarding the **Android Auto application (`midgley-auto`)** MUST be posted to or transferred to the dedicated **[`KoshiirRa/midgley-auto`](https://github.com/KoshiirRa/midgley-auto)** GitHub repository.
 * **Cross-Linking Requirement:** When creating or transferring issues in `KoshiirRa/midgley-auto` that involve API contracts, model endpoints, or backend telemetry, agents MUST include explicit markdown cross-links referencing the corresponding main model repository ([`KoshiirRa/midgley`](https://github.com/KoshiirRa/midgley)) API routes (e.g., `/api/v1/advisor/recommendation` in `src/api_server.py`).
 
+---
+
+### 17. Mandatory GitHub Wiki Documentation Directives for Data Source Changes
+
+* **Role:** Enforces mandatory synchronization between the codebase, developer documentation, and the official GitHub Wiki (`KoshiirRa/midgley.wiki`).
+* **Mandatory Wiki Synchronization Directives:**
+  1. **New Data Source Addition:** Whenever a new data connector, API feed, open data portal, web scraper, or physical metric is added to the codebase (e.g. in `src/data_ingestion.py`, `src/noaa_weather.py`, `src/nhc_hurricane.py`, `src/bsee_shutins.py`, `src/usace_locks.py`, `src/state_open_data.py`), the agent or developer MUST update the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git` on branch `master`):
+     - Append a new numbered technical reference section in [`Data-Ingestion-and-APIs.md`](https://github.com/KoshiirRa/midgley/wiki/Data-Ingestion-and-APIs) documenting the connector class name, module file path, API provider, endpoints/URLs, cost profile, and ingested feature keys.
+     - Update [`Agent-Architecture.md`](https://github.com/KoshiirRa/midgley/wiki/Agent-Architecture) under Agent 1 to list the new connector module.
+     - Update [`Project-History-and-Roadmap.md`](https://github.com/KoshiirRa/midgley/wiki/Project-History-and-Roadmap) under the active system release phase.
+  2. **Data Source Deprecation or Removal:** Whenever an existing data feed, scraper, or API connector is removed, retired, or replaced, the agent MUST update the GitHub Wiki to mark the connector as deprecated/removed in `Data-Ingestion-and-APIs.md` or remove it from active agent listings, documenting the rationale and replacement feed.
+  3. **Repository Wiki Sync Execution:** Wiki updates MUST be cloned (`git clone https://github.com/KoshiirRa/midgley.wiki.git`), modified, committed, and pushed to `origin/master` as part of the implementation workflow.
+
 
 
 
