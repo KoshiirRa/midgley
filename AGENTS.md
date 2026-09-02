@@ -288,8 +288,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Step 5 (Static Regional Fallback Anchor):** Locale-specific base anchors ($5.550 Oakland, $5.650 Bay Area, $3.890 Tulsa, $3.350 Newark, $3.450 Cincinnati).
 * **Key Components:**
   - **SQLite/In-Memory Response Cache (`src/lookup_cache.py`):** 15-minute TTL cache protecting upstream GasBuddy and AAA web scrapers from rate limits.
-  - **RESTful API Endpoint Gateway (`src/api_server.py`):** FastAPI application serving `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and GPT Action manifest (`/.well-known/ai-plugin.json`).
-  - **Model Context Protocol (MCP) Server (`src/mcp_server.py`):** Exposes MCP tools (`get_live_gas_prices`, `get_gas_price_prediction`, `get_live_and_forecast`, `simulate_fuel_market_shock`), static locale resources (`resource://midgley/locales/{locale}`), and prompt templates (`prompt://midgley/market_summary`) across both `stdio` and `HTTP/SSE` transport modes (`/mcp/sse`).
+  - **System Telemetry & Grafana Observability Engine (`src/telemetry.py` & `docs/TELEMETRY_HANDOFF.md`) (Issues #107 & #108):** Central observability engine tracking LLM token metrics, estimated USD costs, tier fallback activations, API quota safety valves, and Prometheus text exporter stream (`GET /metrics`). Supports `MIDGLEY_ENV` environment isolation (`dev` vs `prod`), `GET /api/v1/system/quota` endpoint, and 1-click Grafana dashboard template ([`grafana/dashboard_observability.json`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/grafana/dashboard_observability.json)).
 
 ---
 

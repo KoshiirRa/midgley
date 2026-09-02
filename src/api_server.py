@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 
 from fastapi import FastAPI, Query, HTTPException, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -25,6 +25,7 @@ from src.live_fuel_feed import (
     REGION_METADATA
 )
 from src.lookup_cache import global_cache
+from src.telemetry import get_all_quota_statuses, format_prometheus_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -292,17 +293,19 @@ def get_health():
     }
 
 
-@app.get("/api/v1/system/quota", summary="Get Finlight API Safety Valve Quota Status")
+@app.get("/api/v1/system/quota", summary="Get API Quotas & Safety Valve Status")
 def get_system_quota():
     """
-    Returns current Finlight.me API quota usage, monthly/daily safety caps,
-    and active safety valve status.
+    Returns current API quota usage, monthly/daily safety caps,
+    and active safety valve status across all services (Finlight, OilpriceAPI, AlphaVantage, Gemini).
     """
     from src.finlight_feed import get_finlight_quota_status
+    all_quotas = get_all_quota_statuses()
     return {
         "status": "success",
         "timestamp": datetime.now().isoformat(),
-        "quota": get_finlight_quota_status()
+        "quota": get_finlight_quota_status(),
+        "quotas": all_quotas
     }
 
 
@@ -528,6 +531,13 @@ try:
         await sse_transport.handle_post_message(request.scope, request.receive, request._send)
 except Exception as e:
     logger.warning(f"Could not initialize MCP SSE transport: {e}")
+
+
+# Telemetry & Quota Endpoints (Issue #107 & Issue #108)
+@app.get("/metrics", response_class=PlainTextResponse, summary="Prometheus Telemetry Metrics Exporter")
+async def prometheus_metrics_endpoint(environment: Optional[str] = Query(None, description="Optional environment filter ('dev' or 'prod')")):
+    """Exposes system telemetry and quota metrics in Prometheus exposition text format for Grafana."""
+    return format_prometheus_metrics(environment=environment)
 
 
 # Mount static HTML web dashboard if docs directory is present
