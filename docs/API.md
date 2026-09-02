@@ -152,3 +152,18 @@ Managed by systemd user service `midgley-api.service`:
 systemctl --user status midgley-api.service
 systemctl --user restart midgley-api.service
 ```
+
+---
+
+## 🚗 Mobile & In-Dash Client Ecosystem (`midgley-auto`)
+
+The Midgley REST API Gateway powers the dedicated **[Android Auto & Automotive Fuel Assistant (`midgley-auto`)](https://github.com/KoshiirRa/midgley-auto)**.
+
+### Mobile Client Endpoints:
+- `GET /api/v1/locations/resolve?lat={lat}&lon={lon}` — Resolves vehicle GPS coordinates to refining hub MSA.
+- `GET /api/v1/forecasts/{location_id}` — Returns 5-day out-of-time price trajectory & quantile bands ($P_{10}$, $P_{50}$, $P_{90}$).
+- `GET /api/v1/savings?location_id={location_id}&tank_capacity={gallons}` — Returns optimal fill-up recommendation signal (`🟢 WAIT TO FILL UP`, `🔴 FILL UP NOW`), optimal fill day, and net tank savings.
+- `GET /api/v1/events/active?location_id={location_id}` — Returns active severe weather alerts (NOAA tornado/polar vortex) & refinery outage warnings.
+
+For complete client schemas, SDK configuration, and AndroidX Car App integration guidelines, see **[API_CONTRACT.md](https://github.com/KoshiirRa/midgley-auto/blob/main/docs/API_CONTRACT.md)** in `midgley-auto`.
+
