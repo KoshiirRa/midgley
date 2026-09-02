@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import logging
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed
+from src.noaa_weather import OpenMeteoDegreeDaysConnector
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +108,27 @@ def create_feature_matrix(
         else:
             df[col] = 0.0
 
+    # Merge Open-Meteo Weather Degree Days Data (Issue #72)
+    try:
+        weather_connector = OpenMeteoDegreeDaysConnector()
+        tulsa_weather = weather_connector.fetch_hub_degree_days("Tulsa_OK")
+        hdd_val = tulsa_weather.get("heating_degree_days_hdd", 0.0)
+        cdd_val = tulsa_weather.get("cooling_degree_days_cdd", 0.0)
+        freeze_flag = 1.0 if tulsa_weather.get("freeze_warning", False) else 0.0
+        
+        df['hdd_daily'] = hdd_val
+        df['cdd_daily'] = cdd_val
+        df['freeze_warning_flag'] = freeze_flag
+        df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
+        df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
+    except Exception as e:
+        logger.warning(f"Could not merge Open-Meteo degree days feed: {e}")
+        df['hdd_daily'] = 0.0
+        df['cdd_daily'] = 0.0
+        df['freeze_warning_flag'] = 0.0
+        df['hdd_5d_rolling'] = 0.0
+        df['cdd_5d_rolling'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     
@@ -200,6 +222,7 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'gas_ma_7', 'gas_ma_14', 'gas_ma_30',
         'gas_volatility_14', 'ovx_volatility_index', 'ovx_return_1d',
         'us_active_oil_rigs', 'permian_rigs',
+        'hdd_5d_rolling', 'cdd_5d_rolling', 'freeze_warning_flag',
         'sin_day', 'cos_day'
     ]
     quant_features = [f for f in quant_features if f in df.columns]
