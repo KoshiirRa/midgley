@@ -12,6 +12,16 @@ from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_bake
 
 logger = logging.getLogger(__name__)
 
+# Econometric Event Category Decay Half-Lives (Issue #168)
+# Maps event shock taxonomies to empirical persistence half-lives (in days)
+CATEGORY_HALF_LIVES_DAYS = {
+    'supply_disruption': 14.0,     # Structural physical outages (refineries, pipelines, hurricane damage)
+    'geopolitical_risk': 7.0,      # Geopolitical escalation / sanctions / maritime chokepoints
+    'opec_action': 5.0,            # OPEC+ production quota policy shifts
+    'demand_sentiment': 4.0,       # Macroeconomic / demand expectations
+    'overall_price_pressure': 2.5  # Short-term executive posts / news sentiment shocks
+}
+
 def create_feature_matrix(
     market_df: pd.DataFrame, 
     events_df: pd.DataFrame = None, 
@@ -97,12 +107,14 @@ def create_feature_matrix(
         merged = pd.merge(df, events[['date'] + llm_feature_cols], on='date', how='left')
         merged[llm_feature_cols] = merged[llm_feature_cols].fillna(0.0)
         
-        # Modulate decay half-life dynamically based on context routing diagnostic
-        effective_half_life = decay_half_life_days if diagnostic['recommendation'] == 'TRY_FUSION' else decay_half_life_days * 0.20
-        decay_factor = np.exp(-np.log(2) / effective_half_life)
+        # Modulate decay half-lives dynamically per event category & context routing diagnostic (Issue #168)
         fusion_weight = 1.0 if diagnostic['recommendation'] == 'TRY_FUSION' else 0.10
         
         for col in llm_feature_cols:
+            base_half_life = CATEGORY_HALF_LIVES_DAYS.get(col, decay_half_life_days)
+            effective_half_life = base_half_life if diagnostic['recommendation'] == 'TRY_FUSION' else base_half_life * 0.20
+            decay_factor = np.exp(-np.log(2) / effective_half_life)
+            
             decayed_values = np.zeros(len(merged))
             current_val = 0.0
             for i in range(len(merged)):

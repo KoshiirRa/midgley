@@ -127,12 +127,18 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 2. Exponential Memory Fusion Agent (`src/feature_engineering.py`)
 
-* **Role:** Solves point-shock persistence by modeling event decay over 2–3 weeks.
+* **Role:** Solves point-shock persistence by modeling event decay over 2–3 weeks using dynamic taxonomy-based half-life decay curves (`CATEGORY_HALF_LIVES_DAYS`).
 * **Mathematical Decay:**
   \[
-  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2)}{t_{1/2}}} + \text{NewShock}_t
+  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2)}{t_{1/2}(\text{category})}} + \text{NewShock}_t
   \]
-  where $t_{1/2} = 5.0\text{ days}$ for national macroeconomic/social events and $t_{1/2} = 4.0\text{ days}$ for regional NOAA weather shocks.
+  where dynamic half-lives $t_{1/2}(\text{category})$ are mapped by shock taxonomy:
+  - **`supply_disruption`** (structural physical outages, refinery fires, pipeline shut-ins, hurricane damage): **$t_{1/2} = 14.0\text{ days}$**
+  - **`geopolitical_risk`** (Hormuz/Suez chokepoint blockades, military escalation, sanctions): **$t_{1/2} = 7.0\text{ days}$**
+  - **`opec_action`** (OPEC+ production quota policy shifts): **$t_{1/2} = 5.0\text{ days}$**
+  - **`demand_sentiment`** (macroeconomic indicators, recession fears, driving season demand): **$t_{1/2} = 4.0\text{ days}$**
+  - **`overall_price_pressure`** (executive social media posts, short-term news sentiment headlines): **$t_{1/2} = 2.5\text{ days}$** (retaining $1.42\times$ weekend open gap volatility multiplier)
+* **Pre-Training Context Routing Diagnostic (Paper 2608.25128v1):** Modulates effective half-life ($t_{1/2} \times 0.20$ for `SKIP_FUSION` vs $1.0\times t_{1/2}$ for `TRY_FUSION`) based on temporal autocorrelation $\rho_h$.
 
 ---
 

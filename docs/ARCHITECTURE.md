@@ -40,12 +40,12 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
 
 
 ### B. Exponential Memory Decay Equation
-Real-world event news persistence is modeled via exponential memory decay ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$):
+Real-world event news persistence is modeled via dynamic category-specific exponential memory decay ($t_{1/2} \in [2.5, 14.0]\text{ days}$ depending on shock taxonomy: $14.0\text{d}$ physical supply disruption, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts):
 \[
-\lambda = \frac{\ln(2)}{t_{1/2}}
+\lambda(\text{category}) = \frac{\ln(2)}{t_{1/2}(\text{category})}
 \]
 \[
-\text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda} + \text{Shock}_t
+\text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda(\text{category})} + \text{Shock}_t
 \]
 
 ---
