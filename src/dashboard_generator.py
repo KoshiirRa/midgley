@@ -4276,6 +4276,22 @@ def generate_savings_advisor_page():
                     </select>
                 </div>
 
+                <!-- Target Market / Metro Region Select -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
+                    <select id="regionPreset" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="3.450" selected>Cincinnati, OH/KY Retail ($3.450/gal)</option>
+                        <option value="3.184">National Wholesale RBOB ($3.184/gal)</option>
+                        <option value="3.890">Tulsa, OK Retail ($3.890/gal)</option>
+                        <option value="3.350">Newark, DE Retail ($3.350/gal)</option>
+                        <option value="3.250">Greenville, NC Retail ($3.250/gal)</option>
+                        <option value="3.280">Charlotte, NC Retail ($3.280/gal)</option>
+                        <option value="4.850">Oakland, CA Retail ($4.850/gal)</option>
+                        <option value="4.950">SF Bay Area Region ($4.950/gal)</option>
+                        <option value="custom">Custom Local Pump Price...</option>
+                    </select>
+                </div>
+
                 <!-- Current Local Pump Price Input -->
                 <div class="space-y-2">
                     <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Today's Local Pump Price ($/gal)</label>
@@ -4381,6 +4397,14 @@ def generate_savings_advisor_page():
             const val = document.getElementById('vehiclePreset').value;
             if (val !== 'custom') {{
                 document.getElementById('tankCapacity').value = val;
+            }}
+            calculateSavings();
+        }}
+
+        function applyRegionPreset() {{
+            const val = document.getElementById('regionPreset').value;
+            if (val !== 'custom') {{
+                document.getElementById('currentPrice').value = val;
             }}
             calculateSavings();
         }}
