@@ -211,6 +211,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
     nat_link = f"{rel_prefix}national.html"
@@ -222,6 +223,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
+    sav_link = f"{rel_prefix}savings.html"
 
     badge_html = get_release_badge()
 
@@ -277,6 +279,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     </div>
                 </div>
 
+                <a href="{sav_link}" class="px-3 py-1.5 rounded-lg {savings_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
@@ -4186,7 +4191,11 @@ def generate_savings_advisor_page():
     os.makedirs(DOCS_DIR, exist_ok=True)
     os.makedirs(SAVINGS_SUB_DIR, exist_ok=True)
 
-    savings_html = f"""<!DOCTYPE html>
+    header_html = get_nav_header("savings", rel_prefix="")
+    sub_header_html = get_nav_header("savings", rel_prefix="../")
+
+    def build_savings_html(hdr):
+        return f"""<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -4211,25 +4220,7 @@ def generate_savings_advisor_page():
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
 
-    <!-- Header Navigation Bar -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3 text-lg font-bold text-white tracking-wide">
-                <span class="p-2 bg-emerald-600 rounded-xl text-white"><i class="fa-solid fa-[#10B981] fa-gas-pump"></i></span>
-                Midgley <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800/60 px-2 py-0.5 rounded-full font-mono">v1.4</span>
-            </a>
-            <nav class="hidden md:flex items-center gap-6 text-sm text-slate-300 font-medium">
-                <a href="index.html" class="hover:text-emerald-400 transition">Overview</a>
-                <a href="national.html" class="hover:text-emerald-400 transition">National RBOB</a>
-                <a href="tulsa.html" class="hover:text-emerald-400 transition">Tulsa</a>
-                <a href="newark.html" class="hover:text-emerald-400 transition">Newark</a>
-                <a href="cincinnati.html" class="hover:text-emerald-400 transition">Cincinnati</a>
-                <a href="oakland.html" class="hover:text-emerald-400 transition">Oakland</a>
-                <a href="math.html" class="hover:text-emerald-400 transition">Math Guide</a>
-                <a href="savings.html" class="text-emerald-400 font-bold border-b-2 border-emerald-400 pb-1">Fill-Up Advisor</a>
-            </nav>
-        </div>
-    </header>
+{hdr}
 
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
@@ -4238,7 +4229,7 @@ def generate_savings_advisor_page():
         <div class="space-y-2">
             <div class="flex items-center gap-3">
                 <span class="p-3 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-2xl">
-                    <i class="fa-solid fa-[#10B981] fa-calculator text-2xl"></i>
+                    <i class="fa-solid fa-calculator text-2xl"></i>
                 </span>
                 <div>
                     <h1 class="text-3xl font-black text-white tracking-tight">Interactive Fill-Up Timing &amp; Tank Savings Advisor</h1>
@@ -4270,37 +4261,34 @@ def generate_savings_advisor_page():
 
                 <!-- Tank Capacity Input -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Fuel Tank Capacity (Gallons)</label>
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Total Tank Capacity (Gallons)</label>
                     <input type="number" id="tankCapacity" value="15" step="0.5" min="1" max="1000" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
-                <!-- Current Fuel Level -->
+                <!-- Current Fuel Level Select -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Current Tank Level</label>
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Current Fuel Level</label>
                     <select id="fuelLevel" onchange="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
-                        <option value="0.25" selected>1/4 Tank Remaining (Fill 75%)</option>
-                        <option value="0.10">Near Empty / Reserve Light (Fill 90%)</option>
-                        <option value="0.50">1/2 Tank Remaining (Fill 50%)</option>
-                        <option value="0.00">Completely Empty (Fill 100%)</option>
+                        <option value="0.25" selected>1/4 Tank Remaining (75% Fill-Up Needed)</option>
+                        <option value="0.10">Empty / Low Fuel Light (90% Fill-Up Needed)</option>
+                        <option value="0.50">1/2 Tank Remaining (50% Fill-Up Needed)</option>
+                        <option value="0.75">3/4 Tank Remaining (25% Top-Off)</option>
                     </select>
                 </div>
 
-                <!-- Current Local Pump Price -->
+                <!-- Current Local Pump Price Input -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Current Pump Price ($/gal)</label>
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Today's Local Pump Price ($/gal)</label>
                     <input type="number" id="currentPrice" value="3.450" step="0.01" min="1.00" max="10.00" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm font-mono text-white focus:outline-none focus:border-emerald-500">
                 </div>
             </div>
 
             <!-- Recommendation & Savings Output (Right: 7 cols) -->
-            <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+            <div class="lg:col-span-7 space-y-6">
 
-                <!-- Dynamic Recommendation Badge -->
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-bullseye text-emerald-400"></i> Optimal Fill Recommendation
-                        </h3>
+                <!-- Primary Recommendation Card -->
+                <div id="recommendationCard" class="bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
                         <span id="recommendationBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
                             CALCULATING...
                         </span>
@@ -4464,17 +4452,17 @@ def generate_savings_advisor_page():
             }}
         }}
 
-        // Run calculation on page load
-        document.addEventListener('DOMContentLoaded', calculateSavings);
     </script>
 </body>
-</html>
-"""
+</html>"""
+
+    savings_html = build_savings_html(header_html)
+    savings_sub_html = build_savings_html(sub_header_html)
 
     with open(SAVINGS_PATH, "w", encoding="utf-8") as f:
         f.write(savings_html)
     with open(SAVINGS_SUB_PATH, "w", encoding="utf-8") as f:
-        f.write(savings_html)
+        f.write(savings_sub_html)
 
     logger.info(f"Successfully generated Fill-Up Savings Advisor page at {SAVINGS_PATH} and {SAVINGS_SUB_PATH}")
 
