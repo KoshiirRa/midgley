@@ -374,12 +374,23 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 * **Role:** Enforces mandatory synchronization between the codebase, developer documentation, and the official GitHub Wiki (`KoshiirRa/midgley.wiki`).
 * **Mandatory Wiki Synchronization Directives:**
-  1. **New Data Source Addition:** Whenever a new data connector, API feed, open data portal, web scraper, or physical metric is added to the codebase (e.g. in `src/data_ingestion.py`, `src/noaa_weather.py`, `src/nhc_hurricane.py`, `src/bsee_shutins.py`, `src/usace_locks.py`, `src/state_open_data.py`), the agent or developer MUST update the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git` on branch `master`):
+  1. **New Data Source Addition:** Whenever a new data connector, API feed, open data portal, web scraper, or physical metric is added to the codebase (e.g. in `src/data_ingestion.py`, `src/noaa_weather.py`, `src/nhc_hurricane.py`, `src/bsee_shutins.py`, `src/usace_locks.py`, `src/state_open_data.py`), the agent or developer MUST automatically update the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git` on branch `master`):
      - Append a new numbered technical reference section in [`Data-Ingestion-and-APIs.md`](https://github.com/KoshiirRa/midgley/wiki/Data-Ingestion-and-APIs) documenting the connector class name, module file path, API provider, endpoints/URLs, cost profile, and ingested feature keys.
      - Update [`Agent-Architecture.md`](https://github.com/KoshiirRa/midgley/wiki/Agent-Architecture) under Agent 1 to list the new connector module.
      - Update [`Project-History-and-Roadmap.md`](https://github.com/KoshiirRa/midgley/wiki/Project-History-and-Roadmap) under the active system release phase.
-  2. **Data Source Deprecation or Removal:** Whenever an existing data feed, scraper, or API connector is removed, retired, or replaced, the agent MUST update the GitHub Wiki to mark the connector as deprecated/removed in `Data-Ingestion-and-APIs.md` or remove it from active agent listings, documenting the rationale and replacement feed.
-  3. **Repository Wiki Sync Execution:** Wiki updates MUST be cloned (`git clone https://github.com/KoshiirRa/midgley.wiki.git`), modified, committed, and pushed to `origin/master` as part of the implementation workflow.
+  2. **Data Source Deprecation or Removal:** Whenever an existing data feed, scraper, or API connector is removed, retired, or replaced, the agent MUST automatically update the GitHub Wiki to mark the connector as deprecated/removed in `Data-Ingestion-and-APIs.md` or remove it from active agent listings, documenting the rationale and replacement feed.
+  3. **Repository Wiki Sync Execution:** Wiki updates MUST be cloned (`git clone https://github.com/KoshiirRa/midgley.wiki.git`), modified, committed, and pushed to `origin/master` as part of every feature implementation workflow.
+
+---
+
+### 18. Mandatory Public Math & Technical Breakdown Page Synchronization Directives (`src/dashboard_generator.py`)
+
+* **Role:** Enforces mandatory synchronization between model feature formulas, mathematical estimators, regional tax structures, and the site's public Math page (`docs/technical_breakdown.html` & `docs/technical_breakdown.md`).
+* **Mandatory Math Page Synchronization Directives:**
+  1. **Mathematical & Formula Updates:** Whenever new mathematical formulas, estimators, Z-scores, quantile confidence bands, or physical threat metrics are introduced or modified (e.g., 3-2-1 Crack Spread in #169, Stacking Ensemble Quantiles in #170, EIA-930 Grid Stress Z-Scores in #179, NHC Threat Radii in #177), the agent or developer MUST update `generate_technical_breakdown_file()` in `src/dashboard_generator.py`:
+     - Add KaTeX-rendered LaTeX formulas and explanatory descriptions under **Section 6: Advanced Quantitative Feature & Physical Data Formulas** in both the HTML template and Markdown generator.
+  2. **Regional Tax & Infrastructure Adjustments:** Whenever regional statutory tax burdens, fees, or logistics adjustments are reconciled or modified (e.g. CARB tax burden in #172, C&D Canal detours, Ohio River lock delays in #181), the agent MUST update Section 4 notes and equations in `generate_technical_breakdown_file()`.
+  3. **Automatic Re-generation Execution:** The agent MUST execute `python3 -m src.dashboard_generator` to compile and output `docs/technical_breakdown.html` and `docs/technical_breakdown.md` and commit the updated pages whenever model math or connectors are updated.
 
 
 
