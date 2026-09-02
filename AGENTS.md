@@ -120,6 +120,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **USDA Biofuel & Ethanol Market Reports (`src/data_ingestion.py`):** `USDABiofuelConnector` ingests spot Midwest ethanol (E100) rack prices ($/gal) and RIN D6 Ethanol Credit spot values (`marsapi.ams.usda.gov`) for E10 unleaded blendstock cost modeling ($0.10 \times \text{E100} + 0.90 \times \text{RBOB} + \text{RIN Overhead}$).
   - **3-2-1 Refining Crack Spread Engine (`src/data_ingestion.py` & `src/feature_engineering.py`) (Issue #169):** Queries NYMEX Heating Oil futures (`HO=F`) alongside RBOB Gasoline (`RB=F`) and WTI Crude (`CL=F`) to compute the industry-standard 3-2-1 refining crack margin ($\text{Crack}_{321} = \frac{2 \times \text{RBOB} \times 42 + 1 \times \text{HO} \times 42 - 3 \times \text{WTI}}{3}$) and 5-day margin momentum (`crack_spread_321_delta_5d`) to model refinery yield switching and run cut dynamics.
   - **Open-Meteo & NOAA High-Resolution Degree Days (`src/noaa_weather.py`):** `OpenMeteoDegreeDaysConnector` computes daily Heating Degree Days ($\text{HDD}$), Cooling Degree Days ($\text{CDD}$), and freeze/heat stress risk warnings across 6 primary refining hubs (West Tulsa, Delaware City, Catlettsburg, Richmond/Martinez, Selma, Paw Creek).
+  - **NOAA NHC Tropical Cyclone Advisories (`src/nhc_hurricane.py`) (Issue #177):** `NHCHurricaneConnector` ingests NOAA NHC active tropical cyclone RSS/GIS advisories to model Gulf Coast refining hub threat scores (`nhc_gulf_refinery_exposure_score`) and Colonial Pipeline Line 1/2 intake risk flags.
+  - **BSEE Offshore Gulf Production Shut-Ins (`src/bsee_shutins.py`) (Issue #178):** `BSEEShutInConnector` parses daily Bureau of Safety and Environmental Enforcement reports during tropical storm evacuations to track offshore crude oil shut-in percentages (`bsee_gulf_oil_shutin_pct`) and platform evacuation counts.
+  - **EIA-930 Hourly Electric Grid Stress Monitor (`src/data_ingestion.py`) (Issue #179):** `EIA930GridMonitorConnector` monitors ERCOT, MISO, PJM, and CAISO balancing authority load anomalies near refining hubs (`grid_stress_load_anomaly_zscore`).
+  - **Expanded EIA Weekly Petroleum Balance (`src/data_ingestion.py`) (Issue #180):** Expands `EIADataConnector` to ingest weekly motor gasoline product supplied (implied demand), refiner net production by PADD, and inter-PADD pipeline movements.
+  - **USACE LPMS Ohio River Lock Delays (`src/usace_locks.py`) (Issue #181):** `USACELockConnector` monitors commercial barge queue times and delay hours at Markland and McAlpine locks on the Ohio River (`usace_ohio_river_lock_delay_hours`) for Cincinnati regional logistics calibration.
 
 
 
@@ -354,6 +359,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   5. **3-Tier Cascade & Local Disk Fallback:** Connectors MUST preserve the 3-tier resolution cascade (Tier 1 Turso Edge SQLite -> Tier 2 Cloudflare D1/R2 Worker -> Tier 3 Local SQLite `data/lookup_cache.sqlite` + In-Memory Fast Dict) and maintain secondary local JSON disk cache fallbacks (`data/{source}_cache.json`) for 100% offline benchmark execution.
   6. **Defensive Failure Isolation:** Calls to `global_cache` MUST be wrapped defensively in `try/except` blocks so that temporary edge connection failures, missing credentials, or database locks never interrupt core forecasting or data ingestion execution.
   7. **Trading-Hours & Off-Hours Optimization:** Data connectors fetching financial or market-sensitive series SHOULD combine `global_cache` with trading-hours awareness (`is_trading_hours()`) to gate off-hours API calls and eliminate redundant network traffic outside trading windows.
+
+---
+
+### 16. Multi-Repository Issue Routing Directives for Client Applications (`midgley-auto`)
+
+* **Role:** Enforces repository boundary separation for client application issues and integration tracking.
+* **Android Auto Repository Routing Rule:** Any GitHub issues, bug reports, feature requests, UI enhancements, or hardware integration proposals specifically regarding the **Android Auto application (`midgley-auto`)** MUST be posted to or transferred to the dedicated **[`KoshiirRa/midgley-auto`](https://github.com/KoshiirRa/midgley-auto)** GitHub repository.
+* **Cross-Linking Requirement:** When creating or transferring issues in `KoshiirRa/midgley-auto` that involve API contracts, model endpoints, or backend telemetry, agents MUST include explicit markdown cross-links referencing the corresponding main model repository ([`KoshiirRa/midgley`](https://github.com/KoshiirRa/midgley)) API routes (e.g., `/api/v1/advisor/recommendation` in `src/api_server.py`).
+
 
 
 
