@@ -52,6 +52,19 @@ def create_feature_matrix(
         df['crack_spread'] = 0.0
         df['crude_return_1d'] = 0.0
         df['crude_return_5d'] = 0.0
+
+    # 3-2-1 Crack Spread Calculation ($/bbl and $/gal) (Issue #169)
+    # 3 bbl WTI -> 2 bbl RBOB Gasoline + 1 bbl Heating Oil (Distillate)
+    if 'heating_oil' in df.columns and 'wti_crude' in df.columns and 'gasoline_rbob' in df.columns:
+        rbob_bbl = df['gasoline_rbob'] * 42.0
+        ho_bbl = df['heating_oil'] * 42.0
+        df['crack_spread_321'] = (2.0 * rbob_bbl + 1.0 * ho_bbl - 3.0 * df['wti_crude']) / 3.0
+        df['crack_spread_321_gal'] = df['crack_spread_321'] / 42.0
+        df['crack_spread_321_delta_5d'] = df['crack_spread_321'].pct_change(5)
+    else:
+        df['crack_spread_321'] = df['crack_spread'] * 42.0 if 'crack_spread' in df.columns else 0.0
+        df['crack_spread_321_gal'] = df['crack_spread'] if 'crack_spread' in df.columns else 0.0
+        df['crack_spread_321_delta_5d'] = 0.0
         
     df['gas_return_1d'] = df['gasoline_rbob'].pct_change(1)
     df['gas_return_5d'] = df['gasoline_rbob'].pct_change(5)
@@ -181,6 +194,7 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
     """
     quant_features = [
         'gasoline_rbob', 'wti_crude', 'crack_spread',
+        'crack_spread_321', 'crack_spread_321_delta_5d',
         'gas_return_1d', 'gas_return_5d', 'gas_return_10d',
         'crude_return_1d', 'crude_return_5d',
         'gas_ma_7', 'gas_ma_14', 'gas_ma_30',

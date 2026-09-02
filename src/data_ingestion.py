@@ -39,7 +39,8 @@ def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None) -> p
     tickers = {
         "gasoline_rbob": "RB=F",
         "wti_crude": "CL=F",
-        "brent_crude": "BZ=F"
+        "brent_crude": "BZ=F",
+        "heating_oil": "HO=F"
     }
     
     dfs = []
@@ -73,13 +74,15 @@ def _generate_synthetic_market_data(start_date: str, end_date: str) -> pd.DataFr
     
     wti = 75.0 + np.cumsum(np.random.normal(0, 1.2, n))
     gasoline = (wti / 42.0) * 1.35 + np.cumsum(np.random.normal(0, 0.03, n))
+    heating_oil = (wti / 42.0) * 1.40 + np.cumsum(np.random.normal(0, 0.03, n))
     brent = wti + 4.0 + np.random.normal(0, 0.5, n)
     
     return pd.DataFrame({
         'date': dates,
         'gasoline_rbob': np.maximum(gasoline, 1.50),
         'wti_crude': np.maximum(wti, 40.0),
-        'brent_crude': np.maximum(brent, 45.0)
+        'brent_crude': np.maximum(brent, 45.0),
+        'heating_oil': np.maximum(heating_oil, 1.60)
     })
 
 
