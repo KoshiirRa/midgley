@@ -12,18 +12,18 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-01 14:27 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-01 07:02 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.437`/gal | **`$3.118`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.701`/gal | **`$3.602`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `$3.940`/gal | **`$3.796`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
-| **Cincinnati, OH Retail** | `$3.821`/gal | **`$3.681`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `$3.707`/gal | **`$3.572`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
-| **Greenville, NC Metro Retail** | `$3.599`/gal | **`$3.446`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `$5.703`/gal | **`$5.513`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `$5.703`/gal | **`$5.513`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `$3.437`/gal | **`$3.175`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.700`/gal | **`$3.588`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.935`/gal | **`$3.824`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `$3.846`/gal | **`$3.738`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.700`/gal | **`$3.596`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **Greenville, NC Metro Retail** | `$3.602`/gal | **`$3.494`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `$5.690`/gal | **`$5.522`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `$5.690`/gal | **`$5.522`/gal** | **DOWN 📉** | `2026-09-05` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -158,6 +158,7 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 7. **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`):** Quantifies Trump Twitter/Truth Social energy posts and models Monday morning futures open price gaps (1.42x volatility multiplier).
 8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
 9. **MLOps Prediction Tracker & Ground-Truth Backfilling (`src/prediction_logger.py`):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv`, backfills actual historical market prices from `yfinance` as target dates arrive, and automatically backfills test split history for newly added regions (`backfill_new_region_history`).
+10. **Cloudflare Edge Workers & Option A2 Observability Engine (`workers/`):** Deploys 15-minute intraday RSS event triggers ([`workers/intraday_monitor_worker.ts`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)) and Tier 2 Edge Cache Gateway ([`workers/cache_worker.ts`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)) with Cloudflare Native Observability, Axiom 30-day log search (`logToAxiom`), and Sentry crash stack trace reporting (`captureSentryException`).
 10. **Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`):** Evaluates rolling MAE/RMSE/Hit Rate metrics across all active regions and performs an automated self-review of all open GitHub repository issues using Gemini 2.5 Flash to identify and rank the issue providing the highest potential modeling improvement.
 11. **Local Dev Environment, Web Server & Systemd Timers (`dev-vm` Port 8080 & 8000):** Serves live dashboard analytics from the permanent `dev` branch on `dev-vm`, with systemd user timers (`midgley-daily-forecast.timer` and `midgley-weekly-review.timer`) running daily forecasts and weekly issue audits 24/7.
 12. **Automated Nightly Dev Releases (`.github/workflows/nightly_dev_release.yml`):** Automatically builds, tags (`dev-YYYY-MM-DD`), and documents GitHub pre-releases tracking whatever is on the `dev` branch every night at 3:00 AM Central Time (08:00 UTC).

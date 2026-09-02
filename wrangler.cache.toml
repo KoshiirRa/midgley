@@ -1,0 +1,26 @@
+name = "midgley-cache-worker"
+main = "workers/cache_worker.ts"
+compatibility_date = "2024-09-01"
+
+[vars]
+AXIOM_DATASET = "midgley-workers"
+
+[observability]
+enabled = true
+head_sampling_rate = 1.0
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1.0
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1.0
+persist = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "midgley-cache-d1"
+database_id = "bd1954f1-33b6-4adb-9219-ea5ec43fe2b7"

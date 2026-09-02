@@ -122,8 +122,28 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 
 ### Option B: Setting Up Cloudflare D1 / Worker (Tier 2 Backup)
 1. Create a Cloudflare D1 database: `npx wrangler d1 create midgley-cache-d1`
-2. Deploy a Cloudflare Worker proxy exposing `/get`, `/set`, `/sync-quota` REST endpoints with Bearer Token authentication.
-3. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`.
+2. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):
+   ```bash
+   npx wrangler deploy --config wrangler.cache.toml
+   ```
+3. Configure optional telemetry & auth secrets for Option A2 (Axiom & Sentry):
+   ```bash
+   npx wrangler secret put SENTRY_DSN --config wrangler.cache.toml
+   npx wrangler secret put AXIOM_TOKEN --config wrangler.cache.toml
+   ```
+4. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`.
+
+### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
+1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):
+   ```bash
+   npx wrangler deploy
+   ```
+2. Configure worker secrets:
+   ```bash
+   npx wrangler secret put GH_PAT
+   npx wrangler secret put SENTRY_DSN
+   npx wrangler secret put AXIOM_TOKEN
+   ```
 
 ### Option C: Standalone Local Fallback (Tier 3 Default)
 If no edge credentials are supplied, Midgley defaults to local SQLite persistence at `data/lookup_cache.sqlite` with an in-memory fast dict lookup ($0 cloud infrastructure cost, zero external setup required).

@@ -70,6 +70,7 @@ jobs:
         with:
           commit_message: "chrono: Weekly Saturday model performance review & rolling accuracy update"
           file_pattern: "README.md docs/ data/"
+          push_options: '--force'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v6

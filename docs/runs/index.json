@@ -1,27 +1,195 @@
 [
   {
-    "run_id": "2026-09-01_14-27-02",
-    "timestamp": "2026-09-01 14:27:01",
+    "run_id": "2026-09-02_02-15-45",
+    "timestamp": "2026-09-02 02:15:35",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Indian Prime Minister Modi asks Putin to end Ukraine war ami..."
+  },
+  {
+    "run_id": "2026-09-02_02-00-47",
+    "timestamp": "2026-09-02 02:00:37",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Given No Choice by Trump \u2013 Canada Embraces Asia to Save Auto..."
+  },
+  {
+    "run_id": "2026-09-02_01-45-55",
+    "timestamp": "2026-09-02 01:45:44",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal..."
+  },
+  {
+    "run_id": "2026-09-01_23-30-54",
+    "timestamp": "2026-09-01 23:30:43",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Tanker Market: Unplanned US Refinery Outages Could Impact Fr..."
+  },
+  {
+    "run_id": "2026-09-01_23-15-54",
+    "timestamp": "2026-09-01 23:15:43",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Trump Tariff Reversal Could Cut Costs for US Energy Firms Bu..."
+  },
+  {
+    "run_id": "2026-09-01_21-30-55",
+    "timestamp": "2026-09-01 21:30:45",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "US Treasury's Bessent faces G20 diplomacy test amid tariffs,..."
+  },
+  {
+    "run_id": "2026-09-01_21-15-54",
+    "timestamp": "2026-09-01 21:15:44",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Canada Tariffs Deepen North America's Steel and Aluminum Squ..."
+  },
+  {
+    "run_id": "2026-09-01_20-45-54",
+    "timestamp": "2026-09-01 20:45:43",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Canada\u2019s TSX Slips As Oil Jumps And Tariff Worries Grow - Fi..."
+  },
+  {
+    "run_id": "2026-09-01_16-30-54",
+    "timestamp": "2026-09-01 16:30:44",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Tariffs spat: Carney bets Canada can defy Trump - DW.com"
+  },
+  {
+    "run_id": "2026-09-01_14-15-44",
+    "timestamp": "2026-09-01 14:15:34",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "India: Government raises edible oil tariff values from Septe..."
+  },
+  {
+    "run_id": "2026-09-01_14-00-53",
+    "timestamp": "2026-09-01 14:00:42",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "U.S. to launch tariff review on Chinese candles and polyethy..."
+  },
+  {
+    "run_id": "2026-09-01_13-00-53",
+    "timestamp": "2026-09-01 13:00:42",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Letters: Why slap tariffs on Canadian oil? Let\u2019s conserve in..."
+  },
+  {
+    "run_id": "2026-09-01_08-45-53",
+    "timestamp": "2026-09-01 08:45:41",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Ukraine's Sanctions Czar Lands In Washington As Russia Bill ..."
+  },
+  {
+    "run_id": "2026-09-01_07-02-54",
+    "timestamp": "2026-09-01 07:02:45",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   },
   {
-    "run_id": "2026-09-01_12-38-48",
-    "timestamp": "2026-09-01 12:38:46",
+    "run_id": "2026-09-01_07-02-48",
+    "timestamp": "2026-09-01 07:02:45",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   },
   {
-    "run_id": "2026-08-31_16-10-37",
-    "timestamp": "2026-08-31 16:10:31",
+    "run_id": "2026-09-01_02-00-49",
+    "timestamp": "2026-09-01 02:00:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Indian PM Modi implores Putin to end Ukraine war amid U.S. t..."
+  },
+  {
+    "run_id": "2026-09-01_01-45-49",
+    "timestamp": "2026-09-01 01:45:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Given No Choice by Trump \u2013 Canada Embraces Asia to Save Auto..."
+  },
+  {
+    "run_id": "2026-09-01_00-45-49",
+    "timestamp": "2026-09-01 00:45:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Video Trump\u2019s changing tariff policy draws bipartisan critic..."
+  },
+  {
+    "run_id": "2026-08-31_23-15-48",
+    "timestamp": "2026-08-31 23:15:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Tanker Market: Unplanned US Refinery Outages Could Impact Fr..."
+  },
+  {
+    "run_id": "2026-08-31_21-15-48",
+    "timestamp": "2026-08-31 21:15:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Canada Tariffs Deepen North America's Steel and Aluminum Squ..."
+  },
+  {
+    "run_id": "2026-08-31_20-45-48",
+    "timestamp": "2026-08-31 20:45:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Canada\u2019s TSX Slips As Oil Jumps And Tariff Worries Grow - Fi..."
+  },
+  {
+    "run_id": "2026-08-31_19-30-48",
+    "timestamp": "2026-08-31 19:30:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Alberta Premier Danielle Smith is spot on: the new American ..."
+  },
+  {
+    "run_id": "2026-08-31_18-30-49",
+    "timestamp": "2026-08-31 18:30:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Bessent Unloads On Tariff Refunds As Treasury Targets Fiscal..."
+  },
+  {
+    "run_id": "2026-08-31_18-15-48",
+    "timestamp": "2026-08-31 18:15:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "US to Make Tariff Decision on Solar Panels from India, Indon..."
+  },
+  {
+    "run_id": "2026-08-31_18-00-48",
+    "timestamp": "2026-08-31 18:00:39",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Trump Tariff Reversal Could Cut Costs for US Energy Firms Bu..."
+  },
+  {
+    "run_id": "2026-08-31_17-45-48",
+    "timestamp": "2026-08-31 17:45:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "India, China, Canada and more: 10 countries still under Trum..."
+  },
+  {
+    "run_id": "2026-08-31_17-30-48",
+    "timestamp": "2026-08-31 17:30:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Vene..."
+  },
+  {
+    "run_id": "2026-08-31_17-15-47",
+    "timestamp": "2026-08-31 17:15:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Alberta Premier rejects oil and gas export tax in U.S. tarif..."
+  },
+  {
+    "run_id": "2026-08-31_17-00-48",
+    "timestamp": "2026-08-31 17:00:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Alberta at a crossroads: How US tariffs are reopening an old..."
+  },
+  {
+    "run_id": "2026-08-31_16-45-46",
+    "timestamp": "2026-08-31 16:45:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "What new tariff walls in U.S.-Canada trade war mean for the ..."
+  },
+  {
+    "run_id": "2026-08-31_16-30-48",
+    "timestamp": "2026-08-31 16:30:38",
     "run_type": "INTRADAY_REVISION",
     "trigger": "US-Canada tariff war: Who wins, who loses? - Anadolu Ajans\u0131"
   },
   {
-    "run_id": "2026-08-31_15-18-57",
-    "timestamp": "2026-08-31 15:18:56",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    "run_id": "2026-08-31_16-15-47",
+    "timestamp": "2026-08-31 16:15:37",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Tariffs spat: Carney bets Canada can defy Trump - DW.com"
   },
   {
     "run_id": "2026-08-31_01-01-02",
@@ -430,161 +598,5 @@
     "timestamp": "2026-08-30 16:00:34",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_16-00-43",
-    "timestamp": "2026-08-30 16:00:34",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_16-00-40",
-    "timestamp": "2026-08-30 16:00:34",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_16-00-38",
-    "timestamp": "2026-08-30 16:00:34",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-59-30",
-    "timestamp": "2026-08-30 15:59:15",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-59-04",
-    "timestamp": "2026-08-30 15:58:51",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-58-22",
-    "timestamp": "2026-08-30 15:58:22",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-58-20",
-    "timestamp": "2026-08-30 15:58:05",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-58-18",
-    "timestamp": "2026-08-30 15:58:05",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-58-15",
-    "timestamp": "2026-08-30 15:58:05",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-58-14",
-    "timestamp": "2026-08-30 15:58:05",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-58-13",
-    "timestamp": "2026-08-30 15:58:05",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-58-11",
-    "timestamp": "2026-08-30 15:58:05",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-57-53",
-    "timestamp": "2026-08-30 15:57:41",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-57-50",
-    "timestamp": "2026-08-30 15:57:41",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-57-48",
-    "timestamp": "2026-08-30 15:57:41",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-57-46",
-    "timestamp": "2026-08-30 15:57:41",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-57-44",
-    "timestamp": "2026-08-30 15:57:41",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-57-42",
-    "timestamp": "2026-08-30 15:57:41",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-54-16",
-    "timestamp": "2026-08-30 15:54:00",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-53-07",
-    "timestamp": "2026-08-30 15:52:54",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-53-04",
-    "timestamp": "2026-08-30 15:52:54",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-53-02",
-    "timestamp": "2026-08-30 15:52:54",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-53-00",
-    "timestamp": "2026-08-30 15:52:54",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-52-58",
-    "timestamp": "2026-08-30 15:52:54",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-52-56",
-    "timestamp": "2026-08-30 15:52:54",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-08-30_15-45-45",
-    "timestamp": "2026-08-30 15:45:35",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "G20 Finance Chiefs To Meet In US as Canada Tariff Rift, Vene..."
   }
 ]

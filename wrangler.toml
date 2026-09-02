@@ -2,9 +2,23 @@ name = "midgley-intraday-monitor"
 main = "workers/intraday_monitor_worker.ts"
 compatibility_date = "2024-09-01"
 
+[vars]
+AXIOM_DATASET = "midgley-workers"
+
 [triggers]
 crons = ["*/15 * * * *"]
 
 [observability]
 enabled = true
-head_sampling_rate = 1.0 # 1.0 = 100% trace/log sampling rate
+head_sampling_rate = 1.0
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1.0
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1.0
+persist = true

@@ -64,6 +64,7 @@ jobs:
         with:
           commit_message: "chmod: Daily automated gas price prediction & public dashboard update"
           file_pattern: "README.md docs/ data/prediction_history.csv"
+          push_options: '--force'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v6
