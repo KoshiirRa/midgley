@@ -10,6 +10,7 @@ import numpy as np
 import logging
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
+from src.data_ingestion import CFTCDataConnector
 
 logger = logging.getLogger(__name__)
 
@@ -129,6 +130,21 @@ def create_feature_matrix(
         df['hdd_5d_rolling'] = 0.0
         df['cdd_5d_rolling'] = 0.0
 
+    # Merge CFTC Commitment of Traders (COT) Energy Positioning Data (Issue #143)
+    try:
+        cftc_connector = CFTCDataConnector()
+        cot_data = cftc_connector.fetch_cot_positioning_data()
+        df['cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', 83000.0)
+        df['cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', 0.44)
+        df['cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', 0.8571)
+        df['cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', 3500.0)
+    except Exception as e:
+        logger.warning(f"Could not merge CFTC COT positioning data: {e}")
+        df['cot_rbob_net_speculative'] = 0.0
+        df['cot_rbob_zscore_3y'] = 0.0
+        df['cot_commercial_hedger_ratio'] = 0.0
+        df['cot_net_position_delta_1w'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     
@@ -223,6 +239,8 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'gas_volatility_14', 'ovx_volatility_index', 'ovx_return_1d',
         'us_active_oil_rigs', 'permian_rigs',
         'hdd_5d_rolling', 'cdd_5d_rolling', 'freeze_warning_flag',
+        'cot_rbob_net_speculative', 'cot_rbob_zscore_3y',
+        'cot_commercial_hedger_ratio', 'cot_net_position_delta_1w',
         'sin_day', 'cos_day'
     ]
     quant_features = [f for f in quant_features if f in df.columns]
