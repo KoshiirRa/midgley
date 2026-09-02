@@ -60,7 +60,11 @@ def log_predictions(
         base_price = float(row['current_price'])
         pred_price = float(row['predicted_5d_price'])
         pred_dir = "UP" if pred_price >= base_price else "DOWN"
-        target_date = (pd.to_datetime(row['date']) + pd.Timedelta(days=5)).strftime("%Y-%m-%d")
+        if 'forecast_target_date' in row and pd.notna(row['forecast_target_date']):
+            target_date = str(row['forecast_target_date'])
+        else:
+            base_dt = pd.to_datetime(row['date'])
+            target_date = pd.bdate_range(start=base_dt, periods=6)[-1].strftime("%Y-%m-%d")
         
         new_records.append({
             "log_timestamp": timestamp_str,

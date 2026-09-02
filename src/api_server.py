@@ -418,9 +418,13 @@ def simulate_shock(req: SimulateRequest):
 
 def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -> bool:
     secret_key = os.environ.get("MIDGLEY_WEBHOOK_SECRET")
+    env_name = os.environ.get("MIDGLEY_ENV", os.environ.get("ENVIRONMENT", "prod")).lower()
+    is_testing = os.environ.get("TESTING") == "1"
+    
     if not secret_key:
-        # Secret not set -> permit in unauthenticated dev mode
-        return True
+        if is_testing or env_name in ("dev", "development", "test", "testing"):
+            return True
+        return False
 
     if not signature_header:
         return False
@@ -445,6 +449,7 @@ async def ingest_event_webhook(
     """
     Strategy 4: Receives incoming breaking news headlines pushed by external webhooks
     (IFTTT, Zapier, Google Alerts). Validated via HMAC-SHA256 signature when MIDGLEY_WEBHOOK_SECRET is set.
+    Fails closed in non-development environments when secret is unconfigured.
     """
     raw_body = await request.body()
     if not verify_webhook_signature(raw_body, x_midgley_signature):
@@ -464,11 +469,31 @@ async def ingest_event_webhook(
 
 
 @app.post("/api/v1/events/poll", summary="Trigger Intraday Event Polling Cycle")
-def trigger_event_polling():
+def trigger_event_polling(
+    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature"),
+    authorization: Optional[str] = Header(None, alias="Authorization")
+):
     """
     Strategy 2: Triggers an on-demand intraday RSS polling cycle across free energy feeds.
     Evaluates breaking news, invalidates response cache on anomalies, and updates prediction logs.
+    Fails closed for unauthenticated requests outside local development environments.
     """
+    secret_key = os.environ.get("MIDGLEY_WEBHOOK_SECRET")
+    env_name = os.environ.get("MIDGLEY_ENV", os.environ.get("ENVIRONMENT", "prod")).lower()
+    is_testing = os.environ.get("TESTING") == "1"
+
+    if secret_key:
+        auth_valid = False
+        if authorization and authorization == f"Bearer {secret_key}":
+            auth_valid = True
+        elif x_midgley_signature:
+            expected_sig = hmac.new(secret_key.encode("utf-8"), b"poll", hashlib.sha256).hexdigest()
+            auth_valid = hmac.compare_digest(expected_sig, x_midgley_signature.replace("sha256=", "").strip())
+        if not auth_valid:
+            raise HTTPException(status_code=401, detail="Unauthorized poll mutation request")
+    elif not (is_testing or env_name in ("dev", "development", "test", "testing")):
+        raise HTTPException(status_code=401, detail="Webhook secret unconfigured; polling rejected in non-dev environment")
+
     from src.intraday_event_monitor import IntradayEventMonitor
     monitor = IntradayEventMonitor()
     result = monitor.run_polling_cycle()

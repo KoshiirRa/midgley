@@ -21,12 +21,11 @@ from src.live_fuel_feed import fetch_live_metro_retail_price
 logger = logging.getLogger(__name__)
 
 # CARB (California Air Resources Board) & CA State Regulatory Tax Breakdown (USD per gallon)
-CARB_EXCISE_TAX = 0.634      # CA State Excise Tax (effective July 1, 2026)
-CAP_AND_TRADE_FEE = 0.250    # Cap-and-Trade (Cap-and-Invest) Carbon Allowance Fee
-LCFS_CREDIT_FEE = 0.185      # Low Carbon Fuel Standard (LCFS) Compliance Overhead
-LOCAL_TAX_UST_FEE = 0.150    # Local Sales Tax + Underground Storage Tank (UST) Fee
-FEDERAL_EXCISE_TAX = 0.184   # US Federal Motor Fuel Tax
-TOTAL_CARB_TAX_BURDEN = CARB_EXCISE_TAX + CAP_AND_TRADE_FEE + LCFS_CREDIT_FEE + LOCAL_TAX_UST_FEE + FEDERAL_EXCISE_TAX # $0.953/gal
+CARB_EXCISE_TAX = 0.596      # CA State Excise Tax
+CAP_AND_TRADE_FEE = 0.185    # Cap-and-Trade (Cap-and-Invest) Carbon Allowance Fee
+LCFS_CREDIT_FEE = 0.084      # Low Carbon Fuel Standard (LCFS) Compliance Overhead
+LOCAL_TAX_UST_FEE = 0.088    # Local Sales Tax + Underground Storage Tank (UST) Fee
+TOTAL_CARB_TAX_BURDEN = CARB_EXCISE_TAX + CAP_AND_TRADE_FEE + LCFS_CREDIT_FEE + LOCAL_TAX_UST_FEE # $0.953/gal
 
 def fetch_oakland_market_data(
     start_date: str = "2022-01-01", 
@@ -64,16 +63,22 @@ def fetch_oakland_market_data(
     for name, ticker in tickers.items():
         try:
             data = yf.download(ticker, start=start_date, end=end_date, progress=False)
+            if data is None or data.empty:
+                continue
             close_series = data['Close'][ticker] if isinstance(data.columns, pd.MultiIndex) else data['Close']
+            if close_series.dropna().empty:
+                continue
             df_item = pd.DataFrame({'date': pd.to_datetime(close_series.index).tz_localize(None), name: close_series.values})
             dfs.append(df_item.set_index('date'))
         except Exception as e:
             logger.warning(f"Could not download ticker {ticker}: {e}")
             
-    if not dfs:
+    if not dfs or all(df.empty for df in dfs):
         return _generate_synthetic_oakland_data(start_date, end_date, live_oakland_price, live_bayarea_price)
         
     market_df = pd.concat(dfs, axis=1).sort_index().ffill().bfill().reset_index()
+    if market_df.empty or 'gasoline_rbob' not in market_df.columns or len(market_df) == 0:
+        return _generate_synthetic_oakland_data(start_date, end_date, live_oakland_price, live_bayarea_price)
     
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     margin_oakland = live_oakland_price - latest_rbob

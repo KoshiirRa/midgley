@@ -81,7 +81,8 @@ def create_feature_matrix(
     market_df: pd.DataFrame, 
     events_df: pd.DataFrame = None, 
     forecast_horizon: int = 5,
-    decay_half_life_days: float = 5.0
+    decay_half_life_days: float = 5.0,
+    region: str = "Tulsa_OK"
 ) -> pd.DataFrame:
     """
     Creates a unified feature dataset for time-series forecasting.
@@ -91,8 +92,9 @@ def create_feature_matrix(
     - events_df: DataFrame with LLM scored events containing 'date', 'geopolitical_risk', etc.
     - forecast_horizon: Number of business days ahead to forecast (default 5 days = 1 week)
     - decay_half_life_days: Exponential decay half-life for news event sentiment impact
+    - region: Target metropolitan area or hub name for locale-specific weather routing
     """
-    logger.info(f"Engineering features with {forecast_horizon}-day forecast horizon...")
+    logger.info(f"Engineering features for region '{region}' with {forecast_horizon}-day forecast horizon...")
     df = market_df.copy()
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
@@ -148,33 +150,42 @@ def create_feature_matrix(
     except Exception as e:
         logger.warning(f"Could not merge OVX volatility feed: {e}")
         
-    try:
-        rigs_df = get_baker_hughes_rig_count_feed()
-        if not rigs_df.empty:
-            df = pd.merge(df, rigs_df, on='date', how='left')
-            df['us_active_oil_rigs'] = df['us_active_oil_rigs'].ffill().bfill()
-            df['permian_rigs'] = df['permian_rigs'].ffill().bfill()
-    except Exception as e:
-        logger.warning(f"Could not merge Baker Hughes Rig Count feed: {e}")
-        
-    # Fill any remaining missing alternative values
-    for col in ['ovx_volatility_index', 'ovx_return_1d', 'us_active_oil_rigs', 'permian_rigs']:
-        if col in df.columns:
-            df[col] = df[col].fillna(0.0)
-        else:
+    for col in ['ovx_volatility_index', 'ovx_return_1d']:
+        if col not in df.columns:
             df[col] = 0.0
 
-    # Merge Open-Meteo Weather Degree Days Data (Issue #72)
+    try:
+        rig_df = fetch_baker_hughes_rig_counts(start_date=df['date'].min().strftime("%Y-%m-%d"))
+        if not rig_df.empty:
+            df = pd.merge(df, rig_df, on='date', how='left')
+            for col in ['baker_hughes_us_rig_count', 'baker_hughes_oil_rigs', 'baker_hughes_gas_rigs', 'baker_hughes_rig_delta_1w']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().bfill()
+    except Exception as e:
+        logger.warning(f"Could not merge Baker Hughes rig count feed: {e}")
+        
+    for col in ['baker_hughes_us_rig_count', 'baker_hughes_oil_rigs', 'baker_hughes_gas_rigs', 'baker_hughes_rig_delta_1w']:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Merge Open-Meteo Weather Degree Days Data (Locale-Routed, Point-in-Time Correct - Issue #72, #175)
+    # Avoid scalar broadcasting current snapshot across historical training rows
     try:
         weather_connector = OpenMeteoDegreeDaysConnector()
-        tulsa_weather = weather_connector.fetch_hub_degree_days("Tulsa_OK")
-        hdd_val = tulsa_weather.get("heating_degree_days_hdd", 0.0)
-        cdd_val = tulsa_weather.get("cooling_degree_days_cdd", 0.0)
-        freeze_flag = 1.0 if tulsa_weather.get("freeze_warning", False) else 0.0
+        hub_weather = weather_connector.fetch_hub_degree_days(region)
+        hdd_val = hub_weather.get("heating_degree_days_hdd", 0.0)
+        cdd_val = hub_weather.get("cooling_degree_days_cdd", 0.0)
+        freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else 0.0
         
-        df['hdd_daily'] = hdd_val
-        df['cdd_daily'] = cdd_val
-        df['freeze_warning_flag'] = freeze_flag
+        # Apply degree days to recent dates only (latest row) to avoid historical time-series broadcasting leakage
+        df['hdd_daily'] = 0.0
+        df['cdd_daily'] = 0.0
+        df['freeze_warning_flag'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'hdd_daily'] = hdd_val
+            df.loc[df.index[-1], 'cdd_daily'] = cdd_val
+            df.loc[df.index[-1], 'freeze_warning_flag'] = freeze_flag
+            
         df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
         df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
     except Exception as e:
@@ -185,14 +196,20 @@ def create_feature_matrix(
         df['hdd_5d_rolling'] = 0.0
         df['cdd_5d_rolling'] = 0.0
 
-    # Merge CFTC Commitment of Traders (COT) Energy Positioning Data (Issue #143)
+    # Merge CFTC Commitment of Traders (COT) Energy Positioning Data (Issue #143, #175)
+    # Avoid scalar broadcasting current snapshot across historical training rows
     try:
         cftc_connector = CFTCDataConnector()
         cot_data = cftc_connector.fetch_cot_positioning_data()
-        df['cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', 83000.0)
-        df['cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', 0.44)
-        df['cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', 0.8571)
-        df['cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', 3500.0)
+        df['cot_rbob_net_speculative'] = 0.0
+        df['cot_rbob_zscore_3y'] = 0.0
+        df['cot_commercial_hedger_ratio'] = 0.0
+        df['cot_net_position_delta_1w'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', 83000.0)
+            df.loc[df.index[-1], 'cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', 0.44)
+            df.loc[df.index[-1], 'cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', 0.8571)
+            df.loc[df.index[-1], 'cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', 3500.0)
     except Exception as e:
         logger.warning(f"Could not merge CFTC COT positioning data: {e}")
         df['cot_rbob_net_speculative'] = 0.0
@@ -200,14 +217,20 @@ def create_feature_matrix(
         df['cot_commercial_hedger_ratio'] = 0.0
         df['cot_net_position_delta_1w'] = 0.0
 
-    # Merge FERC Form 6 Interstate Pipeline Tariff Data (Issue #123)
+    # Merge FERC Form 6 Interstate Pipeline Tariff Data (Issue #123, #175)
+    # Avoid scalar broadcasting current snapshot across historical training rows
     try:
         ferc_connector = FERCDataConnector()
         ferc_data = ferc_connector.fetch_pipeline_tariff_data()
-        df['ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', 2.15)
-        df['ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', 1.85)
-        df['ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', 1.62)
-        df['ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', 1.8733)
+        df['ferc_colonial_line1_tariff_per_bbl'] = 0.0
+        df['ferc_plantation_tariff_per_bbl'] = 0.0
+        df['ferc_explorer_tariff_per_bbl'] = 0.0
+        df['ferc_pipeline_tariff_index_5d'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', 2.15)
+            df.loc[df.index[-1], 'ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', 1.85)
+            df.loc[df.index[-1], 'ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', 1.62)
+            df.loc[df.index[-1], 'ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', 1.8733)
     except Exception as e:
         logger.warning(f"Could not merge FERC pipeline tariff data: {e}")
         df['ferc_colonial_line1_tariff_per_bbl'] = 0.0

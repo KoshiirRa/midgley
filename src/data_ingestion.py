@@ -47,23 +47,42 @@ def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None) -> p
     for name, ticker in tickers.items():
         try:
             data = yf.download(ticker, start=start_date, end=end_date, progress=False)
+            if data is None or data.empty:
+                logger.warning(f"Empty market download for ticker {ticker}.")
+                continue
             if isinstance(data.columns, pd.MultiIndex):
-                close_series = data['Close'][ticker]
+                if 'Close' in data.columns.levels[0] and ticker in data['Close'].columns:
+                    close_series = data['Close'][ticker]
+                else:
+                    logger.warning(f"Ticker {ticker} missing Close column in MultiIndex.")
+                    continue
             else:
-                close_series = data['Close']
+                if 'Close' in data.columns:
+                    close_series = data['Close']
+                else:
+                    logger.warning(f"Ticker {ticker} missing Close column.")
+                    continue
             
+            if close_series.dropna().empty:
+                logger.warning(f"Ticker {ticker} Close series has no non-null observations.")
+                continue
+
             df_item = pd.DataFrame({'date': close_series.index, name: close_series.values})
             df_item['date'] = pd.to_datetime(df_item['date']).dt.tz_localize(None)
             dfs.append(df_item.set_index('date'))
         except Exception as e:
             logger.warning(f"Could not download ticker {ticker}: {e}")
             
-    if not dfs:
-        logger.error("No market data downloaded. Creating synthetic benchmark data.")
+    if not dfs or all(df.empty for df in dfs):
+        logger.error("No valid market data downloaded. Creating synthetic benchmark data.")
         return _generate_synthetic_market_data(start_date, end_date)
         
     market_df = pd.concat(dfs, axis=1).sort_index()
     market_df = market_df.ffill().bfill().reset_index()
+    if market_df.empty or len(market_df) == 0:
+        logger.error("Combined market DataFrame is empty. Creating synthetic benchmark data.")
+        return _generate_synthetic_market_data(start_date, end_date)
+
     return market_df
 
 

@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-02 10:08:31",
-  "total_events": 230,
+  "last_updated": "2026-09-02 23:00:11",
+  "total_events": 329,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -2295,6 +2295,996 @@
     },
     {
       "timestamp": "2026-09-02 10:08:31",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:11",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:12",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:12",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:13",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:15",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:16",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:16",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:17",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:19",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:20",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:13",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:14",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:15",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:16",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:17",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:18",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:18",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:20",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:21",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:22",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:11",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:12",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:12",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:13",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:15",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:16",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:16",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:17",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:19",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:20",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:12",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:13",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:14",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:15",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:21",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:22",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:23",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:24",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:25",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:25",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:26",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:11",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:12",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:13",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:15",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:16",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:17",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:17",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:20",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:21",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:12",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:13",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:14",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:14",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:16",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:17",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:17",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:20",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:21",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:13",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:14",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:14",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:15",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:17",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:18",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:18",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:20",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:21",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:22",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:14",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:15",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:16",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:17",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:18",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:19",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:20",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:20",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:21",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:22",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:23",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:03",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:03",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:04",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:05",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:06",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:07",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:08",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:09",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:09",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:10",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:11",
       "connector_name": "AAA Web Scraper (Vallejo, CA)",
       "target": "NorthBay_CA",
       "status": "SUCCESS",
