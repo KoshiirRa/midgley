@@ -4213,4 +4213,4 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-09-02 15:39:01,2026-08-30,BayArea_CA,v1.4-BayArea-Ridge,5.4029,5.3327,DOWN,,,,,DAILY_BATCH,
 2026-09-02 15:39:01,2026-09-06,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.8432,DOWN,,,,,DAILY_BATCH,
 2026-09-02 15:39:01,2026-09-06,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.9411,DOWN,,,,,DAILY_BATCH,
-2026-09-02 16:45:09,2026-09-07,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,Tariffs spat: Carney bets Canada can defy Trump - DW.com
+2026-09-02 17:00:12,2026-09-07,National,v1.4-Finlight-Intraday,3.184,3.2502,UP,,,,,INTRADAY_REVISION,"Inflation risks rise with higher fuel costs and new U.S. tariffs, Bank of Canada governor warns - CBC"

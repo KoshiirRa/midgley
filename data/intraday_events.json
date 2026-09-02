@@ -670,5 +670,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-02T17:00:11.650764",
+    "headline": "Inflation risks rise with higher fuel costs and new U.S. tariffs, Bank of Canada governor warns - CBC",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5LMDNTT18zaDd6RktJMFl0MExJb2Y4bDdueEd4TlNmNjlvUm90X0RVWWFlM1J4VDRmMGsxeXRYNUpnSW1MLWRNanJNeTdIaTVWVE9YOXg4N0VPVThJdjgzWDlvbU9UZm9rQ1FOcXRqLWplNlk?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
