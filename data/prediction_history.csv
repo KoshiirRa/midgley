@@ -1,7 +1,6 @@
 log_timestamp,forecast_target_date,region,model_version,run_type,current_base_price,predicted_5d_price,predicted_direction,actual_5d_price,actual_direction,error_dollars,directional_hit,llm_price_pressure,llm_supply_disruption,quant_baseline_5d_price,llm_augmentation_delta,prediction_lower_95ci,prediction_upper_95ci,within_95ci_hit,data_source_provenance,headline_trigger
 2026-09-01 10:00:00,2026-09-06,Tulsa_OK,v1.5-MLOps,DAILY_BATCH,3.5,3.6,UP,3.58,UP,0.02,1.0,0.4,0.1,3.52,0.08,3.48,3.72,1.0,GasBuddy_GraphQL,
 2026-09-02 10:00:00,2026-09-07,Newark_DE,v1.5-MLOps,DAILY_BATCH,3.2,3.1,DOWN,3.12,DOWN,0.02,1.0,-0.25,0.0,3.18,-0.08,2.98,3.22,1.0,AAA_Scraper,
-2026-09-03 05:15:09,2026-09-10,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,3.1302,3.3702,,yfinance,Bessent says G20 countries should also use tariffs to protect their industries from cheap imports - Greater Milwaukee Today
 2026-09-03 07:00:35,2025-10-06,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,1.9951,1.9341,DOWN,1.9016,DOWN,0.0325,1.0,0.0,0.0,1.9951,0.0,1.8141,2.0541,1.0,yfinance,
 2026-09-03 07:00:35,2025-10-07,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,1.9729,1.9178,DOWN,1.8939,DOWN,0.0239,1.0,0.0,0.0,1.9729,0.0,1.7978,2.0378,1.0,yfinance,
 2026-09-03 07:00:35,2025-10-08,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,1.8859,1.8082,DOWN,1.9095,UP,0.1013,0.0,0.0,0.0,1.8859,0.0,1.6882,1.9282,1.0,yfinance,
@@ -2302,3 +2301,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,current_base_pr
 2026-09-03 07:02:09,2026-09-01,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,4.1241,4.0044,DOWN,3.6851,DOWN,0.3193,1.0,0.0,0.0,4.1241,0.0,3.8844,4.1244,0.0,yfinance,
 2026-09-03 07:02:09,2026-09-02,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,4.1913,4.0631,DOWN,3.6538,DOWN,0.4093,1.0,0.0,0.0,4.1913,0.0,3.9431,4.1831,0.0,yfinance,
 2026-09-03 07:02:10,2026-09-09,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,3.975,3.8215,DOWN,,,,,0.0,0.0,3.975,0.0,3.7015,3.9415,,yfinance,
+2026-09-03 07:30:09,2026-09-10,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,3.1302,3.3702,,yfinance,Korea stocks pare early gains as rate fears and tariff risks weigh - CHOSUNBIZ - Chosunbiz
