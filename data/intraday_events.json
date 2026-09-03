@@ -852,5 +852,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.4
     }
+  },
+  {
+    "timestamp": "2026-09-03T05:15:08.949506",
+    "headline": "Bessent says G20 countries should also use tariffs to protect their industries from cheap imports - Greater Milwaukee Today",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMikwJBVV95cUxPVjJoYjRGckhPZjllZjRGT0xZZGVDT3MwX2lULVV0Q2NFSTJpa3p3REI5dU1FS1VGajB2THI1b0JwcU9RS0JwZjYzUzRTbDNRQzRGazBwVXBzY2JsN1ZVYm1icVhtYUo5YWZxUTRXbG01dVBpdEtMNlZxNExWVld1akFtckxLclI2ZDRDcDRPVkRjTFNRUkU4NUtXWUVlM1MzT2RfNHY5N1Q0c0IwdGx4S3ZQV09CUHJvZVVDM3BTb3pWMDBDUkVqRS1NV2Y0S05NQ3ZHcHVsYURDQm9pNDlxanNHZ0FoT2REVmh1R0wyc1JhU0FjUGVVLVlzTmtDaHp3ak5fZl85S3J5WGFZb19EZlR6TQ?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
