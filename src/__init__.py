@@ -1,8 +1,8 @@
 """
 Gas Price LLM Prediction Package (midgley)
-Package Version: 0.3.3
+Package Version: 0.3.4
 Model Engine Version: Regular Model v1.4 Dubbs
 """
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 __model_version__ = "Regular Model v1.4 Dubbs"

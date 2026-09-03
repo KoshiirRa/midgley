@@ -140,8 +140,8 @@ def get_release_badge() -> str:
     """Generates dynamic HTML badge for the header based on git branch or environment.
     
     When running on the 'dev' branch (or any development branch/environment),
-    it displays a 'Dev Branch v0.3.3-dev' badge in amber.
-    When running on 'main' or 'master' release branches, it displays 'Release v0.3.3' in orange.
+    it displays a 'Dev Branch v0.3.4-dev' badge in amber.
+    When running on 'main' or 'master' release branches, it displays 'Release v0.3.4' in orange.
     """
     branch = os.getenv("MIDGLEY_BRANCH", os.getenv("GITHUB_REF_NAME", ""))
     if not branch:
@@ -157,9 +157,9 @@ def get_release_badge() -> str:
             branch = "dev"
 
     if branch in ["main", "master"] or branch.startswith("release/"):
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.3</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.4</span>'
     else:
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.3-dev</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.4-dev</span>'
 
 
 def get_analytics_script() -> str:
