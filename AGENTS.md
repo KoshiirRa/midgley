@@ -410,6 +410,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   2. **Regional Tax & Infrastructure Adjustments:** Whenever regional statutory tax burdens, fees, or logistics adjustments are reconciled or modified (e.g. CARB tax burden in #172, C&D Canal detours, Ohio River lock delays in #181), the agent MUST update Section 4 notes and equations in `generate_technical_breakdown_file()`.
   3. **Automatic Re-generation Execution:** The agent MUST execute `python3 -m src.dashboard_generator` to compile and output `docs/technical_breakdown.html` and `docs/technical_breakdown.md` and commit the updated pages whenever model math or connectors are updated.
 
+---
+
+### 19. Mandatory GitHub PR, Issue & Release Formatting Directives
+
+* **Role:** Enforces clean, un-corrupted GitHub Markdown formatting across all repository Pull Requests, Issues, and Release Notes.
+* **Mandatory Formatting Directives:**
+  1. **Never Pass Inline Markdown Strings in CLI Arguments:** Passing markdown strings containing backticks (`code`) or special characters directly in CLI command options (e.g. `gh release create --notes "..."` or `gh pr create --body "..."`) causes shell and CLI parser unescaping issues, converting backticks into literal backslashes (`\code\`) or stripping text inside parentheses.
+  2. **Mandatory File Payload Standard:** ALWAYS write markdown content to a standalone file first (`release_notes.md`, `pr_body.md`, or `/tmp/notes.md`) using strict file-writing tools (or `write_to_file`), and pass `--notes-file <file>` or `--body-file <file>` to the `gh` CLI.
+  3. **Backtick Formatting Integrity:** Ensure all code paths, variables, class names, and CLI commands are enclosed in valid backticks (e.g. `src/diesel.py`, `HO=F`, `OILPRICEAPI_MAX_DAILY_CALLS`) so GitHub renders clean inline code blocks without backslash corruption or missing symbols.
+
+
 
 
 
