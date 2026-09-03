@@ -602,6 +602,148 @@ def build_component_attribution_card_html(region_id: str, base_price: float, pre
     return card_html
 
 
+def build_scoreboard_section_html() -> str:
+    """Renders the Realized-vs-Predicted Rolling Scoreboard section HTML."""
+    from src.prediction_logger import (
+        compute_rolling_scoreboard_metrics,
+        compute_regional_scoreboard_breakdown,
+        get_recent_evaluated_records
+    )
+
+    metrics = compute_rolling_scoreboard_metrics(window_days=30)
+    records = get_recent_evaluated_records(limit=15)
+    regional = compute_regional_scoreboard_breakdown(window_days=30)
+
+    mae_str = f"${metrics['mae_dollars']:.4f}"
+    hit_str = f"{metrics['directional_hit_rate_pct']:.1f}%"
+    uplift_str = f"{metrics['model_uplift_mae_pct']:+.1f}%"
+    evals_count = metrics['total_evaluations']
+
+    rows_html = ""
+    for r in records[:10]:
+        hit_badge = '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span>' if r['directional_hit'] == 1 else '<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span>'
+        rows_html += f"""
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+            <td class="p-3 text-slate-300 font-mono text-xs">{r['forecast_target_date']}</td>
+            <td class="p-3 font-semibold text-white text-xs">{r['region']}</td>
+            <td class="p-3 text-slate-400 text-xs">${r['current_base_price']:.3f}</td>
+            <td class="p-3 text-cyan-400 font-semibold text-xs">${r['predicted_5d_price']:.3f}</td>
+            <td class="p-3 text-emerald-400 font-semibold text-xs">${r['actual_5d_price']:.3f}</td>
+            <td class="p-3 text-slate-300 font-mono text-xs">${r['error_dollars']:.4f}</td>
+            <td class="p-3">{hit_badge}</td>
+        </tr>
+        """
+
+    regional_rows_html = ""
+    for reg in regional:
+        up_color = "text-emerald-400" if reg['model_uplift_mae_pct'] > 0 else "text-slate-400"
+        regional_rows_html += f"""
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+            <td class="p-2.5 font-bold text-slate-200 text-xs">{reg['region']}</td>
+            <td class="p-2.5 text-slate-400 text-xs">{reg['evaluations']}</td>
+            <td class="p-2.5 font-semibold text-emerald-400 text-xs">${reg['mae_dollars']:.4f}</td>
+            <td class="p-2.5 text-slate-300 text-xs">${reg['rmse_dollars']:.4f}</td>
+            <td class="p-2.5 font-semibold text-cyan-400 text-xs">{reg['directional_hit_rate_pct']:.1f}%</td>
+            <td class="p-2.5 font-bold {up_color} text-xs">{reg['model_uplift_mae_pct']:+.1f}%</td>
+        </tr>
+        """
+
+    return f"""
+        <!-- 🎯 REALIZED-VS-PREDICTED ROLLING SCOREBOARD SECTION -->
+        <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-wider text-emerald-400 font-bold">MLOps Continuous Performance Scoreboard</span>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2 mt-0.5">
+                        <i class="fa-solid fa-bullseye text-emerald-400"></i> Realized-vs-Predicted Rolling Model Scoreboard
+                    </h3>
+                    <p class="text-xs text-slate-400">Empirical out-of-time accuracy tracking 5-day model projections against actual ground-truth market prices</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <i class="fa-solid fa-clock-rotate-left mr-1"></i> Rolling 30-Day Evaluation Window
+                    </span>
+                </div>
+            </div>
+
+            <!-- Scoreboard Hero KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
+                    <span class="text-xs text-slate-400">30-Day Mean Absolute Error (MAE)</span>
+                    <p class="text-2xl font-extrabold text-white">{mae_str}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                    <p class="text-[11px] text-slate-500">Out-of-Time Error Magnitude</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
+                    <span class="text-xs text-slate-400">30-Day Directional Hit Rate</span>
+                    <p class="text-2xl font-extrabold text-emerald-400">{hit_str}</p>
+                    <p class="text-[11px] text-slate-500">Correct Trend Direction Calls</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
+                    <span class="text-xs text-slate-400">Model MAE Uplift vs Naive</span>
+                    <p class="text-2xl font-extrabold text-cyan-400">{uplift_str}</p>
+                    <p class="text-[11px] text-slate-500">Error Reduction vs Persistence</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
+                    <span class="text-xs text-slate-400">Total Evaluated Forecasts</span>
+                    <p class="text-2xl font-extrabold text-purple-400">{evals_count}</p>
+                    <p class="text-[11px] text-slate-500">Mature Out-of-Time Sample</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Regional Scoreboard Matrix Table -->
+                <div class="lg:col-span-1 space-y-3">
+                    <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-cyan-400"></i> Regional Accuracy Matrix
+                    </h4>
+                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+                                    <th class="p-2.5">Region</th>
+                                    <th class="p-2.5">N</th>
+                                    <th class="p-2.5">MAE</th>
+                                    <th class="p-2.5">RMSE</th>
+                                    <th class="p-2.5">Hit %</th>
+                                    <th class="p-2.5">Uplift</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {regional_rows_html}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Realized-vs-Predicted Evaluation Ledger -->
+                <div class="lg:col-span-2 space-y-3">
+                    <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-emerald-400"></i> Recent Completed Forecast Evaluations
+                    </h4>
+                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+                                    <th class="p-3">Target Date</th>
+                                    <th class="p-3">Region</th>
+                                    <th class="p-3">Base</th>
+                                    <th class="p-3">Pred 5D</th>
+                                    <th class="p-3">Actual</th>
+                                    <th class="p-3">Error</th>
+                                    <th class="p-3">Outcome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {rows_html}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    """
+
+
 def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> str:
     """Renders responsive Tailwind CSS card for the Last Run Intelligence & Impact Audit Component."""
     import urllib.parse
@@ -1962,6 +2104,8 @@ def generate_public_dashboard():
 {audit_card_html}
 
 {build_component_attribution_card_html('National', prices_map['National']['base'], prices_map['National']['pred'])}
+
+{build_scoreboard_section_html()}
 
         <!-- 📈 HISTORICAL ACCURACY IMPROVEMENT SECTION -->
         <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">

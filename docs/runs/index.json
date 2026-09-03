@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-03_00-12-30",
+    "timestamp": "2026-09-02 23:50:09",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-11-56",
+    "timestamp": "2026-09-02 23:50:09",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-02_23-50-31",
     "timestamp": "2026-09-02 23:50:09",
     "run_type": "DAILY_BATCH",
@@ -586,17 +598,5 @@
     "timestamp": "2026-09-01 23:30:43",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Tanker Market: Unplanned US Refinery Outages Could Impact Fr..."
-  },
-  {
-    "run_id": "2026-09-01_23-15-54",
-    "timestamp": "2026-09-01 23:15:43",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Trump Tariff Reversal Could Cut Costs for US Energy Firms Bu..."
-  },
-  {
-    "run_id": "2026-09-01_21-30-55",
-    "timestamp": "2026-09-01 21:30:45",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US Treasury's Bessent faces G20 diplomacy test amid tariffs,..."
   }
 ]

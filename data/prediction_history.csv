@@ -2103,16 +2103,16 @@ log_timestamp,forecast_target_date,region,model_version,current_base_price,predi
 2026-08-29 03:02:06,2026-09-01,Newark_DE,v1.4-Finlight-Newark-Ridge,4.2792,4.2005,DOWN,3.6851,DOWN,0.5154,1.0,DAILY_BATCH,
 2026-08-29 03:03:32,2026-09-01,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,4.2392,4.175,DOWN,3.6851,DOWN,0.4899,1.0,DAILY_BATCH,
 2026-08-29 03:03:32,2026-09-01,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,4.0632,3.999,DOWN,3.5601,DOWN,0.4389,1.0,DAILY_BATCH,
-2026-08-28 18:45:06,2026-09-02,National,v1.4-Finlight-Intraday,3.184,3.2069,UP,3.0947,DOWN,0.1122,0.0,INTRADAY_REVISION,OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com
-2026-08-30 12:59:20,2026-09-02,National,v1.4-Finlight-National-Ridge,3.0502,3.2199,UP,3.0947,UP,0.1252,1.0,DAILY_BATCH,
-2026-08-30 13:00:29,2026-09-02,Tulsa_OK,v1.4-Finlight-Tulsa-Ridge,3.731,3.6094,DOWN,3.6447,DOWN,0.0353,1.0,DAILY_BATCH,
-2026-08-30 13:01:35,2026-09-02,Newark_DE,v1.4-Finlight-Newark-Ridge,3.933,3.7946,DOWN,3.6447,DOWN,0.1499,1.0,DAILY_BATCH,
-2026-08-30 13:02:37,2026-09-02,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,3.862,3.7433,DOWN,3.6447,DOWN,0.0986,1.0,DAILY_BATCH,
-2026-08-30 13:02:37,2026-09-02,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.707,3.5931,DOWN,3.5197,DOWN,0.0734,1.0,DAILY_BATCH,
+2026-08-28 18:45:06,2026-09-02,National,v1.4-Finlight-Intraday,3.184,3.2069,UP,3.0971,DOWN,0.1098,0.0,INTRADAY_REVISION,OR Tambo fuel crunch: Airlines mull tankering after Sasol outage - news24.com
+2026-08-30 12:59:20,2026-09-02,National,v1.4-Finlight-National-Ridge,3.0502,3.2199,UP,3.0971,UP,0.1228,1.0,DAILY_BATCH,
+2026-08-30 13:00:29,2026-09-02,Tulsa_OK,v1.4-Finlight-Tulsa-Ridge,3.731,3.6094,DOWN,3.6471,DOWN,0.0377,1.0,DAILY_BATCH,
+2026-08-30 13:01:35,2026-09-02,Newark_DE,v1.4-Finlight-Newark-Ridge,3.933,3.7946,DOWN,3.6471,DOWN,0.1475,1.0,DAILY_BATCH,
+2026-08-30 13:02:37,2026-09-02,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,3.862,3.7433,DOWN,3.6471,DOWN,0.0962,1.0,DAILY_BATCH,
+2026-08-30 13:02:37,2026-09-02,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,3.707,3.5931,DOWN,3.5221,DOWN,0.071,1.0,DAILY_BATCH,
 2026-08-30 16:03:36,2026-09-02,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,3.28,3.1628,DOWN,3.28,UP,0.1172,0.0,DAILY_BATCH,
-2026-08-30 16:04:17,2026-09-02,Greenville_NC,v1.4-Finlight-Greenville-Ridge,3.25,3.1324,DOWN,3.6447,UP,0.5123,0.0,DAILY_BATCH,
-2026-08-30 16:04:43,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.7747,DOWN,5.1447,UP,0.37,0.0,DAILY_BATCH,
-2026-08-30 16:04:43,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.8712,DOWN,5.2447,UP,0.3735,0.0,DAILY_BATCH,
+2026-08-30 16:04:17,2026-09-02,Greenville_NC,v1.4-Finlight-Greenville-Ridge,3.25,3.1324,DOWN,3.6471,UP,0.5147,0.0,DAILY_BATCH,
+2026-08-30 16:04:43,2026-09-02,Oakland_CA,v1.4-Oakland-Ridge,4.95,4.7747,DOWN,5.1471,UP,0.3724,0.0,DAILY_BATCH,
+2026-08-30 16:04:43,2026-09-02,BayArea_CA,v1.4-BayArea-Ridge,5.05,4.8712,DOWN,5.2471,UP,0.3759,0.0,DAILY_BATCH,
 2026-08-29 22:16:40,2026-09-03,National,v1.4-Finlight-Intraday,3.184,3.2668,UP,,,,,INTRADAY_REVISION,"US And Iran Exchange Strikes, Trump Begins Rebuilding Tariff Wall | The Opening Trade 6/3/2026 Brock Stewart (7pxajata41) - Mshale"
 2026-08-30 23:00:39,2026-09-04,National,v1.4-Finlight-Intraday,3.184,3.2069,UP,,,,,INTRADAY_REVISION,Tanker Market: Unplanned US Refinery Outages Could Impact Freight Trade - Hellenic Shipping News
 2026-08-31 00:58:27,2026-09-04,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,3.28,3.1831,DOWN,,,,,DAILY_BATCH,

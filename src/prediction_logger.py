@@ -218,3 +218,154 @@ def generate_performance_report() -> pd.DataFrame:
         
     report_df = pd.DataFrame(report_rows)
     return report_df
+
+
+def filter_evaluated_history_by_window(
+    df: pd.DataFrame, window_days: int | str = 30, region: str = None
+) -> pd.DataFrame:
+    """Filters evaluated prediction history records by rolling window (in days) and region."""
+    if df.empty or 'actual_5d_price' not in df.columns:
+        return pd.DataFrame()
+
+    eval_df = df.dropna(subset=['actual_5d_price']).copy()
+    if eval_df.empty:
+        return eval_df
+
+    if region and str(region).lower() not in ["all", "none", ""]:
+        reg_target = str(region).lower()
+        eval_df = eval_df[eval_df['region'].astype(str).str.lower() == reg_target]
+
+    if eval_df.empty:
+        return eval_df
+
+    eval_df['target_dt'] = pd.to_datetime(eval_df['forecast_target_date'], errors='coerce')
+    eval_df = eval_df.dropna(subset=['target_dt']).sort_values('target_dt')
+
+    if eval_df.empty:
+        return eval_df
+
+    if window_days is not None and str(window_days).lower() != "all":
+        try:
+            w_int = int(window_days)
+            max_dt = eval_df['target_dt'].max()
+            cutoff_dt = max_dt - pd.Timedelta(days=w_int)
+            eval_df = eval_df[eval_df['target_dt'] >= cutoff_dt]
+        except (ValueError, TypeError):
+            pass
+
+    return eval_df
+
+
+def compute_rolling_scoreboard_metrics(
+    window_days: int | str = 30, region: str = None
+) -> dict:
+    """
+    Computes rolling performance metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
+    Naive Persistence Baseline MAE, and Model MAE Uplift %) over a given rolling day window.
+    """
+    df = backfill_actual_prices_and_evaluate()
+    filtered_df = filter_evaluated_history_by_window(df, window_days=window_days, region=region)
+
+    if filtered_df.empty:
+        return {
+            "window_days": window_days,
+            "region_filter": region or "All",
+            "total_evaluations": 0,
+            "mae_dollars": 0.0,
+            "rmse_dollars": 0.0,
+            "mape_pct": 0.0,
+            "directional_hit_rate_pct": 0.0,
+            "naive_persistence_mae": 0.0,
+            "model_uplift_mae_pct": 0.0,
+        }
+
+    actuals = filtered_df['actual_5d_price'].astype(float).values
+    preds = filtered_df['predicted_5d_price'].astype(float).values
+    bases = filtered_df['current_base_price'].astype(float).values
+    hits = filtered_df['directional_hit'].astype(float).values
+
+    n_eval = len(filtered_df)
+    mae = float(np.mean(np.abs(actuals - preds)))
+    rmse = float(np.sqrt(np.mean((actuals - preds) ** 2)))
+    mape = float(np.mean(np.abs((actuals - preds) / actuals)) * 100.0)
+    hit_rate = float(np.mean(hits) * 100.0)
+
+    naive_errors = np.abs(actuals - bases)
+    naive_mae = float(np.mean(naive_errors)) if len(naive_errors) > 0 else 0.0
+
+    if naive_mae > 0:
+        model_uplift = float(((naive_mae - mae) / naive_mae) * 100.0)
+    else:
+        model_uplift = 0.0
+
+    return {
+        "window_days": window_days,
+        "region_filter": region or "All",
+        "total_evaluations": n_eval,
+        "mae_dollars": round(mae, 4),
+        "rmse_dollars": round(rmse, 4),
+        "mape_pct": round(mape, 2),
+        "directional_hit_rate_pct": round(hit_rate, 2),
+        "naive_persistence_mae": round(naive_mae, 4),
+        "model_uplift_mae_pct": round(model_uplift, 2),
+    }
+
+
+def compute_regional_scoreboard_breakdown(window_days: int | str = 30) -> list[dict]:
+    """Computes rolling performance metrics for each active region."""
+    df = backfill_actual_prices_and_evaluate()
+    if df.empty or 'actual_5d_price' not in df.columns:
+        return []
+
+    eval_df = df.dropna(subset=['actual_5d_price']).copy()
+    if eval_df.empty:
+        return []
+
+    regions = eval_df['region'].unique()
+    breakdown = []
+
+    for reg in sorted(regions):
+        metrics = compute_rolling_scoreboard_metrics(window_days=window_days, region=reg)
+        if metrics["total_evaluations"] > 0:
+            breakdown.append({
+                "region": reg,
+                "evaluations": metrics["total_evaluations"],
+                "mae_dollars": metrics["mae_dollars"],
+                "rmse_dollars": metrics["rmse_dollars"],
+                "mape_pct": metrics["mape_pct"],
+                "directional_hit_rate_pct": metrics["directional_hit_rate_pct"],
+                "naive_persistence_mae": metrics["naive_persistence_mae"],
+                "model_uplift_mae_pct": metrics["model_uplift_mae_pct"],
+            })
+
+    return breakdown
+
+
+def get_recent_evaluated_records(region: str = None, limit: int = 50) -> list[dict]:
+    """Returns chronologically sorted evaluated forecast records."""
+    df = backfill_actual_prices_and_evaluate()
+    filtered_df = filter_evaluated_history_by_window(df, window_days="all", region=region)
+
+    if filtered_df.empty:
+        return []
+
+    recent_df = filtered_df.tail(limit).copy()
+    records = []
+
+    for idx, row in recent_df.iterrows():
+        records.append({
+            "log_timestamp": str(row.get("log_timestamp", "")),
+            "forecast_target_date": str(row.get("forecast_target_date", "")),
+            "region": str(row.get("region", "")),
+            "model_version": str(row.get("model_version", "")),
+            "current_base_price": float(row.get("current_base_price", 0.0)),
+            "predicted_5d_price": float(row.get("predicted_5d_price", 0.0)),
+            "actual_5d_price": float(row.get("actual_5d_price", 0.0)),
+            "predicted_direction": str(row.get("predicted_direction", "")),
+            "actual_direction": str(row.get("actual_direction", "")),
+            "error_dollars": round(float(row.get("error_dollars", 0.0)), 4),
+            "directional_hit": int(row.get("directional_hit", 0)),
+        })
+
+    return records
+

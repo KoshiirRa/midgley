@@ -489,6 +489,20 @@ def test_feature_attribution_card_in_regional_pages():
         assert "Model Share Weight" in html, f"Missing model share weight in {p}"
 
 
+def test_scoreboard_section_in_index_html():
+    """Verify that index.html contains the Realized-vs-Predicted Rolling Scoreboard section."""
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    assert "Realized-vs-Predicted Rolling Model Scoreboard" in html
+    assert "MLOps Continuous Performance Scoreboard" in html
+    assert "Regional Accuracy Matrix" in html
+    assert "Recent Completed Forecast Evaluations" in html
+
+
+
 
 
 
