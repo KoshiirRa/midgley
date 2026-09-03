@@ -838,5 +838,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-03T05:00:08.283802",
+    "headline": "Chip Tariff Threat Adds to Inflation Fears as Yields Near 5% - en.sedaily.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPbGsyekg4WGtVQzF6ZndCSnFreWEtMkN5NTJCR3BEd2x0aVRpUDFHSWtPT1BTN3VIZ2VtOFBuNV84aVNBek5lejEzc1RTNmExSW81dnBuQV9IaUVwU01sUXdhNS1ucDN5VEgzclhyeTl3NUF3Z1pOWExDUFd0dGVGbzktZTNhd0ltNzRDaUZYdW9rZUY1SG95Tlc1X3FHZ1BtQjJEelRDU1Z2Vk0?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": -0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    }
   }
 ]
