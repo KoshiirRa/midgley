@@ -1020,5 +1020,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-03T18:30:07.749237",
+    "headline": "Rates Unchanged as Bank Weighs Tariff and Energy Risks - Signal49 Research",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNTzRGZ2JJNEhVX2xaU3pLYzNkN1ltRndjYzJnZmRONVJlZ3RTWVprU3JqNXV6YkgzeUFhd0lXZVZNTVp3ekxjdmtEd1pwUzNJWUV0NU1nQ1ZRMjF5VE5ZaVZZSU03dm1VREM0djhhTzVhNzhPa0ZkUVV3U2RKWnltNkRxM0FVZEdIRlJKSW81V3FRZw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
