@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-03_14-15-16",
+    "timestamp": "2026-09-03 14:15:05",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Letters: Why slap tariffs on Canadian oil? Let\u2019s conserve in..."
+  },
+  {
     "run_id": "2026-09-03_12-30-17",
     "timestamp": "2026-09-03 12:30:06",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-03_00-13-02",
-    "timestamp": "2026-09-02 23:50:09",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_00-12-59",
     "timestamp": "2026-09-02 23:50:09",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
