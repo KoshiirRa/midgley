@@ -1,0 +1,29 @@
+{
+  "90210": {
+    "zip_code": "90210",
+    "state": "CA",
+    "padd_region": "PADD 5",
+    "calibrated_model_used": "Oakland_CA (PADD 5 CARB)",
+    "hit_count": 2,
+    "first_searched_at": "2026-09-03T23:00:45.433276",
+    "last_searched_at": "2026-09-03T23:00:47.725278"
+  },
+  "77002": {
+    "zip_code": "77002",
+    "state": "TX",
+    "padd_region": "PADD 3",
+    "calibrated_model_used": "National Wholesale (PADD 3)",
+    "hit_count": 1,
+    "first_searched_at": "2026-09-03T23:00:45.433443",
+    "last_searched_at": "2026-09-03T23:00:45.433443"
+  },
+  "10001": {
+    "zip_code": "10001",
+    "state": "NY",
+    "padd_region": "PADD 1B",
+    "calibrated_model_used": "Newark_DE (PADD 1B)",
+    "hit_count": 4,
+    "first_searched_at": "2026-09-03T23:00:45.433602",
+    "last_searched_at": "2026-09-03T23:00:50.127191"
+  }
+}

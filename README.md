@@ -165,6 +165,7 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 13. **Automated Nightly Dev Releases (`.github/workflows/nightly_dev_release.yml`):** Automatically builds, tags (`dev-YYYY-MM-DD`), and documents GitHub pre-releases tracking whatever is on the `dev` branch every night at 3:00 AM Central Time (08:00 UTC).
 14. **3-Tier Multi-Tier Cache Gateway & Quota Sync (`src/lookup_cache.py`):** High-availability cascading cache (Turso Edge SQLite -> Cloudflare D1 Worker -> Local SQLite `data/lookup_cache.sqlite`) with SHA-256 headline deduplication ($0 token cost on repeated headlines) and cross-runner API quota ledger sync (`quota:finlight:current`).
 15. **Locales Metadata & Multi-Region Batch Forecast Gateway (`src/api_server.py`, Issue #48):** Exposes `GET /api/v1/locales` for dynamic discovery of supported locale codes, statutory CARB tax burdens, and refining hub metadata, backed by multi-region batch endpoints (`POST /api/v1/forecast/batch` and `POST /api/v1/combined/batch`).
+16. **ZIP Code Geocoding & System Observability Page (`src/zip_geocoding.py` & `docs/telemetry.html`, Issues #50 & #195):** Resolves any 5-digit US ZIP code via a 4-tier fallback engine (Metro Cluster hit -> State/PADD fallback -> Live GasBuddy station search -> Resolution metadata), logs unmapped lookups to `data/unmapped_zip_telemetry.json`, and exposes interactive Leaflet.js query demand heatmaps and candidate expansion metro hubs on `docs/telemetry.html`.
 
 ---
 

@@ -132,6 +132,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **EIA-930 Hourly Electric Grid Stress Monitor (`src/data_ingestion.py`) (Issue #179):** `EIA930GridMonitorConnector` monitors ERCOT, MISO, PJM, and CAISO balancing authority load anomalies near refining hubs (`grid_stress_load_anomaly_zscore`).
   - **Expanded EIA Weekly Petroleum Balance (`src/data_ingestion.py`) (Issue #180):** Expands `EIADataConnector` to ingest weekly motor gasoline product supplied (implied demand), refiner net production by PADD, and inter-PADD pipeline movements.
   - **USACE LPMS Ohio River Lock Delays (`src/usace_locks.py`) (Issue #181):** `USACELockConnector` monitors commercial barge queue times and delay hours at Markland and McAlpine locks on the Ohio River (`usace_ohio_river_lock_delay_hours`) for Cincinnati regional logistics calibration.
+  - **4-Tier ZIP Code Geocoding & PADD Resolution Engine (`src/zip_geocoding.py`) (Issues #50 & #195):** `resolve_zip_code()` maps any 5-digit US ZIP code to mapped metro area locale, PADD region, state, and statutory state fuel tax policy via a 4-tier fallback engine (Metro Cluster hit -> State/PADD fallback -> Live GasBuddy station search -> Resolution metadata), logging unmapped lookups to `data/unmapped_zip_telemetry.json`.
 
 
 
@@ -230,6 +231,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
 * **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, evaluating 95% Confidence Interval Coverage (`within_95ci_hit`), and exposing continuous rolling performance metrics via API & web dashboard.
+* **Automated Cloud Relational Database Synchronization (`sync_predictions_to_cloud()`, Issue #82):**
+  - Synchronizes out-of-time prediction history logs and backfilled actual outcomes to remote relational databases (Turso Edge SQLite via `/v2/pipeline` REST JSON payloads, Cloudflare D1 Edge Workers via `CLOUDFLARE_CACHE_URL`, or Neon Postgres) with automatic `prediction_history` table schema creation and record upserts.
+  - Enforces 100% offline fallback: cloud sync operations execute defensively in the background so local CSV datastore (`data/prediction_history.csv`) remains fully operational without blocking execution if cloud endpoints are offline or credentials are absent.
+  - Exposed publicly via REST API endpoints `POST /api/v1/forecast/cloud-sync` and `GET /api/v1/forecast/cloud-status` (`get_cloud_sync_status()`).
 * **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
 * **Realized-vs-Predicted Rolling Scoreboard & Observability Engine:**
   - `compute_rolling_scoreboard_metrics(window_days=30, region=None)`: Calculates rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices.
@@ -238,8 +243,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - `get_recent_evaluated_records(region=None, limit=50)`: Returns chronologically sorted evaluated forecast records.
   - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard` and embedded in `docs/index.html`.
 * **Functions:**
-  - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates.
-  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, and backfills actual prices in `prediction_history.csv`.
+  - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates, automatically triggering background cloud DB sync.
+  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, backfills actual prices in `prediction_history.csv`, and triggers background cloud DB sync.
+  - `sync_predictions_to_cloud()`: Pushes prediction history rows to Turso, Cloudflare D1, or Neon cloud stores with zero-downtime local CSV fallback.
+  - `get_cloud_sync_status()`: Returns active cloud sync providers and local CSV datastore statistics.
 
 ---
 
@@ -258,9 +265,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`, `src/regional_metadata.py` & `src/social_embed_generator.py`)
+### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`, `src/regional_metadata.py`, `src/fireworks_tech_graph.py` & `src/social_embed_generator.py`)
 
-* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), loads decoupled regional metadata profiles from `data/regional_metadata/` via `src/regional_metadata.py`, renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
+* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), loads decoupled regional metadata profiles from `data/regional_metadata/` via `src/regional_metadata.py`, synthesizes self-contained SVG architecture diagrams via `src/fireworks_tech_graph.py`, renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
+* **Fireworks Tech Graph Automated Architecture Diagram Generator (`src/fireworks_tech_graph.py`, Issue #191):**
+  - Auto-synthesizes self-contained dark-theme SVG vector diagrams outputting to `docs/assets/multi_agent_architecture.svg` (~12.5 KB) and `docs/assets/regional_metro_architecture.svg` (~7.7 KB) during public web dashboard builds (`src/dashboard_generator.py`).
+  - Visual embeds integrated directly into `AGENTS.md` and `docs/index.html`.
+* **Locales Metadata Discovery & Multi-Region Batch Forecast Gateway (`src/api_server.py`, Issue #48):**
+  - Exposes `GET /api/v1/locales` for dynamic client discovery of all supported locale codes (`tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `port_st_lucie`, `bayarea`, `national`), `region_id`, PADD region, statutory fuel tax burdens, and refining hub metadata profiles loaded via `src/regional_metadata.py`.
+  - Exposes multi-region batch REST endpoints `POST /api/v1/forecast/batch` and `POST /api/v1/combined/batch` enabling client applications to query forecasts for multiple locales in a single HTTP request payload.
 * **Dynamic Overview Card Engine:** Dynamically queries real-time live retail pump prices via `fetch_live_metro_retail_price()` for all regional metro cards (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Oakland_CA`, `BayArea_CA`), while preserving NYMEX RBOB commodity futures benchmark pricing ($3.184/gal - $3.270/gal) for the **National Wholesale** contract card.
 * **Automated Social Preview Image Generator (`src/social_embed_generator.py`):**
   - Uses Matplotlib (`Agg` backend) to generate 10 dark-mode social preview cards (`1200x630px` PNG) in `docs/assets/embeds/` (`national.png`, `tulsa.png`, `newark.png`, `cincinnati.png`, `greenville.png`, `charlotte.png`, `oakland.png`, `bayarea.png`, `overview.png`, `math.png`).
