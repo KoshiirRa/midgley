@@ -214,11 +214,16 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
-* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts to `data/prediction_history.csv` and backfilling actual historical market prices as target dates arrive.
+* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, and exposing continuous rolling performance metrics via API & web dashboard.
 * **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
+* **Realized-vs-Predicted Rolling Scoreboard Engine:**
+  - `compute_rolling_scoreboard_metrics(window_days=30, region=None)`: Calculates rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices.
+  - `compute_regional_scoreboard_breakdown(window_days=30)`: Computes per-region accuracy breakdowns across all 8 active regional markets.
+  - `get_recent_evaluated_records(region=None, limit=50)`: Returns chronologically sorted evaluated forecast records.
+  - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard` and embedded in `docs/index.html`.
 * **Functions:**
   - `log_predictions()`: Logs 5-day out-of-time forecasts with dynamically calculated target dates.
-  - `backfill_actual_prices()`: Queries ground-truth market prices from `yfinance` as target dates mature and backfills actual prices in `prediction_history.csv`.
+  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature and backfills actual prices in `prediction_history.csv`.
 
 ---
 

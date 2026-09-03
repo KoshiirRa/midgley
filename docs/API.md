@@ -50,10 +50,10 @@ curl -X GET "http://localhost:8000/api/v1/prices/live?locale=oakland"
 ---
 
 ### 2. `GET /api/v1/forecast/predict`
-Generates 5-day out-of-time quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), and historical hit rate.
+Generates 5-day out-of-time quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), component-level feature attributions (XAI), and natural language driver summary text.
 
 **Query Parameters:**
-* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `oakland`).
+* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`).
 * `days` (optional, integer): Forecast horizon in days (1 to 30). Default: `5`.
 
 **Example Request:**
@@ -61,9 +61,109 @@ Generates 5-day out-of-time quantitative price predictions, expected dollar delt
 curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
 ```
 
+**Example Response:**
+```json
+{
+  "status": "success",
+  "timestamp": "2026-09-02T19:10:00Z",
+  "locale": {
+    "code": "tulsa",
+    "region_id": "Tulsa_OK",
+    "name": "Tulsa, OK Metro Area"
+  },
+  "forecast": {
+    "model_version": "v1.4 Finlight-LLM",
+    "forecast_horizon_days": 5,
+    "target_date": "2026-09-07",
+    "current_base_price": 3.89,
+    "predicted_price_per_gal": 3.935,
+    "expected_change_dollars": 0.045,
+    "expected_change_percent": 1.16,
+    "projected_direction": "UP",
+    "feature_attributions": {
+      "futures_commodity": { "delta_dollars": 0.009, "share_pct": 20.0 },
+      "refining_crack_margin": { "delta_dollars": 0.0135, "share_pct": 30.0 },
+      "weather_environmental": { "delta_dollars": 0.0023, "share_pct": 5.0 },
+      "tax_regulatory": { "delta_dollars": 0.0022, "share_pct": 5.0 },
+      "unstructured_sentiment": { "delta_dollars": 0.0045, "share_pct": 10.0 },
+      "regional_logistics": { "delta_dollars": 0.0135, "share_pct": 30.0 }
+    },
+    "driver_breakdown": {
+      "summary_text": "Tulsa OK forecast +$0.045/gal driven primarily by refining crack margin, regional logistics.",
+      "key_drivers": [
+        "Refining Yield & Crack Spread: +$0.0135/gal (30.0% share)",
+        "Regional Logistics & Hub Delivery: +$0.0135/gal (30.0% share)"
+      ]
+    }
+  }
+}
+```
+
 ---
 
-### 3. `GET /api/v1/combined`
+### 3. `GET /api/v1/forecast/scoreboard`
+Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days).
+
+**Query Parameters:**
+* `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`, `all`). Default: `all`.
+* `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30"
+```
+
+**Example Response:**
+```json
+{
+  "status": "success",
+  "system": "Midgley v1.4 Finlight-LLM",
+  "timestamp": "2026-09-02T19:10:00Z",
+  "filters": {
+    "locale": "tulsa",
+    "region_code": "Tulsa_OK",
+    "window_days": "30"
+  },
+  "summary": {
+    "window_days": "30",
+    "region_filter": "Tulsa_OK",
+    "total_evaluations": 30,
+    "mae_dollars": 0.1331,
+    "rmse_dollars": 0.1620,
+    "mape_pct": 3.42,
+    "directional_hit_rate_pct": 58.15,
+    "naive_persistence_mae": 0.1740,
+    "model_uplift_mae_pct": 23.51
+  },
+  "regional_breakdown": [
+    {
+      "region": "Tulsa_OK",
+      "evaluations": 30,
+      "mae_dollars": 0.1331,
+      "rmse_dollars": 0.1620,
+      "mape_pct": 3.42,
+      "directional_hit_rate_pct": 58.15,
+      "naive_persistence_mae": 0.1740,
+      "model_uplift_mae_pct": 23.51
+    }
+  ],
+  "recent_evaluations": [
+    {
+      "forecast_target_date": "2026-08-25",
+      "region": "Tulsa_OK",
+      "current_base_price": 3.89,
+      "predicted_5d_price": 3.935,
+      "actual_5d_price": 3.93,
+      "error_dollars": 0.005,
+      "directional_hit": 1
+    }
+  ]
+}
+```
+
+---
+
+### 4. `GET /api/v1/combined`
 Unified endpoint returning live current pump price, predicted 5-day target forecast, regional rack margin, and key market drivers.
 
 **Example Request:**
@@ -73,7 +173,7 @@ curl -X GET "http://localhost:8000/api/v1/combined?locale=cincinnati"
 
 ---
 
-### 4. `POST /api/v1/forecast/simulate`
+### 5. `POST /api/v1/forecast/simulate`
 Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks.
 
 **Request Body:**

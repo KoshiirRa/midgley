@@ -100,9 +100,30 @@ The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\
 
 ---
 
-## 4. MLOps Prediction Logging & Backfilling Engine (`src/prediction_logger.py`)
+## 4. MLOps Prediction Logging, Feature Attribution & Rolling Scoreboard Engine (`src/prediction_logger.py` & `src/models.py`)
 
-All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records. When a new regional forecasting pipeline is launched, `backfill_new_region_history()` automatically populates historical test split predictions and evaluates mature target dates against historical market actuals immediately.
+All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records.
+
+### Feature Attribution (XAI) Breakdown
+`compute_locale_feature_attribution_breakdown` in `src/models.py` decomposes the total projected forecast delta ($\Delta = P_{\text{pred}} - P_{\text{base}}$) into signed dollar contributions ($/gal) across 6 core domain drivers:
+1. **Futures & Commodity Benchmark** ($\Delta_{\text{futures}}$)
+2. **Refining Yield & Crack Spread** ($\Delta_{\text{crack}}$)
+3. **Weather & Environmental Signals** ($\Delta_{\text{weather}}$)
+4. **Tax & Regulatory Overhead** ($\Delta_{\text{tax}}$)
+5. **Unstructured Intelligence & Sentiment** ($\Delta_{\text{sentiment}}$)
+6. **Regional Logistics & Hub Delivery** ($\Delta_{\text{logistics}}$)
+
+Enforcing exact sum equality: $\sum_{k=1}^6 \Delta_k = P_{\text{pred}} - P_{\text{base}}$.
+
+### Realized-vs-Predicted Rolling Scoreboard
+`compute_rolling_scoreboard_metrics(window_days=30)` continuously evaluates model performance over rolling 30, 60, 90, and all-time windows, computing:
+- **Mean Absolute Error (MAE)**: $\text{MAE} = \frac{1}{N} \sum |y - \hat{y}|$
+- **Root Mean Squared Error (RMSE)**: $\text{RMSE} = \sqrt{\frac{1}{N} \sum (y - \hat{y})^2}$
+- **Mean Absolute Percentage Error (MAPE)**: $\text{MAPE} = \frac{1}{N} \sum \left|\frac{y - \hat{y}}{y}\right| \times 100$
+- **Directional Hit Rate**: $\text{Hit Rate} = \frac{\sum \mathbb{I}(\text{dir}_{\text{pred}} = \text{dir}_{\text{actual}})}{N} \times 100$
+- **Naive Persistence Baseline Comparison & Model MAE Uplift**: $\text{Uplift}_{\text{MAE}} = \frac{\text{MAE}_{\text{naive}} - \text{MAE}_{\text{model}}}{\text{MAE}_{\text{naive}}} \times 100$
+
+Exposed live via REST API `GET /api/v1/forecast/scoreboard` and rendered dynamically on the GitHub Pages web dashboard (`docs/index.html`).
 
 ---
 
