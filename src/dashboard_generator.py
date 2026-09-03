@@ -33,6 +33,7 @@ OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
 MATH_PATH = os.path.join(DOCS_DIR, "math.html")
+DIESEL_PATH = os.path.join(DOCS_DIR, "diesel.html")
 TECHNICAL_BREAKDOWN_PATH = os.path.join(DOCS_DIR, "technical_breakdown.html")
 TECHNICAL_BREAKDOWN_MD_PATH = os.path.join(DOCS_DIR, "technical_breakdown.md")
 
@@ -46,6 +47,7 @@ PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
+DIESEL_SUB_DIR = os.path.join(DOCS_DIR, "diesel")
 
 NATIONAL_SUB_PATH = os.path.join(NATIONAL_SUB_DIR, "index.html")
 TULSA_SUB_PATH = os.path.join(TULSA_SUB_DIR, "index.html")
@@ -57,6 +59,7 @@ PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
+DIESEL_SUB_PATH = os.path.join(DIESEL_SUB_DIR, "index.html")
 
 KATEX_ONLOAD_SCRIPT = r'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
@@ -215,6 +218,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    diesel_cls = "bg-purple-600/30 text-purple-300 border border-purple-500/40 font-semibold" if active_tab == "diesel" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
     nat_link = f"{rel_prefix}national.html"
@@ -228,6 +232,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
     sav_link = f"{rel_prefix}savings.html"
+    dsl_link = f"{rel_prefix}diesel.html"
 
     badge_html = get_release_badge()
 
@@ -286,6 +291,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     </div>
                 </div>
 
+                <a href="{dsl_link}" class="px-3 py-1.5 rounded-lg {diesel_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
                 <a href="{sav_link}" class="px-3 py-1.5 rounded-lg {savings_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
                 </a>

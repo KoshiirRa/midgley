@@ -75,7 +75,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.2-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.3-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -110,6 +110,9 @@
                         <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
                         </a>
+                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        </a>
                         <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
                         </a>
@@ -119,6 +122,12 @@
                     </div>
                 </div>
 
+                <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
+                <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
                 <a href="math.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
@@ -363,6 +372,16 @@
                     where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>\(\text{MAE} = \$0.1069/\text{gal}\)</strong>.
                 </p>
             </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-blue-500">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.2: Purged &amp; Combinatorial Cross-Validation (CPCV) Overlap Elimination (Issue #117)</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\text{Purge Condition: } i \in \text{Train} \iff [t_{i,\text{start}}, t_{i,\text{end}}] \cap [t_{j,\text{test,start}}, t_{j,\text{test,end}} + h_{\text{embargo}}] = \emptyset \quad \forall j \in \text{Test}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Temporal Data Leakage Prevention (López de Prado, 2018):</strong> In 5-day step-ahead horizon forecasting, standard cross-validation leaks lookahead information because observation \(t\)'s evaluation window \([t, t+5]\) overlaps with test samples. <code>PurgedGroupTimeSeriesSplit</code> and <code>CombinatorialPurgedCV</code> purge any training observation whose label period intersects test folds or falls within the post-test embargo window (\(h_{\text{embargo}} = 5\text{ days}\)), ensuring 100% out-of-sample purity (queryable via REST API at <code>GET /api/v1/forecast/purged-cv</code>).
+                </p>
+            </div>
         </section>
 
         <!-- Section 10: CARB Regulatory Burden & PADD 5 Refining Island -->
@@ -417,6 +436,28 @@
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> Open RESEARCH_CITATIONS.md on GitHub
                     </a>
                 </div>
+            </div>
+        </section>
+
+        <!-- Section 12: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">12</span>
+                <h3 class="text-2xl font-bold text-white">Ultra-Low Sulfur Diesel (ULSD) &amp; Distillate Crack Spread Modeling (Issue #41)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Beyond unleaded RBOB gasoline, Midgley models <strong>Ultra-Low Sulfur Diesel (ULSD)</strong> (<code class="text-purple-300">HO=F</code> NY Harbor futures) and distillate cracking margins governing commercial freight logistics, agricultural harvesting, and heating oil demand pools:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 12.1: Distillate Crack Spread &amp; 3-2-1 Margin Formulas</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\text{DistillateCrack}_t = P_{\text{ULSD}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad \text{Crack}_{321, t} = \frac{2 P_{\text{RBOB}, t} + P_{\text{ULSD}, t} - 3 \left( \frac{P_{\text{WTI}, t}}{42.0} \right)}{3.0}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Regulatory Excise &amp; Renewable Diesel Overhead:</strong> Federal diesel tax (\(\$0.244/\text{gal}\)), state excise differential, and California statutory CARB ULSD / D4 Biomass-Based Diesel RIN &amp; RD99 renewable diesel compliance overhead (\(\$1.120/\text{gal}\)) (queryable via REST API at <code>GET /api/v1/diesel/live</code>, <code>GET /api/v1/diesel/forecast</code>, and <code>GET /api/v1/diesel/simulate</code>).
+                </p>
             </div>
         </section>
 

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spreads &bull; Midgley Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 950: '#020617' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.3-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="../index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="../national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="../tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="../newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="../cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="../greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="../charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="../port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a href="../oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="../bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
+                    </div>
+                </div>
+
+                <a href="../diesel.html" class="px-3 py-1.5 rounded-lg bg-purple-600/30 text-purple-300 border border-purple-500/40 font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
+                <a href="../savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
+                <a href="../math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+        <!-- Hero Banner -->
+        <div class="p-8 rounded-3xl bg-gradient-to-r from-purple-900/40 via-slate-900 to-indigo-900/40 border border-purple-500/30 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-purple-500/10 text-purple-400 rounded-2xl border border-purple-500/20">
+                    <i class="fa-solid fa-truck-front text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Engine</h2>
+                    <p class="text-slate-300 text-sm">Commercial logistics, agricultural harvest demand, and regional rack margin forecasts for HO=F futures.</p>
+                </div>
+            </div>
+
+            <!-- Key Indicators Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">NY Harbor ULSD (HO=F)</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">$2.850<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-emerald-400 font-mono">NYMEX Futures Benchmark</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">Distillate Crack Spread</span>
+                    <div class="text-2xl font-bold text-blue-300 font-mono">$0.742<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-slate-400 font-mono">HO=F - (WTI/42)</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">3-2-1 Refining Margin</span>
+                    <div class="text-2xl font-bold text-cyan-300 font-mono">$0.685<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-slate-400 font-mono">(2RBOB + 1ULSD - 3WTI)/3</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">5-Day Forecast Wholesale</span>
+                    <div class="text-2xl font-bold text-emerald-400 font-mono">$2.865<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-emerald-400 font-mono">▲ +0.53% Expected Uplift</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Retail Diesel Calibrations -->
+        <section class="space-y-4">
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-purple-400"></i> Regional Retail Diesel Calibrations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <span class="font-bold text-white text-sm">Midwest / Tulsa, OK</span>
+                        <span class="text-xs text-emerald-400 font-mono font-bold">$3.650/gal</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Calibrated to PADD 2 agricultural harvest demand spikes, Cushing crude loading racks, and Midwest rack diesel draws.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <span class="font-bold text-white text-sm">Northeast / Newark, DE</span>
+                        <span class="text-xs text-blue-400 font-mono font-bold">$3.862/gal</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Calibrated to PADD 1 Atlantic distillate supply, Colonial Pipeline Line 2 throughput, and winter home heating oil pool overlap.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <span class="font-bold text-white text-sm">West Coast / Oakland, CA</span>
+                        <span class="text-xs text-amber-400 font-mono font-bold">$5.250/gal</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Includes statutory CARB ULSD tax, Cap-and-Trade carbon fees, LCFS deficit overhead, D4 RIN pricing, and RD99 renewable diesel blending.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Diesel Shock Scenarios -->
+        <section class="space-y-4">
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Counterfactual Diesel Market Shock Simulator
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 font-mono">Colonial Line 2 Outage</span>
+                    <h4 class="text-base font-bold text-white pt-1">Colonial Pipeline Line 2 Distillate Outage</h4>
+                    <p class="text-xs text-slate-400">Halting 850,000 bpd distillate flow from USGC to East Coast generates a <strong class="text-red-400">+$0.285/gal (+7.2%)</strong> wholesale shock.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono">Northeast Polar Vortex</span>
+                    <h4 class="text-base font-bold text-white pt-1">Polar Vortex & Heating Oil Crunch</h4>
+                    <p class="text-xs text-slate-400">Sub-zero freeze draining Northeast heating oil stocks generates a <strong class="text-blue-400">+$0.340/gal (+8.5%)</strong> distillate shock.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+</body>
+</html>
