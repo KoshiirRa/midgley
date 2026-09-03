@@ -1265,6 +1265,21 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
 
         regional_calc_md += f"- **{name}**: $P = \\${b_price:.3f} + {delta_math} = \\${p_price:.3f}\\text{{/gal}}$ (Delta: {delta_badge}, {pct_sign}{pct_val:.2f}\\%){note_md}\n"
 
+    # Add ULSD Distillate Crack Spread Engine (WIP) to Technical Breakdown
+    regional_calc_html += """
+        <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 space-y-2 font-mono text-xs">
+            <div class="flex justify-between items-center text-purple-200 font-bold border-b border-purple-500/30 pb-1.5">
+                <span>ULSD Distillate Crack Engine (WIP)</span>
+                <span class="text-purple-300">$2.865/gal (+0.53%)</span>
+            </div>
+            <p class="text-purple-300/80 text-[11px] leading-relaxed">
+                $$\\text{DistillateCrack} = \\$2.850 - \\frac{\\$75.00}{42.0} = \\$0.742\\text{/gal}, \\quad \\text{Crack}_{321} = \\$0.685\\text{/gal}$$
+            </p>
+            <p class="text-amber-400/90 text-[10px] font-sans italic mt-1.5 flex items-center gap-1"><i class="fa-solid fa-flask-vial"></i> Experimental Work-In-Progress undergoing multi-week feedback loop empirical evaluation</p>
+        </div>"""
+
+    regional_calc_md += "- **ULSD Distillate Crack Engine (WIP)**: $P_{\\text{ULSD}} = \\$2.850\\text{/gal}$, Distillate Crack Spread = $\\$0.742\\text{/gal}$, 3-2-1 Crack Margin = $\\$0.685\\text{/gal}$ *(Experimental Work-In-Progress undergoing multi-week feedback loop empirical evaluation)*\n"
+
     news_html = ""
     news_md = ""
     for h in headline_items:

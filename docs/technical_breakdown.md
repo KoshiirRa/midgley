@@ -58,6 +58,7 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 - **Port St. Lucie, FL Retail**: $P = \$3.380 + (-\$0.090) = \$3.290\text{/gal}$ (Delta: -\$0.090/gal, -2.66\%)
 - **Oakland, CA Retail**: $P = \$4.950 + (-\$0.460) = \$4.827\text{/gal}$ (Delta: -\$0.460/gal, -9.30\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 - **SF Bay Area Region**: $P = \$5.050 + (-\$0.463) = \$4.925\text{/gal}$ (Delta: -\$0.463/gal, -9.17\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **ULSD Distillate Crack Engine (WIP)**: $P_{\text{ULSD}} = \$2.850\text{/gal}$, Distillate Crack Spread = $\$0.742\text{/gal}$, 3-2-1 Crack Margin = $\$0.685\text{/gal}$ *(Experimental Work-In-Progress undergoing multi-week feedback loop empirical evaluation)*
 
 
 ---
@@ -71,7 +72,7 @@ SUMMARY FOR RUN [2026-09-02 19:47:12]: Baseline daily batch market conditions pr
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-02 19:47:12 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (NOAA_NWS_API, CME_Group / NYMEX, Finlight_v2_API). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-02 19:47:12 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (CME_Group / NYMEX, NOAA_NWS_API, Finlight_v2_API). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.1000
   - Day 1: M₁ = 0.0871
   - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).

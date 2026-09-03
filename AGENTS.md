@@ -48,6 +48,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                │  • Greenville & Charlotte (PADD 1C Colonial Pipeline)      │                   │
                │  • Oakland & SF Bay Area (PADD 5 CARB & Richmond Refinery)  │                   │
                │  • Port St. Lucie (PADD 1C Waterborne Terminal Freight)    │                   │
+               │  • ULSD Distillate Engine (HO=F & 3-2-1 Margin - WIP)        │                   │
                └──────────────────────────────┬──────────────────────────────┘                   │
                                               │ Localized Metro Forecasts                        │
                                               ▼                                                  │
