@@ -42,9 +42,12 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                                               ▼                                                  │
                ┌─────────────────────────────────────────────────────────────┐                   │
                │         4. LOCALIZED METRO AREA CALIBRATION AGENTS          │                   │
-               │  • Tulsa Metro Model (Cushing WTI & West Tulsa Refinery)    │                   │
-               │  • Newark Metro Model (PADD 1B & C&D Canal Detour)          │                   │
-               │  • Cincinnati Tri-State (Dual-State Tax & Ohio/Miss River) │                   │
+               │  • Tulsa Metro (Cushing WTI & West Tulsa Refinery)          │                   │
+               │  • Newark Metro (PADD 1B & Delaware City Refinery Detour)   │                   │
+               │  • Cincinnati Tri-State (Dual-State Tax & Ohio/Miss River)  │                   │
+               │  • Greenville & Charlotte (PADD 1C Colonial Pipeline)      │                   │
+               │  • Oakland & SF Bay Area (PADD 5 CARB & Richmond Refinery)  │                   │
+               │  • Port St. Lucie (PADD 1C Waterborne Terminal Freight)    │                   │
                └──────────────────────────────┬──────────────────────────────┘                   │
                                               │ Localized Metro Forecasts                        │
                                               ▼                                                  │
