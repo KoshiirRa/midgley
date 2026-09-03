@@ -37,7 +37,7 @@ LOCAL_BYPASS_HOSTS = {"testclient", "localhost", "test_runner", "test_suite"}
 
 
 class IPASISSecurityVerifier:
-    def __init__(self, daily_allowance: int = 1000, timeout: float = 2.0):
+    def __init__(self, daily_allowance: int = 100, timeout: float = 2.0):
         self.daily_allowance = daily_allowance
         self.timeout = timeout
 
@@ -195,8 +195,8 @@ def get_ipasis_telemetry() -> Dict[str, Any]:
     default_summary = {
         "date": today_str,
         "daily_requests_used": 0,
-        "daily_allowance": 1000,
-        "quota_remaining": 1000,
+        "daily_allowance": 100,
+        "quota_remaining": 100,
         "status": "OK",
         "total_checks": 0,
         "private_bypasses": 0,
@@ -213,7 +213,7 @@ def get_ipasis_telemetry() -> Dict[str, Any]:
                 data = json.load(f)
                 if isinstance(data, dict):
                     used = data.get("daily_requests_used", 0)
-                    allowance = data.get("daily_allowance", 1000)
+                    allowance = data.get("daily_allowance", 100)
                     default_summary.update({
                         "date": data.get("date", today_str),
                         "daily_requests_used": used,

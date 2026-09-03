@@ -221,7 +221,7 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
   - `source` $\leftarrow$ `source`, `origin`, `provider`, `channel`, `service`
 
 * **IPASIS Security Filter (Issue #87):** Inspects client IP (`CF-Connecting-IP`, `X-Forwarded-For`), rejecting high-risk Tor/Abuse origins with HTTP 403 Forbidden.
-* **Security Telemetry Endpoint:** `GET /api/v1/security/ip-status` — Returns IPASIS IP security gateway status, daily API request accounting (used / 1,000 allowance), private IP bypass statistics, and blocked origin counts.
+* **Security Telemetry Endpoint:** `GET /api/v1/security/ip-status` — Returns IPASIS IP security gateway status, daily API request accounting (used / 100 allowance), private IP bypass statistics, and blocked origin counts.
 
 For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and HMAC signature examples, see **[WEBHOOK_FORMATTING_GUIDE.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/WEBHOOK_FORMATTING_GUIDE.md)**.
 

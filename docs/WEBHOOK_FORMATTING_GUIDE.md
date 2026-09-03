@@ -51,7 +51,7 @@ In addition to HMAC signatures, incoming client IP addresses are inspected by th
   ```
 - **Local & Private IP Bypasses**: Local loopback and RFC 1918 private subnets (`127.0.0.1`, `10.x.x.x`, `192.168.x.x`, `testclient`) bypass external calls automatically with $0.00 cost.
 - **Fail-Open Resilience**: If the external IPASIS API is unreachable or times out (2.0s timeout), the gateway safely fails open and processes legitimate webhooks with zero downtime.
-- **Telemetry Accounting**: Daily API request accounting (used / 1,000 allowance) and security stats are exposed at `GET /api/v1/security/ip-status` and rendered on `docs/telemetry.html`.
+- **Telemetry Accounting**: Daily API request accounting (used / 100 allowance) and security stats are exposed at `GET /api/v1/security/ip-status` and rendered on `docs/telemetry.html`.
 
 ---
 

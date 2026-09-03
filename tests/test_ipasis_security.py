@@ -13,7 +13,7 @@ from src.ipasis_security import IPASISSecurityVerifier, get_ipasis_telemetry, TE
 class TestIPASISSecurity(unittest.TestCase):
     def setUp(self):
         _IP_CACHE.clear()
-        self.verifier = IPASISSecurityVerifier(daily_allowance=1000, timeout=1.0)
+        self.verifier = IPASISSecurityVerifier(daily_allowance=100, timeout=1.0)
 
     def test_private_ip_bypass(self):
         # Local loopback
@@ -82,7 +82,7 @@ class TestIPASISSecurity(unittest.TestCase):
         self.assertIn("daily_requests_used", tele)
         self.assertIn("daily_allowance", tele)
         self.assertIn("quota_remaining", tele)
-        self.assertEqual(tele["daily_allowance"], 1000)
+        self.assertEqual(tele["daily_allowance"], 100)
         self.assertIn("status", tele)
         self.assertIn("private_bypasses", tele)
 

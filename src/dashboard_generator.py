@@ -5423,7 +5423,7 @@ def generate_telemetry_page():
                     </div>
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">IPASIS IP Security API</span>
-                        <span class="text-cyan-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 1000)} calls today ({ipasis_data.get('private_bypasses', 0)} local bypasses)</span>
+                        <span class="text-cyan-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 100)} calls today ({ipasis_data.get('private_bypasses', 0)} local bypasses)</span>
                     </div>
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">GasBuddy GraphQL Feed</span>

@@ -64,7 +64,7 @@ ANTHROPIC_API_KEY="sk-ant-..."
 # Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation)
 MIDGLEY_WEBHOOK_SECRET="super-secret-hmac-key-change-me"
 
-# IPASIS API Gateway Security Key & Controls (ipasis.com - 1,000 req/day free)
+# IPASIS API Gateway Security Key & Controls (ipasis.com - 100 req/day free)
 IPASIS_API_KEY="ipasis_c92c28445c93_d65965edd3bfc851770b9573f777e152"
 IPASIS_BLOCK_HIGH_RISK="1"       # Set to 1 to block Tor/Abuse origins with HTTP 403
 MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
