@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-03_03-33-18",
+    "timestamp": "2026-09-02 19:47:12",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-33-03",
+    "timestamp": "2026-09-02 19:47:12",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-03_00-57-58",
     "timestamp": "2026-09-02 19:47:12",
     "run_type": "DAILY_BATCH",
@@ -583,18 +595,6 @@
   },
   {
     "run_id": "2026-09-02_23-01-19",
-    "timestamp": "2026-09-02 23:01:12",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-01-17",
-    "timestamp": "2026-09-02 23:01:12",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-01-15",
     "timestamp": "2026-09-02 23:01:12",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"

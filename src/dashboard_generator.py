@@ -4593,6 +4593,28 @@ def generate_public_dashboard():
             </div>
         </section>
 
+        <!-- Section 12: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">12</span>
+                <h3 class="text-2xl font-bold text-white">Ultra-Low Sulfur Diesel (ULSD) &amp; Distillate Crack Spread Modeling (Issue #41)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Beyond unleaded RBOB gasoline, Midgley models <strong>Ultra-Low Sulfur Diesel (ULSD)</strong> (<code class="text-purple-300">HO=F</code> NY Harbor futures) and distillate cracking margins governing commercial freight logistics, agricultural harvesting, and heating oil demand pools:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 12.1: Distillate Crack Spread &amp; 3-2-1 Margin Formulas</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\text{DistillateCrack}_t = P_{\text{ULSD}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad \text{Crack}_{321, t} = \frac{2 P_{\text{RBOB}, t} + P_{\text{ULSD}, t} - 3 \left( \frac{P_{\text{WTI}, t}}{42.0} \right)}{3.0}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Regulatory Excise &amp; Renewable Diesel Overhead:</strong> Federal diesel tax (\(\$0.244/\text{gal}\)), state excise differential, and California statutory CARB ULSD / D4 Biomass-Based Diesel RIN &amp; RD99 renewable diesel compliance overhead (\(\$1.120/\text{gal}\)) (queryable via REST API at <code>GET /api/v1/diesel/live</code>, <code>GET /api/v1/diesel/forecast</code>, and <code>GET /api/v1/diesel/simulate</code>).
+                </p>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -4610,6 +4632,8 @@ def generate_public_dashboard():
 
     # Issue #91: Generate Fill-Up Savings Advisor Page
     generate_savings_advisor_page()
+    # Issue #41: Generate Diesel ULSD Dashboard Page
+    generate_diesel_page()
 
     try:
         from scripts.generate_standalone_example import generate as generate_example
@@ -5021,6 +5045,142 @@ def generate_quantstats_tearsheet_page(output_dir: str = "docs"):
         f.write(html)
 
     logger.info(f"Successfully generated QuantStats Tear Sheet page at {path} and {sub_path}")
+
+
+def generate_diesel_page():
+    """Generates docs/diesel.html & docs/diesel/index.html (Issue #41)."""
+    os.makedirs(DOCS_DIR, exist_ok=True)
+    os.makedirs(DIESEL_SUB_DIR, exist_ok=True)
+
+    header_html = get_nav_header("diesel", rel_prefix="")
+    sub_header_html = get_nav_header("diesel", rel_prefix="../")
+
+    def build_diesel_html(hdr):
+        return f"""<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Crack Spreads &bull; Midgley Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {{
+            darkMode: 'class',
+            theme: {{
+                extend: {{
+                    colors: {{
+                        slate: {{ 950: '#020617' }}
+                    }}
+                }}
+            }}
+        }}
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
+
+{hdr}
+
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+        <!-- Hero Banner -->
+        <div class="p-8 rounded-3xl bg-gradient-to-r from-purple-900/40 via-slate-900 to-indigo-900/40 border border-purple-500/30 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-purple-500/10 text-purple-400 rounded-2xl border border-purple-500/20">
+                    <i class="fa-solid fa-truck-front text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Engine</h2>
+                    <p class="text-slate-300 text-sm">Commercial logistics, agricultural harvest demand, and regional rack margin forecasts for HO=F futures.</p>
+                </div>
+            </div>
+
+            <!-- Key Indicators Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">NY Harbor ULSD (HO=F)</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">$2.850<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-emerald-400 font-mono">NYMEX Futures Benchmark</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">Distillate Crack Spread</span>
+                    <div class="text-2xl font-bold text-blue-300 font-mono">$0.742<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-slate-400 font-mono">HO=F - (WTI/42)</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">3-2-1 Refining Margin</span>
+                    <div class="text-2xl font-bold text-cyan-300 font-mono">$0.685<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-slate-400 font-mono">(2RBOB + 1ULSD - 3WTI)/3</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">5-Day Forecast Wholesale</span>
+                    <div class="text-2xl font-bold text-emerald-400 font-mono">$2.865<span class="text-xs text-slate-500">/gal</span></div>
+                    <span class="text-[10px] text-emerald-400 font-mono">▲ +0.53% Expected Uplift</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Retail Diesel Calibrations -->
+        <section class="space-y-4">
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-purple-400"></i> Regional Retail Diesel Calibrations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <span class="font-bold text-white text-sm">Midwest / Tulsa, OK</span>
+                        <span class="text-xs text-emerald-400 font-mono font-bold">$3.650/gal</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Calibrated to PADD 2 agricultural harvest demand spikes, Cushing crude loading racks, and Midwest rack diesel draws.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <span class="font-bold text-white text-sm">Northeast / Newark, DE</span>
+                        <span class="text-xs text-blue-400 font-mono font-bold">$3.862/gal</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Calibrated to PADD 1 Atlantic distillate supply, Colonial Pipeline Line 2 throughput, and winter home heating oil pool overlap.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <span class="font-bold text-white text-sm">West Coast / Oakland, CA</span>
+                        <span class="text-xs text-amber-400 font-mono font-bold">$5.250/gal</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Includes statutory CARB ULSD tax, Cap-and-Trade carbon fees, LCFS deficit overhead, D4 RIN pricing, and RD99 renewable diesel blending.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Diesel Shock Scenarios -->
+        <section class="space-y-4">
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Counterfactual Diesel Market Shock Simulator
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 font-mono">Colonial Line 2 Outage</span>
+                    <h4 class="text-base font-bold text-white pt-1">Colonial Pipeline Line 2 Distillate Outage</h4>
+                    <p class="text-xs text-slate-400">Halting 850,000 bpd distillate flow from USGC to East Coast generates a <strong class="text-red-400">+$0.285/gal (+7.2%)</strong> wholesale shock.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono">Northeast Polar Vortex</span>
+                    <h4 class="text-base font-bold text-white pt-1">Polar Vortex & Heating Oil Crunch</h4>
+                    <p class="text-xs text-slate-400">Sub-zero freeze draining Northeast heating oil stocks generates a <strong class="text-blue-400">+$0.340/gal (+8.5%)</strong> distillate shock.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+</body>
+</html>"""
+
+    with open(DIESEL_PATH, "w", encoding="utf-8") as f:
+        f.write(build_diesel_html(header_html))
+    with open(DIESEL_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_diesel_html(sub_header_html))
+
+    logger.info(f"Successfully generated Diesel ULSD page at {DIESEL_PATH} and {DIESEL_SUB_PATH}")
 
 
 if __name__ == "__main__":

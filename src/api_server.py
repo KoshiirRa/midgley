@@ -391,6 +391,61 @@ def get_purged_cv_metrics(
     }
 
 
+@app.get("/api/v1/diesel/live", summary="Get Live Ultra-Low Sulfur Diesel (ULSD) & Distillate Prices")
+def get_diesel_live_prices():
+    """
+    Returns live NYMEX ULSD futures (HO=F), distillate crack spreads,
+    3-2-1 refining margins, and regional retail diesel prices across modeled metro areas (Issue #41).
+    """
+    from src.diesel_regional import DIESEL_BASE_ANCHORS, compute_distillate_crack_spread, compute_321_refining_crack_spread
+    ulsd_spot = 2.850
+    wti_spot = 75.00
+    rbob_spot = 2.450
+    dist_crack = compute_distillate_crack_spread(ulsd_spot, wti_spot)
+    crack_321 = compute_321_refining_crack_spread(rbob_spot, ulsd_spot, wti_spot)
+
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 ULSD Distillate Engine",
+        "timestamp": datetime.now().isoformat(),
+        "futures": {
+            "ulsd_ny_harbor_ho_f": ulsd_spot,
+            "wti_crude_cl_f": wti_spot,
+            "rbob_gasoline_rb_f": rbob_spot,
+            "distillate_crack_spread_gal": dist_crack,
+            "refining_321_crack_spread_gal": crack_321
+        },
+        "retail_diesel_prices": DIESEL_BASE_ANCHORS
+    }
+
+
+@app.get("/api/v1/diesel/forecast", summary="Get 5-Day Out-of-Time ULSD Diesel Forecast")
+def get_diesel_forecast(
+    rbob: float = Query(2.450, description="Base RBOB futures price ($/gal)"),
+    ulsd: float = Query(2.850, description="Base ULSD futures price ($/gal)"),
+    wti: float = Query(75.00, description="Base WTI crude price ($/bbl)")
+):
+    """
+    Generates 5-day step-ahead wholesale ULSD predictions and regional retail calibrations (Issue #41).
+    """
+    from src.diesel_regional import UltraLowSulfurDieselForecastingAgent
+    agent = UltraLowSulfurDieselForecastingAgent(alpha=10.0)
+    res = agent.forecast_ulsd(rbob_price=rbob, ulsd_price=ulsd, wti_price=wti)
+    return res
+
+
+@app.get("/api/v1/diesel/simulate", summary="Simulate Counterfactual Diesel Market Shocks")
+def simulate_diesel_shock_endpoint(
+    scenario: str = Query("colonial_line2_outage", description="Scenario key: 'colonial_line2_outage', 'northeast_polar_vortex', 'midwest_harvest_surge', 'imo_2020_marine_fuel_spike', 'winter_grid_emergency_backup'"),
+    base_ulsd: float = Query(2.850, description="Base ULSD futures price ($/gal)")
+):
+    """
+    Simulates counterfactual physical, weather, and geopolitical diesel shock scenarios (Issue #41).
+    """
+    from src.diesel_regional import simulate_diesel_shock
+    return simulate_diesel_shock(scenario_key=scenario, base_ulsd_price=base_ulsd)
+
+
 @app.get("/health", summary="Health Check")
 @app.get("/", summary="Root Health & API Information")
 def get_health():

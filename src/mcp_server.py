@@ -107,6 +107,41 @@ async def list_tools() -> list[types.Tool]:
                 },
                 "required": ["scenario_id"]
             }
+        ),
+        types.Tool(
+            name="get_live_diesel_prices",
+            description="Fetches live Ultra-Low Sulfur Diesel (ULSD HO=F) futures, distillate crack spreads, 3-2-1 refining margins, and retail diesel prices across metro areas.",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        ),
+        types.Tool(
+            name="get_diesel_forecast",
+            description="Generates 5-day out-of-time ULSD wholesale commodity forecasts ($/gal) and regional retail calibrations.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "rbob": {"type": "number", "default": 2.450, "description": "Base RBOB futures price"},
+                    "ulsd": {"type": "number", "default": 2.850, "description": "Base ULSD futures price"},
+                    "wti": {"type": "number", "default": 75.00, "description": "Base WTI crude price"}
+                }
+            }
+        ),
+        types.Tool(
+            name="simulate_diesel_market_shock",
+            description="Simulates counterfactual physical, weather, and geopolitical diesel shock scenarios (Colonial Line 2 outage, Northeast polar vortex, Midwest harvest surge).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "scenario": {
+                        "type": "string",
+                        "default": "colonial_line2_outage",
+                        "description": "Scenario key: colonial_line2_outage, northeast_polar_vortex, midwest_harvest_surge, imo_2020_marine_fuel_spike, winter_grid_emergency_backup"
+                    },
+                    "base_ulsd": {"type": "number", "default": 2.850, "description": "Base ULSD futures price"}
+                }
+            }
         )
     ]
 
@@ -141,6 +176,26 @@ async def call_tool(
             custom_shock_pct = args.get("custom_shock_pct")
             req = SimulateRequest(scenario_id=scenario_id, locale=locale, custom_shock_pct=custom_shock_pct)
             res = simulate_shock(req)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_live_diesel_prices":
+            from src.api_server import get_diesel_live_prices
+            res = get_diesel_live_prices()
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_diesel_forecast":
+            from src.api_server import get_diesel_forecast
+            rbob = float(args.get("rbob", 2.450))
+            ulsd = float(args.get("ulsd", 2.850))
+            wti = float(args.get("wti", 75.00))
+            res = get_diesel_forecast(rbob=rbob, ulsd=ulsd, wti=wti)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "simulate_diesel_market_shock":
+            from src.api_server import simulate_diesel_shock_endpoint
+            scenario = args.get("scenario", "colonial_line2_outage")
+            base_ulsd = float(args.get("base_ulsd", 2.850))
+            res = simulate_diesel_shock_endpoint(scenario=scenario, base_ulsd=base_ulsd)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:
