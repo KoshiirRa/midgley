@@ -4605,11 +4605,11 @@ def generate_public_dashboard():
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-purple-400">12</span>
-                <h3 class="text-2xl font-bold text-white">Ultra-Low Sulfur Diesel (ULSD) &amp; Distillate Crack Spread Modeling (Issue #41)</h3>
+                <h3 class="text-2xl font-bold text-white">Ultra-Low Sulfur Diesel (ULSD) &amp; Distillate Crack Spread Modeling (Issue #41 - WIP)</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Beyond unleaded RBOB gasoline, Midgley models <strong>Ultra-Low Sulfur Diesel (ULSD)</strong> (<code class="text-purple-300">HO=F</code> NY Harbor futures) and distillate cracking margins governing commercial freight logistics, agricultural harvesting, and heating oil demand pools:
+                Beyond unleaded RBOB gasoline, Midgley models <strong>Ultra-Low Sulfur Diesel (ULSD)</strong> (<code class="text-purple-300">HO=F</code> NY Harbor futures) and distillate cracking margins governing commercial freight logistics, agricultural harvesting, and heating oil demand pools. <em>Note: The ULSD model is currently an experimental Work-In-Progress (WIP) undergoing multi-week feedback loop empirical evaluation before extending full regional metro models.</em>
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
@@ -5090,6 +5090,15 @@ def generate_diesel_page():
 {hdr}
 
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+        <!-- WIP / Experimental Status Banner -->
+        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-amber-300 text-xs sm:text-sm">
+            <i class="fa-solid fa-flask-vial text-amber-400 text-xl shrink-0 mt-0.5"></i>
+            <div>
+                <strong class="font-bold text-amber-200 uppercase tracking-wide block mb-0.5">Experimental Model (Work In Progress)</strong>
+                The Ultra-Low Sulfur Diesel (ULSD) and Distillate Crack Engine is currently in an active multi-week observation phase. We are letting the engine cook for several weeks to evaluate empirical predictions against weekly feedback loops (<code class="text-amber-300">weekly_model_review.yml</code>) before extending full regional metro calibration models to include Diesel. Issue #41 remains actively <em>In Progress</em>.
+            </div>
+        </div>
+
         <!-- Hero Banner -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-purple-900/40 via-slate-900 to-indigo-900/40 border border-purple-500/30 space-y-4">
             <div class="flex items-center gap-3">
