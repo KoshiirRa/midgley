@@ -301,8 +301,12 @@ def compute_context_routing_diagnostic(
     s_t = series[:-horizon]
     s_th = series[horizon:]
     
-    corr_matrix = np.corrcoef(s_t, s_th)
-    rho_h = float(corr_matrix[0, 1]) if corr_matrix.shape == (2, 2) and not np.isnan(corr_matrix[0, 1]) else 0.0
+    if np.std(s_t) == 0.0 or np.std(s_th) == 0.0:
+        rho_h = 0.0
+    else:
+        with np.errstate(divide='ignore', invalid='ignore'):
+            corr_matrix = np.corrcoef(s_t, s_th)
+        rho_h = float(corr_matrix[0, 1]) if corr_matrix.shape == (2, 2) and not np.isnan(corr_matrix[0, 1]) else 0.0
     
     # RBU Room for Improvement Bound: (1 - rho_h^2)
     rbu_bound = max(0.0, 1.0 - (rho_h ** 2))
