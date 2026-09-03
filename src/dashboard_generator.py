@@ -5269,9 +5269,11 @@ def generate_telemetry_page():
     from src.zip_geocoding import get_unmapped_zip_telemetry
     from src.finlight_feed import get_finlight_quota_status
     from src.tokentab_accounting import token_tab_manager
+    from src.ipasis_security import get_ipasis_telemetry
 
     tele_data = get_unmapped_zip_telemetry()
     quota_data = get_finlight_quota_status()
+    ipasis_data = get_ipasis_telemetry()
     tok_data = token_tab_manager.get_accounting_summary()
     tok_summary = tok_data.get('summary', {})
     tok_prov = tok_data.get('provider_breakdown', {})
@@ -5418,6 +5420,10 @@ def generate_telemetry_page():
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">NOAA NWS / wxs.us API</span>
                         <span class="text-blue-400 font-bold">Unlimited (Keyless REST)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">IPASIS IP Security API</span>
+                        <span class="text-cyan-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 1000)} calls today ({ipasis_data.get('private_bypasses', 0)} local bypasses)</span>
                     </div>
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">GasBuddy GraphQL Feed</span>

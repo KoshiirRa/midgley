@@ -859,13 +859,46 @@ async def ingest_event_webhook(
             detail="Unprocessable Entity: Incoming payload must contain a valid non-empty headline, title, text, summary, or tweet_content field."
         )
 
+    # IPASIS IP Gateway Security Check
+    client_ip = (
+        request.headers.get("cf-connecting-ip")
+        or request.headers.get("x-forwarded-for")
+        or request.headers.get("x-real-ip")
+        or (request.client.host if request.client else "127.0.0.1")
+    )
+    from src.ipasis_security import IPASISSecurityVerifier, get_ipasis_telemetry
+    verifier = IPASISSecurityVerifier()
+    ip_status = verifier.check_ip_reputation(client_ip)
+
+    should_block = ip_status.get("is_blocked", False) and os.environ.get("IPASIS_BLOCK_HIGH_RISK", "1") != "0"
+    if should_block:
+        raise HTTPException(
+            status_code=403,
+            detail=f"Forbidden: Incoming request origin IP '{client_ip}' flagged as high-risk by IPASIS security filter."
+        )
+
     from src.intraday_event_monitor import IntradayEventMonitor
     monitor = IntradayEventMonitor()
     result = monitor.process_incoming_headline(req.headline, source=req.source or "Webhook_Push", url=req.url)
     return {
         "status": "success",
         "processed_at": datetime.now().isoformat(),
+        "ip_security": ip_status,
         "result": result
+    }
+
+
+@app.get("/api/v1/security/ip-status", summary="Get IPASIS Gateway Security & Request Telemetry", tags=["Security"])
+def get_ipasis_security_telemetry():
+    """
+    Returns IPASIS IP security gateway status, daily API request accounting (used / 1,000 allowance),
+    private IP bypass statistics, and blocked origin counts (Issue #87).
+    """
+    from src.ipasis_security import get_ipasis_telemetry
+    return {
+        "status": "success",
+        "timestamp": datetime.now().isoformat(),
+        "ipasis_telemetry": get_ipasis_telemetry()
     }
 
 

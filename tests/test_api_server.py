@@ -5,6 +5,7 @@ GET /api/v1/combined, POST /api/v1/forecast/simulate, and /.well-known/ai-plugin
 """
 
 import unittest
+from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 from src.api_server import app
@@ -201,6 +202,38 @@ class TestAPIServer(unittest.TestCase):
         self.assertIn("rmse_dollars", sum_data)
         self.assertIn("directional_hit_rate_pct", sum_data)
         self.assertIn("model_uplift_mae_pct", sum_data)
+
+    def test_get_ipasis_security_telemetry_endpoint(self):
+        res = self.client.get("/api/v1/security/ip-status")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertIn("ipasis_telemetry", data)
+        self.assertIn("daily_requests_used", data["ipasis_telemetry"])
+        self.assertIn("daily_allowance", data["ipasis_telemetry"])
+
+    @patch("src.ipasis_security.IPASISSecurityVerifier.check_ip_reputation")
+    def test_post_webhook_blocked_tor_ip(self, mock_check_ip):
+        import json
+
+        mock_check_ip.return_value = {
+            "ip": "87.118.116.103",
+            "is_blocked": True,
+            "reason": "High-Risk Tor/Abuse Origin",
+            "privacy": {"Tor": True, "Proxy": False, "VPN": True, "Abuse": True},
+            "provider": "IPASIS"
+        }
+
+        payload = {"headline": "Tor Exit Node Webhook Injection Attack", "url": "https://example.com/bad"}
+        body_bytes = json.dumps(payload).encode("utf-8")
+
+        res = self.client.post(
+            "/api/v1/events/webhook",
+            content=body_bytes,
+            headers={"Content-Type": "application/json", "X-Forwarded-For": "87.118.116.103"}
+        )
+        self.assertEqual(res.status_code, 403)
+        self.assertIn("IPASIS security filter", res.json()["detail"])
 
 
 if __name__ == "__main__":

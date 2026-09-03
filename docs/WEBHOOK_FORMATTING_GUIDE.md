@@ -40,6 +40,19 @@ To prevent unauthorized payload injection, production instances enforce HMAC-SHA
    X-Midgley-Signature: sha256=a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0
    ```
 
+### IPASIS IP Gateway Security & Threat Filtering (Issue #87)
+In addition to HMAC signatures, incoming client IP addresses are inspected by the **IPASIS Security Verifier** (`src/ipasis_security.py`).
+- **IP Extraction**: Client IP is extracted from proxy headers (`CF-Connecting-IP` → `X-Forwarded-For` → `X-Real-IP` → `request.client.host`).
+- **Tor & Abuse Filtering**: Incoming requests originating from Tor exit nodes (`privacy.Tor == True`) or malicious proxy/abuse subnets are blocked immediately with **HTTP 403 Forbidden**:
+  ```json
+  {
+    "detail": "Forbidden: Incoming request origin IP '87.118.116.103' flagged as high-risk by IPASIS security filter."
+  }
+  ```
+- **Local & Private IP Bypasses**: Local loopback and RFC 1918 private subnets (`127.0.0.1`, `10.x.x.x`, `192.168.x.x`, `testclient`) bypass external calls automatically with $0.00 cost.
+- **Fail-Open Resilience**: If the external IPASIS API is unreachable or times out (2.0s timeout), the gateway safely fails open and processes legitimate webhooks with zero downtime.
+- **Telemetry Accounting**: Daily API request accounting (used / 1,000 allowance) and security stats are exposed at `GET /api/v1/security/ip-status` and rendered on `docs/telemetry.html`.
+
 ---
 
 ## 4. Regional Metro Target Routing Matrix
