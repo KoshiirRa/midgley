@@ -4526,6 +4526,16 @@ def generate_public_dashboard():
                     where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>\(\text{MAE} = \$0.1069/\text{gal}\)</strong>.
                 </p>
             </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-blue-500">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.2: Purged &amp; Combinatorial Cross-Validation (CPCV) Overlap Elimination (Issue #117)</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\text{Purge Condition: } i \in \text{Train} \iff [t_{i,\text{start}}, t_{i,\text{end}}] \cap [t_{j,\text{test,start}}, t_{j,\text{test,end}} + h_{\text{embargo}}] = \emptyset \quad \forall j \in \text{Test}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Temporal Data Leakage Prevention (López de Prado, 2018):</strong> In 5-day step-ahead horizon forecasting, standard cross-validation leaks lookahead information because observation \(t\)'s evaluation window \([t, t+5]\) overlaps with test samples. <code>PurgedGroupTimeSeriesSplit</code> and <code>CombinatorialPurgedCV</code> purge any training observation whose label period intersects test folds or falls within the post-test embargo window (\(h_{\text{embargo}} = 5\text{ days}\)), ensuring 100% out-of-sample purity (queryable via REST API at <code>GET /api/v1/forecast/purged-cv</code>).
+                </p>
+            </div>
         </section>
 
         <!-- Section 10: CARB Regulatory Burden & PADD 5 Refining Island -->
