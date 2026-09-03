@@ -51,6 +51,10 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(fc["forecast_horizon_days"], 5)
         self.assertGreater(fc["predicted_price_per_gal"], 0.0)
         self.assertIn(fc["projected_direction"], ["UP", "DOWN", "FLAT"])
+        self.assertIn("feature_attributions", fc)
+        self.assertIn("driver_breakdown", fc)
+        self.assertIn("summary_text", fc["driver_breakdown"])
+        self.assertEqual(len(fc["feature_attributions"]), 6)
 
     def test_get_combined(self):
         res = self.client.get("/api/v1/combined?locale=cincinnati")
@@ -60,7 +64,9 @@ class TestAPIServer(unittest.TestCase):
         self.assertIn("live_lookup", data)
         self.assertIn("forecast", data)
         self.assertIn("key_drivers", data)
-        self.assertGreater(len(data["key_drivers"]), 0)
+        self.assertIn("driver_breakdown", data)
+        self.assertIn("summary_text", data["driver_breakdown"])
+        self.assertEqual(len(data["key_drivers"]), 6)
 
     def test_get_greenville_forecast(self):
         res = self.client.get("/api/v1/combined?locale=greenville")
@@ -76,6 +82,14 @@ class TestAPIServer(unittest.TestCase):
         data = res.json()
         self.assertEqual(data["status"], "success")
         self.assertEqual(data["locale"]["region_id"], "Charlotte_NC")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 1C South Atlantic")
+
+    def test_get_port_st_lucie_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=port_st_lucie")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "Port_St_Lucie_FL")
         self.assertEqual(data["locale"]["padd_region"], "PADD 1C South Atlantic")
 
     def test_post_simulate(self):
@@ -142,14 +156,23 @@ class TestAPIServer(unittest.TestCase):
             )
             self.assertEqual(res_missing.status_code, 401)
 
-    def test_post_events_poll(self):
-        res = self.client.post("/api/v1/events/poll")
+    def test_get_forecast_scoreboard(self):
+        res = self.client.get("/api/v1/forecast/scoreboard?locale=tulsa&window=30")
         self.assertEqual(res.status_code, 200)
         data = res.json()
         self.assertEqual(data["status"], "success")
-        self.assertIn("result", data)
-        self.assertEqual(data["result"]["status"], "success")
+        self.assertIn("summary", data)
+        self.assertIn("regional_breakdown", data)
+        self.assertIn("recent_evaluations", data)
+        self.assertEqual(data["filters"]["window_days"], "30")
+
+        sum_data = data["summary"]
+        self.assertIn("mae_dollars", sum_data)
+        self.assertIn("rmse_dollars", sum_data)
+        self.assertIn("directional_hit_rate_pct", sum_data)
+        self.assertIn("model_uplift_mae_pct", sum_data)
 
 
 if __name__ == "__main__":
     unittest.main()
+

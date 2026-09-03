@@ -154,6 +154,13 @@ REGION_METADATA = {
         "static_anchor": 3.280,
         "name": "Charlotte, NC Metro Retail",
         "aaa_keywords": ["Charlotte", "Mecklenburg", "State Average"]
+    },
+    "Port_St_Lucie_FL": {
+        "zip": "34952",
+        "state": "FL",
+        "static_anchor": 3.380,
+        "name": "Port St. Lucie, FL Metro Retail",
+        "aaa_keywords": ["Port St. Lucie", "St. Lucie", "State Average"]
     }
 }
 
@@ -367,7 +374,8 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                     "SanJose_CA": 2.296,
                     "NorthBay_CA": 2.196,
                     "Greenville_NC": 0.490,
-                    "Charlotte_NC": 0.520
+                    "Charlotte_NC": 0.520,
+                    "Port_St_Lucie_FL": 0.620
                 }
                 offset = margins.get(region_code, 0.50)
                 est_price = latest_rbob + offset
@@ -403,7 +411,7 @@ def fetch_history_last_known_price(region_code: str) -> dict:
 def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool = True) -> dict:
     """
     Fetches real-time retail gas price for a metro region executing the full fallback chain:
-    0. 15-Minute SQLite/In-Memory Cache (LookupCache)
+    0. 15-Minute SWR Cache Layer (LookupCache.get_swr)
     1. Live GasBuddy GraphQL API
     2. AAA Metro Web Scraper
     3. EIA / yfinance Benchmark
@@ -411,66 +419,112 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
     5. Static Regional Fallback Anchor
     """
     cache_key = f"live_price_{region_code}"
+
+    def _fetch_uncached() -> dict:
+        meta = REGION_METADATA.get(region_code, REGION_METADATA["Tulsa_OK"])
+        zip_code = meta["zip"]
+        static_fallback = meta["static_anchor"]
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        res = None
+
+        # Step 1: Live GasBuddy GraphQL API
+        gb_res = fetch_gasbuddy_prices_by_zip(zip_code)
+        if gb_res and gb_res.get("average_price") and pd.notna(gb_res.get("average_price")):
+            price = gb_res["average_price"]
+            source = gb_res["source"]
+            logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+            res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
+
+        # Step 2: AAA Metro Web Scraper
+        if not res or res.get("is_stale"):
+            aaa_res = fetch_aaa_metro_price(region_code)
+            if aaa_res and aaa_res.get("average_price") and pd.notna(aaa_res.get("average_price")):
+                price = aaa_res["average_price"]
+                source = aaa_res["source"]
+                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
+                if not res or not cand.get("is_stale"):
+                    res = cand
+
+        # Step 3: EIA / yfinance Benchmark Calculation
+        if not res or res.get("is_stale"):
+            eia_res = fetch_eia_or_yfinance_price(region_code)
+            if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
+                price = eia_res["average_price"]
+                source = eia_res["source"]
+                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
+                if not res or not cand.get("is_stale"):
+                    res = cand
+
+        # Step 4: Last Known prediction_history.csv Price
+        if not res:
+            hist_res = fetch_history_last_known_price(region_code)
+            if hist_res and hist_res.get("average_price") and pd.notna(hist_res.get("average_price")):
+                price = hist_res["average_price"]
+                source = hist_res["source"]
+                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
+
+        # Step 5: Static Fallback Anchor
+        if not res:
+            logger.info(f"Using static fallback anchor for {region_code}: ${static_fallback:.3f}/gal")
+            res = validate_price_payload_freshness({"region": region_code, "price": static_fallback, "source": f"Static Anchor ({region_code})", "timestamp": timestamp_str})
+
+        # Determine granularity level
+        source_name = res.get("source", "Static Anchor")
+        if "GasBuddy" in source_name or "AAA" in source_name:
+            served_granularity = "METRO"
+        elif "EIA State" in source_name or "State" in source_name:
+            served_granularity = "STATE"
+        else:
+            served_granularity = "NATIONAL"
+
+        req_granularity = "NATIONAL" if region_code == "National" else "METRO"
+        padd = meta.get("padd", "PADD 2") if 'meta' in locals() else "PADD 2"
+
+        res["provenance"] = global_cache.build_provenance_chain(
+            source=source_name,
+            region_id=region_code,
+            padd=padd,
+            requested_granularity=req_granularity,
+            served_granularity=served_granularity,
+            cache_status="MISS"
+        )
+        return res
+
+    cache_status = "MISS"
     if use_cache:
-        cached_res = global_cache.get(cache_key)
+        cached_res, cache_status = global_cache.get_swr(
+            cache_key,
+            fetch_func=_fetch_uncached,
+            fresh_ttl_seconds=300,
+            stale_ttl_seconds=1800
+        )
         if cached_res and cached_res.get('price') and pd.notna(cached_res.get('price')):
-            logger.info(f"Cache hit for {region_code}: ${cached_res.get('price'):.3f}/gal (Age: {cached_res.get('_cache_age_seconds')}s)")
+            meta = REGION_METADATA.get(region_code, REGION_METADATA["Tulsa_OK"])
+            if "provenance" not in cached_res or not isinstance(cached_res["provenance"], dict):
+                src = cached_res.get("source", "Cache")
+                srv_gran = "STATE" if "State" in src else ("NATIONAL" if "National" in src else "METRO")
+                req_gran = "NATIONAL" if region_code == "National" else "METRO"
+                cached_res["provenance"] = global_cache.build_provenance_chain(
+                    source=src,
+                    region_id=region_code,
+                    padd=meta.get("padd", "PADD 2"),
+                    requested_granularity=req_gran,
+                    served_granularity=srv_gran,
+                    cache_status=cache_status
+                )
+            else:
+                cached_res["provenance"]["cache_status"] = cache_status
+
+            logger.info(f"SWR Cache {cache_status} for {region_code}: ${cached_res.get('price'):.3f}/gal (Age: {cached_res.get('_cache_age_seconds')}s)")
             return cached_res
 
-    meta = REGION_METADATA.get(region_code, REGION_METADATA["Tulsa_OK"])
-    zip_code = meta["zip"]
-    static_fallback = meta["static_anchor"]
-    timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    result = None
-
-    # Step 1: Live GasBuddy GraphQL API
-    gb_res = fetch_gasbuddy_prices_by_zip(zip_code)
-    if gb_res and gb_res.get("average_price") and pd.notna(gb_res.get("average_price")):
-        price = gb_res["average_price"]
-        source = gb_res["source"]
-        logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
-        result = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
-
-    # Step 2: AAA Metro Web Scraper
-    if not result or result.get("is_stale"):
-        aaa_res = fetch_aaa_metro_price(region_code)
-        if aaa_res and aaa_res.get("average_price") and pd.notna(aaa_res.get("average_price")):
-            price = aaa_res["average_price"]
-            source = aaa_res["source"]
-            logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
-            cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
-            if not result or not cand.get("is_stale"):
-                result = cand
-
-    # Step 3: EIA / yfinance Benchmark Calculation
-    if not result or result.get("is_stale"):
-        eia_res = fetch_eia_or_yfinance_price(region_code)
-        if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
-            price = eia_res["average_price"]
-            source = eia_res["source"]
-            logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
-            cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
-            if not result or not cand.get("is_stale"):
-                result = cand
-
-    # Step 4: Last Known prediction_history.csv Price
-    if not result:
-        hist_res = fetch_history_last_known_price(region_code)
-        if hist_res and hist_res.get("average_price") and pd.notna(hist_res.get("average_price")):
-            price = hist_res["average_price"]
-            source = hist_res["source"]
-            logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
-            result = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
-
-    # Step 5: Static Fallback Anchor
-    if not result:
-        logger.info(f"Using static fallback anchor for {region_code}: ${static_fallback:.3f}/gal")
-        result = validate_price_payload_freshness({"region": region_code, "price": static_fallback, "source": f"Static Anchor ({region_code})", "timestamp": timestamp_str})
-
-    # Cache successful result
+    result = _fetch_uncached()
     if use_cache and result:
-        global_cache.set(cache_key, result, ttl_seconds=900)
+        global_cache.set(cache_key, result, ttl_seconds=1800)
 
     try:
         from src.connector_telemetry import log_connector_event

@@ -97,6 +97,18 @@ LOCALE_SPECS = {
         "filename": "charlotte.png",
         "unit": "$/gal"
     },
+    "port_st_lucie": {
+        "key": "Port_St_Lucie_FL",
+        "title": "Port St. Lucie FL Retail Gas Forecast",
+        "subtitle": "PADD 1C South Atlantic & Port Everglades Marine Offloading",
+        "base_default": 3.380,
+        "target_default": 3.290,
+        "accuracy": "58.15%",
+        "margin": "$0.384 FL Tax",
+        "driver": "Waterborne Marine Barge Offloading & FL Tax ($0.384/gal)",
+        "filename": "port_st_lucie.png",
+        "unit": "$/gal"
+    },
     "oakland": {
         "key": "Oakland_CA",
         "title": "Oakland CA Metro Gas Price Forecast",

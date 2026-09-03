@@ -506,6 +506,14 @@ LOCALE_RUNNERS["chicago"] = run_chicago_pipeline
 ### Step 7: Connect MLOps Prediction Tracker & Backfilling (`src/prediction_logger.py`)
 Update `src/prediction_logger.py` to include `"Chicago_IL"` in target price columns and historical test-split backfilling (`backfill_new_region_history`).
 
+### Step 8: Update GitHub Wiki Documentation (`KoshiirRa/midgley.wiki`)
+Whenever adding, modifying, or removing data connectors, API feeds, or regional data sources:
+1. Clone the GitHub Wiki repository: `git clone https://github.com/KoshiirRa/midgley.wiki.git`.
+2. Document the new data connector in `Data-Ingestion-and-APIs.md` (class name, module path, API provider, endpoints, cost profile, ingested feature keys).
+3. Update `Agent-Architecture.md` under Agent 1 modules list.
+4. Update `Project-History-and-Roadmap.md` under the active release phase.
+5. Commit and push to `origin/master`.
+
 ---
 
 ## 9. Verification, Health Checks & Diagnostics

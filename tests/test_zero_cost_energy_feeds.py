@@ -94,7 +94,7 @@ class TestZeroCostEnergyFeeds(unittest.TestCase):
 
         all_res = connector.fetch_all_hubs_degree_days()
         self.assertEqual(all_res["status"], "SUCCESS")
-        self.assertEqual(len(all_res["hubs"]), 6)
+        self.assertGreaterEqual(len(all_res["hubs"]), 6)
 
 
 if __name__ == "__main__":

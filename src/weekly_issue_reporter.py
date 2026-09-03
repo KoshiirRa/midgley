@@ -482,8 +482,60 @@ REGION_METADATA = {
     "BayArea_CA": {
         "display_name": "SF Bay Area 9-County Metro Retail",
         "architecture": "SFPP Pipeline Corridor + Hayward Fault Seismic Alert"
+    },
+    "Greenville_NC": {
+        "display_name": "Greenville, NC Metro Retail (PADD 1C)",
+        "architecture": "Colonial Pipeline Selma Hub + Tar River Flooding Model"
+    },
+    "Charlotte_NC": {
+        "display_name": "Charlotte, NC Metro Retail (PADD 1C)",
+        "architecture": "Paw Creek Distribution Hub + NC/SC Tax Differential"
+    },
+    "Port_St_Lucie_FL": {
+        "display_name": "Port St. Lucie, FL Metro Retail (PADD 1C)",
+        "architecture": "Port Everglades Marine Offloading + FL Tax & Hurricane Model"
     }
 }
+
+
+def format_mlops_observability_markdown_section() -> str:
+    """Generates MLOps observability & feature attribution markdown for the weekly review report."""
+    try:
+        from src.prediction_logger import compute_mlops_observability_summary
+        obs = compute_mlops_observability_summary(window_days=30)
+        
+        n_eval = obs.get("total_evaluations", 0)
+        if n_eval == 0:
+            return "ℹ️ *No evaluated prediction history available for MLOps observability metrics.*"
+            
+        win_rate = obs.get("llm_augmentation_win_rate_pct", 0.0)
+        ci_cov = obs.get("ci_95_coverage_pct", 0.0)
+        avg_press = obs.get("avg_llm_price_pressure", 0.0)
+        avg_disr = obs.get("avg_llm_supply_disruption", 0.0)
+        prov_map = obs.get("provenance_breakdown", {})
+        
+        prov_rows = []
+        for src_name, metrics in prov_map.items():
+            prov_rows.append(f"| `{src_name}` | {metrics['count']} | ${metrics['mae_dollars']:.4f} |")
+        prov_table = "\n".join(prov_rows) if prov_rows else "| `yfinance` | N/A | N/A |"
+        
+        section = f"""## 📊 Extended MLOps Observability & Feature Attribution (30-Day Window)
+
+| Metric / Dimension | Metric Value | Benchmark Target | Status |
+| :--- | :---: | :---: | :---: |
+| **LLM Augmentation Win Rate (vs Pure Quant)** | **`{win_rate:.1f}%`** | `> 55.0%` | {"✅ Outperforming" if win_rate >= 55 else "⚠️ Calibration Active"} |
+| **95% Confidence Interval Coverage** | **`{ci_cov:.1f}%`** | `> 90.0%` | {"✅ Well Calibrated" if ci_cov >= 90 else "ℹ️ Active Tracking"} |
+| **Mean LLM Price Pressure Vector** | `{avg_press:+.4f}` | `-1.0 to +1.0` | 🟢 Balanced |
+| **Mean LLM Supply Disruption Vector** | `{avg_disr:+.4f}` | `0.0 to +1.0` | 🟢 Active |
+
+#### 🌐 Data Feed Provenance Performance Breakdown:
+| Data Feed Source | Evaluated Records | Mean Absolute Error (MAE) |
+| :--- | :---: | :---: |
+{prov_table}"""
+        return section
+    except Exception as e:
+        logger.warning(f"Could not format MLOps observability section: {e}")
+        return f"⚠️ *MLOps Observability metrics unavailable ({e}).*"
 
 
 def generate_weekly_markdown_report() -> str:
@@ -589,10 +641,13 @@ def generate_weekly_markdown_report() -> str:
         logger.warning(f"Could not execute catalog monitor in weekly report: {e}")
         catalog_summary_md = f"⚠️ *Catalog monitor scan skipped ({e}).*"
 
+    # Fetch MLOps Observability Section
+    mlops_obs_md = format_mlops_observability_markdown_section()
+
     # Fetch recent arXiv research preprints
     arxiv_section_md = format_arxiv_markdown_section(days_back=7)
 
-    report = f"""# 📊 Weekly Model Review & Performance Audit ({today_str})
+    report = f"""# [{branch}] 📊 Weekly Model Review Report & Performance Audit ({today_str})
 
 ### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
 
@@ -611,6 +666,10 @@ def generate_weekly_markdown_report() -> str:
 | Region | Current Base Price | 5-Day Forecast Target | Projected Direction | Forecast Target Date |
 | :--- | :--- | :--- | :--- | :--- |
 {latest_rows}
+
+---
+
+{mlops_obs_md}
 
 ---
 

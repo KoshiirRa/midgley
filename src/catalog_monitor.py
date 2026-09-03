@@ -147,14 +147,14 @@ def evaluate_item_heuristic(item: dict) -> dict:
     """
     text = (item["title"] + " " + item["description"] + " " + item["url"]).lower()
     
-    # Explicitly bar Apify tools and scrapers due to paid platform/compute unit constraints
-    if "apify" in text:
+    # Explicitly bar Apify tools and edgar-geo-revenue due to platform/cost constraints or prior review rejection
+    if any(barred in text for barred in ["apify", "edgar-geo-revenue"]):
         return {
             "impact_score": 0.0,
             "category": "Barred Platform",
             "target_component": "N/A",
             "is_worthwhile": False,
-            "reasoning": "Apify tools and scrapers are explicitly barred from ingestion due to paid subscription/compute cost constraints."
+            "reasoning": "Tool is explicitly barred from ingestion due to platform cost constraints or prior architecture review rejection."
         }
 
     score = 2.0
@@ -210,13 +210,13 @@ def evaluate_item_with_llm(item: dict) -> dict:
     falling back seamlessly to evaluate_item_heuristic().
     """
     text = (item["title"] + " " + item["description"] + " " + item["url"]).lower()
-    if "apify" in text:
+    if any(barred in text for barred in ["apify", "edgar-geo-revenue"]):
         return {
             "impact_score": 0.0,
             "category": "Barred Platform",
             "target_component": "N/A",
             "is_worthwhile": False,
-            "reasoning": "Apify tools and scrapers are explicitly barred from ingestion due to paid subscription/compute cost constraints."
+            "reasoning": "Tool is explicitly barred from ingestion due to platform cost constraints or prior architecture review rejection."
         }
 
     gemini_key = os.environ.get("GEMINI_API_KEY")
@@ -312,23 +312,44 @@ def infer_issue_domain_labels(eval_res: dict, item: dict) -> list:
 
 
 def check_existing_issue(title: str, item_url: str) -> bool:
-    """Checks if an open issue for this item/title or URL already exists on the repo."""
+    """Checks if an issue (open or closed) for this item/title or URL already exists on the repo."""
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    clean_title = title.lower().strip()
     try:
-        cmd = ["gh", "issue", "list", "--repo", "KoshiirRa/midgley", "--state", "open", "--limit", "100", "--json", "number,title"]
+        cmd = ["gh", "issue", "list", "--repo", "KoshiirRa/midgley", "--state", "all", "--limit", "300", "--json", "number,title,state"]
         env = dict(os.environ)
         if token:
             env["GH_TOKEN"] = token
             env["GITHUB_TOKEN"] = token
         res = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
         issues = json.loads(res.stdout.strip())
-        clean_title = title.lower().strip()
         for iss in issues:
             if clean_title == iss.get("title", "").lower().strip():
-                logger.info(f"Existing open issue found matching '{title}': #{iss['number']}. Skipping creation.")
+                logger.info(f"Existing issue ({iss.get('state')}) found matching '{title}': #{iss['number']}. Skipping creation.")
                 return True
     except Exception as e:
         logger.debug(f"Notice checking existing issues via gh CLI ({e}).")
+
+    if not token:
+        return False
+
+    try:
+        api_url = "https://api.github.com/repos/KoshiirRa/midgley/issues?state=all&per_page=100"
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {token}",
+            "User-Agent": "Midgley-Catalog-Monitor"
+        }
+        req = urllib.request.Request(api_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+            for iss in res_data:
+                if clean_title == iss.get("title", "").lower().strip():
+                    logger.info(f"Existing issue ({iss.get('state')}) found matching '{title}' via REST API: #{iss.get('number')}. Skipping creation.")
+                    return True
+    except Exception as e:
+        logger.debug(f"Notice checking existing issues via REST API ({e}).")
+
     return False
 
 

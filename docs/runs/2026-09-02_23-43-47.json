@@ -1,0 +1,112 @@
+{
+  "run_id": "2026-09-02_23-43-47",
+  "log_timestamp": "2026-09-02 23:43:26",
+  "run_type": "DAILY_BATCH",
+  "primary_trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)",
+  "headline_items": [
+    {
+      "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
+      "url": "https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html",
+      "source": "CME_Group / NYMEX"
+    },
+    {
+      "headline": "NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion",
+      "url": "https://api.weather.gov",
+      "source": "NOAA_NWS_API"
+    },
+    {
+      "headline": "Executive Social Media Feed & OPEC Weekend Price Gap Analysis",
+      "url": "https://finlight.me",
+      "source": "Finlight_v2_API"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.1,
+    "overall_price_pressure": 0.02,
+    "geopolitical_risk": 0.15,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.1,
+    "m1": 0.0871,
+    "m2": 0.0758,
+    "m3": 0.066,
+    "m4": 0.0574,
+    "m5": 0.05
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.2502,
+      "delta": 0.0,
+      "pct_change": 0.0
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 3.701,
+      "predicted_price": 3.6211,
+      "delta": -0.12749999999999995,
+      "pct_change": -3.445014860848418
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 3.94,
+      "predicted_price": 3.8622,
+      "delta": -0.13139999999999974,
+      "pct_change": -3.335025380710653
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 3.821,
+      "predicted_price": 3.7462,
+      "delta": -0.12890000000000024,
+      "pct_change": -3.373462444386292
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 3.25,
+      "predicted_price": 3.1325,
+      "delta": -0.11770000000000014,
+      "pct_change": -3.621538461538466
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 3.28,
+      "predicted_price": 3.164,
+      "delta": -0.1187999999999998,
+      "pct_change": -3.6219512195121895
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 4.95,
+      "predicted_price": 4.7615,
+      "delta": -0.4175000000000004,
+      "pct_change": -8.434343434343443
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 5.05,
+      "predicted_price": 4.8576,
+      "delta": -0.4214000000000002,
+      "pct_change": -8.344554455445548
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-09-02 23:43:26]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of \u0394P=+0.02/gal. Primary trigger: 'Scheduled Daily Batch Refresh (02:00 AM Central)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M\u2080=0.1000 down to M\u2085=0.0500.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-09-02 23:43:26 (Mode: DAILY_BATCH), primary event trigger 'Scheduled Daily Batch Refresh (02:00 AM Central)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Finlight_v2_API, CME_Group / NYMEX, NOAA_NWS_API). Ingested factor vector: Supply Disruption S=0.10, Price Pressure \u0394P=+0.02, Geopolitical Risk G=0.15. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.1000\n  - Day 1: M\u2081 = 0.0871\n  - Day 5: M\u2085 = 0.0500 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.250/gal ($0.000/gal, 0.00%)\n  \u2022 Tulsa, OK Retail: $3.621/gal ($-0.127/gal, -3.45%)\n  \u2022 Newark, DE Retail: $3.862/gal ($-0.131/gal, -3.34%)\n  \u2022 Cincinnati, OH/KY: $3.746/gal ($-0.129/gal, -3.37%)\n  \u2022 Greenville, NC Retail: $3.132/gal ($-0.118/gal, -3.62%)\n  \u2022 Charlotte, NC Retail: $3.164/gal ($-0.119/gal, -3.62%)\n  \u2022 Oakland, CA Retail: $4.761/gal ($-0.418/gal, -8.43%)\n  \u2022 SF Bay Area Region: $4.858/gal ($-0.421/gal, -8.34%)\n\nLargest upward shift for this run: National Wholesale at $3.250/gal (+0.000/gal). Largest downward shift for this run: SF Bay Area Region at $4.858/gal (-0.421/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-09-02 23:43:26]:\n\u2022 Execution Context: Run type 'DAILY_BATCH' triggered by 'Scheduled Daily Batch Refresh (02:00 AM Central)'. Overall price pressure vector sits at \u0394P=+0.02/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+  }
+}

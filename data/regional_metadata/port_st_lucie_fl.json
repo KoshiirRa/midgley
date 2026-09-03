@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "port_st_lucie_fl",
+  "display_name": "Port St. Lucie, FL Metro Retail",
+  "padd_region": "PADD 1C Lower Atlantic",
+  "primary_city": "Port St. Lucie, FL",
+  "counties": ["St. Lucie", "Martin", "Indian River"],
+  "baseline_price": 3.380,
+  "icon_class": "fa-water",
+  "theme_color": "cyan",
+  "econometric_drivers": {
+    "title": "PADD 1C Waterborne Econometric Drivers",
+    "description": "Retail pump prices track Gulf Coast RBOB spot indices plus waterborne ocean barge transit freight tariffs and Treasure Coast tank-truck delivery margins."
+  },
+  "refining_logistics": {
+    "title": "Refining & Waterborne Marine Logistics",
+    "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
+    "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
+    "capacity_bpd": 600000,
+    "pipelines": ["Port Everglades Marine Terminal Offloading", "Port Canaveral Tanker Berths", "I-95 & Florida Turnpike Tank Truck Corridors"]
+  },
+  "tax_structure": {
+    "title": "Florida Motor Fuel Tax Structure",
+    "description": "Florida state motor fuel tax ($0.384/gal state & local option) + Federal excise tax ($0.184/gal) creates a total statutory tax burden of $0.568/gal.",
+    "state_tax_per_gal": 0.384,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.568,
+    "notes": "Florida variable state fuel tax + St. Lucie County local option"
+  },
+  "infrastructure_delivery": {
+    "title": "Delivery Hub & NOAA Risk Factors",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{PSL Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.380 - \\$3.184 = \\$0.196/\\text{gal}",
+    "description": "Port Everglades tank-truck dispatch via I-95 & Florida's Turnpike corridors to St. Lucie, Martin & Indian River counties, monitored against Atlantic tropical cyclone tracks.",
+    "hub_distance_miles": 85,
+    "hub_name": "Port Everglades Petroleum Distribution Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Port Everglades Loading Rack Deluge Outage",
+      "subtitle": "Flash Flooding Rack Shutdown",
+      "price_impact_per_gal": 0.245,
+      "pct_impact": 7.25,
+      "description": "Halts tank-truck dispatches to Treasure Coast retail stations"
+    },
+    {
+      "name": "Category 3 Atlantic Hurricane Landfall",
+      "subtitle": "Marine Port Closure & Evacuation Surge",
+      "price_impact_per_gal": 0.225,
+      "pct_impact": 6.66,
+      "description": "Shuts Port Everglades & Port Canaveral marine berths"
+    },
+    {
+      "name": "Straits of Florida Tanker Transit Bottleneck",
+      "subtitle": "Gale Warning Marine Delay",
+      "price_impact_per_gal": 0.175,
+      "pct_impact": 5.18,
+      "description": "Delays Gulf Coast waterborne tank barge arrivals"
+    }
+  ]
+}

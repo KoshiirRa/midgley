@@ -30,6 +30,20 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
   \[
   \text{TaxSpread}_{\text{OH-KY}} = P_{\text{OH Retail}} - P_{\text{KY Retail}} = \$0.125/\text{gal}
   \]
+- **Charlotte Regional Crack Spread & NC/SC Tax Gap:**
+  \[
+  \text{CrackSpread}_{\text{Charlotte}} = P_{\text{Charlotte Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Charlotte}} = \$3.280/\text{gal})
+  \]
+  \[
+  \text{TaxSpread}_{\text{NC-SC}} = P_{\text{NC Tax}} - P_{\text{SC Tax}} = \$0.404 - \$0.288 = \$0.116/\text{gal}
+  \]
+- **Port St. Lucie Waterborne Rack Margin & FL Fuel Tax:**
+  \[
+  \text{CrackSpread}_{\text{PSL}} = P_{\text{PSL Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, PSL}} = \$3.380/\text{gal})
+  \]
+  \[
+  T_{\text{FL}} = \tau_{\text{State/Local}} + \tau_{\text{Federal}} = \$0.384 + \$0.184 = \$0.568/\text{gal}
+  \]
 - **Oakland & SF Bay Area PADD 5 Richmond Crack Spread & CARB Tax Burden:**
   \[
   \text{CrackSpread}_{\text{Richmond}} = P_{\text{Oakland Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Oakland}} = \$4.950/\text{gal}, P_{\text{Live, BayArea}} = \$5.050/\text{gal})
@@ -40,12 +54,12 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
 
 
 ### B. Exponential Memory Decay Equation
-Real-world event news persistence is modeled via exponential memory decay ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$):
+Real-world event news persistence is modeled via dynamic category-specific exponential memory decay ($t_{1/2} \in [2.5, 14.0]\text{ days}$ depending on shock taxonomy: $14.0\text{d}$ physical supply disruption, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts):
 \[
-\lambda = \frac{\ln(2)}{t_{1/2}}
+\lambda(\text{category}) = \frac{\ln(2)}{t_{1/2}(\text{category})}
 \]
 \[
-\text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda} + \text{Shock}_t
+\text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda(\text{category})} + \text{Shock}_t
 \]
 
 ---
@@ -69,6 +83,7 @@ The forecasting engine integrates a **two-tiered weather ingestion model** via t
    │ • Bakken Shale Polar Vortexes │                     │ • Cincinnati OH/KY (Miss River)│
    │                               │                     │ • Greenville NC (NCZ081 Floods)│
    │                               │                     │ • Charlotte NC (NCZ071 Hub)   │
+   │                               │                     │ • Port St. Lucie FL (FLZ147)  │
    │                               │                     │ • Oakland & Bay Area (PSPS)   │
    └───────────────┬───────────────┘                     └───────────────┬───────────────┘
                    │                                                     │
@@ -100,9 +115,30 @@ The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\
 
 ---
 
-## 4. MLOps Prediction Logging & Backfilling Engine (`src/prediction_logger.py`)
+## 4. MLOps Prediction Logging, Feature Attribution & Rolling Scoreboard Engine (`src/prediction_logger.py` & `src/models.py`)
 
-All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records. When a new regional forecasting pipeline is launched, `backfill_new_region_history()` automatically populates historical test split predictions and evaluates mature target dates against historical market actuals immediately.
+All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records.
+
+### Feature Attribution (XAI) Breakdown
+`compute_locale_feature_attribution_breakdown` in `src/models.py` decomposes the total projected forecast delta ($\Delta = P_{\text{pred}} - P_{\text{base}}$) into signed dollar contributions ($/gal) across 6 core domain drivers:
+1. **Futures & Commodity Benchmark** ($\Delta_{\text{futures}}$)
+2. **Refining Yield & Crack Spread** ($\Delta_{\text{crack}}$)
+3. **Weather & Environmental Signals** ($\Delta_{\text{weather}}$)
+4. **Tax & Regulatory Overhead** ($\Delta_{\text{tax}}$)
+5. **Unstructured Intelligence & Sentiment** ($\Delta_{\text{sentiment}}$)
+6. **Regional Logistics & Hub Delivery** ($\Delta_{\text{logistics}}$)
+
+Enforcing exact sum equality: $\sum_{k=1}^6 \Delta_k = P_{\text{pred}} - P_{\text{base}}$.
+
+### Realized-vs-Predicted Rolling Scoreboard
+`compute_rolling_scoreboard_metrics(window_days=30)` continuously evaluates model performance over rolling 30, 60, 90, and all-time windows, computing:
+- **Mean Absolute Error (MAE)**: $\text{MAE} = \frac{1}{N} \sum |y - \hat{y}|$
+- **Root Mean Squared Error (RMSE)**: $\text{RMSE} = \sqrt{\frac{1}{N} \sum (y - \hat{y})^2}$
+- **Mean Absolute Percentage Error (MAPE)**: $\text{MAPE} = \frac{1}{N} \sum \left|\frac{y - \hat{y}}{y}\right| \times 100$
+- **Directional Hit Rate**: $\text{Hit Rate} = \frac{\sum \mathbb{I}(\text{dir}_{\text{pred}} = \text{dir}_{\text{actual}})}{N} \times 100$
+- **Naive Persistence Baseline Comparison & Model MAE Uplift**: $\text{Uplift}_{\text{MAE}} = \frac{\text{MAE}_{\text{naive}} - \text{MAE}_{\text{model}}}{\text{MAE}_{\text{naive}}} \times 100$
+
+Exposed live via REST API `GET /api/v1/forecast/scoreboard` and rendered dynamically on the GitHub Pages web dashboard (`docs/index.html`).
 
 ---
 

@@ -42,9 +42,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                                               ▼                                                  │
                ┌─────────────────────────────────────────────────────────────┐                   │
                │         4. LOCALIZED METRO AREA CALIBRATION AGENTS          │                   │
-               │  • Tulsa Metro Model (Cushing WTI & West Tulsa Refinery)    │                   │
-               │  • Newark Metro Model (PADD 1B & C&D Canal Detour)          │                   │
-               │  • Cincinnati Tri-State (Dual-State Tax & Ohio/Miss River) │                   │
+               │  • Tulsa Metro (Cushing WTI & West Tulsa Refinery)          │                   │
+               │  • Newark Metro (PADD 1B & Delaware City Refinery Detour)   │                   │
+               │  • Cincinnati Tri-State (Dual-State Tax & Ohio/Miss River)  │                   │
+               │  • Greenville & Charlotte (PADD 1C Colonial Pipeline)      │                   │
+               │  • Oakland & SF Bay Area (PADD 5 CARB & Richmond Refinery)  │                   │
+               │  • Port St. Lucie (PADD 1C Waterborne Terminal Freight)    │                   │
+               │  • ULSD Distillate Engine (HO=F & 3-2-1 Margin - WIP)        │                   │
                └──────────────────────────────┬──────────────────────────────┘                   │
                                               │ Localized Metro Forecasts                        │
                                               ▼                                                  │
@@ -118,8 +122,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **FRED (St. Louis Fed) Energy Series (`src/data_ingestion.py`):** `FREDDataConnector` ingests weekly national and PADD retail gasoline/diesel series (`GASREGW`, `GASDESW`, `GASREGWCW`, `GASREGWGULF`) and CPI gasoline index (`CUUR0000SETB01`).
   - **U.S. EIA API v2 Open Data (`src/data_ingestion.py`):** `EIADataConnector` ingests weekly retail price series, PADD refinery percent utilization, and regional motor gasoline/crude stock inventories (`/petroleum/pri/gnd/data/`, `/petroleum/pnp/pct/data/`, `/petroleum/stoc/wstk/data/`).
   - **USDA Biofuel & Ethanol Market Reports (`src/data_ingestion.py`):** `USDABiofuelConnector` ingests spot Midwest ethanol (E100) rack prices ($/gal) and RIN D6 Ethanol Credit spot values (`marsapi.ams.usda.gov`) for E10 unleaded blendstock cost modeling ($0.10 \times \text{E100} + 0.90 \times \text{RBOB} + \text{RIN Overhead}$).
-  - **OilpriceAPI Energy & Petroleum Data Feed (`src/data_ingestion.py`) (Issue #128):** `OilPriceAPIDataConnector` provides REST API & Python SDK ingestion for real-time oil and energy commodity spot prices (`WTI_USD`, `BRENT_USD`, `RBOB_USD`, `NG_USD`, `HO_USD`, `RAL_USD`, `COAL_USD`) with persistent 25 call/day safety valve (`data/oilpriceapi_quota.json`), off-hours cache (`data/oilpriceapi_cache.json`), and offline benchmark fallback mode (`status: FALLBACK`).
+  - **3-2-1 Refining Crack Spread Engine (`src/data_ingestion.py` & `src/feature_engineering.py`) (Issue #169):** Queries NYMEX Heating Oil futures (`HO=F`) alongside RBOB Gasoline (`RB=F`) and WTI Crude (`CL=F`) to compute the industry-standard 3-2-1 refining crack margin ($\text{Crack}_{321} = \frac{2 \times \text{RBOB} \times 42 + 1 \times \text{HO} \times 42 - 3 \times \text{WTI}}{3}$) and 5-day margin momentum (`crack_spread_321_delta_5d`) to model refinery yield switching and run cut dynamics.
   - **Open-Meteo & NOAA High-Resolution Degree Days (`src/noaa_weather.py`):** `OpenMeteoDegreeDaysConnector` computes daily Heating Degree Days ($\text{HDD}$), Cooling Degree Days ($\text{CDD}$), and freeze/heat stress risk warnings across 6 primary refining hubs (West Tulsa, Delaware City, Catlettsburg, Richmond/Martinez, Selma, Paw Creek).
+  - **NOAA NHC Tropical Cyclone Advisories (`src/nhc_hurricane.py`) (Issue #177):** `NHCHurricaneConnector` ingests NOAA NHC active tropical cyclone RSS/GIS advisories to model Gulf Coast refining hub threat scores (`nhc_gulf_refinery_exposure_score`) and Colonial Pipeline Line 1/2 intake risk flags.
+  - **BSEE Offshore Gulf Production Shut-Ins (`src/bsee_shutins.py`) (Issue #178):** `BSEEShutInConnector` parses daily Bureau of Safety and Environmental Enforcement reports during tropical storm evacuations to track offshore crude oil shut-in percentages (`bsee_gulf_oil_shutin_pct`) and platform evacuation counts.
+  - **EIA-930 Hourly Electric Grid Stress Monitor (`src/data_ingestion.py`) (Issue #179):** `EIA930GridMonitorConnector` monitors ERCOT, MISO, PJM, and CAISO balancing authority load anomalies near refining hubs (`grid_stress_load_anomaly_zscore`).
+  - **Expanded EIA Weekly Petroleum Balance (`src/data_ingestion.py`) (Issue #180):** Expands `EIADataConnector` to ingest weekly motor gasoline product supplied (implied demand), refiner net production by PADD, and inter-PADD pipeline movements.
+  - **USACE LPMS Ohio River Lock Delays (`src/usace_locks.py`) (Issue #181):** `USACELockConnector` monitors commercial barge queue times and delay hours at Markland and McAlpine locks on the Ohio River (`usace_ohio_river_lock_delay_hours`) for Cincinnati regional logistics calibration.
 
 
 
@@ -127,18 +136,25 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 2. Exponential Memory Fusion Agent (`src/feature_engineering.py`)
 
-* **Role:** Solves point-shock persistence by modeling event decay over 2–3 weeks.
+* **Role:** Solves point-shock persistence by modeling event decay over 2–3 weeks using dynamic taxonomy-based half-life decay curves (`CATEGORY_HALF_LIVES_DAYS`).
 * **Mathematical Decay:**
   \[
-  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2)}{t_{1/2}}} + \text{NewShock}_t
+  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2)}{t_{1/2}(\text{category})}} + \text{NewShock}_t
   \]
-  where $t_{1/2} = 5.0\text{ days}$ for national macroeconomic/social events and $t_{1/2} = 4.0\text{ days}$ for regional NOAA weather shocks.
+  where dynamic half-lives $t_{1/2}(\text{category})$ are mapped by shock taxonomy:
+  - **`supply_disruption`** (structural physical outages, refinery fires, pipeline shut-ins, hurricane damage): **$t_{1/2} = 14.0\text{ days}$**
+  - **`geopolitical_risk`** (Hormuz/Suez chokepoint blockades, military escalation, sanctions): **$t_{1/2} = 7.0\text{ days}$**
+  - **`opec_action`** (OPEC+ production quota policy shifts): **$t_{1/2} = 5.0\text{ days}$**
+  - **`demand_sentiment`** (macroeconomic indicators, recession fears, driving season demand): **$t_{1/2} = 4.0\text{ days}$**
+  - **`overall_price_pressure`** (executive social media posts, short-term news sentiment headlines): **$t_{1/2} = 2.5\text{ days}$** (retaining $1.42\times$ weekend open gap volatility multiplier)
+* **Pre-Training Context Routing Diagnostic (Paper 2608.25128v1):** Modulates effective half-life ($t_{1/2} \times 0.20$ for `SKIP_FUSION` vs $1.0\times t_{1/2}$ for `TRY_FUSION`) based on temporal autocorrelation $\rho_h$.
 
 ---
 
 ### 3. Quantitative Forecasting Agent (`src/models.py`)
 
-* **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression α=10.0) and XGBoost regressors on 80/20 chronological train/test splits. Main model generates base wholesale RBOB commodity price forecasts.
+* **Role:** Fits regularized linear pipelines (StandardScaler + Ridge Regression α=10.0), XGBoost regressors, and multi-model Stacking Ensemble Regressors on 80/20 chronological train/test splits. Main model generates base wholesale RBOB commodity price forecasts.
+* **Purged & Combinatorial Cross-Validation Engine (`PurgedGroupTimeSeriesSplit`, `CombinatorialPurgedCV`, `evaluate_model_purged_cv()`) (Issue #117):** Implements Marcos López de Prado's Purged Group Time Series Split and Combinatorial Purged CV (CPCV) in `src/models.py`. Eliminates lookahead data leakage in 5-day step-ahead forecasts by purging training observations whose label evaluation window intersects with test fold evaluation windows and enforcing post-test embargo periods (`GET /api/v1/forecast/purged-cv`).
 * **Out-of-Time Test Performance (Regular Model v1.4 "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
@@ -164,10 +180,18 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Charlotte Regional Calibration Agent (`src/locations/charlotte/`):**
   - Tailors market time series to the Charlotte, NC metropolitan area (PADD 1C South Atlantic) calibrated to live pump prices ($3.28/gal base).
   - Integrates **Colonial Pipeline Line 1 & Line 2 Paw Creek Petroleum Distribution Hub**, Plantation Pipeline interconnects, NC state fuel tax ($0.404/gal) vs South Carolina cross-border tax differential ($0.288/gal, persistent ~$0.116/gal gap), and **NOAA Mecklenburg County (NCZ071) Catawba River flooding & winter ice storm alerts**.
+* **Port St. Lucie Regional Calibration Agent (`src/locations/port_st_lucie/`):**
+  - Tailors market time series to the Port St. Lucie, FL metropolitan area (St. Lucie County / Treasure Coast, PADD 1C South Atlantic) calibrated to live pump prices ($3.38/gal base).
+  - Models Florida's unique **>95% waterborne marine tank barge/vessel offloading dependency** (0 crude oil refineries and 0 interstate refined product pipelines entering South Florida), waterborne marine freight tariffs, Port Everglades (Fort Lauderdale) & Port Canaveral petroleum terminals, Florida State Motor Fuel Tax + St. Lucie County local option tax ($0.384/gal), I-95 & Florida Turnpike tank-truck corridors, and **NOAA St. Lucie County (FLZ147 / Zip 34952) Atlantic hurricane, marine gale & flash deluge flood alerts**.
 * **Oakland & SF Bay Area Regional Calibration Agent (`src/locations/oakland/`):**
   - Tailors market time series to Oakland, CA ($4.950/gal base) and the 9-County SF Bay Area Region ($5.050/gal base), establishing high-cost PADD 5 West Coast benchmarks ("scare factor").
   - Models statutory **CARB & CA state tax burden ($0.953/gal total)**: 63.4¢ state excise tax, ~25¢ Cap-and-Trade carbon fees, ~18.5¢ LCFS credit overhead, and ~15¢ local sales tax/UST fees.
   - Integrates Chevron Richmond Refinery dynamics (245,000 bpd capacity), PBF Martinez, Valero Benicia, Kinder Morgan SFPP pipeline corridors, **USGS Hayward/San Andreas Fault seismic risks**, **CAL FIRE & PG&E Public Safety Power Shutoff (PSPS) refinery blackout risks**, **NOAA PTWC Tsunami advisories**, and **NHC EPAC Tropical Storm Remnants**.
+* **Ultra-Low Sulfur Diesel (ULSD) & Distillate Calibration Agent (`src/diesel_regional.py`) (Issue #41 - WIP / In Progress):**
+  - **Work-In-Progress (WIP) Status:** Currently in an active multi-week empirical observation phase ("cooking"). Prediction performance is being evaluated across weekly feedback loops (`.github/workflows/weekly_model_review.yml`) before extending full regional metro modeling pipelines.
+  - Expands Midgley beyond RBOB gasoline by modeling NYMEX Ultra-Low Sulfur Diesel (`HO=F`) futures, Distillate Crack Spreads ($\text{HO=F} - \text{CL=F}/42$), and 3-2-1 refining margins.
+  - Tailors 5-day out-of-time ULSD wholesale and retail predictions across Midwest (Tulsa $3.650/gal), Northeast (Newark $3.862/gal), and West Coast (Oakland $5.250/gal with CARB ULSD excise, D4 Biomass-Based Diesel RINs, and RD99 renewable diesel overhead).
+  - Evaluates counterfactual distillate shocks: Colonial Pipeline Line 2 distillate outage (+$0.285/gal), Northeast polar vortex (+$0.340/gal), Midwest harvest surge (+$0.195/gal), IMO 2020 marine fuel (+$0.220/gal), and winter grid generator emergency (+$0.250/gal). Exposed via REST API (`/api/v1/diesel/live`, `/api/v1/diesel/forecast`, `/api/v1/diesel/simulate`), Web Dashboard (`docs/diesel.html`), and MCP Server tools (`get_live_diesel_prices`, `get_diesel_forecast`, `simulate_diesel_market_shock`).
 
 * **Mandatory Regional Dashboard Visual Card Standard & Metadata Storage Specification (Issue #35 & Decoupled Storage Architecture):**
   - ALL localized regional public web dashboard pages (`/tulsa`, `/newark`, `/cincinnati`, `/greenville`, `/charlotte`, `/oakland`, `/bayarea`) MUST display dedicated visual cards detailing their unique regional econometric drivers, refining logistics, tax structures, and physical delivery hub dynamics.
@@ -175,6 +199,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Mandatory Guidance when New Regions are Added:** Whenever a new regional calibration agent / metro locale is added to Midgley (e.g., in `src/locations/<new_location>/`):
     1. Create a JSON profile file at `data/regional_metadata/<region_id>.json` following the schema defined in `src/regional_metadata.py` covering all 4 core dimensions (`econometric_drivers`, `refining_logistics`, `tax_structure`, `infrastructure_delivery`) and `shock_scenarios`.
     2. Import `render_regional_driver_cards_html` from `src.regional_metadata` inside `src/dashboard_generator.py` and replace `{{REGIONAL_CARDS}}` in the HTML template string to dynamically render the visual cards onto the regional dashboard page.
+    3. **Multi-Agent Architecture Diagram Sync:** Update the ASCII diagram block for `4. LOCALIZED METRO AREA CALIBRATION AGENTS` in Section 2 (`Multi-Agent Architecture Overview`) of `AGENTS.md` to include the newly added metro, its PADD region, and its primary refining/logistics drivers.
 
 ---
 
@@ -201,11 +226,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
-* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts to `data/prediction_history.csv` and backfilling actual historical market prices as target dates arrive.
+* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, evaluating 95% Confidence Interval Coverage (`within_95ci_hit`), and exposing continuous rolling performance metrics via API & web dashboard.
 * **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
+* **Realized-vs-Predicted Rolling Scoreboard & Observability Engine:**
+  - `compute_rolling_scoreboard_metrics(window_days=30, region=None)`: Calculates rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices.
+  - `compute_mlops_observability_summary(window_days=30)`: Computes LLM Augmentation Win Rate % over pure quant baselines, 95% CI Coverage Hit Rate %, average qualitative feature vectors, and feed provenance error breakdowns.
+  - `compute_regional_scoreboard_breakdown(window_days=30)`: Computes per-region accuracy breakdowns across all 8 active regional markets.
+  - `get_recent_evaluated_records(region=None, limit=50)`: Returns chronologically sorted evaluated forecast records.
+  - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard` and embedded in `docs/index.html`.
 * **Functions:**
-  - `log_predictions()`: Logs 5-day out-of-time forecasts with dynamically calculated target dates.
-  - `backfill_actual_prices()`: Queries ground-truth market prices from `yfinance` as target dates mature and backfills actual prices in `prediction_history.csv`.
+  - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates.
+  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, and backfills actual prices in `prediction_history.csv`.
 
 ---
 
@@ -243,6 +274,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **National Wholesale RBOB Page (`/national` / `docs/national.html` & `docs/national/index.html`):** Dedicated commodity futures page with NYMEX RBOB predictions chart, out-of-time error metrics, global maritime & geopolitical shock scenarios (Hormuz/Suez), and technical driver breakdowns. Accessible via **`National Wholesale`** in the top navbar.
   - **Tulsa Metro Retail Gas Page (`/tulsa` / `docs/tulsa.html` & `docs/tulsa/index.html`):** Dedicated regional retail page calibrated to live pump prices ($3.89/gal), Cushing WTI delivery hub dynamics, West Tulsa HF Sinclair refinery tornado/freeze shock scenarios, and dynamic rack margins ($0.706/gal). Accessible via the top nav **`Metro Areas`** dropdown menu.
   - **Educational Math Guide (`/math` / `docs/math.html`):** Educational reference detailing equations and vector spaces across all 10 feature layers rendered via KaTeX (including Section 10 multiline `aligned` CARB tax breakdown).
+  - **Fill-Up Timing & Estimated Savings Advisor (`/savings` / `docs/savings.html` & `docs/savings/index.html`) (Issue #91):** Interactive tank fill savings calculator and recommendation engine (`🔴 FILL UP TODAY` vs `🟢 WAIT TO FILL UP`), vehicle presets (Compact 12g, Sedan 15g, Pickup 24g, Fleet 100g), 5-day trajectory table, and LubeLogger (Issue #22) / Android Auto (Issue #21) cross-link integrations.
 
 ---
 
@@ -281,9 +313,8 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Step 4 (prediction_history.csv Clean History):** Prior validated regional base price (sanitized against anomalies $< \$4.50$ for CA regions).
   - **Step 5 (Static Regional Fallback Anchor):** Locale-specific base anchors ($5.550 Oakland, $5.650 Bay Area, $3.890 Tulsa, $3.350 Newark, $3.450 Cincinnati).
 * **Key Components:**
-  - **SQLite/In-Memory Response Cache (`src/lookup_cache.py`):** 15-minute TTL cache protecting upstream GasBuddy and AAA web scrapers from rate limits.
-  - **RESTful API Endpoint Gateway (`src/api_server.py`):** FastAPI application serving `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/openapi.json`, and GPT Action manifest (`/.well-known/ai-plugin.json`).
-  - **Model Context Protocol (MCP) Server (`src/mcp_server.py`):** Exposes MCP tools (`get_live_gas_prices`, `get_gas_price_prediction`, `get_live_and_forecast`, `simulate_fuel_market_shock`), static locale resources (`resource://midgley/locales/{locale}`), and prompt templates (`prompt://midgley/market_summary`) across both `stdio` and `HTTP/SSE` transport modes (`/mcp/sse`).
+  - **Stale-While-Revalidate (SWR) Response Cache & Provenance Chains (`src/lookup_cache.py`) (Issue #45):** 3-tier cache gateway implementing `LookupCache.get_swr()` with non-blocking async background revalidation threads (`HIT_FRESH`, `HIT_STALE`, `MISS`) and `build_provenance_chain()` metadata serialization to flag state vs. metro fallback granularity mismatches (`is_fallback_granularity`).
+  - **System Telemetry & Grafana Observability Engine (`src/telemetry.py` & `docs/TELEMETRY_HANDOFF.md`) (Issues #107 & #108):** Central observability engine tracking LLM token metrics, estimated USD costs, tier fallback activations, API quota safety valves, and Prometheus text exporter stream (`GET /metrics`). Supports `MIDGLEY_ENV` environment isolation (`dev` vs `prod`), `GET /api/v1/system/quota` endpoint, and 1-click Grafana dashboard template ([`grafana/dashboard_observability.json`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/grafana/dashboard_observability.json)).
 
 ---
 
@@ -346,6 +377,39 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   5. **3-Tier Cascade & Local Disk Fallback:** Connectors MUST preserve the 3-tier resolution cascade (Tier 1 Turso Edge SQLite -> Tier 2 Cloudflare D1/R2 Worker -> Tier 3 Local SQLite `data/lookup_cache.sqlite` + In-Memory Fast Dict) and maintain secondary local JSON disk cache fallbacks (`data/{source}_cache.json`) for 100% offline benchmark execution.
   6. **Defensive Failure Isolation:** Calls to `global_cache` MUST be wrapped defensively in `try/except` blocks so that temporary edge connection failures, missing credentials, or database locks never interrupt core forecasting or data ingestion execution.
   7. **Trading-Hours & Off-Hours Optimization:** Data connectors fetching financial or market-sensitive series SHOULD combine `global_cache` with trading-hours awareness (`is_trading_hours()`) to gate off-hours API calls and eliminate redundant network traffic outside trading windows.
+
+---
+
+### 16. Multi-Repository Issue Routing Directives for Client Applications (`midgley-auto`)
+
+* **Role:** Enforces repository boundary separation for client application issues and integration tracking.
+* **Android Auto Repository Routing Rule:** Any GitHub issues, bug reports, feature requests, UI enhancements, or hardware integration proposals specifically regarding the **Android Auto application (`midgley-auto`)** MUST be posted to or transferred to the dedicated **[`KoshiirRa/midgley-auto`](https://github.com/KoshiirRa/midgley-auto)** GitHub repository.
+* **Cross-Linking Requirement:** When creating or transferring issues in `KoshiirRa/midgley-auto` that involve API contracts, model endpoints, or backend telemetry, agents MUST include explicit markdown cross-links referencing the corresponding main model repository ([`KoshiirRa/midgley`](https://github.com/KoshiirRa/midgley)) API routes (e.g., `/api/v1/advisor/recommendation` in `src/api_server.py`).
+
+---
+
+### 17. Mandatory GitHub Wiki Documentation Directives for Data Source Changes
+
+* **Role:** Enforces mandatory synchronization between the codebase, developer documentation, and the official GitHub Wiki (`KoshiirRa/midgley.wiki`).
+* **Mandatory Wiki Synchronization Directives:**
+  1. **New Data Source Addition:** Whenever a new data connector, API feed, open data portal, web scraper, or physical metric is added to the codebase (e.g. in `src/data_ingestion.py`, `src/noaa_weather.py`, `src/nhc_hurricane.py`, `src/bsee_shutins.py`, `src/usace_locks.py`, `src/state_open_data.py`), the agent or developer MUST automatically update the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git` on branch `master`):
+     - Append a new numbered technical reference section in [`Data-Ingestion-and-APIs.md`](https://github.com/KoshiirRa/midgley/wiki/Data-Ingestion-and-APIs) documenting the connector class name, module file path, API provider, endpoints/URLs, cost profile, and ingested feature keys.
+     - Update [`Agent-Architecture.md`](https://github.com/KoshiirRa/midgley/wiki/Agent-Architecture) under Agent 1 to list the new connector module.
+     - Update [`Project-History-and-Roadmap.md`](https://github.com/KoshiirRa/midgley/wiki/Project-History-and-Roadmap) under the active system release phase.
+  2. **Data Source Deprecation or Removal:** Whenever an existing data feed, scraper, or API connector is removed, retired, or replaced, the agent MUST automatically update the GitHub Wiki to mark the connector as deprecated/removed in `Data-Ingestion-and-APIs.md` or remove it from active agent listings, documenting the rationale and replacement feed.
+  3. **Repository Wiki Sync Execution:** Wiki updates MUST be cloned (`git clone https://github.com/KoshiirRa/midgley.wiki.git`), modified, committed, and pushed to `origin/master` as part of every feature implementation workflow.
+
+---
+
+### 18. Mandatory Public Math & Technical Breakdown Page Synchronization Directives (`src/dashboard_generator.py`)
+
+* **Role:** Enforces mandatory synchronization between model feature formulas, mathematical estimators, regional tax structures, and the site's public Math page (`docs/technical_breakdown.html` & `docs/technical_breakdown.md`).
+* **Mandatory Math Page Synchronization Directives:**
+  1. **Mathematical & Formula Updates:** Whenever new mathematical formulas, estimators, Z-scores, quantile confidence bands, or physical threat metrics are introduced or modified (e.g., 3-2-1 Crack Spread in #169, Stacking Ensemble Quantiles in #170, EIA-930 Grid Stress Z-Scores in #179, NHC Threat Radii in #177), the agent or developer MUST update `generate_technical_breakdown_file()` in `src/dashboard_generator.py`:
+     - Add KaTeX-rendered LaTeX formulas and explanatory descriptions under **Section 6: Advanced Quantitative Feature & Physical Data Formulas** in both the HTML template and Markdown generator.
+  2. **Regional Tax & Infrastructure Adjustments:** Whenever regional statutory tax burdens, fees, or logistics adjustments are reconciled or modified (e.g. CARB tax burden in #172, C&D Canal detours, Ohio River lock delays in #181), the agent MUST update Section 4 notes and equations in `generate_technical_breakdown_file()`.
+  3. **Automatic Re-generation Execution:** The agent MUST execute `python3 -m src.dashboard_generator` to compile and output `docs/technical_breakdown.html` and `docs/technical_breakdown.md` and commit the updated pages whenever model math or connectors are updated.
+
 
 
 

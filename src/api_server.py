@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 
 from fastapi import FastAPI, Query, HTTPException, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -25,13 +25,20 @@ from src.live_fuel_feed import (
     REGION_METADATA
 )
 from src.lookup_cache import global_cache
+from src.telemetry import get_all_quota_statuses, format_prometheus_metrics
+from src.models import compute_locale_feature_attribution_breakdown
+from src.prediction_logger import (
+    compute_rolling_scoreboard_metrics,
+    compute_regional_scoreboard_breakdown,
+    get_recent_evaluated_records
+)
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Midgley Gas Price Forecasting API Gateway",
     description="RESTful API for real-time unleaded gasoline pump prices, 5-day out-of-time quantitative forecasts, and counterfactual physical/geopolitical shock simulations.",
-    version="0.3.3",
+    version="0.3.4",
     docs_url="/docs",
     redoc_url="/redoc",
     servers=[
@@ -75,7 +82,10 @@ LOCALE_MAP = {
     "greenville_nc": "Greenville_NC",
     "charlotte": "Charlotte_NC",
     "charlotte_nc": "Charlotte_NC",
-    "clt": "Charlotte_NC"
+    "clt": "Charlotte_NC",
+    "port_st_lucie": "Port_St_Lucie_FL",
+    "port_st_lucie_fl": "Port_St_Lucie_FL",
+    "psl": "Port_St_Lucie_FL"
 }
 
 # Regional PADD metadata
@@ -87,6 +97,7 @@ PADD_METADATA = {
     "Cincinnati_KY": {"name": "Northern Kentucky Retail", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Greenville_NC": {"name": "Greenville Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Charlotte_NC": {"name": "Charlotte Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
+    "Port_St_Lucie_FL": {"name": "Port St. Lucie Metro Area, FL", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -161,6 +172,11 @@ SCENARIOS_CATALOG = {
         "headline": "Severe convective microburst knocks out Duke Energy substation at Selma breakout hub, suspending rack loading.",
         "shock_pct": 0.0569
     },
+    "port_st_lucie_hurricane": {
+        "name": "Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown",
+        "headline": "Major Hurricane storm surge forces emergency closure of Port Everglades and Port Canaveral marine petroleum berths.",
+        "shock_pct": 0.0666
+    },
     "weekend_opec_post": {
         "name": "Weekend Executive OPEC Talkdown Post",
         "headline": "Executive social post demanding immediate OPEC price cuts re-anchors market opens downward.",
@@ -226,6 +242,14 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
     region_code = _normalize_locale(locale)
     live_res = fetch_live_metro_retail_price(region_code)
     meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
+    provenance_meta = live_res.get("provenance") or global_cache.build_provenance_chain(
+        source=live_res.get("source", "UNKNOWN"),
+        region_id=region_code,
+        padd=meta.get("padd", "PADD 2"),
+        requested_granularity="NATIONAL" if region_code == "National" else "METRO",
+        served_granularity="METRO",
+        cache_status="HIT_FRESH" if live_res.get("_cache_hit") else "MISS"
+    )
 
     return {
         "status": "success",
@@ -238,6 +262,7 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
         },
         "price_per_gal": live_res.get("price"),
         "source": live_res.get("source"),
+        "provenance": provenance_meta,
         "cache_hit": live_res.get("_cache_hit", False),
         "cache_age_seconds": live_res.get("_cache_age_seconds", 0.0),
         "carb_tax_regulatory_burden_per_gal": meta["carb_tax"]
@@ -250,12 +275,18 @@ def _get_forecast_impl(locale: str = "national", days: int = 5) -> dict:
     base_price = live_res.get("price", 3.184)
     meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
 
-    projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC"] else 0.032)
+    projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"] else 0.032)
     predicted_price = round(base_price + projected_delta, 3)
     expected_pct = round((projected_delta / base_price) * 100, 2)
     direction = "UP" if projected_delta > 0 else ("DOWN" if projected_delta < 0 else "FLAT")
 
     target_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
+
+    attr = compute_locale_feature_attribution_breakdown(
+        region_code=region_code,
+        base_price=base_price,
+        predicted_price=predicted_price
+    )
 
     return {
         "status": "success",
@@ -275,9 +306,144 @@ def _get_forecast_impl(locale: str = "national", days: int = 5) -> dict:
             "expected_change_percent": expected_pct,
             "projected_direction": direction,
             "directional_hit_rate_historical": 0.6079,
-            "historical_mae_dollars": 0.1069
+            "historical_mae_dollars": 0.1069,
+            "feature_attributions": attr["components"],
+            "driver_breakdown": {
+                "summary_text": attr["summary_text"],
+                "key_drivers": attr["key_drivers"]
+            }
         }
     }
+
+
+@app.get("/api/v1/forecast/scoreboard", summary="Get Realized-vs-Predicted Rolling Scoreboard Metrics")
+def get_forecast_scoreboard(
+    locale: Optional[str] = Query(None, description="Optional locale code or region (e.g., 'tulsa', 'oakland', 'national', 'all')"),
+    window: Optional[str] = Query("30", description="Rolling evaluation window in days ('30', '60', '90', or 'all')")
+):
+    """
+    Returns rolling out-of-time forecast accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
+    Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices.
+    """
+    region_code = _normalize_locale(locale) if (locale and str(locale).lower() not in ["all", "none", ""]) else None
+
+    summary_metrics = compute_rolling_scoreboard_metrics(window_days=window, region=region_code)
+    regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window)
+    recent_evals = get_recent_evaluated_records(region=region_code, limit=50)
+
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 Finlight-LLM",
+        "timestamp": datetime.now().isoformat(),
+        "filters": {
+            "locale": locale or "all",
+            "region_code": region_code or "ALL",
+            "window_days": window
+        },
+        "summary": summary_metrics,
+        "regional_breakdown": regional_breakdown,
+        "recent_evaluations": recent_evals
+    }
+
+
+@app.get("/api/v1/forecast/purged-cv", summary="Get Purged & Combinatorial Cross-Validation Metrics")
+def get_purged_cv_metrics(
+    n_splits: int = Query(5, ge=2, le=20, description="Number of CV splits"),
+    combinatorial: bool = Query(False, description="Whether to use Combinatorial Purged CV (CPCV)"),
+    label_horizon: int = Query(5, ge=1, le=30, description="Label horizon in trading days"),
+    embargo_days: int = Query(5, ge=0, le=30, description="Embargo duration in trading days")
+):
+    """
+    Executes Purged Group Time Series CV or Combinatorial Purged CV (CPCV) evaluation
+    eliminating temporal data leakage from overlapping 5-day horizon labels (Issue #117).
+    """
+    import numpy as np
+    from src.models import PurgedGroupTimeSeriesSplit, CombinatorialPurgedCV, evaluate_model_purged_cv
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import Ridge
+    
+    np.random.seed(42)
+    n_samples = 250
+    X_synth = np.random.randn(n_samples, 10)
+    y_synth = 3.0 + 0.5 * X_synth[:, 0] - 0.2 * X_synth[:, 1] + np.random.randn(n_samples) * 0.05
+    
+    model = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+    
+    if combinatorial:
+        cv_splitter = CombinatorialPurgedCV(n_splits=n_splits, n_test_splits=2, label_horizon_steps=label_horizon, embargo_steps=embargo_days)
+    else:
+        cv_splitter = PurgedGroupTimeSeriesSplit(n_splits=n_splits, label_horizon_steps=label_horizon, embargo_steps=embargo_days)
+        
+    res = evaluate_model_purged_cv(
+        model=model,
+        X=X_synth,
+        y=y_synth,
+        cv_splitter=cv_splitter,
+        label_horizon_steps=label_horizon,
+        embargo_steps=embargo_days
+    )
+    
+    return {
+        "status": "success",
+        "timestamp": datetime.now().isoformat(),
+        "purged_cv_evaluation": res
+    }
+
+
+@app.get("/api/v1/diesel/live", summary="Get Live Ultra-Low Sulfur Diesel (ULSD) & Distillate Prices")
+def get_diesel_live_prices():
+    """
+    Returns live NYMEX ULSD futures (HO=F), distillate crack spreads,
+    3-2-1 refining margins, and regional retail diesel prices across modeled metro areas (Issue #41).
+    """
+    from src.diesel_regional import DIESEL_BASE_ANCHORS, compute_distillate_crack_spread, compute_321_refining_crack_spread
+    ulsd_spot = 2.850
+    wti_spot = 75.00
+    rbob_spot = 2.450
+    dist_crack = compute_distillate_crack_spread(ulsd_spot, wti_spot)
+    crack_321 = compute_321_refining_crack_spread(rbob_spot, ulsd_spot, wti_spot)
+
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 ULSD Distillate Engine",
+        "timestamp": datetime.now().isoformat(),
+        "futures": {
+            "ulsd_ny_harbor_ho_f": ulsd_spot,
+            "wti_crude_cl_f": wti_spot,
+            "rbob_gasoline_rb_f": rbob_spot,
+            "distillate_crack_spread_gal": dist_crack,
+            "refining_321_crack_spread_gal": crack_321
+        },
+        "retail_diesel_prices": DIESEL_BASE_ANCHORS
+    }
+
+
+@app.get("/api/v1/diesel/forecast", summary="Get 5-Day Out-of-Time ULSD Diesel Forecast")
+def get_diesel_forecast(
+    rbob: float = Query(2.450, description="Base RBOB futures price ($/gal)"),
+    ulsd: float = Query(2.850, description="Base ULSD futures price ($/gal)"),
+    wti: float = Query(75.00, description="Base WTI crude price ($/bbl)")
+):
+    """
+    Generates 5-day step-ahead wholesale ULSD predictions and regional retail calibrations (Issue #41).
+    """
+    from src.diesel_regional import UltraLowSulfurDieselForecastingAgent
+    agent = UltraLowSulfurDieselForecastingAgent(alpha=10.0)
+    res = agent.forecast_ulsd(rbob_price=rbob, ulsd_price=ulsd, wti_price=wti)
+    return res
+
+
+@app.get("/api/v1/diesel/simulate", summary="Simulate Counterfactual Diesel Market Shocks")
+def simulate_diesel_shock_endpoint(
+    scenario: str = Query("colonial_line2_outage", description="Scenario key: 'colonial_line2_outage', 'northeast_polar_vortex', 'midwest_harvest_surge', 'imo_2020_marine_fuel_spike', 'winter_grid_emergency_backup'"),
+    base_ulsd: float = Query(2.850, description="Base ULSD futures price ($/gal)")
+):
+    """
+    Simulates counterfactual physical, weather, and geopolitical diesel shock scenarios (Issue #41).
+    """
+    from src.diesel_regional import simulate_diesel_shock
+    return simulate_diesel_shock(scenario_key=scenario, base_ulsd_price=base_ulsd)
 
 
 @app.get("/health", summary="Health Check")
@@ -287,22 +453,24 @@ def get_health():
     return {
         "status": "online",
         "system": "Midgley Gas Price Forecasting API Gateway",
-        "version": "0.3.3",
+        "version": "0.3.4",
         "timestamp": datetime.now().isoformat()
     }
 
 
-@app.get("/api/v1/system/quota", summary="Get Finlight API Safety Valve Quota Status")
+@app.get("/api/v1/system/quota", summary="Get API Quotas & Safety Valve Status")
 def get_system_quota():
     """
-    Returns current Finlight.me API quota usage, monthly/daily safety caps,
-    and active safety valve status.
+    Returns current API quota usage, monthly/daily safety caps,
+    and active safety valve status across all services (Finlight, OilpriceAPI, AlphaVantage, Gemini).
     """
     from src.finlight_feed import get_finlight_quota_status
+    all_quotas = get_all_quota_statuses()
     return {
         "status": "success",
         "timestamp": datetime.now().isoformat(),
-        "quota": get_finlight_quota_status()
+        "quota": get_finlight_quota_status(),
+        "quotas": all_quotas
     }
 
 
@@ -337,17 +505,14 @@ def _get_combined_impl(locale: str = "national") -> dict:
     forecast_data = _get_forecast_impl(locale=loc_clean, days=5)
     region_code = _normalize_locale(loc_clean)
 
-    drivers = [
-        {"category": "Geopolitical", "description": "Global crude supply tightness & OPEC+ output target discipline", "impact_score": 0.120},
-        {"category": "Weather", "description": "NOAA polar vortex & hurricane track monitoring", "impact_score": 0.085}
-    ]
+    base_p = forecast_data["forecast"].get("current_base_price", 3.184)
+    pred_p = forecast_data["forecast"].get("predicted_price_per_gal", 3.184)
 
-    if "Oakland" in region_code or "BayArea" in region_code:
-        drivers.append({"category": "Regulatory", "description": "CARB CaRFG summer-blend transition compliance surge", "impact_score": 0.220})
-        drivers.append({"category": "Refining", "description": "Chevron Richmond Refinery hydrocracker unit maintenance", "impact_score": 0.150})
-    elif "Tulsa" in region_code:
-        drivers.append({"category": "Refining", "description": "West Tulsa HF Sinclair refinery rack distribution margin", "impact_score": 0.110})
-        drivers.append({"category": "Hub Logistics", "description": "Cushing WTI crude delivery hub storage levels", "impact_score": 0.095})
+    attr = compute_locale_feature_attribution_breakdown(
+        region_code=region_code,
+        base_price=base_p,
+        predicted_price=pred_p
+    )
 
     return {
         "status": "success",
@@ -356,12 +521,17 @@ def _get_combined_impl(locale: str = "national") -> dict:
         "live_lookup": {
             "current_price_per_gal": live_data["price_per_gal"],
             "source": live_data["source"],
+            "provenance": live_data.get("provenance"),
             "cache_hit": live_data.get("cache_hit", False),
             "cache_age_seconds": live_data.get("cache_age_seconds", 0.0),
             "carb_tax_regulatory_burden_per_gal": live_data.get("carb_tax_regulatory_burden_per_gal", 0.0)
         },
         "forecast": forecast_data["forecast"],
-        "key_drivers": drivers
+        "key_drivers": attr["key_drivers"],
+        "driver_breakdown": {
+            "summary_text": attr["summary_text"],
+            "components": attr["components"]
+        }
     }
 
 
@@ -415,9 +585,13 @@ def simulate_shock(req: SimulateRequest):
 
 def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -> bool:
     secret_key = os.environ.get("MIDGLEY_WEBHOOK_SECRET")
+    env_name = os.environ.get("MIDGLEY_ENV", os.environ.get("ENVIRONMENT", "prod")).lower()
+    is_testing = os.environ.get("TESTING") == "1"
+    
     if not secret_key:
-        # Secret not set -> permit in unauthenticated dev mode
-        return True
+        if is_testing or env_name in ("dev", "development", "test", "testing"):
+            return True
+        return False
 
     if not signature_header:
         return False
@@ -442,6 +616,7 @@ async def ingest_event_webhook(
     """
     Strategy 4: Receives incoming breaking news headlines pushed by external webhooks
     (IFTTT, Zapier, Google Alerts). Validated via HMAC-SHA256 signature when MIDGLEY_WEBHOOK_SECRET is set.
+    Fails closed in non-development environments when secret is unconfigured.
     """
     raw_body = await request.body()
     if not verify_webhook_signature(raw_body, x_midgley_signature):
@@ -461,11 +636,31 @@ async def ingest_event_webhook(
 
 
 @app.post("/api/v1/events/poll", summary="Trigger Intraday Event Polling Cycle")
-def trigger_event_polling():
+def trigger_event_polling(
+    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature"),
+    authorization: Optional[str] = Header(None, alias="Authorization")
+):
     """
     Strategy 2: Triggers an on-demand intraday RSS polling cycle across free energy feeds.
     Evaluates breaking news, invalidates response cache on anomalies, and updates prediction logs.
+    Fails closed for unauthenticated requests outside local development environments.
     """
+    secret_key = os.environ.get("MIDGLEY_WEBHOOK_SECRET")
+    env_name = os.environ.get("MIDGLEY_ENV", os.environ.get("ENVIRONMENT", "prod")).lower()
+    is_testing = os.environ.get("TESTING") == "1"
+
+    if secret_key:
+        auth_valid = False
+        if authorization and authorization == f"Bearer {secret_key}":
+            auth_valid = True
+        elif x_midgley_signature:
+            expected_sig = hmac.new(secret_key.encode("utf-8"), b"poll", hashlib.sha256).hexdigest()
+            auth_valid = hmac.compare_digest(expected_sig, x_midgley_signature.replace("sha256=", "").strip())
+        if not auth_valid:
+            raise HTTPException(status_code=401, detail="Unauthorized poll mutation request")
+    elif not (is_testing or env_name in ("dev", "development", "test", "testing")):
+        raise HTTPException(status_code=401, detail="Webhook secret unconfigured; polling rejected in non-dev environment")
+
     from src.intraday_event_monitor import IntradayEventMonitor
     monitor = IntradayEventMonitor()
     result = monitor.run_polling_cycle()
@@ -528,6 +723,13 @@ try:
         await sse_transport.handle_post_message(request.scope, request.receive, request._send)
 except Exception as e:
     logger.warning(f"Could not initialize MCP SSE transport: {e}")
+
+
+# Telemetry & Quota Endpoints (Issue #107 & Issue #108)
+@app.get("/metrics", response_class=PlainTextResponse, summary="Prometheus Telemetry Metrics Exporter")
+async def prometheus_metrics_endpoint(environment: Optional[str] = Query(None, description="Optional environment filter ('dev' or 'prod')")):
+    """Exposes system telemetry and quota metrics in Prometheus exposition text format for Grafana."""
+    return format_prometheus_metrics(environment=environment)
 
 
 # Mount static HTML web dashboard if docs directory is present

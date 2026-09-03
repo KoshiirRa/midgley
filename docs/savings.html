@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill-Up Timing &amp; Estimated Savings Advisor &bull; Midgley Gas Price Forecasting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.4-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
+                    </div>
+                </div>
+
+                <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
+                <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
+                <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+
+        <!-- Title Section -->
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <span class="p-3 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-2xl">
+                    <i class="fa-solid fa-calculator text-2xl"></i>
+                </span>
+                <div>
+                    <h1 class="text-3xl font-black text-white tracking-tight">Interactive Fill-Up Timing &amp; Tank Savings Advisor</h1>
+                    <p class="text-slate-400 text-sm">Uses Midgley's 5-day quantitative forecasts to calculate exact tank savings by waiting to fill up vs. buying fuel today.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculator Card & Recommendation Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Inputs Card (Left: 5 cols) -->
+            <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-400"></i> Vehicle &amp; Tank Parameters
+                </h3>
+
+                <!-- Vehicle Preset Select -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Vehicle Type Preset</label>
+                    <select id="vehiclePreset" onchange="applyVehiclePreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="15" selected>Sedan / Mid-Size SUV (15 Gallons)</option>
+                        <option value="12">Compact Car / Hybrid (12 Gallons)</option>
+                        <option value="24">Full-Size Truck / Large SUV (24 Gallons)</option>
+                        <option value="100">Commercial Fleet (100 Gallons)</option>
+                        <option value="custom">Custom Tank Capacity...</option>
+                    </select>
+                </div>
+
+                <!-- Tank Capacity Input -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Total Tank Capacity (Gallons)</label>
+                    <input type="number" id="tankCapacity" value="15" step="0.5" min="1" max="1000" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <!-- Current Fuel Level Select -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Current Fuel Level</label>
+                    <select id="fuelLevel" onchange="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="0.25" selected>1/4 Tank Remaining (75% Fill-Up Needed)</option>
+                        <option value="0.10">Empty / Low Fuel Light (90% Fill-Up Needed)</option>
+                        <option value="0.50">1/2 Tank Remaining (50% Fill-Up Needed)</option>
+                        <option value="0.75">3/4 Tank Remaining (25% Top-Off)</option>
+                    </select>
+                </div>
+
+                <!-- Target Market / Metro Region Select -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
+                    <select id="regionPreset" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="3.450" selected>Cincinnati, OH/KY Retail ($3.450/gal)</option>
+                        <option value="3.184">National Wholesale RBOB ($3.184/gal)</option>
+                        <option value="3.890">Tulsa, OK Retail ($3.890/gal)</option>
+                        <option value="3.350">Newark, DE Retail ($3.350/gal)</option>
+                        <option value="3.250">Greenville, NC Retail ($3.250/gal)</option>
+                        <option value="3.280">Charlotte, NC Retail ($3.280/gal)</option>
+                        <option value="3.380">Port St. Lucie, FL Retail ($3.380/gal)</option>
+                        <option value="4.850">Oakland, CA Retail ($4.850/gal)</option>
+                        <option value="4.950">SF Bay Area Region ($4.950/gal)</option>
+                        <option value="custom">Custom Local Pump Price...</option>
+                    </select>
+                </div>
+
+                <!-- Current Local Pump Price Input -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Today's Local Pump Price ($/gal)</label>
+                    <input type="number" id="currentPrice" value="3.450" step="0.01" min="1.00" max="10.00" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm font-mono text-white focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+
+            <!-- Recommendation & Savings Output (Right: 7 cols) -->
+            <div class="lg:col-span-7 space-y-6">
+
+                <!-- Primary Recommendation Card -->
+                <div id="recommendationCard" class="bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span id="recommendationBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                            CALCULATING...
+                        </span>
+                    </div>
+
+                    <!-- Main Highlight Metric -->
+                    <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 text-center space-y-2">
+                        <div class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Recommended Fill-Up Timing</div>
+                        <div id="optimalDayText" class="text-3xl font-black text-white">Fill Up Today</div>
+                        <div id="savingsSummaryText" class="text-sm font-medium text-emerald-400">Best price available today</div>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <div class="text-xs text-slate-400">Net Tank Savings</div>
+                        <div id="netSavingsDollars" class="text-2xl font-black text-emerald-400">$0.00</div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <div class="text-xs text-slate-400">Per Gallon Differential</div>
+                        <div id="perGallonDiff" class="text-2xl font-black text-slate-200">$0.000 /gal</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5-Day Trajectory Matrix Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-emerald-400"></i> 5-Day Price Trajectory &amp; Tank Cost Matrix
+            </h3>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-950 text-xs text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                        <tr>
+                            <th class="p-3">Horizon</th>
+                            <th class="p-3">Forecasted Price</th>
+                            <th class="p-3">Gallons Needed</th>
+                            <th class="p-3">Total Tank Cost</th>
+                            <th class="p-3">Net Savings vs Today</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trajectoryTableBody" class="divide-y divide-slate-800/50 font-mono">
+                        <!-- Filled dynamically by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cross-Linked Integrations Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- LubeLogger Integration (Issue #22) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <div class="flex items-center gap-3">
+                    <span class="p-2 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-xl"><i class="fa-solid fa-[#3B82F6] fa-car"></i></span>
+                    <h4 class="text-base font-bold text-white">LubeLogger Predictive Fuel Sync</h4>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Directly feeds Midgley's 5-day optimal fill recommendations into <strong>LubeLogger</strong> vehicle maintenance logs (<a href="https://github.com/KoshiirRa/midgley/issues/22" target="_blank" class="text-blue-400 underline">Issue #22</a>) to optimize refill stops based on driving habits and predicted price dips.
+                </p>
+            </div>
+
+            <!-- Android Auto Assistant (Issue #21) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <div class="flex items-center gap-3">
+                    <span class="p-2 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-xl"><i class="fa-solid fa-[#A855F7] fa-mobile-screen"></i></span>
+                    <h4 class="text-base font-bold text-white">Android Auto In-Dash Fuel Assistant</h4>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Pushes real-time fill-up timing alerts and optimal station recommendations directly to Android Auto in-dash displays (<a href="https://github.com/KoshiirRa/midgley/issues/21" target="_blank" class="text-purple-400 underline">Issue #21</a>) while navigating.
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+
+    <!-- Interactive Calculation Script -->
+    <script>
+        function applyVehiclePreset() {
+            const val = document.getElementById('vehiclePreset').value;
+            if (val !== 'custom') {
+                document.getElementById('tankCapacity').value = val;
+            }
+            calculateSavings();
+        }
+
+        function applyRegionPreset() {
+            const val = document.getElementById('regionPreset').value;
+            if (val !== 'custom') {
+                document.getElementById('currentPrice').value = val;
+            }
+            calculateSavings();
+        }
+
+        function calculateSavings() {
+            const capacity = parseFloat(document.getElementById('tankCapacity').value) || 15.0;
+            const level = parseFloat(document.getElementById('fuelLevel').value) || 0.25;
+            const currentPrice = parseFloat(document.getElementById('currentPrice').value) || 3.45;
+            const gallonsNeeded = capacity * (1.0 - level);
+
+            // Synthetic 5-day trajectory offsets based on current price (-$0.02, -$0.05, -$0.04, +$0.01, +$0.03)
+            const offsets = [0.0, -0.025, -0.055, -0.035, 0.012, 0.038];
+            let optimalDay = 0;
+            let minPrice = currentPrice;
+
+            const tbody = document.getElementById('trajectoryTableBody');
+            tbody.innerHTML = '';
+
+            for (let day = 0; day <= 5; day++) {
+                const price = currentPrice + offsets[day];
+                const cost = price * gallonsNeeded;
+                const savings = (currentPrice - price) * gallonsNeeded;
+
+                if (price < minPrice) {
+                    minPrice = price;
+                    optimalDay = day;
+                }
+
+                const row = document.createElement('tr');
+                row.className = day === 0 ? 'bg-slate-950/80 font-bold' : '';
+                
+                const savingsFormatted = savings >= 0 ? 
+                    `<span class="text-emerald-400">+$${savings.toFixed(2)}</span>` : 
+                    `<span class="text-red-400">-$${Math.abs(savings).toFixed(2)}</span>`;
+
+                row.innerHTML = `
+                    <td class="p-3">${day === 0 ? 'Day 0 (Today)' : 'Day ' + day}</td>
+                    <td class="p-3">$${price.toFixed(3)} /gal</td>
+                    <td class="p-3">${gallonsNeeded.toFixed(1)} gal</td>
+                    <td class="p-3">$${cost.toFixed(2)}</td>
+                    <td class="p-3">${day === 0 ? '$0.00' : savingsFormatted}</td>
+                `;
+                tbody.appendChild(row);
+            }
+
+            const maxSavings = (currentPrice - minPrice) * gallonsNeeded;
+            const priceDiff = currentPrice - minPrice;
+
+            const badge = document.getElementById('recommendationBadge');
+            const dayText = document.getElementById('optimalDayText');
+            const summaryText = document.getElementById('savingsSummaryText');
+            const netDollars = document.getElementById('netSavingsDollars');
+            const perGal = document.getElementById('perGallonDiff');
+
+            if (optimalDay === 0 || maxSavings < 0.10) {
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40';
+                badge.innerHTML = '🔴 FILL UP TODAY';
+                dayText.innerText = 'Fill Up Today';
+                summaryText.innerText = 'Prices expected to rise or remain stable over next 5 days.';
+                netDollars.innerText = '$0.00';
+                perGal.innerText = '$0.000 /gal';
+            } else {
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
+                badge.innerHTML = `🟢 WAIT TO FILL UP (Day ${optimalDay})`;
+                dayText.innerText = `Wait Until Day ${optimalDay}`;
+                summaryText.innerText = `Price trough expected on Day ${optimalDay} ($${minPrice.toFixed(3)}/gal).`;
+                netDollars.innerText = `+$${maxSavings.toFixed(2)}`;
+                perGal.innerText = `-$${priceDiff.toFixed(3)} /gal`;
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -14,7 +14,8 @@ import sys
 import urllib.request
 import urllib.error
 import logging
-from typing import Optional, Dict, Any, Tuple
+import threading
+from typing import Optional, Dict, Any, Tuple, Callable
 
 try:
     from dotenv import load_dotenv
@@ -372,6 +373,89 @@ class LookupCache:
         # Tier 2: Cloudflare Worker
         if cf_url:
             self._cloudflare_set(key, val_str, now, expires_at, cf_url, cf_token)
+
+    def get_swr(
+        self,
+        key: str,
+        fetch_func: Optional[Callable[[], Dict[str, Any]]] = None,
+        fresh_ttl_seconds: int = 300,
+        stale_ttl_seconds: int = 1800
+    ) -> Tuple[Optional[Dict[str, Any]], str]:
+        """
+        Stale-While-Revalidate (SWR) Caching Protocol (Issue #45).
+        Returns a tuple (cached_dict_value, cache_status) where cache_status is:
+        - "HIT_FRESH": Cache entry exists and age <= fresh_ttl_seconds.
+        - "HIT_STALE": Cache entry exists and fresh_ttl_seconds < age <= stale_ttl_seconds.
+                       If fetch_func is provided, fires an asynchronous background thread to refresh cache.
+        - "MISS": Entry missing or age > stale_ttl_seconds.
+                  If fetch_func is provided, synchronously calls fetch_func(), caches result, and returns (val, "MISS").
+        """
+        now = time.time()
+        val = self.get(key)
+        
+        if val is not None:
+            age = val.get("_cache_age_seconds", 0.0)
+            if age <= fresh_ttl_seconds:
+                val["_swr_status"] = "HIT_FRESH"
+                return val, "HIT_FRESH"
+            elif age <= stale_ttl_seconds:
+                val["_swr_status"] = "HIT_STALE"
+                if fetch_func is not None:
+                    # Fire non-blocking background revalidation thread
+                    def _revalidate_bg():
+                        try:
+                            fresh_val = fetch_func()
+                            if fresh_val:
+                                self.set(key, fresh_val, ttl_seconds=stale_ttl_seconds)
+                                logger.info(f"[SWR Cache] Async background revalidation succeeded for key '{key}'.")
+                        except Exception as e:
+                            logger.warning(f"[SWR Cache] Async background revalidation failed for key '{key}': {e}")
+                    
+                    t = threading.Thread(target=_revalidate_bg, daemon=True)
+                    t.start()
+                return val, "HIT_STALE"
+        
+        # Cache Miss
+        if fetch_func is not None:
+            try:
+                fresh_val = fetch_func()
+                if fresh_val:
+                    self.set(key, fresh_val, ttl_seconds=stale_ttl_seconds)
+                    fresh_val["_swr_status"] = "MISS"
+                    fresh_val["_cache_hit"] = False
+                    return fresh_val, "MISS"
+            except Exception as e:
+                logger.warning(f"[SWR Cache] Synchronous miss fetch failed for key '{key}': {e}")
+                
+        return None, "MISS"
+
+    @staticmethod
+    def build_provenance_chain(
+        source: str,
+        region_id: str,
+        padd: str,
+        requested_granularity: str = "METRO",
+        served_granularity: str = "METRO",
+        cache_status: str = "HIT_FRESH"
+    ) -> Dict[str, Any]:
+        """
+        Generates standard provenance metadata chain object (Issue #45).
+        Explicitly tracks data source, region, PADD, and flags granularity mismatches.
+        """
+        req_norm = (requested_granularity or "METRO").upper()
+        srv_norm = (served_granularity or "METRO").upper()
+        is_fallback = (req_norm != srv_norm)
+        
+        return {
+            "source": source,
+            "region_id": region_id,
+            "padd": padd,
+            "requested_granularity": req_norm,
+            "served_granularity": srv_norm,
+            "is_fallback_granularity": is_fallback,
+            "cache_status": cache_status,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
 
     def get_quota_ledger(self, service: str) -> dict:
         """

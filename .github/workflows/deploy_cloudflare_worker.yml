@@ -23,6 +23,5 @@ jobs:
 
       - name: Deploy Worker to Cloudflare
         uses: cloudflare/wrangler-action@v3
-        continue-on-error: true
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

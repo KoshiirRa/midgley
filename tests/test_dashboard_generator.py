@@ -475,6 +475,35 @@ def test_issue_154_dom_xss_sanitization(tmp_path):
     assert "&lt;b&gt;Test_Source&lt;/b&gt;" in content
 
 
+def test_feature_attribution_card_in_regional_pages():
+    """Verify that all regional model pages contain the Component-Level Feature Attribution card."""
+    generate_public_dashboard()
+
+    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, OAKLAND_PATH, BAYAREA_PATH]
+
+    for p in pages:
+        with open(p, "r", encoding="utf-8") as f:
+            html = f.read()
+        assert "Component-Level Feature Attribution & Driver Breakdown" in html, f"Missing feature attribution card in {p}"
+        assert "Executive Model Attribution Summary:" in html, f"Missing attribution summary in {p}"
+        assert "Model Share Weight" in html, f"Missing model share weight in {p}"
+
+
+def test_scoreboard_section_in_index_html():
+    """Verify that index.html contains the Realized-vs-Predicted Rolling Scoreboard section."""
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    assert "Realized-vs-Predicted Rolling Model Scoreboard" in html
+    assert "MLOps Continuous Performance Scoreboard" in html
+    assert "Regional Accuracy Matrix" in html
+    assert "Recent Completed Forecast Evaluations" in html
+
+
+
+
 
 
 

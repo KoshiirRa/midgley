@@ -316,7 +316,7 @@ async function dispatchGitHubEvent(env: Env, headline: string, url: string): Pro
       headline,
       url,
       dispatched: false,
-      error: err.message || String(err)
+      error: "Internal Server Error"
     };
   }
 }
@@ -448,7 +448,7 @@ export default {
     } catch (err: any) {
       console.error(`[Fetch Exception] ${err.message || String(err)}`);
       await captureSentryException(env, ctx, err, { pathname: url.pathname });
-      return new Response(JSON.stringify({ error: err.message || String(err) }), {
+      return new Response(JSON.stringify({ error: "Internal Server Error" }), {
         status: 500,
         headers: { "Content-Type": "application/json" }
       });
