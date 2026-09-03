@@ -1,5 +1,59 @@
 [
   {
+    "run_id": "2026-09-03_22-13-20",
+    "timestamp": "2026-09-03 22:12:03",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-09-15",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-08-48",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-08-21",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-07-54",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-07-27",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-06-59",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-06-32",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_22-06-04",
+    "timestamp": "2026-09-03 22:05:59",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-03_21-56-56",
     "timestamp": "2026-09-03 21:50:54",
     "run_type": "DAILY_BATCH",
@@ -542,60 +596,6 @@
   {
     "run_id": "2026-09-03_03-51-53",
     "timestamp": "2026-09-03 03:50:49",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_03-51-42",
-    "timestamp": "2026-09-03 03:50:49",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_03-51-32",
-    "timestamp": "2026-09-03 03:50:49",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_03-51-22",
-    "timestamp": "2026-09-03 03:50:49",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_03-51-11",
-    "timestamp": "2026-09-03 03:50:49",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_03-51-01",
-    "timestamp": "2026-09-03 03:50:49",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_03-50-51",
-    "timestamp": "2026-09-03 03:50:49",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_03-47-05",
-    "timestamp": "2026-09-03 03:45:05",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Indian Prime Minister Modi asks Putin to end Ukraine war ami..."
-  },
-  {
-    "run_id": "2026-09-03_03-45-15",
-    "timestamp": "2026-09-03 03:45:05",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Indian Prime Minister Modi asks Putin to end Ukraine war ami..."
-  },
-  {
-    "run_id": "2026-09-03_03-40-45",
-    "timestamp": "2026-09-02 19:47:12",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   }
