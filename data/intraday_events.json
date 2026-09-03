@@ -1006,5 +1006,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-03T18:15:07.043756",
+    "headline": "Canada's Carney holds firm against Trump tariffs - dw.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNSWVYMVN0TTA1Sjg5R1h0YnBKeGJzYmVOZkpmemNmUS1EWm10eVV2WURabmNWcUVkcWxYanZPdWpUdXF2SGlPVzNJYUh4MWZ0Z2M0QXV4OWJLYlc5c0lKLXF2dGVrck1lbkIwbHBndWRaUFlIRWQ2dWUwaDNwZHVXNlpUX2N3aHhNT2J6aE1TamI1V1lIUFZFYVU1a2V5TmJsZ1RTc3RzZ0tpQdIBqgFBVV95cUxOdkpkV050enNXMVU4S2NydFR5OUtnYXAzQ1NjMTFaZHE3aEsxSHlSdG5VaDFWM01rTENCOWFmSXNLeFZQZ2YzcHdKWElqUU9DekhndXNxNDFDVmZQQWY2RWF6LXd6WWVycXFKWDROT3IxTFdJa3BBdkw0Ql9IOEdZZllGbk15bU1HeTZaeHRYb2xWWWdYX0h6YXBsMTNOY0ppbEVSRk1sZjVhZw?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
