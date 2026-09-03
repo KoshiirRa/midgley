@@ -1,5 +1,119 @@
 [
   {
+    "run_id": "2026-09-03_04-00-17",
+    "timestamp": "2026-09-03 04:00:08",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Kevin O\u2019Leary Says Canada\u2019s Tariff Chaos Could Be a \u2018Ridicul..."
+  },
+  {
+    "run_id": "2026-09-03_03-59-54",
+    "timestamp": "2026-09-03 03:59:24",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-58-20",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-58-16",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-58-12",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-58-08",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-58-04",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-57-59",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-57-55",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-57-51",
+    "timestamp": "2026-09-03 03:57:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-53-56",
+    "timestamp": "2026-09-03 03:53:24",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-52-03",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-51-53",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-51-42",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-51-32",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-51-22",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-51-11",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-51-01",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_03-50-51",
+    "timestamp": "2026-09-03 03:50:49",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-03_03-47-05",
     "timestamp": "2026-09-03 03:45:05",
     "run_type": "INTRADAY_REVISION",
@@ -482,120 +596,6 @@
   {
     "run_id": "2026-09-02_23-42-27",
     "timestamp": "2026-09-02 23:42:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-42-24",
-    "timestamp": "2026-09-02 23:42:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-42-22",
-    "timestamp": "2026-09-02 23:42:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-42-20",
-    "timestamp": "2026-09-02 23:42:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-42-18",
-    "timestamp": "2026-09-02 23:42:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-42-16",
-    "timestamp": "2026-09-02 23:42:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-30-20",
-    "timestamp": "2026-09-02 23:30:09",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Trump Tariff Reversal Could Cut Costs for US Energy Firms Bu..."
-  },
-  {
-    "run_id": "2026-09-02_23-14-52",
-    "timestamp": "2026-09-02 23:14:31",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-13-32",
-    "timestamp": "2026-09-02 23:13:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-13-29",
-    "timestamp": "2026-09-02 23:13:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-13-27",
-    "timestamp": "2026-09-02 23:13:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-13-25",
-    "timestamp": "2026-09-02 23:13:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-13-22",
-    "timestamp": "2026-09-02 23:13:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-13-20",
-    "timestamp": "2026-09-02 23:13:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-11-41",
-    "timestamp": "2026-09-02 23:11:20",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-10-21",
-    "timestamp": "2026-09-02 23:10:07",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-10-18",
-    "timestamp": "2026-09-02 23:10:07",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-10-16",
-    "timestamp": "2026-09-02 23:10:07",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-10-14",
-    "timestamp": "2026-09-02 23:10:07",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_23-10-12",
-    "timestamp": "2026-09-02 23:10:07",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   }
