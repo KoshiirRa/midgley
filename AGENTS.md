@@ -6,6 +6,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ## Multi-Agent Architecture Overview
 
+![Multi-Agent Execution Pipeline SVG Diagram](docs/assets/multi_agent_architecture.svg)
+![Regional Metro Calibration Hubs SVG Diagram](docs/assets/regional_metro_architecture.svg)
+
 ```
                ┌─────────────────────────────────────────────────────────────┐
                │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │

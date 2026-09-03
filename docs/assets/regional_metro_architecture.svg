@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" width="100%" height="100%" style="background-color: #0b0f19; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="m-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <!-- Header -->
+  <rect x="30" y="20" width="1140" height="55" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="50" y="53" fill="#f8fafc" font-size="18" font-weight="700">REGIONAL METRO CALIBRATION HUBS &amp; LOGISTICS INFRASTRUCTURE</text>
+  <text x="820" y="53" fill="#94a3b8" font-size="13">8 Metro Locales &amp; PADD Pipelines</text>
+
+  <!-- Central Base Commodity Node -->
+  <g transform="translate(450, 100)">
+    <rect width="300" height="90" rx="12" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="2"/>
+    <text x="150" y="38" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle">NATIONAL WHOLESALE RBOB BASE</text>
+    <text x="150" y="60" fill="#e2e8f0" font-size="12" text-anchor="middle">NYMEX RBOB Futures (RB=F) + WTI Crude (CL=F)</text>
+  </g>
+
+  <!-- Lines radiating from Center Node to Regional Hubs -->
+  <!-- Tulsa -->
+  <line x1="500" y1="190" x2="200" y2="250" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#m-arrow)"/>
+  <!-- Newark -->
+  <line x1="560" y1="190" x2="400" y2="250" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#m-arrow)"/>
+  <!-- Cincinnati -->
+  <line x1="600" y1="190" x2="600" y2="250" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#m-arrow)"/>
+  <!-- Greenville & Charlotte -->
+  <line x1="640" y1="190" x2="800" y2="250" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#m-arrow)"/>
+  <!-- Oakland & SF Bay -->
+  <line x1="700" y1="190" x2="1000" y2="250" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#m-arrow)"/>
+
+  <!-- REGIONAL METRO HUB CARDS (Row 1) -->
+
+  <!-- Hub 1: Tulsa -->
+  <g transform="translate(30, 260)">
+    <rect width="215" height="160" rx="10" fill="url(#bgGrad)" stroke="#38bdf8" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="30" fill="#f8fafc" font-size="14" font-weight="700">Tulsa Metro, OK</text>
+    <text x="15" y="48" fill="#38bdf8" font-size="11" font-weight="600">Cushing WTI Hub</text>
+    <text x="15" y="74" fill="#94a3b8" font-size="11">• West Tulsa Refinery</text>
+    <text x="15" y="92" fill="#94a3b8" font-size="11">• Cushing Crude Terminal</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="11">• Local Rack Margin Offset</text>
+    <text x="15" y="136" fill="#34d399" font-size="11" font-weight="600">Base Retail: $3.89/gal</text>
+  </g>
+
+  <!-- Hub 2: Newark -->
+  <g transform="translate(260, 260)">
+    <rect width="215" height="160" rx="10" fill="url(#bgGrad)" stroke="#a78bfa" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="30" fill="#f8fafc" font-size="14" font-weight="700">Newark Metro, DE</text>
+    <text x="15" y="48" fill="#a78bfa" font-size="11" font-weight="600">PADD 1B Central Atlantic</text>
+    <text x="15" y="74" fill="#94a3b8" font-size="11">• PBF Delaware City (180k bpd)</text>
+    <text x="15" y="92" fill="#94a3b8" font-size="11">• Big Stone Lightering Alerts</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="11">• C&amp;D Canal Barge Detour</text>
+    <text x="15" y="136" fill="#34d399" font-size="11" font-weight="600">Base Retail: $3.35/gal</text>
+  </g>
+
+  <!-- Hub 3: Cincinnati -->
+  <g transform="translate(490, 260)">
+    <rect width="220" height="160" rx="10" fill="url(#bgGrad)" stroke="#f472b6" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="30" fill="#f8fafc" font-size="14" font-weight="700">Cincinnati OH / NKY</text>
+    <text x="15" y="48" fill="#f472b6" font-size="11" font-weight="600">Tri-State Corridor</text>
+    <text x="15" y="74" fill="#94a3b8" font-size="11">• Catlettsburg Refinery</text>
+    <text x="15" y="92" fill="#94a3b8" font-size="11">• Dual-State Tax Differential</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="11">• Ohio River Lock Delays</text>
+    <text x="15" y="136" fill="#34d399" font-size="11" font-weight="600">OH Tax Diff: +$0.12/gal</text>
+  </g>
+
+  <!-- Hub 4: Carolinas -->
+  <g transform="translate(725, 260)">
+    <rect width="215" height="160" rx="10" fill="url(#bgGrad)" stroke="#fbbf24" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="30" fill="#f8fafc" font-size="14" font-weight="700">Charlotte &amp; Greenville</text>
+    <text x="15" y="48" fill="#fbbf24" font-size="11" font-weight="600">PADD 1C Lower Atlantic</text>
+    <text x="15" y="74" fill="#94a3b8" font-size="11">• Colonial Pipeline Line 1/2</text>
+    <text x="15" y="92" fill="#94a3b8" font-size="11">• Selma &amp; Paw Creek Terminals</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="11">• NHC Hurricane Threat Index</text>
+    <text x="15" y="136" fill="#34d399" font-size="11" font-weight="600">Colonial Line 1 Intake</text>
+  </g>
+
+  <!-- Hub 5: Bay Area -->
+  <g transform="translate(955, 260)">
+    <rect width="215" height="160" rx="10" fill="url(#bgGrad)" stroke="#34d399" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="30" fill="#f8fafc" font-size="14" font-weight="700">Oakland &amp; SF Bay</text>
+    <text x="15" y="48" fill="#34d399" font-size="11" font-weight="600">PADD 5 West Coast</text>
+    <text x="15" y="74" fill="#94a3b8" font-size="11">• CARB Gasoline Premium</text>
+    <text x="15" y="92" fill="#94a3b8" font-size="11">• Chevron Richmond Outage</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="11">• SFPP Corridor Pipeline</text>
+    <text x="15" y="136" fill="#34d399" font-size="11" font-weight="600">CARB Mandate Offset</text>
+  </g>
+
+  <!-- ROW 2: Florida & ULSD Engines -->
+  <g transform="translate(260, 450)">
+    <rect width="320" height="160" rx="10" fill="url(#bgGrad)" stroke="#38bdf8" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="30" fill="#f8fafc" font-size="14" font-weight="700">Port St. Lucie Metro, FL</text>
+    <text x="15" y="48" fill="#38bdf8" font-size="11" font-weight="600">PADD 1C Waterborne Freight</text>
+    <text x="15" y="74" fill="#94a3b8" font-size="11">• Waterborne Barge Freight Rates</text>
+    <text x="15" y="92" fill="#94a3b8" font-size="11">• Port Everglades / Canaveral Terminals</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="11">• Florida Excise Tax Adjustments</text>
+    <text x="15" y="136" fill="#34d399" font-size="11" font-weight="600">Waterborne Freight Proxy</text>
+  </g>
+
+  <g transform="translate(620, 450)">
+    <rect width="320" height="160" rx="10" fill="url(#bgGrad)" stroke="#a78bfa" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="30" fill="#f8fafc" font-size="14" font-weight="700">ULSD Distillate Fuel Engine</text>
+    <text x="15" y="48" fill="#a78bfa" font-size="11" font-weight="600">Ultra-Low Sulfur Diesel (HO=F)</text>
+    <text x="15" y="74" fill="#94a3b8" font-size="11">• Heating Oil Futures (HO=F)</text>
+    <text x="15" y="92" fill="#94a3b8" font-size="11">• 3-2-1 Distillate Refining Margin</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="11">• Commercial Trucking Freight Index</text>
+    <text x="15" y="136" fill="#34d399" font-size="11" font-weight="600">Dedicated Diesel Dashboard</text>
+  </g>
+</svg>

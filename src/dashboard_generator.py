@@ -140,8 +140,8 @@ def get_release_badge() -> str:
     """Generates dynamic HTML badge for the header based on git branch or environment.
     
     When running on the 'dev' branch (or any development branch/environment),
-    it displays a 'Dev Branch v0.3.4-dev' badge in amber.
-    When running on 'main' or 'master' release branches, it displays 'Release v0.3.4' in orange.
+    it displays a 'Dev Branch v0.3.3-dev' badge in amber.
+    When running on 'main' or 'master' release branches, it displays 'Release v0.3.3' in orange.
     """
     branch = os.getenv("MIDGLEY_BRANCH", os.getenv("GITHUB_REF_NAME", ""))
     if not branch:
@@ -157,9 +157,9 @@ def get_release_badge() -> str:
             branch = "dev"
 
     if branch in ["main", "master"] or branch.startswith("release/"):
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.4</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.3</span>'
     else:
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.4-dev</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.3-dev</span>'
 
 
 def get_analytics_script() -> str:
@@ -1677,6 +1677,7 @@ Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 
 def generate_public_dashboard():
     os.makedirs(DOCS_DIR, exist_ok=True)
+    os.makedirs(os.path.join(DOCS_DIR, "assets"), exist_ok=True)
     os.makedirs(NATIONAL_SUB_DIR, exist_ok=True)
     os.makedirs(TULSA_SUB_DIR, exist_ok=True)
     os.makedirs(NEWARK_SUB_DIR, exist_ok=True)
@@ -1685,6 +1686,13 @@ def generate_public_dashboard():
     os.makedirs(CHARLOTTE_SUB_DIR, exist_ok=True)
     os.makedirs(OAKLAND_SUB_DIR, exist_ok=True)
     os.makedirs(BAYAREA_SUB_DIR, exist_ok=True)
+
+    # Automatically synthesize SVG architecture diagrams via Fireworks Tech Graph
+    try:
+        from src.fireworks_tech_graph import generate_architecture_diagrams
+        generate_architecture_diagrams(os.path.join(DOCS_DIR, "assets"))
+    except Exception as e:
+        logger.warning(f"Architecture diagram generation failed: {e}")
 
     
     dates, rolling_mae, rolling_hit = calculate_rolling_metrics()
@@ -2283,6 +2291,30 @@ def generate_public_dashboard():
                 <a href="math.html" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
                     <i class="fa-solid fa-graduation-cap"></i> Read Full Math & Formulas Guide &rarr;
                 </a>
+            </div>
+
+            <!-- 🎨 FIREWORKS TECH GRAPH AUTOMATED ARCHITECTURE DIAGRAM EMBEDS -->
+            <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project"></i> Auto-Generated Visual Architecture Diagrams (Fireworks Tech Graph)
+                    </h4>
+                    <span class="text-[10px] text-slate-500 font-mono">SVG Vector Assets</span>
+                </div>
+                <div class="space-y-6">
+                    <div class="overflow-x-auto rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+                        <p class="text-xs font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-sitemap text-blue-400"></i> 8-Stage Multi-Agent Execution Pipeline Flow
+                        </p>
+                        <img src="assets/multi_agent_architecture.svg" alt="Multi-Agent Execution Pipeline Architecture SVG" class="w-full h-auto rounded-lg shadow-xl border border-slate-800" />
+                    </div>
+                    <div class="overflow-x-auto rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+                        <p class="text-xs font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-network-wired text-purple-400"></i> Regional Metro Calibration Hubs &amp; Pipeline Logistics Infrastructure
+                        </p>
+                        <img src="assets/regional_metro_architecture.svg" alt="Regional Metro Hubs Architecture SVG" class="w-full h-auto rounded-lg shadow-xl border border-slate-800" />
+                    </div>
+                </div>
             </div>
 
             <!-- 🔄 HIERARCHICAL PIPELINE STAGE FLOW CHART -->
