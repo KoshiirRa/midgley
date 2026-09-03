@@ -193,6 +193,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Mandatory Guidance when New Regions are Added:** Whenever a new regional calibration agent / metro locale is added to Midgley (e.g., in `src/locations/<new_location>/`):
     1. Create a JSON profile file at `data/regional_metadata/<region_id>.json` following the schema defined in `src/regional_metadata.py` covering all 4 core dimensions (`econometric_drivers`, `refining_logistics`, `tax_structure`, `infrastructure_delivery`) and `shock_scenarios`.
     2. Import `render_regional_driver_cards_html` from `src.regional_metadata` inside `src/dashboard_generator.py` and replace `{{REGIONAL_CARDS}}` in the HTML template string to dynamically render the visual cards onto the regional dashboard page.
+    3. **Multi-Agent Architecture Diagram Sync:** Update the ASCII diagram block for `4. LOCALIZED METRO AREA CALIBRATION AGENTS` in Section 2 (`Multi-Agent Architecture Overview`) of `AGENTS.md` to include the newly added metro, its PADD region, and its primary refining/logistics drivers.
 
 ---
 
