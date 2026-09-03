@@ -9,7 +9,7 @@ import json
 import hmac
 import hashlib
 import logging
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta
 
 
@@ -34,6 +34,7 @@ from src.prediction_logger import (
     sync_predictions_to_cloud,
     get_cloud_sync_status
 )
+from src.regional_metadata import list_all_regional_metadata
 
 logger = logging.getLogger(__name__)
 
@@ -196,6 +197,19 @@ class SimulateRequest(BaseModel):
     scenario_id: str = Field(..., json_schema_extra={"example": "hormuz_blockade"}, description="Unique scenario ID")
     locale: Optional[str] = Field("national", json_schema_extra={"example": "oakland"}, description="Target locale code")
     custom_shock_pct: Optional[float] = Field(None, json_schema_extra={"example": 0.05}, description="Optional custom shock percentage")
+
+
+class BatchForecastRequest(BaseModel):
+    locales: List[str] = Field(default_factory=lambda: ["national"], json_schema_extra={"example": ["tulsa", "oakland", "cincinnati"]}, description="List of locale codes")
+    days: Optional[int] = Field(5, ge=1, le=30, description="Forecast target horizon in trading days")
+
+
+class BatchCombinedRequest(BaseModel):
+    locales: List[str] = Field(default_factory=lambda: ["national"], json_schema_extra={"example": ["tulsa", "newark", "port_st_lucie"]}, description="List of locale codes")
+
+
+BatchForecastRequest.model_rebuild()
+BatchCombinedRequest.model_rebuild()
 
 
 # Rate Limiting & Auth Middleware helper
@@ -574,6 +588,98 @@ def get_combined(
     Returns both current live pump price and 5-day out-of-time forecast along with top market drivers.
     """
     return _get_combined_impl(locale=locale or "national")
+
+
+@app.get("/api/v1/locales", summary="Get All Supported Locales & Tax/Logistics Metadata")
+def list_supported_locales():
+    """
+    Returns a complete dictionary of all supported locale codes, region IDs, PADD regions,
+    statutory fuel tax burdens, delivery hub logistics, and metadata profiles (Issue #48).
+    """
+    all_metadata = list_all_regional_metadata()
+    locales_dict = {}
+
+    for loc_code, reg_code in LOCALE_MAP.items():
+        meta = PADD_METADATA.get(reg_code, PADD_METADATA["National"])
+        profile = all_metadata.get(reg_code.lower(), {})
+
+        locales_dict[loc_code] = {
+            "code": loc_code,
+            "region_id": reg_code,
+            "name": meta.get("name", reg_code),
+            "padd_region": meta.get("padd", "PADD 2"),
+            "carb_tax_regulatory_burden_per_gal": meta.get("carb_tax", 0.0),
+            "refining_logistics": profile.get("refining_logistics", {}),
+            "tax_breakdown": profile.get("tax_breakdown", {}),
+            "metadata_profile": profile
+        }
+
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 Finlight-LLM",
+        "timestamp": datetime.now().isoformat(),
+        "total_locales": len(locales_dict),
+        "locales": locales_dict
+    }
+
+
+@app.post("/api/v1/forecast/batch", summary="Get Batch 5-Day Forecasts for Multiple Locales")
+def get_batch_forecast(req: BatchForecastRequest):
+    """
+    Accepts a list of locale codes and returns combined 5-day out-of-time forecasts
+    in a single HTTP response payload (Issue #48).
+    """
+    loc_list = req.locales if req.locales else ["national"]
+    days = req.days or 5
+    results = {}
+
+    for loc in loc_list:
+        clean_loc = str(loc).lower().strip()
+        try:
+            results[clean_loc] = _get_forecast_impl(locale=clean_loc, days=days)
+        except Exception as e:
+            logger.warning(f"Error computing forecast for locale '{loc}' in batch request: {e}")
+            results[clean_loc] = {
+                "status": "error",
+                "message": f"Could not compute forecast for locale '{loc}': {e}"
+            }
+
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 Finlight-LLM",
+        "timestamp": datetime.now().isoformat(),
+        "total_requested": len(loc_list),
+        "forecasts": results
+    }
+
+
+@app.post("/api/v1/combined/batch", summary="Get Batch Combined Live Prices & Forecasts for Multiple Locales")
+def get_batch_combined(req: BatchCombinedRequest):
+    """
+    Accepts a list of locale codes and returns combined live pump prices, forecasts,
+    feature attributions, and provenance metadata in a single HTTP response payload (Issue #48).
+    """
+    loc_list = req.locales if req.locales else ["national"]
+    results = {}
+
+    for loc in loc_list:
+        clean_loc = str(loc).lower().strip()
+        try:
+            results[clean_loc] = _get_combined_impl(locale=clean_loc)
+        except Exception as e:
+            logger.warning(f"Error computing combined payload for locale '{loc}' in batch request: {e}")
+            results[clean_loc] = {
+                "status": "error",
+                "message": f"Could not compute combined payload for locale '{loc}': {e}"
+            }
+
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 Finlight-LLM",
+        "timestamp": datetime.now().isoformat(),
+        "total_requested": len(loc_list),
+        "combined": results
+    }
 
 
 @app.post("/api/v1/forecast/simulate", summary="Simulate Counterfactual Market Shocks")
