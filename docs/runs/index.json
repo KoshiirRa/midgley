@@ -1,5 +1,59 @@
 [
   {
+    "run_id": "2026-09-03_00-29-58",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-29-47",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-29-37",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-29-26",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-29-16",
+    "timestamp": "2026-09-03 00:29 UTC",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-29-10",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-29-05",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-28-55",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_00-28-44",
+    "timestamp": "2026-09-03 00:19:51",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-03_00-20-22",
     "timestamp": "2026-09-03 00:19:51",
     "run_type": "DAILY_BATCH",
@@ -544,59 +598,5 @@
     "timestamp": "2026-09-02 20:45:11",
     "run_type": "INTRADAY_REVISION",
     "trigger": "How US productivity buffered the tariff shock, and other tra..."
-  },
-  {
-    "run_id": "2026-09-02_19-30-21",
-    "timestamp": "2026-09-02 19:30:10",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Inflation risks rise with higher fuel costs and new U.S. tar..."
-  },
-  {
-    "run_id": "2026-09-02_19-15-26",
-    "timestamp": "2026-09-02 19:15:11",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Reducing India\u2019s exposure to U.S. tariff risks - The Hindu"
-  },
-  {
-    "run_id": "2026-09-02_18-00-20",
-    "timestamp": "2026-09-02 18:00:10",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Canada's Carney holds firm against Trump tariffs - DW.com"
-  },
-  {
-    "run_id": "2026-09-02_17-00-22",
-    "timestamp": "2026-09-02 17:00:12",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Inflation risks rise with higher fuel costs and new U.S. tar..."
-  },
-  {
-    "run_id": "2026-09-02_16-45-20",
-    "timestamp": "2026-09-02 16:45:09",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariffs spat: Carney bets Canada can defy Trump - DW.com"
-  },
-  {
-    "run_id": "2026-09-02_15-39-35",
-    "timestamp": "2026-09-02 15:39:01",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_15-37-36",
-    "timestamp": "2026-09-02 15:37:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_15-37-34",
-    "timestamp": "2026-09-02 15:37:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-02_15-37-31",
-    "timestamp": "2026-09-02 15:37:18",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   }
 ]
