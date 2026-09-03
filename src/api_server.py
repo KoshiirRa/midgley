@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="Midgley Gas Price Forecasting API Gateway",
     description="RESTful API for real-time unleaded gasoline pump prices, 5-day out-of-time quantitative forecasts, and counterfactual physical/geopolitical shock simulations.",
-    version="0.3.4",
+    version="0.3.5",
     docs_url="/docs",
     redoc_url="/redoc",
     servers=[
@@ -484,7 +484,7 @@ def get_health():
     return {
         "status": "online",
         "system": "Midgley Gas Price Forecasting API Gateway",
-        "version": "0.3.4",
+        "version": "0.3.5",
         "timestamp": datetime.now().isoformat()
     }
 
