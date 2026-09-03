@@ -67,6 +67,8 @@ def update_readme_forecasts():
                 cin_oh_df = df[df['region'] == 'Cincinnati_OH']
                 cin_ky_df = df[df['region'] == 'Cincinnati_KY']
                 greenville_df = df[df['region'] == 'Greenville_NC']
+                charlotte_df = df[df['region'] == 'Charlotte_NC']
+                psl_df = df[df['region'] == 'Port_St_Lucie_FL']
                 oakland_df = df[df['region'] == 'Oakland_CA']
                 bayarea_df = df[df['region'] == 'BayArea_CA']
                 

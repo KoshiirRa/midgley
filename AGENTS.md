@@ -177,6 +177,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Charlotte Regional Calibration Agent (`src/locations/charlotte/`):**
   - Tailors market time series to the Charlotte, NC metropolitan area (PADD 1C South Atlantic) calibrated to live pump prices ($3.28/gal base).
   - Integrates **Colonial Pipeline Line 1 & Line 2 Paw Creek Petroleum Distribution Hub**, Plantation Pipeline interconnects, NC state fuel tax ($0.404/gal) vs South Carolina cross-border tax differential ($0.288/gal, persistent ~$0.116/gal gap), and **NOAA Mecklenburg County (NCZ071) Catawba River flooding & winter ice storm alerts**.
+* **Port St. Lucie Regional Calibration Agent (`src/locations/port_st_lucie/`):**
+  - Tailors market time series to the Port St. Lucie, FL metropolitan area (St. Lucie County / Treasure Coast, PADD 1C South Atlantic) calibrated to live pump prices ($3.38/gal base).
+  - Models Florida's unique **>95% waterborne marine tank barge/vessel offloading dependency** (0 crude oil refineries and 0 interstate refined product pipelines entering South Florida), waterborne marine freight tariffs, Port Everglades (Fort Lauderdale) & Port Canaveral petroleum terminals, Florida State Motor Fuel Tax + St. Lucie County local option tax ($0.384/gal), I-95 & Florida Turnpike tank-truck corridors, and **NOAA St. Lucie County (FLZ147 / Zip 34952) Atlantic hurricane, marine gale & flash deluge flood alerts**.
 * **Oakland & SF Bay Area Regional Calibration Agent (`src/locations/oakland/`):**
   - Tailors market time series to Oakland, CA ($4.950/gal base) and the 9-County SF Bay Area Region ($5.050/gal base), establishing high-cost PADD 5 West Coast benchmarks ("scare factor").
   - Models statutory **CARB & CA state tax burden ($0.953/gal total)**: 63.4¢ state excise tax, ~25¢ Cap-and-Trade carbon fees, ~18.5¢ LCFS credit overhead, and ~15¢ local sales tax/UST fees.

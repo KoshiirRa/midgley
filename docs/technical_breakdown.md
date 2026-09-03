@@ -55,7 +55,6 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 - **Cincinnati, OH/KY**: $P = \$3.821 + (-\$0.129) = \$3.746\text{/gal}$ (Delta: -\$0.129/gal, -3.37\%)
 - **Greenville, NC Retail**: $P = \$3.250 + (-\$0.223) = \$3.128\text{/gal}$ (Delta: -\$0.223/gal, -6.86\%)
 - **Charlotte, NC Retail**: $P = \$3.280 + (-\$0.223) = \$3.159\text{/gal}$ (Delta: -\$0.223/gal, -6.81\%)
-- **Port St. Lucie, FL Retail**: $P = \$3.380 + (-\$0.090) = \$3.290\text{/gal}$ (Delta: -\$0.090/gal, -2.66\%)
 - **Oakland, CA Retail**: $P = \$4.950 + (-\$0.486) = \$4.751\text{/gal}$ (Delta: -\$0.486/gal, -9.81\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 - **SF Bay Area Region**: $P = \$5.050 + (-\$0.490) = \$4.847\text{/gal}$ (Delta: -\$0.490/gal, -9.70\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 
@@ -84,7 +83,6 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Cincinnati, OH/KY: $3.746/gal ($-0.129/gal, -3.37%)
   • Greenville, NC Retail: $3.128/gal ($-0.223/gal, -6.86%)
   • Charlotte, NC Retail: $3.159/gal ($-0.223/gal, -6.81%)
-  • Port St. Lucie, FL Retail: $3.290/gal ($-0.090/gal, -2.66%)
   • Oakland, CA Retail: $4.751/gal ($-0.486/gal, -9.81%)
   • SF Bay Area Region: $4.847/gal ($-0.490/gal, -9.70%)
 

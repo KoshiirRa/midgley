@@ -137,7 +137,7 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
             raw_actual = float(actuals_map[target_date_str])
             if row['region'] == "Cincinnati_KY":
                 actual_price = raw_actual + 0.425
-            elif row['region'] in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Greenville_NC"]:
+            elif row['region'] in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"]:
                 actual_price = raw_actual + 0.55
             elif row['region'] == "Oakland_CA":
                 actual_price = raw_actual + 2.05

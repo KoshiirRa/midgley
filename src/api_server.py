@@ -82,7 +82,10 @@ LOCALE_MAP = {
     "greenville_nc": "Greenville_NC",
     "charlotte": "Charlotte_NC",
     "charlotte_nc": "Charlotte_NC",
-    "clt": "Charlotte_NC"
+    "clt": "Charlotte_NC",
+    "port_st_lucie": "Port_St_Lucie_FL",
+    "port_st_lucie_fl": "Port_St_Lucie_FL",
+    "psl": "Port_St_Lucie_FL"
 }
 
 # Regional PADD metadata
@@ -94,6 +97,7 @@ PADD_METADATA = {
     "Cincinnati_KY": {"name": "Northern Kentucky Retail", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Greenville_NC": {"name": "Greenville Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Charlotte_NC": {"name": "Charlotte Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
+    "Port_St_Lucie_FL": {"name": "Port St. Lucie Metro Area, FL", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -167,6 +171,11 @@ SCENARIOS_CATALOG = {
         "name": "Selma NC Distribution Hub Tank Farm Outage & Grid Blackout Shock",
         "headline": "Severe convective microburst knocks out Duke Energy substation at Selma breakout hub, suspending rack loading.",
         "shock_pct": 0.0569
+    },
+    "port_st_lucie_hurricane": {
+        "name": "Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown",
+        "headline": "Major Hurricane storm surge forces emergency closure of Port Everglades and Port Canaveral marine petroleum berths.",
+        "shock_pct": 0.0666
     },
     "weekend_opec_post": {
         "name": "Weekend Executive OPEC Talkdown Post",
@@ -257,7 +266,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5) -> dict:
     base_price = live_res.get("price", 3.184)
     meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
 
-    projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC"] else 0.032)
+    projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"] else 0.032)
     predicted_price = round(base_price + projected_delta, 3)
     expected_pct = round((projected_delta / base_price) * 100, 2)
     direction = "UP" if projected_delta > 0 else ("DOWN" if projected_delta < 0 else "FLAT")

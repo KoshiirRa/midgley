@@ -13,6 +13,7 @@ from src.locations.cincinnati import run_cincinnati_pipeline, build_cincinnati_n
 from src.locations.greenville import run_greenville_pipeline, build_greenville_notebook
 from src.locations.charlotte import run_charlotte_pipeline, build_charlotte_notebook
 from src.locations.oakland import run_oakland_pipeline, build_oakland_notebook
+from src.locations.port_st_lucie import run_port_st_lucie_pipeline, build_port_st_lucie_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +80,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_oakland_pipeline,
         "build_notebook": build_oakland_notebook,
         "notebook_filename": "oakland_gas_price_llm_forecasting.ipynb"
+    },
+    "port_st_lucie": {
+        "id": "port_st_lucie",
+        "name": "Port St. Lucie Metro, FL (PADD 1C)",
+        "type": "regional",
+        "module": "src.locations.port_st_lucie",
+        "run_pipeline": run_port_st_lucie_pipeline,
+        "build_notebook": build_port_st_lucie_notebook,
+        "notebook_filename": "port_st_lucie_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -123,5 +133,6 @@ __all__ = [
     "run_cincinnati_pipeline",
     "run_greenville_pipeline",
     "run_charlotte_pipeline",
-    "run_oakland_pipeline"
+    "run_oakland_pipeline",
+    "run_port_st_lucie_pipeline"
 ]

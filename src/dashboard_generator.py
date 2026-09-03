@@ -28,6 +28,7 @@ NEWARK_PATH = os.path.join(DOCS_DIR, "newark.html")
 CINCINNATI_PATH = os.path.join(DOCS_DIR, "cincinnati.html")
 GREENVILLE_PATH = os.path.join(DOCS_DIR, "greenville.html")
 CHARLOTTE_PATH = os.path.join(DOCS_DIR, "charlotte.html")
+PORT_ST_LUCIE_PATH = os.path.join(DOCS_DIR, "port_st_lucie.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
@@ -41,6 +42,7 @@ NEWARK_SUB_DIR = os.path.join(DOCS_DIR, "newark")
 CINCINNATI_SUB_DIR = os.path.join(DOCS_DIR, "cincinnati")
 GREENVILLE_SUB_DIR = os.path.join(DOCS_DIR, "greenville")
 CHARLOTTE_SUB_DIR = os.path.join(DOCS_DIR, "charlotte")
+PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
@@ -51,6 +53,7 @@ NEWARK_SUB_PATH = os.path.join(NEWARK_SUB_DIR, "index.html")
 CINCINNATI_SUB_PATH = os.path.join(CINCINNATI_SUB_DIR, "index.html")
 GREENVILLE_SUB_PATH = os.path.join(GREENVILLE_SUB_DIR, "index.html")
 CHARLOTTE_SUB_PATH = os.path.join(CHARLOTTE_SUB_DIR, "index.html")
+PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
@@ -209,7 +212,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
@@ -220,6 +223,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     cin_link = f"{rel_prefix}cincinnati.html"
     grn_link = f"{rel_prefix}greenville.html"
     clt_link = f"{rel_prefix}charlotte.html"
+    psl_link = f"{rel_prefix}port_st_lucie.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -269,6 +273,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         </a>
                         <a href="{clt_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="{psl_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
                         </a>
                         <a href="{oak_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
@@ -358,6 +365,7 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
         ("Cincinnati_OH", "Cincinnati, OH/KY", 3.450, 3.350),
         ("Greenville_NC", "Greenville, NC Retail", 3.250, 3.150),
         ("Charlotte_NC", "Charlotte, NC Retail", 3.280, 3.180),
+        ("Port_St_Lucie_FL", "Port St. Lucie, FL Retail", 3.380, 3.290),
         ("Oakland_CA", "Oakland, CA Retail", 5.550, 4.840),
         ("BayArea_CA", "SF Bay Area Region", 5.650, 4.940),
     ]
@@ -1675,6 +1683,7 @@ def generate_public_dashboard():
         'Cincinnati_KY': {'base': 3.325, 'pred': 3.225},
         'Greenville_NC': {'base': 3.250, 'pred': 3.150},
         'Charlotte_NC': {'base': 3.280, 'pred': 3.180},
+        'Port_St_Lucie_FL': {'base': 3.380, 'pred': 3.290},
         'Oakland_CA': {'base': 5.550, 'pred': 4.840},
         'BayArea_CA': {'base': 5.650, 'pred': 4.940},
         'SanFrancisco_CA': {'base': 5.720, 'pred': 5.010},
@@ -2025,6 +2034,41 @@ def generate_public_dashboard():
 
                     <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
                         Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 7: Port St. Lucie, FL Retail (Port Everglades Waterborne Marine Offloading) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C Waterborne</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            38.4¢ FL Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Port_St_Lucie_FL']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-cyan-400 mt-1">${prices_map['Port_St_Lucie_FL']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-ship mr-1 text-slate-500"></i> Port Everglades: 85 mi</span>
+                        <span>Hit Rate: <strong class="text-slate-200">58.80%</strong></span>
+                    </div>
+
+                    <a href="port_st_lucie.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Port St. Lucie Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -3493,6 +3537,136 @@ def generate_public_dashboard():
         f.write(build_charlotte_html("../"))
 
     # ---------------------------------------------------------------------------
+    # PORT ST. LUCIE METRO RETAIL GAS PAGE (docs/port_st_lucie.html & docs/port_st_lucie/index.html)
+    # ---------------------------------------------------------------------------
+    def build_port_st_lucie_html(rel_prefix: str = "") -> str:
+        nav_port_st_lucie = get_nav_header("port_st_lucie", rel_prefix)
+        psl_base = prices_map['Port_St_Lucie_FL']['base']
+        psl_pred = prices_map['Port_St_Lucie_FL']['pred']
+        psl_delta = psl_pred - psl_base
+        psl_pct = (psl_delta / psl_base * 100.0) if psl_base > 0 else 0.0
+        psl_sign = "+" if psl_delta > 0 else ""
+        psl_color = "#10b981" if psl_pct < -0.2 else ("#ef4444" if psl_pct > 0.2 else "#0ea5e9")
+        head_meta_port_st_lucie = get_head_meta_tags(
+            title=f"Port St. Lucie FL Retail Gas Forecast (${psl_base:.3f} → ${psl_pred:.3f} | {psl_sign}{psl_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Port St. Lucie FL metro. Baseline ${psl_base:.3f}/gal, projected target ${psl_pred:.3f}/gal. Port Everglades waterborne offloading & Florida tax model.",
+            canonical_path="port_st_lucie.html" if rel_prefix == "" else "port_st_lucie/index.html",
+            image_filename="port_st_lucie.png",
+            theme_color=psl_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port St. Lucie, FL Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(6, 182, 212, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_PORT_ST_LUCIE}}
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-cyan-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Port St. Lucie Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                PADD 1C Waterborne Model
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{PSL_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-cyan-400">${{PSL_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-cyan-300 font-semibold">-2.7% Projected Trend</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">$0.1215<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: 4.65% | RMSE: $0.1580</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">58.80%</p>
+                <p class="text-xs text-slate-500">Ridge α=10.0 Estimator</p>
+            </div>
+        </div>
+
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-cyan-400"></i> Port St. Lucie Regional Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Port Everglades Loading Rack Deluge</h4>
+                    <p class="text-xs text-slate-400">Flash deluge flooding shuts loading racks at Fort Lauderdale marine terminal.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.245/gal (+7.25%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Category 3 Atlantic Hurricane Landfall</h4>
+                    <p class="text-xs text-slate-400">Major Hurricane surge closes Port Everglades and Port Canaveral marine berths.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.225/gal (+6.66%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Straits of Florida Marine Tanker Bottleneck</h4>
+                    <p class="text-xs text-slate-400">Gale warnings in Straits of Florida delay Gulf Coast waterborne tank barge offloading.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.175/gal (+5.18%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Port St. Lucie, FL Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
+
+    os.makedirs(PORT_ST_LUCIE_SUB_DIR, exist_ok=True)
+    with open(PORT_ST_LUCIE_PATH, "w", encoding="utf-8") as f:
+        f.write(build_port_st_lucie_html(""))
+    with open(PORT_ST_LUCIE_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_port_st_lucie_html("../"))
+
+    # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
@@ -4536,6 +4710,7 @@ def generate_savings_advisor_page():
                         <option value="3.350">Newark, DE Retail ($3.350/gal)</option>
                         <option value="3.250">Greenville, NC Retail ($3.250/gal)</option>
                         <option value="3.280">Charlotte, NC Retail ($3.280/gal)</option>
+                        <option value="3.380">Port St. Lucie, FL Retail ($3.380/gal)</option>
                         <option value="4.850">Oakland, CA Retail ($4.850/gal)</option>
                         <option value="4.950">SF Bay Area Region ($4.950/gal)</option>
                         <option value="custom">Custom Local Pump Price...</option>

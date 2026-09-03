@@ -84,6 +84,14 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(data["locale"]["region_id"], "Charlotte_NC")
         self.assertEqual(data["locale"]["padd_region"], "PADD 1C South Atlantic")
 
+    def test_get_port_st_lucie_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=port_st_lucie")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "Port_St_Lucie_FL")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 1C South Atlantic")
+
     def test_post_simulate(self):
         payload = {
             "scenario_id": "hormuz_blockade",

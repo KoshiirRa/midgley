@@ -53,7 +53,7 @@ curl -X GET "http://localhost:8000/api/v1/prices/live?locale=oakland"
 Generates 5-day out-of-time quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), component-level feature attributions (XAI), and natural language driver summary text.
 
 **Query Parameters:**
-* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`).
+* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `oakland`, `bayarea`).
 * `days` (optional, integer): Forecast horizon in days (1 to 30). Default: `5`.
 
 **Example Request:**

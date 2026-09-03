@@ -482,6 +482,18 @@ REGION_METADATA = {
     "BayArea_CA": {
         "display_name": "SF Bay Area 9-County Metro Retail",
         "architecture": "SFPP Pipeline Corridor + Hayward Fault Seismic Alert"
+    },
+    "Greenville_NC": {
+        "display_name": "Greenville, NC Metro Retail (PADD 1C)",
+        "architecture": "Colonial Pipeline Selma Hub + Tar River Flooding Model"
+    },
+    "Charlotte_NC": {
+        "display_name": "Charlotte, NC Metro Retail (PADD 1C)",
+        "architecture": "Paw Creek Distribution Hub + NC/SC Tax Differential"
+    },
+    "Port_St_Lucie_FL": {
+        "display_name": "Port St. Lucie, FL Metro Retail (PADD 1C)",
+        "architecture": "Port Everglades Marine Offloading + FL Tax & Hurricane Model"
     }
 }
 

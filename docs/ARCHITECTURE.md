@@ -30,6 +30,20 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
   \[
   \text{TaxSpread}_{\text{OH-KY}} = P_{\text{OH Retail}} - P_{\text{KY Retail}} = \$0.125/\text{gal}
   \]
+- **Charlotte Regional Crack Spread & NC/SC Tax Gap:**
+  \[
+  \text{CrackSpread}_{\text{Charlotte}} = P_{\text{Charlotte Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Charlotte}} = \$3.280/\text{gal})
+  \]
+  \[
+  \text{TaxSpread}_{\text{NC-SC}} = P_{\text{NC Tax}} - P_{\text{SC Tax}} = \$0.404 - \$0.288 = \$0.116/\text{gal}
+  \]
+- **Port St. Lucie Waterborne Rack Margin & FL Fuel Tax:**
+  \[
+  \text{CrackSpread}_{\text{PSL}} = P_{\text{PSL Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, PSL}} = \$3.380/\text{gal})
+  \]
+  \[
+  T_{\text{FL}} = \tau_{\text{State/Local}} + \tau_{\text{Federal}} = \$0.384 + \$0.184 = \$0.568/\text{gal}
+  \]
 - **Oakland & SF Bay Area PADD 5 Richmond Crack Spread & CARB Tax Burden:**
   \[
   \text{CrackSpread}_{\text{Richmond}} = P_{\text{Oakland Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Oakland}} = \$4.950/\text{gal}, P_{\text{Live, BayArea}} = \$5.050/\text{gal})
@@ -69,6 +83,7 @@ The forecasting engine integrates a **two-tiered weather ingestion model** via t
    │ • Bakken Shale Polar Vortexes │                     │ • Cincinnati OH/KY (Miss River)│
    │                               │                     │ • Greenville NC (NCZ081 Floods)│
    │                               │                     │ • Charlotte NC (NCZ071 Hub)   │
+   │                               │                     │ • Port St. Lucie FL (FLZ147)  │
    │                               │                     │ • Oakland & Bay Area (PSPS)   │
    └───────────────┬───────────────┘                     └───────────────┬───────────────┘
                    │                                                     │
