@@ -42,8 +42,13 @@ def test_build_provenance_chain():
     assert prov_fallback["is_fallback_granularity"] is True
 
 
-def test_swr_cache_protocol():
+def test_swr_cache_protocol(monkeypatch):
     """Tests SWR cache state transitions: HIT_FRESH, HIT_STALE (with bg revalidation), and MISS."""
+    monkeypatch.delenv("TURSO_DATABASE_URL", raising=False)
+    monkeypatch.delenv("TURSO_AUTH_TOKEN", raising=False)
+    monkeypatch.delenv("CLOUDFLARE_CACHE_URL", raising=False)
+    monkeypatch.delenv("CLOUDFLARE_AUTH_TOKEN", raising=False)
+
     test_cache = LookupCache(db_path=":memory:")
     key = "test_swr_key"
     val = {"price": 3.890, "source": "Test Source"}

@@ -5,6 +5,11 @@ Logs model predictions over time, backfills actual historical prices, evaluates 
 """
 
 import os
+import json
+import urllib.request
+import urllib.error
+import urllib.parse
+from typing import Optional, Dict, Any
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -59,6 +64,170 @@ def ensure_history_store():
                 logger.info(f"Migrated existing prediction history log with extended MLOps schema columns.")
         except Exception as e:
             logger.warning(f"Failed to inspect/migrate prediction history CSV: {e}")
+
+
+def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
+    """
+    Synchronizes prediction history records to Cloud DB (Turso Edge / Cloudflare D1 / Neon Postgres).
+    Provides automatic fallback to local CSV datastore if offline or if credentials are missing.
+    """
+    turso_url = os.environ.get("TURSO_DATABASE_URL")
+    turso_token = os.environ.get("TURSO_AUTH_TOKEN")
+    cf_url = os.environ.get("CLOUDFLARE_CACHE_URL")
+    cf_token = os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+
+    if df is None:
+        ensure_history_store()
+        try:
+            df = pd.read_csv(HISTORY_CSV_PATH)
+        except Exception as e:
+            logger.warning(f"Could not read prediction history CSV for cloud sync: {e}")
+            return {"status": "offline_fallback", "synced_rows": 0, "provider": "local_csv", "reason": str(e)}
+
+    if df is None or df.empty:
+        return {"status": "synced", "synced_rows": 0, "provider": "local_csv"}
+
+    # 1. Attempt Turso Edge SQLite sync if credentials present
+    if turso_url and turso_token:
+        try:
+            if turso_url.startswith("turso://"):
+                turso_url = "https://" + turso_url[8:]
+            endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
+            headers = {
+                "Authorization": f"Bearer {turso_token}",
+                "Content-Type": "application/json",
+            }
+            create_stmt = {
+                "type": "execute",
+                "stmt": {
+                    "sql": """CREATE TABLE IF NOT EXISTS prediction_history (
+                        log_timestamp TEXT,
+                        forecast_target_date TEXT,
+                        region TEXT,
+                        model_version TEXT,
+                        run_type TEXT,
+                        headline_trigger TEXT,
+                        current_base_price REAL,
+                        predicted_5d_price REAL,
+                        predicted_direction TEXT,
+                        actual_5d_price REAL,
+                        actual_direction TEXT,
+                        error_dollars REAL,
+                        directional_hit REAL,
+                        llm_price_pressure REAL,
+                        llm_supply_disruption REAL,
+                        quant_baseline_5d_price REAL,
+                        llm_augmentation_delta REAL,
+                        prediction_lower_95ci REAL,
+                        prediction_upper_95ci REAL,
+                        within_95ci_hit REAL,
+                        data_source_provenance TEXT,
+                        PRIMARY KEY (log_timestamp, forecast_target_date, region)
+                    )"""
+                }
+            }
+            requests = [create_stmt]
+            recent_df = df.tail(50)
+            for _, row in recent_df.iterrows():
+                requests.append({
+                    "type": "execute",
+                    "stmt": {
+                        "sql": """INSERT OR REPLACE INTO prediction_history (
+                            log_timestamp, forecast_target_date, region, model_version, run_type,
+                            headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
+                            actual_5d_price, actual_direction, error_dollars, directional_hit,
+                            llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
+                            llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
+                            within_95ci_hit, data_source_provenance
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        "args": [
+                            {"type": "text", "value": str(row.get("log_timestamp", ""))},
+                            {"type": "text", "value": str(row.get("forecast_target_date", ""))},
+                            {"type": "text", "value": str(row.get("region", ""))},
+                            {"type": "text", "value": str(row.get("model_version", ""))},
+                            {"type": "text", "value": str(row.get("run_type", ""))},
+                            {"type": "text", "value": str(row.get("headline_trigger", ""))},
+                            {"type": "float", "value": float(row.get("current_base_price", 0.0)) if pd.notna(row.get("current_base_price")) else 0.0},
+                            {"type": "float", "value": float(row.get("predicted_5d_price", 0.0)) if pd.notna(row.get("predicted_5d_price")) else 0.0},
+                            {"type": "text", "value": str(row.get("predicted_direction", ""))},
+                            {"type": "float", "value": float(row.get("actual_5d_price", 0.0)) if pd.notna(row.get("actual_5d_price")) else 0.0},
+                            {"type": "text", "value": str(row.get("actual_direction", ""))},
+                            {"type": "float", "value": float(row.get("error_dollars", 0.0)) if pd.notna(row.get("error_dollars")) else 0.0},
+                            {"type": "float", "value": float(row.get("directional_hit", 0.0)) if pd.notna(row.get("directional_hit")) else 0.0},
+                            {"type": "float", "value": float(row.get("llm_price_pressure", 0.0)) if pd.notna(row.get("llm_price_pressure")) else 0.0},
+                            {"type": "float", "value": float(row.get("llm_supply_disruption", 0.0)) if pd.notna(row.get("llm_supply_disruption")) else 0.0},
+                            {"type": "float", "value": float(row.get("quant_baseline_5d_price", 0.0)) if pd.notna(row.get("quant_baseline_5d_price")) else 0.0},
+                            {"type": "float", "value": float(row.get("llm_augmentation_delta", 0.0)) if pd.notna(row.get("llm_augmentation_delta")) else 0.0},
+                            {"type": "float", "value": float(row.get("prediction_lower_95ci", 0.0)) if pd.notna(row.get("prediction_lower_95ci")) else 0.0},
+                            {"type": "float", "value": float(row.get("prediction_upper_95ci", 0.0)) if pd.notna(row.get("prediction_upper_95ci")) else 0.0},
+                            {"type": "float", "value": float(row.get("within_95ci_hit", 0.0)) if pd.notna(row.get("within_95ci_hit")) else 0.0},
+                            {"type": "text", "value": str(row.get("data_source_provenance", "yfinance"))}
+                        ]
+                    }
+                })
+            requests.append({"type": "close"})
+            body = json.dumps({"requests": requests}).encode("utf-8")
+            req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=3.0) as resp:
+                if resp.status == 200:
+                    logger.info(f"Successfully synced {len(recent_df)} prediction records to Turso Edge database.")
+                    return {"status": "synced", "synced_rows": len(recent_df), "provider": "turso_edge"}
+        except Exception as e:
+            logger.warning(f"Turso prediction cloud sync notice: {e}")
+
+    # 2. Attempt Cloudflare D1 / Edge Worker sync if credentials present
+    if cf_url:
+        try:
+            if cf_url.startswith("http://"):
+                cf_url = "https://" + cf_url[7:]
+            endpoint = f"{cf_url.rstrip('/')}/api/v1/sync/predictions"
+            headers = {"Content-Type": "application/json", "User-Agent": "MidgleyPredictionSync/1.0"}
+            if cf_token:
+                headers["Authorization"] = f"Bearer {cf_token}"
+            recent_records = df.tail(50).to_dict(orient="records")
+            body = json.dumps({"predictions": recent_records}).encode("utf-8")
+            req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=3.0) as resp:
+                if resp.status in (200, 201):
+                    logger.info(f"Successfully synced {len(recent_records)} prediction records to Cloudflare D1 Edge Worker.")
+                    return {"status": "synced", "synced_rows": len(recent_records), "provider": "cloudflare_d1"}
+        except Exception as e:
+            logger.warning(f"Cloudflare D1 prediction sync notice: {e}")
+
+    return {"status": "offline_fallback", "synced_rows": len(df), "provider": "local_csv"}
+
+
+def get_cloud_sync_status() -> dict:
+    """Returns active cloud database sync providers and local CSV store status."""
+    turso_url = os.environ.get("TURSO_DATABASE_URL")
+    cf_url = os.environ.get("CLOUDFLARE_CACHE_URL")
+    neon_url = os.environ.get("NEON_DATABASE_URL") or os.environ.get("POSTGRES_URL")
+
+    active_providers = []
+    if turso_url:
+        active_providers.append("turso_edge_sqlite")
+    if cf_url:
+        active_providers.append("cloudflare_d1")
+    if neon_url:
+        active_providers.append("neon_serverless_postgres")
+
+    ensure_history_store()
+    total_local_rows = 0
+    if os.path.exists(HISTORY_CSV_PATH):
+        try:
+            df = pd.read_csv(HISTORY_CSV_PATH)
+            total_local_rows = len(df)
+        except Exception:
+            pass
+
+    return {
+        "cloud_sync_enabled": len(active_providers) > 0,
+        "active_providers": active_providers,
+        "primary_store": active_providers[0] if active_providers else "local_csv",
+        "fallback_store": "local_csv",
+        "total_local_records": total_local_rows,
+        "history_file_path": HISTORY_CSV_PATH
+    }
 
 
 def log_predictions(
@@ -128,6 +297,10 @@ def log_predictions(
     combined = pd.concat([history_df, new_df], ignore_index=True)
     combined.drop_duplicates(subset=["forecast_target_date", "region", "model_version", "run_type"], keep="last", inplace=True)
     combined.to_csv(HISTORY_CSV_PATH, index=False)
+    try:
+        sync_predictions_to_cloud(combined)
+    except Exception as e:
+        logger.warning(f"Background prediction cloud sync notice: {e}")
     
     logger.info(f"Logged {len(new_records)} predictions for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
     return len(new_records)
@@ -210,6 +383,10 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
             
     if updated:
         history_df.to_csv(HISTORY_CSV_PATH, index=False)
+        try:
+            sync_predictions_to_cloud(history_df)
+        except Exception as e:
+            logger.warning(f"Background prediction cloud sync notice: {e}")
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
     return history_df

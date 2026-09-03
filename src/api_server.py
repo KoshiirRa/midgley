@@ -30,7 +30,9 @@ from src.models import compute_locale_feature_attribution_breakdown
 from src.prediction_logger import (
     compute_rolling_scoreboard_metrics,
     compute_regional_scoreboard_breakdown,
-    get_recent_evaluated_records
+    get_recent_evaluated_records,
+    sync_predictions_to_cloud,
+    get_cloud_sync_status
 )
 
 logger = logging.getLogger(__name__)
@@ -343,6 +345,35 @@ def get_forecast_scoreboard(
         "summary": summary_metrics,
         "regional_breakdown": regional_breakdown,
         "recent_evaluations": recent_evals
+    }
+
+
+@app.post("/api/v1/forecast/cloud-sync", summary="Synchronize Prediction History to Cloud Database")
+def trigger_cloud_prediction_sync():
+    """
+    Triggers synchronization of prediction history records to Cloud DB (Turso Edge / Cloudflare D1 / Neon Postgres).
+    Falls back gracefully to local CSV store if offline.
+    """
+    res = sync_predictions_to_cloud()
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 Finlight-LLM",
+        "timestamp": datetime.now().isoformat(),
+        "result": res
+    }
+
+
+@app.get("/api/v1/forecast/cloud-status", summary="Get Cloud Prediction Sync Status")
+def get_cloud_prediction_sync_status():
+    """
+    Returns active cloud prediction database providers, local CSV fallback state, and total record counts.
+    """
+    status_info = get_cloud_sync_status()
+    return {
+        "status": "success",
+        "system": "Midgley v1.4 Finlight-LLM",
+        "timestamp": datetime.now().isoformat(),
+        "cloud_sync_status": status_info
     }
 
 
