@@ -4,6 +4,7 @@ Trains Quantitative Baseline vs. LLM-Augmented Hybrid Forecasting Models
 and computes rigorous error metrics & directional accuracy.
 """
 
+import itertools
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import Ridge
@@ -475,4 +476,199 @@ def predict_with_cedar_residual_decomposition(
     base_pred = model_quant.predict(X_features)
     final_pred = base_pred + residual_event_delta
     return final_pred
+
+
+class PurgedGroupTimeSeriesSplit:
+    """
+    Purged Group Time Series Cross-Validation Splitter (Issue #117).
+    Prevents lookahead data leakage in time series models with overlapping labels (e.g. 5-day step-ahead forecasts).
+    
+    Ref: Marcos López de Prado (2018), 'Advances in Financial Machine Learning', Chapter 7.
+    """
+    def __init__(self, n_splits: int = 5, label_horizon_steps: int = 5, embargo_steps: int = 5):
+        self.n_splits = n_splits
+        self.label_horizon_steps = label_horizon_steps
+        self.embargo_steps = embargo_steps
+
+    def split(self, X, y=None, groups=None):
+        n_samples = len(X)
+        indices = np.arange(n_samples)
+        
+        # Divide indices into n_splits contiguous groups
+        fold_bounds = np.linspace(0, n_samples, self.n_splits + 1, dtype=int)
+        
+        for k in range(self.n_splits):
+            test_start = fold_bounds[k]
+            test_end = fold_bounds[k + 1]
+            test_indices = indices[test_start:test_end]
+            
+            if len(test_indices) == 0:
+                continue
+                
+            test_eval_start = test_start
+            test_eval_end = test_end + self.label_horizon_steps
+            embargo_end = test_eval_end + self.embargo_steps
+            
+            train_mask = np.ones(n_samples, dtype=bool)
+            train_mask[test_indices] = False
+            
+            for i in range(n_samples):
+                if not train_mask[i]:
+                    continue
+                obs_start = i
+                obs_end = i + self.label_horizon_steps
+                
+                overlap = (obs_start <= test_eval_end) and (obs_end >= test_eval_start)
+                in_embargo = (test_eval_end <= obs_start < embargo_end)
+                
+                if overlap or in_embargo:
+                    train_mask[i] = False
+                    
+            train_indices = indices[train_mask]
+            yield train_indices, test_indices
+
+    def get_n_splits(self, X=None, y=None, groups=None):
+        return self.n_splits
+
+
+class CombinatorialPurgedCV:
+    """
+    Combinatorial Purged Cross-Validation (CPCV) Splitter (Issue #117).
+    Generates all C(N, k) combinations of test groups, purging overlapping training
+    samples and applying post-test embargo windows for each combination.
+    
+    Ref: Marcos López de Prado (2018), 'Advances in Financial Machine Learning', Chapter 12.
+    """
+    def __init__(self, n_splits: int = 6, n_test_splits: int = 2, label_horizon_steps: int = 5, embargo_steps: int = 5):
+        self.n_splits = n_splits
+        self.n_test_splits = n_test_splits
+        self.label_horizon_steps = label_horizon_steps
+        self.embargo_steps = embargo_steps
+
+    def split(self, X, y=None, groups=None):
+        n_samples = len(X)
+        indices = np.arange(n_samples)
+        fold_bounds = np.linspace(0, n_samples, self.n_splits + 1, dtype=int)
+        
+        test_combinations = list(itertools.combinations(range(self.n_splits), self.n_test_splits))
+        
+        for comb in test_combinations:
+            test_mask = np.zeros(n_samples, dtype=bool)
+            test_eval_ranges = []
+            
+            for group_idx in comb:
+                g_start = fold_bounds[group_idx]
+                g_end = fold_bounds[group_idx + 1]
+                test_mask[g_start:g_end] = True
+                test_eval_ranges.append((g_start, g_end + self.label_horizon_steps, g_end + self.label_horizon_steps + self.embargo_steps))
+                
+            test_indices = indices[test_mask]
+            train_mask = ~test_mask
+            
+            for i in range(n_samples):
+                if not train_mask[i]:
+                    continue
+                obs_start = i
+                obs_end = i + self.label_horizon_steps
+                
+                for (t_start, t_eval_end, embargo_end) in test_eval_ranges:
+                    overlap = (obs_start <= t_eval_end) and (obs_end >= t_start)
+                    in_embargo = (t_eval_end <= obs_start < embargo_end)
+                    if overlap or in_embargo:
+                        train_mask[i] = False
+                        break
+                        
+            train_indices = indices[train_mask]
+            yield train_indices, test_indices
+
+    def get_n_splits(self, X=None, y=None, groups=None):
+        return len(list(itertools.combinations(range(self.n_splits), self.n_test_splits)))
+
+
+def evaluate_model_purged_cv(
+    model,
+    X: pd.DataFrame | np.ndarray,
+    y: pd.Series | np.ndarray,
+    cv_splitter=None,
+    label_horizon_steps: int = 5,
+    embargo_steps: int = 5
+) -> dict:
+    """
+    Evaluates an estimator using Purged & Combinatorial Cross-Validation to eliminate temporal data leakage (Issue #117).
+    
+    Returns structured evaluation summary:
+    - Mean & Std MAE, RMSE, MAPE, Directional Hit Rate %
+    - Average purged sample count per fold
+    - Detailed fold metrics list
+    """
+    if cv_splitter is None:
+        cv_splitter = PurgedGroupTimeSeriesSplit(n_splits=5, label_horizon_steps=label_horizon_steps, embargo_steps=embargo_steps)
+        
+    X_arr = np.array(X)
+    y_arr = np.array(y)
+    n_samples = len(X_arr)
+    
+    fold_results = []
+    purged_counts = []
+    
+    for fold_idx, (train_idx, test_idx) in enumerate(cv_splitter.split(X_arr, y_arr)):
+        if len(train_idx) == 0 or len(test_idx) == 0:
+            continue
+            
+        X_train, y_train = X_arr[train_idx], y_arr[train_idx]
+        X_test, y_test = X_arr[test_idx], y_arr[test_idx]
+        
+        try:
+            from sklearn.base import clone
+            estimator = clone(model)
+        except Exception:
+            estimator = model
+            
+        estimator.fit(X_train, y_train)
+        y_pred = estimator.predict(X_test)
+        
+        y_curr = y_train[-1] if len(y_train) > 0 else y_test[0]
+        y_curr_series = pd.Series([y_curr] * len(y_test))
+        
+        metrics = evaluate_predictions(y_test, y_pred, y_curr_series)
+        
+        n_purged = n_samples - len(train_idx) - len(test_idx)
+        purged_counts.append(n_purged)
+        
+        fold_results.append({
+            "fold": fold_idx + 1,
+            "train_size": len(train_idx),
+            "test_size": len(test_idx),
+            "purged_count": n_purged,
+            "mae": metrics["MAE"],
+            "rmse": metrics["RMSE"],
+            "mape": metrics["MAPE (%)"],
+            "directional_acc": metrics["Directional Accuracy (%)"]
+        })
+        
+    if not fold_results:
+        return {
+            "status": "error",
+            "message": "No valid folds generated",
+            "folds_evaluated": 0
+        }
+        
+    maes = [f["mae"] for f in fold_results]
+    rmses = [f["rmse"] for f in fold_results]
+    dir_accs = [f["directional_acc"] for f in fold_results if f["directional_acc"] != "N/A"]
+    
+    return {
+        "status": "success",
+        "splitter_type": cv_splitter.__class__.__name__,
+        "n_splits": len(fold_results),
+        "total_samples": n_samples,
+        "mean_purged_samples": round(float(np.mean(purged_counts)), 1),
+        "purged_pct": round(float(np.mean(purged_counts)) / max(1, n_samples) * 100.0, 2),
+        "mean_mae": round(float(np.mean(maes)), 4),
+        "std_mae": round(float(np.std(maes)), 4),
+        "mean_rmse": round(float(np.mean(rmses)), 4),
+        "std_rmse": round(float(np.std(rmses)), 4),
+        "mean_directional_accuracy_pct": round(float(np.mean(dir_accs)), 2) if dir_accs else "N/A",
+        "fold_details": fold_results
+    }
 

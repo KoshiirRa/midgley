@@ -346,6 +346,51 @@ def get_forecast_scoreboard(
     }
 
 
+@app.get("/api/v1/forecast/purged-cv", summary="Get Purged & Combinatorial Cross-Validation Metrics")
+def get_purged_cv_metrics(
+    n_splits: int = Query(5, ge=2, le=20, description="Number of CV splits"),
+    combinatorial: bool = Query(False, description="Whether to use Combinatorial Purged CV (CPCV)"),
+    label_horizon: int = Query(5, ge=1, le=30, description="Label horizon in trading days"),
+    embargo_days: int = Query(5, ge=0, le=30, description="Embargo duration in trading days")
+):
+    """
+    Executes Purged Group Time Series CV or Combinatorial Purged CV (CPCV) evaluation
+    eliminating temporal data leakage from overlapping 5-day horizon labels (Issue #117).
+    """
+    import numpy as np
+    from src.models import PurgedGroupTimeSeriesSplit, CombinatorialPurgedCV, evaluate_model_purged_cv
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import Ridge
+    
+    np.random.seed(42)
+    n_samples = 250
+    X_synth = np.random.randn(n_samples, 10)
+    y_synth = 3.0 + 0.5 * X_synth[:, 0] - 0.2 * X_synth[:, 1] + np.random.randn(n_samples) * 0.05
+    
+    model = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+    
+    if combinatorial:
+        cv_splitter = CombinatorialPurgedCV(n_splits=n_splits, n_test_splits=2, label_horizon_steps=label_horizon, embargo_steps=embargo_days)
+    else:
+        cv_splitter = PurgedGroupTimeSeriesSplit(n_splits=n_splits, label_horizon_steps=label_horizon, embargo_steps=embargo_days)
+        
+    res = evaluate_model_purged_cv(
+        model=model,
+        X=X_synth,
+        y=y_synth,
+        cv_splitter=cv_splitter,
+        label_horizon_steps=label_horizon,
+        embargo_steps=embargo_days
+    )
+    
+    return {
+        "status": "success",
+        "timestamp": datetime.now().isoformat(),
+        "purged_cv_evaluation": res
+    }
+
+
 @app.get("/health", summary="Health Check")
 @app.get("/", summary="Root Health & API Information")
 def get_health():
