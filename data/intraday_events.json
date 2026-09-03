@@ -964,5 +964,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-03T15:15:07.278210",
+    "headline": "US Commerce Secretary Lutnick says to companies, if you build in America, you will get tariff relief - Newsquawk",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNTTIxRk54MDBDX2s0WHNNbkJZTVJ3YmQ0TkJBME9QNVZsRFVjd2ZzcVBQUUk3WkVLRmFDU2lNTU1Mc0JMbzV6QVNKMHhlcF9PT2ZkaXl2a0hKWHJpTjhmVmtNZzh5VXZCaEFVOExfZjZrRS0xWjZNTUlvT2pieFVNZjZOdUlyNU1MRGhFaENESHMyZll2bG1kcVpjNU9BT0JHQ1pDQ3hMSkI3RHcwRExJX2g1QUd1dTZydG9HYlFlM3hMQnQ3NFJwd2xtRTcwZFE?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
