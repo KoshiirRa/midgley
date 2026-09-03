@@ -1,5 +1,65 @@
 [
   {
+    "run_id": "2026-09-03_23-27-22",
+    "timestamp": "2026-09-03 23:26:07",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-23-19",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-22-52",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-22-25",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-21-57",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-21-30",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-21-02",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-20-35",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-20-08",
+    "timestamp": "2026-09-03 23:20:02",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-03_23-16-05",
+    "timestamp": "2026-09-03 23:14:46",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-03_23-11-51",
     "timestamp": "2026-09-03 23:11:51",
     "run_type": "DAILY_BATCH",
@@ -536,66 +596,6 @@
   {
     "run_id": "2026-09-03_04-22-11",
     "timestamp": "2026-09-03 04:21:46",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-22-05",
-    "timestamp": "2026-09-03 04:21:46",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-22-00",
-    "timestamp": "2026-09-03 04:21:46",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-21-54",
-    "timestamp": "2026-09-03 04:21:46",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-21-48",
-    "timestamp": "2026-09-03 04:21:46",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-21-17",
-    "timestamp": "2026-09-03 04:14:45",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-17-04",
-    "timestamp": "2026-09-03 04:16:34",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-15-28",
-    "timestamp": "2026-09-03 04:14:45",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-15-22",
-    "timestamp": "2026-09-03 04:14:45",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-15-16",
-    "timestamp": "2026-09-03 04:14:45",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-15-15",
-    "timestamp": "2026-09-03 04:14:45",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   }

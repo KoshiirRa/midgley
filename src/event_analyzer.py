@@ -14,6 +14,7 @@ import numpy as np
 import logging
 from src.lookup_cache import global_cache
 from src.telemetry import log_llm_usage
+from src.tokentab_accounting import token_tab_manager
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +76,7 @@ def _try_openai_single(headline: str) -> dict:
         )
         text = response.choices[0].message.content.strip()
         parsed = json.loads(text)
+        token_tab_manager.record_usage("gpt-4o-mini", "event_extraction", 150, 80, status="success")
         return {
             "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
             "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
@@ -105,6 +107,7 @@ def _try_anthropic_single(headline: str) -> dict:
         elif "```" in text:
             text = text.split("```")[1].split("```")[0].strip()
         parsed = json.loads(text)
+        token_tab_manager.record_usage("claude-3-5-haiku", "event_extraction", 150, 80, status="success")
         return {
             "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
             "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
@@ -175,6 +178,7 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
             _LLM_SCORE_CACHE[headline] = scores
             global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
             log_llm_usage("google", "gemini-2.5-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
+            token_tab_manager.record_usage("gemini-2.5-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
             return scores
         except Exception as e:
             logger.debug(f"Gemini single API call notice ({e}). Checking Tier 2 secondary providers...")
@@ -192,6 +196,7 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     _LLM_SCORE_CACHE[headline] = scores
     global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
     log_llm_usage("offline_lexicon", "rule_based_fallback", prompt_tokens=0, completion_tokens=0, is_fallback=True)
+    token_tab_manager.record_usage("offline_lexicon", "event_extraction", 0, 0, status="fallback")
     return scores
 
 

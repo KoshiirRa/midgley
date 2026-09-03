@@ -36,6 +36,7 @@ from src.prediction_logger import (
 )
 from src.regional_metadata import list_all_regional_metadata
 from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
+from src.tokentab_accounting import token_tab_manager
 
 logger = logging.getLogger(__name__)
 
@@ -541,6 +542,21 @@ def get_system_quota():
         "quota": get_finlight_quota_status(),
         "quotas": all_quotas
     }
+
+
+@app.get("/api/v1/system/token-costs", summary="Get TokenTab LLM Token Accounting & Provider Costs")
+def get_system_token_costs(
+    monthly_cap: Optional[float] = Query(10.0, description="Monthly cost budget cap in USD"),
+    daily_token_limit: Optional[int] = Query(100000, description="Daily token safety threshold")
+):
+    """
+    Returns itemized TokenTab token accounting ledger metrics, provider breakdowns (Gemini, OpenAI, Anthropic, Finlight, Lexicon),
+    daily consumption time-series, and active budget warning alerts.
+    """
+    return token_tab_manager.get_accounting_summary(
+        monthly_cost_limit_usd=monthly_cap or 10.0,
+        daily_token_limit=daily_token_limit or 100000
+    )
 
 
 

@@ -5268,9 +5268,19 @@ def generate_telemetry_page():
 
     from src.zip_geocoding import get_unmapped_zip_telemetry
     from src.finlight_feed import get_finlight_quota_status
+    from src.tokentab_accounting import token_tab_manager
 
     tele_data = get_unmapped_zip_telemetry()
     quota_data = get_finlight_quota_status()
+    tok_data = token_tab_manager.get_accounting_summary()
+    tok_summary = tok_data.get('summary', {})
+    tok_prov = tok_data.get('provider_breakdown', {})
+    tok_warn = tok_data.get('budget_warnings', [{}])[0] if tok_data.get('budget_warnings') else {}
+    gemini_stats = tok_prov.get('gemini-2.5-flash', {})
+    gpt_stats = tok_prov.get('gpt-4o-mini', {})
+    claude_stats = tok_prov.get('claude-3-5-haiku', {})
+    finlight_stats = tok_prov.get('finlight', {})
+    lexicon_stats = tok_prov.get('offline_lexicon', {})
 
     def build_telemetry_html(hdr):
         return f"""<!DOCTYPE html>
@@ -5432,6 +5442,95 @@ def generate_telemetry_page():
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
                         <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
+        <section class="space-y-4 pt-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">{tok_summary.get('total_tokens', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_summary.get('total_input_tokens', 0):,} In / {tok_summary.get('total_output_tokens', 0):,} Out</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">${tok_summary.get('total_cost_usd', 0.0):.6f}</div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">{tok_summary.get('total_calls', 0):,}</div>
+                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
+                        <div class="text-xl font-bold text-emerald-300 font-mono">{tok_warn.get('code', 'NORMAL')}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_warn.get('message', 'Budget nominal')}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Provider / Tier</th>
+                                    <th class="py-2 px-3">Calls</th>
+                                    <th class="py-2 px-3">Input Tokens</th>
+                                    <th class="py-2 px-3">Output Tokens</th>
+                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">${gemini_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">${gpt_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
+                                    <td class="py-2 px-3">{claude_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{claude_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{claude_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">${claude_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
+                                    <td class="py-2 px-3">{finlight_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3">{lexicon_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,236 @@
+{
+  "created_at": "2026-09-03T23:18:45.427602+00:00",
+  "records": [
+    {
+      "timestamp": "2026-09-03T23:19:48.361982+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:19:50.709957+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:19:53.115954+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:19:54.948064+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:19:55.491484+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:19:56.033914+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:24:35.401143+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:24:54.215998+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:01.996183+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "quota_blocked"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:07.770988+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:08.283783+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:08.787480+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:09.249882+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:19.388707+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:21.769232+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:48.153254+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:48.628767+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:49.100243+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:49.523291+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:50.082508+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-03T23:25:50.628738+00:00",
+      "provider": "offline_lexicon",
+      "model_name": "offline_lexicon",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    }
+  ]
+}

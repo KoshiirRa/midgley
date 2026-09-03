@@ -19,6 +19,7 @@ from datetime import datetime
 from typing import Tuple, Dict, Any, List
 import logging
 from src.lookup_cache import global_cache
+from src.tokentab_accounting import token_tab_manager
 
 logger = logging.getLogger(__name__)
 
@@ -268,6 +269,7 @@ def fetch_finlight_articles(
     allowed, quota_status = _check_and_increment_quota()
     if not allowed:
         logger.warning("Finlight API safety valve active (quota cap reached). Falling back to disk cache.")
+        token_tab_manager.record_usage("finlight", "finlight_feed", 0, 0, status="quota_blocked")
         cached_articles, _ = _read_cache(ttl_seconds=86400 * 7)
         return cached_articles
 
@@ -290,6 +292,7 @@ def fetch_finlight_articles(
             articles = data.get("articles", [])
             logger.info(f"Successfully fetched {len(articles)} live articles from finlight.me for query '{query[:30]}...'")
             _write_cache(articles, query=query)
+            token_tab_manager.record_usage("finlight", "finlight_feed", 0, 0, status="success")
             return articles
         elif response.status_code == 429:
             logger.warning("Finlight API rate limit exceeded (HTTP 429). Falling back to disk cache.")

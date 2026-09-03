@@ -115,7 +115,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Unmapped ZIP Queries</span>
-                    <div class="text-2xl font-bold text-cyan-300 font-mono">7</div>
+                    <div class="text-2xl font-bold text-cyan-300 font-mono">21</div>
                     <span class="text-[10px] text-slate-400 font-mono">3 Unique Out-of-Metro ZIPs</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
@@ -229,6 +229,95 @@
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
                         <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
+        <section class="space-y-4 pt-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">0</div>
+                        <span class="text-[10px] text-slate-400 font-mono">0 In / 0 Out</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">$0.000000</div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">21</div>
+                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
+                        <div class="text-xl font-bold text-emerald-300 font-mono">BUDGET_NORMAL</div>
+                        <span class="text-[10px] text-slate-400 font-mono">Token accounting within limits ($0.0000 / $10.00).</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Provider / Tier</th>
+                                    <th class="py-2 px-3">Calls</th>
+                                    <th class="py-2 px-3">Input Tokens</th>
+                                    <th class="py-2 px-3">Output Tokens</th>
+                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
+                                    <td class="py-2 px-3">2</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3">19</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
