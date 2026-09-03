@@ -96,6 +96,37 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertFalse(res["is_anomaly"])
         self.assertTrue(res.get("duplicate"))
 
+    def test_resolve_target_locales(self):
+        # Test Tulsa locale routing
+        t_tulsa = self.monitor.resolve_target_locales("HF Sinclair West Tulsa Refinery Unit Trip Causes Flaring")
+        self.assertEqual(t_tulsa, ["Tulsa"])
+
+        # Test Newark locale routing
+        t_newark = self.monitor.resolve_target_locales("Delaware City Refinery Outage Forces PADD 1B Fuel Rerouting")
+        self.assertEqual(t_newark, ["Newark"])
+
+        # Test Cincinnati locale routing
+        t_cincy = self.monitor.resolve_target_locales("Catlettsburg KY Refinery Trip & Ohio River Lock Delays")
+        self.assertEqual(t_cincy, ["Cincinnati"])
+
+        # Test Greenville & Charlotte locale routing
+        t_carolinas = self.monitor.resolve_target_locales("Colonial Pipeline Line 1 Intake Halt at Selma Terminal")
+        self.assertEqual(t_carolinas, ["Charlotte", "Greenville"])
+
+        # Test Oakland locale routing
+        t_oakland = self.monitor.resolve_target_locales("Chevron Richmond Refinery Flaring Triggers CARB Compliance Warning")
+        self.assertEqual(t_oakland, ["Oakland"])
+
+        # Test Default National routing
+        t_nat = self.monitor.resolve_target_locales("OPEC Announces Emergency Production Quota Cut")
+        self.assertEqual(t_nat, ["National"])
+
+    def test_expanded_trigger_keywords(self):
+        # Technical trigger
+        self.assertTrue(any(kw in "3-2-1 crack spread spikes to $35/bbl".lower() for kw in TRIGGER_KEYWORDS))
+        # Policy trigger
+        self.assertTrue(any(kw in "President Signs Executive Order for Energy Tariff".lower() for kw in TRIGGER_KEYWORDS))
+
     @patch("sys.argv", ["intraday_event_monitor", "--headline", "Emergency Tariff Announcement", "--source", "Cloudflare_Worker", "--url", "https://example.com/tariff"])
     @patch("src.intraday_event_monitor.IntradayEventMonitor.process_incoming_headline")
     def test_cli_headline_dispatch_processing(self, mock_process):

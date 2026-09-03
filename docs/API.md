@@ -205,9 +205,22 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
 * `hayward_quake`: USGS Hayward Fault M>=6.0 Seismic Quake (+8.48%)
 * `pge_psps_shutoff`: PG&E PSPS Wildfire Power Shutoff & Blackout (+7.07%)
 * `chevron_hydrocracker`: Chevron Richmond Refinery Hydrocracker Outage (+5.76%)
-* `carb_transition`: CARB CaRFG Summer-Blend Transition Compliance Surge (+4.44%)
 * `weekend_opec_post`: Weekend Executive OPEC Talkdown Post (-1.85%)
 * `weekend_tariff_declaration`: Weekend Foreign Energy Tariff Declaration (+2.10%)
+
+---
+
+## ⚡ Strategy 4 Incoming Webhook Gateway (`POST /api/v1/events/webhook`)
+
+* **Endpoint:** `POST /api/v1/events/webhook`
+* **Content-Type:** `application/json`
+* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature when `MIDGLEY_WEBHOOK_SECRET` is set).
+* **Payload Transformer Aliases:**
+  - `headline` $\leftarrow$ `headline`, `title`, `text`, `summary`, `tweet_content`, `article_title`, `content`
+  - `url` $\leftarrow$ `url`, `link`, `article_url`, `web_url`, `href`
+  - `source` $\leftarrow$ `source`, `origin`, `provider`, `channel`, `service`
+
+For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and HMAC signature examples, see **[WEBHOOK_FORMATTING_GUIDE.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/WEBHOOK_FORMATTING_GUIDE.md)**.
 
 ---
 

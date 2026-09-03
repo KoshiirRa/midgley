@@ -156,6 +156,36 @@ class TestAPIServer(unittest.TestCase):
             )
             self.assertEqual(res_missing.status_code, 401)
 
+    def test_post_webhook_flexible_payload_aliases(self):
+        import hmac
+        import hashlib
+        import json
+        from unittest.mock import patch
+
+        secret = "test_secret_key_123"
+        payload_alias = {
+            "title": "Colonial Pipeline Halts Line 1 Intake at Selma Terminal",
+            "link": "https://news.google.com/articles/456",
+            "origin": "Test_Zapier_Applet"
+        }
+        body_bytes = json.dumps(payload_alias).encode("utf-8")
+        valid_sig = hmac.new(secret.encode("utf-8"), body_bytes, hashlib.sha256).hexdigest()
+
+        with patch.dict("os.environ", {"MIDGLEY_WEBHOOK_SECRET": secret}):
+            res = self.client.post(
+                "/api/v1/events/webhook",
+                content=body_bytes,
+                headers={"Content-Type": "application/json", "X-Midgley-Signature": valid_sig}
+            )
+            self.assertEqual(res.status_code, 200)
+            data = res.json()
+            self.assertEqual(data["status"], "success")
+            self.assertEqual(data["result"]["headline"], "Colonial Pipeline Halts Line 1 Intake at Selma Terminal")
+            self.assertEqual(data["result"]["url"], "https://news.google.com/articles/456")
+            self.assertEqual(data["result"]["source"], "Test_Zapier_Applet")
+            self.assertIn("Greenville", data["result"]["target_locales"])
+            self.assertIn("Charlotte", data["result"]["target_locales"])
+
     def test_get_forecast_scoreboard(self):
         res = self.client.get("/api/v1/forecast/scoreboard?locale=tulsa&window=30")
         self.assertEqual(res.status_code, 200)

@@ -17,7 +17,7 @@ from fastapi import FastAPI, Query, HTTPException, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from src.live_fuel_feed import (
     fetch_live_metro_retail_price,
@@ -798,9 +798,40 @@ def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -
 
 
 class WebhookRequest(BaseModel):
-    headline: str = Field(..., json_schema_extra={"example": "Canada Announces Retaliatory Tariffs as Trade War Escalates"}, description="Breaking news headline text")
-    url: str = Field(..., json_schema_extra={"example": "https://news.google.com/rss/articles/123"}, description="Required URL link to full article or news release")
+    headline: str = Field("", json_schema_extra={"example": "Canada Announces Retaliatory Tariffs as Trade War Escalates"}, description="Breaking news headline text")
+    url: str = Field("", json_schema_extra={"example": "https://news.google.com/rss/articles/123"}, description="URL link to full article or news release")
     source: Optional[str] = Field("Webhook_Push", json_schema_extra={"example": "IFTTT_GoogleAlerts"}, description="Event source origin")
+
+    @model_validator(mode="before")
+    @classmethod
+    def resolve_payload_aliases(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # Resolve headline alias fallback chain
+            if not data.get("headline"):
+                for alias in ["title", "text", "summary", "tweet_content", "article_title", "content", "message"]:
+                    val = data.get(alias)
+                    if val and isinstance(val, str) and val.strip():
+                        data["headline"] = val.strip()
+                        break
+            # Resolve url alias fallback chain
+            if not data.get("url"):
+                for alias in ["link", "article_url", "web_url", "href", "source_url"]:
+                    val = data.get(alias)
+                    if val and isinstance(val, str) and val.strip():
+                        data["url"] = val.strip()
+                        break
+            if not data.get("url"):
+                data["url"] = ""
+            # Resolve source alias fallback chain
+            if not data.get("source"):
+                for alias in ["origin", "provider", "channel", "service", "sender"]:
+                    val = data.get(alias)
+                    if val and isinstance(val, str) and val.strip():
+                        data["source"] = val.strip()
+                        break
+                if not data.get("source"):
+                    data["source"] = "Webhook_Push"
+        return data
 
 
 @app.post("/api/v1/events/webhook", summary="Ingest Real-Time Breaking Event Webhook")
@@ -811,7 +842,8 @@ async def ingest_event_webhook(
 ):
     """
     Strategy 4: Receives incoming breaking news headlines pushed by external webhooks
-    (IFTTT, Zapier, Google Alerts). Validated via HMAC-SHA256 signature when MIDGLEY_WEBHOOK_SECRET is set.
+    (IFTTT, Zapier, Google Alerts, TradingView). Validated via HMAC-SHA256 signature when MIDGLEY_WEBHOOK_SECRET is set.
+    Supports flexible payload field aliases (headline/title/text/summary/tweet_content & url/link).
     Fails closed in non-development environments when secret is unconfigured.
     """
     raw_body = await request.body()
@@ -819,6 +851,12 @@ async def ingest_event_webhook(
         raise HTTPException(
             status_code=401,
             detail="Unauthorized webhook request: Invalid or missing X-Midgley-Signature HMAC-SHA256 header."
+        )
+
+    if not req.headline:
+        raise HTTPException(
+            status_code=422,
+            detail="Unprocessable Entity: Incoming payload must contain a valid non-empty headline, title, text, summary, or tweet_content field."
         )
 
     from src.intraday_event_monitor import IntradayEventMonitor
