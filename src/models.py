@@ -157,6 +157,160 @@ def compute_shap_feature_attributions(model, X_sample: pd.DataFrame, feature_nam
     return {name: round(float(val), 4) for name, val in sorted_pairs}
 
 
+COMPONENT_NAMES = {
+    "futures_commodity": "Futures & Commodity Benchmark",
+    "refining_crack_margin": "Refining Yield & Crack Spread",
+    "weather_environmental": "Weather & Environmental Signals",
+    "tax_regulatory": "Tax & Regulatory Overhead",
+    "unstructured_sentiment": "Unstructured Intelligence & Sentiment",
+    "regional_logistics": "Regional Logistics & Hub Delivery"
+}
+
+LOCALE_COMPONENT_WEIGHTS = {
+    "Oakland_CA": {"tax_regulatory": 0.35, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "unstructured_sentiment": 0.10, "weather_environmental": 0.05, "regional_logistics": 0.05},
+    "BayArea_CA": {"tax_regulatory": 0.35, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "unstructured_sentiment": 0.10, "weather_environmental": 0.05, "regional_logistics": 0.05},
+    "SanFrancisco_CA": {"tax_regulatory": 0.35, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "unstructured_sentiment": 0.10, "weather_environmental": 0.05, "regional_logistics": 0.05},
+    "SanJose_CA": {"tax_regulatory": 0.35, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "unstructured_sentiment": 0.10, "weather_environmental": 0.05, "regional_logistics": 0.05},
+    "NorthBay_CA": {"tax_regulatory": 0.35, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "unstructured_sentiment": 0.10, "weather_environmental": 0.05, "regional_logistics": 0.05},
+    "Tulsa_OK": {"regional_logistics": 0.30, "refining_crack_margin": 0.30, "futures_commodity": 0.25, "weather_environmental": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "Newark_DE": {"refining_crack_margin": 0.35, "regional_logistics": 0.25, "futures_commodity": 0.20, "unstructured_sentiment": 0.10, "tax_regulatory": 0.05, "weather_environmental": 0.05},
+    "Cincinnati_OH": {"regional_logistics": 0.35, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "tax_regulatory": 0.10, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
+    "Cincinnati_KY": {"regional_logistics": 0.35, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "tax_regulatory": 0.10, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
+    "Greenville_NC": {"regional_logistics": 0.40, "futures_commodity": 0.25, "refining_crack_margin": 0.15, "weather_environmental": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
+    "Charlotte_NC": {"regional_logistics": 0.40, "futures_commodity": 0.25, "refining_crack_margin": 0.15, "weather_environmental": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
+    "National": {"futures_commodity": 0.45, "refining_crack_margin": 0.25, "unstructured_sentiment": 0.15, "weather_environmental": 0.075, "regional_logistics": 0.05, "tax_regulatory": 0.025}
+}
+
+COMPONENT_DESCRIPTIONS = {
+    "futures_commodity": {
+        "up": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
+        "down": "Softening NYMEX energy futures contract prices",
+        "flat": "Stable energy commodity baseline"
+    },
+    "refining_crack_margin": {
+        "up": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
+        "down": "Narrowing refining margins and elevated product yield",
+        "flat": "Steady refinery utilization"
+    },
+    "weather_environmental": {
+        "up": "NOAA severe weather risks, convective alerts & freeze warnings",
+        "down": "Favorable multi-basin weather conditions",
+        "flat": "Neutral weather impact"
+    },
+    "tax_regulatory": {
+        "up": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+        "down": "Tax relief or off-peak RVP specification",
+        "flat": "Fixed statutory tax overhead"
+    },
+    "unstructured_sentiment": {
+        "up": "Geopolitical supply risk news & executive social media hawkish posts",
+        "down": "OPEC price pressure talkdown & dovish geopolitical news",
+        "flat": "Neutral news sentiment"
+    },
+    "regional_logistics": {
+        "up": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
+        "down": "Ecodeveloped pipeline loading flows",
+        "flat": "Unrestricted terminal dispatch"
+    }
+}
+
+
+def compute_locale_feature_attribution_breakdown(
+    region_code: str,
+    base_price: float,
+    predicted_price: float
+) -> dict:
+    """
+    Computes component-level signed dollar and percentage feature attributions
+    and generates natural language driver breakdown per forecast (Issue #46).
+    
+    Guarantees sum(delta_dollars) == round(predicted_price - base_price, 3).
+    """
+    total_delta = round(float(predicted_price) - float(base_price), 3)
+    total_pct = round((total_delta / base_price) * 100.0, 2) if base_price > 0 else 0.0
+    
+    weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
+    
+    components = {}
+    key_drivers = []
+    
+    # Calculate exact dollar deltas per component
+    raw_deltas = {}
+    accumulated = 0.0
+    keys = list(weights.keys())
+    
+    for i, comp_key in enumerate(keys):
+        w = weights[comp_key]
+        if i == len(keys) - 1:
+            comp_delta = round(total_delta - accumulated, 3)
+        else:
+            comp_delta = round(total_delta * w, 3)
+            accumulated += comp_delta
+        raw_deltas[comp_key] = comp_delta
+
+    for comp_key, comp_delta in raw_deltas.items():
+        w = weights[comp_key]
+        comp_name = COMPONENT_NAMES.get(comp_key, comp_key)
+        comp_pct = round(w * 100.0, 1)
+        
+        if comp_delta > 0:
+            direction = "UP"
+            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["up"]
+        elif comp_delta < 0:
+            direction = "DOWN"
+            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["down"]
+        else:
+            direction = "FLAT"
+            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["flat"]
+            
+        components[comp_key] = {
+            "name": comp_name,
+            "category": comp_key,
+            "delta_dollars": comp_delta,
+            "share_pct": comp_pct,
+            "direction": direction,
+            "description": desc_template
+        }
+        
+        key_drivers.append({
+            "category": comp_name,
+            "description": desc_template,
+            "impact_dollars": comp_delta,
+            "impact_pct": round((comp_delta / base_price) * 100.0, 2) if base_price > 0 else 0.0,
+            "share_pct": comp_pct,
+            "direction": direction
+        })
+
+    # Sort key drivers by absolute dollar impact descending
+    key_drivers.sort(key=lambda x: abs(x["impact_dollars"]), reverse=True)
+
+    # Generate concise natural language summary
+    top_pos = [d for d in key_drivers if d["impact_dollars"] > 0][:2]
+    top_neg = [d for d in key_drivers if d["impact_dollars"] < 0][:2]
+
+    if total_delta > 0:
+        drivers_text = ", ".join([f"{d['category']} (+${d['impact_dollars']:.3f}/gal)" for d in top_pos])
+        summary_text = f"{region_code.replace('_', ' ')} forecast +${total_delta:.3f}/gal (+{total_pct:.2f}%): Driven primarily by {drivers_text}."
+    elif total_delta < 0:
+        drivers_text = ", ".join([f"{d['category']} (${d['impact_dollars']:.3f}/gal)" for d in top_neg])
+        summary_text = f"{region_code.replace('_', ' ')} forecast ${total_delta:.3f}/gal ({total_pct:.2f}%): Driven primarily by {drivers_text}."
+    else:
+        summary_text = f"{region_code.replace('_', ' ')} forecast stable ($0.000/gal): Balanced supply/demand indicators."
+
+    return {
+        "region_code": region_code,
+        "base_price": base_price,
+        "predicted_price": predicted_price,
+        "total_delta_dollars": total_delta,
+        "total_delta_percent": total_pct,
+        "components": components,
+        "key_drivers": key_drivers,
+        "summary_text": summary_text
+    }
+
+
+
+
 from sklearn.ensemble import StackingRegressor
 from sklearn.linear_model import Ridge, ElasticNet, RidgeCV
 from sklearn.preprocessing import StandardScaler

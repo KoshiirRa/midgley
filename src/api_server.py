@@ -26,6 +26,7 @@ from src.live_fuel_feed import (
 )
 from src.lookup_cache import global_cache
 from src.telemetry import get_all_quota_statuses, format_prometheus_metrics
+from src.models import compute_locale_feature_attribution_breakdown
 
 logger = logging.getLogger(__name__)
 
@@ -258,6 +259,12 @@ def _get_forecast_impl(locale: str = "national", days: int = 5) -> dict:
 
     target_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
 
+    attr = compute_locale_feature_attribution_breakdown(
+        region_code=region_code,
+        base_price=base_price,
+        predicted_price=predicted_price
+    )
+
     return {
         "status": "success",
         "timestamp": datetime.now().isoformat(),
@@ -276,7 +283,12 @@ def _get_forecast_impl(locale: str = "national", days: int = 5) -> dict:
             "expected_change_percent": expected_pct,
             "projected_direction": direction,
             "directional_hit_rate_historical": 0.6079,
-            "historical_mae_dollars": 0.1069
+            "historical_mae_dollars": 0.1069,
+            "feature_attributions": attr["components"],
+            "driver_breakdown": {
+                "summary_text": attr["summary_text"],
+                "key_drivers": attr["key_drivers"]
+            }
         }
     }
 
@@ -340,17 +352,14 @@ def _get_combined_impl(locale: str = "national") -> dict:
     forecast_data = _get_forecast_impl(locale=loc_clean, days=5)
     region_code = _normalize_locale(loc_clean)
 
-    drivers = [
-        {"category": "Geopolitical", "description": "Global crude supply tightness & OPEC+ output target discipline", "impact_score": 0.120},
-        {"category": "Weather", "description": "NOAA polar vortex & hurricane track monitoring", "impact_score": 0.085}
-    ]
+    base_p = forecast_data["forecast"].get("current_base_price", 3.184)
+    pred_p = forecast_data["forecast"].get("predicted_price_per_gal", 3.184)
 
-    if "Oakland" in region_code or "BayArea" in region_code:
-        drivers.append({"category": "Regulatory", "description": "CARB CaRFG summer-blend transition compliance surge", "impact_score": 0.220})
-        drivers.append({"category": "Refining", "description": "Chevron Richmond Refinery hydrocracker unit maintenance", "impact_score": 0.150})
-    elif "Tulsa" in region_code:
-        drivers.append({"category": "Refining", "description": "West Tulsa HF Sinclair refinery rack distribution margin", "impact_score": 0.110})
-        drivers.append({"category": "Hub Logistics", "description": "Cushing WTI crude delivery hub storage levels", "impact_score": 0.095})
+    attr = compute_locale_feature_attribution_breakdown(
+        region_code=region_code,
+        base_price=base_p,
+        predicted_price=pred_p
+    )
 
     return {
         "status": "success",
@@ -364,7 +373,11 @@ def _get_combined_impl(locale: str = "national") -> dict:
             "carb_tax_regulatory_burden_per_gal": live_data.get("carb_tax_regulatory_burden_per_gal", 0.0)
         },
         "forecast": forecast_data["forecast"],
-        "key_drivers": drivers
+        "key_drivers": attr["key_drivers"],
+        "driver_breakdown": {
+            "summary_text": attr["summary_text"],
+            "components": attr["components"]
+        }
     }
 
 

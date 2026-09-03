@@ -51,6 +51,10 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(fc["forecast_horizon_days"], 5)
         self.assertGreater(fc["predicted_price_per_gal"], 0.0)
         self.assertIn(fc["projected_direction"], ["UP", "DOWN", "FLAT"])
+        self.assertIn("feature_attributions", fc)
+        self.assertIn("driver_breakdown", fc)
+        self.assertIn("summary_text", fc["driver_breakdown"])
+        self.assertEqual(len(fc["feature_attributions"]), 6)
 
     def test_get_combined(self):
         res = self.client.get("/api/v1/combined?locale=cincinnati")
@@ -60,7 +64,9 @@ class TestAPIServer(unittest.TestCase):
         self.assertIn("live_lookup", data)
         self.assertIn("forecast", data)
         self.assertIn("key_drivers", data)
-        self.assertGreater(len(data["key_drivers"]), 0)
+        self.assertIn("driver_breakdown", data)
+        self.assertIn("summary_text", data["driver_breakdown"])
+        self.assertEqual(len(data["key_drivers"]), 6)
 
     def test_get_greenville_forecast(self):
         res = self.client.get("/api/v1/combined?locale=greenville")

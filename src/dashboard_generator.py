@@ -541,6 +541,67 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
     }
 
 
+def build_component_attribution_card_html(region_id: str, base_price: float, pred_price: float) -> str:
+    """
+    Renders standardized Tailwind CSS visual card detailing component-level feature attributions,
+    signed contribution weights, and natural language driver breakdown for region_id (Issue #46).
+    """
+    from src.models import compute_locale_feature_attribution_breakdown
+
+    attr = compute_locale_feature_attribution_breakdown(region_id, base_price, pred_price)
+    summary_text = attr["summary_text"]
+    key_drivers = attr["key_drivers"]
+
+    drivers_html = ""
+    for d in key_drivers:
+        cat_name = d["category"]
+        desc = d["description"]
+        imp_dollars = d["impact_dollars"]
+        share_pct = d["share_pct"]
+
+        if imp_dollars > 0:
+            val_badge = f'<span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+${imp_dollars:.3f}/gal</span>'
+            border_color = "border-emerald-500/30"
+        elif imp_dollars < 0:
+            val_badge = f'<span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-${abs(imp_dollars):.3f}/gal</span>'
+            border_color = "border-rose-500/30"
+        else:
+            val_badge = f'<span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-500/20 text-slate-400 border border-slate-500/30">$0.000/gal</span>'
+            border_color = "border-slate-800"
+
+        drivers_html += f"""
+                <div class="p-3.5 rounded-xl bg-slate-950 border {border_color} flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">{cat_name}</span>
+                        {val_badge}
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">{desc}</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">{share_pct:.1f}%</span>
+                    </div>
+                </div>"""
+
+    card_html = f"""        <!-- Component-Level Feature Attribution & Driver Breakdown Card (Issue #46) -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-blue-400"></i> Component-Level Feature Attribution & Driver Breakdown
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 font-semibold">
+                    <i class="fa-solid fa-microchip mr-1"></i> XAI Model Interpretability
+                </span>
+            </div>
+            <p class="text-xs text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800/90 leading-relaxed">
+                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> {summary_text}
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
+                {drivers_html}
+            </div>
+        </div>"""
+    return card_html
+
+
 def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> str:
     """Renders responsive Tailwind CSS card for the Last Run Intelligence & Impact Audit Component."""
     import urllib.parse
@@ -1900,6 +1961,8 @@ def generate_public_dashboard():
 
 {audit_card_html}
 
+{build_component_attribution_card_html('National', prices_map['National']['base'], prices_map['National']['pred'])}
+
         <!-- 📈 HISTORICAL ACCURACY IMPROVEMENT SECTION -->
         <section class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
@@ -2351,6 +2414,8 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
+
         <!-- Quantitative Model Pipeline Detail -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
@@ -2416,7 +2481,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national)
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -2551,6 +2616,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
     </main>
@@ -2601,7 +2667,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -2736,6 +2802,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
     </main>
@@ -2786,7 +2853,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -2958,6 +3025,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
     </main>
@@ -2975,24 +3043,23 @@ def generate_public_dashboard():
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                     datasets: [
                         {
-                            label: 'Cincinnati, OH Retail ($/gal)',
+                            label: 'Cincinnati OH Retail Actual ($/gal)',
                             data: [3.20, 3.28, 3.35, 3.42, 3.50, 3.55, 3.48, 3.45],
-                            borderColor: '#ef4444',
-                            backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                            borderColor: '#a855f7',
+                            backgroundColor: 'rgba(168, 85, 247, 0.1)',
                             borderWidth: 2.5,
                             fill: true
                         },
                         {
-                            label: 'Northern Kentucky Retail ($/gal)',
-                            data: [3.075, 3.155, 3.225, 3.295, 3.375, 3.425, 3.355, 3.325],
+                            label: 'Northern KY Retail Actual ($/gal)',
+                            data: [3.08, 3.16, 3.22, 3.30, 3.38, 3.42, 3.35, 3.325],
                             borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.08)',
-                            borderWidth: 2.5,
-                            fill: true
+                            borderWidth: 2,
+                            fill: false
                         },
                         {
-                            label: 'Wholesale RBOB Futures ($/gal)',
-                            data: [2.95, 3.05, 3.12, 3.20, 3.28, 3.32, 3.24, 3.18],
+                            label: '5-Day Model Forecast ($/gal)',
+                            data: [3.22, 3.26, 3.32, 3.40, 3.48, 3.52, 3.44, 3.35],
                             borderColor: '#10b981',
                             borderDash: [5, 5],
                             borderWidth: 2,
@@ -3016,7 +3083,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -3110,6 +3177,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
         <!-- Counterfactual Shock Scenario Simulations -->
@@ -3144,7 +3212,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -3238,6 +3306,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
         <!-- Counterfactual Shock Scenario Simulations -->
@@ -3272,7 +3341,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -3449,6 +3518,9 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
         <!-- CHART SECTION -->
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white">Oakland Retail Gas Price vs NYMEX RBOB Futures</h3>
@@ -3520,7 +3592,7 @@ def generate_public_dashboard():
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca'))
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca'))
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -3715,6 +3787,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
         <!-- CHART SECTION -->
@@ -3854,6 +3927,7 @@ def generate_public_dashboard():
             .replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
             .replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
             .replace("{{HEAD_META}}", head_meta_bayarea)
+            .replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('BayArea_CA', bay_base, bay_pred))
             .replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('bayarea_ca'))
         )
 

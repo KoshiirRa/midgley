@@ -475,6 +475,21 @@ def test_issue_154_dom_xss_sanitization(tmp_path):
     assert "&lt;b&gt;Test_Source&lt;/b&gt;" in content
 
 
+def test_feature_attribution_card_in_regional_pages():
+    """Verify that all regional model pages contain the Component-Level Feature Attribution card."""
+    generate_public_dashboard()
+
+    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, OAKLAND_PATH, BAYAREA_PATH]
+
+    for p in pages:
+        with open(p, "r", encoding="utf-8") as f:
+            html = f.read()
+        assert "Component-Level Feature Attribution & Driver Breakdown" in html, f"Missing feature attribution card in {p}"
+        assert "Executive Model Attribution Summary:" in html, f"Missing attribution summary in {p}"
+        assert "Model Share Weight" in html, f"Missing model share weight in {p}"
+
+
+
 
 
 
