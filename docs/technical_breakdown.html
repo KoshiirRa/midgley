@@ -85,7 +85,7 @@
             <!-- Run Selector Dropdown & Download Buttons -->
             <div class="flex items-center gap-2">
                 <select id="runSelect" onchange="switchRun(this.value)" class="bg-slate-800 text-slate-200 text-xs font-mono px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500">
-                    <option value="2026-09-03_03-45-15">2026-09-03 03:45:05 (INTRADAY_REVISION)</option>
+                    <option value="2026-09-03_03-47-05">2026-09-03 03:45:05 (INTRADAY_REVISION)</option>
                 </select>
                 <a id="jsonLink" href="runs/latest.json" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 transition text-xs font-mono flex items-center gap-1">
                     <i class="fa-solid fa-code"></i> JSON Payload
@@ -291,6 +291,16 @@
                 $$\text{P}_{\text{SF Bay Area Region}} = \$5.050 + (-\$0.463) = \$4.925\text{/gal}$$
             </p>
             <p class="text-amber-400/90 text-[10px] font-sans italic mt-1.5 flex items-center gap-1"><i class="fa-solid fa-circle-info text-[10px]"></i> Includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal</p>
+        </div>
+        <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 space-y-2 font-mono text-xs">
+            <div class="flex justify-between items-center text-purple-200 font-bold border-b border-purple-500/30 pb-1.5">
+                <span>ULSD Distillate Crack Engine (WIP)</span>
+                <span class="text-purple-300">$2.865/gal (+0.53%)</span>
+            </div>
+            <p class="text-purple-300/80 text-[11px] leading-relaxed">
+                $$\text{DistillateCrack} = \$2.850 - \frac{\$75.00}{42.0} = \$0.742\text{/gal}, \quad \text{Crack}_{321} = \$0.685\text{/gal}$$
+            </p>
+            <p class="text-amber-400/90 text-[10px] font-sans italic mt-1.5 flex items-center gap-1"><i class="fa-solid fa-flask-vial"></i> Experimental Work-In-Progress undergoing multi-week feedback loop empirical evaluation</p>
         </div>
             </div>
         </section>
