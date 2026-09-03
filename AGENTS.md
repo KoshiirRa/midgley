@@ -226,16 +226,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
-* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, and exposing continuous rolling performance metrics via API & web dashboard.
+* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, evaluating 95% Confidence Interval Coverage (`within_95ci_hit`), and exposing continuous rolling performance metrics via API & web dashboard.
 * **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
-* **Realized-vs-Predicted Rolling Scoreboard Engine:**
+* **Realized-vs-Predicted Rolling Scoreboard & Observability Engine:**
   - `compute_rolling_scoreboard_metrics(window_days=30, region=None)`: Calculates rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices.
+  - `compute_mlops_observability_summary(window_days=30)`: Computes LLM Augmentation Win Rate % over pure quant baselines, 95% CI Coverage Hit Rate %, average qualitative feature vectors, and feed provenance error breakdowns.
   - `compute_regional_scoreboard_breakdown(window_days=30)`: Computes per-region accuracy breakdowns across all 8 active regional markets.
   - `get_recent_evaluated_records(region=None, limit=50)`: Returns chronologically sorted evaluated forecast records.
   - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard` and embedded in `docs/index.html`.
 * **Functions:**
-  - `log_predictions()`: Logs 5-day out-of-time forecasts with dynamically calculated target dates.
-  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature and backfills actual prices in `prediction_history.csv`.
+  - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates.
+  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, and backfills actual prices in `prediction_history.csv`.
 
 ---
 

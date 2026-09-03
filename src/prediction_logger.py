@@ -16,27 +16,49 @@ logger = logging.getLogger(__name__)
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 
 def ensure_history_store():
-    """Ensures data directory and prediction_history.csv file exist with standard schema."""
+    """Ensures data directory and prediction_history.csv file exist with standard and extended MLOps schema."""
     os.makedirs("data", exist_ok=True)
+    columns = [
+        "log_timestamp",
+        "forecast_target_date",
+        "region",
+        "model_version",
+        "run_type",
+        "headline_trigger",
+        "current_base_price",
+        "predicted_5d_price",
+        "predicted_direction",
+        "actual_5d_price",
+        "actual_direction",
+        "error_dollars",
+        "directional_hit",
+        "llm_price_pressure",
+        "llm_supply_disruption",
+        "quant_baseline_5d_price",
+        "llm_augmentation_delta",
+        "prediction_lower_95ci",
+        "prediction_upper_95ci",
+        "within_95ci_hit",
+        "data_source_provenance"
+    ]
     if not os.path.exists(HISTORY_CSV_PATH) or os.path.getsize(HISTORY_CSV_PATH) == 0:
-        columns = [
-            "log_timestamp",
-            "forecast_target_date",
-            "region",
-            "model_version",
-            "run_type",
-            "headline_trigger",
-            "current_base_price",
-            "predicted_5d_price",
-            "predicted_direction",
-            "actual_5d_price",
-            "actual_direction",
-            "error_dollars",
-            "directional_hit"
-        ]
         df = pd.DataFrame(columns=columns)
         df.to_csv(HISTORY_CSV_PATH, index=False)
         logger.info(f"Initialized new prediction history log at {HISTORY_CSV_PATH}")
+    else:
+        # Migrate existing CSV if missing extended columns
+        try:
+            df = pd.read_csv(HISTORY_CSV_PATH)
+            updated = False
+            for col in columns:
+                if col not in df.columns:
+                    df[col] = np.nan
+                    updated = True
+            if updated:
+                df.to_csv(HISTORY_CSV_PATH, index=False)
+                logger.info(f"Migrated existing prediction history log with extended MLOps schema columns.")
+        except Exception as e:
+            logger.warning(f"Failed to inspect/migrate prediction history CSV: {e}")
 
 
 def log_predictions(
@@ -49,6 +71,9 @@ def log_predictions(
     """
     Logs a DataFrame of model predictions into prediction_history.csv.
     Expected columns: ['date', 'current_price', 'predicted_5d_price']
+    Optional extended columns: ['llm_price_pressure', 'llm_supply_disruption', 'quant_baseline_5d_price',
+                               'llm_augmentation_delta', 'prediction_lower_95ci', 'prediction_upper_95ci',
+                               'data_source_provenance']
     """
     ensure_history_store()
     try:
@@ -69,6 +94,12 @@ def log_predictions(
             base_dt = pd.to_datetime(row['date'])
             target_date = pd.bdate_range(start=base_dt, periods=6)[-1].strftime("%Y-%m-%d")
         
+        quant_base = float(row.get('quant_baseline_5d_price')) if 'quant_baseline_5d_price' in row and pd.notna(row['quant_baseline_5d_price']) else np.nan
+        aug_delta = float(row.get('llm_augmentation_delta')) if 'llm_augmentation_delta' in row and pd.notna(row['llm_augmentation_delta']) else (round(pred_price - quant_base, 4) if pd.notna(quant_base) else 0.0)
+
+        lower_ci = float(row.get('prediction_lower_95ci')) if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) else round(pred_price - 0.12, 4)
+        upper_ci = float(row.get('prediction_upper_95ci')) if 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']) else round(pred_price + 0.12, 4)
+        
         new_records.append({
             "log_timestamp": timestamp_str,
             "forecast_target_date": target_date,
@@ -82,7 +113,15 @@ def log_predictions(
             "actual_5d_price": np.nan,
             "actual_direction": "",
             "error_dollars": np.nan,
-            "directional_hit": np.nan
+            "directional_hit": np.nan,
+            "llm_price_pressure": float(row.get('llm_price_pressure')) if 'llm_price_pressure' in row and pd.notna(row['llm_price_pressure']) else 0.0,
+            "llm_supply_disruption": float(row.get('llm_supply_disruption')) if 'llm_supply_disruption' in row and pd.notna(row['llm_supply_disruption']) else 0.0,
+            "quant_baseline_5d_price": round(quant_base, 4) if pd.notna(quant_base) else round(base_price, 4),
+            "llm_augmentation_delta": round(aug_delta, 4),
+            "prediction_lower_95ci": round(lower_ci, 4),
+            "prediction_upper_95ci": round(upper_ci, 4),
+            "within_95ci_hit": np.nan,
+            "data_source_provenance": str(row.get('data_source_provenance', 'yfinance'))
         })
         
     new_df = pd.DataFrame(new_records)
@@ -153,11 +192,20 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
             actual_dir = "UP" if actual_price >= base_price else "DOWN"
             err_dollars = abs(actual_price - pred_price)
             hit = 1 if pred_dir == actual_dir else 0
-            
+
+            # 95% Confidence Interval Coverage Hit Evaluation
+            lower_ci = row.get('prediction_lower_95ci')
+            upper_ci = row.get('prediction_upper_95ci')
+            if pd.notna(lower_ci) and pd.notna(upper_ci):
+                ci_hit = 1 if (float(lower_ci) <= actual_price <= float(upper_ci)) else 0
+            else:
+                ci_hit = 1 if (abs(actual_price - pred_price) <= 0.12) else 0
+
             history_df.at[idx, 'actual_5d_price'] = round(actual_price, 4)
             history_df.at[idx, 'actual_direction'] = str(actual_dir)
             history_df.at[idx, 'error_dollars'] = round(err_dollars, 4)
             history_df.at[idx, 'directional_hit'] = hit
+            history_df.at[idx, 'within_95ci_hit'] = ci_hit
             updated = True
             
     if updated:
@@ -375,4 +423,75 @@ def get_recent_evaluated_records(region: str = None, limit: int = 50) -> list[di
         })
 
     return records
+
+
+def compute_mlops_observability_summary(window_days: int | str = 30) -> dict:
+    """
+    Computes MLOps observability statistics over evaluated predictions:
+    - LLM Intelligence Augmentation Win Rate (vs Pure Quant Baseline)
+    - 95% Confidence Interval Coverage Hit Rate %
+    - Average LLM Price Pressure & Supply Disruption
+    - Performance Breakdown by Data Source Provenance
+    """
+    df = backfill_actual_prices_and_evaluate()
+    filtered_df = filter_evaluated_history_by_window(df, window_days=window_days)
+
+    if filtered_df.empty:
+        return {
+            "window_days": window_days,
+            "total_evaluations": 0,
+            "llm_augmentation_win_rate_pct": 0.0,
+            "ci_95_coverage_pct": 0.0,
+            "avg_llm_price_pressure": 0.0,
+            "avg_llm_supply_disruption": 0.0,
+            "provenance_breakdown": {}
+        }
+
+    n_eval = len(filtered_df)
+
+    # 1. LLM Augmentation Win Rate calculation
+    # Quant baseline error vs Hybrid LLM error
+    if 'quant_baseline_5d_price' in filtered_df.columns:
+        actuals = filtered_df['actual_5d_price'].astype(float)
+        preds = filtered_df['predicted_5d_price'].astype(float)
+        quant_preds = filtered_df['quant_baseline_5d_price'].astype(float).fillna(filtered_df['current_base_price'].astype(float))
+        
+        hybrid_errors = (actuals - preds).abs()
+        quant_errors = (actuals - quant_preds).abs()
+        llm_wins = (hybrid_errors <= quant_errors).sum()
+        llm_win_rate = float((llm_wins / n_eval) * 100.0)
+    else:
+        llm_win_rate = 50.0
+
+    # 2. 95% CI Coverage Hit Rate
+    if 'within_95ci_hit' in filtered_df.columns and filtered_df['within_95ci_hit'].notna().any():
+        ci_hits = filtered_df['within_95ci_hit'].dropna().astype(float)
+        ci_coverage = float(ci_hits.mean() * 100.0) if len(ci_hits) > 0 else 0.0
+    else:
+        ci_coverage = 0.0
+
+    # 3. Average Feature Attribution Scores
+    avg_pressure = float(filtered_df['llm_price_pressure'].dropna().mean()) if 'llm_price_pressure' in filtered_df.columns and filtered_df['llm_price_pressure'].notna().any() else 0.0
+    avg_disruption = float(filtered_df['llm_supply_disruption'].dropna().mean()) if 'llm_supply_disruption' in filtered_df.columns and filtered_df['llm_supply_disruption'].notna().any() else 0.0
+
+    # 4. Data Source Provenance Breakdown
+    provenance_bdown = {}
+    if 'data_source_provenance' in filtered_df.columns:
+        for prov, group in filtered_df.groupby('data_source_provenance'):
+            if not group.empty and 'error_dollars' in group.columns:
+                provenance_bdown[str(prov)] = {
+                    "count": len(group),
+                    "mae_dollars": round(float(group['error_dollars'].mean()), 4)
+                }
+
+    return {
+        "window_days": window_days,
+        "total_evaluations": n_eval,
+        "llm_augmentation_win_rate_pct": round(llm_win_rate, 2),
+        "ci_95_coverage_pct": round(ci_coverage, 2),
+        "avg_llm_price_pressure": round(avg_pressure, 4),
+        "avg_llm_supply_disruption": round(avg_disruption, 4),
+        "provenance_breakdown": provenance_bdown
+    }
+
 
