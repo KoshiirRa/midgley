@@ -1034,5 +1034,19 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-03T18:45:06.391548",
+    "headline": "US trade deficit widens as AI demand trumps tariffs - Capital Brief",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPOGNNeW9lNng1d0pEMUFHV2h5SUZReEJhYk5mWFlJb1pTbV9rWjV2UzBkaEpmWndtaHFOUWxia1ZNNTh5UVJ2d0FiS2VQUm1tbkpHV2xUS2FCcmUxZUptZlpYN09tWmJQUUJrZzJWTGYzb2s3ZnBTaTN1eWZkUVE1V3BjWEdBRURweGZ3NV9LZUtsdmhSdk1UaU41VFdFcUZ6NWZoQTBLb0I0OFl6LTJMSUZwdjZTeUlJYVBCYVB2MzZIMERaZmc?oc=5",
+    "is_anomaly": true,
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
