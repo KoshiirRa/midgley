@@ -295,6 +295,115 @@
             </div>
         </div>
 
+                <!-- Component-Level Feature Attribution & Driver Breakdown Card (Issue #46) -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-blue-400"></i> Component-Level Feature Attribution & Driver Breakdown
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 font-semibold">
+                    <i class="fa-solid fa-microchip mr-1"></i> XAI Model Interpretability
+                </span>
+            </div>
+            <p class="text-xs text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800/90 leading-relaxed">
+                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> Oakland CA forecast $-0.189/gal (-3.29%): Driven primarily by Tax & Regulatory Overhead ($-0.066/gal), Refining Yield & Crack Spread ($-0.047/gal).
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
+                
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Tax & Regulatory Overhead</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.066/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Tax relief or off-peak RVP specification</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">35.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Refining Yield & Crack Spread</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.047/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Narrowing refining margins and elevated product yield</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">25.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Futures & Commodity Benchmark</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.038/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Softening NYMEX energy futures contract prices</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">20.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Unstructured Intelligence & Sentiment</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.019/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">OPEC price pressure talkdown & dovish geopolitical news</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">10.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Regional Logistics & Hub Delivery</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.010/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Ecodeveloped pipeline loading flows</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">5.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Weather & Environmental Signals</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.009/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Favorable multi-basin weather conditions</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">5.0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <!-- Regional Econometric Drivers & Physical Infrastructure Factors -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-warehouse text-amber-400"></i> Regional Econometric Drivers & Physical Infrastructure Factors
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-amber-300 uppercase tracking-wider">PADD 5 West Coast Econometric Levers</h4>
+                    <p>Oakland operates within the isolated PADD 5 West Coast pricing island where retail prices reflect strict CARB CaRFG summer/winter blend specifications, regional refining tightness, and waterborne import premiums.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">Chevron Richmond Refining & Pipeline Logistics</h4>
+                    <p>Located 12 miles north of Oakland, Chevron's 245,000 bpd Richmond Refinery, alongside PBF Martinez and Valero Benicia, supplies East Bay retail stations via the Kinder Morgan SFPP pipeline corridor.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-amber-300 uppercase tracking-wider">CARB Environmental Tax & Regulatory Overhead</h4>
+                    <p>California imposes $0.953/gal state environmental tax/fee burden ($0.634 excise + $0.250 Cap-and-Trade + $0.185 LCFS + $0.150 sales/UST), yielding $1.407/gal total statutory tax with Federal excise.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
+                    <h4 class="font-bold text-purple-300 uppercase tracking-wider">Physical Hazard & Delivery Hub Dynamics</h4>
+                    <p>$$\text{Rack Margin} = P_{\text{Oakland Retail}} - P_{\text{Wholesale RBOB}} = \$4.950 - \$3.184 = \$1.766/\text{gal}$$</p>
+                    <p class="text-slate-400 pt-1">East Bay rack truck and pipeline distribution monitored against USGS Hayward Fault (M>=6.0) seismic risks, PG&E PSPS Red Flag wildfire power cuts, and PTWC Tsunami marine berth closures.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- CHART SECTION -->
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white">Oakland Retail Gas Price vs NYMEX RBOB Futures</h3>

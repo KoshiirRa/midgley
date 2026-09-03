@@ -253,6 +253,89 @@
             </div>
         </div>
 
+                <!-- Component-Level Feature Attribution & Driver Breakdown Card (Issue #46) -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-blue-400"></i> Component-Level Feature Attribution & Driver Breakdown
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 font-semibold">
+                    <i class="fa-solid fa-microchip mr-1"></i> XAI Model Interpretability
+                </span>
+            </div>
+            <p class="text-xs text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800/90 leading-relaxed">
+                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> Cincinnati OH forecast $-0.075/gal (-1.97%): Driven primarily by Regional Logistics & Hub Delivery ($-0.026/gal), Refining Yield & Crack Spread ($-0.019/gal).
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
+                
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Regional Logistics & Hub Delivery</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.026/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Ecodeveloped pipeline loading flows</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">35.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Refining Yield & Crack Spread</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.019/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Narrowing refining margins and elevated product yield</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">25.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Futures & Commodity Benchmark</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.015/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Softening NYMEX energy futures contract prices</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">20.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Tax & Regulatory Overhead</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.007/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Tax relief or off-peak RVP specification</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">10.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Weather & Environmental Signals</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.004/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Favorable multi-basin weather conditions</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">5.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Unstructured Intelligence & Sentiment</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.004/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">OPEC price pressure talkdown & dovish geopolitical news</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">5.0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
                 <!-- Regional Econometric Drivers & Physical Infrastructure Factors -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
@@ -294,24 +377,23 @@
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                     datasets: [
                         {
-                            label: 'Cincinnati, OH Retail ($/gal)',
+                            label: 'Cincinnati OH Retail Actual ($/gal)',
                             data: [3.20, 3.28, 3.35, 3.42, 3.50, 3.55, 3.48, 3.45],
-                            borderColor: '#ef4444',
-                            backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                            borderColor: '#a855f7',
+                            backgroundColor: 'rgba(168, 85, 247, 0.1)',
                             borderWidth: 2.5,
                             fill: true
                         },
                         {
-                            label: 'Northern Kentucky Retail ($/gal)',
-                            data: [3.075, 3.155, 3.225, 3.295, 3.375, 3.425, 3.355, 3.325],
+                            label: 'Northern KY Retail Actual ($/gal)',
+                            data: [3.08, 3.16, 3.22, 3.30, 3.38, 3.42, 3.35, 3.325],
                             borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.08)',
-                            borderWidth: 2.5,
-                            fill: true
+                            borderWidth: 2,
+                            fill: false
                         },
                         {
-                            label: 'Wholesale RBOB Futures ($/gal)',
-                            data: [2.95, 3.05, 3.12, 3.20, 3.28, 3.32, 3.24, 3.18],
+                            label: '5-Day Model Forecast ($/gal)',
+                            data: [3.22, 3.26, 3.32, 3.40, 3.48, 3.52, 3.44, 3.35],
                             borderColor: '#10b981',
                             borderDash: [5, 5],
                             borderWidth: 2,
