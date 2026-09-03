@@ -18,7 +18,7 @@ HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 def ensure_history_store():
     """Ensures data directory and prediction_history.csv file exist with standard schema."""
     os.makedirs("data", exist_ok=True)
-    if not os.path.exists(HISTORY_CSV_PATH):
+    if not os.path.exists(HISTORY_CSV_PATH) or os.path.getsize(HISTORY_CSV_PATH) == 0:
         columns = [
             "log_timestamp",
             "forecast_target_date",
@@ -51,7 +51,10 @@ def log_predictions(
     Expected columns: ['date', 'current_price', 'predicted_5d_price']
     """
     ensure_history_store()
-    history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
+    try:
+        history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
+    except Exception:
+        history_df = pd.DataFrame()
     
     timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     new_records = []
@@ -98,7 +101,11 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
     updates actual prices, error metrics, and directional hit outcomes in prediction_history.csv.
     """
     ensure_history_store()
-    history_df = pd.read_csv(HISTORY_CSV_PATH)
+    try:
+        history_df = pd.read_csv(HISTORY_CSV_PATH)
+    except Exception as e:
+        logger.warning(f"Could not read prediction history log ({e}). Returning empty DataFrame.")
+        return pd.DataFrame()
     
     if history_df.empty:
         logger.warning("Prediction history log is empty. No predictions to evaluate.")
