@@ -242,6 +242,14 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
     region_code = _normalize_locale(locale)
     live_res = fetch_live_metro_retail_price(region_code)
     meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
+    provenance_meta = live_res.get("provenance") or global_cache.build_provenance_chain(
+        source=live_res.get("source", "UNKNOWN"),
+        region_id=region_code,
+        padd=meta.get("padd", "PADD 2"),
+        requested_granularity="NATIONAL" if region_code == "National" else "METRO",
+        served_granularity="METRO",
+        cache_status="HIT_FRESH" if live_res.get("_cache_hit") else "MISS"
+    )
 
     return {
         "status": "success",
@@ -254,6 +262,7 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
         },
         "price_per_gal": live_res.get("price"),
         "source": live_res.get("source"),
+        "provenance": provenance_meta,
         "cache_hit": live_res.get("_cache_hit", False),
         "cache_age_seconds": live_res.get("_cache_age_seconds", 0.0),
         "carb_tax_regulatory_burden_per_gal": meta["carb_tax"]
@@ -412,6 +421,7 @@ def _get_combined_impl(locale: str = "national") -> dict:
         "live_lookup": {
             "current_price_per_gal": live_data["price_per_gal"],
             "source": live_data["source"],
+            "provenance": live_data.get("provenance"),
             "cache_hit": live_data.get("cache_hit", False),
             "cache_age_seconds": live_data.get("cache_age_seconds", 0.0),
             "carb_tax_regulatory_burden_per_gal": live_data.get("carb_tax_regulatory_burden_per_gal", 0.0)

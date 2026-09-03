@@ -303,7 +303,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Step 4 (prediction_history.csv Clean History):** Prior validated regional base price (sanitized against anomalies $< \$4.50$ for CA regions).
   - **Step 5 (Static Regional Fallback Anchor):** Locale-specific base anchors ($5.550 Oakland, $5.650 Bay Area, $3.890 Tulsa, $3.350 Newark, $3.450 Cincinnati).
 * **Key Components:**
-  - **SQLite/In-Memory Response Cache (`src/lookup_cache.py`):** 15-minute TTL cache protecting upstream GasBuddy and AAA web scrapers from rate limits.
+  - **Stale-While-Revalidate (SWR) Response Cache & Provenance Chains (`src/lookup_cache.py`) (Issue #45):** 3-tier cache gateway implementing `LookupCache.get_swr()` with non-blocking async background revalidation threads (`HIT_FRESH`, `HIT_STALE`, `MISS`) and `build_provenance_chain()` metadata serialization to flag state vs. metro fallback granularity mismatches (`is_fallback_granularity`).
   - **System Telemetry & Grafana Observability Engine (`src/telemetry.py` & `docs/TELEMETRY_HANDOFF.md`) (Issues #107 & #108):** Central observability engine tracking LLM token metrics, estimated USD costs, tier fallback activations, API quota safety valves, and Prometheus text exporter stream (`GET /metrics`). Supports `MIDGLEY_ENV` environment isolation (`dev` vs `prod`), `GET /api/v1/system/quota` endpoint, and 1-click Grafana dashboard template ([`grafana/dashboard_observability.json`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/grafana/dashboard_observability.json)).
 
 ---

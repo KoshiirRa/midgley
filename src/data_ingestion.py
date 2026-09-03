@@ -321,7 +321,7 @@ class EIADataConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached:
+            if cached and "product_supplied_thousand_bpd" in cached and "status" in cached:
                 return cached
         except Exception:
             pass
