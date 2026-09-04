@@ -778,6 +778,16 @@ def get_unmapped_zip_telemetry_endpoint():
     return get_unmapped_zip_telemetry()
 
 
+@app.get("/api/v1/telemetry/fallback-status", summary="Get Zero-Cost Fallback & Token Savings Telemetry")
+def get_fallback_telemetry_endpoint():
+    """
+    Returns aggregated telemetry statistics for zero-cost fallback provider invocations (Issue #196),
+    basic tier API key routing counts, provider distribution, and estimated LLM token/dollar cost savings.
+    """
+    from src.fallback_telemetry import fallback_logger
+    return fallback_logger.get_summary()
+
+
 @app.get("/api/v1/locales", summary="Get All Supported Locales & Tax/Logistics Metadata")
 def list_supported_locales():
     """

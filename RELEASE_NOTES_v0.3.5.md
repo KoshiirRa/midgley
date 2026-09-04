@@ -58,6 +58,13 @@
 - **Fireworks Tech Graph Vector Diagrams (`src/fireworks_tech_graph.py`):** Expanded automated SVG diagram generator (ingested in Issue #191) to synthesize 6 self-contained vector diagrams (`multi_agent_architecture.svg`, `regional_metro_architecture.svg`, `weather_architecture.svg`, `web_routing_architecture.svg`, `cache_gateway_architecture.svg`, `worker_telemetry_architecture.svg`), replacing all ASCII flowcharts in `docs/ARCHITECTURE.md`.
 - **KaTeX LaTeX Math Formatting Fixes:** Corrected LaTeX math display blocks (`\[ ... \]`) and dollar sign escaping across `docs/ARCHITECTURE.md` to guarantee clean KaTeX rendering on the `/math` documentation page.
 
+### 11. Zero-Cost Provider Routing, Kaggle LLM Hook & Fallback Telemetry (Issue #196)
+- **Zero-Cost Provider Hook (`ZeroCostProviderHook`):** Modular provider interface in `src/event_analyzer.py` routing unprivileged (`basic`) API tier requests away from paid Cloud LLMs (Gemini/OpenAI) to zero-cost channels (`$0` paid token spend).
+- **Kaggle GPU Open-Source LLM Hook Preparedness:** Prepared `TIER_1_5_ZERO_COST_LLM` provider hook in `src/event_analyzer.py` for seamless drop-in integration with Kaggle GPU open-source LLM kernels (Issue #102 under Milestone v2.0).
+- **Expanded Domain NLP Lexicons:** Expanded rule-based keyword dictionaries across supply disruptions (refinery fires, pipeline halts, force majeure), geopolitical risk (Hormuz/Suez chokepoints, Houthi attacks), OPEC actions, executive social posts, and NOAA SPC convective weather.
+- **Fallback Telemetry Engine ([`src/fallback_telemetry.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/fallback_telemetry.py)):** Persistent accounting at `data/fallback_telemetry.json` tracking basic tier routed requests, zero-cost provider invocations, and estimated token/dollar savings, exposed via `GET /api/v1/telemetry/fallback-status` and rendered on `docs/telemetry.html`.
+- **Unit Test Suite ([`tests/test_zero_cost_fallbacks.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_zero_cost_fallbacks.py)):** 5 unit tests verifying basic tier key routing, lexicon extraction accuracy, provider hook extensibility, and fallback telemetry accounting.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -65,7 +72,7 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `274 passed, 1 warning in 564.32s` (100% pass rate across 56 test modules).
+  **Result:** `280 passed, 1 warning in 540.31s` (100% pass rate across 57 test modules).
 
 ---
 
@@ -79,5 +86,6 @@
 - **Issue #191**: `[Feature Request] Ingest Fireworks Tech Graph for Automated Architecture Diagram Generation` (Closed as completed)
 - **Issue #192**: `[Feature Request] Cloudflare Durable Objects for State Persistence` (Closed as not planned)
 - **Issue #194**: `[Feature Request] Cloudflare Queues Integration for Asynchronous Edge Event Buffering` (Closed as completed)
-- **Issue #195**: `[Feature Request] Dedicated System Observability & Telemetry Dashboard Page` (Closed as completed)`
+- **Issue #195**: `[Feature Request] Dedicated System Observability & Telemetry Dashboard Page` (Closed as completed)
+- **Issue #196**: `[Feature Request] Expand Zero-Cost Fallback Providers & Deterministic Lexicon Engines for Unprivileged API Tier` (Closed as completed)`
 

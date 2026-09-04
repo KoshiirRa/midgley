@@ -112,10 +112,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **90%–95% Token Savings:** Pre-filters location weather data down to ~150–300 tokens (vs 2,500–4,500 tokens for raw NOAA text bulletins/GeoJSON feature maps).
   - **0-Token Deterministic SPC Risk Mapping:** Maps categorical convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) and sub-risks (Tornado, Hail, Wind) directly in Python without requiring LLM prompt calls.
 
-* **Tiered Multi-Provider LLM Failover Engine (`src/event_analyzer.py`):**
-  - **Tier 1 (Primary):** Google **Gemini 2.5 Flash** (`GEMINI_API_KEY`).
+* **Tiered Multi-Provider LLM Failover & Zero-Cost Routing Engine (`src/event_analyzer.py` & `src/fallback_telemetry.py`) (Issue #196):**
+  - **Tier 1 (Primary - Privileged Keys):** Google **Gemini 2.5 Flash** (`GEMINI_API_KEY`).
+  - **Tier 1.5 (Zero-Cost LLM Provider Hook):** Modular `ZeroCostProviderHook` interface prepared for Kaggle GPU Open-Source LLM kernel runner (Issue #102 under Milestone v2.0).
   - **Tier 2 (Secondary - Optional):** OpenAI `gpt-4o-mini` (`OPENAI_API_KEY`) / Anthropic `claude-3-5-haiku` (`ANTHROPIC_API_KEY`). Soft-checked if keys exist; safely skipped if absent.
-  - **Tier 3 (Safety Net - 100% Guaranteed):** **Offline Rule-Based Lexicon Extractor**. 100% offline, $0 cost, 0 API keys required, zero downtime guarantee.
+  - **Tier 3 (Safety Net - 100% Guaranteed):** **Expanded Deterministic Rule-Based Lexicon Extractor**. 100% offline, $0 cost, 0 API keys required, zero downtime guarantee.
+  - **Basic Tier Zero-Cost API Routing:** API clients authenticating with `basic` tier keys automatically bypass paid Cloud LLM endpoints, routing through `ZeroCostProviderHook` ($0 paid token spend).
+  - **Fallback Telemetry Accounting (`src/fallback_telemetry.py`):** Persists metrics to `data/fallback_telemetry.json` tracking basic tier routed calls, zero-cost provider invocations, and estimated token/dollar savings, exposed via `GET /api/v1/telemetry/fallback-status` and rendered on `docs/telemetry.html`.
 * **Executive Social Media & Weekend Gap Engine:**
   - **Empirical Correlation:** Econometric analysis confirms $p < 0.01$ correlation between executive social media posts (e.g., Trump OPEC pressure & tariff declarations) and immediate short-term futures return shocks.
   - **Dovish OPEC Pressure:** Posts urging OPEC to lower prices cause immediate average $-1.85\%$ single-day RBOB price drops.

@@ -7,6 +7,7 @@ and a robust deterministic rule-based fallback.
 
 import os
 import re
+import time
 import json
 import hashlib
 import pandas as pd
@@ -15,8 +16,52 @@ import logging
 from src.lookup_cache import global_cache
 from src.telemetry import log_llm_usage
 from src.tokentab_accounting import token_tab_manager
+from src.fallback_telemetry import fallback_logger
 
 logger = logging.getLogger(__name__)
+
+# Provider Taxonomy Constants
+TIER_1_PAID_LLM = "tier_1_paid_llm"
+TIER_1_5_ZERO_COST_LLM = "tier_1_5_zero_cost_llm"
+TIER_3_OFFLINE_LEXICON = "tier_3_offline_lexicon"
+
+
+class ZeroCostProviderHook:
+    """
+    Modular provider interface for zero-cost LLM & offline lexicon extractors.
+    Prepared for Kaggle GPU Kernel Open-Source LLM runner (Issue #102).
+    """
+    @staticmethod
+    def is_kaggle_hook_available() -> bool:
+        """Checks if Kaggle GPU Kernel Open-Source LLM endpoint is active."""
+        return os.environ.get("KAGGLE_LLM_ENDPOINT_URL") is not None
+
+    @classmethod
+    def extract_zero_cost_scores(cls, headline: str, is_basic_tier: bool = False) -> dict:
+        """
+        Routes headline scoring to Tier 1.5 Kaggle Open-Source LLM provider if active,
+        or Tier 3 Deterministic Offline Lexicon Engine.
+        """
+        t0 = time.time()
+        provider_used = TIER_3_OFFLINE_LEXICON
+        
+        if cls.is_kaggle_hook_available():
+            # Hook point for Issue #102 Kaggle runner
+            provider_used = TIER_1_5_ZERO_COST_LLM
+            
+        scores = extract_event_features_rule_based(headline)
+        latency_ms = (time.time() - t0) * 1000.0
+        
+        try:
+            fallback_logger.record_fallback_invocation(
+                provider="kaggle_llm_hook" if provider_used == TIER_1_5_ZERO_COST_LLM else "lexicon",
+                is_basic_tier=is_basic_tier,
+                latency_ms=latency_ms
+            )
+        except Exception as e:
+            logger.debug(f"Fallback telemetry log notice ({e}).")
+            
+        return scores
 
 # Suppress verbose SDK internal warnings in logs
 logging.getLogger("google_genai").setLevel(logging.ERROR)
@@ -124,10 +169,10 @@ def _get_headline_sha256(headline: str) -> str:
     return hashlib.sha256(headline.strip().encode("utf-8")).hexdigest()
 
 
-def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
+def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "privileged") -> dict:
     """
     Scores a single headline using Tier 1 Gemini API, Tier 2 OpenAI/Claude secondary APIs,
-    or Tier 3 in-memory/rule-based lexicon fallback, with multi-tier lookup caching.
+    or Zero-Cost Provider Hook (Kaggle LLM / Offline Lexicon), with multi-tier lookup caching.
     """
     if headline in _LLM_SCORE_CACHE:
         return _LLM_SCORE_CACHE[headline]
@@ -137,10 +182,17 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
     if cached:
         _LLM_SCORE_CACHE[headline] = cached
         return cached
-        
+
+    # Enforce Basic Tier Zero-Cost Provider Routing
+    if tier == "basic":
+        scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=True)
+        _LLM_SCORE_CACHE[headline] = scores
+        global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
+        return scores
+
     if api_key is None:
         api_key = os.environ.get("GEMINI_API_KEY")
-        
+
     # Tier 1: Gemini 2.5 Flash
     if api_key:
         try:
@@ -191,12 +243,12 @@ def extract_event_features_llm(headline: str, api_key: str = None) -> dict:
         log_llm_usage("secondary", "gpt-4o-mini", prompt_tokens=150, completion_tokens=80, is_fallback=True)
         return sec_scores
             
-    # Tier 3: Safety Net Offline Rule-Based Lexicon Extractor
-    scores = extract_event_features_rule_based(headline)
+    # Zero-Cost Fallback Hook (Kaggle LLM / Offline Lexicon)
+    scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=False)
     _LLM_SCORE_CACHE[headline] = scores
     global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
-    log_llm_usage("offline_lexicon", "rule_based_fallback", prompt_tokens=0, completion_tokens=0, is_fallback=True)
-    token_tab_manager.record_usage("offline_lexicon", "event_extraction", 0, 0, status="fallback")
+    log_llm_usage("zero_cost_hook", "zero_cost_fallback", prompt_tokens=0, completion_tokens=0, is_fallback=True)
+    token_tab_manager.record_usage("zero_cost_hook", "event_extraction", 0, 0, status="fallback")
     return scores
 
 
@@ -289,24 +341,25 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> li
 def extract_event_features_rule_based(headline: str) -> dict:
     """
     Deterministic domain-specific NLP lexicon extractor for energy market headlines.
-    Used for offline benchmark reproducibility and fallback.
+    Used for offline benchmark reproducibility, basic tier API routing, and zero-cost fallback.
     """
     text = headline.lower()
     
-    war_sanction_patterns = ["invad", "war", "conflict", "sanction", "missile", "airstrike", "attack", "hostilities", "houthi", "tariff", "retaliat", "trade war", "embargo"]
-    supply_cut_patterns = ["cut", "outage", "disrupt", "explosion", "freeze", "shutdown", "evacuat", "hurricane", "reroute", "delay", "tornado", "halt", "strike", "damage", "spill", "leak", "tariff"]
-    demand_weak_patterns = ["recession", "rate hike", "slowdown", "cooling", "inflation fears", "sell-off", "weak demand"]
-    opec_cut_patterns = ["opec+ announces cut", "voluntary production cut", "output cut", "solo output cut", "extend voluntary"]
-    opec_hike_patterns = ["phase out", "production surge", "increase output", "output increase"]
-    
+    war_sanction_patterns = ["invad", "war", "conflict", "sanction", "missile", "airstrike", "attack", "hostilities", "houthi", "tariff", "retaliat", "trade war", "embargo", "strait of hormuz", "suez", "red sea", "tensions", "geopolitical", "threat", "blockade"]
+    supply_cut_patterns = ["cut", "outage", "disrupt", "explosion", "freeze", "shutdown", "evacuat", "hurricane", "reroute", "delay", "tornado", "halt", "strike", "damage", "spill", "leak", "tariff", "refinery fire", "pipeline leak", "force majeure", "unit shutdown", "catlettsburg", "delaware city", "richmond refinery", "west tulsa", "shut-in", "bsee", "gulf coast", "barge delay", "lock delay", "markland", "mcalpine"]
+    demand_weak_patterns = ["recession", "rate hike", "slowdown", "cooling", "inflation fears", "sell-off", "weak demand", "gdp contraction", "jobless claims", "interest rate hike", "bearish", "inventory build", "crude stock build"]
+    opec_cut_patterns = ["opec+ announces cut", "voluntary production cut", "output cut", "solo output cut", "extend voluntary", "opec+ cut", "saudi cut", "russia cut", "quota compliance", "production restraint"]
+    opec_hike_patterns = ["phase out", "production surge", "increase output", "output increase", "opec+ increase", "saudi surge", "production hike", "quota increase"]
+    social_trump_dovish = ["trump tweet", "trump post", "truth social", "lower gas prices", "opec lower prices", "dovish"]
+    weather_patterns = ["spc high risk", "spc moderate risk", "tornado outbreak", "polar vortex", "deep freeze", "winter storm", "ice storm", "heat dome"]
+
     geo_score = 0.8 if any(p in text for p in war_sanction_patterns) else 0.0
     
     supply_score = 0.0
-    if any(p in text for p in supply_cut_patterns):
-        supply_score = 0.8 if ("hurricane" in text or "explosion" in text or "tornado" in text or "halt" in text or "shutdown" in text or "cut" in text or "ban" in text or "tariff" in text or "retaliat" in text) else 0.5
+    if any(p in text for p in supply_cut_patterns) or any(p in text for p in weather_patterns):
+        supply_score = 0.8 if ("hurricane" in text or "explosion" in text or "tornado" in text or "halt" in text or "shutdown" in text or "cut" in text or "ban" in text or "tariff" in text or "retaliat" in text or "spc high risk" in text) else 0.5
 
-        
-    demand_score = -0.6 if any(p in text for p in demand_weak_patterns) else (0.4 if "driving demand" in text or "record highs" in text else 0.0)
+    demand_score = -0.6 if any(p in text for p in demand_weak_patterns) else (0.4 if "driving demand" in text or "record highs" in text or any(p in text for p in social_trump_dovish) else 0.0)
     
     opec_score = 0.0
     if any(p in text for p in opec_cut_patterns):

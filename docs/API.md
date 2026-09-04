@@ -155,6 +155,30 @@ curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
 
 ---
 
+## 🍃 Zero-Cost Fallback & Basic Tier Telemetry Endpoint (`GET /api/v1/telemetry/fallback-status` - Issue #196)
+
+* **Endpoint:** `GET /api/v1/telemetry/fallback-status`
+* **Description:** Returns aggregated telemetry statistics for zero-cost fallback provider invocations (`ZeroCostProviderHook`), basic tier API key request routing counts, provider distribution (`lexicon`, `kaggle_llm_hook`, `spc_weather`), and estimated LLM token/dollar cost savings.
+
+* **Example Response:**
+```json
+{
+  "total_zero_cost_invocations": 12,
+  "basic_tier_routed_count": 5,
+  "provider_breakdown": {
+    "lexicon": 12,
+    "kaggle_llm_hook": 0,
+    "spc_weather": 0
+  },
+  "tokens_saved": 4200,
+  "estimated_usd_saved": 0.00126,
+  "avg_zero_cost_latency_ms": 1.45,
+  "last_updated": "2026-09-04T01:10:00Z"
+}
+```
+
+---
+
 ### 3. `GET /api/v1/forecast/scoreboard`
 Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days).
 
