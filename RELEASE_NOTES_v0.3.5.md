@@ -29,6 +29,13 @@
 - **Dedicated Telemetry Page ([`docs/telemetry.html`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/telemetry.html)):** Dedicated web page off `docs/index.html` rendering interactive Leaflet.js maps of requested out-of-metro ZIP codes, state query density, API quota ledgers (`finlight.me` 150 call cap), 3-tier cache hit rates, MLOps model win rates, and candidate metro hub recommendations (Chicago, Houston, Los Angeles, Philadelphia).
 - **Telemetry REST Endpoint (`GET /api/v1/telemetry/unmapped-zips`):** Exposes aggregated out-of-metro lookup counts, state query distributions, and expansion hub recommendations.
 
+### 6. User Authentication, Tiered Access Control & Dual Provisioning Framework (Issue #40)
+- **SQLite Key Manager Engine ([`src/key_manager.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/key_manager.py)):** Manages API keys stored in SQLite database (`data/security.db`) with salted PBKDF2 SHA-256 token hashing and 30 RPM sliding-window rate limiting.
+- **Method A CLI Utility ([`scripts/manage_keys.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/scripts/manage_keys.py)):** Admin command-line tool supporting `create`, `list`, `revoke`, and `verify` commands directly on the server host.
+- **Method B Admin REST API Gateway (`/api/v1/admin/keys`):** Programmatic key management endpoints (`POST`, `GET`, `DELETE`) protected by `MIDGLEY_ADMIN_SECRET` environment variable (`X-Admin-Secret` header).
+- **Endpoint Auth & Tiered Access Control:** Protects `/api/v1/prices/*`, `/api/v1/forecast/*`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/api/v1/diesel/*`, and `/mcp/*`. `privileged` tier unlocks full multi-agent LLM inference, while `basic` tier automatically routes event scoring to zero-cost fallback providers ([Issue #196](https://github.com/KoshiirRa/midgley/issues/196)) to preserve Gemini tokens and Finlight API quotas.
+- **Cloudflare D1 Edge Decoupling:** Edge workers ([`workers/cache_worker.ts`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)) bind directly to Cloudflare D1 (`midgley-cache-d1`) for edge key/cache verification without relying on calls to home infrastructure.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -41,8 +48,10 @@
 ---
 
 ## 📋 Closed GitHub Issues
+- **Issue #40**: `feat(security): Implement user authentication & access control for MCP Server & REST API Gateway` (Closed as completed)
 - **Issue #48**: `feat(api): Add GET /locales Metadata Endpoint & POST /forecast/batch Endpoint` (Closed as completed)
 - **Issue #50**: `feat(geocoding): Add ZIP Code to Locale & PADD Resolution Mapping Engine` (Closed as completed)
 - **Issue #82**: `[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)` (Closed as completed)
 - **Issue #191**: `[Feature Request] Ingest Fireworks Tech Graph for Automated Architecture Diagram Generation` (Closed as completed)
 - **Issue #195**: `[Feature Request] Dedicated System Observability & Telemetry Dashboard Page` (Closed as completed)
+
