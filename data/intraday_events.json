@@ -1256,5 +1256,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-04T07:45:09.889943",
+    "headline": "US-Canada trade escalation: Why autos and oil matter more than today's tariffs - Chase Bank",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOeDU2QUh2Qnh5N01FOGpIWTBSQkk0U0l1cGxrcG9hdGhVcnctRTE0MnQ5Ymp4YkJ0NHNEZnBfWFMxUzRWa1B6dC1aLVQ1RV9uX1AteGg5aEhNWnhFdFlCNjlJQ3c0emM1WERzUW1ZZENycllIZll2UHQ2LUdsZS1ZV3huc1dsYm82YVo2Y29sb3pfYXBnOW44UWpOOGtpbTZfdXhwQ0JuVmRMRG9vcjFkR0tfWExDUQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitgFBVV95cUxOeDU2QUh2Qnh5N01FOGpIWTBSQkk0U0l1cGxrcG9hdGhVcnctRTE0MnQ5Ymp4YkJ0NHNEZnBfWFMxUzRWa1B6dC1aLVQ1RV9uX1AteGg5aEhNWnhFdFlCNjlJQ3c0emM1WERzUW1ZZENycllIZll2UHQ2LUdsZS1ZV3huc1dsYm82YVo2Y29sb3pfYXBnOW44UWpOOGtpbTZfdXhwQ0JuVmRMRG9vcjFkR0tfWExDUQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
