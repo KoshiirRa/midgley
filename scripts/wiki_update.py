@@ -69,7 +69,7 @@ home_file = os.path.join(wiki_dir, "Home.md")
 with open(home_file, "r", encoding="utf-8") as f:
     home_content = f.read()
 
-home_content = home_content.replace("v0.3.5", "v0.4.0").replace("v0.3.4", "v0.4.0").replace("v0.3.3", "v0.4.0")
+home_content = home_content.replace("v0.4.0", "v0.4.1").replace("v0.3.5", "v0.4.1").replace("v0.3.4", "v0.4.1")
 with open(home_file, "w", encoding="utf-8") as f:
     f.write(home_content)
 print("Updated Home.md")
