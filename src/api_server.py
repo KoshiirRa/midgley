@@ -37,8 +37,90 @@ from src.prediction_logger import (
 from src.regional_metadata import list_all_regional_metadata
 from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
 from src.tokentab_accounting import token_tab_manager
+from src.key_manager import global_key_manager
 
 logger = logging.getLogger(__name__)
+
+MIDGLEY_ADMIN_SECRET = os.environ.get("MIDGLEY_ADMIN_SECRET", "midgley_dev_admin_secret_2026")
+
+
+class CreateKeyRequest(BaseModel):
+    user_id: str = Field(..., json_schema_extra={"example": "alice"}, description="User or client identifier")
+    tier: Optional[str] = Field("basic", json_schema_extra={"example": "privileged"}, description="Access tier: 'privileged' or 'basic'")
+    environment: Optional[str] = Field("dev", json_schema_extra={"example": "prod"}, description="Target environment: 'dev' or 'prod'")
+    rate_limit_rpm: Optional[int] = Field(30, json_schema_extra={"example": 30}, description="Rate limit in requests per minute")
+    expires_days: Optional[int] = Field(None, json_schema_extra={"example": 30}, description="Optional key lifespan in days")
+
+
+async def verify_admin_secret(
+    x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")
+) -> str:
+    """Method B Admin Auth Dependency: Verifies X-Admin-Secret header against MIDGLEY_ADMIN_SECRET."""
+    expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET", MIDGLEY_ADMIN_SECRET)
+    if not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized: Invalid or missing X-Admin-Secret header."
+        )
+    return x_admin_secret
+
+
+async def get_api_key_user(
+    request: Request,
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
+    authorization: Optional[str] = Header(None),
+    api_key: Optional[str] = Query(None)
+) -> Dict[str, Any]:
+    """
+    User Auth & Rate Limit Dependency:
+    Extracts and validates API key from X-API-Key header, Authorization: Bearer header, or ?api_key query param.
+    Enforces 30 RPM rate limit per key. Supports testing mode (TESTING=1) for unit test suites.
+    """
+    if os.environ.get("TESTING") == "1" and not x_api_key and not authorization and not api_key:
+        key_info = {
+            "key_prefix": "mg_test_bypass",
+            "user_id": "test_suite_runner",
+            "tier": "privileged",
+            "rate_limit_rpm": 1000,
+            "environment": "dev"
+        }
+        request.state.key_info = key_info
+        return key_info
+
+    token = x_api_key or api_key
+    if not token and authorization:
+        parts = authorization.split()
+        if len(parts) == 2 and parts[0].lower() == "bearer":
+            token = parts[1]
+        else:
+            token = authorization
+
+    if not token:
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized: Missing API key. Pass key via X-API-Key header, Authorization: Bearer <token>, or ?api_key=<token>."
+        )
+
+    is_valid, key_info, err_msg = global_key_manager.verify_key(token)
+    if not is_valid or not key_info:
+        raise HTTPException(
+            status_code=401,
+            detail=f"Unauthorized: {err_msg or 'Invalid API key token.'}"
+        )
+
+    allowed, retry_after = global_key_manager.check_rate_limit(
+        key_prefix=key_info["key_prefix"],
+        rate_limit_rpm=key_info.get("rate_limit_rpm", 30)
+    )
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail=f"Too Many Requests: Rate limit of {key_info.get('rate_limit_rpm', 30)} requests per minute exceeded for key '{key_info['key_prefix']}'.",
+            headers={"Retry-After": str(retry_after)}
+        )
+
+    request.state.key_info = key_info
+    return key_info
 
 app = FastAPI(
     title="Midgley Gas Price Forecasting API Gateway",
@@ -357,7 +439,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     }
 
 
-@app.get("/api/v1/forecast/scoreboard", summary="Get Realized-vs-Predicted Rolling Scoreboard Metrics")
+@app.get("/api/v1/forecast/scoreboard", dependencies=[Depends(get_api_key_user)], summary="Get Realized-vs-Predicted Rolling Scoreboard Metrics")
 def get_forecast_scoreboard(
     locale: Optional[str] = Query(None, description="Optional locale code or region (e.g., 'tulsa', 'oakland', 'national', 'all')"),
     window: Optional[str] = Query("30", description="Rolling evaluation window in days ('30', '60', '90', or 'all')")
@@ -387,11 +469,11 @@ def get_forecast_scoreboard(
     }
 
 
-@app.post("/api/v1/forecast/cloud-sync", summary="Synchronize Prediction History to Cloud Database")
+@app.post("/api/v1/forecast/cloud-sync", dependencies=[Depends(verify_admin_secret)], summary="Synchronize Prediction History to Cloud Database")
 def trigger_cloud_prediction_sync():
     """
     Triggers synchronization of prediction history records to Cloud DB (Turso Edge / Cloudflare D1 / Neon Postgres).
-    Falls back gracefully to local CSV store if offline.
+    Falls back gracefully to local CSV store if offline. Requires X-Admin-Secret header.
     """
     res = sync_predictions_to_cloud()
     return {
@@ -416,7 +498,7 @@ def get_cloud_prediction_sync_status():
     }
 
 
-@app.get("/api/v1/forecast/purged-cv", summary="Get Purged & Combinatorial Cross-Validation Metrics")
+@app.get("/api/v1/forecast/purged-cv", dependencies=[Depends(get_api_key_user)], summary="Get Purged & Combinatorial Cross-Validation Metrics")
 def get_purged_cv_metrics(
     n_splits: int = Query(5, ge=2, le=20, description="Number of CV splits"),
     combinatorial: bool = Query(False, description="Whether to use Combinatorial Purged CV (CPCV)"),
@@ -461,7 +543,7 @@ def get_purged_cv_metrics(
     }
 
 
-@app.get("/api/v1/diesel/live", summary="Get Live Ultra-Low Sulfur Diesel (ULSD) & Distillate Prices")
+@app.get("/api/v1/diesel/live", dependencies=[Depends(get_api_key_user)], summary="Get Live Ultra-Low Sulfur Diesel (ULSD) & Distillate Prices")
 def get_diesel_live_prices():
     """
     Returns live NYMEX ULSD futures (HO=F), distillate crack spreads,
@@ -489,11 +571,11 @@ def get_diesel_live_prices():
     }
 
 
-@app.get("/api/v1/diesel/forecast", summary="Get 5-Day Out-of-Time ULSD Diesel Forecast")
+@app.get("/api/v1/diesel/forecast", dependencies=[Depends(get_api_key_user)], summary="Get 5-Day Out-of-Time ULSD Diesel Forecast")
 def get_diesel_forecast(
     rbob: float = Query(2.450, description="Base RBOB futures price ($/gal)"),
     ulsd: float = Query(2.850, description="Base ULSD futures price ($/gal)"),
-    wti: float = Query(75.00, description="Base WTI crude price ($/bbl)")
+    wti: float = Query(75.00, description="Base WTI crude price ($/gal)")
 ):
     """
     Generates 5-day step-ahead wholesale ULSD predictions and regional retail calibrations (Issue #41).
@@ -504,11 +586,12 @@ def get_diesel_forecast(
     return res
 
 
-@app.get("/api/v1/diesel/simulate", summary="Simulate Counterfactual Diesel Market Shocks")
+@app.get("/api/v1/diesel/simulate", dependencies=[Depends(get_api_key_user)], summary="Simulate Counterfactual Diesel Market Shocks")
 def simulate_diesel_shock_endpoint(
     scenario: str = Query("colonial_line2_outage", description="Scenario key: 'colonial_line2_outage', 'northeast_polar_vortex', 'midwest_harvest_surge', 'imo_2020_marine_fuel_spike', 'winter_grid_emergency_backup'"),
     base_ulsd: float = Query(2.850, description="Base ULSD futures price ($/gal)")
 ):
+
     """
     Simulates counterfactual physical, weather, and geopolitical diesel shock scenarios (Issue #41).
     """
@@ -559,8 +642,53 @@ def get_system_token_costs(
     )
 
 
+# ------------------------------------------------------------------------------
+# Method B: Admin Key Management Endpoints (Protected by X-Admin-Secret)
+# ------------------------------------------------------------------------------
 
-@app.get("/api/v1/prices/live", summary="Get Live Fuel Prices")
+@app.post("/api/v1/admin/keys", tags=["Admin Key Management"], dependencies=[Depends(verify_admin_secret)], summary="Method B Admin API: Provision New API Key")
+def create_api_key_endpoint(req: CreateKeyRequest):
+    """Provisions a new API key (Method B REST API Gateway). Requires X-Admin-Secret header."""
+    res = global_key_manager.create_key(
+        user_id=req.user_id,
+        tier=req.tier or "basic",
+        rate_limit_rpm=req.rate_limit_rpm or 30,
+        environment=req.environment or "dev",
+        expires_days=req.expires_days
+    )
+    return {
+        "status": "success",
+        "message": "API key provisioned successfully.",
+        "key_data": res
+    }
+
+
+@app.get("/api/v1/admin/keys", tags=["Admin Key Management"], dependencies=[Depends(verify_admin_secret)], summary="Method B Admin API: List Registered API Keys")
+def list_api_keys_endpoint(environment: Optional[str] = Query(None, description="Optional environment filter ('dev' or 'prod')")):
+    """Lists registered API key metadata. Requires X-Admin-Secret header."""
+    keys = global_key_manager.list_keys(environment=environment)
+    return {
+        "status": "success",
+        "total_keys": len(keys),
+        "keys": keys
+    }
+
+
+@app.delete("/api/v1/admin/keys/{prefix}", tags=["Admin Key Management"], dependencies=[Depends(verify_admin_secret)], summary="Method B Admin API: Revoke API Key")
+def revoke_api_key_endpoint(prefix: str):
+    """Revokes an active API key by prefix. Requires X-Admin-Secret header."""
+    success = global_key_manager.revoke_key(prefix)
+    if not success:
+        raise HTTPException(status_code=404, detail=f"API key prefix '{prefix}' not found.")
+    return {
+        "status": "success",
+        "message": f"API key prefix '{prefix}' revoked successfully."
+    }
+
+
+
+
+@app.get("/api/v1/prices/live", dependencies=[Depends(get_api_key_user)], summary="Get Live Fuel Prices")
 def get_live_prices(
     locale: Optional[str] = Query("national", description="Locale code (national, tulsa, newark, cincinnati, oakland, bayarea)"),
     zip_code: Optional[str] = Query(None, description="Optional 5-digit US zip code for GasBuddy station lookup")
@@ -572,7 +700,7 @@ def get_live_prices(
     return _get_live_prices_impl(locale=locale or "national", zip_code=zip_code)
 
 
-@app.get("/api/v1/forecast/predict", summary="Get 5-Day Out-of-Time Forecast")
+@app.get("/api/v1/forecast/predict", dependencies=[Depends(get_api_key_user)], summary="Get 5-Day Out-of-Time Forecast")
 def get_forecast(
     locale: Optional[str] = Query("national", description="Locale code"),
     days: int = Query(5, ge=1, le=30, description="Forecast horizon in days"),
@@ -583,6 +711,7 @@ def get_forecast(
     and historical accuracy metrics.
     """
     return _get_forecast_impl(locale=locale or "national", days=days, zip_code=zip_code)
+
 
 
 def _get_combined_impl(locale: str = "national", zip_code: Optional[str] = None) -> dict:
@@ -629,7 +758,7 @@ def _get_combined_impl(locale: str = "national", zip_code: Optional[str] = None)
     return res
 
 
-@app.get("/api/v1/combined", summary="Unified Live Price & Forecast Context")
+@app.get("/api/v1/combined", dependencies=[Depends(get_api_key_user)], summary="Unified Live Price & Forecast Context")
 def get_combined(
     locale: Optional[str] = Query("national", description="Locale code"),
     zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
@@ -682,7 +811,7 @@ def list_supported_locales():
     }
 
 
-@app.post("/api/v1/forecast/batch", summary="Get Batch 5-Day Forecasts for Multiple Locales")
+@app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")
 def get_batch_forecast(req: BatchForecastRequest):
     """
     Accepts a list of locale codes and returns combined 5-day out-of-time forecasts
@@ -712,7 +841,7 @@ def get_batch_forecast(req: BatchForecastRequest):
     }
 
 
-@app.post("/api/v1/combined/batch", summary="Get Batch Combined Live Prices & Forecasts for Multiple Locales")
+@app.post("/api/v1/combined/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch Combined Live Prices & Forecasts for Multiple Locales")
 def get_batch_combined(req: BatchCombinedRequest):
     """
     Accepts a list of locale codes and returns combined live pump prices, forecasts,
@@ -741,8 +870,9 @@ def get_batch_combined(req: BatchCombinedRequest):
     }
 
 
-@app.post("/api/v1/forecast/simulate", summary="Simulate Counterfactual Market Shocks")
+@app.post("/api/v1/forecast/simulate", dependencies=[Depends(get_api_key_user)], summary="Simulate Counterfactual Market Shocks")
 def simulate_shock(req: SimulateRequest):
+
     """
     Evaluates counterfactual physical, refinery outage, weather disaster, or geopolitical shock scenarios.
     """

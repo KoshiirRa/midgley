@@ -14,6 +14,60 @@ The **Midgley MCP & REST API Gateway** exposes real-time unleaded gasoline pump 
 
 ---
 
+## 🔒 Security, Authentication & Key Management (Issue #40)
+
+Midgley endpoints under `/api/v1/prices/*`, `/api/v1/forecast/*`, and `/mcp/*` are secured with API Key authentication and per-key rate limiting (**default: 30 requests/minute**).
+
+### Authentication Headers
+Callers can authenticate using any of the following methods:
+* **Header**: `X-API-Key: mg_prod_a1b2c3d4_...`
+* **Bearer Token Header**: `Authorization: Bearer mg_prod_a1b2c3d4_...`
+* **Query Parameter** (for SSE/browser connections): `?api_key=mg_prod_a1b2c3d4_...`
+
+### Key Access Tiers
+* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 2.5 Flash event analysis, full Stacking Ensemble, and counterfactual shock simulations).
+* 🛡️ **`basic` tier**: Automatically routes LLM event scoring to zero-cost fallback providers (Tier 3 Rule-Based Lexicon, SPC weather mapping, cached news vectors, standard linear Ridge baseline) to conserve Gemini tokens and Finlight API quotas.
+
+### Key Provisioning Methods
+
+#### Method A: Key Management CLI Utility (`scripts/manage_keys.py`)
+Used by administrators directly on the host or `dev-vm` server:
+```bash
+# Provision a key for a user
+python scripts/manage_keys.py create --user "alice" --tier privileged --env prod --rpm 30
+
+# List active keys
+python scripts/manage_keys.py list
+
+# Revoke a key prefix
+python scripts/manage_keys.py revoke --prefix mg_prod_a1b2c3d4
+```
+
+#### Method B: Admin REST API Gateway (`/api/v1/admin/keys`)
+Secured by the `MIDGLEY_ADMIN_SECRET` environment variable (passed via `X-Admin-Secret` header):
+```bash
+# Provision a new key programmatically
+curl -X POST "http://localhost:8000/api/v1/admin/keys" \
+  -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "partner_app",
+    "tier": "privileged",
+    "environment": "prod",
+    "rate_limit_rpm": 30
+  }'
+
+# List active keys
+curl -X GET "http://localhost:8000/api/v1/admin/keys" \
+  -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET"
+
+# Revoke a key by prefix
+curl -X DELETE "http://localhost:8000/api/v1/admin/keys/mg_prod_a1b2c3d4" \
+  -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET"
+```
+
+---
+
 ## 📡 REST API Endpoints
 
 ### 1. `GET /api/v1/prices/live`
