@@ -2,6 +2,9 @@
 
 Technical design document for the **LLM-Augmented Unleaded Gas Price Prediction Engine**.
 
+![Multi-Agent Execution Pipeline SVG Diagram](assets/multi_agent_architecture.svg)
+![Regional Metro Calibration Hubs SVG Diagram](assets/regional_metro_architecture.svg)
+
 ---
 
 ## 1. Mathematical Formulations & Feature Fusion
@@ -10,46 +13,46 @@ Technical design document for the **LLM-Augmented Unleaded Gas Price Prediction 
 Gasoline crack spreads represent refiner acquisition and processing margins:
 - **National Crack Spread Proxy:**
   \[
-  \text{CrackSpread}_{\text{National}} = P_{\text{RBOB Wholesale (\$ / gal)}} - \frac{P_{\text{WTI Crude (\$ / bbl)}}}{42.0}
+  \text{CrackSpread}_{\text{National}} = P_{\text{RBOB Wholesale \text{(\$/gal)}}} - \frac{P_{\text{WTI Crude \text{(\$/bbl)}}}}{42.0}
   \]
 - **Tulsa Regional Crack Spread:**
   \[
-  \text{CrackSpread}_{\text{Tulsa}} = P_{\text{Tulsa Retail (\$ / gal)}} - \frac{P_{\text{Cushing WTI (\$ / bbl)}}}{42.0}
+  \text{CrackSpread}_{\text{Tulsa}} = P_{\text{Tulsa Retail \text{(\$/gal)}}} - \frac{P_{\text{Cushing WTI \text{(\$/bbl)}}}}{42.0}
   \]
 - **Newark Regional Crack Spread:**
   \[
-  \text{CrackSpread}_{\text{Newark}} = P_{\text{Newark Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0}
+  \text{CrackSpread}_{\text{Newark}} = P_{\text{Newark Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0}
   \]
 - **Cincinnati Dual-State Cross-River Rack Margin & Crack Spread:**
   \[
-  P_{\text{OH Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{OH}} \quad (P_{\text{Live, OH}} = \$3.450/\text{gal})
+  P_{\text{OH Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{OH}} \quad (P_{\text{Live, OH}} = \text{\$3.450/gal})
   \]
   \[
-  P_{\text{KY Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{KY}} \quad (P_{\text{Live, KY}} = \$3.325/\text{gal})
+  P_{\text{KY Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{KY}} \quad (P_{\text{Live, KY}} = \text{\$3.325/gal})
   \]
   \[
-  \text{TaxSpread}_{\text{OH-KY}} = P_{\text{OH Retail}} - P_{\text{KY Retail}} = \$0.125/\text{gal}
+  \text{TaxSpread}_{\text{OH-KY}} = P_{\text{OH Retail}} - P_{\text{KY Retail}} = \text{\$0.125/gal}
   \]
 - **Charlotte Regional Crack Spread & NC/SC Tax Gap:**
   \[
-  \text{CrackSpread}_{\text{Charlotte}} = P_{\text{Charlotte Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Charlotte}} = \$3.280/\text{gal})
+  \text{CrackSpread}_{\text{Charlotte}} = P_{\text{Charlotte Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0} \quad (P_{\text{Live, Charlotte}} = \text{\$3.280/gal})
   \]
   \[
-  \text{TaxSpread}_{\text{NC-SC}} = P_{\text{NC Tax}} - P_{\text{SC Tax}} = \$0.404 - \$0.288 = \$0.116/\text{gal}
+  \text{TaxSpread}_{\text{NC-SC}} = P_{\text{NC Tax}} - P_{\text{SC Tax}} = \text{\$0.404} - \text{\$0.288} = \text{\$0.116/gal}
   \]
 - **Port St. Lucie Waterborne Rack Margin & FL Fuel Tax:**
   \[
-  \text{CrackSpread}_{\text{PSL}} = P_{\text{PSL Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, PSL}} = \$3.380/\text{gal})
+  \text{CrackSpread}_{\text{PSL}} = P_{\text{PSL Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0} \quad (P_{\text{Live, PSL}} = \text{\$3.380/gal})
   \]
   \[
-  T_{\text{FL}} = \tau_{\text{State/Local}} + \tau_{\text{Federal}} = \$0.384 + \$0.184 = \$0.568/\text{gal}
+  T_{\text{FL}} = \tau_{\text{State/Local}} + \tau_{\text{Federal}} = \text{\$0.384} + \text{\$0.184} = \text{\$0.568/gal}
   \]
 - **Oakland & SF Bay Area PADD 5 Richmond Crack Spread & CARB Tax Burden:**
   \[
-  \text{CrackSpread}_{\text{Richmond}} = P_{\text{Oakland Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Oakland}} = \$4.950/\text{gal}, P_{\text{Live, BayArea}} = \$5.050/\text{gal})
+  \text{CrackSpread}_{\text{Richmond}} = P_{\text{Oakland Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0} \quad (P_{\text{Live, Oakland}} = \text{\$4.950/gal}, P_{\text{Live, BayArea}} = \text{\$5.050/gal})
   \]
   \[
-  T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} = \$0.634 + \$0.250 + \$0.185 + \$0.150 + \$0.184 = \$0.953/\text{gal}
+  T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} = \text{\$0.634} + \text{\$0.250} + \text{\$0.185} + \text{\$0.150} + \text{\$0.184} = \text{\$0.953/gal}
   \]
 
 
@@ -68,34 +71,7 @@ Real-world event news persistence is modeled via dynamic category-specific expon
 
 The forecasting engine integrates a **two-tiered weather ingestion model** via the NOAA NWS API (`api.weather.gov`) and lightweight terminal connector `t.wxs.us`, combining macro energy basin risks with localized metro-level convective, freeze, and flood threats:
 
-```
-               ┌─────────────────────────────────────────────────────────────┐
-               │                 NOAA NWS & SPC WEATHER API                  │
-               │                   (api.weather.gov / t.wxs.us)              │
-               └──────────────────────────────┬──────────────────────────────┘
-                                              │
-                   ┌──────────────────────────┴──────────────────────────┐
-                   ▼                                                     ▼
-   ┌───────────────────────────────┐                     ┌───────────────────────────────┐
-   │ TIER 1: NATIONAL BASINS       │                     │ TIER 2: LOCALIZED METROS      │
-   │ • Gulf Coast Hurricanes (NHC) │                     │ • Tulsa OK (OKZ060 / OKZ066)  │
-   │ • Permian Basin Freeze Alerts │                     │ • Newark DE (Delaware City)   │
-   │ • Bakken Shale Polar Vortexes │                     │ • Cincinnati OH/KY (Miss River)│
-   │                               │                     │ • Greenville NC (NCZ081 Floods)│
-   │                               │                     │ • Charlotte NC (NCZ071 Hub)   │
-   │                               │                     │ • Port St. Lucie FL (FLZ147)  │
-   │                               │                     │ • Oakland & Bay Area (PSPS)   │
-   └───────────────┬───────────────┘                     └───────────────┬───────────────┘
-                   │                                                     │
-                   ▼                                                     ▼
-   ┌───────────────────────────────┐                     ┌───────────────────────────────┐
-   │ NATIONAL MODEL                │                     │ LOCALIZED METRO CALIBRATION   │
-   │ (src/locations/national)      │                     │ (src/locations/<location>)    │
-   │ • RBOB Wholesale Futures      │                     │ • Tulsa, Newark, Cincinnati,  │
-   │ • Directional Acc: 60.79%     │                     │   Greenville, Charlotte,      │
-   │                               │                     │   Oakland & SF Bay Area       │
-   └───────────────────────────────┘                     └───────────────┬───────────────┘
-```
+![Two-Tiered Weather Architecture](assets/weather_architecture.svg)
 
 * **Token-Efficient Ingestion Engine (`t.wxs.us`):** Pre-filters NWS alerts and SPC convective outlooks down to ~150–300 tokens per request (a 90%–95% token savings vs raw 3,500-token GeoJSON feature maps).
 * **Deterministic Risk Mapping:** Maps SPC convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) directly into numerical impact feature vectors without LLM latency or token cost.
@@ -108,7 +84,7 @@ Instead of predicting raw non-stationary price levels directly, the model learns
 \[
 \Delta \%_t = \frac{P_{t+5} - P_t}{P_t}
 \]
-The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\text{gal}$) is calculated as:
+The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \text{\$3.89/gal}$) is calculated as:
 \[
 \hat{P}_{t+5} = P_{\text{Live}} \times (1 + \hat{\Delta}_{\%})
 \]
@@ -120,7 +96,7 @@ The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\
 All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records.
 
 ### Feature Attribution (XAI) Breakdown
-`compute_locale_feature_attribution_breakdown` in `src/models.py` decomposes the total projected forecast delta ($\Delta = P_{\text{pred}} - P_{\text{base}}$) into signed dollar contributions ($/gal) across 6 core domain drivers:
+`compute_locale_feature_attribution_breakdown` in `src/models.py` decomposes the total projected forecast delta ($\Delta = P_{\text{pred}} - P_{\text{base}}$) into signed dollar contributions (\$/gal) across 6 core domain drivers:
 1. **Futures & Commodity Benchmark** ($\Delta_{\text{futures}}$)
 2. **Refining Yield & Crack Spread** ($\Delta_{\text{crack}}$)
 3. **Weather & Environmental Signals** ($\Delta_{\text{weather}}$)
@@ -172,34 +148,7 @@ The weekly model performance review runs automatically on Saturday mornings (08:
 
 The public presentation layer is compiled by `src/dashboard_generator.py` into static HTML artifacts and Open Graph social preview cards in `docs/`:
 
-```
-                               ┌──────────────────────────────────┐
-                               │       docs/index.html (/)        │
-                               │    Midgley Overview Landing      │
-                               │  Summary Forecast Cards Grid     │
-                               └────────────────┬─────────────────┘
-                                                │
-       ┌───────────────────────────────┬────────┴────────┬───────────────────────────────┐
-       ▼                               ▼                 ▼                               ▼
-┌──────────────┐              ┌──────────────────┐ ┌──────────────┐              ┌──────────────┐
-│ /national    │              │ METRO AREAS MENU │ │ /math        │              │ /reports     │
-│ Wholesale    │              ├──────────────────┤ │ KaTeX Math   │              │ Technical    │
-│ RBOB Futures │              │ • /tulsa (OK)    │ │ Equations &  │              │ Run Reports  │
-│ Analytics    │              │ • /newark (DE)   │ │ 10-Layer     │              │ & Run JSONs  │
-└──────────────┘              │ • /cincinnati(OH)│ │ Architecture │              └──────────────┘
-                              │ • /greenville(NC)│ └──────────────┘
-                              │ • /charlotte (NC)│
-                              │ • /oakland (CA)  │
-                              │ • /bayarea (CA)  │
-                              └────────┬─────────┘
-                                       │
-                                       ▼
-                       ┌────────────────────────────────┐
-                       │ data/regional_metadata/*.json  │
-                       │ Decoupled JSON Driver Cards    │
-                       │ (render_regional_driver_cards) │
-                       └────────────────────────────────┘
-```
+![Multi-Page Web Routing Architecture](assets/web_routing_architecture.svg)
 
 Static web routing compatibility is preserved across both direct file routes (`/<page>.html`) and clean directory routes (`/<page>/index.html`) by outputting dual matching file trees (e.g. `docs/tulsa.html` and `docs/tulsa/index.html`). 
 
@@ -277,29 +226,7 @@ Root entrypoints (`main.py`, `tulsa_main.py`, `newark_main.py`, etc.), notebook 
 
 All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/USDA series, NOAA weather endpoints, commodity spot feeds, and financial news/scrapers) are integrated with the **3-Tier Lookup Cache Gateway** (`src/lookup_cache.py`). This architecture eliminates redundant API requests and synchronizes quota limits across local Dev VM (`10.42.42.54`) and GitHub Actions runners:
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    EXTERNAL DATA CONNECTORS & FEEDS                         │
-│  • EIA, FRED, USDA, OilpriceAPI, Alpha Vantage, Socrata Open Data           │
-│  • GasBuddy, AAA Web Scrapers, NOAA Weather, Finlight Energy News           │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│              MULTI-TIER LOOKUP CACHE GATEWAY (`src/lookup_cache.py`)        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ • Tier 1 (Primary Edge): Turso Edge SQLite REST API (TURSO_DATABASE_URL)    │
-│ • Tier 2 (Backup Edge):  Cloudflare D1/R2 Edge Worker (CLOUDFLARE_CACHE_URL)  │
-│ • Tier 3 (Local Core):   SQLite Datastore (`data/lookup_cache.sqlite`) +    │
-│                          In-Memory Fast Dict (`global_cache`)              │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      LOCAL DISK JSON FALLBACK                               │
-│             (`data/{source}_cache.json` / Offline Benchmark)                 │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+![Multi-Tier Lookup Cache Gateway Architecture](assets/cache_gateway_architecture.svg)
 
 ### Key Technical Specifications:
 * **Key Namespacing:** Prefixed by service domain (e.g., `oilpriceapi_{key}`, `alphavant_{key}`, `eia_{series_id}`, `fred_{series_id}`, `socrata_{state}_{dataset}`).
@@ -314,7 +241,8 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 
 1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):**
    * Executes every 15 minutes via Cloudflare Cron Triggers (`*/15 * * * *`).
-   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection, deduplicates dispatched items against Cloudflare Cache API (`caches.default`), and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
+   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection, deduplicates dispatched items against Cloudflare Cache API (`caches.default`), and enqueues event payloads to Cloudflare Queue (`intraday-event-queue`).
+   * **Cloudflare Queues Edge Buffer (Issue #194):** Configured with producer binding (`INTRADAY_QUEUE`) in `wrangler.toml` and consumer handler (`handleQueueBatch`). Processes message batches asynchronously, enforcing edge cache deduplication, backoff retries, and automatic routing to dead-letter queue (`intraday-event-dlq`) upon persistent failure. Forwards event batches to `POST /api/v1/events/queue-consumer` on `src/api_server.py`. Runs on Workers Free plan (10,000 free operations/day).
 
 2. **`midgley-cache-worker` ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):**
    * Acts as Tier 2 Edge Cache Gateway over Cloudflare D1 database (`midgley-cache-d1`).
@@ -322,21 +250,7 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 
 ### Option A2 Observability & Telemetry Engine
 
-```
-                             ┌──────────────────────────────────┐
-                             │    CLOUDFLARE WORKER INVOCATION  │
-                             └────────────────┬─────────────────┘
-                                              │
-                 ┌────────────────────────────┼────────────────────────────┐
-                 │                            │                            │
-                 ▼                            ▼                            ▼
-  ┌─────────────────────────────┐ ┌─────────────────────────────┐ ┌─────────────────────────────┐
-  │ CLOUDFLARE DASHBOARD LOGS   │ │    AXIOM LOG ANALYTICS      │ │  SENTRY CRASH REPORTING     │
-  │ • Real-time tail logs       │ │ • 30-day searchable events  │ │ • Uncaught exception stack  │
-  │ • Invocation trace graphs   │ │ • `logToAxiom()` HTTPS REST │ │   traces & sourcemaps       │
-  │ • Native persistent logs    │ │ • Dataset: `midgley-workers`│ │ • `captureSentryException()`│
-  └─────────────────────────────┘ └─────────────────────────────┘ └─────────────────────────────┘
-```
+![Cloudflare Edge Workers & Option A2 Telemetry Architecture](assets/worker_telemetry_architecture.svg)
 
 * **Cloudflare Native Observability:** Configured in `wrangler.toml` and `wrangler.cache.toml` with `[observability]` (`enabled = true`, `head_sampling_rate = 1.0`, `persist = true`).
 * **Axiom Log Analytics (`logToAxiom`):** Ingests structured JSON cycle summaries, RSS warnings, GitHub dispatches, and cache hits/misses directly to Axiom dataset `midgley-workers` via `ctx.waitUntil()` async flushes (0 HTTP latency penalty, $0 subscription cost).

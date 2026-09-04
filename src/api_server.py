@@ -1018,6 +1018,64 @@ async def ingest_event_webhook(
     }
 
 
+class QueueBatchRequest(BaseModel):
+    events: List[WebhookRequest] = Field(..., description="List of queued event items to process in batch")
+    batch_id: Optional[str] = Field(None, description="Optional Cloudflare Queue batch ID")
+    queue_name: Optional[str] = Field("intraday-event-queue", description="Queue identifier")
+
+
+@app.post("/api/v1/events/queue-consumer", summary="Ingest Batch Events Pushed by Cloudflare Queue Consumer")
+async def ingest_queue_batch_events(
+    request: Request,
+    req: QueueBatchRequest,
+    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature")
+):
+    """
+    Issue #194: Receives batch queued event payloads pushed by Cloudflare Queue consumer or local queue worker.
+    Processes queued events asynchronously, running anomaly detection, deduplication, and regional metro updates.
+    """
+    raw_body = await request.body()
+    if not verify_webhook_signature(raw_body, x_midgley_signature):
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized queue request: Invalid or missing X-Midgley-Signature HMAC-SHA256 header."
+        )
+
+    from src.intraday_event_monitor import IntradayEventMonitor
+    monitor = IntradayEventMonitor()
+
+    results = []
+    processed_count = 0
+    anomalies_count = 0
+
+    for event in req.events:
+        if not event.headline:
+            continue
+        res = monitor.process_incoming_headline(
+            event.headline,
+            source=event.source or "Cloudflare_Queue_Consumer",
+            url=event.url
+        )
+        results.append({
+            "headline": event.headline,
+            "url": event.url,
+            "result": res
+        })
+        processed_count += 1
+        if res.get("anomaly_detected", False):
+            anomalies_count += 1
+
+    return {
+        "status": "success",
+        "processed_at": datetime.now().isoformat(),
+        "queue_name": req.queue_name or "intraday-event-queue",
+        "batch_id": req.batch_id,
+        "total_processed": processed_count,
+        "anomalies_detected": anomalies_count,
+        "events": results
+    }
+
+
 @app.get("/api/v1/security/ip-status", summary="Get IPASIS Gateway Security & Request Telemetry", tags=["Security"])
 def get_ipasis_security_telemetry():
     """

@@ -48,6 +48,16 @@
 - **1-Hour TTL Cache & Fail-Open Resiliency:** Caches IP lookup results for 3600s (`_IP_CACHE`) and gracefully fails open on network timeouts to prevent service degradation.
 - **Quota Accounting & Observability Dashboard:** Tracks daily API request usage against the **100 req/day free allowance cap** (`data/ipasis_telemetry.json`), exposing metrics via `GET /api/v1/security/ip-status` and rendering real-time quota progress cards on `docs/telemetry.html`.
 
+### 9. Cloudflare Queues Edge Event Buffer & Batch Processing Gateway (Issue #194)
+- **Cloudflare Queues Edge Buffer (`intraday-event-queue`):** Asynchronous edge event queue (`INTRADAY_QUEUE` producer binding in `wrangler.toml` with `intraday-event-dlq` dead-letter queue) decoupling high-frequency headline burst detection and webhook pushes from origin server execution. Included on Workers Free tier (10,000 free operations/day).
+- **Batch Queue Consumer Handler:** `handleQueueBatch` in `workers/intraday_monitor_worker.ts` processes message batches asynchronously, enforcing edge cache deduplication, retry backoffs, and dead-letter queue routing.
+- **Origin Batch Consumer Endpoint (`POST /api/v1/events/queue-consumer`):** Batch consumer REST schema in `src/api_server.py` supporting batch headline ingestion and target locale resolution.
+- **Unit Test Suite ([`tests/test_cloudflare_queues.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_cloudflare_queues.py)):** Full unit test suite verifying single and batch queue payloads, invalid JSON schema handling, and dead-letter fallback.
+
+### 10. System Architecture Diagram Vectorization & LaTeX Math Formatting
+- **Fireworks Tech Graph Vector Diagrams (`src/fireworks_tech_graph.py`):** Expanded automated SVG diagram generator (ingested in Issue #191) to synthesize 6 self-contained vector diagrams (`multi_agent_architecture.svg`, `regional_metro_architecture.svg`, `weather_architecture.svg`, `web_routing_architecture.svg`, `cache_gateway_architecture.svg`, `worker_telemetry_architecture.svg`), replacing all ASCII flowcharts in `docs/ARCHITECTURE.md`.
+- **KaTeX LaTeX Math Formatting Fixes:** Corrected LaTeX math display blocks (`\[ ... \]`) and dollar sign escaping across `docs/ARCHITECTURE.md` to guarantee clean KaTeX rendering on the `/math` documentation page.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -55,7 +65,7 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `244 passed, 1 warning in 598.00s` (100% pass rate across 50 test modules).
+  **Result:** `274 passed, 1 warning in 564.32s` (100% pass rate across 56 test modules).
 
 ---
 
@@ -67,5 +77,7 @@
 - **Issue #82**: `[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)` (Closed as completed)
 - **Issue #87**: `feat(security): implement IPASIS API Gateway Security & Telemetry accounting` (Closed as completed)
 - **Issue #191**: `[Feature Request] Ingest Fireworks Tech Graph for Automated Architecture Diagram Generation` (Closed as completed)
-- **Issue #195**: `[Feature Request] Dedicated System Observability & Telemetry Dashboard Page` (Closed as completed)
+- **Issue #192**: `[Feature Request] Cloudflare Durable Objects for State Persistence` (Closed as not planned)
+- **Issue #194**: `[Feature Request] Cloudflare Queues Integration for Asynchronous Edge Event Buffering` (Closed as completed)
+- **Issue #195**: `[Feature Request] Dedicated System Observability & Telemetry Dashboard Page` (Closed as completed)`
 

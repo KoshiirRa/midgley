@@ -8,6 +8,18 @@ AXIOM_DATASET = "midgley-workers"
 [triggers]
 crons = ["*/15 * * * *"]
 
+[[queues.producers]]
+queue = "intraday-event-queue"
+binding = "INTRADAY_QUEUE"
+
+[[queues.consumers]]
+queue = "intraday-event-queue"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 3
+dead_letter_queue = "intraday-event-dlq"
+
+
 [observability]
 enabled = true
 head_sampling_rate = 1.0

@@ -324,6 +324,241 @@ def generate_regional_metro_svg() -> str:
     return svg_content.strip()
 
 
+def generate_weather_architecture_svg() -> str:
+    svg_content = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 450" width="100%" height="100%" style="background-color: #0b0f19; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="cardGradW" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowW" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowW-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <g transform="translate(300, 20)">
+    <rect width="400" height="60" rx="10" fill="url(#cardGradW)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="200" y="35" fill="#f8fafc" font-size="15" font-weight="700" text-anchor="middle">NOAA NWS &amp; SPC WEATHER INGESTION ENGINE</text>
+    <text x="200" y="50" fill="#38bdf8" font-size="11" text-anchor="middle">api.weather.gov / t.wxs.us Terminal REST Endpoint</text>
+  </g>
+
+  <path d="M 400 80 L 230 140" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowW)"/>
+  <path d="M 600 80 L 770 140" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowW-amber)"/>
+
+  <g transform="translate(50, 140)">
+    <rect width="360" height="180" rx="12" fill="url(#cardGradW)" stroke="#38bdf8" stroke-opacity="0.5" stroke-width="1.5"/>
+    <text x="20" y="32" fill="#38bdf8" font-size="13" font-weight="700">TIER 1: NATIONAL PRODUCTION BASINS</text>
+    <text x="20" y="60" fill="#e2e8f0" font-size="12">• Gulf Coast Hurricanes (NHC advisories)</text>
+    <text x="20" y="80" fill="#e2e8f0" font-size="12">• Permian Basin Freeze Alerts &amp; HDD/CDD</text>
+    <text x="20" y="100" fill="#e2e8f0" font-size="12">• Bakken Shale Polar Vortex Warnings</text>
+    <text x="20" y="120" fill="#e2e8f0" font-size="12">• Refinery Hub Heat Stress Anomaly Z-Scores</text>
+    <rect x="20" y="140" width="320" height="26" rx="6" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="180" y="157" fill="#38bdf8" font-size="11" font-weight="600" text-anchor="middle">Feeds National RBOB Model (src/locations/national)</text>
+  </g>
+
+  <g transform="translate(590, 140)">
+    <rect width="360" height="180" rx="12" fill="url(#cardGradW)" stroke="#fbbf24" stroke-opacity="0.5" stroke-width="1.5"/>
+    <text x="20" y="32" fill="#fbbf24" font-size="13" font-weight="700">TIER 2: LOCALIZED METRO HUBS</text>
+    <text x="20" y="60" fill="#e2e8f0" font-size="12">• Tulsa OK (OKZ060 / HF Sinclair Refinery)</text>
+    <text x="20" y="80" fill="#e2e8f0" font-size="12">• Newark DE (PBF Delaware City 180k bpd)</text>
+    <text x="20" y="100" fill="#e2e8f0" font-size="12">• Cincinnati OH/KY (Ohio River Lock Delays)</text>
+    <text x="20" y="120" fill="#e2e8f0" font-size="12">• Greenville/Charlotte NC &amp; Oakland CA</text>
+    <rect x="20" y="140" width="320" height="26" rx="6" fill="#d97706" fill-opacity="0.2"/>
+    <text x="180" y="157" fill="#fbbf24" font-size="11" font-weight="600" text-anchor="middle">Feeds Metro Calibration Agents (src/locations/&lt;metro&gt;)</text>
+  </g>
+
+  <g transform="translate(50, 360)">
+    <rect width="900" height="55" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="33" fill="#34d399" font-size="12" font-weight="600">TOKEN OPTIMIZATION &amp; 0-TOKEN SPC RATING:</text>
+    <text x="340" y="33" fill="#94a3b8" font-size="12">t.wxs.us JSON reduces prompt overhead from 3,500 to ~200 tokens (95% token savings). 0-token deterministic SPC mapping.</text>
+  </g>
+</svg>'''
+    return svg_content.strip()
+
+
+def generate_web_routing_architecture_svg() -> str:
+    svg_content = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%" style="background-color: #0b0f19; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="cardGradWeb" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowWeb" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#a78bfa"/>
+    </marker>
+  </defs>
+
+  <g transform="translate(320, 20)">
+    <rect width="360" height="65" rx="12" fill="url(#cardGradWeb)" stroke="#a78bfa" stroke-width="2"/>
+    <text x="180" y="38" fill="#f8fafc" font-size="16" font-weight="700" text-anchor="middle">docs/index.html Landing Page (/)</text>
+    <text x="180" y="54" fill="#a78bfa" font-size="11" text-anchor="middle">Overview Landing, Summary Forecast Cards &amp; Live Scoreboard</text>
+  </g>
+
+  <path d="M 380 85 L 120 160" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowWeb)"/>
+  <path d="M 460 85 L 360 160" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowWeb)"/>
+  <path d="M 540 85 L 640 160" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowWeb)"/>
+  <path d="M 620 85 L 880 160" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowWeb)"/>
+
+  <g transform="translate(30, 160)">
+    <rect width="180" height="120" rx="10" fill="url(#cardGradWeb)" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="90" y="32" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">/national</text>
+    <text x="90" y="52" fill="#e2e8f0" font-size="11" text-anchor="middle">Wholesale RBOB</text>
+    <text x="90" y="70" fill="#94a3b8" font-size="10" text-anchor="middle">Futures &amp; Crude Spread</text>
+    <text x="90" y="88" fill="#94a3b8" font-size="10" text-anchor="middle">Stacking Ensemble</text>
+  </g>
+
+  <g transform="translate(240, 160)">
+    <rect width="240" height="180" rx="10" fill="url(#cardGradWeb)" stroke="#34d399" stroke-width="1.2"/>
+    <text x="120" y="30" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle">METRO HUBS MENU</text>
+    <text x="20" y="54" fill="#94a3b8" font-size="11">• /tulsa (OK Cushing)</text>
+    <text x="20" y="72" fill="#94a3b8" font-size="11">• /newark (DE PADD 1B)</text>
+    <text x="20" y="90" fill="#94a3b8" font-size="11">• /cincinnati (OH/KY)</text>
+    <text x="20" y="108" fill="#94a3b8" font-size="11">• /greenville &amp; /charlotte</text>
+    <text x="20" y="126" fill="#94a3b8" font-size="11">• /oakland &amp; /bayarea</text>
+    <text x="20" y="144" fill="#94a3b8" font-size="11">• /port_st_lucie (FL)</text>
+    <text x="20" y="162" fill="#94a3b8" font-size="11">• /diesel (ULSD Engine)</text>
+  </g>
+
+  <g transform="translate(520, 160)">
+    <rect width="210" height="120" rx="10" fill="url(#cardGradWeb)" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="105" y="32" fill="#fbbf24" font-size="13" font-weight="700" text-anchor="middle">/math</text>
+    <text x="105" y="52" fill="#e2e8f0" font-size="11" text-anchor="middle">KaTeX Math Equations</text>
+    <text x="105" y="70" fill="#94a3b8" font-size="10" text-anchor="middle">Full Architecture Specs</text>
+    <text x="105" y="88" fill="#94a3b8" font-size="10" text-anchor="middle">CodeCogs TeX Embeds</text>
+  </g>
+
+  <g transform="translate(760, 160)">
+    <rect width="210" height="120" rx="10" fill="url(#cardGradWeb)" stroke="#f472b6" stroke-width="1.2"/>
+    <text x="105" y="32" fill="#f472b6" font-size="13" font-weight="700" text-anchor="middle">/reports</text>
+    <text x="105" y="52" fill="#e2e8f0" font-size="11" text-anchor="middle">Technical Run Reports</text>
+    <text x="105" y="70" fill="#94a3b8" font-size="10" text-anchor="middle">Weekly Review Audits</text>
+    <text x="105" y="88" fill="#94a3b8" font-size="10" text-anchor="middle">Run History JSON Store</text>
+  </g>
+
+  <g transform="translate(240, 370)">
+    <rect width="520" height="80" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-dasharray="4,4" stroke-width="1.5"/>
+    <text x="260" y="30" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">DECOUPLED METADATA &amp; DUAL ROUTING ENGINE</text>
+    <text x="260" y="50" fill="#94a3b8" font-size="11" text-anchor="middle">Renders profile cards from data/regional_metadata/*.json. Dual output (tulsa.html &amp; tulsa/index.html).</text>
+  </g>
+</svg>'''
+    return svg_content.strip()
+
+
+def generate_cache_gateway_architecture_svg() -> str:
+    svg_content = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%" style="background-color: #0b0f19; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="cardGradC" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowC" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <g transform="translate(100, 20)">
+    <rect width="800" height="65" rx="12" fill="url(#cardGradC)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="400" y="36" fill="#f8fafc" font-size="15" font-weight="700" text-anchor="middle">EXTERNAL DATA CONNECTORS &amp; MARKET FEEDS</text>
+    <text x="400" y="52" fill="#94a3b8" font-size="11" text-anchor="middle">EIA Petroleum API v2 • FRED St. Louis Fed • USDA Biofuels • NOAA Weather • Finlight.me • GasBuddy Scraper</text>
+  </g>
+
+  <path d="M 500 85 L 500 120" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowC)"/>
+
+  <g transform="translate(100, 125)">
+    <rect width="800" height="250" rx="14" fill="url(#cardGradC)" stroke="#34d399" stroke-width="2"/>
+    <text x="400" y="32" fill="#34d399" font-size="15" font-weight="700" text-anchor="middle">MULTI-TIER LOOKUP CACHE GATEWAY (src/lookup_cache.py)</text>
+
+    <g transform="translate(30, 50)">
+      <rect width="740" height="50" rx="8" fill="#0284c7" fill-opacity="0.15" stroke="#0369a1" stroke-width="1"/>
+      <text x="20" y="30" fill="#38bdf8" font-size="13" font-weight="700">TIER 1 (Primary Edge):</text>
+      <text x="200" y="30" fill="#e2e8f0" font-size="12">Turso Edge SQLite REST API (TURSO_DATABASE_URL)</text>
+    </g>
+
+    <g transform="translate(30, 115)">
+      <rect width="740" height="50" rx="8" fill="#7c3aed" fill-opacity="0.15" stroke="#6d28d9" stroke-width="1"/>
+      <text x="20" y="30" fill="#a78bfa" font-size="13" font-weight="700">TIER 2 (Backup Edge):</text>
+      <text x="200" y="30" fill="#e2e8f0" font-size="12">Cloudflare D1/R2 Edge Worker Gateway (workers/cache_worker.ts)</text>
+    </g>
+
+    <g transform="translate(30, 180)">
+      <rect width="740" height="50" rx="8" fill="#059669" fill-opacity="0.15" stroke="#047857" stroke-width="1"/>
+      <text x="20" y="30" fill="#34d399" font-size="13" font-weight="700">TIER 3 (Local Core):</text>
+      <text x="200" y="30" fill="#e2e8f0" font-size="12">SQLite Datastore (data/lookup_cache.sqlite) + Fast In-Memory Dict (global_cache)</text>
+    </g>
+  </g>
+
+  <path d="M 500 375 L 500 405" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowC)"/>
+
+  <g transform="translate(250, 405)">
+    <rect width="500" height="55" rx="10" fill="#0f172a" stroke="#64748b" stroke-width="1.2"/>
+    <text x="250" y="33" fill="#e2e8f0" font-size="13" font-weight="600" text-anchor="middle">LOCAL DISK JSON FALLBACK (data/{source}_cache.json)</text>
+  </g>
+</svg>'''
+    return svg_content.strip()
+
+
+def generate_worker_telemetry_architecture_svg() -> str:
+    svg_content = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 450" width="100%" height="100%" style="background-color: #0b0f19; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="cardGradWk" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowWk" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <g transform="translate(100, 20)">
+    <rect width="800" height="90" rx="12" fill="url(#cardGradWk)" stroke="#f97316" stroke-width="1.5"/>
+    <text x="400" y="32" fill="#f97316" font-size="15" font-weight="700" text-anchor="middle">CLOUDFLARE EDGE WORKERS &amp; QUEUES INGESTION</text>
+    <text x="400" y="52" fill="#e2e8f0" font-size="12" text-anchor="middle">• midgley-intraday-monitor (workers/intraday_monitor_worker.ts) — 15-min RSS cron trigger</text>
+    <text x="400" y="70" fill="#38bdf8" font-size="11" text-anchor="middle">• Cloudflare Queues Buffer (intraday-event-queue &amp; DLQ) + midgley-cache-worker (D1 Edge Gateway)</text>
+  </g>
+
+  <path d="M 230 110 L 230 170" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowWk)"/>
+  <path d="M 500 110 L 500 170" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowWk)"/>
+  <path d="M 770 110 L 770 170" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowWk)"/>
+
+  <g transform="translate(50, 170)">
+    <rect width="270" height="220" rx="12" fill="url(#cardGradWk)" stroke="#38bdf8" stroke-opacity="0.5" stroke-width="1.5"/>
+    <text x="135" y="32" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">CLOUDFLARE NATIVE OBS</text>
+    <text x="20" y="64" fill="#e2e8f0" font-size="11">• Real-time wrangler tail logs</text>
+    <text x="20" y="86" fill="#e2e8f0" font-size="11">• Invocation trace graphs</text>
+    <text x="20" y="108" fill="#e2e8f0" font-size="11">• 100% head sampling rate</text>
+    <text x="20" y="130" fill="#e2e8f0" font-size="11">• Native persistent logs enabled</text>
+    <rect x="20" y="165" width="230" height="35" rx="6" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="135" y="187" fill="#38bdf8" font-size="11" font-weight="600" text-anchor="middle">wrangler.toml observability</text>
+  </g>
+
+  <g transform="translate(365, 170)">
+    <rect width="270" height="220" rx="12" fill="url(#cardGradWk)" stroke="#34d399" stroke-opacity="0.5" stroke-width="1.5"/>
+    <text x="135" y="32" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle">AXIOM LOG ANALYTICS</text>
+    <text x="20" y="64" fill="#e2e8f0" font-size="11">• 30-day searchable log streams</text>
+    <text x="20" y="86" fill="#e2e8f0" font-size="11">• logToAxiom() HTTPS REST ingest</text>
+    <text x="20" y="108" fill="#e2e8f0" font-size="11">• Dataset: midgley-workers</text>
+    <text x="20" y="130" fill="#e2e8f0" font-size="11">• 0 HTTP latency penalty via ctx.waitUntil</text>
+    <rect x="20" y="165" width="230" height="35" rx="6" fill="#059669" fill-opacity="0.2"/>
+    <text x="135" y="187" fill="#34d399" font-size="11" font-weight="600" text-anchor="middle">Option A2 Telemetry Engine</text>
+  </g>
+
+  <g transform="translate(680, 170)">
+    <rect width="270" height="220" rx="12" fill="url(#cardGradWk)" stroke="#f472b6" stroke-opacity="0.5" stroke-width="1.5"/>
+    <text x="135" y="32" fill="#f472b6" font-size="13" font-weight="700" text-anchor="middle">SENTRY CRASH &amp; CRONS</text>
+    <text x="20" y="64" fill="#e2e8f0" font-size="11">• Uncaught exception stack traces</text>
+    <text x="20" y="86" fill="#e2e8f0" font-size="11">• captureSentryException()</text>
+    <text x="20" y="108" fill="#e2e8f0" font-size="11">• Sentry Cron Heartbeats</text>
+    <text x="20" y="130" fill="#e2e8f0" font-size="11">• sendSentryCronCheckIn(ok/error)</text>
+    <rect x="20" y="165" width="230" height="35" rx="6" fill="#db2777" fill-opacity="0.2"/>
+    <text x="135" y="187" fill="#f472b6" font-size="11" font-weight="600" text-anchor="middle">SENTRY_DSN Envelope Protocol</text>
+  </g>
+</svg>'''
+    return svg_content.strip()
+
+
 def validate_svg_content(svg_string: str) -> bool:
     """
     Validates that an SVG string is valid XML with an svg root tag.
@@ -338,37 +573,34 @@ def validate_svg_content(svg_string: str) -> bool:
 
 def generate_architecture_diagrams(output_dir: str = "docs/assets") -> dict:
     """
-    Generates and saves multi_agent_architecture.svg and regional_metro_architecture.svg to output_dir.
+    Generates and saves architecture SVG diagrams to output_dir via Fireworks Tech Graph.
     Returns dict mapping filename to absolute filepath.
     """
     os.makedirs(output_dir, exist_ok=True)
     
-    multi_agent_svg = generate_multi_agent_pipeline_svg()
-    regional_metro_svg = generate_regional_metro_svg()
-
-    if not validate_svg_content(multi_agent_svg):
-        raise ValueError("Generated multi_agent_architecture.svg failed XML validation!")
-
-    if not validate_svg_content(regional_metro_svg):
-        raise ValueError("Generated regional_metro_architecture.svg failed XML validation!")
-
-    multi_agent_path = os.path.join(output_dir, "multi_agent_architecture.svg")
-    regional_metro_path = os.path.join(output_dir, "regional_metro_architecture.svg")
-
-    with open(multi_agent_path, "w", encoding="utf-8") as f:
-        f.write(multi_agent_svg)
-
-    with open(regional_metro_path, "w", encoding="utf-8") as f:
-        f.write(regional_metro_svg)
-
-    print(f"Successfully generated architecture diagrams in '{output_dir}':")
-    print(f"  - {multi_agent_path} ({len(multi_agent_svg)} bytes)")
-    print(f"  - {regional_metro_path} ({len(regional_metro_svg)} bytes)")
-
-    return {
-        "multi_agent_architecture.svg": os.path.abspath(multi_agent_path),
-        "regional_metro_architecture.svg": os.path.abspath(regional_metro_path)
+    diagrams = {
+        "multi_agent_architecture.svg": generate_multi_agent_pipeline_svg(),
+        "regional_metro_architecture.svg": generate_regional_metro_svg(),
+        "weather_architecture.svg": generate_weather_architecture_svg(),
+        "web_routing_architecture.svg": generate_web_routing_architecture_svg(),
+        "cache_gateway_architecture.svg": generate_cache_gateway_architecture_svg(),
+        "worker_telemetry_architecture.svg": generate_worker_telemetry_architecture_svg()
     }
+
+    paths = {}
+    for filename, svg_content in diagrams.items():
+        if not validate_svg_content(svg_content):
+            raise ValueError(f"Generated {filename} failed XML validation!")
+        
+        filepath = os.path.join(output_dir, filename)
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(svg_content)
+        
+        paths[filename] = os.path.abspath(filepath)
+        print(f"  - {filepath} ({len(svg_content)} bytes)")
+
+    return paths
 
 if __name__ == "__main__":
     generate_architecture_diagrams()
+

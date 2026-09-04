@@ -13,6 +13,33 @@ export interface Env {
   SENTRY_DSN?: string;
   AXIOM_TOKEN?: string;
   AXIOM_DATASET?: string;
+  INTRADAY_QUEUE?: {
+    send(message: any, options?: any): Promise<void>;
+    sendBatch(messages: { body: any }[], options?: any): Promise<void>;
+  };
+}
+
+export interface QueueMessage<T = any> {
+  id: string;
+  timestamp: Date;
+  body: T;
+  attempts: number;
+  ack(): void;
+  retry(): void;
+}
+
+export interface QueueMessageBatch<T = any> {
+  queue: string;
+  messages: QueueMessage<T>[];
+  ackAll(): void;
+  retryAll(): void;
+}
+
+export interface QueueEventPayload {
+  headline: string;
+  url: string;
+  source?: string;
+  timestamp?: string;
 }
 
 export interface RSSItem {
@@ -321,6 +348,91 @@ async function dispatchGitHubEvent(env: Env, headline: string, url: string): Pro
   }
 }
 
+export async function enqueueIntradayEvent(
+  env: Env,
+  ctx: any,
+  payload: QueueEventPayload
+): Promise<boolean> {
+  if (!env.INTRADAY_QUEUE) return false;
+  try {
+    await env.INTRADAY_QUEUE.send({
+      ...payload,
+      timestamp: payload.timestamp || new Date().toISOString()
+    });
+    console.log(`[Queue Enqueue Success] Enqueued event for: "${payload.headline}"`);
+    await logToAxiom(env, ctx, {
+      event: "intraday_queue_enqueue",
+      headline: payload.headline,
+      url: payload.url
+    });
+    return true;
+  } catch (err: any) {
+    console.error(`[Queue Enqueue Error] ${err.message || String(err)}`);
+    await captureSentryException(env, ctx, err, { headline: payload.headline });
+    return false;
+  }
+}
+
+export async function handleQueueBatch(
+  batch: QueueMessageBatch<QueueEventPayload>,
+  env: Env,
+  ctx?: any
+): Promise<{ processed: number; acked: number; retried: number }> {
+  console.log(`[Queue Consumer Batch] Processing ${batch.messages.length} messages from queue "${batch.queue}"`);
+
+  let processed = 0;
+  let acked = 0;
+  let retried = 0;
+
+  for (const message of batch.messages) {
+    processed++;
+    const { headline, url } = message.body || {};
+    if (!headline) {
+      message.ack();
+      acked++;
+      continue;
+    }
+
+    try {
+      const alreadyDispatched = await isHeadlineDispatchedInCache(headline);
+      if (alreadyDispatched) {
+        console.log(`[Queue Consumer Cache HIT] Skipping already dispatched event: "${headline}"`);
+        message.ack();
+        acked++;
+        continue;
+      }
+
+      const res = await dispatchGitHubEvent(env, headline, url);
+      if (res.dispatched) {
+        console.log(`[Queue Consumer Dispatch Success] Event dispatched for: "${headline}"`);
+        await markHeadlineDispatchedInCache(headline);
+        message.ack();
+        acked++;
+      } else {
+        console.error(`[Queue Consumer Dispatch Failed] Error: ${res.error}`);
+        await captureSentryException(env, ctx, new Error(res.error || "Queue Consumer Dispatch Failed"), { headline });
+        message.retry();
+        retried++;
+      }
+    } catch (err: any) {
+      console.error(`[Queue Consumer Exception] ${err.message || String(err)}`);
+      await captureSentryException(env, ctx, err, { headline });
+      message.retry();
+      retried++;
+    }
+  }
+
+  await logToAxiom(env, ctx, {
+    event: "intraday_queue_batch_processed",
+    total: batch.messages.length,
+    processed,
+    acked,
+    retried
+  });
+
+  return { processed, acked, retried };
+}
+
 export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSummary> {
   const checkInId1 = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
   const checkInId2 = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now());
@@ -372,6 +484,23 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
         continue;
       }
 
+      if (env.INTRADAY_QUEUE) {
+        const enqueued = await enqueueIntradayEvent(env, ctx, {
+          headline: anomaly.title,
+          url: anomaly.link,
+          source: "Cloudflare_Worker_Queue"
+        });
+        if (enqueued) {
+          dispatches.push({
+            headline: anomaly.title,
+            url: anomaly.link,
+            dispatched: true
+          });
+          break; // Enforce single dispatch per 15-minute cycle
+        }
+      }
+
+      // Direct fallback dispatch if INTRADAY_QUEUE is absent or enqueue failed
       const res = await dispatchGitHubEvent(env, anomaly.title, anomaly.link);
       if (res.dispatched) {
         console.log(`[GitHub Dispatch Success] Event dispatched for: "${anomaly.title}"`);
@@ -422,6 +551,15 @@ export default {
     } catch (err: any) {
       console.error(`[Scheduled Exception] ${err.message || String(err)}`);
       await captureSentryException(env, ctx, err, { trigger: "scheduled" });
+    }
+  },
+
+  async queue(batch: QueueMessageBatch<QueueEventPayload>, env: Env, ctx: any): Promise<void> {
+    try {
+      await handleQueueBatch(batch, env, ctx);
+    } catch (err: any) {
+      console.error(`[Queue Exception] ${err.message || String(err)}`);
+      await captureSentryException(env, ctx, err, { trigger: "queue" });
     }
   },
 

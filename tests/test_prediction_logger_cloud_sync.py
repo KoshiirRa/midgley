@@ -111,8 +111,9 @@ def test_cloudflare_d1_cloud_sync_mocked(monkeypatch):
         assert res["synced_rows"] == 1
 
 
-def test_api_server_cloud_endpoints(clean_env):
+def test_api_server_cloud_endpoints(clean_env, monkeypatch):
     """Verifies GET /api/v1/forecast/cloud-status and POST /api/v1/forecast/cloud-sync endpoints."""
+    monkeypatch.setenv("TESTING", "1")
     client = TestClient(app)
     
     # 1. Test GET /api/v1/forecast/cloud-status
@@ -124,7 +125,7 @@ def test_api_server_cloud_endpoints(clean_env):
     assert data["cloud_sync_status"]["fallback_store"] == "local_csv"
 
     # 2. Test POST /api/v1/forecast/cloud-sync
-    post_resp = client.post("/api/v1/forecast/cloud-sync")
+    post_resp = client.post("/api/v1/forecast/cloud-sync", headers={"X-Admin-Secret": "midgley_dev_admin_secret_2026"})
     assert post_resp.status_code == 200
     post_data = post_resp.json()
     assert post_data["status"] == "success"

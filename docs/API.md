@@ -281,6 +281,35 @@ For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and
 
 ---
 
+## 📦 Cloudflare Queue Batch Consumer Endpoint (`POST /api/v1/events/queue-consumer` - Issue #194)
+
+* **Endpoint:** `POST /api/v1/events/queue-consumer`
+* **Content-Type:** `application/json`
+* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature when `MIDGLEY_WEBHOOK_SECRET` is set).
+* **Description:** Asynchronously receives batch queued event payloads pushed by Cloudflare Queue consumers or local queue workers. Processes queued event items in batch, executing deduplication against edge cache, fast-path anomaly scoring, and regional metro forecast updates.
+
+* **Example Payload:**
+```json
+{
+  "queue_name": "intraday-event-queue",
+  "batch_id": "batch_884920",
+  "events": [
+    {
+      "headline": "OPEC Emergency Cut Announced",
+      "url": "https://news.example.com/opec1",
+      "source": "Cloudflare_Queue_Consumer"
+    },
+    {
+      "headline": "Refinery Outage Reported in PADD 1B",
+      "url": "https://news.example.com/refinery2",
+      "source": "Cloudflare_Queue_Consumer"
+    }
+  ]
+}
+```
+
+---
+
 ## 🤖 Model Context Protocol (MCP) Server Integration
 
 The Midgley MCP Server exposes tools, resources, and prompt templates for integration with Claude Desktop, Antigravity CLI (`agy`), and OpenAI Custom GPTs.

@@ -10,6 +10,12 @@ from src.api_server import app
 client = TestClient(app)
 
 
+@pytest.fixture(autouse=True)
+def setup_testing_env(monkeypatch):
+    monkeypatch.setenv("TESTING", "1")
+    monkeypatch.setenv("MIDGLEY_ENV", "dev")
+
+
 def test_get_locales_endpoint():
     """Verifies GET /api/v1/locales returns supported locales and metadata profiles."""
     resp = client.get("/api/v1/locales")
