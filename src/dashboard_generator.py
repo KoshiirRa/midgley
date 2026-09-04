@@ -1602,6 +1602,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
 </html>
 """
 
+    decay_formula_url = codecogs_url(r"M_t = M_{t-1} \cdot e^{-\frac{\ln(2)}{t_{1/2}}} + S_t")
     md_content = f"""# Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
 **Log Timestamp:** `{log_ts}`  
@@ -1633,7 +1634,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
 
 Exponential Memory Decay Model Equation:
 $$M_t = M_{{t-1}} \\cdot e^{{-\\frac{{\\ln(2)}}{{t_{{1/2}}}}}} + S_t$$
-![Exponential Decay Formula]({codecogs_url("M_t = M_{t-1} \\cdot e^{-\\frac{\\ln(2)}{t_{1/2}}} + S_t")})
+![Exponential Decay Formula]({decay_formula_url})
 
 Decay Parameter Substitutions:
 - Decay constant: $\\lambda = \\frac{{\\ln(2)}}{{{decay_half_life:.1f}}} = {decay_constant:.5f} \\text{{ day}}^{{-1}}$
