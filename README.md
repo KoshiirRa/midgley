@@ -1,6 +1,6 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.3.3)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.4.1)
 
-[![Release: v0.3.3](https://img.shields.io/badge/Release-v0.3.3-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.3.3)
+[![Release: v0.4.1](https://img.shields.io/badge/Release-v0.4.1-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.4.1)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
 [![Automated Nightly Dev Release](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml)
@@ -177,7 +177,7 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 
 For operators and developers wishing to host their own custom instance of Midgley or extend the forecasting framework to new metropolitan regions:
 
-👉 **Read the complete [Self-Hosting & Multi-Metro Regional Setup Guide (`docs/SELF_HOSTING.md`)](docs/SELF_HOSTING.md)**
+👉 **Read the complete [Self-Hosting & Multi-Metro Regional Setup Guide (`SELF_HOSTING.md`)](SELF_HOSTING.md)**
 
 Key guide coverage includes:
 * **Standalone Server & VM Deployment:** Systemd user service & timer unit files (`midgley-api.service`, `midgley-dev.service`, `midgley-daily-forecast.timer`, `midgley-weekly-review.timer`).
