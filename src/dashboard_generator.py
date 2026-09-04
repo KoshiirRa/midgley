@@ -2570,6 +2570,8 @@ def generate_public_dashboard():
         nat_pct = (nat_delta / nat_base * 100.0) if nat_base > 0 else 0.0
         nat_sign = "+" if nat_delta > 0 else ""
         nat_color = "#10b981" if nat_pct < -0.2 else ("#ef4444" if nat_pct > 0.2 else "#0ea5e9")
+        nat_trend_text = f"{nat_sign}{nat_pct:.1f}% Projected Trend"
+        nat_trend_color = "text-emerald-300" if nat_pct < -0.2 else ("text-rose-300" if nat_pct > 0.2 else "text-blue-300")
         head_meta_national = get_head_meta_tags(
             title=f"National Wholesale RBOB Forecast (${nat_base:.3f} → ${nat_pred:.3f} | {nat_sign}{nat_pct:.2f}%) - Midgley AI",
             description=f"5-day forecast for National Wholesale RBOB futures. Baseline ${nat_base:.3f}/gal, projected target ${nat_pred:.3f}/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.",
@@ -2632,7 +2634,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-blue-400">${{NAT_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.2% Projected Trend</p>
+                <p class="text-xs {{NAT_TREND_COLOR}} font-semibold">{{NAT_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -2754,7 +2756,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -2772,6 +2774,8 @@ def generate_public_dashboard():
         tul_pct = (tul_delta / tul_base * 100.0) if tul_base > 0 else 0.0
         tul_sign = "+" if tul_delta > 0 else ""
         tul_color = "#10b981" if tul_pct < -0.2 else ("#ef4444" if tul_pct > 0.2 else "#0ea5e9")
+        tulsa_trend_text = f"{tul_sign}{tul_pct:.1f}% Projected Trend"
+        tulsa_trend_color = "text-emerald-300" if tul_pct < -0.2 else ("text-rose-300" if tul_pct > 0.2 else "text-emerald-300")
         head_meta_tulsa = get_head_meta_tags(
             title=f"Tulsa Metro Gas Price Forecast (${tul_base:.3f} → ${tul_pred:.3f} | {tul_sign}{tul_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Tulsa OK metro. Baseline ${tul_base:.3f}/gal, projected target ${tul_pred:.3f}/gal. Cushing WTI hub & West Tulsa HF Sinclair refinery model.",
@@ -2834,7 +2838,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-emerald-400">${{TULSA_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-emerald-300 font-semibold">-2.8% Projected Trend</p>
+                <p class="text-xs {{TULSA_TREND_COLOR}} font-semibold">{{TULSA_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -2940,7 +2944,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -2958,6 +2962,8 @@ def generate_public_dashboard():
         new_pct = (new_delta / new_base * 100.0) if new_base > 0 else 0.0
         new_sign = "+" if new_delta > 0 else ""
         new_color = "#10b981" if new_pct < -0.2 else ("#ef4444" if new_pct > 0.2 else "#0ea5e9")
+        new_trend_text = f"{new_sign}{new_pct:.1f}% Projected Trend"
+        new_trend_color = "text-emerald-300" if new_pct < -0.2 else ("text-rose-300" if new_pct > 0.2 else "text-blue-300")
         head_meta_newark = get_head_meta_tags(
             title=f"Newark DE Metro Gas Price Forecast (${new_base:.3f} → ${new_pred:.3f} | {new_sign}{new_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Newark DE metro. Baseline ${new_base:.3f}/gal, projected target ${new_pred:.3f}/gal. PBF Delaware City refinery & C&D Canal detour model.",
@@ -3020,7 +3026,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-blue-400">${{NEWARK_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.0% Projected Trend</p>
+                <p class="text-xs {{NEWARK_TREND_COLOR}} font-semibold">{{NEWARK_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3126,7 +3132,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -3374,6 +3380,8 @@ def generate_public_dashboard():
         grn_pct = (grn_delta / grn_base * 100.0) if grn_base > 0 else 0.0
         grn_sign = "+" if grn_delta > 0 else ""
         grn_color = "#10b981" if grn_pct < -0.2 else ("#ef4444" if grn_pct > 0.2 else "#0ea5e9")
+        grn_trend_text = f"{grn_sign}{grn_pct:.1f}% Projected Trend"
+        grn_trend_color = "text-emerald-300" if grn_pct < -0.2 else ("text-rose-300" if grn_pct > 0.2 else "text-green-300")
         head_meta_greenville = get_head_meta_tags(
             title=f"Greenville NC Retail Gas Forecast (${grn_base:.3f} → ${grn_pred:.3f} | {grn_sign}{grn_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Greenville NC metro. Baseline ${grn_base:.3f}/gal, projected target ${grn_pred:.3f}/gal. Colonial Pipeline Selma hub & Tar River flooding model.",
@@ -3436,7 +3444,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-green-400">${{GREENVILLE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-green-300 font-semibold">-3.1% Projected Trend</p>
+                <p class="text-xs {{GREENVILLE_TREND_COLOR}} font-semibold">{{GREENVILLE_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3485,7 +3493,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -3503,6 +3511,8 @@ def generate_public_dashboard():
         clt_pct = (clt_delta / clt_base * 100.0) if clt_base > 0 else 0.0
         clt_sign = "+" if clt_delta > 0 else ""
         clt_color = "#10b981" if clt_pct < -0.2 else ("#ef4444" if clt_pct > 0.2 else "#0ea5e9")
+        clt_trend_text = f"{clt_sign}{clt_pct:.1f}% Projected Trend"
+        clt_trend_color = "text-emerald-300" if clt_pct < -0.2 else ("text-rose-300" if clt_pct > 0.2 else "text-cyan-300")
         head_meta_charlotte = get_head_meta_tags(
             title=f"Charlotte NC Retail Gas Forecast (${clt_base:.3f} → ${clt_pred:.3f} | {clt_sign}{clt_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Charlotte NC metro. Baseline ${clt_base:.3f}/gal, projected target ${clt_pred:.3f}/gal. Paw Creek terminal & NC/SC cross-border tax gap model.",
@@ -3565,7 +3575,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-cyan-400">${{CHARLOTTE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-cyan-300 font-semibold">-3.0% Projected Trend</p>
+                <p class="text-xs {{CHARLOTTE_TREND_COLOR}} font-semibold">{{CHARLOTTE_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3614,7 +3624,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -3632,6 +3642,8 @@ def generate_public_dashboard():
         psl_pct = (psl_delta / psl_base * 100.0) if psl_base > 0 else 0.0
         psl_sign = "+" if psl_delta > 0 else ""
         psl_color = "#10b981" if psl_pct < -0.2 else ("#ef4444" if psl_pct > 0.2 else "#0ea5e9")
+        psl_trend_text = f"{psl_sign}{psl_pct:.1f}% Projected Trend"
+        psl_trend_color = "text-emerald-300" if psl_pct < -0.2 else ("text-rose-300" if psl_pct > 0.2 else "text-cyan-300")
         head_meta_port_st_lucie = get_head_meta_tags(
             title=f"Port St. Lucie FL Retail Gas Forecast (${psl_base:.3f} → ${psl_pred:.3f} | {psl_sign}{psl_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Port St. Lucie FL metro. Baseline ${psl_base:.3f}/gal, projected target ${psl_pred:.3f}/gal. Port Everglades waterborne offloading & Florida tax model.",
@@ -3694,7 +3706,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-cyan-400">${{PSL_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-cyan-300 font-semibold">-2.7% Projected Trend</p>
+                <p class="text-xs {{PSL_TREND_COLOR}} font-semibold">{{PSL_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3743,7 +3755,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
+""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
 
     os.makedirs(PORT_ST_LUCIE_SUB_DIR, exist_ok=True)
     with open(PORT_ST_LUCIE_PATH, "w", encoding="utf-8") as f:

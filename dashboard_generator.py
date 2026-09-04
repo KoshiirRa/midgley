@@ -67,6 +67,17 @@ TELEMETRY_SUB_PATH = os.path.join(TELEMETRY_SUB_DIR, "index.html")
 KATEX_ONLOAD_SCRIPT = r'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 
+
+def codecogs_url(latex_str: str) -> str:
+    """
+    Generates a CodeCogs SVG equation image rendering URL for raw LaTeX math expressions (Issue #52).
+    """
+    import urllib.parse
+    clean_latex = latex_str.strip().strip("$").strip("\\(").strip("\\)")
+    encoded = urllib.parse.quote(clean_latex)
+    return f"https://latex.codecogs.com/svg.latex?{encoded}"
+
+
 KATEX_MOBILE_CSS = """
         /* Mobile-Responsive KaTeX Math Equation Styles */
         .katex-display {
@@ -139,7 +150,37 @@ def calculate_rolling_metrics():
         return [], [], []
 
 
-from src.dashboard_generator import get_release_badge
+try:
+    from src import __version__
+except ImportError:
+    __version__ = "0.4.1"
+
+
+def get_release_badge() -> str:
+    """Generates dynamic HTML badge for the header based on git branch or environment.
+    
+    When running on the 'dev' branch (or any development branch/environment),
+    it displays a 'Dev Branch v{version}-dev' badge in amber.
+    When running on 'main' or 'master' release branches, it displays 'Release v{version}' in orange.
+    """
+    version = os.getenv("MIDGLEY_VERSION", __version__)
+    branch = os.getenv("MIDGLEY_BRANCH", os.getenv("GITHUB_REF_NAME", ""))
+    if not branch:
+        try:
+            cmd_out = subprocess.check_output(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                stderr=subprocess.DEVNULL,
+                text=True
+            ).strip()
+            if cmd_out:
+                branch = cmd_out
+        except Exception:
+            branch = "dev"
+
+    if branch in ["main", "master"] or branch.startswith("release/"):
+        return f'<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v{version}</span>'
+    else:
+        return f'<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v{version}-dev</span>'
 
 
 
@@ -1569,6 +1610,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
 </html>
 """
 
+    decay_formula_url = codecogs_url(r"M_t = M_{t-1} \cdot e^{-\frac{\ln(2)}{t_{1/2}}} + S_t")
     md_content = f"""# Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
 **Log Timestamp:** `{log_ts}`  
@@ -1600,10 +1642,12 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
 
 Exponential Memory Decay Model Equation:
 $$M_t = M_{{t-1}} \\cdot e^{{-\\frac{{\\ln(2)}}{{t_{{1/2}}}}}} + S_t$$
+![Exponential Decay Formula]({decay_formula_url})
 
 Decay Parameter Substitutions:
 - Decay constant: $\\lambda = \\frac{{\\ln(2)}}{{{decay_half_life:.1f}}} = {decay_constant:.5f} \\text{{ day}}^{{-1}}$
 - Daily retention multiplier: $\\gamma = e^{{-{decay_constant:.5f}}} \\approx {retention_daily:.5f}$
+
 
 Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 - **Day 0 (Initial Shock Target)**: $M_0 = {m0:.4f}$
@@ -2526,6 +2570,8 @@ def generate_public_dashboard():
         nat_pct = (nat_delta / nat_base * 100.0) if nat_base > 0 else 0.0
         nat_sign = "+" if nat_delta > 0 else ""
         nat_color = "#10b981" if nat_pct < -0.2 else ("#ef4444" if nat_pct > 0.2 else "#0ea5e9")
+        nat_trend_text = f"{nat_sign}{nat_pct:.1f}% Projected Trend"
+        nat_trend_color = "text-emerald-300" if nat_pct < -0.2 else ("text-rose-300" if nat_pct > 0.2 else "text-blue-300")
         head_meta_national = get_head_meta_tags(
             title=f"National Wholesale RBOB Forecast (${nat_base:.3f} → ${nat_pred:.3f} | {nat_sign}{nat_pct:.2f}%) - Midgley AI",
             description=f"5-day forecast for National Wholesale RBOB futures. Baseline ${nat_base:.3f}/gal, projected target ${nat_pred:.3f}/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.",
@@ -2588,7 +2634,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-blue-400">${{NAT_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.2% Projected Trend</p>
+                <p class="text-xs {{NAT_TREND_COLOR}} font-semibold">{{NAT_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -2710,7 +2756,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -2728,6 +2774,8 @@ def generate_public_dashboard():
         tul_pct = (tul_delta / tul_base * 100.0) if tul_base > 0 else 0.0
         tul_sign = "+" if tul_delta > 0 else ""
         tul_color = "#10b981" if tul_pct < -0.2 else ("#ef4444" if tul_pct > 0.2 else "#0ea5e9")
+        tulsa_trend_text = f"{tul_sign}{tul_pct:.1f}% Projected Trend"
+        tulsa_trend_color = "text-emerald-300" if tul_pct < -0.2 else ("text-rose-300" if tul_pct > 0.2 else "text-emerald-300")
         head_meta_tulsa = get_head_meta_tags(
             title=f"Tulsa Metro Gas Price Forecast (${tul_base:.3f} → ${tul_pred:.3f} | {tul_sign}{tul_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Tulsa OK metro. Baseline ${tul_base:.3f}/gal, projected target ${tul_pred:.3f}/gal. Cushing WTI hub & West Tulsa HF Sinclair refinery model.",
@@ -2790,7 +2838,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-emerald-400">${{TULSA_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-emerald-300 font-semibold">-2.8% Projected Trend</p>
+                <p class="text-xs {{TULSA_TREND_COLOR}} font-semibold">{{TULSA_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -2896,7 +2944,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -2914,6 +2962,8 @@ def generate_public_dashboard():
         new_pct = (new_delta / new_base * 100.0) if new_base > 0 else 0.0
         new_sign = "+" if new_delta > 0 else ""
         new_color = "#10b981" if new_pct < -0.2 else ("#ef4444" if new_pct > 0.2 else "#0ea5e9")
+        new_trend_text = f"{new_sign}{new_pct:.1f}% Projected Trend"
+        new_trend_color = "text-emerald-300" if new_pct < -0.2 else ("text-rose-300" if new_pct > 0.2 else "text-blue-300")
         head_meta_newark = get_head_meta_tags(
             title=f"Newark DE Metro Gas Price Forecast (${new_base:.3f} → ${new_pred:.3f} | {new_sign}{new_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Newark DE metro. Baseline ${new_base:.3f}/gal, projected target ${new_pred:.3f}/gal. PBF Delaware City refinery & C&D Canal detour model.",
@@ -2976,7 +3026,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-blue-400">${{NEWARK_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.0% Projected Trend</p>
+                <p class="text-xs {{NEWARK_TREND_COLOR}} font-semibold">{{NEWARK_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3082,7 +3132,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -3330,6 +3380,8 @@ def generate_public_dashboard():
         grn_pct = (grn_delta / grn_base * 100.0) if grn_base > 0 else 0.0
         grn_sign = "+" if grn_delta > 0 else ""
         grn_color = "#10b981" if grn_pct < -0.2 else ("#ef4444" if grn_pct > 0.2 else "#0ea5e9")
+        grn_trend_text = f"{grn_sign}{grn_pct:.1f}% Projected Trend"
+        grn_trend_color = "text-emerald-300" if grn_pct < -0.2 else ("text-rose-300" if grn_pct > 0.2 else "text-green-300")
         head_meta_greenville = get_head_meta_tags(
             title=f"Greenville NC Retail Gas Forecast (${grn_base:.3f} → ${grn_pred:.3f} | {grn_sign}{grn_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Greenville NC metro. Baseline ${grn_base:.3f}/gal, projected target ${grn_pred:.3f}/gal. Colonial Pipeline Selma hub & Tar River flooding model.",
@@ -3392,7 +3444,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-green-400">${{GREENVILLE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-green-300 font-semibold">-3.1% Projected Trend</p>
+                <p class="text-xs {{GREENVILLE_TREND_COLOR}} font-semibold">{{GREENVILLE_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3441,7 +3493,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -3459,6 +3511,8 @@ def generate_public_dashboard():
         clt_pct = (clt_delta / clt_base * 100.0) if clt_base > 0 else 0.0
         clt_sign = "+" if clt_delta > 0 else ""
         clt_color = "#10b981" if clt_pct < -0.2 else ("#ef4444" if clt_pct > 0.2 else "#0ea5e9")
+        clt_trend_text = f"{clt_sign}{clt_pct:.1f}% Projected Trend"
+        clt_trend_color = "text-emerald-300" if clt_pct < -0.2 else ("text-rose-300" if clt_pct > 0.2 else "text-cyan-300")
         head_meta_charlotte = get_head_meta_tags(
             title=f"Charlotte NC Retail Gas Forecast (${clt_base:.3f} → ${clt_pred:.3f} | {clt_sign}{clt_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Charlotte NC metro. Baseline ${clt_base:.3f}/gal, projected target ${clt_pred:.3f}/gal. Paw Creek terminal & NC/SC cross-border tax gap model.",
@@ -3521,7 +3575,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-cyan-400">${{CHARLOTTE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-cyan-300 font-semibold">-3.0% Projected Trend</p>
+                <p class="text-xs {{CHARLOTTE_TREND_COLOR}} font-semibold">{{CHARLOTTE_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3570,7 +3624,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -3588,6 +3642,8 @@ def generate_public_dashboard():
         psl_pct = (psl_delta / psl_base * 100.0) if psl_base > 0 else 0.0
         psl_sign = "+" if psl_delta > 0 else ""
         psl_color = "#10b981" if psl_pct < -0.2 else ("#ef4444" if psl_pct > 0.2 else "#0ea5e9")
+        psl_trend_text = f"{psl_sign}{psl_pct:.1f}% Projected Trend"
+        psl_trend_color = "text-emerald-300" if psl_pct < -0.2 else ("text-rose-300" if psl_pct > 0.2 else "text-cyan-300")
         head_meta_port_st_lucie = get_head_meta_tags(
             title=f"Port St. Lucie FL Retail Gas Forecast (${psl_base:.3f} → ${psl_pred:.3f} | {psl_sign}{psl_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Port St. Lucie FL metro. Baseline ${psl_base:.3f}/gal, projected target ${psl_pred:.3f}/gal. Port Everglades waterborne offloading & Florida tax model.",
@@ -3650,7 +3706,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-cyan-400">${{PSL_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-cyan-300 font-semibold">-2.7% Projected Trend</p>
+                <p class="text-xs {{PSL_TREND_COLOR}} font-semibold">{{PSL_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3699,7 +3755,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
+""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
 
     os.makedirs(PORT_ST_LUCIE_SUB_DIR, exist_ok=True)
     with open(PORT_ST_LUCIE_PATH, "w", encoding="utf-8") as f:
@@ -5246,9 +5302,21 @@ def generate_telemetry_page():
 
     from src.zip_geocoding import get_unmapped_zip_telemetry
     from src.finlight_feed import get_finlight_quota_status
+    from src.tokentab_accounting import token_tab_manager
+    from src.ipasis_security import get_ipasis_telemetry
 
     tele_data = get_unmapped_zip_telemetry()
     quota_data = get_finlight_quota_status()
+    ipasis_data = get_ipasis_telemetry()
+    tok_data = token_tab_manager.get_accounting_summary()
+    tok_summary = tok_data.get('summary', {})
+    tok_prov = tok_data.get('provider_breakdown', {})
+    tok_warn = tok_data.get('budget_warnings', [{}])[0] if tok_data.get('budget_warnings') else {}
+    gemini_stats = tok_prov.get('gemini-2.5-flash', {})
+    gpt_stats = tok_prov.get('gpt-4o-mini', {})
+    claude_stats = tok_prov.get('claude-3-5-haiku', {})
+    finlight_stats = tok_prov.get('finlight', {})
+    lexicon_stats = tok_prov.get('offline_lexicon', {})
 
     def build_telemetry_html(hdr):
         return f"""<!DOCTYPE html>
@@ -5388,6 +5456,10 @@ def generate_telemetry_page():
                         <span class="text-blue-400 font-bold">Unlimited (Keyless REST)</span>
                     </div>
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">IPASIS IP Security API</span>
+                        <span class="text-cyan-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 100)} calls today ({ipasis_data.get('private_bypasses', 0)} local bypasses)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">GasBuddy GraphQL Feed</span>
                         <span class="text-purple-400 font-bold">Keyless Public Endpoint</span>
                     </div>
@@ -5410,6 +5482,95 @@ def generate_telemetry_page():
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
                         <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
+        <section class="space-y-4 pt-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">{tok_summary.get('total_tokens', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_summary.get('total_input_tokens', 0):,} In / {tok_summary.get('total_output_tokens', 0):,} Out</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">${tok_summary.get('total_cost_usd', 0.0):.6f}</div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">{tok_summary.get('total_calls', 0):,}</div>
+                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
+                        <div class="text-xl font-bold text-emerald-300 font-mono">{tok_warn.get('code', 'NORMAL')}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_warn.get('message', 'Budget nominal')}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Provider / Tier</th>
+                                    <th class="py-2 px-3">Calls</th>
+                                    <th class="py-2 px-3">Input Tokens</th>
+                                    <th class="py-2 px-3">Output Tokens</th>
+                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">${gemini_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">${gpt_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
+                                    <td class="py-2 px-3">{claude_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{claude_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{claude_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">${claude_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
+                                    <td class="py-2 px-3">{finlight_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3">{lexicon_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

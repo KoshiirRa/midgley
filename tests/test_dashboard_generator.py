@@ -525,6 +525,59 @@ def test_get_release_badge_dynamic_version(monkeypatch):
     assert "Release v0.5.0" in badge_custom
 
 
+def test_dynamic_trend_badges_rendering():
+    """Verify Issue #207: Ensure that regional dashboard HTML pages render
+    dynamic trend percentage badges calculated from (predicted - base) / base * 100.0,
+    rather than static hardcoded trend strings (e.g. '-3.0% Projected Trend').
+    """
+    generate_public_dashboard()
+
+    all_regional_paths = [
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        CINCINNATI_PATH,
+        GREENVILLE_PATH,
+        CHARLOTTE_PATH,
+        OAKLAND_PATH,
+        BAYAREA_PATH,
+    ]
+
+    single_trend_paths = [
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        GREENVILLE_PATH,
+        CHARLOTTE_PATH,
+    ]
+
+    for path in all_regional_paths:
+        assert os.path.exists(path), f"Page missing: {path}"
+        with open(path, "r", encoding="utf-8") as f:
+            html = f.read()
+
+        # Verify static contradictory trend strings are never present in generated HTML
+        assert "-3.0% Projected Trend" not in html, f"Hardcoded '-3.0% Projected Trend' found in {path}"
+        assert "+1.2% Projected Trend" not in html, f"Hardcoded '+1.2% Projected Trend' found in {path}"
+        assert "+2.1% Projected Trend" not in html, f"Hardcoded '+2.1% Projected Trend' found in {path}"
+        assert "+1.8% Projected Trend" not in html, f"Hardcoded '+1.8% Projected Trend' found in {path}"
+
+    for path in single_trend_paths:
+        with open(path, "r", encoding="utf-8") as f:
+            html = f.read()
+        # Verify dynamic badge structure with % Projected Trend exists on single-region pages
+        assert "% Projected Trend" in html, f"Missing dynamic '% Projected Trend' badge in {path}"
+
+    # Verify Oakland renders dynamic percentage trend in its target card
+    with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
+        oak_html = f.read()
+        assert "5-Day Target:" in oak_html
+        assert "%" in oak_html
+
+
+
+
+
 
 
 

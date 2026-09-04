@@ -155,6 +155,18 @@ class TestLiveFuelFeed(unittest.TestCase):
         self.assertEqual(res5["price"], 3.890)
         self.assertIn("Static Anchor", res5["source"])
 
+    def test_is_price_outlier_detection(self):
+        """Verify is_price_outlier correctly identifies extreme price anomalies."""
+        from src.live_fuel_feed import is_price_outlier
+        # Newark_DE static_anchor is 3.350; $4.117 is a +22.9% outlier
+        self.assertTrue(is_price_outlier("Newark_DE", 4.117))
+        # $3.377 is a valid normal price
+        self.assertFalse(is_price_outlier("Newark_DE", 3.377))
+        # Oakland_CA static_anchor is 5.550; $5.827 is valid for CA
+        self.assertFalse(is_price_outlier("Oakland_CA", 5.827))
+        # $2.00 is an extreme low outlier for Oakland
+        self.assertTrue(is_price_outlier("Oakland_CA", 2.00))
+
     def test_fetch_live_metro_retail_prices_all_regions(self):
         """Verify fetch_live_metro_retail_prices returns non-empty dict for all regions."""
         prices = fetch_live_metro_retail_prices()

@@ -70,6 +70,42 @@ def validate_price_payload_freshness(payload: dict, max_allowed_hours: float = M
     return payload
 
 
+def is_price_outlier(region_code: str, price: float) -> bool:
+    """
+    Validates whether a candidate live retail gas price is a plausible value
+    or an unvalidated scraper outlier anomaly.
+    Checks deviation against static_anchor or yfinance benchmark.
+    Returns True if price is an extreme outlier, False otherwise.
+    """
+    if price is None or not pd.notna(price) or float(price) <= 0:
+        return True
+    meta = REGION_METADATA.get(region_code)
+    if not meta:
+        return False
+    anchor = float(meta.get("static_anchor", 3.50))
+    p_val = float(price)
+    
+    # For CA regions (Oakland, BayArea, etc.), prices are high ($4.00 - $7.50)
+    if region_code in ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA"]:
+        if p_val < 4.00 or p_val > 7.50:
+            logger.warning(f"CA OUTLIER PRICE WARNING for {region_code}: ${p_val:.3f}/gal is outside expected CA range [$4.00, $7.50].")
+            return True
+        return False
+    
+    # For non-CA regions, check absolute dollar deviation (> $0.75/gal) and percentage deviation (> 20%)
+    dollar_diff = abs(p_val - anchor)
+    pct_diff = dollar_diff / anchor if anchor > 0 else 0.0
+    
+    if dollar_diff > 0.75 and pct_diff > 0.20:
+        logger.warning(
+            f"OUTLIER PRICE ANOMALY DETECTED for {region_code}: ${p_val:.3f}/gal "
+            f"diverges by ${dollar_diff:.3f}/gal ({pct_diff*100:.1f}%) from static anchor ${anchor:.3f}/gal. Rejecting live scrape candidate."
+        )
+        return True
+        
+    return False
+
+
 REGION_METADATA = {
     "National": {
         "zip": "20001",
@@ -433,8 +469,9 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
         if gb_res and gb_res.get("average_price") and pd.notna(gb_res.get("average_price")):
             price = gb_res["average_price"]
             source = gb_res["source"]
-            logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
-            res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
+            if not is_price_outlier(region_code, price):
+                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
 
         # Step 2: AAA Metro Web Scraper
         if not res or res.get("is_stale"):
@@ -442,10 +479,11 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             if aaa_res and aaa_res.get("average_price") and pd.notna(aaa_res.get("average_price")):
                 price = aaa_res["average_price"]
                 source = aaa_res["source"]
-                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
-                cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
-                if not res or not cand.get("is_stale"):
-                    res = cand
+                if not is_price_outlier(region_code, price):
+                    logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                    cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
+                    if not res or not cand.get("is_stale"):
+                        res = cand
 
         # Step 3: EIA / yfinance Benchmark Calculation
         if not res or res.get("is_stale"):
