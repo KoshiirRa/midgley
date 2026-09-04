@@ -17,6 +17,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy Worker
+    env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
+      NODE_OPTIONS: "--no-warnings"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

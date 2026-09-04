@@ -30,6 +30,9 @@ concurrency:
 jobs:
   intraday-monitor-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
+      NODE_OPTIONS: "--no-warnings"
 
     steps:
       - name: Checkout Repository
