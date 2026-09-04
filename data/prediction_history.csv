@@ -1,12 +1,12 @@
 Unnamed: 0,2026-02-24,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,2.7856,2.8625,UP,2.5214,DOWN,0.3411,0.0,0.0.1,0.0.2,2.7856.1,0.0.3,2.7425,2.9825,0.0.4,yfinance,Unnamed: 20,log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigger,current_base_price,predicted_5d_price,predicted_direction,actual_5d_price,actual_direction,error_dollars,directional_hit,llm_price_pressure,llm_supply_disruption,quant_baseline_5d_price,llm_augmentation_delta,prediction_lower_95ci,prediction_upper_95ci,within_95ci_hit,data_source_provenance
 2026-09-03 21:08:06,2026-09-09,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,3.25,3.1277,DOWN,,,,,0.0,0.0,3.25,0.0,3.0077,3.2477,,yfinance,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,2026-09-03 23:00:08,2026-09-10,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Canada’s TSX Slips As Oil Jumps And Tariff Worries Grow - Finimize,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,3.1302,3.3702,,yfinance
-,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:10:00,2026-09-03,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.5604,3.463,DOWN,3.6932,UP,0.2302,0.0,0.0,0.0,3.5604,0.0,3.343,3.583,0.0,yfinance
+,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:10:00,2026-09-03,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.5604,3.463,DOWN,3.6849,UP,0.2219,0.0,0.0,0.0,3.5604,0.0,3.343,3.583,0.0,yfinance
 ,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:10:07,2026-09-10,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.28,3.1856,DOWN,,,,,0.0,0.0,3.28,0.0,3.0656,3.3056,,yfinance
-,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:14:46,2026-09-03,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.5304,3.4188,DOWN,3.6932,UP,0.2744,0.0,0.0,0.0,3.5304,0.0,3.2988,3.5388,0.0,yfinance
+,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:14:46,2026-09-03,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.5304,3.4188,DOWN,3.6849,UP,0.2661,0.0,0.0,0.0,3.5304,0.0,3.2988,3.5388,0.0,yfinance
 ,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:14:53,2026-09-10,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.25,3.1428,DOWN,,,,,0.0,0.0,3.25,0.0,3.0228,3.2628,,yfinance
-,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:15:15,2026-09-03,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.4342,5.3238,DOWN,5.1932,DOWN,0.1306,1.0,0.0,0.0,5.4342,0.0,5.2038,5.4438,0.0,yfinance
-,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:15:22,2026-09-03,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.5342,5.4238,DOWN,5.2932,DOWN,0.1306,1.0,0.0,0.0,5.5342,0.0,5.3038,5.5438,0.0,yfinance
+,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:15:15,2026-09-03,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.4342,5.3238,DOWN,5.1849,DOWN,0.1389,1.0,0.0,0.0,5.4342,0.0,5.2038,5.4438,0.0,yfinance
+,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:15:22,2026-09-03,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.5342,5.4238,DOWN,5.2849,DOWN,0.1389,1.0,0.0,0.0,5.5342,0.0,5.3038,5.5438,0.0,yfinance
 ,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:15:29,2026-09-10,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.7886,DOWN,,,,,0.0,0.0,4.95,0.0,4.6686,4.9086,,yfinance
 ,,,,,,,,,,,,,,,,,,,,,2026-09-03 20:15:33,2026-09-10,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.8853,DOWN,,,,,0.0,0.0,5.05,0.0,4.7653,5.0053,,yfinance
 ,,,,,,,,,,,,,,,,,,,,,2026-09-04 07:00:46,2025-10-06,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,1.9951,1.9352,DOWN,1.9016,DOWN,0.0336,1.0,0.0,0.0,1.9951,0.0,1.8152,2.0552,1.0,yfinance
@@ -2309,4 +2309,4 @@ Unnamed: 0,2026-02-24,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BAT
 ,,,,,,,,,,,,,,,,,,,,,2026-09-04 07:04:29,2026-09-01,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.1301,4.0114,DOWN,3.6851,DOWN,0.3263,1.0,0.0,0.0,4.1301,0.0,3.8914,4.1314,0.0,yfinance
 ,,,,,,,,,,,,,,,,,,,,,2026-09-04 07:04:29,2026-09-02,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.1973,4.0705,DOWN,3.6538,DOWN,0.4167,1.0,0.0,0.0,4.1973,0.0,3.9505,4.1905,0.0,yfinance
 ,,,,,,,,,,,,,,,,,,,,,2026-09-04 07:04:36,2026-09-09,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.981,3.829,DOWN,,,,,0.0,0.0,3.981,0.0,3.709,3.949,,yfinance
-,,,,,,,,,,,,,,,,,,,,,2026-09-04 09:00:18,2026-09-11,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"U.S.–Canada Tariffs: Timeline of Key Dates and Documents - Blake, Cassels & Graydon LLP",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,3.1302,3.3702,,yfinance
+,,,,,,,,,,,,,,,,,,,,,2026-09-04 12:30:18,2026-09-11,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Trump's Middle East and Tariff Cards Likely to Remain Short-Term Headwinds Ahead of Midterms - finance.biggo.com,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,3.1302,3.3702,,yfinance
