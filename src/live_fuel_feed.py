@@ -267,9 +267,9 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
                     # Search for specific metro heading block and its corresponding table
                     for kw in keywords:
                         kw_lower = kw.lower()
-                        for el in soup.find_all(['h2', 'h3', 'h4', 'h5', 'h6', 'button', 'a', 'div', 'td', 'th', 'p']):
-                            text = el.get_text(strip=True).lower()
-                            if kw_lower in text:
+                        for el in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'button', 'a', 'td', 'th']):
+                            text = el.get_text(strip=True)
+                            if kw_lower in text.lower() and len(text) < 100:
                                 tbl = el.find_next('table')
                                 if tbl:
                                     for tr in tbl.find_all('tr'):

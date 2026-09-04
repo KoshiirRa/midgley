@@ -344,8 +344,8 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Role:** Exposes real-time unleaded gasoline price ingestion, 5-day out-of-time quantitative forecasting, counterfactual physical/geopolitical shock simulations, and Model Context Protocol (MCP) integrations for external LLMs, AI agents, and chatbots.
 * **Service Orchestration:** Managed by `midgley-api.service` running continuously on `dev-vm` (`http://localhost:8000`).
 * **Scraper Fallback Sequence (`src/live_fuel_feed.py`):**
-  - **Step 1 (GasBuddy GraphQL):** Real-time station queries by zip code.
-  - **Step 2 (AAA Metro BS4 Scraper):** Targeted BeautifulSoup metro table parsing by region keywords (e.g. `Oakland`, `San Francisco`, `Tulsa`, `Wilmington`, `Cincinnati`, `Covington`). Rejects unparseable headers to return `None` rather than matching global top-nav header text.
+  - **Step 1 (GasBuddy GraphQL):** Real-time station & metro trend queries by zip code using `py_gasbuddy` with coordinate (`lat`, `lon`) resolution.
+  - **Step 2 (AAA Metro BS4 Scraper):** Targeted BeautifulSoup metro table parsing by region keywords (e.g. `Oakland`, `San Francisco`, `Tulsa`, `Wilmington`, `Cincinnati`, `Covington`). Restricts candidate DOM tags strictly to header/title elements (`h1`-`h6`, `button`, `a`, `td`, `th`) under 100 characters to prevent matching outer page container `<div>` tags (which span top-nav/footer links and trigger the State Average table fallback).
   - **Step 3 (EIA / yfinance RBOB Futures Benchmark):** RBOB futures contract close plus regional rack margin offset.
   - **Step 4 (prediction_history.csv Clean History):** Prior validated regional base price (sanitized against anomalies $< \$4.50$ for CA regions).
   - **Step 5 (Static Regional Fallback Anchor):** Locale-specific base anchors ($5.550 Oakland, $5.650 Bay Area, $3.890 Tulsa, $3.350 Newark, $3.450 Cincinnati).
