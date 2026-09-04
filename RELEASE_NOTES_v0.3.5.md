@@ -36,6 +36,18 @@
 - **Endpoint Auth & Tiered Access Control:** Protects `/api/v1/prices/*`, `/api/v1/forecast/*`, `/api/v1/combined`, `/api/v1/forecast/simulate`, `/api/v1/diesel/*`, and `/mcp/*`. `privileged` tier unlocks full multi-agent LLM inference, while `basic` tier automatically routes event scoring to zero-cost fallback providers ([Issue #196](https://github.com/KoshiirRa/midgley/issues/196)) to preserve Gemini tokens and Finlight API quotas.
 - **Cloudflare D1 Edge Decoupling:** Edge workers ([`workers/cache_worker.ts`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)) bind directly to Cloudflare D1 (`midgley-cache-d1`) for edge key/cache verification without relying on calls to home infrastructure.
 
+### 7. Strategy 4 Webhook Gateway Payload Transformers & Multi-Locale Routing (Issue #78)
+- **Flexible Payload Transformer (`POST /api/v1/events/webhook`):** Supports generic push webhooks from external alert tools (Zapier, IFTTT, Google Alerts, TradingView) using flexible field alias transformations (`headline` $\leftarrow$ `title` / `text` / `summary` / `tweet_content` / `article_title`, `url` $\leftarrow$ `link` / `article_url` / `web_url`, `source` $\leftarrow$ `origin` / `provider` / `channel`).
+- **Target Locales Resolution:** Automatically parses incoming headlines to resolve affected regional metro agents (`Tulsa`, `Newark`, `Cincinnati`, `Greenville`, `Charlotte`, `Oakland`, `Port_St_Lucie`, `National`) via `resolve_target_locales()` in `src/intraday_event_monitor.py`.
+- **HMAC-SHA256 Signature Security:** Verifies payload integrity via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment.
+- **Documentation & Integration Guide:** Published complete integration guide in [docs/WEBHOOK_FORMATTING_GUIDE.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/WEBHOOK_FORMATTING_GUIDE.md) and GitHub Wiki [Incoming-Webhook-Formatting-Guide.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/scratch/midgley.wiki/Incoming-Webhook-Formatting-Guide.md).
+
+### 8. IPASIS API Gateway Security & Telemetry Accounting (Issue #87)
+- **Real-Time IP Reputation Filtering ([`src/ipasis_security.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/ipasis_security.py)):** Queries IPASIS API (`https://api.ipasis.com/v1/lookup`) to block high-risk origins (Tor exit nodes, malicious proxies, abuse subnets) with `HTTP 403 Forbidden` on incoming push webhooks.
+- **Zero-Overhead Private IP Bypass:** Automatically bypasses external API lookups for loopback (`127.0.0.1`, `::1`), RFC 1918 private subnets (`10.x.x.x`, `172.16-31.x.x`, `192.168.x.x`), and internal test runners (`testclient`, `localhost`).
+- **1-Hour TTL Cache & Fail-Open Resiliency:** Caches IP lookup results for 3600s (`_IP_CACHE`) and gracefully fails open on network timeouts to prevent service degradation.
+- **Quota Accounting & Observability Dashboard:** Tracks daily API request usage against the **100 req/day free allowance cap** (`data/ipasis_telemetry.json`), exposing metrics via `GET /api/v1/security/ip-status` and rendering real-time quota progress cards on `docs/telemetry.html`.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -51,7 +63,9 @@
 - **Issue #40**: `feat(security): Implement user authentication & access control for MCP Server & REST API Gateway` (Closed as completed)
 - **Issue #48**: `feat(api): Add GET /locales Metadata Endpoint & POST /forecast/batch Endpoint` (Closed as completed)
 - **Issue #50**: `feat(geocoding): Add ZIP Code to Locale & PADD Resolution Mapping Engine` (Closed as completed)
+- **Issue #78**: `feat(api): expand Strategy 4 incoming webhook gateway with flexible payload transformers & locale routing` (Closed as completed)
 - **Issue #82**: `[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)` (Closed as completed)
+- **Issue #87**: `feat(security): implement IPASIS API Gateway Security & Telemetry accounting` (Closed as completed)
 - **Issue #191**: `[Feature Request] Ingest Fireworks Tech Graph for Automated Architecture Diagram Generation` (Closed as completed)
 - **Issue #195**: `[Feature Request] Dedicated System Observability & Telemetry Dashboard Page` (Closed as completed)
 
