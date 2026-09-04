@@ -138,6 +138,8 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Expanded EIA Weekly Petroleum Balance (`src/data_ingestion.py`) (Issue #180):** Expands `EIADataConnector` to ingest weekly motor gasoline product supplied (implied demand), refiner net production by PADD, and inter-PADD pipeline movements.
   - **USACE LPMS Ohio River Lock Delays (`src/usace_locks.py`) (Issue #181):** `USACELockConnector` monitors commercial barge queue times and delay hours at Markland and McAlpine locks on the Ohio River (`usace_ohio_river_lock_delay_hours`) for Cincinnati regional logistics calibration.
   - **4-Tier ZIP Code Geocoding & PADD Resolution Engine (`src/zip_geocoding.py`) (Issues #50 & #195):** `resolve_zip_code()` maps any 5-digit US ZIP code to mapped metro area locale, PADD region, state, and statutory state fuel tax policy via a 4-tier fallback engine (Metro Cluster hit -> State/PADD fallback -> Live GasBuddy station search -> Resolution metadata), logging unmapped lookups to `data/unmapped_zip_telemetry.json`.
+  - **Zero-Cost Internet Archive Wayback Machine Cloud Archiver (`src/wayback_archiver.py`) (Issue #197):** `archive_url_to_wayback()` automatically submits breaking energy news, OPEC bulletins, and refinery outage URLs to the Internet Archive Save API (`https://web.archive.org/save/{url}`), attaching permanent `archive_url` strings to event results in `data/intraday_events.json` and system logs.
+
 
 
 
@@ -297,8 +299,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Tulsa Metro Retail Gas Page (`/tulsa` / `docs/tulsa.html` & `docs/tulsa/index.html`):** Dedicated regional retail page calibrated to live pump prices ($3.89/gal), Cushing WTI delivery hub dynamics, West Tulsa HF Sinclair refinery tornado/freeze shock scenarios, and dynamic rack margins ($0.706/gal). Accessible via the top nav **`Metro Areas`** dropdown menu.
   - **Educational Math Guide (`/math` / `docs/math.html`):** Educational reference detailing equations and vector spaces across all 10 feature layers rendered via KaTeX (including Section 10 multiline `aligned` CARB tax breakdown).
   - **Fill-Up Timing & Estimated Savings Advisor (`/savings` / `docs/savings.html` & `docs/savings/index.html`) (Issue #91):** Interactive tank fill savings calculator and recommendation engine (`🔴 FILL UP TODAY` vs `🟢 WAIT TO FILL UP`), vehicle presets (Compact 12g, Sedan 15g, Pickup 24g, Fleet 100g), 5-day trajectory table, and LubeLogger (Issue #22) / Android Auto (Issue #21) cross-link integrations.
+  - **CodeCogs Visual LaTeX Math Fallbacks (`src/dashboard_generator.py`) (Issue #52):** `codecogs_url()` generator embedding visual SVG equation image tags (`![Exponential Decay Formula](https://latex.codecogs.com/svg.latex?...)`) alongside raw LaTeX notation in `docs/technical_breakdown.md` for visual math rendering across Markdown previews, RSS feeds, and mobile devices.
+  - **Prometheus Telemetry Exporter (`GET /api/v1/metrics` & `GET /metrics`) (Issue #107):** Exposes operational telemetry, TokenTab consumption, IPASIS security check/block metrics, 3-tier cache hit rates, request counters, and API quota remaining ratios in Prometheus exposition text format for Grafana observability dashboards.
 
 ---
+
 
 ### 9. Dev Environment & Permanent Server Agent (`dev-vm` Port 8080 & Systemd Local Workflow Timers)
 

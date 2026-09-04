@@ -239,11 +239,22 @@ class IntradayEventMonitor:
         }
         is_anomaly_bool = bool(is_anomaly)
 
+        archive_url = ""
+        if url:
+            try:
+                from src.wayback_archiver import archive_url_to_wayback
+                arch_res = archive_url_to_wayback(url, headline=headline)
+                archive_url = arch_res.get("archive_url", "")
+                logger.info(f"  -> Wayback Machine archive URL logged: {archive_url}")
+            except Exception as e:
+                logger.warning(f"Wayback Machine archive trigger error: {e}")
+
         result = {
             "timestamp": datetime.now().isoformat(),
             "headline": headline,
             "source": source,
             "url": url,
+            "archive_url": archive_url,
             "is_anomaly": is_anomaly_bool,
             "target_locales": target_locales,
             "scores": clean_scores
@@ -262,6 +273,7 @@ class IntradayEventMonitor:
                 # 2. Flush 15-minute SQLite response cache
                 clear_lookup_cache()
                 logger.info("  -> Cleared SQLite response cache for API gateway.")
+
 
                 # 3. Log Intraday Revision Record across target locales
                 for loc in target_locales:

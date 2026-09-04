@@ -1192,9 +1192,11 @@ except Exception as e:
 
 # Telemetry & Quota Endpoints (Issue #107 & Issue #108)
 @app.get("/metrics", response_class=PlainTextResponse, summary="Prometheus Telemetry Metrics Exporter")
+@app.get("/api/v1/metrics", response_class=PlainTextResponse, summary="Prometheus Telemetry Metrics Exporter")
 async def prometheus_metrics_endpoint(environment: Optional[str] = Query(None, description="Optional environment filter ('dev' or 'prod')")):
     """Exposes system telemetry and quota metrics in Prometheus exposition text format for Grafana."""
     return format_prometheus_metrics(environment=environment)
+
 
 
 # Mount static HTML web dashboard if docs directory is present

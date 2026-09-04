@@ -67,6 +67,17 @@ TELEMETRY_SUB_PATH = os.path.join(TELEMETRY_SUB_DIR, "index.html")
 KATEX_ONLOAD_SCRIPT = r'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 
+
+def codecogs_url(latex_str: str) -> str:
+    """
+    Generates a CodeCogs SVG equation image rendering URL for raw LaTeX math expressions (Issue #52).
+    """
+    import urllib.parse
+    clean_latex = latex_str.strip().strip("$").strip("\\(").strip("\\)")
+    encoded = urllib.parse.quote(clean_latex)
+    return f"https://latex.codecogs.com/svg.latex?{encoded}"
+
+
 KATEX_MOBILE_CSS = """
         /* Mobile-Responsive KaTeX Math Equation Styles */
         .katex-display {
@@ -1622,10 +1633,12 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
 
 Exponential Memory Decay Model Equation:
 $$M_t = M_{{t-1}} \\cdot e^{{-\\frac{{\\ln(2)}}{{t_{{1/2}}}}}} + S_t$$
+![Exponential Decay Formula]({codecogs_url("M_t = M_{t-1} \\cdot e^{-\\frac{\\ln(2)}{t_{1/2}}} + S_t")})
 
 Decay Parameter Substitutions:
 - Decay constant: $\\lambda = \\frac{{\\ln(2)}}{{{decay_half_life:.1f}}} = {decay_constant:.5f} \\text{{ day}}^{{-1}}$
 - Daily retention multiplier: $\\gamma = e^{{-{decay_constant:.5f}}} \\approx {retention_daily:.5f}$
+
 
 Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 - **Day 0 (Initial Shock Target)**: $M_0 = {m0:.4f}$

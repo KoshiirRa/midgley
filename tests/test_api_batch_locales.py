@@ -3,11 +3,15 @@ Unit Tests for Locales Metadata & Batch Forecast REST Endpoints (tests/test_api_
 Issue #48: Add GET /locales Metadata Endpoint & POST /forecast/batch Endpoint
 """
 
+import os
 import pytest
+os.environ["TESTING"] = "1"
+os.environ["MIDGLEY_ENV"] = "dev"
 from fastapi.testclient import TestClient
 from src.api_server import app
 
 client = TestClient(app)
+
 
 
 @pytest.fixture(autouse=True)
