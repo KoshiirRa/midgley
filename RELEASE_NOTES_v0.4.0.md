@@ -1,8 +1,9 @@
-# Release Notes - v0.4.0-dev
+# Release Notes - v0.4.0
 
 **Release Date:** September 3, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`)  
-**Git Branch:** `dev`  
+**Git Branch:** `main`  
+
 
 ---
 
