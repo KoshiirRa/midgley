@@ -554,4 +554,4 @@ systemctl --user list-timers --all
 
 ---
 
-*Midgley Version: `v0.4.0` | Engine: Gemini 2.5 Flash + Standardized Ridge / XGBoost Estimator | License: Apache 2.0*
+*Midgley Version: `v0.4.1` | Engine: Gemini 2.5 Flash + Standardized Ridge / XGBoost Estimator | License: Apache 2.0*

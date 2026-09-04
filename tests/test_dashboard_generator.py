@@ -502,6 +502,30 @@ def test_scoreboard_section_in_index_html():
     assert "Recent Completed Forecast Evaluations" in html
 
 
+def test_get_release_badge_dynamic_version(monkeypatch):
+    """Verify that get_release_badge dynamically uses package version and branch env vars."""
+    from src.dashboard_generator import get_release_badge
+    from src import __version__
+
+    # Test dev branch default
+    monkeypatch.setenv("MIDGLEY_BRANCH", "dev")
+    badge_dev = get_release_badge()
+    assert f"Dev Branch v{__version__}-dev" in badge_dev
+    assert "amber-500" in badge_dev
+
+    # Test main branch release
+    monkeypatch.setenv("MIDGLEY_BRANCH", "main")
+    badge_main = get_release_badge()
+    assert f"Release v{__version__}" in badge_main
+    assert "orange-500" in badge_main
+
+    # Test custom MIDGLEY_VERSION override
+    monkeypatch.setenv("MIDGLEY_VERSION", "0.5.0")
+    badge_custom = get_release_badge()
+    assert "Release v0.5.0" in badge_custom
+
+
+
 
 
 
