@@ -1292,5 +1292,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-04T08:15:29.365402",
+    "headline": "Graham\u2019s Russia Sanctions Bill Stalls in House Over Fuel Price and Tariff Concerns - mezha.net",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5ZcHo5dVo1TmthLVkyQUIwYncxS2p1clhVM0R5eUFmM3V0eTQtV1FxdG9QbnpPUFRsRTY2NlptQ2d0T1RBc09BTkxqRWtNSkh0OExoWVNwekdPSzU4V3FxY1prbENYMXhTdzdNT2NJMA?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMib0FVX3lxTE5ZcHo5dVo1TmthLVkyQUIwYncxS2p1clhVM0R5eUFmM3V0eTQtV1FxdG9QbnpPUFRsRTY2NlptQ2d0T1RBc09BTkxqRWtNSkh0OExoWVNwekdPSzU4V3FxY1prbENYMXhTdzdNT2NJMA?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
