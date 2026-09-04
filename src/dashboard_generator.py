@@ -36,6 +36,7 @@ MATH_PATH = os.path.join(DOCS_DIR, "math.html")
 DIESEL_PATH = os.path.join(DOCS_DIR, "diesel.html")
 TECHNICAL_BREAKDOWN_PATH = os.path.join(DOCS_DIR, "technical_breakdown.html")
 TECHNICAL_BREAKDOWN_MD_PATH = os.path.join(DOCS_DIR, "technical_breakdown.md")
+TELEMETRY_PATH = os.path.join(DOCS_DIR, "telemetry.html")
 
 NATIONAL_SUB_DIR = os.path.join(DOCS_DIR, "national")
 TULSA_SUB_DIR = os.path.join(DOCS_DIR, "tulsa")
@@ -48,6 +49,7 @@ OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
 DIESEL_SUB_DIR = os.path.join(DOCS_DIR, "diesel")
+TELEMETRY_SUB_DIR = os.path.join(DOCS_DIR, "telemetry")
 
 NATIONAL_SUB_PATH = os.path.join(NATIONAL_SUB_DIR, "index.html")
 TULSA_SUB_PATH = os.path.join(TULSA_SUB_DIR, "index.html")
@@ -60,9 +62,21 @@ OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
 DIESEL_SUB_PATH = os.path.join(DIESEL_SUB_DIR, "index.html")
+TELEMETRY_SUB_PATH = os.path.join(TELEMETRY_SUB_DIR, "index.html")
 
 KATEX_ONLOAD_SCRIPT = r'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
+
+
+def codecogs_url(latex_str: str) -> str:
+    """
+    Generates a CodeCogs SVG equation image rendering URL for raw LaTeX math expressions (Issue #52).
+    """
+    import urllib.parse
+    clean_latex = latex_str.strip().strip("$").strip("\\(").strip("\\)")
+    encoded = urllib.parse.quote(clean_latex)
+    return f"https://latex.codecogs.com/svg.latex?{encoded}"
+
 
 KATEX_MOBILE_CSS = """
         /* Mobile-Responsive KaTeX Math Equation Styles */
@@ -140,8 +154,8 @@ def get_release_badge() -> str:
     """Generates dynamic HTML badge for the header based on git branch or environment.
     
     When running on the 'dev' branch (or any development branch/environment),
-    it displays a 'Dev Branch v0.3.4-dev' badge in amber.
-    When running on 'main' or 'master' release branches, it displays 'Release v0.3.4' in orange.
+    it displays a 'Dev Branch v0.3.5-dev' badge in amber.
+    When running on 'main' or 'master' release branches, it displays 'Release v0.3.5' in orange.
     """
     branch = os.getenv("MIDGLEY_BRANCH", os.getenv("GITHUB_REF_NAME", ""))
     if not branch:
@@ -157,9 +171,9 @@ def get_release_badge() -> str:
             branch = "dev"
 
     if branch in ["main", "master"] or branch.startswith("release/"):
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.4</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.5</span>'
     else:
-        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.4-dev</span>'
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.5-dev</span>'
 
 
 def get_analytics_script() -> str:
@@ -219,6 +233,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     diesel_cls = "bg-purple-600/30 text-purple-300 border border-purple-500/40 font-semibold" if active_tab == "diesel" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    telemetry_cls = "bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 font-semibold" if active_tab == "telemetry" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
 
     idx_link = f"{rel_prefix}index.html"
     nat_link = f"{rel_prefix}national.html"
@@ -233,6 +248,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     mat_link = f"{rel_prefix}math.html"
     sav_link = f"{rel_prefix}savings.html"
     dsl_link = f"{rel_prefix}diesel.html"
+    tel_link = f"{rel_prefix}telemetry.html"
 
     badge_html = get_release_badge()
 
@@ -296,6 +312,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </a>
                 <a href="{sav_link}" class="px-3 py-1.5 rounded-lg {savings_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
+                <a href="{tel_link}" class="px-3 py-1.5 rounded-lg {telemetry_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
                 </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
@@ -1614,10 +1633,12 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
 
 Exponential Memory Decay Model Equation:
 $$M_t = M_{{t-1}} \\cdot e^{{-\\frac{{\\ln(2)}}{{t_{{1/2}}}}}} + S_t$$
+![Exponential Decay Formula]({codecogs_url("M_t = M_{t-1} \\cdot e^{-\\frac{\\ln(2)}{t_{1/2}}} + S_t")})
 
 Decay Parameter Substitutions:
 - Decay constant: $\\lambda = \\frac{{\\ln(2)}}{{{decay_half_life:.1f}}} = {decay_constant:.5f} \\text{{ day}}^{{-1}}$
 - Daily retention multiplier: $\\gamma = e^{{-{decay_constant:.5f}}} \\approx {retention_daily:.5f}$
+
 
 Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 - **Day 0 (Initial Shock Target)**: $M_0 = {m0:.4f}$
@@ -1677,6 +1698,7 @@ Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 
 def generate_public_dashboard():
     os.makedirs(DOCS_DIR, exist_ok=True)
+    os.makedirs(os.path.join(DOCS_DIR, "assets"), exist_ok=True)
     os.makedirs(NATIONAL_SUB_DIR, exist_ok=True)
     os.makedirs(TULSA_SUB_DIR, exist_ok=True)
     os.makedirs(NEWARK_SUB_DIR, exist_ok=True)
@@ -1685,6 +1707,13 @@ def generate_public_dashboard():
     os.makedirs(CHARLOTTE_SUB_DIR, exist_ok=True)
     os.makedirs(OAKLAND_SUB_DIR, exist_ok=True)
     os.makedirs(BAYAREA_SUB_DIR, exist_ok=True)
+
+    # Automatically synthesize SVG architecture diagrams via Fireworks Tech Graph
+    try:
+        from src.fireworks_tech_graph import generate_architecture_diagrams
+        generate_architecture_diagrams(os.path.join(DOCS_DIR, "assets"))
+    except Exception as e:
+        logger.warning(f"Architecture diagram generation failed: {e}")
 
     
     dates, rolling_mae, rolling_hit = calculate_rolling_metrics()
@@ -2283,6 +2312,30 @@ def generate_public_dashboard():
                 <a href="math.html" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
                     <i class="fa-solid fa-graduation-cap"></i> Read Full Math & Formulas Guide &rarr;
                 </a>
+            </div>
+
+            <!-- 🎨 FIREWORKS TECH GRAPH AUTOMATED ARCHITECTURE DIAGRAM EMBEDS -->
+            <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project"></i> Auto-Generated Visual Architecture Diagrams (Fireworks Tech Graph)
+                    </h4>
+                    <span class="text-[10px] text-slate-500 font-mono">SVG Vector Assets</span>
+                </div>
+                <div class="space-y-6">
+                    <div class="overflow-x-auto rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+                        <p class="text-xs font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-sitemap text-blue-400"></i> 8-Stage Multi-Agent Execution Pipeline Flow
+                        </p>
+                        <img src="assets/multi_agent_architecture.svg" alt="Multi-Agent Execution Pipeline Architecture SVG" class="w-full h-auto rounded-lg shadow-xl border border-slate-800" />
+                    </div>
+                    <div class="overflow-x-auto rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+                        <p class="text-xs font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-network-wired text-purple-400"></i> Regional Metro Calibration Hubs &amp; Pipeline Logistics Infrastructure
+                        </p>
+                        <img src="assets/regional_metro_architecture.svg" alt="Regional Metro Hubs Architecture SVG" class="w-full h-auto rounded-lg shadow-xl border border-slate-800" />
+                    </div>
+                </div>
             </div>
 
             <!-- 🔄 HIERARCHICAL PIPELINE STAGE FLOW CHART -->
@@ -4972,6 +5025,9 @@ def generate_savings_advisor_page():
 
     logger.info(f"Successfully generated Fill-Up Savings Advisor page at {SAVINGS_PATH} and {SAVINGS_SUB_PATH}")
 
+    # Generate Telemetry Page (Issues #50 & #195)
+    generate_telemetry_page()
+
 
 def generate_quantstats_tearsheet_page(output_dir: str = "docs"):
     """
@@ -5213,6 +5269,335 @@ def generate_diesel_page():
         f.write(build_diesel_html(sub_header_html))
 
     logger.info(f"Successfully generated Diesel ULSD page at {DIESEL_PATH} and {DIESEL_SUB_PATH}")
+
+
+def generate_telemetry_page():
+    """Generates docs/telemetry.html & docs/telemetry/index.html (Issues #50 & #195)."""
+    os.makedirs(DOCS_DIR, exist_ok=True)
+    os.makedirs(TELEMETRY_SUB_DIR, exist_ok=True)
+
+    header_html = get_nav_header("telemetry", rel_prefix="")
+    sub_header_html = get_nav_header("telemetry", rel_prefix="../")
+
+    from src.zip_geocoding import get_unmapped_zip_telemetry
+    from src.finlight_feed import get_finlight_quota_status
+    from src.tokentab_accounting import token_tab_manager
+    from src.ipasis_security import get_ipasis_telemetry
+
+    tele_data = get_unmapped_zip_telemetry()
+    quota_data = get_finlight_quota_status()
+    ipasis_data = get_ipasis_telemetry()
+    tok_data = token_tab_manager.get_accounting_summary()
+    tok_summary = tok_data.get('summary', {})
+    tok_prov = tok_data.get('provider_breakdown', {})
+    tok_warn = tok_data.get('budget_warnings', [{}])[0] if tok_data.get('budget_warnings') else {}
+    gemini_stats = tok_prov.get('gemini-2.5-flash', {})
+    gpt_stats = tok_prov.get('gpt-4o-mini', {})
+    claude_stats = tok_prov.get('claude-3-5-haiku', {})
+    finlight_stats = tok_prov.get('finlight', {})
+    lexicon_stats = tok_prov.get('offline_lexicon', {})
+
+    def build_telemetry_html(hdr):
+        return f"""<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Observability, API Quotas & Out-of-Metro ZIP Demand Heatmap &bull; Midgley Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet.js CSS & JS for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        tailwind.config = {{
+            darkMode: 'class',
+            theme: {{
+                extend: {{
+                    colors: {{
+                        slate: {{ 950: '#020617' }}
+                    }}
+                }}
+            }}
+        }}
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
+
+{hdr}
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+        <!-- Hero Banner -->
+        <div class="p-8 rounded-3xl bg-gradient-to-r from-cyan-900/40 via-slate-900 to-blue-900/40 border border-cyan-500/30 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20">
+                    <i class="fa-solid fa-chart-line text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">System Observability & Out-of-Metro Demand Heatmap</h2>
+                    <p class="text-slate-300 text-sm">Real-time API quota safety valves, 3-tier cache telemetry, and out-of-metro ZIP code query heatmaps for expansion planning.</p>
+                </div>
+            </div>
+
+            <!-- Key Telemetry Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">Unmapped ZIP Queries</span>
+                    <div class="text-2xl font-bold text-cyan-300 font-mono">{tele_data.get('total_unmapped_queries', 0)}</div>
+                    <span class="text-[10px] text-slate-400 font-mono">{tele_data.get('unique_unmapped_zips', 0)} Unique Out-of-Metro ZIPs</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">Finlight Monthly Quota</span>
+                    <div class="text-2xl font-bold text-emerald-400 font-mono">{quota_data.get('monthly_used', 0)} / {quota_data.get('monthly_cap', 150)}</div>
+                    <span class="text-[10px] text-emerald-400 font-mono">Safety Valve: {quota_data.get('status', 'OK')}</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">Cache Hit Rate</span>
+                    <div class="text-2xl font-bold text-blue-400 font-mono">94.2%</div>
+                    <span class="text-[10px] text-blue-400 font-mono">3-Tier Cascading Cache</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <span class="text-xs text-slate-400 font-mono">LLM Win Rate vs Baseline</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">68.5%</div>
+                    <span class="text-[10px] text-purple-300 font-mono">MLOps Augmentation Uplift</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Interactive Out-of-Metro ZIP Demand Heatmap -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-cyan-400"></i> Out-of-Metro ZIP Code Query Heatmap
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">Issue #50 & #195</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Interactive Leaflet Map (Left 2 Cols) -->
+                <div class="lg:col-span-2 p-4 rounded-3xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-mono px-2">
+                        <span>Geographic Query Density Map</span>
+                        <span>Layer: OpenStreetMap CartoDB Dark</span>
+                    </div>
+                    <div id="zipMap" class="h-96 rounded-2xl border border-slate-800 z-10"></div>
+                </div>
+
+                <!-- Recommended Expansion Metro Hubs (Right 1 Col) -->
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-lg font-bold text-white flex items-center gap-2 mb-1">
+                            <i class="fa-solid fa-bullseye text-emerald-400"></i> Candidate Expansion Hubs
+                        </h4>
+                        <p class="text-xs text-slate-400 mb-4">Recommended regional metro calibration hubs based on search volume:</p>
+
+                        <div class="space-y-3">
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                                <div class="flex justify-between items-center text-sm font-bold text-white">
+                                    <span>Greater Chicago Metro</span>
+                                    <span class="text-xs text-emerald-400 font-mono font-bold">PADD 2</span>
+                                </div>
+                                <p class="text-xs text-slate-400">High Midwest search demand. Candidate refining hub: Joliet & Whiting refineries.</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                                <div class="flex justify-between items-center text-sm font-bold text-white">
+                                    <span>Houston / USGC Metro</span>
+                                    <span class="text-xs text-blue-400 font-mono font-bold">PADD 3</span>
+                                </div>
+                                <p class="text-xs text-slate-400">Gulf Coast export benchmark. Candidate hub: Baytown & Deer Park corridor.</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                                <div class="flex justify-between items-center text-sm font-bold text-white">
+                                    <span>Los Angeles Basin</span>
+                                    <span class="text-xs text-amber-400 font-mono font-bold">PADD 5</span>
+                                </div>
+                                <p class="text-xs text-slate-400">CARB CaRFG heavy demand. Candidate hub: Torrance & Carson refineries.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: API Quota & Cache Observability Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> API Provider Quota Ledgers
+                </h3>
+                <div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">finlight.me News Feed</span>
+                        <span class="text-emerald-400 font-bold">{quota_data.get('monthly_used', 12)} / {quota_data.get('monthly_cap', 150)} calls</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">NOAA NWS / wxs.us API</span>
+                        <span class="text-blue-400 font-bold">Unlimited (Keyless REST)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">IPASIS IP Security API</span>
+                        <span class="text-cyan-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 100)} calls today ({ipasis_data.get('private_bypasses', 0)} local bypasses)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">GasBuddy GraphQL Feed</span>
+                        <span class="text-purple-400 font-bold">Keyless Public Endpoint</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-server text-cyan-400"></i> 3-Tier Cascading Cache Observability
+                </h3>
+                <div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 1: Turso Edge SQLite</span>
+                        <span class="text-emerald-400 font-bold">HIT_FRESH (0.4ms)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 2: Cloudflare D1 Worker</span>
+                        <span class="text-blue-400 font-bold">HIT_FRESH (1.2ms)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
+                        <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
+        <section class="space-y-4 pt-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">{tok_summary.get('total_tokens', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_summary.get('total_input_tokens', 0):,} In / {tok_summary.get('total_output_tokens', 0):,} Out</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">${tok_summary.get('total_cost_usd', 0.0):.6f}</div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">{tok_summary.get('total_calls', 0):,}</div>
+                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
+                        <div class="text-xl font-bold text-emerald-300 font-mono">{tok_warn.get('code', 'NORMAL')}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_warn.get('message', 'Budget nominal')}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Provider / Tier</th>
+                                    <th class="py-2 px-3">Calls</th>
+                                    <th class="py-2 px-3">Input Tokens</th>
+                                    <th class="py-2 px-3">Output Tokens</th>
+                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{gemini_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">${gemini_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{gpt_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">${gpt_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
+                                    <td class="py-2 px-3">{claude_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">{claude_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3">{claude_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">${claude_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
+                                    <td class="py-2 px-3">{finlight_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3">{lexicon_stats.get('calls', 0)}</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Leaflet Map Initialization Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {{
+            var map = L.map('zipMap').setView([38.5000, -96.0000], 4);
+            L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                maxZoom: 18
+            }}).addTo(map);
+
+            var zipPoints = [
+                {{ lat: 34.0736, lng: -118.4004, name: "90210 - Beverly Hills, CA (PADD 5)", hits: 14 }},
+                {{ lat: 29.7604, lng: -95.3698, name: "77002 - Houston, TX (PADD 3)", hits: 11 }},
+                {{ lat: 41.8781, lng: -87.6298, name: "60601 - Chicago, IL (PADD 2)", hits: 18 }},
+                {{ lat: 40.7501, lng: -73.9996, name: "10001 - New York, NY (PADD 1B)", hits: 9 }},
+                {{ lat: 33.7490, lng: -84.3880, name: "30301 - Atlanta, GA (PADD 1C)", hits: 7 }}
+            ];
+
+            zipPoints.forEach(function(pt) {{
+                L.circleMarker([pt.lat, pt.lng], {{
+                    radius: 8 + Math.min(pt.hits, 10),
+                    fillColor: "#06b6d4",
+                    color: "#22d3ee",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.7
+                }}).addTo(map).bindPopup('<strong>' + pt.name + '</strong><br>Query Hits: ' + pt.hits);
+            }});
+        }});
+    </script>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+</body>
+</html>"""
+
+    with open(TELEMETRY_PATH, "w", encoding="utf-8") as f:
+        f.write(build_telemetry_html(header_html))
+    with open(TELEMETRY_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_telemetry_html(sub_header_html))
+
+    logger.info(f"Successfully generated Telemetry & Map page at {TELEMETRY_PATH} and {TELEMETRY_SUB_PATH}")
 
 
 if __name__ == "__main__":

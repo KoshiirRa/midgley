@@ -23,9 +23,11 @@ secrets/
 
 # Databases & Local Caches
 *.sqlite
+*.db
 data/alpha_vantage_*.json
 data/oilpriceapi_*.json
 data/finlight_*.json
+data/ipasis_telemetry.json
 
 # Scratch & Temporary Agent Workspaces
 scratch/

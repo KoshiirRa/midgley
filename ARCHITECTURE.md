@@ -307,3 +307,18 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 * **Sentry Crash Reporting & Crons (`captureSentryException` & `sendSentryCronCheckIn`):** Captures unhandled runtime errors with stack trace context and executes 2-stage Sentry Cron check-ins (`in_progress` start ping + `ok`/`error` completion ping with matching `check_in_id`) for execution duration tracking and timeout detection.
 * **Axiom & Sentry Dashboard Templates & APL Queries:** See [`docs/OBSERVABILITY_DASHBOARDS.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/OBSERVABILITY_DASHBOARDS.md) for ready-to-use APL queries, dashboard widget templates, and alert rules.
 
+---
+
+## 11. System Telemetry Prometheus Metrics & Zero-Cost Cloud Archiving (Issues #107 & #197)
+
+### Prometheus Telemetry Exporter (`/metrics` & `/api/v1/metrics`)
+Midgley exposes a standard Prometheus exposition text format endpoint (`GET /api/v1/metrics` and `GET /metrics` in `src/api_server.py`) for Grafana observability:
+* **TokenTab Metrics:** `llm_tokens_consumed_total` (by prompt/completion/total) and `llm_estimated_cost_usd_total`.
+* **IPASIS Security Metrics:** `ipasis_security_requests_total` tracking checked vs. blocked inbound requests.
+* **Multi-Tier Cache Metrics:** `cache_gateway_operations_total` tracking hit vs. miss ratios across lookup tiers.
+* **API Quota Ratios:** `api_quota_remaining_ratio` tracking remaining allowances across Finlight, OilpriceAPI, and AlphaVantage.
+
+### Zero-Cost Internet Archive Wayback Machine Cloud Archiver (`src/wayback_archiver.py`)
+During intraday event evaluations in `src/intraday_event_monitor.py`, breaking headline URLs are submitted directly to the Internet Archive Save API (`https://web.archive.org/save/{url}`). The permanent `archive_url` string is attached to the event result object, saved in `data/intraday_events.json`, and cached locally at `data/wayback_archive_cache.json` for 100% zero-cost cloud web archiving.
+
+

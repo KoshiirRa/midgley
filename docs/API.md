@@ -14,6 +14,60 @@ The **Midgley MCP & REST API Gateway** exposes real-time unleaded gasoline pump 
 
 ---
 
+## 🔒 Security, Authentication & Key Management (Issue #40)
+
+Midgley endpoints under `/api/v1/prices/*`, `/api/v1/forecast/*`, and `/mcp/*` are secured with API Key authentication and per-key rate limiting (**default: 30 requests/minute**).
+
+### Authentication Headers
+Callers can authenticate using any of the following methods:
+* **Header**: `X-API-Key: mg_prod_a1b2c3d4_...`
+* **Bearer Token Header**: `Authorization: Bearer mg_prod_a1b2c3d4_...`
+* **Query Parameter** (for SSE/browser connections): `?api_key=mg_prod_a1b2c3d4_...`
+
+### Key Access Tiers
+* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 2.5 Flash event analysis, full Stacking Ensemble, and counterfactual shock simulations).
+* 🛡️ **`basic` tier**: Automatically routes LLM event scoring to zero-cost fallback providers (Tier 3 Rule-Based Lexicon, SPC weather mapping, cached news vectors, standard linear Ridge baseline) to conserve Gemini tokens and Finlight API quotas.
+
+### Key Provisioning Methods
+
+#### Method A: Key Management CLI Utility (`scripts/manage_keys.py`)
+Used by administrators directly on the host or `dev-vm` server:
+```bash
+# Provision a key for a user
+python scripts/manage_keys.py create --user "alice" --tier privileged --env prod --rpm 30
+
+# List active keys
+python scripts/manage_keys.py list
+
+# Revoke a key prefix
+python scripts/manage_keys.py revoke --prefix mg_prod_a1b2c3d4
+```
+
+#### Method B: Admin REST API Gateway (`/api/v1/admin/keys`)
+Secured by the `MIDGLEY_ADMIN_SECRET` environment variable (passed via `X-Admin-Secret` header):
+```bash
+# Provision a new key programmatically
+curl -X POST "http://localhost:8000/api/v1/admin/keys" \
+  -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "partner_app",
+    "tier": "privileged",
+    "environment": "prod",
+    "rate_limit_rpm": 30
+  }'
+
+# List active keys
+curl -X GET "http://localhost:8000/api/v1/admin/keys" \
+  -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET"
+
+# Revoke a key by prefix
+curl -X DELETE "http://localhost:8000/api/v1/admin/keys/mg_prod_a1b2c3d4" \
+  -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET"
+```
+
+---
+
 ## 📡 REST API Endpoints
 
 ### 1. `GET /api/v1/prices/live`
@@ -96,6 +150,30 @@ curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
       ]
     }
   }
+}
+```
+
+---
+
+## 🍃 Zero-Cost Fallback & Basic Tier Telemetry Endpoint (`GET /api/v1/telemetry/fallback-status` - Issue #196)
+
+* **Endpoint:** `GET /api/v1/telemetry/fallback-status`
+* **Description:** Returns aggregated telemetry statistics for zero-cost fallback provider invocations (`ZeroCostProviderHook`), basic tier API key request routing counts, provider distribution (`lexicon`, `kaggle_llm_hook`, `spc_weather`), and estimated LLM token/dollar cost savings.
+
+* **Example Response:**
+```json
+{
+  "total_zero_cost_invocations": 12,
+  "basic_tier_routed_count": 5,
+  "provider_breakdown": {
+    "lexicon": 12,
+    "kaggle_llm_hook": 0,
+    "spc_weather": 0
+  },
+  "tokens_saved": 4200,
+  "estimated_usd_saved": 0.00126,
+  "avg_zero_cost_latency_ms": 1.45,
+  "last_updated": "2026-09-04T01:10:00Z"
 }
 ```
 
@@ -205,9 +283,54 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
 * `hayward_quake`: USGS Hayward Fault M>=6.0 Seismic Quake (+8.48%)
 * `pge_psps_shutoff`: PG&E PSPS Wildfire Power Shutoff & Blackout (+7.07%)
 * `chevron_hydrocracker`: Chevron Richmond Refinery Hydrocracker Outage (+5.76%)
-* `carb_transition`: CARB CaRFG Summer-Blend Transition Compliance Surge (+4.44%)
 * `weekend_opec_post`: Weekend Executive OPEC Talkdown Post (-1.85%)
 * `weekend_tariff_declaration`: Weekend Foreign Energy Tariff Declaration (+2.10%)
+
+---
+
+## ⚡ Strategy 4 Incoming Webhook Gateway (`POST /api/v1/events/webhook`)
+
+* **Endpoint:** `POST /api/v1/events/webhook`
+* **Content-Type:** `application/json`
+* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature when `MIDGLEY_WEBHOOK_SECRET` is set).
+* **Payload Transformer Aliases:**
+  - `headline` $\leftarrow$ `headline`, `title`, `text`, `summary`, `tweet_content`, `article_title`, `content`
+  - `url` $\leftarrow$ `url`, `link`, `article_url`, `web_url`, `href`
+  - `source` $\leftarrow$ `source`, `origin`, `provider`, `channel`, `service`
+
+* **IPASIS Security Filter (Issue #87):** Inspects client IP (`CF-Connecting-IP`, `X-Forwarded-For`), rejecting high-risk Tor/Abuse origins with HTTP 403 Forbidden.
+* **Security Telemetry Endpoint:** `GET /api/v1/security/ip-status` — Returns IPASIS IP security gateway status, daily API request accounting (used / 100 allowance), private IP bypass statistics, and blocked origin counts.
+
+For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and HMAC signature examples, see **[WEBHOOK_FORMATTING_GUIDE.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/WEBHOOK_FORMATTING_GUIDE.md)**.
+
+---
+
+## 📦 Cloudflare Queue Batch Consumer Endpoint (`POST /api/v1/events/queue-consumer` - Issue #194)
+
+* **Endpoint:** `POST /api/v1/events/queue-consumer`
+* **Content-Type:** `application/json`
+* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature when `MIDGLEY_WEBHOOK_SECRET` is set).
+* **Description:** Asynchronously receives batch queued event payloads pushed by Cloudflare Queue consumers or local queue workers. Processes queued event items in batch, executing deduplication against edge cache, fast-path anomaly scoring, and regional metro forecast updates.
+
+* **Example Payload:**
+```json
+{
+  "queue_name": "intraday-event-queue",
+  "batch_id": "batch_884920",
+  "events": [
+    {
+      "headline": "OPEC Emergency Cut Announced",
+      "url": "https://news.example.com/opec1",
+      "source": "Cloudflare_Queue_Consumer"
+    },
+    {
+      "headline": "Refinery Outage Reported in PADD 1B",
+      "url": "https://news.example.com/refinery2",
+      "source": "Cloudflare_Queue_Consumer"
+    }
+  ]
+}
+```
 
 ---
 

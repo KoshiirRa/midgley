@@ -64,6 +64,11 @@ ANTHROPIC_API_KEY="sk-ant-..."
 # Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation)
 MIDGLEY_WEBHOOK_SECRET="super-secret-hmac-key-change-me"
 
+# IPASIS API Gateway Security Key & Controls (ipasis.com - 100 req/day free)
+IPASIS_API_KEY="ipasis_c92c28445c93_d65965edd3bfc851770b9573f777e152"
+IPASIS_BLOCK_HIGH_RISK="1"       # Set to 1 to block Tor/Abuse origins with HTTP 403
+MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
+
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
@@ -498,21 +503,33 @@ LOCALE_PRICE_KEYS["chicago"] = "Chicago_IL"
 LOCALE_RUNNERS["chicago"] = run_chicago_pipeline
 ```
 
-### Step 6: Connect UI Presentation & Visual Cards (`src/dashboard_generator.py`)
+### Step 6: Register Webhook Locale Routing & Infrastructure Keywords (`src/intraday_event_monitor.py`)
+Update `resolve_target_locales()` and `TRIGGER_KEYWORDS` in `src/intraday_event_monitor.py` to register the new region's name, primary refining hubs, pipelines, and logistics keywords:
+```python
+# Add regional trigger keywords to TRIGGER_KEYWORDS
+TRIGGER_KEYWORDS.extend(["chicago", "whiting refinery", "joliet refinery", "miso grid"])
+
+# In resolve_target_locales(headline: str):
+if any(k in text for k in ["chicago", "whiting refinery", "joliet refinery", "illinois"]):
+    targets.add("Chicago")
+```
+
+### Step 7: Connect UI Presentation & Visual Cards (`src/dashboard_generator.py`)
 1. Add `CHICAGO_PATH = os.path.join(DOCS_DIR, "chicago.html")` and `build_chicago_html()` in `src/dashboard_generator.py`.
 2. Ensure `render_regional_driver_cards_html('chicago_il')` is invoked in the template to render standardized visual cards automatically from `data/regional_metadata/chicago_il.json`.
 3. Add the navigation link to the **Metro Areas** dropdown menu in `get_nav_header()`.
 
-### Step 7: Connect MLOps Prediction Tracker & Backfilling (`src/prediction_logger.py`)
+### Step 8: Connect MLOps Prediction Tracker & Backfilling (`src/prediction_logger.py`)
 Update `src/prediction_logger.py` to include `"Chicago_IL"` in target price columns and historical test-split backfilling (`backfill_new_region_history`).
 
-### Step 8: Update GitHub Wiki Documentation (`KoshiirRa/midgley.wiki`)
+### Step 9: Update GitHub Wiki Documentation (`KoshiirRa/midgley.wiki`)
 Whenever adding, modifying, or removing data connectors, API feeds, or regional data sources:
 1. Clone the GitHub Wiki repository: `git clone https://github.com/KoshiirRa/midgley.wiki.git`.
-2. Document the new data connector in `Data-Ingestion-and-APIs.md` (class name, module path, API provider, endpoints, cost profile, ingested feature keys).
-3. Update `Agent-Architecture.md` under Agent 1 modules list.
-4. Update `Project-History-and-Roadmap.md` under the active release phase.
-5. Commit and push to `origin/master`.
+2. Document the new data connector in `Data-Ingestion-and-APIs.md` (class name, module path, API provider, endpoints, cost profile, ingested feature keys) and `Incoming-Webhook-Formatting-Guide.md`.
+3. Update `Regional-Metro-Models.md` with calibration specs and locale routing keywords.
+4. Update `Agent-Architecture.md` under Agent 1 modules list.
+5. Update `Project-History-and-Roadmap.md` under the active release phase.
+6. Commit and push to `origin/master`.
 
 ---
 

@@ -263,7 +263,34 @@ def format_prometheus_metrics(environment: Optional[str] = None) -> str:
         used = q_data.get("calls_used", 0)
         lines.append(f'api_quota_calls_used_total{{environment="{environment}",service="{q_key}"}} {used}')
 
+    # IPASIS Gateway Security Metrics
+    ipasis_file = os.path.join("data", "ipasis_telemetry.json")
+    if os.path.exists(ipasis_file):
+        try:
+            with open(ipasis_file, "r", encoding="utf-8") as f:
+                ip_data = json.load(f)
+                lines.append("# HELP ipasis_security_requests_total Total IPASIS security check operations.")
+                lines.append("# TYPE ipasis_security_requests_total counter")
+                lines.append(f'ipasis_security_requests_total{{environment="{environment}",type="checked"}} {ip_data.get("requests_today", 0)}')
+                lines.append(f'ipasis_security_requests_total{{environment="{environment}",type="blocked"}} {ip_data.get("blocked_count", 0)}')
+        except Exception as e:
+            logger.debug(f"Error reading ipasis telemetry: {e}")
+
+    # Connector Cache Gateway Metrics
+    conn_file = os.path.join("data", "connector_telemetry.json")
+    if os.path.exists(conn_file):
+        try:
+            with open(conn_file, "r", encoding="utf-8") as f:
+                c_data = json.load(f)
+                lines.append("# HELP cache_gateway_operations_total Total multi-tier cache gateway lookups.")
+                lines.append("# TYPE cache_gateway_operations_total counter")
+                lines.append(f'cache_gateway_operations_total{{environment="{environment}",type="hit"}} {c_data.get("cache_hits", 0)}')
+                lines.append(f'cache_gateway_operations_total{{environment="{environment}",type="miss"}} {c_data.get("cache_misses", 0)}')
+        except Exception as e:
+            logger.debug(f"Error reading connector telemetry: {e}")
+
     return "\n".join(lines) + "\n"
+
 
 
 def is_api_call_suppressed_for_environment(service_name: str) -> bool:

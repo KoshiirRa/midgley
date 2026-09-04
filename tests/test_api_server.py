@@ -5,6 +5,7 @@ GET /api/v1/combined, POST /api/v1/forecast/simulate, and /.well-known/ai-plugin
 """
 
 import unittest
+from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 from src.api_server import app
@@ -156,6 +157,36 @@ class TestAPIServer(unittest.TestCase):
             )
             self.assertEqual(res_missing.status_code, 401)
 
+    def test_post_webhook_flexible_payload_aliases(self):
+        import hmac
+        import hashlib
+        import json
+        from unittest.mock import patch
+
+        secret = "test_secret_key_123"
+        payload_alias = {
+            "title": "Colonial Pipeline Halts Line 1 Intake at Selma Terminal",
+            "link": "https://news.google.com/articles/456",
+            "origin": "Test_Zapier_Applet"
+        }
+        body_bytes = json.dumps(payload_alias).encode("utf-8")
+        valid_sig = hmac.new(secret.encode("utf-8"), body_bytes, hashlib.sha256).hexdigest()
+
+        with patch.dict("os.environ", {"MIDGLEY_WEBHOOK_SECRET": secret}):
+            res = self.client.post(
+                "/api/v1/events/webhook",
+                content=body_bytes,
+                headers={"Content-Type": "application/json", "X-Midgley-Signature": valid_sig}
+            )
+            self.assertEqual(res.status_code, 200)
+            data = res.json()
+            self.assertEqual(data["status"], "success")
+            self.assertEqual(data["result"]["headline"], "Colonial Pipeline Halts Line 1 Intake at Selma Terminal")
+            self.assertEqual(data["result"]["url"], "https://news.google.com/articles/456")
+            self.assertEqual(data["result"]["source"], "Test_Zapier_Applet")
+            self.assertIn("Greenville", data["result"]["target_locales"])
+            self.assertIn("Charlotte", data["result"]["target_locales"])
+
     def test_get_forecast_scoreboard(self):
         res = self.client.get("/api/v1/forecast/scoreboard?locale=tulsa&window=30")
         self.assertEqual(res.status_code, 200)
@@ -172,7 +203,96 @@ class TestAPIServer(unittest.TestCase):
         self.assertIn("directional_hit_rate_pct", sum_data)
         self.assertIn("model_uplift_mae_pct", sum_data)
 
+    def test_get_ipasis_security_telemetry_endpoint(self):
+        res = self.client.get("/api/v1/security/ip-status")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertIn("ipasis_telemetry", data)
+        self.assertIn("daily_requests_used", data["ipasis_telemetry"])
+        self.assertIn("daily_allowance", data["ipasis_telemetry"])
+
+    @patch("src.ipasis_security.IPASISSecurityVerifier.check_ip_reputation")
+    def test_post_webhook_blocked_tor_ip(self, mock_check_ip):
+        import json
+
+        mock_check_ip.return_value = {
+            "ip": "87.118.116.103",
+            "is_blocked": True,
+            "reason": "High-Risk Tor/Abuse Origin",
+            "privacy": {"Tor": True, "Proxy": False, "VPN": True, "Abuse": True},
+            "provider": "IPASIS"
+        }
+
+        payload = {"headline": "Tor Exit Node Webhook Injection Attack", "url": "https://example.com/bad"}
+        body_bytes = json.dumps(payload).encode("utf-8")
+
+        res = self.client.post(
+            "/api/v1/events/webhook",
+            content=body_bytes,
+            headers={"Content-Type": "application/json", "X-Forwarded-For": "87.118.116.103"}
+        )
+        self.assertEqual(res.status_code, 403)
+        self.assertIn("IPASIS security filter", res.json()["detail"])
+
+    def test_unauthenticated_request_fails(self):
+        """Verifies that requests without API key return 401 Unauthorized when TESTING mode is off."""
+        with patch.dict(os.environ, {"TESTING": "0"}):
+            res = self.client.get("/api/v1/prices/live?locale=tulsa")
+            self.assertEqual(res.status_code, 401)
+            self.assertIn("Unauthorized", res.json()["detail"])
+
+    def test_authenticated_request_success(self):
+        """Verifies that requests with a valid API key header return 200 OK."""
+        from src.key_manager import global_key_manager
+        key_res = global_key_manager.create_key(user_id="test_runner_user", tier="privileged")
+        token = key_res["token"]
+
+        with patch.dict(os.environ, {"TESTING": "0"}):
+            res = self.client.get(
+                "/api/v1/prices/live?locale=tulsa",
+                headers={"X-API-Key": token}
+            )
+            self.assertEqual(res.status_code, 200)
+            self.assertEqual(res.json()["status"], "success")
+
+    def test_admin_api_unauthorized_without_secret(self):
+        """Verifies Method B admin key endpoint rejects requests without X-Admin-Secret header."""
+        res = self.client.post("/api/v1/admin/keys", json={"user_id": "test_user"})
+        self.assertEqual(res.status_code, 401)
+        self.assertIn("X-Admin-Secret", res.json()["detail"])
+
+    def test_admin_api_key_provisioning_method_b(self):
+        """Verifies Method B admin endpoints allow key creation, listing, and revocation with valid secret."""
+        admin_secret = "midgley_dev_admin_secret_2026"
+        headers = {"X-Admin-Secret": admin_secret}
+
+        # 1. Create key via Method B
+        res = self.client.post(
+            "/api/v1/admin/keys",
+            json={"user_id": "method_b_user", "tier": "privileged", "rate_limit_rpm": 30, "environment": "dev"},
+            headers=headers
+        )
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        key_data = data["key_data"]
+        self.assertEqual(key_data["user_id"], "method_b_user")
+        self.assertEqual(key_data["tier"], "privileged")
+        prefix = key_data["key_prefix"]
+
+        # 2. List keys via Method B
+        res_list = self.client.get("/api/v1/admin/keys", headers=headers)
+        self.assertEqual(res_list.status_code, 200)
+        self.assertGreater(res_list.json()["total_keys"], 0)
+
+        # 3. Revoke key via Method B
+        res_del = self.client.delete(f"/api/v1/admin/keys/{prefix}", headers=headers)
+        self.assertEqual(res_del.status_code, 200)
+        self.assertEqual(res_del.json()["status"], "success")
+
 
 if __name__ == "__main__":
     unittest.main()
+
 

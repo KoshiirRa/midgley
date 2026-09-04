@@ -48,7 +48,14 @@ TRIGGER_KEYWORDS = [
     "tariff", "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
     "explosion", "tornado", "blackout", "blockade", "sanction",
     "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
-    "strait of hormuz", "red sea attack", "spill"
+    "strait of hormuz", "red sea attack", "spill",
+    # Market Technicals & Volatility
+    "crack spread", "crack-spread", "ovx spike", "futures spike", "futures crash", "wti surge", "rbob surge", "barrel price",
+    # Executive Policy & Geopolitics
+    "executive order", "energy tariff", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
+    # Logistics & Infrastructure Hubs
+    "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
+    "catlettsburg", "delaware city", "west tulsa", "richmond refinery"
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -164,12 +171,52 @@ class IntradayEventMonitor:
             
         return False
 
+    def resolve_target_locales(self, headline: str) -> List[str]:
+        """
+        Maps incoming headline keywords to affected regional metro calibration agents.
+        Returns a sorted list of target locale identifiers (e.g. ['Tulsa'], ['Greenville', 'Charlotte'], or ['National']).
+        """
+        text = headline.lower()
+        targets = set()
+
+        # Tulsa / Cushing / West Tulsa
+        if any(k in text for k in ["tulsa", "cushing", "sinclair", "hf sinclair", "west tulsa"]):
+            targets.add("Tulsa")
+
+        # Newark / Delaware City / PADD 1B
+        if any(k in text for k in ["newark", "delaware city", "delaware", "padd 1b", "padd1b"]):
+            targets.add("Newark")
+
+        # Cincinnati / Catlettsburg / Ohio River
+        if any(k in text for k in ["cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock"]):
+            targets.add("Cincinnati")
+
+        # Greenville & Charlotte / Colonial Pipeline / Selma / Paw Creek
+        if any(k in text for k in ["colonial pipeline", "greenville", "charlotte", "selma", "paw creek"]):
+            targets.add("Greenville")
+            targets.add("Charlotte")
+
+        # Oakland & SF Bay Area / Richmond / CARB / California
+        if any(k in text for k in ["oakland", "sf bay", "san francisco", "richmond refinery", "carb", "california"]):
+            targets.add("Oakland")
+
+        # Port St. Lucie / Florida / Waterborne Freight
+        if any(k in text for k in ["port st. lucie", "port st lucie", "florida", "waterborne freight"]):
+            targets.add("Port_St_Lucie")
+
+        if not targets:
+            return ["National"]
+
+        return sorted(list(targets))
+
     def process_incoming_headline(self, headline: str, source: str = "Webhook", url: str = "", skip_dedup: bool = False) -> Dict:
         """
         Evaluates an individual incoming headline (from Webhook or RSS), logs anomalies,
         and triggers cache invalidation / prediction revision logging if threshold is met.
         Deduplicates against previously processed headlines within 24 hours.
         """
+        target_locales = self.resolve_target_locales(headline)
+
         # Deduplication check unless explicitly skipped or running automated test runner
         if not skip_dedup and not source.startswith("Test_"):
             if self.is_headline_already_processed(headline, url=url):
@@ -181,6 +228,7 @@ class IntradayEventMonitor:
                     "url": url,
                     "is_anomaly": False,
                     "duplicate": True,
+                    "target_locales": target_locales,
                     "scores": {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
                 }
 
@@ -191,18 +239,29 @@ class IntradayEventMonitor:
         }
         is_anomaly_bool = bool(is_anomaly)
 
+        archive_url = ""
+        if url:
+            try:
+                from src.wayback_archiver import archive_url_to_wayback
+                arch_res = archive_url_to_wayback(url, headline=headline)
+                archive_url = arch_res.get("archive_url", "")
+                logger.info(f"  -> Wayback Machine archive URL logged: {archive_url}")
+            except Exception as e:
+                logger.warning(f"Wayback Machine archive trigger error: {e}")
+
         result = {
             "timestamp": datetime.now().isoformat(),
             "headline": headline,
             "source": source,
             "url": url,
+            "archive_url": archive_url,
             "is_anomaly": is_anomaly_bool,
+            "target_locales": target_locales,
             "scores": clean_scores
         }
 
-
         if is_anomaly:
-            logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}]: '{headline}' (Scores: {scores})")
+            logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}] (Targets: {target_locales}): '{headline}' (Scores: {scores})")
 
             is_test = source.startswith("Test_") or os.environ.get("TESTING") == "1"
             if is_test:
@@ -215,19 +274,21 @@ class IntradayEventMonitor:
                 clear_lookup_cache()
                 logger.info("  -> Cleared SQLite response cache for API gateway.")
 
-                # 3. Log Intraday Revision Record
-                dummy_df = pd.DataFrame([{
-                    "date": datetime.now().strftime("%Y-%m-%d"),
-                    "current_price": 3.184,
-                    "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
-                }])
-                log_predictions(
-                    dummy_df, 
-                    region="National", 
-                    model_version="v1.4-Finlight-Intraday",
-                    run_type="INTRADAY_REVISION",
-                    headline_trigger=headline
-                )
+
+                # 3. Log Intraday Revision Record across target locales
+                for loc in target_locales:
+                    dummy_df = pd.DataFrame([{
+                        "date": datetime.now().strftime("%Y-%m-%d"),
+                        "current_price": 3.184,
+                        "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
+                    }])
+                    log_predictions(
+                        dummy_df, 
+                        region=loc, 
+                        model_version="v1.4-Finlight-Intraday",
+                        run_type="INTRADAY_REVISION",
+                        headline_trigger=headline
+                    )
 
                 # 4. Regenerate Public Web Dashboard
                 try:

@@ -6,6 +6,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ## Multi-Agent Architecture Overview
 
+![Multi-Agent Execution Pipeline SVG Diagram](docs/assets/multi_agent_architecture.svg)
+![Regional Metro Calibration Hubs SVG Diagram](docs/assets/regional_metro_architecture.svg)
+
 ```
                ┌─────────────────────────────────────────────────────────────┐
                │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │
@@ -94,11 +97,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Strategy 2 (Free RSS Polling & Time-Constrained Filtering):** Zero-cost 15-minute polling across free energy RSS streams (Google News, NYT, CNBC). Enforces `when:1d` Google News query constraint and timestamp age filtering (`max_age_hours=24.0`) in `fetch_rss_headlines()`, automatically discarding stale historical articles.
   - **Strategy 1 (Cascading Anomaly Gate):** Regex/keyword trigger gate (`tariff`, `retaliat`, `trade war`, `opec emergency`, `pipeline halt`, `explosion`, `tornado`) evaluating fast-path impact scores. Tripping threshold: \(|\text{overall\_price\_pressure}| \ge 0.40\) or \(\text{supply\_disruption} \ge 0.50\).
   - **Strategy 3 (Trading Hours Adaptive Ingestion):** `is_trading_hours()` helper restricts `finlight.me` fetches to active US commodity trading hours (08:00 AM – 05:00 PM EST, Mon–Fri).
-  - **Strategy 4 (Incoming Webhook Gateway & HMAC Security):** `POST /api/v1/events/webhook` endpoint on `src/api_server.py` for direct push ingestion from external alerts (Zapier, IFTTT, Google Alerts). Mandatory payload schema requires `headline` text and `url` article link, with optional `source` origin. Enforces HMAC-SHA256 signature validation via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment, rejecting unauthorized payload tampering with HTTP 401.
+  - **Strategy 4 (Incoming Webhook Gateway, Payload Transformers & IPASIS Security):** `POST /api/v1/events/webhook` endpoint on `src/api_server.py` for direct push ingestion from external alerts (Zapier, IFTTT, Google Alerts, TradingView). Features an automatic **Payload Transformer** (`WebhookRequest` schema in `src/api_server.py`) supporting flexible field alias fallbacks (`headline` $\leftarrow$ `title` / `text` / `summary` / `tweet_content` / `article_title` & `url` $\leftarrow$ `link` / `article_url`). Integrates the **IPASIS Security Verifier** (`src/ipasis_security.py`) to inspect client IPs, filtering high-risk Tor/Abuse origins with HTTP 403 Forbidden, zero-overhead private IP bypasses, 1-hour TTL caching, fail-open resiliency, and daily request accounting (Issue #87). Enforces HMAC-SHA256 signature validation via `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is set in the environment, rejecting unauthorized payload tampering with HTTP 401. Automatically maps incoming breaking headlines to affected regional metro agents (`Tulsa`, `Newark`, `Cincinnati`, `Greenville`, `Charlotte`, `Oakland`, `Port_St_Lucie`, `National`) via `resolve_target_locales()` in `src/intraday_event_monitor.py` (Issue #78).
+  - **Strategy 5 (User Authentication, Tiered Access Control & Dual Provisioning - Issue #40):** Protects REST API endpoints (`/api/v1/prices/*`, `/api/v1/forecast/*`, `/api/v1/combined`, `/api/v1/forecast/simulate`) and MCP transport (`/mcp/sse`, `/mcp/messages`) with PBKDF2 SHA-256 token verification and 30 RPM rate limiting via `KeyManager` (`src/key_manager.py`) backed by SQLite (`data/security.db`). Supports **Method A CLI** (`scripts/manage_keys.py`) for server admins and **Method B Admin REST API** (`/api/v1/admin/keys` protected by `MIDGLEY_ADMIN_SECRET`). Implements **Tiered Key Access**: `privileged` tier unlocks full multi-agent LLM inference, while `basic` tier automatically routes event scoring to zero-cost fallback providers (Issue #196) to protect Gemini tokens and Finlight API quotas. Cloudflare Workers ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)) bind directly to Cloudflare D1 (`midgley-cache-d1`) for edge verification decoupled from home infrastructure.
   - **24-Hour Headline & URL Deduplication Engine:** `is_headline_already_processed()` deduplicates incoming headlines and article URLs against `data/intraday_events.json` within a rolling 24-hour window, skipping redundant LLM scoring calls, avoiding duplicate prediction revision logs, and preventing unnecessary dashboard regenerations.
   - **Test Suite Execution Isolation & Defensive Dashboard Filtering:** Isolates unit test executions by checking `source.startswith("Test_")` or `TESTING=1` environment variable in `process_incoming_headline()`, automatically suppressing persistent disk writes (`_save_anomaly_record`, `log_predictions`) and skipping `generate_public_dashboard()` calls. Defensively filters test event sources (`Test_Suite`, `Test_Runner`, `Test_*`) in `src/dashboard_generator.py` when building public web app card feeds to guarantee production state cleanliness.
-  - **Cloudflare Edge Workers & Option A2 Observability Architecture (`workers/intraday_monitor_worker.ts`, `workers/cache_worker.ts`, `wrangler.toml`, & `wrangler.cache.toml`):**
+  - **Cloudflare Edge Workers, Queues & Option A2 Observability Architecture (`workers/intraday_monitor_worker.ts`, `workers/cache_worker.ts`, `wrangler.toml`, & `wrangler.cache.toml`):**
     - **`midgley-intraday-monitor` (`workers/intraday_monitor_worker.ts`):** 15-minute cron trigger worker scanning energy RSS feeds, evaluating regex anomaly triggers, deduplicating via edge cache, and firing GitHub Repository Dispatch events.
+    - **Cloudflare Queues Edge Buffer (`intraday-event-queue` - Issue #194):** Asynchronous edge event buffer (`INTRADAY_QUEUE` producer binding in `wrangler.toml` with `intraday-event-dlq` dead-letter queue) decoupling high-frequency headline burst detection and webhook pushes from origin execution. Batch consumer handler (`handleQueueBatch`) processes enqueued payloads asynchronously, enforcing edge cache deduplication and backoff retries. Origin API gateway exposes `POST /api/v1/events/queue-consumer` schema in `src/api_server.py` for batch payload consumption. Included on Workers Free tier (10,000 free ops/day, 24h message retention).
     - **`midgley-cache-worker` (`workers/cache_worker.ts`):** Tier 2 Edge Cache Gateway exposing `/api/v1/cache/:key` GET/POST and `/status` REST endpoints over Cloudflare D1.
     - **Option A2 Telemetry Engine:** Both workers integrate **Cloudflare Native Observability** (100% trace/log sampling rate), **Axiom Log Analytics** (`logToAxiom()` streaming top-level event logs to dataset `midgley-workers` via `AXIOM_TOKEN`), **Sentry Error Tracking** (`captureSentryException()` exporting stack traces via `SENTRY_DSN`), and **Sentry Cron Heartbeats** (`sendSentryCronCheckIn()` sending `in_progress` start and `ok`/`error` completion pings with matching `check_in_id` for execution duration tracking and timeout protection). Telemetry flushes execute asynchronously via `ctx.waitUntil()`, ensuring 0 latency overhead and $0 infrastructure cost.
 
@@ -107,10 +112,13 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **90%–95% Token Savings:** Pre-filters location weather data down to ~150–300 tokens (vs 2,500–4,500 tokens for raw NOAA text bulletins/GeoJSON feature maps).
   - **0-Token Deterministic SPC Risk Mapping:** Maps categorical convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) and sub-risks (Tornado, Hail, Wind) directly in Python without requiring LLM prompt calls.
 
-* **Tiered Multi-Provider LLM Failover Engine (`src/event_analyzer.py`):**
-  - **Tier 1 (Primary):** Google **Gemini 2.5 Flash** (`GEMINI_API_KEY`).
+* **Tiered Multi-Provider LLM Failover & Zero-Cost Routing Engine (`src/event_analyzer.py` & `src/fallback_telemetry.py`) (Issue #196):**
+  - **Tier 1 (Primary - Privileged Keys):** Google **Gemini 2.5 Flash** (`GEMINI_API_KEY`).
+  - **Tier 1.5 (Zero-Cost LLM Provider Hook):** Modular `ZeroCostProviderHook` interface prepared for Kaggle GPU Open-Source LLM kernel runner (Issue #102 under Milestone v2.0).
   - **Tier 2 (Secondary - Optional):** OpenAI `gpt-4o-mini` (`OPENAI_API_KEY`) / Anthropic `claude-3-5-haiku` (`ANTHROPIC_API_KEY`). Soft-checked if keys exist; safely skipped if absent.
-  - **Tier 3 (Safety Net - 100% Guaranteed):** **Offline Rule-Based Lexicon Extractor**. 100% offline, $0 cost, 0 API keys required, zero downtime guarantee.
+  - **Tier 3 (Safety Net - 100% Guaranteed):** **Expanded Deterministic Rule-Based Lexicon Extractor**. 100% offline, $0 cost, 0 API keys required, zero downtime guarantee.
+  - **Basic Tier Zero-Cost API Routing:** API clients authenticating with `basic` tier keys automatically bypass paid Cloud LLM endpoints, routing through `ZeroCostProviderHook` ($0 paid token spend).
+  - **Fallback Telemetry Accounting (`src/fallback_telemetry.py`):** Persists metrics to `data/fallback_telemetry.json` tracking basic tier routed calls, zero-cost provider invocations, and estimated token/dollar savings, exposed via `GET /api/v1/telemetry/fallback-status` and rendered on `docs/telemetry.html`.
 * **Executive Social Media & Weekend Gap Engine:**
   - **Empirical Correlation:** Econometric analysis confirms $p < 0.01$ correlation between executive social media posts (e.g., Trump OPEC pressure & tariff declarations) and immediate short-term futures return shocks.
   - **Dovish OPEC Pressure:** Posts urging OPEC to lower prices cause immediate average $-1.85\%$ single-day RBOB price drops.
@@ -129,6 +137,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **EIA-930 Hourly Electric Grid Stress Monitor (`src/data_ingestion.py`) (Issue #179):** `EIA930GridMonitorConnector` monitors ERCOT, MISO, PJM, and CAISO balancing authority load anomalies near refining hubs (`grid_stress_load_anomaly_zscore`).
   - **Expanded EIA Weekly Petroleum Balance (`src/data_ingestion.py`) (Issue #180):** Expands `EIADataConnector` to ingest weekly motor gasoline product supplied (implied demand), refiner net production by PADD, and inter-PADD pipeline movements.
   - **USACE LPMS Ohio River Lock Delays (`src/usace_locks.py`) (Issue #181):** `USACELockConnector` monitors commercial barge queue times and delay hours at Markland and McAlpine locks on the Ohio River (`usace_ohio_river_lock_delay_hours`) for Cincinnati regional logistics calibration.
+  - **4-Tier ZIP Code Geocoding & PADD Resolution Engine (`src/zip_geocoding.py`) (Issues #50 & #195):** `resolve_zip_code()` maps any 5-digit US ZIP code to mapped metro area locale, PADD region, state, and statutory state fuel tax policy via a 4-tier fallback engine (Metro Cluster hit -> State/PADD fallback -> Live GasBuddy station search -> Resolution metadata), logging unmapped lookups to `data/unmapped_zip_telemetry.json`.
+  - **Zero-Cost Internet Archive Wayback Machine Cloud Archiver (`src/wayback_archiver.py`) (Issue #197):** `archive_url_to_wayback()` automatically submits breaking energy news, OPEC bulletins, and refinery outage URLs to the Internet Archive Save API (`https://web.archive.org/save/{url}`), attaching permanent `archive_url` strings to event results in `data/intraday_events.json` and system logs.
+
 
 
 
@@ -200,6 +211,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
     1. Create a JSON profile file at `data/regional_metadata/<region_id>.json` following the schema defined in `src/regional_metadata.py` covering all 4 core dimensions (`econometric_drivers`, `refining_logistics`, `tax_structure`, `infrastructure_delivery`) and `shock_scenarios`.
     2. Import `render_regional_driver_cards_html` from `src.regional_metadata` inside `src/dashboard_generator.py` and replace `{{REGIONAL_CARDS}}` in the HTML template string to dynamically render the visual cards onto the regional dashboard page.
     3. **Multi-Agent Architecture Diagram Sync:** Update the ASCII diagram block for `4. LOCALIZED METRO AREA CALIBRATION AGENTS` in Section 2 (`Multi-Agent Architecture Overview`) of `AGENTS.md` to include the newly added metro, its PADD region, and its primary refining/logistics drivers.
+    4. **Webhook Locale Routing Registration:** Update `resolve_target_locales()` and `TRIGGER_KEYWORDS` in `src/intraday_event_monitor.py` to register the new region's name, primary refining hubs, pipelines, and logistics keywords so Strategy 4 incoming webhooks route relevant breaking news alerts directly to the new regional calibration agent.
 
 ---
 
@@ -227,6 +239,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 ### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
 * **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, evaluating 95% Confidence Interval Coverage (`within_95ci_hit`), and exposing continuous rolling performance metrics via API & web dashboard.
+* **Automated Cloud Relational Database Synchronization (`sync_predictions_to_cloud()`, Issue #82):**
+  - Synchronizes out-of-time prediction history logs and backfilled actual outcomes to remote relational databases (Turso Edge SQLite via `/v2/pipeline` REST JSON payloads, Cloudflare D1 Edge Workers via `CLOUDFLARE_CACHE_URL`, or Neon Postgres) with automatic `prediction_history` table schema creation and record upserts.
+  - Enforces 100% offline fallback: cloud sync operations execute defensively in the background so local CSV datastore (`data/prediction_history.csv`) remains fully operational without blocking execution if cloud endpoints are offline or credentials are absent.
+  - Exposed publicly via REST API endpoints `POST /api/v1/forecast/cloud-sync` and `GET /api/v1/forecast/cloud-status` (`get_cloud_sync_status()`).
 * **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
 * **Realized-vs-Predicted Rolling Scoreboard & Observability Engine:**
   - `compute_rolling_scoreboard_metrics(window_days=30, region=None)`: Calculates rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices.
@@ -235,8 +251,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - `get_recent_evaluated_records(region=None, limit=50)`: Returns chronologically sorted evaluated forecast records.
   - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard` and embedded in `docs/index.html`.
 * **Functions:**
-  - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates.
-  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, and backfills actual prices in `prediction_history.csv`.
+  - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates, automatically triggering background cloud DB sync.
+  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, backfills actual prices in `prediction_history.csv`, and triggers background cloud DB sync.
+  - `sync_predictions_to_cloud()`: Pushes prediction history rows to Turso, Cloudflare D1, or Neon cloud stores with zero-downtime local CSV fallback.
+  - `get_cloud_sync_status()`: Returns active cloud sync providers and local CSV datastore statistics.
 
 ---
 
@@ -255,9 +273,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`, `src/regional_metadata.py` & `src/social_embed_generator.py`)
+### 8. Public Web Dashboard & Multi-Locale Presentation Agent (`src/dashboard_generator.py`, `src/regional_metadata.py`, `src/fireworks_tech_graph.py` & `src/social_embed_generator.py`)
 
-* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), loads decoupled regional metadata profiles from `data/regional_metadata/` via `src/regional_metadata.py`, renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
+* **Role:** Builds and updates the responsive, multi-page public web application deployed to GitHub Pages (`docs/`), loads decoupled regional metadata profiles from `data/regional_metadata/` via `src/regional_metadata.py`, synthesizes self-contained SVG architecture diagrams via `src/fireworks_tech_graph.py`, renders dark-mode social preview cards (`1200x630px`), and injects Open Graph and Twitter Card metadata.
+* **Fireworks Tech Graph Automated Architecture Diagram Generator (`src/fireworks_tech_graph.py`, Issue #191):**
+  - Auto-synthesizes self-contained dark-theme SVG vector diagrams outputting to `docs/assets/multi_agent_architecture.svg` (~12.5 KB) and `docs/assets/regional_metro_architecture.svg` (~7.7 KB) during public web dashboard builds (`src/dashboard_generator.py`).
+  - Visual embeds integrated directly into `AGENTS.md` and `docs/index.html`.
+* **Locales Metadata Discovery & Multi-Region Batch Forecast Gateway (`src/api_server.py`, Issue #48):**
+  - Exposes `GET /api/v1/locales` for dynamic client discovery of all supported locale codes (`tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `port_st_lucie`, `bayarea`, `national`), `region_id`, PADD region, statutory fuel tax burdens, and refining hub metadata profiles loaded via `src/regional_metadata.py`.
+  - Exposes multi-region batch REST endpoints `POST /api/v1/forecast/batch` and `POST /api/v1/combined/batch` enabling client applications to query forecasts for multiple locales in a single HTTP request payload.
 * **Dynamic Overview Card Engine:** Dynamically queries real-time live retail pump prices via `fetch_live_metro_retail_price()` for all regional metro cards (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Oakland_CA`, `BayArea_CA`), while preserving NYMEX RBOB commodity futures benchmark pricing ($3.184/gal - $3.270/gal) for the **National Wholesale** contract card.
 * **Automated Social Preview Image Generator (`src/social_embed_generator.py`):**
   - Uses Matplotlib (`Agg` backend) to generate 10 dark-mode social preview cards (`1200x630px` PNG) in `docs/assets/embeds/` (`national.png`, `tulsa.png`, `newark.png`, `cincinnati.png`, `greenville.png`, `charlotte.png`, `oakland.png`, `bayarea.png`, `overview.png`, `math.png`).
@@ -275,8 +299,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Tulsa Metro Retail Gas Page (`/tulsa` / `docs/tulsa.html` & `docs/tulsa/index.html`):** Dedicated regional retail page calibrated to live pump prices ($3.89/gal), Cushing WTI delivery hub dynamics, West Tulsa HF Sinclair refinery tornado/freeze shock scenarios, and dynamic rack margins ($0.706/gal). Accessible via the top nav **`Metro Areas`** dropdown menu.
   - **Educational Math Guide (`/math` / `docs/math.html`):** Educational reference detailing equations and vector spaces across all 10 feature layers rendered via KaTeX (including Section 10 multiline `aligned` CARB tax breakdown).
   - **Fill-Up Timing & Estimated Savings Advisor (`/savings` / `docs/savings.html` & `docs/savings/index.html`) (Issue #91):** Interactive tank fill savings calculator and recommendation engine (`🔴 FILL UP TODAY` vs `🟢 WAIT TO FILL UP`), vehicle presets (Compact 12g, Sedan 15g, Pickup 24g, Fleet 100g), 5-day trajectory table, and LubeLogger (Issue #22) / Android Auto (Issue #21) cross-link integrations.
+  - **CodeCogs Visual LaTeX Math Fallbacks (`src/dashboard_generator.py`) (Issue #52):** `codecogs_url()` generator embedding visual SVG equation image tags (`![Exponential Decay Formula](https://latex.codecogs.com/svg.latex?...)`) alongside raw LaTeX notation in `docs/technical_breakdown.md` for visual math rendering across Markdown previews, RSS feeds, and mobile devices.
+  - **Prometheus Telemetry Exporter (`GET /api/v1/metrics` & `GET /metrics`) (Issue #107):** Exposes operational telemetry, TokenTab consumption, IPASIS security check/block metrics, 3-tier cache hit rates, request counters, and API quota remaining ratios in Prometheus exposition text format for Grafana observability dashboards.
 
 ---
+
 
 ### 9. Dev Environment & Permanent Server Agent (`dev-vm` Port 8080 & Systemd Local Workflow Timers)
 
