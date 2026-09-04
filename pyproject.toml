@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "midgley"
-version = "0.4.0"
+version = "0.4.1"
 description = "LLM-Augmented Unleaded Gasoline Price Prediction Framework"
 readme = "README.md"
 requires-python = ">=3.11"
