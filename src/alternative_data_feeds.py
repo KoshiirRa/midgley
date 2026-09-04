@@ -99,6 +99,21 @@ def get_baker_hughes_rig_count_feed() -> pd.DataFrame:
     df['date'] = pd.to_datetime(df['date'])
     return df
 
+def fetch_baker_hughes_rig_counts(start_date: str = None) -> pd.DataFrame:
+    """
+    Returns Baker Hughes active drilling rig count DataFrame with expected column schema.
+    """
+    df = get_baker_hughes_rig_count_feed()
+    if df.empty:
+        return pd.DataFrame()
+    df = df.rename(columns={"us_active_oil_rigs": "baker_hughes_oil_rigs"})
+    df['baker_hughes_us_rig_count'] = df['baker_hughes_oil_rigs']
+    df['baker_hughes_gas_rigs'] = (df['baker_hughes_us_rig_count'] * 0.20).astype(int)
+    df['baker_hughes_rig_delta_1w'] = df['baker_hughes_us_rig_count'].diff().fillna(0.0)
+    if start_date:
+        df = df[df['date'] >= pd.to_datetime(start_date)]
+    return df
+
 if __name__ == "__main__":
     ovx_df = fetch_cboe_crude_volatility_ovx("2024-01-01")
     rigs_df = get_baker_hughes_rig_count_feed()

@@ -8,7 +8,7 @@ and qualitative features chronologically without lookahead bias.
 import pandas as pd
 import numpy as np
 import logging
-from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed
+from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed, fetch_baker_hughes_rig_counts
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
 from src.data_ingestion import CFTCDataConnector, FERCDataConnector
 
@@ -158,9 +158,9 @@ def create_feature_matrix(
         rig_df = fetch_baker_hughes_rig_counts(start_date=df['date'].min().strftime("%Y-%m-%d"))
         if not rig_df.empty:
             df = pd.merge(df, rig_df, on='date', how='left')
-            for col in ['baker_hughes_us_rig_count', 'baker_hughes_oil_rigs', 'baker_hughes_gas_rigs', 'baker_hughes_rig_delta_1w']:
+            for col in [c for c in rig_df.columns if c != 'date']:
                 if col in df.columns:
-                    df[col] = df[col].ffill().bfill()
+                    df[col] = df[col].ffill().bfill().fillna(0.0)
     except Exception as e:
         logger.warning(f"Could not merge Baker Hughes rig count feed: {e}")
         
