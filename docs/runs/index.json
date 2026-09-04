@@ -1,5 +1,95 @@
 [
   {
+    "run_id": "2026-09-04_14-14-48",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-14-44",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-14-20",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-14-10",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-13-46",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-13-36",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-13-12",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-13-02",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-12-38",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-12-31",
+    "timestamp": "2026-09-04 07:01:39",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-12-03",
+    "timestamp": "2026-09-04 14:10:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-11-49",
+    "timestamp": "2026-09-04 14:10:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-11-12",
+    "timestamp": "2026-09-04 14:10:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-11-09",
+    "timestamp": "2026-09-04 14:10:54",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
+    "run_id": "2026-09-04_14-10-20",
+    "timestamp": "2026-09-04 13:30:18",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Russia sanctions bill likely stalled in US House until Novem..."
+  },
+  {
     "run_id": "2026-09-04_13-30-33",
     "timestamp": "2026-09-04 13:30:18",
     "run_type": "INTRADAY_REVISION",
@@ -506,96 +596,6 @@
   {
     "run_id": "2026-09-03_21-37-29",
     "timestamp": "2026-09-03 21:35:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-37-08",
-    "timestamp": "2026-09-03 21:35:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-36-48",
-    "timestamp": "2026-09-03 21:35:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-36-28",
-    "timestamp": "2026-09-03 21:35:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-36-08",
-    "timestamp": "2026-09-03 21:35:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-35-48",
-    "timestamp": "2026-09-03 21:35:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-55",
-    "timestamp": "2026-09-03 21:08:30",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-43",
-    "timestamp": "2026-09-03 21:08:30",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-40",
-    "timestamp": "2026-09-03 21:08:30",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-36",
-    "timestamp": "2026-09-03 21:08:30",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-33",
-    "timestamp": "2026-09-03 21:08:30",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-25",
-    "timestamp": "2026-09-03 21:08:06",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-15",
-    "timestamp": "2026-09-03 21:08:06",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-08-05",
-    "timestamp": "2026-09-03 21:06:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-07-54",
-    "timestamp": "2026-09-03 21:06:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-07-28",
-    "timestamp": "2026-09-03 21:06:13",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
   }
