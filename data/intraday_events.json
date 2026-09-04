@@ -1436,5 +1436,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.7
     }
+  },
+  {
+    "timestamp": "2026-09-04T22:45:27.034784",
+    "headline": "Fuel Costs and Corporate Pushback Stall US \u201cSanctions From Hell\u201d - UNITED24 Media",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxObVFjb0NmRk1rWktiWmtqTHQ4a0MwamxjY3EzVktGOURYTS1QQ3BLbW02UkRCSnNzWlVQamg2VXFjYk1lbzd2SzZ1Z1lTdmw4STQ5eXU4S2RYYkFTWHFSMS1KbG1SRmhrMXFKNlRmb2dlWUNTU2trSTNWdTAzaXo1Qm5ORWlDVTBJaS1QeERQRmxMamJVMjJVVVI5VWtMdEkxWHc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxObVFjb0NmRk1rWktiWmtqTHQ4a0MwamxjY3EzVktGOURYTS1QQ3BLbW02UkRCSnNzWlVQamg2VXFjYk1lbzd2SzZ1Z1lTdmw4STQ5eXU4S2RYYkFTWHFSMS1KbG1SRmhrMXFKNlRmb2dlWUNTU2trSTNWdTAzaXo1Qm5ORWlDVTBJaS1QeERQRmxMamJVMjJVVVI5VWtMdEkxWHc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": -0.3,
+      "supply_disruption": -0.4,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.5
+    }
   }
 ]
