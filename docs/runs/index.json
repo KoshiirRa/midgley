@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-04_00-30-20",
+    "timestamp": "2026-09-04 00:30:04",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "From Partnership to Penalty: US Tariffs Shadow India Trade D..."
+  },
+  {
     "run_id": "2026-09-04_00-15-19",
     "timestamp": "2026-09-04 00:15:05",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-03_04-22-23",
-    "timestamp": "2026-09-03 04:21:46",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_04-22-17",
     "timestamp": "2026-09-03 04:21:46",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
