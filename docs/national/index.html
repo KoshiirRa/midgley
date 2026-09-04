@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1ae2ce4322b14229bad5f1c4bf222a01"}'></script>
     <!-- Open Graph / Discord Social Embed Metadata -->
     <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="National Wholesale RBOB Forecast ($3.184 → $3.250 | +2.07%) - Midgley AI">
-    <meta property="og:description" content="5-day forecast for National Wholesale RBOB futures. Baseline $3.184/gal, projected target $3.250/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.">
+    <meta property="og:title" content="National Wholesale RBOB Forecast ($3.135 → $3.242 | +3.41%) - Midgley AI">
+    <meta property="og:description" content="5-day forecast for National Wholesale RBOB futures. Baseline $3.135/gal, projected target $3.242/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.">
     <meta property="og:url" content="https://koshiirra.github.io/midgley/national/index.html">
     <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/national.png">
     <meta property="og:image:width" content="1200">
@@ -15,8 +16,8 @@
 
     <!-- Twitter Card Metadata -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="National Wholesale RBOB Forecast ($3.184 → $3.250 | +2.07%) - Midgley AI">
-    <meta name="twitter:description" content="5-day forecast for National Wholesale RBOB futures. Baseline $3.184/gal, projected target $3.250/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.">
+    <meta name="twitter:title" content="National Wholesale RBOB Forecast ($3.135 → $3.242 | +3.41%) - Midgley AI">
+    <meta name="twitter:description" content="5-day forecast for National Wholesale RBOB futures. Baseline $3.135/gal, projected target $3.242/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.">
     <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/national.png">
 
     <!-- Discord Theme Accent Color -->
@@ -75,7 +76,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.3.5-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.3.5</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -164,12 +165,12 @@
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Current Wholesale Futures</span>
-                <p class="text-3xl font-extrabold text-white">$3.184<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-white">$3.135<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-slate-500">Spot NYMEX RBOB Contract</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-blue-400">$3.250<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-3xl font-extrabold text-blue-400">$3.242<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                 <p class="text-xs text-blue-300 font-semibold">-3.2% Projected Trend</p>
             </div>
             <div class="space-y-1">
@@ -236,14 +237,14 @@
                 </span>
             </div>
             <p class="text-xs text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800/90 leading-relaxed">
-                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> National forecast +$0.066/gal (+2.07%): Driven primarily by Futures & Commodity Benchmark (+$0.030/gal), Refining Yield & Crack Spread (+$0.017/gal).
+                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> National forecast +$0.107/gal (+3.41%): Driven primarily by Futures & Commodity Benchmark (+$0.048/gal), Refining Yield & Crack Spread (+$0.027/gal).
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
                 
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Futures & Commodity Benchmark</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.030/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.048/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -254,7 +255,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Refining Yield & Crack Spread</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.017/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.027/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">3-2-1 refining crack margin expansion & regional plant utilization tightness</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -265,7 +266,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Unstructured Intelligence & Sentiment</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.010/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.016/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Geopolitical supply risk news & executive social media hawkish posts</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -276,7 +277,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Weather & Environmental Signals</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.005/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.008/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">NOAA severe weather risks, convective alerts & freeze warnings</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -287,7 +288,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Regional Logistics & Hub Delivery</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.003/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.005/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Delivery hub rack margin expansion & pipeline/barge throughput constraints</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -298,7 +299,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Tax & Regulatory Overhead</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.001/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.003/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Statutory motor fuel tax fees & CARB summer-blend compliance overhead</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
