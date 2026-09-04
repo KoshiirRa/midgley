@@ -1400,5 +1400,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-04T22:00:22.394709",
+    "headline": "Canada hasn\u2019t pulled the gas trigger in Trump\u2019s trade war. What happens if it does? - The Independent",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNMUg4Q0c4cFF2Vl94a1NjaTRqZjlrV2RCRG9qeDRLaHNRRjFmTVF2Sm1OTy1mR2NiSEcxQjNkNnlyWEtzekpEZXo3UEpjd0w3Z1dibGp4OHpXd3FRcG5YTlFsby02aE5LSnFVVnFtaGNLNUxJWHRzRUZQVzVzMkdkNjZPc29vbVZIU2JRZnZwQjM3Yk1vR1BTMHd5ZThRNG5RVVhBaDFwTXpDZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqgFBVV95cUxNMUg4Q0c4cFF2Vl94a1NjaTRqZjlrV2RCRG9qeDRLaHNRRjFmTVF2Sm1OTy1mR2NiSEcxQjNkNnlyWEtzekpEZXo3UEpjd0w3Z1dibGp4OHpXd3FRcG5YTlFsby02aE5LSnFVVnFtaGNLNUxJWHRzRUZQVzVzMkdkNjZPc29vbVZIU2JRZnZwQjM3Yk1vR1BTMHd5ZThRNG5RVVhBaDFwTXpDZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.7,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.7
+    }
   }
 ]
