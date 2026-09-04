@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-04 07:15:16`  
+**Log Timestamp:** `2026-09-04 07:30:22`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** 100% Tariff Risk: Russia Sanctions Bill Stalls in US House, India Gets Reprieve - NiftyTrader  
+**Primary Event Trigger:** India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** 100% Tariff Risk: Russia Sanctions Bill Stalls in US House, India Gets Reprieve - NiftyTrader
+- **Headline Trigger:** India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe
 - **Active Ingested News Links:**
+- [India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe](https://news.google.com/rss/articles/CBMidkFVX3lxTFBodllKVTdtcFFvQzd2YVRwQU9ubmZPaDRlU0t2MFZ3WWRDMkppSUJLemtBMlMwTXZZVjJrUlhBRTRERTdDV0IzVzFkcy1hM1hNRGFtVmxHZkxmODJkbl9kaHVicXRQdEJQZU43RTczQm9ENmFiZlHSAXZBVV95cUxQaHZZSlU3bXBRb0M3dmFUcEFPbm5mT2g0ZVNLdjBWd1lkQzJKaUlCS3prQTJTME12WVYya1JYQUU0REU3Q1dCM1cxZHMtYTNYTURhbVZsR2ZMZjgyZG5fZGh1YnF0UHRCUGVON0U3M0JvRDZhYmZR?oc=5) (RSS_Feed)
 - [100% Tariff Risk: Russia Sanctions Bill Stalls in US House, India Gets Reprieve - NiftyTrader](https://news.google.com/rss/articles/CBMifkFVX3lxTE56ejJ2bWdJbVVvdERXZm42cGxHczRaaTV4dkZYUXJ0Y2VGZTFRbTJtY3RVTFpIckJzWDhsaHNiQUpTZ2J2Y001NGRKWTBxXzVlWF9scFBQSWxfeEpOOVV0ZzRwVF9aM3U3emxiVUE3QWhTM2lYZXlXN1EtV3ZLZw?oc=5) (RSS_Feed)
 - [Russia ready to supply as much oil as India needs: Russian envoy criticises Western sanctions, tariffs - India.com](https://news.google.com/rss/articles/CBMijgJBVV95cUxOek9JWVFVWUc2LVhSMndhTUxkTF9UbUlxWU9XZUF6R1JqVFJwZkh1MzFlVmRneGdQcGJSeFVGYWNvU2hKTDdwRTE1TkJ1TG84NGdvZ2QzemY5andkMFFqbHJKYm9uYVJDeWVBUDdUNDdJNnlGSnFtd0ZTUGxvM1lEeWR6cnBadlIxTVVRdkJhRm5xOXZFQzFBWVRiamlmN1dvWGlIQ3FBTkhsTVh6czlOXzgyMGJldG5Kb29ZTVBtZ1N2ZWZKN3VGNVhrSnREbmxBMEpDbTZEOE9CYU16VzRNR2l3T3lMM0E4Z1d1NThwRW9IdlNYWEsyeVZVWXotTHNsR0VnREE3SlZXOEtDWWfSAZMCQVVfeXFMTmZDOTY4ZXpCX0c4MjUxRjNVdE5QQVpqZnU4eDY2QjdTZ0ZiN081a3ZIcFVVbVdoSm5PQ0NGei1oLXBLcU4xbWd3MERjWktPSVpqNXNfMkgwb2dRdExCbGMyNVVPZ1l4Yy1odDdaR3R5WC14Z1lXVC1kUGtsUFFuNVppYldycG1qU3NhMkhINHVsZHFqV0x1RlBQY3VoVDZMeF9IUi1GMldKc1ByVlM2NWxncjJkMjVudGExejZlTTRHZVdGUHBHVDBOQzlwUUREOG1lQm52eTY4clBDaEJNSEZ3ZUVxNEFnNmFBQWFMNk13ZVp1MDhWZXNCRlJHdUtkbjhnUlpWQXY0LTU0a29sS2ZYV2M?oc=5) (RSS_Feed)
-- [Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times](https://news.google.com/rss/articles/CBMi_AFBVV95cUxPc0FnQzRraWN1ck9PR3lWVHhzVDJpdlRqaXM0c1ZHRUFsWnUzTUoxYnFhXzlUTUhyOFNZMDRRS0FzUXVuZDBEa21TRDJRYUhsRkpXenQ0Q0ZFR080ZUlwWXRaUTNzakVCUlB1cTBCQVhZY0o1a2hyVHF3R09vWldoVVA4Tk10azFLRzNVc1l2cEUzLXhSQzY4RU5IRlVFVnhVaTV6VVB6QzZUZHNvU3N6Ynd0X29KX0p3QnVrRFNoMVJ5ZFk2MW5xcXh2Nko0UWxDWTBGRkdHdXNZSG9uRFEwVG9Za3hhTzVlcTJCREo1YTdqaTJnQVV4c3h4aFrSAYICQVVfeXFMT3cxd3dHRHhhQzg5eFQ0UVBRT2tod2Raa1RLcU9VVXR4c21ISWRaSGVPc2YyZnUyb0pwOTA5TVliWThCN3YwTGhzYXI3MUdJeE9EZDh0UHk0SGdWX3h0Y2pTODZkS0RNc1lBWEVaVEtaSVQxaW53WlRzOTE0aWk0WFByUXpocE84cWpPbnN2X3J6YVN6VUxRZ29vWWcwWGctSHN5dXcyMWlVRDdHM01ndXNia3JCeGRoU2hfVGJEdzBFMWYzYzVhZ0pkbWF3MzdCQXR1RFNna05JcFFqOUNiMk9LVkp2MXZjaWVqSDFaaExnRlk3TDZRNVRSeS1sOENpVDB3?oc=5) (RSS_Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-04 07:15:16]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger '100% Tariff Risk: Russia Sanctions Bill Stalls in US House, India Gets Reprieve - NiftyTrader' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-04 07:30:22]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-04 07:15:16 (Mode: INTRADAY_REVISION), primary event trigger '100% Tariff Risk: Russia Sanctions Bill Stalls in US House, India Gets Reprieve - NiftyTrader' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-04 07:30:22 (Mode: INTRADAY_REVISION), primary event trigger 'India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (RSS_Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,11 +96,11 @@ Largest upward shift for this run: Oakland, CA Retail at $5.553/gal (+0.314/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-04 07:15:16]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by '100% Tariff Risk: Russia Sanctions Bill Stalls in US House, India Gets Reprieve - NiftyTrader'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-04 07:30:22]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'India-US Trade Deal on the Brink as Washington Reopens Tariff War - The Probe'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-04 07:15:16.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-04 07:30:22.*

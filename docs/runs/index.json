@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-04_07-30-36",
+    "timestamp": "2026-09-04 07:30:22",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "India-US Trade Deal on the Brink as Washington Reopens Tarif..."
+  },
+  {
     "run_id": "2026-09-04_07-15-31",
     "timestamp": "2026-09-04 07:15:16",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-03_21-06-27",
-    "timestamp": "2026-09-03 21:06:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_21-06-16",
     "timestamp": "2026-09-03 21:06:13",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
