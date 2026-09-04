@@ -1149,4 +1149,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-04 19:12:49,2026-09-03,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.5342,5.4381,DOWN,5.2849,DOWN,0.1532,1.0,0.0,0.0,5.5342,0.0,5.3181,5.5581,0.0,yfinance
 2026-09-04 19:12:56,2026-09-10,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.8095,DOWN,,,,,0.0,0.0,4.95,0.0,4.6895,4.9295,,yfinance
 2026-09-04 19:12:59,2026-09-10,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9067,DOWN,,,,,0.0,0.0,5.05,0.0,4.7867,5.0267,,yfinance
-2026-09-04 22:00:22,2026-09-11,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Canada hasn’t pulled the gas trigger in Trump’s trade war. What happens if it does? - The Independent,3.184,3.2732,UP,,,,,0.0,0.0,3.184,0.0,3.1532,3.3932,,yfinance
+2026-09-04 22:15:29,2026-09-11,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Russia Sanctions Bill Stalls: Why India’s Russian Oil Could Be In The Crosshairs - outlookbusiness.com,3.184,3.2732,UP,,,,,0.0,0.0,3.184,0.0,3.1532,3.3932,,yfinance
