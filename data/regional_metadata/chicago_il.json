@@ -1,0 +1,37 @@
+{
+  "region_id": "chicago_il",
+  "display_name": "Chicago Metro, IL",
+  "theme_color": "emerald",
+  "icon_class": "fa-gas-pump",
+  "padd_region": "PADD_2",
+  "zip_code": "60601",
+  "base_price_anchor": 3.95,
+  "statutory_tax_gal": 0.655,
+  "rack_margin_offset": 0.5,
+  "logger_region_key": "Chicago_Il",
+  "econometric_drivers": {
+    "title": "Regional Econometric Drivers",
+    "description": "Localized market dynamics calibrated for chicago_il."
+  },
+  "refining_logistics": {
+    "title": "Refining Capacity & Logistics",
+    "description": "Regional supply infrastructure and pipeline corridors serving chicago_il."
+  },
+  "tax_structure": {
+    "title": "Statutory Fuel Tax Structure",
+    "description": "State motor fuel excise tax ($0.655/gal) and regulatory overhead."
+  },
+  "infrastructure_delivery": {
+    "title": "Delivery Hub & Rack Margin Equation",
+    "description": "Terminal delivery hub dynamics for chicago_il.",
+    "equation_latex": "P_{\\text{Retail}} = P_{\\text{RBOB}} + \\text{RackMargin}"
+  },
+  "shock_scenarios": [
+    {
+      "id": "unplanned_refinery_outage",
+      "name": "Local Unplanned Refinery Outage",
+      "impact_gal": 0.15,
+      "description": "Simulates a 150,000 bpd refinery unit trips near chicago_il."
+    }
+  ]
+}

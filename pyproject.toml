@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "midgley"
-version = "0.3.5"
+version = "0.4.0"
 description = "LLM-Augmented Unleaded Gasoline Price Prediction Framework"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,9 +21,17 @@ dependencies = [
     "google-genai>=0.1.0",
     "matplotlib>=3.8.0",
     "seaborn>=0.13.0",
-    "requests>=2.31.0"
+    "requests>=2.31.0",
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0",
+    "pydantic>=2.6.0"
 ]
 
 [project.urls]
 Homepage = "https://koshiirra.github.io/midgley/"
 Repository = "https://github.com/KoshiirRa/midgley"
+
+[project.scripts]
+midgley-api = "src.api_server:main"
+midgley-forecast = "src.locations.national.main:main"
+midgley-region = "scripts.manage_regions:main"

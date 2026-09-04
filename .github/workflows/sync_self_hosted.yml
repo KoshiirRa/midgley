@@ -1,0 +1,35 @@
+name: Auto-Sync Dev Branch into Self-Hosted Branch
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  sync-self-hosted:
+    name: Merge Dev into Self-Hosted Branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository (Self-Hosted Branch)
+        uses: actions/checkout@v4
+        with:
+          ref: self-hosted
+          fetch-depth: 0
+
+      - name: Configure Git User
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge Dev Branch into Self-Hosted
+        run: |
+          git fetch origin dev:dev
+          git merge dev -m "chore(sync): auto-merge dev updates into self-hosted branch"
+
+      - name: Push Synchronized Self-Hosted Branch
+        run: |
+          git push origin self-hosted
