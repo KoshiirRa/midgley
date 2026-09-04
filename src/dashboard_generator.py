@@ -1751,6 +1751,7 @@ def generate_public_dashboard():
         'SanJose_CA': {'base': 5.553, 'pred': 4.843},
         'NorthBay_CA': {'base': 5.453, 'pred': 4.743}
     }
+    initial_deltas = {reg: prices_map[reg]['pred'] - prices_map[reg]['base'] for reg in prices_map}
 
     # 0. Fetch real-time live prices for metro retail regions (excluding National Wholesale commodity benchmark)
     try:
@@ -1764,6 +1765,7 @@ def generate_public_dashboard():
     except Exception as live_err:
         logger.warning(f"Could not fetch live metro prices for dashboard generator: {live_err}")
 
+    logged_regions = set()
     if os.path.exists(HISTORY_CSV_PATH):
         try:
             df_hist = pd.read_csv(HISTORY_CSV_PATH)
@@ -1771,6 +1773,7 @@ def generate_public_dashboard():
                 for reg in prices_map:
                     reg_df = df_hist[df_hist['region'] == reg]
                     if not reg_df.empty:
+                        logged_regions.add(reg)
                         latest = reg_df.iloc[-1]
                         hist_base = float(latest['current_base_price'])
                         hist_pred = float(latest['predicted_5d_price'])
@@ -1782,6 +1785,11 @@ def generate_public_dashboard():
                             prices_map[reg]['pred'] = round(prices_map[reg]['base'] + delta, 3)
         except Exception as e:
             logger.warning(f"Could not read prediction history for dashboard cards: {e}")
+
+    # Preserve initial model target deltas for regions not explicitly present in prediction_history.csv
+    for reg in prices_map:
+        if reg != "National" and reg not in logged_regions:
+            prices_map[reg]['pred'] = round(prices_map[reg]['base'] + initial_deltas[reg], 3)
 
     # Synchronize sub-locale base prices and model forecasts relative to Oakland/BayArea benchmarks
     oak_base = prices_map['Oakland_CA']['base']

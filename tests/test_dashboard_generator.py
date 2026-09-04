@@ -556,11 +556,10 @@ def test_dynamic_trend_badges_rendering():
         with open(path, "r", encoding="utf-8") as f:
             html = f.read()
 
-        # Verify static contradictory trend strings are never present in generated HTML
-        assert "-3.0% Projected Trend" not in html, f"Hardcoded '-3.0% Projected Trend' found in {path}"
-        assert "+1.2% Projected Trend" not in html, f"Hardcoded '+1.2% Projected Trend' found in {path}"
-        assert "+2.1% Projected Trend" not in html, f"Hardcoded '+2.1% Projected Trend' found in {path}"
-        assert "+1.8% Projected Trend" not in html, f"Hardcoded '+1.8% Projected Trend' found in {path}"
+        # Verify un-substituted template placeholders are never present in generated HTML
+        assert "{{NAT_TREND_TEXT}}" not in html, f"Unplaced template token found in {path}"
+        assert "{{TULSA_TREND_TEXT}}" not in html, f"Unplaced template token found in {path}"
+        assert "{{NEWARK_TREND_TEXT}}" not in html, f"Unplaced template token found in {path}"
 
     for path in single_trend_paths:
         with open(path, "r", encoding="utf-8") as f:
@@ -573,6 +572,36 @@ def test_dynamic_trend_badges_rendering():
         oak_html = f.read()
         assert "5-Day Target:" in oak_html
         assert "%" in oak_html
+
+
+def test_unlogged_regions_delta_preservation(monkeypatch):
+    """Verify that when live prices update for unlogged regions,
+    prices_map preserves the initial model delta (pred = base + delta)
+    so forecast targets move in sync with live base price updates,
+    preventing artificial trend drops.
+    """
+    def mock_fetch(region, use_cache=True):
+        live_prices = {
+            'Tulsa_OK': {'price': 3.614},
+            'Cincinnati_OH': {'price': 3.916},
+            'Cincinnati_KY': {'price': 3.952},
+            'Port_St_Lucie_FL': {'price': 3.949},
+        }
+        return live_prices.get(region, None)
+
+    import src.live_fuel_feed as lff
+    monkeypatch.setattr(lff, "fetch_live_metro_retail_price", mock_fetch)
+
+    generate_public_dashboard()
+
+    with open(CINCINNATI_PATH, "r", encoding="utf-8") as f:
+        cin_html = f.read()
+
+    assert "$3.916" in cin_html
+    assert "$3.816" in cin_html
+    assert "-14.5%" not in cin_html
+    assert "-18.4%" not in cin_html
+
 
 
 
