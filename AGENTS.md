@@ -217,11 +217,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Blank-Slate Base Package (`self-hosted` branch):** Out of the box, `midgley` runs as a lightweight core package containing the **National RBOB Wholesale Forecasting Engine**, multi-agent news/weather pipelines, 3-tier edge caching, IP security, and FastAPI REST/MCP gateway (`MIDGLEY_ENABLED_REGIONS="national"`).
   - **Dynamic Region Calibration Engine (`DynamicRegionRunner` in `src/dynamic_region.py`):** Replaces static city-specific code with a dynamic regional engine that ingests decoupled JSON metadata profiles (`data/regional_metadata/<region_id>.json`), automatically computing localized 5-day pump forecasts, rack margin formulas, and signed feature attributions.
   - **CLI Region Manager (`scripts/manage_regions.py`):** Provides CLI tools for self-hosters to list, create (`python scripts/manage_regions.py create --region-id chicago_il --zip 60601`), test, and register custom metro regions.
-  - **Mandatory 3-Branch Synchronization & Agent Reconciliation Protocol (`dev` $\rightarrow$ `main` & `self-hosted`):**
+  - **Mandatory 3-Branch Synchronization & Agent Reconciliation Protocol (`dev` $\rightarrow$ `main` $\rightarrow$ `self-hosted`):**
     All AI agent sessions and developers MUST adhere to the 3-branch workflow:
     1. **`main` / `dev`:** Preserves the production multi-region showcase (National + 7 preset metro hubs) for `koshiirra.github.io/midgley`.
     2. **`self-hosted`:** Preserves the clean blank-slate core framework and container build (`ghcr.io/koshiirra/midgley:self-hosted`).
-    3. **Reconciliation Rule:** Whenever `dev` is reconciled into `main`, `self-hosted` MUST also be merged with `dev` (`git checkout self-hosted && git merge dev && git push origin self-hosted`). Automated CI/CD (`.github/workflows/sync_self_hosted.yml`) ensures automated background reconciliation on pushes.
+    3. **Reconciliation Rule:** Whenever `dev` is reconciled into `main` (production release), `self-hosted` MUST also be merged with `main` (`git checkout self-hosted && git merge main && git push origin self-hosted`). Automated CI/CD (`.github/workflows/sync_self_hosted.yml`) ensures automated background reconciliation on pushes to `main`.
 
 ---
 

@@ -1786,7 +1786,7 @@ def generate_public_dashboard():
         except Exception as e:
             logger.warning(f"Could not read prediction history for dashboard cards: {e}")
 
-    # Preserve initial model target deltas for regions not explicitly present in prediction_history.csv
+    # Preserve initial model target deltas for regions not explicitly present in prediction_history.csv (Issue #208)
     for reg in prices_map:
         if reg != "National" and reg not in logged_regions:
             prices_map[reg]['pred'] = round(prices_map[reg]['base'] + initial_deltas[reg], 3)

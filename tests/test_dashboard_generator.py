@@ -575,7 +575,7 @@ def test_dynamic_trend_badges_rendering():
 
 
 def test_unlogged_regions_delta_preservation(monkeypatch):
-    """Verify that when live prices update for unlogged regions,
+    """Verify Issue #208: Ensure that when live prices update for unlogged regions,
     prices_map preserves the initial model delta (pred = base + delta)
     so forecast targets move in sync with live base price updates,
     preventing artificial trend drops.
