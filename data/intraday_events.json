@@ -1310,5 +1310,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-04T09:00:18.086044",
+    "headline": "U.S.\u2013Canada Tariffs: Timeline of Key Dates and Documents - Blake, Cassels & Graydon LLP",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOR1hhWGpyTG1kNmVZZE90RGxKbk9rcnlwTUg0S2kxMmxWRU9qYXVtMTlBZ1RQeXA5SWMtVUgzVHB3U0tCYnFvOWJXa204UDNNRkhvdzZObnlDc3pGWmdaRG50bW1SNEotTE0zYVVmZXZQWkM3Z1VtbG1uU3RLM2luVjJKMUZlTG9jaXh4Y05XZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijwFBVV95cUxOR1hhWGpyTG1kNmVZZE90RGxKbk9rcnlwTUg0S2kxMmxWRU9qYXVtMTlBZ1RQeXA5SWMtVUgzVHB3U0tCYnFvOWJXa204UDNNRkhvdzZObnlDc3pGWmdaRG50bW1SNEotTE0zYVVmZXZQWkM3Z1VtbG1uU3RLM2luVjJKMUZlTG9jaXh4Y05XZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
