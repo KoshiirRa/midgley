@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Open Graph / Discord Social Embed Metadata -->
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Newark DE Metro Gas Price Forecast ($3.381 → $3.289 | -2.72%) - Midgley AI">
+    <meta property="og:description" content="5-day retail gas price forecast for Newark DE metro. Baseline $3.381/gal, projected target $3.289/gal. PBF Delaware City refinery & C&D Canal detour model.">
+    <meta property="og:url" content="https://koshiirra.github.io/midgley/newark/index.html">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/newark.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Newark DE Metro Gas Price Forecast ($3.381 → $3.289 | -2.72%) - Midgley AI">
+    <meta name="twitter:description" content="5-day retail gas price forecast for Newark DE metro. Baseline $3.381/gal, projected target $3.289/gal. PBF Delaware City refinery & C&D Canal detour model.">
+    <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/newark.png">
+
+    <!-- Discord Theme Accent Color -->
+    <meta name="theme-color" content="#10b981">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newark Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.4.4-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="../index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="../national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="../tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="../newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="../cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="../greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="../charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="../port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a href="../oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="../bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
+                    </div>
+                </div>
+
+                <a href="../diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
+                <a href="../savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
+                <a href="../telemetry.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                </a>
+                <a href="../math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Newark Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                PADD 1B Regional Model
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">$3.381<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-blue-400">$3.289<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-emerald-300 font-semibold">-2.7% Projected Trend</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">$0.1210<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: 4.65% | RMSE: $0.1620</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">59.20%</p>
+                <p class="text-xs text-slate-500">DEZ001 NOAA & C&D Canal detour signals</p>
+            </div>
+        </div>
+
+        <!-- Historical Time-Series Chart -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-blue-400"></i> Historical Newark Retail Prices vs. 5-Day Model Predictions
+            </h3>
+            <div class="h-80 w-full">
+                <canvas id="newarkChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Regional Counterfactual Scenario Shock Simulator -->
+        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-ship text-purple-400"></i> Regional Newark & Maritime Counterfactual Shock Scenarios
+            </h3>
+            <p class="text-xs text-slate-400">Estimated real-time Newark pump price impact under localized refinery, weather & maritime channel disruptions:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs font-semibold text-rose-400">PBF Delaware City Outage</span>
+                    <h4 class="text-sm font-semibold text-white">Fluid Catalytic Cracker Shutdown</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.535 <span class="text-xs font-normal text-rose-300">(+$0.185/gal)</span></p>
+                    <p class="text-xs text-slate-500">Halts 180,000 bpd refinery loading racks</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs font-semibold text-amber-400">C&D Canal Shoaling Detour</span>
+                    <h4 class="text-sm font-semibold text-white">Emergency 300 nm Delmarva Route</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.447 <span class="text-xs font-normal text-rose-300">(+$0.097/gal)</span></p>
+                    <p class="text-xs text-slate-500">+35% marine barge freight rate surge</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span class="text-xs font-semibold text-blue-400">Delaware Bay Ice Lockout</span>
+                    <h4 class="text-sm font-semibold text-white">Big Stone Anchorage Lightering Freeze</h4>
+                    <p class="text-2xl font-bold text-rose-400">$3.462 <span class="text-xs font-normal text-rose-300">(+$0.112/gal)</span></p>
+                    <p class="text-xs text-slate-500">Delays foreign crude tanker discharge</p>
+                </div>
+            </div>
+        </div>
+
+                <!-- Component-Level Feature Attribution & Driver Breakdown Card (Issue #46) -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-blue-400"></i> Component-Level Feature Attribution & Driver Breakdown
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 font-semibold">
+                    <i class="fa-solid fa-microchip mr-1"></i> XAI Model Interpretability
+                </span>
+            </div>
+            <p class="text-xs text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800/90 leading-relaxed">
+                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> Newark DE forecast $-0.092/gal (-2.72%): Driven primarily by Refining Yield & Crack Spread ($-0.032/gal), Regional Logistics & Hub Delivery ($-0.023/gal).
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
+                
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Refining Yield & Crack Spread</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.032/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Narrowing refining margins and elevated product yield</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">35.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Regional Logistics & Hub Delivery</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.023/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Ecodeveloped pipeline loading flows</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">25.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Futures & Commodity Benchmark</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.018/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Softening NYMEX energy futures contract prices</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">20.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Unstructured Intelligence & Sentiment</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.009/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">OPEC price pressure talkdown & dovish geopolitical news</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">10.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Tax & Regulatory Overhead</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.005/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Tax relief or off-peak RVP specification</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">5.0%</span>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-slate-200 text-xs">Weather & Environmental Signals</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.005/gal</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-snug">Favorable multi-basin weather conditions</p>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
+                        <span>Model Share Weight</span>
+                        <span class="font-mono text-slate-300">5.0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <!-- Regional Econometric Drivers & Physical Infrastructure Factors -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-warehouse text-blue-400"></i> Regional Econometric Drivers & Physical Infrastructure Factors
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">PADD 1B Import Parity & Econometric Levers</h4>
+                    <p>Newark sits in the PADD 1B Central Atlantic pricing zone where retail pump prices track NY Harbor wholesale RBOB futures, waterborne import parity from Europe, and regional Atlantic spot margins.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-blue-300 uppercase tracking-wider">PBF Delaware City Refining & Maritime Logistics</h4>
+                    <p>Located 12 miles south of Newark, DE, PBF's Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering at Big Stone Anchorage and C&D Canal barge routes.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                    <h4 class="font-bold text-amber-300 uppercase tracking-wider">Delaware State Fuel Tax & Statutory Overhead</h4>
+                    <p>Delaware state motor fuel tax ($0.230/gal) combined with US Federal excise tax ($0.184/gal) establishes a total statutory tax overhead of $0.414/gal across New Castle County stations.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2 overflow-x-auto max-w-full">
+                    <h4 class="font-bold text-purple-300 uppercase tracking-wider">Newark Delivery Hub & Dynamic Rack Margin</h4>
+                    <p>$$\text{Rack Margin} = P_{\text{Newark Retail}} - P_{\text{Wholesale RBOB}} = \$3.350 - \$3.184 = \$0.166/\text{gal}$$</p>
+                    <p class="text-slate-400 pt-1">Calibrates predicted wholesale returns directly into local I-95 corridor pump station rack prices.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('newarkChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [
+                        {
+                            label: 'Newark Retail Gas Actual ($/gal)',
+                            data: [3.10, 3.18, 3.25, 3.32, 3.40, 3.45, 3.38, 3.35],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 2.5,
+                            fill: true
+                        },
+                        {
+                            label: '5-Day Model Forecast ($/gal)',
+                            data: [3.12, 3.16, 3.22, 3.30, 3.38, 3.42, 3.34, 3.25],
+                            borderColor: '#10b981',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8' } }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

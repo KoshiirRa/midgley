@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Open Graph / Discord Social Embed Metadata -->
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Technical Analysis & Specific-Run Math Audit - Midgley AI">
+    <meta property="og:description" content="Educational mathematical breakdown guide detailing formulas for all 9 feature layers, continuous shock decay, and regularized Ridge Estimator.">
+    <meta property="og:url" content="https://koshiirra.github.io/midgley/math.html">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/math.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Technical Analysis & Specific-Run Math Audit - Midgley AI">
+    <meta name="twitter:description" content="Educational mathematical breakdown guide detailing formulas for all 9 feature layers, continuous shock decay, and regularized Ridge Estimator.">
+    <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/math.png">
+
+    <!-- Discord Theme Accent Color -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematical & Algorithmic Foundations - Midgley Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .math-box { background: #090d16; border-left: 4px solid #3b82f6; overflow-x: auto; max-width: 100%; }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.4.4-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
+                    </div>
+                </div>
+
+                <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
+                <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
+                <a href="telemetry.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                </a>
+                <a href="math.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
+        
+        <!-- Hero Section -->
+        <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-indigo-900/40 border border-blue-500/30 space-y-4">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                <i class="fa-solid fa-graduation-cap text-blue-400"></i> Mathematical & Econometric Architecture
+            </h2>
+            <p class="text-slate-300 text-base leading-relaxed">
+                Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.4 Finlight-LLM</strong>.
+            </p>
+            
+            <!-- Research Citations Ledger Link Card -->
+            <div class="pt-2">
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            <i class="fa-solid fa-book-bookmark text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                Peer-Reviewed Research Literature Index <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
+                            </h4>
+                            <p class="text-xs text-slate-400">View the running citation ledger referencing peer-reviewed arXiv papers (Context Routing Diagnostics, Alibaba CEDAR Residual Decomposition, TraceBench, SAGE, SPALT) whose methodologies are implemented in Midgley.</p>
+                        </div>
+                    </div>
+                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shrink-0 shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> View RESEARCH_CITATIONS.md
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Refining Crack Spreads -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-500">01</span>
+                <h3 class="text-2xl font-bold text-white">Quantitative Time-Series & 3-2-1 Crack Spreads</h3>
+            </div>
+            
+            <p class="text-slate-300 leading-relaxed text-sm">
+                A <strong>crack spread</strong> measures the profit margin refiners earn when "cracking" crude oil into finished petroleum products. Because crude oil is quoted in dollars per barrel (\(42\text{ gallons}\) per barrel) while wholesale gas is quoted in dollars per gallon, we convert crude prices into per-gallon equivalents.
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 1.1: Refining Crack Spread & Technical Returns</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\text{CrackSpread}_t = P_{\text{RBOB}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad r_t = \ln\left(\frac{P_t}{P_{t-1}}\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    where \(P_{\text{RBOB}}\) is the NYMEX RBOB Futures price (\(RB=F\)) and \(P_{\text{WTI}}\) is West Texas Intermediate Crude (\(CL=F\)). Moving averages \(\text{MA}_K(t) = \frac{1}{K}\sum_{i=0}^{K-1} P_{t-i}\) are calculated across \(K \in \{7, 14, 30\}\) trading days.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: LLM Qualitative Vector Space -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-500">02</span>
+                <h3 class="text-2xl font-bold text-white">Qualitative LLM Extraction (Google Gemini 2.5 Flash)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Unstructured news bulletins and press releases are processed by <strong>Google Gemini 2.5 Flash</strong> to convert qualitative events into a bounded numerical factor vector space:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 2.1: LLM Bounded Impact Vector Space</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\mathbf{V}_{\text{event}, t} = \begin{bmatrix} S_{\text{geopolitical}} \\ S_{\text{supply}} \\ S_{\text{opec}} \\ S_{\text{demand}} \\ S_{\text{pressure}} \end{bmatrix}_t \in [-1.0, +1.0]^5$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Each component is bounded in the interval \([-1.0, +1.0]\), representing negative (bearish), zero (neutral), or positive (bullish) market pressure.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Multi-Tiered NOAA Weather Risk -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-500">03</span>
+                <h3 class="text-2xl font-bold text-white">Multi-Tiered NOAA Weather Risk Dynamics</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Atmospheric weather alerts from the NOAA NWS API (<code class="text-amber-300">api.weather.gov</code>) are factored across national basins and regional localized metro tiers:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Multi-Tiered Weather Vulnerability Matrix</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks &amp; Permian/Bakken production basin freeze warnings.<br>
+                    <strong>Tier 2 (Tulsa OK):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa \(125,000\text{ bpd}\) HF Sinclair loading racks, \(+\$0.173/\text{gal}\) shock) and Cushing (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.<br>
+                    <strong>Tier 2 (Newark DE):</strong> New Castle County (<code class="text-amber-300">DEZ001</code>) Nor'easters &amp; storm surges affecting PBF Delaware City (\(180,000\text{ bpd}\)) loading racks.<br>
+                    <strong>Tier 2 (Cincinnati OH/KY):</strong> Ohio Valley flooding &amp; Mississippi River low-water draft restrictions affecting river barge deliveries.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 4: Global & Regional Maritime Chokepoints -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-500">04</span>
+                <h3 class="text-2xl font-bold text-white">Global &amp; Regional Maritime Chokepoints &amp; Delay Equations</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Key global and regional maritime chokepoints dictate crude transit times and regional rack margins:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit &amp; Detour Premium</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right), \quad \Delta \text{Margin}_{\text{Delaware}} = +\$0.097/\text{gal } (p = 0.00191)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Strait of Hormuz:</strong> \(21.0\text{M bpd}\) (\(20\%\) of global petroleum) naval blockade threats (\(+\$0.109/\text{gal}\) price shock).<br>
+                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add \(+12\text{--}14\) days transit time, adding \(+\$4.50/\text{bbl}\) freight premium (\(+\$0.201/\text{gal}\) price shock).<br>
+                    <strong>Delaware Bay &amp; C&amp;D Canal:</strong> Big Stone Anchorage deepwater lightering freezes and C&amp;D Canal shoaling closures force tank barges onto a \(300\text{ nm}\) detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by \(+\$0.097/\text{gal}\), \(p = 0.00191\)).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 5: Executive Social Media & Weekend Gap Engine -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-400">05</span>
+                <h3 class="text-2xl font-bold text-white">Executive Social Feed &amp; Weekend Volatility Multiplier (\(1.42\times\))</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Executive social media posts (Twitter/X and Truth Social energy commentary) produce empirical return shocks and Sunday evening open gap volatility:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 5.1: Weekend Market Open Gap Volatility Multiplier</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\sigma_{\text{SundayOpen}} = 1.42 \times \sigma_{\text{Baseline}}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Because commodity exchanges are closed Friday 17:00 EST to Sunday 18:00 EST, Saturday/Sunday posts generate <strong>\(1.42\times\) higher Sunday evening open price gap volatility</strong>. Dovish OPEC posts cause average \(-1.85\%\) single-day RBOB drops, while hawkish tariff threats cause \(+2.10\%\) price surges.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 6: Alternative Physical Feeds & Key Movers -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-400">06</span>
+                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds &amp; Key Market Movers</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Inverted options market tail-risk, active drilling rig pipelines, and high-impact policy figures:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 6.1: Physical Supply &amp; Volatility Integration</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\mathbf{X}_{\text{Physical}} = \Big[ \text{OVX}_t, \quad \Delta \text{Rigs}_{t-90}, \quad \text{DXY}_t, \quad \text{EIA\_Inventory\_Draw}_t \Big]$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Cboe OVX Index (^OVX):</strong> Options tail-risk volatility vector ("VIX for Oil").<br>
+                    <strong>Baker Hughes Rig Count:</strong> 3-to-6 month domestic shale crude supply pipeline lead indicator.<br>
+                    <strong>Key Market Movers:</strong> Saudi Energy Minister Prince Abdulaziz (OPEC+ cuts), Fed Chair Powell (\(DXY\) demand destruction), and US DOE Strategic Petroleum Reserve (SPR buyback floor at \(\$70\text{--}\$79/\text{bbl}\)).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 7: Real-Time Financial Media Feed (Finlight.me REST API) -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">07</span>
+                <h3 class="text-2xl font-bold text-white">Real-Time Financial Media Feed (Finlight.me REST API)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                <code>v1.4 Finlight-LLM</code> integrates live, real-time financial media news articles via the <strong>finlight.me REST API</strong> (Reuters, Bloomberg, Seeking Alpha, Investing.com, Al Jazeera, Fox News). Targeted Boolean keyword query vectors stream raw commodity and refining bulletins directly into the Gemini 2.5 Flash batch factor extraction pipeline:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 7.1: Live News Vector Ingestion &amp; Batch Factor Scoring</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>API Endpoint:</strong> <code>POST https://api.finlight.me/v2/articles</code> with header <code>X-API-KEY</code>.<br>
+                    <strong>Target Queries:</strong> <code>oil OR gasoline OR crude OR RBOB OR OPEC OR petroleum</code>, <code>refinery OR Cushing OR outage OR inventory OR EIA</code>, and <code>Hormuz OR Red Sea OR Houthi OR Suez OR tanker OR sanctions</code>.<br>
+                    <strong>LLM Transformation:</strong> Raw news payloads (title, summary, source, publishDate) are parsed into 5 bounded quantitative factors: <code>geopolitical_risk</code>, <code>supply_disruption</code>, <code>demand_sentiment</code>, <code>opec_action</code>, and <code>overall_price_pressure</code>.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 8: Exponential Shock Decay -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-400">08</span>
+                <h3 class="text-2xl font-bold text-white">Exponential Memory Decay &amp; Vector Fusion</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 8.1: Continuous Memory Decay Accumulator</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
+                    $$\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp\left(-\frac{\ln 2}{t_{1/2}}\right) + \mathbf{V}_t$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    where half-life \(t_{1/2} = 5.0\text{ days}\) for national macroeconomic/social events and \(t_{1/2} = 4.0\text{ days}\) for regional NOAA weather shocks.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 9: Ridge Estimator & Live Retail Calibration -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-500">09</span>
+                <h3 class="text-2xl font-bold text-white">Standardized Ridge Estimator &amp; Live Pump Calibration</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Rather than predicting non-stationary raw price levels, our model fits a regularized <strong>Ridge Regression (\(\alpha = 10.0\))</strong> model to predict 5-day percentage price returns (\(\Delta\%\)), applied directly to today's live pump price (\(P_{\text{Live Base}}\)):
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.1: Regularized Ridge Objective Function &amp; Calibration</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Metro Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>\(\text{MAE} = \$0.1069/\text{gal}\)</strong>.
+                </p>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-blue-500">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.2: Purged &amp; Combinatorial Cross-Validation (CPCV) Overlap Elimination (Issue #117)</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\text{Purge Condition: } i \in \text{Train} \iff [t_{i,\text{start}}, t_{i,\text{end}}] \cap [t_{j,\text{test,start}}, t_{j,\text{test,end}} + h_{\text{embargo}}] = \emptyset \quad \forall j \in \text{Test}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Temporal Data Leakage Prevention (López de Prado, 2018):</strong> In 5-day step-ahead horizon forecasting, standard cross-validation leaks lookahead information because observation \(t\)'s evaluation window \([t, t+5]\) overlaps with test samples. <code>PurgedGroupTimeSeriesSplit</code> and <code>CombinatorialPurgedCV</code> purge any training observation whose label period intersects test folds or falls within the post-test embargo window (\(h_{\text{embargo}} = 5\text{ days}\)), ensuring 100% out-of-sample purity (queryable via REST API at <code>GET /api/v1/forecast/purged-cv</code>).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 10: CARB Regulatory Burden & PADD 5 Refining Island -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-500">10</span>
+                <h3 class="text-2xl font-bold text-white">CARB Regulatory Burden &amp; PADD 5 Refining Island Isolation</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Oakland (\(\$5.550/\text{gal}\)) and the 9-County SF Bay Area (\(\$5.650/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 10.1: Total Statutory CARB Tax &amp; Fee Accumulation</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\begin{aligned}
+                    T_{\text{CARB}} &= \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} \\[6pt]
+                    &= \$0.634 + \$0.250 + \$0.185 + \$0.150 + \$0.184 \\[6pt]
+                    &= \$0.953/\text{gal}
+                    \end{aligned}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Refining Crack Spread:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>
+                    <strong>Physical Risk Shocks:</strong> Hayward Fault Seismic (\(+\$0.420/\text{gal}\)), PG&amp;E PSPS Red Flag Wildfire Blackout (\(+\$0.350/\text{gal}\)), and PTWC Tsunami Berth Closure (\(+\$0.165/\text{gal}\)).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 11: Academic Research & Citation Ledger -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-400">11</span>
+                <h3 class="text-2xl font-bold text-white">Peer-Reviewed Research &amp; Academic Citation Ledger</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Midgley actively integrates theoretical theorems, diagnostic algorithms, and multi-agent architectural paradigms from peer-reviewed scientific literature. All implemented research papers are indexed in our persistent repository ledger:
+            </p>
+
+            <div class="p-6 rounded-2xl bg-slate-900 border border-blue-500/30 space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <h4 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-scroll text-blue-400"></i> RESEARCH_CITATIONS.md
+                        </h4>
+                        <p class="text-xs text-slate-400">
+                            Includes arXiv pre-prints, theoretical bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR two-stage residual formulas (\(\mathbf{s}_{t+1} = f_\theta(\mathbf{s}) + \epsilon_t\)), TraceBench LLM agent benchmarking, and SPALT spatio-temporal locality tree references.
+                        </p>
+                    </div>
+                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shrink-0 shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open RESEARCH_CITATIONS.md on GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 12: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">12</span>
+                <h3 class="text-2xl font-bold text-white">Ultra-Low Sulfur Diesel (ULSD) &amp; Distillate Crack Spread Modeling (Issue #41 - WIP)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Beyond unleaded RBOB gasoline, Midgley models <strong>Ultra-Low Sulfur Diesel (ULSD)</strong> (<code class="text-purple-300">HO=F</code> NY Harbor futures) and distillate cracking margins governing commercial freight logistics, agricultural harvesting, and heating oil demand pools. <em>Note: The ULSD model is currently an experimental Work-In-Progress (WIP) undergoing multi-week feedback loop empirical evaluation before extending full regional metro models.</em>
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 12.1: Distillate Crack Spread &amp; 3-2-1 Margin Formulas</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\text{DistillateCrack}_t = P_{\text{ULSD}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad \text{Crack}_{321, t} = \frac{2 P_{\text{RBOB}, t} + P_{\text{ULSD}, t} - 3 \left( \frac{P_{\text{WTI}, t}}{42.0} \right)}{3.0}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    <strong>Regulatory Excise &amp; Renewable Diesel Overhead:</strong> Federal diesel tax (\(\$0.244/\text{gal}\)), state excise differential, and California statutory CARB ULSD / D4 Biomass-Based Diesel RIN &amp; RD99 renewable diesel compliance overhead (\(\$1.120/\text{gal}\)) (queryable via REST API at <code>GET /api/v1/diesel/live</code>, <code>GET /api/v1/diesel/forecast</code>, and <code>GET /api/v1/diesel/simulate</code>).
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+
+</body>
+</html>
