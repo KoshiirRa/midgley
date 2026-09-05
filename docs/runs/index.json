@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-05_22-15-30",
+    "timestamp": "2026-09-05 22:15:17",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Canada hasn\u2019t pulled the gas trigger in Trump\u2019s trade war. W..."
+  },
+  {
     "run_id": "2026-09-05_16-00-56",
     "timestamp": "2026-09-05 16:00:40",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-04_19-53-44",
-    "timestamp": "2026-09-04 19:12:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-04_19-53-15",
     "timestamp": "2026-09-04 19:12:42",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
