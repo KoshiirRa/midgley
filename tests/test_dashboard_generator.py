@@ -176,7 +176,7 @@ def test_last_run_intelligence_audit_card_daily_batch(tmp_path):
 
     card_html = build_last_run_audit_card_html(audit_data)
     assert "Last Run Intelligence & Impact Audit" in card_html
-    assert "Scheduled Daily Batch" in card_html
+    assert "Daily Forecast Batch Execution" in card_html
     assert "DAILY_BATCH" in card_html
     assert "Supply Disruption Score" in card_html
     assert "Prediction Revisions Delta" in card_html
@@ -276,7 +276,7 @@ def test_last_run_intelligence_audit_card_fallback_on_missing_files(tmp_path):
 
     card_html = build_last_run_audit_card_html(audit_data)
     assert "Last Run Intelligence & Impact Audit" in card_html
-    assert "Scheduled Daily Batch" in card_html
+    assert "Daily Forecast Batch Execution" in card_html
     assert '<a href="technical_breakdown.html"' in card_html
 
 

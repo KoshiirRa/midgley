@@ -78,6 +78,91 @@ def codecogs_url(latex_str: str) -> str:
     return f"https://latex.codecogs.com/svg.latex?{encoded}"
 
 
+def is_valid_headline(headline: str) -> bool:
+    """
+    Enforces strict headline sanitization (Issue #204).
+    Requires title/headline strings to contain valid textual headline prose.
+    Filters out raw API URLs (api.finlight.me, api.weather.gov, etc.), raw JSON payloads,
+    and non-headline telemetry strings.
+    """
+    if not headline or not isinstance(headline, str):
+        return False
+
+    h_stripped = headline.strip()
+    if len(h_stripped) < 10:
+        return False
+
+    # Filter raw URLs
+    if h_stripped.startswith(("http://", "https://", "ftp://")):
+        return False
+
+    # Filter raw JSON or dict strings
+    if (h_stripped.startswith("{") and h_stripped.endswith("}")) or (h_stripped.startswith("[") and h_stripped.endswith("]")):
+        return False
+    if any(json_kw in h_stripped for json_kw in ['"properties":', '"geometry":', '"type": "Feature"', '"id":']):
+        return False
+
+    # Filter raw API domain URLs embedded in headline text
+    raw_api_domains = [
+        "api.finlight.me",
+        "api.weather.gov",
+        "t.wxs.us",
+        "api.github.com",
+        "marsapi.ams.usda.gov"
+    ]
+    if any(domain in h_stripped.lower() for domain in raw_api_domains):
+        return False
+
+    # Ensure at least 3 words containing alphabetic characters
+    words = [w for w in h_stripped.split() if any(c.isalpha() for c in w)]
+    if len(words) < 3:
+        return False
+
+    return True
+
+
+def format_human_source(source: str, url: str = "") -> str:
+    """
+    Converts raw technical feed identifiers into human-readable source attributions (Issue #204).
+    """
+    if not source or not isinstance(source, str):
+        source = "Energy Market Wire"
+
+    s_clean = source.strip()
+    if s_clean.startswith("Test_"):
+        return s_clean
+
+    s_lower = s_clean.lower()
+    url_lower = url.lower() if url else ""
+
+    if "reuters" in s_lower or "reuters" in url_lower:
+        return "Reuters Energy"
+    if "bloomberg" in s_lower or "bloomberg" in url_lower:
+        return "Bloomberg Market Wire"
+    if "noaa" in s_lower or "weather.gov" in s_lower or "weather.gov" in url_lower or "wxs.us" in url_lower:
+        return "NOAA NWS Storm Alert"
+    if "cme" in s_lower or "nymex" in s_lower or "cmegroup" in url_lower:
+        return "CME Group / NYMEX"
+    if "finlight" in s_lower or "finlight" in url_lower:
+        return "Financial Media Wire"
+    if "nyt" in s_lower or "nytimes" in url_lower:
+        return "New York Times Energy"
+    if "cnbc" in s_lower or "cnbc" in url_lower:
+        return "CNBC Energy Wire"
+    if "google" in s_lower or "news.google" in url_lower:
+        return "Google News Energy Feed"
+    if "rss" in s_lower:
+        return "Energy News Wire"
+    if "webhook" in s_lower:
+        return "Intraday Anomaly Trigger"
+
+    if "_" in s_clean and " " not in s_clean:
+        return s_clean.replace("_", " ")
+
+    return s_clean
+
+
+
 KATEX_MOBILE_CSS = """
         /* Mobile-Responsive KaTeX Math Equation Styles */
         .katex-display {
@@ -530,34 +615,39 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
                             h_src = evt.get("source", "Webhook / RSS")
                             if any(t_pfx in h_src.lower() for t_pfx in ["test_suite", "test_runner", "test_"]):
                                 continue
-                            if h_text and not any(item["headline"] == h_text for item in headline_items):
-                                headline_items.append({"headline": h_text, "url": h_url, "source": h_src})
+                            if h_text and is_valid_headline(h_text) and not any(item["headline"] == h_text for item in headline_items):
+                                clean_url = h_url if h_url and not any(d in h_url.lower() for d in ["api.finlight.me", "api.weather.gov", "t.wxs.us"]) else f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
+                                headline_items.append({
+                                    "headline": h_text.strip(),
+                                    "url": clean_url,
+                                    "source": format_human_source(h_src, clean_url)
+                                })
                             if len(headline_items) >= 3:
                                 break
             except Exception as e:
                 logger.warning(f"Could not parse headline items from intraday_events.json: {e}")
-        if not headline_items and headline_trigger:
+        if not headline_items and headline_trigger and is_valid_headline(headline_trigger):
             headline_items.append({
-                "headline": headline_trigger,
+                "headline": headline_trigger.strip(),
                 "url": f"https://news.google.com/search?q={urllib.parse.quote(headline_trigger)}",
-                "source": "Intraday Anomaly Trigger"
+                "source": format_human_source("Intraday Anomaly Trigger")
             })
     else:
         headline_items = [
             {
                 "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
                 "url": "https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html",
-                "source": "CME_Group / NYMEX"
+                "source": "CME Group / NYMEX"
             },
             {
                 "headline": "NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion",
-                "url": "https://api.weather.gov",
-                "source": "NOAA_NWS_API"
+                "url": "https://www.weather.gov",
+                "source": "NOAA NWS Storm Alert"
             },
             {
-                "headline": "Executive Social Media Feed & OPEC Weekend Price Gap Analysis",
-                "url": "https://finlight.me",
-                "source": "Finlight_v2_API"
+                "headline": "Executive Policy Feed & OPEC Weekend Open Price Gap Intelligence",
+                "url": "https://www.bloomberg.com/energy",
+                "source": "Bloomberg Market Wire"
             }
         ]
 
@@ -812,9 +902,10 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
         run_mode_tag = "INTRADAY_REVISION"
     else:
         badge_html = """<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-            <i class="fa-solid fa-circle-check text-emerald-400"></i> Scheduled Daily Batch
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Daily Forecast Batch Execution
         </span>"""
-        trigger_title = "Scheduled Daily Batch @ 02:00 AM Central"
+        timestamp_utc = log_ts if log_ts else datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        trigger_title = f"Daily Forecast Batch Execution ({timestamp_utc})"
         trigger_desc = "Automated 24-hour commodity futures, weather alerts, and executive social media ingestion."
         run_mode_tag = "DAILY_BATCH"
 
@@ -840,9 +931,16 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
         h_text = h.get("headline", "")
         h_url = h.get("url", "")
         h_src = h.get("source", "Energy_News")
+
+        if not is_valid_headline(h_text):
+            continue
+
         is_dummy_url = any(dummy_kw in h_url for dummy_kw in ["/articles/123", "/articles/tariffs_", "/articles/hormuz_", "example.com", "test_"])
-        if not h_url or is_dummy_url:
+        is_raw_api = any(domain in h_url.lower() for domain in ["api.finlight.me", "api.weather.gov", "t.wxs.us", "api.github.com"])
+        if not h_url or is_dummy_url or is_raw_api:
             h_url = f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
+
+        h_src = format_human_source(h_src, h_url)
 
         h_text_esc = html.escape(h_text)
         h_url_esc = html.escape(h_url)
@@ -1039,7 +1137,7 @@ def build_spc_style_synopsis(
     m1 = m0 * retention_daily
     m5 = m0 * 0.50
 
-    trigger_desc = headline if headline else "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    trigger_desc = headline if headline else f"Daily Forecast Batch Execution ({log_ts})"
 
     # Extract top gainers and decliners specific to THIS run's regional deltas
     sorted_regions = sorted(region_deltas, key=lambda x: x.get("delta", 0.0), reverse=True)
@@ -1171,7 +1269,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     m5 = m0 * 0.50
 
     file_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H-%M-%S")
-    trigger_text = headline if headline else "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    trigger_text = headline if headline else f"Daily Forecast Batch Execution ({log_ts})"
 
     # Build SPC-style technical narrative synopsis for Section 5
     synopsis = build_spc_style_synopsis(
@@ -1871,7 +1969,7 @@ def generate_public_dashboard():
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
-                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
+                <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
