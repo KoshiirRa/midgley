@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-05 08:00:50`  
+**Log Timestamp:** `2026-09-05 08:15:32`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times  
+**Primary Event Trigger:** Canada targets US metals in looming retaliatory tariffs - S&P Global  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times
+- **Headline Trigger:** Canada targets US metals in looming retaliatory tariffs - S&P Global
 - **Active Ingested News Links:**
+- [Canada targets US metals in looming retaliatory tariffs - S&P Global](https://news.google.com/rss/articles/CBMiygFBVV95cUxNdFFBYy1DMTVpY1hiemZHSXdhMmxVd2hmU1VzSGJodWlvQWZjVXJ2VTNMSTdSeENSQnYtTldaNWhld3Rwd2pyVy1SeDQzTm50ZnE5R3NZRU02bDdGMmMzMnhtdDQ0SkZ6THhsS3hHZEF2ejFRRF9nemRaenpkeFR3SFNXZnh5Q1VWWXk0UGRkUUppVnFuTk10aHZQSTBNRVFfMmdmaDMzWXF5V1A2OGVSUTI0V2FSZTJXTG5mdGhkQWJtckRTWHotUXR3?oc=5) (Google News Energy Feed)
 - [Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times](https://news.google.com/rss/articles/CBMi_AFBVV95cUxPc0FnQzRraWN1ck9PR3lWVHhzVDJpdlRqaXM0c1ZHRUFsWnUzTUoxYnFhXzlUTUhyOFNZMDRRS0FzUXVuZDBEa21TRDJRYUhsRkpXenQ0Q0ZFR080ZUlwWXRaUTNzakVCUlB1cTBCQVhZY0o1a2hyVHF3R09vWldoVVA4Tk10azFLRzNVc1l2cEUzLXhSQzY4RU5IRlVFVnhVaTV6VVB6QzZUZHNvU3N6Ynd0X29KX0p3QnVrRFNoMVJ5ZFk2MW5xcXh2Nko0UWxDWTBGRkdHdXNZSG9uRFEwVG9Za3hhTzVlcTJCREo1YTdqaTJnQVV4c3h4aFrSAYICQVVfeXFMT3cxd3dHRHhhQzg5eFQ0UVBRT2tod2Raa1RLcU9VVXR4c21ISWRaSGVPc2YyZnUyb0pwOTA5TVliWThCN3YwTGhzYXI3MUdJeE9EZDh0UHk0SGdWX3h0Y2pTODZkS0RNc1lBWEVaVEtaSVQxaW53WlRzOTE0aWk0WFByUXpocE84cWpPbnN2X3J6YVN6VUxRZ29vWWcwWGctSHN5dXcyMWlVRDdHM01ndXNia3JCeGRoU2hfVGJEdzBFMWYzYzVhZ0pkbWF3MzdCQXR1RFNna05JcFFqOUNiMk9LVkp2MXZjaWVqSDFaaExnRlk3TDZRNVRSeS1sOENpVDB3?oc=5) (Google News Energy Feed)
 - [Rewards of Resilience: India’s growth surges despite oil shocks, tariffs and a weak monsoon outlook - Open Magazine](https://news.google.com/rss/articles/CBMizgFBVV95cUxPNTlBLVRyR1pWY1RRQ1QySi0zNllLbmx2dnROX2Z4V1RpRlVKOVRzNmVIZExFLVg3NkwteUJJakVVN21vbE9GNFg3am5mNnZMbE1xM0xsVTY5d0RSMEw4bjU5T0lEbVhpMXZyWkh3MEU3MmNVVGZ5YzRRZ2Z6ZXk3Yl9NUU52VXZKenp2YW00UDNDMlFPcUUxYnFNdExjQ1VxVDNVV0x4NlA5b3BJOUJNSm1SV2ZPQnJ6TUlGTnFlUldFNnRqbWY2ZXJ2bVdTUQ?oc=5) (Google News Energy Feed)
-- [US-India Trade Deal at Risk Amid New Tariff Proposals - India News Network](https://news.google.com/rss/articles/CBMimwFBVV95cUxNRnFmRFFvQjM3QS1sRWpvMW1ldTBpWktnMHE2TlpxSDVxaFZVVWkyaVhQRHFQY1R2czloM2NjNWpNMzR4MmNkT215bGlYYzcxcENjSV96ZFR1TnZHOUZwU3pqNTlWVXNwMFFIVUZGUzloVVhuSEh6Yk5rMHpTaGVVeXpBdDFEV2ZlbzJvbkZmNVZpc29Yajc3WkpxZw?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -21,8 +21,8 @@
 
 - **Supply Disruption Score ($S$):** `0.00`
 - **Price Pressure Shock ($\Delta P$):** `-0.40`
-- **Geopolitical Risk Score ($G$):** `-0.30`
-- **Demand Sentiment Score ($D$):** `0.00`
+- **Geopolitical Risk Score ($G$):** `0.60`
+- **Demand Sentiment Score ($D$):** `-0.50`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.0000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-05 08:00:50]: Downward price pressure (-0.40/gal shock) detected following 'Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times'. Supply disruption score S=0.00 and geopolitical risk G=-0.30 indicate easing market tightness. Residual event memory decays from initial M₀=0.0000 to Day-5 retention M₅=0.0000.
+SUMMARY FOR RUN [2026-09-05 08:15:32]: Downward price pressure (-0.40/gal shock) detected following 'Canada targets US metals in looming retaliatory tariffs - S&P Global'. Supply disruption score S=0.00 and geopolitical risk G=0.60 indicate easing market tightness. Residual event memory decays from initial M₀=0.0000 to Day-5 retention M₅=0.0000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-05 08:00:50 (Mode: INTRADAY_REVISION), primary event trigger 'Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.00, Price Pressure ΔP=-0.40, Geopolitical Risk G=-0.30. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-05 08:15:32 (Mode: INTRADAY_REVISION), primary event trigger 'Canada targets US metals in looming retaliatory tariffs - S&P Global' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.00, Price Pressure ΔP=-0.40, Geopolitical Risk G=0.60. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.0000
   - Day 1: M₁ = 0.0000
   - Day 5: M₅ = 0.0000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,11 +96,11 @@ Largest upward shift for this run: SF Bay Area Region at $5.796/gal (+0.247/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-05 08:00:50]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times'. Overall price pressure vector sits at ΔP=-0.40/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-05 08:15:32]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Canada targets US metals in looming retaliatory tariffs - S&P Global'. Overall price pressure vector sits at ΔP=-0.40/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=-0.30. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.60. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-05 08:00:50.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-05 08:15:32.*

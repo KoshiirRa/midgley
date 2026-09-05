@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-05_08-15-47",
+    "timestamp": "2026-09-05 08:15:32",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Canada targets US metals in looming retaliatory tariffs - S&..."
+  },
+  {
     "run_id": "2026-09-05_08-01-04",
     "timestamp": "2026-09-05 08:00:50",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-04_19-49-14",
-    "timestamp": "2026-09-04 19:12:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-04_19-48-46",
     "timestamp": "2026-09-04 19:12:42",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"

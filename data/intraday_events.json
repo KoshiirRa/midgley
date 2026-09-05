@@ -1580,5 +1580,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.4
     }
+  },
+  {
+    "timestamp": "2026-09-05T08:15:32.285159",
+    "headline": "Canada targets US metals in looming retaliatory tariffs - S&P Global",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNdFFBYy1DMTVpY1hiemZHSXdhMmxVd2hmU1VzSGJodWlvQWZjVXJ2VTNMSTdSeENSQnYtTldaNWhld3Rwd2pyVy1SeDQzTm50ZnE5R3NZRU02bDdGMmMzMnhtdDQ0SkZ6THhsS3hHZEF2ejFRRF9nemRaenpkeFR3SFNXZnh5Q1VWWXk0UGRkUUppVnFuTk10aHZQSTBNRVFfMmdmaDMzWXF5V1A2OGVSUTI0V2FSZTJXTG5mdGhkQWJtckRTWHotUXR3?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiygFBVV95cUxNdFFBYy1DMTVpY1hiemZHSXdhMmxVd2hmU1VzSGJodWlvQWZjVXJ2VTNMSTdSeENSQnYtTldaNWhld3Rwd2pyVy1SeDQzTm50ZnE5R3NZRU02bDdGMmMzMnhtdDQ0SkZ6THhsS3hHZEF2ejFRRF9nemRaenpkeFR3SFNXZnh5Q1VWWXk0UGRkUUppVnFuTk10aHZQSTBNRVFfMmdmaDMzWXF5V1A2OGVSUTI0V2FSZTJXTG5mdGhkQWJtckRTWHotUXR3?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.6,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    }
   }
 ]
