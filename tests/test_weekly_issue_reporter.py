@@ -142,3 +142,4 @@ def test_generate_weekly_markdown_report_includes_self_review(sample_issues):
         assert "Highest-Impact Modeling Issue" in report
         assert "## ⚠️ Model Degradation & Baseline Underperformance Alerts" in report
         assert "## 📚 Relevant Recent arXiv Research Papers" in report
+        assert "## 🔬 Relevant CORE Open-Access Research Papers" in report

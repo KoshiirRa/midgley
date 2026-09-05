@@ -57,6 +57,9 @@ EIA_API_KEY="eia_api_key_here"
 # St. Louis Fed FRED Key (Macro Energy & Retail Index Series)
 FRED_API_KEY="fred_api_key_here"
 
+# CORE Open-Access Research Literature API Key (Weekly Model Review)
+CORE_API_KEY="core_api_key_here"
+
 # Optional Secondary LLM Tier Failovers (Soft-checked)
 OPENAI_API_KEY="sk-proj-..."
 ANTHROPIC_API_KEY="sk-ant-..."

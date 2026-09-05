@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 import logging
 from typing import Dict, Any, List, Optional
 from src.arxiv_monitor import format_arxiv_markdown_section
+from src.core_monitor import format_core_markdown_section
 
 logger = logging.getLogger(__name__)
 
@@ -930,6 +931,9 @@ def generate_weekly_markdown_report() -> str:
     # Fetch recent arXiv research preprints
     arxiv_section_md = format_arxiv_markdown_section(days_back=7)
 
+    # Fetch recent CORE open-access research papers
+    core_section_md = format_core_markdown_section(days_back=7)
+
     report = f"""# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report & Performance Audit
 
 ### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
@@ -985,6 +989,10 @@ def generate_weekly_markdown_report() -> str:
 ---
 
 {arxiv_section_md}
+
+---
+
+{core_section_md}
 
 ---
 

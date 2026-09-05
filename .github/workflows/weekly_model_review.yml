@@ -66,6 +66,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODEL_DEGRADATION_WEBHOOK_URL: ${{ secrets.MODEL_DEGRADATION_WEBHOOK_URL }}
+          CORE_API_KEY: ${{ secrets.CORE_API_KEY }}
         run: |
           python -m src.weekly_issue_reporter
 
