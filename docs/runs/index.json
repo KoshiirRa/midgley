@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-05_11-22-24",
+    "timestamp": "2026-09-05 11:22:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
+  },
+  {
     "run_id": "2026-09-04_16-06-43",
     "timestamp": "2026-09-04 16:06:39",
     "run_type": "DAILY_BATCH",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-03_22-08-48",
-    "timestamp": "2026-09-03 22:05:59",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-03_22-08-21",
     "timestamp": "2026-09-03 22:05:59",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
