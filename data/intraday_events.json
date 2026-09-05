@@ -1490,5 +1490,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.4
     }
+  },
+  {
+    "timestamp": "2026-09-05T01:15:23.490167",
+    "headline": "Tariff Authorities In The Lindsey O. Graham Sanctioning Russia And Iran Act Of 2026 - Analysis - Eurasia Review",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQTG9oVmxtUzZweHNjdF9JMEJtS2oyV3N0OHFMVTl1NXE5dDhwUzhJbmZLZklUTHJsbXhncTVNWHVkQkxsWFpvaTgwVU56ZGw3Q3BiZGhYMGxKY2hDOVZHRWhuR01haW45c2FEdkR3b2FKN0ktOXZvZkpGWjVQNWkza0QtUVBkbTRmVkxWdHAyR1FSWmV6dkFhMWxTLUJYQ2dJTmsyd1hDNFJpMzJ3My1NNXhXTElpbC1MNWVRelpsRTB1OWdObUZsbHlrSQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiywFBVV95cUxQTG9oVmxtUzZweHNjdF9JMEJtS2oyV3N0OHFMVTl1NXE5dDhwUzhJbmZLZklUTHJsbXhncTVNWHVkQkxsWFpvaTgwVU56ZGw3Q3BiZGhYMGxKY2hDOVZHRWhuR01haW45c2FEdkR3b2FKN0ktOXZvZkpGWjVQNWkza0QtUVBkbTRmVkxWdHAyR1FSWmV6dkFhMWxTLUJYQ2dJTmsyd1hDNFJpMzJ3My1NNXhXTElpbC1MNWVRelpsRTB1OWdObUZsbHlrSQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.8,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.3,
+      "overall_price_pressure": 0.9
+    }
   }
 ]
