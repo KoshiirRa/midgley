@@ -1526,5 +1526,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.4
     }
+  },
+  {
+    "timestamp": "2026-09-05T05:15:33.380526",
+    "headline": "US-India Trade Deal at Risk Amid New Tariff Proposals - India News Network",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNRnFmRFFvQjM3QS1sRWpvMW1ldTBpWktnMHE2TlpxSDVxaFZVVWkyaVhQRHFQY1R2czloM2NjNWpNMzR4MmNkT215bGlYYzcxcENjSV96ZFR1TnZHOUZwU3pqNTlWVXNwMFFIVUZGUzloVVhuSEh6Yk5rMHpTaGVVeXpBdDFEV2ZlbzJvbkZmNVZpc29Yajc3WkpxZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimwFBVV95cUxNRnFmRFFvQjM3QS1sRWpvMW1ldTBpWktnMHE2TlpxSDVxaFZVVWkyaVhQRHFQY1R2czloM2NjNWpNMzR4MmNkT215bGlYYzcxcENjSV96ZFR1TnZHOUZwU3pqNTlWVXNwMFFIVUZGUzloVVhuSEh6Yk5rMHpTaGVVeXpBdDFEV2ZlbzJvbkZmNVZpc29Yajc3WkpxZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.5,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.5,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    }
   }
 ]
