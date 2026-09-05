@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-05_08-30-39",
+    "timestamp": "2026-09-05 08:30:23",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "US-Canada trade escalation: Why autos and oil matter more th..."
+  },
+  {
     "run_id": "2026-09-05_08-15-47",
     "timestamp": "2026-09-05 08:15:32",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-04_19-50-19",
-    "timestamp": "2026-09-04 19:12:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
-  },
-  {
-    "run_id": "2026-09-04_19-49-14",
     "timestamp": "2026-09-04 19:12:42",
     "run_type": "DAILY_BATCH",
     "trigger": "Scheduled Daily Batch Refresh (02:00 AM Central)"
