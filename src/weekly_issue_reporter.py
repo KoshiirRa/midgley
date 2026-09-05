@@ -11,13 +11,290 @@ import urllib.request
 import urllib.error
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
+from typing import Dict, Any, List, Optional
 from src.arxiv_monitor import format_arxiv_markdown_section
 
 logger = logging.getLogger(__name__)
 
 HISTORY_CSV = os.path.join("data", "prediction_history.csv")
+TELEMETRY_ALERTS_PATH = os.path.join("data", "telemetry_alerts.json")
+
+
+def _load_telemetry_alerts() -> dict:
+    """Loads telemetry alert records from data/telemetry_alerts.json."""
+    if os.path.exists(TELEMETRY_ALERTS_PATH):
+        try:
+            with open(TELEMETRY_ALERTS_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            logger.debug(f"Error loading telemetry alerts: {e}")
+    return {
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "total_alerts_logged": 0,
+        "active_degraded_regions": [],
+        "history": []
+    }
+
+
+def log_degradation_telemetry_alert(alert_data: dict) -> dict:
+    """
+    Logs model degradation alert event to data/telemetry_alerts.json.
+    Suppresses disk write when TESTING=1 unless TEST_TELEMETRY_PERSIST=1.
+    """
+    if os.environ.get("TESTING") == "1" and not os.environ.get("TEST_TELEMETRY_PERSIST"):
+        logger.info("TESTING=1: Suppressed telemetry alerts disk write.")
+        return {"status": "TEST_SUPPRESSED", "alert_data": alert_data}
+
+    os.makedirs(os.path.dirname(TELEMETRY_ALERTS_PATH), exist_ok=True)
+    alerts_file = _load_telemetry_alerts()
+
+    degraded_regions = alert_data.get("degraded_regions", [])
+    degraded_names = [r["region"] for r in degraded_regions if isinstance(r, dict) and "region" in r]
+
+    alerts_file["last_updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    alerts_file["active_degraded_regions"] = list(dict.fromkeys(degraded_names))
+
+    if alert_data.get("is_degraded"):
+        alerts_file["total_alerts_logged"] += 1
+        record = {
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "is_degraded": True,
+            "degraded_regions": degraded_regions,
+            "github_issue_url": alert_data.get("github_issue_url"),
+            "webhook_sent": alert_data.get("webhook_sent", False)
+        }
+        alerts_file["history"].append(record)
+        if len(alerts_file["history"]) > 200:
+            alerts_file["history"] = alerts_file["history"][-200:]
+
+    try:
+        with open(TELEMETRY_ALERTS_PATH, "w", encoding="utf-8") as f:
+            json.dump(alerts_file, f, indent=2)
+        logger.info(f"Updated telemetry alerts ledger at {TELEMETRY_ALERTS_PATH}")
+    except Exception as e:
+        logger.warning(f"Failed to write telemetry alerts ledger: {e}")
+
+    return alerts_file
+
+
+def check_open_degradation_github_issue(repo: str = "KoshiirRa/midgley") -> bool:
+    """Checks if an open model degradation issue already exists on GitHub to prevent duplicate issues."""
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    # 1. Try gh CLI
+    try:
+        cmd = ["gh", "issue", "list", "--repo", repo, "--search", "label:degradation-alert state:open", "--json", "number,title"]
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        raw_issues = json.loads(result.stdout) if result.stdout else []
+        return len(raw_issues) > 0
+    except Exception as e:
+        logger.debug(f"gh CLI notice checking degradation issues: {e}")
+
+    # 2. Try REST API
+    if token:
+        try:
+            url = f"https://api.github.com/repos/{repo}/issues?state=open&labels=degradation-alert"
+            headers = {"Accept": "application/vnd.github.v3+json", "Authorization": f"Bearer {token}", "User-Agent": "Midgley-Weekly-Reviewer"}
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=10) as response:
+                data = json.loads(response.read().decode("utf-8"))
+                return len(data) > 0
+        except Exception as e:
+            logger.debug(f"REST API notice checking degradation issues: {e}")
+
+    return False
+
+
+def send_degradation_webhook_alert(alert_summary: dict, webhook_url: Optional[str] = None) -> bool:
+    """
+    Sends an HTTP POST webhook payload when model degradation is detected.
+    """
+    if webhook_url is None:
+        webhook_url = os.environ.get("MODEL_DEGRADATION_WEBHOOK_URL") or os.environ.get("MIDGLEY_ALERT_WEBHOOK_URL")
+
+    if not webhook_url:
+        logger.info("No webhook URL configured for model degradation alerts.")
+        return False
+
+    if os.environ.get("TESTING") == "1" and not os.environ.get("TEST_WEBHOOK_DISPATCH"):
+        logger.info("TESTING=1: Suppressed webhook alert HTTP POST.")
+        return True
+
+    payload = {
+        "event": "model_degradation_alert",
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "is_degraded": alert_summary.get("is_degraded", False),
+        "degraded_regions": alert_summary.get("degraded_regions", []),
+        "total_evaluations": alert_summary.get("total_evaluations", 0),
+        "message": alert_summary.get("message", "Model underperforming naive persistence baseline.")
+    }
+
+    try:
+        data_bytes = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            webhook_url,
+            data=data_bytes,
+            headers={"Content-Type": "application/json", "User-Agent": "Midgley-MLOps-AlertGateway"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            logger.info(f"Dispatched model degradation webhook alert to {webhook_url} (HTTP {resp.status})")
+            return resp.status in (200, 201, 202, 204)
+    except Exception as e:
+        logger.warning(f"Failed to dispatch model degradation webhook alert: {e}")
+        return False
+
+
+def evaluate_model_degradation_alerts(window_days: int | str = 30, repo: str = "KoshiirRa/midgley") -> dict:
+    """
+    Evaluates rolling MAE uplift across all active regions.
+    If model_uplift_mae_pct < 0.0 for any region with evaluated records,
+    triggers automated logging to data/telemetry_alerts.json, sends Webhook alert,
+    and opens a GitHub issue flagged with label 'degradation-alert'.
+    """
+    try:
+        from src.prediction_logger import compute_regional_scoreboard_breakdown
+        regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window_days)
+    except Exception as e:
+        logger.warning(f"Could not fetch regional scoreboard breakdown for degradation check: {e}")
+        regional_breakdown = []
+
+    degraded_regions = []
+    healthy_regions = []
+
+    for reg_metrics in regional_breakdown:
+        uplift = reg_metrics.get("model_uplift_mae_pct", 0.0)
+        n_eval = reg_metrics.get("evaluations", 0)
+        reg_name = reg_metrics.get("region", "Unknown")
+
+        if n_eval > 0:
+            if uplift < 0.0:
+                degraded_regions.append({
+                    "region": reg_name,
+                    "evaluations": n_eval,
+                    "model_mae": reg_metrics.get("mae_dollars", 0.0),
+                    "naive_mae": reg_metrics.get("naive_persistence_mae", 0.0),
+                    "model_uplift_mae_pct": uplift,
+                    "status": "DEGRADED"
+                })
+            else:
+                healthy_regions.append({
+                    "region": reg_name,
+                    "evaluations": n_eval,
+                    "model_mae": reg_metrics.get("mae_dollars", 0.0),
+                    "naive_mae": reg_metrics.get("naive_persistence_mae", 0.0),
+                    "model_uplift_mae_pct": uplift,
+                    "status": "HEALTHY"
+                })
+
+    is_degraded = len(degraded_regions) > 0
+    total_evals = sum(r.get("evaluations", 0) for r in regional_breakdown)
+
+    summary_res = {
+        "is_degraded": is_degraded,
+        "degraded_regions": degraded_regions,
+        "healthy_regions": healthy_regions,
+        "total_evaluations": total_evals,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "github_issue_url": None,
+        "webhook_sent": False
+    }
+
+    # Dispatch Webhook if degraded
+    if is_degraded:
+        webhook_ok = send_degradation_webhook_alert(summary_res)
+        summary_res["webhook_sent"] = webhook_ok
+
+        # Check if GitHub Issue should be created
+        if not check_open_degradation_github_issue(repo=repo):
+            issue_title = f"[MODEL DEGRADATION ALERT] Model Underperforming Naive Baseline ({len(degraded_regions)} Region(s))"
+            body_lines = [
+                "## ⚠️ Automated Model Degradation & Baseline Underperformance Alert",
+                "",
+                "The weekly MLOps model review engine has detected that the quantitative price forecasting model is **underperforming the naive persistence baseline** (`model_uplift_mae_pct < 0.0`).",
+                "",
+                "### Degraded Region Breakdown:",
+                "| Region | Evaluated Days | Model MAE | Naive Persistence MAE | Uplift vs Baseline | Status |",
+                "| :--- | :---: | :---: | :---: | :---: | :---: |"
+            ]
+            for dr in degraded_regions:
+                body_lines.append(f"| **`{dr['region']}`** | {dr['evaluations']} | `${dr['model_mae']:.4f}/gal` | `${dr['naive_mae']:.4f}/gal` | **`{dr['model_uplift_mae_pct']:+.2f}%`** | 🛑 DEGRADED |")
+
+            body_lines.extend([
+                "",
+                "### Recommended Actions:",
+                "1. **Recalibrate Regularization:** Inspect Ridge $\\alpha$ parameter or retune localized metro feature weights.",
+                "2. **Decay Half-Life Adjustment:** Verify exponential decay half-life ($t_{1/2} = 4.0$ days) for breaking qualitative news shocks.",
+                "3. **Feature Engineering:** Inspect physical feed inputs (NOAA NWS, Cboe OVX, Cushing WTI Crack Spread).",
+                "",
+                "---",
+                "*Logged automatically to `data/telemetry_alerts.json` by `src/weekly_issue_reporter.py`.*"
+            ])
+            issue_body = "\n".join(body_lines)
+
+            # Create GitHub issue
+            token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+            if os.environ.get("TESTING") != "1":
+                try:
+                    cmd = [
+                        "gh", "issue", "create",
+                        "--repo", repo,
+                        "--title", issue_title,
+                        "--body", issue_body,
+                        "--label", "degradation-alert,modeling,mlops,bug"
+                    ]
+                    env = dict(os.environ)
+                    if token:
+                        env["GH_TOKEN"] = token
+                        env["GITHUB_TOKEN"] = token
+                    res = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
+                    summary_res["github_issue_url"] = res.stdout.strip()
+                    logger.info(f"Opened model degradation GitHub issue: {summary_res['github_issue_url']}")
+                except Exception as e:
+                    logger.warning(f"Could not open degradation issue via gh CLI: {e}")
+
+    # Log event to data/telemetry_alerts.json
+    log_degradation_telemetry_alert(summary_res)
+
+    return summary_res
+
+
+def format_degradation_markdown_section(degradation_res: Optional[dict] = None) -> str:
+    """Formats the Model Degradation & Baseline Underperformance Alerts section for weekly review report."""
+    if degradation_res is None:
+        try:
+            degradation_res = evaluate_model_degradation_alerts(window_days=30)
+        except Exception as e:
+            logger.warning(f"Could not evaluate degradation alerts: {e}")
+            degradation_res = {"is_degraded": False, "degraded_regions": [], "healthy_regions": []}
+
+    is_deg = degradation_res.get("is_degraded", False)
+    deg_list = degradation_res.get("degraded_regions", [])
+    healthy_list = degradation_res.get("healthy_regions", [])
+
+    if is_deg:
+        deg_rows = ""
+        for dr in deg_list:
+            deg_rows += f"| **`{dr['region']}`** | {dr['evaluations']} | `${dr['model_mae']:.4f}/gal` | `${dr['naive_mae']:.4f}/gal` | **`{dr['model_uplift_mae_pct']:+.2f}%`** | 🚨 DEGRADED |\n"
+
+        section = f"""## ⚠️ Model Degradation & Baseline Underperformance Alerts
+
+> [!WARNING]
+> **Model Underperformance Alert Active:** The model is currently underperforming the naive persistence baseline (`model_uplift_mae_pct < 0.0`) in **{len(deg_list)} region(s)**. Automated alerts logged to `data/telemetry_alerts.json`.
+
+| Region | Evaluated Days | Model MAE | Naive Baseline MAE | Uplift vs Baseline | Alert Status |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+{deg_rows}"""
+    else:
+        n_healthy = len(healthy_list)
+        section = f"""## ⚠️ Model Degradation & Baseline Underperformance Alerts
+
+> [!NOTE]
+> **All Models Healthy:** Model MAE is outperforming naive persistence baseline across all {n_healthy} evaluated region(s) (`model_uplift_mae_pct >= 0.0%`). Zero degradation alerts active."""
+
+    return section
 
 
 def fetch_open_github_issues(repo: str = "KoshiirRa/midgley") -> list:
@@ -544,11 +821,13 @@ def generate_weekly_markdown_report() -> str:
     Also fetches open repository issues and performs a self-review evaluation to identify
     the issue offering the largest potential modeling improvement.
     """
-    today_str = datetime.now().strftime("%Y-%m-%d")
+    now_utc = datetime.now(timezone.utc)
+    today_str = now_utc.strftime("%Y-%m-%d")
+    timestamp_utc = now_utc.strftime("%Y-%m-%d %H:%M UTC")
     branch = get_current_git_branch()
     
     if not os.path.exists(HISTORY_CSV):
-        return f"# [{branch}] 📊 Weekly Model Review Report ({today_str})\n\nNo prediction history found."
+        return f"# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report\n\nNo prediction history found."
         
     df = pd.read_csv(HISTORY_CSV)
     df = df.dropna(subset=['region']).copy()
@@ -644,10 +923,14 @@ def generate_weekly_markdown_report() -> str:
     # Fetch MLOps Observability Section
     mlops_obs_md = format_mlops_observability_markdown_section()
 
+    # Evaluate Model Degradation & Baseline Underperformance Alerts
+    degradation_res = evaluate_model_degradation_alerts(window_days=30)
+    degradation_section_md = format_degradation_markdown_section(degradation_res)
+
     # Fetch recent arXiv research preprints
     arxiv_section_md = format_arxiv_markdown_section(days_back=7)
 
-    report = f"""# [{branch}] 📊 Weekly Model Review Report & Performance Audit ({today_str})
+    report = f"""# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report & Performance Audit
 
 ### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
 
@@ -670,6 +953,10 @@ def generate_weekly_markdown_report() -> str:
 ---
 
 {mlops_obs_md}
+
+---
+
+{degradation_section_md}
 
 ---
 

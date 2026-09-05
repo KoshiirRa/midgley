@@ -65,6 +65,7 @@ jobs:
       - name: Open Weekly GitHub Issue Report & Recommendations
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODEL_DEGRADATION_WEBHOOK_URL: ${{ secrets.MODEL_DEGRADATION_WEBHOOK_URL }}
         run: |
           python -m src.weekly_issue_reporter
 

@@ -27,6 +27,12 @@
 ### 5. Dynamic Release Banner Version Binding
 - **Version Parity ([`src/dashboard_generator.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/dashboard_generator.py)):** Bound public web dashboard release headers dynamically to package version (`midgley.__version__`) and environment overrides (`MIDGLEY_BRANCH` / `MIDGLEY_VERSION`), eliminating hardcoded version text drift.
 
+### 6. Automated Model Degradation & Baseline Underperformance Alerting (Issue #210)
+- **MLOps Degradation Threshold Check ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)):** Implemented `evaluate_model_degradation_alerts()` to check rolling MAE uplift across all active regions against naive persistence baseline (`model_uplift_mae_pct < 0.0`).
+- **Telemetry Alerts Ledger ([`data/telemetry_alerts.json`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/data/telemetry_alerts.json)):** Logs persistent alert records, active degraded region lists, and timestamps.
+- **Webhook & GitHub Issue Alerts:** Dispatches HTTP POST webhook payloads to `MODEL_DEGRADATION_WEBHOOK_URL` and opens GitHub Issues tagged `degradation-alert,modeling,mlops,bug` when model underperformance is detected.
+- **Saturday Cloud Review Workflow ([`.github/workflows/weekly_model_review.yml`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/.github/workflows/weekly_model_review.yml)):** Surfacing alert status in weekly Saturday review reports and committing telemetry alert logs.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -35,7 +41,7 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `286 passed in 586.70s` (100% pass rate across all 58 test modules).
+  **Result:** `288 passed in 874.83s` (100% pass rate across all test modules).
 
 ---
 
@@ -43,3 +49,4 @@
 - **Issue #202**: `fix(ci): Upgrade Node environment settings & resolve Node 20 runner deprecation warnings` (Closed as completed)
 - **Issue #203**: `fix(ingestion): Resolve Baker Hughes NameError and feature matrix drop` (Closed as completed)
 - **Issue #206**: `fix(scraping): Resolve Tulsa AAA state average scraper bug & integrate py_gasbuddy GraphQL feeds` (Closed as completed)
+- **Issue #210**: `feat(mlops): Implement Automated Model Degradation & Baseline Underperformance Alerting` (Closed as completed)

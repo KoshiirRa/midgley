@@ -1,0 +1,125 @@
+{
+  "created_at": "2026-09-05 04:38:50",
+  "last_updated": "2026-09-05 04:39:17",
+  "total_alerts_logged": 4,
+  "active_degraded_regions": [
+    "BayArea_CA",
+    "Charlotte_NC",
+    "Greenville_NC",
+    "Oakland_CA"
+  ],
+  "history": [
+    {
+      "timestamp": "2026-09-05 04:38:50",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 14,
+          "model_mae": 0.582,
+          "naive_mae": 0.55,
+          "model_uplift_mae_pct": -5.82,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": true
+    },
+    {
+      "timestamp": "2026-09-05 04:38:58",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 23,
+          "model_mae": 0.5386,
+          "naive_mae": 0.5042,
+          "model_uplift_mae_pct": -6.82,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.5663,
+          "naive_mae": 0.5316,
+          "model_uplift_mae_pct": -6.52,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-05 04:39:09",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 14,
+          "model_mae": 0.582,
+          "naive_mae": 0.55,
+          "model_uplift_mae_pct": -5.82,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": true
+    },
+    {
+      "timestamp": "2026-09-05 04:39:17",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 23,
+          "model_mae": 0.5386,
+          "naive_mae": 0.5042,
+          "model_uplift_mae_pct": -6.82,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.5663,
+          "naive_mae": 0.5316,
+          "model_uplift_mae_pct": -6.52,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    }
+  ]
+}
