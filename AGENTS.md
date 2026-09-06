@@ -284,6 +284,16 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
+### 1.6. Microsoft Qlib & RD-Agent Autonomous Alpha Mining & Domain Adaptation Layer (`src/qlib_symbolic_engine.py`, `src/alpha_factor_miner.py`, & `src/ddg_da_adapter.py`, Issue #127)
+
+* **Role:** Integrates architectural patterns from Microsoft Research's **Qlib** quantitative platform and **RD-Agent** framework into the quantitative forecasting engine under Milestone **v2.0 "Hubbert"**.
+* **Qlib Symbolic Expression Engine (`src/qlib_symbolic_engine.py`):** AST-parsed safe expression evaluator supporting rolling time-series operators (`Ref`, `Mean`, `Std`, `Delta`, `Roc`, `ZScore`, `Slope`, `Corr`, `Rank`). Strictly enforces non-lookahead point-in-time calculation rules ($d \ge 0$).
+* **Autonomous RD-Agent Alpha Factor Miner (`src/alpha_factor_miner.py`):** Gemini 2.5 Flash sub-agent loop formulating economic hypotheses on alternative data streams (Cboe OVX, Baker Hughes rigs, NOAA convective risk, Cushing WTI spreads, regional rack margins, USDA ethanol, CFTC COT positioning), generating symbolic factor formulas, evaluating Information Coefficient (IC, Rank IC, $IC_{IR}$), pruning collinear features ($|r| > 0.70$), and persisting active factors to `data/alpha_factors.json`.
+* **Dynamic Data Grouping Domain Adaptation (`src/ddg_da_adapter.py`):** Identifies non-stationary market regimes (domains) via GMM clustering and calculates Gaussian RBF kernel similarity weights $w_i$ between historical training instances and recent market windows to combat concept drift during structural market shifts.
+* **Documentation & Reference:** Detailed in [`docs/qlib_rd_agent_integration.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/qlib_rd_agent_integration.md).
+
+---
+
 ### 1.5. Qualitative Intelligence Knowledge Graph & Agent Memory Layer (`src/knowledge_graph.py`, Issue #116)
 
 * **Role:** Manages an entity-relationship physical supply topology graph and episodic agent shock memory store using an embedded zero-cost `NetworkX` graph engine backed by SQLite (`data/knowledge_graph.db`).

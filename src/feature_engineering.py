@@ -319,7 +319,26 @@ def create_feature_matrix(
         for col in llm_feature_cols:
             df[f'event_{col}'] = 0.0
 
-    # 4. Forecast Target Construction
+    # 4. Qlib Symbolic Alpha Factors Evaluation (Issue #127)
+    try:
+        import os
+        import json
+        from src.qlib_symbolic_engine import QlibSymbolicEngine
+        alpha_path = "data/alpha_factors.json"
+        if os.path.exists(alpha_path):
+            with open(alpha_path, "r") as af_file:
+                af_data = json.load(af_file)
+                factors = af_data.get("factors", [])
+                engine = QlibSymbolicEngine()
+                for factor in factors:
+                    name = factor.get("name")
+                    expr = factor.get("expression")
+                    if name and expr:
+                        df[f"qlib_{name}"] = engine.evaluate_expression(expr, df)
+    except Exception as e:
+        logger.warning(f"Could not evaluate Qlib symbolic alpha factors: {e}")
+
+    # 5. Forecast Target Construction
     df[f'target_price_{forecast_horizon}d'] = df['gasoline_rbob'].shift(-forecast_horizon)
     df[f'target_return_{forecast_horizon}d'] = (df[f'target_price_{forecast_horizon}d'] - df['gasoline_rbob']) / df['gasoline_rbob']
     
@@ -396,7 +415,8 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'rbob_bollinger_band_pct_b', 'rbob_atr_14',
         'sin_day', 'cos_day'
     ]
-    quant_features = [f for f in quant_features if f in df.columns]
+    qlib_features = [c for c in df.columns if c.startswith('qlib_')]
+    quant_features = [f for f in quant_features if f in df.columns] + qlib_features
     
     event_features = [c for c in df.columns if c.startswith('event_')]
     hybrid_features = quant_features + event_features

@@ -201,10 +201,15 @@ Verify Feast repository configuration and export Parquet feature sources:
 python3 -c "from src.feast_store import MidgleyFeastStore; store = MidgleyFeastStore(); store.initialize_store()"
 ```
 
-### Step 4: Run Baseline Forecast Pipeline
+### Step 4: Run Baseline Forecast Pipeline & Alpha Factor Mining
 Execute the full multi-region prediction pipeline once:
 ```bash
 python3 -m src.locations.national.main --llm
+```
+
+Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
+```bash
+python3 -m scripts.benchmark_qlib_rd_agent
 ```
 
 ---

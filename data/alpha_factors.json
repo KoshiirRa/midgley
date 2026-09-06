@@ -1,0 +1,37 @@
+{
+  "mined_at": "2026-09-05T21:51:14.072092",
+  "target_col": "gasoline_rbob",
+  "forecast_horizon": 5,
+  "factors": [
+    {
+      "name": "rig_count_lagged_production_drag",
+      "expression": "Roc(baker_hughes_rigs, 14)",
+      "hypothesis": "Multi-week decline in active Baker Hughes drilling rigs exerts upward price pressure on 5-day horizon.",
+      "category": "physical_supply",
+      "ic": 0.3125,
+      "rank_ic": 0.2232,
+      "ic_ir": 0.2112,
+      "n_samples": 340
+    },
+    {
+      "name": "wti_rbob_rolling_correlation_break",
+      "expression": "Corr(gasoline_rbob, wti_crude, 20)",
+      "hypothesis": "Divergence between WTI crude and RBOB futures correlation highlights refined product supply disruptions.",
+      "category": "cross_asset",
+      "ic": 0.0898,
+      "rank_ic": 0.0602,
+      "ic_ir": 0.067,
+      "n_samples": 340
+    },
+    {
+      "name": "ovx_crude_volatility_spread",
+      "expression": "ZScore(cboe_ovx, 20)",
+      "hypothesis": "High crude oil options volatility relative to 20-day mean indicates impending wholesale price breaks.",
+      "category": "volatility_momentum",
+      "ic": 0.0763,
+      "rank_ic": 0.0618,
+      "ic_ir": -0.3685,
+      "n_samples": 340
+    }
+  ]
+}

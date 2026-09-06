@@ -68,6 +68,12 @@
 - **Point-in-Time Feature Engineering (`src/feature_engineering.py`):** Updated `create_feature_matrix()` to accept an `as_of_cutoff` parameter (`as_of <= target_run_date`), ensuring zero lookahead leakage from restated EIA figures during model retraining and historical backtests.
 - **Unit Test Suite (`tests/test_eia_bitemporal_vintages.py`):** Added comprehensive unit test suite covering bitemporal metadata fields, JSON vintage persistence, point-in-time lookup queries, and cutoff feature matrix generation (`4/4 passed`).
 
+### 13. Microsoft Qlib & RD-Agent Architecture Integration (Issue #127)
+- **Qlib Symbolic Domain Expression Engine ([`src/qlib_symbolic_engine.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/qlib_symbolic_engine.py)):** Implemented AST-parsed safe expression evaluator supporting rolling operators (`Ref`, `Mean`, `Std`, `Delta`, `Roc`, `ZScore`, `Slope`, `Corr`, `Rank`) with point-in-time calculation rules ($d \ge 0$).
+- **Autonomous RD-Agent LLM Alpha Factor Miner ([`src/alpha_factor_miner.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/alpha_factor_miner.py)):** Gemini 2.5 Flash sub-agent loop for economic hypothesis formulation, symbolic factor formula generation, Information Coefficient ($IC$, Rank $IC$, $IC_{IR}$) evaluation, and redundancy pruning ($|r| > 0.70$), persisting active factors to `data/alpha_factors.json`.
+- **Dynamic Data Grouping Domain Adaptation ([`src/ddg_da_adapter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/ddg_da_adapter.py)):** Implemented Qlib DDG-DA framework to cluster non-stationary market regimes via Gaussian Mixture Models (GMM) and compute Gaussian RBF kernel similarity weights to combat concept drift during structural market shifts.
+- **Benchmarking & Documentation:** Comprehensive unit tests in [`tests/test_qlib_rd_agent.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_qlib_rd_agent.py), evaluation benchmark in [`scripts/benchmark_qlib_rd_agent.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/scripts/benchmark_qlib_rd_agent.py), and technical reference guide in [`docs/qlib_rd_agent_integration.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/qlib_rd_agent_integration.md).
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -76,7 +82,7 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `334 passed` (100% pass rate across all 334 test modules).
+  **Result:** `341 passed` (100% pass rate across all test modules including Qlib & RD-Agent suite).
 
 ---
 
@@ -86,9 +92,10 @@
 - **Issue #112**: `[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting` (Closed as completed)
 - **Issue #116**: `[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)` (Closed as completed)
 - **Issue #121**: `[Feature Request] Implement Bitemporal Vintage Tracking (as_of) for EIA Data Ingestion` (Closed as completed)
+- **Issue #127**: `[Feature Request] Evaluate Microsoft Qlib & RD-Agent Architecture for Automated Alpha Factor Discovery & Dynamic Domain Adaptation` (Closed as completed)
 - **Issue #185**: `[Feature Request] Ingest Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting` (Closed as completed)
 - **Issue #202**: `fix(ci): Upgrade Node environment settings & resolve Node 20 runner deprecation warnings` (Closed as completed)
 - **Issue #203**: `fix(ingestion): Resolve Baker Hughes NameError and feature matrix drop` (Closed as completed)
 - **Issue #204**: `feat(mlops): Refine execution audit naming & sanitize news feed headlines` (Closed as completed)
 - **Issue #206**: `fix(scraping): Resolve Tulsa AAA state average scraper bug & integrate py_gasbuddy GraphQL feeds` (Closed as completed)
-- **Issue #210**: `feat(mlops): Implement Automated Model Degradation & Baseline Underperformance Alerting` (Closed as completed)
+- **Issue #210**: `feat(mlops): Implement Automated Model Degradation & Baseline Underperformance Alerting` (Closed as completed)`

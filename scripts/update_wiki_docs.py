@@ -165,8 +165,32 @@ Midgley integrates **Dynamic Volatility-Gated Persistence Blending (DV-GPB)** in
                 f.write(qm_text)
             print("Updated Quantitative-Models.md with DV-GPB in wiki")
 
+        # 6. Add Microsoft Qlib & RD-Agent Architecture (Issue #127)
+        qm_qlib_addition = r"""
+
+---
+
+## 🧮 Microsoft Qlib & RD-Agent Autonomous Alpha Mining & Domain Adaptation (Issue #127)
+
+Midgley ingests quantitative platform patterns from Microsoft Research's **Qlib** (`microsoft/qlib`) and **RD-Agent** (`microsoft/RD-Agent`) under Milestone **v2.0 "Hubbert"**.
+
+### Core Architecture:
+1. **Qlib Symbolic Domain Expression Engine (`src/qlib_symbolic_engine.py`):**
+   AST-parsed safe expression evaluator supporting rolling time-series operators (`Ref`, `Mean`, `Std`, `Delta`, `Roc`, `ZScore`, `Slope`, `Corr`, `Rank`). Strictly enforces point-in-time calculation rules ($d \ge 0$).
+2. **Autonomous RD-Agent LLM Alpha Factor Miner (`src/alpha_factor_miner.py`):**
+   Gemini 2.5 Flash sub-agent loop formulating economic hypotheses on multi-modal feeds, generating symbolic factor formulas, evaluating Information Coefficient ($IC$, Rank $IC$, $IC_{IR}$), and pruning collinear features ($|r| > 0.70$). Mined factors are saved to `data/alpha_factors.json`.
+3. **Dynamic Data Grouping Domain Adaptation (`src/ddg_da_adapter.py`):**
+   Segments historical data into non-stationary market domains via Gaussian Mixture Models (GMM) and applies Gaussian RBF kernel similarity sample weights to combat concept drift during market regime shifts.
+"""
+        if "Microsoft Qlib & RD-Agent Autonomous Alpha Mining" not in qm_text:
+            qm_text += qm_qlib_addition
+            with open(qm_path, "w", encoding="utf-8") as f:
+                f.write(qm_text)
+            print("Updated Quantitative-Models.md with Qlib & RD-Agent in wiki")
+
 
 if __name__ == "__main__":
-    target_dir = sys.argv[1] if len(sys.argv) > 1 else "/home/marty/projects/midgley.wiki"
+    target_dir = sys.argv[1] if len(sys.argv) > 1 else "scratch/midgley.wiki"
     update_wiki(target_dir)
+
 

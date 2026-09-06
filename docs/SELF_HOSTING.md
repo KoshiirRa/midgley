@@ -186,10 +186,15 @@ Test health endpoint:
 curl http://localhost:8000/api/v1/system/quota
 ```
 
-### Step 3: Run Baseline Forecast Pipeline
+### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
 Execute the full multi-region prediction pipeline once:
 ```bash
 python3 -m src.locations.national.main --llm
+```
+
+Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
+```bash
+python3 -m scripts.benchmark_qlib_rd_agent
 ```
 
 ---
