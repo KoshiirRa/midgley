@@ -96,7 +96,12 @@ def test_evaluate_model_purged_cv():
 
 def test_api_purged_cv_endpoint():
     """Tests GET /api/v1/forecast/purged-cv FastAPI endpoint."""
-    resp = client.get("/api/v1/forecast/purged-cv?n_splits=5&label_horizon=5")
+    from src.key_manager import global_key_manager
+    res_key = global_key_manager.create_key(user_id="test_user_cv", tier="privileged")
+    test_key = res_key["token"]
+    headers = {"Authorization": f"Bearer {test_key}"}
+
+    resp = client.get("/api/v1/forecast/purged-cv?n_splits=5&label_horizon=5", headers=headers)
     assert resp.status_code == 200
     data = resp.json()
 
@@ -107,7 +112,7 @@ def test_api_purged_cv_endpoint():
     assert eval_data["n_splits"] == 5
 
     # Test combinatorial option
-    resp_comb = client.get("/api/v1/forecast/purged-cv?n_splits=6&combinatorial=true")
+    resp_comb = client.get("/api/v1/forecast/purged-cv?n_splits=6&combinatorial=true", headers=headers)
     assert resp_comb.status_code == 200
     data_comb = resp_comb.json()
     assert data_comb["purged_cv_evaluation"]["splitter_type"] == "CombinatorialPurgedCV"

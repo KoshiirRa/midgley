@@ -19,13 +19,7 @@ from src.spatial_refinery import (
     METRO_CLUSTER_DATA
 )
 
-from src.locations.tulsa.regional import get_tulsa_spatial_refinery_decay
-from src.locations.newark.regional import get_newark_spatial_refinery_decay
-from src.locations.cincinnati.regional import get_cincinnati_spatial_refinery_decay
-from src.locations.greenville.regional import get_greenville_spatial_refinery_decay
-from src.locations.charlotte.regional import get_charlotte_spatial_refinery_decay
-from src.locations.oakland.regional import get_oakland_spatial_refinery_decay
-from src.locations.port_st_lucie.regional import get_port_st_lucie_spatial_refinery_decay
+# Regional spatial helper tests via get_metro_spatial_refinery_summary
 
 
 def test_haversine_distance_miles():
@@ -126,26 +120,26 @@ def test_get_buffer_tier():
 
 
 def test_regional_agent_spatial_helpers():
-    """Verify all regional agent spatial decay helper functions."""
-    tulsa_decay = get_tulsa_spatial_refinery_decay()
+    """Verify all regional agent spatial decay helper summaries."""
+    tulsa_decay = get_metro_spatial_refinery_summary("Tulsa_OK")
     assert tulsa_decay["metro_id"] == "Tulsa_OK"
 
-    newark_decay = get_newark_spatial_refinery_decay()
+    newark_decay = get_metro_spatial_refinery_summary("Newark_DE")
     assert newark_decay["metro_id"] == "Newark_DE"
 
-    cin_decay = get_cincinnati_spatial_refinery_decay()
+    cin_decay = get_metro_spatial_refinery_summary("Cincinnati_OH")
     assert cin_decay["metro_id"] == "Cincinnati_OH"
 
-    grn_decay = get_greenville_spatial_refinery_decay()
+    grn_decay = get_metro_spatial_refinery_summary("Greenville_NC")
     assert grn_decay["metro_id"] == "Greenville_NC"
 
-    clt_decay = get_charlotte_spatial_refinery_decay()
+    clt_decay = get_metro_spatial_refinery_summary("Charlotte_NC")
     assert clt_decay["metro_id"] == "Charlotte_NC"
 
-    oak_decay = get_oakland_spatial_refinery_decay()
+    oak_decay = get_metro_spatial_refinery_summary("Oakland_CA")
     assert oak_decay["metro_id"] == "Oakland_CA"
 
-    psl_decay = get_port_st_lucie_spatial_refinery_decay()
+    psl_decay = get_metro_spatial_refinery_summary("PortStLucie_FL")
     assert psl_decay["metro_id"] == "PortStLucie_FL"
 
 
