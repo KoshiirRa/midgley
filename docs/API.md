@@ -251,7 +251,20 @@ curl -X GET "http://localhost:8000/api/v1/combined?locale=cincinnati"
 
 ---
 
-### 5. `POST /api/v1/forecast/simulate`
+### 5. `GET /api/v1/usgs/water_levels`
+Returns real-time streamflow (`00060`), gage height (`00065`), water temperature (`00010`), and specific conductance (`00095`) telemetry across USGS monitoring stations in 6 hydrological clusters (Inland Barge Corridor, Gulf Coast Refining Origin, Bay Area Carquinez Strait, Delaware River/Bay, Tulsa MKARNS, and South Florida Coastal Drainage) (Issue #56).
+
+**Query Parameters:**
+* `cluster` (optional): Filter by regional cluster (`inland_barge`, `gulf_coast`, `bay_area`, `delaware`, `tulsa`, `florida`).
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/usgs/water_levels?cluster=inland_barge"
+```
+
+---
+
+### 6. `POST /api/v1/forecast/simulate`
 Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks.
 
 **Request Body:**
@@ -277,6 +290,9 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
 * `cushing_spill`: Cushing Keystone Pipeline Rupture & Lock (+4.58%)
 * `marathon_outage`: Marathon Catlettsburg KY Refinery Outage (+4.78%)
 * `mississippi_low_water`: Lower Mississippi & Ohio River Low-Water Bottleneck (+4.20%)
+* `houston_ship_channel_closure`: Houston Ship Channel Torrential Runoff & Marine Closure (+5.12%)
+* `carquinez_atmospheric_river`: Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt (+4.35%)
+* `summer_refinery_thermal_cutback`: Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment (+3.85%)
 * `colonial_outage`: Colonial Pipeline Mainline Outage / Cyberattack Shock (+7.54%)
 * `greenville_hurricane`: Category 3 Atlantic Hurricane Landfall & Tar River Flooding (+6.62%)
 * `selma_outage`: Selma NC Distribution Hub Tank Farm Outage & Blackout (+5.69%)

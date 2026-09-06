@@ -185,6 +185,27 @@ def get_oakland_regional_events() -> pd.DataFrame:
         })
     weather_events_df = pd.DataFrame(weather_events)
     
-    # 4. Concatenate and sort
-    combined = pd.concat([macro_events_df, reg_df, weather_events_df], ignore_index=True)
+    # 4. Ingest Live USGS Water Data Telemetry (Issue #56)
+    usgs_events = []
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        water_connector = USGSWaterFeedConnector()
+        water_telemetry = water_connector.fetch_live_water_telemetry(cluster="bay_area")
+        indices = water_telemetry.get("indices", {})
+        if indices.get("carquinez_berthing_risk_index", 0.0) >= 0.40:
+            berth_idx = indices.get("carquinez_berthing_risk_index", 0.0)
+            usgs_events.append({
+                "date": pd.to_datetime(datetime.now().strftime("%Y-%m-%d")),
+                "headline": f"USGS Carquinez Strait & Sacramento River telemetry indicates high berthing/intake risk (Risk Index: {berth_idx:.2f}); runoff velocities or salinity intrusion restrict refinery marine terminal operations.",
+                "category": "Carquinez Strait Hydrology"
+            })
+    except Exception as e:
+        logger.warning(f"Could not load live USGS water telemetry for Oakland/Bay Area: {e}")
+
+    frames = [macro_events_df, reg_df, weather_events_df]
+    if usgs_events:
+        frames.append(pd.DataFrame(usgs_events))
+
+    # 5. Concatenate and sort
+    combined = pd.concat(frames, ignore_index=True)
     return combined.sort_values('date').reset_index(drop=True)

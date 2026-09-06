@@ -74,6 +74,17 @@
 - **Dynamic Data Grouping Domain Adaptation ([`src/ddg_da_adapter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/ddg_da_adapter.py)):** Implemented Qlib DDG-DA framework to cluster non-stationary market regimes via Gaussian Mixture Models (GMM) and compute Gaussian RBF kernel similarity weights to combat concept drift during structural market shifts.
 - **Benchmarking & Documentation:** Comprehensive unit tests in [`tests/test_qlib_rd_agent.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_qlib_rd_agent.py), evaluation benchmark in [`scripts/benchmark_qlib_rd_agent.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/scripts/benchmark_qlib_rd_agent.py), and technical reference guide in [`docs/qlib_rd_agent_integration.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/qlib_rd_agent_integration.md).
 
+### 14. USGS Water Data API Telemetry & Multi-Regional Hydrological Modeling (Issue #56)
+- **Zero-Cost Telemetry Connector ([`src/usgs_water_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/usgs_water_feed.py)):** Built `USGSWaterFeedConnector` integrating instantaneous values from the USGS Water Data API (`waterservices.usgs.gov`) across 13 key stations in 6 hydrological clusters (Inland Barge Corridor, Gulf Coast Refining Origin, Bay Area Carquinez Strait, Delaware River/Bay, Tulsa MKARNS, and South Florida Coastal Drainage).
+- **Physical Risk Indices:** Extracts streamflow (`00060`), gage height (`00065`), water temperature (`00010`), and specific conductance (`00095`) to compute normalized metrics:
+  - `hydrological_barge_bottleneck_index` (Memphis & Cairo low-water draft limits throttle barge capacity by 40%)
+  - `gulf_marine_departure_risk_index` (Houston Ship Channel deluge closures & Lower Mississippi salt-wedge intrusion)
+  - `carquinez_berthing_risk_index` (Sacramento River atmospheric river runoff & Suisun Bay cooling water salinity)
+  - `delaware_refinery_thermal_index` (Summer Delaware River water temps $>28^\circ\text{C}$ degrading cooling tower efficiency)
+- **Multi-Regional Calibration:** Fuses live telemetry into regional metro models (`cincinnati`, `newark`, `tulsa`, `oakland`, `port_st_lucie`) and macro feature engineering (`src/feature_engineering.py`).
+- **API & MCP Tooling:** Added `GET /api/v1/usgs/water_levels` REST endpoint (`src/api_server.py`), counterfactual simulator scenarios (`houston_ship_channel_closure`, `carquinez_atmospheric_river`, `summer_refinery_thermal_cutback`), and registered MCP tool `get_usgs_water_telemetry` (`src/mcp_server.py`).
+- **Comprehensive Verification ([`tests/test_usgs_water_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_usgs_water_feed.py)):** 100% test pass rate covering API parsing, risk index calculations, cluster filtering, 15-minute lookup caching, fallback baseline, REST API, and MCP tool execution.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -82,12 +93,13 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `341 passed` (100% pass rate across all test modules including Qlib & RD-Agent suite).
+  **Result:** `348 passed` (100% pass rate across all test modules including USGS Water Data telemetry suite).
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
 - **Issue #53**: `feat(core-api): Monitor open-access research papers via CORE API during weekly self-review` (Closed as completed)
+- **Issue #56**: `feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting` (Closed as completed)
 - **Issue #95**: `[Feature Request] Implement GeoPandas Spatial Refinery Distance Buffering for Metro Agents` (Closed as completed)
 - **Issue #112**: `[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting` (Closed as completed)
 - **Issue #116**: `[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)` (Closed as completed)

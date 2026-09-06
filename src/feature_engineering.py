@@ -286,6 +286,29 @@ def create_feature_matrix(
         df['ferc_explorer_tariff_per_bbl'] = 0.0
         df['ferc_pipeline_tariff_index_5d'] = 0.0
 
+    # Merge USGS Water Data Telemetry (Issue #56)
+    # Avoid scalar broadcasting current snapshot across historical training rows
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        usgs_connector = USGSWaterFeedConnector()
+        usgs_data = usgs_connector.fetch_live_water_telemetry()
+        usgs_indices = usgs_data.get('indices', {})
+        df['usgs_hydrological_barge_bottleneck_index'] = 0.0
+        df['usgs_gulf_marine_departure_risk_index'] = 0.0
+        df['usgs_carquinez_berthing_risk_index'] = 0.0
+        df['usgs_delaware_refinery_thermal_index'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', 0.0)
+            df.loc[df.index[-1], 'usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge USGS water data telemetry: {e}")
+        df['usgs_hydrological_barge_bottleneck_index'] = 0.0
+        df['usgs_gulf_marine_departure_risk_index'] = 0.0
+        df['usgs_carquinez_berthing_risk_index'] = 0.0
+        df['usgs_delaware_refinery_thermal_index'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     

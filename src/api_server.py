@@ -273,6 +273,21 @@ SCENARIOS_CATALOG = {
         "name": "Weekend Foreign Energy Tariff Declaration",
         "headline": "Executive social post announcing immediate 25% energy import tariff causes weekend open gap surge.",
         "shock_pct": 0.0210
+    },
+    "houston_ship_channel_closure": {
+        "name": "Houston Ship Channel Torrential Runoff & Marine Closure",
+        "headline": "USGS San Jacinto runoff surge closes Houston Ship Channel to crude tankers and fuel barges, halting 2.7M bpd refining corridor.",
+        "shock_pct": 0.0512
+    },
+    "carquinez_atmospheric_river": {
+        "name": "Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt",
+        "headline": "USGS Sacramento River discharge surge through Carquinez Strait suspends crude tanker berthing at Martinez & Benicia refineries.",
+        "shock_pct": 0.0435
+    },
+    "summer_refinery_thermal_cutback": {
+        "name": "Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment",
+        "headline": "USGS river water temperature exceeds 28°C, impairing refinery cooling tower efficiency and triggering statutory run cuts.",
+        "shock_pct": 0.0385
     }
 }
 
@@ -819,6 +834,17 @@ def list_supported_locales():
         "total_locales": len(locales_dict),
         "locales": locales_dict
     }
+
+
+@app.get("/api/v1/usgs/water_levels", summary="Get Live USGS River & Waterway Hydrological Telemetry", tags=["Physical Data Feeds"])
+def get_usgs_water_levels_endpoint(cluster: Optional[str] = Query(None, description="Optional regional cluster filter: inland_barge, gulf_coast, bay_area, delaware, tulsa, florida")):
+    """
+    Returns real-time streamflow, gage height, water temperature, and specific conductance
+    telemetry from USGS NWIS monitoring stations across inland waterways and refining corridors (Issue #56).
+    """
+    from src.usgs_water_feed import USGSWaterFeedConnector
+    connector = USGSWaterFeedConnector()
+    return connector.fetch_live_water_telemetry(cluster=cluster)
 
 
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")

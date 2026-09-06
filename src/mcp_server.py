@@ -179,6 +179,20 @@ async def list_tools() -> list[types.Tool]:
                 },
                 "required": ["query"]
             }
+        ),
+        types.Tool(
+            name="get_usgs_water_telemetry",
+            description="Fetches real-time USGS streamflow, gage height, water temperature, and specific conductance telemetry across inland waterways and refining corridors (Issue #56).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "cluster": {
+                        "type": "string",
+                        "description": "Optional regional cluster: inland_barge, gulf_coast, bay_area, delaware, tulsa, florida",
+                        "default": "all"
+                    }
+                }
+            }
         )
     ]
 
@@ -252,6 +266,13 @@ async def call_tool(
             query = args.get("query", "")
             top_k = int(args.get("top_k", 3))
             res = kg_engine.find_historical_precedents(query, top_k=top_k)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_usgs_water_telemetry":
+            from src.usgs_water_feed import USGSWaterFeedConnector
+            cluster = args.get("cluster")
+            connector = USGSWaterFeedConnector()
+            res = connector.fetch_live_water_telemetry(cluster=cluster)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:

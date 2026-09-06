@@ -396,13 +396,13 @@ I need a detailed logistical breakdown of fuel supply pipelines and refining cap
 Research and specify:
 1. Primary Supplying Refineries: Name, location, operator, and crude processing capacity (in bpd - barrels per day).
 2. Primary Pipeline Corridors: Specific pipeline systems (e.g., Colonial Pipeline Line 1/2, Kinder Morgan SFPP, Explorer Pipeline, Keystone, Enterprise) and major breakout distribution hubs/terminals.
-3. Marine / River Barge Infrastructure: Nearby navigable river channels (e.g., Ohio River, Mississippi River, C&D Canal) or ocean deepwater anchorages subject to low-water restrictions, weather delays, or lightering detours.
+3. Marine / River Barge Infrastructure: Nearby navigable river channels (e.g., Ohio River, Mississippi River, C&D Canal, Houston Ship Channel, Carquinez Strait) or ocean deepwater anchorages subject to USGS low-water restrictions, stage levels, cooling water thermal limits, or lightering detours.
 4. Logistics Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, power grid outages, or barge congestion.
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```
 
-### Prompt 4: NOAA Weather & Geophysical Risk Discovery
+### Prompt 4: NOAA Weather & Physical Hydrological Risk Discovery
 ```text
 You are an Operational Meteorologist and Physical Risk Analyst.
 I need to map NOAA Weather Service alerts and geophysical threat factors for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
@@ -411,7 +411,7 @@ Identify:
 1. NOAA NWS Forecast Zone Code (e.g., "OKZ060" for Tulsa, "NCZ081" for Greenville).
 2. SPC (Storm Prediction Center) Convective Risk Vulnerabilities: Severe tornado risk, hail, or high wind thresholds.
 3. Cold Weather Freeze / Polar Vortex Vulnerability: Sub-zero freeze impacts on local refinery instrumentation or crude pipelines.
-4. Flooding & Marine Hazards: Local river gauge flood stages (e.g., Tar River, Catawba River, Mississippi Confluence) or coastal hurricane storm surge risks.
+4. Hydrological & Marine Hazards: Local river gauge flood stages & water temperatures (USGS Water Data API telemetry: streamflow `00060`, gage height `00065`, water temperature `00010`, specific conductance `00095`) or coastal hurricane storm surge risks.
 5. Regional Geophysical Risks: CAL FIRE PSPS wildfire power shutoffs, USGS seismic fault line risks, or tsunami advisories.
 ```
 

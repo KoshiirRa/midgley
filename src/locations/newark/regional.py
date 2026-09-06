@@ -115,6 +115,27 @@ def get_newark_regional_events() -> pd.DataFrame:
     noaa_de_df = get_newark_delaware_weather_dataset()
     noaa_formatted = noaa_de_df[['date', 'headline', 'weather_type']].rename(columns={'weather_type': 'category'})
     
-    # Combine Macro + Regional + DE NOAA Weather
-    combined_events = pd.concat([macro_events_df, regional_df, noaa_formatted], ignore_index=True)
+    # 4. Ingest Live USGS Water Data Telemetry (Issue #56)
+    usgs_events = []
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        water_connector = USGSWaterFeedConnector()
+        water_telemetry = water_connector.fetch_live_water_telemetry(cluster="delaware")
+        indices = water_telemetry.get("indices", {})
+        if indices.get("is_thermal_curtailment_risk", False):
+            thermal_idx = indices.get("delaware_refinery_thermal_index", 0.0)
+            usgs_events.append({
+                "date": pd.to_datetime(datetime.now().strftime("%Y-%m-%d")),
+                "headline": f"USGS Delaware River water telemetry indicates thermal stress (Index: {thermal_idx:.2f}); river water temps near Delaware City Refinery exceed cooling tower efficiency thresholds.",
+                "category": "Delaware River Thermal Stress"
+            })
+    except Exception as e:
+        logger.warning(f"Could not load live USGS water telemetry for Newark: {e}")
+
+    frames = [macro_events_df, regional_df, noaa_formatted]
+    if usgs_events:
+        frames.append(pd.DataFrame(usgs_events))
+
+    # Combine Macro + Regional + DE NOAA Weather + USGS Hydrology
+    combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)
