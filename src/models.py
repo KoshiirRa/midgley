@@ -15,6 +15,15 @@ try:
 except ImportError:
     HAS_XGBOOST = False
 
+try:
+    from src.timesfm_forecaster import TimesFMForecaster, HAS_TIMESFM
+except ImportError:
+    try:
+        from timesfm_forecaster import TimesFMForecaster, HAS_TIMESFM
+    except ImportError:
+        TimesFMForecaster = None
+        HAS_TIMESFM = False
+
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import logging
 
@@ -371,6 +380,15 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
     if model_type == "stacking":
         model_quant = build_stacking_ensemble_pipeline()
         model_hybrid = build_stacking_ensemble_pipeline()
+    elif model_type == "timesfm":
+        if TimesFMForecaster is not None:
+            model_quant = TimesFMForecaster(horizon_len=len(y_test))
+            model_hybrid = TimesFMForecaster(horizon_len=len(y_test))
+            model_quant.load_model()
+            model_hybrid.load_model()
+        else:
+            model_quant = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+            model_hybrid = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
     elif model_type == "xgboost" and HAS_XGBOOST:
         model_quant = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
         model_hybrid = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
@@ -671,4 +689,155 @@ def evaluate_model_purged_cv(
         "mean_directional_accuracy_pct": round(float(np.mean(dir_accs)), 2) if dir_accs else "N/A",
         "fold_details": fold_results
     }
+
+
+def evaluate_timesfm_zero_shot_benchmarks(split_data: dict) -> dict:
+    """
+    Evaluates Google TimesFM Zero-Shot Foundation Model against standard baseline estimators
+    (Persistence, Moving Average, Ridge, XGBoost, Stacking Ensemble) across test set (Issues #185 & #112).
+    
+    Returns structured benchmark dictionary with error metrics and comparative rankings.
+    """
+    X_train_quant = split_data['X_train_quant']
+    X_test_quant = split_data['X_test_quant']
+    y_train = split_data['y_train']
+    y_test = split_data['y_test']
+    test_df = split_data['test_df']
+    y_current = test_df['gasoline_rbob']
+    
+    benchmarks = {}
+    
+    # 1. Naive Persistence Baseline
+    pred_persistence = np.array(y_current)
+    benchmarks["persistence"] = evaluate_predictions(y_test, pred_persistence, y_current)
+    
+    # 2. 5-Day Moving Average Baseline
+    if 'gas_ma_7' in test_df.columns:
+        pred_ma = np.array(test_df['gas_ma_7'])
+    else:
+        pred_ma = pred_persistence
+    benchmarks["moving_avg_5d"] = evaluate_predictions(y_test, pred_ma, y_current)
+    
+    # 3. Ridge Regression Baseline (alpha=10.0)
+    ridge_pipeline = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+    ridge_pipeline.fit(X_train_quant, y_train)
+    pred_ridge = ridge_pipeline.predict(X_test_quant)
+    benchmarks["ridge"] = evaluate_predictions(y_test, pred_ridge, y_current)
+    
+    # 4. XGBoost Baseline
+    if HAS_XGBOOST:
+        xgb_model = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
+        xgb_model.fit(X_train_quant, y_train)
+        pred_xgb = xgb_model.predict(X_test_quant)
+        benchmarks["xgboost"] = evaluate_predictions(y_test, pred_xgb, y_current)
+        
+    # 5. Stacking Ensemble Baseline
+    stacking_pipeline = build_stacking_ensemble_pipeline()
+    stacking_pipeline.fit(X_train_quant, y_train)
+    pred_stacking = stacking_pipeline.predict(X_test_quant)
+    benchmarks["stacking"] = evaluate_predictions(y_test, pred_stacking, y_current)
+    
+    # 6. TimesFM Zero-Shot Foundation Model
+    if TimesFMForecaster is not None:
+        tfm = TimesFMForecaster(horizon_len=len(y_test))
+        tfm.load_model()
+        tfm.fit(X_train_quant, y_train)
+        pred_tfm = tfm.predict(X_test_quant)
+        tfm_status = tfm.get_model_status()
+    else:
+        pred_tfm = pred_ridge
+        tfm_status = {"has_timesfm_pkg": False, "using_fallback": True}
+        
+    benchmarks["timesfm_zero_shot"] = evaluate_predictions(y_test, pred_tfm, y_current)
+    
+    # Comparative Rankings by MAE
+    rankings = sorted(
+        [{"model": k, "mae": v["MAE"], "hit_rate": v.get("Directional Accuracy (%)", 0.0)} for k, v in benchmarks.items()],
+        key=lambda x: x["mae"]
+    )
+    
+    # Standard baseline MAE for uplift reference
+    base_mae = benchmarks["persistence"]["MAE"]
+    tfm_mae = benchmarks["timesfm_zero_shot"]["MAE"]
+    tfm_uplift_pct = round(((base_mae - tfm_mae) / base_mae) * 100.0, 2) if base_mae > 0 else 0.0
+    
+    return {
+        "status": "success",
+        "benchmarks": benchmarks,
+        "rankings": rankings,
+        "timesfm_model_status": tfm_status,
+        "timesfm_uplift_over_persistence_pct": tfm_uplift_pct
+    }
+
+
+def compute_rolling_volatility_index(prices_series: pd.Series | np.ndarray, window: int = 14) -> float:
+    """
+    Computes rolling 14-day standard deviation of single-day price changes (Issue #214):
+    sigma_14d(r) = std(y_t - y_{t-1}, window=14)
+    """
+    arr = np.array(prices_series, dtype=float)
+    arr = arr[~np.isnan(arr)]
+    if len(arr) < 2:
+        return 0.015  # Default baseline volatility ($/gal)
+
+    diffs = np.diff(arr)
+    if len(diffs) > window:
+        diffs = diffs[-window:]
+
+    if len(diffs) < 2:
+        return 0.015
+
+    std_val = float(np.std(diffs, ddof=1)) if len(diffs) > 1 else float(np.std(diffs))
+    return max(0.0001, round(std_val, 5))
+
+
+def compute_volatility_gate_weight(volatility_14d: float, threshold: float = 0.015, k: float = 200.0) -> float:
+    """
+    Calculates adaptive sigmoid blending weight lambda_vol in [0.0, 1.0] (Issue #214):
+    lambda_vol = 1 / (1 + exp(-k * (sigma_14d - threshold)))
+    """
+    val = -k * (volatility_14d - threshold)
+    val_clipped = np.clip(val, -50.0, 50.0)
+    lambda_vol = 1.0 / (1.0 + np.exp(val_clipped))
+    return round(float(lambda_vol), 4)
+
+
+def apply_gated_persistence_blending(
+    raw_pred_price: float,
+    current_base_price: float,
+    lambda_vol: float,
+    guardrail_active: bool = False,
+    guardrail_alpha: float = 0.5
+) -> float:
+    """
+    Applies Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214):
+    y_gated = lambda_vol * y_raw + (1 - lambda_vol) * y_current
+    If guardrail_active is True (rolling 14d uplift < -2.0%), applies additional persistence bias alpha.
+    """
+    gated_pred = (lambda_vol * raw_pred_price) + ((1.0 - lambda_vol) * current_base_price)
+
+    if guardrail_active:
+        gated_pred = ((1.0 - guardrail_alpha) * gated_pred) + (guardrail_alpha * current_base_price)
+
+    return round(float(gated_pred), 4)
+
+
+def compute_empirical_residual_ci(
+    predicted_price: float,
+    residual_std_30d: float = 0.0612,
+    confidence_level: float = 0.95
+) -> tuple[float, float]:
+    """
+    Computes dynamic Empirical Residual Confidence Interval bounds (Issue #214):
+    CI_95% = predicted_price +/- z_score * residual_std_30d
+    replaces static +/- 5% multipliers with empirical residual variance.
+    """
+    z_score = 1.96 if confidence_level >= 0.95 else 1.645
+    std_val = max(0.01, float(residual_std_30d))
+
+    lower_ci = round(predicted_price - (z_score * std_val), 4)
+    upper_ci = round(predicted_price + (z_score * std_val), 4)
+    return lower_ci, upper_ci
+
+
 

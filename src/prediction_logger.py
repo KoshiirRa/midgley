@@ -230,6 +230,28 @@ def get_cloud_sync_status() -> dict:
     }
 
 
+def compute_regional_residual_std(region: str = None, window_days: int = 30, default_std: float = 0.0612) -> float:
+    """
+    Computes rolling 30-day standard error of regional prediction residuals (Issue #214).
+    sigma_residual = std(actual_5d_price - predicted_5d_price)
+    Returns default_std (0.0612 $/gal) if evaluated history has < 3 records.
+    """
+    try:
+        if os.path.exists(HISTORY_CSV_PATH):
+            df = pd.read_csv(HISTORY_CSV_PATH)
+            filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region)
+            if not filtered.empty and 'actual_5d_price' in filtered.columns:
+                actuals = filtered['actual_5d_price'].astype(float).values
+                preds = filtered['predicted_5d_price'].astype(float).values
+                residuals = actuals - preds
+                if len(residuals) >= 3:
+                    res_std = float(np.std(residuals, ddof=1))
+                    return max(0.01, round(res_std, 4))
+    except Exception as e:
+        logger.debug(f"Notice computing regional residual std for {region}: {e}")
+    return default_std
+
+
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
@@ -252,6 +274,8 @@ def log_predictions(
     
     timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     new_records = []
+
+    res_std = compute_regional_residual_std(region=region, window_days=30)
     
     for idx, row in predictions_df.iterrows():
         base_price = float(row['current_price'])
@@ -266,8 +290,9 @@ def log_predictions(
         quant_base = float(row.get('quant_baseline_5d_price')) if 'quant_baseline_5d_price' in row and pd.notna(row['quant_baseline_5d_price']) else np.nan
         aug_delta = float(row.get('llm_augmentation_delta')) if 'llm_augmentation_delta' in row and pd.notna(row['llm_augmentation_delta']) else (round(pred_price - quant_base, 4) if pd.notna(quant_base) else 0.0)
 
-        lower_ci = float(row.get('prediction_lower_95ci')) if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) else round(pred_price - 0.12, 4)
-        upper_ci = float(row.get('prediction_upper_95ci')) if 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']) else round(pred_price + 0.12, 4)
+        lower_ci = float(row.get('prediction_lower_95ci')) if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) else round(pred_price - (1.96 * res_std), 4)
+        upper_ci = float(row.get('prediction_upper_95ci')) if 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']) else round(pred_price + (1.96 * res_std), 4)
+
         
         new_records.append({
             "log_timestamp": timestamp_str,
