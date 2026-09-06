@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "midgley"
-version = "0.4.4"
+version = "0.4.7"
 description = "LLM-Augmented Unleaded Gasoline Price Prediction Framework"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -28,3 +28,8 @@ dependencies = [
 [project.urls]
 Homepage = "https://koshiirra.github.io/midgley/"
 Repository = "https://github.com/KoshiirRa/midgley"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:google.genai.*",
+]

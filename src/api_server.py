@@ -1149,6 +1149,68 @@ def get_connector_telemetry(days: int = Query(7, ge=1, le=90, description="Rolli
     return get_telemetry_summary(days=days)
 
 
+# Knowledge Graph & Agent Memory REST API Endpoints
+@app.get("/api/v1/graph/topology", summary="Get Full Knowledge Graph Topology (Nodes & Edges)", tags=["Knowledge Graph"])
+def get_graph_topology():
+    """Returns nodes, edges, entity types, and relationship summaries for Knowledge Graph visualization."""
+    from src.knowledge_graph import kg_engine
+    return kg_engine.export_topology_dict()
+
+
+@app.get("/api/v1/graph/subgraph", summary="Get Localized Subgraph Neighborhood for Entity", tags=["Knowledge Graph"])
+def get_graph_subgraph(
+    entity: str = Query(..., description="Target entity node ID or name (e.g., 'Chevron_Richmond', 'Oakland_CA')"),
+    depth: int = Query(2, ge=1, le=4, description="Graph traversal depth")
+):
+    """Extracts 2-hop sub-graph neighborhood and returns GraphContextSchema."""
+    from src.knowledge_graph import kg_engine
+    matched = kg_engine.resolve_entities_in_text(entity) or [entity]
+    schema = kg_engine.get_subgraph_context(matched, depth=depth)
+    return schema.to_dict()
+
+
+@app.get("/api/v1/memory/precedents", summary="Query Episodic Agent Memory for Historical Precedents", tags=["Agent Memory"])
+def get_memory_precedents(
+    query: str = Query(..., description="Search headline or keyword query (e.g., 'refinery outage heatwave')"),
+    top_k: int = Query(3, ge=1, le=10, description="Max precedent records to return")
+):
+    """Searches historical shock memory using TF-IDF + topological graph distance."""
+    from src.knowledge_graph import kg_engine
+    precedents = kg_engine.find_historical_precedents(query, top_k=top_k)
+    return {"query": query, "top_k": top_k, "precedents": precedents}
+
+
+class GraphIngestPayload(BaseModel):
+    headline: str
+    geopolitical_risk: float = 0.0
+    supply_disruption: float = 0.0
+    demand_sentiment: float = 0.0
+    opec_action: float = 0.0
+    overall_price_pressure: float = 0.0
+    affected_entities: Optional[List[str]] = None
+    model_attribution: Optional[str] = "api_user"
+
+
+@app.post("/api/v1/graph/ingest", dependencies=[Depends(get_api_key_user)], summary="Ingest Event Shock Memory into Knowledge Graph", tags=["Knowledge Graph"])
+def post_graph_ingest(payload: GraphIngestPayload):
+    """Ingests qualitative event into Knowledge Graph memory store."""
+    from src.knowledge_graph import kg_engine
+    scores = {
+        "geopolitical_risk": payload.geopolitical_risk,
+        "supply_disruption": payload.supply_disruption,
+        "demand_sentiment": payload.demand_sentiment,
+        "opec_action": payload.opec_action,
+        "overall_price_pressure": payload.overall_price_pressure
+    }
+    shock_id = kg_engine.record_event_shock_memory(
+        headline=payload.headline,
+        score_vector=scores,
+        affected_entities=payload.affected_entities,
+        model_attribution=payload.model_attribution
+    )
+    return {"status": "success", "shock_id": shock_id, "headline": payload.headline}
+
+
 @app.get("/.well-known/ai-plugin.json", include_in_schema=False)
 
 def get_ai_plugin_manifest():

@@ -278,7 +278,18 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates, automatically triggering background cloud DB sync.
   - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, backfills actual prices in `prediction_history.csv`, and triggers background cloud DB sync.
   - `sync_predictions_to_cloud()`: Pushes prediction history rows to Turso, Cloudflare D1, or Neon cloud stores with zero-downtime local CSV fallback.
-  - `get_cloud_sync_status()`: Returns active cloud sync providers and local CSV datastore statistics.
+
+---
+
+### 1.5. Qualitative Intelligence Knowledge Graph & Agent Memory Layer (`src/knowledge_graph.py`, Issue #116)
+
+* **Role:** Manages an entity-relationship physical supply topology graph and episodic agent shock memory store using an embedded zero-cost `NetworkX` graph engine backed by SQLite (`data/knowledge_graph.db`).
+* **Petroleum Domain Entity Taxonomy:** `Refinery`, `Pipeline`, `Chokepoint`, `MarineTerminal`, `PADDRegion`, `MetroLocale`, `ExecutiveActor`, `PolicyRule`, `HistoricalShock`.
+* **Spatial & Physical Relationships:** `SUPPLIES`, `CONNECTED_TO`, `AFFECTS_LOCALE`, `TRANSITS_THROUGH`, `REGULATES`, `EXPOSES_RISK`, `HISTORICAL_PRECEDENT_FOR`.
+* **Automated Topology Seeding:** Automatically seeds all 9 refining assets, 4 marine chokepoints, 5 PADD regions, and 6 regional metro hubs on initial startup from `src/spatial_refinery.py`.
+* **GraphRAG Subgraph Context Injection:** Performs 2-hop neighborhood subgraph traversal for incoming news headlines, formatting standardized `GraphContextSchema` contexts into LLM prompts (`LLM_SINGLE_PROMPT`) to ground scoring calls with physical supply topology.
+* **Episodic Agent Shock Memory & Precedent Retrieval:** Ingests high-impact scored events into `kg_memory_shocks`, supporting semantic TF-IDF + graph distance precedent retrieval (*"Find historical gas price reactions to East Bay PSPS heatwave refinery curtailments"*).
+* **Council of LLMs Forward-Compatible Architecture:** Standardizes graph context serialization for multi-provider LLM ensembles (Gemini, OpenAI, Anthropic, DeepSeek, local models) while recording multi-model attribution, individual provider opinions, and consensus disagreement metrics (`council_variance`).
 
 ---
 

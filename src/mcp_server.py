@@ -142,6 +142,43 @@ async def list_tools() -> list[types.Tool]:
                     "base_ulsd": {"type": "number", "default": 2.850, "description": "Base ULSD futures price"}
                 }
             }
+        ),
+        types.Tool(
+            name="query_knowledge_graph",
+            description="Queries Knowledge Graph topology, refineries, pipelines, chokepoints, PADDs, and metro relations.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "entity": {
+                        "type": "string",
+                        "description": "Optional entity name or ID to filter sub-graph (e.g. 'Chevron_Richmond', 'Oakland_CA')"
+                    },
+                    "depth": {
+                        "type": "integer",
+                        "default": 2,
+                        "description": "Graph traversal depth"
+                    }
+                }
+            }
+        ),
+        types.Tool(
+            name="retrieve_event_precedents",
+            description="Searches episodic agent memory for historical qualitative shock analogs and model agreement scores.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Headline or market event query string (e.g. 'refinery explosion heatwave')"
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "default": 3,
+                        "description": "Max precedents to return"
+                    }
+                },
+                "required": ["query"]
+            }
         )
     ]
 
@@ -196,6 +233,25 @@ async def call_tool(
             scenario = args.get("scenario", "colonial_line2_outage")
             base_ulsd = float(args.get("base_ulsd", 2.850))
             res = simulate_diesel_shock_endpoint(scenario=scenario, base_ulsd=base_ulsd)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "query_knowledge_graph":
+            from src.knowledge_graph import kg_engine
+            entity = args.get("entity")
+            depth = int(args.get("depth", 2))
+            if entity:
+                matched = kg_engine.resolve_entities_in_text(entity) or [entity]
+                schema = kg_engine.get_subgraph_context(matched, depth=depth)
+                res = schema.to_dict()
+            else:
+                res = kg_engine.export_topology_dict()
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "retrieve_event_precedents":
+            from src.knowledge_graph import kg_engine
+            query = args.get("query", "")
+            top_k = int(args.get("top_k", 3))
+            res = kg_engine.find_historical_precedents(query, top_k=top_k)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:

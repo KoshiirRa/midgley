@@ -8,35 +8,33 @@
 
 ## 🚀 Key Features, Bug Fixes & Architectural Enhancements
 
-### 1. Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
-- **Rolling Volatility Index ($\sigma_{14d}$):** Implemented `compute_rolling_volatility_index()` in `src/models.py` calculating the rolling 14-day standard deviation of single-day price changes ($\sigma_{14d} = \text{std}(y_t - y_{t-1}, \text{window}=14)$).
-- **Adaptive Sigmoid Persistence Gate ($\lambda_{vol}$):** Implemented `compute_volatility_gate_weight()` evaluating continuous blending weight $\lambda_{vol} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14d} - 0.015)}}$.
-  - During low-volatility price plateaus ($\sigma_{14d} \ll 0.015$), $\lambda_{vol} \to 0.0$, shrinking predictions to pure Naive Persistence ($\hat{y}_{t+5} = y_t$) and eliminating extraneous forecast variance across degraded regions (`BayArea_CA`, `Greenville_NC`, `Newark_DE`, `Oakland_CA`, `Tulsa_OK`).
-  - During active market shocks ($\sigma_{14d} > 0.015$), $\lambda_{vol} \to 1.0$, preserving 100% of event shock vectors.
-- **Closed-Loop Uplift Guardrail ($\alpha_{\text{guardrail}} = 0.5$):** Implemented `apply_gated_persistence_blending()` automatically applying persistence bias factor $\alpha_{\text{guardrail}} = 0.5$ if rolling 14-day baseline uplift drops below $-2.0\%$.
-
-### 2. Empirical Residual Confidence Interval Recalibration (Issue #214)
-- **Dynamic Standard Error Error Variance:** Implemented `compute_regional_residual_std()` in `src/prediction_logger.py` computing rolling 30-day standard error of regional prediction residuals.
-- **Dynamic 95% Confidence Bounds:** Replaced static $\pm 5\%$ multipliers (`predicted_5d_price * 0.95` / `1.05`) with empirical residual confidence bounds $\text{CI}_{95\%} = \hat{y}_{t+5}^{\text{final}} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$ in `src/dynamic_region.py` and `src/models.py`.
-- **Target Coverage:** Elevates 95% CI empirical coverage from 32.2% to $\ge 90.0\%$ across all 10 metro calibration hubs.
+### 1. Qualitative Intelligence Knowledge Graph & Agent Memory Layer (Issue #116)
+- **Zero-Cost Embedded Graph Engine (`src/knowledge_graph.py`):** Built `KnowledgeGraphEngine` using pure Python `NetworkX` graph core with `SQLite` persistent storage (`data/knowledge_graph.db`), ensuring **$0 infrastructure cost** and zero external database server requirements.
+- **Automated Petroleum Topology Seeding:** Automatically seeds all 9 refining assets, 4 marine chokepoints, 5 PADD regions, and 6 regional metro hubs on initial startup from `src/spatial_refinery.py`.
+- **GraphRAG Subgraph Context Injection (`src/event_analyzer.py`):** Resolves entity nodes from breaking headlines, extracts 2-hop neighborhood subgraphs, and formats standardized `GraphContextSchema` contexts into LLM prompts (`LLM_SINGLE_PROMPT`) to ground scoring calls with physical supply topology.
+- **Episodic Shock Memory & Precedent Retrieval Engine:** Ingests high-impact event shocks into `kg_memory_shocks`, supporting TF-IDF + graph distance precedent retrieval (*"Find historical gas price reactions to East Bay PSPS heatwave refinery curtailments"*).
+- **Council of LLMs Forward-Compatible Architecture:** Standardizes graph context serialization for multi-provider LLM ensembles (Gemini, OpenAI, Anthropic, DeepSeek, local models) while recording multi-model attribution, individual provider opinions, and consensus disagreement metrics (`council_variance`).
+- **REST API & MCP Tooling:**
+  - Added REST endpoints: `GET /api/v1/graph/topology`, `GET /api/v1/graph/subgraph`, `GET /api/v1/memory/precedents`, `POST /api/v1/graph/ingest`.
+  - Registered MCP tools in `src/mcp_server.py`: `query_knowledge_graph` and `retrieve_event_precedents`.
+- **Pluggable Enterprise Adapters:** Included `PluggableGraphAdapter` abstract class supporting optional external backends (`Neo4jAdapter`, `Mem0Adapter`, `CogneeAdapter`).
 
 ---
 
 ## 🧪 Verification & Test Suite Results
 
-- **DV-GPB Unit Test Suite Execution (`pytest tests/test_volatility_gating.py`):**
+- **Knowledge Graph Unit Test Suite (`pytest tests/test_knowledge_graph.py`):**
   ```bash
-  pytest tests/test_volatility_gating.py -v
+  pytest tests/test_knowledge_graph.py -v
   ```
-  **Result:** `6 passed` (100% pass rate in 5.03s on `dev-vm`).
-
-- **Full Project Test Suite Execution:**
+  **Result:** `8 passed` (100% pass rate on `dev-vm` and Windows host).
+- **Full System & Event Test Suite Execution:**
   ```bash
-  pytest
+  pytest tests/test_knowledge_graph.py tests/test_event_analyzer.py tests/test_api_server.py -v
   ```
-  **Result:** `320 passed` (100% pass rate in 1185.69s across all 63 test suites).
+  **Result:** `31 passed, 0 warnings` (100% clean execution).
 
 ---
 
-## 📋 Closed & Superseded GitHub Issues
-- **Issue #214**: `[Feature Request] Implement Dynamic Volatility-Gated Persistence Blending (DV-GPB) for Low-Volatility Plateau Calibration` (Closed as completed)
+## 📋 Closed GitHub Issues
+- **Issue #116**: `[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)` (Closed as completed)

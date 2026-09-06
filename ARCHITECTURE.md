@@ -233,11 +233,23 @@ src/locations/
     └── notebook_builder.py
 ```
 
+---
+
+## 10. Qualitative Intelligence Knowledge Graph & Agent Memory Layer (`src/knowledge_graph.py`, Issue #116)
+
+Midgley features an embedded zero-cost **Knowledge Graph & Agent Memory Layer**:
+
+* **Graph Engine & Persistence:** Pure Python `NetworkX` graph core with `SQLite` persistence (`data/knowledge_graph.db`), ensuring **$0 infrastructure cost**.
+* **Automated Seeding:** Automatically populates 9 refineries, 4 marine chokepoints, 5 PADDs, and 6 metro hubs on initial startup from `src/spatial_refinery.py`.
+* **GraphRAG Prompt Context:** Extracts 2-hop subgraphs and precedent memories for incoming headlines, formatting standardized `GraphContextSchema` into LLM prompts (`LLM_SINGLE_PROMPT`) to ground scoring calls with physical supply topology.
+* **Episodic Shock Memory & Precedent Search:** Ingests high-impact event shocks into `kg_memory_shocks`, supporting TF-IDF + graph distance precedent retrieval.
+* **Council of LLMs Readiness:** Standardizes context serialization across multi-provider LLM ensembles while recording multi-model attribution, individual provider opinions, and consensus disagreement metrics (`council_variance`).
+
 Root entrypoints (`main.py`, `tulsa_main.py`, `newark_main.py`, etc.), notebook build scripts (`build_*.py`), and `src/*_regional.py` modules operate as lightweight delegation shims to `src/locations/`, maintaining 100% backward compatibility for all existing scripts, workflows, and systemd services.
 
 ---
 
-## 10. Multi-Tier Lookup Cache Gateway Architecture (Issue #108 / `src/lookup_cache.py`)
+## 11. Multi-Tier Lookup Cache Gateway Architecture (Issue #108 / `src/lookup_cache.py`)
 
 All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/USDA series, NOAA weather endpoints, commodity spot feeds, and financial news/scrapers) are integrated with the **3-Tier Lookup Cache Gateway** (`src/lookup_cache.py`). This architecture eliminates redundant API requests and synchronizes quota limits across local Dev VM (`10.42.42.54`) and GitHub Actions runners:
 

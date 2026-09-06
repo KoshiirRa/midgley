@@ -625,6 +625,50 @@ systemctl --user status midgley-api.service
 systemctl --user list-timers --all
 ```
 
+
+---
+
+## 10. Knowledge Graph & Agent Memory Layer Operations (`src/knowledge_graph.py`, Issue #116)
+
+Midgley includes an embedded, zero-cost **Knowledge Graph & Agent Memory Layer** that models physical petroleum supply topology (refineries, pipelines, marine chokepoints, PADDs, metros) and episodic shock memory.
+
+### Key Operational Characteristics:
+- **Zero External Server Requirement:** Primary graph engine runs in-memory via `NetworkX` with SQLite persistence at `data/knowledge_graph.db` ($0 cloud cost).
+- **Automated Topology Seeding:** Automatically seeds 9 refining assets, 4 marine chokepoints, 5 PADD regions, and 6 metro hubs on initial startup from `src/spatial_refinery.py`.
+- **GraphRAG Prompt Context:** Automatically retrieves 2-hop subgraphs and precedent memories for incoming headlines, formatting standardized `GraphContextSchema` into LLM prompts (`LLM_SINGLE_PROMPT`).
+
+### REST API & MCP Server Verification:
+```bash
+# Query full graph topology (nodes and edges)
+curl -s http://localhost:8000/api/v1/graph/topology | jq .
+
+# Query localized 2-hop subgraph for an entity
+curl -s "http://localhost:8000/api/v1/graph/subgraph?entity=Chevron_Richmond&depth=2" | jq .
+
+# Search historical shock memory precedents
+curl -s "http://localhost:8000/api/v1/memory/precedents?query=refinery+explosion" | jq .
+
+# Ingest event shock memory programmatically
+curl -X POST http://localhost:8000/api/v1/graph/ingest \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -d '{
+    "headline": "Fire shuts down Catlettsburg refinery unit",
+    "supply_disruption": 0.7,
+    "overall_price_pressure": 0.5,
+    "affected_entities": ["Marathon_Catlettsburg", "Cincinnati_OH"]
+  }'
+```
+
+### Pluggable External Adapters (Optional):
+For enterprise deployments requiring external graph databases (Neo4j, Cognee, Mem0, Graphiti), set the appropriate environment variables:
+```bash
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=secret
+MEM0_API_KEY=your_mem0_key
+```
+
 ---
 
 *Midgley Version: `v0.4.7` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
