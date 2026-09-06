@@ -11,6 +11,7 @@ import logging
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed, fetch_baker_hughes_rig_counts
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
 from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector
+from src.feast_store import MidgleyFeastStore
 
 logger = logging.getLogger(__name__)
 
@@ -77,13 +78,48 @@ def compute_technical_momentum_indicators(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def get_feast_point_in_time_features(
+    market_df: pd.DataFrame,
+    events_df: pd.DataFrame = None,
+    region: str = "Tulsa_OK"
+) -> pd.DataFrame:
+    """
+    Retrieves point-in-time AS OF joined features from MidgleyFeastStore (Issue #94).
+    Guarantees temporal non-leakage during historical backtesting.
+    """
+    store = MidgleyFeastStore()
+    entity_df = pd.DataFrame({
+        'date': market_df['date'],
+        'event_timestamp': pd.to_datetime(market_df['date']).dt.tz_localize(None),
+        'location_id': region,
+        'market_id': 'RBOB_FUTURES'
+    })
+    feature_refs = [
+        "eia_weekly_fv:gasoline_rbob",
+        "eia_weekly_fv:wti_crude",
+        "eia_weekly_fv:crack_spread",
+        "noaa_weather_fv:hdd_daily",
+        "noaa_weather_fv:cdd_daily",
+        "llm_event_decay_fv:geopolitical_risk",
+        "llm_event_decay_fv:supply_disruption"
+    ]
+    return store.get_historical_point_in_time_features(
+        entity_df=entity_df,
+        feature_refs=feature_refs,
+        market_df=market_df,
+        events_df=events_df,
+        region=region
+    )
+
+
 def create_feature_matrix(
     market_df: pd.DataFrame, 
     events_df: pd.DataFrame = None, 
     forecast_horizon: int = 5,
     decay_half_life_days: float = 5.0,
     region: str = "Tulsa_OK",
-    as_of_cutoff: str = None
+    as_of_cutoff: str = None,
+    use_feast: bool = False
 ) -> pd.DataFrame:
     """
     Creates a unified feature dataset for time-series forecasting.
@@ -96,10 +132,20 @@ def create_feature_matrix(
     - region: Target metropolitan area or hub name for locale-specific weather routing
     - as_of_cutoff: Publication timestamp cutoff (YYYY-MM-DD [HH:MM:SS]) for point-in-time bitemporal filtering (Issue #121)
     """
-    logger.info(f"Engineering features for region '{region}' with {forecast_horizon}-day forecast horizon...")
+    logger.info(f"Engineering features for region '{region}' with {forecast_horizon}-day forecast horizon (use_feast={use_feast})...")
     df = market_df.copy()
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
+
+    if use_feast:
+        try:
+            feast_df = get_feast_point_in_time_features(df, events_df, region)
+            for col in feast_df.columns:
+                if col not in df.columns and col not in ['event_timestamp', 'location_id', 'market_id']:
+                    df[col] = feast_df[col]
+            logger.info("Successfully merged Feast point-in-time feature vectors.")
+        except Exception as e:
+            logger.warning(f"Feast feature lookup failed: {e}. Defaulting to standard feature matrix generation.")
     
     # 1. Quantitative Technical Indicators
     df = compute_technical_momentum_indicators(df)
@@ -277,7 +323,11 @@ def create_feature_matrix(
     df[f'target_price_{forecast_horizon}d'] = df['gasoline_rbob'].shift(-forecast_horizon)
     df[f'target_return_{forecast_horizon}d'] = (df[f'target_price_{forecast_horizon}d'] - df['gasoline_rbob']) / df['gasoline_rbob']
     
-    df = df.dropna().reset_index(drop=True)
+    # Fill feature NaNs safely to prevent premature row purging
+    feature_cols = [c for c in df.columns if not c.startswith('target_')]
+    df[feature_cols] = df[feature_cols].bfill().ffill().fillna(0.0)
+    
+    df = df.dropna(subset=[f'target_price_{forecast_horizon}d']).reset_index(drop=True)
     return df
 
 

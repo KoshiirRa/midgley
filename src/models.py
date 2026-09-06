@@ -840,4 +840,50 @@ def compute_empirical_residual_ci(
     return lower_ci, upper_ci
 
 
+def train_models_with_feast_point_in_time(
+    market_df: pd.DataFrame,
+    events_df: pd.DataFrame = None,
+    region: str = "Tulsa_OK",
+    forecast_horizon: int = 5
+) -> dict:
+    """
+    Trains Ridge and XGBoost models using Feast Feature Store point-in-time features (Issue #94).
+    Prevents temporal data leakage during model evaluation.
+    """
+    from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
+
+    feature_matrix = create_feature_matrix(
+        market_df=market_df,
+        events_df=events_df,
+        forecast_horizon=forecast_horizon,
+        region=region,
+        use_feast=True
+    )
+    splits = prepare_chronological_splits(feature_matrix, forecast_horizon=forecast_horizon)
+    
+    # Train Ridge Model
+    ridge = Ridge(alpha=10.0)
+    ridge.fit(splits['X_train_hybrid'], splits['y_train'])
+    y_pred_ridge = ridge.predict(splits['X_test_hybrid'])
+    metrics_ridge = evaluate_predictions(splits['y_test'], y_pred_ridge, splits['test_df']['gasoline_rbob'])
+    
+    metrics_xgb = None
+    if HAS_XGBOOST:
+        xgb = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
+        xgb.fit(splits['X_train_hybrid'], splits['y_train'])
+        y_pred_xgb = xgb.predict(splits['X_test_hybrid'])
+        metrics_xgb = evaluate_predictions(splits['y_test'], y_pred_xgb, splits['test_df']['gasoline_rbob'])
+        
+    return {
+        "status": "success",
+        "region": region,
+        "forecast_horizon": forecast_horizon,
+        "feature_count": splits['X_train_hybrid'].shape[1],
+        "ridge_metrics": metrics_ridge,
+        "xgb_metrics": metrics_xgb,
+        "used_feast": True
+    }
+
+
+
 

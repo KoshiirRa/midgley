@@ -194,7 +194,14 @@ Test health endpoint:
 curl http://localhost:8000/api/v1/system/quota
 ```
 
-### Step 3: Run Baseline Forecast Pipeline
+### Step 3: Feast Feature Store Initialization & Point-in-Time Backtesting
+Verify Feast repository configuration and export Parquet feature sources:
+```bash
+# Verify Feast repository initialization (Issue #94)
+python3 -c "from src.feast_store import MidgleyFeastStore; store = MidgleyFeastStore(); store.initialize_store()"
+```
+
+### Step 4: Run Baseline Forecast Pipeline
 Execute the full multi-region prediction pipeline once:
 ```bash
 python3 -m src.locations.national.main --llm

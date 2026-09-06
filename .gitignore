@@ -35,6 +35,9 @@ scratch/
 # Generated Execution Reports & Output Logs
 docs/reports/
 data/reports/
-data/runs/
+# Feast Feature Store Local Cache & Database Registries
+data/feast_parquet/
+data/data/
+*.pb
 
 
