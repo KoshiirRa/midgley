@@ -1796,5 +1796,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.5
     }
+  },
+  {
+    "timestamp": "2026-09-06T11:45:41.961489",
+    "headline": "The right kind of retaliation to Donald Trump\u2019s tariffs - The Globe and Mail",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOLUw3UmNEMWtMY3VuVmNsdEUxZlBaV3B3WXdIMFY2RWNEZjRNUTdQR3RidzUtcllkS3dVcDhoMzJacjl3UERVRVBOdGRJQzRGSzhibmxuMm5sdVUxdkFRekRzS2pldERsODNtX2p3bFVIS0g5UGVTaGpJWmhkWjlFZWVJMnlLSHZ6Wk9qQ2VfRGt5STE1ZFdlbmN5VXFkOWhqeEliNDRZMFlRaWRXZFFxNFZsTXc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitAFBVV95cUxOLUw3UmNEMWtMY3VuVmNsdEUxZlBaV3B3WXdIMFY2RWNEZjRNUTdQR3RidzUtcllkS3dVcDhoMzJacjl3UERVRVBOdGRJQzRGSzhibmxuMm5sdVUxdkFRekRzS2pldERsODNtX2p3bFVIS0g5UGVTaGpJWmhkWjlFZWVJMnlLSHZ6Wk9qQ2VfRGt5STE1ZFdlbmN5VXFkOWhqeEliNDRZMFlRaWRXZFFxNFZsTXc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    }
   }
 ]
