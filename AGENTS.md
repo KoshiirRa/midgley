@@ -486,6 +486,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   2. **Mandatory File Payload Standard:** ALWAYS write markdown content to a standalone file first (`release_notes.md`, `pr_body.md`, or `/tmp/notes.md`) using strict file-writing tools (or `write_to_file`), and pass `--notes-file <file>` or `--body-file <file>` to the `gh` CLI.
   3. **Backtick Formatting Integrity:** Ensure all code paths, variables, class names, and CLI commands are enclosed in valid backticks (e.g. `src/diesel.py`, `HO=F`, `OILPRICEAPI_MAX_DAILY_CALLS`) so GitHub renders clean inline code blocks without backslash corruption or missing symbols.
 
+---
+
+### 20. Mandatory In-Progress Release Notes Consolidation Directives
+
+* **Role:** Enforces single-file release notes consolidation during active development cycles and prevents draft version number sprawl.
+* **Mandatory Release Notes Versioning Directives:**
+  1. **Single Active In-Progress Release Document:** All feature implementations, bug fixes, MLOps enhancements, test results, and closed issues completed during an ongoing development cycle MUST be appended directly to the single active in-progress release notes document (e.g., `RELEASE_NOTES_v0.4.2.md`).
+  2. **No Per-Issue Release Notes Files:** Agents MUST NEVER increment the release notes version number or create new incremental release notes files (such as `RELEASE_NOTES_v0.4.3.md`, `RELEASE_NOTES_v0.4.4.md`, `RELEASE_NOTES_v0.4.8.md`) for intermediate task completions or individual issue resolutions.
+  3. **Release-Time Version Incrementing Only:** The release notes version number is bumped to a new draft file (e.g., `RELEASE_NOTES_v0.4.3.md`) ONLY when an official version release is tagged and cut by maintainers.
+
+
 
 
 
