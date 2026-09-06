@@ -71,7 +71,7 @@
   {
     "number": 40,
     "title": "feat(security): Implement user authentication & access control for MCP Server & REST API Gateway",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "v0.4",
     "labels": [
       "enhancement",
@@ -187,7 +187,7 @@
   {
     "number": 52,
     "title": "feat(docs/math): Leverage CodeCogs LaTeX rendering service for equation images across GitHub Markdown & web embeds",
-    "status": "Ready",
+    "status": "Obsolete (Closed)",
     "milestone": "v0.5",
     "labels": [
       "documentation",
@@ -254,7 +254,7 @@
   {
     "number": 67,
     "title": "[Feature Request] Ingest BriefTape AI-Summarized SEC 8-K & Policy Event Stream",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -265,7 +265,7 @@
   {
     "number": 68,
     "title": "[Feature Request] Ingest Congressional Energy Equity Trading Signals (CongressInvests API)",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -287,7 +287,7 @@
   {
     "number": 70,
     "title": "[Feature Request] Implement OpenFIGI Cross-Market Symbol Normalization Service",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -299,7 +299,7 @@
   {
     "number": 71,
     "title": "[Feature Request] Ingest Tradestie Reddit Retail Energy Sentiment Feed",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -365,7 +365,7 @@
   {
     "number": 78,
     "title": "[Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "v0.4",
     "labels": [
       "enhancement",
@@ -377,7 +377,7 @@
   {
     "number": 79,
     "title": "[Feature Request] Ingest AlphaAI Scored Insider & Financial News Event Stream",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -433,7 +433,7 @@
   {
     "number": 84,
     "title": "[Feature Request] Integrate Tavily AI Search API for Real-Time Anomaly Event RAG",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -456,7 +456,7 @@
   {
     "number": 86,
     "title": "[Feature Request] Ingest Market Data API for Energy Equities & Commodity Backstop",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -467,7 +467,7 @@
   {
     "number": 87,
     "title": "[Feature Request] Implement IPASIS API Gateway Security for Incoming Webhooks",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "v0.4",
     "labels": [
       "enhancement",
@@ -490,7 +490,7 @@
   {
     "number": 89,
     "title": "[Feature Request] Ingest SearchApi Google SERP Data for Geopolitical Event Extraction",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -665,7 +665,7 @@
   {
     "number": 109,
     "title": "[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)",
-    "status": "Ready",
+    "status": "Closed",
     "milestone": "Regular Model v2.0 \"Hubbert\"",
     "labels": [
       "enhancement",
@@ -688,7 +688,7 @@
   {
     "number": 113,
     "title": "[Feature Request] Ingest FRED Macroeconomic & Energy Series via Database-Lookup Skill",
-    "status": "Ready",
+    "status": "Superseded (Closed by #141)",
     "milestone": "Regular Model v2.0 \"Hubbert\"",
     "labels": [
       "enhancement",
@@ -863,7 +863,7 @@
   {
     "number": 141,
     "title": "[Feature Request] Ingest Zero-Cost Energy Data Feeds (FRED, EIA v2, Universal State Open Data, USDA Biofuels, Open-Meteo)",
-    "status": "In Progress",
+    "status": "Completed",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",

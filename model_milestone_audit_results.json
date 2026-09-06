@@ -426,10 +426,10 @@
       ],
       "current_milestone": "Regular Model v1.5 \"Houdry\"",
       "current_milestone_id": 3,
-      "is_non_model": false,
-      "recommended_action": "KEEP in Regular Model v1.5 \"Houdry\"",
-      "target_milestone": "Regular Model v1.5 \"Houdry\"",
-      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+      "is_non_model": true,
+      "recommended_action": "CLOSE as Out-of-Scope",
+      "target_milestone": "Closed",
+      "rationale": "Closed as Out-of-Scope (Not Planned). OpenFIGI does not support FRED or EIA macro series, uses Bloomberg symbology incompatible with yfinance commodity futures, and provides zero predictive alpha. Refiner CIKs are handled via static mapping in Issue #69."
     },
     {
       "number": 71,
@@ -599,9 +599,9 @@
       "current_milestone": "Regular Model v2.0 \"Hubbert\"",
       "current_milestone_id": 5,
       "is_non_model": false,
-      "recommended_action": "KEEP in Regular Model v2.0 \"Hubbert\"",
-      "target_milestone": "Regular Model v2.0 \"Hubbert\"",
-      "rationale": "Genuine quantitative modeling / physical data feature vector / econometrics issue."
+      "recommended_action": "CLOSE - Superseded by Issue #141",
+      "target_milestone": "Closed",
+      "rationale": "Closed as obsolete/superseded by OpenMeteoDegreeDaysConnector (Issue #141) and NWS/SPC convective alerts."
     }
   ]
 }
