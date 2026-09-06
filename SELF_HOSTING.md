@@ -397,6 +397,7 @@ Research and specify:
 1. Primary Supplying Refineries: Name, location, operator, and crude processing capacity (in bpd - barrels per day).
 2. Primary Pipeline Corridors: Specific pipeline systems (e.g., Colonial Pipeline Line 1/2, Kinder Morgan SFPP, Explorer Pipeline, Keystone, Enterprise) and major breakout distribution hubs/terminals.
 3. Marine / River Barge Infrastructure: Nearby navigable river channels (e.g., Ohio River, Mississippi River, C&D Canal, Houston Ship Channel, Carquinez Strait) or ocean deepwater anchorages subject to USGS low-water restrictions, stage levels, cooling water thermal limits, or lightering detours.
+   - Relevant USGS Hydrological Stations: Identify exact 8-digit USGS Station Numbers (e.g., "03612500" for Ohio River at Cairo, "07179000" for Arkansas River at Tulsa, "01477050" for Delaware River at Chester, "08077637" for Houston Ship Channel) and station names that monitor streamflow (00060), gage height (00065), water temperature (00010), or specific conductance (00095) for the supplying waterways or refinery cooling water intakes.
 4. Logistics Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, power grid outages, or barge congestion.
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
@@ -412,6 +413,7 @@ Identify:
 2. SPC (Storm Prediction Center) Convective Risk Vulnerabilities: Severe tornado risk, hail, or high wind thresholds.
 3. Cold Weather Freeze / Polar Vortex Vulnerability: Sub-zero freeze impacts on local refinery instrumentation or crude pipelines.
 4. Hydrological & Marine Hazards: Local river gauge flood stages & water temperatures (USGS Water Data API telemetry: streamflow `00060`, gage height `00065`, water temperature `00010`, specific conductance `00095`) or coastal hurricane storm surge risks.
+   - Candidate USGS Stations & Thresholds: Identify primary 8-digit USGS station site IDs and flood stage thresholds (action stage, flood stage, moderate flood stage in feet) that could disrupt petroleum rack operations, refinery cooling, or barge navigation.
 5. Regional Geophysical Risks: CAL FIRE PSPS wildfire power shutoffs, USGS seismic fault line risks, or tsunami advisories.
 ```
 
@@ -502,7 +504,7 @@ __all__ = [
 ```
 
 2. **`src/locations/chicago/regional.py`**:
-Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios.
+Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `get_usgs_water_feed_summary()` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`).
 
 3. **`src/locations/chicago/main.py`**:
 Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering, fits the Ridge estimator, logs predictions to `data/prediction_history.csv`, and returns forecast metrics.
