@@ -352,6 +352,7 @@ Please research and provide:
    Equation: P_retail = P_RBOB + DynamicRackMargin
 4. Historical Baseline Retail Pump Price ($/gal) anchor for [TARGET METRO CITY].
 5. Primary economic drivers influencing local fuel price volatility (e.g., seasonal summer blend transitions, regional agricultural diesel demand spikes, industrial transportation hubs).
+6. Biofuel & Blendstock Specifications: Statutory ethanol blend mandate (e.g. standard E10, E15, or state bio-mandates), summer Reid Vapor Pressure (RVP in psi) compliance limits (e.g. 7.8 psi, 9.0 psi, or CARB 7.0 psi), seasonal transition dates (May 1 refinery / June 1 retail deadlines), and USDA AMS Midwest ethanol rack basis.
 
 Format your output in concise technical bullet points.
 ```
@@ -368,6 +369,7 @@ Provide exact quantitative values ($/gal) for:
 4. Environmental & UST (Underground Storage Tank) Inspection Fees ($/gal).
 5. Statutory Carbon Fees or Cap-and-Trade / LCFS Overhead (if applicable, e.g. California CARB / Washington CCA).
 6. Total Aggregated Statutory Burden T_statutory ($/gal).
+7. Official State Open Data Portal & Primary Source: Official state Socrata open data portal domain (e.g. `data.<state>.gov` or `data.gov`), State Department of Revenue/Taxation motor fuel tax bulletin URL, statutory tax adjustment schedule (e.g. annual July 1 rate adjustments or CPI indexation), and monthly taxable motor fuel volume reporting (supporting Midgley's Universal 50-State Open Data Connector).
 
 Write out the KaTeX math formula:
 T_{\text{statutory}} = \tau_{\text{state}} + \tau_{\text{federal}} + \tau_{\text{local}} + \tau_{\text{environmental}}
@@ -379,11 +381,13 @@ You are a Petroleum Supply Chain & Logistics Engineer.
 I need a detailed logistical breakdown of fuel supply pipelines and refining capacity for [TARGET METRO CITY, STATE].
 
 Research and specify:
-1. Primary Supplying Refineries: Name, location, operator, and crude processing capacity (in bpd - barrels per day).
+1. Primary Supplying Refineries: Name, location, operator, crude processing capacity (in bpd - barrels per day), and exact WGS84 GPS coordinates (latitude, longitude) for spatial distance-decay buffering.
 2. Primary Pipeline Corridors: Specific pipeline systems (e.g., Colonial Pipeline Line 1/2, Kinder Morgan SFPP, Explorer Pipeline, Keystone, Enterprise) and major breakout distribution hubs/terminals.
-3. Marine / River Barge Infrastructure: Nearby navigable river channels (e.g., Ohio River, Mississippi River, C&D Canal, Houston Ship Channel, Carquinez Strait) or ocean deepwater anchorages subject to USGS low-water restrictions, stage levels, cooling water thermal limits, or lightering detours.
+3. Marine & River Barge Infrastructure: Nearby navigable river channels (e.g., Ohio River, Mississippi River, C&D Canal, Houston Ship Channel, Carquinez Strait) or ocean deepwater anchorages subject to USGS low-water restrictions, stage levels, cooling water thermal limits, or lightering detours.
    - Relevant USGS Hydrological Stations: Identify exact 8-digit USGS Station Numbers (e.g., "03612500" for Ohio River at Cairo, "07179000" for Arkansas River at Tulsa, "01477050" for Delaware River at Chester, "08077637" for Houston Ship Channel) and station names that monitor streamflow (00060), gage height (00065), water temperature (00010), or specific conductance (00095) for the supplying waterways or refinery cooling water intakes.
-4. Logistics Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, power grid outages, or barge congestion.
+   - USACE Locks & Dams: Identify key U.S. Army Corps of Engineers (USACE) Locks and Dams along supplying commercial waterways (e.g., Markland, Meldahl, Lock 27, C&D Canal) that govern barge tow transit times and lock closure risks.
+4. Logistics & Power Grid Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, marine congestion, and electric power grid vulnerability—specifically identifying the EIA-930 Electric Grid Balancing Authority (BA) / RTO (e.g., ERCOT, MISO, PJM, CAISO, SWPP, SOCO, TVA, NYIS, ISNE) powering the supplying refineries and pipeline pump stations.
+5. Metro Centroid & Spatial Buffer Anchor: Representative metro geographic coordinates (WGS84 latitude, longitude), primary 5-digit ZIP code, and approximate pipeline/haul distance (miles) to the primary supplying refinery or distribution rack hub (for GeoPandas spatial distance-decay modeling in `src/spatial_refinery.py`).
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```
@@ -396,10 +400,10 @@ I need to map NOAA Weather Service alerts and geophysical threat factors for [TA
 Identify:
 1. NOAA NWS Forecast Zone Code (e.g., "OKZ060" for Tulsa, "NCZ081" for Greenville).
 2. SPC (Storm Prediction Center) Convective Risk Vulnerabilities: Severe tornado risk, hail, or high wind thresholds.
-3. Cold Weather Freeze / Polar Vortex Vulnerability: Sub-zero freeze impacts on local refinery instrumentation or crude pipelines.
-4. Hydrological & Marine Hazards: Local river gauge flood stages & water temperatures (USGS Water Data API telemetry: streamflow `00060`, gage height `00065`, water temperature `00010`, specific conductance `00095`) or coastal hurricane storm surge risks.
+3. Cold Weather Freeze / Heat Stress & Degree Days: Sub-zero freeze or extreme summer heat vulnerabilities impacting refinery instrumentation, crude pipelines, or cooling tower thermal compliance; identify baseline Heating Degree Days (HDD) and Cooling Degree Days (CDD) profile.
+4. Hydrological, Coastal & Marine Hazards: Local river gauge flood stages & water temperatures (USGS Water Data API telemetry: streamflow `00060`, gage height `00065`, water temperature `00010`, specific conductance `00095`); exposure to NOAA National Hurricane Center (NHC) tropical cyclone tracks, coastal storm surge, and BSEE offshore crude production shut-in alerts.
    - Candidate USGS Stations & Thresholds: Identify primary 8-digit USGS station site IDs and flood stage thresholds (action stage, flood stage, moderate flood stage in feet) that could disrupt petroleum rack operations, refinery cooling, or barge navigation.
-5. Regional Geophysical Risks: CAL FIRE PSPS wildfire power shutoffs, USGS seismic fault line risks, or tsunami advisories.
+5. Regional Geophysical & Grid Hazards: CAL FIRE PSPS wildfire power shutoffs, tsunami advisories (NOAA PTWC), or USGS seismic fault lines (identifying active fault names, historical M >= 4.0 / M >= 6.0 quakes, and geographic bounding box for live USGS earthquake monitoring).
 ```
 
 ### Prompt 5: Decoupled JSON Metadata Profile Generator Prompt
@@ -408,32 +412,47 @@ You are an MLOps Engineer for Midgley. Using the research gathered above for [TA
 
 Output ONLY valid JSON following this schema:
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "[region_id]",
-  "display_name": "[TARGET METRO CITY, STATE]",
+  "display_name": "[TARGET METRO CITY, STATE] Metro Retail",
+  "padd_region": "PADD [X] [Region Name]",
+  "primary_city": "[TARGET METRO CITY, STATE]",
+  "counties": ["[County 1]", "[County 2]"],
+  "baseline_price": 3.950,
+  "icon_class": "fa-warehouse",
   "theme_color": "emerald",
-  "icon_class": "fa-gas-pump",
   "econometric_drivers": {
     "title": "Regional Econometric Drivers & Benchmark Anchors",
     "description": "..."
   },
   "refining_logistics": {
     "title": "Refining Capacity & Pipeline Logistics",
-    "description": "..."
+    "description": "...",
+    "primary_refinery": "[Refinery Name]",
+    "capacity_bpd": 250000,
+    "pipelines": ["[Pipeline 1]", "[Pipeline 2]"]
   },
   "tax_structure": {
     "title": "Statutory Tax & Regulatory Overhead",
-    "description": "..."
+    "description": "...",
+    "state_tax_per_gal": 0.385,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.569,
+    "notes": "..."
   },
   "infrastructure_delivery": {
-    "title": "Delivery Hub & Rack Margin Equation",
+    "title": "Delivery Hub & Dynamic Rack Margin",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.950 - \\$3.184 = \\$0.766/\\text{gal}",
     "description": "...",
-    "equation_latex": "P_{\\text{Retail}} = P_{\\text{RBOB}} + \\text{RackMargin}"
+    "hub_distance_miles": 25,
+    "hub_name": "[Distribution Terminal / Rack Hub Name]"
   },
   "shock_scenarios": [
     {
-      "id": "refinery_outage",
-      "name": "Local Refinery Unplanned Outage",
-      "impact_gal": 0.150,
+      "name": "[Scenario Name]",
+      "subtitle": "[Scenario Subtitle]",
+      "price_impact_per_gal": 0.150,
+      "pct_impact": 4.25,
       "description": "..."
     }
   ]
