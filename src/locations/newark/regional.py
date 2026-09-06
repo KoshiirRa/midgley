@@ -143,10 +143,21 @@ def get_newark_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live USGS seismic telemetry for Newark/Mid-Atlantic: {e}")
 
+    # 6. Ingest Live AQI & Industrial Flaring Telemetry (Delaware Valley Refining Hub, Issue #54)
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_telemetry = aqi_connector.fetch_live_aqi_telemetry(corridor="delaware_valley")
+        aqi_headline = aqi_connector.generate_aqi_event_headline(corridor="delaware_valley", telemetry=aqi_telemetry)
+        if aqi_headline:
+            usgs_events.append(aqi_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live AQI telemetry for Delaware Valley: {e}")
+
     frames = [macro_events_df, regional_df, noaa_formatted]
     if usgs_events:
         frames.append(pd.DataFrame(usgs_events))
 
-    # Combine Macro + Regional + DE NOAA Weather + USGS Hydrology & Seismic
+    # Combine Macro + Regional + DE NOAA Weather + USGS Hydrology & Seismic + AQI
     combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)

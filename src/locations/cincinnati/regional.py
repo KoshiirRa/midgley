@@ -157,10 +157,21 @@ def get_cincinnati_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live USGS water telemetry for Cincinnati: {e}")
 
+    # 5. Ingest Live AQI & Industrial Flaring Telemetry (Catlettsburg Refining Hub, Issue #54)
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_telemetry = aqi_connector.fetch_live_aqi_telemetry(corridor="tri_state")
+        aqi_headline = aqi_connector.generate_aqi_event_headline(corridor="tri_state", telemetry=aqi_telemetry)
+        if aqi_headline:
+            usgs_events.append(aqi_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live AQI telemetry for Catlettsburg/Tri-State: {e}")
+
     frames = [macro_events_df, regional_df, noaa_formatted]
     if usgs_events:
         frames.append(pd.DataFrame(usgs_events))
 
-    # Combine Macro + Regional + Local NOAA Weather + USGS Hydrology
+    # Combine Macro + Regional + Local NOAA Weather + USGS Hydrology + AQI
     combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)

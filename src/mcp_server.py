@@ -216,6 +216,20 @@ async def list_tools() -> list[types.Tool]:
                     }
                 }
             }
+        ),
+        types.Tool(
+            name="get_refinery_aqi_anomalies",
+            description="Fetches real-time multi-feed air quality metrics (PurpleAir, OpenAQ, EPA AirNow) and flaring outage anomaly scores for petroleum refining hubs (Issue #54).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "corridor": {
+                        "type": "string",
+                        "description": "Regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, or 'all'",
+                        "default": "bay_area"
+                    }
+                }
+            }
         )
     ]
 
@@ -308,6 +322,14 @@ async def call_tool(
             corr_arg = None if corridor == "all" else corridor
             connector = USGSSeismicConnector()
             res = connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days, min_mag=min_mag)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_refinery_aqi_anomalies":
+            from src.aqi_feed import AQIFeedConnector
+            corridor = args.get("corridor", "bay_area")
+            corr_arg = None if corridor == "all" else corridor
+            connector = AQIFeedConnector()
+            res = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:

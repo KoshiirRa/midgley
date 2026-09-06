@@ -213,10 +213,21 @@ def get_oakland_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live USGS seismic telemetry for Oakland/Bay Area: {e}")
 
+    # 6. Ingest Live AQI & Industrial Flaring Telemetry (Issue #54)
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_telemetry = aqi_connector.fetch_live_aqi_telemetry(corridor="bay_area")
+        aqi_headline = aqi_connector.generate_aqi_event_headline(corridor="bay_area", telemetry=aqi_telemetry)
+        if aqi_headline:
+            usgs_events.append(aqi_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live AQI telemetry for Oakland/Bay Area: {e}")
+
     frames = [macro_events_df, reg_df, weather_events_df]
     if usgs_events:
         frames.append(pd.DataFrame(usgs_events))
 
-    # 6. Concatenate and sort
+    # 7. Concatenate and sort
     combined = pd.concat(frames, ignore_index=True)
     return combined.sort_values('date').reset_index(drop=True)

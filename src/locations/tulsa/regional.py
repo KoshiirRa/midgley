@@ -132,5 +132,16 @@ def get_tulsa_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live USGS seismic telemetry for Cushing/Tulsa: {e}")
 
+    # Ingest Live AQI & Industrial Flaring Telemetry (West Tulsa Refining, Issue #54)
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_telemetry = aqi_connector.fetch_live_aqi_telemetry(corridor="tulsa")
+        aqi_headline = aqi_connector.generate_aqi_event_headline(corridor="tulsa", telemetry=aqi_telemetry)
+        if aqi_headline:
+            frames.append(pd.DataFrame([aqi_headline]))
+    except Exception as e:
+        logger.warning(f"Could not load live AQI telemetry for Tulsa: {e}")
+
     merged = pd.concat(frames, ignore_index=True)
     return merged.sort_values('date').reset_index(drop=True)

@@ -388,14 +388,15 @@ Research and specify:
    - USACE Locks & Dams: Identify key U.S. Army Corps of Engineers (USACE) Locks and Dams along supplying commercial waterways (e.g., Markland, Meldahl, Lock 27, C&D Canal) that govern barge tow transit times and lock closure risks.
 4. Logistics & Power Grid Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, marine congestion, and electric power grid vulnerability—specifically identifying the EIA-930 Electric Grid Balancing Authority (BA) / RTO (e.g., ERCOT, MISO, PJM, CAISO, SWPP, SOCO, TVA, NYIS, ISNE) powering the supplying refineries and pipeline pump stations.
 5. Metro Centroid & Spatial Buffer Anchor: Representative metro geographic coordinates (WGS84 latitude, longitude), primary 5-digit ZIP code, and approximate pipeline/haul distance (miles) to the primary supplying refinery or distribution rack hub (for GeoPandas spatial distance-decay modeling in `src/spatial_refinery.py`).
+6. Fence-Line Air Quality & Industrial Emissions Monitoring (PurpleAir & OpenAQ): Identify fence-line air quality monitoring networks within a 15 km radius downwind of supplying refineries (e.g. PurpleAir optical sensor groups, OpenAQ municipal stations, EPA AirNow station ID) monitoring PM2.5, PM10, SO2, and NO2 to capture early flaring and unplanned FCC unit outage signals in `src/aqi_feed.py`.
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```
 
-### Prompt 4: NOAA Weather, Physical Hydrological & Seismic Hazard Discovery
+### Prompt 4: NOAA Weather, Physical Hydrological, Seismic & Air Quality Outage Hazard Discovery
 ```text
 You are an Operational Meteorologist and Physical Risk Analyst.
-I need to map NOAA Weather Service alerts, hydrological constraints, and geophysical threat factors for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
+I need to map NOAA Weather Service alerts, hydrological constraints, geophysical threat factors, and industrial air quality flaring indicators for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
 
 Identify:
 1. NOAA NWS Forecast Zone Code (e.g., "OKZ060" for Tulsa, "NCZ081" for Greenville).
@@ -409,6 +410,11 @@ Identify:
    - Magnitude Operational Thresholds: Baseline magnitude trigger ($M \ge 3.8$ for shallow induced quakes, $M \ge 4.0$ or $4.5$ for tectonic faults) and catastrophic pipeline trip threshold ($M \ge 6.0$).
    - Facility Vulnerability Targets: Identify exact GPS coordinates for critical refineries, pipeline pump stations, and crude storage tank farms to evaluate distance attenuation and peak ground shaking impact in `src/usgs_seismic.py`.
 6. Regional Geophysical, Wildfire & Grid Hazards: CAL FIRE PSPS wildfire power shutoffs (Diablo/Santa Ana red flag high-wind shutoffs), tsunami advisories (NOAA PTWC), and electric power grid vulnerability (EIA-930 Balancing Authority).
+7. Fence-Line Air Quality & Industrial Flaring Anomaly Thresholds (PurpleAir, OpenAQ, EPA AirNow - `src/aqi_feed.py`):
+   - Refining Corridor Coordinates & Sensor Buffer: Define center GPS coordinates and 15 km radius bounding box enclosing local supplying refineries for live multi-feed AQI queries.
+   - Pollutant Baseline Profiles: Research typical ambient baseline levels and standard deviations for fine particulates ($\text{PM}_{2.5}$ in $\mu\text{g}/\text{m}^3$) and sulfur dioxide ($\text{SO}_2$ in $\text{ppb}$).
+   - Flaring Outage Anomaly Triggers: Identify statistical $Z$-score thresholds ($Z_{\text{PM2.5}} \ge 3.5$ and $Z_{\text{SO2}} \ge 2.5$) to capture emergency catalytic cracker shutdown flaring while discriminating against ambient wildfire/wood smoke (high $\text{PM}_{2.5}$ with baseline $\text{SO}_2$).
+   - Statutory Summer Blend / RVP Mandates: Identify county-level EPA AirNow monitoring sites and statutory Ozone Non-Attainment action day frequencies triggering Reid Vapor Pressure (RVP) summer blend compliance cutovers.
 ```
 
 ### Prompt 5: Decoupled JSON Metadata Profile Generator Prompt
@@ -506,7 +512,7 @@ __all__ = [
 ```
 
 2. **`src/locations/chicago/regional.py`**:
-Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`).
+Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`). If adjacent to supplying refining centers, ingest live fence-line air quality and flaring emissions telemetry via `AQIFeedConnector` (registering corridor bounding box and refinery assets in `AQI_CORRIDORS` inside `src/aqi_feed.py`).
 
 3. **`src/locations/chicago/main.py`**:
 Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering, fits the Ridge estimator, logs predictions to `data/prediction_history.csv`, and returns forecast metrics.

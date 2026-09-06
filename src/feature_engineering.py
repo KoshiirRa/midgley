@@ -329,6 +329,32 @@ def create_feature_matrix(
         df['usgs_cushing_seismic_risk_index'] = 0.0
         df['usgs_composite_seismic_risk_index'] = 0.0
 
+    # Merge Air Quality (AQI) Industrial Emissions Telemetry (Issue #54)
+    # Avoid scalar broadcasting current snapshot across historical training rows
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_data = aqi_connector.fetch_live_aqi_telemetry()
+        aqi_indices = aqi_data.get('indices', {})
+        df['aqi_bay_area_outage_risk_index'] = 0.0
+        df['aqi_tulsa_outage_risk_index'] = 0.0
+        df['aqi_delaware_outage_risk_index'] = 0.0
+        df['aqi_catlettsburg_outage_risk_index'] = 0.0
+        df['aqi_composite_outage_risk_index'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge AQI industrial emissions telemetry: {e}")
+        df['aqi_bay_area_outage_risk_index'] = 0.0
+        df['aqi_tulsa_outage_risk_index'] = 0.0
+        df['aqi_delaware_outage_risk_index'] = 0.0
+        df['aqi_catlettsburg_outage_risk_index'] = 0.0
+        df['aqi_composite_outage_risk_index'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     

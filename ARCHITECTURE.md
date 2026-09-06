@@ -257,7 +257,7 @@ All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/U
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    EXTERNAL DATA CONNECTORS & FEEDS                         │
 │  • EIA, FRED, USDA, OilpriceAPI, Alpha Vantage, Socrata Open Data           │
-│  • GasBuddy, AAA Web Scrapers, NOAA Weather, Finlight Energy News           │
+│  • GasBuddy, AAA, NOAA Weather, USGS Water & Seismic, Multi-Feed AQI        │
 └──────────────────────────────────────┬──────────────────────────────────────┘
                                        │
                                        ▼

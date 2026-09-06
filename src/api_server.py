@@ -863,6 +863,21 @@ def get_usgs_seismic_endpoint(
     return connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days or 30, min_mag=min_mag)
 
 
+@app.get("/api/v1/aqi/live", summary="Get Live Refinery Air Quality & Industrial Flaring Telemetry", tags=["Physical Data Feeds"])
+def get_aqi_live_endpoint(
+    corridor: Optional[str] = Query("bay_area", description="Optional regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, or 'all'")
+):
+    """
+    Returns real-time and historical multi-feed air quality metrics (PM2.5, SO2, NO2, O3)
+    from PurpleAir, OpenAQ, and EPA AirNow evaluated against critical refining hubs for
+    unplanned outage early detection and flaring risk scoring (Issue #54).
+    """
+    from src.aqi_feed import AQIFeedConnector
+    connector = AQIFeedConnector()
+    corr_arg = None if corridor == "all" else corridor
+    return connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+
+
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")
 def get_batch_forecast(req: BatchForecastRequest):
     """
