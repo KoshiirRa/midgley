@@ -435,7 +435,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             "name": meta["name"]
         },
         "forecast": {
-            "model_version": "v1.4 Finlight-LLM",
+            "model_version": "v1.6 Ipatieff",
             "forecast_horizon_days": days,
             "target_date": target_date,
             "current_base_price": base_price,
