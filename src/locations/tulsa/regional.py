@@ -121,5 +121,16 @@ def get_tulsa_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live USGS water telemetry for Tulsa: {e}")
 
+    # Ingest Live USGS Seismic Telemetry (Cushing Hub Induced Seismicity, Issue #55)
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_telemetry = seismic_connector.fetch_live_seismic_telemetry(corridor="cushing_ok")
+        seismic_headline = seismic_connector.generate_seismic_event_headline(corridor="cushing_ok", telemetry=seismic_telemetry)
+        if seismic_headline:
+            frames.append(pd.DataFrame([seismic_headline]))
+    except Exception as e:
+        logger.warning(f"Could not load live USGS seismic telemetry for Cushing/Tulsa: {e}")
+
     merged = pd.concat(frames, ignore_index=True)
     return merged.sort_values('date').reset_index(drop=True)

@@ -85,6 +85,21 @@
 - **API & MCP Tooling:** Added `GET /api/v1/usgs/water_levels` REST endpoint (`src/api_server.py`), counterfactual simulator scenarios (`houston_ship_channel_closure`, `carquinez_atmospheric_river`, `summer_refinery_thermal_cutback`), and registered MCP tool `get_usgs_water_telemetry` (`src/mcp_server.py`).
 - **Comprehensive Verification ([`tests/test_usgs_water_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_usgs_water_feed.py)):** 100% test pass rate covering API parsing, risk index calculations, cluster filtering, 15-minute lookup caching, fallback baseline, REST API, and MCP tool execution.
 
+### 15. USGS Earthquake API Telemetry & Multi-Regional Seismic Fuel Market Risk Scoring (Issue #55)
+- **Zero-Cost GeoJSON Seismic Connector ([`src/usgs_seismic.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/usgs_seismic.py)):** Built `USGSSeismicConnector` querying the USGS Earthquake Web Service (`earthquake.usgs.gov/fdsnws/event/1/query?format=geojson`) across 5 critical refining, pipeline, and storage corridors (`bay_area`, `cushing_ok`, `socal`, `mid_atlantic`, `new_madrid`) within rolling 7-day windows with a 15-minute global TTL cache.
+- **3D Hypocentral Attenuation & Peak Ground Acceleration (PGA) Proxy:** Models focal depth $h$ and epicentral distance $d$ to compute hypocentral distance $R = \sqrt{d^2 + h^2}$, geometric attenuation $w(R) = \frac{1}{1 + (R/35)^2}$, and normalized ground shaking intensity $I = 10^{M - M_{\text{base}}} \times w(R)$.
+- **Multi-Regional Physical Risk Indices:** Calculates continuous risk scores $\in [0, 1]$ and generates qualitative intelligence shock headlines:
+  - `usgs_bay_area_seismic_risk_index`: Monitors Richmond, Martinez, Benicia refineries and SFPP pipeline near Hayward and San Andreas faults.
+  - `usgs_cushing_seismic_risk_index`: Monitors Cushing WTI crude storage tank farms, Tulsa, and Ponca City refineries against wastewater injection induced seismicity ($M_{\text{base}}=3.6$).
+  - `usgs_socal_seismic_risk_index`: Monitors Torrance, Wilmington, El Segundo, Carson refineries and Carson terminal along Newport-Inglewood fault.
+  - `usgs_mid_atlantic_seismic_risk_index`: Monitors Delaware City, Bayway, and Buckeye pipeline along Ramapo seismic zone.
+  - `usgs_new_madrid_seismic_risk_index`: Monitors critical mid-continent and cross-Mississippi crude and product pipelines along New Madrid seismic zone.
+  - `usgs_composite_seismic_risk_index`: Weighted macro risk index across all monitored corridors.
+- **Regional Agent Calibration & Feature Matrix:** Ingests live telemetry into `oakland`, `tulsa`, and `newark` regional models, appending breaking shock headlines when corridor risk $\ge 0.20$, dynamically weighting counterfactual baseline simulations, and integrating macro indices into [`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py).
+- **API & MCP Tooling:** Added `GET /api/v1/usgs/seismic` endpoint ([`src/api_server.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/api_server.py)), calibrated `hayward_quake` counterfactual scenario ($+18.5\text{ c/gal}$ wholesale spike), and registered MCP tool `get_usgs_seismic_telemetry` ([`src/mcp_server.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/mcp_server.py)).
+- **Web App Dashboard Binding:** Bound Physical Hazard Risk Matrix in `docs/oakland.html` to live USGS seismic telemetry status.
+- **Comprehensive Verification ([`tests/test_usgs_seismic.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_usgs_seismic.py)):** 100% test pass rate across 9 unit and integration tests (distance math, 3D attenuation, GeoJSON parsing, caching, Cushing induced quakes, REST endpoint, and MCP tool execution).
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -93,12 +108,13 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `348 passed` (100% pass rate across all test modules including USGS Water Data telemetry suite).
+  **Result:** `357 passed` (100% pass rate across all test modules including USGS Earthquake and USGS Water Data telemetry suites).
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
 - **Issue #53**: `feat(core-api): Monitor open-access research papers via CORE API during weekly self-review` (Closed as completed)
+- **Issue #55**: `[Feature Request] Ingest live USGS Earthquake API feeds for real-time seismic fuel market risk scoring` (Closed as completed)
 - **Issue #56**: `feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting` (Closed as completed)
 - **Issue #95**: `[Feature Request] Implement GeoPandas Spatial Refinery Distance Buffering for Metro Agents` (Closed as completed)
 - **Issue #112**: `[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting` (Closed as completed)
@@ -110,4 +126,4 @@
 - **Issue #203**: `fix(ingestion): Resolve Baker Hughes NameError and feature matrix drop` (Closed as completed)
 - **Issue #204**: `feat(mlops): Refine execution audit naming & sanitize news feed headlines` (Closed as completed)
 - **Issue #206**: `fix(scraping): Resolve Tulsa AAA state average scraper bug & integrate py_gasbuddy GraphQL feeds` (Closed as completed)
-- **Issue #210**: `feat(mlops): Implement Automated Model Degradation & Baseline Underperformance Alerting` (Closed as completed)`
+- **Issue #210**: `feat(mlops): Implement Automated Model Degradation & Baseline Underperformance Alerting` (Closed as completed)

@@ -193,6 +193,29 @@ async def list_tools() -> list[types.Tool]:
                     }
                 }
             }
+        ),
+        types.Tool(
+            name="get_usgs_seismic_telemetry",
+            description="Fetches real-time USGS earthquake and ground shaking telemetry evaluated against critical petroleum refining, pipeline, and storage infrastructure (Issue #55).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "corridor": {
+                        "type": "string",
+                        "description": "Regional corridor filter: bay_area, cushing_ok, socal, mid_atlantic, new_madrid, or 'all'",
+                        "default": "bay_area"
+                    },
+                    "days": {
+                        "type": "integer",
+                        "description": "Rolling window in days (default: 30)",
+                        "default": 30
+                    },
+                    "min_mag": {
+                        "type": "number",
+                        "description": "Optional minimum magnitude threshold"
+                    }
+                }
+            }
         )
     ]
 
@@ -273,6 +296,18 @@ async def call_tool(
             cluster = args.get("cluster")
             connector = USGSWaterFeedConnector()
             res = connector.fetch_live_water_telemetry(cluster=cluster)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_usgs_seismic_telemetry":
+            from src.usgs_seismic import USGSSeismicConnector
+            corridor = args.get("corridor", "bay_area")
+            days = int(args.get("days", 30))
+            min_mag = args.get("min_mag")
+            if min_mag is not None:
+                min_mag = float(min_mag)
+            corr_arg = None if corridor == "all" else corridor
+            connector = USGSSeismicConnector()
+            res = connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days, min_mag=min_mag)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:

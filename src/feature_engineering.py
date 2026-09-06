@@ -309,6 +309,26 @@ def create_feature_matrix(
         df['usgs_carquinez_berthing_risk_index'] = 0.0
         df['usgs_delaware_refinery_thermal_index'] = 0.0
 
+    # Merge USGS Seismic Data Telemetry (Issue #55)
+    # Avoid scalar broadcasting current snapshot across historical training rows
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_data = seismic_connector.fetch_live_seismic_telemetry()
+        seismic_indices = seismic_data.get('indices', {})
+        df['usgs_bay_area_seismic_risk_index'] = 0.0
+        df['usgs_cushing_seismic_risk_index'] = 0.0
+        df['usgs_composite_seismic_risk_index'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge USGS seismic data telemetry: {e}")
+        df['usgs_bay_area_seismic_risk_index'] = 0.0
+        df['usgs_cushing_seismic_risk_index'] = 0.0
+        df['usgs_composite_seismic_risk_index'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     

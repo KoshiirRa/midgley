@@ -132,10 +132,21 @@ def get_newark_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live USGS water telemetry for Newark: {e}")
 
+    # 5. Ingest Live USGS Seismic Telemetry (Mid-Atlantic / Ramapo Fault Corridor, Issue #55)
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_telemetry = seismic_connector.fetch_live_seismic_telemetry(corridor="mid_atlantic")
+        seismic_headline = seismic_connector.generate_seismic_event_headline(corridor="mid_atlantic", telemetry=seismic_telemetry)
+        if seismic_headline:
+            usgs_events.append(seismic_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live USGS seismic telemetry for Newark/Mid-Atlantic: {e}")
+
     frames = [macro_events_df, regional_df, noaa_formatted]
     if usgs_events:
         frames.append(pd.DataFrame(usgs_events))
 
-    # Combine Macro + Regional + DE NOAA Weather + USGS Hydrology
+    # Combine Macro + Regional + DE NOAA Weather + USGS Hydrology & Seismic
     combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)

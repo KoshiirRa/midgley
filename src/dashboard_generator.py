@@ -4019,6 +4019,10 @@ def generate_public_dashboard():
                         <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">+$0.420/gal</span>
                     </div>
                     <p class="text-slate-400">Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips.</p>
+                    <div class="pt-1 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+                        <span class="text-slate-500 uppercase tracking-wider">USGS FDSNWS Feed</span>
+                        {{USGS_SEISMIC_STATUS_BADGE}}
+                    </div>
                 </div>
 
                 <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/30 space-y-2">
@@ -4113,7 +4117,19 @@ def generate_public_dashboard():
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca'))
+        try:
+            from src.usgs_seismic import USGSSeismicConnector
+            _seismic_c = USGSSeismicConnector()
+            _s_data = _seismic_c.fetch_live_seismic_telemetry(corridor="bay_area")
+            _s_risk = _s_data.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
+            if _s_risk >= 0.25:
+                seismic_badge = f'<span class="text-rose-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Active Risk: {_s_risk:.2f}</span>'
+            else:
+                seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
+        except Exception:
+            seismic_badge = '<span class="text-slate-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-nodes"></i> Monitored</span>'
+
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))

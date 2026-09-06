@@ -202,10 +202,21 @@ def get_oakland_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live USGS water telemetry for Oakland/Bay Area: {e}")
 
+    # 5. Ingest Live USGS Seismic Telemetry (Issue #55)
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_telemetry = seismic_connector.fetch_live_seismic_telemetry(corridor="bay_area")
+        seismic_headline = seismic_connector.generate_seismic_event_headline(corridor="bay_area", telemetry=seismic_telemetry)
+        if seismic_headline:
+            usgs_events.append(seismic_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live USGS seismic telemetry for Oakland/Bay Area: {e}")
+
     frames = [macro_events_df, reg_df, weather_events_df]
     if usgs_events:
         frames.append(pd.DataFrame(usgs_events))
 
-    # 5. Concatenate and sort
+    # 6. Concatenate and sort
     combined = pd.concat(frames, ignore_index=True)
     return combined.sort_values('date').reset_index(drop=True)

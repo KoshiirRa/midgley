@@ -847,6 +847,22 @@ def get_usgs_water_levels_endpoint(cluster: Optional[str] = Query(None, descript
     return connector.fetch_live_water_telemetry(cluster=cluster)
 
 
+@app.get("/api/v1/usgs/seismic", summary="Get Live USGS Earthquake & Seismic Telemetry", tags=["Physical Data Feeds"])
+def get_usgs_seismic_endpoint(
+    corridor: Optional[str] = Query("bay_area", description="Optional regional corridor filter: bay_area, cushing_ok, socal, mid_atlantic, new_madrid, or 'all'"),
+    days: Optional[int] = Query(30, description="Rolling historical window in days (default: 30)"),
+    min_mag: Optional[float] = Query(None, description="Minimum earthquake magnitude filter (defaults to corridor threshold)")
+):
+    """
+    Returns real-time and historical earthquake telemetry from the USGS Earthquake Web Service API
+    (earthquake.usgs.gov/fdsnws/event/1/) evaluated against critical refining, pipeline, and storage infrastructure (Issue #55).
+    """
+    from src.usgs_seismic import USGSSeismicConnector
+    connector = USGSSeismicConnector()
+    corr_arg = None if corridor == "all" else corridor
+    return connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days or 30, min_mag=min_mag)
+
+
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")
 def get_batch_forecast(req: BatchForecastRequest):
     """
@@ -924,6 +940,17 @@ def simulate_shock(req: SimulateRequest):
     base_price = live_res.get("price", 3.184)
 
     shock_pct = req.custom_shock_pct if req.custom_shock_pct is not None else scenario_info["shock_pct"]
+    if req.scenario_id == "hayward_quake" and req.custom_shock_pct is None:
+        try:
+            from src.usgs_seismic import USGSSeismicConnector
+            seismic_conn = USGSSeismicConnector()
+            seismic_live = seismic_conn.fetch_live_seismic_telemetry(corridor="bay_area")
+            live_risk = seismic_live.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
+            if live_risk > 0.10:
+                shock_pct = round(scenario_info["shock_pct"] + (live_risk * 0.05), 4)
+        except Exception:
+            pass
+
     dollar_impact = round(base_price * shock_pct, 3)
     simulated_price = round(base_price + dollar_impact, 3)
 
