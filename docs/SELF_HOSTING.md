@@ -392,10 +392,10 @@ Research and specify:
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```
 
-### Prompt 4: NOAA Weather & Physical Hydrological Risk Discovery
+### Prompt 4: NOAA Weather, Physical Hydrological & Seismic Hazard Discovery
 ```text
 You are an Operational Meteorologist and Physical Risk Analyst.
-I need to map NOAA Weather Service alerts and geophysical threat factors for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
+I need to map NOAA Weather Service alerts, hydrological constraints, and geophysical threat factors for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
 
 Identify:
 1. NOAA NWS Forecast Zone Code (e.g., "OKZ060" for Tulsa, "NCZ081" for Greenville).
@@ -403,7 +403,12 @@ Identify:
 3. Cold Weather Freeze / Heat Stress & Degree Days: Sub-zero freeze or extreme summer heat vulnerabilities impacting refinery instrumentation, crude pipelines, or cooling tower thermal compliance; identify baseline Heating Degree Days (HDD) and Cooling Degree Days (CDD) profile.
 4. Hydrological, Coastal & Marine Hazards: Local river gauge flood stages & water temperatures (USGS Water Data API telemetry: streamflow `00060`, gage height `00065`, water temperature `00010`, specific conductance `00095`); exposure to NOAA National Hurricane Center (NHC) tropical cyclone tracks, coastal storm surge, and BSEE offshore crude production shut-in alerts.
    - Candidate USGS Stations & Thresholds: Identify primary 8-digit USGS station site IDs and flood stage thresholds (action stage, flood stage, moderate flood stage in feet) that could disrupt petroleum rack operations, refinery cooling, or barge navigation.
-5. Regional Geophysical & Grid Hazards: CAL FIRE PSPS wildfire power shutoffs, tsunami advisories (NOAA PTWC), or USGS seismic fault lines (identifying active fault names, historical M >= 4.0 / M >= 6.0 quakes, and geographic bounding box for live USGS earthquake monitoring).
+5. Seismic & Earthquake Hazard Corridors (USGS Earthquake Web Service API - fdsnws/event/1/):
+   - Regional Faults & Seismic Clusters: Identify active tectonic fault lines (e.g. Hayward, San Andreas, Ramapo, New Madrid) or wastewater-induced seismicity fault zones (e.g. Oklahoma/Cushing Anadarko & Nemaha fault zones).
+   - Geographic Bounding Box: Define `minlatitude`, `maxlatitude`, `minlongitude`, `maxlongitude` coordinates enclosing the regional refining facilities and key delivery pipelines for live USGS GeoJSON queries (`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson`).
+   - Magnitude Operational Thresholds: Baseline magnitude trigger ($M \ge 3.8$ for shallow induced quakes, $M \ge 4.0$ or $4.5$ for tectonic faults) and catastrophic pipeline trip threshold ($M \ge 6.0$).
+   - Facility Vulnerability Targets: Identify exact GPS coordinates for critical refineries, pipeline pump stations, and crude storage tank farms to evaluate distance attenuation and peak ground shaking impact in `src/usgs_seismic.py`.
+6. Regional Geophysical, Wildfire & Grid Hazards: CAL FIRE PSPS wildfire power shutoffs (Diablo/Santa Ana red flag high-wind shutoffs), tsunami advisories (NOAA PTWC), and electric power grid vulnerability (EIA-930 Balancing Authority).
 ```
 
 ### Prompt 5: Decoupled JSON Metadata Profile Generator Prompt
@@ -501,7 +506,7 @@ __all__ = [
 ```
 
 2. **`src/locations/chicago/regional.py`**:
-Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `get_usgs_water_feed_summary()` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`).
+Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`).
 
 3. **`src/locations/chicago/main.py`**:
 Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering, fits the Ridge estimator, logs predictions to `data/prediction_history.csv`, and returns forecast metrics.

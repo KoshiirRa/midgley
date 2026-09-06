@@ -69,6 +69,7 @@ flowchart TD
         F4["Executive Social Feed (Trump Twitter / Truth Social)"]
         F5["Physical Alternative Feeds (Cboe OVX & Baker Hughes)"]
         F6["USGS Water Data Telemetry (Streamflow, Stage & Cooling Temp)"]
+        F7["USGS Earthquake API Telemetry (earthquake.usgs.gov)"]
     end
 
     subgraph EXTRACTOR["1. Event, Weather & Physical Extraction Agent"]
@@ -172,6 +173,8 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 19. **Prometheus Telemetry Metrics Exporter (`src/telemetry.py` & `src/api_server.py`, Issue #107):** Exposes `/metrics` and `/api/v1/metrics` in Prometheus text exposition format, tracking TokenTab token consumption, IPASIS security check/block counts, 3-tier cache hit rates, request counters, and API quota remaining ratios for Grafana observability dashboards.
 20. **Zero-Cost Internet Archive Wayback Machine Cloud Archiving (`src/wayback_archiver.py`, Issue #197):** Automatically submits breaking energy news, OPEC bulletins, and refinery outage URLs to the Internet Archive Save API (`https://web.archive.org/save/{url}`), attaching permanent `archive_url` strings to event results in `data/intraday_events.json` and system logs.
 21. **GeoPandas Spatial Refinery Distance Buffering Engine (`src/spatial_refinery.py`, Issue #95):** Calculates spatial distance-decay calculation from oil refineries, pipeline corridors, and marine terminals to regional retail gas station clusters using GeoPandas & Shapely in Web Mercator projection (`EPSG:3857`), generating spatial buffer rings (`25mi`, `50mi`, `100mi`, `250mi`, `500mi`) and exponential attenuation weights ($w(d) = \exp(-d / 150.0)$) with spherical Haversine fallback.
+22. **USGS Water Data API Telemetry (`src/usgs_water_feed.py`, Issue #56):** Ingests real-time streamflow, gage height, water temperature, and specific conductance across 13 key stations in 6 inland waterway and refining corridors, providing physical bottleneck risk scoring via `GET /api/v1/usgs/water_levels` and MCP tool `get_usgs_water_telemetry`.
+23. **USGS Earthquake Web Service Telemetry (`src/usgs_seismic.py`, Issue #55):** Ingests live earthquake GeoJSON data from `earthquake.usgs.gov/fdsnws/event/1/` across 5 critical energy corridors (`bay_area`, `cushing_ok`, `socal`, `mid_atlantic`, `new_madrid`), calculating facility-level distance-decay ground shaking proxies, regional composite risk indices, and pipeline emergency shutoff flags via `GET /api/v1/usgs/seismic` and MCP tool `get_usgs_seismic_telemetry`.
 
 ---
 

@@ -264,7 +264,54 @@ curl -X GET "http://localhost:8000/api/v1/usgs/water_levels?cluster=inland_barge
 
 ---
 
-### 6. `POST /api/v1/forecast/simulate`
+### 6. `GET /api/v1/usgs/seismic`
+Returns real-time and historical earthquake telemetry from the USGS Earthquake Web Service API (`earthquake.usgs.gov/fdsnws/event/1/`) evaluated against critical refining, pipeline, and storage infrastructure (Issue #55).
+
+**Query Parameters:**
+* `corridor` (optional, default: `bay_area`): Filter by regional refining and delivery corridor (`bay_area`, `cushing_ok`, `socal`, `mid_atlantic`, `new_madrid`, or `all`).
+* `days` (optional, default: `30`): Rolling temporal observation window in days.
+* `min_mag` (optional): Minimum earthquake magnitude filter (defaults to corridor-specific threshold: $4.0$ in California, $3.8$ in Oklahoma/Mid-Atlantic).
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/usgs/seismic?corridor=bay_area"
+```
+
+**Example Response:**
+```json
+{
+  "status": "SUCCESS",
+  "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+  "timestamp": "2026-09-06 00:00:00",
+  "filtered_corridor": "bay_area",
+  "temporal_window_days": 30,
+  "events": [],
+  "corridors": {
+    "bay_area": {
+      "corridor_risk_index": 0.0,
+      "max_magnitude": 0.0,
+      "active_events_count": 0,
+      "highest_impact_event": null
+    }
+  },
+  "indices": {
+    "bay_area_seismic_risk_index": 0.0,
+    "cushing_storage_seismic_risk_index": 0.0,
+    "socal_refining_seismic_risk_index": 0.0,
+    "mid_atlantic_seismic_risk_index": 0.0,
+    "new_madrid_seismic_risk_index": 0.0,
+    "composite_seismic_risk_index": 0.0,
+    "is_pipeline_emergency_shutdown_risk": false,
+    "is_refinery_inspection_advisory": false,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0
+  }
+}
+```
+
+---
+
+### 7. `POST /api/v1/forecast/simulate`
 Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks.
 
 **Request Body:**
