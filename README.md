@@ -12,18 +12,18 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-05 13:13 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-04 07:04 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.215`/gal | **`$3.409`/gal** | **UP 📈** | `2026-09-11` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.611`/gal | **`$3.514`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `$3.381`/gal | **`$3.291`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
-| **Cincinnati, OH Retail** | `$3.909`/gal | **`$3.815`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `$3.947`/gal | **`$3.852`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
-| **Greenville, NC Metro Retail** | `$3.705`/gal | **`$3.613`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `$5.853`/gal | **`$5.705`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `$5.971`/gal | **`$5.820`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `$3.104`/gal | **`$3.202`/gal** | **UP 📈** | `2026-09-09` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.717`/gal | **`$3.572`/gal** | **DOWN 📉** | `2026-09-09` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.988`/gal | **`$3.836`/gal** | **DOWN 📉** | `2026-09-09` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `$3.900`/gal | **`$3.758`/gal** | **DOWN 📉** | `2026-09-09` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.848`/gal | **`$3.708`/gal** | **DOWN 📉** | `2026-09-09` | `v1.4-Finlight-Ridge` |
+| **Greenville, NC Metro Retail** | `$3.623`/gal | **`$3.493`/gal** | **DOWN 📉** | `2026-09-09` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `$5.782`/gal | **`$5.553`/gal** | **DOWN 📉** | `2026-09-09` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `$5.782`/gal | **`$5.553`/gal** | **DOWN 📉** | `2026-09-09` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -170,6 +170,7 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 18. **CodeCogs Visual LaTeX Math UI & Markdown Fallbacks (`src/dashboard_generator.py`, Issue #52):** Generates CodeCogs SVG equation image URLs (`https://latex.codecogs.com/svg.latex?...`) embedding visual math fallbacks alongside raw LaTeX in `docs/technical_breakdown.md` for visual math rendering across GitHub Markdown views, mobile readers, and RSS feeds.
 19. **Prometheus Telemetry Metrics Exporter (`src/telemetry.py` & `src/api_server.py`, Issue #107):** Exposes `/metrics` and `/api/v1/metrics` in Prometheus text exposition format, tracking TokenTab token consumption, IPASIS security check/block counts, 3-tier cache hit rates, request counters, and API quota remaining ratios for Grafana observability dashboards.
 20. **Zero-Cost Internet Archive Wayback Machine Cloud Archiving (`src/wayback_archiver.py`, Issue #197):** Automatically submits breaking energy news, OPEC bulletins, and refinery outage URLs to the Internet Archive Save API (`https://web.archive.org/save/{url}`), attaching permanent `archive_url` strings to event results in `data/intraday_events.json` and system logs.
+21. **GeoPandas Spatial Refinery Distance Buffering Engine (`src/spatial_refinery.py`, Issue #95):** Calculates spatial distance-decay calculation from oil refineries, pipeline corridors, and marine terminals to regional retail gas station clusters using GeoPandas & Shapely in Web Mercator projection (`EPSG:3857`), generating spatial buffer rings (`25mi`, `50mi`, `100mi`, `250mi`, `500mi`) and exponential attenuation weights ($w(d) = \exp(-d / 150.0)$) with spherical Haversine fallback.
 
 ---
 
