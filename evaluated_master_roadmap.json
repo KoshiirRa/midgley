@@ -770,7 +770,7 @@
   },
   {
     "number": 93,
-    "title": "[Feature Request] Implement NeuralProphet Hybrid Estimator with Exogenous Shock Decay",
+    "title": "[Feature Request] Implement Nixtla NeuralForecast (N-BEATSx / NHITS) Hybrid Estimator with Exogenous Shock Decay",
     "category": "Quantitative Modeling & ML Core",
     "status": "Ready",
     "milestone": "Regular Model v2.0 \"Hubbert\"",
@@ -782,7 +782,7 @@
     "effort_days": "1-2 weeks",
     "risk": "Medium Risk",
     "risk_color": "Yellow",
-    "body_snippet": "## Summary Integrate **\\NeuralProphet\\** (\\github.com/ourownstory/neural_prophet\\) into \\src/models.py\\ as a hybrid neural time-series estimator combining PyTorch auto-autoregressive terms with exogenous LLM event shock decay vectors.  ## Motivations & Value - **Non-Linear Event Modeling:** Captures non-linear interactions between macroeconomic indicators and event memory decay vectors (\\{1/2} = 4..."
+    "body_snippet": "## Summary Integrate **Nixtla \\NeuralForecast\\** (\\github.com/Nixtla/neuralforecast\\, N-BEATSx / NHITS) into \\src/models.py\\ as a modern neural time-series estimator combining PyTorch architectures with exogenous LLM event shock decay vectors (\\t_{1/2} = 4.0\\text{ to }5.0\\text{ days}\\$) and multi-quantile uncertainty bounds (\\MQLoss\\). Supersedes legacy unmaintained NeuralProphet (Issue #93 pivot)."
   },
   {
     "number": 94,

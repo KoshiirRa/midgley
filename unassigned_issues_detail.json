@@ -482,7 +482,7 @@
     "url": "https://github.com/KoshiirRa/midgley/issues/94"
   },
   {
-    "body": "## Summary\nIntegrate **\\NeuralProphet\\** (\\github.com/ourownstory/neural_prophet\\) into \\src/models.py\\ as a hybrid neural time-series estimator combining PyTorch auto-autoregressive terms with exogenous LLM event shock decay vectors.\n\n## Motivations & Value\n- **Non-Linear Event Modeling:** Captures non-linear interactions between macroeconomic indicators and event memory decay vectors (\\{1/2} = 4.0\\\\text{ to }5.0\\\\text{ days}\\$).\n- **Model Diversity:** Adds a third quantitative estimator alongside Ridge Regression and XGBoost.\n\n## Acceptance Criteria\n- [ ] Implement NeuralProphet estimator class in \\src/models.py\\.\n- [ ] Train hybrid model on chronological 80/20 train/test splits.\n- [ ] Log out-of-time MAE and directional hit rates.",
+    "body": "## Summary\nIntegrate **Nixtla \\NeuralForecast\\** (\\github.com/Nixtla/neuralforecast\\, specifically \\NBEATSx\\ / \\NHITS\\) into \\src/models.py\\ as a modern neural time-series benchmark estimator combining PyTorch architectures with exogenous LLM event shock decay vectors (\\t_{1/2} = 4.0\\text{ to }5.0\\text{ days}\\$) and multi-quantile uncertainty bounds (\\MQLoss\\). Supersedes legacy unmaintained NeuralProphet (Issue #93 pivot).\n\n## Motivations & Value\n- **Non-Linear Exogenous Event Modeling:** Uses \\NBEATSx\\ / \\NHITS\\ with \\hist_exog_list\\ to capture non-linear interactions between exogenous LLM shock decay vectors, 3-2-1 crack spread margins, and EIA grid stress Z-scores.\n- **SOTA Deep Learning Benchmark:** Replaces unmaintained NeuralProphet (stagnant since v0.9.0 in June 2024) with Nixtla's actively maintained PyTorch forecasting framework.\n- **Probabilistic Forecasting:** Generates \\P_{10}\\$, \\P_{50}\\$, and \\P_{90}\\$ quantile prediction bands natively via \\MQLoss\\.\n\n## Acceptance Criteria\n- [ ] Implement \\NixtlaNeuralForecaster\\ wrapper class (with \\NBEATSx\\ / \\NHITS\\ & \\MQLoss\\) in \\src/models.py\\ / \\src/nixtla_forecaster.py\\.\n- [ ] Support exogenous feature passing (\\hist_exog_list\\ for LLM shock decay and crack spreads; \\futr_exog_list\\ for calendar features).\n- [ ] Provide analytical fallback estimator when \\neuralforecast\\ / PyTorch dependencies are omitted.\n- [ ] Train hybrid model on chronological 80/20 train/test splits and log out-of-time MAE, RMSE, and directional hit rates.\n- [ ] Add unit test coverage.",
     "createdAt": "2026-08-25T16:55:02Z",
     "labels": [
       {
@@ -500,7 +500,7 @@
     ],
     "milestone": null,
     "number": 93,
-    "title": "[Feature Request] Implement NeuralProphet Hybrid Estimator with Exogenous Shock Decay",
+    "title": "[Feature Request] Implement Nixtla NeuralForecast (N-BEATSx / NHITS) Hybrid Estimator with Exogenous Shock Decay",
     "url": "https://github.com/KoshiirRa/midgley/issues/93"
   },
   {

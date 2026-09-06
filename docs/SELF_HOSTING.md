@@ -534,6 +534,15 @@ Whenever adding, modifying, or removing data connectors, API feeds, or regional 
 5. Update `Project-History-and-Roadmap.md` under the active release phase.
 6. Commit and push to `origin/master`.
 
+### Step 10: Modern Neural Forecasting with Nixtla NeuralForecast (Issue #93 Pivot)
+For advanced PyTorch deep learning forecasting benchmarks, Midgley specifies **Nixtla `NeuralForecast`** (`N-BEATSx` / `NHITS` with `MQLoss`), which supersedes legacy unmaintained NeuralProphet (stagnant since `v0.9.0` in June 2024):
+1. Install optional Nixtla dependencies:
+   ```bash
+   pip install neuralforecast torch
+   ```
+2. **Exogenous Feature Integration**: Nixtla `NeuralForecast` accepts historical exogenous shock vectors (`hist_exog_list=['event_shock_decay_5d', 'crack_spread_321_delta_5d']`) and future calendar features (`futr_exog_list=['is_weekend']`).
+3. **Resiliency**: If `neuralforecast` or `torch` is omitted in lightweight container environments, Midgley defaults to regularized Ridge/XGBoost and Google TimesFM zero-shot fallback estimators with zero runtime downtime.
+
 ---
 
 ## 9. Verification, Health Checks & Diagnostics
