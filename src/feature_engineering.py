@@ -10,7 +10,7 @@ import numpy as np
 import logging
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed, fetch_baker_hughes_rig_counts
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
-from src.data_ingestion import CFTCDataConnector, FERCDataConnector
+from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +82,8 @@ def create_feature_matrix(
     events_df: pd.DataFrame = None, 
     forecast_horizon: int = 5,
     decay_half_life_days: float = 5.0,
-    region: str = "Tulsa_OK"
+    region: str = "Tulsa_OK",
+    as_of_cutoff: str = None
 ) -> pd.DataFrame:
     """
     Creates a unified feature dataset for time-series forecasting.
@@ -93,6 +94,7 @@ def create_feature_matrix(
     - forecast_horizon: Number of business days ahead to forecast (default 5 days = 1 week)
     - decay_half_life_days: Exponential decay half-life for news event sentiment impact
     - region: Target metropolitan area or hub name for locale-specific weather routing
+    - as_of_cutoff: Publication timestamp cutoff (YYYY-MM-DD [HH:MM:SS]) for point-in-time bitemporal filtering (Issue #121)
     """
     logger.info(f"Engineering features for region '{region}' with {forecast_horizon}-day forecast horizon...")
     df = market_df.copy()

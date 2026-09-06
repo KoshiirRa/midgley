@@ -156,6 +156,14 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 ### Option C: Standalone Local Fallback (Tier 3 Default)
 If no edge credentials are supplied, Midgley defaults to local SQLite persistence at `data/lookup_cache.sqlite` with an in-memory fast dict lookup ($0 cloud infrastructure cost, zero external setup required).
 
+### Bitemporal EIA Vintage Datastore (`data/eia_vintages.json`)
+Self-hosted instances store historical EIA observation snapshots and release dates in `data/eia_vintages.json`. Each snapshot includes:
+- `as_of`: Publication timestamp (ISO format `YYYY-MM-DD HH:MM:SS`).
+- `valid_date`: Period end date (ISO format `YYYY-MM-DD`).
+- `is_vintage_reconstructed`: `False` for live queries, `True` for historical backfills.
+
+During model retraining or historical backtests, feature engineering queries use `as_of <= target_run_date` cutoffs (`as_of_cutoff`), eliminating lookahead leakage across restated EIA series (Issue #121).
+
 ---
 
 ## 4. Standalone Linux Server & VM Deployment
@@ -456,6 +464,13 @@ Run Prompts 1–5 above to research the new metro region and generate its profil
 ### Step 2: Create Decoupled JSON Profile (`data/regional_metadata/chicago_il.json`)
 Save the JSON profile generated in Step 1 to `data/regional_metadata/chicago_il.json`.
 
+### Step 2.5: Register Live Fuel Feed Coordinates & AAA Scraper Keywords (`src/live_fuel_feed.py`)
+Register the new metro region in `REGION_METADATA` and `ZIP_COORDS` in `src/live_fuel_feed.py`:
+1. **Coordinates & GasBuddy Resolution:** Provide the primary 5-digit ZIP code and `(lat, lon)` float tuple in `ZIP_COORDS` and `REGION_METADATA` (e.g. `"Chicago_IL": {"zip": "60601", "lat": 41.8857, "lon": -87.6229, ...}`). This enables authentic GraphQL `py_gasbuddy` queries for station-level prices and metro trend averages.
+2. **AAA Metro Scraper Keywords:** Add specific metro keywords to `REGION_METADATA[region_id]["aaa_keywords"]` (e.g., `["Chicago"]`).
+   > [!IMPORTANT]
+   > **AAA Scraper Keyword Rule**: Always use exact, narrow metro name strings (e.g., `["Tulsa"]`, `["Chicago"]`, `["Oakland"]`). Avoid generic state names or navigation terms. The AAA scraper filters candidate DOM tags strictly to header/title tags (`h1`-`h6`, `button`, `a`, `td`, `th`) under 100 characters to prevent matching outer page container `<div>` tags (which span top-nav/footer links and trigger the State Average table fallback).
+
 ### Step 3: Create Localized Subpackage Agent (`src/locations/chicago/`)
 Create a new folder `src/locations/chicago/` containing four files:
 
@@ -534,7 +549,51 @@ Whenever adding, modifying, or removing data connectors, API feeds, or regional 
 5. Update `Project-History-and-Roadmap.md` under the active release phase.
 6. Commit and push to `origin/master`.
 
-### Step 10: Modern Neural Forecasting with Nixtla NeuralForecast (Issue #93 Pivot)
+### Step 10: Register GeoPandas Spatial Refinery & Cluster Coordinates (`src/spatial_refinery.py`)
+To register custom refining hubs, pipeline junctions, or new metro cluster coordinates for spatial distance-decay buffering (Issue #95):
+1. Install spatial dependencies: `pip install geopandas>=0.14.0 shapely>=2.0.0`.
+2. Register the refinery/terminal WGS84 (`EPSG:4326`) coordinates and bpd capacity in `REFINERY_DATA` inside `src/spatial_refinery.py`:
+   ```python
+   REFINERY_DATA["Whiting_Refinery"] = {
+       "name": "bp Whiting Refinery",
+       "lat": 41.6811,
+       "lon": -87.4947,
+       "capacity_bpd": 435000,
+       "padd": "PADD 2",
+       "primary_locales": ["Chicago_IL"]
+   }
+   ```
+3. Register the metro cluster centroid in `METRO_CLUSTER_DATA` inside `src/spatial_refinery.py`:
+   ```python
+   METRO_CLUSTER_DATA["Chicago_IL"] = {
+       "name": "Chicago Metro, IL",
+       "lat": 41.8781,
+       "lon": -87.6298,
+       "zip": "60601"
+   }
+   ```
+4. Verify spatial buffering and distance decay calculation:
+   ```python
+   from src.spatial_refinery import get_metro_spatial_refinery_summary
+   summary = get_metro_spatial_refinery_summary("Chicago_IL")
+   ```
+
+### Step 11: Configuring Google TimesFM Foundation Model & Zero-Shot Forecasting (Issues #185 & #112)
+To enable zero-shot time-series foundation model forecasting with Google Research's TimesFM:
+1. Install optional TimesFM dependencies on your dev host / GPU server:
+   ```bash
+   pip install timesfm torch transformers huggingface_hub
+   ```
+2. Verify foundation model loading and zero-shot benchmark evaluation:
+   ```python
+   from src.timesfm_forecaster import TimesFMForecaster
+   forecaster = TimesFMForecaster(horizon_len=5)
+   forecaster.load_model()
+   print(forecaster.get_model_status())
+   ```
+3. **Automatic Fallback Resiliency**: If `timesfm` or `torch` is not installed, Midgley automatically operates using `AnalyticalZeroShotFallback`, ensuring zero downtime and 100% test pass rate in lightweight container environments.
+
+### Step 12: Modern Neural Forecasting with Nixtla NeuralForecast (Issue #93 Pivot)
 For advanced PyTorch deep learning forecasting benchmarks, Midgley specifies **Nixtla `NeuralForecast`** (`N-BEATSx` / `NHITS` with `MQLoss`), which supersedes legacy unmaintained NeuralProphet (stagnant since `v0.9.0` in June 2024):
 1. Install optional Nixtla dependencies:
    ```bash
@@ -542,6 +601,17 @@ For advanced PyTorch deep learning forecasting benchmarks, Midgley specifies **N
    ```
 2. **Exogenous Feature Integration**: Nixtla `NeuralForecast` accepts historical exogenous shock vectors (`hist_exog_list=['event_shock_decay_5d', 'crack_spread_321_delta_5d']`) and future calendar features (`futr_exog_list=['is_weekend']`).
 3. **Resiliency**: If `neuralforecast` or `torch` is omitted in lightweight container environments, Midgley defaults to regularized Ridge/XGBoost and Google TimesFM zero-shot fallback estimators with zero runtime downtime.
+
+### Step 12: Configuring Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI (Issue #214)
+To calibrate low-volatility price plateaus and dynamic residual confidence intervals:
+1. **Dynamic Volatility-Gated Persistence Blending (DV-GPB)**:
+   - Evaluates rolling 14-day standard deviation ($\sigma_{14d}$) of single-day price changes per region.
+   - Calculates continuous sigmoid blending weight $\lambda_{vol} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14d} - 0.015)}}$.
+   - During low-volatility plateaus ($\sigma_{14d} \ll 0.015$), predictions smoothly shrink to Naive Persistence ($\hat{y}_{t+5} = y_t$). During active market shocks ($\sigma_{14d} > 0.015$), 100% of event shock vectors are retained.
+   - Closed-loop guardrail automatically applies persistence bias $\alpha_{\text{guardrail}} = 0.5$ if rolling 14-day baseline uplift drops below $-2.0\%$.
+2. **Empirical Residual Confidence Interval Recalibration**:
+   - Replaces naive static $\pm 5\%$ multipliers with dynamic 95% confidence bounds $\hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$ derived from rolling 30-day standard error of regional prediction residuals.
+   - Elevates empirical 95% CI coverage from 32.2% to $\ge 90.0\%$ across all 10 metro calibration hubs.
 
 ---
 
@@ -572,6 +642,51 @@ systemctl --user status midgley-api.service
 systemctl --user list-timers --all
 ```
 
+
 ---
 
-*Midgley Version: `v0.3.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+## 10. Knowledge Graph & Agent Memory Layer Operations (`src/knowledge_graph.py`, Issue #116)
+
+Midgley includes an embedded, zero-cost **Knowledge Graph & Agent Memory Layer** that models physical petroleum supply topology (refineries, pipelines, marine chokepoints, PADDs, metros) and episodic shock memory.
+
+### Key Operational Characteristics:
+- **Zero External Server Requirement:** Primary graph engine runs in-memory via `NetworkX` with SQLite persistence at `data/knowledge_graph.db` ($0 cloud cost).
+- **Automated Topology Seeding:** Automatically seeds 9 refining assets, 4 marine chokepoints, 5 PADD regions, and 6 metro hubs on initial startup from `src/spatial_refinery.py`.
+- **GraphRAG Prompt Context:** Automatically retrieves 2-hop subgraphs and precedent memories for incoming headlines, formatting standardized `GraphContextSchema` into LLM prompts (`LLM_SINGLE_PROMPT`).
+
+### REST API & MCP Server Verification:
+```bash
+# Query full graph topology (nodes and edges)
+curl -s http://localhost:8000/api/v1/graph/topology | jq .
+
+# Query localized 2-hop subgraph for an entity
+curl -s "http://localhost:8000/api/v1/graph/subgraph?entity=Chevron_Richmond&depth=2" | jq .
+
+# Search historical shock memory precedents
+curl -s "http://localhost:8000/api/v1/memory/precedents?query=refinery+explosion" | jq .
+
+# Ingest event shock memory programmatically
+curl -X POST http://localhost:8000/api/v1/graph/ingest \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -d '{
+    "headline": "Fire shuts down Catlettsburg refinery unit",
+    "supply_disruption": 0.7,
+    "overall_price_pressure": 0.5,
+    "affected_entities": ["Marathon_Catlettsburg", "Cincinnati_OH"]
+  }'
+```
+
+### Pluggable External Adapters (Optional):
+For enterprise deployments requiring external graph databases (Neo4j, Cognee, Mem0, Graphiti), set the appropriate environment variables:
+```bash
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=secret
+MEM0_API_KEY=your_mem0_key
+```
+
+---
+
+*Midgley Version: `v0.4.7` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+

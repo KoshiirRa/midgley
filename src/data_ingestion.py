@@ -321,17 +321,21 @@ class EIADataConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached and "product_supplied_thousand_bpd" in cached and "status" in cached:
+            if cached and "product_supplied_thousand_bpd" in cached and "status" in cached and "as_of" in cached:
                 return cached
         except Exception:
             pass
 
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        valid_date_str = datetime.now().strftime("%Y-%m-%d")
         result = {
             "source": "U.S. Energy Information Administration API v2 (Zero-Cost)",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
+            "as_of": timestamp_str,
+            "valid_date": valid_date_str,
+            "is_vintage_reconstructed": False,
             "refinery_utilization": {
                 "PADD1_EastCoast": 87.4,
                 "PADD2_Midwest": 92.1,
@@ -362,12 +366,72 @@ class EIADataConnector:
         }
 
         try:
+            self.save_eia_vintage_record(result)
+        except Exception:
+            pass
+
+        try:
             from src.lookup_cache import global_cache
             global_cache.set(cache_key, result, ttl_seconds=86400 * 7)
         except Exception:
             pass
 
         return result
+
+    @staticmethod
+    def save_eia_vintage_record(record: dict, filepath: str = os.path.join("data", "eia_vintages.json")) -> None:
+        """
+        Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
+        """
+        try:
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            vintages = []
+            if os.path.exists(filepath):
+                try:
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        vintages = json.load(f)
+                except Exception:
+                    vintages = []
+
+            rec_copy = dict(record)
+            if "as_of" not in rec_copy:
+                rec_copy["as_of"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if "valid_date" not in rec_copy:
+                rec_copy["valid_date"] = datetime.now().strftime("%Y-%m-%d")
+            if "is_vintage_reconstructed" not in rec_copy:
+                rec_copy["is_vintage_reconstructed"] = False
+
+            vintages = [v for v in vintages if not (v.get("as_of") == rec_copy["as_of"] and v.get("source") == rec_copy.get("source"))]
+            vintages.append(rec_copy)
+
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(json.dumps(vintages, indent=2))
+        except Exception as e:
+            logger.warning(f"Could not persist EIA vintage record: {e}")
+
+    @staticmethod
+    def get_eia_vintages_as_of(target_as_of: str = None, filepath: str = os.path.join("data", "eia_vintages.json")) -> list:
+        """
+        Retrieves EIA observations published on or before target_as_of (Issue #121).
+        """
+        try:
+            if not os.path.exists(filepath):
+                return []
+            with open(filepath, "r", encoding="utf-8") as f:
+                vintages = json.load(f)
+            if not target_as_of:
+                return vintages
+            
+            target_str = str(target_as_of)
+            filtered = []
+            for v in vintages:
+                as_of_val = v.get("as_of", "")
+                if as_of_val <= target_str or as_of_val[:10] <= target_str[:10]:
+                    filtered.append(v)
+            return filtered
+        except Exception as e:
+            logger.warning(f"Could not read EIA vintages as of {target_as_of}: {e}")
+            return []
 
 
 class EIA930GridMonitorConnector:
@@ -477,12 +541,13 @@ class EIAStateMetroRetailConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached:
+            if cached and "as_of" in cached:
                 return cached
         except Exception:
             pass
 
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        valid_date_str = datetime.now().strftime("%Y-%m-%d")
         price = self.state_prices.get(st, 3.250)
         result = {
             "state_code": st,
@@ -490,7 +555,10 @@ class EIAStateMetroRetailConnector:
             "source": f"U.S. EIA API v2 Weekly Survey ({st})",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
-            "timestamp": timestamp_str
+            "timestamp": timestamp_str,
+            "as_of": timestamp_str,
+            "valid_date": valid_date_str,
+            "is_vintage_reconstructed": False
         }
 
         try:
@@ -506,12 +574,13 @@ class EIAStateMetroRetailConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached:
+            if cached and "as_of" in cached:
                 return cached
         except Exception:
             pass
 
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        valid_date_str = datetime.now().strftime("%Y-%m-%d")
         price = self.metro_prices.get(metro_name, 3.450)
         result = {
             "metro_name": metro_name,
@@ -519,7 +588,10 @@ class EIAStateMetroRetailConnector:
             "source": f"U.S. EIA API v2 Metro Survey ({metro_name})",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
-            "timestamp": timestamp_str
+            "timestamp": timestamp_str,
+            "as_of": timestamp_str,
+            "valid_date": valid_date_str,
+            "is_vintage_reconstructed": False
         }
 
         try:
@@ -529,6 +601,65 @@ class EIAStateMetroRetailConnector:
             pass
 
         return result
+
+    @staticmethod
+    def save_eia_vintage_record(record: dict, filepath: str = os.path.join("data", "eia_vintages.json")) -> None:
+        """
+        Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
+        """
+        try:
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            vintages = []
+            if os.path.exists(filepath):
+                try:
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        vintages = json.load(f)
+                except Exception:
+                    vintages = []
+
+            # Append record with timestamp
+            rec_copy = dict(record)
+            if "as_of" not in rec_copy:
+                rec_copy["as_of"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if "valid_date" not in rec_copy:
+                rec_copy["valid_date"] = datetime.now().strftime("%Y-%m-%d")
+            if "is_vintage_reconstructed" not in rec_copy:
+                rec_copy["is_vintage_reconstructed"] = False
+
+            # Avoid exact duplicate timestamps
+            vintages = [v for v in vintages if not (v.get("as_of") == rec_copy["as_of"] and v.get("source") == rec_copy.get("source"))]
+            vintages.append(rec_copy)
+
+            with open(filepath, "w", encoding="utf-8") as f:
+                json.dumps(vintages, indent=2)
+                f.write(json.dumps(vintages, indent=2))
+        except Exception as e:
+            logger.warning(f"Could not persist EIA vintage record: {e}")
+
+    @staticmethod
+    def get_eia_vintages_as_of(target_as_of: str = None, filepath: str = os.path.join("data", "eia_vintages.json")) -> list:
+        """
+        Retrieves EIA observations that were published on or before target_as_of (Issue #121).
+        If target_as_of is None, returns all stored vintages.
+        """
+        try:
+            if not os.path.exists(filepath):
+                return []
+            with open(filepath, "r", encoding="utf-8") as f:
+                vintages = json.load(f)
+            if not target_as_of:
+                return vintages
+            
+            target_str = str(target_as_of)
+            filtered = []
+            for v in vintages:
+                as_of_val = v.get("as_of", "")
+                if as_of_val <= target_str or as_of_val[:10] <= target_str[:10]:
+                    filtered.append(v)
+            return filtered
+        except Exception as e:
+            logger.warning(f"Could not read EIA vintages as of {target_as_of}: {e}")
+            return []
 
 
 ALPHA_VANTAGE_QUOTA_FILE = os.path.join("data", "alpha_vantage_quota.json")
