@@ -2376,4 +2376,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-07 00:58:50,2026-09-07,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.587,5.499,DOWN,,,,,0.0,0.0,5.587,0.0,5.0648,5.9331,,yfinance
 2026-09-07 00:58:51,2026-09-14,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.8232,DOWN,,,,,0.0,0.0,4.95,0.0,4.39,5.2564,,yfinance
 2026-09-07 00:58:51,2026-09-14,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9206,DOWN,,,,,0.0,0.0,5.05,0.0,4.4875,5.3538,,yfinance
-2026-09-07 01:00:05,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Canadian Additive Tariff: Putting the Potential Impact in Perspective - JobbersWorld,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.8233,3.6771,,yfinance
+2026-09-07 01:15:03,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"U.S.–Canada Tariffs: Timeline of Key Dates and Documents - Blake, Cassels & Graydon LLP",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.8233,3.6771,,yfinance
