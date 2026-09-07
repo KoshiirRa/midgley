@@ -550,7 +550,7 @@ def filter_evaluated_history_by_window(
         try:
             w_int = int(window_days)
             max_dt = eval_df['target_dt'].max()
-            cutoff_dt = max_dt - pd.Timedelta(days=w_int)
+            cutoff_dt = max_dt - pd.Timedelta(days=int(w_int))
             eval_df = eval_df[eval_df['target_dt'] >= cutoff_dt]
         except (ValueError, TypeError):
             pass
