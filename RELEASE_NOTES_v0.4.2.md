@@ -194,6 +194,12 @@
 - **Weekly Review Integration:** Research findings and factor candidate validation tables are formatted into Saturday weekly review issues ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)).
 - **Unit Test Suite ([`tests/test_praxist_research.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_praxist_research.py)):** 7/7 unit tests passed.
 
+### 28. Horizon-Specific Performance Metrics & Forecast Horizon Scoreboard Breakdown (Issue #209)
+- **MLOps Multi-Horizon Engine ([`src/prediction_logger.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/prediction_logger.py)):** Extended `compute_rolling_scoreboard_metrics()`, `compute_regional_scoreboard_breakdown()`, and `get_recent_evaluated_records()` to accept `horizon_days` filtering (1d through 5d, or all). Added `compute_horizon_scoreboard_breakdown()` returning granular accuracy metrics across 1-day (24h), 2-day (48h), 3-day (72h), 4-day (96h), and 5-day (1-week) forecast horizons.
+- **REST API Scoreboard Filtering ([`src/api_server.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/api_server.py)):** Exposed `horizon` query parameter on `GET /api/v1/forecast/scoreboard` and returned the `horizon_breakdown` matrix array in the API response.
+- **Public Web Dashboard Multi-Horizon Matrix ([`src/dashboard_generator.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/dashboard_generator.py) -> `docs/index.html`):** Rendered responsive Forecast Horizon Accuracy Breakdown Matrix and added the `Horizon` column to the recent evaluation ledger table.
+- **Unit Test Suite ([`tests/test_prediction_scoreboard.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_prediction_scoreboard.py) & [`tests/test_api_server.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_api_server.py)):** 7/7 scoreboard and 20/20 API tests passed.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -207,6 +213,7 @@
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
+- **Issue #209**: `feat(scoreboard): Implement Horizon-Specific Performance Metrics & Forecast Horizon Breakdown` (Closed as completed)
 - **Issue #98**: `[Feature Request] Implement Healthchecks Cron Monitoring for Daily & Weekly Pipeline Runs` (Closed as completed)
 - **Issue #187**: `[Feature Request] Ingest Open Source AI Radar REST API for Automated Model Discovery & Capability Tracking` (Closed as completed)
 - **Issue #97**: `[Feature Request] Deploy Self-Hosted ArchiveBox for Historical News & Event Preservation` (Closed as completed)

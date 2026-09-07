@@ -736,16 +736,18 @@ def build_component_attribution_card_html(region_id: str, base_price: float, pre
 
 
 def build_scoreboard_section_html() -> str:
-    """Renders the Realized-vs-Predicted Rolling Scoreboard section HTML."""
+    """Renders the Realized-vs-Predicted Rolling Scoreboard section HTML with Horizon and Regional Breakdowns."""
     from src.prediction_logger import (
         compute_rolling_scoreboard_metrics,
         compute_regional_scoreboard_breakdown,
+        compute_horizon_scoreboard_breakdown,
         get_recent_evaluated_records
     )
 
     metrics = compute_rolling_scoreboard_metrics(window_days=30)
     records = get_recent_evaluated_records(limit=15)
     regional = compute_regional_scoreboard_breakdown(window_days=30)
+    horizon_breakdown = compute_horizon_scoreboard_breakdown(window_days=30)
 
     mae_str = f"${metrics['mae_dollars']:.4f}"
     hit_str = f"{metrics['directional_hit_rate_pct']:.1f}%"
@@ -755,15 +757,34 @@ def build_scoreboard_section_html() -> str:
     rows_html = ""
     for r in records[:10]:
         hit_badge = '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span>' if r['directional_hit'] == 1 else '<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span>'
+        h_tag = f"{r.get('forecast_horizon_days', 5)}D"
         rows_html += f"""
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
             <td class="p-3 text-slate-300 font-mono text-xs">{r['forecast_target_date']}</td>
+            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">{h_tag}</span></td>
             <td class="p-3 font-semibold text-white text-xs">{r['region']}</td>
             <td class="p-3 text-slate-400 text-xs">${r['current_base_price']:.3f}</td>
             <td class="p-3 text-cyan-400 font-semibold text-xs">${r['predicted_5d_price']:.3f}</td>
             <td class="p-3 text-emerald-400 font-semibold text-xs">${r['actual_5d_price']:.3f}</td>
             <td class="p-3 text-slate-300 font-mono text-xs">${r['error_dollars']:.4f}</td>
             <td class="p-3">{hit_badge}</td>
+        </tr>
+        """
+
+    horizon_rows_html = ""
+    for h_item in horizon_breakdown:
+        h_up_color = "text-emerald-400" if h_item['model_uplift_mae_pct'] > 0 else "text-slate-400"
+        horizon_rows_html += f"""
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+            <td class="p-2.5 font-bold text-slate-200 text-xs flex items-center gap-1.5">
+                <span class="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono text-[10px] font-semibold">{h_item['horizon_days']}D</span>
+                <span>{h_item['horizon_label']}</span>
+            </td>
+            <td class="p-2.5 text-slate-400 text-xs">{h_item['evaluations']}</td>
+            <td class="p-2.5 font-semibold text-emerald-400 text-xs">${h_item['mae_dollars']:.4f}</td>
+            <td class="p-2.5 text-slate-300 text-xs">${h_item['rmse_dollars']:.4f}</td>
+            <td class="p-2.5 font-semibold text-cyan-400 text-xs">{h_item['directional_hit_rate_pct']:.1f}%</td>
+            <td class="p-2.5 font-bold {h_up_color} text-xs">{h_item['model_uplift_mae_pct']:+.1f}%</td>
         </tr>
         """
 
@@ -790,7 +811,7 @@ def build_scoreboard_section_html() -> str:
                     <h3 class="text-xl font-bold text-white flex items-center gap-2 mt-0.5">
                         <i class="fa-solid fa-bullseye text-emerald-400"></i> Realized-vs-Predicted Rolling Model Scoreboard
                     </h3>
-                    <p class="text-xs text-slate-400">Empirical out-of-time accuracy tracking 5-day model projections against actual ground-truth market prices</p>
+                    <p class="text-xs text-slate-400">Empirical out-of-time accuracy tracking multi-horizon model projections against actual ground-truth market prices</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -823,11 +844,36 @@ def build_scoreboard_section_html() -> str:
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Regional Scoreboard Matrix Table -->
-                <div class="lg:col-span-1 space-y-3">
+            <!-- Horizon & Regional Matrices Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Forecast Horizon Breakdown Matrix Table -->
+                <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-cyan-400"></i> Regional Accuracy Matrix
+                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Forecast Horizon Accuracy Breakdown
+                    </h4>
+                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+                                    <th class="p-2.5">Horizon</th>
+                                    <th class="p-2.5">N</th>
+                                    <th class="p-2.5">MAE</th>
+                                    <th class="p-2.5">RMSE</th>
+                                    <th class="p-2.5">Hit %</th>
+                                    <th class="p-2.5">Uplift</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {horizon_rows_html}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Regional Scoreboard Matrix Table -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-emerald-400"></i> Regional Accuracy Matrix
                     </h4>
                     <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
                         <table class="w-full text-left text-xs border-collapse">
@@ -847,30 +893,31 @@ def build_scoreboard_section_html() -> str:
                         </table>
                     </div>
                 </div>
+            </div>
 
-                <!-- Recent Realized-vs-Predicted Evaluation Ledger -->
-                <div class="lg:col-span-2 space-y-3">
-                    <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-emerald-400"></i> Recent Completed Forecast Evaluations
-                    </h4>
-                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                    <th class="p-3">Target Date</th>
-                                    <th class="p-3">Region</th>
-                                    <th class="p-3">Base</th>
-                                    <th class="p-3">Pred 5D</th>
-                                    <th class="p-3">Actual</th>
-                                    <th class="p-3">Error</th>
-                                    <th class="p-3">Outcome</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rows_html}
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Recent Realized-vs-Predicted Evaluation Ledger -->
+            <div class="space-y-3">
+                <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-emerald-400"></i> Recent Completed Forecast Evaluations
+                </h4>
+                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+                                <th class="p-3">Target Date</th>
+                                <th class="p-3">Horizon</th>
+                                <th class="p-3">Region</th>
+                                <th class="p-3">Base</th>
+                                <th class="p-3">Forecast</th>
+                                <th class="p-3">Actual</th>
+                                <th class="p-3">Error</th>
+                                <th class="p-3">Outcome</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows_html}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>

@@ -188,7 +188,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Closed-Loop Uplift Guardrail:** Automatically applies persistence bias factor $\alpha_{\text{guardrail}} = 0.5$ if a region's 14-day rolling baseline uplift drops below $-2.0\%$.
 * **Empirical Residual Confidence Interval Recalibration ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) (Issue #214):**
   - Replaces naive static $\pm 5\%$ multipliers with dynamic 95% confidence bounds ($\hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) derived from rolling 30-day standard error of regional prediction residuals (falling back to $\sigma_{\text{default}} = 0.0612$ $/gal). Elevates empirical 95% CI coverage from 32.2% to $\ge 90.0\%$ across all 10 metro calibration hubs.
-* **Out-of-Time Test Performance (Regular v1.6 "Ipatieff" Engine "Dubbs" Finlight-LLM Engine):**
+* **Out-of-Time Test Performance (Regular Model v1.4 "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
   - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).
@@ -288,11 +288,12 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - Exposed publicly via REST API endpoints `POST /api/v1/forecast/cloud-sync` and `GET /api/v1/forecast/cloud-status` (`get_cloud_sync_status()`).
 * **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
 * **Realized-vs-Predicted Rolling Scoreboard & Observability Engine:**
-  - `compute_rolling_scoreboard_metrics(window_days=30, region=None)`: Calculates rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices.
+  - `compute_rolling_scoreboard_metrics(window_days=30, region=None, horizon_days=None)`: Calculates rolling 30/60/90-day and per-horizon (1d through 5d) MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices (Issue #209).
+  - `compute_horizon_scoreboard_breakdown(window_days=30, region=None)`: Computes granular accuracy and uplift breakdowns across all discrete forecast horizons (1-day, 2-day, 3-day, 4-day, and 5-day out-of-time projections).
   - `compute_mlops_observability_summary(window_days=30)`: Computes LLM Augmentation Win Rate % over pure quant baselines, 95% CI Coverage Hit Rate %, average qualitative feature vectors, and feed provenance error breakdowns.
-  - `compute_regional_scoreboard_breakdown(window_days=30)`: Computes per-region accuracy breakdowns across all 8 active regional markets.
-  - `get_recent_evaluated_records(region=None, limit=50)`: Returns chronologically sorted evaluated forecast records.
-  - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard` and embedded in `docs/index.html`.
+  - `compute_regional_scoreboard_breakdown(window_days=30, horizon_days=None)`: Computes per-region accuracy breakdowns across all 8 active regional markets with optional horizon filtering.
+  - `get_recent_evaluated_records(region=None, limit=50, horizon_days=None)`: Returns chronologically sorted evaluated forecast records including `forecast_horizon_days`.
+  - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard?locale=...&window=30&horizon=5` and embedded in `docs/index.html`.
 * **Weights & Biases (W&B) Telemetry & Experiment Tracking (`src/wandb_logger.py`, Issue #80):**
   - Logs quantitative model training runs, hyperparameter sweeps (Ridge $\alpha$, XGBoost depth/learning rate), rolling validation loss curves, and backtest risk metrics (Sharpe, Sortino, Max Drawdown) to W&B project dashboard (`wandb.ai/midgley-gas-forecasting`).
   - Automatically records feature importance weights and SHAP attribution tables as W&B Artifacts.

@@ -236,6 +236,16 @@ Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmark
 python3 -m scripts.benchmark_qlib_rd_agent
 ```
 
+### Step 4: Verify Multi-Horizon Scoreboard & MLOps Accuracy Metrics
+Query the rolling scoreboard across discrete forecast horizons (1d through 5d) (Issue #209):
+```bash
+# Query 5-day horizon scoreboard metrics
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=national&window=30&horizon=5"
+
+# Query 1-day (24h tactical) horizon scoreboard metrics
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=1"
+```
+
 ---
 
 ## 5. Systemd Services & Automated Timer Schedules

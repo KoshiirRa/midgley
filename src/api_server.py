@@ -30,6 +30,7 @@ from src.models import compute_locale_feature_attribution_breakdown
 from src.prediction_logger import (
     compute_rolling_scoreboard_metrics,
     compute_regional_scoreboard_breakdown,
+    compute_horizon_scoreboard_breakdown,
     get_recent_evaluated_records,
     sync_predictions_to_cloud,
     get_cloud_sync_status
@@ -457,17 +458,20 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
 @app.get("/api/v1/forecast/scoreboard", dependencies=[Depends(get_api_key_user)], summary="Get Realized-vs-Predicted Rolling Scoreboard Metrics")
 def get_forecast_scoreboard(
     locale: Optional[str] = Query(None, description="Optional locale code or region (e.g., 'tulsa', 'oakland', 'national', 'all')"),
-    window: Optional[str] = Query("30", description="Rolling evaluation window in days ('30', '60', '90', or 'all')")
+    window: Optional[str] = Query("30", description="Rolling evaluation window in days ('30', '60', '90', or 'all')"),
+    horizon: Optional[str] = Query(None, description="Optional forecast horizon in days ('1', '2', '3', '4', '5', or 'all')")
 ):
     """
     Returns rolling out-of-time forecast accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
     Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices.
+    Supports granular filtering by forecast horizon (1d through 5d).
     """
     region_code = _normalize_locale(locale) if (locale and str(locale).lower() not in ["all", "none", ""]) else None
 
-    summary_metrics = compute_rolling_scoreboard_metrics(window_days=window, region=region_code)
-    regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window)
-    recent_evals = get_recent_evaluated_records(region=region_code, limit=50)
+    summary_metrics = compute_rolling_scoreboard_metrics(window_days=window, region=region_code, horizon_days=horizon)
+    regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window, horizon_days=horizon)
+    horizon_breakdown = compute_horizon_scoreboard_breakdown(window_days=window, region=region_code)
+    recent_evals = get_recent_evaluated_records(region=region_code, limit=50, horizon_days=horizon)
 
     return {
         "status": "success",
@@ -476,9 +480,11 @@ def get_forecast_scoreboard(
         "filters": {
             "locale": locale or "all",
             "region_code": region_code or "ALL",
-            "window_days": window
+            "window_days": window,
+            "horizon": horizon or "all"
         },
         "summary": summary_metrics,
+        "horizon_breakdown": horizon_breakdown,
         "regional_breakdown": regional_breakdown,
         "recent_evaluations": recent_evals
     }
