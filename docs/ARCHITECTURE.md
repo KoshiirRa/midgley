@@ -139,8 +139,9 @@ The weekly model performance review runs automatically on Saturday mornings (08:
 
 ### Continuous Feedback Loop Mechanics:
 1. **Diagnostic Validation & Multi-Region Error Tracking:** Calculates rolling metrics across 30-day, 60-day, and 90-day evaluation windows across all active regions (National, Tulsa, Newark, Cincinnati OH/KY, Oakland, SF Bay Area).
-2. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
-3. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
+2. **Quantitative Feature Leakage & Factor Decay Validation (`src/feature_auditor.py`, Issue #146):** Runs automated point-in-time temporal cross-correlations across EIA, FRED, NOAA, USDA, and futures series to detect lookahead leakage ($|r| > 0.50$), computes multi-horizon Spearman Rank IC decay curves ($H \in \{1, 3, 5, 10, 14, 20\}\text{ days}$) with empirical $t_{1/2}$ curve fitting, and estimates Probability of Backtest Overfitting (PBO via CSCV) / Deflated Sharpe Ratios (DSR).
+3. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
+4. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
 
 ---
 

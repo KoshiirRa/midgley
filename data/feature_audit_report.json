@@ -1,0 +1,2059 @@
+{
+  "timestamp_utc": "2026-09-07T03:59:34.991661+00:00",
+  "engine": "LacunaFeatureAuditor",
+  "has_lacuna_native_pkg": false,
+  "summary": {
+    "total_features": 73,
+    "pass_count": 71,
+    "warn_count": 2,
+    "fail_count": 0,
+    "qualitative_factor_count": 18
+  },
+  "pbo_audit": {
+    "pbo": 0.0,
+    "pbo_pct": 0.0,
+    "status": "PASS"
+  },
+  "leakage_audit": {
+    "wti_crude": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1002,
+      "lead_correlations": {
+        "-1d": 0.0694,
+        "-2d": 0.065,
+        "-3d": 0.0615,
+        "-4d": 0.1094,
+        "-5d": 0.1378
+      },
+      "lag_correlations": {
+        "+1d": -0.1959,
+        "+2d": -0.1824,
+        "+3d": -0.1529,
+        "+4d": -0.1066,
+        "+5d": -0.1116
+      },
+      "max_lead_corr": 0.1378,
+      "max_lag_corr": 0.1959,
+      "leakage_detected": false
+    },
+    "brent_crude": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1302,
+      "lead_correlations": {
+        "-1d": 0.1205,
+        "-2d": 0.1136,
+        "-3d": 0.1064,
+        "-4d": 0.1251,
+        "-5d": 0.1822
+      },
+      "lag_correlations": {
+        "+1d": -0.1709,
+        "+2d": -0.1237,
+        "+3d": -0.1226,
+        "+4d": -0.0831,
+        "+5d": -0.1282
+      },
+      "max_lead_corr": 0.1822,
+      "max_lag_corr": 0.1709,
+      "leakage_detected": false
+    },
+    "heating_oil": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.21,
+      "lead_correlations": {
+        "-1d": 0.1506,
+        "-2d": 0.1534,
+        "-3d": 0.133,
+        "-4d": 0.1575,
+        "-5d": 0.1755
+      },
+      "lag_correlations": {
+        "+1d": -0.1544,
+        "+2d": -0.1103,
+        "+3d": -0.109,
+        "+4d": -0.0521,
+        "+5d": -0.0273
+      },
+      "max_lead_corr": 0.1755,
+      "max_lag_corr": 0.1544,
+      "leakage_detected": false
+    },
+    "rbob_rsi_14": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.2753,
+      "lead_correlations": {
+        "-1d": 0.2389,
+        "-2d": 0.2161,
+        "-3d": 0.2043,
+        "-4d": 0.2225,
+        "-5d": 0.271
+      },
+      "lag_correlations": {
+        "+1d": -0.0792,
+        "+2d": -0.0566,
+        "+3d": -0.0197,
+        "+4d": -0.0528,
+        "+5d": -0.0019
+      },
+      "max_lead_corr": 0.271,
+      "max_lag_corr": 0.0792,
+      "leakage_detected": false
+    },
+    "rbob_macd_line": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0058,
+      "lead_correlations": {
+        "-1d": 0.0664,
+        "-2d": 0.117,
+        "-3d": 0.1518,
+        "-4d": 0.1817,
+        "-5d": 0.2155
+      },
+      "lag_correlations": {
+        "+1d": -0.1057,
+        "+2d": -0.0979,
+        "+3d": -0.1005,
+        "+4d": -0.1053,
+        "+5d": -0.1109
+      },
+      "max_lead_corr": 0.2155,
+      "max_lag_corr": 0.1109,
+      "leakage_detected": false
+    },
+    "rbob_macd_signal": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0923,
+      "lead_correlations": {
+        "-1d": -0.0583,
+        "-2d": -0.0216,
+        "-3d": 0.0162,
+        "-4d": 0.0532,
+        "-5d": 0.0914
+      },
+      "lag_correlations": {
+        "+1d": -0.1139,
+        "+2d": -0.1092,
+        "+3d": -0.1071,
+        "+4d": -0.107,
+        "+5d": -0.1014
+      },
+      "max_lead_corr": 0.0914,
+      "max_lag_corr": 0.1139,
+      "leakage_detected": false
+    },
+    "rbob_bollinger_band_pct_b": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.454,
+      "lead_correlations": {
+        "-1d": 0.3376,
+        "-2d": 0.3114,
+        "-3d": 0.2464,
+        "-4d": 0.2346,
+        "-5d": 0.2788
+      },
+      "lag_correlations": {
+        "+1d": -0.0742,
+        "+2d": -0.0147,
+        "+3d": -0.0238,
+        "+4d": -0.0191,
+        "+5d": -0.0591
+      },
+      "max_lead_corr": 0.3376,
+      "max_lag_corr": 0.0742,
+      "leakage_detected": false
+    },
+    "rbob_atr_14": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0438,
+      "lead_correlations": {
+        "-1d": -0.0627,
+        "-2d": -0.0555,
+        "-3d": -0.0065,
+        "-4d": 0.0121,
+        "-5d": 0.0006
+      },
+      "lag_correlations": {
+        "+1d": -0.0537,
+        "+2d": -0.0172,
+        "+3d": 0.0035,
+        "+4d": -0.0569,
+        "+5d": -0.0068
+      },
+      "max_lead_corr": 0.0627,
+      "max_lag_corr": 0.0569,
+      "leakage_detected": false
+    },
+    "crude_per_gal": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1002,
+      "lead_correlations": {
+        "-1d": 0.0694,
+        "-2d": 0.065,
+        "-3d": 0.0615,
+        "-4d": 0.1094,
+        "-5d": 0.1378
+      },
+      "lag_correlations": {
+        "+1d": -0.1959,
+        "+2d": -0.1824,
+        "+3d": -0.1529,
+        "+4d": -0.1066,
+        "+5d": -0.1116
+      },
+      "max_lead_corr": 0.1378,
+      "max_lag_corr": 0.1959,
+      "leakage_detected": false
+    },
+    "crack_spread": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0864,
+      "lead_correlations": {
+        "-1d": 0.0888,
+        "-2d": 0.0911,
+        "-3d": 0.0733,
+        "-4d": 0.0352,
+        "-5d": 0.0491
+      },
+      "lag_correlations": {
+        "+1d": -0.0398,
+        "+2d": 0.0148,
+        "+3d": -0.01,
+        "+4d": -0.056,
+        "+5d": -0.0555
+      },
+      "max_lead_corr": 0.0911,
+      "max_lag_corr": 0.056,
+      "leakage_detected": false
+    },
+    "crude_return_1d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.7914,
+      "lead_correlations": {
+        "-1d": -0.0808,
+        "-2d": -0.0056,
+        "-3d": -0.0046,
+        "-4d": 0.1051,
+        "-5d": 0.0795
+      },
+      "lag_correlations": {
+        "+1d": -0.0009,
+        "+2d": -0.0541,
+        "+3d": -0.1376,
+        "+4d": 0.0445,
+        "+5d": 0.1118
+      },
+      "max_lead_corr": 0.1051,
+      "max_lag_corr": 0.1376,
+      "leakage_detected": false
+    },
+    "crude_return_5d": {
+      "status": "WARN",
+      "reason": "Suspiciously high backward lead correlation (0.4089 vs fwd 0.1287). Potential lookahead or inverted shift.",
+      "contemporaneous_corr": 0.2878,
+      "lead_correlations": {
+        "-1d": 0.2446,
+        "-2d": 0.3083,
+        "-3d": 0.3291,
+        "-4d": 0.4089,
+        "-5d": 0.04
+      },
+      "lag_correlations": {
+        "+1d": -0.025,
+        "+2d": -0.059,
+        "+3d": -0.024,
+        "+4d": -0.0175,
+        "+5d": -0.1287
+      },
+      "max_lead_corr": 0.4089,
+      "max_lag_corr": 0.1287,
+      "leakage_detected": true
+    },
+    "crack_spread_321": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1407,
+      "lead_correlations": {
+        "-1d": 0.1202,
+        "-2d": 0.1256,
+        "-3d": 0.1033,
+        "-4d": 0.0735,
+        "-5d": 0.0821
+      },
+      "lag_correlations": {
+        "+1d": -0.0384,
+        "+2d": 0.0198,
+        "+3d": -0.0084,
+        "+4d": -0.0254,
+        "+5d": -0.008
+      },
+      "max_lead_corr": 0.1256,
+      "max_lag_corr": 0.0384,
+      "leakage_detected": false
+    },
+    "crack_spread_321_gal": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1407,
+      "lead_correlations": {
+        "-1d": 0.1202,
+        "-2d": 0.1256,
+        "-3d": 0.1033,
+        "-4d": 0.0735,
+        "-5d": 0.0821
+      },
+      "lag_correlations": {
+        "+1d": -0.0384,
+        "+2d": 0.0198,
+        "+3d": -0.0084,
+        "+4d": -0.0254,
+        "+5d": -0.008
+      },
+      "max_lead_corr": 0.1256,
+      "max_lag_corr": 0.0384,
+      "leakage_detected": false
+    },
+    "crack_spread_321_delta_5d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.3116,
+      "lead_correlations": {
+        "-1d": 0.2559,
+        "-2d": 0.2623,
+        "-3d": 0.1808,
+        "-4d": 0.1919,
+        "-5d": -0.0522
+      },
+      "lag_correlations": {
+        "+1d": 0.0893,
+        "+2d": 0.1699,
+        "+3d": 0.1263,
+        "+4d": 0.111,
+        "+5d": 0.1429
+      },
+      "max_lead_corr": 0.2623,
+      "max_lag_corr": 0.1699,
+      "leakage_detected": false
+    },
+    "gas_return_1d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.9838,
+      "lead_correlations": {
+        "-1d": -0.0926,
+        "-2d": 0.0119,
+        "-3d": -0.0433,
+        "-4d": 0.0453,
+        "-5d": 0.0914
+      },
+      "lag_correlations": {
+        "+1d": -0.0594,
+        "+2d": 0.0246,
+        "+3d": -0.0507,
+        "+4d": 0.0656,
+        "+5d": 0.0849
+      },
+      "max_lead_corr": 0.0926,
+      "max_lag_corr": 0.0849,
+      "leakage_detected": false
+    },
+    "gas_return_5d": {
+      "status": "WARN",
+      "reason": "Suspiciously high backward lead correlation (0.4523 vs fwd 0.0507). Potential lookahead or inverted shift.",
+      "contemporaneous_corr": 0.4446,
+      "lead_correlations": {
+        "-1d": 0.3867,
+        "-2d": 0.4126,
+        "-3d": 0.3776,
+        "-4d": 0.4523,
+        "-5d": 0.0033
+      },
+      "lag_correlations": {
+        "+1d": 0.0361,
+        "+2d": 0.0507,
+        "+3d": 0.0327,
+        "+4d": 0.028,
+        "+5d": -0.0505
+      },
+      "max_lead_corr": 0.4523,
+      "max_lag_corr": 0.0507,
+      "leakage_detected": true
+    },
+    "gas_return_10d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.2681,
+      "lead_correlations": {
+        "-1d": 0.2829,
+        "-2d": 0.3066,
+        "-3d": 0.2787,
+        "-4d": 0.3175,
+        "-5d": 0.3078
+      },
+      "lag_correlations": {
+        "+1d": -0.047,
+        "+2d": -0.0549,
+        "+3d": -0.0224,
+        "+4d": 0.0083,
+        "+5d": -0.0688
+      },
+      "max_lead_corr": 0.3175,
+      "max_lag_corr": 0.0688,
+      "leakage_detected": false
+    },
+    "gas_ma_7": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.1624,
+      "lead_correlations": {
+        "-1d": -0.0989,
+        "-2d": -0.0496,
+        "-3d": -0.0032,
+        "-4d": 0.0483,
+        "-5d": 0.1125
+      },
+      "lag_correlations": {
+        "+1d": -0.2279,
+        "+2d": -0.2098,
+        "+3d": -0.203,
+        "+4d": -0.1997,
+        "+5d": -0.1859
+      },
+      "max_lead_corr": 0.1125,
+      "max_lag_corr": 0.2279,
+      "leakage_detected": false
+    },
+    "gas_ma_14": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.1862,
+      "lead_correlations": {
+        "-1d": -0.1579,
+        "-2d": -0.138,
+        "-3d": -0.1176,
+        "-4d": -0.0927,
+        "-5d": -0.0575
+      },
+      "lag_correlations": {
+        "+1d": -0.2126,
+        "+2d": -0.1967,
+        "+3d": -0.1842,
+        "+4d": -0.1794,
+        "+5d": -0.1688
+      },
+      "max_lead_corr": 0.1579,
+      "max_lag_corr": 0.2126,
+      "leakage_detected": false
+    },
+    "gas_ma_30": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.1785,
+      "lead_correlations": {
+        "-1d": -0.1682,
+        "-2d": -0.1622,
+        "-3d": -0.1528,
+        "-4d": -0.1442,
+        "-5d": -0.1313
+      },
+      "lag_correlations": {
+        "+1d": -0.186,
+        "+2d": -0.1712,
+        "+3d": -0.1595,
+        "+4d": -0.1526,
+        "+5d": -0.138
+      },
+      "max_lead_corr": 0.1682,
+      "max_lag_corr": 0.186,
+      "leakage_detected": false
+    },
+    "gas_volatility_14": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0507,
+      "lead_correlations": {
+        "-1d": 0.0392,
+        "-2d": 0.0515,
+        "-3d": 0.0759,
+        "-4d": 0.073,
+        "-5d": 0.0419
+      },
+      "lag_correlations": {
+        "+1d": 0.1098,
+        "+2d": 0.0917,
+        "+3d": 0.0671,
+        "+4d": 0.0783,
+        "+5d": 0.0865
+      },
+      "max_lead_corr": 0.0759,
+      "max_lag_corr": 0.1098,
+      "leakage_detected": false
+    },
+    "day_of_year": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0399,
+      "lead_correlations": {
+        "-1d": -0.0305,
+        "-2d": -0.0445,
+        "-3d": -0.0558,
+        "-4d": -0.0654,
+        "-5d": -0.0621
+      },
+      "lag_correlations": {
+        "+1d": -0.0409,
+        "+2d": -0.0126,
+        "+3d": 0.0007,
+        "+4d": -0.008,
+        "+5d": 0.0101
+      },
+      "max_lead_corr": 0.0654,
+      "max_lag_corr": 0.0409,
+      "leakage_detected": false
+    },
+    "sin_day": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0092,
+      "lead_correlations": {
+        "-1d": 0.0024,
+        "-2d": 0.0185,
+        "-3d": 0.0295,
+        "-4d": 0.0418,
+        "-5d": 0.0387
+      },
+      "lag_correlations": {
+        "+1d": 0.0089,
+        "+2d": -0.011,
+        "+3d": -0.0177,
+        "+4d": -0.0146,
+        "+5d": -0.027
+      },
+      "max_lead_corr": 0.0418,
+      "max_lag_corr": 0.027,
+      "leakage_detected": false
+    },
+    "cos_day": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1121,
+      "lead_correlations": {
+        "-1d": 0.1135,
+        "-2d": 0.1143,
+        "-3d": 0.1211,
+        "-4d": 0.1191,
+        "-5d": 0.12
+      },
+      "lag_correlations": {
+        "+1d": 0.1136,
+        "+2d": 0.0765,
+        "+3d": 0.0542,
+        "+4d": 0.0662,
+        "+5d": 0.0397
+      },
+      "max_lead_corr": 0.1211,
+      "max_lag_corr": 0.1136,
+      "leakage_detected": false
+    },
+    "ovx_volatility_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.118,
+      "lead_correlations": {
+        "-1d": 0.1065,
+        "-2d": 0.0686,
+        "-3d": 0.0704,
+        "-4d": 0.1054,
+        "-5d": 0.1328
+      },
+      "lag_correlations": {
+        "+1d": 0.0212,
+        "+2d": -0.045,
+        "+3d": -0.0519,
+        "+4d": 0.004,
+        "+5d": -0.0297
+      },
+      "max_lead_corr": 0.1328,
+      "max_lag_corr": 0.0519,
+      "leakage_detected": false
+    },
+    "ovx_return_1d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.3982,
+      "lead_correlations": {
+        "-1d": -0.0385,
+        "-2d": -0.1746,
+        "-3d": -0.0044,
+        "-4d": 0.0675,
+        "-5d": 0.1254
+      },
+      "lag_correlations": {
+        "+1d": 0.109,
+        "+2d": -0.0576,
+        "+3d": -0.1648,
+        "+4d": 0.0271,
+        "+5d": 0.0515
+      },
+      "max_lead_corr": 0.1746,
+      "max_lag_corr": 0.1648,
+      "leakage_detected": false
+    },
+    "baker_hughes_us_rig_count": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "baker_hughes_oil_rigs": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "baker_hughes_gas_rigs": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "baker_hughes_rig_delta_1w": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "treasury_yield_10y": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0494,
+      "lead_correlations": {
+        "-1d": -0.1323,
+        "-2d": -0.0982,
+        "-3d": -0.1391,
+        "-4d": -0.1533,
+        "-5d": -0.1
+      },
+      "lag_correlations": {
+        "+1d": -0.1918,
+        "+2d": -0.039,
+        "+3d": -0.0744,
+        "+4d": -0.0208,
+        "+5d": 0.0259
+      },
+      "max_lead_corr": 0.1533,
+      "max_lag_corr": 0.1918,
+      "leakage_detected": false
+    },
+    "treasury_yield_2y": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0413,
+      "lead_correlations": {
+        "-1d": -0.1559,
+        "-2d": -0.0918,
+        "-3d": -0.1708,
+        "-4d": -0.1303,
+        "-5d": -0.0803
+      },
+      "lag_correlations": {
+        "+1d": -0.1772,
+        "+2d": -0.041,
+        "+3d": -0.0586,
+        "+4d": -0.0487,
+        "+5d": 0.0382
+      },
+      "max_lead_corr": 0.1708,
+      "max_lag_corr": 0.1772,
+      "leakage_detected": false
+    },
+    "tips_10y_real_yield": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0494,
+      "lead_correlations": {
+        "-1d": -0.1323,
+        "-2d": -0.0982,
+        "-3d": -0.1391,
+        "-4d": -0.1533,
+        "-5d": -0.1
+      },
+      "lag_correlations": {
+        "+1d": -0.1918,
+        "+2d": -0.039,
+        "+3d": -0.0744,
+        "+4d": -0.0208,
+        "+5d": 0.0259
+      },
+      "max_lead_corr": 0.1533,
+      "max_lag_corr": 0.1918,
+      "leakage_detected": false
+    },
+    "treasury_yield_10y_2y_spread": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0634,
+      "lead_correlations": {
+        "-1d": -0.0735,
+        "-2d": -0.1024,
+        "-3d": -0.0653,
+        "-4d": -0.1793,
+        "-5d": -0.1185
+      },
+      "lag_correlations": {
+        "+1d": -0.2086,
+        "+2d": -0.0315,
+        "+3d": -0.1028,
+        "+4d": 0.0418,
+        "+5d": -0.0029
+      },
+      "max_lead_corr": 0.1793,
+      "max_lag_corr": 0.2086,
+      "leakage_detected": false
+    },
+    "treasury_spread_delta_5d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1162,
+      "lead_correlations": {
+        "-1d": -0.0708,
+        "-2d": 0.168,
+        "-3d": -0.0843,
+        "-4d": -0.1079,
+        "-5d": -0.072
+      },
+      "lag_correlations": {
+        "+1d": 0.0193,
+        "+2d": 0.1557,
+        "+3d": 0.0108,
+        "+4d": 0.136,
+        "+5d": 0.0088
+      },
+      "max_lead_corr": 0.168,
+      "max_lag_corr": 0.1557,
+      "leakage_detected": false
+    },
+    "hdd_daily": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "cdd_daily": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "freeze_warning_flag": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "hdd_5d_rolling": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "cdd_5d_rolling": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "cot_rbob_net_speculative": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "cot_rbob_zscore_3y": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "cot_commercial_hedger_ratio": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "cot_net_position_delta_1w": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "ferc_colonial_line1_tariff_per_bbl": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "ferc_plantation_tariff_per_bbl": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "ferc_explorer_tariff_per_bbl": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "ferc_pipeline_tariff_index_5d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "usgs_hydrological_barge_bottleneck_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "usgs_gulf_marine_departure_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "usgs_carquinez_berthing_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "usgs_delaware_refinery_thermal_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "usgs_bay_area_seismic_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "usgs_cushing_seismic_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "usgs_composite_seismic_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "aqi_bay_area_outage_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "aqi_tulsa_outage_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "aqi_delaware_outage_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "aqi_catlettsburg_outage_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "aqi_composite_outage_risk_index": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "aqi_ozone_action_day_count": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "aqi_max_rvp_surcharge_per_gal": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "event_geopolitical_risk": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "event_supply_disruption": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "event_demand_sentiment": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "event_opec_action": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "event_overall_price_pressure": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "qlib_rig_count_lagged_production_drag": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "qlib_wti_rbob_rolling_correlation_break": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.1551,
+      "lead_correlations": {
+        "-1d": -0.111,
+        "-2d": -0.1187,
+        "-3d": -0.1217,
+        "-4d": -0.1191,
+        "-5d": -0.0877
+      },
+      "lag_correlations": {
+        "+1d": -0.2503,
+        "+2d": -0.201,
+        "+3d": -0.1339,
+        "+4d": -0.1961,
+        "+5d": -0.1196
+      },
+      "max_lead_corr": 0.1217,
+      "max_lag_corr": 0.2503,
+      "leakage_detected": false
+    },
+    "qlib_ovx_crude_volatility_spread": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.0,
+      "lead_correlations": {
+        "-1d": 0.0,
+        "-2d": 0.0,
+        "-3d": 0.0,
+        "-4d": 0.0,
+        "-5d": 0.0
+      },
+      "lag_correlations": {
+        "+1d": 0.0,
+        "+2d": 0.0,
+        "+3d": 0.0,
+        "+4d": 0.0,
+        "+5d": 0.0
+      },
+      "max_lead_corr": 0.0,
+      "max_lag_corr": 0.0,
+      "leakage_detected": false
+    },
+    "target_price_5d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": 0.1912,
+      "lead_correlations": {
+        "-1d": 0.1926,
+        "-2d": 0.1786,
+        "-3d": 0.1319,
+        "-4d": 0.1257,
+        "-5d": 0.084
+      },
+      "lag_correlations": {
+        "+1d": 0.1444,
+        "+2d": 0.1392,
+        "+3d": 0.1777,
+        "+4d": 0.1839,
+        "+5d": 0.2249
+      },
+      "max_lead_corr": 0.1926,
+      "max_lag_corr": 0.2249,
+      "leakage_detected": false
+    },
+    "target_return_5d": {
+      "status": "PASS",
+      "reason": "Clean point-in-time temporal structure.",
+      "contemporaneous_corr": -0.0116,
+      "lead_correlations": {
+        "-1d": 0.0326,
+        "-2d": 0.0193,
+        "-3d": -0.0098,
+        "-4d": -0.0285,
+        "-5d": -0.1207
+      },
+      "lag_correlations": {
+        "+1d": 0.4334,
+        "+2d": 0.3521,
+        "+3d": 0.392,
+        "+4d": 0.3837,
+        "+5d": 0.4335
+      },
+      "max_lead_corr": 0.1207,
+      "max_lag_corr": 0.4335,
+      "leakage_detected": false
+    }
+  },
+  "decay_audit": {
+    "ovx_volatility_index": {
+      "factor_name": "ovx_volatility_index",
+      "status": "WARN",
+      "reason": "Substantial decay divergence: empirical t1/2=30.0d vs prior 4.5d (R2=0.70).",
+      "horizon_pearson_ic": {
+        "1D": 0.0212,
+        "3D": -0.0536,
+        "5D": -0.05,
+        "10D": -0.1237,
+        "14D": -0.0719
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0482,
+        "3D": -0.0825,
+        "5D": -0.1294,
+        "10D": -0.2034,
+        "14D": -0.1573
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 30.0,
+      "half_life_delta_days": 25.5,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.7
+    },
+    "ovx_return_1d": {
+      "factor_name": "ovx_return_1d",
+      "status": "WARN",
+      "reason": "Substantial decay divergence: empirical t1/2=30.0d vs prior 4.5d (R2=0.53).",
+      "horizon_pearson_ic": {
+        "1D": 0.109,
+        "3D": -0.0666,
+        "5D": -0.0108,
+        "10D": -0.1022,
+        "14D": -0.0893
+      },
+      "horizon_rank_ic": {
+        "1D": 0.1116,
+        "3D": -0.1157,
+        "5D": -0.0864,
+        "10D": -0.233,
+        "14D": -0.1744
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 30.0,
+      "half_life_delta_days": 25.5,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.525
+    },
+    "usgs_gulf_marine_departure_risk_index": {
+      "factor_name": "usgs_gulf_marine_departure_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "usgs_carquinez_berthing_risk_index": {
+      "factor_name": "usgs_carquinez_berthing_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "usgs_bay_area_seismic_risk_index": {
+      "factor_name": "usgs_bay_area_seismic_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "usgs_cushing_seismic_risk_index": {
+      "factor_name": "usgs_cushing_seismic_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "usgs_composite_seismic_risk_index": {
+      "factor_name": "usgs_composite_seismic_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "aqi_bay_area_outage_risk_index": {
+      "factor_name": "aqi_bay_area_outage_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "aqi_tulsa_outage_risk_index": {
+      "factor_name": "aqi_tulsa_outage_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "aqi_delaware_outage_risk_index": {
+      "factor_name": "aqi_delaware_outage_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "aqi_catlettsburg_outage_risk_index": {
+      "factor_name": "aqi_catlettsburg_outage_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "aqi_composite_outage_risk_index": {
+      "factor_name": "aqi_composite_outage_risk_index",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "event_geopolitical_risk": {
+      "factor_name": "event_geopolitical_risk",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "event_supply_disruption": {
+      "factor_name": "event_supply_disruption",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "event_demand_sentiment": {
+      "factor_name": "event_demand_sentiment",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "event_opec_action": {
+      "factor_name": "event_opec_action",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "event_overall_price_pressure": {
+      "factor_name": "event_overall_price_pressure",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    },
+    "qlib_ovx_crude_volatility_spread": {
+      "factor_name": "qlib_ovx_crude_volatility_spread",
+      "status": "PASS",
+      "reason": "Empirical half-life t1/2=4.5d aligns with nominal prior (4.5d).",
+      "horizon_pearson_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "horizon_rank_ic": {
+        "1D": 0.0,
+        "3D": 0.0,
+        "5D": 0.0,
+        "10D": 0.0,
+        "14D": 0.0
+      },
+      "nominal_half_life_days": 4.5,
+      "empirical_half_life_days": 4.5,
+      "half_life_delta_days": 0.0,
+      "decay_rate_lambda": 0.0,
+      "decay_fit_r2": 0.0
+    }
+  }
+}

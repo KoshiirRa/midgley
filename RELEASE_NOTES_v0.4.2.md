@@ -158,6 +158,14 @@
 - **Feature Matrix & Quantitative Splits Fusion:** Integrated into [`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py) with point-in-time forward-filling and registered under `quant_features` in `prepare_chronological_splits()`.
 - **Automated Test Suite ([`tests/test_treasury_yield_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_treasury_yield_feed.py)):** 100% test pass rate verifying connector attributes, live and synthetic dataset generation, spread calculations, and feature matrix integration.
 
+### 22. Quantitative Feature Leakage & Factor Decay Auditor (Issue #146)
+- **Point-in-Time Temporal Leakage Auditor ([`src/feature_auditor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_auditor.py)):** Built `PointInTimeLeakageAuditor` calculating lead-lag cross-correlations across predictive and lookahead shifts to detect unphysical future returns leakage ($|r| > 0.50$) or inverted lead anomalies across multi-frequency EIA, FRED, NOAA, USDA, and futures series.
+- **Multi-Horizon Factor IC & Decay Half-Life Analysis:** Implemented `FactorDecayAuditor` to compute Pearson IC, Spearman Rank IC, and IC Information Ratio ($IC_{IR}$) across forward price horizons $H \in \{1, 3, 5, 10, 14, 20\}$ days, fitting empirical exponential decay half-lives ($t_{1/2} = -\frac{\ln 2}{\lambda}$) to validate qualitative event shock decay priors.
+- **Combinatorial Symmetric Cross-Validation & Overfitting Inference:** Implemented `BacktestOverfittingAuditor` computing Probability of Backtest Overfitting (PBO) via CSCV and Deflated Sharpe Ratio (DSR / PSR) adjusting for multiple testing.
+- **Standalone CLI Audit Tool ([`scripts/audit_feature_leakage.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/scripts/audit_feature_leakage.py)):** Created executable utility to audit unified feature matrices and output structured summaries (`data/feature_audit_report.json` and Markdown tables).
+- **MLOps Weekly Review Integration ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)):** Added automated feature leakage pass rates, PBO percentages, and qualitative factor decay metrics to Saturday weekly performance review issue reports.
+- **Automated Test Suite ([`tests/test_feature_auditor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_feature_auditor.py)):** 100% test pass rate across unit tests for synthetic leakage detection, factor decay curve fitting, CSCV PBO estimation, Deflated Sharpe, and full matrix execution.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -166,11 +174,12 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `389 passed` (100% pass rate across all test modules including Treasury Yield Curve & TIPS, Census Demographics, Multi-Feed AQI & EPA AirNow Ozone, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
+  **Result:** `395 passed` (100% pass rate across all test modules including Feature Leakage & Factor Decay Auditor, Treasury Yield Curve, Census Demographics, Multi-Feed AQI, USGS Earthquake, USGS Water Data, and EDGAR 8-K test suites).
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
+- **Issue #146**: `[Feature Request] Evaluate Lacuna for Quantitative Feature Leakage & Factor Decay Auditing` (Closed as completed)
 - **Issue #66**: `[Feature Request] Ingest U.S. Treasury Yield Curve & TIPS Inflation Metrics (Fiscal Data API)` (Closed as completed)
 - **Issue #73**: `[Feature Request] Ingest EPA AirNow Ozone Alerts for Summer-Blend Gas Compliance` (Closed as completed)
 - **Issue #75**: `[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics` (Closed as completed)
