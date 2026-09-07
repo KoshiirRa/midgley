@@ -30,7 +30,7 @@ jobs:
       - name: Merge Main Branch into Self-Hosted
         run: |
           git fetch origin main:main
-          git merge main -m "chore(sync): auto-merge main updates into self-hosted branch"
+          git merge main -X theirs -m "chore(sync): auto-merge main updates into self-hosted branch"
 
       - name: Push Synchronized Self-Hosted Branch
         run: |
