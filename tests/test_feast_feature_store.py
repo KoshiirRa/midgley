@@ -14,6 +14,16 @@ from src.feast_store import MidgleyFeastStore
 from src.feature_engineering import create_feature_matrix, get_feast_point_in_time_features
 from src.models import train_models_with_feast_point_in_time
 
+try:
+    import pyarrow
+    HAS_PARQUET = True
+except ImportError:
+    try:
+        import fastparquet
+        HAS_PARQUET = True
+    except ImportError:
+        HAS_PARQUET = False
+
 
 def test_feast_store_initialization():
     """Verify MidgleyFeastStore initializes directory structure and feature_store.yaml."""
@@ -23,6 +33,7 @@ def test_feast_store_initialization():
         assert os.path.exists(os.path.join(tmpdir, "feast_parquet"))
 
 
+@pytest.mark.skipif(not HAS_PARQUET, reason="pyarrow or fastparquet required for Feast parquet tests")
 def test_prepare_parquet_sources():
     """Verify prepare_parquet_sources exports EIA, FRED, NOAA, and LLM decay Parquet files."""
     dates = pd.date_range("2026-01-01", periods=10, freq="D")
@@ -54,6 +65,7 @@ def test_prepare_parquet_sources():
             assert "created_timestamp" in df_parquet.columns
 
 
+@pytest.mark.skipif(not HAS_PARQUET, reason="pyarrow or fastparquet required for Feast parquet tests")
 def test_point_in_time_join_correctness():
     """
     Verifies point-in-time (AS OF) join semantics:
