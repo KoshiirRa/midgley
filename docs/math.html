@@ -502,6 +502,88 @@
             </div>
         </section>
 
+        <!-- Section 15: End-to-End Master Prediction Synthesis & Mathematical Factor Composition -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-400">15</span>
+                <h3 class="text-2xl font-bold text-white">End-to-End Master Prediction Synthesis &amp; Mathematical Factor Composition</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                The ultimate retail price forecast \(\hat{P}_{r, t+5}\) for any regional market \(r\) is synthesized by composing the mathematical operations from all preceding sections into a unified multi-layer estimator. The architecture transitions sequentially from quantitative futures and qualitative shock memory to regularized regime projection, spatial basis calibration, statutory tax burdens, physical friction offsets, and volatility-gated persistence blending:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-6 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 15.1: Master Multi-Layer Retail Price Estimator</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-5 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\begin{aligned}
+                    \hat{P}_{r, t+5} &= \lambda_{\text{vol}} \cdot \Big[ \underbrace{\beta_0 + \sum_{k=1}^K \beta_k X_{k, t}}_{\text{Sec 01 \& 11: Quant Futures \& Crack}} + \underbrace{\boldsymbol{\beta}_{\text{shock}}^T \mathbf{M}_t}_{\text{Sec 02 \& 03: Decayed Shock Memory}} + \underbrace{\boldsymbol{\beta}_{\alpha}^T \mathbf{f}_{\text{Qlib}, t}}_{\text{Sec 14: Symbolic Alphas}} \\[8pt]
+                    &\qquad\qquad + \underbrace{\Delta_{\text{metro}, r}}_{\text{Sec 06 \& 09: Spatial Basis}} + \underbrace{T_{\text{tax}, r}}_{\text{Sec 08 \& 10: State/CARB Burden}} + \underbrace{\delta_{\text{physical}, r}}_{\text{Sec 07 \& 13: Seismic/River Friction}} \Big] + (1 - \lambda_{\text{vol}}) \cdot P_{r, t}
+                    \end{aligned}$$
+                </div>
+
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold pt-2">Equation 15.2: Volatility-Calibrated Empirical Prediction Interval</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\text{CI}_{95\%}(r, t+5) = \hat{P}_{r, t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+                </div>
+
+                <!-- Structured Component Factor Breakdown Table -->
+                <div class="pt-2 overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400">
+                                <th class="pb-2 font-semibold">Factor Term</th>
+                                <th class="pb-2 font-semibold">Originating Section</th>
+                                <th class="pb-2 font-semibold">Mathematical &amp; Econometric Role</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                            <tr>
+                                <td class="py-2.5 font-mono text-blue-400 font-bold">\(X_{k, t}\) &amp; \(\text{Crack}_{321, t}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 01 &amp; Section 11</td>
+                                <td class="py-2.5">NYMEX RBOB (\(RB=F\)), WTI Crude (\(CL=F\)), ULSD (\(HO=F\)), and 3-2-1 refining margins.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-emerald-400 font-bold">\(\mathbf{M}_t = \mathbf{M}_{t-1} e^{-\lambda} + \mathbf{V}_t\)</td>
+                                <td class="py-2.5 text-slate-400">Section 02 &amp; Section 03</td>
+                                <td class="py-2.5">Gemini 2.5 Flash 9-factor bounded vector decayed with \(t_{1/2} = 5.0\text{ days}\) half-life.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-purple-400 font-bold">\(\boldsymbol{\beta}(\mathbf{W})\) &amp; \(\mathbf{f}_{\text{Qlib}, t}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 04 &amp; Section 14</td>
+                                <td class="py-2.5">\(L_2\)-regularized Ridge projection weighted by Qlib DDG-DA GMM market regime weights \(w_i\).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-cyan-400 font-bold">\(\Delta_{\text{metro}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 06 &amp; Section 09</td>
+                                <td class="py-2.5">Hub-to-rack pipeline basis differentials and spatial consumer arbitrage spreads.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-amber-400 font-bold">\(T_{\text{tax}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 08 &amp; Section 10</td>
+                                <td class="py-2.5">Statutory state excise taxes, UST fees, and California CARB regulatory burden (\(\$0.953/\text{gal}\)).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-rose-400 font-bold">\(\delta_{\text{physical}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 07 &amp; Section 13</td>
+                                <td class="py-2.5">Fast-path anomaly gates, USGS 3D seismic shaking intensity \(I\), and river barge draft constraints.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-emerald-400 font-bold">\(\lambda_{\text{vol}} = \sigma(\sigma_{14\text{d}})\)</td>
+                                <td class="py-2.5 text-slate-400">Section 12</td>
+                                <td class="py-2.5">Continuous sigmoid volatility gate dynamically blending model projection with naive persistence \(P_{r, t}\).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-indigo-400 font-bold">\(\text{CI}_{95\%}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 05</td>
+                                <td class="py-2.5">Empirical 30-day residual standard error establishing \(\ge 90\%\) out-of-time coverage bands.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
