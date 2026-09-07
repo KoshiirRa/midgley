@@ -173,6 +173,27 @@
 - **Zero-Cost Soft Dependency & Offline Fallback:** Gracefully operates in `offline` mode or no-ops silently when `WANDB_API_KEY` is not present, guaranteeing 0 infrastructure cost and offline test suite isolation (`WANDB_MODE=disabled`).
 - **Comprehensive Verification ([`tests/test_wandb_logger.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_wandb_logger.py)):** 100% test pass rate across unit tests covering W&B initialization, training run logging, weekly audit tracking, and mocked model comparison runs.
 
+### 24. Healthchecks.io Pipeline Heartbeat & Dead-Man's Snitch Monitoring (Issue #98)
+- **Automated Execution Heartbeats ([`src/healthcheck_monitor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/healthcheck_monitor.py)):** Built `HealthcheckMonitor` module dispatching start (`/start`), success (`/0` or `POST /`), duration (seconds), and error (`/fail`) pings to Healthchecks.io dead-man's snitch endpoints.
+- **Workflow & Daily Forecasting Integration:** Wired into daily forecasting batch executions ([`src/prediction_logger.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/prediction_logger.py)), Saturday weekly performance review audits ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)), and GitHub Actions workflows (`.github/workflows/gas_price_forecast.yml`, `.github/workflows/weekly_model_review.yml`).
+- **Resiliency & Unit Test Suite ([`tests/test_healthcheck_monitor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_healthcheck_monitor.py)):** 100% fail-open operation with 10s timeouts and unit test isolation (`TESTING=1`). 10/10 unit tests passed.
+
+### 25. Open Source AI Radar Automated Model Discovery & Capability Tracking (Issue #187)
+- **Model Discovery Connector ([`src/data_ingestion.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/data_ingestion.py)):** Built `OpenSourceAIRadarConnector` ingesting open-weights LLMs/SLMs, parameter scales, licenses, quantization benchmarks, and capability metrics via REST APIs.
+- **REST Gateway & Weekly Review Sections:** Added `GET /api/v1/system/radar` to [`src/api_server.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/api_server.py) with 24-hour disk caching (`data/radar_cache.json`) and automated model capability tables in Saturday review reports ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)).
+- **Unit Test Suite ([`tests/test_open_source_ai_radar.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_open_source_ai_radar.py)):** 6/6 unit tests passed.
+
+### 26. Self-Hosted ArchiveBox Historical Article Preservation & Snapshot Ledger (Issue #97)
+- **Asynchronous Web Page Archiving ([`src/archive_service.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/archive_service.py)):** Built `ArchiveBoxClient` submitting breaking news and qualitative source URLs to self-hosted ArchiveBox instances (`POST /api/v1/core/add/`) asynchronously via background thread pools.
+- **Dual-Tier Local Snapshot Ledger:** Automatic fallback saving local markdown snapshots in `data/archives/` and ledger tracking in `data/archived_events_ledger.json`.
+- **Event Scoring Hook:** Integrated with `extract_event_features_from_url()` in [`src/event_analyzer.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/event_analyzer.py) with 0ms latency impact.
+- **Unit Test Suite ([`tests/test_archive_service.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_archive_service.py)):** 4/4 unit tests passed.
+
+### 27. Sapient PRAXIST Computer-Executable Autonomous Research Harness (Issue #188)
+- **Empirical Research Harness ([`src/praxist_engine.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/praxist_engine.py)):** Built `PraxistResearchHarness` enabling LLM agents to formulate empirical feature hypotheses, run out-of-sample backtests, compute paired $t$-tests and $p$-values, and execute systematic parameter sweeps (Ridge $\alpha$, decay half-life $t_{1/2}$).
+- **Weekly Review Integration:** Research findings and factor candidate validation tables are formatted into Saturday weekly review issues ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)).
+- **Unit Test Suite ([`tests/test_praxist_research.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_praxist_research.py)):** 7/7 unit tests passed.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -181,11 +202,15 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `100% pass rate` across all test modules including Weights & Biases Telemetry, Feature Leakage & Factor Decay Auditor, Treasury Yield Curve, Census Demographics, Multi-Feed AQI, USGS Earthquake, USGS Water Data, and EDGAR 8-K test suites.
+  **Result:** `446 passed, 3 skipped, 0 failures` across all 27 test modules including Healthchecks, Open Source AI Radar, ArchiveBox, Sapient PRAXIST, Weights & Biases Telemetry, Feature Leakage & Factor Decay Auditor, Treasury Yield Curve, Census Demographics, Multi-Feed AQI, USGS Earthquake, USGS Water Data, and EDGAR 8-K test suites.
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
+- **Issue #98**: `[Feature Request] Implement Healthchecks Cron Monitoring for Daily & Weekly Pipeline Runs` (Closed as completed)
+- **Issue #187**: `[Feature Request] Ingest Open Source AI Radar REST API for Automated Model Discovery & Capability Tracking` (Closed as completed)
+- **Issue #97**: `[Feature Request] Deploy Self-Hosted ArchiveBox for Historical News & Event Preservation` (Closed as completed)
+- **Issue #188**: `[Feature Request] Ingest Sapient PRAXIST for Computer-Executable Autonomous Energy Research & Backtesting Validation` (Closed as completed)
 - **Issue #80**: `[Feature Request] Integrate Weights & Biases (W&B) for Rolling Model Drift & Validation Loss Tracking` (Closed as completed)
 - **Issue #146**: `[Feature Request] Evaluate Lacuna for Quantitative Feature Leakage & Factor Decay Auditing` (Closed as completed)
 - **Issue #66**: `[Feature Request] Ingest U.S. Treasury Yield Curve & TIPS Inflation Metrics (Fiscal Data API)` (Closed as completed)
@@ -209,4 +234,5 @@
 - **Issue #210**: `feat(mlops): Implement Automated Model Degradation & Baseline Underperformance Alerting` (Closed as completed)
 - **Issue #129**: `[Feature Request] EDGAR 8-K Refinery Operator Monitor (Operational Disruption Feed)` (Closed as completed)
 - **Issue #69**: `[Feature Request] Ingest SEC EDGAR Official Refinery 8-K Outage Filings (sec.gov API)` (Closed as completed)
+
 
