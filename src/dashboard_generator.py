@@ -2701,10 +2701,10 @@ def generate_public_dashboard():
                     <!-- Pillar 4 -->
                     <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                         <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
-                            <i class="fa-solid fa-ship"></i> 4. Maritime Chokepoints
+                            <i class="fa-solid fa-ship"></i> 4. Maritime &amp; Waterway Chokepoints
                         </h4>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Strait of Hormuz (21M bpd) blockade risk &amp; Red Sea / Suez rerouting freight premiums (+12 to +14 days).
+                            Strait of Hormuz (21M bpd), Suez reroutings (+12d), inland Mississippi/Ohio river barge draft limits, and coastal waterborne terminals.
                         </p>
                     </div>
 
@@ -4764,26 +4764,38 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 4: Global & Regional Maritime Chokepoints -->
+        <!-- Section 4: Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-purple-500">04</span>
-                <h3 class="text-2xl font-bold text-white">Global &amp; Regional Maritime Chokepoints &amp; Delay Equations</h3>
+                <h3 class="text-2xl font-bold text-white">Global &amp; Regional Maritime Chokepoints, Inland River Barging &amp; Waterborne Terminals</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Key global and regional maritime chokepoints dictate crude transit times and regional rack margins:
+                Global maritime chokepoints, inland river tow barge draft constraints, and coastal waterborne terminal freight logistics dictate crude transit delays, spot barge shipping rates, and regional rack margins:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit &amp; Detour Premium</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
-                    $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right), \quad \Delta \text{Margin}_{\text{Delaware}} = +\$0.097/\text{gal } (p = 0.00191)$$
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Unified Waterway Freight &amp; Detour Penalty Model</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-purple-200 overflow-x-auto">
+                    $$\Delta P_{\text{freight}, r} = \underbrace{C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right)}_{\text{Global Chokepoint Detour}} + \underbrace{\gamma_{\text{draft}} \cdot \text{Index}_{\text{barge}}}_{\text{Inland River Tow Constraints}} + \underbrace{\Delta \text{Margin}_{\text{waterborne}, r}}_{\text{Coastal Terminal / Canal Surcharge}}$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    <strong>Strait of Hormuz:</strong> \(21.0\text{M bpd}\) (\(20\%\) of global petroleum) naval blockade threats (\(+\$0.109/\text{gal}\) price shock).<br>
-                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add \(+12\text{--}14\) days transit time, adding \(+\$4.50/\text{bbl}\) freight premium (\(+\$0.201/\text{gal}\) price shock).<br>
-                    <strong>Delaware Bay &amp; C&amp;D Canal:</strong> Big Stone Anchorage deepwater lightering freezes and C&amp;D Canal shoaling closures force tank barges onto a \(300\text{ nm}\) detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by \(+\$0.097/\text{gal}\), \(p = 0.00191\)).
+                <div class="text-center text-sm font-mono py-2 bg-slate-950/80 rounded-lg border border-slate-800/80 text-purple-300 overflow-x-auto">
+                    $$\text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>1. Global Strategic Chokepoints (National Wholesale Baseline):</strong><br>
+                    &bull; <strong>Strait of Hormuz:</strong> \(21.0\text{M bpd}\) (\(20\%\) of global petroleum) naval blockade &amp; Iranian mine threats (\(+\$0.109/\text{gal}\) futures price shock).<br>
+                    &bull; <strong>Suez Canal &amp; Bab-el-Mandeb / Red Sea:</strong> Cape of Good Hope reroutings add \(+12\text{--}14\) days transit time, adding \(+\$4.50/\text{bbl}\) marine freight premium (\(+\$0.201/\text{gal}\) price shock).<br>
+                    &bull; <strong>Venezuela Orinoco &amp; Caribbean:</strong> OFAC General License 44 heavy crude sanctions and tanker export quotas (\(0.85\text{M bpd}\)).<br><br>
+                    <strong>2. Inland River Barging &amp; Hydro Navigation Corridors (Mid-Continent &amp; Midwest):</strong><br>
+                    &bull; <strong>Cincinnati Tri-State (Ohio &amp; Lower Mississippi River Corridor):</strong> Confluence at Cairo, IL (Mile 981 on Lower Mississippi / Mile 0 on Ohio River) and Memphis, TN USGS gage (<code class="text-amber-300">07032000</code>). Autumn low-water droughts drop gage below \(5.0\text{ ft}\) (severe crisis at \(&lt;0.0\text{ ft}\)), enforcing \(-40\%\) barge payload draft cuts, surging spot barge freight rates \(+300\%\), and expanding Cincinnati/Ohio Valley rack margins by \(+14.5\text{¢}/\text{gal}\) (\(+\$0.145/\text{gal}\)). Winter ice lockouts at Markland Locks &amp; Dam (Mile 531.5) halt Marathon Catlettsburg (\(291,000\text{ bpd}\)) barge deliveries, forcing rail substitution (\(+\$0.112/\text{gal}\)).<br>
+                    &bull; <strong>Tulsa Metro (MKARNS / Port of Catoosa Navigation):</strong> McClellan-Kerr Arkansas River Navigation System (Head of Navigation Mile 445 at Verdigris River) linking West Tulsa HF Sinclair refinery corridor to the Mississippi River; high-discharge flood stages or low-water lock halts throttle refined product barge departures.<br><br>
+                    <strong>3. Coastal Waterborne Terminals &amp; Domestic Canal Bottlenecks:</strong><br>
+                    &bull; <strong>Newark Metro (Delaware Bay &amp; C&amp;D Canal):</strong> Big Stone Anchorage deepwater tanker lightering freezes and C&amp;D Canal emergency shoaling closures force tank barges onto a \(300\text{ nm}\) open-ocean detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by \(+\$0.097/\text{gal}\), \(p = 0.00191\)).<br>
+                    &bull; <strong>Port St. Lucie (Straits of Florida &amp; Coastal Waterborne Terminals):</strong> Florida lacks crude/product pipelines and refineries, relying \(100\%\) on waterborne articulated tug-barges (ATBs) and product tankers from Gulf Coast refining hubs (Texas/Louisiana) into Port Everglades and Port Canaveral berths. Tropical cyclones, high seas, and Straits of Florida gale warnings bottleneck coastal barge dockings (\(+\$0.125/\text{gal}\) freight dislocation).<br>
+                    &bull; <strong>Oakland &amp; SF Bay Area (Carquinez Strait &amp; San Francisco Bay):</strong> Marine crude lightering in Central San Francisco Bay and Carquinez Strait barge berthing supplying Chevron Richmond (\(245,000\text{ bpd}\)) and Martinez refineries; Pacific bomb cyclones and coastal gale warnings throttle marine dockings and CaRFG waterborne transfers.<br>
+                    &bull; <strong>Greenville NC (Port of Wilmington &amp; Cape Fear River):</strong> Coastal petroleum barge offloading at Port of Wilmington oil terminal docks supplying Eastern North Carolina fuel racks via Cape Fear River navigation channel during storm surge closures.
                 </p>
             </div>
         </section>

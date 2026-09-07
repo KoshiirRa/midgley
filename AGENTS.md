@@ -1,6 +1,6 @@
 # Agent System Specification (AGENTS.md)
 
-This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and retail unleaded gasoline prices by integrating qualitative real-world event intelligence, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Data (Cboe OVX Volatility & Baker Hughes Rig Counts)**, and **Tulsa Regional Refining Dynamics** into quantitative time-series estimators.
+This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and retail unleaded gasoline prices by integrating qualitative real-world event intelligence, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Data (Cboe OVX Volatility & Baker Hughes Rig Counts)**, and **Tulsa Regional Refining Dynamics** into quantitative time-series estimators.
 
 ---
 
@@ -14,7 +14,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │
                │  • Geopolitical Headlines & OPEC Press Releases             │
                │  • NOAA NWS API (api.weather.gov) - Multi-Basin & Regional Alerts │
-               │  • Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)   │
+               │  • Maritime & Waterway Chokepoints (Hormuz, Suez, Rivers)   │
                │  • Executive Social Feed (Trump Twitter / Truth Social)     │
                │  • Physical Alternative Feeds (Cboe OVX & Baker Hughes)     │
                └──────────────────────────────┬──────────────────────────────┘
@@ -88,7 +88,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 1. Event, Weather, Seismic, Air Quality, Social Media & Web Scraper Extraction Agent (`src/event_analyzer.py`, `src/firecrawl_scraper.py`, `src/finlight_feed.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, `src/executive_social_feed.py`, `src/usgs_seismic.py`, `src/usgs_water_feed.py`, `src/aqi_feed.py`, & `src/alternative_data_feeds.py`)
 
-* **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, deep web articles, refinery operator disclosures, state motor fuel tax portals, NOAA alerts, USGS earthquake events and seismic risk indices, multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring outages, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
+* **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, deep web articles, refinery operator disclosures, state motor fuel tax portals, NOAA alerts, USGS earthquake events and seismic risk indices, multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring outages, global maritime chokepoints and inland waterway constraints (Ohio/Mississippi River tow drafts, MKARNS navigation, Delmarva detour, Straits of Florida), executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
 * **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
 * **Firecrawl Web-to-Markdown API Connector & URL Extraction (`src/firecrawl_scraper.py` & `src/event_analyzer.py`) (Issue #83):**
   - **Web-to-Markdown Extraction:** Integrates Firecrawl API (`firecrawl.dev`) to convert raw HTML from breaking energy news articles, refinery press releases, and state tax portals into clean, LLM-ready Markdown with JavaScript rendering support.
