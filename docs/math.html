@@ -75,7 +75,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.4.4-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.5.0-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -464,11 +464,69 @@
             </div>
         </section>
 
+        <!-- Section 13: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-400">13</span>
+                <h3 class="text-2xl font-bold text-white">Dynamic Volatility-Gated Persistence Blending (DV-GPB) &amp; Empirical CI (Issue #214)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                During low-volatility plateaus, autoregressive time-series models risk overreacting to micro-fluctuations. DV-GPB applies a continuous sigmoid gate derived from 14-day rolling price volatility (\(\sigma_{14\text{d}}\)) to dynamically blend model forecasts with naive persistence:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 13.1: Adaptive Sigmoid Volatility Gate &amp; Empirical Residual Bounds</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t, \quad \text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    When \(\sigma_{14\text{d}} \ll 0.015\), \(\lambda_{\text{vol}} \to 0.0\) (shrinking forecasts to pure naive persistence). When \(\sigma_{14\text{d}} > 0.015\), \(\lambda_{\text{vol}} \to 1.0\) (preserving 100% of event shock vectors). Empirical 95% confidence bounds derived from 30-day regional residual standard error elevate empirical coverage to \(\ge 90\%\).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 14: USGS 3D Hypocentral Attenuation & Hydrological Barge Telemetry -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-cyan-400">14</span>
+                <h3 class="text-2xl font-bold text-white">USGS 3D Hypocentral Attenuation &amp; Hydrological Barge Telemetry (Issues #55 &amp; #56)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-cyan-500">
+                <h4 class="text-sm uppercase tracking-wider text-cyan-400 font-bold">Equation 14.1: 3D Seismic Shaking Attenuation &amp; River Bottleneck Index</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-cyan-200">
+                    $$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R), \quad \text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Models 3D hypocentral seismic shaking intensity across 5 refining/storage corridors and calculates low-water navigation draft constraints at Memphis &amp; Cairo confluence points on the Mississippi/Ohio river system.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 15: Microsoft Qlib & RD-Agent Symbolic Alpha Factor Mining -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">15</span>
+                <h3 class="text-2xl font-bold text-white">Microsoft Qlib Symbolic Alpha Factor Mining &amp; Dynamic Domain Adaptation (Issue #127)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 15.1: Information Coefficient &amp; DDG-DA GMM RBF Kernel Similarity</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}, \quad w_i = \exp\left(-\gamma \|x_i - \bar{x}_{\text{recent}}\|^2\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Evaluates non-lookahead symbolic alpha factor formulas with point-in-time calculation rules ($d \ge 0$), prunes collinear factors ($|r| > 0.70$), and weights historical training samples using Gaussian RBF kernels across GMM market regimes to combat concept drift.
+                </p>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley v1.6 Ipatieff</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
 </body>

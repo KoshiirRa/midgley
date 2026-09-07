@@ -1678,15 +1678,63 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">EIA-930 Electric Grid Stress Anomaly Z-Score (Issue #179):</p>
-                    <p class="text-blue-300">$$Z_{{\\text{{Grid}}}} = \\frac{{\\text{{Load}}_{{\\text{{RTO}}}} - \\mu_{{24\\text{{h}}}}}}{{\\sigma_{{24\\text{{h}}}}}}$$</p>
-                    <p class="text-slate-400 text-[11px]">Monitors ERCOT, MISO, PJM & CAISO grid load spikes near major refining hubs.</p>
+                    <p class="text-amber-300 font-bold">Dynamic Volatility-Gated Persistence Blending (Issue #214):</p>
+                    <p class="text-blue-300">$$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$</p>
+                    <p class="text-slate-400 text-[11px]">Blends model forecasts into naive persistence during low-volatility plateaus while preserving 100% shock reactivity.</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">NHC Hurricane & Colonial Pipeline Threat Index (Issue #177):</p>
-                    <p class="text-blue-300">$$\\text{{Score}}_{{\\text{{Refinery}}}} = \\text{{Threat}}_{{\\text{{NHC}}}} \\times (1.5 \\text{{ if Gulf Coast else }} 1.0)$$</p>
-                    <p class="text-slate-400 text-[11px]">Projects Gulf refining hub and Colonial Pipeline Line 1/2 intake risk scores.</p>
+                    <p class="text-amber-300 font-bold">Empirical Residual 95% Confidence Intervals (Issue #214):</p>
+                    <p class="text-blue-300">$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$</p>
+                    <p class="text-slate-400 text-[11px]">Derives dynamic 95% confidence bands from rolling 30-day regional residual standard errors.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">USGS 3D Hypocentral Attenuation & Ground Shaking (Issue #55):</p>
+                    <p class="text-blue-300">$$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$</p>
+                    <p class="text-slate-400 text-[11px]">Quantifies facility-level peak ground shaking and pipeline shutoff risk indices across 5 corridors.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">USGS Hydrological Barge Bottleneck Index (Issue #56):</p>
+                    <p class="text-blue-300">$$\\text{{Index}}_{{\\text{{barge}}}} = \\max\\left(0, \\min\\left(1, \\frac{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_t}}{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_{{\\text{{min}}}}}}\\right)\\right)$$</p>
+                    <p class="text-slate-400 text-[11px]">Tracks low-water navigation draft restrictions at Memphis & Cairo confluence throttling barge throughput.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Multi-Feed AQI Standardized Flaring Outage Z-Score (Issue #54):</p>
+                    <p class="text-blue-300">$$Z_{{\\text{{PM2.5}}}} = \\frac{{\\text{{PM2.5}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}, \\quad Z_{{\\text{{SO2}}}} = \\frac{{\\text{{SO2}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Detects emergency refinery flaring when $Z_{{\\text{{PM2.5}}}} \\ge 3.5 \\land Z_{{\\text{{SO2}}}} \\ge 2.5$ with 12-24h lead time over news.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73):</p>
+                    <p class="text-blue-300">$$\\text{{Surcharge}}_{{\\text{{RVP}}}} = \\Delta \\text{{Spread}}_{{\\text{{Summer Blend}}}} + 0.040 \\cdot \\mathbf{{1}}_{{\\text{{AQI}}_{{\\text{{O3}}}} \\ge 101}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Applies statutory summer-blend RVP constraints (CARB 7.0 psi, EPA 7.8 psi, Conventional 9.0 psi) and Ozone Action Day fees.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">U.S. Census Commuter Inelastic Demand Score (Issue #75):</p>
+                    <p class="text-blue-300">$$\\text{{Score}}_{{\\text{{inelastic}}}} = \\frac{{\\text{{DriveAlone}} + \\text{{Carpool}}}}{{\\text{{TotalCommuters}}}} \\times (1 - \\text{{TransitIndex}})$$</p>
+                    <p class="text-slate-400 text-[11px]">Calibrates retail pump price pass-through speed and baseline rack spreads from ACS commuting tables.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66):</p>
+                    <p class="text-blue-300">$$\\text{{Spread}}_{{10\\text{{Y}}-2\\text{{Y}}}} = Y_{{10\\text{{Y}}}} - Y_{{2\\text{{Y}}}}, \\quad \\Delta \\text{{Spread}}_{{5\\text{{d}}}} = \\text{{Spread}}_t - \\text{{Spread}}_{{t-5}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Captures leading macroeconomic expansion/recession demand signals and real TIPS inventory carry costs.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Qlib Symbolic Alpha Information Coefficient (Issue #127):</p>
+                    <p class="text-blue-300">$$IC_t = \\text{{Corr}}(f_t, r_{{t+h}}), \\quad IC_{{IR}} = \\frac{{\\mu(IC)}}{{\\sigma(IC)}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Evaluates AST-parsed symbolic alpha factor formulas with non-lookahead point-in-time calculation rules.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Multi-Horizon Scoreboard Performance Accuracy (Issue #209):</p>
+                    <p class="text-blue-300">$$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}} - y_{{i, H}}|, \\quad H \\in [1\\text{{d}}, 2\\text{{d}}, 3\\text{{d}}, 4\\text{{d}}, 5\\text{{d}}]$$</p>
+                    <p class="text-slate-400 text-[11px]">Tracks continuous rolling out-of-time accuracy breakdowns across all discrete forecast horizons.</p>
                 </div>
             </div>
         </section>
@@ -1820,6 +1868,48 @@ Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 {synopsis['risks_scenarios']}
+
+---
+
+## 6. Advanced Quantitative Feature & Physical Data Formulas
+
+### 3-2-1 Refining Crack Spread Formula (Issue #169)
+$$\\text{{Crack}}_{{321}} (\\$/\\text{{bbl}}) = \\frac{{2 \\times (P_{{\\text{{RBOB}}}} \\times 42) + 1 \\times (P_{{\\text{{HO}}}} \\times 42) - 3 \\times P_{{\\text{{WTI}}}}}}{{3}}$$
+
+### Stacking Ensemble Quantile Prediction Bounds (Issue #170)
+$$P_{{10}} = P_{{50}} - 1.2815\\sigma, \\quad P_{{90}} = P_{{50}} + 1.2815\\sigma$$
+
+### Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
+$$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$
+
+### Empirical Residual 95% Confidence Intervals (Issue #214)
+$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$
+
+### USGS 3D Hypocentral Attenuation & Ground Shaking Intensity (Issue #55)
+$$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$
+
+### USGS Hydrological Streamflow & Barge Bottleneck Index (Issue #56)
+$$\\text{{Index}}_{{\\text{{barge}}}} = \\max\\left(0, \\min\\left(1, \\frac{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_t}}{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_{{\\text{{min}}}}}}\\right)\\right)$$
+
+### Multi-Feed AQI Standardized Flaring Outage Detection Z-Score (Issue #54)
+$$Z_{{\\text{{PM2.5}}}} = \\frac{{\\text{{PM2.5}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}, \\quad Z_{{\\text{{SO2}}}} = \\frac{{\\text{{SO2}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}$$
+
+### EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73)
+$$\\text{{Surcharge}}_{{\\text{{RVP}}}} = \\Delta \\text{{Spread}}_{{\\text{{Summer Blend}}}} + 0.040 \\cdot \\mathbf{{1}}_{{\\text{{AQI}}_{{\\text{{O3}}}} \\ge 101}}$$
+
+### U.S. Census Commuter Inelastic Demand Score (Issue #75)
+$$\\text{{Score}}_{{\\text{{inelastic}}}} = \\frac{{\\text{{DriveAlone}} + \\text{{Carpool}}}}{{\\text{{TotalCommuters}}}} \\times (1 - \\text{{TransitIndex}})$$
+
+### Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66)
+$$\\text{{Spread}}_{{10\\text{{Y}}-2\\text{{Y}}}} = Y_{{10\\text{{Y}}}} - Y_{{2\\text{{Y}}}}, \\quad \\Delta \\text{{Spread}}_{{5\\text{{d}}}} = \\text{{Spread}}_t - \\text{{Spread}}_{{t-5}}$$
+
+### Qlib Symbolic Alpha Factor Information Coefficient (Issue #127)
+$$IC_t = \\text{{Corr}}(f_t, r_{{t+h}}), \\quad IC_{{IR}} = \\frac{{\\mu(IC)}}{{\\sigma(IC)}}$$
+
+### Multi-Horizon Forecast Scoreboard Accuracy (Issue #209)
+$$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}} - y_{{i, H}}|, \\quad H \\in [1\\text{{d}}, 2\\text{{d}}, 3\\text{{d}}, 4\\text{{d}}, 5\\text{{d}}]$$
+
+
 
 ---
 *Report generated automatically by Midgley Dashboard Generator Engine at {log_ts}.*
@@ -4881,11 +4971,69 @@ def generate_public_dashboard():
             </div>
         </section>
 
+        <!-- Section 13: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-400">13</span>
+                <h3 class="text-2xl font-bold text-white">Dynamic Volatility-Gated Persistence Blending (DV-GPB) &amp; Empirical CI (Issue #214)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                During low-volatility plateaus, autoregressive time-series models risk overreacting to micro-fluctuations. DV-GPB applies a continuous sigmoid gate derived from 14-day rolling price volatility (\(\sigma_{14\text{d}}\)) to dynamically blend model forecasts with naive persistence:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 13.1: Adaptive Sigmoid Volatility Gate &amp; Empirical Residual Bounds</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t, \quad \text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    When \(\sigma_{14\text{d}} \ll 0.015\), \(\lambda_{\text{vol}} \to 0.0\) (shrinking forecasts to pure naive persistence). When \(\sigma_{14\text{d}} > 0.015\), \(\lambda_{\text{vol}} \to 1.0\) (preserving 100% of event shock vectors). Empirical 95% confidence bounds derived from 30-day regional residual standard error elevate empirical coverage to \(\ge 90\%\).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 14: USGS 3D Hypocentral Attenuation & Hydrological Barge Telemetry -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-cyan-400">14</span>
+                <h3 class="text-2xl font-bold text-white">USGS 3D Hypocentral Attenuation &amp; Hydrological Barge Telemetry (Issues #55 &amp; #56)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-cyan-500">
+                <h4 class="text-sm uppercase tracking-wider text-cyan-400 font-bold">Equation 14.1: 3D Seismic Shaking Attenuation &amp; River Bottleneck Index</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-cyan-200">
+                    $$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R), \quad \text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Models 3D hypocentral seismic shaking intensity across 5 refining/storage corridors and calculates low-water navigation draft constraints at Memphis &amp; Cairo confluence points on the Mississippi/Ohio river system.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 15: Microsoft Qlib & RD-Agent Symbolic Alpha Factor Mining -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">15</span>
+                <h3 class="text-2xl font-bold text-white">Microsoft Qlib Symbolic Alpha Factor Mining &amp; Dynamic Domain Adaptation (Issue #127)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 15.1: Information Coefficient &amp; DDG-DA GMM RBF Kernel Similarity</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}, \quad w_i = \exp\left(-\gamma \|x_i - \bar{x}_{\text{recent}}\|^2\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Evaluates non-lookahead symbolic alpha factor formulas with point-in-time calculation rules ($d \ge 0$), prunes collinear factors ($|r| > 0.70$), and weights historical training samples using Gaussian RBF kernels across GMM market regimes to combat concept drift.
+                </p>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley v1.6 Ipatieff</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
 </body>

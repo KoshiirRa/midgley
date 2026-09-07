@@ -103,4 +103,46 @@ Evaluated tail-risk catalysts specific to execution [2026-09-07 16:15:20]:
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
+
+## 6. Advanced Quantitative Feature & Physical Data Formulas
+
+### 3-2-1 Refining Crack Spread Formula (Issue #169)
+$$\text{Crack}_{321} (\$/\text{bbl}) = \frac{2 \times (P_{\text{RBOB}} \times 42) + 1 \times (P_{\text{HO}} \times 42) - 3 \times P_{\text{WTI}}}{3}$$
+
+### Stacking Ensemble Quantile Prediction Bounds (Issue #170)
+$$P_{10} = P_{50} - 1.2815\sigma, \quad P_{90} = P_{50} + 1.2815\sigma$$
+
+### Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
+$$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t$$
+
+### Empirical Residual 95% Confidence Intervals (Issue #214)
+$$\text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+
+### USGS 3D Hypocentral Attenuation & Ground Shaking Intensity (Issue #55)
+$$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R)$$
+
+### USGS Hydrological Streamflow & Barge Bottleneck Index (Issue #56)
+$$\text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+
+### Multi-Feed AQI Standardized Flaring Outage Detection Z-Score (Issue #54)
+$$Z_{\text{PM2.5}} = \frac{\text{PM2.5}_t - \mu_{30\text{d}}}{\sigma_{30\text{d}}}, \quad Z_{\text{SO2}} = \frac{\text{SO2}_t - \mu_{30\text{d}}}{\sigma_{30\text{d}}}$$
+
+### EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73)
+$$\text{Surcharge}_{\text{RVP}} = \Delta \text{Spread}_{\text{Summer Blend}} + 0.040 \cdot \mathbf{1}_{\text{AQI}_{\text{O3}} \ge 101}$$
+
+### U.S. Census Commuter Inelastic Demand Score (Issue #75)
+$$\text{Score}_{\text{inelastic}} = \frac{\text{DriveAlone} + \text{Carpool}}{\text{TotalCommuters}} \times (1 - \text{TransitIndex})$$
+
+### Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66)
+$$\text{Spread}_{10\text{Y}-2\text{Y}} = Y_{10\text{Y}} - Y_{2\text{Y}}, \quad \Delta \text{Spread}_{5\text{d}} = \text{Spread}_t - \text{Spread}_{t-5}$$
+
+### Qlib Symbolic Alpha Factor Information Coefficient (Issue #127)
+$$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}$$
+
+### Multi-Horizon Forecast Scoreboard Accuracy (Issue #209)
+$$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \quad H \in [1\text{d}, 2\text{d}, 3\text{d}, 4\text{d}, 5\text{d}]$$
+
+
+
+---
 *Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-07 16:15:20.*
