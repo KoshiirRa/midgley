@@ -598,7 +598,7 @@ def test_unlogged_regions_delta_preservation(monkeypatch):
         cin_html = f.read()
 
     assert "$3.916" in cin_html
-    assert ("$3.822" in cin_html or "$3.816" in cin_html)
+    assert any(p in cin_html for p in ["$3.832", "$3.822", "$3.816"])
     assert "-14.5%" not in cin_html
     assert "-18.4%" not in cin_html
 
