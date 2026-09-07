@@ -1662,7 +1662,6 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-07 17:26:38,2026-09-03,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.0826,4.0161,DOWN,3.6849,DOWN,0.3312,1.0,0.0,0.0,4.0826,0.0,3.8962,4.1361,0.0,yfinance,5.0
 2026-09-07 17:26:38,2026-09-04,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.1883,4.1044,DOWN,3.7646,DOWN,0.3398,1.0,0.0,0.0,4.1883,0.0,3.9845,4.2244,0.0,yfinance,5.0
 2026-09-07 17:26:39,2026-09-11,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.913,3.819,DOWN,,,,,0.0,0.0,3.913,0.0,3.3893,4.2486,,yfinance,5.0
-2026-09-07 18:00:20,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,US Diesel Fuel Prices Reach Record Highs Amid Global Refinery Outages - SuaraGarut.ID,3.184,3.2171,UP,,,,,0.0,0.0,3.184,0.0,2.9296,3.5046,,yfinance,5.0
 2026-09-07 18:09:22,2025-09-30,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,2.0645,2.0235,DOWN,2.5229,UP,0.4994,0.0,0.0,0.0,2.0645,0.0,1.7115,2.3356,0.0,yfinance,5.0
 2026-09-07 18:09:22,2025-10-01,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,2.0842,2.0352,DOWN,2.4359,UP,0.4007,0.0,0.0,0.0,2.0842,0.0,1.7232,2.3473,0.0,yfinance,5.0
 2026-09-07 18:09:22,2025-10-02,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,2.0676,2.0049,DOWN,2.401,UP,0.3961,0.0,0.0,0.0,2.0676,0.0,1.6929,2.317,0.0,yfinance,5.0
@@ -2371,3 +2370,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-07 18:12:12,2026-09-03,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.4196,3.3572,DOWN,3.6849,UP,0.3277,0.0,0.0,0.0,3.4196,0.0,3.0619,3.6526,0.0,yfinance,5.0
 2026-09-07 18:12:12,2026-09-04,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.5253,3.4461,DOWN,3.7646,UP,0.3185,0.0,0.0,0.0,3.5253,0.0,3.1507,3.7414,0.0,yfinance,5.0
 2026-09-07 18:12:13,2026-09-11,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.25,3.1762,DOWN,,,,,0.0,0.0,3.25,0.0,2.8761,3.4763,,yfinance,5.0
+2026-09-07 20:30:08,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Trump administration pays out milestone $100 billion in tariff refunds - ABC News - Breaking News, Latest News and Videos",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9627,3.5378,,yfinance,5.0
