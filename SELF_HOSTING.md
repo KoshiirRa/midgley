@@ -97,7 +97,9 @@ CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 # SEC EDGAR User-Agent — required for EDGAR 8-K polling (free, name + email only).
 # No account or API key needed. Per EDGAR robots.txt access policy.
 # Cloudflare Worker production: wrangler secret put SEC_USER_AGENT
-SEC_USER_AGENT="Midgley your@email.com"
+# Optional U.S. Census Bureau API Key (api.census.gov - Free public open data)
+# Optional: Public keyless queries work out-of-the-box. Add key for high-volume batch runs.
+CENSUS_API_KEY=""
 
 # Comma-separated list of refinery operator tickers to monitor for 8-K filings.
 # Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.

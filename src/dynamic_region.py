@@ -57,6 +57,7 @@ class DynamicRegionRunner:
         self.statutory_tax = self.profile.get("statutory_tax_gal", 0.400)
         self.rack_margin_offset = self.profile.get("rack_margin_offset", 0.500)
         self.logger_region_key = self.profile.get("logger_region_key", self.display_name.replace(" ", "_"))
+        self.commuter_demographics = self.profile.get("commuter_demographics", {})
 
     def _fetch_recent_region_prices(self) -> np.ndarray:
         """Fetches recent base prices for this region to compute rolling volatility."""
@@ -182,6 +183,7 @@ class DynamicRegionRunner:
             "guardrail_active": guardrail_active,
             "statutory_tax_gal": self.statutory_tax,
             "rack_margin_offset": self.rack_margin_offset,
+            "commuter_demographics": self.commuter_demographics,
             "feature_attributions": attributions,
             "spatial_refinery_summary": spatial_summary,
             "national_baseline": nat_res

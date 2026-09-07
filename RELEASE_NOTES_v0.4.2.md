@@ -131,6 +131,13 @@
 - **URL Event Feature Extraction (`src/event_analyzer.py`):** Added `extract_event_features_from_url()` with automatic content truncation (~1,500 words) to protect Gemini Flash token context budgets while enabling full qualitative impact scoring on web articles.
 - **Verification (`tests/test_firecrawl_scraper.py`):** 7/7 unit tests passing covering API response parsing, quota safety valve enforcement, cache hit persistence, offline HTML fallback extraction, HTTP error resiliency (429/500), and telemetry accounting.
 
+### 19. U.S. Census Bureau Metro Commuter & Vehicle Availability Ingestion (Issue #75)
+- **Zero-Cost Public ACS Connector (`src/census_demographics.py`):** Built `CensusDemographicsConnector` ingesting American Community Survey (ACS 1-Year & 5-Year) tables (`B08201` vehicle availability, `B08301` commute mode split, `B08013` aggregate travel time) across all regional benchmark MSAs (Tulsa, Newark, Cincinnati, Greenville, Oakland, Charlotte, Port St. Lucie).
+- **Econometric Derived Metrics:** Computes `vehicle_dependency_ratio`, `vehicles_per_household`, `mean_commute_minutes`, `transit_alternative_index`, and composite `inelastic_demand_score` ($0.0$ elastic to $1.0$ completely captive driving demand) to calibrate retail price pass-through speed and baseline rack margin spreads.
+- **Adaptive Annual Release Window Caching:** Features a window-aware caching engine that actively polls daily during the annual September release window (Sept 1–30) for new ACS-1 vintages and locks long-term cache forward (~335+ days until next August 31st) once the new vintage is confirmed ($0 compute/network overhead during standard operation).
+- **Regional Profile & Dynamic Calibration Integration:** Enriched all 8 regional JSON profiles in `data/regional_metadata/` and integrated commuter factors directly into `DynamicRegionRunner` (`src/dynamic_region.py`).
+- **Comprehensive Verification (`tests/test_census_demographics.py`):** 7/7 unit tests passing covering release window lifecycle, derived econometric metric formulas, live response parsing, deterministic offline fallbacks, and multi-metro resolution.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -139,11 +146,12 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `378 passed` (100% pass rate across all test modules including Multi-Feed AQI, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
+  **Result:** `385 passed` (100% pass rate across all test modules including Census Demographics, Multi-Feed AQI, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
+- **Issue #75**: `[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics` (Closed as completed)
 - **Issue #53**: `feat(core-api): Monitor open-access research papers via CORE API during weekly self-review` (Closed as completed)
 - **Issue #54**: `feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection` (Closed as completed)
 - **Issue #55**: `[Feature Request] Ingest live USGS Earthquake API feeds for real-time seismic fuel market risk scoring` (Closed as completed)

@@ -103,6 +103,7 @@ In addition to developer catalogs and academic preprint servers, the system inge
 
 ### State & Regional Open Data Portals
 * **Universal 50-State Open Data Portals ([`src/state_open_data.py`](file:///src/state_open_data.py)):** Socrata open data portals (`data.<state>.gov` / `data.gov`), U.S. Census State Tax Collections API, and FTA motor fuel indices for official state motor fuel excise tax rates ($/gal) and UST fees across all 50 states + DC.
+* **U.S. Census Bureau ACS Demographics & Commuter Metrics ([`src/census_demographics.py`](file:///src/census_demographics.py)):** Ingests MSA- and county-level American Community Survey (ACS-1 / ACS-5) commuter tables (`B08201`, `B08301`, `B08013`) to compute `vehicle_dependency_ratio`, `vehicles_per_household`, `mean_commute_minutes`, and `inelastic_demand_score` with an adaptive annual release-window lifecycle (Sept 1–30 verification, 335+ day locked annual cache).
 
 ---
 
