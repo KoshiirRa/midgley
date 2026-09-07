@@ -3,15 +3,17 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system build dependencies
+# Install system build & runtime dependencies (OpenMP for XGBoost, CA certs for TLS)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    ca-certificates \
     curl \
     git \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy official static uv binary
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Create virtual environment and add to PATH
 ENV VIRTUAL_ENV=/opt/venv
