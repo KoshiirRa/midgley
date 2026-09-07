@@ -5,7 +5,7 @@
     "completion_tokens": 15340,
     "total_tokens": 42020,
     "estimated_cost_usd": 0.006596,
-    "fallback_activations": 140
+    "fallback_activations": 171
   },
   "llm_events": [
     {
@@ -3747,6 +3747,347 @@
       "total_tokens": 200,
       "estimated_cost_usd": 2.6e-05,
       "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-07 17:25:35",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:37",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:42",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:43",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:43",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:44",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:44",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:45",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:52",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:52",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:53",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:53",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:54",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:25:55",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:01",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:02",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:02",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:03",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:03",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:11",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:12",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:14",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:15",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:20",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:22",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:23",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:24",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:36",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:37",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:37",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 17:26:37",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
     }
   ],
   "api_events": []
