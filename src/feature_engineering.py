@@ -216,6 +216,25 @@ def create_feature_matrix(
         if col not in df.columns:
             df[col] = 0.0
 
+    # Merge U.S. Treasury Yield Curve & TIPS Inflation Metrics (Issue #66)
+    try:
+        from src.treasury_yield_feed import TreasuryYieldConnector
+        treasury_connector = TreasuryYieldConnector()
+        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2022-01-01"
+        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
+        treasury_df = treasury_connector.fetch_treasury_yield_dataset(start_date=start_str, end_date=end_str)
+        if not treasury_df.empty:
+            df = pd.merge(df, treasury_df, on='date', how='left')
+            for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().bfill().fillna(0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge U.S. Treasury yield feed: {e}")
+
+    for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
+        if col not in df.columns:
+            df[col] = 0.0
+
     # Merge Open-Meteo Weather Degree Days Data (Locale-Routed, Point-in-Time Correct - Issue #72, #175)
     # Avoid scalar broadcasting current snapshot across historical training rows
     try:
@@ -329,7 +348,7 @@ def create_feature_matrix(
         df['usgs_cushing_seismic_risk_index'] = 0.0
         df['usgs_composite_seismic_risk_index'] = 0.0
 
-    # Merge Air Quality (AQI) Industrial Emissions Telemetry (Issue #54)
+    # Merge Air Quality (AQI) Industrial Emissions & Ozone Telemetry (Issues #54 & #73)
     # Avoid scalar broadcasting current snapshot across historical training rows
     try:
         from src.aqi_feed import AQIFeedConnector
@@ -341,12 +360,16 @@ def create_feature_matrix(
         df['aqi_delaware_outage_risk_index'] = 0.0
         df['aqi_catlettsburg_outage_risk_index'] = 0.0
         df['aqi_composite_outage_risk_index'] = 0.0
+        df['aqi_ozone_action_day_count'] = 0.0
+        df['aqi_max_rvp_surcharge_per_gal'] = 0.0
         if len(df) > 0:
             df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', 0.0)
             df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', 0.0)
             df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', 0.0)
             df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', 0.0)
             df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', 0.0)
+            df.loc[df.index[-1], 'aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', 0))
+            df.loc[df.index[-1], 'aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', 0.0)
     except Exception as e:
         logger.warning(f"Could not merge AQI industrial emissions telemetry: {e}")
         df['aqi_bay_area_outage_risk_index'] = 0.0
@@ -354,6 +377,8 @@ def create_feature_matrix(
         df['aqi_delaware_outage_risk_index'] = 0.0
         df['aqi_catlettsburg_outage_risk_index'] = 0.0
         df['aqi_composite_outage_risk_index'] = 0.0
+        df['aqi_ozone_action_day_count'] = 0.0
+        df['aqi_max_rvp_surcharge_per_gal'] = 0.0
 
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
@@ -480,6 +505,7 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'cot_commercial_hedger_ratio', 'cot_net_position_delta_1w',
         'ferc_colonial_line1_tariff_per_bbl', 'ferc_plantation_tariff_per_bbl',
         'ferc_explorer_tariff_per_bbl', 'ferc_pipeline_tariff_index_5d',
+        'treasury_yield_10y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d',
         'rbob_rsi_14', 'rbob_macd_line', 'rbob_macd_signal',
         'rbob_bollinger_band_pct_b', 'rbob_atr_14',
         'sin_day', 'cos_day'

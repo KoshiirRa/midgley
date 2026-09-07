@@ -470,3 +470,60 @@ def process_event_dataset(events_df: pd.DataFrame, use_llm_api: bool = False) ->
         
     return pd.DataFrame(records)
 
+
+def extract_event_features_from_url(
+    url: str,
+    headline_hint: str = None,
+    api_key: str = None,
+    tier: str = "privileged",
+    max_words: int = 1500
+) -> dict:
+    """
+    Scrapes target web article/press release URL into clean Markdown using Firecrawl API
+    (or deterministic zero-cost native fallback), truncates safely to max_words, and extracts
+    structured commodity impact scores using Gemini Flash or offline lexicon.
+    """
+    from src.firecrawl_scraper import FirecrawlConnector
+
+    scraper = FirecrawlConnector()
+    scrape_res = scraper.scrape_url(url)
+    markdown_text = scrape_res.get("markdown", "")
+    title = scrape_res.get("title") or headline_hint or url
+
+    # Safe word truncation to preserve LLM token context budget
+    words = markdown_text.split()
+    if len(words) > max_words:
+        truncated_md = " ".join(words[:max_words]) + " ...[truncated]"
+    else:
+        truncated_md = markdown_text
+
+    combined_text = f"{title}\n\n{truncated_md}".strip() if truncated_md else title
+
+    # Automatically snapshot and preserve historical news article (Issue #97)
+    try:
+        from src.archive_service import submit_url_to_archive
+        submit_url_to_archive(
+            url=url,
+            title=title,
+            tags=["midgley-news", "energy-url-extraction"],
+            content_snapshot=truncated_md,
+            async_dispatch=True
+        )
+    except Exception as e:
+        logger.debug(f"Historical archive notice for {url}: {e}")
+
+    scores = extract_event_features_llm(combined_text, api_key=api_key, tier=tier)
+
+    return {
+        "url": url,
+        "title": title,
+        "provider": scrape_res.get("provider", "unknown"),
+        "scrape_success": scrape_res.get("success", False),
+        "scores": scores,
+        "geopolitical_risk": scores.get("geopolitical_risk", 0.0),
+        "supply_disruption": scores.get("supply_disruption", 0.0),
+        "demand_sentiment": scores.get("demand_sentiment", 0.0),
+        "opec_action": scores.get("opec_action", 0.0),
+        "overall_price_pressure": scores.get("overall_price_pressure", 0.0)
+    }
+

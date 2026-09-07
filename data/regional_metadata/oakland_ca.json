@@ -4,8 +4,11 @@
   "display_name": "Oakland, CA Metro Retail",
   "padd_region": "PADD 5 West Coast",
   "primary_city": "Oakland, CA",
-  "counties": ["Alameda", "Contra Costa"],
-  "baseline_price": 4.950,
+  "counties": [
+    "Alameda",
+    "Contra Costa"
+  ],
+  "baseline_price": 4.95,
   "icon_class": "fa-warehouse",
   "theme_color": "amber",
   "econometric_drivers": {
@@ -17,7 +20,9 @@
     "description": "Located 12 miles north of Oakland, Chevron's 245,000 bpd Richmond Refinery, alongside PBF Martinez and Valero Benicia, supplies East Bay retail stations via the Kinder Morgan SFPP pipeline corridor.",
     "primary_refinery": "Chevron Richmond Refinery",
     "capacity_bpd": 245000,
-    "pipelines": ["Kinder Morgan SFPP North/South Line"]
+    "pipelines": [
+      "Kinder Morgan SFPP North/South Line"
+    ]
   },
   "tax_structure": {
     "title": "CARB Environmental Tax & Regulatory Overhead",
@@ -38,14 +43,14 @@
     {
       "name": "USGS Hayward Quake (M>=6.0)",
       "subtitle": "Pipeline Shutoff & Hydrocracker Trip",
-      "price_impact_per_gal": 0.420,
+      "price_impact_per_gal": 0.42,
       "pct_impact": 8.48,
       "description": "Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips"
     },
     {
       "name": "PG&E PSPS Wildfire Shutoff",
       "subtitle": "Diablo Wind Red Flag Power Cut",
-      "price_impact_per_gal": 0.350,
+      "price_impact_per_gal": 0.35,
       "pct_impact": 7.07,
       "description": "Diablo wind Red Flag power cuts force emergency flaring & 2-week unit restarts"
     },
@@ -56,5 +61,19 @@
       "pct_impact": 3.33,
       "description": "Golden Gate & Carquinez Strait crude tanker berth closures delay ANS discharges"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 1820000,
+    "zero_vehicle_pct": 11.5,
+    "vehicles_per_household": 1.62,
+    "drive_alone_share": 0.585,
+    "carpool_share": 0.085,
+    "public_transit_share": 0.125,
+    "work_from_home_share": 0.185,
+    "mean_commute_minutes": 32.5,
+    "vehicle_dependency_ratio": 0.67,
+    "transit_alternative_index": 0.218,
+    "inelastic_demand_score": 0.548
+  }
 }

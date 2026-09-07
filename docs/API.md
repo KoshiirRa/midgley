@@ -180,15 +180,16 @@ curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
 ---
 
 ### 3. `GET /api/v1/forecast/scoreboard`
-Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days).
+Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days) and discrete forecast horizons (1d through 5d) (Issue #209).
 
 **Query Parameters:**
 * `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`, `all`). Default: `all`.
 * `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
+* `horizon` (optional, string): Filter by forecast target horizon in days (`1`, `2`, `3`, `4`, `5`, `all`). Default: `all`.
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30"
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=5"
 ```
 
 **Example Response:**
@@ -196,15 +197,17 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
 {
   "status": "success",
   "system": "Midgley v1.4 Finlight-LLM",
-  "timestamp": "2026-09-02T19:10:00Z",
+  "timestamp": "2026-09-07T11:00:00Z",
   "filters": {
     "locale": "tulsa",
     "region_code": "Tulsa_OK",
-    "window_days": "30"
+    "window_days": "30",
+    "horizon": "5"
   },
   "summary": {
     "window_days": "30",
     "region_filter": "Tulsa_OK",
+    "horizon_filter": 5,
     "total_evaluations": 30,
     "mae_dollars": 0.1331,
     "rmse_dollars": 0.1620,
@@ -213,6 +216,63 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
     "naive_persistence_mae": 0.1740,
     "model_uplift_mae_pct": 23.51
   },
+  "horizon_breakdown": [
+    {
+      "horizon_days": 1,
+      "horizon_label": "1-Day (24h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.0412,
+      "rmse_dollars": 0.0583,
+      "mape_pct": 1.28,
+      "directional_hit_rate_pct": 68.33,
+      "naive_persistence_mae": 0.0520,
+      "model_uplift_mae_pct": 20.77
+    },
+    {
+      "horizon_days": 2,
+      "horizon_label": "2-Day (48h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.0685,
+      "rmse_dollars": 0.0892,
+      "mape_pct": 1.84,
+      "directional_hit_rate_pct": 64.50,
+      "naive_persistence_mae": 0.0841,
+      "model_uplift_mae_pct": 18.55
+    },
+    {
+      "horizon_days": 3,
+      "horizon_label": "3-Day (72h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.0910,
+      "rmse_dollars": 0.1145,
+      "mape_pct": 2.45,
+      "directional_hit_rate_pct": 61.20,
+      "naive_persistence_mae": 0.1180,
+      "model_uplift_mae_pct": 22.88
+    },
+    {
+      "horizon_days": 4,
+      "horizon_label": "4-Day (96h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.1140,
+      "rmse_dollars": 0.1410,
+      "mape_pct": 2.98,
+      "directional_hit_rate_pct": 59.80,
+      "naive_persistence_mae": 0.1460,
+      "model_uplift_mae_pct": 21.92
+    },
+    {
+      "horizon_days": 5,
+      "horizon_label": "5-Day (1-Week Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.1331,
+      "rmse_dollars": 0.1620,
+      "mape_pct": 3.42,
+      "directional_hit_rate_pct": 58.15,
+      "naive_persistence_mae": 0.1740,
+      "model_uplift_mae_pct": 23.51
+    }
+  ],
   "regional_breakdown": [
     {
       "region": "Tulsa_OK",
@@ -227,7 +287,9 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
   ],
   "recent_evaluations": [
     {
+      "log_timestamp": "2026-09-02 08:00:00",
       "forecast_target_date": "2026-08-25",
+      "forecast_horizon_days": 5,
       "region": "Tulsa_OK",
       "current_base_price": 3.89,
       "predicted_5d_price": 3.935,
@@ -390,6 +452,44 @@ For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and
       "headline": "Refinery Outage Reported in PADD 1B",
       "url": "https://news.example.com/refinery2",
       "source": "Cloudflare_Queue_Consumer"
+    }
+  ]
+}
+```
+
+---
+
+## 📡 Open Source AI Radar Model Discovery Endpoint (`GET /api/v1/system/radar` - Issue #187)
+
+* **Endpoint:** `GET /api/v1/system/radar`
+* **Query Parameters:**
+  - `limit` (optional, integer): Maximum models to return (default: 20).
+  - `min_score` (optional, float): Minimum benchmark capability score (0.0 to 100.0).
+  - `task` (optional, string): Filter by primary task (e.g. `text-generation`, `code-generation`, `reasoning`).
+* **Description:** Ingests live model discovery and capability benchmark metadata from Open Source AI Radar, tracking open-weights LLMs/SLMs, parameter scales, and quantization profiles with 24-hour disk caching (`data/radar_cache.json`).
+
+* **Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/system/radar?limit=5"
+```
+
+* **Example Response:**
+```json
+{
+  "status": "success",
+  "timestamp": "2026-09-07T04:45:00Z",
+  "total_models_available": 50,
+  "returned_count": 5,
+  "top_models": [
+    {
+      "model_id": "meta-llama/Llama-3.3-70B-Instruct",
+      "model_name": "Llama 3.3 70B Instruct",
+      "developer": "Meta",
+      "parameter_size": "70B",
+      "open_weights": true,
+      "benchmark_score": 88.6,
+      "release_date": "2024-12-06",
+      "license": "llama3.3"
     }
   ]
 }

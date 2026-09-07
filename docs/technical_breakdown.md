@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-06 22:30:53`  
+**Log Timestamp:** `2026-09-07 16:15:20`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal  
+**Primary Event Trigger:** Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal
+- **Headline Trigger:** Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st
 - **Active Ingested News Links:**
-- [Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal](https://news.google.com/rss/articles/CBMizAFBVV95cUxNWFZkSjlibElfRVhYUFBrT25Ld1gtZUdnamR0VEhGTVlkRFpaX294RzRwd0lCWXNCbXVhQk1kUmtDY2tpRE5KNm5PcWNQajdPcGt5dmtuTUhuQVBCLVJ6bnladWRjTmJkOFpjWTR1MzdiNkZPT0pzVFpLX2o1SnN6SVB1QXBfUWl2TTc4bXdQM3BpblpNR3E4QkRkMTdwaDZTQ3A5WHJLX1ZPVlczQ2paSDFSUWFEdmpHdTQxM1E1dENFNXJWTzg1NjVxSWg?oc=5) (Google News Energy Feed)
-- [Russia Sanctions Bill Stalls: Why India’s Russian Oil Could Be In The Crosshairs - outlookbusiness.com](https://news.google.com/rss/articles/CBMitgFBVV95cUxQbmxBU0xiU1ZjY1F3alVaUWdEbXpkVkFQYXhyQXFVNW1CQ1pLQ1R0bUJWZmdmZDhhbV9CTFdTdXItZEtGM3RhbnByVkVfcjUtUTNjQ09WYzNqS2ItSjZLVEJZSFc0b2V5aEVhSjUwN204Y3c1a2hQYlB2LUdFTU5DLVNQaVRsNEIwMEJ5cHpNNUplcFNwMm45andXRzFubXQ2ZTVPck9FbU1PdU01NVF5dnNHR1QzUdIBwwFBVV95cUxNc2tzNklMNmVRTUttLWpJZHRxQ05MN1JsNzBLYU0ySEQ5SlItS0F1VVhpRktLdGI5ZHFJR1Z6eW5qOHB6UGJZWnUtQ2RiV3NobTRCTnRYWkNvUmN0N1BObUFHbVFxX2pXQ2gwcmI0STZrc0lib1RSRHFrYmF2cHEwalJ1SEdPeDB2REJ0THRCOWdIRmlLZHhNdlo0OEE3c1habTBNelpteDFpTzVTOGNPeXY4TlJtSWZOWWdqc0prc3ZRTUk?oc=5) (Google News Energy Feed)
-- [Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com](https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5) (Google News Energy Feed)
+- [Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st](https://news.google.com/rss/articles/CBMizgFBVV95cUxPaFBnYjdQa2JpX0YxVGQ5dTY4YmNuLWl6d0VkazR0TC1LeEdQVnNsemRTS01MQk43QV82eEU5UnpySXVoLXFaS0M5NDJneWhYaktHa3RoT19Id2k3Wk13eXFCTmgtdnVXX3I2aE5jbVJzc2NXZkxtNVlLTEl1THdNaG5DcmN6WVlNd2FsbWxSOFZmSFFkZENMa1ZhaGItemYwQ3pqTkozdURzYmtQeE9uMkNpY1ZWYThYcHVFdVBRVEdDU0hlM3NRRzkwbmU5UdIBzgFBVV95cUxPaFBnYjdQa2JpX0YxVGQ5dTY4YmNuLWl6d0VkazR0TC1LeEdQVnNsemRTS01MQk43QV82eEU5UnpySXVoLXFaS0M5NDJneWhYaktHa3RoT19Id2k3Wk13eXFCTmgtdnVXX3I2aE5jbVJzc2NXZkxtNVlLTEl1THdNaG5DcmN6WVlNd2FsbWxSOFZmSFFkZENMa1ZhaGItemYwQ3pqTkozdURzYmtQeE9uMkNpY1ZWYThYcHVFdVBRVEdDU0hlM3NRRzkwbmU5UQ?oc=5) (Google News Energy Feed)
+- [The right kind of retaliation to Donald Trump’s tariffs - The Globe and Mail](https://news.google.com/rss/articles/CBMitAFBVV95cUxOLUw3UmNEMWtMY3VuVmNsdEUxZlBaV3B3WXdIMFY2RWNEZjRNUTdQR3RidzUtcllkS3dVcDhoMzJacjl3UERVRVBOdGRJQzRGSzhibmxuMm5sdVUxdkFRekRzS2pldERsODNtX2p3bFVIS0g5UGVTaGpJWmhkWjlFZWVJMnlLSHZ6Wk9qQ2VfRGt5STE1ZFdlbmN5VXFkOWhqeEliNDRZMFlRaWRXZFFxNFZsTXc?oc=5) (Google News Energy Feed)
+- [The US tariff on Canadian imports could send already soaring hockey gear prices even higher - Midland Reporter-Telegram](https://news.google.com/rss/articles/CBMilwFBVV95cUxOTFVRTnYzQTVSNmp5dEJYa1ZLSVRNZ2pMcnI3bUdDdGlBajBoYUxiVGJVc3g0VDlqakNqcWllOEQ3U3J3VUpYcHlIY016T09CdE90ZzRYSWxtc2loWkIta1FCeDJrWWpzc0V2MFVNbWcyd0E2cEtWdmd1dkpzS1ZLZzl4bFg0MzRJRTdHRWlSa3VSdVFjaERJ?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -51,15 +51,15 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.179) = \$3.250\text{/gal}$ (Delta: -\$0.179/gal, -5.64\%)
-- **Tulsa, OK Retail**: $P = \$3.611 + (-\$0.278) = \$3.538\text{/gal}$ (Delta: -\$0.278/gal, -7.69\%)
-- **Newark, DE Retail**: $P = \$3.381 + (-\$0.273) = \$3.310\text{/gal}$ (Delta: -\$0.273/gal, -8.07\%)
-- **Cincinnati, OH/KY**: $P = \$3.909 + (-\$0.283) = \$3.837\text{/gal}$ (Delta: -\$0.283/gal, -7.24\%)
-- **Greenville, NC Retail**: $P = \$3.705 + (-\$0.280) = \$3.632\text{/gal}$ (Delta: -\$0.280/gal, -7.54\%)
-- **Charlotte, NC Retail**: $P = \$3.851 + (-\$0.283) = \$3.773\text{/gal}$ (Delta: -\$0.283/gal, -7.34\%)
-- **Port St. Lucie, FL Retail**: $P = \$3.929 + (-\$0.285) = \$3.841\text{/gal}$ (Delta: -\$0.285/gal, -7.26\%)
-- **Oakland, CA Retail**: $P = \$5.853 + (+\$0.267) = \$5.738\text{/gal}$ (Delta: +\$0.267/gal, +4.55\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
-- **SF Bay Area Region**: $P = \$5.971 + (+\$0.282) = \$5.854\text{/gal}$ (Delta: +\$0.282/gal, +4.73\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **National Wholesale**: $P = \$3.184 + (-\$0.163) = \$3.250\text{/gal}$ (Delta: -\$0.163/gal, -5.13\%)
+- **Tulsa, OK Retail**: $P = \$3.890 + (-\$0.110) = \$3.780\text{/gal}$ (Delta: -\$0.110/gal, -2.83\%)
+- **Newark, DE Retail**: $P = \$3.350 + (-\$0.100) = \$3.250\text{/gal}$ (Delta: -\$0.100/gal, -2.99\%)
+- **Cincinnati, OH/KY**: $P = \$3.450 + (-\$0.100) = \$3.350\text{/gal}$ (Delta: -\$0.100/gal, -2.90\%)
+- **Greenville, NC Retail**: $P = \$3.250 + (-\$0.270) = \$3.176\text{/gal}$ (Delta: -\$0.270/gal, -8.30\%)
+- **Charlotte, NC Retail**: $P = \$3.280 + (-\$0.270) = \$3.203\text{/gal}$ (Delta: -\$0.270/gal, -8.24\%)
+- **Port St. Lucie, FL Retail**: $P = \$3.380 + (-\$0.090) = \$3.290\text{/gal}$ (Delta: -\$0.090/gal, -2.66\%)
+- **Oakland, CA Retail**: $P = \$4.950 + (-\$0.628) = \$4.822\text{/gal}$ (Delta: -\$0.628/gal, -12.68\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **SF Bay Area Region**: $P = \$5.050 + (-\$0.630) = \$4.919\text{/gal}$ (Delta: -\$0.630/gal, -12.48\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 - **ULSD Distillate Crack Engine (WIP)**: $P_{\text{ULSD}} = \$2.850\text{/gal}$, Distillate Crack Spread = $\$0.742\text{/gal}$, 3-2-1 Crack Margin = $\$0.685\text{/gal}$ *(Experimental Work-In-Progress undergoing multi-week feedback loop empirical evaluation)*
 
 
@@ -68,39 +68,81 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-06 22:30:53]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-07 16:15:20]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-06 22:30:53 (Mode: INTRADAY_REVISION), primary event trigger 'Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-07 16:15:20 (Mode: INTRADAY_REVISION), primary event trigger 'Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.250/gal ($-0.179/gal, -5.64%)
-  • Tulsa, OK Retail: $3.538/gal ($-0.278/gal, -7.69%)
-  • Newark, DE Retail: $3.310/gal ($-0.273/gal, -8.07%)
-  • Cincinnati, OH/KY: $3.837/gal ($-0.283/gal, -7.24%)
-  • Greenville, NC Retail: $3.632/gal ($-0.280/gal, -7.54%)
-  • Charlotte, NC Retail: $3.773/gal ($-0.283/gal, -7.34%)
-  • Port St. Lucie, FL Retail: $3.841/gal ($-0.285/gal, -7.26%)
-  • Oakland, CA Retail: $5.738/gal (+$0.267/gal, +4.55%)
-  • SF Bay Area Region: $5.854/gal (+$0.282/gal, +4.73%)
+  • National Wholesale: $3.250/gal ($-0.163/gal, -5.13%)
+  • Tulsa, OK Retail: $3.780/gal ($-0.110/gal, -2.83%)
+  • Newark, DE Retail: $3.250/gal ($-0.100/gal, -2.99%)
+  • Cincinnati, OH/KY: $3.350/gal ($-0.100/gal, -2.90%)
+  • Greenville, NC Retail: $3.176/gal ($-0.270/gal, -8.30%)
+  • Charlotte, NC Retail: $3.203/gal ($-0.270/gal, -8.24%)
+  • Port St. Lucie, FL Retail: $3.290/gal ($-0.090/gal, -2.66%)
+  • Oakland, CA Retail: $4.822/gal ($-0.628/gal, -12.68%)
+  • SF Bay Area Region: $4.919/gal ($-0.630/gal, -12.48%)
 
-Largest upward shift for this run: SF Bay Area Region at $5.854/gal (+0.282/gal). Largest downward shift for this run: Port St. Lucie, FL Retail at $3.841/gal (-0.285/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: Port St. Lucie, FL Retail at $3.290/gal (-0.090/gal). Largest downward shift for this run: SF Bay Area Region at $4.919/gal (-0.630/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-06 22:30:53]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-07 16:15:20]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-06 22:30:53.*
+
+## 6. Advanced Quantitative Feature & Physical Data Formulas
+
+### 3-2-1 Refining Crack Spread Formula (Issue #169)
+$$\text{Crack}_{321} (\$/\text{bbl}) = \frac{2 \times (P_{\text{RBOB}} \times 42) + 1 \times (P_{\text{HO}} \times 42) - 3 \times P_{\text{WTI}}}{3}$$
+
+### Stacking Ensemble Quantile Prediction Bounds (Issue #170)
+$$P_{10} = P_{50} - 1.2815\sigma, \quad P_{90} = P_{50} + 1.2815\sigma$$
+
+### Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
+$$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t$$
+
+### Empirical Residual 95% Confidence Intervals (Issue #214)
+$$\text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+
+### USGS 3D Hypocentral Attenuation & Ground Shaking Intensity (Issue #55)
+$$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R)$$
+
+### USGS Hydrological Streamflow & Barge Bottleneck Index (Issue #56)
+$$\text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+
+### Multi-Feed AQI Standardized Flaring Outage Detection Z-Score (Issue #54)
+$$Z_{\text{PM2.5}} = \frac{\text{PM2.5}_t - \mu_{30\text{d}}}{\sigma_{30\text{d}}}, \quad Z_{\text{SO2}} = \frac{\text{SO2}_t - \mu_{30\text{d}}}{\sigma_{30\text{d}}}$$
+
+### EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73)
+$$\text{Surcharge}_{\text{RVP}} = \Delta \text{Spread}_{\text{Summer Blend}} + 0.040 \cdot \mathbf{1}_{\text{AQI}_{\text{O3}} \ge 101}$$
+
+### U.S. Census Commuter Inelastic Demand Score (Issue #75)
+$$\text{Score}_{\text{inelastic}} = \frac{\text{DriveAlone} + \text{Carpool}}{\text{TotalCommuters}} \times (1 - \text{TransitIndex})$$
+
+### Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66)
+$$\text{Spread}_{10\text{Y}-2\text{Y}} = Y_{10\text{Y}} - Y_{2\text{Y}}, \quad \Delta \text{Spread}_{5\text{d}} = \text{Spread}_t - \text{Spread}_{t-5}$$
+
+### Qlib Symbolic Alpha Factor Information Coefficient (Issue #127)
+$$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}$$
+
+### Multi-Horizon Forecast Scoreboard Accuracy (Issue #209)
+$$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \quad H \in [1\text{d}, 2\text{d}, 3\text{d}, 4\text{d}, 5\text{d}]$$
+
+
+
+---
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-07 16:15:20.*

@@ -62,6 +62,7 @@ def test_get_recent_evaluated_records():
     if len(records) > 0:
         rec = records[0]
         assert "forecast_target_date" in rec
+        assert "forecast_horizon_days" in rec
         assert "region" in rec
         assert "current_base_price" in rec
         assert "predicted_5d_price" in rec
@@ -69,3 +70,50 @@ def test_get_recent_evaluated_records():
         assert "error_dollars" in rec
         assert "directional_hit" in rec
         assert rec["directional_hit"] in [0, 1]
+
+
+def test_scoreboard_horizon_filtering():
+    """Verify compute_rolling_scoreboard_metrics with horizon_days filter."""
+    m_5d = compute_rolling_scoreboard_metrics(window_days=30, horizon_days=5)
+    assert "mae_dollars" in m_5d
+    assert "horizon_filter" in m_5d
+    assert m_5d["horizon_filter"] == 5
+
+    m_all = compute_rolling_scoreboard_metrics(window_days=30, horizon_days="all")
+    assert m_all["horizon_filter"] == "All"
+    assert m_all["total_evaluations"] >= m_5d["total_evaluations"]
+
+
+def test_compute_horizon_scoreboard_breakdown():
+    """Verify compute_horizon_scoreboard_breakdown returns per-horizon metrics across 1d through 5d."""
+    from src.prediction_logger import compute_horizon_scoreboard_breakdown
+    breakdown = compute_horizon_scoreboard_breakdown(window_days=30)
+    assert isinstance(breakdown, list)
+    assert len(breakdown) == 5
+
+    h_days_list = [item["horizon_days"] for item in breakdown]
+    assert h_days_list == [1, 2, 3, 4, 5]
+
+    for item in breakdown:
+        assert "horizon_label" in item
+        assert "evaluations" in item
+        assert "mae_dollars" in item
+        assert "rmse_dollars" in item
+        assert "mape_pct" in item
+        assert "directional_hit_rate_pct" in item
+        assert "naive_persistence_mae" in item
+        assert "model_uplift_mae_pct" in item
+
+
+def test_regional_scoreboard_breakdown_with_horizon():
+    """Verify compute_regional_scoreboard_breakdown supports horizon_days argument."""
+    breakdown = compute_regional_scoreboard_breakdown(window_days=30, horizon_days=5)
+    assert isinstance(breakdown, list)
+    if len(breakdown) > 0:
+        item = breakdown[0]
+        assert "region" in item
+        assert "evaluations" in item
+        assert "mae_dollars" in item
+        assert "directional_hit_rate_pct" in item
+        assert "model_uplift_mae_pct" in item
+

@@ -117,6 +117,12 @@ class TestEDGAR8KCachePersistence(unittest.TestCase):
         self.assertFalse(monitor._is_seen("PBF:0001234567-26-999999"))
         os.unlink(tmp_cache)
 
+    def test_sec_edgar_feed_module_shim(self):
+        """Verify backwards compatibility shim for Issue #69."""
+        import src.sec_edgar_feed as sef
+        self.assertTrue(hasattr(sef, "EDGAR8KMonitor"))
+        self.assertEqual(sef.DEFAULT_TICKERS, ["PBF", "DINO", "MPC", "VLO", "PSX"])
+
 
 if __name__ == "__main__":
     unittest.main()

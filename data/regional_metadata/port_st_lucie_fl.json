@@ -4,8 +4,12 @@
   "display_name": "Port St. Lucie, FL Metro Retail",
   "padd_region": "PADD 1C Lower Atlantic",
   "primary_city": "Port St. Lucie, FL",
-  "counties": ["St. Lucie", "Martin", "Indian River"],
-  "baseline_price": 3.380,
+  "counties": [
+    "St. Lucie",
+    "Martin",
+    "Indian River"
+  ],
+  "baseline_price": 3.38,
   "icon_class": "fa-water",
   "theme_color": "cyan",
   "econometric_drivers": {
@@ -17,7 +21,11 @@
     "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
     "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
     "capacity_bpd": 600000,
-    "pipelines": ["Port Everglades Marine Terminal Offloading", "Port Canaveral Tanker Berths", "I-95 & Florida Turnpike Tank Truck Corridors"]
+    "pipelines": [
+      "Port Everglades Marine Terminal Offloading",
+      "Port Canaveral Tanker Berths",
+      "I-95 & Florida Turnpike Tank Truck Corridors"
+    ]
   },
   "tax_structure": {
     "title": "Florida Motor Fuel Tax Structure",
@@ -56,5 +64,19 @@
       "pct_impact": 5.18,
       "description": "Delays Gulf Coast waterborne tank barge arrivals"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 215000,
+    "zero_vehicle_pct": 4.1,
+    "vehicles_per_household": 1.94,
+    "drive_alone_share": 0.812,
+    "carpool_share": 0.08,
+    "public_transit_share": 0.006,
+    "work_from_home_share": 0.088,
+    "mean_commute_minutes": 28.5,
+    "vehicle_dependency_ratio": 0.892,
+    "transit_alternative_index": 0.05,
+    "inelastic_demand_score": 0.868
+  }
 }

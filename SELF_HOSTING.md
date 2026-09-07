@@ -51,8 +51,14 @@ GEMINI_API_KEY="AIzaSy..."
 # Real-Time Financial Energy Media API (finlight.me) - Enforces 150 call/month safety cap
 FINLIGHT_API_KEY="fl_live_..."
 
+# Firecrawl Web Scraping API (firecrawl.dev) - Enforces 800 call/month safety cap (Issue #83)
+FIRECRAWL_API_KEY="fc-..."
+
 # Official U.S. EIA Open Data v2 Key (Weekly PADD Stocks & Utilization)
 EIA_API_KEY="eia_api_key_here"
+
+# U.S. EPA AirNow API Key (airnowapi.org - Free 500 req/hr developer account, Issue #73)
+AIRNOW_API_KEY="0882E80D-3459-4F86-ADE5-A38F34CFE021"
 
 # St. Louis Fed FRED Key (Macro Energy & Retail Index Series)
 FRED_API_KEY="fred_api_key_here"
@@ -75,6 +81,12 @@ MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
+# Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
+# Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
+WANDB_API_KEY="wandb_v1_..."
+WANDB_PROJECT="midgley-gas-forecasting"
+WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
+
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
 # ==============================================================================
@@ -94,7 +106,19 @@ CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 # SEC EDGAR User-Agent — required for EDGAR 8-K polling (free, name + email only).
 # No account or API key needed. Per EDGAR robots.txt access policy.
 # Cloudflare Worker production: wrangler secret put SEC_USER_AGENT
-SEC_USER_AGENT="Midgley your@email.com"
+# Optional U.S. Census Bureau API Key (api.census.gov - Free public open data)
+# Optional: Public keyless queries work out-of-the-box. Add key for high-volume batch runs.
+CENSUS_API_KEY=""
+
+# Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
+HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
+# Or separate daily/weekly endpoints:
+# HEALTHCHECKS_DAILY_PING_URL="https://hc-ping.com/<uuid>"
+# HEALTHCHECKS_WEEKLY_PING_URL="https://hc-ping.com/<uuid>"
+
+# Self-Hosted ArchiveBox Historical Preservation Server (github.com/ArchiveBox/ArchiveBox, Issue #97)
+ARCHIVEBOX_URL="http://10.42.42.54:8000"
+ARCHIVEBOX_API_KEY=""
 
 # Comma-separated list of refinery operator tickers to monitor for 8-K filings.
 # Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.
@@ -210,6 +234,16 @@ python3 -m src.locations.national.main --llm
 Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
 ```bash
 python3 -m scripts.benchmark_qlib_rd_agent
+```
+
+### Step 4: Verify Multi-Horizon Scoreboard & MLOps Accuracy Metrics
+Query the rolling scoreboard across discrete forecast horizons (1d through 5d) (Issue #209):
+```bash
+# Query 5-day horizon scoreboard metrics
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=national&window=30&horizon=5"
+
+# Query 1-day (24h tactical) horizon scoreboard metrics
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=1"
 ```
 
 ---
@@ -625,6 +659,12 @@ systemctl --user status midgley-api.service
 systemctl --user list-timers --all
 ```
 
+### 5. Execute Feature Leakage & Factor Decay Validation Audit (Issue #146)
+Run the quantitative research validation auditor to verify point-in-time temporal alignment, calculate Probability of Backtest Overfitting (PBO), and fit multi-horizon factor decay curves:
+```bash
+python3 scripts/audit_feature_leakage.py --region Tulsa_OK --horizons 1,3,5,10,14,20 --output data/feature_audit_report.json
+```
+
 ---
 
-*Midgley Version: `v0.3.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.5.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
