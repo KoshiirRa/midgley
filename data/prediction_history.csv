@@ -1,5 +1,4 @@
 log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigger,current_base_price,predicted_5d_price,predicted_direction,actual_5d_price,actual_direction,error_dollars,directional_hit,llm_price_pressure,llm_supply_disruption,quant_baseline_5d_price,llm_augmentation_delta,prediction_lower_95ci,prediction_upper_95ci,within_95ci_hit,data_source_provenance
-2026-09-07 03:30:08,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Russia Sanctions Bill: India gets a breather as Trump’s 100% tariff weapon stalls in US House - The Economic Times,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,3.1303,3.3702,,yfinance
 2026-09-07 03:33:29,2026-09-07,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.5024,3.4217,DOWN,3.7646,UP,0.3429,0.0,0.0,0.0,3.5024,0.0,3.3017,3.5416,0.0,yfinance
 2026-09-07 03:33:29,2026-09-14,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.28,3.203,DOWN,,,,,0.0,0.0,3.28,0.0,2.769,3.6369,,yfinance
 2026-09-07 03:34:45,2026-09-07,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.437,3.3745,DOWN,3.2146,DOWN,0.1599,1.0,0.0,0.0,3.437,0.0,2.9476,3.8014,1.0,yfinance
@@ -1190,3 +1189,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-07 04:41:44,2026-09-04,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.6399,5.5493,DOWN,5.3646,DOWN,0.1847,1.0,0.0,0.0,5.6399,0.0,5.2531,5.8454,1.0,yfinance
 2026-09-07 04:41:45,2026-09-11,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.8215,DOWN,,,,,0.0,0.0,4.95,0.0,4.5253,5.1176,,yfinance
 2026-09-07 04:41:45,2026-09-11,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9189,DOWN,,,,,0.0,0.0,5.05,0.0,4.6227,5.215,,yfinance
+2026-09-07 05:15:09,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9627,3.5378,,yfinance
