@@ -255,7 +255,7 @@ def compute_regional_residual_std(region: str = None, window_days: int = 30, def
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
-    model_version: str = "v1.4-Finlight-Ridge",
+    model_version: str = "v1.6-Ipatieff",
     run_type: str = "DAILY_BATCH",
     headline_trigger: str = ""
 ) -> int:
@@ -422,7 +422,7 @@ def backfill_new_region_history(
     base_prices,
     predicted_prices,
     region: str,
-    model_version: str = "v1.4-Ridge"
+    model_version: str = "v1.6-Ipatieff"
 ) -> int:
     """
     Backfills historical test split predictions for a newly added region into prediction_history.csv
