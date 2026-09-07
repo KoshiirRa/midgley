@@ -5,7 +5,7 @@
     "completion_tokens": 15390,
     "total_tokens": 42220,
     "estimated_cost_usd": 0.006622,
-    "fallback_activations": 183
+    "fallback_activations": 184
   },
   "llm_events": [
     {
@@ -4223,6 +4223,17 @@
     },
     {
       "timestamp": "2026-09-07 22:00:05",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-07 22:45:04",
       "environment": "dev",
       "vendor": "zero_cost_hook",
       "model": "zero_cost_fallback",
