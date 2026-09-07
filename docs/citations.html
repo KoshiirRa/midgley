@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Open Graph / Discord Social Embed Metadata -->
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Academic Literature & Research Citation Ledger - Midgley AI">
+    <meta property="og:description" content="Peer-reviewed research papers, econometric formulations, arXiv pre-prints, and foundation algorithms powering the Midgley multi-agent forecasting framework.">
+    <meta property="og:url" content="https://koshiirra.github.io/midgley/citations.html">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/math.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Academic Literature & Research Citation Ledger - Midgley AI">
+    <meta name="twitter:description" content="Peer-reviewed research papers, econometric formulations, arXiv pre-prints, and foundation algorithms powering the Midgley multi-agent forecasting framework.">
+    <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/math.png">
+
+    <!-- Discord Theme Accent Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Literature & Research Citations - Midgley Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .citation-card { transition: transform 0.15s ease, border-color 0.15s ease; }
+        .citation-card:hover { transform: translateY(-2px); border-color: rgba(59, 130, 246, 0.6); }
+        .math-box { background: #090d16; border-left: 4px solid #3b82f6; overflow-x: auto; max-width: 100%; }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.5.1</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
+                    </div>
+                </div>
+
+                <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
+                <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
+                <a href="telemetry.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                </a>
+                <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="citations.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 py-10 flex-1 w-full space-y-10">
+        
+        <!-- Hero Section -->
+        <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-indigo-900/40 border border-blue-500/30 space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                        <i class="fa-solid fa-book-bookmark text-blue-400"></i> Academic Literature &amp; Citation Ledger
+                    </h2>
+                    <p class="text-slate-300 text-base leading-relaxed mt-2 max-w-3xl">
+                        Midgley bridges empirical econometric modeling with cutting-edge academic AI research. This ledger tracks all peer-reviewed papers, foundational time-series theorems, and algorithm designs implemented directly within our forecasting architecture.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-file-code"></i> RESEARCH_CITATIONS.md
+                    </a>
+                    <a href="math.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-2 transition">
+                        <i class="fa-solid fa-graduation-cap"></i> View Math Guide
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quantitative Stats Ribbon -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-800/80">
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-blue-400 font-mono">12</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Implemented Papers</p>
+                </div>
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-emerald-400 font-mono">100%</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Open-Access / arXiv</p>
+                </div>
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-purple-400 font-mono">6</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Core Python Modules</p>
+                </div>
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-amber-400 font-mono">0.1069</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Out-of-Time MAE ($/gal)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+            <!-- Filter Chips -->
+            <div class="flex items-center gap-2 flex-wrap text-xs" id="filter-chips">
+                <button onclick="filterPapers('all')" class="filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-category="all">
+                    All Papers (12)
+                </button>
+                <button onclick="filterPapers('forecasting')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-category="forecasting">
+                    Time-Series &amp; Quant
+                </button>
+                <button onclick="filterPapers('agents')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-category="agents">
+                    LLM Agents &amp; NLP
+                </button>
+                <button onclick="filterPapers('validation')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-category="validation">
+                    Backtesting &amp; Overfitting
+                </button>
+                <button onclick="filterPapers('spatial')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-category="spatial">
+                    Spatio-Temporal
+                </button>
+            </div>
+
+            <!-- Search Input -->
+            <div class="relative w-full md:w-72">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" id="search-input" onkeyup="searchPapers()" placeholder="Search paper, author, method..." class="w-full pl-8 pr-4 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
+            </div>
+        </div>
+
+        <!-- Papers Grid -->
+        <div class="space-y-6" id="papers-container">
+
+            <!-- Paper 1: Context Routing & RBU Diagnostic -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="forecasting agents" data-keywords="context routing rbu diagnostic zhou du liu autocorrelation mmse multi-modal fusion feature engineering">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#01</span>
+                        <h3 class="text-lg font-bold text-white">When Does Context Routing Help? A Systematic Study of Multi-Modal Fusion in Time Series Forecasting</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Aug 2026</span>
+                        <a href="https://arxiv.org/abs/2608.25128v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2608.25128v1
+                        </a>
+                        <a href="https://arxiv.org/pdf/2608.25128v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Ruizhe Zhou, Gaoyuan Du, Xiaoyang Liu, et al.</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/feature_engineering.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Pre-Training Diagnostic &amp; RBU Bound</p>
+                    </div>
+                </div>
+
+                <div class="math-box p-4 rounded-r-xl space-y-2">
+                    <h4 class="text-[11px] uppercase tracking-wider text-blue-400 font-bold">Key Theorem &amp; Mathematical Formulation</h4>
+                    <div class="text-center font-mono py-2 bg-slate-950 rounded-lg text-blue-200">
+                        $$\mathrm{MMSE}(X_{t+h} \mid X_t, C) = \sigma^2 (1 - \rho_h^2) \cdot 2^{-2\delta}, \quad \mathrm{RBU} = 1 - 2^{-2\delta}$$
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Calculates rolling autocorrelation $\rho_h = \mathrm{Corr}(X_t, X_{t+h})$. When $\rho_h > 0.95$ (calm baseline markets), last-value shortcuts dominate and LLM qualitative context fusion is suppressed to prevent hallucination. When $\rho_h \le 0.95$ (exogenous shock events), event memory decay and shock multipliers are dynamically enabled.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Paper 2: Alibaba CEDAR Two-Stage Residual Decomposition -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="forecasting agents" data-keywords="cedar alibaba residual decomposition meng zhang event driven demand forecasting models event analyzer gemini">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#02</span>
+                        <h3 class="text-lg font-bold text-white">CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Aug 2026</span>
+                        <a href="https://arxiv.org/abs/2608.25871v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2608.25871v1
+                        </a>
+                        <a href="https://arxiv.org/pdf/2608.25871v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors &amp; Institution</p>
+                        <p class="text-slate-200">Junjie Meng, Ranxu Zhang, Zi-an Zhang, Chao Wang et al. (Alibaba 1688)</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/event_analyzer.py, src/models.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Two-Stage Decoupled Residual Decomposition</p>
+                    </div>
+                </div>
+
+                <div class="math-box p-4 rounded-r-xl space-y-2 border-l-emerald-500">
+                    <h4 class="text-[11px] uppercase tracking-wider text-emerald-400 font-bold">Key Theorem &amp; Mathematical Formulation</h4>
+                    <div class="text-center font-mono py-2 bg-slate-950 rounded-lg text-emerald-200">
+                        $$\mathbf{s}_{t+1} = f_\theta(\mathbf{s}_{\le t}, \mathbf{a}_{\le t+1}) + \epsilon_t, \quad \hat{y}_{\mathrm{final}} = f_{\mathrm{quant}}(X) + \hat{\epsilon}_{\mathrm{event}}$$
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Decouples baseline quantitative time-series transitions from qualitative event shock residuals ($\epsilon_t$). Stage I fits regularized Ridge regression on numerical commodity fundamentals; Stage II prompts Gemini 2.5 Flash for Tag Filtering &amp; Regional Calendar Event Synthesis, outputting calibrated residual delta adjustments $\hat{\epsilon}_{\mathrm{event}}$.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Paper 3: TraceBench Root-Cause Attribution -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="agents" data-keywords="tracebench bendinelli dox holz root cause attribution time series agents noaa weather token efficiency">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#03</span>
+                        <h3 class="text-lg font-bold text-white">TraceBench: Controlled Evaluation of LLM Agents for Time-Series Root-Cause Attribution</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Aug 2026</span>
+                        <a href="https://arxiv.org/abs/2608.27182v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2608.27182v1
+                        </a>
+                        <a href="https://arxiv.org/pdf/2608.27182v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Tommaso Bendinelli, Artur Dox, Christian Holz</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/event_analyzer.py, src/noaa_weather.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Structured Data Ingestion &amp; Explicit Domain Prompts</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Empirically demonstrated that time-series LLM agents explore data significantly better through compact numerical JSON/console formats than visual plots. Guided Midgley's token-efficient NOAA weather architecture (<code class="text-amber-300">wxs.us</code> 150-token summaries &amp; 0-token deterministic SPC convective risk lookups).
+                </p>
+            </article>
+
+            <!-- Paper 4: SAGE Variate-Wise Semantic Augmentation -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="forecasting agents" data-keywords="sage fan le variate wise semantic augmentation vision language time series feature engineering">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#04</span>
+                        <h3 class="text-lg font-bold text-white">SAGE: Variate-Wise Semantic Augmentation for Vision-Language Time Series Forecasting</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Aug 2026</span>
+                        <a href="https://arxiv.org/abs/2608.26829v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2608.26829v1
+                        </a>
+                        <a href="https://arxiv.org/pdf/2608.26829v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Haizhao Fan, Xinyi Le</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/feature_engineering.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Variate-Specific Domain Descriptors</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Injects explicit variate-level metadata (physical units, autocorrelation decay rates, geographic hub profiles) into the feature engineering layer without requiring resource-heavy LLM inference inside critical real-time execution loops.
+                </p>
+            </article>
+
+            <!-- Paper 5: SPALT Spatio-Temporal Locality Trees -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="spatial forecasting" data-keywords="spalt daversa pio ceci spatio temporal locality geo referenced regional metro calibration">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#05</span>
+                        <h3 class="text-lg font-bold text-white">Modeling Spatio-Temporal Locality in Multi-Step Forecasting of Geo-Referenced Time Series (SPALT)</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Aug 2026</span>
+                        <a href="https://arxiv.org/abs/2608.25698v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2608.25698v1
+                        </a>
+                        <a href="https://arxiv.org/pdf/2608.25698v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Annunziata D'Aversa, Gianvito Pio, Michelangelo Ceci</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/locations/*/regional.py, src/metro_agents.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Spatio-Temporal Locality Trees</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Guides Midgley's 8 regional calibration hubs (Tulsa OK, Newark DE, Cincinnati OH/KY, Greenville NC, Charlotte NC, Oakland CA, SF Bay Area, Port St. Lucie FL) to capture localized geographic autocorrelation while preserving specific state motor fuel excise tax and refining hub characteristics.
+                </p>
+            </article>
+
+            <!-- Paper 6: LLM Agents for Time-Series Survey -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="agents" data-keywords="chen qin liu llm agents time series survey multi agent architecture agents md taxonomy">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#06</span>
+                        <h3 class="text-lg font-bold text-white">LLM Agents for Time-Series: A Survey</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Aug 2026</span>
+                        <a href="https://arxiv.org/abs/2608.26226v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2608.26226v1
+                        </a>
+                        <a href="https://arxiv.org/pdf/2608.26226v1" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Yilong Chen, Xiao Qin, Chenghao Liu, et al.</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Documentation</p>
+                        <p class="font-mono text-emerald-400">AGENTS.md, docs/technical_breakdown.html</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Agentic Architecture Taxonomy</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Provides the foundational taxonomy benchmarking Midgley's 8 specialized agents across Forecasting &amp; Reasoning, Anomaly Detection &amp; Diagnosis, and Decision Support / Counterfactual Scenario Simulation.
+                </p>
+            </article>
+
+            <!-- Paper 7: López de Prado (2018) Advances in Financial Machine Learning -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="validation forecasting" data-keywords="lopez de prado financial machine learning purged cv cpcv cscv pbo deflated sharpe ratio leakage embargo models feature auditor">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#07</span>
+                        <h3 class="text-lg font-bold text-white">Advances in Financial Machine Learning (Purged CPCV &amp; PBO Overfitting Audit)</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Wiley 2018</span>
+                        <a href="https://www.wiley.com/en-us/Advances+in+Financial+Machine+Learning-p-9781119482086" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-purple-600/20 text-purple-400 border border-purple-500/30 hover:bg-purple-600/40 transition">
+                            <i class="fa-solid fa-book text-[10px]"></i> Wiley Text
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Author</p>
+                        <p class="text-slate-200">Marcos López de Prado</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/models.py, src/feature_auditor.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Purged &amp; Combinatorial Purged Cross-Validation (CPCV)</p>
+                    </div>
+                </div>
+
+                <div class="math-box p-4 rounded-r-xl space-y-2 border-l-blue-500">
+                    <h4 class="text-[11px] uppercase tracking-wider text-blue-400 font-bold">Key Theorem &amp; Mathematical Formulation</h4>
+                    <div class="text-center font-mono py-2 bg-slate-950 rounded-lg text-blue-200">
+                        $$\text{Purge Condition: } i \in \text{Train} \iff [t_{i,\text{start}}, t_{i,\text{end}}] \cap [t_{j,\text{test,start}}, t_{j,\text{test,end}} + h_{\text{embargo}}] = \emptyset \quad \forall j \in \text{Test}, \quad \text{PBO} = \int_{-\infty}^0 f(\lambda) \, d\lambda$$
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Purges overlapping forward label windows with post-test embargoes ($h_{\text{embargo}} = 5\text{ days}$) to eliminate temporal lookahead data leakage in 5-day horizon forecasting. Implements CSCV Probability of Backtest Overfitting (PBO) and Deflated Sharpe Ratio (DSR) in <code class="text-blue-300">src/feature_auditor.py</code> (Issue #146).
+                    </p>
+                </div>
+            </article>
+
+            <!-- Paper 8: Google TimesFM Foundation Model -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="forecasting" data-keywords="timesfm google research das kong leach decoder only foundation model zero shot quantile forecaster">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#08</span>
+                        <h3 class="text-lg font-bold text-white">A Decoder-Only Foundation Model for Time-Series Forecasting (TimesFM)</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Oct 2023 / 2024</span>
+                        <a href="https://arxiv.org/abs/2310.10688" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2310.10688
+                        </a>
+                        <a href="https://arxiv.org/pdf/2310.10688" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors &amp; Institution</p>
+                        <p class="text-slate-200">Abhimanyu Das, Weihao Kong, Andrew Leach et al. (Google Research)</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/timesfm_forecaster.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Decoder-Only Foundation Model Forecasting</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Wraps Google Research's decoder-only time-series foundation model with scikit-learn API compatibility, generating zero-shot point predictions and $P_{10}, P_{50}, P_{90}$ quantile uncertainty bounds alongside an analytical zero-shot fallback (Issues #185 &amp; #112).
+                </p>
+            </article>
+
+            <!-- Paper 9: Microsoft Qlib & RD-Agent Alpha Factor Mining -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="forecasting validation" data-keywords="qlib rd agent microsoft yang liu zhou symbolic alpha factor mining ddg da dynamic domain adaptation ic icir gmm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#09</span>
+                        <h3 class="text-lg font-bold text-white">Qlib: AI Investment Platform &amp; RD-Agent: Autonomous Factor Mining (DDG-DA)</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sep 2020 / 2024</span>
+                        <a href="https://arxiv.org/abs/2009.11189" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/40 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> arXiv:2009.11189
+                        </a>
+                        <a href="https://arxiv.org/pdf/2009.11189" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 transition">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors &amp; Institution</p>
+                        <p class="text-slate-200">Xiao Yang, Weiqing Liu, Dong Zhou et al. (Microsoft Research)</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/qlib_symbolic_engine.py, src/alpha_factor_miner.py, src/ddg_da_adapter.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Symbolic Alpha Mining &amp; Dynamic Domain Adaptation</p>
+                    </div>
+                </div>
+
+                <div class="math-box p-4 rounded-r-xl space-y-2 border-l-purple-500">
+                    <h4 class="text-[11px] uppercase tracking-wider text-purple-400 font-bold">Key Theorem &amp; Mathematical Formulation</h4>
+                    <div class="text-center font-mono py-2 bg-slate-950 rounded-lg text-purple-200">
+                        $$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}, \quad w_i = \exp\left(-\gamma \|x_i - \bar{x}_{\text{recent}}\|^2\right)$$
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Evaluates symbolic factor formulas for Information Coefficient ($IC > 0.03, IC_{IR} > 0.50$), prunes collinear factors ($|r| > 0.70$), and weights historical training samples using Gaussian RBF kernels across GMM market regimes to combat concept drift (Issue #127).
+                    </p>
+                </div>
+            </article>
+
+            <!-- Paper 10: Dynamic Volatility-Gated Persistence Blending -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="forecasting validation" data-keywords="dv gpb dynamic volatility gated persistence blending empirical residual calibration midgley research group models dynamic region">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#10</span>
+                        <h3 class="text-lg font-bold text-white">Dynamic Volatility-Gated Persistence Blending (DV-GPB) &amp; Empirical Residual Calibration</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sep 2026</span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-600/20 text-emerald-400 border border-emerald-500/30">
+                            Midgley Proprietary
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Midgley Quantitative Research Group</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/models.py, src/dynamic_region.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Adaptive Sigmoid Gating &amp; Empirical 95% Residual CI</p>
+                    </div>
+                </div>
+
+                <div class="math-box p-4 rounded-r-xl space-y-2 border-l-emerald-500">
+                    <h4 class="text-[11px] uppercase tracking-wider text-emerald-400 font-bold">Key Theorem &amp; Mathematical Formulation</h4>
+                    <div class="text-center font-mono py-2 bg-slate-950 rounded-lg text-emerald-200">
+                        $$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t, \quad \text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Transitions model predictions smoothly toward pure naive persistence during low-volatility plateaus ($\sigma_{14\text{d}} \ll 0.015$) while maintaining 100% responsiveness to real-world event shocks ($\sigma_{14\text{d}} > 0.015$), coupled with empirical 30-day residual standard error bounds ensuring $\ge 90\%$ coverage (Issue #214).
+                    </p>
+                </div>
+            </article>
+
+            <!-- Paper 11: CORE Global Open Access Research Aggregation -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="agents" data-keywords="core knoth zdrahal open access research aggregation literature monitor core monitor weekly review">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#11</span>
+                        <h3 class="text-lg font-bold text-white">CORE: A Global Aggregation of Open Access Research Papers</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">2012 / 2024</span>
+                        <a href="https://core.ac.uk" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-0.5 rounded-full bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-600/40 transition">
+                            <i class="fa-solid fa-globe text-[10px]"></i> core.ac.uk
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Petr Knoth, Zdenek Zdrahal</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/core_monitor.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Open-Access Literature Monitor</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Integrates the CORE API v3 search works endpoint to monitor global open-access repositories for literature on refining crack spreads, energy commodity econometrics, and asymmetric retail price transmission during weekly review cycles (Issue #53).
+                </p>
+            </article>
+
+            <!-- Paper 12: Sapient PRAXIST Autonomous Research Harness -->
+            <article class="paper-card p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 citation-card" data-category="validation agents" data-keywords="praxist sapient autonomous research harness hypothesis testing parameter sweeps praxist engine">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">#12</span>
+                        <h3 class="text-lg font-bold text-white">Sapient PRAXIST: Computer-Executable Autonomous Research Harness</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sep 2026</span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-600/20 text-emerald-400 border border-emerald-500/30">
+                            Midgley Framework
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Authors</p>
+                        <p class="text-slate-200">Midgley Quantitative Research Group</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Target Modules</p>
+                        <p class="font-mono text-emerald-400">src/praxist_engine.py</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Methodology Type</p>
+                        <p class="text-slate-200">Empirical Hypothesis Testing &amp; Automated Parameter Sweeps</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Provides programmatic execution harnesses allowing LLM agents to formulate empirical feature hypotheses, execute out-of-sample backtests, compute paired $t$-tests and $p$-values, and optimize hyperparameters (Ridge $\alpha$, decay half-life $t_{1/2}$) autonomously (Issue #188).
+                </p>
+            </article>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.6 Ipatieff</strong> &bull; Released under Apache-2.0 License &bull; <a href="https://github.com/KoshiirRa/midgley" class="hover:text-slate-400 transition underline">GitHub Repository</a></p>
+    </footer>
+
+    <!-- Interactive Filtering & Search Script -->
+    <script>
+        function filterPapers(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('bg-blue-600', 'text-white', 'font-semibold');
+                    btn.classList.remove('bg-slate-800', 'text-slate-300');
+                } else {
+                    btn.classList.remove('bg-blue-600', 'text-white', 'font-semibold');
+                    btn.classList.add('bg-slate-800', 'text-slate-300');
+                }
+            });
+
+            const cards = document.querySelectorAll('.paper-card');
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category') || '';
+                if (category === 'all' || cardCat.includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function searchPapers() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.paper-card');
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase() + ' ' + (card.getAttribute('data-keywords') || '');
+                if (text.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

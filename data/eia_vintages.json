@@ -214,5 +214,113 @@
       "padd3_to_padd2_pipeline_thousand_bpd": 980.0
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. Energy Information Administration API v2 (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-07 18:11:40",
+    "as_of": "2026-09-07 18:11:40",
+    "valid_date": "2026-09-07",
+    "is_vintage_reconstructed": false,
+    "refinery_utilization": {
+      "PADD1_EastCoast": 87.4,
+      "PADD2_Midwest": 92.1,
+      "PADD3_GulfCoast": 94.6,
+      "PADD5_WestCoast": 85.2
+    },
+    "gasoline_stocks_million_bbl": {
+      "PADD1": 54.2,
+      "PADD2": 48.6,
+      "PADD3": 82.1,
+      "PADD5": 28.4
+    },
+    "product_supplied_thousand_bpd": {
+      "us_motor_gasoline": 8850.0,
+      "us_distillate_fuel": 3920.0
+    },
+    "refiner_net_production_thousand_bpd": {
+      "padd1_finished_gasoline": 310.0,
+      "padd2_finished_gasoline": 2450.0,
+      "padd3_finished_gasoline": 2680.0,
+      "padd5_finished_gasoline": 1420.0
+    },
+    "inter_padd_movements": {
+      "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+      "padd3_to_padd2_pipeline_thousand_bpd": 980.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. Energy Information Administration API v2 (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-07 18:11:54",
+    "as_of": "2026-09-07 18:11:54",
+    "valid_date": "2026-09-07",
+    "is_vintage_reconstructed": false,
+    "refinery_utilization": {
+      "PADD1_EastCoast": 87.4,
+      "PADD2_Midwest": 92.1,
+      "PADD3_GulfCoast": 94.6,
+      "PADD5_WestCoast": 85.2
+    },
+    "gasoline_stocks_million_bbl": {
+      "PADD1": 54.2,
+      "PADD2": 48.6,
+      "PADD3": 82.1,
+      "PADD5": 28.4
+    },
+    "product_supplied_thousand_bpd": {
+      "us_motor_gasoline": 8850.0,
+      "us_distillate_fuel": 3920.0
+    },
+    "refiner_net_production_thousand_bpd": {
+      "padd1_finished_gasoline": 310.0,
+      "padd2_finished_gasoline": 2450.0,
+      "padd3_finished_gasoline": 2680.0,
+      "padd5_finished_gasoline": 1420.0
+    },
+    "inter_padd_movements": {
+      "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+      "padd3_to_padd2_pipeline_thousand_bpd": 980.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. Energy Information Administration API v2 (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-07 18:13:27",
+    "as_of": "2026-09-07 18:13:27",
+    "valid_date": "2026-09-07",
+    "is_vintage_reconstructed": false,
+    "refinery_utilization": {
+      "PADD1_EastCoast": 87.4,
+      "PADD2_Midwest": 92.1,
+      "PADD3_GulfCoast": 94.6,
+      "PADD5_WestCoast": 85.2
+    },
+    "gasoline_stocks_million_bbl": {
+      "PADD1": 54.2,
+      "PADD2": 48.6,
+      "PADD3": 82.1,
+      "PADD5": 28.4
+    },
+    "product_supplied_thousand_bpd": {
+      "us_motor_gasoline": 8850.0,
+      "us_distillate_fuel": 3920.0
+    },
+    "refiner_net_production_thousand_bpd": {
+      "padd1_finished_gasoline": 310.0,
+      "padd2_finished_gasoline": 2450.0,
+      "padd3_finished_gasoline": 2680.0,
+      "padd5_finished_gasoline": 1420.0
+    },
+    "inter_padd_movements": {
+      "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+      "padd3_to_padd2_pipeline_thousand_bpd": 980.0
+    },
+    "status": "SUCCESS"
   }
 ]
