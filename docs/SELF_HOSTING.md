@@ -54,6 +54,9 @@ FINLIGHT_API_KEY="fl_live_..."
 # Official U.S. EIA Open Data v2 Key (Weekly PADD Stocks & Utilization)
 EIA_API_KEY="eia_api_key_here"
 
+# U.S. EPA AirNow API Key (airnowapi.org - Free 500 req/hr developer account, Issue #73)
+AIRNOW_API_KEY="0882E80D-3459-4F86-ADE5-A38F34CFE021"
+
 # St. Louis Fed FRED Key (Macro Energy & Retail Index Series)
 FRED_API_KEY="fred_api_key_here"
 

@@ -20,24 +20,29 @@ with open(apis_file, "r", encoding="utf-8") as f:
 aqi_section = """
 ---
 
-## 29. Multi-Feed Air Quality Ingestion & Industrial Emissions Early Outage Detection (Issue #54)
-* **Module:** `src/aqi_feed.py` | **REST API:** `GET /api/v1/aqi/live` | **MCP Tool:** `get_refinery_aqi_anomalies`
+## 29. Multi-Feed Air Quality Ingestion, EPA AirNow Ozone Alerts & Summer-Blend RVP Compliance (Issues #54 & #73)
+* **Module:** `src/aqi_feed.py` | **REST APIs:** `GET /api/v1/aqi/live`, `GET /api/v1/aqi/ozone-alerts` | **MCP Tools:** `get_refinery_aqi_anomalies`, `get_regional_ozone_alerts`
 * **API Providers:**
-  - **PurpleAir API:** Crowdsourced optical particulate sensors ($\\\\text{PM}_{1.0}, \\\\text{PM}_{2.5}, \\\\text{PM}_{10}$) within 15 km fence-line polygons downwind of refining facilities.
-  - **OpenAQ API:** Global open environmental stations providing continuous chemical gas monitoring ($\\\\text{SO}_2, \\\\text{NO}_2, \\\\text{O}_3, \\\\text{CO}$) to confirm sulfurous flaring.
-  - **EPA AirNow API:** Federal municipal monitoring network tracking regulatory Ozone Non-Attainment action days and seasonal Reid Vapor Pressure (RVP) summer blend transitions.
+  - **EPA AirNow API (`airnowapi.org`):** Federal municipal monitoring network tracking real-time ground-level ozone ($\text{O}_3$), $\text{PM}_{2.5}$, and $\text{PM}_{10}$ observations across 7 regional hubs. Flags Ozone Action Days ($\text{AQI}_{\text{O3}} \ge 101$) to compute statutory Reid Vapor Pressure (RVP) summer-blend compliance surcharges.
+  - **PurpleAir API:** Crowdsourced optical particulate sensors ($\text{PM}_{1.0}, \text{PM}_{2.5}, \text{PM}_{10}$) within 15 km fence-line polygons downwind of refining facilities.
+  - **OpenAQ API:** Global open environmental stations providing continuous chemical gas monitoring ($\text{SO}_2, \text{NO}_2, \text{O}_3, \text{CO}$) to confirm sulfurous flaring.
   - **WAQI (World Air Quality Index):** Global bounding box fallback.
-* **Cost & Credentials:** Zero-cost open data feeds ($0.00/mo) with synthetic offline fallback and 15-minute lookup caching (`global_cache`).
+* **Cost & Credentials:** Free developer tier (500 req/hr with `AIRNOW_API_KEY`), 1-hour EPA AirNow lookup caching (`global_cache`), and 100% deterministic offline fallback.
 * **Monitored Refining Corridors & Target Hubs:**
-  1. `bay_area` (PADD 5): Chevron Richmond (245k bpd), PBF Martinez (157k bpd), Valero Benicia (145k bpd) in Contra Costa County.
-  2. `tulsa` (PADD 2): HF Sinclair West Tulsa (85k bpd) and Phillips 66 Ponca City (200k bpd).
-  3. `delaware_valley` (PADD 1B): PBF Delaware City (180k bpd) and Phillips 66 Bayway (238k bpd).
-  4. `tri_state` (PADD 2): Marathon Catlettsburg (291k bpd) along the Ohio River Valley.
+  1. `bay_area` / `94612` (PADD 5): Chevron Richmond (245k bpd), PBF Martinez (157k bpd), Valero Benicia (145k bpd) (CARB 7.0 psi RVP, +$0.180/gal summer base).
+  2. `tulsa` / `74101` (PADD 2): HF Sinclair West Tulsa (85k bpd) and Phillips 66 Ponca City (200k bpd) (9.0 psi RVP, +$0.050/gal summer base).
+  3. `delaware_valley` / `19711` (PADD 1B): PBF Delaware City (180k bpd) and Phillips 66 Bayway (238k bpd) (9.0 psi RVP, +$0.060/gal summer base).
+  4. `tri_state` / `45202` (PADD 2): Marathon Catlettsburg (291k bpd) along the Ohio River Valley (EPA Non-Attainment 7.8 psi RVP, +$0.085/gal summer base).
+  5. `carolinas_coastal` / `27834` (PADD 1C): Selma Terminal / Colonial & Plantation Pipelines (+$0.045/gal summer base).
+  6. `carolinas_piedmont` / `28202` (PADD 1C): Paw Creek Terminal / Charlotte Metro Hub (+$0.048/gal summer base).
+  7. `south_florida` / `34984` (PADD 1C): Port Everglades Terminal / Waterborne Marine Freight (+$0.055/gal summer base).
+* **Statutory Summer Blend & Ozone Compliance Engine:**
+  - Evaluates statutory seasonal transition dates (Summer Blend: May 1 to Sept 15; Spring/Fall Shoulder: April & late Sept/early Oct; Winter: Oct 16 to Mar 31).
+  - Triggers an additional +$0.040/gal margin penalty during acute Ozone Action Days due to stringent anti-smog compliance and boutique blendstock constraints.
 * **Statistical Anomaly Scoring & Wildfire Discrimination:**
-  - Standardized rolling 30-day $Z$-scores for fine particulates ($Z_{\\\\text{PM2.5}}$) and sulfur dioxide ($Z_{\\\\text{SO2}}$).
-  - **Outage Alert Trigger:** $Z_{\\\\text{PM2.5}} \\ge 3.5$ AND $Z_{\\\\text{SO2}} \\ge 2.5$ flags catastrophic fluid catalytic cracking (FCC) unit trips and emergency flaring, providing a **12 to 24 hour lead time** over commercial media.
-  - **Wildfire Discrimination:** When $Z_{\\\\text{PM2.5}} \\ge 3.5$ but $Z_{\\\\text{SO2}} < 1.5$, anomalies are classified as ambient wildfire or agricultural haze, suppressing false-positive refinery outage alerts.
-* **Rack Margin Shock Impact:** Computes normalized continuous outage risk indices $\\\\in [0, 1]$ mapped to regional wholesale rack shocks ($+\\\\$0.15\\\\text{ to }+\\\\$0.35/\\\\text{gal}$) integrated into `src/feature_engineering.py` and regional metro calibration models.
+  - Standardized rolling 30-day $Z$-scores for fine particulates ($Z_{\text{PM2.5}}$) and sulfur dioxide ($Z_{\text{SO2}}$).
+  - **Outage Alert Trigger:** $Z_{\text{PM2.5}} \ge 3.5$ AND $Z_{\text{SO2}} \ge 2.5$ flags catastrophic fluid catalytic cracking (FCC) unit trips and emergency flaring, providing a **12 to 24 hour lead time** over commercial media.
+  - **Wildfire Discrimination:** When $Z_{\text{PM2.5}} \ge 3.5$ but $Z_{\text{SO2}} < 1.5$, anomalies are classified as ambient wildfire or agricultural haze, suppressing false-positive refinery outage alerts.
 """
 
 if "## 29. Multi-Feed Air Quality Ingestion" not in apis_content:

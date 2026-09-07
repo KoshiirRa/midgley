@@ -138,6 +138,19 @@
 - **Regional Profile & Dynamic Calibration Integration:** Enriched all 8 regional JSON profiles in `data/regional_metadata/` and integrated commuter factors directly into `DynamicRegionRunner` (`src/dynamic_region.py`).
 - **Comprehensive Verification (`tests/test_census_demographics.py`):** 7/7 unit tests passing covering release window lifecycle, derived econometric metric formulas, live response parsing, deterministic offline fallbacks, and multi-metro resolution.
 
+### 20. EPA AirNow Ground-Level Ozone Alerts & Statutory Summer-Blend RVP Compliance Engine (Issue #73)
+- **Zero-Cost EPA AirNow Connector ([`src/aqi_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/aqi_feed.py)):** Enhanced `AQIFeedConnector` with full HTTP integration to the official U.S. EPA AirNow API (`airnowapi.org/aq/observation/zipCode/current/`) supporting `AIRNOW_API_KEY`, 1-hour lookup caching (`global_cache`), and deterministic geographic/seasonal offline fallbacks.
+- **7-Metro Calibration Coverage:** Mapped official monitoring sites and primary ZIP codes for all 7 regional benchmark hubs (`bay_area` 94612, `tulsa` 74101, `delaware_valley` 19711, `tri_state` 45202, `carolinas_coastal` 27834, `carolinas_piedmont` 28202, `south_florida` 34984).
+- **Ozone Action Day Anomaly Gate:** Automatically flags statutory Ozone Action Days when ground-level ozone $\text{AQI}_{\text{O3}} \ge 101$ (Category 3+ "Unhealthy for Sensitive Groups"), adding localized compliance surcharges ($+\$0.040/\text{gal}$) for acute anti-smog and VOC blendstock restrictions.
+- **Seasonal Reid Vapor Pressure (RVP) Step Function:** Dynamically computes statutory seasonal RVP specifications and base summer-blend margin surcharges:
+  - **CARB Phase 3 (Oakland / Bay Area):** 7.0 psi statutory RVP limit ($+\$0.180/\text{gal}$ baseline summer spread).
+  - **EPA Ozone Non-Attainment (Cincinnati / Tri-State):** 7.8 psi statutory RVP limit ($+\$0.085/\text{gal}$ baseline summer spread).
+  - **Conventional Baseline (Tulsa, Newark, Greenville, Charlotte, PSL):** 9.0 psi statutory RVP limit ($+\$0.045\text{ to }+\$0.060/\text{gal}$ baseline summer spread).
+  - **Seasonal Cutover Calendar:** Summer Blend (May 1 to Sept 15), Spring Butane Drawdown Shoulder (April), Fall Transition Shoulder (Sept 16 to Oct 15), and Winter Blend (Oct 16 to March 31, \$0.00 surcharge).
+- **API & MCP Tooling:** Added `GET /api/v1/aqi/ozone-alerts` endpoint in [`src/api_server.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/api_server.py) supporting direct ZIP code and regional corridor filters, and registered `get_regional_ozone_alerts` MCP tool in [`src/mcp_server.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/mcp_server.py).
+- **Feature Matrix & Regional Fusion:** Exposed `aqi_ozone_action_day_count` and `aqi_max_rvp_surcharge_per_gal` in [`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py).
+- **Comprehensive Verification ([`tests/test_aqi_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_aqi_feed.py)):** 100% test pass rate across 16 unit and integration tests (mocked live API, 7-metro ZIP resolution, seasonal step function, Ozone Action Day trigger, REST endpoints, and MCP tool execution).
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -146,11 +159,12 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `385 passed` (100% pass rate across all test modules including Census Demographics, Multi-Feed AQI, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
+  **Result:** `385 passed` (100% pass rate across all test modules including Census Demographics, Multi-Feed AQI & EPA AirNow Ozone, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
+- **Issue #73**: `[Feature Request] Ingest EPA AirNow Ozone Alerts for Summer-Blend Gas Compliance` (Closed as completed)
 - **Issue #75**: `[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics` (Closed as completed)
 - **Issue #53**: `feat(core-api): Monitor open-access research papers via CORE API during weekly self-review` (Closed as completed)
 - **Issue #54**: `feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection` (Closed as completed)

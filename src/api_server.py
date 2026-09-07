@@ -10,7 +10,7 @@ import hmac
 import hashlib
 import logging
 from typing import Optional, Dict, Any, List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 from fastapi import FastAPI, Query, HTTPException, Header, Request, Depends
@@ -865,17 +865,54 @@ def get_usgs_seismic_endpoint(
 
 @app.get("/api/v1/aqi/live", summary="Get Live Refinery Air Quality & Industrial Flaring Telemetry", tags=["Physical Data Feeds"])
 def get_aqi_live_endpoint(
-    corridor: Optional[str] = Query("bay_area", description="Optional regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, or 'all'")
+    corridor: Optional[str] = Query("bay_area", description="Optional regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'")
 ):
     """
     Returns real-time and historical multi-feed air quality metrics (PM2.5, SO2, NO2, O3)
     from PurpleAir, OpenAQ, and EPA AirNow evaluated against critical refining hubs for
-    unplanned outage early detection and flaring risk scoring (Issue #54).
+    unplanned outage early detection, flaring risk scoring, and ozone action day tracking (Issues #54 & #73).
     """
     from src.aqi_feed import AQIFeedConnector
     connector = AQIFeedConnector()
     corr_arg = None if corridor == "all" else corridor
     return connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+
+
+@app.get("/api/v1/aqi/ozone-alerts", summary="Get Regional EPA AirNow Ozone Alerts & Seasonal RVP Compliance Surcharges", tags=["Physical Data Feeds"])
+def get_ozone_alerts_endpoint(
+    corridor: Optional[str] = Query("all", description="Optional regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'"),
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code to query EPA AirNow directly")
+):
+    """
+    Returns official EPA AirNow ground-level ozone (O3) action alerts, AQI metrics, and statutory
+    seasonal Reid Vapor Pressure (RVP) summer-blend compliance surcharges for target regions (Issue #73).
+    """
+    from src.aqi_feed import AQIFeedConnector
+    connector = AQIFeedConnector()
+    if zip_code:
+        airnow_res = connector.fetch_airnow_aqi(zip_code)
+        rvp_res = connector.get_seasonal_rvp_surcharge(
+            corridor_or_zip=zip_code,
+            ozone_aqi=airnow_res.get("ozone_aqi"),
+            is_action_day=airnow_res.get("is_ozone_action_day", False)
+        )
+        return {
+            "status": "SUCCESS",
+            "as_of": datetime.now(timezone.utc).isoformat(),
+            "airnow": airnow_res,
+            "seasonal_rvp_compliance": rvp_res
+        }
+    
+    corr_arg = None if corridor == "all" else corridor
+    telemetry = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+    return {
+        "status": "SUCCESS",
+        "as_of": telemetry.get("as_of"),
+        "ozone_action_day_count": telemetry.get("indices", {}).get("ozone_action_day_count", 0),
+        "max_rvp_compliance_surcharge_per_gal": telemetry.get("indices", {}).get("max_rvp_compliance_surcharge_per_gal", 0.0),
+        "active_ozone_action_corridors": telemetry.get("active_ozone_action_corridors", []),
+        "corridors": telemetry.get("corridors", {})
+    }
 
 
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")

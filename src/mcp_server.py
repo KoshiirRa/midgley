@@ -219,14 +219,32 @@ async def list_tools() -> list[types.Tool]:
         ),
         types.Tool(
             name="get_refinery_aqi_anomalies",
-            description="Fetches real-time multi-feed air quality metrics (PurpleAir, OpenAQ, EPA AirNow) and flaring outage anomaly scores for petroleum refining hubs (Issue #54).",
+            description="Fetches real-time multi-feed air quality metrics (PurpleAir, OpenAQ, EPA AirNow) and flaring outage anomaly scores for petroleum refining hubs (Issue #54 & #73).",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "corridor": {
                         "type": "string",
-                        "description": "Regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, or 'all'",
+                        "description": "Regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'",
                         "default": "bay_area"
+                    }
+                }
+            }
+        ),
+        types.Tool(
+            name="get_regional_ozone_alerts",
+            description="Fetches official EPA AirNow ground-level ozone (O3) action alerts and statutory seasonal Reid Vapor Pressure (RVP) summer-blend compliance surcharges (Issue #73).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "corridor": {
+                        "type": "string",
+                        "description": "Regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'",
+                        "default": "all"
+                    },
+                    "zip_code": {
+                        "type": "string",
+                        "description": "Optional 5-digit US ZIP code to query EPA AirNow directly"
                     }
                 }
             }
@@ -330,6 +348,28 @@ async def call_tool(
             corr_arg = None if corridor == "all" else corridor
             connector = AQIFeedConnector()
             res = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_regional_ozone_alerts":
+            from src.aqi_feed import AQIFeedConnector
+            connector = AQIFeedConnector()
+            zip_code = args.get("zip_code")
+            if zip_code:
+                airnow_res = connector.fetch_airnow_aqi(zip_code)
+                rvp_res = connector.get_seasonal_rvp_surcharge(
+                    corridor_or_zip=zip_code,
+                    ozone_aqi=airnow_res.get("ozone_aqi"),
+                    is_action_day=airnow_res.get("is_ozone_action_day", False)
+                )
+                res = {
+                    "status": "SUCCESS",
+                    "airnow": airnow_res,
+                    "seasonal_rvp_compliance": rvp_res
+                }
+            else:
+                corridor = args.get("corridor", "all")
+                corr_arg = None if corridor == "all" else corridor
+                res = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:
