@@ -1,13 +1,14 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.4.1)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.5)
 
-[![Release: v0.4.1](https://img.shields.io/badge/Release-v0.4.1-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.4.1)
+[![Release: v0.5](https://img.shields.io/badge/Release-v0.5-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.5)
+[![GHCR Docker](https://img.shields.io/badge/GHCR-midgley%3Aself--hosted-blue.svg?logo=docker)](https://github.com/KoshiirRa/midgley/pkgs/container/midgley)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
 [![Automated Nightly Dev Release](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml)
 
 [![Public Dashboard](https://img.shields.io/badge/Public_Dashboard-koshiirra.github.io%2Fmidgley-blue.svg)](https://koshiirra.github.io/midgley/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Python 3.11](https://img.shields.io/badge/Python-3.11-green.svg)](requirements.txt)
+[![Python 3.13](https://img.shields.io/badge/Python-3.13-green.svg)](requirements.txt)
 
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
@@ -47,6 +48,7 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/` (Overview)**: Central Midgley overview landing page featuring summary forecast cards for all active locales, rolling accuracy improvement charts, and multi-agent system pillars.
 - **`/national` (National Wholesale)**: Dedicated NYMEX RBOB futures forecast & technical analytics page.
 - **`/tulsa` (Tulsa Retail Gas)**: Dedicated Tulsa metro retail gas forecast & regional refinery shock simulator, accessible via the top nav **`Metro Areas`** dropdown menu.
+- **`/newark` (Newark DE Retail)**: Dedicated Newark, DE (PADD 1B Central Atlantic) metro retail gas forecast featuring Delaware City Refinery turnaround dynamics, C&D Canal maritime detours, and DE state fuel tax ($0.230/gal).
 - **`/cincinnati` (Cincinnati OH/KY Cross-River Retail)**: Dedicated Cincinnati OH/KY metro retail gas forecast featuring dual-state fuel tax differential display (OH $3.45 vs NKY $3.325), live USGS river stage telemetry, and Mississippi/Ohio River low-water barge bottleneck simulator.
 - **`/greenville` (Greenville NC Retail)**: Dedicated Greenville, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Selma/Apex breakout hub dynamics, NC state gas tax ($0.404/gal), and NOAA Pitt County (NCZ081) Tar River flood / hurricane alerts.
 - **`/charlotte` (Charlotte NC Retail)**: Dedicated Charlotte, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Paw Creek breakout hub dynamics, NC/SC cross-border tax differential ($0.404/gal NC vs $0.288/gal SC), and NOAA Mecklenburg County (NCZ071) Catawba River flood / winter ice storm alerts.
@@ -54,7 +56,10 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/oakland` (Oakland CA Retail)**: Dedicated Oakland / East Bay retail gas forecast featuring CARB regulatory breakdown ($0.953/gal tax burden), USGS Carquinez Strait runoff & berthing telemetry, and physical hazard risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
 - **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers (including Section 10 multiline `aligned` CARB tax breakdown).
-- **Automated Social Embed Cards**: Dynamic 1200x630px dark-mode Open Graph preview card PNGs (`docs/assets/embeds/*.png`) rendered for Discord, Twitter/X, and Slack link previews. *(Note: Social preview cards resolve to absolute production URLs `https://koshiirra.github.io/midgley/assets/embeds/<locale>.png` and will render live cards in production GitHub Pages).*
+- **`/telemetry` (System Observability)**: Real-time telemetry dashboard detailing TokenTab token consumption, cache performance, IPASIS security check metrics, unmapped ZIP heatmaps, and fallback accounting.
+- **`/research` (Research Citations)**: Research literature bibliography cataloging academic papers, preprints, econometric models, and domain citations referenced in Midgley.
+- **Automated Social Embed Cards**: Dynamic 1200x630px dark-mode Open Graph preview card PNGs (`docs/assets/embeds/*.png`) rendered for Discord, Twitter/X, and Slack link previews.
+
 
 ---
 
@@ -179,6 +184,10 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 25. **Open Source AI Radar Model Discovery (`src/data_ingestion.py` & `src/api_server.py`, Issue #187):** Ingests open-weights LLM/SLM releases, quantization benchmarks, and capability metrics via `OpenSourceAIRadarConnector` and `GET /api/v1/system/radar`.
 26. **Self-Hosted ArchiveBox Historical Article Preservation (`src/archive_service.py`, Issue #97):** Asynchronously archives breaking news and energy source URLs to self-hosted ArchiveBox instances with zero pipeline latency and local snapshot ledger fallback (`data/archived_events_ledger.json`).
 27. **Sapient PRAXIST Autonomous Energy Research Engine (`src/praxist_engine.py`, Issue #188):** Programmatic research evaluation harness for formulating, backtesting, and statistically validating empirical feature engineering hypotheses and multi-parameter sweeps.
+28. **Universal 50-State Open Data Portals Connector (`src/state_open_data.py`, Issue #141):** `UniversalStateOpenDataConnector` provides dynamic resolution across all 50 US States + DC (51 total locales). Queries Socrata open data domains (`data.<state>.gov` / `data.gov`), U.S. Census State Tax Collections API, and FTA motor fuel indices for official state excise tax rates ($/gal), UST environmental cleanup fees, and motor fuel sales volume indices.
+29. **Cloudflare Edge Queue Buffer & D1 Cache Gateway (`workers/intraday_monitor_worker.ts` & `workers/cache_worker.ts`, Issues #194 & #196):** Edge message buffer (`intraday-event-queue` producer/consumer bindings) decoupling event burst detection and webhook pushes from origin execution. Features edge authentication over Cloudflare D1 (`midgley-cache-d1`) and Option A2 full-stack telemetry streaming to Axiom Log Analytics and Sentry error/heartbeat tracking.
+30. **Zero-Cost LLM Fallback Routing & TokenTab Accounting (`src/fallback_telemetry.py` & `src/token_tracker.py`, Issue #196):** Tiered key access routing `basic` tier requests to zero-cost offline rule lexicons and Kaggle open-source LLM hooks while preserving paid Gemini API tokens for `privileged` tier keys, tracking cumulative token/dollar savings on `docs/telemetry.html`.
+31. **Self-Hosted Production Docker Container Image (`ghcr.io/koshiirra/midgley:self-hosted`, Issue #198):** Multi-stage production container packaged with Python 3.13, `uv`, OpenMP runtime, and pre-configured blank-slate National Wholesale RBOB environment variables, published automatically to GitHub Container Registry (`ghcr.io/koshiirra/midgley:self-hosted` & `latest`).
 
 ---
 
@@ -188,11 +197,33 @@ For operators and developers wishing to host their own custom instance of Midgle
 
 👉 **Read the complete [Self-Hosting & Multi-Metro Regional Setup Guide (`SELF_HOSTING.md`)](SELF_HOSTING.md)**
 
+### 🐳 Quick Start: Docker Container Deployment
+
+Deploy a standalone Midgley self-hosted container instance directly from GitHub Container Registry:
+
+```bash
+# Pull the latest self-hosted container image
+docker pull ghcr.io/koshiirra/midgley:self-hosted
+
+# Run the container (defaulting to blank-slate National Wholesale RBOB)
+docker run -d \
+  --name midgley \
+  -p 8000:8000 \
+  -e GEMINI_API_KEY="AIzaSy..." \
+  -e FINLIGHT_API_KEY="fl_live_..." \
+  ghcr.io/koshiirra/midgley:self-hosted
+
+# Verify API server health
+curl http://localhost:8000/api/v1/forecast/summary
+```
+
 Key guide coverage includes:
+* **Production Docker Container:** Multi-stage image running Python 3.13, `uv`, OpenMP, and FastAPI / MCP transport.
 * **Standalone Server & VM Deployment:** Systemd user service & timer unit files (`midgley-api.service`, `midgley-dev.service`, `midgley-daily-forecast.timer`, `midgley-weekly-review.timer`).
 * **3-Tier Edge Cache Configuration:** Step-by-step setup for Turso Edge SQLite, Cloudflare D1/Worker, and local SQLite fallbacks.
 * **LLM Discovery Prompts:** Ready-to-use LLM system prompt templates for researching econometric anchors, statutory fuel tax structures, refinery logistics, and NOAA weather alerts.
 * **7-Step Developer Tutorial:** Comprehensive guide for adding new metro calibration subpackages (`src/locations/<location>/`) and decoupled JSON profiles (`data/regional_metadata/`).
+
 
 ---
 
