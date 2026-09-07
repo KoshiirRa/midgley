@@ -151,6 +151,13 @@
 - **Feature Matrix & Regional Fusion:** Exposed `aqi_ozone_action_day_count` and `aqi_max_rvp_surcharge_per_gal` in [`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py).
 - **Comprehensive Verification ([`tests/test_aqi_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_aqi_feed.py)):** 100% test pass rate across 16 unit and integration tests (mocked live API, 7-metro ZIP resolution, seasonal step function, Ozone Action Day trigger, REST endpoints, and MCP tool execution).
 
+### 21. U.S. Treasury Yield Curve & TIPS Inflation Metrics Ingestion (Issue #66)
+- **Zero-Cost U.S. Treasury Fiscal Data API Connector ([`src/treasury_yield_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/treasury_yield_feed.py)):** Built `TreasuryYieldConnector` ingests daily nominal Treasury yields (10Y, 2Y) and 10-Year TIPS real yields from the keyless U.S. Treasury Fiscal Data API (`fiscaldata.treasury.gov`), FRED Treasury series, and market proxies ($0 API cost, 24-hour multi-tier caching via `data/treasury_cache.json`).
+- **Macroeconomic Yield Spread Dynamics:** Derives the benchmark 10Y-2Y yield curve spread $\text{Spread}_{10\text{Y}-2\text{Y}} = Y_{10\text{Y}} - Y_{2\text{Y}}$ and 5-day spread momentum delta (`treasury_spread_delta_5d`) to model leading recessionary demand contraction and expansionary signals.
+- **TIPS Real Rate Financing Proxy:** Captures 10-Year TIPS real rates (`tips_10y_real_yield`) to quantify real cost of physical commodity inventory carry and real USD purchasing power movements.
+- **Feature Matrix & Quantitative Splits Fusion:** Integrated into [`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py) with point-in-time forward-filling and registered under `quant_features` in `prepare_chronological_splits()`.
+- **Automated Test Suite ([`tests/test_treasury_yield_feed.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_treasury_yield_feed.py)):** 100% test pass rate verifying connector attributes, live and synthetic dataset generation, spread calculations, and feature matrix integration.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -159,11 +166,12 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `385 passed` (100% pass rate across all test modules including Census Demographics, Multi-Feed AQI & EPA AirNow Ozone, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
+  **Result:** `389 passed` (100% pass rate across all test modules including Treasury Yield Curve & TIPS, Census Demographics, Multi-Feed AQI & EPA AirNow Ozone, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
+- **Issue #66**: `[Feature Request] Ingest U.S. Treasury Yield Curve & TIPS Inflation Metrics (Fiscal Data API)` (Closed as completed)
 - **Issue #73**: `[Feature Request] Ingest EPA AirNow Ozone Alerts for Summer-Blend Gas Compliance` (Closed as completed)
 - **Issue #75**: `[Feature Request] Ingest U.S. Census Bureau Metro Commuter & Vehicle Ownership Metrics` (Closed as completed)
 - **Issue #53**: `feat(core-api): Monitor open-access research papers via CORE API during weekly self-review` (Closed as completed)
