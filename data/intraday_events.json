@@ -2318,5 +2318,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-07T18:00:20.317750",
+    "headline": "US Diesel Fuel Prices Reach Record Highs Amid Global Refinery Outages - SuaraGarut.ID",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBPOE4zZDEyTE1YYXU4dFp0NDNXVnFjdVFkYTBUcGpxWjRtQ2h4TkJlRXpUU3A4RVVVVVdIVlJDYVl2dWFUek5PVzZiWFVSVjF2VFVyUXdacng5bm14VGQ2UUtFeFU?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiZEFVX3lxTFBPOE4zZDEyTE1YYXU4dFp0NDNXVnFjdVFkYTBUcGpxWjRtQ2h4TkJlRXpUU3A4RVVVVVdIVlJDYVl2dWFUek5PVzZiWFVSVjF2VFVyUXdacng5bm14VGQ2UUtFeFU?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.4,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.26
+    }
   }
 ]
