@@ -86,6 +86,21 @@ TURSO_AUTH_TOKEN="eyJhbGciOi..."
 # Tier 2: Cloudflare D1 / Edge Worker Gateway
 CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
+
+# ==============================================================================
+# EDGAR 8-K REFINERY OPERATOR MONITOR (Issue #129)
+# ==============================================================================
+
+# SEC EDGAR User-Agent — required for EDGAR 8-K polling (free, name + email only).
+# No account or API key needed. Per EDGAR robots.txt access policy.
+# Cloudflare Worker production: wrangler secret put SEC_USER_AGENT
+SEC_USER_AGENT="Midgley your@email.com"
+
+# Comma-separated list of refinery operator tickers to monitor for 8-K filings.
+# Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.
+# Cloudflare Worker production: set EDGAR_8K_TICKERS in wrangler.toml [vars].
+# Add additional tickers for non-default supplying refineries (see §7 Prompt 3).
+EDGAR_8K_TICKERS="PBF,DINO,MPC,VLO,PSX"
 ```
 
 ---
@@ -389,6 +404,7 @@ Research and specify:
 4. Logistics & Power Grid Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, marine congestion, and electric power grid vulnerability—specifically identifying the EIA-930 Electric Grid Balancing Authority (BA) / RTO (e.g., ERCOT, MISO, PJM, CAISO, SWPP, SOCO, TVA, NYIS, ISNE) powering the supplying refineries and pipeline pump stations.
 5. Metro Centroid & Spatial Buffer Anchor: Representative metro geographic coordinates (WGS84 latitude, longitude), primary 5-digit ZIP code, and approximate pipeline/haul distance (miles) to the primary supplying refinery or distribution rack hub (for GeoPandas spatial distance-decay modeling in `src/spatial_refinery.py`).
 6. Fence-Line Air Quality & Industrial Emissions Monitoring (PurpleAir & OpenAQ): Identify fence-line air quality monitoring networks within a 15 km radius downwind of supplying refineries (e.g. PurpleAir optical sensor groups, OpenAQ municipal stations, EPA AirNow station ID) monitoring PM2.5, PM10, SO2, and NO2 to capture early flaring and unplanned FCC unit outage signals in `src/aqi_feed.py`.
+7. SEC EDGAR Refinery Operator Monitoring (Issue #129): Identify the publicly traded refinery operators (NYSE/NASDAQ tickers) whose refinery assets directly supply [TARGET METRO CITY, STATE]. Cross-reference against the default `EDGAR_8K_TICKERS` list (`PBF`, `DINO`, `MPC`, `VLO`, `PSX`). If the primary supplying refinery is owned by an operator NOT in the default list (e.g., Delek Group `DKL`, Calumet `CLMT`, Par Pacific `PARR`, or Ergon for a mid-continent or rural region), document the ticker so it can be appended to `EDGAR_8K_TICKERS` in `wrangler.toml` (Cloudflare Worker production) or `.env` (local deployment). This ensures the EDGAR 8-K Refinery Operator Monitor (`src/edgar_8k_monitor.py` / `workers/intraday_monitor_worker.ts`) captures unplanned operational disclosures from the refineries directly supplying the new metro region.
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```

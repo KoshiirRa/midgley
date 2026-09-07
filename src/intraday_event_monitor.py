@@ -55,7 +55,12 @@ TRIGGER_KEYWORDS = [
     "executive order", "energy tariff", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
     # Logistics & Infrastructure Hubs
     "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
-    "catlettsburg", "delaware city", "west tulsa", "richmond refinery"
+    "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
+    # Refinery Operator 8-K Signals (Issue #129 — EDGAR 8-K Monitor)
+    "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+    "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
+    "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
+    "sweeny refinery", "bayway refinery",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -203,6 +208,23 @@ class IntradayEventMonitor:
         # Port St. Lucie / Florida / Waterborne Freight
         if any(k in text for k in ["port st. lucie", "port st lucie", "florida", "waterborne freight"]):
             targets.add("Port_St_Lucie")
+
+        # Refinery Operator 8-K Locale Routing (Issue #129 — EDGAR 8-K Monitor)
+        # PBF Energy → Newark (Delaware City Refinery, PADD 1B)
+        if any(k in text for k in ["pbf energy", "pbf 8-k", "delaware city refinery"]):
+            targets.add("Newark")
+
+        # HF Sinclair → Tulsa (El Dorado / Tulsa-area, PADD 2 Mid-Continent)
+        if any(k in text for k in ["hf sinclair", "holly frontier", "el dorado refinery"]):
+            targets.add("Tulsa")
+
+        # Marathon Petroleum → Cincinnati (Catlettsburg, PADD 3/2 junction)
+        if any(k in text for k in ["marathon petroleum", "marathon 8-k"]):
+            targets.add("Cincinnati")
+
+        # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
+        if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery", "bayway refinery"]):
+            targets.add("National")
 
         if not targets:
             return ["National"]

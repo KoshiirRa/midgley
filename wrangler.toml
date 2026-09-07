@@ -4,6 +4,10 @@ compatibility_date = "2024-09-01"
 
 [vars]
 AXIOM_DATASET = "midgley-workers"
+EDGAR_8K_TICKERS = "PBF,DINO,MPC,VLO,PSX"
+# SEC_USER_AGENT is sensitive — set as a Worker secret (never commit to wrangler.toml):
+# wrangler secret put SEC_USER_AGENT
+# Value format: "Midgley your@email.com" (per EDGAR robots.txt policy)
 
 [triggers]
 crons = ["*/15 * * * *"]
