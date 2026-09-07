@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-07 16:15:20`  
+**Log Timestamp:** `2026-09-07 17:00:13`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st  
+**Primary Event Trigger:** India buys oil for itself, not to help Moscow: Russian envoy amid US tariff threat - India Today  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st
+- **Headline Trigger:** India buys oil for itself, not to help Moscow: Russian envoy amid US tariff threat - India Today
 - **Active Ingested News Links:**
+- [India buys oil for itself, not to help Moscow: Russian envoy amid US tariff threat - India Today](https://news.google.com/rss/articles/CBMihAJBVV95cUxPbzVTS2pHY3RxZXhPREJnQS1INzFDZ2Jlb2R3eU1uT3dnRml3UVcxWS1JZmJZZlJwLWRFYXZmc1g0VFNSMmFDQTEwOHQyNTAxN0NSYTBWT2lONHpTVFNpMHl2RGVURjJWX2NZdTR6NlRuR2hTbUhjRXNxV0FWeTdSUGVZMURNWGl5c3BWRU1zcjFSa3h6cTlpMnlpTkd4d2F2YnRwODEtOTFjSjFQSTZtd0xjUmxWSEhhRl80cnA3d2QwYXlpbTRUSzdrYS1kZGxFMjJJb3lBSnE4Q1AzMzJQQi1EekFlYlJBNWxDZmVqTFA1cHV2OXFmS2JWbUJvbHBIRDBZUdIBigJBVV95cUxPa19sSVNwVm11WjMxNVF5eklXVGxCZjZRRGgzZlBhYTVzYnJPV2c4WjVpS2dSalNyUDc1Qm5qRHFjbmk1QnpMU2hVdm01dUhhNnhJeDdVam53bzFRel9GYnQ0TTNKanUxc3N6T2hPZHRlcEMyVFFHNmFQVDNtbFRvOWM4YkdQV2RVUHVaQ2RpM2cwcjNzQ0ltNXNEMHlSWmoybGZUaDRsQ0p1Uy0wMVJ4VFNuWlJGR2NPRkJ5WjJhaGlPQ3Y3MnhmUXJua083M3hRMnRmREtEVC00b2VULXU4eGlSWkJsN1p1S25mMGRPcnhyUWYyODhXcFFHQUdBc0lpcm5ST2l5YjdpZw?oc=5) (Google News Energy Feed)
 - [Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st](https://news.google.com/rss/articles/CBMizgFBVV95cUxPaFBnYjdQa2JpX0YxVGQ5dTY4YmNuLWl6d0VkazR0TC1LeEdQVnNsemRTS01MQk43QV82eEU5UnpySXVoLXFaS0M5NDJneWhYaktHa3RoT19Id2k3Wk13eXFCTmgtdnVXX3I2aE5jbVJzc2NXZkxtNVlLTEl1THdNaG5DcmN6WVlNd2FsbWxSOFZmSFFkZENMa1ZhaGItemYwQ3pqTkozdURzYmtQeE9uMkNpY1ZWYThYcHVFdVBRVEdDU0hlM3NRRzkwbmU5UdIBzgFBVV95cUxPaFBnYjdQa2JpX0YxVGQ5dTY4YmNuLWl6d0VkazR0TC1LeEdQVnNsemRTS01MQk43QV82eEU5UnpySXVoLXFaS0M5NDJneWhYaktHa3RoT19Id2k3Wk13eXFCTmgtdnVXX3I2aE5jbVJzc2NXZkxtNVlLTEl1THdNaG5DcmN6WVlNd2FsbWxSOFZmSFFkZENMa1ZhaGItemYwQ3pqTkozdURzYmtQeE9uMkNpY1ZWYThYcHVFdVBRVEdDU0hlM3NRRzkwbmU5UQ?oc=5) (Google News Energy Feed)
 - [The right kind of retaliation to Donald Trump’s tariffs - The Globe and Mail](https://news.google.com/rss/articles/CBMitAFBVV95cUxOLUw3UmNEMWtMY3VuVmNsdEUxZlBaV3B3WXdIMFY2RWNEZjRNUTdQR3RidzUtcllkS3dVcDhoMzJacjl3UERVRVBOdGRJQzRGSzhibmxuMm5sdVUxdkFRekRzS2pldERsODNtX2p3bFVIS0g5UGVTaGpJWmhkWjlFZWVJMnlLSHZ6Wk9qQ2VfRGt5STE1ZFdlbmN5VXFkOWhqeEliNDRZMFlRaWRXZFFxNFZsTXc?oc=5) (Google News Energy Feed)
-- [The US tariff on Canadian imports could send already soaring hockey gear prices even higher - Midland Reporter-Telegram](https://news.google.com/rss/articles/CBMilwFBVV95cUxOTFVRTnYzQTVSNmp5dEJYa1ZLSVRNZ2pMcnI3bUdDdGlBajBoYUxiVGJVc3g0VDlqakNqcWllOEQ3U3J3VUpYcHlIY016T09CdE90ZzRYSWxtc2loWkIta1FCeDJrWWpzc0V2MFVNbWcyd0E2cEtWdmd1dkpzS1ZLZzl4bFg0MzRJRTdHRWlSa3VSdVFjaERJ?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-07 16:15:20]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-07 17:00:13]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'India buys oil for itself, not to help Moscow: Russian envoy amid US tariff threat - India Today' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-07 16:15:20 (Mode: INTRADAY_REVISION), primary event trigger 'Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-07 17:00:13 (Mode: INTRADAY_REVISION), primary event trigger 'India buys oil for itself, not to help Moscow: Russian envoy amid US tariff threat - India Today' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: Port St. Lucie, FL Retail at $3.290/gal (-0.0
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-07 16:15:20]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Should Williams-Sonoma’s (WSM) Upgraded 2026 Outlook Amid Tariffs Require Action From Investors? - simplywall.st'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-07 17:00:13]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'India buys oil for itself, not to help Moscow: Russian envoy amid US tariff threat - India Today'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-07 16:15:20.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-07 17:00:13.*
