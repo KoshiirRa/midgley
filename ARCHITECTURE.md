@@ -70,6 +70,7 @@ The forecasting engine integrates a **two-tiered weather ingestion model** via t
    │                               │                     │ • Greenville NC (NCZ081 Floods)│
    │                               │                     │ • Charlotte NC (NCZ071 Hub)   │
    │                               │                     │ • Oakland & Bay Area (PSPS)   │
+   │                               │                     │ • Port St. Lucie FL (FLZ147)  │
    └───────────────┬───────────────┘                     └───────────────┬───────────────┘
                    │                                                     │
                    ▼                                                     ▼
@@ -78,7 +79,7 @@ The forecasting engine integrates a **two-tiered weather ingestion model** via t
    │ (src/locations/national)      │                     │ (src/locations/<location>)    │
    │ • RBOB Wholesale Futures      │                     │ • Tulsa, Newark, Cincinnati,  │
    │ • Directional Acc: 60.79%     │                     │   Greenville, Charlotte,      │
-   │                               │                     │   Oakland & SF Bay Area       │
+   │                               │                     │   Oakland, Port St. Lucie     │
    └───────────────────────────────┘                     └───────────────┬───────────────┘
 ```
 

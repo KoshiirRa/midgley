@@ -603,16 +603,42 @@ def test_unlogged_regions_delta_preservation(monkeypatch):
     assert "-18.4%" not in cin_html
 
 
+def test_math_weather_vulnerability_matrix_all_regions():
+    """Verify that docs/math.html Section 03 contains Equation 3.1 terms
+    and NOAA NWS zone codes for all 7 active regional metro hubs.
+    """
+    generate_public_dashboard()
 
+    with open(MATH_PATH, "r", encoding="utf-8") as f:
+        math_html = f.read()
 
+    # Verify Equation 3.1 includes all 7 regional metros and national basins
+    expected_weather_terms = [
+        r"\mathbf{W}_{\text{National Basins}}",
+        r"\mathbf{W}_{\text{Tulsa}}",
+        r"\mathbf{W}_{\text{Newark}}",
+        r"\mathbf{W}_{\text{Cincinnati}}",
+        r"\mathbf{W}_{\text{Greenville}}",
+        r"\mathbf{W}_{\text{Charlotte}}",
+        r"\mathbf{W}_{\text{Oakland}}",
+        r"\mathbf{W}_{\text{Port St. Lucie}}",
+    ]
+    for term in expected_weather_terms:
+        assert term in math_html, f"Expected weather term '{term}' not found in docs/math.html"
 
-
-
-
-
-
-
-
-
+    # Verify all localized NOAA NWS zone codes are documented in Section 03
+    expected_zone_codes = [
+        "OKZ060",
+        "OKZ066",
+        "DEZ001",
+        "OHZ077",
+        "NCZ081",
+        "NCZ071",
+        "CAZ508",
+        "CAZ511",
+        "FLZ147",
+    ]
+    for zone in expected_zone_codes:
+        assert zone in math_html, f"Expected NOAA zone code '{zone}' not found in docs/math.html"
 
 
