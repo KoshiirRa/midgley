@@ -10,12 +10,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip & install uv for fast, reliable binary wheel installation
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel uv
+# Copy official static uv binary
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-# Copy dependencies manifest & install
+# Create virtual environment and add to PATH
+ENV VIRTUAL_ENV=/opt/venv
+RUN uv venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Copy dependencies manifest & install into virtual environment
 COPY requirements.txt .
-RUN uv pip install --system --no-cache -r requirements.txt
+RUN uv pip install --no-cache -r requirements.txt
 
 # Copy application source
 COPY . .
