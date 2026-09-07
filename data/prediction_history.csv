@@ -9,7 +9,6 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-07 03:35:26,2026-09-07,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.587,5.499,DOWN,5.3646,DOWN,0.1344,1.0,0.0,0.0,5.587,0.0,5.0658,5.9321,1.0,yfinance
 2026-09-07 03:35:26,2026-09-14,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.8232,DOWN,,,,,0.0,0.0,4.95,0.0,4.39,5.2564,,yfinance
 2026-09-07 03:35:26,2026-09-14,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9206,DOWN,,,,,0.0,0.0,5.05,0.0,4.4875,5.3538,,yfinance
-2026-09-07 05:15:09,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9627,3.5378,,yfinance
 2026-09-07 07:00:22,2025-09-30,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,1.9991,1.9591,DOWN,1.9729,DOWN,0.0138,1.0,0.0,0.0,1.9991,0.0,1.6716,2.2466,1.0,yfinance
 2026-09-07 07:00:22,2025-10-01,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,2.0188,1.9721,DOWN,1.8859,DOWN,0.0862,1.0,0.0,0.0,2.0188,0.0,1.6846,2.2596,1.0,yfinance
 2026-09-07 07:00:22,2025-10-02,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,2.0022,1.9456,DOWN,1.851,DOWN,0.0946,1.0,0.0,0.0,2.0022,0.0,1.658,2.2331,1.0,yfinance
@@ -2371,3 +2370,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-07 07:01:26,2026-09-03,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.0856,4.0191,DOWN,3.6849,DOWN,0.3342,1.0,0.0,0.0,4.0856,0.0,3.8992,4.1391,0.0,yfinance
 2026-09-07 07:01:26,2026-09-04,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.1913,4.1074,DOWN,3.7646,DOWN,0.3428,1.0,0.0,0.0,4.1913,0.0,3.9875,4.2274,0.0,yfinance
 2026-09-07 07:01:27,2026-09-11,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.916,3.8219,DOWN,,,,,0.0,0.0,3.916,0.0,3.3923,4.2515,,yfinance
+2026-09-07 07:15:08,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Russia ready to supply ‘as much oil as India needs’, envoy hits out at US tariff pressure - millenniumpost.in",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9627,3.5378,,yfinance
