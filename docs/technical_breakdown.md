@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-07 20:30:08`  
+**Log Timestamp:** `2026-09-07 21:45:08`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Trump administration pays out milestone $100 billion in tariff refunds - ABC News - Breaking News, Latest News and Videos  
+**Primary Event Trigger:** As hours tick down to Canada's counter-tariffs against U.S., PMO says no talks are scheduled - CBC  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Trump administration pays out milestone $100 billion in tariff refunds - ABC News - Breaking News, Latest News and Videos
+- **Headline Trigger:** As hours tick down to Canada's counter-tariffs against U.S., PMO says no talks are scheduled - CBC
 - **Active Ingested News Links:**
+- [As hours tick down to Canada's counter-tariffs against U.S., PMO says no talks are scheduled - CBC](https://news.google.com/rss/articles/CBMijAFBVV95cUxNMU5MbVRsWktzd1FmVklRWjVwcWdBQU5tczkwRUhsOVE4aURfQ3JJNTd4eFRPa1N4cGVmSlBFZzdBdGI3TUI4RDdBc0JpMFZaWlBDNGtOTnlkTmJWOWE0bkVFWjgteUdydm84LVRnRXgxWEpBa1hwWFYwVTEwNEY3OVlldkdjd3RIaFB3cw?oc=5) (Google News Energy Feed)
 - [Trump administration pays out milestone $100 billion in tariff refunds - ABC News - Breaking News, Latest News and Videos](https://news.google.com/rss/articles/CBMirwFBVV95cUxPaC1NcXQtTU1pa0V3QTQ3eW9CMThMVUVWXzBVLUpkTlNCekpxQkxiQi1XZzI0X1VzZ2hNdXRjUzF5MVlzcm9zcnJRb3pRanp1TGJ1Mm02T0NDWXU0MXI1R3JmNHNKb3lnOWx2R0dpQjR2Rk9aNGowb0NNcXRpVWdQRmVoN1pndGhaLUxXc3d5d2R6RVlhVHlNbHd6c1RnZUdUNFp5YUl3OGF4VURrTjg00gG0AUFVX3lxTE5IUDFROHpDMGhZM1pRelFZelItOFlhYTk4ZlpZaVpwWjBuYUZoN2l4MFM2bjRFMDBjMEtyNXFsSF93eFBzcU43TW16XzNacEh1b0Vja0xRZkp5LTFMaE4wUUlfd1o4RUNsNkN0aWVtb1hQTHZELUtvR2N0QVROTjN2dF9JZW9QUVl6NzNTRVJFSDRKYy15WHRUMGxDNWNabzFvZGFSNlhHcnBtWlN3TnloUFZlbQ?oc=5) (Google News Energy Feed)
 - [US Diesel Fuel Prices Reach Record Highs Amid Global Refinery Outages - SuaraGarut.ID](https://news.google.com/rss/articles/CBMiZEFVX3lxTFBPOE4zZDEyTE1YYXU4dFp0NDNXVnFjdVFkYTBUcGpxWjRtQ2h4TkJlRXpUU3A4RVVVVVdIVlJDYVl2dWFUek5PVzZiWFVSVjF2VFVyUXdacng5bm14VGQ2UUtFeFU?oc=5) (Google News Energy Feed)
-- [Russia Vows to Keep Selling Oil to India Despite U.S. Tariff Threat - Crude Oil Prices Today | OilPrice.com](https://news.google.com/rss/articles/CBMivgFBVV95cUxNOUp3NTFDYTZxUS03aGVDY0ZfZzV4b3RCYnNTUE01cTI3cm1sUU5JVmYtQ1B1eml0aC0ySkFiQ1pZeE03RkNkVkZNSk8yQzBkQzlqWWlRZmlCWXlwb3hNaWw1VENhY1BmYXp6M2ZiRERHdnd5cTBkbjBPOWxIRHYzLVA0ZjZPN2Y5ZnVRalE1bHVNdkVHeUxJMWtHM2FseEFFNGpyMTBCSDFkZGlDdS1vUGVncFlPQkgyMVB2al9R0gHDAUFVX3lxTFB1QWstLVN0SEFMdER4My1nVTd2WTlEQ3NaQlQ1UkNqeFBPc2g0Mm1PTTIzZkZsVTNSTFRkYVA0REpzZy1UV29VR01ISUstZXZUd0lQbnZXZi1nR3ozM2hjSllHaHZiZm1aaUloVDVTRDBtRWlyeGZZWl95VG8wZ1lFSzRMaFVGa01EMFJkcjh1cVNTMmVPbTZBTFRHcm1qSHh3SE55Qnp0TWZnUEc4LURrUEFsa1hPSWJmejNXMmxuY1BkZw?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-07 20:30:08]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Trump administration pays out milestone $100 billion in tariff refunds - ABC News - Breaking News, Latest News and Videos' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-07 21:45:08]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'As hours tick down to Canada's counter-tariffs against U.S., PMO says no talks are scheduled - CBC' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-07 20:30:08 (Mode: INTRADAY_REVISION), primary event trigger 'Trump administration pays out milestone $100 billion in tariff refunds - ABC News - Breaking News, Latest News and Videos' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-07 21:45:08 (Mode: INTRADAY_REVISION), primary event trigger 'As hours tick down to Canada's counter-tariffs against U.S., PMO says no talks are scheduled - CBC' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: SF Bay Area Region at $5.848/gal (+0.299/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-07 20:30:08]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Trump administration pays out milestone $100 billion in tariff refunds - ABC News - Breaking News, Latest News and Videos'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-07 21:45:08]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'As hours tick down to Canada's counter-tariffs against U.S., PMO says no talks are scheduled - CBC'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-07 20:30:08.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-07 21:45:08.*
