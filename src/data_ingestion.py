@@ -321,17 +321,21 @@ class EIADataConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached and "product_supplied_thousand_bpd" in cached and "status" in cached:
+            if cached and "product_supplied_thousand_bpd" in cached and "status" in cached and "as_of" in cached:
                 return cached
         except Exception:
             pass
 
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        valid_date_str = datetime.now().strftime("%Y-%m-%d")
         result = {
             "source": "U.S. Energy Information Administration API v2 (Zero-Cost)",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
+            "as_of": timestamp_str,
+            "valid_date": valid_date_str,
+            "is_vintage_reconstructed": False,
             "refinery_utilization": {
                 "PADD1_EastCoast": 87.4,
                 "PADD2_Midwest": 92.1,
@@ -362,12 +366,72 @@ class EIADataConnector:
         }
 
         try:
+            self.save_eia_vintage_record(result)
+        except Exception:
+            pass
+
+        try:
             from src.lookup_cache import global_cache
             global_cache.set(cache_key, result, ttl_seconds=86400 * 7)
         except Exception:
             pass
 
         return result
+
+    @staticmethod
+    def save_eia_vintage_record(record: dict, filepath: str = os.path.join("data", "eia_vintages.json")) -> None:
+        """
+        Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
+        """
+        try:
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            vintages = []
+            if os.path.exists(filepath):
+                try:
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        vintages = json.load(f)
+                except Exception:
+                    vintages = []
+
+            rec_copy = dict(record)
+            if "as_of" not in rec_copy:
+                rec_copy["as_of"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if "valid_date" not in rec_copy:
+                rec_copy["valid_date"] = datetime.now().strftime("%Y-%m-%d")
+            if "is_vintage_reconstructed" not in rec_copy:
+                rec_copy["is_vintage_reconstructed"] = False
+
+            vintages = [v for v in vintages if not (v.get("as_of") == rec_copy["as_of"] and v.get("source") == rec_copy.get("source"))]
+            vintages.append(rec_copy)
+
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(json.dumps(vintages, indent=2))
+        except Exception as e:
+            logger.warning(f"Could not persist EIA vintage record: {e}")
+
+    @staticmethod
+    def get_eia_vintages_as_of(target_as_of: str = None, filepath: str = os.path.join("data", "eia_vintages.json")) -> list:
+        """
+        Retrieves EIA observations published on or before target_as_of (Issue #121).
+        """
+        try:
+            if not os.path.exists(filepath):
+                return []
+            with open(filepath, "r", encoding="utf-8") as f:
+                vintages = json.load(f)
+            if not target_as_of:
+                return vintages
+            
+            target_str = str(target_as_of)
+            filtered = []
+            for v in vintages:
+                as_of_val = v.get("as_of", "")
+                if as_of_val <= target_str or as_of_val[:10] <= target_str[:10]:
+                    filtered.append(v)
+            return filtered
+        except Exception as e:
+            logger.warning(f"Could not read EIA vintages as of {target_as_of}: {e}")
+            return []
 
 
 class EIA930GridMonitorConnector:
@@ -477,12 +541,13 @@ class EIAStateMetroRetailConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached:
+            if cached and "as_of" in cached:
                 return cached
         except Exception:
             pass
 
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        valid_date_str = datetime.now().strftime("%Y-%m-%d")
         price = self.state_prices.get(st, 3.250)
         result = {
             "state_code": st,
@@ -490,7 +555,10 @@ class EIAStateMetroRetailConnector:
             "source": f"U.S. EIA API v2 Weekly Survey ({st})",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
-            "timestamp": timestamp_str
+            "timestamp": timestamp_str,
+            "as_of": timestamp_str,
+            "valid_date": valid_date_str,
+            "is_vintage_reconstructed": False
         }
 
         try:
@@ -506,12 +574,13 @@ class EIAStateMetroRetailConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached:
+            if cached and "as_of" in cached:
                 return cached
         except Exception:
             pass
 
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        valid_date_str = datetime.now().strftime("%Y-%m-%d")
         price = self.metro_prices.get(metro_name, 3.450)
         result = {
             "metro_name": metro_name,
@@ -519,7 +588,10 @@ class EIAStateMetroRetailConnector:
             "source": f"U.S. EIA API v2 Metro Survey ({metro_name})",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
-            "timestamp": timestamp_str
+            "timestamp": timestamp_str,
+            "as_of": timestamp_str,
+            "valid_date": valid_date_str,
+            "is_vintage_reconstructed": False
         }
 
         try:
@@ -529,6 +601,65 @@ class EIAStateMetroRetailConnector:
             pass
 
         return result
+
+    @staticmethod
+    def save_eia_vintage_record(record: dict, filepath: str = os.path.join("data", "eia_vintages.json")) -> None:
+        """
+        Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
+        """
+        try:
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            vintages = []
+            if os.path.exists(filepath):
+                try:
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        vintages = json.load(f)
+                except Exception:
+                    vintages = []
+
+            # Append record with timestamp
+            rec_copy = dict(record)
+            if "as_of" not in rec_copy:
+                rec_copy["as_of"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if "valid_date" not in rec_copy:
+                rec_copy["valid_date"] = datetime.now().strftime("%Y-%m-%d")
+            if "is_vintage_reconstructed" not in rec_copy:
+                rec_copy["is_vintage_reconstructed"] = False
+
+            # Avoid exact duplicate timestamps
+            vintages = [v for v in vintages if not (v.get("as_of") == rec_copy["as_of"] and v.get("source") == rec_copy.get("source"))]
+            vintages.append(rec_copy)
+
+            with open(filepath, "w", encoding="utf-8") as f:
+                json.dumps(vintages, indent=2)
+                f.write(json.dumps(vintages, indent=2))
+        except Exception as e:
+            logger.warning(f"Could not persist EIA vintage record: {e}")
+
+    @staticmethod
+    def get_eia_vintages_as_of(target_as_of: str = None, filepath: str = os.path.join("data", "eia_vintages.json")) -> list:
+        """
+        Retrieves EIA observations that were published on or before target_as_of (Issue #121).
+        If target_as_of is None, returns all stored vintages.
+        """
+        try:
+            if not os.path.exists(filepath):
+                return []
+            with open(filepath, "r", encoding="utf-8") as f:
+                vintages = json.load(f)
+            if not target_as_of:
+                return vintages
+            
+            target_str = str(target_as_of)
+            filtered = []
+            for v in vintages:
+                as_of_val = v.get("as_of", "")
+                if as_of_val <= target_str or as_of_val[:10] <= target_str[:10]:
+                    filtered.append(v)
+            return filtered
+        except Exception as e:
+            logger.warning(f"Could not read EIA vintages as of {target_as_of}: {e}")
+            return []
 
 
 ALPHA_VANTAGE_QUOTA_FILE = os.path.join("data", "alpha_vantage_quota.json")
@@ -1373,9 +1504,216 @@ class FERCDataConnector:
             log_connector_event(name, target, status, latency, age, stale, details)
         except Exception:
             pass
+class OpenSourceAIRadarConnector:
+    """
+    Open Source AI Radar Connector (Issue #187)
+    Fetches open-source model capabilities, parameter counts, context windows, benchmark scores,
+    and release timelines from Open Source AI Radar (erbharatmalhotra.github.io/open-source-ai-radar).
+    Provides automatic disk caching and fallback datasets for 100% offline reliability.
+    """
+
+    CACHE_FILE = os.path.join("data", "radar_cache.json")
+    PRIMARY_URL = "https://erbharatmalhotra.github.io/open-source-ai-radar/api/data.json"
+    FALLBACK_URL = "https://raw.githubusercontent.com/erbharatmalhotra/open-source-ai-radar/main/public/data/models.json"
+
+    CURATED_BASELINE_MODELS = [
+        {
+            "name": "Llama-3.3-70B-Instruct",
+            "organization": "Meta",
+            "license": "Llama-3.3-Community",
+            "parameters": "70B",
+            "context_window": 128000,
+            "release_date": "2024-12-06",
+            "tags": ["llm", "general", "reasoning"],
+            "benchmark_score": 88.6,
+            "url": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct",
+            "is_time_series_capable": False,
+            "is_llm_reasoning": True
+        },
+        {
+            "name": "DeepSeek-V3",
+            "organization": "DeepSeek",
+            "license": "MIT",
+            "parameters": "671B (37B active)",
+            "context_window": 128000,
+            "release_date": "2024-12-26",
+            "tags": ["llm", "moe", "reasoning"],
+            "benchmark_score": 90.2,
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3",
+            "is_time_series_capable": False,
+            "is_llm_reasoning": True
+        },
+        {
+            "name": "Qwen2.5-Coder-32B-Instruct",
+            "organization": "Alibaba Cloud",
+            "license": "Apache-2.0",
+            "parameters": "32B",
+            "context_window": 131072,
+            "release_date": "2024-11-12",
+            "tags": ["llm", "code", "quant"],
+            "benchmark_score": 86.4,
+            "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct",
+            "is_time_series_capable": False,
+            "is_llm_reasoning": True
+        },
+        {
+            "name": "Chronos-Bolt-Large",
+            "organization": "Amazon Web Services",
+            "license": "Apache-2.0",
+            "parameters": "200M",
+            "context_window": 2048,
+            "release_date": "2024-10-15",
+            "tags": ["timeseries", "forecasting", "pretrained"],
+            "benchmark_score": 84.1,
+            "url": "https://huggingface.co/amazon/chronos-bolt-large",
+            "is_time_series_capable": True,
+            "is_llm_reasoning": False
+        },
+        {
+            "name": "Time-LLM-7B",
+            "organization": "NeurIPS Research",
+            "license": "Apache-2.0",
+            "parameters": "7B",
+            "context_window": 8192,
+            "release_date": "2024-06-01",
+            "tags": ["timeseries", "llm-forecasting", "reprogramming"],
+            "benchmark_score": 82.5,
+            "url": "https://github.com/KimMeen/Time-LLM",
+            "is_time_series_capable": True,
+            "is_llm_reasoning": True
+        },
+        {
+            "name": "Mistral-Small-24B-Instruct-2501",
+            "organization": "Mistral AI",
+            "license": "Apache-2.0",
+            "parameters": "24B",
+            "context_window": 32768,
+            "release_date": "2025-01-29",
+            "tags": ["llm", "reasoning", "efficiency"],
+            "benchmark_score": 85.8,
+            "url": "https://huggingface.co/mistralai/Mistral-Small-24B-Instruct-2501",
+            "is_time_series_capable": False,
+            "is_llm_reasoning": True
+        }
+    ]
+
+    def __init__(self):
+        self.cached_models: List[Dict[str, Any]] = []
+
+    def _load_disk_cache(self) -> Optional[List[Dict[str, Any]]]:
+        """Loads cached radar records from data/radar_cache.json if within 24h TTL."""
+        if not os.path.exists(self.CACHE_FILE):
+            return None
+        try:
+            with open(self.CACHE_FILE, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            cached_at = payload.get("cached_at")
+            if cached_at:
+                dt = datetime.fromisoformat(cached_at)
+                if (datetime.now() - dt).total_seconds() < 86400:  # 24h
+                    return payload.get("models", [])
+        except Exception as e:
+            logger.debug(f"Error reading radar cache: {e}")
+        return None
+
+    def _save_disk_cache(self, models: List[Dict[str, Any]]):
+        """Saves radar records to data/radar_cache.json."""
+        try:
+            os.makedirs(os.path.dirname(self.CACHE_FILE), exist_ok=True)
+            with open(self.CACHE_FILE, "w", encoding="utf-8") as f:
+                json.dump({
+                    "cached_at": datetime.now().isoformat(),
+                    "total_models": len(models),
+                    "models": models
+                }, f, indent=2)
+        except Exception as e:
+            logger.debug(f"Error writing radar cache: {e}")
+
+    def fetch_radar_models(
+        self,
+        max_results: int = 15,
+        category: Optional[str] = None,
+        force_refresh: bool = False
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetches open-source models with optional tag/category filtering (e.g. 'llm', 'timeseries').
+        """
+        start_time = datetime.now()
+
+        if not force_refresh:
+            cached = self._load_disk_cache()
+            if cached:
+                self._log_telemetry("OpenSourceAIRadar", "AI_Radar_Cache", "SUCCESS", 0.001, 0.0, False, "Cached radar models retrieved")
+                return self._filter_models(cached, category, max_results)
+
+        models = []
+        for target_url in [self.PRIMARY_URL, self.FALLBACK_URL]:
+            try:
+                req = urllib.request.Request(
+                    target_url,
+                    headers={"User-Agent": "Midgley-AIRadar-Connector/1.0"}
+                )
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    status_code = getattr(resp, "status", None) or (resp.getcode() if hasattr(resp, "getcode") else 200)
+                    if status_code == 200:
+                        raw_data = json.loads(resp.read().decode("utf-8"))
+                        items = raw_data if isinstance(raw_data, list) else raw_data.get("models", raw_data.get("items", []))
+                        for it in items:
+                            if isinstance(it, dict) and it.get("name"):
+                                tags = [t.lower() for t in it.get("tags", [])]
+                                is_ts = any("time" in t or "forecast" in t for t in tags)
+                                is_llm = any("llm" in t or "reason" in t or "instruct" in t for t in tags)
+                                models.append({
+                                    "name": it.get("name"),
+                                    "organization": it.get("organization", it.get("provider", "Open Source")),
+                                    "license": it.get("license", "Open"),
+                                    "parameters": str(it.get("parameters", "Unknown")),
+                                    "context_window": int(it.get("context_window", 4096)),
+                                    "release_date": it.get("release_date", datetime.now().strftime("%Y-%m-%d")),
+                                    "tags": tags,
+                                    "benchmark_score": float(it.get("benchmark_score", it.get("score", 80.0))),
+                                    "url": it.get("url", f"https://huggingface.co/{it.get('name')}"),
+                                    "is_time_series_capable": is_ts,
+                                    "is_llm_reasoning": is_llm
+                                })
+                        if models:
+                            break
+            except Exception as e:
+                logger.debug(f"Notice querying {target_url}: {e}")
+
+        if not models:
+            models = list(self.CURATED_BASELINE_MODELS)
+            status = "FALLBACK"
+        else:
+            status = "SUCCESS"
+
+        self._save_disk_cache(models)
+        latency = (datetime.now() - start_time).total_seconds()
+        self._log_telemetry("OpenSourceAIRadar", "AI_Radar_API", status, latency, 0.0, False, f"Retrieved {len(models)} radar models")
+
+        return self._filter_models(models, category, max_results)
+
+    def _filter_models(self, models: List[Dict[str, Any]], category: Optional[str], limit: int) -> List[Dict[str, Any]]:
+        if not category:
+            return models[:limit]
+        cat = category.lower().strip()
+        filtered = [
+            m for m in models
+            if cat in [t.lower() for t in m.get("tags", [])]
+            or (cat in ("timeseries", "time_series") and m.get("is_time_series_capable"))
+            or (cat == "llm" and m.get("is_llm_reasoning"))
+        ]
+        return filtered[:limit]
+
+    def _log_telemetry(self, name: str, target: str, status: str, latency: float, age: float, stale: bool, details: str):
+        try:
+            from src.connector_telemetry import log_connector_event
+            log_connector_event(name, target, status, latency, age, stale, details)
+        except Exception:
+            pass
 
 
-
-
-
-
+def get_open_source_ai_radar_models(max_results: int = 15, category: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Helper to fetch open-source AI radar models."""
+    connector = OpenSourceAIRadarConnector()
+    return connector.fetch_radar_models(max_results=max_results, category=category)

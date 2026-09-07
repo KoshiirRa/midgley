@@ -65,6 +65,13 @@
 - **Fallback Telemetry Engine ([`src/fallback_telemetry.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/fallback_telemetry.py)):** Persistent accounting at `data/fallback_telemetry.json` tracking basic tier routed requests, zero-cost provider invocations, and estimated token/dollar savings, exposed via `GET /api/v1/telemetry/fallback-status` and rendered on `docs/telemetry.html`.
 - **Unit Test Suite ([`tests/test_zero_cost_fallbacks.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_zero_cost_fallbacks.py)):** 5 unit tests verifying basic tier key routing, lexicon extraction accuracy, provider hook extensibility, and fallback telemetry accounting.
 
+### 12. Feast Feature Store for Point-in-Time Backtesting Correctness (Issue #94)
+- **Feast Feature Store Engine ([`src/feast_store.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feast_store.py) & [`data/feature_store.yaml`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/data/feature_store.yaml)):** Integrates Feast (`feast>=0.30.0`) with local Parquet file offline store (`data/feast_parquet/`) and SQLite online store (`data/online_store.db`).
+- **FeatureView Schemas:** Standardized `BatchFeatureView` definitions for **EIA** (weekly petroleum balance), **FRED** (gasoline retail & CPI index), **NOAA** (HDD, CDD, freeze warning, SPC tornado risk), and **LLM Event Shock Decay Vectors**.
+- **Point-in-Time (`AS OF`) Temporal Joins:** Exposes `MidgleyFeastStore.get_historical_point_in_time_features()` to enforce strict point-in-time joins during historical backtests, eliminating future data leakage and train-serve skew.
+- **Model Training & Feature Matrix Integration:** Connected `create_feature_matrix(use_feast=True)` in `src/feature_engineering.py` and `train_models_with_feast_point_in_time()` in `src/models.py`.
+- **Unit Test Suite ([`tests/test_feast_feature_store.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_feast_feature_store.py)):** 5 unit tests verifying Feast initialization, Parquet file exports, point-in-time non-leakage assertions, and model training integration.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -72,7 +79,7 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `280 passed, 1 warning in 540.31s` (100% pass rate across 57 test modules).
+  **Result:** `285 passed, 1 warning` (100% pass rate across 58 test modules).
 
 ---
 
@@ -83,9 +90,11 @@
 - **Issue #78**: `feat(api): expand Strategy 4 incoming webhook gateway with flexible payload transformers & locale routing` (Closed as completed)
 - **Issue #82**: `[Feature Request] Synchronize Prediction History & Lookup Cache with Serverless Postgres (Neon / D1)` (Closed as completed)
 - **Issue #87**: `feat(security): implement IPASIS API Gateway Security & Telemetry accounting` (Closed as completed)
+- **Issue #94**: `[Feature Request] Implement Feast Feature Store for Point-in-Time Backtesting Correctness` (Closed as completed)
 - **Issue #191**: `[Feature Request] Ingest Fireworks Tech Graph for Automated Architecture Diagram Generation` (Closed as completed)
 - **Issue #192**: `[Feature Request] Cloudflare Durable Objects for State Persistence` (Closed as not planned)
 - **Issue #194**: `[Feature Request] Cloudflare Queues Integration for Asynchronous Edge Event Buffering` (Closed as completed)
 - **Issue #195**: `[Feature Request] Dedicated System Observability & Telemetry Dashboard Page` (Closed as completed)
-- **Issue #196**: `[Feature Request] Expand Zero-Cost Fallback Providers & Deterministic Lexicon Engines for Unprivileged API Tier` (Closed as completed)`
+- **Issue #196**: `[Feature Request] Expand Zero-Cost Fallback Providers & Deterministic Lexicon Engines for Unprivileged API Tier` (Closed as completed)
+
 

@@ -4,8 +4,18 @@
   "display_name": "SF Bay Area 9-County Region",
   "padd_region": "PADD 5 West Coast",
   "primary_city": "San Francisco, CA",
-  "counties": ["San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Marin", "Solano", "Napa", "Sonoma"],
-  "baseline_price": 5.050,
+  "counties": [
+    "San Francisco",
+    "San Mateo",
+    "Santa Clara",
+    "Alameda",
+    "Contra Costa",
+    "Marin",
+    "Solano",
+    "Napa",
+    "Sonoma"
+  ],
+  "baseline_price": 5.05,
   "icon_class": "fa-warehouse",
   "theme_color": "cyan",
   "econometric_drivers": {
@@ -17,7 +27,9 @@
     "description": "Carquinez Strait & Suisun Bay refining complex (Chevron Richmond, PBF Martinez, Valero Benicia, Rodeo Renewable), marine oil terminals, and crude lightering berths.",
     "primary_refinery": "Carquinez Strait Refining Complex",
     "capacity_bpd": 720000,
-    "pipelines": ["Kinder Morgan SFPP Bay Area Spine"]
+    "pipelines": [
+      "Kinder Morgan SFPP Bay Area Spine"
+    ]
   },
   "tax_structure": {
     "title": "CARB Regulatory Tax & Bay Area Surcharges",
@@ -38,7 +50,7 @@
     {
       "name": "Hayward & San Andreas Seismic Event",
       "subtitle": "Bay Bridge & Pipeline Corridor Lockout",
-      "price_impact_per_gal": 0.450,
+      "price_impact_per_gal": 0.45,
       "pct_impact": 8.91,
       "description": "Throttles fuel truck passage across San Francisco Bay bridges"
     },
@@ -49,5 +61,19 @@
       "pct_impact": 5.64,
       "description": "Spikes North Bay and East Bay rack prices"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 1820000,
+    "zero_vehicle_pct": 11.5,
+    "vehicles_per_household": 1.62,
+    "drive_alone_share": 0.585,
+    "carpool_share": 0.085,
+    "public_transit_share": 0.125,
+    "work_from_home_share": 0.185,
+    "mean_commute_minutes": 32.5,
+    "vehicle_dependency_ratio": 0.67,
+    "transit_alternative_index": 0.218,
+    "inelastic_demand_score": 0.548
+  }
 }

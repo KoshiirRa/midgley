@@ -38,6 +38,10 @@ Release **v0.3.4** introduces Ultra-Low Sulfur Diesel (ULSD) distillate modeling
 9. **Cloudflare Edge Worker Stack Trace Sanitization**:
    - Remediated CodeQL `js/stack-trace-exposure` security alerts in `workers/cache_worker.ts` and `workers/intraday_monitor_worker.ts` by returning generic `"Internal Server Error"` payloads while maintaining full Sentry error tracking.
 
+10. **Issue #93 Neural Forecasting Roadmap Pivot (Nixtla `NeuralForecast`)**:
+    - Evaluated Issue #93 and pivoted from legacy unmaintained NeuralProphet (stagnant since `v0.9.0` in June 2024) to **Nixtla `NeuralForecast`** (`N-BEATSx` / `NHITS`).
+    - Specifies PyTorch deep learning architectures with explicit historical exogenous feature passing (`hist_exog_list` for LLM event shock decay vectors $t_{1/2}=4.0\text{--}5.0\text{d}$) and multi-quantile uncertainty bounds (`MQLoss`), complementing Google TimesFM and tabular GBDT estimators.
+
 ### 🧪 Verification & Audit
 - **Unit Test Suite**: 227/227 unit tests passed cleanly (100% pass rate).
 - **Public Web App**: Recompiled and verified across all pages (`docs/*.html`).

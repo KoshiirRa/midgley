@@ -4,8 +4,10 @@
   "display_name": "Newark, DE Metro Retail",
   "padd_region": "PADD 1B Central Atlantic",
   "primary_city": "Newark, DE",
-  "counties": ["New Castle"],
-  "baseline_price": 3.350,
+  "counties": [
+    "New Castle"
+  ],
+  "baseline_price": 3.35,
   "icon_class": "fa-warehouse",
   "theme_color": "blue",
   "econometric_drivers": {
@@ -17,12 +19,15 @@
     "description": "Located 12 miles south of Newark, DE, PBF's Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering at Big Stone Anchorage and C&D Canal barge routes.",
     "primary_refinery": "PBF Delaware City Refinery",
     "capacity_bpd": 180000,
-    "pipelines": ["Colonial Pipeline North Spurt", "Delaware River Barge Fleet"]
+    "pipelines": [
+      "Colonial Pipeline North Spurt",
+      "Delaware River Barge Fleet"
+    ]
   },
   "tax_structure": {
     "title": "Delaware State Fuel Tax & Statutory Overhead",
     "description": "Delaware state motor fuel tax ($0.230/gal) combined with US Federal excise tax ($0.184/gal) establishes a total statutory tax overhead of $0.414/gal across New Castle County stations.",
-    "state_tax_per_gal": 0.230,
+    "state_tax_per_gal": 0.23,
     "federal_tax_per_gal": 0.184,
     "total_tax_per_gal": 0.414,
     "notes": "Maintained at flat statutory rate across New Castle County"
@@ -39,7 +44,7 @@
       "name": "C&D Canal Detour Event",
       "subtitle": "Barge Traffic Detour (300 nm)",
       "price_impact_per_gal": 0.097,
-      "pct_impact": 2.90,
+      "pct_impact": 2.9,
       "description": "Increases marine waterborne transport tariffs"
     },
     {
@@ -56,5 +61,19 @@
       "pct_impact": 3.34,
       "description": "Delays foreign crude tanker discharge"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 225000,
+    "zero_vehicle_pct": 7.8,
+    "vehicles_per_household": 1.74,
+    "drive_alone_share": 0.742,
+    "carpool_share": 0.078,
+    "public_transit_share": 0.045,
+    "work_from_home_share": 0.118,
+    "mean_commute_minutes": 26.4,
+    "vehicle_dependency_ratio": 0.82,
+    "transit_alternative_index": 0.104,
+    "inelastic_demand_score": 0.732
+  }
 }

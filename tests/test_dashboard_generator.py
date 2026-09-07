@@ -176,7 +176,7 @@ def test_last_run_intelligence_audit_card_daily_batch(tmp_path):
 
     card_html = build_last_run_audit_card_html(audit_data)
     assert "Last Run Intelligence & Impact Audit" in card_html
-    assert "Scheduled Daily Batch" in card_html
+    assert "Daily Forecast Batch Execution" in card_html
     assert "DAILY_BATCH" in card_html
     assert "Supply Disruption Score" in card_html
     assert "Prediction Revisions Delta" in card_html
@@ -276,7 +276,7 @@ def test_last_run_intelligence_audit_card_fallback_on_missing_files(tmp_path):
 
     card_html = build_last_run_audit_card_html(audit_data)
     assert "Last Run Intelligence & Impact Audit" in card_html
-    assert "Scheduled Daily Batch" in card_html
+    assert "Daily Forecast Batch Execution" in card_html
     assert '<a href="technical_breakdown.html"' in card_html
 
 
@@ -523,6 +523,88 @@ def test_get_release_badge_dynamic_version(monkeypatch):
     monkeypatch.setenv("MIDGLEY_VERSION", "0.5.0")
     badge_custom = get_release_badge()
     assert "Release v0.5.0" in badge_custom
+
+
+def test_dynamic_trend_badges_rendering():
+    """Verify Issue #207: Ensure that regional dashboard HTML pages render
+    dynamic trend percentage badges calculated from (predicted - base) / base * 100.0,
+    rather than static hardcoded trend strings (e.g. '-3.0% Projected Trend').
+    """
+    generate_public_dashboard()
+
+    all_regional_paths = [
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        CINCINNATI_PATH,
+        GREENVILLE_PATH,
+        CHARLOTTE_PATH,
+        OAKLAND_PATH,
+        BAYAREA_PATH,
+    ]
+
+    single_trend_paths = [
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        GREENVILLE_PATH,
+        CHARLOTTE_PATH,
+    ]
+
+    for path in all_regional_paths:
+        assert os.path.exists(path), f"Page missing: {path}"
+        with open(path, "r", encoding="utf-8") as f:
+            html = f.read()
+
+        # Verify un-substituted template placeholders are never present in generated HTML
+        assert "{{NAT_TREND_TEXT}}" not in html, f"Unplaced template token found in {path}"
+        assert "{{TULSA_TREND_TEXT}}" not in html, f"Unplaced template token found in {path}"
+        assert "{{NEWARK_TREND_TEXT}}" not in html, f"Unplaced template token found in {path}"
+
+    for path in single_trend_paths:
+        with open(path, "r", encoding="utf-8") as f:
+            html = f.read()
+        # Verify dynamic badge structure with % Projected Trend exists on single-region pages
+        assert "% Projected Trend" in html, f"Missing dynamic '% Projected Trend' badge in {path}"
+
+    # Verify Oakland renders dynamic percentage trend in its target card
+    with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
+        oak_html = f.read()
+        assert "5-Day Target:" in oak_html
+        assert "%" in oak_html
+
+
+def test_unlogged_regions_delta_preservation(monkeypatch):
+    """Verify Issue #208: Ensure that when live prices update for unlogged regions,
+    prices_map preserves the initial model delta (pred = base + delta)
+    so forecast targets move in sync with live base price updates,
+    preventing artificial trend drops.
+    """
+    def mock_fetch(region, use_cache=True):
+        live_prices = {
+            'Tulsa_OK': {'price': 3.614},
+            'Cincinnati_OH': {'price': 3.916},
+            'Cincinnati_KY': {'price': 3.952},
+            'Port_St_Lucie_FL': {'price': 3.949},
+        }
+        return live_prices.get(region, None)
+
+    import src.live_fuel_feed as lff
+    monkeypatch.setattr(lff, "fetch_live_metro_retail_price", mock_fetch)
+
+    generate_public_dashboard()
+
+    with open(CINCINNATI_PATH, "r", encoding="utf-8") as f:
+        cin_html = f.read()
+
+    assert "$3.916" in cin_html
+    assert ("$3.822" in cin_html or "$3.816" in cin_html)
+    assert "-14.5%" not in cin_html
+    assert "-18.4%" not in cin_html
+
+
+
+
 
 
 

@@ -10,7 +10,7 @@ import hmac
 import hashlib
 import logging
 from typing import Optional, Dict, Any, List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 from fastapi import FastAPI, Query, HTTPException, Header, Request, Depends
@@ -30,6 +30,7 @@ from src.models import compute_locale_feature_attribution_breakdown
 from src.prediction_logger import (
     compute_rolling_scoreboard_metrics,
     compute_regional_scoreboard_breakdown,
+    compute_horizon_scoreboard_breakdown,
     get_recent_evaluated_records,
     sync_predictions_to_cloud,
     get_cloud_sync_status
@@ -273,6 +274,21 @@ SCENARIOS_CATALOG = {
         "name": "Weekend Foreign Energy Tariff Declaration",
         "headline": "Executive social post announcing immediate 25% energy import tariff causes weekend open gap surge.",
         "shock_pct": 0.0210
+    },
+    "houston_ship_channel_closure": {
+        "name": "Houston Ship Channel Torrential Runoff & Marine Closure",
+        "headline": "USGS San Jacinto runoff surge closes Houston Ship Channel to crude tankers and fuel barges, halting 2.7M bpd refining corridor.",
+        "shock_pct": 0.0512
+    },
+    "carquinez_atmospheric_river": {
+        "name": "Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt",
+        "headline": "USGS Sacramento River discharge surge through Carquinez Strait suspends crude tanker berthing at Martinez & Benicia refineries.",
+        "shock_pct": 0.0435
+    },
+    "summer_refinery_thermal_cutback": {
+        "name": "Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment",
+        "headline": "USGS river water temperature exceeds 28°C, impairing refinery cooling tower efficiency and triggering statutory run cuts.",
+        "shock_pct": 0.0385
     }
 }
 
@@ -420,7 +436,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             "name": meta["name"]
         },
         "forecast": {
-            "model_version": "v1.4 Finlight-LLM",
+            "model_version": "v1.6 Ipatieff",
             "forecast_horizon_days": days,
             "target_date": target_date,
             "current_base_price": base_price,
@@ -442,17 +458,20 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
 @app.get("/api/v1/forecast/scoreboard", dependencies=[Depends(get_api_key_user)], summary="Get Realized-vs-Predicted Rolling Scoreboard Metrics")
 def get_forecast_scoreboard(
     locale: Optional[str] = Query(None, description="Optional locale code or region (e.g., 'tulsa', 'oakland', 'national', 'all')"),
-    window: Optional[str] = Query("30", description="Rolling evaluation window in days ('30', '60', '90', or 'all')")
+    window: Optional[str] = Query("30", description="Rolling evaluation window in days ('30', '60', '90', or 'all')"),
+    horizon: Optional[str] = Query(None, description="Optional forecast horizon in days ('1', '2', '3', '4', '5', or 'all')")
 ):
     """
     Returns rolling out-of-time forecast accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
     Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices.
+    Supports granular filtering by forecast horizon (1d through 5d).
     """
     region_code = _normalize_locale(locale) if (locale and str(locale).lower() not in ["all", "none", ""]) else None
 
-    summary_metrics = compute_rolling_scoreboard_metrics(window_days=window, region=region_code)
-    regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window)
-    recent_evals = get_recent_evaluated_records(region=region_code, limit=50)
+    summary_metrics = compute_rolling_scoreboard_metrics(window_days=window, region=region_code, horizon_days=horizon)
+    regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window, horizon_days=horizon)
+    horizon_breakdown = compute_horizon_scoreboard_breakdown(window_days=window, region=region_code)
+    recent_evals = get_recent_evaluated_records(region=region_code, limit=50, horizon_days=horizon)
 
     return {
         "status": "success",
@@ -461,9 +480,11 @@ def get_forecast_scoreboard(
         "filters": {
             "locale": locale or "all",
             "region_code": region_code or "ALL",
-            "window_days": window
+            "window_days": window,
+            "horizon": horizon or "all"
         },
         "summary": summary_metrics,
+        "horizon_breakdown": horizon_breakdown,
         "regional_breakdown": regional_breakdown,
         "recent_evaluations": recent_evals
     }
@@ -496,6 +517,34 @@ def get_cloud_prediction_sync_status():
         "timestamp": datetime.now().isoformat(),
         "cloud_sync_status": status_info
     }
+
+
+@app.get("/api/v1/system/radar", summary="Get Open Source AI Radar Model Catalog")
+def get_system_radar_catalog(
+    category: Optional[str] = Query(None, description="Optional category filter (e.g. llm, timeseries, vision)"),
+    limit: int = Query(15, ge=1, le=50, description="Max models to return")
+):
+    """
+    Returns open-source model capabilities, benchmarks, and release metrics from Open Source AI Radar (Issue #187).
+    """
+    try:
+        from src.data_ingestion import OpenSourceAIRadarConnector
+        connector = OpenSourceAIRadarConnector()
+        models = connector.fetch_radar_models(max_results=limit, category=category)
+        return {
+            "status": "success",
+            "count": len(models),
+            "timestamp": datetime.now().isoformat(),
+            "models": models
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e),
+            "timestamp": datetime.now().isoformat(),
+            "models": []
+        }
+
 
 
 @app.get("/api/v1/forecast/purged-cv", dependencies=[Depends(get_api_key_user)], summary="Get Purged & Combinatorial Cross-Validation Metrics")
@@ -821,6 +870,85 @@ def list_supported_locales():
     }
 
 
+@app.get("/api/v1/usgs/water_levels", summary="Get Live USGS River & Waterway Hydrological Telemetry", tags=["Physical Data Feeds"])
+def get_usgs_water_levels_endpoint(cluster: Optional[str] = Query(None, description="Optional regional cluster filter: inland_barge, gulf_coast, bay_area, delaware, tulsa, florida")):
+    """
+    Returns real-time streamflow, gage height, water temperature, and specific conductance
+    telemetry from USGS NWIS monitoring stations across inland waterways and refining corridors (Issue #56).
+    """
+    from src.usgs_water_feed import USGSWaterFeedConnector
+    connector = USGSWaterFeedConnector()
+    return connector.fetch_live_water_telemetry(cluster=cluster)
+
+
+@app.get("/api/v1/usgs/seismic", summary="Get Live USGS Earthquake & Seismic Telemetry", tags=["Physical Data Feeds"])
+def get_usgs_seismic_endpoint(
+    corridor: Optional[str] = Query("bay_area", description="Optional regional corridor filter: bay_area, cushing_ok, socal, mid_atlantic, new_madrid, or 'all'"),
+    days: Optional[int] = Query(30, description="Rolling historical window in days (default: 30)"),
+    min_mag: Optional[float] = Query(None, description="Minimum earthquake magnitude filter (defaults to corridor threshold)")
+):
+    """
+    Returns real-time and historical earthquake telemetry from the USGS Earthquake Web Service API
+    (earthquake.usgs.gov/fdsnws/event/1/) evaluated against critical refining, pipeline, and storage infrastructure (Issue #55).
+    """
+    from src.usgs_seismic import USGSSeismicConnector
+    connector = USGSSeismicConnector()
+    corr_arg = None if corridor == "all" else corridor
+    return connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days or 30, min_mag=min_mag)
+
+
+@app.get("/api/v1/aqi/live", summary="Get Live Refinery Air Quality & Industrial Flaring Telemetry", tags=["Physical Data Feeds"])
+def get_aqi_live_endpoint(
+    corridor: Optional[str] = Query("bay_area", description="Optional regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'")
+):
+    """
+    Returns real-time and historical multi-feed air quality metrics (PM2.5, SO2, NO2, O3)
+    from PurpleAir, OpenAQ, and EPA AirNow evaluated against critical refining hubs for
+    unplanned outage early detection, flaring risk scoring, and ozone action day tracking (Issues #54 & #73).
+    """
+    from src.aqi_feed import AQIFeedConnector
+    connector = AQIFeedConnector()
+    corr_arg = None if corridor == "all" else corridor
+    return connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+
+
+@app.get("/api/v1/aqi/ozone-alerts", summary="Get Regional EPA AirNow Ozone Alerts & Seasonal RVP Compliance Surcharges", tags=["Physical Data Feeds"])
+def get_ozone_alerts_endpoint(
+    corridor: Optional[str] = Query("all", description="Optional regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'"),
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code to query EPA AirNow directly")
+):
+    """
+    Returns official EPA AirNow ground-level ozone (O3) action alerts, AQI metrics, and statutory
+    seasonal Reid Vapor Pressure (RVP) summer-blend compliance surcharges for target regions (Issue #73).
+    """
+    from src.aqi_feed import AQIFeedConnector
+    connector = AQIFeedConnector()
+    if zip_code:
+        airnow_res = connector.fetch_airnow_aqi(zip_code)
+        rvp_res = connector.get_seasonal_rvp_surcharge(
+            corridor_or_zip=zip_code,
+            ozone_aqi=airnow_res.get("ozone_aqi"),
+            is_action_day=airnow_res.get("is_ozone_action_day", False)
+        )
+        return {
+            "status": "SUCCESS",
+            "as_of": datetime.now(timezone.utc).isoformat(),
+            "airnow": airnow_res,
+            "seasonal_rvp_compliance": rvp_res
+        }
+    
+    corr_arg = None if corridor == "all" else corridor
+    telemetry = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+    return {
+        "status": "SUCCESS",
+        "as_of": telemetry.get("as_of"),
+        "ozone_action_day_count": telemetry.get("indices", {}).get("ozone_action_day_count", 0),
+        "max_rvp_compliance_surcharge_per_gal": telemetry.get("indices", {}).get("max_rvp_compliance_surcharge_per_gal", 0.0),
+        "active_ozone_action_corridors": telemetry.get("active_ozone_action_corridors", []),
+        "corridors": telemetry.get("corridors", {})
+    }
+
+
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")
 def get_batch_forecast(req: BatchForecastRequest):
     """
@@ -898,6 +1026,17 @@ def simulate_shock(req: SimulateRequest):
     base_price = live_res.get("price", 3.184)
 
     shock_pct = req.custom_shock_pct if req.custom_shock_pct is not None else scenario_info["shock_pct"]
+    if req.scenario_id == "hayward_quake" and req.custom_shock_pct is None:
+        try:
+            from src.usgs_seismic import USGSSeismicConnector
+            seismic_conn = USGSSeismicConnector()
+            seismic_live = seismic_conn.fetch_live_seismic_telemetry(corridor="bay_area")
+            live_risk = seismic_live.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
+            if live_risk > 0.10:
+                shock_pct = round(scenario_info["shock_pct"] + (live_risk * 0.05), 4)
+        except Exception:
+            pass
+
     dollar_impact = round(base_price * shock_pct, 3)
     simulated_price = round(base_price + dollar_impact, 3)
 
@@ -1147,6 +1286,68 @@ def get_connector_telemetry(days: int = Query(7, ge=1, le=90, description="Rolli
     """
     from src.connector_telemetry import get_telemetry_summary
     return get_telemetry_summary(days=days)
+
+
+# Knowledge Graph & Agent Memory REST API Endpoints
+@app.get("/api/v1/graph/topology", summary="Get Full Knowledge Graph Topology (Nodes & Edges)", tags=["Knowledge Graph"])
+def get_graph_topology():
+    """Returns nodes, edges, entity types, and relationship summaries for Knowledge Graph visualization."""
+    from src.knowledge_graph import kg_engine
+    return kg_engine.export_topology_dict()
+
+
+@app.get("/api/v1/graph/subgraph", summary="Get Localized Subgraph Neighborhood for Entity", tags=["Knowledge Graph"])
+def get_graph_subgraph(
+    entity: str = Query(..., description="Target entity node ID or name (e.g., 'Chevron_Richmond', 'Oakland_CA')"),
+    depth: int = Query(2, ge=1, le=4, description="Graph traversal depth")
+):
+    """Extracts 2-hop sub-graph neighborhood and returns GraphContextSchema."""
+    from src.knowledge_graph import kg_engine
+    matched = kg_engine.resolve_entities_in_text(entity) or [entity]
+    schema = kg_engine.get_subgraph_context(matched, depth=depth)
+    return schema.to_dict()
+
+
+@app.get("/api/v1/memory/precedents", summary="Query Episodic Agent Memory for Historical Precedents", tags=["Agent Memory"])
+def get_memory_precedents(
+    query: str = Query(..., description="Search headline or keyword query (e.g., 'refinery outage heatwave')"),
+    top_k: int = Query(3, ge=1, le=10, description="Max precedent records to return")
+):
+    """Searches historical shock memory using TF-IDF + topological graph distance."""
+    from src.knowledge_graph import kg_engine
+    precedents = kg_engine.find_historical_precedents(query, top_k=top_k)
+    return {"query": query, "top_k": top_k, "precedents": precedents}
+
+
+class GraphIngestPayload(BaseModel):
+    headline: str
+    geopolitical_risk: float = 0.0
+    supply_disruption: float = 0.0
+    demand_sentiment: float = 0.0
+    opec_action: float = 0.0
+    overall_price_pressure: float = 0.0
+    affected_entities: Optional[List[str]] = None
+    model_attribution: Optional[str] = "api_user"
+
+
+@app.post("/api/v1/graph/ingest", dependencies=[Depends(get_api_key_user)], summary="Ingest Event Shock Memory into Knowledge Graph", tags=["Knowledge Graph"])
+def post_graph_ingest(payload: GraphIngestPayload):
+    """Ingests qualitative event into Knowledge Graph memory store."""
+    from src.knowledge_graph import kg_engine
+    scores = {
+        "geopolitical_risk": payload.geopolitical_risk,
+        "supply_disruption": payload.supply_disruption,
+        "demand_sentiment": payload.demand_sentiment,
+        "opec_action": payload.opec_action,
+        "overall_price_pressure": payload.overall_price_pressure
+    }
+    shock_id = kg_engine.record_event_shock_memory(
+        headline=payload.headline,
+        score_vector=scores,
+        affected_entities=payload.affected_entities,
+        model_attribution=payload.model_attribution
+    )
+    return {"status": "success", "shock_id": shock_id, "headline": payload.headline}
 
 
 @app.get("/.well-known/ai-plugin.json", include_in_schema=False)

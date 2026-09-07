@@ -4,8 +4,12 @@
   "display_name": "Tulsa, OK Metro Retail",
   "padd_region": "PADD 2 Mid-Continent",
   "primary_city": "Tulsa, OK",
-  "counties": ["Tulsa", "Creek", "Rogers"],
-  "baseline_price": 3.890,
+  "counties": [
+    "Tulsa",
+    "Creek",
+    "Rogers"
+  ],
+  "baseline_price": 3.89,
   "icon_class": "fa-warehouse",
   "theme_color": "emerald",
   "econometric_drivers": {
@@ -17,12 +21,15 @@
     "description": "HF Sinclair West Tulsa Refinery (125,000 bpd capacity) processes sweet/sour crude streams, dispatching refined unleaded blendstock across Magellan Pipeline terminals to local jobbers and retail stations.",
     "primary_refinery": "HF Sinclair West Tulsa Refinery",
     "capacity_bpd": 125000,
-    "pipelines": ["Magellan Pipeline", "Explorer Pipeline"]
+    "pipelines": [
+      "Magellan Pipeline",
+      "Explorer Pipeline"
+    ]
   },
   "tax_structure": {
     "title": "Oklahoma Tax Structure & Statutory Overhead",
-    "description": "Oklahoma state motor fuel tax ($0.190/gal) plus US Federal excise tax ($0.184/gal) and UST fees create a total statutory tax burden of $0.374/gal—the lowest tax overhead among Midgley metro benchmarks.",
-    "state_tax_per_gal": 0.190,
+    "description": "Oklahoma state motor fuel tax ($0.190/gal) plus US Federal excise tax ($0.184/gal) and UST fees create a total statutory tax burden of $0.374/gal\u2014the lowest tax overhead among Midgley metro benchmarks.",
+    "state_tax_per_gal": 0.19,
     "federal_tax_per_gal": 0.184,
     "total_tax_per_gal": 0.374,
     "notes": "Lowest statutory tax overhead among Midgley metro benchmarks"
@@ -56,5 +63,19 @@
       "pct_impact": 4.58,
       "description": "Temporary Canadian crude influx drop"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 420500,
+    "zero_vehicle_pct": 5.4,
+    "vehicles_per_household": 1.95,
+    "drive_alone_share": 0.825,
+    "carpool_share": 0.092,
+    "public_transit_share": 0.007,
+    "work_from_home_share": 0.062,
+    "mean_commute_minutes": 21.8,
+    "vehicle_dependency_ratio": 0.917,
+    "transit_alternative_index": 0.038,
+    "inelastic_demand_score": 0.885
+  }
 }

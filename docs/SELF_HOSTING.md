@@ -51,11 +51,20 @@ GEMINI_API_KEY="AIzaSy..."
 # Real-Time Financial Energy Media API (finlight.me) - Enforces 150 call/month safety cap
 FINLIGHT_API_KEY="fl_live_..."
 
+# Firecrawl Web Scraping API (firecrawl.dev) - Enforces 800 call/month safety cap (Issue #83)
+FIRECRAWL_API_KEY="fc-..."
+
 # Official U.S. EIA Open Data v2 Key (Weekly PADD Stocks & Utilization)
 EIA_API_KEY="eia_api_key_here"
 
+# U.S. EPA AirNow API Key (airnowapi.org - Free 500 req/hr developer account, Issue #73)
+AIRNOW_API_KEY="0882E80D-3459-4F86-ADE5-A38F34CFE021"
+
 # St. Louis Fed FRED Key (Macro Energy & Retail Index Series)
 FRED_API_KEY="fred_api_key_here"
+
+# CORE Open-Access Research Literature API Key (Weekly Model Review)
+CORE_API_KEY="core_api_key_here"
 
 # Optional Secondary LLM Tier Failovers (Soft-checked)
 OPENAI_API_KEY="sk-proj-..."
@@ -72,6 +81,12 @@ MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
+# Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
+# Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
+WANDB_API_KEY="wandb_v1_..."
+WANDB_PROJECT="midgley-gas-forecasting"
+WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
+
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
 # ==============================================================================
@@ -83,6 +98,33 @@ TURSO_AUTH_TOKEN="eyJhbGciOi..."
 # Tier 2: Cloudflare D1 / Edge Worker Gateway
 CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
+
+# ==============================================================================
+# EDGAR 8-K REFINERY OPERATOR MONITOR (Issue #129)
+# ==============================================================================
+
+# SEC EDGAR User-Agent — required for EDGAR 8-K polling (free, name + email only).
+# No account or API key needed. Per EDGAR robots.txt access policy.
+# Cloudflare Worker production: wrangler secret put SEC_USER_AGENT
+# Optional U.S. Census Bureau API Key (api.census.gov - Free public open data)
+# Optional: Public keyless queries work out-of-the-box. Add key for high-volume batch runs.
+CENSUS_API_KEY=""
+
+# Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
+HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
+# Or separate daily/weekly endpoints:
+# HEALTHCHECKS_DAILY_PING_URL="https://hc-ping.com/<uuid>"
+# HEALTHCHECKS_WEEKLY_PING_URL="https://hc-ping.com/<uuid>"
+
+# Self-Hosted ArchiveBox Historical Preservation Server (github.com/ArchiveBox/ArchiveBox, Issue #97)
+ARCHIVEBOX_URL="http://10.42.42.54:8000"
+ARCHIVEBOX_API_KEY=""
+
+# Comma-separated list of refinery operator tickers to monitor for 8-K filings.
+# Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.
+# Cloudflare Worker production: set EDGAR_8K_TICKERS in wrangler.toml [vars].
+# Add additional tickers for non-default supplying refineries (see §7 Prompt 3).
+EDGAR_8K_TICKERS="PBF,DINO,MPC,VLO,PSX"
 ```
 
 ---
@@ -183,10 +225,25 @@ Test health endpoint:
 curl http://localhost:8000/api/v1/system/quota
 ```
 
-### Step 3: Run Baseline Forecast Pipeline
+### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
 Execute the full multi-region prediction pipeline once:
 ```bash
 python3 -m src.locations.national.main --llm
+```
+
+Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
+```bash
+python3 -m scripts.benchmark_qlib_rd_agent
+```
+
+### Step 4: Verify Multi-Horizon Scoreboard & MLOps Accuracy Metrics
+Query the rolling scoreboard across discrete forecast horizons (1d through 5d) (Issue #209):
+```bash
+# Query 5-day horizon scoreboard metrics
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=national&window=30&horizon=5"
+
+# Query 1-day (24h tactical) horizon scoreboard metrics
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=1"
 ```
 
 ---
@@ -344,6 +401,7 @@ Please research and provide:
    Equation: P_retail = P_RBOB + DynamicRackMargin
 4. Historical Baseline Retail Pump Price ($/gal) anchor for [TARGET METRO CITY].
 5. Primary economic drivers influencing local fuel price volatility (e.g., seasonal summer blend transitions, regional agricultural diesel demand spikes, industrial transportation hubs).
+6. Biofuel & Blendstock Specifications: Statutory ethanol blend mandate (e.g. standard E10, E15, or state bio-mandates), summer Reid Vapor Pressure (RVP in psi) compliance limits (e.g. 7.8 psi, 9.0 psi, or CARB 7.0 psi), seasonal transition dates (May 1 refinery / June 1 retail deadlines), and USDA AMS Midwest ethanol rack basis.
 
 Format your output in concise technical bullet points.
 ```
@@ -360,6 +418,7 @@ Provide exact quantitative values ($/gal) for:
 4. Environmental & UST (Underground Storage Tank) Inspection Fees ($/gal).
 5. Statutory Carbon Fees or Cap-and-Trade / LCFS Overhead (if applicable, e.g. California CARB / Washington CCA).
 6. Total Aggregated Statutory Burden T_statutory ($/gal).
+7. Official State Open Data Portal & Primary Source: Official state Socrata open data portal domain (e.g. `data.<state>.gov` or `data.gov`), State Department of Revenue/Taxation motor fuel tax bulletin URL, statutory tax adjustment schedule (e.g. annual July 1 rate adjustments or CPI indexation), and monthly taxable motor fuel volume reporting (supporting Midgley's Universal 50-State Open Data Connector).
 
 Write out the KaTeX math formula:
 T_{\text{statutory}} = \tau_{\text{state}} + \tau_{\text{federal}} + \tau_{\text{local}} + \tau_{\text{environmental}}
@@ -371,25 +430,41 @@ You are a Petroleum Supply Chain & Logistics Engineer.
 I need a detailed logistical breakdown of fuel supply pipelines and refining capacity for [TARGET METRO CITY, STATE].
 
 Research and specify:
-1. Primary Supplying Refineries: Name, location, operator, and crude processing capacity (in bpd - barrels per day).
+1. Primary Supplying Refineries: Name, location, operator, crude processing capacity (in bpd - barrels per day), and exact WGS84 GPS coordinates (latitude, longitude) for spatial distance-decay buffering.
 2. Primary Pipeline Corridors: Specific pipeline systems (e.g., Colonial Pipeline Line 1/2, Kinder Morgan SFPP, Explorer Pipeline, Keystone, Enterprise) and major breakout distribution hubs/terminals.
-3. Marine / River Barge Infrastructure: Nearby navigable river channels (e.g., Ohio River, Mississippi River, C&D Canal) or ocean deepwater anchorages subject to low-water restrictions, weather delays, or lightering detours.
-4. Logistics Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, power grid outages, or barge congestion.
+3. Marine & River Barge Infrastructure: Nearby navigable river channels (e.g., Ohio River, Mississippi River, C&D Canal, Houston Ship Channel, Carquinez Strait) or ocean deepwater anchorages subject to USGS low-water restrictions, stage levels, cooling water thermal limits, or lightering detours.
+   - Relevant USGS Hydrological Stations: Identify exact 8-digit USGS Station Numbers (e.g., "03612500" for Ohio River at Cairo, "07179000" for Arkansas River at Tulsa, "01477050" for Delaware River at Chester, "08077637" for Houston Ship Channel) and station names that monitor streamflow (00060), gage height (00065), water temperature (00010), or specific conductance (00095) for the supplying waterways or refinery cooling water intakes.
+   - USACE Locks & Dams: Identify key U.S. Army Corps of Engineers (USACE) Locks and Dams along supplying commercial waterways (e.g., Markland, Meldahl, Lock 27, C&D Canal) that govern barge tow transit times and lock closure risks.
+4. Logistics & Power Grid Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, marine congestion, and electric power grid vulnerability—specifically identifying the EIA-930 Electric Grid Balancing Authority (BA) / RTO (e.g., ERCOT, MISO, PJM, CAISO, SWPP, SOCO, TVA, NYIS, ISNE) powering the supplying refineries and pipeline pump stations.
+5. Metro Centroid & Spatial Buffer Anchor: Representative metro geographic coordinates (WGS84 latitude, longitude), primary 5-digit ZIP code, and approximate pipeline/haul distance (miles) to the primary supplying refinery or distribution rack hub (for GeoPandas spatial distance-decay modeling in `src/spatial_refinery.py`).
+6. Fence-Line Air Quality & Industrial Emissions Monitoring (PurpleAir & OpenAQ): Identify fence-line air quality monitoring networks within a 15 km radius downwind of supplying refineries (e.g. PurpleAir optical sensor groups, OpenAQ municipal stations, EPA AirNow station ID) monitoring PM2.5, PM10, SO2, and NO2 to capture early flaring and unplanned FCC unit outage signals in `src/aqi_feed.py`.
+7. SEC EDGAR Refinery Operator Monitoring (Issue #129): Identify the publicly traded refinery operators (NYSE/NASDAQ tickers) whose refinery assets directly supply [TARGET METRO CITY, STATE]. Cross-reference against the default `EDGAR_8K_TICKERS` list (`PBF`, `DINO`, `MPC`, `VLO`, `PSX`). If the primary supplying refinery is owned by an operator NOT in the default list (e.g., Delek Group `DKL`, Calumet `CLMT`, Par Pacific `PARR`, or Ergon for a mid-continent or rural region), document the ticker so it can be appended to `EDGAR_8K_TICKERS` in `wrangler.toml` (Cloudflare Worker production) or `.env` (local deployment). This ensures the EDGAR 8-K Refinery Operator Monitor (`src/edgar_8k_monitor.py` / `workers/intraday_monitor_worker.ts`) captures unplanned operational disclosures from the refineries directly supplying the new metro region.
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```
 
-### Prompt 4: NOAA Weather & Geophysical Risk Discovery
+### Prompt 4: NOAA Weather, Physical Hydrological, Seismic & Air Quality Outage Hazard Discovery
 ```text
 You are an Operational Meteorologist and Physical Risk Analyst.
-I need to map NOAA Weather Service alerts and geophysical threat factors for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
+I need to map NOAA Weather Service alerts, hydrological constraints, geophysical threat factors, and industrial air quality flaring indicators for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
 
 Identify:
 1. NOAA NWS Forecast Zone Code (e.g., "OKZ060" for Tulsa, "NCZ081" for Greenville).
 2. SPC (Storm Prediction Center) Convective Risk Vulnerabilities: Severe tornado risk, hail, or high wind thresholds.
-3. Cold Weather Freeze / Polar Vortex Vulnerability: Sub-zero freeze impacts on local refinery instrumentation or crude pipelines.
-4. Flooding & Marine Hazards: Local river gauge flood stages (e.g., Tar River, Catawba River, Mississippi Confluence) or coastal hurricane storm surge risks.
-5. Regional Geophysical Risks: CAL FIRE PSPS wildfire power shutoffs, USGS seismic fault line risks, or tsunami advisories.
+3. Cold Weather Freeze / Heat Stress & Degree Days: Sub-zero freeze or extreme summer heat vulnerabilities impacting refinery instrumentation, crude pipelines, or cooling tower thermal compliance; identify baseline Heating Degree Days (HDD) and Cooling Degree Days (CDD) profile.
+4. Hydrological, Coastal & Marine Hazards: Local river gauge flood stages & water temperatures (USGS Water Data API telemetry: streamflow `00060`, gage height `00065`, water temperature `00010`, specific conductance `00095`); exposure to NOAA National Hurricane Center (NHC) tropical cyclone tracks, coastal storm surge, and BSEE offshore crude production shut-in alerts.
+   - Candidate USGS Stations & Thresholds: Identify primary 8-digit USGS station site IDs and flood stage thresholds (action stage, flood stage, moderate flood stage in feet) that could disrupt petroleum rack operations, refinery cooling, or barge navigation.
+5. Seismic & Earthquake Hazard Corridors (USGS Earthquake Web Service API - fdsnws/event/1/):
+   - Regional Faults & Seismic Clusters: Identify active tectonic fault lines (e.g. Hayward, San Andreas, Ramapo, New Madrid) or wastewater-induced seismicity fault zones (e.g. Oklahoma/Cushing Anadarko & Nemaha fault zones).
+   - Geographic Bounding Box: Define `minlatitude`, `maxlatitude`, `minlongitude`, `maxlongitude` coordinates enclosing the regional refining facilities and key delivery pipelines for live USGS GeoJSON queries (`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson`).
+   - Magnitude Operational Thresholds: Baseline magnitude trigger ($M \ge 3.8$ for shallow induced quakes, $M \ge 4.0$ or $4.5$ for tectonic faults) and catastrophic pipeline trip threshold ($M \ge 6.0$).
+   - Facility Vulnerability Targets: Identify exact GPS coordinates for critical refineries, pipeline pump stations, and crude storage tank farms to evaluate distance attenuation and peak ground shaking impact in `src/usgs_seismic.py`.
+6. Regional Geophysical, Wildfire & Grid Hazards: CAL FIRE PSPS wildfire power shutoffs (Diablo/Santa Ana red flag high-wind shutoffs), tsunami advisories (NOAA PTWC), and electric power grid vulnerability (EIA-930 Balancing Authority).
+7. Fence-Line Air Quality & Industrial Flaring Anomaly Thresholds (PurpleAir, OpenAQ, EPA AirNow - `src/aqi_feed.py`):
+   - Refining Corridor Coordinates & Sensor Buffer: Define center GPS coordinates and 15 km radius bounding box enclosing local supplying refineries for live multi-feed AQI queries.
+   - Pollutant Baseline Profiles: Research typical ambient baseline levels and standard deviations for fine particulates ($\text{PM}_{2.5}$ in $\mu\text{g}/\text{m}^3$) and sulfur dioxide ($\text{SO}_2$ in $\text{ppb}$).
+   - Flaring Outage Anomaly Triggers: Identify statistical $Z$-score thresholds ($Z_{\text{PM2.5}} \ge 3.5$ and $Z_{\text{SO2}} \ge 2.5$) to capture emergency catalytic cracker shutdown flaring while discriminating against ambient wildfire/wood smoke (high $\text{PM}_{2.5}$ with baseline $\text{SO}_2$).
+   - Statutory Summer Blend / RVP Mandates: Identify county-level EPA AirNow monitoring sites and statutory Ozone Non-Attainment action day frequencies triggering Reid Vapor Pressure (RVP) summer blend compliance cutovers.
 ```
 
 ### Prompt 5: Decoupled JSON Metadata Profile Generator Prompt
@@ -398,32 +473,47 @@ You are an MLOps Engineer for Midgley. Using the research gathered above for [TA
 
 Output ONLY valid JSON following this schema:
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "[region_id]",
-  "display_name": "[TARGET METRO CITY, STATE]",
+  "display_name": "[TARGET METRO CITY, STATE] Metro Retail",
+  "padd_region": "PADD [X] [Region Name]",
+  "primary_city": "[TARGET METRO CITY, STATE]",
+  "counties": ["[County 1]", "[County 2]"],
+  "baseline_price": 3.950,
+  "icon_class": "fa-warehouse",
   "theme_color": "emerald",
-  "icon_class": "fa-gas-pump",
   "econometric_drivers": {
     "title": "Regional Econometric Drivers & Benchmark Anchors",
     "description": "..."
   },
   "refining_logistics": {
     "title": "Refining Capacity & Pipeline Logistics",
-    "description": "..."
+    "description": "...",
+    "primary_refinery": "[Refinery Name]",
+    "capacity_bpd": 250000,
+    "pipelines": ["[Pipeline 1]", "[Pipeline 2]"]
   },
   "tax_structure": {
     "title": "Statutory Tax & Regulatory Overhead",
-    "description": "..."
+    "description": "...",
+    "state_tax_per_gal": 0.385,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.569,
+    "notes": "..."
   },
   "infrastructure_delivery": {
-    "title": "Delivery Hub & Rack Margin Equation",
+    "title": "Delivery Hub & Dynamic Rack Margin",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.950 - \\$3.184 = \\$0.766/\\text{gal}",
     "description": "...",
-    "equation_latex": "P_{\\text{Retail}} = P_{\\text{RBOB}} + \\text{RackMargin}"
+    "hub_distance_miles": 25,
+    "hub_name": "[Distribution Terminal / Rack Hub Name]"
   },
   "shock_scenarios": [
     {
-      "id": "refinery_outage",
-      "name": "Local Refinery Unplanned Outage",
-      "impact_gal": 0.150,
+      "name": "[Scenario Name]",
+      "subtitle": "[Scenario Subtitle]",
+      "price_impact_per_gal": 0.150,
+      "pct_impact": 4.25,
       "description": "..."
     }
   ]
@@ -472,7 +562,7 @@ __all__ = [
 ```
 
 2. **`src/locations/chicago/regional.py`**:
-Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios.
+Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`). If adjacent to supplying refining centers, ingest live fence-line air quality and flaring emissions telemetry via `AQIFeedConnector` (registering corridor bounding box and refinery assets in `AQI_CORRIDORS` inside `src/aqi_feed.py`).
 
 3. **`src/locations/chicago/main.py`**:
 Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering, fits the Ridge estimator, logs predictions to `data/prediction_history.csv`, and returns forecast metrics.
@@ -531,6 +621,15 @@ Whenever adding, modifying, or removing data connectors, API feeds, or regional 
 5. Update `Project-History-and-Roadmap.md` under the active release phase.
 6. Commit and push to `origin/master`.
 
+### Step 10: Modern Neural Forecasting with Nixtla NeuralForecast (Issue #93 Pivot)
+For advanced PyTorch deep learning forecasting benchmarks, Midgley specifies **Nixtla `NeuralForecast`** (`N-BEATSx` / `NHITS` with `MQLoss`), which supersedes legacy unmaintained NeuralProphet (stagnant since `v0.9.0` in June 2024):
+1. Install optional Nixtla dependencies:
+   ```bash
+   pip install neuralforecast torch
+   ```
+2. **Exogenous Feature Integration**: Nixtla `NeuralForecast` accepts historical exogenous shock vectors (`hist_exog_list=['event_shock_decay_5d', 'crack_spread_321_delta_5d']`) and future calendar features (`futr_exog_list=['is_weekend']`).
+3. **Resiliency**: If `neuralforecast` or `torch` is omitted in lightweight container environments, Midgley defaults to regularized Ridge/XGBoost and Google TimesFM zero-shot fallback estimators with zero runtime downtime.
+
 ---
 
 ## 9. Verification, Health Checks & Diagnostics
@@ -560,6 +659,12 @@ systemctl --user status midgley-api.service
 systemctl --user list-timers --all
 ```
 
+### 5. Execute Feature Leakage & Factor Decay Validation Audit (Issue #146)
+Run the quantitative research validation auditor to verify point-in-time temporal alignment, calculate Probability of Backtest Overfitting (PBO), and fit multi-horizon factor decay curves:
+```bash
+python3 scripts/audit_feature_leakage.py --region Tulsa_OK --horizons 1,3,5,10,14,20 --output data/feature_audit_report.json
+```
+
 ---
 
-*Midgley Version: `v0.3.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.5.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*

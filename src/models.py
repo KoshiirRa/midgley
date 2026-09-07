@@ -5,6 +5,7 @@ and computes rigorous error metrics & directional accuracy.
 """
 
 import itertools
+from typing import Any, Optional, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import Ridge
@@ -15,8 +16,38 @@ try:
 except ImportError:
     HAS_XGBOOST = False
 
+try:
+    from src.timesfm_forecaster import TimesFMForecaster, HAS_TIMESFM
+except ImportError:
+    try:
+        from timesfm_forecaster import TimesFMForecaster, HAS_TIMESFM
+    except ImportError:
+        TimesFMForecaster = None
+        HAS_TIMESFM = False
+
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import logging
+
+try:
+    from src.wandb_logger import (
+        init_wandb_run,
+        log_model_training_run,
+        finish_wandb_run,
+        is_wandb_enabled
+    )
+except ImportError:
+    try:
+        from wandb_logger import (
+            init_wandb_run,
+            log_model_training_run,
+            finish_wandb_run,
+            is_wandb_enabled
+        )
+    except ImportError:
+        init_wandb_run = lambda *args, **kwargs: None
+        log_model_training_run = lambda *args, **kwargs: None
+        finish_wandb_run = lambda *args, **kwargs: None
+        is_wandb_enabled = lambda *args, **kwargs: False
 
 logger = logging.getLogger(__name__)
 
@@ -350,7 +381,7 @@ def compute_quantile_uncertainty_bands(y_pred: np.ndarray, residual_std: float =
     }
 
 
-def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dict:
+def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wandb: bool = False, wandb_run: Any = None) -> dict:
     """
     Trains Baseline Quantitative Model and Hybrid LLM-Augmented Model.
     Performs ablation comparison on the out-of-time test set.
@@ -371,6 +402,15 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
     if model_type == "stacking":
         model_quant = build_stacking_ensemble_pipeline()
         model_hybrid = build_stacking_ensemble_pipeline()
+    elif model_type == "timesfm":
+        if TimesFMForecaster is not None:
+            model_quant = TimesFMForecaster(horizon_len=len(y_test))
+            model_hybrid = TimesFMForecaster(horizon_len=len(y_test))
+            model_quant.load_model()
+            model_hybrid.load_model()
+        else:
+            model_quant = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+            model_hybrid = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
     elif model_type == "xgboost" and HAS_XGBOOST:
         model_quant = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
         model_hybrid = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
@@ -429,6 +469,31 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         feature_names = split_data['hybrid_feature_names']
         feature_importance = dict(sorted(zip(feature_names, coefs), key=lambda x: x[1], reverse=True))
 
+    # 8. Optional Weights & Biases Logging (Issue #80)
+    wandb_run_url = None
+    if log_wandb or wandb_run or (is_wandb_enabled() and os.environ.get("WANDB_AUTO_LOG") == "1"):
+        try:
+            active_run = wandb_run or init_wandb_run(job_type="train", name=f"train-{model_type}")
+            if active_run:
+                log_model_training_run(
+                    model_name=f"baseline_quant_{model_type}",
+                    hyperparameters={"model_type": model_type, "stage": "quant_baseline"},
+                    metrics=metrics_quant,
+                    run=active_run
+                )
+                log_model_training_run(
+                    model_name=f"hybrid_llm_{model_type}",
+                    hyperparameters={"model_type": model_type, "stage": "hybrid_llm"},
+                    metrics={**metrics_hybrid, "mae_improvement_pct": mae_imp, "rmse_improvement_pct": rmse_imp, **risk_metrics},
+                    feature_importances=feature_importance,
+                    run=active_run
+                )
+                wandb_run_url = getattr(active_run, "url", None)
+                if not wandb_run:
+                    finish_wandb_run(active_run)
+        except Exception as e:
+            logger.debug(f"Notice logging to W&B: {e}")
+
     return {
         "model_quant": model_quant,
         "model_hybrid": model_hybrid,
@@ -450,7 +515,8 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         "predictions_persistence": baselines['predictions_persistence'],
         "y_test": np.array(y_test),
         "test_dates": test_df['date'].values,
-        "current_prices": np.array(y_current)
+        "current_prices": np.array(y_current),
+        "wandb_run_url": wandb_run_url
     }
 
 
@@ -671,4 +737,238 @@ def evaluate_model_purged_cv(
         "mean_directional_accuracy_pct": round(float(np.mean(dir_accs)), 2) if dir_accs else "N/A",
         "fold_details": fold_results
     }
+
+
+def evaluate_timesfm_zero_shot_benchmarks(split_data: dict) -> dict:
+    """
+    Evaluates Google TimesFM Zero-Shot Foundation Model against standard baseline estimators
+    (Persistence, Moving Average, Ridge, XGBoost, Stacking Ensemble) across test set (Issues #185 & #112).
+    
+    Returns structured benchmark dictionary with error metrics and comparative rankings.
+    """
+    X_train_quant = split_data['X_train_quant']
+    X_test_quant = split_data['X_test_quant']
+    y_train = split_data['y_train']
+    y_test = split_data['y_test']
+    test_df = split_data['test_df']
+    y_current = test_df['gasoline_rbob']
+    
+    benchmarks = {}
+    
+    # 1. Naive Persistence Baseline
+    pred_persistence = np.array(y_current)
+    benchmarks["persistence"] = evaluate_predictions(y_test, pred_persistence, y_current)
+    
+    # 2. 5-Day Moving Average Baseline
+    if 'gas_ma_7' in test_df.columns:
+        pred_ma = np.array(test_df['gas_ma_7'])
+    else:
+        pred_ma = pred_persistence
+    benchmarks["moving_avg_5d"] = evaluate_predictions(y_test, pred_ma, y_current)
+    
+    # 3. Ridge Regression Baseline (alpha=10.0)
+    ridge_pipeline = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+    ridge_pipeline.fit(X_train_quant, y_train)
+    pred_ridge = ridge_pipeline.predict(X_test_quant)
+    benchmarks["ridge"] = evaluate_predictions(y_test, pred_ridge, y_current)
+    
+    # 4. XGBoost Baseline
+    if HAS_XGBOOST:
+        xgb_model = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
+        xgb_model.fit(X_train_quant, y_train)
+        pred_xgb = xgb_model.predict(X_test_quant)
+        benchmarks["xgboost"] = evaluate_predictions(y_test, pred_xgb, y_current)
+        
+    # 5. Stacking Ensemble Baseline
+    stacking_pipeline = build_stacking_ensemble_pipeline()
+    stacking_pipeline.fit(X_train_quant, y_train)
+    pred_stacking = stacking_pipeline.predict(X_test_quant)
+    benchmarks["stacking"] = evaluate_predictions(y_test, pred_stacking, y_current)
+    
+    # 6. TimesFM Zero-Shot Foundation Model
+    if TimesFMForecaster is not None:
+        tfm = TimesFMForecaster(horizon_len=len(y_test))
+        tfm.load_model()
+        tfm.fit(X_train_quant, y_train)
+        pred_tfm = tfm.predict(X_test_quant)
+        tfm_status = tfm.get_model_status()
+    else:
+        pred_tfm = pred_ridge
+        tfm_status = {"has_timesfm_pkg": False, "using_fallback": True}
+        
+    benchmarks["timesfm_zero_shot"] = evaluate_predictions(y_test, pred_tfm, y_current)
+    
+    # Comparative Rankings by MAE
+    rankings = sorted(
+        [{"model": k, "mae": v["MAE"], "hit_rate": v.get("Directional Accuracy (%)", 0.0)} for k, v in benchmarks.items()],
+        key=lambda x: x["mae"]
+    )
+    
+    # Standard baseline MAE for uplift reference
+    base_mae = benchmarks["persistence"]["MAE"]
+    tfm_mae = benchmarks["timesfm_zero_shot"]["MAE"]
+    tfm_uplift_pct = round(((base_mae - tfm_mae) / base_mae) * 100.0, 2) if base_mae > 0 else 0.0
+    
+    return {
+        "status": "success",
+        "benchmarks": benchmarks,
+        "rankings": rankings,
+        "timesfm_model_status": tfm_status,
+        "timesfm_uplift_over_persistence_pct": tfm_uplift_pct
+    }
+
+
+def compute_rolling_volatility_index(prices_series: pd.Series | np.ndarray, window: int = 14) -> float:
+    """
+    Computes rolling 14-day standard deviation of single-day price changes (Issue #214):
+    sigma_14d(r) = std(y_t - y_{t-1}, window=14)
+    """
+    arr = np.array(prices_series, dtype=float)
+    arr = arr[~np.isnan(arr)]
+    if len(arr) < 2:
+        return 0.015  # Default baseline volatility ($/gal)
+
+    diffs = np.diff(arr)
+    if len(diffs) > window:
+        diffs = diffs[-window:]
+
+    if len(diffs) < 2:
+        return 0.015
+
+    std_val = float(np.std(diffs, ddof=1)) if len(diffs) > 1 else float(np.std(diffs))
+    return max(0.0001, round(std_val, 5))
+
+
+def compute_volatility_gate_weight(volatility_14d: float, threshold: float = 0.015, k: float = 200.0) -> float:
+    """
+    Calculates adaptive sigmoid blending weight lambda_vol in [0.0, 1.0] (Issue #214):
+    lambda_vol = 1 / (1 + exp(-k * (sigma_14d - threshold)))
+    """
+    val = -k * (volatility_14d - threshold)
+    val_clipped = np.clip(val, -50.0, 50.0)
+    lambda_vol = 1.0 / (1.0 + np.exp(val_clipped))
+    return round(float(lambda_vol), 4)
+
+
+def apply_gated_persistence_blending(
+    raw_pred_price: float,
+    current_base_price: float,
+    lambda_vol: float,
+    guardrail_active: bool = False,
+    guardrail_alpha: float = 0.5
+) -> float:
+    """
+    Applies Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214):
+    y_gated = lambda_vol * y_raw + (1 - lambda_vol) * y_current
+    If guardrail_active is True (rolling 14d uplift < -2.0%), applies additional persistence bias alpha.
+    """
+    gated_pred = (lambda_vol * raw_pred_price) + ((1.0 - lambda_vol) * current_base_price)
+
+    if guardrail_active:
+        gated_pred = ((1.0 - guardrail_alpha) * gated_pred) + (guardrail_alpha * current_base_price)
+
+    return round(float(gated_pred), 4)
+
+
+def compute_empirical_residual_ci(
+    predicted_price: float,
+    residual_std_30d: float = 0.0612,
+    confidence_level: float = 0.95
+) -> tuple[float, float]:
+    """
+    Computes dynamic Empirical Residual Confidence Interval bounds (Issue #214):
+    CI_95% = predicted_price +/- z_score * residual_std_30d
+    replaces static +/- 5% multipliers with empirical residual variance.
+    """
+    z_score = 1.96 if confidence_level >= 0.95 else 1.645
+    std_val = max(0.01, float(residual_std_30d))
+
+    lower_ci = round(predicted_price - (z_score * std_val), 4)
+    upper_ci = round(predicted_price + (z_score * std_val), 4)
+    return lower_ci, upper_ci
+
+
+def train_models_with_feast_point_in_time(
+    market_df: pd.DataFrame,
+    events_df: pd.DataFrame = None,
+    region: str = "Tulsa_OK",
+    forecast_horizon: int = 5
+) -> dict:
+    """
+    Trains Ridge and XGBoost models using Feast Feature Store point-in-time features (Issue #94).
+    Prevents temporal data leakage during model evaluation.
+    """
+    from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
+
+    feature_matrix = create_feature_matrix(
+        market_df=market_df,
+        events_df=events_df,
+        forecast_horizon=forecast_horizon,
+        region=region,
+        use_feast=True
+    )
+    splits = prepare_chronological_splits(feature_matrix, forecast_horizon=forecast_horizon)
+    
+    # Train Ridge Model
+    ridge = Ridge(alpha=10.0)
+    ridge.fit(splits['X_train_hybrid'], splits['y_train'])
+    y_pred_ridge = ridge.predict(splits['X_test_hybrid'])
+    metrics_ridge = evaluate_predictions(splits['y_test'], y_pred_ridge, splits['test_df']['gasoline_rbob'])
+    
+    metrics_xgb = None
+    if HAS_XGBOOST:
+        xgb = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
+        xgb.fit(splits['X_train_hybrid'], splits['y_train'])
+        y_pred_xgb = xgb.predict(splits['X_test_hybrid'])
+        metrics_xgb = evaluate_predictions(splits['y_test'], y_pred_xgb, splits['test_df']['gasoline_rbob'])
+        
+    return {
+        "status": "success",
+        "region": region,
+        "forecast_horizon": forecast_horizon,
+        "feature_count": splits['X_train_hybrid'].shape[1],
+        "ridge_metrics": metrics_ridge,
+        "xgb_metrics": metrics_xgb,
+        "used_feast": True
+    }
+
+
+def evaluate_praxist_shock_hypothesis(
+    hypothesis_name: str = "Candidate_Shock_Parameters",
+    candidate_params: Optional[Dict[str, Any]] = None,
+    historical_df: Optional[pd.DataFrame] = None
+) -> Dict[str, Any]:
+    """
+    Evaluates candidate exogenous shock parameters using the Sapient PRAXIST
+    autonomous research harness (Issue #188).
+    """
+    from src.praxist_engine import PraxistResearchHarness
+    harness = PraxistResearchHarness()
+    params = candidate_params or {
+        "half_life_days": 4.5,
+        "geopolitical_weight": 0.35,
+        "supply_disruption_weight": 0.40,
+        "opec_action_weight": 0.25,
+        "weekend_gap_multiplier": 1.42
+    }
+    return harness.evaluate_hypothesis(hypothesis_name, params, historical_df=historical_df)
+
+
+def run_praxist_research_sweep(
+    half_life_options: Optional[List[float]] = None,
+    weekend_mult_options: Optional[List[float]] = None
+) -> Dict[str, Any]:
+    """
+    Executes autonomous multi-parameter sweep exploring optimal decay and shock combinations.
+    """
+    from src.praxist_engine import PraxistResearchHarness
+    harness = PraxistResearchHarness()
+    return harness.run_autonomous_parameter_sweep(
+        half_life_options=half_life_options,
+        weekend_mult_options=weekend_mult_options
+    )
+
+
+
+
 

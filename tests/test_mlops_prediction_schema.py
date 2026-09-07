@@ -73,7 +73,7 @@ def test_log_predictions_with_extended_vectors():
     assert row["data_source_provenance"] == "GasBuddy_GraphQL"
 
 
-def test_compute_mlops_observability_summary():
+def test_compute_mlops_observability_summary(monkeypatch):
     # Insert mock evaluated records into test CSV
     ensure_history_store()
     history_df = pd.DataFrame([
@@ -124,6 +124,7 @@ def test_compute_mlops_observability_summary():
     ])
     csv_path = pred_logger.HISTORY_CSV_PATH
     history_df.to_csv(csv_path, index=False)
+    monkeypatch.setattr(pred_logger, "backfill_actual_prices_and_evaluate", lambda: pd.read_csv(csv_path))
     
     summary = compute_mlops_observability_summary(window_days=30)
     assert summary["total_evaluations"] == 2
@@ -133,7 +134,7 @@ def test_compute_mlops_observability_summary():
     assert "AAA_Scraper" in summary["provenance_breakdown"]
 
 
-def test_format_mlops_observability_markdown_section():
+def test_format_mlops_observability_markdown_section(monkeypatch):
     ensure_history_store()
     history_df = pd.DataFrame([{
         "log_timestamp": "2026-09-01 10:00:00",
@@ -157,7 +158,9 @@ def test_format_mlops_observability_markdown_section():
         "within_95ci_hit": 1,
         "data_source_provenance": "GasBuddy_GraphQL"
     }])
-    history_df.to_csv(pred_logger.HISTORY_CSV_PATH, index=False)
+    csv_path = pred_logger.HISTORY_CSV_PATH
+    history_df.to_csv(csv_path, index=False)
+    monkeypatch.setattr(pred_logger, "backfill_actual_prices_and_evaluate", lambda: pd.read_csv(csv_path))
 
     section_md = format_mlops_observability_markdown_section()
     assert "Extended MLOps Observability & Feature Attribution" in section_md

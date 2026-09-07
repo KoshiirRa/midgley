@@ -71,13 +71,15 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 # In-Memory Cache to prevent redundant Gemini API calls for identical headlines
 _LLM_SCORE_CACHE = {}
 
+from src.knowledge_graph import kg_engine
+
 # Single-Headline Prompt Contract (Fallback / Scenario Testing)
 LLM_SINGLE_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following energy news headline/event description and extract structured numerical impact scores regarding unleaded gasoline and crude oil prices.
 
 Headline/Event: "{headline}"
-
+{graph_context}
 Return ONLY a raw JSON object with the following fields:
 - "geopolitical_risk": float between -1.0 (de-escalation/peace) and +1.0 (war/sanctions/conflict)
 - "supply_disruption": float between 0.0 (no disruption) and +1.0 (major refinery/pipeline/shipping shutdown)
@@ -106,7 +108,7 @@ Return ONLY a raw JSON array of objects in the EXACT SAME ORDER, where each obje
 JSON Array Output:
 """
 
-def _try_openai_single(headline: str) -> dict:
+def _try_openai_single(headline: str, graph_context: str = "") -> dict:
     openai_key = os.environ.get("OPENAI_API_KEY")
     if not openai_key:
         return None
@@ -115,7 +117,7 @@ def _try_openai_single(headline: str) -> dict:
         client = openai.OpenAI(api_key=openai_key)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline)}],
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context)}],
             temperature=0.1,
             response_format={"type": "json_object"}
         )
@@ -134,7 +136,7 @@ def _try_openai_single(headline: str) -> dict:
         return None
 
 
-def _try_anthropic_single(headline: str) -> dict:
+def _try_anthropic_single(headline: str, graph_context: str = "") -> dict:
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     if not anthropic_key:
         return None
@@ -144,7 +146,7 @@ def _try_anthropic_single(headline: str) -> dict:
         response = client.messages.create(
             model="claude-3-5-haiku-20241022",
             max_tokens=300,
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline)}]
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context)}]
         )
         text = response.content[0].text.strip()
         if "```json" in text:
@@ -173,6 +175,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     """
     Scores a single headline using Tier 1 Gemini API, Tier 2 OpenAI/Claude secondary APIs,
     or Zero-Cost Provider Hook (Kaggle LLM / Offline Lexicon), with multi-tier lookup caching.
+    Includes GraphRAG context injection and automatic Knowledge Graph shock memory recording.
     """
     if headline in _LLM_SCORE_CACHE:
         return _LLM_SCORE_CACHE[headline]
@@ -183,19 +186,34 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
         _LLM_SCORE_CACHE[headline] = cached
         return cached
 
+    # Build GraphRAG Context
+    matched_ents = kg_engine.resolve_entities_in_text(headline)
+    kg_schema = kg_engine.get_subgraph_context(matched_ents)
+    kg_schema.precedents = kg_engine.find_historical_precedents(headline, top_k=2)
+    graph_md = kg_schema.to_markdown()
+    graph_context_str = f"\n{graph_md}\n" if graph_md else ""
+
     # Enforce Basic Tier Zero-Cost Provider Routing
     if tier == "basic":
         scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=True)
         _LLM_SCORE_CACHE[headline] = scores
         global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
+        try:
+            kg_engine.record_event_shock_memory(headline, scores, affected_entities=matched_ents, model_attribution="zero_cost_lexicon")
+        except Exception:
+            pass
         return scores
 
     if api_key is None:
         api_key = os.environ.get("GEMINI_API_KEY")
 
+    provider_used = "offline_lexicon"
+    scores = None
+
     # Tier 1: Gemini 2.5 Flash
     if api_key:
         try:
+            prompt_str = LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context_str)
             try:
                 from google import genai
                 from google.genai import types
@@ -203,7 +221,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 config = types.GenerateContentConfig(temperature=0.1)
                 response = client.models.generate_content(
                     model='gemini-2.5-flash',
-                    contents=LLM_SINGLE_PROMPT.format(headline=headline),
+                    contents=prompt_str,
                     config=config
                 )
                 text = response.text.strip()
@@ -211,7 +229,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 import google.generativeai as genai_legacy
                 genai_legacy.configure(api_key=api_key)
                 model = genai_legacy.GenerativeModel('gemini-1.5-flash')
-                response = model.generate_content(LLM_SINGLE_PROMPT.format(headline=headline))
+                response = model.generate_content(prompt_str)
                 text = response.text.strip()
                 
             if "```json" in text:
@@ -227,28 +245,41 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 "opec_action": float(parsed.get("opec_action", 0.0)),
                 "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
             }
-            _LLM_SCORE_CACHE[headline] = scores
-            global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
+            provider_used = "gemini-2.5-flash"
             log_llm_usage("google", "gemini-2.5-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
             token_tab_manager.record_usage("gemini-2.5-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
-            return scores
         except Exception as e:
             logger.debug(f"Gemini single API call notice ({e}). Checking Tier 2 secondary providers...")
 
     # Tier 2: Secondary OpenAI / Anthropic Soft Failover
-    sec_scores = _try_openai_single(headline) or _try_anthropic_single(headline)
-    if sec_scores:
-        _LLM_SCORE_CACHE[headline] = sec_scores
-        global_cache.set(sha_key, sec_scores, ttl_seconds=86400 * 30)
-        log_llm_usage("secondary", "gpt-4o-mini", prompt_tokens=150, completion_tokens=80, is_fallback=True)
-        return sec_scores
+    if not scores:
+        sec_scores = _try_openai_single(headline, graph_context=graph_context_str) or _try_anthropic_single(headline, graph_context=graph_context_str)
+        if sec_scores:
+            scores = sec_scores
+            provider_used = "secondary_llm"
+            log_llm_usage("secondary", "gpt-4o-mini", prompt_tokens=150, completion_tokens=80, is_fallback=True)
             
     # Zero-Cost Fallback Hook (Kaggle LLM / Offline Lexicon)
-    scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=False)
+    if not scores:
+        scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=False)
+        provider_used = "offline_lexicon"
+        log_llm_usage("zero_cost_hook", "zero_cost_fallback", prompt_tokens=0, completion_tokens=0, is_fallback=True)
+        token_tab_manager.record_usage("zero_cost_hook", "event_extraction", 0, 0, status="fallback")
+
     _LLM_SCORE_CACHE[headline] = scores
     global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
-    log_llm_usage("zero_cost_hook", "zero_cost_fallback", prompt_tokens=0, completion_tokens=0, is_fallback=True)
-    token_tab_manager.record_usage("zero_cost_hook", "event_extraction", 0, 0, status="fallback")
+
+    # Record Knowledge Graph Memory
+    try:
+        kg_engine.record_event_shock_memory(
+            headline=headline,
+            score_vector=scores,
+            affected_entities=matched_ents,
+            model_attribution=provider_used
+        )
+    except Exception as e:
+        logger.debug(f"Knowledge Graph shock memory record notice ({e}).")
+
     return scores
 
 
@@ -438,4 +469,61 @@ def process_event_dataset(events_df: pd.DataFrame, use_llm_api: bool = False) ->
         records.append({**row, **scores})
         
     return pd.DataFrame(records)
+
+
+def extract_event_features_from_url(
+    url: str,
+    headline_hint: str = None,
+    api_key: str = None,
+    tier: str = "privileged",
+    max_words: int = 1500
+) -> dict:
+    """
+    Scrapes target web article/press release URL into clean Markdown using Firecrawl API
+    (or deterministic zero-cost native fallback), truncates safely to max_words, and extracts
+    structured commodity impact scores using Gemini Flash or offline lexicon.
+    """
+    from src.firecrawl_scraper import FirecrawlConnector
+
+    scraper = FirecrawlConnector()
+    scrape_res = scraper.scrape_url(url)
+    markdown_text = scrape_res.get("markdown", "")
+    title = scrape_res.get("title") or headline_hint or url
+
+    # Safe word truncation to preserve LLM token context budget
+    words = markdown_text.split()
+    if len(words) > max_words:
+        truncated_md = " ".join(words[:max_words]) + " ...[truncated]"
+    else:
+        truncated_md = markdown_text
+
+    combined_text = f"{title}\n\n{truncated_md}".strip() if truncated_md else title
+
+    # Automatically snapshot and preserve historical news article (Issue #97)
+    try:
+        from src.archive_service import submit_url_to_archive
+        submit_url_to_archive(
+            url=url,
+            title=title,
+            tags=["midgley-news", "energy-url-extraction"],
+            content_snapshot=truncated_md,
+            async_dispatch=True
+        )
+    except Exception as e:
+        logger.debug(f"Historical archive notice for {url}: {e}")
+
+    scores = extract_event_features_llm(combined_text, api_key=api_key, tier=tier)
+
+    return {
+        "url": url,
+        "title": title,
+        "provider": scrape_res.get("provider", "unknown"),
+        "scrape_success": scrape_res.get("success", False),
+        "scores": scores,
+        "geopolitical_risk": scores.get("geopolitical_risk", 0.0),
+        "supply_disruption": scores.get("supply_disruption", 0.0),
+        "demand_sentiment": scores.get("demand_sentiment", 0.0),
+        "opec_action": scores.get("opec_action", 0.0),
+        "overall_price_pressure": scores.get("overall_price_pressure", 0.0)
+    }
 

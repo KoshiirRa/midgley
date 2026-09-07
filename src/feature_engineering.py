@@ -10,7 +10,8 @@ import numpy as np
 import logging
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed, fetch_baker_hughes_rig_counts
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
-from src.data_ingestion import CFTCDataConnector, FERCDataConnector
+from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector
+from src.feast_store import MidgleyFeastStore
 
 logger = logging.getLogger(__name__)
 
@@ -77,12 +78,48 @@ def compute_technical_momentum_indicators(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def get_feast_point_in_time_features(
+    market_df: pd.DataFrame,
+    events_df: pd.DataFrame = None,
+    region: str = "Tulsa_OK"
+) -> pd.DataFrame:
+    """
+    Retrieves point-in-time AS OF joined features from MidgleyFeastStore (Issue #94).
+    Guarantees temporal non-leakage during historical backtesting.
+    """
+    store = MidgleyFeastStore()
+    entity_df = pd.DataFrame({
+        'date': market_df['date'],
+        'event_timestamp': pd.to_datetime(market_df['date']).dt.tz_localize(None),
+        'location_id': region,
+        'market_id': 'RBOB_FUTURES'
+    })
+    feature_refs = [
+        "eia_weekly_fv:gasoline_rbob",
+        "eia_weekly_fv:wti_crude",
+        "eia_weekly_fv:crack_spread",
+        "noaa_weather_fv:hdd_daily",
+        "noaa_weather_fv:cdd_daily",
+        "llm_event_decay_fv:geopolitical_risk",
+        "llm_event_decay_fv:supply_disruption"
+    ]
+    return store.get_historical_point_in_time_features(
+        entity_df=entity_df,
+        feature_refs=feature_refs,
+        market_df=market_df,
+        events_df=events_df,
+        region=region
+    )
+
+
 def create_feature_matrix(
     market_df: pd.DataFrame, 
     events_df: pd.DataFrame = None, 
     forecast_horizon: int = 5,
     decay_half_life_days: float = 5.0,
-    region: str = "Tulsa_OK"
+    region: str = "Tulsa_OK",
+    as_of_cutoff: str = None,
+    use_feast: bool = False
 ) -> pd.DataFrame:
     """
     Creates a unified feature dataset for time-series forecasting.
@@ -93,11 +130,22 @@ def create_feature_matrix(
     - forecast_horizon: Number of business days ahead to forecast (default 5 days = 1 week)
     - decay_half_life_days: Exponential decay half-life for news event sentiment impact
     - region: Target metropolitan area or hub name for locale-specific weather routing
+    - as_of_cutoff: Publication timestamp cutoff (YYYY-MM-DD [HH:MM:SS]) for point-in-time bitemporal filtering (Issue #121)
     """
-    logger.info(f"Engineering features for region '{region}' with {forecast_horizon}-day forecast horizon...")
+    logger.info(f"Engineering features for region '{region}' with {forecast_horizon}-day forecast horizon (use_feast={use_feast})...")
     df = market_df.copy()
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
+
+    if use_feast:
+        try:
+            feast_df = get_feast_point_in_time_features(df, events_df, region)
+            for col in feast_df.columns:
+                if col not in df.columns and col not in ['event_timestamp', 'location_id', 'market_id']:
+                    df[col] = feast_df[col]
+            logger.info("Successfully merged Feast point-in-time feature vectors.")
+        except Exception as e:
+            logger.warning(f"Feast feature lookup failed: {e}. Defaulting to standard feature matrix generation.")
     
     # 1. Quantitative Technical Indicators
     df = compute_technical_momentum_indicators(df)
@@ -165,6 +213,25 @@ def create_feature_matrix(
         logger.warning(f"Could not merge Baker Hughes rig count feed: {e}")
         
     for col in ['baker_hughes_us_rig_count', 'baker_hughes_oil_rigs', 'baker_hughes_gas_rigs', 'baker_hughes_rig_delta_1w']:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Merge U.S. Treasury Yield Curve & TIPS Inflation Metrics (Issue #66)
+    try:
+        from src.treasury_yield_feed import TreasuryYieldConnector
+        treasury_connector = TreasuryYieldConnector()
+        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2022-01-01"
+        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
+        treasury_df = treasury_connector.fetch_treasury_yield_dataset(start_date=start_str, end_date=end_str)
+        if not treasury_df.empty:
+            df = pd.merge(df, treasury_df, on='date', how='left')
+            for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().bfill().fillna(0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge U.S. Treasury yield feed: {e}")
+
+    for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
         if col not in df.columns:
             df[col] = 0.0
 
@@ -238,6 +305,81 @@ def create_feature_matrix(
         df['ferc_explorer_tariff_per_bbl'] = 0.0
         df['ferc_pipeline_tariff_index_5d'] = 0.0
 
+    # Merge USGS Water Data Telemetry (Issue #56)
+    # Avoid scalar broadcasting current snapshot across historical training rows
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        usgs_connector = USGSWaterFeedConnector()
+        usgs_data = usgs_connector.fetch_live_water_telemetry()
+        usgs_indices = usgs_data.get('indices', {})
+        df['usgs_hydrological_barge_bottleneck_index'] = 0.0
+        df['usgs_gulf_marine_departure_risk_index'] = 0.0
+        df['usgs_carquinez_berthing_risk_index'] = 0.0
+        df['usgs_delaware_refinery_thermal_index'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', 0.0)
+            df.loc[df.index[-1], 'usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge USGS water data telemetry: {e}")
+        df['usgs_hydrological_barge_bottleneck_index'] = 0.0
+        df['usgs_gulf_marine_departure_risk_index'] = 0.0
+        df['usgs_carquinez_berthing_risk_index'] = 0.0
+        df['usgs_delaware_refinery_thermal_index'] = 0.0
+
+    # Merge USGS Seismic Data Telemetry (Issue #55)
+    # Avoid scalar broadcasting current snapshot across historical training rows
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_data = seismic_connector.fetch_live_seismic_telemetry()
+        seismic_indices = seismic_data.get('indices', {})
+        df['usgs_bay_area_seismic_risk_index'] = 0.0
+        df['usgs_cushing_seismic_risk_index'] = 0.0
+        df['usgs_composite_seismic_risk_index'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', 0.0)
+            df.loc[df.index[-1], 'usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge USGS seismic data telemetry: {e}")
+        df['usgs_bay_area_seismic_risk_index'] = 0.0
+        df['usgs_cushing_seismic_risk_index'] = 0.0
+        df['usgs_composite_seismic_risk_index'] = 0.0
+
+    # Merge Air Quality (AQI) Industrial Emissions & Ozone Telemetry (Issues #54 & #73)
+    # Avoid scalar broadcasting current snapshot across historical training rows
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_data = aqi_connector.fetch_live_aqi_telemetry()
+        aqi_indices = aqi_data.get('indices', {})
+        df['aqi_bay_area_outage_risk_index'] = 0.0
+        df['aqi_tulsa_outage_risk_index'] = 0.0
+        df['aqi_delaware_outage_risk_index'] = 0.0
+        df['aqi_catlettsburg_outage_risk_index'] = 0.0
+        df['aqi_composite_outage_risk_index'] = 0.0
+        df['aqi_ozone_action_day_count'] = 0.0
+        df['aqi_max_rvp_surcharge_per_gal'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', 0.0)
+            df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', 0.0)
+            df.loc[df.index[-1], 'aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', 0))
+            df.loc[df.index[-1], 'aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge AQI industrial emissions telemetry: {e}")
+        df['aqi_bay_area_outage_risk_index'] = 0.0
+        df['aqi_tulsa_outage_risk_index'] = 0.0
+        df['aqi_delaware_outage_risk_index'] = 0.0
+        df['aqi_catlettsburg_outage_risk_index'] = 0.0
+        df['aqi_composite_outage_risk_index'] = 0.0
+        df['aqi_ozone_action_day_count'] = 0.0
+        df['aqi_max_rvp_surcharge_per_gal'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     
@@ -271,11 +413,34 @@ def create_feature_matrix(
         for col in llm_feature_cols:
             df[f'event_{col}'] = 0.0
 
-    # 4. Forecast Target Construction
+    # 4. Qlib Symbolic Alpha Factors Evaluation (Issue #127)
+    try:
+        import os
+        import json
+        from src.qlib_symbolic_engine import QlibSymbolicEngine
+        alpha_path = "data/alpha_factors.json"
+        if os.path.exists(alpha_path):
+            with open(alpha_path, "r") as af_file:
+                af_data = json.load(af_file)
+                factors = af_data.get("factors", [])
+                engine = QlibSymbolicEngine()
+                for factor in factors:
+                    name = factor.get("name")
+                    expr = factor.get("expression")
+                    if name and expr:
+                        df[f"qlib_{name}"] = engine.evaluate_expression(expr, df)
+    except Exception as e:
+        logger.warning(f"Could not evaluate Qlib symbolic alpha factors: {e}")
+
+    # 5. Forecast Target Construction
     df[f'target_price_{forecast_horizon}d'] = df['gasoline_rbob'].shift(-forecast_horizon)
     df[f'target_return_{forecast_horizon}d'] = (df[f'target_price_{forecast_horizon}d'] - df['gasoline_rbob']) / df['gasoline_rbob']
     
-    df = df.dropna().reset_index(drop=True)
+    # Fill feature NaNs safely to prevent premature row purging
+    feature_cols = [c for c in df.columns if not c.startswith('target_')]
+    df[feature_cols] = df[feature_cols].bfill().ffill().fillna(0.0)
+    
+    df = df.dropna(subset=[f'target_price_{forecast_horizon}d']).reset_index(drop=True)
     return df
 
 
@@ -340,11 +505,13 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'cot_commercial_hedger_ratio', 'cot_net_position_delta_1w',
         'ferc_colonial_line1_tariff_per_bbl', 'ferc_plantation_tariff_per_bbl',
         'ferc_explorer_tariff_per_bbl', 'ferc_pipeline_tariff_index_5d',
+        'treasury_yield_10y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d',
         'rbob_rsi_14', 'rbob_macd_line', 'rbob_macd_signal',
         'rbob_bollinger_band_pct_b', 'rbob_atr_14',
         'sin_day', 'cos_day'
     ]
-    quant_features = [f for f in quant_features if f in df.columns]
+    qlib_features = [c for c in df.columns if c.startswith('qlib_')]
+    quant_features = [f for f in quant_features if f in df.columns] + qlib_features
     
     event_features = [c for c in df.columns if c.startswith('event_')]
     hybrid_features = quant_features + event_features

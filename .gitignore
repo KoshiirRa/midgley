@@ -27,7 +27,9 @@ secrets/
 data/alpha_vantage_*.json
 data/oilpriceapi_*.json
 data/finlight_*.json
+data/firecrawl_*.json
 data/ipasis_telemetry.json
+data/runs/
 
 # Scratch & Temporary Agent Workspaces
 scratch/
@@ -35,6 +37,9 @@ scratch/
 # Generated Execution Reports & Output Logs
 docs/reports/
 data/reports/
-data/runs/
+# Feast Feature Store Local Cache & Database Registries
+data/feast_parquet/
+data/data/
+*.pb
 
 

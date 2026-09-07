@@ -4,8 +4,12 @@
   "display_name": "Cincinnati, OH & KY Tri-State",
   "padd_region": "PADD 2 Mid-Continent / Ohio Valley",
   "primary_city": "Cincinnati, OH",
-  "counties": ["Hamilton", "Kenton", "Boone"],
-  "baseline_price": 3.450,
+  "counties": [
+    "Hamilton",
+    "Kenton",
+    "Boone"
+  ],
+  "baseline_price": 3.45,
   "icon_class": "fa-warehouse",
   "theme_color": "purple",
   "econometric_drivers": {
@@ -17,7 +21,10 @@
     "description": "Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo IL confluence, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.",
     "primary_refinery": "Marathon Catlettsburg KY Refinery",
     "capacity_bpd": 291000,
-    "pipelines": ["Buckeye Pipeline", "Ohio River Marine Barge Corridor"]
+    "pipelines": [
+      "Buckeye Pipeline",
+      "Ohio River Marine Barge Corridor"
+    ]
   },
   "tax_structure": {
     "title": "Dual-State Tax Structure & Statutory Fees",
@@ -53,8 +60,22 @@
       "name": "Lower Mississippi Low Water",
       "subtitle": "Memphis Draft Restrictions",
       "price_impact_per_gal": 0.145,
-      "pct_impact": 4.20,
+      "pct_impact": 4.2,
       "description": "Restricts Gulf Coast barge tow capacity"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 905000,
+    "zero_vehicle_pct": 6.2,
+    "vehicles_per_household": 1.86,
+    "drive_alone_share": 0.795,
+    "carpool_share": 0.075,
+    "public_transit_share": 0.024,
+    "work_from_home_share": 0.092,
+    "mean_commute_minutes": 25.1,
+    "vehicle_dependency_ratio": 0.87,
+    "transit_alternative_index": 0.07,
+    "inelastic_demand_score": 0.814
+  }
 }

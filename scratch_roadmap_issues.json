@@ -241,7 +241,7 @@
   {
     "number": 116,
     "title": "[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)",
-    "status": "Ready",
+    "status": "Completed",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],
@@ -320,7 +320,7 @@
   {
     "number": 109,
     "title": "[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)",
-    "status": "Ready",
+    "status": "Closed",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],
@@ -482,7 +482,7 @@
   },
   {
     "number": 93,
-    "title": "[Feature Request] Implement NeuralProphet Hybrid Estimator with Exogenous Shock Decay",
+    "title": "[Feature Request] Implement Nixtla NeuralForecast (N-BEATSx / NHITS) Hybrid Estimator with Exogenous Shock Decay",
     "status": "Ready",
     "projects": [
       "Project Midgley - Master Roadmap"
@@ -492,7 +492,7 @@
       "enhancement",
       "modeling"
     ],
-    "body": "## Summary\nIntegrate **\\NeuralProphet\\** (\\github.com/ourownstory/neural_prophet\\) into \\src/models.py\\ as a hybrid neural time-series estimator combining PyTorch auto-autoregressive terms with exogenous LLM event shock decay vectors.\n\n## Motivations & Value\n- **Non-Linear Event Modeling:** Captures non-linear interactions between macroeconomic indicators and event memory decay vectors (\\{1/2} = 4.0\\\\text{ to }5.0\\\\text{ days}\\$).\n- **Model Diversity:** Adds a third quantitative estimator alongside Ridge Regression and XGBoost.\n\n## Acceptance Criteria\n- [ ] Implement NeuralProphet estimator class in \\src/models.py\\.\n- [ ] Train hybrid model on chronological 80/20 train/test splits.\n- [ ] Log out-of-time MAE and directional hit rates."
+    "body": "## Summary\nIntegrate **Nixtla \\NeuralForecast\\** (\\github.com/Nixtla/neuralforecast\\, specifically \\NBEATSx\\ / \\NHITS\\) into \\src/models.py\\ as a modern neural time-series benchmark estimator combining PyTorch architectures with exogenous LLM event shock decay vectors (\\t_{1/2} = 4.0\\text{ to }5.0\\text{ days}\\$) and multi-quantile uncertainty bounds (\\MQLoss\\). Supersedes legacy unmaintained NeuralProphet (Issue #93 pivot).\n\n## Motivations & Value\n- **Non-Linear Exogenous Event Modeling:** Uses \\NBEATSx\\ / \\NHITS\\ with \\hist_exog_list\\ to capture non-linear interactions between exogenous LLM shock decay vectors, 3-2-1 crack spread margins, and EIA grid stress Z-scores.\n- **SOTA Deep Learning Benchmark:** Replaces unmaintained NeuralProphet (stagnant since v0.9.0 in June 2024) with Nixtla's actively maintained PyTorch forecasting framework.\n- **Probabilistic Forecasting:** Generates \\P_{10}\\$, \\P_{50}\\$, and \\P_{90}\\$ quantile prediction bands natively via \\MQLoss\\.\n\n## Acceptance Criteria\n- [ ] Implement \\NixtlaNeuralForecaster\\ wrapper class (with \\NBEATSx\\ / \\NHITS\\ & \\MQLoss\\) in \\src/models.py\\ / \\src/nixtla_forecaster.py\\.\n- [ ] Support exogenous feature passing (\\hist_exog_list\\ for LLM shock decay and crack spreads; \\futr_exog_list\\ for calendar features).\n- [ ] Provide analytical fallback estimator when \\neuralforecast\\ / PyTorch dependencies are omitted.\n- [ ] Train hybrid model on chronological 80/20 train/test splits and log out-of-time MAE, RMSE, and directional hit rates.\n- [ ] Add unit test coverage."
   },
   {
     "number": 92,
@@ -797,7 +797,7 @@
   {
     "number": 70,
     "title": "[Feature Request] Implement OpenFIGI Cross-Market Symbol Normalization Service",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],
@@ -868,7 +868,7 @@
   {
     "number": 56,
     "title": "feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting",
-    "status": "Ready",
+    "status": "Completed",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],
@@ -882,7 +882,7 @@
   {
     "number": 55,
     "title": "Feature: Ingest live USGS Earthquake API feeds (fdsnws/event/1/) for real-time seismic fuel market risk scoring",
-    "status": "Ready",
+    "status": "Completed",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],
@@ -896,7 +896,7 @@
   {
     "number": 54,
     "title": "feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection",
-    "status": "Ready",
+    "status": "Completed",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],
@@ -910,7 +910,7 @@
   {
     "number": 53,
     "title": "feat(core-api): Monitor open-access research papers via CORE API during weekly self-review",
-    "status": "Ready",
+    "status": "Completed",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],
@@ -983,7 +983,7 @@
   {
     "number": 47,
     "title": "feat(scoreboard): Implement Realized-vs-Predicted Rolling Scoreboard API & Dashboard Section",
-    "status": "Ready",
+    "status": "Completed",
     "projects": [
       "Project Midgley - Master Roadmap"
     ],

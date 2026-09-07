@@ -2,9 +2,6 @@
 
 Technical design document for the **LLM-Augmented Unleaded Gas Price Prediction Engine**.
 
-![Multi-Agent Execution Pipeline SVG Diagram](assets/multi_agent_architecture.svg)
-![Regional Metro Calibration Hubs SVG Diagram](assets/regional_metro_architecture.svg)
-
 ---
 
 ## 1. Mathematical Formulations & Feature Fusion
@@ -13,56 +10,42 @@ Technical design document for the **LLM-Augmented Unleaded Gas Price Prediction 
 Gasoline crack spreads represent refiner acquisition and processing margins:
 - **National Crack Spread Proxy:**
   \[
-  \text{CrackSpread}_{\text{National}} = P_{\text{RBOB Wholesale \text{(\$/gal)}}} - \frac{P_{\text{WTI Crude \text{(\$/bbl)}}}}{42.0}
+  \text{CrackSpread}_{\text{National}} = P_{\text{RBOB Wholesale (\$ / gal)}} - \frac{P_{\text{WTI Crude (\$ / bbl)}}}{42.0}
   \]
 - **Tulsa Regional Crack Spread:**
   \[
-  \text{CrackSpread}_{\text{Tulsa}} = P_{\text{Tulsa Retail \text{(\$/gal)}}} - \frac{P_{\text{Cushing WTI \text{(\$/bbl)}}}}{42.0}
+  \text{CrackSpread}_{\text{Tulsa}} = P_{\text{Tulsa Retail (\$ / gal)}} - \frac{P_{\text{Cushing WTI (\$ / bbl)}}}{42.0}
   \]
 - **Newark Regional Crack Spread:**
   \[
-  \text{CrackSpread}_{\text{Newark}} = P_{\text{Newark Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0}
+  \text{CrackSpread}_{\text{Newark}} = P_{\text{Newark Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0}
   \]
 - **Cincinnati Dual-State Cross-River Rack Margin & Crack Spread:**
   \[
-  P_{\text{OH Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{OH}} \quad (P_{\text{Live, OH}} = \text{\$3.450/gal})
+  P_{\text{OH Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{OH}} \quad (P_{\text{Live, OH}} = \$3.450/\text{gal})
   \]
   \[
-  P_{\text{KY Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{KY}} \quad (P_{\text{Live, KY}} = \text{\$3.325/gal})
+  P_{\text{KY Retail}} = P_{\text{Wholesale RBOB}} + \text{Margin}_{\text{KY}} \quad (P_{\text{Live, KY}} = \$3.325/\text{gal})
   \]
   \[
-  \text{TaxSpread}_{\text{OH-KY}} = P_{\text{OH Retail}} - P_{\text{KY Retail}} = \text{\$0.125/gal}
-  \]
-- **Charlotte Regional Crack Spread & NC/SC Tax Gap:**
-  \[
-  \text{CrackSpread}_{\text{Charlotte}} = P_{\text{Charlotte Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0} \quad (P_{\text{Live, Charlotte}} = \text{\$3.280/gal})
-  \]
-  \[
-  \text{TaxSpread}_{\text{NC-SC}} = P_{\text{NC Tax}} - P_{\text{SC Tax}} = \text{\$0.404} - \text{\$0.288} = \text{\$0.116/gal}
-  \]
-- **Port St. Lucie Waterborne Rack Margin & FL Fuel Tax:**
-  \[
-  \text{CrackSpread}_{\text{PSL}} = P_{\text{PSL Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0} \quad (P_{\text{Live, PSL}} = \text{\$3.380/gal})
-  \]
-  \[
-  T_{\text{FL}} = \tau_{\text{State/Local}} + \tau_{\text{Federal}} = \text{\$0.384} + \text{\$0.184} = \text{\$0.568/gal}
+  \text{TaxSpread}_{\text{OH-KY}} = P_{\text{OH Retail}} - P_{\text{KY Retail}} = \$0.125/\text{gal}
   \]
 - **Oakland & SF Bay Area PADD 5 Richmond Crack Spread & CARB Tax Burden:**
   \[
-  \text{CrackSpread}_{\text{Richmond}} = P_{\text{Oakland Retail \text{(\$/gal)}}} - \frac{P_{\text{Brent Crude \text{(\$/bbl)}}}}{42.0} \quad (P_{\text{Live, Oakland}} = \text{\$4.950/gal}, P_{\text{Live, BayArea}} = \text{\$5.050/gal})
+  \text{CrackSpread}_{\text{Richmond}} = P_{\text{Oakland Retail (\$ / gal)}} - \frac{P_{\text{Brent Crude (\$ / bbl)}}}{42.0} \quad (P_{\text{Live, Oakland}} = \$4.950/\text{gal}, P_{\text{Live, BayArea}} = \$5.050/\text{gal})
   \]
   \[
-  T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} = \text{\$0.634} + \text{\$0.250} + \text{\$0.185} + \text{\$0.150} + \text{\$0.184} = \text{\$0.953/gal}
+  T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} = \$0.634 + \$0.250 + \$0.185 + \$0.150 + \$0.184 = \$0.953/\text{gal}
   \]
 
 
 ### B. Exponential Memory Decay Equation
-Real-world event news persistence is modeled via dynamic category-specific exponential memory decay ($t_{1/2} \in [2.5, 14.0]\text{ days}$ depending on shock taxonomy: $14.0\text{d}$ physical supply disruption, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts):
+Real-world event news persistence is modeled via exponential memory decay ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$):
 \[
-\lambda(\text{category}) = \frac{\ln(2)}{t_{1/2}(\text{category})}
+\lambda = \frac{\ln(2)}{t_{1/2}}
 \]
 \[
-\text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda(\text{category})} + \text{Shock}_t
+\text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda} + \text{Shock}_t
 \]
 
 ---
@@ -71,7 +54,33 @@ Real-world event news persistence is modeled via dynamic category-specific expon
 
 The forecasting engine integrates a **two-tiered weather ingestion model** via the NOAA NWS API (`api.weather.gov`) and lightweight terminal connector `t.wxs.us`, combining macro energy basin risks with localized metro-level convective, freeze, and flood threats:
 
-![Two-Tiered Weather Architecture](assets/weather_architecture.svg)
+```
+               ┌─────────────────────────────────────────────────────────────┐
+               │                 NOAA NWS & SPC WEATHER API                  │
+               │                   (api.weather.gov / t.wxs.us)              │
+               └──────────────────────────────┬──────────────────────────────┘
+                                              │
+                   ┌──────────────────────────┴──────────────────────────┐
+                   ▼                                                     ▼
+   ┌───────────────────────────────┐                     ┌───────────────────────────────┐
+   │ TIER 1: NATIONAL BASINS       │                     │ TIER 2: LOCALIZED METROS      │
+   │ • Gulf Coast Hurricanes (NHC) │                     │ • Tulsa OK (OKZ060 / OKZ066)  │
+   │ • Permian Basin Freeze Alerts │                     │ • Newark DE (Delaware City)   │
+   │ • Bakken Shale Polar Vortexes │                     │ • Cincinnati OH/KY (Miss River)│
+   │                               │                     │ • Greenville NC (NCZ081 Floods)│
+   │                               │                     │ • Charlotte NC (NCZ071 Hub)   │
+   │                               │                     │ • Oakland & Bay Area (PSPS)   │
+   └───────────────┬───────────────┘                     └───────────────┬───────────────┘
+                   │                                                     │
+                   ▼                                                     ▼
+   ┌───────────────────────────────┐                     ┌───────────────────────────────┐
+   │ NATIONAL MODEL                │                     │ LOCALIZED METRO CALIBRATION   │
+   │ (src/locations/national)      │                     │ (src/locations/<location>)    │
+   │ • RBOB Wholesale Futures      │                     │ • Tulsa, Newark, Cincinnati,  │
+   │ • Directional Acc: 60.79%     │                     │   Greenville, Charlotte,      │
+   │                               │                     │   Oakland & SF Bay Area       │
+   └───────────────────────────────┘                     └───────────────┬───────────────┘
+```
 
 * **Token-Efficient Ingestion Engine (`t.wxs.us`):** Pre-filters NWS alerts and SPC convective outlooks down to ~150–300 tokens per request (a 90%–95% token savings vs raw 3,500-token GeoJSON feature maps).
 * **Deterministic Risk Mapping:** Maps SPC convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) directly into numerical impact feature vectors without LLM latency or token cost.
@@ -84,37 +93,16 @@ Instead of predicting raw non-stationary price levels directly, the model learns
 \[
 \Delta \%_t = \frac{P_{t+5} - P_t}{P_t}
 \]
-The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \text{\$3.89/gal}$) is calculated as:
+The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\text{gal}$) is calculated as:
 \[
 \hat{P}_{t+5} = P_{\text{Live}} \times (1 + \hat{\Delta}_{\%})
 \]
 
 ---
 
-## 4. MLOps Prediction Logging, Feature Attribution & Rolling Scoreboard Engine (`src/prediction_logger.py` & `src/models.py`)
+## 4. MLOps Prediction Logging & Backfilling Engine (`src/prediction_logger.py`)
 
-All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records.
-
-### Feature Attribution (XAI) Breakdown
-`compute_locale_feature_attribution_breakdown` in `src/models.py` decomposes the total projected forecast delta ($\Delta = P_{\text{pred}} - P_{\text{base}}$) into signed dollar contributions (\$/gal) across 6 core domain drivers:
-1. **Futures & Commodity Benchmark** ($\Delta_{\text{futures}}$)
-2. **Refining Yield & Crack Spread** ($\Delta_{\text{crack}}$)
-3. **Weather & Environmental Signals** ($\Delta_{\text{weather}}$)
-4. **Tax & Regulatory Overhead** ($\Delta_{\text{tax}}$)
-5. **Unstructured Intelligence & Sentiment** ($\Delta_{\text{sentiment}}$)
-6. **Regional Logistics & Hub Delivery** ($\Delta_{\text{logistics}}$)
-
-Enforcing exact sum equality: $\sum_{k=1}^6 \Delta_k = P_{\text{pred}} - P_{\text{base}}$.
-
-### Realized-vs-Predicted Rolling Scoreboard
-`compute_rolling_scoreboard_metrics(window_days=30)` continuously evaluates model performance over rolling 30, 60, 90, and all-time windows, computing:
-- **Mean Absolute Error (MAE)**: $\text{MAE} = \frac{1}{N} \sum |y - \hat{y}|$
-- **Root Mean Squared Error (RMSE)**: $\text{RMSE} = \sqrt{\frac{1}{N} \sum (y - \hat{y})^2}$
-- **Mean Absolute Percentage Error (MAPE)**: $\text{MAPE} = \frac{1}{N} \sum \left|\frac{y - \hat{y}}{y}\right| \times 100$
-- **Directional Hit Rate**: $\text{Hit Rate} = \frac{\sum \mathbb{I}(\text{dir}_{\text{pred}} = \text{dir}_{\text{actual}})}{N} \times 100$
-- **Naive Persistence Baseline Comparison & Model MAE Uplift**: $\text{Uplift}_{\text{MAE}} = \frac{\text{MAE}_{\text{naive}} - \text{MAE}_{\text{model}}}{\text{MAE}_{\text{naive}}} \times 100$
-
-Exposed live via REST API `GET /api/v1/forecast/scoreboard` and rendered dynamically on the GitHub Pages web dashboard (`docs/index.html`).
+All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records. When a new regional forecasting pipeline is launched, `backfill_new_region_history()` automatically populates historical test split predictions and evaluates mature target dates against historical market actuals immediately.
 
 ---
 
@@ -139,8 +127,9 @@ The weekly model performance review runs automatically on Saturday mornings (08:
 
 ### Continuous Feedback Loop Mechanics:
 1. **Diagnostic Validation & Multi-Region Error Tracking:** Calculates rolling metrics across 30-day, 60-day, and 90-day evaluation windows across all active regions (National, Tulsa, Newark, Cincinnati OH/KY, Oakland, SF Bay Area).
-2. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
-3. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
+2. **Quantitative Feature Leakage & Factor Decay Validation (`src/feature_auditor.py`, Issue #146):** Runs automated point-in-time temporal cross-correlations across EIA, FRED, NOAA, USDA, and futures series to detect lookahead leakage ($|r| > 0.50$), computes multi-horizon Spearman Rank IC decay curves ($H \in \{1, 3, 5, 10, 14, 20\}\text{ days}$) with empirical $t_{1/2}$ curve fitting, and estimates Probability of Backtest Overfitting (PBO via CSCV) / Deflated Sharpe Ratios (DSR).
+3. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
+4. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
 
 ---
 
@@ -148,7 +137,34 @@ The weekly model performance review runs automatically on Saturday mornings (08:
 
 The public presentation layer is compiled by `src/dashboard_generator.py` into static HTML artifacts and Open Graph social preview cards in `docs/`:
 
-![Multi-Page Web Routing Architecture](assets/web_routing_architecture.svg)
+```
+                               ┌──────────────────────────────────┐
+                               │       docs/index.html (/)        │
+                               │    Midgley Overview Landing      │
+                               │  Summary Forecast Cards Grid     │
+                               └────────────────┬─────────────────┘
+                                                │
+       ┌───────────────────────────────┬────────┴────────┬───────────────────────────────┐
+       ▼                               ▼                 ▼                               ▼
+┌──────────────┐              ┌──────────────────┐ ┌──────────────┐              ┌──────────────┐
+│ /national    │              │ METRO AREAS MENU │ │ /math        │              │ /reports     │
+│ Wholesale    │              ├──────────────────┤ │ KaTeX Math   │              │ Technical    │
+│ RBOB Futures │              │ • /tulsa (OK)    │ │ Equations &  │              │ Run Reports  │
+│ Analytics    │              │ • /newark (DE)   │ │ 10-Layer     │              │ & Run JSONs  │
+└──────────────┘              │ • /cincinnati(OH)│ │ Architecture │              └──────────────┘
+                              │ • /greenville(NC)│ └──────────────┘
+                              │ • /charlotte (NC)│
+                              │ • /oakland (CA)  │
+                              │ • /bayarea (CA)  │
+                              └────────┬─────────┘
+                                       │
+                                       ▼
+                       ┌────────────────────────────────┐
+                       │ data/regional_metadata/*.json  │
+                       │ Decoupled JSON Driver Cards    │
+                       │ (render_regional_driver_cards) │
+                       └────────────────────────────────┘
+```
 
 Static web routing compatibility is preserved across both direct file routes (`/<page>.html`) and clean directory routes (`/<page>/index.html`) by outputting dual matching file trees (e.g. `docs/tulsa.html` and `docs/tulsa/index.html`). 
 
@@ -218,15 +234,49 @@ src/locations/
     └── notebook_builder.py
 ```
 
+---
+
+## 10. Qualitative Intelligence Knowledge Graph & Agent Memory Layer (`src/knowledge_graph.py`, Issue #116)
+
+Midgley features an embedded zero-cost **Knowledge Graph & Agent Memory Layer**:
+
+* **Graph Engine & Persistence:** Pure Python `NetworkX` graph core with `SQLite` persistence (`data/knowledge_graph.db`), ensuring **$0 infrastructure cost**.
+* **Automated Seeding:** Automatically populates 9 refineries, 4 marine chokepoints, 5 PADDs, and 6 metro hubs on initial startup from `src/spatial_refinery.py`.
+* **GraphRAG Prompt Context:** Extracts 2-hop subgraphs and precedent memories for incoming headlines, formatting standardized `GraphContextSchema` into LLM prompts (`LLM_SINGLE_PROMPT`) to ground scoring calls with physical supply topology.
+* **Episodic Shock Memory & Precedent Search:** Ingests high-impact event shocks into `kg_memory_shocks`, supporting TF-IDF + graph distance precedent retrieval.
+* **Council of LLMs Readiness:** Standardizes context serialization across multi-provider LLM ensembles while recording multi-model attribution, individual provider opinions, and consensus disagreement metrics (`council_variance`).
+
 Root entrypoints (`main.py`, `tulsa_main.py`, `newark_main.py`, etc.), notebook build scripts (`build_*.py`), and `src/*_regional.py` modules operate as lightweight delegation shims to `src/locations/`, maintaining 100% backward compatibility for all existing scripts, workflows, and systemd services.
 
 ---
 
-## 10. Multi-Tier Lookup Cache Gateway Architecture (Issue #108 / `src/lookup_cache.py`)
+## 11. Multi-Tier Lookup Cache Gateway Architecture (Issue #108 / `src/lookup_cache.py`)
 
 All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/USDA series, NOAA weather endpoints, commodity spot feeds, and financial news/scrapers) are integrated with the **3-Tier Lookup Cache Gateway** (`src/lookup_cache.py`). This architecture eliminates redundant API requests and synchronizes quota limits across local Dev VM (`10.42.42.54`) and GitHub Actions runners:
 
-![Multi-Tier Lookup Cache Gateway Architecture](assets/cache_gateway_architecture.svg)
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    EXTERNAL DATA CONNECTORS & FEEDS                         │
+│  • EIA, FRED, USDA, OilpriceAPI, Alpha Vantage, Socrata Open Data           │
+│  • GasBuddy, AAA, NOAA Weather, USGS Water & Seismic, Multi-Feed AQI        │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              MULTI-TIER LOOKUP CACHE GATEWAY (`src/lookup_cache.py`)        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ • Tier 1 (Primary Edge): Turso Edge SQLite REST API (TURSO_DATABASE_URL)    │
+│ • Tier 2 (Backup Edge):  Cloudflare D1/R2 Edge Worker (CLOUDFLARE_CACHE_URL)  │
+│ • Tier 3 (Local Core):   SQLite Datastore (`data/lookup_cache.sqlite`) +    │
+│                          In-Memory Fast Dict (`global_cache`)              │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      LOCAL DISK JSON FALLBACK                               │
+│             (`data/{source}_cache.json` / Offline Benchmark)                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ### Key Technical Specifications:
 * **Key Namespacing:** Prefixed by service domain (e.g., `oilpriceapi_{key}`, `alphavant_{key}`, `eia_{series_id}`, `fred_{series_id}`, `socrata_{state}_{dataset}`).
@@ -241,8 +291,7 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 
 1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):**
    * Executes every 15 minutes via Cloudflare Cron Triggers (`*/15 * * * *`).
-   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection, deduplicates dispatched items against Cloudflare Cache API (`caches.default`), and enqueues event payloads to Cloudflare Queue (`intraday-event-queue`).
-   * **Cloudflare Queues Edge Buffer (Issue #194):** Configured with producer binding (`INTRADAY_QUEUE`) in `wrangler.toml` and consumer handler (`handleQueueBatch`). Processes message batches asynchronously, enforcing edge cache deduplication, backoff retries, and automatic routing to dead-letter queue (`intraday-event-dlq`) upon persistent failure. Forwards event batches to `POST /api/v1/events/queue-consumer` on `src/api_server.py`. Runs on Workers Free plan (10,000 free operations/day).
+   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection, deduplicates dispatched items against Cloudflare Cache API (`caches.default`), and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
 
 2. **`midgley-cache-worker` ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):**
    * Acts as Tier 2 Edge Cache Gateway over Cloudflare D1 database (`midgley-cache-d1`).
@@ -250,10 +299,83 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 
 ### Option A2 Observability & Telemetry Engine
 
-![Cloudflare Edge Workers & Option A2 Telemetry Architecture](assets/worker_telemetry_architecture.svg)
+```
+                             ┌──────────────────────────────────┐
+                             │    CLOUDFLARE WORKER INVOCATION  │
+                             └────────────────┬─────────────────┘
+                                              │
+                 ┌────────────────────────────┼────────────────────────────┐
+                 │                            │                            │
+                 ▼                            ▼                            ▼
+  ┌─────────────────────────────┐ ┌─────────────────────────────┐ ┌─────────────────────────────┐
+  │ CLOUDFLARE DASHBOARD LOGS   │ │    AXIOM LOG ANALYTICS      │ │  SENTRY CRASH REPORTING     │
+  │ • Real-time tail logs       │ │ • 30-day searchable events  │ │ • Uncaught exception stack  │
+  │ • Invocation trace graphs   │ │ • `logToAxiom()` HTTPS REST │ │   traces & sourcemaps       │
+  │ • Native persistent logs    │ │ • Dataset: `midgley-workers`│ │ • `captureSentryException()`│
+  └─────────────────────────────┘ └─────────────────────────────┘ └─────────────────────────────┘
+```
 
 * **Cloudflare Native Observability:** Configured in `wrangler.toml` and `wrangler.cache.toml` with `[observability]` (`enabled = true`, `head_sampling_rate = 1.0`, `persist = true`).
 * **Axiom Log Analytics (`logToAxiom`):** Ingests structured JSON cycle summaries, RSS warnings, GitHub dispatches, and cache hits/misses directly to Axiom dataset `midgley-workers` via `ctx.waitUntil()` async flushes (0 HTTP latency penalty, $0 subscription cost).
 * **Sentry Crash Reporting & Crons (`captureSentryException` & `sendSentryCronCheckIn`):** Captures unhandled runtime errors with stack trace context and executes 2-stage Sentry Cron check-ins (`in_progress` start ping + `ok`/`error` completion ping with matching `check_in_id`) for execution duration tracking and timeout detection.
 * **Axiom & Sentry Dashboard Templates & APL Queries:** See [`docs/OBSERVABILITY_DASHBOARDS.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/OBSERVABILITY_DASHBOARDS.md) for ready-to-use APL queries, dashboard widget templates, and alert rules.
+
+---
+
+## 11. System Telemetry Prometheus Metrics & Zero-Cost Cloud Archiving (Issues #107 & #197)
+
+### Prometheus Telemetry Exporter (`/metrics` & `/api/v1/metrics`)
+Midgley exposes a standard Prometheus exposition text format endpoint (`GET /api/v1/metrics` and `GET /metrics` in `src/api_server.py`) for Grafana observability:
+* **TokenTab Metrics:** `llm_tokens_consumed_total` (by prompt/completion/total) and `llm_estimated_cost_usd_total`.
+* **IPASIS Security Metrics:** `ipasis_security_requests_total` tracking checked vs. blocked inbound requests.
+* **Multi-Tier Cache Metrics:** `cache_gateway_operations_total` tracking hit vs. miss ratios across lookup tiers.
+* **API Quota Ratios:** `api_quota_remaining_ratio` tracking remaining allowances across Finlight, OilpriceAPI, and AlphaVantage.
+
+### Zero-Cost Internet Archive Wayback Machine Cloud Archiver (`src/wayback_archiver.py`)
+During intraday event evaluations in `src/intraday_event_monitor.py`, breaking headline URLs are submitted directly to the Internet Archive Save API (`https://web.archive.org/save/{url}`). The permanent `archive_url` string is attached to the event result object, saved in `data/intraday_events.json`, and cached locally at `data/wayback_archive_cache.json` for 100% zero-cost cloud web archiving.
+
+---
+
+## 12. Healthchecks.io Pipeline Heartbeat & Dead-Man's Snitch Monitoring (`src/healthcheck_monitor.py`, Issue #98)
+
+Midgley integrates **Healthchecks.io** dead-man's snitch monitoring to guarantee visibility into scheduled pipeline executions:
+* **Heartbeat Dispatch Stages:**
+  - **Start (`/start`):** Sent when a forecasting cycle or weekly model review run begins.
+  - **Success (`/0` or `POST /`):** Dispatched upon successful completion, uploading execution duration (seconds) and summary diagnostic logs in the HTTP payload body.
+  - **Failure (`/fail`):** Sent upon uncaught exceptions or catastrophic run aborts, including the traceback in the payload.
+* **Orchestration Integration:**
+  - `src/prediction_logger.py` for daily 02:00 AM Central forecast runs.
+  - `src/weekly_issue_reporter.py` for Saturday 08:00 AM Central weekly review audits.
+  - `.github/workflows/gas_price_forecast.yml` and `.github/workflows/weekly_model_review.yml` GitHub Actions workflows.
+* **Operational Resiliency:** 100% fail-open, 10-second request timeouts, and test execution isolation (`TESTING=1`).
+
+---
+
+## 13. Open Source AI Radar Automated Model Discovery Connector (`src/data_ingestion.py`, Issue #187)
+
+Midgley monitors the open-weights AI model landscape via **Open Source AI Radar**:
+* **`OpenSourceAIRadarConnector`:** Ingests release metadata, parameter scales, quantization benchmarks, licensing, and capabilities from `api.opensourceai.io/v1/radar/models` (or configured mirror).
+* **Caching & Resilience:** 24-hour disk cache (`data/radar_cache.json`) with deterministic fallback model registry.
+* **REST & Weekly Review Integration:** Exposes `GET /api/v1/system/radar` and automatically injects model discovery tables into Saturday weekly review issues.
+
+---
+
+## 14. Self-Hosted ArchiveBox Historical Article Preservation Engine (`src/archive_service.py`, Issue #97)
+
+Midgley integrates self-hosted **ArchiveBox** (`archivebox.io`) to preserve full-fidelity historical web pages:
+* **Non-Blocking Architecture:** Dispatches archive requests (`POST /api/v1/core/add/`) via background thread pool (`concurrent.futures.ThreadPoolExecutor`) to eliminate LLM pipeline latency overhead.
+* **Dual-Tier Snapshot Ledger:** If ArchiveBox instance is unreachable or disabled, saves local markdown snapshots to `data/archives/` and records entries in `data/archived_events_ledger.json`.
+* **URL Extraction Hook:** Automatically invoked by `extract_event_features_from_url()` in `src/event_analyzer.py`.
+
+---
+
+## 15. Sapient PRAXIST Autonomous Energy Research Engine (`src/praxist_engine.py`, Issue #188)
+
+Midgley provides an autonomous programmatic research harness inspired by **Sapient PRAXIST**:
+* **`PraxistResearchHarness`:** Enables LLM agents to formulate empirical feature engineering hypotheses, execute backtests, and evaluate out-of-sample MAE deltas against baseline estimators.
+* **Statistical Validation:** Computes paired $t$-tests and $p$-values to verify that candidate feature improvements are statistically significant ($p < 0.05$) rather than backtest overfitting.
+* **Automated Parameter Sweeps:** Conducts systematic grid searches (e.g. Ridge $\alpha \in [0.1, 100.0]$, decay half-life $t_{1/2} \in [1.0, 14.0]$).
+* **Weekly Audit Synthesis:** Research findings and validated factor candidates are summarized in Saturday weekly model review reports.
+
+
 

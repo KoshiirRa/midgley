@@ -100,6 +100,15 @@ def run_oakland_pipeline(
 
     # Step 5: Real-Time Scenario Simulations
     print("\n[Step 5/6] Real-Time Oakland Regional, Seismic, Wildfire & Maritime Scenario Simulations...")
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_conn = USGSSeismicConnector()
+        seismic_data = seismic_conn.fetch_live_seismic_telemetry(corridor="bay_area")
+        bay_risk = seismic_data.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
+        print(f"  Live USGS Seismic Status: {seismic_data.get('status')} | Bay Area Seismic Risk Index: {bay_risk:.2f}")
+    except Exception as e:
+        print(f"  Live USGS Seismic Telemetry offline ({e}), using default baseline.")
+
     scenarios = [
         {
             "name": "Scenario 1: USGS Hayward Fault M>=6.0 Seismic Quake & Kinder Morgan Pipeline Shutoff",

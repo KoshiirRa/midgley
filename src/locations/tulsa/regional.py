@@ -103,6 +103,45 @@ def get_tulsa_regional_events() -> pd.DataFrame:
     
     # Merge localized NOAA Weather Alerts
     noaa_df = get_tulsa_cushing_weather_dataset()
-    merged = pd.concat([events_df, noaa_df[['date', 'headline', 'weather_type']].rename(columns={'weather_type': 'category'})], ignore_index=True)
-    
+    frames = [events_df, noaa_df[['date', 'headline', 'weather_type']].rename(columns={'weather_type': 'category'})]
+
+    # Ingest Live USGS Water Data Telemetry (Issue #56)
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        water_connector = USGSWaterFeedConnector()
+        water_telemetry = water_connector.fetch_live_water_telemetry(cluster="tulsa")
+        indices = water_telemetry.get("indices", {})
+        if indices.get("tulsa_refinery_flood_risk_index", 0.0) >= 0.40:
+            flood_idx = indices.get("tulsa_refinery_flood_risk_index", 0.0)
+            frames.append(pd.DataFrame([{
+                "date": pd.to_datetime(datetime.now().strftime("%Y-%m-%d")),
+                "headline": f"USGS Arkansas River gage at Tulsa indicates elevated flood stage (Flood Risk: {flood_idx:.2f}); river crest threatens West Tulsa HF Sinclair refinery perimeter.",
+                "category": "Arkansas River Flood"
+            }]))
+    except Exception as e:
+        logger.warning(f"Could not load live USGS water telemetry for Tulsa: {e}")
+
+    # Ingest Live USGS Seismic Telemetry (Cushing Hub Induced Seismicity, Issue #55)
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_telemetry = seismic_connector.fetch_live_seismic_telemetry(corridor="cushing_ok")
+        seismic_headline = seismic_connector.generate_seismic_event_headline(corridor="cushing_ok", telemetry=seismic_telemetry)
+        if seismic_headline:
+            frames.append(pd.DataFrame([seismic_headline]))
+    except Exception as e:
+        logger.warning(f"Could not load live USGS seismic telemetry for Cushing/Tulsa: {e}")
+
+    # Ingest Live AQI & Industrial Flaring Telemetry (West Tulsa Refining, Issue #54)
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_telemetry = aqi_connector.fetch_live_aqi_telemetry(corridor="tulsa")
+        aqi_headline = aqi_connector.generate_aqi_event_headline(corridor="tulsa", telemetry=aqi_telemetry)
+        if aqi_headline:
+            frames.append(pd.DataFrame([aqi_headline]))
+    except Exception as e:
+        logger.warning(f"Could not load live AQI telemetry for Tulsa: {e}")
+
+    merged = pd.concat(frames, ignore_index=True)
     return merged.sort_values('date').reset_index(drop=True)

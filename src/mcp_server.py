@@ -142,6 +142,112 @@ async def list_tools() -> list[types.Tool]:
                     "base_ulsd": {"type": "number", "default": 2.850, "description": "Base ULSD futures price"}
                 }
             }
+        ),
+        types.Tool(
+            name="query_knowledge_graph",
+            description="Queries Knowledge Graph topology, refineries, pipelines, chokepoints, PADDs, and metro relations.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "entity": {
+                        "type": "string",
+                        "description": "Optional entity name or ID to filter sub-graph (e.g. 'Chevron_Richmond', 'Oakland_CA')"
+                    },
+                    "depth": {
+                        "type": "integer",
+                        "default": 2,
+                        "description": "Graph traversal depth"
+                    }
+                }
+            }
+        ),
+        types.Tool(
+            name="retrieve_event_precedents",
+            description="Searches episodic agent memory for historical qualitative shock analogs and model agreement scores.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Headline or market event query string (e.g. 'refinery explosion heatwave')"
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "default": 3,
+                        "description": "Max precedents to return"
+                    }
+                },
+                "required": ["query"]
+            }
+        ),
+        types.Tool(
+            name="get_usgs_water_telemetry",
+            description="Fetches real-time USGS streamflow, gage height, water temperature, and specific conductance telemetry across inland waterways and refining corridors (Issue #56).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "cluster": {
+                        "type": "string",
+                        "description": "Optional regional cluster: inland_barge, gulf_coast, bay_area, delaware, tulsa, florida",
+                        "default": "all"
+                    }
+                }
+            }
+        ),
+        types.Tool(
+            name="get_usgs_seismic_telemetry",
+            description="Fetches real-time USGS earthquake and ground shaking telemetry evaluated against critical petroleum refining, pipeline, and storage infrastructure (Issue #55).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "corridor": {
+                        "type": "string",
+                        "description": "Regional corridor filter: bay_area, cushing_ok, socal, mid_atlantic, new_madrid, or 'all'",
+                        "default": "bay_area"
+                    },
+                    "days": {
+                        "type": "integer",
+                        "description": "Rolling window in days (default: 30)",
+                        "default": 30
+                    },
+                    "min_mag": {
+                        "type": "number",
+                        "description": "Optional minimum magnitude threshold"
+                    }
+                }
+            }
+        ),
+        types.Tool(
+            name="get_refinery_aqi_anomalies",
+            description="Fetches real-time multi-feed air quality metrics (PurpleAir, OpenAQ, EPA AirNow) and flaring outage anomaly scores for petroleum refining hubs (Issue #54 & #73).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "corridor": {
+                        "type": "string",
+                        "description": "Regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'",
+                        "default": "bay_area"
+                    }
+                }
+            }
+        ),
+        types.Tool(
+            name="get_regional_ozone_alerts",
+            description="Fetches official EPA AirNow ground-level ozone (O3) action alerts and statutory seasonal Reid Vapor Pressure (RVP) summer-blend compliance surcharges (Issue #73).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "corridor": {
+                        "type": "string",
+                        "description": "Regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'",
+                        "default": "all"
+                    },
+                    "zip_code": {
+                        "type": "string",
+                        "description": "Optional 5-digit US ZIP code to query EPA AirNow directly"
+                    }
+                }
+            }
         )
     ]
 
@@ -196,6 +302,74 @@ async def call_tool(
             scenario = args.get("scenario", "colonial_line2_outage")
             base_ulsd = float(args.get("base_ulsd", 2.850))
             res = simulate_diesel_shock_endpoint(scenario=scenario, base_ulsd=base_ulsd)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "query_knowledge_graph":
+            from src.knowledge_graph import kg_engine
+            entity = args.get("entity")
+            depth = int(args.get("depth", 2))
+            if entity:
+                matched = kg_engine.resolve_entities_in_text(entity) or [entity]
+                schema = kg_engine.get_subgraph_context(matched, depth=depth)
+                res = schema.to_dict()
+            else:
+                res = kg_engine.export_topology_dict()
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "retrieve_event_precedents":
+            from src.knowledge_graph import kg_engine
+            query = args.get("query", "")
+            top_k = int(args.get("top_k", 3))
+            res = kg_engine.find_historical_precedents(query, top_k=top_k)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_usgs_water_telemetry":
+            from src.usgs_water_feed import USGSWaterFeedConnector
+            cluster = args.get("cluster")
+            connector = USGSWaterFeedConnector()
+            res = connector.fetch_live_water_telemetry(cluster=cluster)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_usgs_seismic_telemetry":
+            from src.usgs_seismic import USGSSeismicConnector
+            corridor = args.get("corridor", "bay_area")
+            days = int(args.get("days", 30))
+            min_mag = args.get("min_mag")
+            if min_mag is not None:
+                min_mag = float(min_mag)
+            corr_arg = None if corridor == "all" else corridor
+            connector = USGSSeismicConnector()
+            res = connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days, min_mag=min_mag)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_refinery_aqi_anomalies":
+            from src.aqi_feed import AQIFeedConnector
+            corridor = args.get("corridor", "bay_area")
+            corr_arg = None if corridor == "all" else corridor
+            connector = AQIFeedConnector()
+            res = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_regional_ozone_alerts":
+            from src.aqi_feed import AQIFeedConnector
+            connector = AQIFeedConnector()
+            zip_code = args.get("zip_code")
+            if zip_code:
+                airnow_res = connector.fetch_airnow_aqi(zip_code)
+                rvp_res = connector.get_seasonal_rvp_surcharge(
+                    corridor_or_zip=zip_code,
+                    ozone_aqi=airnow_res.get("ozone_aqi"),
+                    is_action_day=airnow_res.get("is_ozone_action_day", False)
+                )
+                res = {
+                    "status": "SUCCESS",
+                    "airnow": airnow_res,
+                    "seasonal_rvp_compliance": rvp_res
+                }
+            else:
+                corridor = args.get("corridor", "all")
+                corr_arg = None if corridor == "all" else corridor
+                res = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:

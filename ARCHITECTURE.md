@@ -127,8 +127,9 @@ The weekly model performance review runs automatically on Saturday mornings (08:
 
 ### Continuous Feedback Loop Mechanics:
 1. **Diagnostic Validation & Multi-Region Error Tracking:** Calculates rolling metrics across 30-day, 60-day, and 90-day evaluation windows across all active regions (National, Tulsa, Newark, Cincinnati OH/KY, Oakland, SF Bay Area).
-2. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
-3. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
+2. **Quantitative Feature Leakage & Factor Decay Validation (`src/feature_auditor.py`, Issue #146):** Runs automated point-in-time temporal cross-correlations across EIA, FRED, NOAA, USDA, and futures series to detect lookahead leakage ($|r| > 0.50$), computes multi-horizon Spearman Rank IC decay curves ($H \in \{1, 3, 5, 10, 14, 20\}\text{ days}$) with empirical $t_{1/2}$ curve fitting, and estimates Probability of Backtest Overfitting (PBO via CSCV) / Deflated Sharpe Ratios (DSR).
+3. **Estimator Hyperparameter Re-Calibration:** Feeds validation loss signals back into quantitative estimation, optimizing regularized Ridge regression alpha penalties ($\alpha = 10.0$) and re-fitting pipeline scalers.
+4. **Feature Decay & Weight Optimization:** Adjusts exponential memory half-lives ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$) and fine-tunes LLM prompt impact scoring weights based on empirical directional success rates.
 
 ---
 
@@ -233,11 +234,23 @@ src/locations/
     └── notebook_builder.py
 ```
 
+---
+
+## 10. Qualitative Intelligence Knowledge Graph & Agent Memory Layer (`src/knowledge_graph.py`, Issue #116)
+
+Midgley features an embedded zero-cost **Knowledge Graph & Agent Memory Layer**:
+
+* **Graph Engine & Persistence:** Pure Python `NetworkX` graph core with `SQLite` persistence (`data/knowledge_graph.db`), ensuring **$0 infrastructure cost**.
+* **Automated Seeding:** Automatically populates 9 refineries, 4 marine chokepoints, 5 PADDs, and 6 metro hubs on initial startup from `src/spatial_refinery.py`.
+* **GraphRAG Prompt Context:** Extracts 2-hop subgraphs and precedent memories for incoming headlines, formatting standardized `GraphContextSchema` into LLM prompts (`LLM_SINGLE_PROMPT`) to ground scoring calls with physical supply topology.
+* **Episodic Shock Memory & Precedent Search:** Ingests high-impact event shocks into `kg_memory_shocks`, supporting TF-IDF + graph distance precedent retrieval.
+* **Council of LLMs Readiness:** Standardizes context serialization across multi-provider LLM ensembles while recording multi-model attribution, individual provider opinions, and consensus disagreement metrics (`council_variance`).
+
 Root entrypoints (`main.py`, `tulsa_main.py`, `newark_main.py`, etc.), notebook build scripts (`build_*.py`), and `src/*_regional.py` modules operate as lightweight delegation shims to `src/locations/`, maintaining 100% backward compatibility for all existing scripts, workflows, and systemd services.
 
 ---
 
-## 10. Multi-Tier Lookup Cache Gateway Architecture (Issue #108 / `src/lookup_cache.py`)
+## 11. Multi-Tier Lookup Cache Gateway Architecture (Issue #108 / `src/lookup_cache.py`)
 
 All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/USDA series, NOAA weather endpoints, commodity spot feeds, and financial news/scrapers) are integrated with the **3-Tier Lookup Cache Gateway** (`src/lookup_cache.py`). This architecture eliminates redundant API requests and synchronizes quota limits across local Dev VM (`10.42.42.54`) and GitHub Actions runners:
 
@@ -245,7 +258,7 @@ All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/U
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    EXTERNAL DATA CONNECTORS & FEEDS                         │
 │  • EIA, FRED, USDA, OilpriceAPI, Alpha Vantage, Socrata Open Data           │
-│  • GasBuddy, AAA Web Scrapers, NOAA Weather, Finlight Energy News           │
+│  • GasBuddy, AAA, NOAA Weather, USGS Water & Seismic, Multi-Feed AQI        │
 └──────────────────────────────────────┬──────────────────────────────────────┘
                                        │
                                        ▼

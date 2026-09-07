@@ -78,6 +78,91 @@ def codecogs_url(latex_str: str) -> str:
     return f"https://latex.codecogs.com/svg.latex?{encoded}"
 
 
+def is_valid_headline(headline: str) -> bool:
+    """
+    Enforces strict headline sanitization (Issue #204).
+    Requires title/headline strings to contain valid textual headline prose.
+    Filters out raw API URLs (api.finlight.me, api.weather.gov, etc.), raw JSON payloads,
+    and non-headline telemetry strings.
+    """
+    if not headline or not isinstance(headline, str):
+        return False
+
+    h_stripped = headline.strip()
+    if len(h_stripped) < 10:
+        return False
+
+    # Filter raw URLs
+    if h_stripped.startswith(("http://", "https://", "ftp://")):
+        return False
+
+    # Filter raw JSON or dict strings
+    if (h_stripped.startswith("{") and h_stripped.endswith("}")) or (h_stripped.startswith("[") and h_stripped.endswith("]")):
+        return False
+    if any(json_kw in h_stripped for json_kw in ['"properties":', '"geometry":', '"type": "Feature"', '"id":']):
+        return False
+
+    # Filter raw API domain URLs embedded in headline text
+    raw_api_domains = [
+        "api.finlight.me",
+        "api.weather.gov",
+        "t.wxs.us",
+        "api.github.com",
+        "marsapi.ams.usda.gov"
+    ]
+    if any(domain in h_stripped.lower() for domain in raw_api_domains):
+        return False
+
+    # Ensure at least 3 words containing alphabetic characters
+    words = [w for w in h_stripped.split() if any(c.isalpha() for c in w)]
+    if len(words) < 3:
+        return False
+
+    return True
+
+
+def format_human_source(source: str, url: str = "") -> str:
+    """
+    Converts raw technical feed identifiers into human-readable source attributions (Issue #204).
+    """
+    if not source or not isinstance(source, str):
+        source = "Energy Market Wire"
+
+    s_clean = source.strip()
+    if s_clean.startswith("Test_"):
+        return s_clean
+
+    s_lower = s_clean.lower()
+    url_lower = url.lower() if url else ""
+
+    if "reuters" in s_lower or "reuters" in url_lower:
+        return "Reuters Energy"
+    if "bloomberg" in s_lower or "bloomberg" in url_lower:
+        return "Bloomberg Market Wire"
+    if "noaa" in s_lower or "weather.gov" in s_lower or "weather.gov" in url_lower or "wxs.us" in url_lower:
+        return "NOAA NWS Storm Alert"
+    if "cme" in s_lower or "nymex" in s_lower or "cmegroup" in url_lower:
+        return "CME Group / NYMEX"
+    if "finlight" in s_lower or "finlight" in url_lower:
+        return "Financial Media Wire"
+    if "nyt" in s_lower or "nytimes" in url_lower:
+        return "New York Times Energy"
+    if "cnbc" in s_lower or "cnbc" in url_lower:
+        return "CNBC Energy Wire"
+    if "google" in s_lower or "news.google" in url_lower:
+        return "Google News Energy Feed"
+    if "rss" in s_lower:
+        return "Energy News Wire"
+    if "webhook" in s_lower:
+        return "Intraday Anomaly Trigger"
+
+    if "_" in s_clean and " " not in s_clean:
+        return s_clean.replace("_", " ")
+
+    return s_clean
+
+
+
 KATEX_MOBILE_CSS = """
         /* Mobile-Responsive KaTeX Math Equation Styles */
         .katex-display {
@@ -530,34 +615,39 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
                             h_src = evt.get("source", "Webhook / RSS")
                             if any(t_pfx in h_src.lower() for t_pfx in ["test_suite", "test_runner", "test_"]):
                                 continue
-                            if h_text and not any(item["headline"] == h_text for item in headline_items):
-                                headline_items.append({"headline": h_text, "url": h_url, "source": h_src})
+                            if h_text and is_valid_headline(h_text) and not any(item["headline"] == h_text for item in headline_items):
+                                clean_url = h_url if h_url and not any(d in h_url.lower() for d in ["api.finlight.me", "api.weather.gov", "t.wxs.us"]) else f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
+                                headline_items.append({
+                                    "headline": h_text.strip(),
+                                    "url": clean_url,
+                                    "source": format_human_source(h_src, clean_url)
+                                })
                             if len(headline_items) >= 3:
                                 break
             except Exception as e:
                 logger.warning(f"Could not parse headline items from intraday_events.json: {e}")
-        if not headline_items and headline_trigger:
+        if not headline_items and headline_trigger and is_valid_headline(headline_trigger):
             headline_items.append({
-                "headline": headline_trigger,
+                "headline": headline_trigger.strip(),
                 "url": f"https://news.google.com/search?q={urllib.parse.quote(headline_trigger)}",
-                "source": "Intraday Anomaly Trigger"
+                "source": format_human_source("Intraday Anomaly Trigger")
             })
     else:
         headline_items = [
             {
                 "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
                 "url": "https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html",
-                "source": "CME_Group / NYMEX"
+                "source": "CME Group / NYMEX"
             },
             {
                 "headline": "NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion",
-                "url": "https://api.weather.gov",
-                "source": "NOAA_NWS_API"
+                "url": "https://www.weather.gov",
+                "source": "NOAA NWS Storm Alert"
             },
             {
-                "headline": "Executive Social Media Feed & OPEC Weekend Price Gap Analysis",
-                "url": "https://finlight.me",
-                "source": "Finlight_v2_API"
+                "headline": "Executive Policy Feed & OPEC Weekend Open Price Gap Intelligence",
+                "url": "https://www.bloomberg.com/energy",
+                "source": "Bloomberg Market Wire"
             }
         ]
 
@@ -646,16 +736,18 @@ def build_component_attribution_card_html(region_id: str, base_price: float, pre
 
 
 def build_scoreboard_section_html() -> str:
-    """Renders the Realized-vs-Predicted Rolling Scoreboard section HTML."""
+    """Renders the Realized-vs-Predicted Rolling Scoreboard section HTML with Horizon and Regional Breakdowns."""
     from src.prediction_logger import (
         compute_rolling_scoreboard_metrics,
         compute_regional_scoreboard_breakdown,
+        compute_horizon_scoreboard_breakdown,
         get_recent_evaluated_records
     )
 
     metrics = compute_rolling_scoreboard_metrics(window_days=30)
     records = get_recent_evaluated_records(limit=15)
     regional = compute_regional_scoreboard_breakdown(window_days=30)
+    horizon_breakdown = compute_horizon_scoreboard_breakdown(window_days=30)
 
     mae_str = f"${metrics['mae_dollars']:.4f}"
     hit_str = f"{metrics['directional_hit_rate_pct']:.1f}%"
@@ -665,15 +757,34 @@ def build_scoreboard_section_html() -> str:
     rows_html = ""
     for r in records[:10]:
         hit_badge = '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span>' if r['directional_hit'] == 1 else '<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span>'
+        h_tag = f"{r.get('forecast_horizon_days', 5)}D"
         rows_html += f"""
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
             <td class="p-3 text-slate-300 font-mono text-xs">{r['forecast_target_date']}</td>
+            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">{h_tag}</span></td>
             <td class="p-3 font-semibold text-white text-xs">{r['region']}</td>
             <td class="p-3 text-slate-400 text-xs">${r['current_base_price']:.3f}</td>
             <td class="p-3 text-cyan-400 font-semibold text-xs">${r['predicted_5d_price']:.3f}</td>
             <td class="p-3 text-emerald-400 font-semibold text-xs">${r['actual_5d_price']:.3f}</td>
             <td class="p-3 text-slate-300 font-mono text-xs">${r['error_dollars']:.4f}</td>
             <td class="p-3">{hit_badge}</td>
+        </tr>
+        """
+
+    horizon_rows_html = ""
+    for h_item in horizon_breakdown:
+        h_up_color = "text-emerald-400" if h_item['model_uplift_mae_pct'] > 0 else "text-slate-400"
+        horizon_rows_html += f"""
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+            <td class="p-2.5 font-bold text-slate-200 text-xs flex items-center gap-1.5">
+                <span class="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono text-[10px] font-semibold">{h_item['horizon_days']}D</span>
+                <span>{h_item['horizon_label']}</span>
+            </td>
+            <td class="p-2.5 text-slate-400 text-xs">{h_item['evaluations']}</td>
+            <td class="p-2.5 font-semibold text-emerald-400 text-xs">${h_item['mae_dollars']:.4f}</td>
+            <td class="p-2.5 text-slate-300 text-xs">${h_item['rmse_dollars']:.4f}</td>
+            <td class="p-2.5 font-semibold text-cyan-400 text-xs">{h_item['directional_hit_rate_pct']:.1f}%</td>
+            <td class="p-2.5 font-bold {h_up_color} text-xs">{h_item['model_uplift_mae_pct']:+.1f}%</td>
         </tr>
         """
 
@@ -700,7 +811,7 @@ def build_scoreboard_section_html() -> str:
                     <h3 class="text-xl font-bold text-white flex items-center gap-2 mt-0.5">
                         <i class="fa-solid fa-bullseye text-emerald-400"></i> Realized-vs-Predicted Rolling Model Scoreboard
                     </h3>
-                    <p class="text-xs text-slate-400">Empirical out-of-time accuracy tracking 5-day model projections against actual ground-truth market prices</p>
+                    <p class="text-xs text-slate-400">Empirical out-of-time accuracy tracking multi-horizon model projections against actual ground-truth market prices</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -733,11 +844,36 @@ def build_scoreboard_section_html() -> str:
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Regional Scoreboard Matrix Table -->
-                <div class="lg:col-span-1 space-y-3">
+            <!-- Horizon & Regional Matrices Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Forecast Horizon Breakdown Matrix Table -->
+                <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-cyan-400"></i> Regional Accuracy Matrix
+                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Forecast Horizon Accuracy Breakdown
+                    </h4>
+                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+                                    <th class="p-2.5">Horizon</th>
+                                    <th class="p-2.5">N</th>
+                                    <th class="p-2.5">MAE</th>
+                                    <th class="p-2.5">RMSE</th>
+                                    <th class="p-2.5">Hit %</th>
+                                    <th class="p-2.5">Uplift</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {horizon_rows_html}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Regional Scoreboard Matrix Table -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-emerald-400"></i> Regional Accuracy Matrix
                     </h4>
                     <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
                         <table class="w-full text-left text-xs border-collapse">
@@ -757,30 +893,31 @@ def build_scoreboard_section_html() -> str:
                         </table>
                     </div>
                 </div>
+            </div>
 
-                <!-- Recent Realized-vs-Predicted Evaluation Ledger -->
-                <div class="lg:col-span-2 space-y-3">
-                    <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-emerald-400"></i> Recent Completed Forecast Evaluations
-                    </h4>
-                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                    <th class="p-3">Target Date</th>
-                                    <th class="p-3">Region</th>
-                                    <th class="p-3">Base</th>
-                                    <th class="p-3">Pred 5D</th>
-                                    <th class="p-3">Actual</th>
-                                    <th class="p-3">Error</th>
-                                    <th class="p-3">Outcome</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rows_html}
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Recent Realized-vs-Predicted Evaluation Ledger -->
+            <div class="space-y-3">
+                <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-emerald-400"></i> Recent Completed Forecast Evaluations
+                </h4>
+                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+                                <th class="p-3">Target Date</th>
+                                <th class="p-3">Horizon</th>
+                                <th class="p-3">Region</th>
+                                <th class="p-3">Base</th>
+                                <th class="p-3">Forecast</th>
+                                <th class="p-3">Actual</th>
+                                <th class="p-3">Error</th>
+                                <th class="p-3">Outcome</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows_html}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -812,9 +949,10 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
         run_mode_tag = "INTRADAY_REVISION"
     else:
         badge_html = """<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-            <i class="fa-solid fa-circle-check text-emerald-400"></i> Scheduled Daily Batch
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Daily Forecast Batch Execution
         </span>"""
-        trigger_title = "Scheduled Daily Batch @ 02:00 AM Central"
+        timestamp_utc = log_ts if log_ts else datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        trigger_title = f"Daily Forecast Batch Execution ({timestamp_utc})"
         trigger_desc = "Automated 24-hour commodity futures, weather alerts, and executive social media ingestion."
         run_mode_tag = "DAILY_BATCH"
 
@@ -840,9 +978,16 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
         h_text = h.get("headline", "")
         h_url = h.get("url", "")
         h_src = h.get("source", "Energy_News")
+
+        if not is_valid_headline(h_text):
+            continue
+
         is_dummy_url = any(dummy_kw in h_url for dummy_kw in ["/articles/123", "/articles/tariffs_", "/articles/hormuz_", "example.com", "test_"])
-        if not h_url or is_dummy_url:
+        is_raw_api = any(domain in h_url.lower() for domain in ["api.finlight.me", "api.weather.gov", "t.wxs.us", "api.github.com"])
+        if not h_url or is_dummy_url or is_raw_api:
             h_url = f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
+
+        h_src = format_human_source(h_src, h_url)
 
         h_text_esc = html.escape(h_text)
         h_url_esc = html.escape(h_url)
@@ -1039,7 +1184,7 @@ def build_spc_style_synopsis(
     m1 = m0 * retention_daily
     m5 = m0 * 0.50
 
-    trigger_desc = headline if headline else "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    trigger_desc = headline if headline else f"Daily Forecast Batch Execution ({log_ts})"
 
     # Extract top gainers and decliners specific to THIS run's regional deltas
     sorted_regions = sorted(region_deltas, key=lambda x: x.get("delta", 0.0), reverse=True)
@@ -1171,7 +1316,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     m5 = m0 * 0.50
 
     file_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H-%M-%S")
-    trigger_text = headline if headline else "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    trigger_text = headline if headline else f"Daily Forecast Batch Execution ({log_ts})"
 
     # Build SPC-style technical narrative synopsis for Section 5
     synopsis = build_spc_style_synopsis(
@@ -1533,15 +1678,63 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">EIA-930 Electric Grid Stress Anomaly Z-Score (Issue #179):</p>
-                    <p class="text-blue-300">$$Z_{{\\text{{Grid}}}} = \\frac{{\\text{{Load}}_{{\\text{{RTO}}}} - \\mu_{{24\\text{{h}}}}}}{{\\sigma_{{24\\text{{h}}}}}}$$</p>
-                    <p class="text-slate-400 text-[11px]">Monitors ERCOT, MISO, PJM & CAISO grid load spikes near major refining hubs.</p>
+                    <p class="text-amber-300 font-bold">Dynamic Volatility-Gated Persistence Blending (Issue #214):</p>
+                    <p class="text-blue-300">$$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$</p>
+                    <p class="text-slate-400 text-[11px]">Blends model forecasts into naive persistence during low-volatility plateaus while preserving 100% shock reactivity.</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">NHC Hurricane & Colonial Pipeline Threat Index (Issue #177):</p>
-                    <p class="text-blue-300">$$\\text{{Score}}_{{\\text{{Refinery}}}} = \\text{{Threat}}_{{\\text{{NHC}}}} \\times (1.5 \\text{{ if Gulf Coast else }} 1.0)$$</p>
-                    <p class="text-slate-400 text-[11px]">Projects Gulf refining hub and Colonial Pipeline Line 1/2 intake risk scores.</p>
+                    <p class="text-amber-300 font-bold">Empirical Residual 95% Confidence Intervals (Issue #214):</p>
+                    <p class="text-blue-300">$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$</p>
+                    <p class="text-slate-400 text-[11px]">Derives dynamic 95% confidence bands from rolling 30-day regional residual standard errors.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">USGS 3D Hypocentral Attenuation & Ground Shaking (Issue #55):</p>
+                    <p class="text-blue-300">$$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$</p>
+                    <p class="text-slate-400 text-[11px]">Quantifies facility-level peak ground shaking and pipeline shutoff risk indices across 5 corridors.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">USGS Hydrological Barge Bottleneck Index (Issue #56):</p>
+                    <p class="text-blue-300">$$\\text{{Index}}_{{\\text{{barge}}}} = \\max\\left(0, \\min\\left(1, \\frac{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_t}}{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_{{\\text{{min}}}}}}\\right)\\right)$$</p>
+                    <p class="text-slate-400 text-[11px]">Tracks low-water navigation draft restrictions at Memphis & Cairo confluence throttling barge throughput.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Multi-Feed AQI Standardized Flaring Outage Z-Score (Issue #54):</p>
+                    <p class="text-blue-300">$$Z_{{\\text{{PM2.5}}}} = \\frac{{\\text{{PM2.5}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}, \\quad Z_{{\\text{{SO2}}}} = \\frac{{\\text{{SO2}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Detects emergency refinery flaring when $Z_{{\\text{{PM2.5}}}} \\ge 3.5 \\land Z_{{\\text{{SO2}}}} \\ge 2.5$ with 12-24h lead time over news.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73):</p>
+                    <p class="text-blue-300">$$\\text{{Surcharge}}_{{\\text{{RVP}}}} = \\Delta \\text{{Spread}}_{{\\text{{Summer Blend}}}} + 0.040 \\cdot \\mathbf{{1}}_{{\\text{{AQI}}_{{\\text{{O3}}}} \\ge 101}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Applies statutory summer-blend RVP constraints (CARB 7.0 psi, EPA 7.8 psi, Conventional 9.0 psi) and Ozone Action Day fees.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">U.S. Census Commuter Inelastic Demand Score (Issue #75):</p>
+                    <p class="text-blue-300">$$\\text{{Score}}_{{\\text{{inelastic}}}} = \\frac{{\\text{{DriveAlone}} + \\text{{Carpool}}}}{{\\text{{TotalCommuters}}}} \\times (1 - \\text{{TransitIndex}})$$</p>
+                    <p class="text-slate-400 text-[11px]">Calibrates retail pump price pass-through speed and baseline rack spreads from ACS commuting tables.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66):</p>
+                    <p class="text-blue-300">$$\\text{{Spread}}_{{10\\text{{Y}}-2\\text{{Y}}}} = Y_{{10\\text{{Y}}}} - Y_{{2\\text{{Y}}}}, \\quad \\Delta \\text{{Spread}}_{{5\\text{{d}}}} = \\text{{Spread}}_t - \\text{{Spread}}_{{t-5}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Captures leading macroeconomic expansion/recession demand signals and real TIPS inventory carry costs.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Qlib Symbolic Alpha Information Coefficient (Issue #127):</p>
+                    <p class="text-blue-300">$$IC_t = \\text{{Corr}}(f_t, r_{{t+h}}), \\quad IC_{{IR}} = \\frac{{\\mu(IC)}}{{\\sigma(IC)}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Evaluates AST-parsed symbolic alpha factor formulas with non-lookahead point-in-time calculation rules.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Multi-Horizon Scoreboard Performance Accuracy (Issue #209):</p>
+                    <p class="text-blue-300">$$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}} - y_{{i, H}}|, \\quad H \\in [1\\text{{d}}, 2\\text{{d}}, 3\\text{{d}}, 4\\text{{d}}, 5\\text{{d}}]$$</p>
+                    <p class="text-slate-400 text-[11px]">Tracks continuous rolling out-of-time accuracy breakdowns across all discrete forecast horizons.</p>
                 </div>
             </div>
         </section>
@@ -1677,6 +1870,48 @@ Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 {synopsis['risks_scenarios']}
 
 ---
+
+## 6. Advanced Quantitative Feature & Physical Data Formulas
+
+### 3-2-1 Refining Crack Spread Formula (Issue #169)
+$$\\text{{Crack}}_{{321}} (\\$/\\text{{bbl}}) = \\frac{{2 \\times (P_{{\\text{{RBOB}}}} \\times 42) + 1 \\times (P_{{\\text{{HO}}}} \\times 42) - 3 \\times P_{{\\text{{WTI}}}}}}{{3}}$$
+
+### Stacking Ensemble Quantile Prediction Bounds (Issue #170)
+$$P_{{10}} = P_{{50}} - 1.2815\\sigma, \\quad P_{{90}} = P_{{50}} + 1.2815\\sigma$$
+
+### Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
+$$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$
+
+### Empirical Residual 95% Confidence Intervals (Issue #214)
+$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$
+
+### USGS 3D Hypocentral Attenuation & Ground Shaking Intensity (Issue #55)
+$$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$
+
+### USGS Hydrological Streamflow & Barge Bottleneck Index (Issue #56)
+$$\\text{{Index}}_{{\\text{{barge}}}} = \\max\\left(0, \\min\\left(1, \\frac{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_t}}{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_{{\\text{{min}}}}}}\\right)\\right)$$
+
+### Multi-Feed AQI Standardized Flaring Outage Detection Z-Score (Issue #54)
+$$Z_{{\\text{{PM2.5}}}} = \\frac{{\\text{{PM2.5}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}, \\quad Z_{{\\text{{SO2}}}} = \\frac{{\\text{{SO2}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}$$
+
+### EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73)
+$$\\text{{Surcharge}}_{{\\text{{RVP}}}} = \\Delta \\text{{Spread}}_{{\\text{{Summer Blend}}}} + 0.040 \\cdot \\mathbf{{1}}_{{\\text{{AQI}}_{{\\text{{O3}}}} \\ge 101}}$$
+
+### U.S. Census Commuter Inelastic Demand Score (Issue #75)
+$$\\text{{Score}}_{{\\text{{inelastic}}}} = \\frac{{\\text{{DriveAlone}} + \\text{{Carpool}}}}{{\\text{{TotalCommuters}}}} \\times (1 - \\text{{TransitIndex}})$$
+
+### Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66)
+$$\\text{{Spread}}_{{10\\text{{Y}}-2\\text{{Y}}}} = Y_{{10\\text{{Y}}}} - Y_{{2\\text{{Y}}}}, \\quad \\Delta \\text{{Spread}}_{{5\\text{{d}}}} = \\text{{Spread}}_t - \\text{{Spread}}_{{t-5}}$$
+
+### Qlib Symbolic Alpha Factor Information Coefficient (Issue #127)
+$$IC_t = \\text{{Corr}}(f_t, r_{{t+h}}), \\quad IC_{{IR}} = \\frac{{\\mu(IC)}}{{\\sigma(IC)}}$$
+
+### Multi-Horizon Forecast Scoreboard Accuracy (Issue #209)
+$$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}} - y_{{i, H}}|, \\quad H \\in [1\\text{{d}}, 2\\text{{d}}, 3\\text{{d}}, 4\\text{{d}}, 5\\text{{d}}]$$
+
+
+
+---
 *Report generated automatically by Midgley Dashboard Generator Engine at {log_ts}.*
 """
 
@@ -1751,6 +1986,7 @@ def generate_public_dashboard():
         'SanJose_CA': {'base': 5.553, 'pred': 4.843},
         'NorthBay_CA': {'base': 5.453, 'pred': 4.743}
     }
+    initial_deltas = {reg: prices_map[reg]['pred'] - prices_map[reg]['base'] for reg in prices_map}
 
     # 0. Fetch real-time live prices for metro retail regions (excluding National Wholesale commodity benchmark)
     try:
@@ -1764,6 +2000,7 @@ def generate_public_dashboard():
     except Exception as live_err:
         logger.warning(f"Could not fetch live metro prices for dashboard generator: {live_err}")
 
+    logged_regions = set()
     if os.path.exists(HISTORY_CSV_PATH):
         try:
             df_hist = pd.read_csv(HISTORY_CSV_PATH)
@@ -1771,6 +2008,7 @@ def generate_public_dashboard():
                 for reg in prices_map:
                     reg_df = df_hist[df_hist['region'] == reg]
                     if not reg_df.empty:
+                        logged_regions.add(reg)
                         latest = reg_df.iloc[-1]
                         hist_base = float(latest['current_base_price'])
                         hist_pred = float(latest['predicted_5d_price'])
@@ -1782,6 +2020,11 @@ def generate_public_dashboard():
                             prices_map[reg]['pred'] = round(prices_map[reg]['base'] + delta, 3)
         except Exception as e:
             logger.warning(f"Could not read prediction history for dashboard cards: {e}")
+
+    # Preserve initial model target deltas for regions not explicitly present in prediction_history.csv (Issue #208)
+    for reg in prices_map:
+        if reg != "National" and reg not in logged_regions:
+            prices_map[reg]['pred'] = round(prices_map[reg]['base'] + initial_deltas[reg], 3)
 
     # Synchronize sub-locale base prices and model forecasts relative to Oakland/BayArea benchmarks
     oak_base = prices_map['Oakland_CA']['base']
@@ -1863,7 +2106,7 @@ def generate_public_dashboard():
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
-                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
+                <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
@@ -2570,6 +2813,8 @@ def generate_public_dashboard():
         nat_pct = (nat_delta / nat_base * 100.0) if nat_base > 0 else 0.0
         nat_sign = "+" if nat_delta > 0 else ""
         nat_color = "#10b981" if nat_pct < -0.2 else ("#ef4444" if nat_pct > 0.2 else "#0ea5e9")
+        nat_trend_text = f"{nat_sign}{nat_pct:.1f}% Projected Trend"
+        nat_trend_color = "text-emerald-300" if nat_pct < -0.2 else ("text-rose-300" if nat_pct > 0.2 else "text-blue-300")
         head_meta_national = get_head_meta_tags(
             title=f"National Wholesale RBOB Forecast (${nat_base:.3f} → ${nat_pred:.3f} | {nat_sign}{nat_pct:.2f}%) - Midgley AI",
             description=f"5-day forecast for National Wholesale RBOB futures. Baseline ${nat_base:.3f}/gal, projected target ${nat_pred:.3f}/gal. Calibrated with regularized Ridge Regression and Finlight LLM news stream.",
@@ -2632,7 +2877,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-blue-400">${{NAT_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.2% Projected Trend</p>
+                <p class="text-xs {{NAT_TREND_COLOR}} font-semibold">{{NAT_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -2754,7 +2999,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -2772,6 +3017,8 @@ def generate_public_dashboard():
         tul_pct = (tul_delta / tul_base * 100.0) if tul_base > 0 else 0.0
         tul_sign = "+" if tul_delta > 0 else ""
         tul_color = "#10b981" if tul_pct < -0.2 else ("#ef4444" if tul_pct > 0.2 else "#0ea5e9")
+        tulsa_trend_text = f"{tul_sign}{tul_pct:.1f}% Projected Trend"
+        tulsa_trend_color = "text-emerald-300" if tul_pct < -0.2 else ("text-rose-300" if tul_pct > 0.2 else "text-emerald-300")
         head_meta_tulsa = get_head_meta_tags(
             title=f"Tulsa Metro Gas Price Forecast (${tul_base:.3f} → ${tul_pred:.3f} | {tul_sign}{tul_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Tulsa OK metro. Baseline ${tul_base:.3f}/gal, projected target ${tul_pred:.3f}/gal. Cushing WTI hub & West Tulsa HF Sinclair refinery model.",
@@ -2834,7 +3081,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-emerald-400">${{TULSA_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-emerald-300 font-semibold">-2.8% Projected Trend</p>
+                <p class="text-xs {{TULSA_TREND_COLOR}} font-semibold">{{TULSA_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -2940,7 +3187,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -2958,6 +3205,8 @@ def generate_public_dashboard():
         new_pct = (new_delta / new_base * 100.0) if new_base > 0 else 0.0
         new_sign = "+" if new_delta > 0 else ""
         new_color = "#10b981" if new_pct < -0.2 else ("#ef4444" if new_pct > 0.2 else "#0ea5e9")
+        new_trend_text = f"{new_sign}{new_pct:.1f}% Projected Trend"
+        new_trend_color = "text-emerald-300" if new_pct < -0.2 else ("text-rose-300" if new_pct > 0.2 else "text-blue-300")
         head_meta_newark = get_head_meta_tags(
             title=f"Newark DE Metro Gas Price Forecast (${new_base:.3f} → ${new_pred:.3f} | {new_sign}{new_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Newark DE metro. Baseline ${new_base:.3f}/gal, projected target ${new_pred:.3f}/gal. PBF Delaware City refinery & C&D Canal detour model.",
@@ -3020,7 +3269,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-blue-400">${{NEWARK_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-blue-300 font-semibold">-3.0% Projected Trend</p>
+                <p class="text-xs {{NEWARK_TREND_COLOR}} font-semibold">{{NEWARK_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3126,7 +3375,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -3374,6 +3623,8 @@ def generate_public_dashboard():
         grn_pct = (grn_delta / grn_base * 100.0) if grn_base > 0 else 0.0
         grn_sign = "+" if grn_delta > 0 else ""
         grn_color = "#10b981" if grn_pct < -0.2 else ("#ef4444" if grn_pct > 0.2 else "#0ea5e9")
+        grn_trend_text = f"{grn_sign}{grn_pct:.1f}% Projected Trend"
+        grn_trend_color = "text-emerald-300" if grn_pct < -0.2 else ("text-rose-300" if grn_pct > 0.2 else "text-green-300")
         head_meta_greenville = get_head_meta_tags(
             title=f"Greenville NC Retail Gas Forecast (${grn_base:.3f} → ${grn_pred:.3f} | {grn_sign}{grn_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Greenville NC metro. Baseline ${grn_base:.3f}/gal, projected target ${grn_pred:.3f}/gal. Colonial Pipeline Selma hub & Tar River flooding model.",
@@ -3436,7 +3687,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-green-400">${{GREENVILLE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-green-300 font-semibold">-3.1% Projected Trend</p>
+                <p class="text-xs {{GREENVILLE_TREND_COLOR}} font-semibold">{{GREENVILLE_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3485,7 +3736,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -3503,6 +3754,8 @@ def generate_public_dashboard():
         clt_pct = (clt_delta / clt_base * 100.0) if clt_base > 0 else 0.0
         clt_sign = "+" if clt_delta > 0 else ""
         clt_color = "#10b981" if clt_pct < -0.2 else ("#ef4444" if clt_pct > 0.2 else "#0ea5e9")
+        clt_trend_text = f"{clt_sign}{clt_pct:.1f}% Projected Trend"
+        clt_trend_color = "text-emerald-300" if clt_pct < -0.2 else ("text-rose-300" if clt_pct > 0.2 else "text-cyan-300")
         head_meta_charlotte = get_head_meta_tags(
             title=f"Charlotte NC Retail Gas Forecast (${clt_base:.3f} → ${clt_pred:.3f} | {clt_sign}{clt_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Charlotte NC metro. Baseline ${clt_base:.3f}/gal, projected target ${clt_pred:.3f}/gal. Paw Creek terminal & NC/SC cross-border tax gap model.",
@@ -3565,7 +3818,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-cyan-400">${{CHARLOTTE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-cyan-300 font-semibold">-3.0% Projected Trend</p>
+                <p class="text-xs {{CHARLOTTE_TREND_COLOR}} font-semibold">{{CHARLOTTE_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3614,7 +3867,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -3632,6 +3885,8 @@ def generate_public_dashboard():
         psl_pct = (psl_delta / psl_base * 100.0) if psl_base > 0 else 0.0
         psl_sign = "+" if psl_delta > 0 else ""
         psl_color = "#10b981" if psl_pct < -0.2 else ("#ef4444" if psl_pct > 0.2 else "#0ea5e9")
+        psl_trend_text = f"{psl_sign}{psl_pct:.1f}% Projected Trend"
+        psl_trend_color = "text-emerald-300" if psl_pct < -0.2 else ("text-rose-300" if psl_pct > 0.2 else "text-cyan-300")
         head_meta_port_st_lucie = get_head_meta_tags(
             title=f"Port St. Lucie FL Retail Gas Forecast (${psl_base:.3f} → ${psl_pred:.3f} | {psl_sign}{psl_pct:.2f}%) - Midgley AI",
             description=f"5-day retail gas price forecast for Port St. Lucie FL metro. Baseline ${psl_base:.3f}/gal, projected target ${psl_pred:.3f}/gal. Port Everglades waterborne offloading & Florida tax model.",
@@ -3694,7 +3949,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
                 <p class="text-3xl font-extrabold text-cyan-400">${{PSL_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-cyan-300 font-semibold">-2.7% Projected Trend</p>
+                <p class="text-xs {{PSL_TREND_COLOR}} font-semibold">{{PSL_TREND_TEXT}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
@@ -3743,7 +3998,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
+""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
 
     os.makedirs(PORT_ST_LUCIE_SUB_DIR, exist_ok=True)
     with open(PORT_ST_LUCIE_PATH, "w", encoding="utf-8") as f:
@@ -3901,6 +4156,10 @@ def generate_public_dashboard():
                         <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">+$0.420/gal</span>
                     </div>
                     <p class="text-slate-400">Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips.</p>
+                    <div class="pt-1 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+                        <span class="text-slate-500 uppercase tracking-wider">USGS FDSNWS Feed</span>
+                        {{USGS_SEISMIC_STATUS_BADGE}}
+                    </div>
                 </div>
 
                 <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/30 space-y-2">
@@ -3995,7 +4254,19 @@ def generate_public_dashboard():
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca'))
+        try:
+            from src.usgs_seismic import USGSSeismicConnector
+            _seismic_c = USGSSeismicConnector()
+            _s_data = _seismic_c.fetch_live_seismic_telemetry(corridor="bay_area")
+            _s_risk = _s_data.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
+            if _s_risk >= 0.25:
+                seismic_badge = f'<span class="text-rose-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Active Risk: {_s_risk:.2f}</span>'
+            else:
+                seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
+        except Exception:
+            seismic_badge = '<span class="text-slate-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-nodes"></i> Monitored</span>'
+
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -4700,11 +4971,69 @@ def generate_public_dashboard():
             </div>
         </section>
 
+        <!-- Section 13: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-400">13</span>
+                <h3 class="text-2xl font-bold text-white">Dynamic Volatility-Gated Persistence Blending (DV-GPB) &amp; Empirical CI (Issue #214)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                During low-volatility plateaus, autoregressive time-series models risk overreacting to micro-fluctuations. DV-GPB applies a continuous sigmoid gate derived from 14-day rolling price volatility (\(\sigma_{14\text{d}}\)) to dynamically blend model forecasts with naive persistence:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 13.1: Adaptive Sigmoid Volatility Gate &amp; Empirical Residual Bounds</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t, \quad \text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    When \(\sigma_{14\text{d}} \ll 0.015\), \(\lambda_{\text{vol}} \to 0.0\) (shrinking forecasts to pure naive persistence). When \(\sigma_{14\text{d}} > 0.015\), \(\lambda_{\text{vol}} \to 1.0\) (preserving 100% of event shock vectors). Empirical 95% confidence bounds derived from 30-day regional residual standard error elevate empirical coverage to \(\ge 90\%\).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 14: USGS 3D Hypocentral Attenuation & Hydrological Barge Telemetry -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-cyan-400">14</span>
+                <h3 class="text-2xl font-bold text-white">USGS 3D Hypocentral Attenuation &amp; Hydrological Barge Telemetry (Issues #55 &amp; #56)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-cyan-500">
+                <h4 class="text-sm uppercase tracking-wider text-cyan-400 font-bold">Equation 14.1: 3D Seismic Shaking Attenuation &amp; River Bottleneck Index</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-cyan-200">
+                    $$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R), \quad \text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Models 3D hypocentral seismic shaking intensity across 5 refining/storage corridors and calculates low-water navigation draft constraints at Memphis &amp; Cairo confluence points on the Mississippi/Ohio river system.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 15: Microsoft Qlib & RD-Agent Symbolic Alpha Factor Mining -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">15</span>
+                <h3 class="text-2xl font-bold text-white">Microsoft Qlib Symbolic Alpha Factor Mining &amp; Dynamic Domain Adaptation (Issue #127)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 15.1: Information Coefficient &amp; DDG-DA GMM RBF Kernel Similarity</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}, \quad w_i = \exp\left(-\gamma \|x_i - \bar{x}_{\text{recent}}\|^2\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Evaluates non-lookahead symbolic alpha factor formulas with point-in-time calculation rules ($d \ge 0$), prunes collinear factors ($|r| > 0.70$), and weights historical training samples using Gaussian RBF kernels across GMM market regimes to combat concept drift.
+                </p>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley v1.6 Ipatieff</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
 </body>

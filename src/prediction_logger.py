@@ -26,6 +26,7 @@ def ensure_history_store():
     columns = [
         "log_timestamp",
         "forecast_target_date",
+        "forecast_horizon_days",
         "region",
         "model_version",
         "run_type",
@@ -103,6 +104,7 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                     "sql": """CREATE TABLE IF NOT EXISTS prediction_history (
                         log_timestamp TEXT,
                         forecast_target_date TEXT,
+                        forecast_horizon_days INTEGER,
                         region TEXT,
                         model_version TEXT,
                         run_type TEXT,
@@ -133,16 +135,17 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                     "type": "execute",
                     "stmt": {
                         "sql": """INSERT OR REPLACE INTO prediction_history (
-                            log_timestamp, forecast_target_date, region, model_version, run_type,
+                            log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
                             headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
                             actual_5d_price, actual_direction, error_dollars, directional_hit,
                             llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
                             llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
                             within_95ci_hit, data_source_provenance
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                         "args": [
                             {"type": "text", "value": str(row.get("log_timestamp", ""))},
                             {"type": "text", "value": str(row.get("forecast_target_date", ""))},
+                            {"type": "integer", "value": int(float(row.get("forecast_horizon_days", 5))) if pd.notna(row.get("forecast_horizon_days")) else 5},
                             {"type": "text", "value": str(row.get("region", ""))},
                             {"type": "text", "value": str(row.get("model_version", ""))},
                             {"type": "text", "value": str(row.get("run_type", ""))},
@@ -230,17 +233,40 @@ def get_cloud_sync_status() -> dict:
     }
 
 
+def compute_regional_residual_std(region: str = None, window_days: int = 30, default_std: float = 0.0612) -> float:
+    """
+    Computes rolling 30-day standard error of regional prediction residuals (Issue #214).
+    sigma_residual = std(actual_5d_price - predicted_5d_price)
+    Returns default_std (0.0612 $/gal) if evaluated history has < 3 records.
+    """
+    try:
+        if os.path.exists(HISTORY_CSV_PATH):
+            df = pd.read_csv(HISTORY_CSV_PATH)
+            filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region)
+            if not filtered.empty and 'actual_5d_price' in filtered.columns:
+                actuals = filtered['actual_5d_price'].astype(float).values
+                preds = filtered['predicted_5d_price'].astype(float).values
+                residuals = actuals - preds
+                if len(residuals) >= 3:
+                    res_std = float(np.std(residuals, ddof=1))
+                    return max(0.01, round(res_std, 4))
+    except Exception as e:
+        logger.debug(f"Notice computing regional residual std for {region}: {e}")
+    return default_std
+
+
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
-    model_version: str = "v1.4-Finlight-Ridge",
+    model_version: str = "v1.6-Ipatieff",
     run_type: str = "DAILY_BATCH",
-    headline_trigger: str = ""
+    headline_trigger: str = "",
+    forecast_horizon_days: int = 5
 ) -> int:
     """
     Logs a DataFrame of model predictions into prediction_history.csv.
     Expected columns: ['date', 'current_price', 'predicted_5d_price']
-    Optional extended columns: ['llm_price_pressure', 'llm_supply_disruption', 'quant_baseline_5d_price',
+    Optional extended columns: ['forecast_horizon_days', 'llm_price_pressure', 'llm_supply_disruption', 'quant_baseline_5d_price',
                                'llm_augmentation_delta', 'prediction_lower_95ci', 'prediction_upper_95ci',
                                'data_source_provenance']
     """
@@ -252,26 +278,38 @@ def log_predictions(
     
     timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     new_records = []
+
+    res_std = compute_regional_residual_std(region=region, window_days=30)
     
     for idx, row in predictions_df.iterrows():
         base_price = float(row['current_price'])
         pred_price = float(row['predicted_5d_price'])
         pred_dir = "UP" if pred_price >= base_price else "DOWN"
+        
+        # Determine forecast horizon
+        row_h = row.get('forecast_horizon_days', row.get('horizon_days', row.get('horizon', forecast_horizon_days)))
+        try:
+            h_days = int(float(row_h)) if pd.notna(row_h) else int(forecast_horizon_days)
+        except (ValueError, TypeError):
+            h_days = int(forecast_horizon_days)
+
         if 'forecast_target_date' in row and pd.notna(row['forecast_target_date']):
             target_date = str(row['forecast_target_date'])
         else:
             base_dt = pd.to_datetime(row['date'])
-            target_date = pd.bdate_range(start=base_dt, periods=6)[-1].strftime("%Y-%m-%d")
+            target_date = pd.bdate_range(start=base_dt, periods=h_days + 1)[-1].strftime("%Y-%m-%d")
         
         quant_base = float(row.get('quant_baseline_5d_price')) if 'quant_baseline_5d_price' in row and pd.notna(row['quant_baseline_5d_price']) else np.nan
         aug_delta = float(row.get('llm_augmentation_delta')) if 'llm_augmentation_delta' in row and pd.notna(row['llm_augmentation_delta']) else (round(pred_price - quant_base, 4) if pd.notna(quant_base) else 0.0)
 
-        lower_ci = float(row.get('prediction_lower_95ci')) if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) else round(pred_price - 0.12, 4)
-        upper_ci = float(row.get('prediction_upper_95ci')) if 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']) else round(pred_price + 0.12, 4)
+        lower_ci = float(row.get('prediction_lower_95ci')) if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) else round(pred_price - (1.96 * res_std), 4)
+        upper_ci = float(row.get('prediction_upper_95ci')) if 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']) else round(pred_price + (1.96 * res_std), 4)
+
         
         new_records.append({
             "log_timestamp": timestamp_str,
             "forecast_target_date": target_date,
+            "forecast_horizon_days": h_days,
             "region": region,
             "model_version": model_version,
             "run_type": run_type,
@@ -302,7 +340,14 @@ def log_predictions(
     except Exception as e:
         logger.warning(f"Background prediction cloud sync notice: {e}")
     
-    logger.info(f"Logged {len(new_records)} predictions for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
+    logger.info(f"Logged {len(new_records)} predictions ({forecast_horizon_days}d horizon) for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
+    try:
+        from src.healthcheck_monitor import ping_healthcheck_success
+        ping_healthcheck_success(
+            log_message=f"Logged {len(new_records)} predictions for {region} ({model_version}, {run_type})"
+        )
+    except Exception as e:
+        logger.debug(f"Healthcheck heartbeat notice: {e}")
     return len(new_records)
 
 
@@ -397,7 +442,7 @@ def backfill_new_region_history(
     base_prices,
     predicted_prices,
     region: str,
-    model_version: str = "v1.4-Ridge"
+    model_version: str = "v1.6-Ipatieff"
 ) -> int:
     """
     Backfills historical test split predictions for a newly added region into prediction_history.csv
@@ -452,10 +497,35 @@ def generate_performance_report() -> pd.DataFrame:
     return report_df
 
 
+def _infer_horizon_days(row) -> int:
+    """Infers the forecast horizon in trading/business days from record or date difference."""
+    if 'forecast_horizon_days' in row and pd.notna(row['forecast_horizon_days']):
+        try:
+            val = int(float(row['forecast_horizon_days']))
+            if 1 <= val <= 30:
+                return val
+        except (ValueError, TypeError):
+            pass
+    try:
+        if pd.notna(row.get('forecast_target_date')) and pd.notna(row.get('log_timestamp')):
+            log_d = pd.to_datetime(row['log_timestamp']).date()
+            tgt_d = pd.to_datetime(row['forecast_target_date']).date()
+            if tgt_d > log_d:
+                bdays = len(pd.bdate_range(start=log_d + timedelta(days=1), end=tgt_d))
+                if 1 <= bdays <= 30:
+                    return bdays
+    except Exception:
+        pass
+    return 5
+
+
 def filter_evaluated_history_by_window(
-    df: pd.DataFrame, window_days: int | str = 30, region: str = None
+    df: pd.DataFrame, 
+    window_days: int | str = 30, 
+    region: str = None,
+    horizon_days: Optional[int | str] = None
 ) -> pd.DataFrame:
-    """Filters evaluated prediction history records by rolling window (in days) and region."""
+    """Filters evaluated prediction history records by rolling window (in days), region, and forecast horizon."""
     if df.empty or 'actual_5d_price' not in df.columns:
         return pd.DataFrame()
 
@@ -485,23 +555,39 @@ def filter_evaluated_history_by_window(
         except (ValueError, TypeError):
             pass
 
+    if eval_df.empty:
+        return eval_df
+
+    if horizon_days is not None and str(horizon_days).lower() not in ["all", "none", ""]:
+        try:
+            h_int = int(horizon_days)
+            inferred = eval_df.apply(_infer_horizon_days, axis=1)
+            eval_df = eval_df[inferred == h_int]
+        except (ValueError, TypeError):
+            pass
+
     return eval_df
 
 
 def compute_rolling_scoreboard_metrics(
-    window_days: int | str = 30, region: str = None
+    window_days: int | str = 30, 
+    region: str = None,
+    horizon_days: Optional[int | str] = None
 ) -> dict:
     """
     Computes rolling performance metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
-    Naive Persistence Baseline MAE, and Model MAE Uplift %) over a given rolling day window.
+    Naive Persistence Baseline MAE, and Model MAE Uplift %) over a given rolling day window and horizon.
     """
     df = backfill_actual_prices_and_evaluate()
-    filtered_df = filter_evaluated_history_by_window(df, window_days=window_days, region=region)
+    filtered_df = filter_evaluated_history_by_window(df, window_days=window_days, region=region, horizon_days=horizon_days)
+
+    h_filter = int(horizon_days) if (horizon_days is not None and str(horizon_days).lower() not in ["all", "none", ""]) else "All"
 
     if filtered_df.empty:
         return {
             "window_days": window_days,
             "region_filter": region or "All",
+            "horizon_filter": h_filter,
             "total_evaluations": 0,
             "mae_dollars": 0.0,
             "rmse_dollars": 0.0,
@@ -533,6 +619,7 @@ def compute_rolling_scoreboard_metrics(
     return {
         "window_days": window_days,
         "region_filter": region or "All",
+        "horizon_filter": h_filter,
         "total_evaluations": n_eval,
         "mae_dollars": round(mae, 4),
         "rmse_dollars": round(rmse, 4),
@@ -543,8 +630,11 @@ def compute_rolling_scoreboard_metrics(
     }
 
 
-def compute_regional_scoreboard_breakdown(window_days: int | str = 30) -> list[dict]:
-    """Computes rolling performance metrics for each active region."""
+def compute_regional_scoreboard_breakdown(
+    window_days: int | str = 30,
+    horizon_days: Optional[int | str] = None
+) -> list[dict]:
+    """Computes rolling performance metrics for each active region under optional horizon filter."""
     df = backfill_actual_prices_and_evaluate()
     if df.empty or 'actual_5d_price' not in df.columns:
         return []
@@ -557,7 +647,7 @@ def compute_regional_scoreboard_breakdown(window_days: int | str = 30) -> list[d
     breakdown = []
 
     for reg in sorted(regions):
-        metrics = compute_rolling_scoreboard_metrics(window_days=window_days, region=reg)
+        metrics = compute_rolling_scoreboard_metrics(window_days=window_days, region=reg, horizon_days=horizon_days)
         if metrics["total_evaluations"] > 0:
             breakdown.append({
                 "region": reg,
@@ -573,10 +663,52 @@ def compute_regional_scoreboard_breakdown(window_days: int | str = 30) -> list[d
     return breakdown
 
 
-def get_recent_evaluated_records(region: str = None, limit: int = 50) -> list[dict]:
+def compute_horizon_scoreboard_breakdown(
+    window_days: int | str = 30, 
+    region: str = None,
+    horizons: Optional[list[int]] = None
+) -> list[dict]:
+    """
+    Computes rolling performance metrics broken down across discrete forecast horizons (1d through 5d).
+    """
+    if horizons is None:
+        horizons = [1, 2, 3, 4, 5]
+
+    breakdown = []
+    horizon_labels = {
+        1: "1-Day (24h Ahead)",
+        2: "2-Day (48h Ahead)",
+        3: "3-Day (72h Ahead)",
+        4: "4-Day (96h Ahead)",
+        5: "5-Day (1-Week Ahead)"
+    }
+
+    for h in horizons:
+        metrics = compute_rolling_scoreboard_metrics(window_days=window_days, region=region, horizon_days=h)
+        label = horizon_labels.get(h, f"{h}-Day Forward")
+        breakdown.append({
+            "horizon_days": h,
+            "horizon_label": label,
+            "evaluations": metrics["total_evaluations"],
+            "mae_dollars": metrics["mae_dollars"],
+            "rmse_dollars": metrics["rmse_dollars"],
+            "mape_pct": metrics["mape_pct"],
+            "directional_hit_rate_pct": metrics["directional_hit_rate_pct"],
+            "naive_persistence_mae": metrics["naive_persistence_mae"],
+            "model_uplift_mae_pct": metrics["model_uplift_mae_pct"]
+        })
+
+    return breakdown
+
+
+def get_recent_evaluated_records(
+    region: str = None, 
+    limit: int = 50,
+    horizon_days: Optional[int | str] = None
+) -> list[dict]:
     """Returns chronologically sorted evaluated forecast records."""
     df = backfill_actual_prices_and_evaluate()
-    filtered_df = filter_evaluated_history_by_window(df, window_days="all", region=region)
+    filtered_df = filter_evaluated_history_by_window(df, window_days="all", region=region, horizon_days=horizon_days)
 
     if filtered_df.empty:
         return []
@@ -585,9 +717,11 @@ def get_recent_evaluated_records(region: str = None, limit: int = 50) -> list[di
     records = []
 
     for idx, row in recent_df.iterrows():
+        h_val = int(float(row.get("forecast_horizon_days"))) if pd.notna(row.get("forecast_horizon_days")) else _infer_horizon_days(row)
         records.append({
             "log_timestamp": str(row.get("log_timestamp", "")),
             "forecast_target_date": str(row.get("forecast_target_date", "")),
+            "forecast_horizon_days": h_val,
             "region": str(row.get("region", "")),
             "model_version": str(row.get("model_version", "")),
             "current_base_price": float(row.get("current_base_price", 0.0)),

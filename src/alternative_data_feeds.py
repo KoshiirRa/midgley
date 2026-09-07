@@ -23,7 +23,11 @@ ALTERNATIVE_DATA_SOURCES = {
         "agency": "US Energy Information Administration (EIA)",
         "frequency": "Weekly (Wednesdays 10:30 AM EST)",
         "key_metrics": ["Commercial Crude Stocks", "Finished Motor Gasoline Supplied (Demand)", "Refinery Utilization %"],
-        "predictive_power": "High short-term (1-5 day) price adjustment driver."
+        "predictive_power": "High short-term (1-5 day) price adjustment driver.",
+        "bitemporal_architecture": {
+            "fields": ["valid_date", "as_of", "is_vintage_reconstructed"],
+            "description": "Bitemporal vintage tracking eliminating lookahead bias in historical backtests and model retraining (Issue #121)."
+        }
     },
     "Baker_Hughes_Rig_Count": {
         "agency": "Baker Hughes / Enverus",

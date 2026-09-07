@@ -185,6 +185,49 @@ def get_oakland_regional_events() -> pd.DataFrame:
         })
     weather_events_df = pd.DataFrame(weather_events)
     
-    # 4. Concatenate and sort
-    combined = pd.concat([macro_events_df, reg_df, weather_events_df], ignore_index=True)
+    # 4. Ingest Live USGS Water Data Telemetry (Issue #56)
+    usgs_events = []
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        water_connector = USGSWaterFeedConnector()
+        water_telemetry = water_connector.fetch_live_water_telemetry(cluster="bay_area")
+        indices = water_telemetry.get("indices", {})
+        if indices.get("carquinez_berthing_risk_index", 0.0) >= 0.40:
+            berth_idx = indices.get("carquinez_berthing_risk_index", 0.0)
+            usgs_events.append({
+                "date": pd.to_datetime(datetime.now().strftime("%Y-%m-%d")),
+                "headline": f"USGS Carquinez Strait & Sacramento River telemetry indicates high berthing/intake risk (Risk Index: {berth_idx:.2f}); runoff velocities or salinity intrusion restrict refinery marine terminal operations.",
+                "category": "Carquinez Strait Hydrology"
+            })
+    except Exception as e:
+        logger.warning(f"Could not load live USGS water telemetry for Oakland/Bay Area: {e}")
+
+    # 5. Ingest Live USGS Seismic Telemetry (Issue #55)
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_telemetry = seismic_connector.fetch_live_seismic_telemetry(corridor="bay_area")
+        seismic_headline = seismic_connector.generate_seismic_event_headline(corridor="bay_area", telemetry=seismic_telemetry)
+        if seismic_headline:
+            usgs_events.append(seismic_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live USGS seismic telemetry for Oakland/Bay Area: {e}")
+
+    # 6. Ingest Live AQI & Industrial Flaring Telemetry (Issue #54)
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_telemetry = aqi_connector.fetch_live_aqi_telemetry(corridor="bay_area")
+        aqi_headline = aqi_connector.generate_aqi_event_headline(corridor="bay_area", telemetry=aqi_telemetry)
+        if aqi_headline:
+            usgs_events.append(aqi_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live AQI telemetry for Oakland/Bay Area: {e}")
+
+    frames = [macro_events_df, reg_df, weather_events_df]
+    if usgs_events:
+        frames.append(pd.DataFrame(usgs_events))
+
+    # 7. Concatenate and sort
+    combined = pd.concat(frames, ignore_index=True)
     return combined.sort_values('date').reset_index(drop=True)

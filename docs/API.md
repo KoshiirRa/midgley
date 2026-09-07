@@ -180,15 +180,16 @@ curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
 ---
 
 ### 3. `GET /api/v1/forecast/scoreboard`
-Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days).
+Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days) and discrete forecast horizons (1d through 5d) (Issue #209).
 
 **Query Parameters:**
 * `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`, `all`). Default: `all`.
 * `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
+* `horizon` (optional, string): Filter by forecast target horizon in days (`1`, `2`, `3`, `4`, `5`, `all`). Default: `all`.
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30"
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=5"
 ```
 
 **Example Response:**
@@ -196,15 +197,17 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
 {
   "status": "success",
   "system": "Midgley v1.4 Finlight-LLM",
-  "timestamp": "2026-09-02T19:10:00Z",
+  "timestamp": "2026-09-07T11:00:00Z",
   "filters": {
     "locale": "tulsa",
     "region_code": "Tulsa_OK",
-    "window_days": "30"
+    "window_days": "30",
+    "horizon": "5"
   },
   "summary": {
     "window_days": "30",
     "region_filter": "Tulsa_OK",
+    "horizon_filter": 5,
     "total_evaluations": 30,
     "mae_dollars": 0.1331,
     "rmse_dollars": 0.1620,
@@ -213,6 +216,63 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
     "naive_persistence_mae": 0.1740,
     "model_uplift_mae_pct": 23.51
   },
+  "horizon_breakdown": [
+    {
+      "horizon_days": 1,
+      "horizon_label": "1-Day (24h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.0412,
+      "rmse_dollars": 0.0583,
+      "mape_pct": 1.28,
+      "directional_hit_rate_pct": 68.33,
+      "naive_persistence_mae": 0.0520,
+      "model_uplift_mae_pct": 20.77
+    },
+    {
+      "horizon_days": 2,
+      "horizon_label": "2-Day (48h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.0685,
+      "rmse_dollars": 0.0892,
+      "mape_pct": 1.84,
+      "directional_hit_rate_pct": 64.50,
+      "naive_persistence_mae": 0.0841,
+      "model_uplift_mae_pct": 18.55
+    },
+    {
+      "horizon_days": 3,
+      "horizon_label": "3-Day (72h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.0910,
+      "rmse_dollars": 0.1145,
+      "mape_pct": 2.45,
+      "directional_hit_rate_pct": 61.20,
+      "naive_persistence_mae": 0.1180,
+      "model_uplift_mae_pct": 22.88
+    },
+    {
+      "horizon_days": 4,
+      "horizon_label": "4-Day (96h Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.1140,
+      "rmse_dollars": 0.1410,
+      "mape_pct": 2.98,
+      "directional_hit_rate_pct": 59.80,
+      "naive_persistence_mae": 0.1460,
+      "model_uplift_mae_pct": 21.92
+    },
+    {
+      "horizon_days": 5,
+      "horizon_label": "5-Day (1-Week Ahead)",
+      "evaluations": 30,
+      "mae_dollars": 0.1331,
+      "rmse_dollars": 0.1620,
+      "mape_pct": 3.42,
+      "directional_hit_rate_pct": 58.15,
+      "naive_persistence_mae": 0.1740,
+      "model_uplift_mae_pct": 23.51
+    }
+  ],
   "regional_breakdown": [
     {
       "region": "Tulsa_OK",
@@ -227,7 +287,9 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
   ],
   "recent_evaluations": [
     {
+      "log_timestamp": "2026-09-02 08:00:00",
       "forecast_target_date": "2026-08-25",
+      "forecast_horizon_days": 5,
       "region": "Tulsa_OK",
       "current_base_price": 3.89,
       "predicted_5d_price": 3.935,
@@ -251,7 +313,67 @@ curl -X GET "http://localhost:8000/api/v1/combined?locale=cincinnati"
 
 ---
 
-### 5. `POST /api/v1/forecast/simulate`
+### 5. `GET /api/v1/usgs/water_levels`
+Returns real-time streamflow (`00060`), gage height (`00065`), water temperature (`00010`), and specific conductance (`00095`) telemetry across USGS monitoring stations in 6 hydrological clusters (Inland Barge Corridor, Gulf Coast Refining Origin, Bay Area Carquinez Strait, Delaware River/Bay, Tulsa MKARNS, and South Florida Coastal Drainage) (Issue #56).
+
+**Query Parameters:**
+* `cluster` (optional): Filter by regional cluster (`inland_barge`, `gulf_coast`, `bay_area`, `delaware`, `tulsa`, `florida`).
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/usgs/water_levels?cluster=inland_barge"
+```
+
+---
+
+### 6. `GET /api/v1/usgs/seismic`
+Returns real-time and historical earthquake telemetry from the USGS Earthquake Web Service API (`earthquake.usgs.gov/fdsnws/event/1/`) evaluated against critical refining, pipeline, and storage infrastructure (Issue #55).
+
+**Query Parameters:**
+* `corridor` (optional, default: `bay_area`): Filter by regional refining and delivery corridor (`bay_area`, `cushing_ok`, `socal`, `mid_atlantic`, `new_madrid`, or `all`).
+* `days` (optional, default: `30`): Rolling temporal observation window in days.
+* `min_mag` (optional): Minimum earthquake magnitude filter (defaults to corridor-specific threshold: $4.0$ in California, $3.8$ in Oklahoma/Mid-Atlantic).
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/usgs/seismic?corridor=bay_area"
+```
+
+**Example Response:**
+```json
+{
+  "status": "SUCCESS",
+  "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+  "timestamp": "2026-09-06 00:00:00",
+  "filtered_corridor": "bay_area",
+  "temporal_window_days": 30,
+  "events": [],
+  "corridors": {
+    "bay_area": {
+      "corridor_risk_index": 0.0,
+      "max_magnitude": 0.0,
+      "active_events_count": 0,
+      "highest_impact_event": null
+    }
+  },
+  "indices": {
+    "bay_area_seismic_risk_index": 0.0,
+    "cushing_storage_seismic_risk_index": 0.0,
+    "socal_refining_seismic_risk_index": 0.0,
+    "mid_atlantic_seismic_risk_index": 0.0,
+    "new_madrid_seismic_risk_index": 0.0,
+    "composite_seismic_risk_index": 0.0,
+    "is_pipeline_emergency_shutdown_risk": false,
+    "is_refinery_inspection_advisory": false,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0
+  }
+}
+```
+
+---
+
+### 7. `POST /api/v1/forecast/simulate`
 Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks.
 
 **Request Body:**
@@ -277,6 +399,9 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
 * `cushing_spill`: Cushing Keystone Pipeline Rupture & Lock (+4.58%)
 * `marathon_outage`: Marathon Catlettsburg KY Refinery Outage (+4.78%)
 * `mississippi_low_water`: Lower Mississippi & Ohio River Low-Water Bottleneck (+4.20%)
+* `houston_ship_channel_closure`: Houston Ship Channel Torrential Runoff & Marine Closure (+5.12%)
+* `carquinez_atmospheric_river`: Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt (+4.35%)
+* `summer_refinery_thermal_cutback`: Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment (+3.85%)
 * `colonial_outage`: Colonial Pipeline Mainline Outage / Cyberattack Shock (+7.54%)
 * `greenville_hurricane`: Category 3 Atlantic Hurricane Landfall & Tar River Flooding (+6.62%)
 * `selma_outage`: Selma NC Distribution Hub Tank Farm Outage & Blackout (+5.69%)
@@ -327,6 +452,44 @@ For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and
       "headline": "Refinery Outage Reported in PADD 1B",
       "url": "https://news.example.com/refinery2",
       "source": "Cloudflare_Queue_Consumer"
+    }
+  ]
+}
+```
+
+---
+
+## 📡 Open Source AI Radar Model Discovery Endpoint (`GET /api/v1/system/radar` - Issue #187)
+
+* **Endpoint:** `GET /api/v1/system/radar`
+* **Query Parameters:**
+  - `limit` (optional, integer): Maximum models to return (default: 20).
+  - `min_score` (optional, float): Minimum benchmark capability score (0.0 to 100.0).
+  - `task` (optional, string): Filter by primary task (e.g. `text-generation`, `code-generation`, `reasoning`).
+* **Description:** Ingests live model discovery and capability benchmark metadata from Open Source AI Radar, tracking open-weights LLMs/SLMs, parameter scales, and quantization profiles with 24-hour disk caching (`data/radar_cache.json`).
+
+* **Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/system/radar?limit=5"
+```
+
+* **Example Response:**
+```json
+{
+  "status": "success",
+  "timestamp": "2026-09-07T04:45:00Z",
+  "total_models_available": 50,
+  "returned_count": 5,
+  "top_models": [
+    {
+      "model_id": "meta-llama/Llama-3.3-70B-Instruct",
+      "model_name": "Llama 3.3 70B Instruct",
+      "developer": "Meta",
+      "parameter_size": "70B",
+      "open_weights": true,
+      "benchmark_score": 88.6,
+      "release_date": "2024-12-06",
+      "license": "llama3.3"
     }
   ]
 }

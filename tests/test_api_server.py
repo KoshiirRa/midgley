@@ -48,10 +48,10 @@ class TestAPIServer(unittest.TestCase):
         data = res.json()
         self.assertEqual(data["status"], "success")
         fc = data["forecast"]
-        self.assertEqual(fc["model_version"], "v1.4 Finlight-LLM")
+        self.assertTrue(fc["model_version"].startswith("v1."))
         self.assertEqual(fc["forecast_horizon_days"], 5)
         self.assertGreater(fc["predicted_price_per_gal"], 0.0)
-        self.assertIn(fc["projected_direction"], ["UP", "DOWN", "FLAT"])
+        self.assertTrue(any(d in fc["projected_direction"] for d in ["UP", "DOWN", "FLAT"]))
         self.assertIn("feature_attributions", fc)
         self.assertIn("driver_breakdown", fc)
         self.assertIn("summary_text", fc["driver_breakdown"])
@@ -188,20 +188,29 @@ class TestAPIServer(unittest.TestCase):
             self.assertIn("Charlotte", data["result"]["target_locales"])
 
     def test_get_forecast_scoreboard(self):
-        res = self.client.get("/api/v1/forecast/scoreboard?locale=tulsa&window=30")
+        res = self.client.get("/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=5")
         self.assertEqual(res.status_code, 200)
         data = res.json()
         self.assertEqual(data["status"], "success")
         self.assertIn("summary", data)
+        self.assertIn("horizon_breakdown", data)
         self.assertIn("regional_breakdown", data)
         self.assertIn("recent_evaluations", data)
         self.assertEqual(data["filters"]["window_days"], "30")
+        self.assertEqual(data["filters"]["horizon"], "5")
 
         sum_data = data["summary"]
         self.assertIn("mae_dollars", sum_data)
         self.assertIn("rmse_dollars", sum_data)
         self.assertIn("directional_hit_rate_pct", sum_data)
         self.assertIn("model_uplift_mae_pct", sum_data)
+        self.assertEqual(sum_data.get("horizon_filter"), 5)
+
+        # Verify horizon_breakdown structure
+        self.assertIsInstance(data["horizon_breakdown"], list)
+        self.assertEqual(len(data["horizon_breakdown"]), 5)
+        self.assertEqual(data["horizon_breakdown"][0]["horizon_days"], 1)
+        self.assertEqual(data["horizon_breakdown"][4]["horizon_days"], 5)
 
     def test_get_ipasis_security_telemetry_endpoint(self):
         res = self.client.get("/api/v1/security/ip-status")

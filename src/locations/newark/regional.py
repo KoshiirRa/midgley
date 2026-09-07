@@ -115,6 +115,49 @@ def get_newark_regional_events() -> pd.DataFrame:
     noaa_de_df = get_newark_delaware_weather_dataset()
     noaa_formatted = noaa_de_df[['date', 'headline', 'weather_type']].rename(columns={'weather_type': 'category'})
     
-    # Combine Macro + Regional + DE NOAA Weather
-    combined_events = pd.concat([macro_events_df, regional_df, noaa_formatted], ignore_index=True)
+    # 4. Ingest Live USGS Water Data Telemetry (Issue #56)
+    usgs_events = []
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        water_connector = USGSWaterFeedConnector()
+        water_telemetry = water_connector.fetch_live_water_telemetry(cluster="delaware")
+        indices = water_telemetry.get("indices", {})
+        if indices.get("is_thermal_curtailment_risk", False):
+            thermal_idx = indices.get("delaware_refinery_thermal_index", 0.0)
+            usgs_events.append({
+                "date": pd.to_datetime(datetime.now().strftime("%Y-%m-%d")),
+                "headline": f"USGS Delaware River water telemetry indicates thermal stress (Index: {thermal_idx:.2f}); river water temps near Delaware City Refinery exceed cooling tower efficiency thresholds.",
+                "category": "Delaware River Thermal Stress"
+            })
+    except Exception as e:
+        logger.warning(f"Could not load live USGS water telemetry for Newark: {e}")
+
+    # 5. Ingest Live USGS Seismic Telemetry (Mid-Atlantic / Ramapo Fault Corridor, Issue #55)
+    try:
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_telemetry = seismic_connector.fetch_live_seismic_telemetry(corridor="mid_atlantic")
+        seismic_headline = seismic_connector.generate_seismic_event_headline(corridor="mid_atlantic", telemetry=seismic_telemetry)
+        if seismic_headline:
+            usgs_events.append(seismic_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live USGS seismic telemetry for Newark/Mid-Atlantic: {e}")
+
+    # 6. Ingest Live AQI & Industrial Flaring Telemetry (Delaware Valley Refining Hub, Issue #54)
+    try:
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_telemetry = aqi_connector.fetch_live_aqi_telemetry(corridor="delaware_valley")
+        aqi_headline = aqi_connector.generate_aqi_event_headline(corridor="delaware_valley", telemetry=aqi_telemetry)
+        if aqi_headline:
+            usgs_events.append(aqi_headline)
+    except Exception as e:
+        logger.warning(f"Could not load live AQI telemetry for Delaware Valley: {e}")
+
+    frames = [macro_events_df, regional_df, noaa_formatted]
+    if usgs_events:
+        frames.append(pd.DataFrame(usgs_events))
+
+    # Combine Macro + Regional + DE NOAA Weather + USGS Hydrology & Seismic + AQI
+    combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)

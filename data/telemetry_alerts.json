@@ -1,0 +1,304 @@
+{
+  "created_at": "2026-09-05 04:38:50",
+  "last_updated": "2026-09-07 04:00:41",
+  "total_alerts_logged": 9,
+  "active_degraded_regions": [],
+  "history": [
+    {
+      "timestamp": "2026-09-05 04:38:50",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 14,
+          "model_mae": 0.582,
+          "naive_mae": 0.55,
+          "model_uplift_mae_pct": -5.82,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": true
+    },
+    {
+      "timestamp": "2026-09-05 04:38:58",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 23,
+          "model_mae": 0.5386,
+          "naive_mae": 0.5042,
+          "model_uplift_mae_pct": -6.82,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.5663,
+          "naive_mae": 0.5316,
+          "model_uplift_mae_pct": -6.52,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-05 04:39:09",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 14,
+          "model_mae": 0.582,
+          "naive_mae": 0.55,
+          "model_uplift_mae_pct": -5.82,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": true
+    },
+    {
+      "timestamp": "2026-09-05 04:39:17",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 23,
+          "model_mae": 0.5386,
+          "naive_mae": 0.5042,
+          "model_uplift_mae_pct": -6.82,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.5663,
+          "naive_mae": 0.5316,
+          "model_uplift_mae_pct": -6.52,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-05 05:47:10",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 23,
+          "model_mae": 0.5386,
+          "naive_mae": 0.5042,
+          "model_uplift_mae_pct": -6.82,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.5663,
+          "naive_mae": 0.5316,
+          "model_uplift_mae_pct": -6.52,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.2005,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -4.79,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-05 13:16:18",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.1951,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -1.97,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.221,
+          "naive_mae": 0.2104,
+          "model_uplift_mae_pct": -5.03,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Newark_DE",
+          "evaluations": 23,
+          "model_mae": 0.4419,
+          "naive_mae": 0.412,
+          "model_uplift_mae_pct": -7.26,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.1951,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -1.97,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 23,
+          "model_mae": 0.2599,
+          "naive_mae": 0.2503,
+          "model_uplift_mae_pct": -3.83,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-07 04:00:07",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.1973,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -3.12,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 23,
+          "model_mae": 0.5255,
+          "naive_mae": 0.5042,
+          "model_uplift_mae_pct": -4.22,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.5539,
+          "naive_mae": 0.5316,
+          "model_uplift_mae_pct": -4.19,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.1973,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -3.12,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-07 04:00:34",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 23,
+          "model_mae": 0.1973,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -3.12,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 23,
+          "model_mae": 0.5255,
+          "naive_mae": 0.5042,
+          "model_uplift_mae_pct": -4.22,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 23,
+          "model_mae": 0.5539,
+          "naive_mae": 0.5316,
+          "model_uplift_mae_pct": -4.19,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 23,
+          "model_mae": 0.1973,
+          "naive_mae": 0.1913,
+          "model_uplift_mae_pct": -3.12,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-07 04:00:41",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 14,
+          "model_mae": 0.582,
+          "naive_mae": 0.55,
+          "model_uplift_mae_pct": -5.82,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": true
+    }
+  ]
+}

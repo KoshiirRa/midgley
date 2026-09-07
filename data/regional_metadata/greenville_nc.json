@@ -4,8 +4,12 @@
   "display_name": "Greenville, NC Metro Retail",
   "padd_region": "PADD 1C Lower Atlantic",
   "primary_city": "Greenville, NC",
-  "counties": ["Pitt", "Lenoir", "Beaufort"],
-  "baseline_price": 3.250,
+  "counties": [
+    "Pitt",
+    "Lenoir",
+    "Beaufort"
+  ],
+  "baseline_price": 3.25,
   "icon_class": "fa-network-wired",
   "theme_color": "green",
   "econometric_drivers": {
@@ -17,7 +21,10 @@
     "description": "Colonial Line 1 feeds Selma & Apex breakout hubs, supplemented by Port of Wilmington marine oil terminal imports for Coastal Carolina.",
     "primary_refinery": "Selma NC & Apex NC Breakout Hub Tank Farms",
     "capacity_bpd": 850000,
-    "pipelines": ["Colonial Pipeline Line 1", "Colonial Pipeline Line 2"]
+    "pipelines": [
+      "Colonial Pipeline Line 1",
+      "Colonial Pipeline Line 2"
+    ]
   },
   "tax_structure": {
     "title": "NC Motor Fuel Tax Structure",
@@ -56,5 +63,19 @@
       "pct_impact": 5.69,
       "description": "Suspends automated rack loading"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 76500,
+    "zero_vehicle_pct": 6.8,
+    "vehicles_per_household": 1.88,
+    "drive_alone_share": 0.831,
+    "carpool_share": 0.088,
+    "public_transit_share": 0.011,
+    "work_from_home_share": 0.058,
+    "mean_commute_minutes": 21.2,
+    "vehicle_dependency_ratio": 0.919,
+    "transit_alternative_index": 0.04,
+    "inelastic_demand_score": 0.879
+  }
 }

@@ -120,12 +120,28 @@ def get_port_st_lucie_regional_events() -> pd.DataFrame:
     
     # 3. Merge Localized NOAA Weather Alerts for St. Lucie County FL (FLZ147 / Zip 34952)
     noaa_psl_df = get_port_st_lucie_weather_dataset()
+    frames = [macro_events_df, regional_df]
     
     if not noaa_psl_df.empty:
         noaa_psl_df['category'] = "NOAA Weather St. Lucie County (FLZ147)"
-        combined_df = pd.concat([macro_events_df, regional_df, noaa_psl_df], ignore_index=True)
-    else:
-        combined_df = pd.concat([macro_events_df, regional_df], ignore_index=True)
+        frames.append(noaa_psl_df)
+
+    # 4. Ingest Live USGS Water Data Telemetry (Issue #56)
+    try:
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        water_connector = USGSWaterFeedConnector()
+        water_telemetry = water_connector.fetch_live_water_telemetry(cluster="gulf_coast")
+        indices = water_telemetry.get("indices", {})
+        if indices.get("gulf_marine_departure_risk_index", 0.0) >= 0.40:
+            gulf_risk = indices.get("gulf_marine_departure_risk_index", 0.0)
+            frames.append(pd.DataFrame([{
+                "date": pd.to_datetime(datetime.now().strftime("%Y-%m-%d")),
+                "headline": f"USGS Gulf Coast water telemetry indicates severe marine departure disruption (Departure Risk: {gulf_risk:.2f}); waterborne tank barge deliveries to Port Everglades & Port Canaveral throttled.",
+                "category": "Gulf Waterborne Delay"
+            }]))
+    except Exception as e:
+        logger.warning(f"Could not load live USGS water telemetry for Port St. Lucie: {e}")
         
+    combined_df = pd.concat(frames, ignore_index=True)
     combined_df['date'] = pd.to_datetime(combined_df['date'])
     return combined_df.sort_values('date').reset_index(drop=True)

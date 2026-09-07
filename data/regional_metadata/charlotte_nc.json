@@ -4,8 +4,11 @@
   "display_name": "Charlotte, NC Metro Retail",
   "padd_region": "PADD 1C Lower Atlantic",
   "primary_city": "Charlotte, NC",
-  "counties": ["Mecklenburg", "York"],
-  "baseline_price": 3.280,
+  "counties": [
+    "Mecklenburg",
+    "York"
+  ],
+  "baseline_price": 3.28,
   "icon_class": "fa-network-wired",
   "theme_color": "cyan",
   "econometric_drivers": {
@@ -17,7 +20,10 @@
     "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
     "primary_refinery": "Paw Creek Petroleum Distribution Hub",
     "capacity_bpd": 950000,
-    "pipelines": ["Colonial Pipeline Line 1", "Plantation Pipeline"]
+    "pipelines": [
+      "Colonial Pipeline Line 1",
+      "Plantation Pipeline"
+    ]
   },
   "tax_structure": {
     "title": "NC/SC Tax Structure & Overhead",
@@ -52,9 +58,23 @@
     {
       "name": "Winter Ice Storm Transit Lockdown",
       "subtitle": "Piedmont Freezing Rain Alert",
-      "price_impact_per_gal": 0.140,
+      "price_impact_per_gal": 0.14,
       "pct_impact": 4.27,
       "description": "Locks down I-85 & I-77 logistics corridors across Mecklenburg County"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 1100000,
+    "zero_vehicle_pct": 4.9,
+    "vehicles_per_household": 1.91,
+    "drive_alone_share": 0.778,
+    "carpool_share": 0.082,
+    "public_transit_share": 0.021,
+    "work_from_home_share": 0.105,
+    "mean_commute_minutes": 27.8,
+    "vehicle_dependency_ratio": 0.86,
+    "transit_alternative_index": 0.074,
+    "inelastic_demand_score": 0.821
+  }
 }

@@ -71,7 +71,7 @@
   {
     "number": 40,
     "title": "feat(security): Implement user authentication & access control for MCP Server & REST API Gateway",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "v0.4",
     "labels": [
       "enhancement",
@@ -139,7 +139,7 @@
   {
     "number": 47,
     "title": "feat(scoreboard): Implement Realized-vs-Predicted Rolling Scoreboard API & Dashboard Section",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "v0.5",
     "labels": [
       "documentation",
@@ -187,7 +187,7 @@
   {
     "number": 52,
     "title": "feat(docs/math): Leverage CodeCogs LaTeX rendering service for equation images across GitHub Markdown & web embeds",
-    "status": "Ready",
+    "status": "Obsolete (Closed)",
     "milestone": "v0.5",
     "labels": [
       "documentation",
@@ -210,7 +210,7 @@
   {
     "number": 54,
     "title": "feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -221,7 +221,7 @@
   {
     "number": 55,
     "title": "Feature: Ingest live USGS Earthquake API feeds (fdsnws/event/1/) for real-time seismic fuel market risk scoring",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -232,7 +232,7 @@
   {
     "number": 56,
     "title": "feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -254,7 +254,7 @@
   {
     "number": 67,
     "title": "[Feature Request] Ingest BriefTape AI-Summarized SEC 8-K & Policy Event Stream",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -265,7 +265,7 @@
   {
     "number": 68,
     "title": "[Feature Request] Ingest Congressional Energy Equity Trading Signals (CongressInvests API)",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -287,7 +287,7 @@
   {
     "number": 70,
     "title": "[Feature Request] Implement OpenFIGI Cross-Market Symbol Normalization Service",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -299,7 +299,7 @@
   {
     "number": 71,
     "title": "[Feature Request] Ingest Tradestie Reddit Retail Energy Sentiment Feed",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -365,7 +365,7 @@
   {
     "number": 78,
     "title": "[Feature Epic] Strategy 4: Expand Incoming Webhook Gateway & Custom Event Triggers",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "v0.4",
     "labels": [
       "enhancement",
@@ -377,7 +377,7 @@
   {
     "number": 79,
     "title": "[Feature Request] Ingest AlphaAI Scored Insider & Financial News Event Stream",
-    "status": "Ready",
+    "status": "Out-of-Scope (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -433,7 +433,7 @@
   {
     "number": 84,
     "title": "[Feature Request] Integrate Tavily AI Search API for Real-Time Anomaly Event RAG",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -456,7 +456,7 @@
   {
     "number": 86,
     "title": "[Feature Request] Ingest Market Data API for Energy Equities & Commodity Backstop",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -467,7 +467,7 @@
   {
     "number": 87,
     "title": "[Feature Request] Implement IPASIS API Gateway Security for Incoming Webhooks",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "v0.4",
     "labels": [
       "enhancement",
@@ -490,7 +490,7 @@
   {
     "number": 89,
     "title": "[Feature Request] Ingest SearchApi Google SERP Data for Geopolitical Event Extraction",
-    "status": "Ready",
+    "status": "Redundant (Closed)",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
@@ -535,14 +535,14 @@
   },
   {
     "number": 93,
-    "title": "[Feature Request] Implement NeuralProphet Hybrid Estimator with Exogenous Shock Decay",
+    "title": "[Feature Request] Implement Nixtla NeuralForecast (N-BEATSx / NHITS) Hybrid Estimator with Exogenous Shock Decay",
     "status": "Ready",
     "milestone": "Regular Model v2.0 \"Hubbert\"",
     "labels": [
       "enhancement",
       "modeling"
     ],
-    "body_preview": "## Summary\nIntegrate **\\NeuralProphet\\** (\\github.com/ourownstory/neural_prophet\\) into \\src/models.py\\ as a hybrid neural time-series estimator combining PyTorch auto-autoregressive terms with exogenous LLM event shock decay vectors.\n\n## Motivations & Value\n- **Non-Linear Event Modeling:** Captures..."
+    "body_preview": "## Summary\nIntegrate **Nixtla \\NeuralForecast\\** (\\github.com/Nixtla/neuralforecast\\, N-BEATSx / NHITS) into \\src/models.py\\ as a modern neural time-series estimator combining PyTorch architectures with exogenous LLM event shock decay vectors (\\t_{1/2} = 4.0\\text{ to }5.0\\text{ days}\\$) and multi-quantile uncertainty bounds (\\MQLoss\\). Supersedes legacy unmaintained NeuralProphet (Issue #93 pivot)."
   },
   {
     "number": 94,
@@ -665,7 +665,7 @@
   {
     "number": 109,
     "title": "[Feature Request] Ingest Open-Meteo Ensemble (NOAA & Weather Intelligence)",
-    "status": "Ready",
+    "status": "Closed",
     "milestone": "Regular Model v2.0 \"Hubbert\"",
     "labels": [
       "enhancement",
@@ -688,7 +688,7 @@
   {
     "number": 113,
     "title": "[Feature Request] Ingest FRED Macroeconomic & Energy Series via Database-Lookup Skill",
-    "status": "Ready",
+    "status": "Superseded (Closed by #141)",
     "milestone": "Regular Model v2.0 \"Hubbert\"",
     "labels": [
       "enhancement",
@@ -727,7 +727,7 @@
   {
     "number": 116,
     "title": "[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)",
-    "status": "Ready",
+    "status": "Completed",
     "milestone": "Regular Model v2.0 \"Hubbert\"",
     "labels": [
       "enhancement",
@@ -863,7 +863,7 @@
   {
     "number": 141,
     "title": "[Feature Request] Ingest Zero-Cost Energy Data Feeds (FRED, EIA v2, Universal State Open Data, USDA Biofuels, Open-Meteo)",
-    "status": "In Progress",
+    "status": "Completed",
     "milestone": "Regular Model v1.5 \"Houdry\"",
     "labels": [
       "enhancement",
