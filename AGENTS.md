@@ -188,7 +188,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Closed-Loop Uplift Guardrail:** Automatically applies persistence bias factor $\alpha_{\text{guardrail}} = 0.5$ if a region's 14-day rolling baseline uplift drops below $-2.0\%$.
 * **Empirical Residual Confidence Interval Recalibration ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) (Issue #214):**
   - Replaces naive static $\pm 5\%$ multipliers with dynamic 95% confidence bounds ($\hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) derived from rolling 30-day standard error of regional prediction residuals (falling back to $\sigma_{\text{default}} = 0.0612$ $/gal). Elevates empirical 95% CI coverage from 32.2% to $\ge 90.0\%$ across all 10 metro calibration hubs.
-* **Out-of-Time Test Performance (Regular Model v1.4 "Dubbs" Finlight-LLM Engine):**
+* **Out-of-Time Test Performance (Regular v1.6 "Ipatieff" Engine "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
   - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).
