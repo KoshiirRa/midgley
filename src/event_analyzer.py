@@ -499,6 +499,19 @@ def extract_event_features_from_url(
 
     combined_text = f"{title}\n\n{truncated_md}".strip() if truncated_md else title
 
+    # Automatically snapshot and preserve historical news article (Issue #97)
+    try:
+        from src.archive_service import submit_url_to_archive
+        submit_url_to_archive(
+            url=url,
+            title=title,
+            tags=["midgley-news", "energy-url-extraction"],
+            content_snapshot=truncated_md,
+            async_dispatch=True
+        )
+    except Exception as e:
+        logger.debug(f"Historical archive notice for {url}: {e}")
+
     scores = extract_event_features_llm(combined_text, api_key=api_key, tier=tier)
 
     return {

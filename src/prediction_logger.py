@@ -328,6 +328,13 @@ def log_predictions(
         logger.warning(f"Background prediction cloud sync notice: {e}")
     
     logger.info(f"Logged {len(new_records)} predictions for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
+    try:
+        from src.healthcheck_monitor import ping_healthcheck_success
+        ping_healthcheck_success(
+            log_message=f"Logged {len(new_records)} predictions for {region} ({model_version}, {run_type})"
+        )
+    except Exception as e:
+        logger.debug(f"Healthcheck heartbeat notice: {e}")
     return len(new_records)
 
 

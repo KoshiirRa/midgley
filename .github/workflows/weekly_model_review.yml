@@ -61,6 +61,7 @@ jobs:
           CLOUDFLARE_AUTH_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_TOKEN }}
           AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+          HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
         run: |
           python run_all.py --use-llm-api
 
@@ -70,6 +71,7 @@ jobs:
           MODEL_DEGRADATION_WEBHOOK_URL: ${{ secrets.MODEL_DEGRADATION_WEBHOOK_URL }}
           CORE_API_KEY: ${{ secrets.CORE_API_KEY }}
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+          HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
         run: |
           python -m src.weekly_issue_reporter
 

@@ -932,5 +932,42 @@ def train_models_with_feast_point_in_time(
     }
 
 
+def evaluate_praxist_shock_hypothesis(
+    hypothesis_name: str = "Candidate_Shock_Parameters",
+    candidate_params: Optional[Dict[str, Any]] = None,
+    historical_df: Optional[pd.DataFrame] = None
+) -> Dict[str, Any]:
+    """
+    Evaluates candidate exogenous shock parameters using the Sapient PRAXIST
+    autonomous research harness (Issue #188).
+    """
+    from src.praxist_engine import PraxistResearchHarness
+    harness = PraxistResearchHarness()
+    params = candidate_params or {
+        "half_life_days": 4.5,
+        "geopolitical_weight": 0.35,
+        "supply_disruption_weight": 0.40,
+        "opec_action_weight": 0.25,
+        "weekend_gap_multiplier": 1.42
+    }
+    return harness.evaluate_hypothesis(hypothesis_name, params, historical_df=historical_df)
+
+
+def run_praxist_research_sweep(
+    half_life_options: Optional[List[float]] = None,
+    weekend_mult_options: Optional[List[float]] = None
+) -> Dict[str, Any]:
+    """
+    Executes autonomous multi-parameter sweep exploring optimal decay and shock combinations.
+    """
+    from src.praxist_engine import PraxistResearchHarness
+    harness = PraxistResearchHarness()
+    return harness.run_autonomous_parameter_sweep(
+        half_life_options=half_life_options,
+        weekend_mult_options=weekend_mult_options
+    )
+
+
+
 
 

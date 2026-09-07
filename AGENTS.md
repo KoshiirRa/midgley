@@ -344,6 +344,19 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
     - **Multi-Horizon Factor IC & Decay Half-Life Auditor:** Measures Pearson IC, Spearman Rank IC, and IC Information Ratio ($IC_{IR}$) across forward horizons $H \in \{1, 3, 5, 10, 14, 20\}$ days and fits empirical exponential decay trajectories ($t_{1/2} = -\frac{\ln 2}{\lambda}$) to validate qualitative event shock decay priors.
     - **Combinatorial Symmetric Cross-Validation (CSCV) & Probability of Backtest Overfitting (PBO):** Computes PBO and Deflated Sharpe Ratio (DSR / PSR) to audit multi-feature model stability across out-of-sample combinations.
     - **Weekly Automated MLOps Audit Section:** Integrates automated feature leakage and PBO validation summaries directly into Saturday weekly model performance review issues.
+  - **Healthchecks.io Pipeline Heartbeat & Dead-Man's Snitch Monitoring (`src/healthcheck_monitor.py`, Issue #98):**
+    - Dispatches start (`/start`), success (`/0` or `POST /`), failure (`/fail`), and execution duration pings to Healthchecks.io via `send_healthcheck_ping()`.
+    - Integrated into daily pipeline runs (`prediction_logger.py`), Saturday weekly model reviews (`weekly_issue_reporter.py`), and GitHub Actions workflows (`gas_price_forecast.yml`, `weekly_model_review.yml`).
+    - Enforces 100% fail-open operation and unit test execution isolation (`TESTING=1`).
+  - **Open Source AI Radar Model Discovery & Capability Tracking (`src/data_ingestion.py` & `src/api_server.py`, Issue #187):**
+    - `OpenSourceAIRadarConnector` ingests real-time open-weights LLM and SLM release metadata, quantization capabilities, parameter scales, and benchmarks from Open Source AI Radar REST APIs.
+    - Features disk-backed 24-hour caching (`data/radar_cache.json`), REST endpoint `GET /api/v1/system/radar`, and automated weekly model capability tracking sections in Saturday review reports.
+  - **ArchiveBox Self-Hosted Historical Article Preservation & Snapshot Ledger (`src/archive_service.py`, Issue #97):**
+    - Submits breaking news URLs and qualitative event sources to self-hosted ArchiveBox instances asynchronously via REST API (`POST /api/v1/core/add/`).
+    - Features background thread pooling to ensure zero latency overhead on LLM event scoring pipelines, automatic local markdown snapshot ledger fallback (`data/archived_events_ledger.json` + `data/archives/`), and full offline resiliency.
+  - **Sapient PRAXIST Computer-Executable Autonomous Research Harness (`src/praxist_engine.py`, Issue #188):**
+    - Provides a programmatic evaluation harness (`PraxistResearchHarness`) for LLM agents to propose, execute, backtest, and statistically validate empirical feature engineering and modeling hypotheses.
+    - Evaluates out-of-sample MAE improvements, paired $t$-tests, $p$-values, and multi-parameter sweeps (e.g. Ridge $\alpha$, decay half-life $t_{1/2}$), formatting research findings into Saturday weekly review reports.
   - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
 
 

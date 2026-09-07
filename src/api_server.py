@@ -513,6 +513,34 @@ def get_cloud_prediction_sync_status():
     }
 
 
+@app.get("/api/v1/system/radar", summary="Get Open Source AI Radar Model Catalog")
+def get_system_radar_catalog(
+    category: Optional[str] = Query(None, description="Optional category filter (e.g. llm, timeseries, vision)"),
+    limit: int = Query(15, ge=1, le=50, description="Max models to return")
+):
+    """
+    Returns open-source model capabilities, benchmarks, and release metrics from Open Source AI Radar (Issue #187).
+    """
+    try:
+        from src.data_ingestion import OpenSourceAIRadarConnector
+        connector = OpenSourceAIRadarConnector()
+        models = connector.fetch_radar_models(max_results=limit, category=category)
+        return {
+            "status": "success",
+            "count": len(models),
+            "timestamp": datetime.now().isoformat(),
+            "models": models
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e),
+            "timestamp": datetime.now().isoformat(),
+            "models": []
+        }
+
+
+
 @app.get("/api/v1/forecast/purged-cv", dependencies=[Depends(get_api_key_user)], summary="Get Purged & Combinatorial Cross-Validation Metrics")
 def get_purged_cv_metrics(
     n_splits: int = Query(5, ge=2, le=20, description="Number of CV splits"),

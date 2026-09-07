@@ -110,6 +110,16 @@ CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 # Optional: Public keyless queries work out-of-the-box. Add key for high-volume batch runs.
 CENSUS_API_KEY=""
 
+# Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
+HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
+# Or separate daily/weekly endpoints:
+# HEALTHCHECKS_DAILY_PING_URL="https://hc-ping.com/<uuid>"
+# HEALTHCHECKS_WEEKLY_PING_URL="https://hc-ping.com/<uuid>"
+
+# Self-Hosted ArchiveBox Historical Preservation Server (github.com/ArchiveBox/ArchiveBox, Issue #97)
+ARCHIVEBOX_URL="http://10.42.42.54:8000"
+ARCHIVEBOX_API_KEY=""
+
 # Comma-separated list of refinery operator tickers to monitor for 8-K filings.
 # Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.
 # Cloudflare Worker production: set EDGAR_8K_TICKERS in wrangler.toml [vars].
