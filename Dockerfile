@@ -10,12 +10,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv package manager
-RUN pip install --no-cache-dir uv
-
 # Copy dependencies manifest & install
 COPY requirements.txt .
-RUN uv pip install --system -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application source
 COPY . .
