@@ -10,9 +10,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+# Upgrade pip & install uv for fast, reliable binary wheel installation
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel uv
+
 # Copy dependencies manifest & install
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv pip install --system --no-cache -r requirements.txt
 
 # Copy application source
 COPY . .
