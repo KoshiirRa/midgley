@@ -14,21 +14,22 @@ The forecasting engine continuously ingests both quantitative time-series data a
                                   │     (.github/workflows/weekly_model_review.yml @ 08:00 CT) │
                                   └──────────────┬──────────────────────────────┬───────────────┘
                                                  │                              │
-                                                 ▼                              ▼
-                                  ┌──────────────────────────────┐┌──────────────────────────────┐
-                                  │   DEVELOPER CATALOG MONITOR  ││    arXiv RESEARCH MONITOR    │
-                                  │    (src/catalog_monitor.py)  ││    (src/arxiv_monitor.py)    │
-                                  └──────────────┬───────────────┘└──────────────┬───────────────┘
-                                                 │                              │
-                                                 ▼                              ▼
-                                  ┌──────────────────────────────┐┌──────────────────────────────┐
-                                  │ 10 Curated Developer Indexes ││  arXiv API (q-fin, econ, cs) │
-                                  │ Gemini 2.5 Flash Score ≥ 7.0 ││ 7-Day Rolling Paper Filtering │
-                                  └──────────────┬───────────────┘└──────────────┬───────────────┘
-                                                 │                              │
-                                                 └──────────────┬───────────────┘
-                                                                │
-                                                                ▼
+                        ┌────────────────────────┼──────────────────────────────┐
+                        ▼                        ▼                              ▼
+         ┌──────────────────────────────┐┌──────────────────────────────┐┌──────────────────────────────┐
+         │   DEVELOPER CATALOG MONITOR  ││    arXiv RESEARCH MONITOR    ││     CORE RESEARCH MONITOR    │
+         │    (src/catalog_monitor.py)  ││    (src/arxiv_monitor.py)    ││    (src/core_monitor.py)     │
+         └──────────────┬───────────────┘└──────────────┬───────────────┘└──────────────┬───────────────┘
+                        │                               │                               │
+                        ▼                               ▼                               ▼
+         ┌──────────────────────────────┐┌──────────────────────────────┐┌──────────────────────────────┐
+         │ 10 Curated Developer Indexes ││  arXiv API (q-fin, econ, cs) ││  CORE API v3 Open-Access     │
+         │ Gemini 2.5 Flash Score ≥ 7.0 ││ 7-Day Rolling Paper Filter   ││ 7-Day Energy Search & Filter │
+         └──────────────┬───────────────┘└──────────────┬───────────────┘└──────────────┬───────────────┘
+                        │                               │                               │
+                        └───────────────────────────────┴───────────────────────────────┘
+                                                        │
+                                                        ▼
                                   ┌─────────────────────────────────────────────────────────────┐
                                   │              GITHUB ISSUE REVIEW & REPO REPORT              │
                                   │           (src/weekly_issue_reporter.py -> Issues)          │
@@ -64,11 +65,13 @@ The Developer Catalog Monitor ([`src/catalog_monitor.py`](file:///src/catalog_mo
 
 ---
 
-## 3. Academic & Research Paper Feeds (`src/arxiv_monitor.py`)
+## 3. Academic & Research Paper Feeds (`src/arxiv_monitor.py` & `src/core_monitor.py`)
 
-The arXiv Research Paper Monitor ([`src/arxiv_monitor.py`](file:///src/arxiv_monitor.py)) queries the official arXiv REST API (`export.arxiv.org/api/query`) during weekly review runs to extract newly published or updated preprints in quantitative finance, econometrics, and machine learning.
+During weekly Saturday review runs, the forecasting system scans both preprint servers and peer-reviewed open-access literature repositories to discover new modeling methodologies, crack margin theories, and volatility forecasting architectures.
 
-### Monitored arXiv Categories & Query Filters
+### 3.1 arXiv Research Paper Monitor (`src/arxiv_monitor.py`)
+
+The arXiv Research Paper Monitor queries the official arXiv REST API (`export.arxiv.org/api/query`) to extract newly published or updated preprints in quantitative finance, econometrics, and machine learning.
 
 * **Target Subject Categories:**
   - `q-fin.PR`: Quantitative Finance — Pricing & Risk
@@ -84,6 +87,21 @@ The arXiv Research Paper Monitor ([`src/arxiv_monitor.py`](file:///src/arxiv_mon
   ```
 * **Evaluation Window:** Filters papers published within a rolling 7-day window prior to the Saturday review run.
 * **Reporting:** Formatted paper abstracts, author lists, and PDF links are injected directly into the weekly model performance review issue report. See [`docs/arxiv_monitoring_spec.md`](file:///docs/arxiv_monitoring_spec.md) for detailed technical specifications.
+
+### 3.2 CORE Open-Access Research Paper Monitor (`src/core_monitor.py`) (Issue #53)
+
+The CORE Open-Access Paper Monitor integrates the [CORE API v3](https://core.ac.uk/services/api) (`https://api.core.ac.uk/v3/search/works`) to discover open-access research papers from global university repositories, academic journals, and conference proceedings.
+
+* **Search Topics & Focus Areas:**
+  - `fuel price forecasting`, `gasoline crack margin`, `refinery economics`, `crude oil volatility`, `asymmetric price transmission`, `rockets and feathers econometrics`.
+* **API Query String:**
+  ```text
+  ("gasoline price" OR "fuel price" OR "crack spread" OR "refinery margin" OR "oil price shock") AND (forecasting OR prediction OR econometrics)
+  ```
+* **Cutoff & Deduplication Filtering:**
+  - Enforces a rolling 7-day publication window filter (`max_age_days=7.0`).
+  - Deduplicates against previously reviewed DOIs and paper identifiers in `data/catalog_monitors_state.json`.
+* **GitHub Actions Integration:** Authenticates via `CORE_API_KEY` secret during Saturday review runs and formats paper titles, authors, journals, and open-access download URLs directly into the weekly model review report.
 
 ---
 
@@ -111,6 +129,7 @@ In addition to developer catalogs and academic preprint servers, the system inge
 
 * **Catalog Monitor Source Code:** [`src/catalog_monitor.py`](file:///src/catalog_monitor.py)
 * **arXiv Monitor Source Code:** [`src/arxiv_monitor.py`](file:///src/arxiv_monitor.py)
+* **CORE Monitor Source Code:** [`src/core_monitor.py`](file:///src/core_monitor.py)
 * **Weekly Review Workflow:** [`.github/workflows/weekly_model_review.yml`](file:///.github/workflows/weekly_model_review.yml)
 * **arXiv Monitoring Specification:** [`docs/arxiv_monitoring_spec.md`](file:///docs/arxiv_monitoring_spec.md)
 * **System Architecture Document:** [`docs/ARCHITECTURE.md`](file:///docs/ARCHITECTURE.md)
