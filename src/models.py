@@ -5,6 +5,7 @@ and computes rigorous error metrics & directional accuracy.
 """
 
 import itertools
+import os
 from typing import Any, Optional, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
