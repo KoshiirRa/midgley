@@ -324,6 +324,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     diesel_cls = "bg-purple-600/30 text-purple-300 border border-purple-500/40 font-semibold" if active_tab == "diesel" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     telemetry_cls = "bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 font-semibold" if active_tab == "telemetry" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -339,6 +340,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
+    cit_link = f"{rel_prefix}citations.html"
     sav_link = f"{rel_prefix}savings.html"
     dsl_link = f"{rel_prefix}diesel.html"
     tel_link = f"{rel_prefix}telemetry.html"
@@ -411,6 +413,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="{cit_link}" class="px-3 py-1.5 rounded-lg {citations_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
                 </a>
                 <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
                     <i class="fa-brands fa-github"></i> GitHub
@@ -4929,22 +4934,27 @@ def generate_public_dashboard():
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Midgley actively integrates theoretical theorems, diagnostic algorithms, and multi-agent architectural paradigms from peer-reviewed scientific literature. All implemented research papers are indexed in our persistent repository ledger:
+                Midgley actively integrates theoretical theorems, diagnostic algorithms, and multi-agent architectural paradigms from peer-reviewed scientific literature. All 12 implemented research papers are indexed in our dedicated web portal and persistent repository ledger:
             </p>
 
             <div class="p-6 rounded-2xl bg-slate-900 border border-blue-500/30 space-y-4">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div class="space-y-1">
                         <h4 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-scroll text-blue-400"></i> RESEARCH_CITATIONS.md
+                            <i class="fa-solid fa-book-bookmark text-blue-400"></i> Peer-Reviewed Academic Literature Portal
                         </h4>
                         <p class="text-xs text-slate-400">
-                            Includes arXiv pre-prints, theoretical bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR two-stage residual formulas (\(\mathbf{s}_{t+1} = f_\theta(\mathbf{s}) + \epsilon_t\)), TraceBench LLM agent benchmarking, and SPALT spatio-temporal locality tree references.
+                            Explore comprehensive mathematical formulations, arXiv pre-prints, theoretical bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR two-stage residual formulas (\(\mathbf{s}_{t+1} = f_\theta(\mathbf{s}) + \epsilon_t\)), López de Prado Purged CPCV, TimesFM foundation models, and Qlib symbolic factor mining across all 12 cited papers.
                         </p>
                     </div>
-                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shrink-0 shadow-lg shadow-blue-600/20">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open RESEARCH_CITATIONS.md on GitHub
-                    </a>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-book-open"></i> Open Citations Page
+                        </a>
+                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+                            <i class="fa-brands fa-github"></i> RESEARCH_CITATIONS.md
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
