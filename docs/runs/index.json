@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-07_07-01-40",
+    "timestamp": "2026-09-07 07:01:27",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-07 07:01:27)"
+  },
+  {
+    "run_id": "2026-09-07_07-01-29",
+    "timestamp": "2026-09-07 07:01:27",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-07 07:01:27)"
+  },
+  {
     "run_id": "2026-09-07_05-15-15",
     "timestamp": "2026-09-07 05:15:09",
     "run_type": "INTRADAY_REVISION",
@@ -583,18 +595,6 @@
   },
   {
     "run_id": "2026-09-06_01-18-07",
-    "timestamp": "2026-09-06 01:15:57",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariff Authorities In The Lindsey O. Graham Sanctioning Russ..."
-  },
-  {
-    "run_id": "2026-09-06_01-17-15",
-    "timestamp": "2026-09-06 01:15:57",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariff Authorities In The Lindsey O. Graham Sanctioning Russ..."
-  },
-  {
-    "run_id": "2026-09-06_01-16-55",
     "timestamp": "2026-09-06 01:15:57",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Tariff Authorities In The Lindsey O. Graham Sanctioning Russ..."
