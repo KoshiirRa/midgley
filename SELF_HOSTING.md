@@ -51,6 +51,9 @@ GEMINI_API_KEY="AIzaSy..."
 # Real-Time Financial Energy Media API (finlight.me) - Enforces 150 call/month safety cap
 FINLIGHT_API_KEY="fl_live_..."
 
+# Firecrawl Web Scraping API (firecrawl.dev) - Enforces 800 call/month safety cap (Issue #83)
+FIRECRAWL_API_KEY="fc-..."
+
 # Official U.S. EIA Open Data v2 Key (Weekly PADD Stocks & Utilization)
 EIA_API_KEY="eia_api_key_here"
 

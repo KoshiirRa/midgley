@@ -123,6 +123,14 @@
 - **Documentation:** `SELF_HOSTING.md` §2 env block + §7 Prompt 3 item 7 (new-region ticker discovery guidance). `AGENTS.md` Agent 1 module list updated.
 - **Verification (`tests/test_edgar_8k_monitor.py`):** 7/7 tests passing — relevance gate positive (FCC outage, refinery fire, capacity reduction), relevance gate negative (earnings release, debt issuance), integration pipeline routing gate (`supply_disruption >= 0.40`), and cache persistence deduplication.
 
+### 18. Firecrawl Web Scraping API & Web-to-Markdown Ingestion (Issue #83)
+- **Web-to-Markdown Scraper Connector (`src/firecrawl_scraper.py`):** Integrated the Firecrawl API (`https://api.firecrawl.dev/v1/scrape`) to ingest full-text articles from breaking energy media, refinery press releases, and state motor fuel tax portals into clean, structured Markdown with JavaScript rendering support.
+- **Hard Quota Safety Valve:** Enforces an **800 call/month safety cap** (and 30 call/day burst limit) on `data/firecrawl_quota.json` out of the 1,000 free tier allowance, safeguarding free credits and routing gracefully to local extraction when caps are reached.
+- **24-Hour Multi-Tier Caching:** Persists scraped markdown to `data/firecrawl_cache.json` and in-memory cache keyed by SHA-256 hash of normalized URLs with a 24-hour TTL (86,400s).
+- **Deterministic Offline HTML Fallback:** Built-in `SimpleHTMLTextExtractor` ($0 cost, 100% offline) using standard library `urllib` and `html.parser` to strip scripts, styles, navigation, and headers into clean Markdown when API keys are omitted or offline.
+- **URL Event Feature Extraction (`src/event_analyzer.py`):** Added `extract_event_features_from_url()` with automatic content truncation (~1,500 words) to protect Gemini Flash token context budgets while enabling full qualitative impact scoring on web articles.
+- **Verification (`tests/test_firecrawl_scraper.py`):** 7/7 unit tests passing covering API response parsing, quota safety valve enforcement, cache hit persistence, offline HTML fallback extraction, HTTP error resiliency (429/500), and telemetry accounting.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -131,7 +139,7 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `371 passed` (100% pass rate across all test modules including Multi-Feed AQI, USGS Earthquake, and USGS Water Data telemetry suites).
+  **Result:** `378 passed` (100% pass rate across all test modules including Multi-Feed AQI, USGS Earthquake, USGS Water Data, EDGAR 8-K, and Firecrawl Web Scraping test suites).
 
 ---
 
@@ -140,6 +148,7 @@
 - **Issue #54**: `feat(aqi): Integrate Independent & Multi-Feed Air Quality Ingestion (PurpleAir, OpenAQ, AirNow) for Refinery Outage Early Detection` (Closed as completed)
 - **Issue #55**: `[Feature Request] Ingest live USGS Earthquake API feeds for real-time seismic fuel market risk scoring` (Closed as completed)
 - **Issue #56**: `feat: Integrate USGS Water Data API Telemetry (api.waterdata.usgs.gov) for Inland Waterway & Refinery Bottleneck Forecasting` (Closed as completed)
+- **Issue #83**: `[Feature Request] Ingest Firecrawl Web-to-Markdown API for LLM Event Extraction` (Closed as completed)
 - **Issue #95**: `[Feature Request] Implement GeoPandas Spatial Refinery Distance Buffering for Metro Agents` (Closed as completed)
 - **Issue #112**: `[Feature Request] Evaluate Google TimesFM Foundation Model for Zero-Shot Gas Price Forecasting` (Closed as completed)
 - **Issue #116**: `[Feature Request] Implement Knowledge Graph & Agent Memory Layer for Qualitative Intelligence (Cognee, GraphRAG, Graphiti, Mem0 & Neo4j)` (Closed as completed)

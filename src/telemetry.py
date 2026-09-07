@@ -210,7 +210,31 @@ def get_all_quota_statuses() -> Dict[str, Any]:
             "service": "AlphaVantage", "calls_used": 0, "limit": 25, "remaining": 25, "remaining_ratio": 1.0, "is_capped": False
         }
 
-    # 4. Gemini API Quota (Cumulative LLM usage)
+    # 4. Firecrawl Quota (Issue #83)
+    firecrawl_file = os.path.join("data", "firecrawl_quota.json")
+    if os.path.exists(firecrawl_file):
+        try:
+            with open(firecrawl_file, "r", encoding="utf-8") as f:
+                fc_data = json.load(f)
+                calls = fc_data.get("monthly_calls", 0)
+                limit = 800
+                quotas["firecrawl"] = {
+                    "service": "Firecrawl.dev",
+                    "calls_used": calls,
+                    "limit": limit,
+                    "remaining": max(0, limit - calls),
+                    "remaining_ratio": round(max(0.0, (limit - calls) / limit), 4),
+                    "is_capped": calls >= limit
+                }
+        except Exception as e:
+            logger.debug(f"Error reading firecrawl quota: {e}")
+
+    if "firecrawl" not in quotas:
+        quotas["firecrawl"] = {
+            "service": "Firecrawl.dev", "calls_used": 0, "limit": 800, "remaining": 800, "remaining_ratio": 1.0, "is_capped": False
+        }
+
+    # 5. Gemini API Quota (Cumulative LLM usage)
     ledger = _load_telemetry_ledger()
     totals = ledger.get("llm_totals", {})
     quotas["gemini_llm"] = {

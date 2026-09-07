@@ -86,10 +86,16 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ## Agent Specifications
 
-### 1. Event, Weather, Seismic, Air Quality & Social Media Extraction Agent (`src/event_analyzer.py`, `src/finlight_feed.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, `src/executive_social_feed.py`, `src/usgs_seismic.py`, `src/usgs_water_feed.py`, `src/aqi_feed.py`, & `src/alternative_data_feeds.py`)
+### 1. Event, Weather, Seismic, Air Quality, Social Media & Web Scraper Extraction Agent (`src/event_analyzer.py`, `src/firecrawl_scraper.py`, `src/finlight_feed.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, `src/executive_social_feed.py`, `src/usgs_seismic.py`, `src/usgs_water_feed.py`, `src/aqi_feed.py`, & `src/alternative_data_feeds.py`)
 
-* **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, NOAA alerts, USGS earthquake events and seismic risk indices, multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring outages, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
+* **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, deep web articles, refinery operator disclosures, state motor fuel tax portals, NOAA alerts, USGS earthquake events and seismic risk indices, multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring outages, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
 * **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
+* **Firecrawl Web-to-Markdown API Connector & URL Extraction (`src/firecrawl_scraper.py` & `src/event_analyzer.py`) (Issue #83):**
+  - **Web-to-Markdown Extraction:** Integrates Firecrawl API (`firecrawl.dev`) to convert raw HTML from breaking energy news articles, refinery press releases, and state tax portals into clean, LLM-ready Markdown with JavaScript rendering support.
+  - **Hard Quota Safety Valve:** Persistent ledger at `data/firecrawl_quota.json` enforcing an **800 call/month safety cap** (and 30 call/day burst limit) out of the 1,000 free tier allowance. Automatically routes to the zero-cost native HTML parser when caps are reached.
+  - **24-Hour Multi-Tier Caching:** Disk cache at `data/firecrawl_cache.json` and in-memory caching keyed by URL SHA-256 hash with 24-hour TTL (86,400s) to prevent duplicate scraping overhead.
+  - **Zero-Cost Deterministic HTML Fallback:** Built-in native parser stripping scripts, styles, navigation, and headers into structured text with $0 cost and 100% offline reliability.
+  - **URL Event Feature Extraction:** `extract_event_features_from_url()` in `src/event_analyzer.py` safely truncates scraped content to ~1,500 words to conserve LLM context tokens before qualitative scoring.
 * **Real-Time Financial News Stream & Quota Safety Valve (`src/finlight_feed.py`):**
   - **Live Coverage:** Ingests real-time financial energy headlines from tier-1 media (Reuters, Bloomberg, Seeking Alpha, Investing.com) via `finlight.me` REST API.
   - **Hard Quota Safety Valve:** Persistent ledger at `data/finlight_quota.json` enforcing a **150 call/month safety cap** (and 10 call/day burst limit) out of the 250 free tier allowance. Automatically blocks outgoing API calls when cap is reached, falling back seamlessly to cached news or the Tier 3 Offline Lexicon. Quota status exposed via `GET /api/v1/system/quota`.
