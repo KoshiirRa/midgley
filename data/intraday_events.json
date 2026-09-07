@@ -2228,5 +2228,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-07T11:00:07.867779",
+    "headline": "The US tariff on Canadian imports could send already soaring hockey gear prices even higher - Midland Reporter-Telegram",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOTFVRTnYzQTVSNmp5dEJYa1ZLSVRNZ2pMcnI3bUdDdGlBajBoYUxiVGJVc3g0VDlqakNqcWllOEQ3U3J3VUpYcHlIY016T09CdE90ZzRYSWxtc2loWkIta1FCeDJrWWpzc0V2MFVNbWcyd0E2cEtWdmd1dkpzS1ZLZzl4bFg0MzRJRTdHRWlSa3VSdVFjaERJ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilwFBVV95cUxOTFVRTnYzQTVSNmp5dEJYa1ZLSVRNZ2pMcnI3bUdDdGlBajBoYUxiVGJVc3g0VDlqakNqcWllOEQ3U3J3VUpYcHlIY016T09CdE90ZzRYSWxtc2loWkIta1FCeDJrWWpzc0V2MFVNbWcyd0E2cEtWdmd1dkpzS1ZLZzl4bFg0MzRJRTdHRWlSa3VSdVFjaERJ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
