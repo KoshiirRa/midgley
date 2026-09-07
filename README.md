@@ -10,7 +10,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-green.svg)](requirements.txt)
 
-An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
+An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
 ### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-07 17:26 UTC)
@@ -70,7 +70,7 @@ flowchart TD
     subgraph FEEDS["Unstructured News, NOAA Weather & Physical Data Feeds"]
         F1["Geopolitical Headlines & OPEC Press Releases"]
         F2["NOAA NWS & SPC Weather Alerts (t.wxs.us)"]
-        F3["Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)"]
+        F3["Maritime & Waterways (Hormuz, Suez, Rivers, Waterborne Terminals)"]
         F4["Executive Social Feed (Trump Twitter / Truth Social)"]
         F5["Physical Alternative Feeds (Cboe OVX & Baker Hughes)"]
         F6["USGS Water Data Telemetry (Streamflow, Stage & Cooling Temp)"]
@@ -161,7 +161,7 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 4. **Two-Tiered NOAA Weather Integration (`src/noaa_weather.py`):**
    - **Tier 1 (National Basins):** NOAA NHC Hurricane advisories in Gulf Coast refining hubs & Permian/Bakken winter freeze warnings.
    - **Tier 2 (Localized Regional Metros):** NOAA NWS severe alerts across **Tulsa (`OKZ060/OKZ066`)**, **Newark (`DEZ001`)**, **Cincinnati (`OHZ077/KYZ091`)**, **Greenville (`NCZ081`)**, **Charlotte (`NCZ071`)**, **Oakland / SF Bay (`CAZ508/CAZ511`)**, and **Port St. Lucie (`FLZ147`)**.
-5. **Global Maritime Chokepoint Feeds (`src/geopolitical_feeds.py`):** Tracks Iran conflict alerts in the **Strait of Hormuz** (21.0M bpd / 20% of global oil), Red Sea / Suez Canal tanker rerouting events, and Venezuela Orinoco heavy crude sanctions.
+5. **Global Maritime Chokepoint & Inland Waterway Logistics Feeds (`src/geopolitical_feeds.py`):** Tracks Iran conflict alerts in the **Strait of Hormuz** (21.0M bpd / 20% of global oil), Red Sea / Suez Canal tanker rerouting events, Venezuela Orinoco heavy crude sanctions, Ohio/Mississippi River tow barge draft constraints, MKARNS navigation, and coastal waterborne lightering/terminal surcharges.
 6. **Real-Time Finlight Financial News Stream (`src/finlight_feed.py`):** Integrates live commodity & macroeconomic news articles from tier-1 financial media (Reuters, Bloomberg, Seeking Alpha, Investing.com) using the `finlight.me` REST API.
 7. **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`):** Quantifies Trump Twitter/Truth Social energy posts and models Monday morning futures open price gaps (1.42x volatility multiplier).
 8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.

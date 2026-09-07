@@ -609,6 +609,7 @@ if any(k in text for k in ["chicago", "whiting refinery", "joliet refinery", "il
 2. Ensure `render_regional_driver_cards_html('chicago_il')` is invoked in the template to render standardized visual cards automatically from `data/regional_metadata/chicago_il.json`.
 3. Add the navigation link to the **Metro Areas** dropdown menu in `get_nav_header()`.
 4. Update Section 03 (**Equation 3.1: Multi-Tiered Weather Vulnerability Matrix**) in `docs/math.html` and `src/dashboard_generator.py` to append the new regional weather vector term ($\mathbf{W}_{\text{Metro}}$) and document localized NOAA NWS county/zone codes.
+5. Update Section 04 (**Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals** and **Equation 4.1: Unified Global Maritime Detour, Inland River Barge & Coastal Waterborne Freight Rate Model**) in `docs/math.html` and `src/dashboard_generator.py` if the region introduces inland waterway navigation/draft or coastal lightering/terminal surcharges ($\Delta \text{Margin}_{\text{waterborne}, r}$ / $\text{Index}_{\text{barge}}$).
 
 ### Step 8: Connect MLOps Prediction Tracker & Backfilling (`src/prediction_logger.py`)
 Update `src/prediction_logger.py` to include `"Chicago_IL"` in target price columns and historical test-split backfilling (`backfill_new_region_history`).
