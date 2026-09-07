@@ -1,5 +1,5 @@
 # Production Dockerfile for Midgley Self-Hosted Container
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
