@@ -51,6 +51,9 @@ GEMINI_API_KEY="AIzaSy..."
 # Real-Time Financial Energy Media API (finlight.me) - Enforces 150 call/month safety cap
 FINLIGHT_API_KEY="fl_live_..."
 
+# Firecrawl Web Scraping API (firecrawl.dev) - Enforces 800 call/month safety cap (Issue #83)
+FIRECRAWL_API_KEY="fc-..."
+
 # Official U.S. EIA Open Data v2 Key (Weekly PADD Stocks & Utilization)
 EIA_API_KEY="eia_api_key_here"
 
@@ -78,6 +81,12 @@ MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
+# Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
+# Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
+WANDB_API_KEY="wandb_v1_..."
+WANDB_PROJECT="midgley-gas-forecasting"
+WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
+
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
 # ==============================================================================
@@ -89,6 +98,23 @@ TURSO_AUTH_TOKEN="eyJhbGciOi..."
 # Tier 2: Cloudflare D1 / Edge Worker Gateway
 CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
+
+# ==============================================================================
+# EDGAR 8-K REFINERY OPERATOR MONITOR (Issue #129)
+# ==============================================================================
+
+# SEC EDGAR User-Agent — required for EDGAR 8-K polling (free, name + email only).
+# No account or API key needed. Per EDGAR robots.txt access policy.
+# Cloudflare Worker production: wrangler secret put SEC_USER_AGENT
+# Optional U.S. Census Bureau API Key (api.census.gov - Free public open data)
+# Optional: Public keyless queries work out-of-the-box. Add key for high-volume batch runs.
+CENSUS_API_KEY=""
+
+# Comma-separated list of refinery operator tickers to monitor for 8-K filings.
+# Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.
+# Cloudflare Worker production: set EDGAR_8K_TICKERS in wrangler.toml [vars].
+# Add additional tickers for non-default supplying refineries (see §7 Prompt 3).
+EDGAR_8K_TICKERS="PBF,DINO,MPC,VLO,PSX"
 ```
 
 ---
@@ -391,14 +417,16 @@ Research and specify:
    - USACE Locks & Dams: Identify key U.S. Army Corps of Engineers (USACE) Locks and Dams along supplying commercial waterways (e.g., Markland, Meldahl, Lock 27, C&D Canal) that govern barge tow transit times and lock closure risks.
 4. Logistics & Power Grid Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, marine congestion, and electric power grid vulnerability—specifically identifying the EIA-930 Electric Grid Balancing Authority (BA) / RTO (e.g., ERCOT, MISO, PJM, CAISO, SWPP, SOCO, TVA, NYIS, ISNE) powering the supplying refineries and pipeline pump stations.
 5. Metro Centroid & Spatial Buffer Anchor: Representative metro geographic coordinates (WGS84 latitude, longitude), primary 5-digit ZIP code, and approximate pipeline/haul distance (miles) to the primary supplying refinery or distribution rack hub (for GeoPandas spatial distance-decay modeling in `src/spatial_refinery.py`).
+6. Fence-Line Air Quality & Industrial Emissions Monitoring (PurpleAir & OpenAQ): Identify fence-line air quality monitoring networks within a 15 km radius downwind of supplying refineries (e.g. PurpleAir optical sensor groups, OpenAQ municipal stations, EPA AirNow station ID) monitoring PM2.5, PM10, SO2, and NO2 to capture early flaring and unplanned FCC unit outage signals in `src/aqi_feed.py`.
+7. SEC EDGAR Refinery Operator Monitoring (Issue #129): Identify the publicly traded refinery operators (NYSE/NASDAQ tickers) whose refinery assets directly supply [TARGET METRO CITY, STATE]. Cross-reference against the default `EDGAR_8K_TICKERS` list (`PBF`, `DINO`, `MPC`, `VLO`, `PSX`). If the primary supplying refinery is owned by an operator NOT in the default list (e.g., Delek Group `DKL`, Calumet `CLMT`, Par Pacific `PARR`, or Ergon for a mid-continent or rural region), document the ticker so it can be appended to `EDGAR_8K_TICKERS` in `wrangler.toml` (Cloudflare Worker production) or `.env` (local deployment). This ensures the EDGAR 8-K Refinery Operator Monitor (`src/edgar_8k_monitor.py` / `workers/intraday_monitor_worker.ts`) captures unplanned operational disclosures from the refineries directly supplying the new metro region.
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```
 
-### Prompt 4: NOAA Weather, Physical Hydrological & Seismic Hazard Discovery
+### Prompt 4: NOAA Weather, Physical Hydrological, Seismic & Air Quality Outage Hazard Discovery
 ```text
 You are an Operational Meteorologist and Physical Risk Analyst.
-I need to map NOAA Weather Service alerts, hydrological constraints, and geophysical threat factors for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
+I need to map NOAA Weather Service alerts, hydrological constraints, geophysical threat factors, and industrial air quality flaring indicators for [TARGET METRO CITY, STATE] (Zipcode: [ZIPCODE]).
 
 Identify:
 1. NOAA NWS Forecast Zone Code (e.g., "OKZ060" for Tulsa, "NCZ081" for Greenville).
@@ -412,6 +440,11 @@ Identify:
    - Magnitude Operational Thresholds: Baseline magnitude trigger ($M \ge 3.8$ for shallow induced quakes, $M \ge 4.0$ or $4.5$ for tectonic faults) and catastrophic pipeline trip threshold ($M \ge 6.0$).
    - Facility Vulnerability Targets: Identify exact GPS coordinates for critical refineries, pipeline pump stations, and crude storage tank farms to evaluate distance attenuation and peak ground shaking impact in `src/usgs_seismic.py`.
 6. Regional Geophysical, Wildfire & Grid Hazards: CAL FIRE PSPS wildfire power shutoffs (Diablo/Santa Ana red flag high-wind shutoffs), tsunami advisories (NOAA PTWC), and electric power grid vulnerability (EIA-930 Balancing Authority).
+7. Fence-Line Air Quality & Industrial Flaring Anomaly Thresholds (PurpleAir, OpenAQ, EPA AirNow - `src/aqi_feed.py`):
+   - Refining Corridor Coordinates & Sensor Buffer: Define center GPS coordinates and 15 km radius bounding box enclosing local supplying refineries for live multi-feed AQI queries.
+   - Pollutant Baseline Profiles: Research typical ambient baseline levels and standard deviations for fine particulates ($\text{PM}_{2.5}$ in $\mu\text{g}/\text{m}^3$) and sulfur dioxide ($\text{SO}_2$ in $\text{ppb}$).
+   - Flaring Outage Anomaly Triggers: Identify statistical $Z$-score thresholds ($Z_{\text{PM2.5}} \ge 3.5$ and $Z_{\text{SO2}} \ge 2.5$) to capture emergency catalytic cracker shutdown flaring while discriminating against ambient wildfire/wood smoke (high $\text{PM}_{2.5}$ with baseline $\text{SO}_2$).
+   - Statutory Summer Blend / RVP Mandates: Identify county-level EPA AirNow monitoring sites and statutory Ozone Non-Attainment action day frequencies triggering Reid Vapor Pressure (RVP) summer blend compliance cutovers.
 ```
 
 ### Prompt 5: Decoupled JSON Metadata Profile Generator Prompt
@@ -509,7 +542,7 @@ __all__ = [
 ```
 
 2. **`src/locations/chicago/regional.py`**:
-Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`).
+Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`). If adjacent to supplying refining centers, ingest live fence-line air quality and flaring emissions telemetry via `AQIFeedConnector` (registering corridor bounding box and refinery assets in `AQI_CORRIDORS` inside `src/aqi_feed.py`).
 
 3. **`src/locations/chicago/main.py`**:
 Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering, fits the Ridge estimator, logs predictions to `data/prediction_history.csv`, and returns forecast metrics.

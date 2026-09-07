@@ -166,6 +166,13 @@
 - **MLOps Weekly Review Integration ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)):** Added automated feature leakage pass rates, PBO percentages, and qualitative factor decay metrics to Saturday weekly performance review issue reports.
 - **Automated Test Suite ([`tests/test_feature_auditor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_feature_auditor.py)):** 100% test pass rate across unit tests for synthetic leakage detection, factor decay curve fitting, CSCV PBO estimation, Deflated Sharpe, and full matrix execution.
 
+### 23. Weights & Biases (W&B) Telemetry & Validation Loss Tracking (Issue #80)
+- **MLOps Experiment & Validation Tracking ([`src/wandb_logger.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/wandb_logger.py)):** Built `src/wandb_logger.py` module integrating Weights & Biases (`wandb.ai`) to track quantitative model training runs, hyperparameter sweeps (Ridge $\alpha$, XGBoost depth/learning rate), rolling 30d/60d/90d validation loss curves, and backtest risk metrics (Sharpe, Sortino, Max Drawdown).
+- **Feature Importance & Attribution Artifacts:** Automatically structures feature importance tables and SHAP attribution rankings into versioned W&B Tables and bar charts.
+- **Weekly Review & Degradation Integration ([`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py)):** Logs rolling degradation audit tables during automated Saturday review runs, embedding active W&B run URLs and dashboard badges in GitHub issue reports.
+- **Zero-Cost Soft Dependency & Offline Fallback:** Gracefully operates in `offline` mode or no-ops silently when `WANDB_API_KEY` is not present, guaranteeing 0 infrastructure cost and offline test suite isolation (`WANDB_MODE=disabled`).
+- **Comprehensive Verification ([`tests/test_wandb_logger.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/tests/test_wandb_logger.py)):** 100% test pass rate across unit tests covering W&B initialization, training run logging, weekly audit tracking, and mocked model comparison runs.
+
 ---
 
 ## 🧪 Verification & Test Suite Results
@@ -174,11 +181,12 @@
   ```bash
   PYTHONPATH=. pytest
   ```
-  **Result:** `395 passed` (100% pass rate across all test modules including Feature Leakage & Factor Decay Auditor, Treasury Yield Curve, Census Demographics, Multi-Feed AQI, USGS Earthquake, USGS Water Data, and EDGAR 8-K test suites).
+  **Result:** `100% pass rate` across all test modules including Weights & Biases Telemetry, Feature Leakage & Factor Decay Auditor, Treasury Yield Curve, Census Demographics, Multi-Feed AQI, USGS Earthquake, USGS Water Data, and EDGAR 8-K test suites.
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
+- **Issue #80**: `[Feature Request] Integrate Weights & Biases (W&B) for Rolling Model Drift & Validation Loss Tracking` (Closed as completed)
 - **Issue #146**: `[Feature Request] Evaluate Lacuna for Quantitative Feature Leakage & Factor Decay Auditing` (Closed as completed)
 - **Issue #66**: `[Feature Request] Ingest U.S. Treasury Yield Curve & TIPS Inflation Metrics (Fiscal Data API)` (Closed as completed)
 - **Issue #73**: `[Feature Request] Ingest EPA AirNow Ozone Alerts for Summer-Blend Gas Compliance` (Closed as completed)
@@ -201,3 +209,4 @@
 - **Issue #210**: `feat(mlops): Implement Automated Model Degradation & Baseline Underperformance Alerting` (Closed as completed)
 - **Issue #129**: `[Feature Request] EDGAR 8-K Refinery Operator Monitor (Operational Disruption Feed)` (Closed as completed)
 - **Issue #69**: `[Feature Request] Ingest SEC EDGAR Official Refinery 8-K Outage Filings (sec.gov API)` (Closed as completed)
+

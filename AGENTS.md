@@ -293,10 +293,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - `compute_regional_scoreboard_breakdown(window_days=30)`: Computes per-region accuracy breakdowns across all 8 active regional markets.
   - `get_recent_evaluated_records(region=None, limit=50)`: Returns chronologically sorted evaluated forecast records.
   - Exposed publicly via REST API gateway `GET /api/v1/forecast/scoreboard` and embedded in `docs/index.html`.
+* **Weights & Biases (W&B) Telemetry & Experiment Tracking (`src/wandb_logger.py`, Issue #80):**
+  - Logs quantitative model training runs, hyperparameter sweeps (Ridge $\alpha$, XGBoost depth/learning rate), rolling validation loss curves, and backtest risk metrics (Sharpe, Sortino, Max Drawdown) to W&B project dashboard (`wandb.ai/midgley-gas-forecasting`).
+  - Automatically records feature importance weights and SHAP attribution tables as W&B Artifacts.
+  - Soft-dependency architecture: runs silently in `offline` mode or no-ops safely when `WANDB_API_KEY` is not present, ensuring zero cost and 100% offline resiliency.
 * **Functions:**
   - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates, automatically triggering background cloud DB sync.
   - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, backfills actual prices in `prediction_history.csv`, and triggers background cloud DB sync.
   - `sync_predictions_to_cloud()`: Pushes prediction history rows to Turso, Cloudflare D1, or Neon cloud stores with zero-downtime local CSV fallback.
+  - `init_wandb_run()`, `log_model_training_run()`, `log_weekly_audit_run()`: Publishes experiment telemetry and rolling degradation tables to Weights & Biases.
 
 ---
 

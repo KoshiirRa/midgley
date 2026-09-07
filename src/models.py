@@ -27,6 +27,27 @@ except ImportError:
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import logging
 
+try:
+    from src.wandb_logger import (
+        init_wandb_run,
+        log_model_training_run,
+        finish_wandb_run,
+        is_wandb_enabled
+    )
+except ImportError:
+    try:
+        from wandb_logger import (
+            init_wandb_run,
+            log_model_training_run,
+            finish_wandb_run,
+            is_wandb_enabled
+        )
+    except ImportError:
+        init_wandb_run = lambda *args, **kwargs: None
+        log_model_training_run = lambda *args, **kwargs: None
+        finish_wandb_run = lambda *args, **kwargs: None
+        is_wandb_enabled = lambda *args, **kwargs: False
+
 logger = logging.getLogger(__name__)
 
 def evaluate_predictions(y_true: pd.Series, y_pred: np.ndarray, y_current: pd.Series = None) -> dict:
@@ -359,7 +380,7 @@ def compute_quantile_uncertainty_bands(y_pred: np.ndarray, residual_std: float =
     }
 
 
-def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dict:
+def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wandb: bool = False, wandb_run: Any = None) -> dict:
     """
     Trains Baseline Quantitative Model and Hybrid LLM-Augmented Model.
     Performs ablation comparison on the out-of-time test set.
@@ -447,6 +468,31 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         feature_names = split_data['hybrid_feature_names']
         feature_importance = dict(sorted(zip(feature_names, coefs), key=lambda x: x[1], reverse=True))
 
+    # 8. Optional Weights & Biases Logging (Issue #80)
+    wandb_run_url = None
+    if log_wandb or wandb_run or (is_wandb_enabled() and os.environ.get("WANDB_AUTO_LOG") == "1"):
+        try:
+            active_run = wandb_run or init_wandb_run(job_type="train", name=f"train-{model_type}")
+            if active_run:
+                log_model_training_run(
+                    model_name=f"baseline_quant_{model_type}",
+                    hyperparameters={"model_type": model_type, "stage": "quant_baseline"},
+                    metrics=metrics_quant,
+                    run=active_run
+                )
+                log_model_training_run(
+                    model_name=f"hybrid_llm_{model_type}",
+                    hyperparameters={"model_type": model_type, "stage": "hybrid_llm"},
+                    metrics={**metrics_hybrid, "mae_improvement_pct": mae_imp, "rmse_improvement_pct": rmse_imp, **risk_metrics},
+                    feature_importances=feature_importance,
+                    run=active_run
+                )
+                wandb_run_url = getattr(active_run, "url", None)
+                if not wandb_run:
+                    finish_wandb_run(active_run)
+        except Exception as e:
+            logger.debug(f"Notice logging to W&B: {e}")
+
     return {
         "model_quant": model_quant,
         "model_hybrid": model_hybrid,
@@ -468,7 +514,8 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge") -> dic
         "predictions_persistence": baselines['predictions_persistence'],
         "y_test": np.array(y_test),
         "test_dates": test_df['date'].values,
-        "current_prices": np.array(y_current)
+        "current_prices": np.array(y_current),
+        "wandb_run_url": wandb_run_url
     }
 
 

@@ -17,6 +17,15 @@ from typing import Dict, Any, List, Optional
 from src.arxiv_monitor import format_arxiv_markdown_section
 from src.core_monitor import format_core_markdown_section
 
+try:
+    from src.wandb_logger import log_weekly_audit_run, is_wandb_enabled
+except ImportError:
+    try:
+        from wandb_logger import log_weekly_audit_run, is_wandb_enabled
+    except ImportError:
+        log_weekly_audit_run = lambda *args, **kwargs: {"status": "UNAVAILABLE", "run_url": None}
+        is_wandb_enabled = lambda: False
+
 logger = logging.getLogger(__name__)
 
 HISTORY_CSV = os.path.join("data", "prediction_history.csv")
@@ -798,12 +807,15 @@ def format_mlops_observability_markdown_section() -> str:
             prov_rows.append(f"| `{src_name}` | {metrics['count']} | ${metrics['mae_dollars']:.4f} |")
         prov_table = "\n".join(prov_rows) if prov_rows else "| `yfinance` | N/A | N/A |"
         
+        wandb_status = "🟢 Active (Online)" if is_wandb_enabled() else "ℹ️ Configured (Standby)"
+
         section = f"""## 📊 Extended MLOps Observability & Feature Attribution (30-Day Window)
 
 | Metric / Dimension | Metric Value | Benchmark Target | Status |
 | :--- | :---: | :---: | :---: |
 | **LLM Augmentation Win Rate (vs Pure Quant)** | **`{win_rate:.1f}%`** | `> 55.0%` | {"✅ Outperforming" if win_rate >= 55 else "⚠️ Calibration Active"} |
 | **95% Confidence Interval Coverage** | **`{ci_cov:.1f}%`** | `> 90.0%` | {"✅ Well Calibrated" if ci_cov >= 90 else "ℹ️ Active Tracking"} |
+| **Weights & Biases (W&B) Dashboard** | [wandb.ai/midgley-gas-forecasting](https://wandb.ai) | Continuous Run Tracking | {wandb_status} |
 | **Mean LLM Price Pressure Vector** | `{avg_press:+.4f}` | `-1.0 to +1.0` | 🟢 Balanced |
 | **Mean LLM Supply Disruption Vector** | `{avg_disr:+.4f}` | `0.0 to +1.0` | 🟢 Active |
 
@@ -974,6 +986,21 @@ def generate_weekly_markdown_report() -> str:
     # Evaluate Model Degradation & Baseline Underperformance Alerts
     degradation_res = evaluate_model_degradation_alerts(window_days=30)
     degradation_section_md = format_degradation_markdown_section(degradation_res)
+
+    # Log weekly audit metrics to Weights & Biases (Issue #80)
+    try:
+        if is_wandb_enabled():
+            log_weekly_audit_run(
+                audit_summary={
+                    "nat_mae": nat_mae,
+                    "tulsa_mae": tulsa_mae,
+                    "total_records": len(eval_df)
+                },
+                degradation_alerts=degradation_res,
+                window_days=30
+            )
+    except Exception as e:
+        logger.debug(f"Notice logging weekly audit to W&B: {e}")
 
     # Fetch recent arXiv research preprints
     arxiv_section_md = format_arxiv_markdown_section(days_back=7)

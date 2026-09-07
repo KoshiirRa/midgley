@@ -81,6 +81,12 @@ MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
+# Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
+# Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
+WANDB_API_KEY="wandb_v1_..."
+WANDB_PROJECT="midgley-gas-forecasting"
+WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
+
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
 # ==============================================================================
