@@ -334,4 +334,48 @@ Midgley exposes a standard Prometheus exposition text format endpoint (`GET /api
 ### Zero-Cost Internet Archive Wayback Machine Cloud Archiver (`src/wayback_archiver.py`)
 During intraday event evaluations in `src/intraday_event_monitor.py`, breaking headline URLs are submitted directly to the Internet Archive Save API (`https://web.archive.org/save/{url}`). The permanent `archive_url` string is attached to the event result object, saved in `data/intraday_events.json`, and cached locally at `data/wayback_archive_cache.json` for 100% zero-cost cloud web archiving.
 
+---
+
+## 12. Healthchecks.io Pipeline Heartbeat & Dead-Man's Snitch Monitoring (`src/healthcheck_monitor.py`, Issue #98)
+
+Midgley integrates **Healthchecks.io** dead-man's snitch monitoring to guarantee visibility into scheduled pipeline executions:
+* **Heartbeat Dispatch Stages:**
+  - **Start (`/start`):** Sent when a forecasting cycle or weekly model review run begins.
+  - **Success (`/0` or `POST /`):** Dispatched upon successful completion, uploading execution duration (seconds) and summary diagnostic logs in the HTTP payload body.
+  - **Failure (`/fail`):** Sent upon uncaught exceptions or catastrophic run aborts, including the traceback in the payload.
+* **Orchestration Integration:**
+  - `src/prediction_logger.py` for daily 02:00 AM Central forecast runs.
+  - `src/weekly_issue_reporter.py` for Saturday 08:00 AM Central weekly review audits.
+  - `.github/workflows/gas_price_forecast.yml` and `.github/workflows/weekly_model_review.yml` GitHub Actions workflows.
+* **Operational Resiliency:** 100% fail-open, 10-second request timeouts, and test execution isolation (`TESTING=1`).
+
+---
+
+## 13. Open Source AI Radar Automated Model Discovery Connector (`src/data_ingestion.py`, Issue #187)
+
+Midgley monitors the open-weights AI model landscape via **Open Source AI Radar**:
+* **`OpenSourceAIRadarConnector`:** Ingests release metadata, parameter scales, quantization benchmarks, licensing, and capabilities from `api.opensourceai.io/v1/radar/models` (or configured mirror).
+* **Caching & Resilience:** 24-hour disk cache (`data/radar_cache.json`) with deterministic fallback model registry.
+* **REST & Weekly Review Integration:** Exposes `GET /api/v1/system/radar` and automatically injects model discovery tables into Saturday weekly review issues.
+
+---
+
+## 14. Self-Hosted ArchiveBox Historical Article Preservation Engine (`src/archive_service.py`, Issue #97)
+
+Midgley integrates self-hosted **ArchiveBox** (`archivebox.io`) to preserve full-fidelity historical web pages:
+* **Non-Blocking Architecture:** Dispatches archive requests (`POST /api/v1/core/add/`) via background thread pool (`concurrent.futures.ThreadPoolExecutor`) to eliminate LLM pipeline latency overhead.
+* **Dual-Tier Snapshot Ledger:** If ArchiveBox instance is unreachable or disabled, saves local markdown snapshots to `data/archives/` and records entries in `data/archived_events_ledger.json`.
+* **URL Extraction Hook:** Automatically invoked by `extract_event_features_from_url()` in `src/event_analyzer.py`.
+
+---
+
+## 15. Sapient PRAXIST Autonomous Energy Research Engine (`src/praxist_engine.py`, Issue #188)
+
+Midgley provides an autonomous programmatic research harness inspired by **Sapient PRAXIST**:
+* **`PraxistResearchHarness`:** Enables LLM agents to formulate empirical feature engineering hypotheses, execute backtests, and evaluate out-of-sample MAE deltas against baseline estimators.
+* **Statistical Validation:** Computes paired $t$-tests and $p$-values to verify that candidate feature improvements are statistically significant ($p < 0.05$) rather than backtest overfitting.
+* **Automated Parameter Sweeps:** Conducts systematic grid searches (e.g. Ridge $\alpha \in [0.1, 100.0]$, decay half-life $t_{1/2} \in [1.0, 14.0]$).
+* **Weekly Audit Synthesis:** Research findings and validated factor candidates are summarized in Saturday weekly model review reports.
+
+
 

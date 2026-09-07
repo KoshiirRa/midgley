@@ -397,6 +397,44 @@ For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and
 
 ---
 
+## 📡 Open Source AI Radar Model Discovery Endpoint (`GET /api/v1/system/radar` - Issue #187)
+
+* **Endpoint:** `GET /api/v1/system/radar`
+* **Query Parameters:**
+  - `limit` (optional, integer): Maximum models to return (default: 20).
+  - `min_score` (optional, float): Minimum benchmark capability score (0.0 to 100.0).
+  - `task` (optional, string): Filter by primary task (e.g. `text-generation`, `code-generation`, `reasoning`).
+* **Description:** Ingests live model discovery and capability benchmark metadata from Open Source AI Radar, tracking open-weights LLMs/SLMs, parameter scales, and quantization profiles with 24-hour disk caching (`data/radar_cache.json`).
+
+* **Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/system/radar?limit=5"
+```
+
+* **Example Response:**
+```json
+{
+  "status": "success",
+  "timestamp": "2026-09-07T04:45:00Z",
+  "total_models_available": 50,
+  "returned_count": 5,
+  "top_models": [
+    {
+      "model_id": "meta-llama/Llama-3.3-70B-Instruct",
+      "model_name": "Llama 3.3 70B Instruct",
+      "developer": "Meta",
+      "parameter_size": "70B",
+      "open_weights": true,
+      "benchmark_score": 88.6,
+      "release_date": "2024-12-06",
+      "license": "llama3.3"
+    }
+  ]
+}
+```
+
+---
+
 ## 🤖 Model Context Protocol (MCP) Server Integration
 
 The Midgley MCP Server exposes tools, resources, and prompt templates for integration with Claude Desktop, Antigravity CLI (`agy`), and OpenAI Custom GPTs.
