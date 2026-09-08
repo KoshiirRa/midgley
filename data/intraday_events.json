@@ -2570,5 +2570,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.18
     }
+  },
+  {
+    "timestamp": "2026-09-08T20:30:24.146770",
+    "headline": "Graham Russia Tariff Bill Contains Legal Ambiguities - Legis1",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFB5VW9xMlJqbjJMSmc1QlI4a2Fydlh0VVluRllmZW9xeTJrd295STk3WkNzcy02MEtZY1VJRnl6c3NHRzYwSTBKWFhBaE9JcEFNVEdrZjZYMTNjWW5LdWZ1VmlCTEp0VGVabU1zbU9td2lJQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMickFVX3lxTFB5VW9xMlJqbjJMSmc1QlI4a2Fydlh0VVluRllmZW9xeTJrd295STk3WkNzcy02MEtZY1VJRnl6c3NHRzYwSTBKWFhBaE9JcEFNVEdrZjZYMTNjWW5LdWZ1VmlCTEp0VGVabU1zbU9td2lJQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
