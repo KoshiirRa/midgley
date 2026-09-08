@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-08_07-02-02",
+    "timestamp": "2026-09-08 07:01:45",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-08 07:01:45)"
+  },
+  {
+    "run_id": "2026-09-08_07-01-47",
+    "timestamp": "2026-09-08 07:01:45",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-08 07:01:45)"
+  },
+  {
     "run_id": "2026-09-08_05-30-16",
     "timestamp": "2026-09-08 05:30:10",
     "run_type": "INTRADAY_REVISION",
