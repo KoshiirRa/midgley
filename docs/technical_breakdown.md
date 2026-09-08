@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-08 11:15:09`  
+**Log Timestamp:** `2026-09-08 12:30:09`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Here’s how to attract investment to Newfoundland despite Trump’s tariffs - Fraser Institute  
+**Primary Event Trigger:** Copper hits record high as tight supply, US tariff fears boost prices - business-standard.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Here’s how to attract investment to Newfoundland despite Trump’s tariffs - Fraser Institute
+- **Headline Trigger:** Copper hits record high as tight supply, US tariff fears boost prices - business-standard.com
 - **Active Ingested News Links:**
+- [Copper hits record high as tight supply, US tariff fears boost prices - business-standard.com](https://news.google.com/rss/articles/CBMi2gFBVV95cUxNRXA2UXktQTdSN0NrcGJsdEVmeDFsWnZjdVJWTW5CdmpoNklCR3djWUdJTDl3eDIySURkSHY4N25reC1Kc0RVN2JjMDQ2VEF4anhjUThrWm9BLVN1WjJtdVpUM1FMaEZCUFpBSmtJZGZYbGtCTkxIaHRpTnYtc3Q0SmNqWHppVEtoSDFrQVhHc3RHSzNJTWlsQ0RfSGZaWXdqZ0VoUEpLLVdMTnE5bF84SnczS1hrYmZPdmRIOTRtSXVKT3Qyam5BU1FIQ2l3bVZLQXZLRWxiUlhDZ9IB3wFBVV95cUxPLUx6aVZqVVV3djFVMk04Nkd0S244WmhBUzNuUUJaTVBTRkdncEFQTzlKQTE5Tl9BM1k0YWw0REw1MEMxajZvZ19GODBUN2ttM3Z2dkFOcm1wWklsNW1qZWdvd1RrLTY4VktHYjhHZ3o4OVNEQkRsZU5QemlEU1c1dHVUY2V1WXlqSlp6dElQN1hRTUlQamtZQThfYVA1b29pZW1CMVhwc2FuUkhrQVJPRm9sT3pMM2x2WTdEY3JxVXZENllLd2s3aTBaV2Q4LUVnX2k2R2ZUTHFIWjdsWTlF?oc=5) (Google News Energy Feed)
 - [Here’s how to attract investment to Newfoundland despite Trump’s tariffs - Fraser Institute](https://news.google.com/rss/articles/CBMiqwFBVV95cUxNNm1VSUtpaDRuUTZXdWhYX0tMWmNWN2hjVC1YTjVWbUlQWUdXWmpzc3RmY3JheEtvZ0ZRRTBERklpRnZLbkNqMDJKZ2dja3RyVk9Rck81elc2WW5IT1B4UVBoc3RldHlxdm56MWgtU054c2tlTEhMalJUcmN0X0VRNWNyLWNkRmNaSEtjSFZPUVY4Ul9JbHFkOXhteGRBODB3WTZZMkVZU09IcUU?oc=5) (Google News Energy Feed)
 - [Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz](https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5) (Google News Energy Feed)
-- [Oil surges above $97; Canada to double tariffs on US goods from today - DhanamOnline](https://news.google.com/rss/articles/CBMitwFBVV95cUxQY2VoaTJEWi11RUdsSFVfUmJVMGJ2Rnc5bnhQQ2t1SjEtUWp0YWtrVW1QT2dHTDF1Mjc4Ynh1blJHaFdpWnp4d1B2YTZwVEdjM0dWWWpydF9KX1hkVlJ4bV9DMndJLVRHLWp5TnFGQWVibVZHRDZlaUJ6THpvdnZVQUFwUlhEWEowajBrRU9wcVRKTE5ROGg1bzZjV0RpdlZoSDRfcGdyUHRJUkNmZkJmd3dyZlQ1UHPSAcQBQVVfeXFMUFA5dXc3MlhzMUFjdVc2SkVlOEtDN3JzTFF2MjFoWHpJYVNkUHluVmhJQTRQR041T1pSWFdyN1dWcG0xamlXNUhsb0JST1lnOVhWZ0RFUUJfQ0R0aHhXNzVlRWZxeEl5bzdsa3gwdkxyLTJza2tabU9RNE9uQWMydXNsNFNzZ0VOblJfVHdoekJHbUg0UTNoeEFpRkpEVG9wTE1nV3dnSUFOMXJKSm96UGl0bnVkWXNHNkRVUXlaaHozRTJmdg?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-08 11:15:09]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Here’s how to attract investment to Newfoundland despite Trump’s tariffs - Fraser Institute' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-08 12:30:09]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Copper hits record high as tight supply, US tariff fears boost prices - business-standard.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-08 11:15:09 (Mode: INTRADAY_REVISION), primary event trigger 'Here’s how to attract investment to Newfoundland despite Trump’s tariffs - Fraser Institute' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-08 12:30:09 (Mode: INTRADAY_REVISION), primary event trigger 'Copper hits record high as tight supply, US tariff fears boost prices - business-standard.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: SF Bay Area Region at $5.848/gal (+0.299/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-08 11:15:09]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Here’s how to attract investment to Newfoundland despite Trump’s tariffs - Fraser Institute'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-08 12:30:09]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Copper hits record high as tight supply, US tariff fears boost prices - business-standard.com'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 11:15:09.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 12:30:09.*
