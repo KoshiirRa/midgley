@@ -2552,5 +2552,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-08T12:45:08.999248",
+    "headline": "Swiss Government Releases Emergency Oil Reserves Following Cressier Refinery Outage - streamlinefeed.co.ke",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQcU9qSGk4azluSUU1Y2kyMXRxRjFYSWNRQ3NlU3UyLUlFX2ZvMGRrSWpSZXU3RkdwSy1wOFhPeXZzd3Bmcy1vcG1vTXpjSlphOHZUOHdIM3JpQXZjdUhuMHFSTlNyb0VrN2wxeTlYSWljSTU4VWc2bUlVb19pNkZqZEViVjhPT215SjBVemdWYm95dHJZd0wyYUJYbl9sb09ibF95Rk44aGdFRnc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqwFBVV95cUxQcU9qSGk4azluSUU1Y2kyMXRxRjFYSWNRQ3NlU3UyLUlFX2ZvMGRrSWpSZXU3RkdwSy1wOFhPeXZzd3Bmcy1vcG1vTXpjSlphOHZUOHdIM3JpQXZjdUhuMHFSTlNyb0VrN2wxeTlYSWljSTU4VWc2bUlVb19pNkZqZEViVjhPT215SjBVemdWYm95dHJZd0wyYUJYbl9sb09ibF95Rk44aGdFRnc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    }
   }
 ]
