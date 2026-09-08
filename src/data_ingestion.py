@@ -10,7 +10,7 @@ and Key Market Movers (Saudi Energy Minister, Fed Chair Powell, DOE SPR, IEA Bir
 import os
 import json
 import urllib.request
-from typing import Tuple, Dict, Any, List
+from typing import Tuple, Dict, Any, List, Optional, Union, Callable
 import pandas as pd
 import numpy as np
 import yfinance as yf
