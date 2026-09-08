@@ -1,27 +1,27 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-08 10:00:09`  
+**Log Timestamp:** `2026-09-08 10:30:09`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Oil surges above $97; Canada to double tariffs on US goods from today - DhanamOnline  
+**Primary Event Trigger:** Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Oil surges above $97; Canada to double tariffs on US goods from today - DhanamOnline
+- **Headline Trigger:** Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz
 - **Active Ingested News Links:**
+- [Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz](https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5) (Google News Energy Feed)
 - [Oil surges above $97; Canada to double tariffs on US goods from today - DhanamOnline](https://news.google.com/rss/articles/CBMitwFBVV95cUxQY2VoaTJEWi11RUdsSFVfUmJVMGJ2Rnc5bnhQQ2t1SjEtUWp0YWtrVW1QT2dHTDF1Mjc4Ynh1blJHaFdpWnp4d1B2YTZwVEdjM0dWWWpydF9KX1hkVlJ4bV9DMndJLVRHLWp5TnFGQWVibVZHRDZlaUJ6THpvdnZVQUFwUlhEWEowajBrRU9wcVRKTE5ROGg1bzZjV0RpdlZoSDRfcGdyUHRJUkNmZkJmd3dyZlQ1UHPSAcQBQVVfeXFMUFA5dXc3MlhzMUFjdVc2SkVlOEtDN3JzTFF2MjFoWHpJYVNkUHluVmhJQTRQR041T1pSWFdyN1dWcG0xamlXNUhsb0JST1lnOVhWZ0RFUUJfQ0R0aHhXNzVlRWZxeEl5bzdsa3gwdkxyLTJza2tabU9RNE9uQWMydXNsNFNzZ0VOblJfVHdoekJHbUg0UTNoeEFpRkpEVG9wTE1nV3dnSUFOMXJKSm96UGl0bnVkWXNHNkRVUXlaaHozRTJmdg?oc=5) (Google News Energy Feed)
 - [Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times](https://news.google.com/rss/articles/CBMi_AFBVV95cUxOWml5Z25XNGRpcEtJWnQwRVlWRXduNkpkMVRVYTl6YkJWeG9sWWd2X29RTlFzVWk1dk5ZWmRIR25DSmNfMDhfMDlKQzYxZTE5T1lMcUphcHd5bllVNE1RaFlIdU1ZWU1uRTdnMzRFU1BKdmo0b193TXZPM3RRSDBaWE1VOVQ4QVh6YWlQeGVxUTZpZWt5QXp1YkZ4TGhpWl9SNlkwTzYwa3VFTmxlUGh5akpDS1JzSkg2TEhvbVFKQ09zYjJiWjNkei1qd3hYQlc5MVhVcV9EUlpTSThkZDNMNTR5WjI4TDdlTi0wWFJOV3RGVWNBRGF6WmItSy3SAYICQVVfeXFMT013YXF6b1V4c1NpRDlHQWJiRXN2VEQxZm9QZ2laTl8zbFl1OVBKMzh4TGI0X00tOVcwcTJlcndwNmRVSWtmRWh6bHAtZDJXcTZBQ2h6cmJZQmdoWC1jZUdvTTBLZkdiMzFQMXdRNkk5dGdraEg2MmNWTHYxUE44UjJmeGU4Rk8zeWwwVHdwUzZjeW1UQUVrVkpBNkctcGF4T0E4UEdDTHgwYi1DU2JKZFYyTmQ0RlJxYmJzUVY1X0NiUUtHLWZjNnpWemZtSUVpeHc5aEJvMk0tOFdCNUUtb3VDdFRwOTFVbWprSDVCQTgyd2FGY3YtVi1DLWRtUEtXRUpR?oc=5) (Google News Energy Feed)
-- [Copper hits record high as tight supply, US tariff fears boost prices - Business Standard](https://news.google.com/rss/articles/CBMi2gFBVV95cUxNRXA2UXktQTdSN0NrcGJsdEVmeDFsWnZjdVJWTW5CdmpoNklCR3djWUdJTDl3eDIySURkSHY4N25reC1Kc0RVN2JjMDQ2VEF4anhjUThrWm9BLVN1WjJtdVpUM1FMaEZCUFpBSmtJZGZYbGtCTkxIaHRpTnYtc3Q0SmNqWHppVEtoSDFrQVhHc3RHSzNJTWlsQ0RfSGZaWXdqZ0VoUEpLLVdMTnE5bF84SnczS1hrYmZPdmRIOTRtSXVKT3Qyam5BU1FIQ2l3bVZLQXZLRWxiUlhDZw?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.80`
-- **Price Pressure Shock ($\Delta P$):** `+0.52`
-- **Geopolitical Risk Score ($G$):** `0.80`
+- **Supply Disruption Score ($S$):** `0.50`
+- **Price Pressure Shock ($\Delta P$):** `+0.18`
+- **Geopolitical Risk Score ($G$):** `0.00`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.8000$
-- **Day 1 Decayed Shock**: $M_1 = 0.8000 \times 0.87055 = 0.6964$
-- **Day 2 Decayed Shock**: $M_2 = 0.8000 \times (0.87055)^2 = 0.6063$
-- **Day 3 Decayed Shock**: $M_3 = 0.8000 \times (0.87055)^3 = 0.5278$
-- **Day 4 Decayed Shock**: $M_4 = 0.8000 \times (0.87055)^4 = 0.4595$
-- **Day 5 (Target Horizon)**: $M_5 = 0.8000 \times 0.50000 = 0.4000$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.5000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.5000$
+- **Day 1 Decayed Shock**: $M_1 = 0.5000 \times 0.87055 = 0.4353$
+- **Day 2 Decayed Shock**: $M_2 = 0.5000 \times (0.87055)^2 = 0.3789$
+- **Day 3 Decayed Shock**: $M_3 = 0.5000 \times (0.87055)^3 = 0.3299$
+- **Day 4 Decayed Shock**: $M_4 = 0.5000 \times (0.87055)^4 = 0.2872$
+- **Day 5 (Target Horizon)**: $M_5 = 0.5000 \times 0.50000 = 0.2500$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.163) = \$3.250\text{/gal}$ (Delta: -\$0.163/gal, -5.13\%)
+- **National Wholesale**: $P = \$3.184 + (-\$0.207) = \$3.207\text{/gal}$ (Delta: -\$0.207/gal, -6.49\%)
 - **Tulsa, OK Retail**: $P = \$3.599 + (-\$0.278) = \$3.503\text{/gal}$ (Delta: -\$0.278/gal, -7.73\%)
 - **Newark, DE Retail**: $P = \$3.220 + (-\$0.269) = \$3.142\text{/gal}$ (Delta: -\$0.269/gal, -8.35\%)
 - **Cincinnati, OH/KY**: $P = \$3.883 + (-\$0.284) = \$3.799\text{/gal}$ (Delta: -\$0.284/gal, -7.31\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-08 10:00:09]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Oil surges above $97; Canada to double tariffs on US goods from today - DhanamOnline' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-08 10:30:09]: Elevated upward price shock (+$0.18/gal) observed across wholesale futures. Event trigger 'Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz' drove supply disruption to S=0.50 and geopolitical risk to G=0.00. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.4353 and Day-5 horizon retention M₅=0.2500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-08 10:00:09 (Mode: INTRADAY_REVISION), primary event trigger 'Oil surges above $97; Canada to double tariffs on US goods from today - DhanamOnline' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.8000
-  - Day 1: M₁ = 0.6964
-  - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-08 10:30:09 (Mode: INTRADAY_REVISION), primary event trigger 'Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.50, Price Pressure ΔP=+0.18, Geopolitical Risk G=0.00. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.5000
+  - Day 1: M₁ = 0.4353
+  - Day 5: M₅ = 0.2500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.250/gal ($-0.163/gal, -5.13%)
+  • National Wholesale: $3.207/gal ($-0.207/gal, -6.49%)
   • Tulsa, OK Retail: $3.503/gal ($-0.278/gal, -7.73%)
   • Newark, DE Retail: $3.142/gal ($-0.269/gal, -8.35%)
   • Cincinnati, OH/KY: $3.799/gal ($-0.284/gal, -7.31%)
@@ -96,10 +96,10 @@ Largest upward shift for this run: SF Bay Area Region at $5.848/gal (+0.299/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-08 10:00:09]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Oil surges above $97; Canada to double tariffs on US goods from today - DhanamOnline'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-08 10:30:09]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz'. Overall price pressure vector sits at ΔP=+0.18/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.00. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 10:00:09.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 10:30:09.*
