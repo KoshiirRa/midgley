@@ -62,6 +62,7 @@ jobs:
           AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
           HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
         run: |
+          set -eo pipefail
           python -u run_all.py --use-llm-api 2>&1 | tee run_all_output.log
 
       - name: Upload Pipeline Execution Log

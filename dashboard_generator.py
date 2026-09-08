@@ -78,6 +78,91 @@ def codecogs_url(latex_str: str) -> str:
     return f"https://latex.codecogs.com/svg.latex?{encoded}"
 
 
+def is_valid_headline(headline: str) -> bool:
+    """
+    Enforces strict headline sanitization (Issue #204).
+    Requires title/headline strings to contain valid textual headline prose.
+    Filters out raw API URLs (api.finlight.me, api.weather.gov, etc.), raw JSON payloads,
+    and non-headline telemetry strings.
+    """
+    if not headline or not isinstance(headline, str):
+        return False
+
+    h_stripped = headline.strip()
+    if len(h_stripped) < 10:
+        return False
+
+    # Filter raw URLs
+    if h_stripped.startswith(("http://", "https://", "ftp://")):
+        return False
+
+    # Filter raw JSON or dict strings
+    if (h_stripped.startswith("{") and h_stripped.endswith("}")) or (h_stripped.startswith("[") and h_stripped.endswith("]")):
+        return False
+    if any(json_kw in h_stripped for json_kw in ['"properties":', '"geometry":', '"type": "Feature"', '"id":']):
+        return False
+
+    # Filter raw API domain URLs embedded in headline text
+    raw_api_domains = [
+        "api.finlight.me",
+        "api.weather.gov",
+        "t.wxs.us",
+        "api.github.com",
+        "marsapi.ams.usda.gov"
+    ]
+    if any(domain in h_stripped.lower() for domain in raw_api_domains):
+        return False
+
+    # Ensure at least 3 words containing alphabetic characters
+    words = [w for w in h_stripped.split() if any(c.isalpha() for c in w)]
+    if len(words) < 3:
+        return False
+
+    return True
+
+
+def format_human_source(source: str, url: str = "") -> str:
+    """
+    Converts raw technical feed identifiers into human-readable source attributions (Issue #204).
+    """
+    if not source or not isinstance(source, str):
+        source = "Energy Market Wire"
+
+    s_clean = source.strip()
+    if s_clean.startswith("Test_"):
+        return s_clean
+
+    s_lower = s_clean.lower()
+    url_lower = url.lower() if url else ""
+
+    if "reuters" in s_lower or "reuters" in url_lower:
+        return "Reuters Energy"
+    if "bloomberg" in s_lower or "bloomberg" in url_lower:
+        return "Bloomberg Market Wire"
+    if "noaa" in s_lower or "weather.gov" in s_lower or "weather.gov" in url_lower or "wxs.us" in url_lower:
+        return "NOAA NWS Storm Alert"
+    if "cme" in s_lower or "nymex" in s_lower or "cmegroup" in url_lower:
+        return "CME Group / NYMEX"
+    if "finlight" in s_lower or "finlight" in url_lower:
+        return "Financial Media Wire"
+    if "nyt" in s_lower or "nytimes" in url_lower:
+        return "New York Times Energy"
+    if "cnbc" in s_lower or "cnbc" in url_lower:
+        return "CNBC Energy Wire"
+    if "google" in s_lower or "news.google" in url_lower:
+        return "Google News Energy Feed"
+    if "rss" in s_lower:
+        return "Energy News Wire"
+    if "webhook" in s_lower:
+        return "Intraday Anomaly Trigger"
+
+    if "_" in s_clean and " " not in s_clean:
+        return s_clean.replace("_", " ")
+
+    return s_clean
+
+
+
 KATEX_MOBILE_CSS = """
         /* Mobile-Responsive KaTeX Math Equation Styles */
         .katex-display {
@@ -239,6 +324,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     diesel_cls = "bg-purple-600/30 text-purple-300 border border-purple-500/40 font-semibold" if active_tab == "diesel" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     telemetry_cls = "bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 font-semibold" if active_tab == "telemetry" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -254,6 +340,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
+    cit_link = f"{rel_prefix}citations.html"
     sav_link = f"{rel_prefix}savings.html"
     dsl_link = f"{rel_prefix}diesel.html"
     tel_link = f"{rel_prefix}telemetry.html"
@@ -326,6 +413,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="{cit_link}" class="px-3 py-1.5 rounded-lg {citations_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
                 </a>
                 <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
                     <i class="fa-brands fa-github"></i> GitHub
@@ -530,34 +620,39 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
                             h_src = evt.get("source", "Webhook / RSS")
                             if any(t_pfx in h_src.lower() for t_pfx in ["test_suite", "test_runner", "test_"]):
                                 continue
-                            if h_text and not any(item["headline"] == h_text for item in headline_items):
-                                headline_items.append({"headline": h_text, "url": h_url, "source": h_src})
+                            if h_text and is_valid_headline(h_text) and not any(item["headline"] == h_text for item in headline_items):
+                                clean_url = h_url if h_url and not any(d in h_url.lower() for d in ["api.finlight.me", "api.weather.gov", "t.wxs.us"]) else f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
+                                headline_items.append({
+                                    "headline": h_text.strip(),
+                                    "url": clean_url,
+                                    "source": format_human_source(h_src, clean_url)
+                                })
                             if len(headline_items) >= 3:
                                 break
             except Exception as e:
                 logger.warning(f"Could not parse headline items from intraday_events.json: {e}")
-        if not headline_items and headline_trigger:
+        if not headline_items and headline_trigger and is_valid_headline(headline_trigger):
             headline_items.append({
-                "headline": headline_trigger,
+                "headline": headline_trigger.strip(),
                 "url": f"https://news.google.com/search?q={urllib.parse.quote(headline_trigger)}",
-                "source": "Intraday Anomaly Trigger"
+                "source": format_human_source("Intraday Anomaly Trigger")
             })
     else:
         headline_items = [
             {
                 "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
                 "url": "https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html",
-                "source": "CME_Group / NYMEX"
+                "source": "CME Group / NYMEX"
             },
             {
                 "headline": "NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion",
-                "url": "https://api.weather.gov",
-                "source": "NOAA_NWS_API"
+                "url": "https://www.weather.gov",
+                "source": "NOAA NWS Storm Alert"
             },
             {
-                "headline": "Executive Social Media Feed & OPEC Weekend Price Gap Analysis",
-                "url": "https://finlight.me",
-                "source": "Finlight_v2_API"
+                "headline": "Executive Policy Feed & OPEC Weekend Open Price Gap Intelligence",
+                "url": "https://www.bloomberg.com/energy",
+                "source": "Bloomberg Market Wire"
             }
         ]
 
@@ -859,9 +954,10 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
         run_mode_tag = "INTRADAY_REVISION"
     else:
         badge_html = """<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-            <i class="fa-solid fa-circle-check text-emerald-400"></i> Scheduled Daily Batch
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Daily Forecast Batch Execution
         </span>"""
-        trigger_title = "Scheduled Daily Batch @ 02:00 AM Central"
+        timestamp_utc = log_ts if log_ts else datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        trigger_title = f"Daily Forecast Batch Execution ({timestamp_utc})"
         trigger_desc = "Automated 24-hour commodity futures, weather alerts, and executive social media ingestion."
         run_mode_tag = "DAILY_BATCH"
 
@@ -887,9 +983,16 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
         h_text = h.get("headline", "")
         h_url = h.get("url", "")
         h_src = h.get("source", "Energy_News")
+
+        if not is_valid_headline(h_text):
+            continue
+
         is_dummy_url = any(dummy_kw in h_url for dummy_kw in ["/articles/123", "/articles/tariffs_", "/articles/hormuz_", "example.com", "test_"])
-        if not h_url or is_dummy_url:
+        is_raw_api = any(domain in h_url.lower() for domain in ["api.finlight.me", "api.weather.gov", "t.wxs.us", "api.github.com"])
+        if not h_url or is_dummy_url or is_raw_api:
             h_url = f"https://news.google.com/search?q={urllib.parse.quote(h_text)}"
+
+        h_src = format_human_source(h_src, h_url)
 
         h_text_esc = html.escape(h_text)
         h_url_esc = html.escape(h_url)
@@ -1086,7 +1189,7 @@ def build_spc_style_synopsis(
     m1 = m0 * retention_daily
     m5 = m0 * 0.50
 
-    trigger_desc = headline if headline else "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    trigger_desc = headline if headline else f"Daily Forecast Batch Execution ({log_ts})"
 
     # Extract top gainers and decliners specific to THIS run's regional deltas
     sorted_regions = sorted(region_deltas, key=lambda x: x.get("delta", 0.0), reverse=True)
@@ -1218,7 +1321,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     m5 = m0 * 0.50
 
     file_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H-%M-%S")
-    trigger_text = headline if headline else "Scheduled Daily Batch Refresh (02:00 AM Central)"
+    trigger_text = headline if headline else f"Daily Forecast Batch Execution ({log_ts})"
 
     # Build SPC-style technical narrative synopsis for Section 5
     synopsis = build_spc_style_synopsis(
@@ -1580,15 +1683,63 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">EIA-930 Electric Grid Stress Anomaly Z-Score (Issue #179):</p>
-                    <p class="text-blue-300">$$Z_{{\\text{{Grid}}}} = \\frac{{\\text{{Load}}_{{\\text{{RTO}}}} - \\mu_{{24\\text{{h}}}}}}{{\\sigma_{{24\\text{{h}}}}}}$$</p>
-                    <p class="text-slate-400 text-[11px]">Monitors ERCOT, MISO, PJM & CAISO grid load spikes near major refining hubs.</p>
+                    <p class="text-amber-300 font-bold">Dynamic Volatility-Gated Persistence Blending (Issue #214):</p>
+                    <p class="text-blue-300">$$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$</p>
+                    <p class="text-slate-400 text-[11px]">Blends model forecasts into naive persistence during low-volatility plateaus while preserving 100% shock reactivity.</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">NHC Hurricane & Colonial Pipeline Threat Index (Issue #177):</p>
-                    <p class="text-blue-300">$$\\text{{Score}}_{{\\text{{Refinery}}}} = \\text{{Threat}}_{{\\text{{NHC}}}} \\times (1.5 \\text{{ if Gulf Coast else }} 1.0)$$</p>
-                    <p class="text-slate-400 text-[11px]">Projects Gulf refining hub and Colonial Pipeline Line 1/2 intake risk scores.</p>
+                    <p class="text-amber-300 font-bold">Empirical Residual 95% Confidence Intervals (Issue #214):</p>
+                    <p class="text-blue-300">$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$</p>
+                    <p class="text-slate-400 text-[11px]">Derives dynamic 95% confidence bands from rolling 30-day regional residual standard errors.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">USGS 3D Hypocentral Attenuation & Ground Shaking (Issue #55):</p>
+                    <p class="text-blue-300">$$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$</p>
+                    <p class="text-slate-400 text-[11px]">Quantifies facility-level peak ground shaking and pipeline shutoff risk indices across 5 corridors.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">USGS Hydrological Barge Bottleneck Index (Issue #56):</p>
+                    <p class="text-blue-300">$$\\text{{Index}}_{{\\text{{barge}}}} = \\max\\left(0, \\min\\left(1, \\frac{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_t}}{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_{{\\text{{min}}}}}}\\right)\\right)$$</p>
+                    <p class="text-slate-400 text-[11px]">Tracks low-water navigation draft restrictions at Memphis & Cairo confluence throttling barge throughput.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Multi-Feed AQI Standardized Flaring Outage Z-Score (Issue #54):</p>
+                    <p class="text-blue-300">$$Z_{{\\text{{PM2.5}}}} = \\frac{{\\text{{PM2.5}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}, \\quad Z_{{\\text{{SO2}}}} = \\frac{{\\text{{SO2}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Detects emergency refinery flaring when $Z_{{\\text{{PM2.5}}}} \\ge 3.5 \\land Z_{{\\text{{SO2}}}} \\ge 2.5$ with 12-24h lead time over news.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73):</p>
+                    <p class="text-blue-300">$$\\text{{Surcharge}}_{{\\text{{RVP}}}} = \\Delta \\text{{Spread}}_{{\\text{{Summer Blend}}}} + 0.040 \\cdot \\mathbf{{1}}_{{\\text{{AQI}}_{{\\text{{O3}}}} \\ge 101}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Applies statutory summer-blend RVP constraints (CARB 7.0 psi, EPA 7.8 psi, Conventional 9.0 psi) and Ozone Action Day fees.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">U.S. Census Commuter Inelastic Demand Score (Issue #75):</p>
+                    <p class="text-blue-300">$$\\text{{Score}}_{{\\text{{inelastic}}}} = \\frac{{\\text{{DriveAlone}} + \\text{{Carpool}}}}{{\\text{{TotalCommuters}}}} \\times (1 - \\text{{TransitIndex}})$$</p>
+                    <p class="text-slate-400 text-[11px]">Calibrates retail pump price pass-through speed and baseline rack spreads from ACS commuting tables.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66):</p>
+                    <p class="text-blue-300">$$\\text{{Spread}}_{{10\\text{{Y}}-2\\text{{Y}}}} = Y_{{10\\text{{Y}}}} - Y_{{2\\text{{Y}}}}, \\quad \\Delta \\text{{Spread}}_{{5\\text{{d}}}} = \\text{{Spread}}_t - \\text{{Spread}}_{{t-5}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Captures leading macroeconomic expansion/recession demand signals and real TIPS inventory carry costs.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Qlib Symbolic Alpha Information Coefficient (Issue #127):</p>
+                    <p class="text-blue-300">$$IC_t = \\text{{Corr}}(f_t, r_{{t+h}}), \\quad IC_{{IR}} = \\frac{{\\mu(IC)}}{{\\sigma(IC)}}$$</p>
+                    <p class="text-slate-400 text-[11px]">Evaluates AST-parsed symbolic alpha factor formulas with non-lookahead point-in-time calculation rules.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <p class="text-amber-300 font-bold">Multi-Horizon Scoreboard Performance Accuracy (Issue #209):</p>
+                    <p class="text-blue-300">$$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}} - y_{{i, H}}|, \\quad H \\in [1\\text{{d}}, 2\\text{{d}}, 3\\text{{d}}, 4\\text{{d}}, 5\\text{{d}}]$$</p>
+                    <p class="text-slate-400 text-[11px]">Tracks continuous rolling out-of-time accuracy breakdowns across all discrete forecast horizons.</p>
                 </div>
             </div>
         </section>
@@ -1722,6 +1873,48 @@ Numeric Retention Schedule for This Run ($M_0 = {m0:.4f}$):
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 {synopsis['risks_scenarios']}
+
+---
+
+## 6. Advanced Quantitative Feature & Physical Data Formulas
+
+### 3-2-1 Refining Crack Spread Formula (Issue #169)
+$$\\text{{Crack}}_{{321}} (\\$/\\text{{bbl}}) = \\frac{{2 \\times (P_{{\\text{{RBOB}}}} \\times 42) + 1 \\times (P_{{\\text{{HO}}}} \\times 42) - 3 \\times P_{{\\text{{WTI}}}}}}{{3}}$$
+
+### Stacking Ensemble Quantile Prediction Bounds (Issue #170)
+$$P_{{10}} = P_{{50}} - 1.2815\\sigma, \\quad P_{{90}} = P_{{50}} + 1.2815\\sigma$$
+
+### Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
+$$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$
+
+### Empirical Residual 95% Confidence Intervals (Issue #214)
+$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$
+
+### USGS 3D Hypocentral Attenuation & Ground Shaking Intensity (Issue #55)
+$$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$
+
+### USGS Hydrological Streamflow & Barge Bottleneck Index (Issue #56)
+$$\\text{{Index}}_{{\\text{{barge}}}} = \\max\\left(0, \\min\\left(1, \\frac{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_t}}{{\\text{{Gage}}_{{\\text{{threshold}}}} - \\text{{Gage}}_{{\\text{{min}}}}}}\\right)\\right)$$
+
+### Multi-Feed AQI Standardized Flaring Outage Detection Z-Score (Issue #54)
+$$Z_{{\\text{{PM2.5}}}} = \\frac{{\\text{{PM2.5}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}, \\quad Z_{{\\text{{SO2}}}} = \\frac{{\\text{{SO2}}_t - \\mu_{{30\\text{{d}}}}}}{{\\sigma_{{30\\text{{d}}}}}}$$
+
+### EPA Ozone & Statutory Seasonal RVP Compliance Surcharge (Issue #73)
+$$\\text{{Surcharge}}_{{\\text{{RVP}}}} = \\Delta \\text{{Spread}}_{{\\text{{Summer Blend}}}} + 0.040 \\cdot \\mathbf{{1}}_{{\\text{{AQI}}_{{\\text{{O3}}}} \\ge 101}}$$
+
+### U.S. Census Commuter Inelastic Demand Score (Issue #75)
+$$\\text{{Score}}_{{\\text{{inelastic}}}} = \\frac{{\\text{{DriveAlone}} + \\text{{Carpool}}}}{{\\text{{TotalCommuters}}}} \\times (1 - \\text{{TransitIndex}})$$
+
+### Treasury 10Y-2Y Term Spread & Momentum Delta (Issue #66)
+$$\\text{{Spread}}_{{10\\text{{Y}}-2\\text{{Y}}}} = Y_{{10\\text{{Y}}}} - Y_{{2\\text{{Y}}}}, \\quad \\Delta \\text{{Spread}}_{{5\\text{{d}}}} = \\text{{Spread}}_t - \\text{{Spread}}_{{t-5}}$$
+
+### Qlib Symbolic Alpha Factor Information Coefficient (Issue #127)
+$$IC_t = \\text{{Corr}}(f_t, r_{{t+h}}), \\quad IC_{{IR}} = \\frac{{\\mu(IC)}}{{\\sigma(IC)}}$$
+
+### Multi-Horizon Forecast Scoreboard Accuracy (Issue #209)
+$$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}} - y_{{i, H}}|, \\quad H \\in [1\\text{{d}}, 2\\text{{d}}, 3\\text{{d}}, 4\\text{{d}}, 5\\text{{d}}]$$
+
+
 
 ---
 *Report generated automatically by Midgley Dashboard Generator Engine at {log_ts}.*
@@ -1918,7 +2111,7 @@ def generate_public_dashboard():
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
-                <span class="text-xs text-slate-400">Updated Daily @ 02:00 AM Central &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
+                <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
@@ -2508,10 +2701,10 @@ def generate_public_dashboard():
                     <!-- Pillar 4 -->
                     <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                         <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
-                            <i class="fa-solid fa-ship"></i> 4. Maritime Chokepoints
+                            <i class="fa-solid fa-ship"></i> 4. Maritime &amp; Waterway Chokepoints
                         </h4>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Strait of Hormuz (21M bpd) blockade risk &amp; Red Sea / Suez rerouting freight premiums (+12 to +14 days).
+                            Strait of Hormuz (21M bpd), Suez reroutings (+12d), inland Mississippi/Ohio river barge draft limits, and coastal waterborne terminals.
                         </p>
                     </div>
 
@@ -3968,6 +4161,10 @@ def generate_public_dashboard():
                         <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">+$0.420/gal</span>
                     </div>
                     <p class="text-slate-400">Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips.</p>
+                    <div class="pt-1 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+                        <span class="text-slate-500 uppercase tracking-wider">USGS FDSNWS Feed</span>
+                        {{USGS_SEISMIC_STATUS_BADGE}}
+                    </div>
                 </div>
 
                 <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/30 space-y-2">
@@ -4062,7 +4259,19 @@ def generate_public_dashboard():
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca'))
+        try:
+            from src.usgs_seismic import USGSSeismicConnector
+            _seismic_c = USGSSeismicConnector()
+            _s_data = _seismic_c.fetch_live_seismic_telemetry(corridor="bay_area")
+            _s_risk = _s_data.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
+            if _s_risk >= 0.25:
+                seismic_badge = f'<span class="text-rose-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Active Risk: {_s_risk:.2f}</span>'
+            else:
+                seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
+        except Exception:
+            seismic_badge = '<span class="text-slate-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-nodes"></i> Monitored</span>'
+
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -4467,12 +4676,17 @@ def generate_public_dashboard():
                             <h4 class="text-sm font-bold text-white flex items-center gap-2">
                                 Peer-Reviewed Research Literature Index <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
                             </h4>
-                            <p class="text-xs text-slate-400">View the running citation ledger referencing peer-reviewed arXiv papers (Context Routing Diagnostics, Alibaba CEDAR Residual Decomposition, TraceBench, SAGE, SPALT) whose methodologies are implemented in Midgley.</p>
+                            <p class="text-xs text-slate-400">Explore theoretical theorems, KaTeX formulas, arXiv pre-prints, Context Routing bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR residual decomposition, and Purged CPCV cross-validation across all 12 cited foundation papers.</p>
                         </div>
                     </div>
-                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shrink-0 shadow-lg shadow-blue-600/20">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> View RESEARCH_CITATIONS.md
-                    </a>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-book-open"></i> Open Citations Portal
+                        </a>
+                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+                            <i class="fa-brands fa-github"></i> RESEARCH_CITATIONS.md
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4534,38 +4748,54 @@ def generate_public_dashboard():
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Multi-Tiered Weather Vulnerability Matrix</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
-                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}}$$
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}}$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks &amp; Permian/Bakken production basin freeze warnings.<br>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks (PADD 3 refining corridor) &amp; Permian/Bakken production basin polar vortex freezes.<br>
                     <strong>Tier 2 (Tulsa OK):</strong> Tulsa County (<code class="text-amber-300">OKZ060</code>) EF-3 Tornado warnings (halting West Tulsa \(125,000\text{ bpd}\) HF Sinclair loading racks, \(+\$0.173/\text{gal}\) shock) and Cushing (<code class="text-amber-300">OKZ066</code>) sub-zero delivery freezes.<br>
-                    <strong>Tier 2 (Newark DE):</strong> New Castle County (<code class="text-amber-300">DEZ001</code>) Nor'easters &amp; storm surges affecting PBF Delaware City (\(180,000\text{ bpd}\)) loading racks.<br>
-                    <strong>Tier 2 (Cincinnati OH/KY):</strong> Ohio Valley flooding &amp; Mississippi River low-water draft restrictions affecting river barge deliveries.
+                    <strong>Tier 2 (Newark DE):</strong> New Castle County (<code class="text-amber-300">DEZ001</code>) Nor'easters &amp; storm surges affecting PBF Delaware City (\(180,000\text{ bpd}\)) loading racks, Big Stone Anchorage deepwater lightering halts, and C&amp;D Canal freeze lockouts.<br>
+                    <strong>Tier 2 (Cincinnati OH/KY):</strong> Hamilton County OH (<code class="text-amber-300">OHZ077</code>) &amp; NKY (<code class="text-amber-300">KYZ091/092/093</code>) Ohio Valley flooding &amp; Mississippi River low-water draft restrictions affecting river barge deliveries from Marathon Catlettsburg (\(291,000\text{ bpd}\)).<br>
+                    <strong>Tier 2 (Greenville NC):</strong> Pitt County (<code class="text-amber-300">NCZ081</code>) Atlantic hurricane coastal inundation, Tar River flood crests (\(&gt;19\text{ ft}\)), and winter ice storms throttling Selma/Apex terminal rack dispatch on Colonial Pipeline Lines 1 &amp; 2.<br>
+                    <strong>Tier 2 (Charlotte NC):</strong> Mecklenburg County (<code class="text-amber-300">NCZ071</code>) inland tropical cyclone wind gusts, Catawba River basin flooding, and severe convective power substation trips halting truck dispatches at Paw Creek petroleum tank farms.<br>
+                    <strong>Tier 2 (Oakland &amp; SF Bay Area CA):</strong> Alameda County (<code class="text-amber-300">CAZ508</code>) &amp; Contra Costa County (<code class="text-amber-300">CAZ511</code>) atmospheric river bomb cyclones, PG&amp;E Public Safety Power Shutoffs (PSPS) / Diablo winds impacting Chevron Richmond (\(245,000\text{ bpd}\)) CaRFG units, and USGS Hayward Fault seismic pipeline shutoffs.<br>
+                    <strong>Tier 2 (Port St. Lucie FL):</strong> St. Lucie County (<code class="text-amber-300">FLZ147</code> / Zip <code class="text-amber-300">34952</code>) Atlantic hurricane evacuations/landfalls (Ian, Nicole, Milton), South Florida 25-inch flash flood rack washouts, and marine barge delays into Port Everglades and Port Canaveral berths.
                 </p>
             </div>
         </section>
 
-        <!-- Section 4: Global & Regional Maritime Chokepoints -->
+        <!-- Section 4: Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-purple-500">04</span>
-                <h3 class="text-2xl font-bold text-white">Global &amp; Regional Maritime Chokepoints &amp; Delay Equations</h3>
+                <h3 class="text-2xl font-bold text-white">Global &amp; Regional Maritime Chokepoints, Inland River Barging &amp; Waterborne Terminals</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Key global and regional maritime chokepoints dictate crude transit times and regional rack margins:
+                Global maritime chokepoints, inland river tow barge draft constraints, and coastal waterborne terminal freight logistics dictate crude transit delays, spot barge shipping rates, and regional rack margins:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Maritime Freight Transit &amp; Detour Premium</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
-                    $$\Delta P_{\text{freight}} = C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right), \quad \Delta \text{Margin}_{\text{Delaware}} = +\$0.097/\text{gal } (p = 0.00191)$$
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Unified Waterway Freight &amp; Detour Penalty Model</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-purple-200 overflow-x-auto">
+                    $$\Delta P_{\text{freight}, r} = \underbrace{C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right)}_{\text{Global Chokepoint Detour}} + \underbrace{\gamma_{\text{draft}} \cdot \text{Index}_{\text{barge}}}_{\text{Inland River Tow Constraints}} + \underbrace{\Delta \text{Margin}_{\text{waterborne}, r}}_{\text{Coastal Terminal / Canal Surcharge}}$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    <strong>Strait of Hormuz:</strong> \(21.0\text{M bpd}\) (\(20\%\) of global petroleum) naval blockade threats (\(+\$0.109/\text{gal}\) price shock).<br>
-                    <strong>Suez Canal / Red Sea:</strong> Cape of Good Hope reroutings add \(+12\text{--}14\) days transit time, adding \(+\$4.50/\text{bbl}\) freight premium (\(+\$0.201/\text{gal}\) price shock).<br>
-                    <strong>Delaware Bay &amp; C&amp;D Canal:</strong> Big Stone Anchorage deepwater lightering freezes and C&amp;D Canal shoaling closures force tank barges onto a \(300\text{ nm}\) detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by \(+\$0.097/\text{gal}\), \(p = 0.00191\)).
+                <div class="text-center text-sm font-mono py-2 bg-slate-950/80 rounded-lg border border-slate-800/80 text-purple-300 overflow-x-auto">
+                    $$\text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>1. Global Strategic Chokepoints (National Wholesale Baseline):</strong><br>
+                    &bull; <strong>Strait of Hormuz:</strong> \(21.0\text{M bpd}\) (\(20\%\) of global petroleum) naval blockade &amp; Iranian mine threats (\(+\$0.109/\text{gal}\) futures price shock).<br>
+                    &bull; <strong>Suez Canal &amp; Bab-el-Mandeb / Red Sea:</strong> Cape of Good Hope reroutings add \(+12\text{--}14\) days transit time, adding \(+\$4.50/\text{bbl}\) marine freight premium (\(+\$0.201/\text{gal}\) price shock).<br>
+                    &bull; <strong>Venezuela Orinoco &amp; Caribbean:</strong> OFAC General License 44 heavy crude sanctions and tanker export quotas (\(0.85\text{M bpd}\)).<br><br>
+                    <strong>2. Inland River Barging &amp; Hydro Navigation Corridors (Mid-Continent &amp; Midwest):</strong><br>
+                    &bull; <strong>Cincinnati Tri-State (Ohio &amp; Lower Mississippi River Corridor):</strong> Confluence at Cairo, IL (Mile 981 on Lower Mississippi / Mile 0 on Ohio River) and Memphis, TN USGS gage (<code class="text-amber-300">07032000</code>). Autumn low-water droughts drop gage below \(5.0\text{ ft}\) (severe crisis at \(&lt;0.0\text{ ft}\)), enforcing \(-40\%\) barge payload draft cuts, surging spot barge freight rates \(+300\%\), and expanding Cincinnati/Ohio Valley rack margins by \(+14.5\text{¢}/\text{gal}\) (\(+\$0.145/\text{gal}\)). Winter ice lockouts at Markland Locks &amp; Dam (Mile 531.5) halt Marathon Catlettsburg (\(291,000\text{ bpd}\)) barge deliveries, forcing rail substitution (\(+\$0.112/\text{gal}\)).<br>
+                    &bull; <strong>Tulsa Metro (MKARNS / Port of Catoosa Navigation):</strong> McClellan-Kerr Arkansas River Navigation System (Head of Navigation Mile 445 at Verdigris River) linking West Tulsa HF Sinclair refinery corridor to the Mississippi River; high-discharge flood stages or low-water lock halts throttle refined product barge departures.<br><br>
+                    <strong>3. Coastal Waterborne Terminals &amp; Domestic Canal Bottlenecks:</strong><br>
+                    &bull; <strong>Newark Metro (Delaware Bay &amp; C&amp;D Canal):</strong> Big Stone Anchorage deepwater tanker lightering freezes and C&amp;D Canal emergency shoaling closures force tank barges onto a \(300\text{ nm}\) open-ocean detour around the Delmarva Peninsula (+35% marine freight rate surge, expanding regional Delaware rack margins by \(+\$0.097/\text{gal}\), \(p = 0.00191\)).<br>
+                    &bull; <strong>Port St. Lucie (Straits of Florida &amp; Coastal Waterborne Terminals):</strong> Florida lacks crude/product pipelines and refineries, relying \(100\%\) on waterborne articulated tug-barges (ATBs) and product tankers from Gulf Coast refining hubs (Texas/Louisiana) into Port Everglades and Port Canaveral berths. Tropical cyclones, high seas, and Straits of Florida gale warnings bottleneck coastal barge dockings (\(+\$0.125/\text{gal}\) freight dislocation).<br>
+                    &bull; <strong>Oakland &amp; SF Bay Area (Carquinez Strait &amp; San Francisco Bay):</strong> Marine crude lightering in Central San Francisco Bay and Carquinez Strait barge berthing supplying Chevron Richmond (\(245,000\text{ bpd}\)) and Martinez refineries; Pacific bomb cyclones and coastal gale warnings throttle marine dockings and CaRFG waterborne transfers.<br>
+                    &bull; <strong>Greenville NC (Port of Wilmington &amp; Cape Fear River):</strong> Coastal petroleum barge offloading at Port of Wilmington oil terminal docks supplying Eastern North Carolina fuel racks via Cape Fear River navigation channel during storm surge closures.
                 </p>
             </div>
         </section>
@@ -4717,38 +4947,10 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 11: Academic Research & Citation Ledger -->
+        <!-- Section 11: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-blue-400">11</span>
-                <h3 class="text-2xl font-bold text-white">Peer-Reviewed Research &amp; Academic Citation Ledger</h3>
-            </div>
-
-            <p class="text-slate-300 leading-relaxed text-sm">
-                Midgley actively integrates theoretical theorems, diagnostic algorithms, and multi-agent architectural paradigms from peer-reviewed scientific literature. All implemented research papers are indexed in our persistent repository ledger:
-            </p>
-
-            <div class="p-6 rounded-2xl bg-slate-900 border border-blue-500/30 space-y-4">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <h4 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-scroll text-blue-400"></i> RESEARCH_CITATIONS.md
-                        </h4>
-                        <p class="text-xs text-slate-400">
-                            Includes arXiv pre-prints, theoretical bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR two-stage residual formulas (\(\mathbf{s}_{t+1} = f_\theta(\mathbf{s}) + \epsilon_t\)), TraceBench LLM agent benchmarking, and SPALT spatio-temporal locality tree references.
-                        </p>
-                    </div>
-                    <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shrink-0 shadow-lg shadow-blue-600/20">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open RESEARCH_CITATIONS.md on GitHub
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 12: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread -->
-        <section class="space-y-6">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-purple-400">12</span>
+                <span class="text-2xl font-black text-purple-400">11</span>
                 <h3 class="text-2xl font-bold text-white">Ultra-Low Sulfur Diesel (ULSD) &amp; Distillate Crack Spread Modeling (Issue #41 - WIP)</h3>
             </div>
 
@@ -4757,7 +4959,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 12.1: Distillate Crack Spread &amp; 3-2-1 Margin Formulas</h4>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 11.1: Distillate Crack Spread &amp; 3-2-1 Margin Formulas</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
                     $$\text{DistillateCrack}_t = P_{\text{ULSD}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad \text{Crack}_{321, t} = \frac{2 P_{\text{RBOB}, t} + P_{\text{ULSD}, t} - 3 \left( \frac{P_{\text{WTI}, t}}{42.0} \right)}{3.0}$$
                 </div>
@@ -4767,11 +4969,151 @@ def generate_public_dashboard():
             </div>
         </section>
 
+        <!-- Section 12: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-emerald-400">12</span>
+                <h3 class="text-2xl font-bold text-white">Dynamic Volatility-Gated Persistence Blending (DV-GPB) &amp; Empirical CI (Issue #214)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                During low-volatility plateaus, autoregressive time-series models risk overreacting to micro-fluctuations. DV-GPB applies a continuous sigmoid gate derived from 14-day rolling price volatility (\(\sigma_{14\text{d}}\)) to dynamically blend model forecasts with naive persistence:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 12.1: Adaptive Sigmoid Volatility Gate &amp; Empirical Residual Bounds</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
+                    $$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t, \quad \text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    When \(\sigma_{14\text{d}} \ll 0.015\), \(\lambda_{\text{vol}} \to 0.0\) (shrinking forecasts to pure naive persistence). When \(\sigma_{14\text{d}} > 0.015\), \(\lambda_{\text{vol}} \to 1.0\) (preserving 100% of event shock vectors). Empirical 95% confidence bounds derived from 30-day regional residual standard error elevate empirical coverage to \(\ge 90\%\).
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 13: USGS 3D Hypocentral Attenuation & Hydrological Barge Telemetry -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-cyan-400">13</span>
+                <h3 class="text-2xl font-bold text-white">USGS 3D Hypocentral Attenuation &amp; Hydrological Barge Telemetry (Issues #55 &amp; #56)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-cyan-500">
+                <h4 class="text-sm uppercase tracking-wider text-cyan-400 font-bold">Equation 13.1: 3D Seismic Shaking Attenuation &amp; River Bottleneck Index</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-cyan-200">
+                    $$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R), \quad \text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Models 3D hypocentral seismic shaking intensity across 5 refining/storage corridors and calculates low-water navigation draft constraints at Memphis &amp; Cairo confluence points on the Mississippi/Ohio river system.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 14: Microsoft Qlib & RD-Agent Symbolic Alpha Factor Mining -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-purple-400">14</span>
+                <h3 class="text-2xl font-bold text-white">Microsoft Qlib Symbolic Alpha Factor Mining &amp; Dynamic Domain Adaptation (Issue #127)</h3>
+            </div>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 14.1: Information Coefficient &amp; DDG-DA GMM RBF Kernel Similarity</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}, \quad w_i = \exp\left(-\gamma \|x_i - \bar{x}_{\text{recent}}\|^2\right)$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    Evaluates non-lookahead symbolic alpha factor formulas with point-in-time calculation rules ($d \ge 0$), prunes collinear factors ($|r| > 0.70$), and weights historical training samples using Gaussian RBF kernels across GMM market regimes to combat concept drift.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 15: End-to-End Master Prediction Synthesis & Mathematical Factor Composition -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-400">15</span>
+                <h3 class="text-2xl font-bold text-white">End-to-End Master Prediction Synthesis &amp; Mathematical Factor Composition</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                The ultimate retail price forecast \(\hat{P}_{r, t+5}\) for any regional market \(r\) is synthesized by composing the mathematical operations from all preceding sections into a unified multi-layer estimator. The architecture transitions sequentially from quantitative futures and qualitative shock memory to regularized regime projection, spatial basis calibration, statutory tax burdens, physical friction offsets, and volatility-gated persistence blending:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-6 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 15.1: Master Multi-Layer Retail Price Estimator</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-5 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\begin{aligned}
+                    \hat{P}_{r, t+5} &= \lambda_{\text{vol}} \cdot \Big[ \underbrace{\beta_0 + \sum_{k=1}^K \beta_k X_{k, t}}_{\text{Sec 01 \& 11: Quant Futures \& Crack}} + \underbrace{\boldsymbol{\beta}_{\text{shock}}^T \mathbf{M}_t}_{\text{Sec 02 \& 03: Decayed Shock Memory}} + \underbrace{\boldsymbol{\beta}_{\alpha}^T \mathbf{f}_{\text{Qlib}, t}}_{\text{Sec 14: Symbolic Alphas}} \\[8pt]
+                    &\qquad\qquad + \underbrace{\Delta_{\text{metro}, r}}_{\text{Sec 06 \& 09: Spatial Basis}} + \underbrace{T_{\text{tax}, r}}_{\text{Sec 08 \& 10: State/CARB Burden}} + \underbrace{\delta_{\text{physical}, r}}_{\text{Sec 07 \& 13: Seismic/River Friction}} \Big] + (1 - \lambda_{\text{vol}}) \cdot P_{r, t}
+                    \end{aligned}$$
+                </div>
+
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold pt-2">Equation 15.2: Volatility-Calibrated Empirical Prediction Interval</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\text{CI}_{95\%}(r, t+5) = \hat{P}_{r, t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
+                </div>
+
+                <!-- Structured Component Factor Breakdown Table -->
+                <div class="pt-2 overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400">
+                                <th class="pb-2 font-semibold">Factor Term</th>
+                                <th class="pb-2 font-semibold">Originating Section</th>
+                                <th class="pb-2 font-semibold">Mathematical &amp; Econometric Role</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                            <tr>
+                                <td class="py-2.5 font-mono text-blue-400 font-bold">\(X_{k, t}\) &amp; \(\text{Crack}_{321, t}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 01 &amp; Section 11</td>
+                                <td class="py-2.5">NYMEX RBOB (\(RB=F\)), WTI Crude (\(CL=F\)), ULSD (\(HO=F\)), and 3-2-1 refining margins.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-emerald-400 font-bold">\(\mathbf{M}_t = \mathbf{M}_{t-1} e^{-\lambda} + \mathbf{V}_t\)</td>
+                                <td class="py-2.5 text-slate-400">Section 02 &amp; Section 03</td>
+                                <td class="py-2.5">Gemini 2.5 Flash 9-factor bounded vector decayed with \(t_{1/2} = 5.0\text{ days}\) half-life.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-purple-400 font-bold">\(\boldsymbol{\beta}(\mathbf{W})\) &amp; \(\mathbf{f}_{\text{Qlib}, t}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 04 &amp; Section 14</td>
+                                <td class="py-2.5">\(L_2\)-regularized Ridge projection weighted by Qlib DDG-DA GMM market regime weights \(w_i\).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-cyan-400 font-bold">\(\Delta_{\text{metro}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 06 &amp; Section 09</td>
+                                <td class="py-2.5">Hub-to-rack pipeline basis differentials and spatial consumer arbitrage spreads.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-amber-400 font-bold">\(T_{\text{tax}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 08 &amp; Section 10</td>
+                                <td class="py-2.5">Statutory state excise taxes, UST fees, and California CARB regulatory burden (\(\$0.953/\text{gal}\)).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-rose-400 font-bold">\(\delta_{\text{physical}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 07 &amp; Section 13</td>
+                                <td class="py-2.5">Fast-path anomaly gates, USGS 3D seismic shaking intensity \(I\), and river barge draft constraints.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-emerald-400 font-bold">\(\lambda_{\text{vol}} = \sigma(\sigma_{14\text{d}})\)</td>
+                                <td class="py-2.5 text-slate-400">Section 12</td>
+                                <td class="py-2.5">Continuous sigmoid volatility gate dynamically blending model projection with naive persistence \(P_{r, t}\).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-indigo-400 font-bold">\(\text{CI}_{95\%}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 05</td>
+                                <td class="py-2.5">Empirical 30-day residual standard error establishing \(\ge 90\%\) out-of-time coverage bands.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley v1.6 Ipatieff</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
 </body>

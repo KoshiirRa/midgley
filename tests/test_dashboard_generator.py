@@ -603,16 +603,89 @@ def test_unlogged_regions_delta_preservation(monkeypatch):
     assert "-18.4%" not in cin_html
 
 
+def test_math_weather_vulnerability_matrix_all_regions():
+    """Verify that docs/math.html Section 03 contains Equation 3.1 terms
+    and NOAA NWS zone codes for all 7 active regional metro hubs.
+    """
+    generate_public_dashboard()
+
+    with open(MATH_PATH, "r", encoding="utf-8") as f:
+        math_html = f.read()
+
+    # Verify Equation 3.1 includes all 7 regional metros and national basins
+    expected_weather_terms = [
+        r"\mathbf{W}_{\text{National Basins}}",
+        r"\mathbf{W}_{\text{Tulsa}}",
+        r"\mathbf{W}_{\text{Newark}}",
+        r"\mathbf{W}_{\text{Cincinnati}}",
+        r"\mathbf{W}_{\text{Greenville}}",
+        r"\mathbf{W}_{\text{Charlotte}}",
+        r"\mathbf{W}_{\text{Oakland}}",
+        r"\mathbf{W}_{\text{Port St. Lucie}}",
+    ]
+    for term in expected_weather_terms:
+        assert term in math_html, f"Expected weather term '{term}' not found in docs/math.html"
+
+    # Verify all localized NOAA NWS zone codes are documented in Section 03
+    expected_zone_codes = [
+        "OKZ060",
+        "OKZ066",
+        "DEZ001",
+        "OHZ077",
+        "NCZ081",
+        "NCZ071",
+        "CAZ508",
+        "CAZ511",
+        "FLZ147",
+    ]
+    for zone in expected_zone_codes:
+        assert zone in math_html, f"Expected NOAA zone code '{zone}' not found in docs/math.html"
 
 
+def test_math_maritime_chokepoints_and_inland_waterways_all_regions():
+    """Verify that docs/math.html Section 04 contains Equation 4.1 terms
+    and comprehensive physical descriptions for Global Chokepoints,
+    Inland River Barging (Cincinnati, Tulsa), and Coastal Waterborne Terminals
+    (Newark, Port St. Lucie, Oakland, Greenville).
+    """
+    generate_public_dashboard()
 
+    with open(MATH_PATH, "r", encoding="utf-8") as f:
+        math_html = f.read()
 
+    # Verify Equation 4.1 terms
+    expected_equation_terms = [
+        r"\Delta P_{\text{freight}, r}",
+        r"\text{Index}_{\text{barge}}",
+        r"\Delta \text{Margin}_{\text{waterborne}, r}",
+    ]
+    for term in expected_equation_terms:
+        assert term in math_html, f"Expected maritime equation term '{term}' not found in docs/math.html"
 
+    # Verify Global Strategic Chokepoints
+    assert "Strait of Hormuz" in math_html
+    assert "Suez Canal" in math_html
+    assert "Bab-el-Mandeb" in math_html
+    assert "Venezuela Orinoco" in math_html
 
+    # Verify Inland River Barging Corridors (Cincinnati & Tulsa)
+    assert "Cairo, IL" in math_html
+    assert "07032000" in math_html  # Memphis gage
+    assert "Markland Locks" in math_html
+    assert "Catlettsburg" in math_html
+    assert "MKARNS" in math_html
+    assert "Port of Catoosa" in math_html
 
-
-
-
+    # Verify Coastal Waterborne Terminals (Newark, Florida, Bay Area, Eastern NC)
+    assert "Delaware Bay" in math_html
+    assert "C&amp;D Canal" in math_html
+    assert "Delmarva Peninsula" in math_html
+    assert "Straits of Florida" in math_html
+    assert "Port Everglades" in math_html
+    assert "Port Canaveral" in math_html
+    assert "Carquinez Strait" in math_html
+    assert "Port of Wilmington" in math_html
+    assert "Cape Fear River" in math_html
 
 
 
