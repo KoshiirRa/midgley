@@ -1,6 +1,6 @@
 # Agent System Specification (AGENTS.md)
 
-This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and retail unleaded gasoline prices by integrating qualitative real-world event intelligence, **NOAA Weather Models**, **Global Maritime Chokepoints (Hormuz/Suez/Venezuela)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Data (Cboe OVX Volatility & Baker Hughes Rig Counts)**, and **Tulsa Regional Refining Dynamics** into quantitative time-series estimators.
+This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and retail unleaded gasoline prices by integrating qualitative real-world event intelligence, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Data (Cboe OVX Volatility & Baker Hughes Rig Counts)**, and **Tulsa Regional Refining Dynamics** into quantitative time-series estimators.
 
 ---
 
@@ -14,7 +14,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                │    UNSTRUCTURED NEWS, NOAA WEATHER & PHYSICAL DATA FEEDS    │
                │  • Geopolitical Headlines & OPEC Press Releases             │
                │  • NOAA NWS API (api.weather.gov) - Multi-Basin & Regional Alerts │
-               │  • Maritime Chokepoints (Hormuz 21M bpd, Suez, Venezuela)   │
+               │  • Maritime & Waterway Chokepoints (Hormuz, Suez, Rivers)   │
                │  • Executive Social Feed (Trump Twitter / Truth Social)     │
                │  • Physical Alternative Feeds (Cboe OVX & Baker Hughes)     │
                └──────────────────────────────┬──────────────────────────────┘
@@ -88,7 +88,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 1. Event, Weather, Seismic, Air Quality, Social Media & Web Scraper Extraction Agent (`src/event_analyzer.py`, `src/firecrawl_scraper.py`, `src/finlight_feed.py`, `src/noaa_weather.py`, `src/geopolitical_feeds.py`, `src/executive_social_feed.py`, `src/usgs_seismic.py`, `src/usgs_water_feed.py`, `src/aqi_feed.py`, & `src/alternative_data_feeds.py`)
 
-* **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, deep web articles, refinery operator disclosures, state motor fuel tax portals, NOAA alerts, USGS earthquake events and seismic risk indices, multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring outages, maritime chokepoints, executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
+* **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, deep web articles, refinery operator disclosures, state motor fuel tax portals, NOAA alerts, USGS earthquake events and seismic risk indices, multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring outages, global maritime chokepoints and inland waterway constraints (Ohio/Mississippi River tow drafts, MKARNS navigation, Delmarva detour, Straits of Florida), executive social media posts, Cboe OVX options volatility, and Baker Hughes drilling rig counts into structured numerical impact score vectors.
 * **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
 * **Firecrawl Web-to-Markdown API Connector & URL Extraction (`src/firecrawl_scraper.py` & `src/event_analyzer.py`) (Issue #83):**
   - **Web-to-Markdown Extraction:** Integrates Firecrawl API (`firecrawl.dev`) to convert raw HTML from breaking energy news articles, refinery press releases, and state tax portals into clean, LLM-ready Markdown with JavaScript rendering support.
@@ -114,7 +114,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
     - **Option A2 Telemetry Engine:** Both workers integrate **Cloudflare Native Observability** (100% trace/log sampling rate), **Axiom Log Analytics** (`logToAxiom()` streaming top-level event logs to dataset `midgley-workers` via `AXIOM_TOKEN`), **Sentry Error Tracking** (`captureSentryException()` exporting stack traces via `SENTRY_DSN`), and **Sentry Cron Heartbeats** (`sendSentryCronCheckIn()` sending `in_progress` start and `ok`/`error` completion pings with matching `check_in_id` for execution duration tracking and timeout protection). Telemetry flushes execute asynchronously via `ctx.waitUntil()`, ensuring 0 latency overhead and $0 infrastructure cost.
 
 * **NOAA Weather Models & Lightweight `wxs.us` Ingestion (`src/noaa_weather.py`):**
-  - **Token-Efficient Ingestion Engine:** Integrates `t.wxs.us` lightweight terminal REST endpoints (`/location?format=json`) to fetch NWS alerts and SPC (Storm Prediction Center) convective outlooks for specific zipcodes (`74101` Tulsa, `19711` Newark, `45202` Cincinnati, `27834` Greenville, `28202` Charlotte, `94612` Oakland).
+  - **Token-Efficient Ingestion Engine:** Integrates `t.wxs.us` lightweight terminal REST endpoints (`/location?format=json`) to fetch NWS alerts and SPC (Storm Prediction Center) convective outlooks for specific zipcodes (`74101` Tulsa, `19711` Newark, `45202` Cincinnati, `27834` Greenville, `28202` Charlotte, `94612` Oakland, `34952` Port St. Lucie).
   - **90%–95% Token Savings:** Pre-filters location weather data down to ~150–300 tokens (vs 2,500–4,500 tokens for raw NOAA text bulletins/GeoJSON feature maps).
   - **0-Token Deterministic SPC Risk Mapping:** Maps categorical convective risks (`HIGH`: 1.0, `MDT`: 0.8, `ENH`: 0.6, `SLGT`: 0.4, `MRGL`: 0.2, `NONE`: 0.0) and sub-risks (Tornado, Hail, Wind) directly in Python without requiring LLM prompt calls.
 
@@ -188,7 +188,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Closed-Loop Uplift Guardrail:** Automatically applies persistence bias factor $\alpha_{\text{guardrail}} = 0.5$ if a region's 14-day rolling baseline uplift drops below $-2.0\%$.
 * **Empirical Residual Confidence Interval Recalibration ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) (Issue #214):**
   - Replaces naive static $\pm 5\%$ multipliers with dynamic 95% confidence bounds ($\hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) derived from rolling 30-day standard error of regional prediction residuals (falling back to $\sigma_{\text{default}} = 0.0612$ $/gal). Elevates empirical 95% CI coverage from 32.2% to $\ge 90.0\%$ across all 10 metro calibration hubs.
-* **Out-of-Time Test Performance (Regular Model v1.4 "Dubbs" Finlight-LLM Engine):**
+* **Out-of-Time Test Performance (Regular v1.6 "Ipatieff" Engine "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
   - **Cincinnati Model:** **58.85% Directional Accuracy** ($0.1245 MAE).
