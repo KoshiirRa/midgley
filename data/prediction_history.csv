@@ -2371,4 +2371,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-08 07:01:44,2026-09-03,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.0826,4.0161,DOWN,3.6849,DOWN,0.3312,1.0,0.0,0.0,4.0826,0.0,3.5865,4.4457,1.0,yfinance,5.0
 2026-09-08 07:01:44,2026-09-04,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.1883,4.1044,DOWN,3.7646,DOWN,0.3398,1.0,0.0,0.0,4.1883,0.0,3.6748,4.5341,1.0,yfinance,5.0
 2026-09-08 07:01:45,2026-09-11,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.913,3.819,DOWN,,,,,0.0,0.0,3.913,0.0,3.3893,4.2486,,yfinance,5.0
-2026-09-08 12:45:09,2026-09-15,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Swiss Government Releases Emergency Oil Reserves Following Cressier Refinery Outage - streamlinefeed.co.ke,3.184,3.2069,UP,,,,,0.0,0.0,3.184,0.0,2.8808,3.5331,,yfinance,5.0
+2026-09-08 20:30:24,2026-09-15,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Graham Russia Tariff Bill Contains Legal Ambiguities - Legis1,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9241,3.5764,,yfinance,5.0

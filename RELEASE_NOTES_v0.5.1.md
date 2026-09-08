@@ -1,8 +1,8 @@
-# Release Notes - v0.5.1 (In Progress)
+# Release Notes - v0.5.1
 
-**Release Date:** September 7, 2026  
+**Release Date:** September 8, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`)  
-**Git Branch:** `dev`  
+**Git Branch:** `main`  
 
 ---
 
@@ -27,6 +27,25 @@
 - **Physical Logistics Attribution Matrix:** Documented physical mechanisms and freight impact parameters for Global Strategic Chokepoints (Strait of Hormuz 21.0M bpd, Bab-el-Mandeb & Suez Canal 8.8M bpd, Orinoco Heavy Crude Sanctions), Inland River Navigation Corridors (Cincinnati / Ohio River USACE Markland Locks `OR05` & Cairo/Memphis USGS `07032000` gauge; Tulsa MKARNS & Port of Catoosa navigation channel), and Coastal Waterborne Logistics (Newark / Delaware Bay Big Stone Anchorage & C&D Canal detour; Port St. Lucie / Straits of Florida ATB freight; Oakland / Carquinez Strait lightering; Greenville / Port of Wilmington Cape Fear River corridor).
 - **Unit Test Coverage:** Added `test_math_maritime_chokepoints_and_inland_waterways_all_regions` in `tests/test_dashboard_generator.py` asserting exact presence of Equation 4.1 mathematical terms and geographic identifiers.
 
-### 3. Nightly Pipeline Resilience & Module Typing Runtime Fix
+### 3. Nightly Pipeline Resilience, Knowledge Graph & Core Dependency Manifest
 - **Typing Import Resolution ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):** Added `Optional, Union, Callable` to the top-level typing imports in `src/data_ingestion.py`, resolving runtime `NameError: name 'Optional' is not defined` on Python 3.13 when evaluating `OpenSourceAIRadarConnector` type annotations.
+- **Explicit NetworkX & Core Tooling Dependencies ([`requirements.txt`](file:///requirements.txt) & [`pyproject.toml`](file:///pyproject.toml)):** Explicitly added `networkx>=3.0`, `scipy>=1.12.0`, `python-dotenv>=1.0.0`, `pydantic>=2.0.0`, and `beautifulsoup4>=4.12.0` to project dependencies, ensuring headless and fresh runner environments have graph topology and mathematical optimization engines pre-installed.
 - **Workflow Pipeline Exit Code Hardening ([`.github/workflows/gas_price_forecast.yml`](file:///.github/workflows/gas_price_forecast.yml)):** Added `set -eo pipefail` to the daily forecasting execution step to guarantee non-zero python exit codes are never masked by `tee`, preventing false-positive CI green states and ensuring automated alerts trigger on pipeline failures.
+
+---
+
+## 🧪 Verification & Test Suite Results
+
+- **Full Test Suite Execution on `dev-vm` (`10.42.42.54`):**
+  ```bash
+  PYTHONPATH=. pytest
+  ```
+  **Result:** `451 passed, 3 skipped, 0 failures` across all 28 test modules.
+
+---
+
+## 📋 Closed & Superseded GitHub Issues
+- **Issue #228**: `feat(docs): Refactor Academic Citation Ledger into dedicated citations portal` (Closed as completed)
+- **Issue #222**: `docs(math): update Section 03 Weather Vulnerability Matrix with all 7 regional metros` (Closed as completed)
+- **Issue #223**: `docs(math): expand Section 04 maritime chokepoints with inland river barging & waterborne terminals` (Closed as completed)
+
