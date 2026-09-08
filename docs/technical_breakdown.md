@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-08 01:30:10`  
+**Log Timestamp:** `2026-09-08 02:15:10`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Canada’s Retaliatory Tariffs Set to Take Effect as Trump Threatens to Escalate - The New York Times  
+**Primary Event Trigger:** Russia assures India of steady oil supply, criticises US ‘pressure tactics’ amid 100% tariff threats - energy.economictimes.indiatimes.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Canada’s Retaliatory Tariffs Set to Take Effect as Trump Threatens to Escalate - The New York Times
+- **Headline Trigger:** Russia assures India of steady oil supply, criticises US ‘pressure tactics’ amid 100% tariff threats - energy.economictimes.indiatimes.com
 - **Active Ingested News Links:**
+- [Russia assures India of steady oil supply, criticises US ‘pressure tactics’ amid 100% tariff threats - energy.economictimes.indiatimes.com](https://news.google.com/rss/articles/CBMi-wFBVV95cUxORmNQcFZZTk1xRFdfN19LOFpKMkJMNklJalNDekRPQkc3NzA3WVhCaU9wbC1RVUtqTDQ1enJ1OEhuVzFqbHJDTXdEbk1EeGZVVU4wU3MzZk5PTFlNWjVldldKSzJKNmtiZW5YaUVHOFZBWXRtOERXNVZMcThNRGFKSkhhcHpRZ3NXSnFRam9tQ3FZbGxlS0g0Mi1RMDlzV2xXcDdHUU9xWFVHYXRISjRpWHF0ZC1kUlRSY281cU9KbWxDZEVka0dOdDZBX09WdHZIcW52OU9uZFV4ZWc0aDVIa3gzbzNDTlhURHZEck1LczBwRi1sNVQ1S2prRdIBgAJBVV95cUxPNXFUSkdwbzQ4SnpiTTZTT1lCYUtzNFZ3Z2ZKQjJETFNqOWhWYTBTMmlaSjVhT0oteHdrc2c5Z050QURHbWRjU2ZXSUZYdDB6QjhTTHEwcG96NllFLU95YTE3RVhaa2YzME5oUTAyU0lKTjNkOUF5WHZyNlFWMUx5T2pFV3ZyWlY0eDV3dnByY3I4VDNpdmk4QmVtRkdEZWYzblNVTDZYeFRLTm9QWFdHUml0ZjZqeE9WRGxuczhkRnlVT3ZaU1Y5Z3hKcEJwb3B5eHJHbGtsRWhJOFBvWXNGbk9GZ2dEVkRqZkl3SDBvV3AyNWZNS1BjQ2FVWTM2RlZx?oc=5) (Google News Energy Feed)
 - [Canada’s Retaliatory Tariffs Set to Take Effect as Trump Threatens to Escalate - The New York Times](https://news.google.com/rss/articles/CBMiiwFBVV95cUxPb015UGswWm1Na0pCWTRkc1B6bUR6Q2FrdndPNTdkdDlITkFEQmtTRV8xZGFlbDhRWmVFWUhLZ1dZblNjbzhSZlMzYVJJdE9ld3dKcFByQ2J4R2dXejZlVE01N1dnSW5jWi0xLUNudFMzYkdoaEtkV2RCNmo2eHkyQXhTUTVjNk9VNUFN?oc=5) (Google News Energy Feed)
 - [Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal](https://news.google.com/rss/articles/CBMizAFBVV95cUxNWFZkSjlibElfRVhYUFBrT25Ld1gtZUdnamR0VEhGTVlkRFpaX294RzRwd0lCWXNCbXVhQk1kUmtDY2tpRE5KNm5PcWNQajdPcGt5dmtuTUhuQVBCLVJ6bnladWRjTmJkOFpjWTR1MzdiNkZPT0pzVFpLX2o1SnN6SVB1QXBfUWl2TTc4bXdQM3BpblpNR3E4QkRkMTdwaDZTQ3A5WHJLX1ZPVlczQ2paSDFSUWFEdmpHdTQxM1E1dENFNXJWTzg1NjVxSWg?oc=5) (Google News Energy Feed)
-- [As hours tick down to Canada's counter-tariffs against U.S., PMO says no talks are scheduled - CBC](https://news.google.com/rss/articles/CBMijAFBVV95cUxNMU5MbVRsWktzd1FmVklRWjVwcWdBQU5tczkwRUhsOVE4aURfQ3JJNTd4eFRPa1N4cGVmSlBFZzdBdGI3TUI4RDdBc0JpMFZaWlBDNGtOTnlkTmJWOWE0bkVFWjgteUdydm84LVRnRXgxWEpBa1hwWFYwVTEwNEY3OVlldkdjd3RIaFB3cw?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-08 01:30:10]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Canada’s Retaliatory Tariffs Set to Take Effect as Trump Threatens to Escalate - The New York Times' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-08 02:15:10]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Russia assures India of steady oil supply, criticises US ‘pressure tactics’ amid 100% tariff threats - energy.economictimes.indiatimes.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-08 01:30:10 (Mode: INTRADAY_REVISION), primary event trigger 'Canada’s Retaliatory Tariffs Set to Take Effect as Trump Threatens to Escalate - The New York Times' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-08 02:15:10 (Mode: INTRADAY_REVISION), primary event trigger 'Russia assures India of steady oil supply, criticises US ‘pressure tactics’ amid 100% tariff threats - energy.economictimes.indiatimes.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: National Wholesale at $3.250/gal (-0.163/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-08 01:30:10]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Canada’s Retaliatory Tariffs Set to Take Effect as Trump Threatens to Escalate - The New York Times'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-08 02:15:10]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Russia assures India of steady oil supply, criticises US ‘pressure tactics’ amid 100% tariff threats - energy.economictimes.indiatimes.com'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 01:30:10.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 02:15:10.*
