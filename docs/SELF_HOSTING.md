@@ -669,4 +669,4 @@ python3 scripts/audit_feature_leakage.py --region Tulsa_OK --horizons 1,3,5,10,1
 
 ---
 
-*Midgley Version: `v0.5.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.5.1` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
