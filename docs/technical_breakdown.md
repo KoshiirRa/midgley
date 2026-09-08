@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-08 04:30:11`  
+**Log Timestamp:** `2026-09-08 05:30:10`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Copper hits record high as tight supply, US tariff fears boost prices - Business Standard  
+**Primary Event Trigger:** Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Copper hits record high as tight supply, US tariff fears boost prices - Business Standard
+- **Headline Trigger:** Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times
 - **Active Ingested News Links:**
+- [Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times](https://news.google.com/rss/articles/CBMi_AFBVV95cUxOWml5Z25XNGRpcEtJWnQwRVlWRXduNkpkMVRVYTl6YkJWeG9sWWd2X29RTlFzVWk1dk5ZWmRIR25DSmNfMDhfMDlKQzYxZTE5T1lMcUphcHd5bllVNE1RaFlIdU1ZWU1uRTdnMzRFU1BKdmo0b193TXZPM3RRSDBaWE1VOVQ4QVh6YWlQeGVxUTZpZWt5QXp1YkZ4TGhpWl9SNlkwTzYwa3VFTmxlUGh5akpDS1JzSkg2TEhvbVFKQ09zYjJiWjNkei1qd3hYQlc5MVhVcV9EUlpTSThkZDNMNTR5WjI4TDdlTi0wWFJOV3RGVWNBRGF6WmItSy3SAYICQVVfeXFMT013YXF6b1V4c1NpRDlHQWJiRXN2VEQxZm9QZ2laTl8zbFl1OVBKMzh4TGI0X00tOVcwcTJlcndwNmRVSWtmRWh6bHAtZDJXcTZBQ2h6cmJZQmdoWC1jZUdvTTBLZkdiMzFQMXdRNkk5dGdraEg2MmNWTHYxUE44UjJmeGU4Rk8zeWwwVHdwUzZjeW1UQUVrVkpBNkctcGF4T0E4UEdDTHgwYi1DU2JKZFYyTmQ0RlJxYmJzUVY1X0NiUUtHLWZjNnpWemZtSUVpeHc5aEJvMk0tOFdCNUUtb3VDdFRwOTFVbWprSDVCQTgyd2FGY3YtVi1DLWRtUEtXRUpR?oc=5) (Google News Energy Feed)
 - [Copper hits record high as tight supply, US tariff fears boost prices - Business Standard](https://news.google.com/rss/articles/CBMi2gFBVV95cUxNRXA2UXktQTdSN0NrcGJsdEVmeDFsWnZjdVJWTW5CdmpoNklCR3djWUdJTDl3eDIySURkSHY4N25reC1Kc0RVN2JjMDQ2VEF4anhjUThrWm9BLVN1WjJtdVpUM1FMaEZCUFpBSmtJZGZYbGtCTkxIaHRpTnYtc3Q0SmNqWHppVEtoSDFrQVhHc3RHSzNJTWlsQ0RfSGZaWXdqZ0VoUEpLLVdMTnE5bF84SnczS1hrYmZPdmRIOTRtSXVKT3Qyam5BU1FIQ2l3bVZLQXZLRWxiUlhDZw?oc=5) (Google News Energy Feed)
 - [Oil and Copper Prices Surge in Tandem as US-Iran Conflict and Tariff Expectations Converge — Copper Hits Record High - finance.biggo.com](https://news.google.com/rss/articles/CBMidkFVX3lxTFAxNnBiTGtPYUxsSW1XTEhMbGxvcEVrRXBjQzBnbVpqS01xLUtMb3NiVnZRenhmTU5BRmtPczIzN1NhZ0JXUEthV3RPdk5qV0FLOGlUZmo2a3lpcEhCTFE3aUpLTW5aR3VMQWNxMXFjdXdiR2kzTXc?oc=5) (Google News Energy Feed)
-- [Russia assures India of steady oil supply, criticises US ‘pressure tactics’ amid 100% tariff threats - energy.economictimes.indiatimes.com](https://news.google.com/rss/articles/CBMi-wFBVV95cUxORmNQcFZZTk1xRFdfN19LOFpKMkJMNklJalNDekRPQkc3NzA3WVhCaU9wbC1RVUtqTDQ1enJ1OEhuVzFqbHJDTXdEbk1EeGZVVU4wU3MzZk5PTFlNWjVldldKSzJKNmtiZW5YaUVHOFZBWXRtOERXNVZMcThNRGFKSkhhcHpRZ3NXSnFRam9tQ3FZbGxlS0g0Mi1RMDlzV2xXcDdHUU9xWFVHYXRISjRpWHF0ZC1kUlRSY281cU9KbWxDZEVka0dOdDZBX09WdHZIcW52OU9uZFV4ZWc0aDVIa3gzbzNDTlhURHZEck1LczBwRi1sNVQ1S2prRdIBgAJBVV95cUxPNXFUSkdwbzQ4SnpiTTZTT1lCYUtzNFZ3Z2ZKQjJETFNqOWhWYTBTMmlaSjVhT0oteHdrc2c5Z050QURHbWRjU2ZXSUZYdDB6QjhTTHEwcG96NllFLU95YTE3RVhaa2YzME5oUTAyU0lKTjNkOUF5WHZyNlFWMUx5T2pFV3ZyWlY0eDV3dnByY3I4VDNpdmk4QmVtRkdEZWYzblNVTDZYeFRLTm9QWFdHUml0ZjZqeE9WRGxuczhkRnlVT3ZaU1Y5Z3hKcEJwb3B5eHJHbGtsRWhJOFBvWXNGbk9GZ2dEVkRqZkl3SDBvV3AyNWZNS1BjQ2FVWTM2RlZx?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-08 04:30:11]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Copper hits record high as tight supply, US tariff fears boost prices - Business Standard' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-08 05:30:10]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-08 04:30:11 (Mode: INTRADAY_REVISION), primary event trigger 'Copper hits record high as tight supply, US tariff fears boost prices - Business Standard' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-08 05:30:10 (Mode: INTRADAY_REVISION), primary event trigger 'Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: National Wholesale at $3.250/gal (-0.163/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-08 04:30:11]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Copper hits record high as tight supply, US tariff fears boost prices - Business Standard'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-08 05:30:10]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 04:30:11.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-08 05:30:10.*

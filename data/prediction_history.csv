@@ -2371,4 +2371,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-07 23:22:31,2026-09-04,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.6399,5.5493,DOWN,5.3646,DOWN,0.1847,1.0,0.0,0.0,5.6399,0.0,5.2171,5.8815,1.0,yfinance,5.0
 2026-09-07 23:22:32,2026-09-11,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.8215,DOWN,,,,,0.0,0.0,4.95,0.0,4.4892,5.1537,,yfinance,5.0
 2026-09-07 23:22:32,2026-09-11,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9189,DOWN,,,,,0.0,0.0,5.05,0.0,4.5866,5.2511,,yfinance,5.0
-2026-09-08 04:30:11,2026-09-15,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Copper hits record high as tight supply, US tariff fears boost prices - Business Standard",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9241,3.5764,,yfinance,5.0
+2026-09-08 05:30:10,2026-09-15,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Russia ready to supply ‘as much oil as India needs’, envoy slams 'pressure tactics' amid US' 100% tariff threats | India News - Hindustan Times",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9241,3.5764,,yfinance,5.0
