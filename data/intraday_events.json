@@ -2588,5 +2588,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-09T22:02:03.743931",
+    "headline": "Indian exports surge in August as Jazan Refinery outage opens up EU diesel market - thehindubusinessline.com",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPT0Z2bWswWjlZUFV1c285cGRDdE14d1BlVHUwOTV2Qi1PaXA2V0gxSDVQQWtkZVRMMzRMN3NtdkdXV2lfN3lWdXlKLXFQVWVpN2lKbUFPRGZUUnhBNk9OaUtUbGJDTFNXMGU2X0VCTW1YOEh4aktQSE51V3l2NUc1VnJMQjRRNHF4aV9RUEhxUnJiWDQ4b19XbS1SRmN2VWdGaWJnUWxIbUJDdE1yMXVpTTA4dUFtVVNSM0c4WW52M29vU3ZnM0hxUWxtaVFURWZZZGNaazhFNUR5UGFIUElUWlFB?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi4gFBVV95cUxPT0Z2bWswWjlZUFV1c285cGRDdE14d1BlVHUwOTV2Qi1PaXA2V0gxSDVQQWtkZVRMMzRMN3NtdkdXV2lfN3lWdXlKLXFQVWVpN2lKbUFPRGZUUnhBNk9OaUtUbGJDTFNXMGU2X0VCTW1YOEh4aktQSE51V3l2NUc1VnJMQjRRNHF4aV9RUEhxUnJiWDQ4b19XbS1SRmN2VWdGaWJnUWxIbUJDdE1yMXVpTTA4dUFtVVNSM0c4WW52M29vU3ZnM0hxUWxtaVFURWZZZGNaazhFNUR5UGFIUElUWlFB?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.6,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.3
+    }
   }
 ]
