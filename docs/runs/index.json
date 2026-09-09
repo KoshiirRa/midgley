@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-09_12-26-21",
+    "timestamp": "2026-09-09 12:26:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-09 12:26:18)"
+  },
+  {
     "run_id": "2026-09-08_20-45-32",
     "timestamp": "2026-09-08 20:45:29",
     "run_type": "DAILY_BATCH",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-07 16:15:20",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Should Williams-Sonoma\u2019s (WSM) Upgraded 2026 Outlook Amid Ta..."
-  },
-  {
-    "run_id": "2026-09-07_16-19-05",
-    "timestamp": "2026-09-07 04:41:45",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-07 04:41:45)"
   }
 ]
