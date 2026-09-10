@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-10 18:00:22`  
+**Log Timestamp:** `2026-09-10 18:15:15`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Copper, FCX Stock Plunge On Tariff Report, Surging Yields; Silver, Gold Also Fall - Investor's Business Daily  
+**Primary Event Trigger:** Copper: Tariff uncertainty and max CTA length – TD Securities - tmgm.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Copper, FCX Stock Plunge On Tariff Report, Surging Yields; Silver, Gold Also Fall - Investor's Business Daily
+- **Headline Trigger:** Copper: Tariff uncertainty and max CTA length – TD Securities - tmgm.com
 - **Active Ingested News Links:**
+- [Copper: Tariff uncertainty and max CTA length – TD Securities - tmgm.com](https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWmRMZWJfSllNVXpBdi11eWdZdndnNGJ4Tk1YRTl1OUl1Zm9yaEFQbVlmM3FIczhnM01MUlUtOXZqSkpVWjNhQzZ5SEh4LXRqRG9oNjdvTWY0Z00xSVpJbE9uellha3h0WXE4cy0xZU1uQWNYNllpOFNUMVRESXJsS1NFVTJPZmhnNTFQemd6eW1uVTc3RUlkWUdNcjBGUHFoV0ljZWdwMnU4SmxmQTdlc3JvU1Nzd0JJU3JzZ1dEak1qZw?oc=5) (Google News Energy Feed)
 - [Copper, FCX Stock Plunge On Tariff Report, Surging Yields; Silver, Gold Also Fall - Investor's Business Daily](https://news.google.com/rss/articles/CBMipAFBVV95cUxOUWwyaUhjbjFhcTU2aXZpaVdjYXdraE5OUGhQcXlOQVh2Mi1VR3hYSkFlTWJLNDJWWnp3SDJBT1dwamZ4SkZDM1FibE1nNmVnc2FuSGRoeHBzdENHSi12cU9LVEhjTTh6dFVMMWlJX28tZU95ME9DVjlrNEZIaVc2SWl6Yy1EQkNNMWdZU0xwSU5kNmxfR3ZLVURUUlpxX3ZFMmNnbw?oc=5) (Google News Energy Feed)
 - [Canada's retaliatory tariffs may hurt its economy, but most still approve because they hate Trump - Fortune](https://news.google.com/rss/articles/CBMiogFBVV95cUxQQWZCVTQ4MXQwZEpWV2kzQV9Zb0IwdTJzVUh3aEltT2pydEtzc1JoTG8xNVUyOTdxaEQwVUU0QkFNMnlQb256YmV0ZE5OZWdWaW1mVl9aTjdEelQ4ckN0UTZZVlNjZWhwU3VhczQxbWl4dkRIM0QwS2czVDdCWmpmYWF6bjRoaG1Rcl96SHAzaS1hckhnR0hZN04xeHdTeFJaclE?oc=5) (Google News Energy Feed)
-- [Canadian tariffs on US goods take effect. Which products are impacted? - USA Today](https://news.google.com/rss/articles/CBMisAFBVV95cUxNTC00M2t2SEVqcWRMdDJKc2pybV9aZHpzZ3kzSnQ1dUJoQXpoZVpJUHJFYXgxa3ZBXzJydnZWUmg1cFR6Z2lGWlcxTmd2c3RzemxRMUlfVEI5V1lRV0NDbUU1al82Y1d4aGlyYWJuZk0wbmhXdkJ5X2RlQzEtNTZ1SE9obGNmNGtQa25KRmJCcWo5WlVCclY4b1F1aEhtSlFCRms2MDRJeDA3alJoeE5iag?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-10 18:00:22]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Copper, FCX Stock Plunge On Tariff Report, Surging Yields; Silver, Gold Also Fall - Investor's Business Daily' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-10 18:15:15]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Copper: Tariff uncertainty and max CTA length – TD Securities - tmgm.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-10 18:00:22 (Mode: INTRADAY_REVISION), primary event trigger 'Copper, FCX Stock Plunge On Tariff Report, Surging Yields; Silver, Gold Also Fall - Investor's Business Daily' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-10 18:15:15 (Mode: INTRADAY_REVISION), primary event trigger 'Copper: Tariff uncertainty and max CTA length – TD Securities - tmgm.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: National Wholesale at $3.250/gal (+0.111/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-10 18:00:22]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Copper, FCX Stock Plunge On Tariff Report, Surging Yields; Silver, Gold Also Fall - Investor's Business Daily'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-10 18:15:15]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Copper: Tariff uncertainty and max CTA length – TD Securities - tmgm.com'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-10 18:00:22.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-10 18:15:15.*

@@ -2804,5 +2804,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-10T18:15:15.052884",
+    "headline": "Copper: Tariff uncertainty and max CTA length \u2013 TD Securities - tmgm.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWmRMZWJfSllNVXpBdi11eWdZdndnNGJ4Tk1YRTl1OUl1Zm9yaEFQbVlmM3FIczhnM01MUlUtOXZqSkpVWjNhQzZ5SEh4LXRqRG9oNjdvTWY0Z00xSVpJbE9uellha3h0WXE4cy0xZU1uQWNYNllpOFNUMVRESXJsS1NFVTJPZmhnNTFQemd6eW1uVTc3RUlkWUdNcjBGUHFoV0ljZWdwMnU4SmxmQTdlc3JvU1Nzd0JJU3JzZ1dEak1qZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWmRMZWJfSllNVXpBdi11eWdZdndnNGJ4Tk1YRTl1OUl1Zm9yaEFQbVlmM3FIczhnM01MUlUtOXZqSkpVWjNhQzZ5SEh4LXRqRG9oNjdvTWY0Z00xSVpJbE9uellha3h0WXE4cy0xZU1uQWNYNllpOFNUMVRESXJsS1NFVTJPZmhnNTFQemd6eW1uVTc3RUlkWUdNcjBGUHFoV0ljZWdwMnU4SmxmQTdlc3JvU1Nzd0JJU3JzZ1dEak1qZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
