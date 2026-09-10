@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-10_17-45-21",
+    "timestamp": "2026-09-10 17:45:14",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Canada's retaliatory tariffs may hurt its economy, but most ..."
+  },
+  {
     "run_id": "2026-09-10_17-30-25",
     "timestamp": "2026-09-10 17:30:19",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-07_18-13-33",
-    "timestamp": "2026-09-07 18:12:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-07 18:12:13)"
-  },
-  {
-    "run_id": "2026-09-07_18-13-20",
     "timestamp": "2026-09-07 18:12:13",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-07 18:12:13)"

@@ -2768,5 +2768,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-10T17:45:14.772471",
+    "headline": "Canada's retaliatory tariffs may hurt its economy, but most still approve because they hate Trump - Fortune",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQQWZCVTQ4MXQwZEpWV2kzQV9Zb0IwdTJzVUh3aEltT2pydEtzc1JoTG8xNVUyOTdxaEQwVUU0QkFNMnlQb256YmV0ZE5OZWdWaW1mVl9aTjdEelQ4ckN0UTZZVlNjZWhwU3VhczQxbWl4dkRIM0QwS2czVDdCWmpmYWF6bjRoaG1Rcl96SHAzaS1hckhnR0hZN04xeHdTeFJaclE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxQQWZCVTQ4MXQwZEpWV2kzQV9Zb0IwdTJzVUh3aEltT2pydEtzc1JoTG8xNVUyOTdxaEQwVUU0QkFNMnlQb256YmV0ZE5OZWdWaW1mVl9aTjdEelQ4ckN0UTZZVlNjZWhwU3VhczQxbWl4dkRIM0QwS2czVDdCWmpmYWF6bjRoaG1Rcl96SHAzaS1hckhnR0hZN04xeHdTeFJaclE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
