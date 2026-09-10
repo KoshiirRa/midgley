@@ -2750,5 +2750,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-10T17:30:19.267378",
+    "headline": "Canadian tariffs on US goods take effect. Which products are impacted? - USA Today",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNTC00M2t2SEVqcWRMdDJKc2pybV9aZHpzZ3kzSnQ1dUJoQXpoZVpJUHJFYXgxa3ZBXzJydnZWUmg1cFR6Z2lGWlcxTmd2c3RzemxRMUlfVEI5V1lRV0NDbUU1al82Y1d4aGlyYWJuZk0wbmhXdkJ5X2RlQzEtNTZ1SE9obGNmNGtQa25KRmJCcWo5WlVCclY4b1F1aEhtSlFCRms2MDRJeDA3alJoeE5iag?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisAFBVV95cUxNTC00M2t2SEVqcWRMdDJKc2pybV9aZHpzZ3kzSnQ1dUJoQXpoZVpJUHJFYXgxa3ZBXzJydnZWUmg1cFR6Z2lGWlcxTmd2c3RzemxRMUlfVEI5V1lRV0NDbUU1al82Y1d4aGlyYWJuZk0wbmhXdkJ5X2RlQzEtNTZ1SE9obGNmNGtQa25KRmJCcWo5WlVCclY4b1F1aEhtSlFCRms2MDRJeDA3alJoeE5iag?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
