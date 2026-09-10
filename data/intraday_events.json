@@ -2840,5 +2840,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-10T19:15:08.068446",
+    "headline": "Tariff uncertainty tests copper\u2019s record rally - ing think",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNN1VvU0VDazRrNHFCLWV3MzN2bENUMTc1dC1JZkd2aXBkRHRxYmdpTGVsbjR4bkc2ZUwzUTRmVVp1bmVmOFBMSVFYUEw1UW9HMzhGTUhGTHpHTTVYbzlVVllKS3BrUEZ0cGY3V2ljX3FlNWNHMWVVbkJWTXdiMlNvWWVtRQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigwFBVV95cUxNN1VvU0VDazRrNHFCLWV3MzN2bENUMTc1dC1JZkd2aXBkRHRxYmdpTGVsbjR4bkc2ZUwzUTRmVVp1bmVmOFBMSVFYUEw1UW9HMzhGTUhGTHpHTTVYbzlVVllKS3BrUEZ0cGY3V2ljX3FlNWNHMWVVbkJWTXdiMlNvWWVtRQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
