@@ -2642,5 +2642,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-10T16:00:20.496137",
+    "headline": "Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBndWoxX1JuSk41ZmtQb3dFeG5iX0ZrM09yWlF3akdZLWxGWFpZWU1FcE9FMW1OT2hKcHM0ekRsNHBIUjV1ckVXYmpUaUE1NndMcE5jTUFxMkZtMTJFRjU0UWx0alM0MnBvS1JIaGZSbXlOU2xKR3c?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMidkFVX3lxTFBndWoxX1JuSk41ZmtQb3dFeG5iX0ZrM09yWlF3akdZLWxGWFpZWU1FcE9FMW1OT2hKcHM0ekRsNHBIUjV1ckVXYmpUaUE1NndMcE5jTUFxMkZtMTJFRjU0UWx0alM0MnBvS1JIaGZSbXlOU2xKR3c?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": -0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    }
   }
 ]

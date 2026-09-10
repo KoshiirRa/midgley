@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-10 15:45:20`  
+**Log Timestamp:** `2026-09-10 16:00:20`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank  
+**Primary Event Trigger:** Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank
+- **Headline Trigger:** Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com
 - **Active Ingested News Links:**
+- [Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com](https://news.google.com/rss/articles/CBMidkFVX3lxTFBndWoxX1JuSk41ZmtQb3dFeG5iX0ZrM09yWlF3akdZLWxGWFpZWU1FcE9FMW1OT2hKcHM0ekRsNHBIUjV1ckVXYmpUaUE1NndMcE5jTUFxMkZtMTJFRjU0UWx0alM0MnBvS1JIaGZSbXlOU2xKR3c?oc=5) (Google News Energy Feed)
 - [US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank](https://news.google.com/rss/articles/CBMiygFBVV95cUxOVlZNdVJGTE9Vd3hHc3F5RnlSSVRneDRicnE4TnBONFo0SlhzNmVVQnZuMHZXREZOdzNLTXFBZ2VtT2NZOWtjTERhLXVoeGdqaWpST0w5MTE1cXl3ZlA4YmNhT2lFYjdmZXJIMGRVR3BRQkEza2xWZ0RpR3pKdXlOaFB0S1NlR29PLUdtak53UkZUdUc2NHpwVHh0c1NMVDJISkY3bVVUMEN0Z1pYOEptd0pBMVdWZXhWUGF3LUFxekVESmRObnhTNC1n?oc=5) (Google News Energy Feed)
 - [Indian exports surge in August as Jazan Refinery outage opens up EU diesel market - BusinessLine](https://news.google.com/rss/articles/CBMi4gFBVV95cUxPT0Z2bWswWjlZUFV1c285cGRDdE14d1BlVHUwOTV2Qi1PaXA2V0gxSDVQQWtkZVRMMzRMN3NtdkdXV2lfN3lWdXlKLXFQVWVpN2lKbUFPRGZUUnhBNk9OaUtUbGJDTFNXMGU2X0VCTW1YOEh4aktQSE51V3l2NUc1VnJMQjRRNHF4aV9RUEhxUnJiWDQ4b19XbS1SRmN2VWdGaWJnUWxIbUJDdE1yMXVpTTA4dUFtVVNSM0c4WW52M29vU3ZnM0hxUWxtaVFURWZZZGNaazhFNUR5UGFIUElUWlFB0gHoAUFVX3lxTE9Cc1BNdTVNdmc2enVPSmhlVVhSQldmSi1MS053Q2FQNFhXZURGMmlsbVVNay1pdVhRZDNtTnBRZHlvMTBmTzZfaWctcDNoWlpUc0hwa3Zxdkwwc1pBak9HUVBoMUgyd2FlOVd4VWlwS3J3bVRkUTRhQnlPY25XY29PNExKbDRlNlRDSVl5QkxrLWtRX0hRVGpza3d5aFBIdk9qZTFNblN5VkhJUGFpeklLYzZ3bU9hV3JvSl9FYUluVFJYMGFoLU96TTg0eElMcm1kSVZJMnZLaEMxM2N0V1l6RDJoWlBadEI?oc=5) (Google News Energy Feed)
-- [Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz](https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -20,9 +20,9 @@
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
 - **Supply Disruption Score ($S$):** `0.80`
-- **Price Pressure Shock ($\Delta P$):** `+0.52`
+- **Price Pressure Shock ($\Delta P$):** `+0.40`
 - **Geopolitical Risk Score ($G$):** `0.80`
-- **Demand Sentiment Score ($D$):** `0.00`
+- **Demand Sentiment Score ($D$):** `-0.60`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -51,7 +51,7 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (+\$0.111) = \$3.250\text{/gal}$ (Delta: +\$0.111/gal, +3.48\%)
+- **National Wholesale**: $P = \$3.184 + (+\$0.096) = \$3.235\text{/gal}$ (Delta: +\$0.096/gal, +3.00\%)
 - **Tulsa, OK Retail**: $P = \$3.599 + (-\$0.278) = \$3.503\text{/gal}$ (Delta: -\$0.278/gal, -7.73\%)
 - **Newark, DE Retail**: $P = \$3.220 + (-\$0.269) = \$3.142\text{/gal}$ (Delta: -\$0.269/gal, -8.35\%)
 - **Cincinnati, OH/KY**: $P = \$3.883 + (-\$0.284) = \$3.799\text{/gal}$ (Delta: -\$0.284/gal, -7.31\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-10 15:45:20]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-10 16:00:20]: Elevated upward price shock (+$0.40/gal) observed across wholesale futures. Event trigger 'Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-10 15:45:20 (Mode: INTRADAY_REVISION), primary event trigger 'US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-10 16:00:20 (Mode: INTRADAY_REVISION), primary event trigger 'Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.40, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.250/gal (+$0.111/gal, +3.48%)
+  • National Wholesale: $3.235/gal (+$0.096/gal, +3.00%)
   • Tulsa, OK Retail: $3.503/gal ($-0.278/gal, -7.73%)
   • Newark, DE Retail: $3.142/gal ($-0.269/gal, -8.35%)
   • Cincinnati, OH/KY: $3.799/gal ($-0.284/gal, -7.31%)
@@ -91,13 +91,13 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $4.882/gal ($-0.260/gal, -5.25%)
   • SF Bay Area Region: $4.981/gal ($-0.261/gal, -5.18%)
 
-Largest upward shift for this run: National Wholesale at $3.250/gal (+0.111/gal). Largest downward shift for this run: Port St. Lucie, FL Retail at $3.819/gal (-0.285/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: National Wholesale at $3.235/gal (+0.096/gal). Largest downward shift for this run: Port St. Lucie, FL Retail at $3.819/gal (-0.285/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-10 15:45:20]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-10 16:00:20]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com'. Overall price pressure vector sits at ΔP=+0.40/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-10 15:45:20.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-10 16:00:20.*
