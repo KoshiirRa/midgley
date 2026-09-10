@@ -2382,4 +2382,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-10 15:16:41,2026-09-08,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.2851,5.242,DOWN,5.4025,UP,0.1605,0.0,0.0,0.0,5.2851,0.0,4.9082,5.5758,1.0,yfinance,5.0
 2026-09-10 15:16:42,2026-09-16,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.882,DOWN,,,,,0.0,0.0,4.95,0.0,4.5937,5.1703,,yfinance,5.0
 2026-09-10 15:16:42,2026-09-16,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9806,DOWN,,,,,0.0,0.0,5.05,0.0,4.6923,5.2689,,yfinance,5.0
-2026-09-10 18:15:15,2026-09-17,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Copper: Tariff uncertainty and max CTA length – TD Securities - tmgm.com,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9715,3.5289,,yfinance,5.0
+2026-09-10 18:30:33,2026-09-17,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"U.S. Sen. Tammy Baldwin meets with Janesville retailers as tariffs, trade war intensify - GazetteXtra",3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9715,3.5289,,yfinance,5.0
