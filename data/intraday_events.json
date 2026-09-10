@@ -2624,5 +2624,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.18
     }
+  },
+  {
+    "timestamp": "2026-09-10T15:45:20.121297",
+    "headline": "US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOVlZNdVJGTE9Vd3hHc3F5RnlSSVRneDRicnE4TnBONFo0SlhzNmVVQnZuMHZXREZOdzNLTXFBZ2VtT2NZOWtjTERhLXVoeGdqaWpST0w5MTE1cXl3ZlA4YmNhT2lFYjdmZXJIMGRVR3BRQkEza2xWZ0RpR3pKdXlOaFB0S1NlR29PLUdtak53UkZUdUc2NHpwVHh0c1NMVDJISkY3bVVUMEN0Z1pYOEptd0pBMVdWZXhWUGF3LUFxekVESmRObnhTNC1n?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiygFBVV95cUxOVlZNdVJGTE9Vd3hHc3F5RnlSSVRneDRicnE4TnBONFo0SlhzNmVVQnZuMHZXREZOdzNLTXFBZ2VtT2NZOWtjTERhLXVoeGdqaWpST0w5MTE1cXl3ZlA4YmNhT2lFYjdmZXJIMGRVR3BRQkEza2xWZ0RpR3pKdXlOaFB0S1NlR29PLUdtak53UkZUdUc2NHpwVHh0c1NMVDJISkY3bVVUMEN0Z1pYOEptd0pBMVdWZXhWUGF3LUFxekVESmRObnhTNC1n?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]
