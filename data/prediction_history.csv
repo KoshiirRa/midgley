@@ -1437,7 +1437,6 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-10 15:12:28,2026-09-07,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.5064,3.4294,DOWN,,,,,0.0,0.0,3.5064,0.0,3.1446,3.7141,,yfinance,5.0
 2026-09-10 15:12:28,2026-09-08,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.2045,3.1623,DOWN,3.8025,UP,0.6402,0.0,0.0,0.0,3.2045,0.0,2.8776,3.4471,0.0,yfinance,5.0
 2026-09-10 15:12:28,2026-09-16,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.28,3.2359,DOWN,,,,,0.0,0.0,3.28,0.0,2.9462,3.5256,,yfinance,5.0
-2026-09-10 15:15:31,2026-09-17,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz",3.184,3.2069,UP,,,,,0.0,0.0,3.184,0.0,2.8808,3.5331,,yfinance,5.0
 2026-09-10 15:15:41,2025-10-02,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,2.0022,1.9437,DOWN,1.851,DOWN,0.0927,1.0,0.0,0.0,2.0022,0.0,1.6175,2.2698,1.0,yfinance,5.0
 2026-09-10 15:15:41,2025-10-03,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,2.0376,1.9833,DOWN,1.8605,DOWN,0.1228,1.0,0.0,0.0,2.0376,0.0,1.6571,2.3094,1.0,yfinance,5.0
 2026-09-10 15:15:41,2025-10-06,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,1.9951,1.9699,DOWN,1.9016,DOWN,0.0683,1.0,0.0,0.0,1.9951,0.0,1.6438,2.2961,1.0,yfinance,5.0
@@ -2383,3 +2382,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-10 15:16:41,2026-09-08,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.2851,5.242,DOWN,5.4025,UP,0.1605,0.0,0.0,0.0,5.2851,0.0,4.9082,5.5758,1.0,yfinance,5.0
 2026-09-10 15:16:42,2026-09-16,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.882,DOWN,,,,,0.0,0.0,4.95,0.0,4.5937,5.1703,,yfinance,5.0
 2026-09-10 15:16:42,2026-09-16,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9806,DOWN,,,,,0.0,0.0,5.05,0.0,4.6923,5.2689,,yfinance,5.0
+2026-09-10 15:30:26,2026-09-17,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Indian exports surge in August as Jazan Refinery outage opens up EU diesel market - BusinessLine,3.184,3.2069,UP,,,,,0.0,0.0,3.184,0.0,2.9282,3.4856,,yfinance,5.0
