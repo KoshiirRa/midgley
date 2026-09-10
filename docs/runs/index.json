@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-10_12-20-16",
+    "timestamp": "2026-09-10 12:20:13",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-10 12:20:13)"
+  },
+  {
     "run_id": "2026-09-09_22-02-08",
     "timestamp": "2026-09-09 22:02:03",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-07 17:26:39",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-07 17:26:39)"
-  },
-  {
-    "run_id": "2026-09-07_17-00-19",
-    "timestamp": "2026-09-07 17:00:13",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India buys oil for itself, not to help Moscow: Russian envoy..."
   }
 ]
