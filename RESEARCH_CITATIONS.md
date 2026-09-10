@@ -22,6 +22,7 @@ Gotta give credit where credit is due! 🎓
 | **10** | [**Dynamic Volatility-Gated Persistence Blending & Empirical Residual Calibration**](https://arxiv.org/abs/2402.00000) | Midgley Quantitative Research Group | Sep 2026 | [`src/models.py`](file:///src/models.py)<br/>[`src/dynamic_region.py`](file:///src/dynamic_region.py) | **Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI**: Built adaptive continuous sigmoid gate ($\lambda_{vol} = \frac{1}{1 + e^{-200(\sigma_{14d} - 0.015)}}$) blending model predictions with naive persistence during low-volatility plateaus while preserving 100% shock reactivity during market turbulence, coupled with dynamic empirical $95\%$ residual confidence bounds ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) (Issue #214). |
 | **11** | [**CORE: A Global Aggregation of Open Access Research Papers**](https://core.ac.uk) | Petr Knoth, Zdenek Zdrahal | 2012 / 2024 | [`src/core_monitor.py`](file:///src/core_monitor.py) | **Open-Access Energy Literature Monitor**: Integrated CORE API v3 search works endpoint to monitor global open-access research repositories for papers on refinery crack spreads, energy commodity econometrics, and asymmetric retail price transmission during weekly review cycles (Issue #53). |
 | **12** | [**Sapient PRAXIST: Computer-Executable Autonomous Research Harness**](https://github.com/KoshiirRa/midgley) | Midgley Quantitative Research Group | Sep 2026 | [`src/praxist_engine.py`](file:///src/praxist_engine.py) | **Empirical Hypothesis Testing & Automated Parameter Sweeps**: Built programmatic research evaluation harness allowing LLM agents to formulate empirical feature hypotheses, execute out-of-sample backtests, compute paired $t$-tests and $p$-values, and optimize hyperparameters (Ridge $\alpha$, decay half-life $t_{1/2}$) (Issue #188). |
+| **13** | [**CoSPOT: Compositional Spectral Prompts for LLM-based Online Time Series Forecasting**](https://arxiv.org/abs/2609.02093v1) <br/>([PDF](https://arxiv.org/pdf/2609.02093v1)) | Seungyoon Choi, Youngin Cho, Dongmin Kim, Seung-won Hwang (KAIST) | Sep 2026 | [`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py)<br/>[`src/feature_engineering.py`](file:///src/feature_engineering.py)<br/>[`src/event_analyzer.py`](file:///src/event_analyzer.py)<br/>[`src/models.py`](file:///src/models.py) | **Compositional Spectral Prompts & DWT Wavelet Context**: Implemented Discrete Fourier Transform (DFT) orthogonal basis decomposition ($T_{\text{dom}}$, $E_{\text{low}}$, $H_{\text{spectral}}$) and 2-level Discrete Wavelet Transform (DWT) detail decomposition ($D_1, D_2, A_2$) to inject natural language frequency regime descriptors into Gemini 2.5 Flash event analysis prompts, resolving LLM "numerical blindness" and adapting online linear projection heads with geometric loss decay ($\delta = 0.90$) (Issue #215). |
 
 ---
 
@@ -90,6 +91,17 @@ $$\hat{y}_{t+5} = \lambda_{vol} \cdot \hat{y}_{\text{model}, t+5} + (1 - \lambda
 $$\text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
 
 * **Logic:** Smoothly transitions model output toward pure naive persistence during low-volatility market conditions ($\sigma_{14d} \ll 0.015$) while maintaining 100% responsiveness to real-world event shocks ($\sigma_{14d} > 0.015$), calibrated with empirical 30-day residual standard error confidence bands.
+
+### 7. CoSPOT: Compositional Spectral Prompts & DWT Wavelet Context (Choi et al., 2026, arXiv:2609.02093v1)
+
+* **Location:** [`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py), [`src/feature_engineering.py`](file:///src/feature_engineering.py), [`src/event_analyzer.py`](file:///src/event_analyzer.py), [`src/models.py`](file:///src/models.py)
+* **Equations:**
+
+$$F_k = \sum_{t=0}^{L-1} X_t e^{-i 2\pi k t / L}, \quad P_k = \frac{|F_k|^2}{\sum |F_m|^2}, \quad H_{\text{spectral}} = -\frac{\sum P_k \ln(P_k + 1e-12)}{\ln(K)}$$
+
+$$R_{\text{wavelet}} = \frac{\|D_1\|^2 + \|D_2\|^2}{\|A_2\|^2 + 1e-8}, \quad \mathcal{L}_{\text{online}} = \sum_{\tau=1}^T \delta^{T-\tau} \ell(f_\theta(X_\tau), \tilde{y}_\tau)$$
+
+* **Logic:** Decomposes lookback sequences into orthogonal Fourier frequency bases and multi-resolution wavelet details, generating natural language spectral regime descriptions for LLM prompts while dynamically updating a linear projection adapter head using geometric loss decay ($\delta = 0.90$) to conquer concept drift and numerical blindness.
 
 ---
 

@@ -125,8 +125,19 @@ class IntradayEventMonitor:
         if not has_keyword:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
+        # Generate CoSPOT Spectral Context if market data is available (Issue #215)
+        spectral_ctx = ""
+        try:
+            from src.cospot_spectral_engine import generate_spectral_prompt_context
+            from src.data_ingestion import fetch_all_data
+            m_df = fetch_all_data()
+            if not m_df.empty and 'gasoline_rbob' in m_df.columns:
+                spectral_ctx = generate_spectral_prompt_context(m_df['gasoline_rbob'].values)
+        except Exception:
+            pass
+
         # Keyword matched -> Trigger impact scoring
-        scores = extract_event_features_llm(headline)
+        scores = extract_event_features_llm(headline, spectral_context=spectral_ctx)
         overall_pressure = abs(scores.get("overall_price_pressure", 0.0))
         supply_disruption = scores.get("supply_disruption", 0.0)
 
