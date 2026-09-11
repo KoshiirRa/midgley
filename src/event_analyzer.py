@@ -73,13 +73,14 @@ _LLM_SCORE_CACHE = {}
 
 from src.knowledge_graph import kg_engine
 
-# Single-Headline Prompt Contract (Fallback / Scenario Testing)
+# Single-Headline Prompt Contract (Fallback / Scenario Testing / CoSPOT arXiv:2609.02093)
 LLM_SINGLE_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following energy news headline/event description and extract structured numerical impact scores regarding unleaded gasoline and crude oil prices.
 
 Headline/Event: "{headline}"
 {graph_context}
+{spectral_context}
 Return ONLY a raw JSON object with the following fields:
 - "geopolitical_risk": float between -1.0 (de-escalation/peace) and +1.0 (war/sanctions/conflict)
 - "supply_disruption": float between 0.0 (no disruption) and +1.0 (major refinery/pipeline/shipping shutdown)
@@ -90,11 +91,11 @@ Return ONLY a raw JSON object with the following fields:
 JSON Output:
 """
 
-# Ultra-Fast Single-Batch System Prompt Contract
+# Ultra-Fast Single-Batch System Prompt Contract (CoSPOT arXiv:2609.02093)
 LLM_BATCH_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following JSON list of energy news headlines/event descriptions and extract structured numerical impact scores for each item.
-
+{spectral_context}
 Input Headlines:
 {headlines_json}
 
@@ -108,7 +109,7 @@ Return ONLY a raw JSON array of objects in the EXACT SAME ORDER, where each obje
 JSON Array Output:
 """
 
-def _try_openai_single(headline: str, graph_context: str = "") -> dict:
+def _try_openai_single(headline: str, graph_context: str = "", spectral_context: str = "") -> dict:
     openai_key = os.environ.get("OPENAI_API_KEY")
     if not openai_key:
         return None
@@ -117,7 +118,7 @@ def _try_openai_single(headline: str, graph_context: str = "") -> dict:
         client = openai.OpenAI(api_key=openai_key)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context)}],
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context, spectral_context=spectral_context)}],
             temperature=0.1,
             response_format={"type": "json_object"}
         )
@@ -136,7 +137,7 @@ def _try_openai_single(headline: str, graph_context: str = "") -> dict:
         return None
 
 
-def _try_anthropic_single(headline: str, graph_context: str = "") -> dict:
+def _try_anthropic_single(headline: str, graph_context: str = "", spectral_context: str = "") -> dict:
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     if not anthropic_key:
         return None
@@ -146,7 +147,7 @@ def _try_anthropic_single(headline: str, graph_context: str = "") -> dict:
         response = client.messages.create(
             model="claude-3-5-haiku-20241022",
             max_tokens=300,
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context)}]
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context, spectral_context=spectral_context)}]
         )
         text = response.content[0].text.strip()
         if "```json" in text:
@@ -167,23 +168,28 @@ def _try_anthropic_single(headline: str, graph_context: str = "") -> dict:
         return None
 
 
-def _get_headline_sha256(headline: str) -> str:
-    return hashlib.sha256(headline.strip().encode("utf-8")).hexdigest()
+def _get_headline_sha256(headline: str, spectral_context: str = "") -> str:
+    raw = f"{headline.strip()}|{spectral_context.strip()}"
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "privileged") -> dict:
+def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "privileged", spectral_context: str = "") -> dict:
     """
     Scores a single headline using Tier 1 Gemini API, Tier 2 OpenAI/Claude secondary APIs,
     or Zero-Cost Provider Hook (Kaggle LLM / Offline Lexicon), with multi-tier lookup caching.
-    Includes GraphRAG context injection and automatic Knowledge Graph shock memory recording.
+    Includes GraphRAG context injection, CoSPOT spectral context (arXiv:2609.02093),
+    and automatic Knowledge Graph shock memory recording.
     """
-    if headline in _LLM_SCORE_CACHE:
+    cache_key = f"{headline}|{spectral_context}"
+    if cache_key in _LLM_SCORE_CACHE:
+        return _LLM_SCORE_CACHE[cache_key]
+    if headline in _LLM_SCORE_CACHE and not spectral_context:
         return _LLM_SCORE_CACHE[headline]
 
-    sha_key = f"llm_score:{_get_headline_sha256(headline)}"
+    sha_key = f"llm_score:{_get_headline_sha256(headline, spectral_context)}"
     cached = global_cache.get(sha_key)
     if cached:
-        _LLM_SCORE_CACHE[headline] = cached
+        _LLM_SCORE_CACHE[cache_key] = cached
         return cached
 
     # Build GraphRAG Context
@@ -196,7 +202,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     # Enforce Basic Tier Zero-Cost Provider Routing
     if tier == "basic":
         scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=True)
-        _LLM_SCORE_CACHE[headline] = scores
+        _LLM_SCORE_CACHE[cache_key] = scores
         global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
         try:
             kg_engine.record_event_shock_memory(headline, scores, affected_entities=matched_ents, model_attribution="zero_cost_lexicon")
@@ -213,7 +219,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     # Tier 1: Gemini 2.5 Flash
     if api_key:
         try:
-            prompt_str = LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context_str)
+            prompt_str = LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context_str, spectral_context=spectral_context)
             try:
                 from google import genai
                 from google.genai import types
@@ -253,7 +259,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
 
     # Tier 2: Secondary OpenAI / Anthropic Soft Failover
     if not scores:
-        sec_scores = _try_openai_single(headline, graph_context=graph_context_str) or _try_anthropic_single(headline, graph_context=graph_context_str)
+        sec_scores = _try_openai_single(headline, graph_context=graph_context_str, spectral_context=spectral_context) or _try_anthropic_single(headline, graph_context=graph_context_str, spectral_context=spectral_context)
         if sec_scores:
             scores = sec_scores
             provider_used = "secondary_llm"
@@ -266,7 +272,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
         log_llm_usage("zero_cost_hook", "zero_cost_fallback", prompt_tokens=0, completion_tokens=0, is_fallback=True)
         token_tab_manager.record_usage("zero_cost_hook", "event_extraction", 0, 0, status="fallback")
 
-    _LLM_SCORE_CACHE[headline] = scores
+    _LLM_SCORE_CACHE[cache_key] = scores
     global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
 
     # Record Knowledge Graph Memory
@@ -284,7 +290,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
 
 
 
-def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> list:
+def extract_batch_event_features_llm(headlines: list, api_key: str = None, spectral_context: str = "") -> list:
     """
     Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 2.5 Flash API call,
     leveraging multi-tier lookup caching with SHA-256 digests.
@@ -292,12 +298,13 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> li
     # Check in-memory and multi-tier lookup cache first
     uncached = []
     for h in headlines:
-        if h in _LLM_SCORE_CACHE:
+        cache_key = f"{h}|{spectral_context}"
+        if cache_key in _LLM_SCORE_CACHE or (h in _LLM_SCORE_CACHE and not spectral_context):
             continue
-        sha_key = f"llm_score:{_get_headline_sha256(h)}"
+        sha_key = f"llm_score:{_get_headline_sha256(h, spectral_context)}"
         cached = global_cache.get(sha_key)
         if cached:
-            _LLM_SCORE_CACHE[h] = cached
+            _LLM_SCORE_CACHE[cache_key] = cached
         else:
             uncached.append(h)
     
@@ -309,7 +316,7 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> li
             try:
                 logger.info(f"⚡ Launching Single-Batch Gemini 2.5 Flash LLM call for {len(uncached)} headlines...")
                 input_json_str = json.dumps([{"id": i, "headline": h} for i, h in enumerate(uncached)], indent=2)
-                prompt = LLM_BATCH_PROMPT.format(headlines_json=input_json_str)
+                prompt = LLM_BATCH_PROMPT.format(headlines_json=input_json_str, spectral_context=spectral_context)
                 
                 try:
                     from google import genai
@@ -345,8 +352,10 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> li
                             "opec_action": float(parsed.get("opec_action", 0.0)),
                             "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
                         }
+                        cache_key = f"{h}|{spectral_context}"
+                        _LLM_SCORE_CACHE[cache_key] = scores
                         _LLM_SCORE_CACHE[h] = scores
-                        sha_key = f"llm_score:{_get_headline_sha256(h)}"
+                        sha_key = f"llm_score:{_get_headline_sha256(h, spectral_context)}"
                         global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
                     logger.info(f"  -> Single-Batch LLM extractions complete in 1 request!")
                 else:
@@ -357,12 +366,16 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None) -> li
     # Gather final scores for all headlines from cache or rule-based fallback
     results = []
     for h in headlines:
-        if h in _LLM_SCORE_CACHE:
+        cache_key = f"{h}|{spectral_context}"
+        if cache_key in _LLM_SCORE_CACHE:
+            results.append(_LLM_SCORE_CACHE[cache_key])
+        elif h in _LLM_SCORE_CACHE:
             results.append(_LLM_SCORE_CACHE[h])
         else:
             scores = extract_event_features_rule_based(h)
+            _LLM_SCORE_CACHE[cache_key] = scores
             _LLM_SCORE_CACHE[h] = scores
-            sha_key = f"llm_score:{_get_headline_sha256(h)}"
+            sha_key = f"llm_score:{_get_headline_sha256(h, spectral_context)}"
             global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
             results.append(scores)
             

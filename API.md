@@ -179,6 +179,33 @@ curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
 
 ---
 
+## 📊 System Observability, Telemetry & Memory Endpoints
+
+### `GET /api/v1/system/telemetry` (Issue #237)
+Returns aggregated 7-day health audit metrics across zero-cost open data connectors (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS) including request volumes, error counts, failure rate %, latency, and cache freshness.
+
+### `GET /api/v1/telemetry/unmapped-zips` (Issues #50 & #195)
+Returns aggregated telemetry for out-of-metro ZIP code lookups, including top unmapped ZIPs, state and PADD distributions, total query counts, and candidate expansion metro hubs.
+
+### `GET /api/v1/memory/precedents` (Issues #230 & #237)
+Queries the Vectorize Hindsight episodic agent memory engine for historical shock precedents, matching query keywords and tags against stored resolved prediction experiences and reflections.
+
+**Query Parameters:**
+* `q` (required, string): Query string (e.g. `refinery fire`, `hurricane flood`, `tariffs`).
+* `locale` (optional, string): Filter by locale (`tulsa`, `newark`, `oakland`, etc.).
+* `limit` (optional, integer): Max results to return. Default: `5`.
+
+### `GET /api/v1/system/quota` (Issues #83, #87, #237)
+Returns real-time usage metrics and hard quota safety valve limits for Firecrawl (800/mo cap, 30/day burst limit), Finlight (150/mo cap, 10/day burst limit), IPASIS Security Verifier (100 req/day cap), and NOAA Weather endpoints.
+
+### `GET /api/v1/system/token-costs` (Issue #107)
+Returns TokenTab cumulative token consumption (input/output tokens), cache read/write tokens, and estimated USD expenditure across LLM providers.
+
+### `GET /api/v1/security/ip-status` (Issue #87)
+Returns IPASIS security telemetry including inspected request counts, blocked high-risk IP origins, and cache hit ratios.
+
+---
+
 ### 3. `GET /api/v1/forecast/scoreboard`
 Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days) and discrete forecast horizons (1d through 5d) (Issue #209).
 

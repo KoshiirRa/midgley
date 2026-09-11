@@ -11,6 +11,7 @@ Monitors critical energy corridor assets across:
 5. PADD 2 Central US / New Madrid Corridor (`new_madrid`): Capline & Mid-Valley pipeline river crossings, Valero Memphis.
 """
 
+import os
 import math
 import json
 import logging

@@ -52,7 +52,17 @@ To allow tracking local development work separately from live production executi
 
 ### B. API Quotas & Rate Limits
 - `api_quota_remaining_ratio{environment, service}`: Gauge (0.0 to 1.0) indicating remaining API quota ratio before throttling.
-- `api_quota_calls_used_total{environment, service}`: Counter tracking API calls made against hard safety caps (e.g. Finlight 150 call/month limit).
+- `api_quota_calls_used_total{environment, service}`: Counter tracking API calls made against hard safety caps (e.g. Finlight 150 call/month limit, Firecrawl 800 call/month cap).
+
+### C. Agent Memory & Episodic Reflection Metrics (Issue #230)
+- `agent_memory_operations_total{environment, operation}`: Counter tracking memory lifecycle operations (`operation="retain"`, `operation="recall"`, `operation="reflect"`).
+- `agent_memory_backend_calls_total{environment, backend}`: Counter tracking memory backend routing (`backend="hindsight_cloud"` for Cloud Run / Supabase vs `backend="sqlite_fts5"` for local zero-cost store).
+- `agent_memory_stored_experiences_total{environment}`: Gauge showing total retained prediction experiences in the SQLite FTS5 database.
+- `agent_memory_stored_reflections_total{environment}`: Gauge showing total qualitative anomaly reflections in the SQLite store.
+
+### D. Security & Cache Gateway Metrics
+- `ipasis_security_requests_total{environment, type}`: Counter for IPASIS threat verification operations (`type="checked"` vs `type="blocked"`).
+- `cache_gateway_operations_total{environment, type}`: Counter for multi-tier connector cache operations (`type="hit"` vs `type="miss"`).
 
 ---
 
@@ -71,6 +81,21 @@ api_quota_remaining_ratio{environment=~"$environment"} * 100
 ### Tier Fallback Activations (Offline Lexicon Rate)
 ```promql
 sum(rate(llm_tier_fallback_activations_total{environment=~"$environment"}[5m]))
+```
+
+### Agent Memory Operations Throughput (Retain vs Recall vs Reflect)
+```promql
+sum(rate(agent_memory_operations_total{environment=~"$environment"}[5m])) by (operation)
+```
+
+### Memory Backend Call Distribution (Hindsight Cloud vs Local SQLite)
+```promql
+sum(agent_memory_backend_calls_total{environment=~"$environment"}) by (backend)
+```
+
+### Stored Memory Experiences Growth
+```promql
+agent_memory_stored_experiences_total{environment=~"$environment"}
 ```
 
 ---

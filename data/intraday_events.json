@@ -2590,21 +2590,327 @@
     }
   },
   {
-    "timestamp": "2026-09-09T22:02:03.743931",
-    "headline": "Indian exports surge in August as Jazan Refinery outage opens up EU diesel market - thehindubusinessline.com",
-    "source": "Cloudflare_Worker",
-    "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPT0Z2bWswWjlZUFV1c285cGRDdE14d1BlVHUwOTV2Qi1PaXA2V0gxSDVQQWtkZVRMMzRMN3NtdkdXV2lfN3lWdXlKLXFQVWVpN2lKbUFPRGZUUnhBNk9OaUtUbGJDTFNXMGU2X0VCTW1YOEh4aktQSE51V3l2NUc1VnJMQjRRNHF4aV9RUEhxUnJiWDQ4b19XbS1SRmN2VWdGaWJnUWxIbUJDdE1yMXVpTTA4dUFtVVNSM0c4WW52M29vU3ZnM0hxUWxtaVFURWZZZGNaazhFNUR5UGFIUElUWlFB?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi4gFBVV95cUxPT0Z2bWswWjlZUFV1c285cGRDdE14d1BlVHUwOTV2Qi1PaXA2V0gxSDVQQWtkZVRMMzRMN3NtdkdXV2lfN3lWdXlKLXFQVWVpN2lKbUFPRGZUUnhBNk9OaUtUbGJDTFNXMGU2X0VCTW1YOEh4aktQSE51V3l2NUc1VnJMQjRRNHF4aV9RUEhxUnJiWDQ4b19XbS1SRmN2VWdGaWJnUWxIbUJDdE1yMXVpTTA4dUFtVVNSM0c4WW52M29vU3ZnM0hxUWxtaVFURWZZZGNaazhFNUR5UGFIUElUWlFB?oc=5",
+    "timestamp": "2026-09-10T15:15:31.154819",
+    "headline": "Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5",
     "is_anomaly": true,
     "target_locales": [
       "National"
     ],
     "scores": {
       "geopolitical_risk": 0.0,
-      "supply_disruption": 0.6,
+      "supply_disruption": 0.5,
       "demand_sentiment": 0.0,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.3
+      "overall_price_pressure": 0.18
+    }
+  },
+  {
+    "timestamp": "2026-09-10T15:30:26.187345",
+    "headline": "Indian exports surge in August as Jazan Refinery outage opens up EU diesel market - BusinessLine",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPT0Z2bWswWjlZUFV1c285cGRDdE14d1BlVHUwOTV2Qi1PaXA2V0gxSDVQQWtkZVRMMzRMN3NtdkdXV2lfN3lWdXlKLXFQVWVpN2lKbUFPRGZUUnhBNk9OaUtUbGJDTFNXMGU2X0VCTW1YOEh4aktQSE51V3l2NUc1VnJMQjRRNHF4aV9RUEhxUnJiWDQ4b19XbS1SRmN2VWdGaWJnUWxIbUJDdE1yMXVpTTA4dUFtVVNSM0c4WW52M29vU3ZnM0hxUWxtaVFURWZZZGNaazhFNUR5UGFIUElUWlFB0gHoAUFVX3lxTE9Cc1BNdTVNdmc2enVPSmhlVVhSQldmSi1MS053Q2FQNFhXZURGMmlsbVVNay1pdVhRZDNtTnBRZHlvMTBmTzZfaWctcDNoWlpUc0hwa3Zxdkwwc1pBak9HUVBoMUgyd2FlOVd4VWlwS3J3bVRkUTRhQnlPY25XY29PNExKbDRlNlRDSVl5QkxrLWtRX0hRVGpza3d5aFBIdk9qZTFNblN5VkhJUGFpeklLYzZ3bU9hV3JvSl9FYUluVFJYMGFoLU96TTg0eElMcm1kSVZJMnZLaEMxM2N0V1l6RDJoWlBadEI?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi4gFBVV95cUxPT0Z2bWswWjlZUFV1c285cGRDdE14d1BlVHUwOTV2Qi1PaXA2V0gxSDVQQWtkZVRMMzRMN3NtdkdXV2lfN3lWdXlKLXFQVWVpN2lKbUFPRGZUUnhBNk9OaUtUbGJDTFNXMGU2X0VCTW1YOEh4aktQSE51V3l2NUc1VnJMQjRRNHF4aV9RUEhxUnJiWDQ4b19XbS1SRmN2VWdGaWJnUWxIbUJDdE1yMXVpTTA4dUFtVVNSM0c4WW52M29vU3ZnM0hxUWxtaVFURWZZZGNaazhFNUR5UGFIUElUWlFB0gHoAUFVX3lxTE9Cc1BNdTVNdmc2enVPSmhlVVhSQldmSi1MS053Q2FQNFhXZURGMmlsbVVNay1pdVhRZDNtTnBRZHlvMTBmTzZfaWctcDNoWlpUc0hwa3Zxdkwwc1pBak9HUVBoMUgyd2FlOVd4VWlwS3J3bVRkUTRhQnlPY25XY29PNExKbDRlNlRDSVl5QkxrLWtRX0hRVGpza3d5aFBIdk9qZTFNblN5VkhJUGFpeklLYzZ3bU9hV3JvSl9FYUluVFJYMGFoLU96TTg0eElMcm1kSVZJMnZLaEMxM2N0V1l6RDJoWlBadEI?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    }
+  },
+  {
+    "timestamp": "2026-09-10T15:45:20.121297",
+    "headline": "US-Canada tariffs are now in effect: Why autos and oil might be the bigger inflation risks - Chase Bank",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOVlZNdVJGTE9Vd3hHc3F5RnlSSVRneDRicnE4TnBONFo0SlhzNmVVQnZuMHZXREZOdzNLTXFBZ2VtT2NZOWtjTERhLXVoeGdqaWpST0w5MTE1cXl3ZlA4YmNhT2lFYjdmZXJIMGRVR3BRQkEza2xWZ0RpR3pKdXlOaFB0S1NlR29PLUdtak53UkZUdUc2NHpwVHh0c1NMVDJISkY3bVVUMEN0Z1pYOEptd0pBMVdWZXhWUGF3LUFxekVESmRObnhTNC1n?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiygFBVV95cUxOVlZNdVJGTE9Vd3hHc3F5RnlSSVRneDRicnE4TnBONFo0SlhzNmVVQnZuMHZXREZOdzNLTXFBZ2VtT2NZOWtjTERhLXVoeGdqaWpST0w5MTE1cXl3ZlA4YmNhT2lFYjdmZXJIMGRVR3BRQkEza2xWZ0RpR3pKdXlOaFB0S1NlR29PLUdtak53UkZUdUc2NHpwVHh0c1NMVDJISkY3bVVUMEN0Z1pYOEptd0pBMVdWZXhWUGF3LUFxekVESmRObnhTNC1n?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T16:00:20.496137",
+    "headline": "Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hikes May Struggle to Tame as Structural Inflation Persists - finance.biggo.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBndWoxX1JuSk41ZmtQb3dFeG5iX0ZrM09yWlF3akdZLWxGWFpZWU1FcE9FMW1OT2hKcHM0ekRsNHBIUjV1ckVXYmpUaUE1NndMcE5jTUFxMkZtMTJFRjU0UWx0alM0MnBvS1JIaGZSbXlOU2xKR3c?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMidkFVX3lxTFBndWoxX1JuSk41ZmtQb3dFeG5iX0ZrM09yWlF3akdZLWxGWFpZWU1FcE9FMW1OT2hKcHM0ekRsNHBIUjV1ckVXYmpUaUE1NndMcE5jTUFxMkZtMTJFRjU0UWx0alM0MnBvS1JIaGZSbXlOU2xKR3c?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": -0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    }
+  },
+  {
+    "timestamp": "2026-09-10T16:15:15.674268",
+    "headline": "Russia Vows to Keep Selling Oil to India Despite U.S. Tariff Threat - Crude Oil Prices Today | OilPrice.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNOUp3NTFDYTZxUS03aGVDY0ZfZzV4b3RCYnNTUE01cTI3cm1sUU5JVmYtQ1B1eml0aC0ySkFiQ1pZeE03RkNkVkZNSk8yQzBkQzlqWWlRZmlCWXlwb3hNaWw1VENhY1BmYXp6M2ZiRERHdnd5cTBkbjBPOWxIRHYzLVA0ZjZPN2Y5ZnVRalE1bHVNdkVHeUxJMWtHM2FseEFFNGpyMTBCSDFkZGlDdS1vUGVncFlPQkgyMVB2al9R0gHDAUFVX3lxTFB1QWstLVN0SEFMdER4My1nVTd2WTlEQ3NaQlQ1UkNqeFBPc2g0Mm1PTTIzZkZsVTNSTFRkYVA0REpzZy1UV29VR01ISUstZXZUd0lQbnZXZi1nR3ozM2hjSllHaHZiZm1aaUloVDVTRDBtRWlyeGZZWl95VG8wZ1lFSzRMaFVGa01EMFJkcjh1cVNTMmVPbTZBTFRHcm1qSHh3SE55Qnp0TWZnUEc4LURrUEFsa1hPSWJmejNXMmxuY1BkZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxNOUp3NTFDYTZxUS03aGVDY0ZfZzV4b3RCYnNTUE01cTI3cm1sUU5JVmYtQ1B1eml0aC0ySkFiQ1pZeE03RkNkVkZNSk8yQzBkQzlqWWlRZmlCWXlwb3hNaWw1VENhY1BmYXp6M2ZiRERHdnd5cTBkbjBPOWxIRHYzLVA0ZjZPN2Y5ZnVRalE1bHVNdkVHeUxJMWtHM2FseEFFNGpyMTBCSDFkZGlDdS1vUGVncFlPQkgyMVB2al9R0gHDAUFVX3lxTFB1QWstLVN0SEFMdER4My1nVTd2WTlEQ3NaQlQ1UkNqeFBPc2g0Mm1PTTIzZkZsVTNSTFRkYVA0REpzZy1UV29VR01ISUstZXZUd0lQbnZXZi1nR3ozM2hjSllHaHZiZm1aaUloVDVTRDBtRWlyeGZZWl95VG8wZ1lFSzRMaFVGa01EMFJkcjh1cVNTMmVPbTZBTFRHcm1qSHh3SE55Qnp0TWZnUEc4LURrUEFsa1hPSWJmejNXMmxuY1BkZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T16:30:15.658980",
+    "headline": "Graham Russia Tariff Bill Contains Legal Ambiguities - Legis1",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFB5VW9xMlJqbjJMSmc1QlI4a2Fydlh0VVluRllmZW9xeTJrd295STk3WkNzcy02MEtZY1VJRnl6c3NHRzYwSTBKWFhBaE9JcEFNVEdrZjZYMTNjWW5LdWZ1VmlCTEp0VGVabU1zbU9td2lJQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMickFVX3lxTFB5VW9xMlJqbjJMSmc1QlI4a2Fydlh0VVluRllmZW9xeTJrd295STk3WkNzcy02MEtZY1VJRnl6c3NHRzYwSTBKWFhBaE9JcEFNVEdrZjZYMTNjWW5LdWZ1VmlCTEp0VGVabU1zbU9td2lJQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T16:45:15.649308",
+    "headline": "Trump\u2019s Midterm Pitch Clouded by Iran War and Canada Tariffs - The New York Times",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOQW5SZG5jQ3Z2STdOUDVUMXh1Vm9pWTNtM0gzTmE5eUNjMkxESklVUlpsejZ1WEtSTTBzcWE4YkZuck84RlBIelVWSnlQMHJQNHoxaTB6cS1YRkdvM1dOTmFMamkzME45UUdpQUk4MTUyTmFqWG1uZFF1eTc2WUdXbEtVSGp2Zw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihgFBVV95cUxOQW5SZG5jQ3Z2STdOUDVUMXh1Vm9pWTNtM0gzTmE5eUNjMkxESklVUlpsejZ1WEtSTTBzcWE4YkZuck84RlBIelVWSnlQMHJQNHoxaTB6cS1YRkdvM1dOTmFMamkzME45UUdpQUk4MTUyTmFqWG1uZFF1eTc2WUdXbEtVSGp2Zw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T17:00:26.282312",
+    "headline": "Oil, tariffs and uncertainty shake markets: What it means for investors - WKRC",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQSWwtaGJYTF9SQURtSFhxcUItX1dRb1ByYkRZd3N3Qk9SbXZuUFRSeElCNTE0OW90S25pR0pyOXZnb2dMcVNvXzAtRi01WlBHRDB4LWNpTmRiNWN5ZlhjRkJ5Um9MbXlVZG5QVVBfcVVyX1J1b3BvU3ZDV0dpTEN3WjJ4bkRoellFQVVxQ0U3YTlhZ0RTajlESjktd0doYk1fUkczbE1IN2hodTZnLWNISkI1aEdzbGJnbmJqY3JlV3ZaLTRCa3ZtcTJycEVFV2VpenEyS0s5YS01amV0bm03a19zMWF1a2otbEN2aXBLWl9qV2dFbWJENVZ6ZV9oWFlBVUE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiggJBVV95cUxQSWwtaGJYTF9SQURtSFhxcUItX1dRb1ByYkRZd3N3Qk9SbXZuUFRSeElCNTE0OW90S25pR0pyOXZnb2dMcVNvXzAtRi01WlBHRDB4LWNpTmRiNWN5ZlhjRkJ5Um9MbXlVZG5QVVBfcVVyX1J1b3BvU3ZDV0dpTEN3WjJ4bkRoellFQVVxQ0U3YTlhZ0RTajlESjktd0doYk1fUkczbE1IN2hodTZnLWNISkI1aEdzbGJnbmJqY3JlV3ZaLTRCa3ZtcTJycEVFV2VpenEyS0s5YS01amV0bm03a19zMWF1a2otbEN2aXBLWl9qV2dFbWJENVZ6ZV9oWFlBVUE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T17:15:20.036778",
+    "headline": "Trump widens trade war with Canada beyond tariffs. Here\u2019s what to know - AP News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNUHRWc2I4elJ6Ukh6TzhHcF9IUEFEbnZFUkRiYTQ5Nnh2cUUxU3pQYXR0eml3UFFNWGt2bHFBdzJXeEIxRV96dXdBOUY2VzFYZXhVY2hhRmlEcVF0Y0xGNVAwX0ZzZGloOURMTzZ4bERjbDlmWnBzRWoxbVRqYUt4OWJEanc2V3YyTlNGSURSQjlpblJIV2FIT3A3bzBhQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMingFBVV95cUxNUHRWc2I4elJ6Ukh6TzhHcF9IUEFEbnZFUkRiYTQ5Nnh2cUUxU3pQYXR0eml3UFFNWGt2bHFBdzJXeEIxRV96dXdBOUY2VzFYZXhVY2hhRmlEcVF0Y0xGNVAwX0ZzZGloOURMTzZ4bERjbDlmWnBzRWoxbVRqYUt4OWJEanc2V3YyTlNGSURSQjlpblJIV2FIT3A3bzBhQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T17:30:19.267378",
+    "headline": "Canadian tariffs on US goods take effect. Which products are impacted? - USA Today",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNTC00M2t2SEVqcWRMdDJKc2pybV9aZHpzZ3kzSnQ1dUJoQXpoZVpJUHJFYXgxa3ZBXzJydnZWUmg1cFR6Z2lGWlcxTmd2c3RzemxRMUlfVEI5V1lRV0NDbUU1al82Y1d4aGlyYWJuZk0wbmhXdkJ5X2RlQzEtNTZ1SE9obGNmNGtQa25KRmJCcWo5WlVCclY4b1F1aEhtSlFCRms2MDRJeDA3alJoeE5iag?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisAFBVV95cUxNTC00M2t2SEVqcWRMdDJKc2pybV9aZHpzZ3kzSnQ1dUJoQXpoZVpJUHJFYXgxa3ZBXzJydnZWUmg1cFR6Z2lGWlcxTmd2c3RzemxRMUlfVEI5V1lRV0NDbUU1al82Y1d4aGlyYWJuZk0wbmhXdkJ5X2RlQzEtNTZ1SE9obGNmNGtQa25KRmJCcWo5WlVCclY4b1F1aEhtSlFCRms2MDRJeDA3alJoeE5iag?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T17:45:14.772471",
+    "headline": "Canada's retaliatory tariffs may hurt its economy, but most still approve because they hate Trump - Fortune",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQQWZCVTQ4MXQwZEpWV2kzQV9Zb0IwdTJzVUh3aEltT2pydEtzc1JoTG8xNVUyOTdxaEQwVUU0QkFNMnlQb256YmV0ZE5OZWdWaW1mVl9aTjdEelQ4ckN0UTZZVlNjZWhwU3VhczQxbWl4dkRIM0QwS2czVDdCWmpmYWF6bjRoaG1Rcl96SHAzaS1hckhnR0hZN04xeHdTeFJaclE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxQQWZCVTQ4MXQwZEpWV2kzQV9Zb0IwdTJzVUh3aEltT2pydEtzc1JoTG8xNVUyOTdxaEQwVUU0QkFNMnlQb256YmV0ZE5OZWdWaW1mVl9aTjdEelQ4ckN0UTZZVlNjZWhwU3VhczQxbWl4dkRIM0QwS2czVDdCWmpmYWF6bjRoaG1Rcl96SHAzaS1hckhnR0hZN04xeHdTeFJaclE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T18:00:22.252717",
+    "headline": "Copper, FCX Stock Plunge On Tariff Report, Surging Yields; Silver, Gold Also Fall - Investor's Business Daily",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOUWwyaUhjbjFhcTU2aXZpaVdjYXdraE5OUGhQcXlOQVh2Mi1VR3hYSkFlTWJLNDJWWnp3SDJBT1dwamZ4SkZDM1FibE1nNmVnc2FuSGRoeHBzdENHSi12cU9LVEhjTTh6dFVMMWlJX28tZU95ME9DVjlrNEZIaVc2SWl6Yy1EQkNNMWdZU0xwSU5kNmxfR3ZLVURUUlpxX3ZFMmNnbw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipAFBVV95cUxOUWwyaUhjbjFhcTU2aXZpaVdjYXdraE5OUGhQcXlOQVh2Mi1VR3hYSkFlTWJLNDJWWnp3SDJBT1dwamZ4SkZDM1FibE1nNmVnc2FuSGRoeHBzdENHSi12cU9LVEhjTTh6dFVMMWlJX28tZU95ME9DVjlrNEZIaVc2SWl6Yy1EQkNNMWdZU0xwSU5kNmxfR3ZLVURUUlpxX3ZFMmNnbw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T18:15:15.052884",
+    "headline": "Copper: Tariff uncertainty and max CTA length \u2013 TD Securities - tmgm.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWmRMZWJfSllNVXpBdi11eWdZdndnNGJ4Tk1YRTl1OUl1Zm9yaEFQbVlmM3FIczhnM01MUlUtOXZqSkpVWjNhQzZ5SEh4LXRqRG9oNjdvTWY0Z00xSVpJbE9uellha3h0WXE4cy0xZU1uQWNYNllpOFNUMVRESXJsS1NFVTJPZmhnNTFQemd6eW1uVTc3RUlkWUdNcjBGUHFoV0ljZWdwMnU4SmxmQTdlc3JvU1Nzd0JJU3JzZ1dEak1qZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWmRMZWJfSllNVXpBdi11eWdZdndnNGJ4Tk1YRTl1OUl1Zm9yaEFQbVlmM3FIczhnM01MUlUtOXZqSkpVWjNhQzZ5SEh4LXRqRG9oNjdvTWY0Z00xSVpJbE9uellha3h0WXE4cy0xZU1uQWNYNllpOFNUMVRESXJsS1NFVTJPZmhnNTFQemd6eW1uVTc3RUlkWUdNcjBGUHFoV0ljZWdwMnU4SmxmQTdlc3JvU1Nzd0JJU3JzZ1dEak1qZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T18:30:33.016897",
+    "headline": "U.S. Sen. Tammy Baldwin meets with Janesville retailers as tariffs, trade war intensify - GazetteXtra",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxOWGtMaDhFblpqQVNScVh4SlY1RVpGNE1KeU5pMkd1Si1mdElvSmwtaHpJUC10MjQ1UXYybDU5RzQ4MllDanBIUFFIVUMxWVpFZ3U0RDRTYnhqVTEyRjdWdEV3bjl0R2JwenJiUEM0XzJHYkJfMTdkazVBTERVRGV0bExGekpuMGNlOUhOalg1eXNMaHRYYW1mMEdlVGJxSjZOMnczOEM3TkFZajR2ZEJ1MjJaX0N4NU5DaDZCZF8zSjZlSkdIbnZ4T3doT1JLVkVLYmRhR3FBU1BXcTlFNnhORG9XU3ZKTWIwMkZxclRyRzFLY3RobFpGMk9mTQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi-wFBVV95cUxOWGtMaDhFblpqQVNScVh4SlY1RVpGNE1KeU5pMkd1Si1mdElvSmwtaHpJUC10MjQ1UXYybDU5RzQ4MllDanBIUFFIVUMxWVpFZ3U0RDRTYnhqVTEyRjdWdEV3bjl0R2JwenJiUEM0XzJHYkJfMTdkazVBTERVRGV0bExGekpuMGNlOUhOalg1eXNMaHRYYW1mMEdlVGJxSjZOMnczOEM3TkFZajR2ZEJ1MjJaX0N4NU5DaDZCZF8zSjZlSkdIbnZ4T3doT1JLVkVLYmRhR3FBU1BXcTlFNnhORG9XU3ZKTWIwMkZxclRyRzFLY3RobFpGMk9mTQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T19:15:08.068446",
+    "headline": "Tariff uncertainty tests copper\u2019s record rally - ing think",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNN1VvU0VDazRrNHFCLWV3MzN2bENUMTc1dC1JZkd2aXBkRHRxYmdpTGVsbjR4bkc2ZUwzUTRmVVp1bmVmOFBMSVFYUEw1UW9HMzhGTUhGTHpHTTVYbzlVVllKS3BrUEZ0cGY3V2ljX3FlNWNHMWVVbkJWTXdiMlNvWWVtRQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigwFBVV95cUxNN1VvU0VDazRrNHFCLWV3MzN2bENUMTc1dC1JZkd2aXBkRHRxYmdpTGVsbjR4bkc2ZUwzUTRmVVp1bmVmOFBMSVFYUEw1UW9HMzhGTUhGTHpHTTVYbzlVVllKS3BrUEZ0cGY3V2ljX3FlNWNHMWVVbkJWTXdiMlNvWWVtRQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-10T19:45:08.499113",
+    "headline": "The AI boom and tariff uncertainty are pushing copper prices to record highs - CNN",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE11ZFRwQXE0QTFMTzNmYzFTZ2VpZ2ZTbGdKcV9LX2dKX3hhRG1mUVVDSEhfNUtBOTNBTUtZeHZnNTNybGVWaFVQVTlsVnlNM0V1WWNzZzZQYnNKeFVWdWlDNy0xeDh0eG1uV3VNVkJMS1hWR3M?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMic0FVX3lxTE11ZFRwQXE0QTFMTzNmYzFTZ2VpZ2ZTbGdKcV9LX2dKX3hhRG1mUVVDSEhfNUtBOTNBTUtZeHZnNTNybGVWaFVQVTlsVnlNM0V1WWNzZzZQYnNKeFVWdWlDNy0xeDh0eG1uV3VNVkJMS1hWR3M?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.4,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    }
+  },
+  {
+    "timestamp": "2026-09-10T20:15:09.511028",
+    "headline": "Copper Stocks Sink as White House Tariff Uncertainty Spooks Traders - Crude Oil Prices Today | OilPrice.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNeUlUWmJWN1lKbnJKb1JoV2k1Q0pyalM0aFBRdVBsZmtZemFEbndEbW5WakNfbjh2T3RmbGM2Y2M5VGVMVDY4eGFRYnRPSzlaTUFVRmo5V2RIc25HVDd5MmZoR2ViYlZpR05yVzNXaG0wNG9aNmpXTEZ1ckxGTVp2MWRTN1ZpS095U2RtNVV0Mmp4eWVIOTRnZGRldlYtZTNsNVhCUHZBbkg2VjluN3dLbTR30gG3AUFVX3lxTE9BdTBJUnVpTkFFZHlPZVFiY3VMaElYV0U0eGJGODZ2dHBUWno0cUdrdmFTejJIbURkS2VVa2NVUGNtSjBVTldGLUg3T0lTd1lKdWFCMy1QQVh5VVNzZlFZdWNtWjRqOGszY3ZWeG5VVEZSdkVNN2ZxMmJWWWVGUHlsVXZKVWRGSjJfejUyWkFJUEtpdjBsbVpXOEpQN2t1MTJ6OTlhTXlfZ3BGREtJZGxUUUwzSlJ0dw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisgFBVV95cUxNeUlUWmJWN1lKbnJKb1JoV2k1Q0pyalM0aFBRdVBsZmtZemFEbndEbW5WakNfbjh2T3RmbGM2Y2M5VGVMVDY4eGFRYnRPSzlaTUFVRmo5V2RIc25HVDd5MmZoR2ViYlZpR05yVzNXaG0wNG9aNmpXTEZ1ckxGTVp2MWRTN1ZpS095U2RtNVV0Mmp4eWVIOTRnZGRldlYtZTNsNVhCUHZBbkg2VjluN3dLbTR30gG3AUFVX3lxTE9BdTBJUnVpTkFFZHlPZVFiY3VMaElYV0U0eGJGODZ2dHBUWno0cUdrdmFTejJIbURkS2VVa2NVUGNtSjBVTldGLUg3T0lTd1lKdWFCMy1QQVh5VVNzZlFZdWNtWjRqOGszY3ZWeG5VVEZSdkVNN2ZxMmJWWWVGUHlsVXZKVWRGSjJfejUyWkFJUEtpdjBsbVpXOEpQN2t1MTJ6OTlhTXlfZ3BGREtJZGxUUUwzSlJ0dw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:00:09.117186",
+    "headline": "RH Q2 EPS beats $1.78 estimate; tariff benefit offsets oil costs - scanx.trade",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxORE45QXR1LUJFaDJ4R3Y4cnd3cGE5c3BlNHpHZEk0WENZaDBoOWJpXzFPZFdkdnl2T0VlOWxUd3ZSZVV1a2QwVlRxcFVpd1BrLTVMNnVhZXFNQnh1MXJsNFVaQnV6NmhJWklMQzluc3lpVDBCMlNMQV9XVEg3RGVXVzk5SFhmb3lQYUJrTHJPN2YxOTlNSUJsT3htak9yaFBCN29qMWVmWmx1Wlp5T1E?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxORE45QXR1LUJFaDJ4R3Y4cnd3cGE5c3BlNHpHZEk0WENZaDBoOWJpXzFPZFdkdnl2T0VlOWxUd3ZSZVV1a2QwVlRxcFVpd1BrLTVMNnVhZXFNQnh1MXJsNFVaQnV6NmhJWklMQzluc3lpVDBCMlNMQV9XVEg3RGVXVzk5SFhmb3lQYUJrTHJPN2YxOTlNSUJsT3htak9yaFBCN29qMWVmWmx1Wlp5T1E?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
     }
   },
   {

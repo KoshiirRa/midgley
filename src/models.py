@@ -970,6 +970,91 @@ def run_praxist_research_sweep(
     )
 
 
+def evaluate_cospot_spectral_benchmarks(split_data: dict) -> dict:
+    """
+    Evaluates the empirical performance impact of CoSPOT Compositional Spectral & Wavelet
+    feature representations (arXiv:2609.02093v1) against standard feature subsets on out-of-time test data (Issue #215).
+    
+    Compares:
+    1. Standard Quantitative Baseline (without CoSPOT spectral features).
+    2. CoSPOT Spectral-Augmented Quantitative Model.
+    3. Full Hybrid + CoSPOT Spectral Model.
+    4. Online-Adapted CoSPOT Residual Model (geometric decay delta = 0.90).
+    """
+    from src.cospot_spectral_engine import CoSPOTOnlineAdapter
+    
+    X_train_quant = split_data['X_train_quant']
+    X_test_quant = split_data['X_test_quant']
+    X_train_hybrid = split_data['X_train_hybrid']
+    X_test_hybrid = split_data['X_test_hybrid']
+    y_train = split_data['y_train']
+    y_test = split_data['y_test']
+    test_df = split_data['test_df']
+    y_current = test_df['gasoline_rbob']
+    
+    cospot_cols = [c for c in X_train_quant.columns if c.startswith('cospot_')]
+    non_cospot_quant_cols = [c for c in X_train_quant.columns if not c.startswith('cospot_')]
+    
+    # 1. Base Model (Without Spectral Features)
+    base_pipe = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+    X_tr_base = X_train_quant[non_cospot_quant_cols] if non_cospot_quant_cols else X_train_quant
+    X_te_base = X_test_quant[non_cospot_quant_cols] if non_cospot_quant_cols else X_test_quant
+    base_pipe.fit(X_tr_base, y_train)
+    pred_base = base_pipe.predict(X_te_base)
+    metrics_base = evaluate_predictions(y_test, pred_base, y_current)
+    
+    # 2. CoSPOT Spectral-Augmented Model (Quantitative + DFT/DWT Features)
+    spectral_pipe = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+    spectral_pipe.fit(X_train_quant, y_train)
+    pred_spectral = spectral_pipe.predict(X_test_quant)
+    metrics_spectral = evaluate_predictions(y_test, pred_spectral, y_current)
+    
+    # 3. Full Hybrid + Spectral Model
+    hybrid_spectral_pipe = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+    hybrid_spectral_pipe.fit(X_train_hybrid, y_train)
+    pred_hybrid = hybrid_spectral_pipe.predict(X_test_hybrid)
+    metrics_hybrid = evaluate_predictions(y_test, pred_hybrid, y_current)
+    
+    # 4. Online-Adapted CoSPOT Residual Model (delta = 0.90)
+    adapter = CoSPOTOnlineAdapter(delta=0.90, learning_rate=0.01)
+    # Warm-up on recent training observations
+    X_tr_arr = np.array(X_train_quant)
+    y_tr_arr = np.array(y_train)
+    tr_base_preds = spectral_pipe.predict(X_train_quant)
+    for i in range(max(0, len(y_tr_arr) - 30), len(y_tr_arr)):
+        adapter.fit_online_step(X_tr_arr[i], y_tr_arr[i], tr_base_preds[i])
+        
+    # Online sequential testing
+    X_te_arr = np.array(X_test_quant)
+    y_te_arr = np.array(y_test)
+    pred_online = np.zeros(len(y_test))
+    for j in range(len(y_test)):
+        res_adj = adapter.predict_residual(X_te_arr[j])
+        pred_online[j] = pred_spectral[j] + res_adj
+        adapter.fit_online_step(X_te_arr[j], y_te_arr[j], pred_spectral[j])
+        
+    metrics_online = evaluate_predictions(y_test, pred_online, y_current)
+    
+    # MAE & Directional Accuracy Improvements
+    base_mae = metrics_base['MAE']
+    spectral_mae = metrics_spectral['MAE']
+    mae_improvement_pct = round(((base_mae - spectral_mae) / base_mae) * 100.0, 2) if base_mae > 0 else 0.0
+    
+    return {
+        "status": "success",
+        "cospot_feature_count": len(cospot_cols),
+        "cospot_features": cospot_cols,
+        "metrics_base_without_spectral": metrics_base,
+        "metrics_cospot_spectral_quant": metrics_spectral,
+        "metrics_cospot_spectral_hybrid": metrics_hybrid,
+        "metrics_cospot_online_adapted": metrics_online,
+        "mae_improvement_pct": mae_improvement_pct,
+        "predictions_base": pred_base,
+        "predictions_spectral": pred_spectral,
+        "predictions_online": pred_online
+    }
+
+
 
 
 

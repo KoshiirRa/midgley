@@ -36,9 +36,9 @@ This document provides a comprehensive guide for self-hosting custom instances o
 
 ## 2. Environment Configuration & API Keys
 
-Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 2.5 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys.
+Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 2.5 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys. 
 
-Create a `.env` file in the project root directory (`/home/marty/projects/midgley/.env` or root folder):
+All core mathematical transformations — including **CoSPOT Compositional Spectral & Wavelet Feature Prompting** (`src/cospot_spectral_engine.py`, Issue #215, arXiv:2609.02093), Purged Cross-Validation (`src/models.py`), Dynamic Volatility-Gated Persistence Blending (`src/dynamic_region.py`), and Qlib Symbolic Alpha mining (`src/qlib_symbolic_engine.py`) — run natively on standard Python libraries (`numpy`, `pandas`, `scipy`) without requiring extra cloud subscriptions or heavy GPU accelerators.
 
 ```bash
 # ==============================================================================
@@ -87,6 +87,10 @@ WANDB_API_KEY="wandb_v1_..."
 WANDB_PROJECT="midgley-gas-forecasting"
 WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
 
+# Discord Webhook Notification Gateway (Intraday Forecast Revisions, Issue #234)
+# Dispatches real-time alerts on intraday price shocks with environment tagging ([PRODUCTION] vs [DEVELOPMENT])
+DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
 # ==============================================================================
@@ -98,6 +102,20 @@ TURSO_AUTH_TOKEN="eyJhbGciOi..."
 # Tier 2: Cloudflare D1 / Edge Worker Gateway
 CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
+
+# ==============================================================================
+# HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN) (Issue #230)
+# ==============================================================================
+
+# Vectorize Hindsight Cloud Run REST API Endpoint (Scale-to-Zero)
+HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
+HINDSIGHT_API_KEY=""              # Optional bearer token if endpoint is authenticated
+
+# Supabase PostgreSQL pgvector Connection URI (Transaction Pooler Port 5432 or 6543)
+SUPABASE_DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
+
+# Google Cloud Project ID (for Cloud Run deployment)
+GCP_PROJECT_ID="midgley"
 
 # ==============================================================================
 # EDGAR 8-K REFINERY OPERATOR MONITOR (Issue #129)
@@ -194,6 +212,45 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 
 ### Option C: Standalone Local Fallback (Tier 3 Default)
 If no edge credentials are supplied, Midgley defaults to local SQLite persistence at `data/lookup_cache.sqlite` with an in-memory fast dict lookup ($0 cloud infrastructure cost, zero external setup required).
+
+---
+
+## 3.5. Setting Up Vectorize Hindsight Episodic Agent Memory (Issue #230)
+
+Midgley integrates an episodic memory layer (**Retain-Recall-Reflect**) to perform automated qualitative root-cause post-mortems and historical shock analogy search during Saturday model reviews (Agent 7).
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    HINDSIGHT EPISODIC AGENT MEMORY ENGINE                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 1. RETAIN  ──► Captures resolved predictions, actual prices & anomalies      │
+│ 2. RECALL  ──► Zero-LLM search over historical shocks via dense pgvector    │
+│ 3. REFLECT ──► Synthesizes root-cause post-mortems & calibration suggestions │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Option A: Cloud Run + Supabase pgvector Setup (Recommended)
+1. **Initialize Supabase PostgreSQL Schema:**
+   - Open your **Supabase Project Dashboard** $\rightarrow$ **SQL Editor**.
+   - Execute [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql) to enable the `vector` extension, create `hindsight_memories` and `hindsight_mental_models` tables, and construct HNSW vector indexes.
+2. **Deploy to Google Cloud Run (Scale-to-Zero):**
+   - Ensure `SUPABASE_DATABASE_URL`, `GCP_PROJECT_ID`, and `GEMINI_API_KEY` are configured in `.env`.
+   - Run the deployment script:
+     ```bash
+     bash scripts/deploy_hindsight_cloudrun.sh
+     ```
+   - Cloud Run deploys `ghcr.io/vectorize-io/hindsight:latest` with `--min-instances 0` ($0 idle cost) and `--port 8888`.
+3. **Configure Endpoint in Midgley:**
+   - Set `HINDSIGHT_API_URL` in `.env` and GitHub Repository Secrets:
+     ```bash
+     HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
+     ```
+
+### Option B: Zero-Cost Local SQLite FTS5 Fallback ($0 / Standalone Default)
+If no remote Hindsight or Supabase credentials are configured, Midgley automatically activates `SQLiteMemoryStore` at `data/agent_memory.sqlite`:
+* **Zero external services or cloud accounts required.**
+* Uses SQLite FTS5 with Porter stemming and BM25 ranking for analogy recall.
+* Generates structured post-mortems and parameter calibration recommendations via Gemini 2.5 Flash (or the Tier 3 Offline Rule-Based Lexicon).
 
 ---
 
@@ -371,6 +428,7 @@ If you prefer serverless execution via GitHub Actions:
    - `EIA_API_KEY`
    - `FRED_API_KEY`
    - `MIDGLEY_WEBHOOK_SECRET`
+   - `DISCORD_INTRADAY_WEBHOOK_URL` (or `DISCORD_WEBHOOK_URL`, optional for intraday revision alerts)
    - `TURSO_DATABASE_URL` (optional)
    - `TURSO_AUTH_TOKEN` (optional)
 3. **Configure GitHub Pages:**

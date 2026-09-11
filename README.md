@@ -13,18 +13,18 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-11 12:17 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-08 07:01 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.393`/gal | **`$3.342`/gal** | **DOWN 📉** | `2026-09-17` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.817`/gal | **`$3.845`/gal** | **UP 📈** | `2026-09-17` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `$3.313`/gal | **`$3.214`/gal** | **DOWN 📉** | `2026-09-17` | `v1.4-Finlight-Ridge` |
-| **Cincinnati, OH Retail** | `$4.149`/gal | **`$4.134`/gal** | **DOWN 📉** | `2026-09-17` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `$3.288`/gal | **`$3.276`/gal** | **DOWN 📉** | `2026-09-17` | `v1.4-Finlight-Ridge` |
-| **Greenville, NC Metro Retail** | `$3.638`/gal | **`$3.552`/gal** | **DOWN 📉** | `2026-09-17` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `$5.974`/gal | **`$5.983`/gal** | **UP 📈** | `2026-09-17` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `$6.060`/gal | **`$6.069`/gal** | **UP 📈** | `2026-09-17` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `$3.215`/gal | **`$3.413`/gal** | **UP 📈** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.599`/gal | **`$3.503`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.220`/gal | **`$3.142`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **Cincinnati, OH Retail** | `$3.883`/gal | **`$3.799`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.945`/gal | **`$3.859`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **Greenville, NC Metro Retail** | `$3.544`/gal | **`$3.463`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **Oakland, CA Metro Retail** | `$5.891`/gal | **`$5.738`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
+| **SF Bay Area 9-County Avg** | `$6.004`/gal | **`$5.848`/gal** | **DOWN 📉** | `2026-09-11` | `v1.4-Finlight-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -55,9 +55,11 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/port_st_lucie` (Port St. Lucie FL Retail)**: Dedicated Port St. Lucie, FL (PADD 1C South Atlantic) metro retail gas forecast featuring Florida >95% waterborne marine barge offloading dependency, upstream USGS Gulf Coast departure tracking, Port Everglades & Port Canaveral marine terminals, FL state fuel tax ($0.384/gal), and NOAA St. Lucie County (FLZ147) Atlantic hurricane alerts.
 - **`/oakland` (Oakland CA Retail)**: Dedicated Oakland / East Bay retail gas forecast featuring CARB regulatory breakdown ($0.953/gal tax burden), USGS Carquinez Strait runoff & berthing telemetry, and physical hazard risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
 - **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
-- **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers (including Section 10 multiline `aligned` CARB tax breakdown).
-- **`/telemetry` (System Observability)**: Real-time telemetry dashboard detailing TokenTab token consumption, cache performance, IPASIS security check metrics, unmapped ZIP heatmaps, and fallback accounting.
+- **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 15 pipeline sections (including 3-2-1 crack spreads, executive social gap multipliers, and CARB tax breakdown).
+- **`/sources` (Data Sources Catalog)**: Comprehensive public catalog documenting all 26 quantitative commodity futures, NOAA weather sensors, USGS hydrology stations, state tax portals, and financial news feeds.
+- **`/telemetry` (System Observability)**: Real-time telemetry dashboard featuring Vectorize Hindsight episodic memory observability, 7-day zero-cost data connector health audits (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS), zero-cost LLM fallback & cumulative dollar/token savings, expanded API quota safety valves (Firecrawl, Finlight, IPASIS), and dynamic out-of-metro Leaflet demand heatmaps.
 - **`/research` (Research Citations)**: Research literature bibliography cataloging academic papers, preprints, econometric models, and domain citations referenced in Midgley.
+- **Weekly Review 2.0 & Episodic Agent Memory (Issue #230)**: Biomimetic Retain-Recall-Reflect memory engine on Google Cloud Run (Scale-to-Zero) + Supabase `pgvector` with local SQLite FTS5 fallback, performing automated qualitative anomaly post-mortems and historical shock analogy retrieval during Saturday reviews.
 - **Automated Social Embed Cards**: Dynamic 1200x630px dark-mode Open Graph preview card PNGs (`docs/assets/embeds/*.png`) rendered for Discord, Twitter/X, and Slack link previews.
 
 
@@ -111,7 +113,8 @@ flowchart TD
 
     subgraph REVIEW["7. Model Performance Review & Feedback Loop Agent"]
         R1[".github/workflows/weekly_model_review.yml"]
-        R2["weekly_issue_reporter.py, catalog_monitor.py & arxiv_monitor.py"]
+        R2["weekly_issue_reporter.py, agent_memory.py & hindsight_client.py"]
+        R3["Retain-Recall-Reflect: Cloud Run (Scale-to-Zero) + Supabase pgvector & SQLite FTS5"]
     end
 
     subgraph DASHBOARD["8. Public Web Dashboard & Presentation Agent"]
@@ -188,6 +191,8 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 29. **Cloudflare Edge Queue Buffer & D1 Cache Gateway (`workers/intraday_monitor_worker.ts` & `workers/cache_worker.ts`, Issues #194 & #196):** Edge message buffer (`intraday-event-queue` producer/consumer bindings) decoupling event burst detection and webhook pushes from origin execution. Features edge authentication over Cloudflare D1 (`midgley-cache-d1`) and Option A2 full-stack telemetry streaming to Axiom Log Analytics and Sentry error/heartbeat tracking.
 30. **Zero-Cost LLM Fallback Routing & TokenTab Accounting (`src/fallback_telemetry.py` & `src/token_tracker.py`, Issue #196):** Tiered key access routing `basic` tier requests to zero-cost offline rule lexicons and Kaggle open-source LLM hooks while preserving paid Gemini API tokens for `privileged` tier keys, tracking cumulative token/dollar savings on `docs/telemetry.html`.
 31. **Self-Hosted Production Docker Container Image (`ghcr.io/koshiirra/midgley:self-hosted`, Issue #198):** Multi-stage production container packaged with Python 3.13, `uv`, OpenMP runtime, and pre-configured blank-slate National Wholesale RBOB environment variables, published automatically to GitHub Container Registry (`ghcr.io/koshiirra/midgley:self-hosted` & `latest`).
+32. **Real-Time Discord Webhook Notification Gateway (`src/discord_notifier.py`, Issue #234):** Automated real-time Discord webhook alerts dispatched on intraday forecast revisions with environment isolation (`[PRODUCTION]` vs `[DEVELOPMENT]`), detailed catalyst telemetry (headline, source, article/archive links, target locales, price pressure $\Delta P$, supply disruption $S$), dynamic severity color-coding, and non-blocking failure resilience.
+33. **Model Data Sources & Intelligence Feeds Directory (`src/sources_generator.py` & `docs/sources.html`):** Public technical directory and governance matrix documenting all 26+ input data streams (commodity futures, options volatility, rig counts, NOAA weather, USGS hydrology, USACE locks, USGS seismic, air quality, 50-state tax portals, crowdsourced pump feeds, and academic preprints) with instant category filtering and search.
 
 ---
 

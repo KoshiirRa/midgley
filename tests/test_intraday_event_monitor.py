@@ -177,6 +177,17 @@ class TestIntradayEventMonitor(unittest.TestCase):
         # Should detect exactly 1 anomaly per cycle to avoid multiple sequential dashboard builds
         self.assertEqual(res["anomalies_detected"], 1)
 
+    @patch("src.intraday_event_monitor.send_intraday_discord_notification")
+    def test_process_incoming_headline_triggers_discord_notification(self, mock_discord):
+        mock_discord.return_value = True
+        headline = "Canada Announces Retaliatory Tariffs as Trade War Escalates"
+        res = self.monitor.process_incoming_headline(headline, source="Test_Suite")
+        self.assertTrue(res["is_anomaly"])
+        mock_discord.assert_called_once()
+        call_arg = mock_discord.call_args[0][0]
+        self.assertEqual(call_arg["headline"], headline)
+        self.assertTrue(res.get("discord_notified"))
+
 
 if __name__ == "__main__":
     unittest.main()

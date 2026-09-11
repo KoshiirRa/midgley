@@ -62,8 +62,16 @@ def _load_telemetry_ledger() -> dict:
             "estimated_cost_usd": 0.0,
             "fallback_activations": 0
         },
+        "memory_totals": {
+            "retain_count": 0,
+            "recall_count": 0,
+            "reflect_count": 0,
+            "cloud_calls": 0,
+            "local_fallback_calls": 0
+        },
         "llm_events": [],
-        "api_events": []
+        "api_events": [],
+        "memory_events": []
     }
 
 
@@ -76,6 +84,8 @@ def _save_telemetry_ledger(ledger: dict) -> None:
             ledger["llm_events"] = ledger["llm_events"][-1000:]
         if len(ledger.get("api_events", [])) > 1000:
             ledger["api_events"] = ledger["api_events"][-1000:]
+        if len(ledger.get("memory_events", [])) > 1000:
+            ledger["memory_events"] = ledger["memory_events"][-1000:]
         with open(TELEMETRY_LEDGER_PATH, "w", encoding="utf-8") as f:
             json.dump(ledger, f, indent=2)
     except Exception as e:
@@ -127,6 +137,58 @@ def log_llm_usage(
         totals["fallback_activations"] += 1
 
     ledger["llm_events"].append(event_record)
+    _save_telemetry_ledger(ledger)
+
+    return event_record
+
+
+def log_agent_memory_op(
+    operation: str,
+    backend: str,
+    status: str = "success",
+    latency_ms: float = 0.0,
+    environment: Optional[str] = None
+) -> dict:
+    """
+    Logs an Agent Memory operation (retain, recall, reflect) and updates cumulative metrics (Issue #230).
+    """
+    if environment is None:
+        environment = get_current_environment()
+
+    if os.environ.get("TESTING") == "1" and not os.environ.get("TEST_TELEMETRY_PERSIST"):
+        return {"status": "TEST_SUPPRESSED"}
+
+    event_record = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "environment": environment,
+        "operation": operation,
+        "backend": backend,
+        "status": status,
+        "latency_ms": round(latency_ms, 2)
+    }
+
+    ledger = _load_telemetry_ledger()
+    totals = ledger.setdefault("memory_totals", {
+        "retain_count": 0,
+        "recall_count": 0,
+        "reflect_count": 0,
+        "cloud_calls": 0,
+        "local_fallback_calls": 0
+    })
+
+    if operation == "retain":
+        totals["retain_count"] = totals.get("retain_count", 0) + 1
+    elif operation == "recall":
+        totals["recall_count"] = totals.get("recall_count", 0) + 1
+    elif operation == "reflect":
+        totals["reflect_count"] = totals.get("reflect_count", 0) + 1
+
+    if backend == "hindsight_cloud":
+        totals["cloud_calls"] = totals.get("cloud_calls", 0) + 1
+    elif backend in ["sqlite_fts5", "sqlite_local"]:
+        totals["local_fallback_calls"] = totals.get("local_fallback_calls", 0) + 1
+
+    ledger.setdefault("memory_events", []).append(event_record)
     _save_telemetry_ledger(ledger)
 
     return event_record
@@ -312,6 +374,42 @@ def format_prometheus_metrics(environment: Optional[str] = None) -> str:
                 lines.append(f'cache_gateway_operations_total{{environment="{environment}",type="miss"}} {c_data.get("cache_misses", 0)}')
         except Exception as e:
             logger.debug(f"Error reading connector telemetry: {e}")
+
+    # Agent Memory & Episodic Reflection Metrics (Issue #230)
+    mem_totals = ledger.get("memory_totals", {})
+    lines.append("# HELP agent_memory_operations_total Total episodic memory retain, recall, and reflect operations.")
+    lines.append("# TYPE agent_memory_operations_total counter")
+    lines.append(f'agent_memory_operations_total{{environment="{environment}",operation="retain"}} {mem_totals.get("retain_count", 0)}')
+    lines.append(f'agent_memory_operations_total{{environment="{environment}",operation="recall"}} {mem_totals.get("recall_count", 0)}')
+    lines.append(f'agent_memory_operations_total{{environment="{environment}",operation="reflect"}} {mem_totals.get("reflect_count", 0)}')
+
+    lines.append("# HELP agent_memory_backend_calls_total Total calls routed to Hindsight Cloud Run vs local SQLite FTS5.")
+    lines.append("# TYPE agent_memory_backend_calls_total counter")
+    lines.append(f'agent_memory_backend_calls_total{{environment="{environment}",backend="hindsight_cloud"}} {mem_totals.get("cloud_calls", 0)}')
+    lines.append(f'agent_memory_backend_calls_total{{environment="{environment}",backend="sqlite_fts5"}} {mem_totals.get("local_fallback_calls", 0)}')
+
+    # Local SQLite Memory Database Stats
+    sqlite_mem_path = os.path.join("data", "agent_memory.sqlite")
+    if os.path.exists(sqlite_mem_path):
+        try:
+            import sqlite3
+            conn = sqlite3.connect(sqlite_mem_path, timeout=2.0)
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM memories")
+            exp_count = cursor.fetchone()[0]
+            cursor.execute("SELECT COUNT(*) FROM reflections")
+            ref_count = cursor.fetchone()[0]
+            conn.close()
+
+            lines.append("# HELP agent_memory_stored_experiences_total Total episodic experience records in SQLite store.")
+            lines.append("# TYPE agent_memory_stored_experiences_total gauge")
+            lines.append(f'agent_memory_stored_experiences_total{{environment="{environment}"}} {exp_count}')
+
+            lines.append("# HELP agent_memory_stored_reflections_total Total qualitative reflection records in SQLite store.")
+            lines.append("# TYPE agent_memory_stored_reflections_total gauge")
+            lines.append(f'agent_memory_stored_reflections_total{{environment="{environment}"}} {ref_count}')
+        except Exception as e:
+            logger.debug(f"Error querying sqlite memory stats: {e}")
 
     return "\n".join(lines) + "\n"
 

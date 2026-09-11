@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1ae2ce4322b14229bad5f1c4bf222a01"}'></script>
+
     <!-- Open Graph / Discord Social Embed Metadata -->
     <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Cincinnati Tri-State Gas Price Forecast ($4.149 → $4.134 | -0.36%) - Midgley AI">
-    <meta property="og:description" content="5-day retail gas price forecast for Cincinnati OH/KY tri-state. Baseline $4.149/gal, projected target $4.134/gal. Ohio/KY dual-state tax gap & Marathon Catlettsburg model.">
+    <meta property="og:title" content="Cincinnati Tri-State Gas Price Forecast ($3.428 → $3.344 | -2.45%) - Midgley AI">
+    <meta property="og:description" content="5-day retail gas price forecast for Cincinnati OH/KY tri-state. Baseline $3.428/gal, projected target $3.344/gal. Ohio/KY dual-state tax gap & Marathon Catlettsburg model.">
     <meta property="og:url" content="https://koshiirra.github.io/midgley/cincinnati.html">
     <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/cincinnati.png">
     <meta property="og:image:width" content="1200">
@@ -16,8 +15,8 @@
 
     <!-- Twitter Card Metadata -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Cincinnati Tri-State Gas Price Forecast ($4.149 → $4.134 | -0.36%) - Midgley AI">
-    <meta name="twitter:description" content="5-day retail gas price forecast for Cincinnati OH/KY tri-state. Baseline $4.149/gal, projected target $4.134/gal. Ohio/KY dual-state tax gap & Marathon Catlettsburg model.">
+    <meta name="twitter:title" content="Cincinnati Tri-State Gas Price Forecast ($3.428 → $3.344 | -2.45%) - Midgley AI">
+    <meta name="twitter:description" content="5-day retail gas price forecast for Cincinnati OH/KY tri-state. Baseline $3.428/gal, projected target $3.344/gal. Ohio/KY dual-state tax gap & Marathon Catlettsburg model.">
     <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/cincinnati.png">
 
     <!-- Discord Theme Accent Color -->
@@ -76,7 +75,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.5.1</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.5.1-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -135,6 +134,9 @@
                 <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
+                <a href="sources.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                </a>
                 <a href="citations.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
                 </a>
@@ -187,8 +189,8 @@
                         <span class="font-bold text-rose-400">Ohio Side (Hamilton Co.)</span>
                         <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20">Tax: 38.5¢/gal</span>
                     </div>
-                    <p class="text-3xl font-extrabold text-white">$4.149 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-rose-300">$4.134/gal</strong></p>
+                    <p class="text-3xl font-extrabold text-white">$3.428 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-rose-300">$3.344/gal</strong></p>
                 </div>
 
                 <!-- Kentucky Side -->
@@ -197,8 +199,8 @@
                         <span class="font-bold text-blue-400">Northern KY (Boone/Kenton)</span>
                         <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">Tax: 26.0¢/gal</span>
                     </div>
-                    <p class="text-3xl font-extrabold text-white">$3.288 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-blue-300">$3.276/gal</strong></p>
+                    <p class="text-3xl font-extrabold text-white">$3.303 <span class="text-xs font-normal text-slate-400">/gal base</span></p>
+                    <p class="text-xs text-slate-400">5-Day Forecast: <strong class="text-blue-300">$3.217/gal</strong></p>
                 </div>
 
                 <!-- Model Accuracy -->
@@ -277,14 +279,14 @@
                 </span>
             </div>
             <p class="text-xs text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800/90 leading-relaxed">
-                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> Cincinnati OH forecast $-0.015/gal (-0.36%): Driven primarily by Regional Logistics & Hub Delivery ($-0.005/gal), Refining Yield & Crack Spread ($-0.004/gal).
+                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> Cincinnati OH forecast $-0.084/gal (-2.45%): Driven primarily by Regional Logistics & Hub Delivery ($-0.029/gal), Refining Yield & Crack Spread ($-0.021/gal).
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
                 
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Regional Logistics & Hub Delivery</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.005/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.029/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Ecodeveloped pipeline loading flows</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -295,7 +297,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Refining Yield & Crack Spread</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.004/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.021/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Narrowing refining margins and elevated product yield</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -306,7 +308,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Futures & Commodity Benchmark</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.003/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.017/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Softening NYMEX energy futures contract prices</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -317,7 +319,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Tax & Regulatory Overhead</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.002/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.008/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Tax relief or off-peak RVP specification</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -327,21 +329,21 @@
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-semibold text-slate-200 text-xs">Weather & Environmental Signals</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.001/gal</span>
+                        <span class="font-semibold text-slate-200 text-xs">Unstructured Intelligence & Sentiment</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.005/gal</span>
                     </div>
-                    <p class="text-slate-400 text-xs leading-snug">Favorable multi-basin weather conditions</p>
+                    <p class="text-slate-400 text-xs leading-snug">OPEC price pressure talkdown & dovish geopolitical news</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
                         <span>Model Share Weight</span>
                         <span class="font-mono text-slate-300">5.0%</span>
                     </div>
                 </div>
-                <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-2">
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-semibold text-slate-200 text-xs">Unstructured Intelligence & Sentiment</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-500/20 text-slate-400 border border-slate-500/30">$0.000/gal</span>
+                        <span class="font-semibold text-slate-200 text-xs">Weather & Environmental Signals</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">-$0.004/gal</span>
                     </div>
-                    <p class="text-slate-400 text-xs leading-snug">Neutral news sentiment</p>
+                    <p class="text-slate-400 text-xs leading-snug">Favorable multi-basin weather conditions</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
                         <span>Model Share Weight</span>
                         <span class="font-mono text-slate-300">5.0%</span>

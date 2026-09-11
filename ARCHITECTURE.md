@@ -335,4 +335,84 @@ Midgley exposes a standard Prometheus exposition text format endpoint (`GET /api
 ### Zero-Cost Internet Archive Wayback Machine Cloud Archiver (`src/wayback_archiver.py`)
 During intraday event evaluations in `src/intraday_event_monitor.py`, breaking headline URLs are submitted directly to the Internet Archive Save API (`https://web.archive.org/save/{url}`). The permanent `archive_url` string is attached to the event result object, saved in `data/intraday_events.json`, and cached locally at `data/wayback_archive_cache.json` for 100% zero-cost cloud web archiving.
 
+---
+
+## 12. Real-Time Discord Webhook Notification Gateway (Issue #234)
+
+```
+       ┌─────────────────────────────────────────────────────────────┐
+       │   INTRADAY SHOCK DETECTED (IntradayEventMonitor / Edge)     │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │      DISCORD NOTIFICATION ENGINE (src/discord_notifier.py)   │
+       │  • Evaluates Environment (MIDGLEY_ENV: 'prod' vs 'dev')     │
+       │  • Formats Rich Discord Embed (Color: Red / Green / Orange) │
+       │  • Attaches Headline, Source, Target Locales & Factor Vector│
+       │  • Attaches Original Article & Wayback Machine Archive URLs │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │ HTTP POST (10s Timeout, Non-blocking)
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │             DISCORD CHANNEL INCOMING WEBHOOK                │
+       │   🚨 [PRODUCTION] or [DEVELOPMENT] Intraday Revision Alert  │
+---
+
+## 13. Chronological 15-Section Mathematical Framework & Pipeline Execution (Issues #224, #225, #226, #227, #229)
+
+The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and generation engine in [`src/dashboard_generator.py`](file:///src/dashboard_generator.py) follow a strict 15-section chronological execution pipeline:
+
+1. **`01` Commodity Futures & 3-2-1 Crack Spread:** NYMEX RBOB ($P_{\text{RBOB}}$), WTI ($P_{\text{WTI}}$), ULSD Heating Oil ($P_{\text{ULSD}}$), and standard 3-2-1 crack spread $\text{Crack}_{321} = \frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{ULSD}} - 3 \cdot (P_{\text{WTI}} / 42)}{3}$.
+2. **`02` Alternative Physical Feeds & Positioning:** 7 quantitative macro and positioning feeds: Cboe OVX, Baker Hughes Rig Counts, 10-Year Treasury Yields, 10-Year TIPS Breakevens, CFTC COT Managed Money Net Longs, FERC Natural Gas / LNG Spark Spreads, and USDA/EIA Ethanol/RIN blendstock margins.
+3. **`03` Live News Streams, Web Scraping & Multi-Tiered LLM Extraction:** Finlight financial news stream (150/mo cap), Firecrawl JavaScript web scraper (800/mo cap & 24h caching), zero-cost RSS polling ($<24\text{h}$ filter), webhook push with IPASIS security verification, and 3-tier LLM failover (Gemini 2.5 Flash $\rightarrow$ GPT-4o-mini $\rightarrow$ Offline Lexicon).
+4. **`04` Executive Social Media & Weekend Gap Dynamics:** Social shock vector $\mathbf{V}_{\text{social}, t}$ with empirical regression weights ($\beta_{\text{OPEC}} = -1.85\%$, $\beta_{\text{tariff}} = +2.10\%$) and the $1.42\times$ weekend market close multiplier applied on Monday open reopening.
+5. **`05` Multi-Tiered NOAA Weather Risk:** 2-tiered weather ingestion via `t.wxs.us` lightweight terminal endpoints with deterministic SPC convective risk mapping ($90\%-95\%$ token reduction).
+6. **`06` Maritime Chokepoints & Inland Waterways:** Hormuz, Suez, Bab el-Mandeb, Delmarva detour, and Mississippi/Ohio River tow draft restrictions.
+7. **`07` USGS 3D Hypocentral Seismic Attenuation & AQI Outage Risk:** USGS earthquake hypocentral distance modeling $D_{\text{hypo}} = \sqrt{d_{\text{epicenter}}^2 + \text{depth}^2}$, facility criticalities, and industrial AQI flaring detection.
+8. **`08` Microsoft Qlib Alpha Factor Mining & Spectral CoSPOT:** Qlib symbolic expression mining, Discrete Fourier Transform (DFT), Discrete Wavelet Transform (DWT), and spectral entropy features.
+9. **`09` Econometric Exponential Memory Decay & Category Shock Fusion:** Recursive decay $\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp(-\ln 2 / t_{1/2}) + \mathbf{V}_t$ with category half-lives ($t_{1/2} \in [2.5, 14.0]\text{ days}$) and Context Routing Diagnostic Fusion weighting $\omega_{\text{fusion}} \in [0.85, 1.25]$.
+10. **`10` Standardized Ridge Estimator & Purged CPCV:** Regularized regression ($\alpha=10.0$) evaluated via Purged Combinatorial Cross-Validation to eliminate temporal leakage.
+11. **`11` CARB Regulatory Burden & PADD 5 Island Isolation:** Reconciled statutory California fuel tax burden $T_{\text{CARB}} = \$0.953/\text{gal}$.
+12. **`12` Ultra-Low Sulfur Diesel (ULSD) & Distillate Margin:** Distillate hydrocracking margin modeling.
+13. **`13` Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI:** Sigmoidal gating parameter $\lambda_{\text{vol}}$ transitioning between Naive Persistence and active event shock forecasts, with $\pm 1.96 \cdot \sigma_{\text{residual, 30d}}$ empirical CI coverage ($\ge 90.0\%$).
+14. **`14` Local Metro Basis Differentials & Spatial Freight:** Local rack margin adjustments across 10 metro calibration hubs.
+15. **`15` End-to-End Master Prediction Synthesis:** Signed component-level factor attribution breakdown across 6 standardized economic domains.
+
+---
+
+## 14. CoSPOT Spectral Prompting & Hindsight Episodic Agent Memory (Issues #215 & #230)
+
+* **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
+* **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](file:///src/agent_memory.py) & [`src/hindsight_client.py`](file:///src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Google Cloud Run + Supabase pgvector and local SQLite FTS5 fallback.
+
+---
+
+## 15. System Telemetry, Connector Health Auditing & Observability Architecture (Issue #237)
+
+```
+        ┌─────────────────────────────────────────────────────────────┐
+        │            SYSTEM OBSERVABILITY & TELEMETRY HUB             │
+        │             (src/telemetry.py & src/dashboard_generator.py) │
+        └──────────────┬──────────────────────────────┬───────────────┘
+                       │                              │
+         ┌─────────────┴────────────┐   ┌─────────────┴────────────┐
+         ▼                          ▼   ▼                          ▼
+┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐
+│ HINDSIGHT MEMORY │       │ CONNECTOR AUDIT  │       │ FALLBACK SAVINGS │
+│ Retain / Recall  │       │ 7-Day EIA, FRED, │       │ Basic Tier &     │
+│ & Cloud Run vs   │       │ USDA, NOAA, AAA, │       │ Lexicon Routing  │
+│ SQLite FTS5 Hub  │       │ Socrata & USGS   │       │ Spared LLM $ & Tk│
+└──────────────────┘       └──────────────────┘       └──────────────────┘
+```
+
+* **Vectorize Hindsight Observability:** Tracks real-time memory operation volume (`retain_count`, `recall_count`, `reflect_count`), hybrid cloud container (`midgley-hindsight`) vs local SQLite FTS5 routing, and database experience totals.
+* **7-Day Connector Health Audit:** Ingests `src.connector_telemetry` to compute 7-day request volumes, failure rate %, latency, and cache freshness across all zero-cost open data connectors.
+* **Zero-Cost Fallback & Dollar Savings Accounting:** Ingests `src.fallback_telemetry` to monitor Basic Tier zero-cost routing and calculate cumulative dollar/token savings.
+* **Hard Quota Safety Valves:** Monitors Firecrawl (800/mo cap, 30/day burst limit), Finlight (150/mo cap, 10/day burst limit), and IPASIS Security Verifier (100 req/day cap).
+* **Dynamic Out-of-Metro Leaflet Map:** Renders real-time geographic clusters of out-of-metro forecast lookups from `src.telemetry.get_unmapped_zip_telemetry()`.
+
+
+
+
 
