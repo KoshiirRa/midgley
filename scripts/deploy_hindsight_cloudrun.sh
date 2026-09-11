@@ -55,10 +55,10 @@ gcloud run deploy "$SERVICE_NAME" \
     --port 8888 \
     --min-instances 0 \
     --max-instances 1 \
-    --memory 512Mi \
-    --cpu 1 \
+    --memory 2Gi \
+    --cpu 2 \
     --timeout 300 \
-    --set-env-vars HINDSIGHT_API_DATABASE_URL="$SUPABASE_DATABASE_URL",HINDSIGHT_API_LLM_PROVIDER="gemini",HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY"
+    --set-env-vars HINDSIGHT_API_PORT="8888",HINDSIGHT_API_DATABASE_URL="$SUPABASE_DATABASE_URL",DATABASE_URL="$SUPABASE_DATABASE_URL",HINDSIGHT_API_RUN_MIGRATIONS_ON_STARTUP="true",HINDSIGHT_API_LLM_PROVIDER="gemini",HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY"
 
 # 3. Retrieve service URL
 SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID" --platform managed --region "$REGION" --format 'value(status.url)')
