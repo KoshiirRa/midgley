@@ -21,6 +21,8 @@ from src.dashboard_generator import (
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
+    SOURCES_PATH,
+    SOURCES_SUB_PATH,
     get_analytics_script,
 )
 
@@ -690,6 +692,81 @@ def test_math_maritime_chokepoints_and_inland_waterways_all_regions():
     assert "Carquinez Strait" in math_html
     assert "Port of Wilmington" in math_html
     assert "Cape Fear River" in math_html
+
+
+def test_data_sources_page_generation():
+    """Verify that generate_public_dashboard generates docs/sources.html and docs/sources/index.html
+    documenting all 26+ quantitative commodity futures, NOAA weather feeds, USGS hydrology,
+    physical telemetry, state open data, and financial news streams without control character corruption.
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(SOURCES_PATH), f"Expected file does not exist: {SOURCES_PATH}"
+    assert os.path.getsize(SOURCES_PATH) > 0, f"Generated file is empty: {SOURCES_PATH}"
+
+    assert os.path.exists(SOURCES_SUB_PATH), f"Expected file does not exist: {SOURCES_SUB_PATH}"
+    assert os.path.getsize(SOURCES_SUB_PATH) > 0, f"Generated file is empty: {SOURCES_SUB_PATH}"
+
+    with open(SOURCES_PATH, "r", encoding="utf-8") as f:
+        sources_content = f.read()
+
+    # Check for unwanted ASCII control characters in docs/sources.html
+    ctrl_chars = [
+        ("\t", "Tab"),
+        ("\f", "Formfeed"),
+        ("\r", "Carriage Return"),
+        ("\a", "Bell"),
+        ("\b", "Backspace"),
+    ]
+    for char, name in ctrl_chars:
+        count = sources_content.count(char)
+        assert count == 0, f"Found {count} unescaped '{name}' control character(s) in docs/sources.html"
+
+    # Verify presence of all 6 category sections
+    assert "Quantitative Commodity Futures &amp; Energy Benchmarks" in sources_content
+    assert "Alternative Physical, Upstream &amp; Macroeconomic Telemetry" in sources_content
+    assert "Real-Time Financial Media, Web Scraping &amp; Event Intelligence" in sources_content
+    assert "Atmospheric, Hydrological &amp; Seismic Hazard Telemetry" in sources_content
+    assert "State Open Data, Tax Portals &amp; Crowdsourced Retail Pump Feeds" in sources_content
+    assert "Continuous Academic Literature &amp; Developer Catalog Feeds" in sources_content
+
+    # Verify key monitored feeds across all categories
+    assert "RB=F" in sources_content
+    assert "CL=F" in sources_content
+    assert "BZ=F" in sources_content
+    assert "HO=F" in sources_content
+    assert "api.eia.gov/v2" in sources_content
+    assert "api.stlouisfed.org" in sources_content
+    assert "marsapi.ams.usda.gov" in sources_content
+
+    assert "^OVX" in sources_content
+    assert "bakerhughes.com" in sources_content
+    assert "cftc.gov" in sources_content
+    assert "ferc.gov" in sources_content
+
+    assert "api.finlight.me" in sources_content
+    assert "api.firecrawl.dev" in sources_content
+    assert "sec.gov/edgar/" in sources_content
+
+    assert "api.weather.gov" in sources_content
+    assert "t.wxs.us" in sources_content
+    assert "spc.noaa.gov" in sources_content
+    assert "nhc.noaa.gov" in sources_content
+    assert "api.waterdata.usgs.gov" in sources_content
+    assert "earthquake.usgs.gov" in sources_content
+    assert "PurpleAir" in sources_content
+
+    assert "api.census.gov" in sources_content
+    assert "GasBuddy" in sources_content
+    assert "export.arxiv.org" in sources_content
+    assert "api.core.ac.uk" in sources_content
+    assert "free-for-dev" in sources_content
+
+    # Verify Master Governance Ledger Table and dynamic search/filter script
+    assert "id=\"master-feed-table\"" in sources_content
+    assert "function filterCategory(cat)" in sources_content
+    assert "function searchFeeds()" in sources_content
+
 
 
 

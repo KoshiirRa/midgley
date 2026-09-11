@@ -80,7 +80,7 @@ class TestHindsightClient(unittest.TestCase):
         reflect_res = client.reflect(anomalies=[{"region": "National"}])
         self.assertEqual(reflect_res["status"], "UNCONFIGURED")
 
-    @patch("urllib.request.urlopen")
+    @patch("src.hindsight_client.urllib.request.urlopen")
     def test_configured_retain_mock(self, mock_urlopen):
         mock_resp = MagicMock()
         mock_resp.read.return_value = json.dumps({"status": "SUCCESS", "id": "mem_123"}).encode("utf-8")

@@ -78,7 +78,8 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                                               ▼
                ┌─────────────────────────────────────────────────────────────┐
                │     8. PUBLIC WEB DASHBOARD & PRESENTATION AGENT            │
-               │     (src/dashboard_generator.py -> docs/ GitHub Pages)      │
+               │  (src/dashboard_generator.py & src/sources_generator.py    │
+               │                   -> docs/ GitHub Pages)                    │
                └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -576,6 +577,36 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   1. **Network Suppression in Test Mode:** All live network connectors (`src/live_fuel_feed.py`, `src/usgs_seismic.py`, `src/hindsight_client.py`, `src/discord_notifier.py`, `src/finlight_feed.py`, `src/firecrawl_scraper.py`) MUST check `os.environ.get("TESTING") == "1"` and immediately return mock/quiet default payloads without initiating external HTTP socket connections or timing out.
   2. **Persistent Storage Protection:** `TESTING=1` or test sources (`Test_*`, `Test_Suite`) MUST automatically suppress persistent disk writes (`_save_anomaly_record`, `prediction_history.csv` appends) and skip non-isolated dashboard rebuilds during unit test execution.
   3. **Monkeypatch Compatibility:** `generate_public_dashboard()` MUST call connector functions directly without outer conditional skipping, allowing test functions to monkeypatch underlying connectors (e.g. `monkeypatch.setattr(lff, "fetch_live_metro_retail_price", mock_fetch)`) while the underlying connectors internally handle `TESTING=1` fast-paths when unpatched.
+
+---
+
+### 22. Mandatory Data Sources Page & Ingestion Matrix Synchronization Directives (`src/sources_generator.py` & `docs/sources.html`)
+
+* **Role:** Enforces automatic synchronization of the public Data Sources catalog documentation page (`docs/sources.html` & `docs/sources/index.html`) whenever new ingestion feeds, telemetry connectors, or quantitative data sources are added, updated, or deprecated.
+* **Mandatory Data Sources Page Directives:**
+  1. **Comprehensive 26-Feed Domain Matrix:** The Data Sources portal catalogs all quantitative futures, physical telemetry streams, NOAA weather sensors, USGS hydrology stations, state tax portals, and financial news feeds across 6 domain partitions:
+     - `01`: Quantitative Commodity Futures & Energy Benchmarks (7 feeds: RBOB `RB=F`, WTI `CL=F`, Brent `BZ=F`, ULSD `HO=F`, EIA v2 API, FRED Energy Series, USDA Ethanol & RIN Credits)
+     - `02`: Alternative Physical, Upstream & Macroeconomic Telemetry (6 feeds: Cboe OVX `^OVX`, Baker Hughes Rig Counts, US Treasury & TIPS Yields `^TNX`/`DGS10`/`DFII10`, CFTC COT Energy Positioning, FERC Form 6 Tariffs, Energy Equities `XLE`/`VLO`/`MPC`/`PSX`)
+     - `03`: Real-Time Financial Media, Web Scraping & Event Intelligence (6 feeds: Finlight.me REST API, Firecrawl Scraper, Free Energy RSS Feeds, Push Webhook Gateway, Executive Social Feed, SEC EDGAR 8-K Outages)
+     - `04`: Atmospheric, Hydrological & Seismic Hazard Telemetry (8 feeds: NOAA NWS Alerts, NOAA SPC Convective Risk, NOAA NHC Tropical Cones, BSEE Gulf Shut-ins, USGS Water Data Telemetry, USACE Lock Performance, USGS Seismic Hazards, Air Quality & Flaring Index)
+     - `05`: State Open Data, Tax Portals & Crowdsourced Retail Pump Feeds (3 feeds: Universal 50-State Open Data Portals, U.S. Census Demographics, Live Retail Fuel Feeds)
+     - `06`: Continuous Academic Literature & Developer Catalog Feeds (3 feeds: arXiv Research Preprints, CORE Open-Access Literature, Developer Catalogs)
+  2. **Clean Typography & HTML Entity Standard:** In catalog cards and summary tables, use clean, native typography and semantic HTML entities (e.g. `&Delta;P`, `PM<sub>2.5</sub>`, `SO<sub>2</sub>`, `Crack<sub>321</sub>`, `&ge; M3.0`, `(XLE)`) rather than raw inline LaTeX escaping (`\(\text{...}\)`), ensuring instantaneous, uncorrupted readability without client-side script execution delays.
+  3. **Master Ingestion & Governance Ledger Matrix:** Maintain the master architecture table at the bottom of the page detailing feed identifiers, domain categories, providers/endpoints, protocols/auth, caching TTLs, update cadences, cost profiles ($0 open access), and consumer modules.
+  4. **Automatic Re-generation Execution & Test Suite Integration:** Whenever a new data source is added to the codebase, the agent MUST update `src/sources_generator.py`, execute `python3 -c "from src.sources_generator import generate_data_sources_page; generate_data_sources_page()"`, and verify pass status with `pytest tests/test_dashboard_generator.py -k test_data_sources_page_generation`.
+
+---
+
+### 23. Mandatory System Telemetry & Public Observability Directives (`src/dashboard_generator.py` & `docs/telemetry.html`)
+
+* **Role:** Enforces comprehensive synchronization and maintenance of the public Telemetry & System Observability dashboard ([`docs/telemetry.html`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/telemetry.html) & [`docs/telemetry/index.html`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/telemetry/index.html)) (Issues #50, #107, #195, #196, #230, #237).
+* **Mandatory Telemetry Directives:**
+  1. **Hindsight Episodic Memory Observability:** `generate_telemetry_page()` MUST dynamically read `data/telemetry_ledger.json` and `data/agent_memory.sqlite`, rendering real-time metrics for Retain (experiences stored), Recall (analogies searched), and Reflect (qualitative post-mortems synthesized), alongside Google Cloud Run (`midgley-hindsight` + Supabase `pgvector`) vs local SQLite FTS5 fallback routing.
+  2. **Zero-Cost Connector Health & Freshness Audit:** Ingest `src.connector_telemetry.get_telemetry_summary(days=7)` to render an automated health table across core zero-cost open data providers (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS), displaying 7-day request volumes, failure rate %, average response latency, and cache freshness.
+  3. **Zero-Cost Fallback & Dollar/Token Savings Accounting:** Ingest `src.fallback_telemetry.fallback_logger.get_summary()` to display Basic Tier routed calls, zero-cost provider hooks, and Tier 3 offline lexicon fallbacks, quantifying LLM tokens spared and cumulative USD savings.
+  4. **Dynamic Out-of-Metro Leaflet Map Points:** Dynamically serialize `src.telemetry.get_unmapped_zip_telemetry()` into the client-side Leaflet map script to display active geographic clusters of out-of-metro forecast requests.
+  5. **Automated Re-generation & Test Execution:** Whenever telemetry schemas, memory tables, or quota ledgers change, agents MUST execute `python3 -c "from src.dashboard_generator import generate_telemetry_page; generate_telemetry_page()"` and verify pass status with `pytest tests/test_system_telemetry.py`.
+
 
 
 

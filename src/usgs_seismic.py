@@ -11,6 +11,7 @@ Monitors critical energy corridor assets across:
 5. PADD 2 Central US / New Madrid Corridor (`new_madrid`): Capline & Mid-Valley pipeline river crossings, Valero Memphis.
 """
 
+import os
 import math
 import json
 import logging
@@ -294,26 +295,6 @@ class USGSSeismicConnector:
         minute_bucket = datetime.now().strftime("%Y-%m-%d-%H-%M")
         minute_quarter = f"{minute_bucket[:-1]}{int(minute_bucket[-1]) // 5 * 5:01d}"
         cache_key = f"usgs_seismic_telemetry:{corridor or 'all'}:{days}:{min_mag or 'def'}:{minute_quarter}"
-
-        if os.environ.get("TESTING") == "1":
-            return {
-                "events": [],
-                "indices": {
-                    "bay_area_seismic_risk_index": 0.0,
-                    "cushing_storage_seismic_risk_index": 0.0,
-                    "socal_refining_seismic_risk_index": 0.0,
-                    "mid_atlantic_seismic_risk_index": 0.0,
-                    "new_madrid_seismic_risk_index": 0.0,
-                    "composite_seismic_risk_index": 0.0,
-                    "is_pipeline_emergency_shutdown_risk": False,
-                    "is_refinery_inspection_advisory": False,
-                    "max_magnitude": 0.0,
-                    "total_significant_quakes": 0
-                },
-                "corridors": {},
-                "status": "SUCCESS",
-                "source": "USGS Earthquake Hazards API (Testing Mode)"
-            }
 
         cached = global_cache.get(cache_key)
         if cached:

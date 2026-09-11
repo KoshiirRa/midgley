@@ -20,7 +20,8 @@ from src.regional_metadata import render_regional_driver_cards_html
 
 logger = logging.getLogger(__name__)
 
-DOCS_DIR = "docs"
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DOCS_DIR = os.path.join(PROJECT_ROOT, "docs")
 INDEX_PATH = os.path.join(DOCS_DIR, "index.html")
 NATIONAL_PATH = os.path.join(DOCS_DIR, "national.html")
 TULSA_PATH = os.path.join(DOCS_DIR, "tulsa.html")
@@ -33,6 +34,7 @@ OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
 MATH_PATH = os.path.join(DOCS_DIR, "math.html")
+SOURCES_PATH = os.path.join(DOCS_DIR, "sources.html")
 DIESEL_PATH = os.path.join(DOCS_DIR, "diesel.html")
 TECHNICAL_BREAKDOWN_PATH = os.path.join(DOCS_DIR, "technical_breakdown.html")
 TECHNICAL_BREAKDOWN_MD_PATH = os.path.join(DOCS_DIR, "technical_breakdown.md")
@@ -48,6 +50,7 @@ PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
+SOURCES_SUB_DIR = os.path.join(DOCS_DIR, "sources")
 DIESEL_SUB_DIR = os.path.join(DOCS_DIR, "diesel")
 TELEMETRY_SUB_DIR = os.path.join(DOCS_DIR, "telemetry")
 
@@ -61,11 +64,12 @@ PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
+SOURCES_SUB_PATH = os.path.join(SOURCES_SUB_DIR, "index.html")
 DIESEL_SUB_PATH = os.path.join(DIESEL_SUB_DIR, "index.html")
 TELEMETRY_SUB_PATH = os.path.join(TELEMETRY_SUB_DIR, "index.html")
 
-KATEX_ONLOAD_SCRIPT = r'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
-HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
+KATEX_ONLOAD_SCRIPT = 'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
+HISTORY_CSV_PATH = os.path.join(PROJECT_ROOT, "data", "prediction_history.csv")
 
 
 def codecogs_url(latex_str: str) -> str:
@@ -324,6 +328,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     diesel_cls = "bg-purple-600/30 text-purple-300 border border-purple-500/40 font-semibold" if active_tab == "diesel" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -340,6 +345,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
+    src_link = f"{rel_prefix}sources.html"
     cit_link = f"{rel_prefix}citations.html"
     sav_link = f"{rel_prefix}savings.html"
     dsl_link = f"{rel_prefix}diesel.html"
@@ -413,6 +419,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="{src_link}" class="px-3 py-1.5 rounded-lg {sources_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
                 </a>
                 <a href="{cit_link}" class="px-3 py-1.5 rounded-lg {citations_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
@@ -2726,9 +2735,31 @@ def generate_public_dashboard():
                         <p class="text-xs text-slate-300 leading-relaxed">
                             Cboe OVX options tail-risk volatility &amp; Baker Hughes drilling rig counts tracking 3-6 month supply pipelines.
                         </p>
-                    </div>
-
                 </div>
+
+                <!-- Documentation & Data Sources CTA Ribbon -->
+                <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-book-open text-cyan-400"></i> Deep Dive into Model Architecture &amp; Data Streams
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Explore full mathematical specifications, continuous shock decay functions, and complete directory of all 26 monitored feeds.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+                        <a href="sources.html" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-cyan-600/20">
+                            <i class="fa-solid fa-database"></i> Data Sources Directory
+                        </a>
+                        <a href="math.html" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-graduation-cap"></i> Math Architecture
+                        </a>
+                        <a href="citations.html" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -4668,26 +4699,45 @@ def generate_public_dashboard():
                 Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.4 Finlight-LLM</strong>.
             </p>
             
-            <!-- Research Citations Ledger Link Card -->
-            <div class="pt-2">
-                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <!-- Research Citations & Data Sources Link Cards -->
+            <div class="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
                             <i class="fa-solid fa-book-bookmark text-xl"></i>
                         </div>
                         <div>
                             <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                                Peer-Reviewed Research Literature Index <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
+                                Peer-Reviewed Literature <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
                             </h4>
-                            <p class="text-xs text-slate-400">Explore theoretical theorems, KaTeX formulas, arXiv pre-prints, Context Routing bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR residual decomposition, and Purged CPCV cross-validation across all 12 cited foundation papers.</p>
+                            <p class="text-xs text-slate-400 mt-1">Explore theoretical theorems, arXiv pre-prints, Context Routing bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR residual decomposition, and Purged CPCV cross-validation across all 12 cited foundation papers.</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
-                            <i class="fa-solid fa-book-open"></i> Open Citations Portal
+                    <div class="flex items-center gap-2 pt-1">
+                        <a href="citations.html" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-book-open"></i> Citations Portal
                         </a>
-                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
-                            <i class="fa-brands fa-github"></i> RESEARCH_CITATIONS.md
+                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+                            <i class="fa-brands fa-github"></i> Markdown
+                        </a>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-cyan-500/30 flex flex-col justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shrink-0">
+                            <i class="fa-solid fa-database text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                Model Data Sources &amp; Feeds <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">26 Ingestion Feeds</span>
+                            </h4>
+                            <p class="text-xs text-slate-400 mt-1">Explore complete technical documentation, endpoints, update cadences, schemas, and zero-cost quota policies for all 26 data streams feeding the model.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1">
+                        <a href="sources.html" class="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-cyan-600/20">
+                            <i class="fa-solid fa-server"></i> Open Data Sources Portal
                         </a>
                     </div>
                 </div>
@@ -5511,6 +5561,9 @@ def generate_savings_advisor_page():
     # Generate Telemetry Page (Issues #50 & #195)
     generate_telemetry_page()
 
+    # Generate Comprehensive Data Sources Page
+    generate_data_sources_page()
+
 
 def generate_quantstats_tearsheet_page(output_dir: str = "docs"):
     """
@@ -5755,7 +5808,7 @@ def generate_diesel_page():
 
 
 def generate_telemetry_page():
-    """Generates docs/telemetry.html & docs/telemetry/index.html (Issues #50 & #195)."""
+    """Generates docs/telemetry.html & docs/telemetry/index.html (Issues #50, #195, #196, #230, #237)."""
     os.makedirs(DOCS_DIR, exist_ok=True)
     os.makedirs(TELEMETRY_SUB_DIR, exist_ok=True)
 
@@ -5766,10 +5819,18 @@ def generate_telemetry_page():
     from src.finlight_feed import get_finlight_quota_status
     from src.tokentab_accounting import token_tab_manager
     from src.ipasis_security import get_ipasis_telemetry
+    from src.connector_telemetry import get_telemetry_summary
+    from src.fallback_telemetry import fallback_logger
+    from src.telemetry import _load_telemetry_ledger, get_all_quota_statuses
 
     tele_data = get_unmapped_zip_telemetry()
     quota_data = get_finlight_quota_status()
     ipasis_data = get_ipasis_telemetry()
+    all_quotas = get_all_quota_statuses()
+    fc_quota = all_quotas.get('firecrawl', {})
+    conn_summary = get_telemetry_summary(days=7)
+    fb_summary = fallback_logger.get_summary()
+
     tok_data = token_tab_manager.get_accounting_summary()
     tok_summary = tok_data.get('summary', {})
     tok_prov = tok_data.get('provider_breakdown', {})
@@ -5779,6 +5840,103 @@ def generate_telemetry_page():
     claude_stats = tok_prov.get('claude-3-5-haiku', {})
     finlight_stats = tok_prov.get('finlight', {})
     lexicon_stats = tok_prov.get('offline_lexicon', {})
+
+    # Memory totals from telemetry ledger & local SQLite
+    ledger = _load_telemetry_ledger()
+    mem_totals = ledger.get('memory_totals', {})
+    retain_count = mem_totals.get('retain_count', 0)
+    recall_count = mem_totals.get('recall_count', 0)
+    reflect_count = mem_totals.get('reflect_count', 0)
+    cloud_calls = mem_totals.get('cloud_calls', 0)
+    local_fallback_calls = mem_totals.get('local_fallback_calls', 0)
+
+    sqlite_mem_path = os.path.join(PROJECT_ROOT, "data", "agent_memory.sqlite")
+    stored_memories = 0
+    stored_reflections = 0
+    if os.path.exists(sqlite_mem_path):
+        try:
+            import sqlite3
+            conn = sqlite3.connect(sqlite_mem_path, timeout=2.0)
+            c = conn.cursor()
+            c.execute("SELECT COUNT(*) FROM memories")
+            stored_memories = c.fetchone()[0]
+            c.execute("SELECT COUNT(*) FROM reflections")
+            stored_reflections = c.fetchone()[0]
+            conn.close()
+        except Exception:
+            pass
+
+    # Connector audit rows
+    connectors_dict = conn_summary.get('connectors', {})
+    connector_rows_html = ""
+    if not connectors_dict:
+        connector_rows_html = '<tr><td colspan="6" class="py-3 px-4 text-center text-slate-500 italic">No connector calls logged in evaluation window</td></tr>'
+    else:
+        for c_name, meta in sorted(connectors_dict.items(), key=lambda x: x[1].get('total_calls', 0), reverse=True):
+            s_rate = meta.get('success_rate_pct', 100.0)
+            s_color = "text-emerald-400" if s_rate >= 95.0 else ("text-amber-400" if s_rate >= 80.0 else "text-red-400")
+            stale_c = meta.get('stale_calls', 0)
+            stale_color = "text-red-400 font-bold" if stale_c > 0 else "text-slate-400"
+            connector_rows_html += f"""
+            <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
+                <td class="py-2.5 px-3 font-semibold text-slate-200">{c_name}</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">{meta.get('total_calls', 0):,}</td>
+                <td class="py-2.5 px-3 text-center {s_color} font-bold">{s_rate:.1f}%</td>
+                <td class="py-2.5 px-3 text-center {stale_color}">{stale_c}</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">{meta.get('avg_latency_ms', 0.0):.2f} ms</td>
+                <td class="py-2.5 px-3 text-right text-slate-300">{meta.get('avg_data_age_hours', 0.0):.2f} h</td>
+            </tr>"""
+
+    # Dynamic Leaflet points
+    known_zip_coords = {
+        "90210": (34.0736, -118.4004, "Beverly Hills, CA (PADD 5)"),
+        "77002": (29.7604, -95.3698, "Houston, TX (PADD 3)"),
+        "10001": (40.7501, -73.9996, "New York, NY (PADD 1B)"),
+        "60601": (41.8781, -87.6298, "Chicago, IL (PADD 2)"),
+        "30301": (33.7490, -84.3880, "Atlanta, GA (PADD 1C)"),
+        "74101": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
+        "19711": (39.6837, -75.7497, "Newark, DE (PADD 1B)"),
+        "45202": (39.1031, -84.5120, "Cincinnati, OH (PADD 2)"),
+        "27834": (35.6127, -77.3664, "Greenville, NC (PADD 1C)"),
+        "28202": (35.2271, -80.8431, "Charlotte, NC (PADD 1C)"),
+        "94612": (37.8044, -122.2712, "Oakland, CA (PADD 5)"),
+        "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)")
+    }
+    state_center_coords = {
+        "CA": (36.7783, -119.4179),
+        "TX": (31.9686, -99.9018),
+        "NY": (40.7128, -74.0060),
+        "IL": (40.6331, -89.3985),
+        "FL": (27.6648, -81.5158),
+        "PA": (41.2033, -77.1945),
+        "OH": (40.4173, -82.9071),
+        "NC": (35.7596, -79.0193),
+        "GA": (32.1656, -82.9001),
+        "OK": (35.4676, -97.5164),
+        "DE": (38.9108, -75.5277),
+    }
+
+    zip_records = tele_data.get('top_unmapped_zips', [])
+    map_points = []
+    if zip_records:
+        for zr in zip_records:
+            z_code = str(zr.get('zip_code', ''))
+            z_hits = zr.get('hit_count', 1)
+            z_st = zr.get('state', 'US')
+            z_padd = zr.get('padd_region', 'PADD 2')
+            if z_code in known_zip_coords:
+                lat, lng, desc = known_zip_coords[z_code]
+                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {desc}", "hits": z_hits})
+            elif z_st in state_center_coords:
+                lat, lng = state_center_coords[z_st]
+                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {z_st} ({z_padd})", "hits": z_hits})
+    if not map_points:
+        map_points = [
+            {"lat": 34.0736, "lng": -118.4004, "name": "90210 - Beverly Hills, CA (PADD 5)", "hits": 20},
+            {"lat": 29.7604, "lng": -95.3698, "name": "77002 - Houston, TX (PADD 3)", "hits": 10},
+            {"lat": 40.7501, "lng": -73.9996, "name": "10001 - New York, NY (PADD 1B)", "hits": 40}
+        ]
+    map_points_json = json.dumps(map_points)
 
     def build_telemetry_html(hdr):
         return f"""<!DOCTYPE html>
@@ -5817,8 +5975,8 @@ def generate_telemetry_page():
                     <i class="fa-solid fa-chart-line text-3xl"></i>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-extrabold text-white tracking-tight">System Observability & Out-of-Metro Demand Heatmap</h2>
-                    <p class="text-slate-300 text-sm">Real-time API quota safety valves, 3-tier cache telemetry, and out-of-metro ZIP code query heatmaps for expansion planning.</p>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">System Observability & Operational Telemetry</h2>
+                    <p class="text-slate-300 text-sm">Real-time API quota safety valves, Vectorize Hindsight episodic memory, 3-tier cache telemetry, zero-cost fallback audit, and out-of-metro demand heatmaps.</p>
                 </div>
             </div>
 
@@ -5826,28 +5984,373 @@ def generate_telemetry_page():
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Unmapped ZIP Queries</span>
-                    <div class="text-2xl font-bold text-cyan-300 font-mono">{tele_data.get('total_unmapped_queries', 0)}</div>
+                    <div class="text-2xl font-bold text-cyan-300 font-mono">{tele_data.get('total_unmapped_queries', 0):,}</div>
                     <span class="text-[10px] text-slate-400 font-mono">{tele_data.get('unique_unmapped_zips', 0)} Unique Out-of-Metro ZIPs</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                    <span class="text-xs text-slate-400 font-mono">Finlight Monthly Quota</span>
-                    <div class="text-2xl font-bold text-emerald-400 font-mono">{quota_data.get('monthly_used', 0)} / {quota_data.get('monthly_cap', 150)}</div>
-                    <span class="text-[10px] text-emerald-400 font-mono">Safety Valve: {quota_data.get('status', 'OK')}</span>
+                    <span class="text-xs text-slate-400 font-mono">Connector Success Rate</span>
+                    <div class="text-2xl font-bold text-emerald-400 font-mono">{conn_summary.get('success_rate_pct', 100.0):.1f}%</div>
+                    <span class="text-[10px] text-emerald-400 font-mono">{conn_summary.get('total_calls', 0):,} Total Calls (7-Day)</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                    <span class="text-xs text-slate-400 font-mono">Cache Hit Rate</span>
-                    <div class="text-2xl font-bold text-blue-400 font-mono">94.2%</div>
-                    <span class="text-[10px] text-blue-400 font-mono">3-Tier Cascading Cache</span>
+                    <span class="text-xs text-slate-400 font-mono">Zero-Cost Fallback Savings</span>
+                    <div class="text-2xl font-bold text-blue-400 font-mono">${fb_summary.get('estimated_usd_saved', 0.0):.4f}</div>
+                    <span class="text-[10px] text-blue-400 font-mono">{fb_summary.get('tokens_saved', 0):,} Tokens Saved</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                    <span class="text-xs text-slate-400 font-mono">LLM Win Rate vs Baseline</span>
-                    <div class="text-2xl font-bold text-purple-300 font-mono">68.5%</div>
-                    <span class="text-[10px] text-purple-300 font-mono">MLOps Augmentation Uplift</span>
+                    <span class="text-xs text-slate-400 font-mono">Hindsight Stored Memories</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">{stored_memories + stored_reflections:,}</div>
+                    <span class="text-[10px] text-purple-300 font-mono">{retain_count:,} Retain / {cloud_calls:,} Cloud Calls</span>
                 </div>
             </div>
         </div>
 
-        <!-- Section 1: Interactive Out-of-Metro ZIP Demand Heatmap -->
+        <!-- Section 1: Vectorize Hindsight Episodic Agent Memory & Reflection Engine (Issue #230) -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-brain text-purple-400"></i> Vectorize Hindsight Episodic Memory & Reflection Observability
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">Issue #230 & #237</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Lifecycle Triad -->
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-spin text-purple-400"></i> Operation Triad Throughput
+                    </h4>
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
+                            <span class="text-emerald-400 font-bold">{retain_count:,} ops</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
+                            <span class="text-blue-400 font-bold">{recall_count:,} ops</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Reflect (Anomaly Synthesis)</span>
+                            <span class="text-amber-400 font-bold">{reflect_count:,} ops</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend Routing Split -->
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-network-wired text-cyan-400"></i> Backend Routing Split
+                    </h4>
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">Cloud Run + Supabase pgvector</span>
+                                <span class="text-cyan-400 font-bold">{cloud_calls:,} calls</span>
+                            </div>
+                            <p class="text-[10px] text-slate-500 font-sans">Scale-to-zero container (midgley-hindsight) with HNSW vector index</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">Local SQLite FTS5 Fallback</span>
+                                <span class="text-emerald-400 font-bold">{local_fallback_calls:,} calls</span>
+                            </div>
+                            <p class="text-[10px] text-slate-500 font-sans">Zero-cost local datastore with full-text BM25 search ranking</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Memory Bank Inventory -->
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
+                    </h4>
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="text-[10px] text-slate-500 uppercase tracking-wider">Bank Identifier</div>
+                            <div class="text-slate-200 font-bold text-sm">midgley-gas-forecasting</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                                <div class="text-lg font-bold text-purple-300">{stored_memories:,}</div>
+                                <div class="text-[10px] text-slate-400 font-sans">Experiences</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                                <div class="text-lg font-bold text-amber-300">{stored_reflections:,}</div>
+                                <div class="text-[10px] text-slate-400 font-sans">Reflections</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Zero-Cost Connector Health & Freshness Audit Grid -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-satellite-dish text-emerald-400"></i> Data Connector Performance & Freshness Audit (7-Day Window)
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">src/connector_telemetry.py</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Total Invocations</span>
+                        <div class="text-xl font-bold text-white font-mono">{conn_summary.get('total_calls', 0):,}</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Success Rate</span>
+                        <div class="text-xl font-bold text-emerald-400 font-mono">{conn_summary.get('success_rate_pct', 100.0):.1f}%</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Avg Latency</span>
+                        <div class="text-xl font-bold text-cyan-400 font-mono">{conn_summary.get('avg_latency_ms', 0.0):.2f} ms</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Stale Payloads (>24h)</span>
+                        <div class="text-xl font-bold {'text-red-400' if conn_summary.get('stale_payload_count', 0) > 0 else 'text-slate-300'} font-mono">{conn_summary.get('stale_payload_count', 0)}</div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto pt-2">
+                    <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                <th class="py-2.5 px-3">Data Connector / Ingestion Feed</th>
+                                <th class="py-2.5 px-3 text-center">Calls</th>
+                                <th class="py-2.5 px-3 text-center">Success Rate</th>
+                                <th class="py-2.5 px-3 text-center">Stale (>24h)</th>
+                                <th class="py-2.5 px-3 text-center">Avg Latency</th>
+                                <th class="py-2.5 px-3 text-right">Avg Data Age</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                            {connector_rows_html}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Zero-Cost Fallback & Token Savings Ledger (Issue #196) -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-piggy-bank text-emerald-400"></i> Zero-Cost Fallback & Cumulative Token Savings Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">Issue #196</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Zero-Cost Invocations</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">{fb_summary.get('total_zero_cost_invocations', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{fb_summary.get('basic_tier_routed_count', 0)} Basic-Tier Routed</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Tokens Saved</span>
+                        <div class="text-2xl font-bold text-cyan-300 font-mono">{fb_summary.get('tokens_saved', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">~350 tokens per bypassed event</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. USD Saved</span>
+                        <div class="text-2xl font-bold text-emerald-300 font-mono">${fb_summary.get('estimated_usd_saved', 0.0):.4f}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">Gemini Flash blend pricing</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Avg Extraction Latency</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">{fb_summary.get('avg_zero_cost_latency_ms', 0.0):.2f} ms</div>
+                        <span class="text-[10px] text-slate-400 font-mono">Deterministic Sub-millisecond</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Zero-Cost Provider Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Zero-Cost Provider / Engine</th>
+                                    <th class="py-2 px-3 text-center">Invocations</th>
+                                    <th class="py-2 px-3 text-center">Cost Rate</th>
+                                    <th class="py-2 px-3 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Offline Domain NLP Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('lexicon', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">100% ONLINE</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">NOAA SPC Convective Deterministic Mapper</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('spc_weather', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">ACTIVE</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Kaggle GPU Open-Source LLM Hook (Tier 1.5)</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('kaggle_llm_hook', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">STANDBY (v2.0)</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-amber-300">Physical Alternative Feeds (OVX / Rigs)</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('physical_feed', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-amber-400 font-bold">ACTIVE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: API Provider Quota Ledgers & 3-Tier Cascading Cache Observability -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> API Provider Quota Ledgers
+                </h3>
+                <div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">finlight.me News Feed</span>
+                        <span class="text-emerald-400 font-bold">{quota_data.get('monthly_used', 12)} / {quota_data.get('monthly_cap', 150)} monthly calls</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Firecrawl.dev Web Scraper (Issue #83)</span>
+                        <span class="text-cyan-400 font-bold">{fc_quota.get('calls_used', 0)} / {fc_quota.get('limit', 800)} monthly calls</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">IPASIS IP Security API (Issue #87)</span>
+                        <span class="text-amber-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 100)} daily ({ipasis_data.get('private_bypasses', 0)} bypasses)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">NOAA NWS / wxs.us Weather API</span>
+                        <span class="text-blue-400 font-bold">Unlimited (Keyless REST)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">GasBuddy GraphQL Feed</span>
+                        <span class="text-purple-400 font-bold">Keyless Public Endpoint</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-server text-cyan-400"></i> 3-Tier Cascading Cache Observability
+                </h3>
+                <div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 1: Turso Edge SQLite</span>
+                        <span class="text-emerald-400 font-bold">HIT_FRESH (0.4ms)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 2: Cloudflare D1 Worker</span>
+                        <span class="text-blue-400 font-bold">HIT_FRESH (1.2ms)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
+                        <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
+        <section class="space-y-4 pt-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">{tok_summary.get('total_tokens', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_summary.get('total_input_tokens', 0):,} In / {tok_summary.get('total_output_tokens', 0):,} Out</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">${tok_summary.get('total_cost_usd', 0.0):.6f}</div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">{tok_summary.get('total_calls', 0):,}</div>
+                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
+                        <div class="text-xl font-bold text-emerald-300 font-mono">{tok_warn.get('code', 'NORMAL')}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_warn.get('message', 'Budget nominal')}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Provider / Tier</th>
+                                    <th class="py-2 px-3 text-center">Calls</th>
+                                    <th class="py-2 px-3 text-center">Input Tokens</th>
+                                    <th class="py-2 px-3 text-center">Output Tokens</th>
+                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3 text-center">{gemini_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gemini_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gemini_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">${gemini_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
+                                    <td class="py-2 px-3 text-center">{gpt_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gpt_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gpt_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">${gpt_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
+                                    <td class="py-2 px-3 text-center">{claude_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{claude_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{claude_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">${claude_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
+                                    <td class="py-2 px-3 text-center">{finlight_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3 text-center">{lexicon_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Interactive Out-of-Metro ZIP Demand Heatmap -->
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
@@ -5901,142 +6404,6 @@ def generate_telemetry_page():
                 </div>
             </div>
         </section>
-
-        <!-- Section 2: API Quota & Cache Observability Grid -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> API Provider Quota Ledgers
-                </h3>
-                <div class="space-y-3 font-mono text-xs">
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">finlight.me News Feed</span>
-                        <span class="text-emerald-400 font-bold">{quota_data.get('monthly_used', 12)} / {quota_data.get('monthly_cap', 150)} calls</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">NOAA NWS / wxs.us API</span>
-                        <span class="text-blue-400 font-bold">Unlimited (Keyless REST)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">IPASIS IP Security API</span>
-                        <span class="text-cyan-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 100)} calls today ({ipasis_data.get('private_bypasses', 0)} local bypasses)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">GasBuddy GraphQL Feed</span>
-                        <span class="text-purple-400 font-bold">Keyless Public Endpoint</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-server text-cyan-400"></i> 3-Tier Cascading Cache Observability
-                </h3>
-                <div class="space-y-3 font-mono text-xs">
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">Tier 1: Turso Edge SQLite</span>
-                        <span class="text-emerald-400 font-bold">HIT_FRESH (0.4ms)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">Tier 2: Cloudflare D1 Worker</span>
-                        <span class="text-blue-400 font-bold">HIT_FRESH (1.2ms)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
-                        <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
-        <section class="space-y-4 pt-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
-                </h3>
-                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
-            </div>
-
-            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
-                        <div class="text-2xl font-bold text-amber-400 font-mono">{tok_summary.get('total_tokens', 0):,}</div>
-                        <span class="text-[10px] text-slate-400 font-mono">{tok_summary.get('total_input_tokens', 0):,} In / {tok_summary.get('total_output_tokens', 0):,} Out</span>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
-                        <div class="text-2xl font-bold text-emerald-400 font-mono">${tok_summary.get('total_cost_usd', 0.0):.6f}</div>
-                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
-                        <div class="text-2xl font-bold text-blue-400 font-mono">{tok_summary.get('total_calls', 0):,}</div>
-                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
-                        <div class="text-xl font-bold text-emerald-300 font-mono">{tok_warn.get('code', 'NORMAL')}</div>
-                        <span class="text-[10px] text-slate-400 font-mono">{tok_warn.get('message', 'Budget nominal')}</span>
-                    </div>
-                </div>
-
-                <div class="space-y-3">
-                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                    <th class="py-2 px-3">Provider / Tier</th>
-                                    <th class="py-2 px-3">Calls</th>
-                                    <th class="py-2 px-3">Input Tokens</th>
-                                    <th class="py-2 px-3">Output Tokens</th>
-                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800/50">
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
-                                    <td class="py-2 px-3">{gemini_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">{gemini_stats.get('input_tokens', 0):,}</td>
-                                    <td class="py-2 px-3">{gemini_stats.get('output_tokens', 0):,}</td>
-                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">${gemini_stats.get('cost_usd', 0.0):.6f}</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
-                                    <td class="py-2 px-3">{gpt_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">{gpt_stats.get('input_tokens', 0):,}</td>
-                                    <td class="py-2 px-3">{gpt_stats.get('output_tokens', 0):,}</td>
-                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">${gpt_stats.get('cost_usd', 0.0):.6f}</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
-                                    <td class="py-2 px-3">{claude_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">{claude_stats.get('input_tokens', 0):,}</td>
-                                    <td class="py-2 px-3">{claude_stats.get('output_tokens', 0):,}</td>
-                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">${claude_stats.get('cost_usd', 0.0):.6f}</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
-                                    <td class="py-2 px-3">{finlight_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
-                                    <td class="py-2 px-3">{lexicon_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Leaflet Map Initialization Script -->
@@ -6048,17 +6415,11 @@ def generate_telemetry_page():
                 maxZoom: 18
             }}).addTo(map);
 
-            var zipPoints = [
-                {{ lat: 34.0736, lng: -118.4004, name: "90210 - Beverly Hills, CA (PADD 5)", hits: 14 }},
-                {{ lat: 29.7604, lng: -95.3698, name: "77002 - Houston, TX (PADD 3)", hits: 11 }},
-                {{ lat: 41.8781, lng: -87.6298, name: "60601 - Chicago, IL (PADD 2)", hits: 18 }},
-                {{ lat: 40.7501, lng: -73.9996, name: "10001 - New York, NY (PADD 1B)", hits: 9 }},
-                {{ lat: 33.7490, lng: -84.3880, name: "30301 - Atlanta, GA (PADD 1C)", hits: 7 }}
-            ];
+            var zipPoints = {map_points_json};
 
             zipPoints.forEach(function(pt) {{
                 L.circleMarker([pt.lat, pt.lng], {{
-                    radius: 8 + Math.min(pt.hits, 10),
+                    radius: 8 + Math.min(pt.hits, 12),
                     fillColor: "#06b6d4",
                     color: "#22d3ee",
                     weight: 2,
@@ -6083,5 +6444,14 @@ def generate_telemetry_page():
     logger.info(f"Successfully generated Telemetry & Map page at {TELEMETRY_PATH} and {TELEMETRY_SUB_PATH}")
 
 
+def generate_data_sources_page(docs_dir: str = DOCS_DIR):
+    """
+    Generates docs/sources.html & docs/sources/index.html documenting all 26 model data sources.
+    """
+    from src.sources_generator import generate_data_sources_page as _gen_sources
+    _gen_sources(docs_dir=docs_dir)
+
+
 if __name__ == "__main__":
     generate_public_dashboard()
+

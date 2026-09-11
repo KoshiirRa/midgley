@@ -34,16 +34,20 @@ class HindsightClient:
         bank_id: str = "midgley-gas-forecasting",
         timeout: float = DEFAULT_TIMEOUT
     ):
-        self.base_url = (base_url or os.environ.get("HINDSIGHT_API_URL", "")).rstrip("/")
-        self.api_key = api_key or os.environ.get("HINDSIGHT_API_KEY", "")
+        if base_url is not None:
+            self.base_url = base_url.rstrip("/")
+        else:
+            self.base_url = os.environ.get("HINDSIGHT_API_URL", "").rstrip("/")
+        if api_key is not None:
+            self.api_key = api_key
+        else:
+            self.api_key = os.environ.get("HINDSIGHT_API_KEY", "")
         self.bank_id = bank_id
         self.timeout = timeout
 
     @property
     def is_configured(self) -> bool:
         """Returns True if a valid Hindsight API URL is configured."""
-        if os.environ.get("TESTING") == "1":
-            return False
         return bool(self.base_url and self.base_url.startswith("http"))
 
     def _get_headers(self) -> Dict[str, str]:

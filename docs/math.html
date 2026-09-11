@@ -134,6 +134,9 @@
                 <a href="math.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
                 </a>
+                <a href="sources.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                </a>
                 <a href="citations.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
                 </a>
@@ -156,26 +159,45 @@
                 Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.4 Finlight-LLM</strong>.
             </p>
             
-            <!-- Research Citations Ledger Link Card -->
-            <div class="pt-2">
-                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <!-- Research Citations & Data Sources Link Cards -->
+            <div class="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
                             <i class="fa-solid fa-book-bookmark text-xl"></i>
                         </div>
                         <div>
                             <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                                Peer-Reviewed Research Literature Index <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
+                                Peer-Reviewed Literature <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
                             </h4>
-                            <p class="text-xs text-slate-400">Explore theoretical theorems, KaTeX formulas, arXiv pre-prints, Context Routing bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR residual decomposition, and Purged CPCV cross-validation across all 12 cited foundation papers.</p>
+                            <p class="text-xs text-slate-400 mt-1">Explore theoretical theorems, arXiv pre-prints, Context Routing bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR residual decomposition, and Purged CPCV cross-validation across all 12 cited foundation papers.</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
-                            <i class="fa-solid fa-book-open"></i> Open Citations Portal
+                    <div class="flex items-center gap-2 pt-1">
+                        <a href="citations.html" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-book-open"></i> Citations Portal
                         </a>
-                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
-                            <i class="fa-brands fa-github"></i> RESEARCH_CITATIONS.md
+                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+                            <i class="fa-brands fa-github"></i> Markdown
+                        </a>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-cyan-500/30 flex flex-col justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shrink-0">
+                            <i class="fa-solid fa-database text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                Model Data Sources &amp; Feeds <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">26 Ingestion Feeds</span>
+                            </h4>
+                            <p class="text-xs text-slate-400 mt-1">Explore complete technical documentation, endpoints, update cadences, schemas, and zero-cost quota policies for all 26 data streams feeding the model.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1">
+                        <a href="sources.html" class="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-cyan-600/20">
+                            <i class="fa-solid fa-server"></i> Open Data Sources Portal
                         </a>
                     </div>
                 </div>

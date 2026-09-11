@@ -1,6 +1,6 @@
 # Release Notes - v0.5.2
 
-**Release Date:** September 10, 2026  
+**Release Date:** September 11, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`)  
 **Git Branch:** `dev`  
 
@@ -100,6 +100,41 @@
 - **Exponential Memory Decay with Category Half-Lives & Diagnostic Fusion (Issue #227):**
   - Updated discrete recursive memory decay accumulator ($\mathbf{M}_t = \mathbf{M}_{t-1} \cdot e^{-\frac{\ln 2}{t_{1/2}}} + \mathbf{V}_t$) with category half-lives $t_{1/2} \in [2.5, 14.0]\text{ days}$ ($14.0\text{d}$ physical supply disruptions, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts) and Context Routing Diagnostic Fusion weighting $\omega_{\text{fusion}} \in [0.85, 1.25]$.
 
+### 5. Interactive Model Data Sources & Ingestion Governance Matrix ([`src/sources_generator.py`](file:///src/sources_generator.py), [`docs/sources.html`](file:///docs/sources.html), [`docs/sources/index.html`](file:///docs/sources/index.html))
+- **Dedicated Public Data Sources Catalog:**
+  - Implemented modular `src/sources_generator.py` generating comprehensive standalone documentation pages (`docs/sources.html` and `docs/sources/index.html`) cataloging all 26 quantitative commodity futures, NOAA weather feeds, USGS hydrology gages, physical telemetry, state open data portals, and financial media streams feeding the Midgley forecasting engine.
+- **6 Comprehensive Domain Category Partitions:**
+  - `01`: **Quantitative Commodity Futures & Energy Benchmarks** (7 feeds: RBOB Futures `RB=F`, WTI Crude `CL=F`, Brent Crude `BZ=F`, ULSD Heating Oil `HO=F`, EIA v2 API, FRED St. Louis Fed, USDA Ethanol & RIN Credits).
+  - `02`: **Alternative Physical, Upstream & Macroeconomic Telemetry** (6 feeds: Cboe OVX `^OVX`, Baker Hughes Rig Counts, US Treasury & TIPS Yields `^TNX`/`DGS10`/`DFII10`, CFTC COT Energy Positioning, FERC Form 6 Tariffs, Energy Equities `XLE`/`VLO`/`MPC`/`PSX`).
+  - `03`: **Real-Time Financial Media, Web Scraping & Event Intelligence** (6 feeds: Finlight.me REST API, Firecrawl Scraper, Free Energy RSS Feeds, Push Webhook Gateway, Executive Social Feed, SEC EDGAR 8-K Outages).
+  - `04`: **Atmospheric, Hydrological & Seismic Hazard Telemetry** (8 feeds: NOAA NWS Alerts, NOAA SPC Convective Risk, NOAA NHC Tropical Cones, BSEE Gulf Shut-ins, USGS Water Data Telemetry, USACE Lock Performance, USGS Seismic Hazards, Air Quality & Flaring Index).
+  - `05`: **State Open Data, Tax Portals & Crowdsourced Retail Pump Feeds** (3 feeds: Universal 50-State Open Data Portals, U.S. Census Demographics, Live Retail Fuel Feeds).
+  - `06`: **Continuous Academic Literature & Developer Catalog Feeds** (3 feeds: arXiv Research Preprints, CORE Open-Access Literature, Tracked Developer Catalog Indexes).
+- **Interactive Search & Category Filter Controls:**
+  - Real-time client-side search box filtering across feed titles, tickers, consumer module paths, and operational tags.
+  - Sticky category filter bar with active feed counters and instant DOM toggling.
+- **Master Ingestion & Governance Ledger Matrix:**
+  - Searchable tabular ledger summarizing endpoint protocols, authentication profiles ($0 Open Access / Free Keys), caching TTLs, update cadences, and consumer modules for automated API governance.
+- **Typography & KaTeX Script Fixes:**
+  - Cleaned all catalog cards to use native HTML entities and typography (e.g., `Crack321`, `ΔP`, `PM2.5`, `SO2`, `≥ M3.0`) eliminating unneeded raw LaTeX escaping in card descriptions.
+  - Corrected `KATEX_ONLOAD_SCRIPT` JavaScript escaping in `src/dashboard_generator.py` to prevent browser syntax errors on auto-rendered math equations.
+
+### 6. Public Telemetry Page Expansion & Missing Observability Streams (Issue #237)
+- **Vectorize Hindsight Episodic Agent Memory Observability ([`src/dashboard_generator.py`](file:///src/dashboard_generator.py), [`docs/telemetry.html`](file:///docs/telemetry.html)):**
+  - Surfaced real-time episodic memory statistics directly from `data/telemetry_ledger.json` and `data/agent_memory.sqlite`.
+  - **Memory Triad Counters:** Explicitly displays lifetime counts for `Retain` operations (experience storage), `Recall` queries (analogy matching), and `Reflect` syntheses (qualitative post-mortems).
+  - **Hybrid Routing Telemetry:** Displays request distribution between Google Cloud Run Vector DB (`midgley-hindsight` + Supabase `pgvector`) vs zero-cost local SQLite FTS5 fallbacks.
+  - **Persistent Storage Metrics:** Renders total stored episodic memory records and synthesized anomaly post-mortems.
+- **Zero-Cost Data Connector Health & Freshness Audit:**
+  - Integrated `src.connector_telemetry.get_telemetry_summary(days=7)` into a dedicated 7-day health audit matrix across all 7 core zero-cost open data providers (EIA API v2, FRED Energy Series, USDA Biofuel & RINs, NOAA Terminal Weather, AAA Regional Retail, Socrata 50-State Portals, USGS Streamflow & Seismic).
+  - Tracks 7-day request volume, error counts, failure rate %, average response latency (ms), and data cache freshness.
+- **Zero-Cost LLM Fallback & Dollar/Token Savings Accounting:**
+  - Integrated `src.fallback_telemetry.fallback_logger.get_summary()` to surface Basic Tier routed calls, Kaggle/zero-cost provider hook executions, and Tier 3 offline lexicon fallbacks, quantifying estimated LLM tokens spared and cumulative dollar savings.
+- **Comprehensive API Quota Safety Valves:**
+  - Expanded the quota dashboard to provide real-time budget cards for Firecrawl Web-to-Markdown (800/mo cap & 30/day burst limit), Finlight Financial News (150/mo cap & 10/day burst limit), IPASIS Security Verifier (100 req/day cap with 1-hr caching), GasBuddy GraphQL, and NOAA Weather terminal limits.
+- **Dynamic Out-of-Metro Demand Map Visualization:**
+  - Replaced static mock Leaflet map coordinates with live dynamic serialization of `src.telemetry.get_unmapped_zip_telemetry()`, visualizing unmapped ZIP code query clusters across the United States for target metro expansion planning.
+
 ---
 
 ## 🧪 Benchmark & Verification Results
@@ -111,7 +146,9 @@
     - **Reflection Synthesis Latency:** `29.98 ms`
     - **SQLite DB Storage Footprint:** `172.00 KB` (for 224 experiences)
 - **Mathematical Specification & Dashboard Generator Test Suite (`tests/test_dashboard_generator.py`):**
-  - `17 passed in 420.06s` (100% pass rate) on `dev-vm`.
+  - `18 passed in 341.71s` (100% pass rate) on `dev-vm` (`10.42.42.54`), covering all 18 test cases including `test_data_sources_page_generation` and dynamic telemetry assertions.
+- **System Telemetry & Unmapped Zip Geocoding Test Suite (`tests/test_system_telemetry.py`):**
+  - `10 passed in 1.94s` (100% pass rate) on `dev-vm` (`10.42.42.54`), validating telemetry page rendering, HTML validity, API server telemetry endpoints, and corruption resilience.
 - **Discord Notification & Intraday Anomaly Test Suite (`tests/test_discord_notifier.py`, `tests/test_intraday_event_monitor.py`):**
   - `23 passed in 0.55s` (100% pass rate).
 - **CoSPOT Unit & Integration Test Suite (`tests/test_cospot_spectral.py`):**
@@ -130,5 +167,8 @@
 - **Issue #229**: `docs(math): Reorder and Structure Math Guide Sections into Chronological Pipeline Order` (Completed)
 - **Issue #230**: `[Weekly Review 2.0] Evaluate Hindsight Agent Memory (Retain-Recall-Reflect) for Qualitative Anomaly Post-Mortems` (Completed)
 - **Issue #234**: `feat(notifications): Discord webhook notification for intraday forecast revisions` (Completed)
+- **Issue #237**: `[Telemetry] Surface Missing Backend Telemetry Streams (Hindsight Memory, Connector Health Audit, Fallback Accounting & Quota Valves) on Public Dashboard` (Completed)
+
+
 
 

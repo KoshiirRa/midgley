@@ -99,14 +99,23 @@ class TestSystemTelemetry(unittest.TestCase):
         self.assertIn("agent_memory_operations_total", res.text)
         self.assertIn('environment="dev"', res.text)
 
-    def test_api_server_quota_endpoint(self):
-        """Verify GET /api/v1/system/quota endpoint returns 200 JSON with quotas."""
-        res = self.client.get("/api/v1/system/quota")
-        self.assertEqual(res.status_code, 200)
-        data = res.json()
-        self.assertEqual(data["status"].lower(), "success")
-        self.assertIn("quotas", data)
-        self.assertIn("finlight", data["quotas"])
+    def test_generate_telemetry_page(self):
+        """Verify generate_telemetry_page generates HTML containing Hindsight, Connector, and Fallback sections (Issue #237)."""
+        from src.dashboard_generator import generate_telemetry_page, TELEMETRY_PATH, TELEMETRY_SUB_PATH
+        generate_telemetry_page()
+        self.assertTrue(os.path.exists(TELEMETRY_PATH))
+        self.assertTrue(os.path.exists(TELEMETRY_SUB_PATH))
+
+        with open(TELEMETRY_PATH, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        self.assertIn("Vectorize Hindsight Episodic Memory", content)
+        self.assertIn("Data Connector Performance &amp; Freshness Audit", content.replace("&", "&amp;"))
+        self.assertIn("Zero-Cost Fallback &amp; Cumulative Token Savings", content.replace("&", "&amp;"))
+        self.assertIn("API Provider Quota Ledgers", content)
+        self.assertIn("Firecrawl.dev Web Scraper", content)
+        self.assertIn("zipMap", content)
 
 if __name__ == '__main__':
     unittest.main()
+
