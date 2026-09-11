@@ -205,6 +205,7 @@ def fetch_gasbuddy_prices_by_zip(zip_code: str = "74103") -> dict:
     """
     Queries GasBuddy's GraphQL API for real-time station prices in any zip code.
     """
+
     graphql_query = """
     query LocationBySearchTerm($searchTerm: String!) {
         locationBySearchTerm(search: $searchTerm) {

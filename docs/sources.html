@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+
+    <!-- Open Graph / Discord Social Embed Metadata -->
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Model Data Sources & Ingestion Streams - Midgley AI">
+    <meta property="og:description" content="Comprehensive technical directory of all 26 quantitative commodity futures, NOAA weather feeds, USGS hydrology, physical telemetry, state open data, and financial news streams powering Midgley.">
+    <meta property="og:url" content="https://koshiirra.github.io/midgley/sources.html">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/overview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Model Data Sources & Ingestion Streams - Midgley AI">
+    <meta name="twitter:description" content="Comprehensive technical directory of all 26 quantitative commodity futures, NOAA weather feeds, USGS hydrology, physical telemetry, state open data, and financial news streams powering Midgley.">
+    <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/overview.png">
+
+    <!-- Discord Theme Accent Color -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Data Sources &amp; Intelligence Feeds &bull; Midgley Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Equations -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .feed-card { transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+        .feed-card:hover { transform: translateY(-2px); border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.6); }
+        
+        /* Mobile-Responsive KaTeX Math Equation Styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            padding: 0.35rem 0.2rem;
+            margin: 0.5em 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .katex-display > .katex {
+            max-width: 100%;
+        }
+        .katex {
+            font-size: 1.02em;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .katex-display {
+                font-size: 0.85em;
+                padding: 0.25rem 0;
+                margin: 0.35em 0;
+            }
+            .katex {
+                font-size: 0.9em;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="p-2.5 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 transition">
+                    <i class="fa-solid fa-gas-pump text-2xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.5.1-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> Overview
+                </a>
+                <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> National Wholesale
+                </a>
+
+                <!-- Metro Areas Dropdown Menu -->
+                <div class="relative group">
+                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    </button>
+                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                        </a>
+                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        </a>
+                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        </a>
+                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        </a>
+                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        </a>
+                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        </a>
+                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        </a>
+                    </div>
+                </div>
+
+                <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                </a>
+                <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                </a>
+                <a href="telemetry.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                </a>
+                <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="sources.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                </a>
+                <a href="citations.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                </a>
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
+        
+        <!-- Hero Section -->
+        <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-cyan-900/40 border border-blue-500/30 space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="space-y-3 max-w-3xl">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                            <i class="fa-solid fa-server mr-1.5 text-cyan-400"></i> Open Intelligence Suite
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                            <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400"></i> $0 Cost &bull; Open Access
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                            <i class="fa-solid fa-layer-group mr-1.5 text-purple-400"></i> Multi-Modal Feature Space
+                        </span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                        <i class="fa-solid fa-database text-cyan-400"></i> Model Data Sources &amp; Intelligence Feeds
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>26 monitored feeds</strong>.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0">
+                    <a href="math.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-graduation-cap"></i> View Math Guide
+                    </a>
+                    <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations Portal
+                    </a>
+                    <a href="telemetry.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Live Telemetry &amp; Quotas
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Ribbon -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-800/80">
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-blue-400 font-mono">26</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Ingestion Feeds</p>
+                </div>
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-emerald-400 font-mono">$0.00</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Paid API Cost</p>
+                </div>
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-purple-400 font-mono">3-Tier</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Failover Resiliency</p>
+                </div>
+                <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
+                    <span class="text-2xl font-black text-amber-400 font-mono">&lt; 15 min</span>
+                    <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Fast-Path Polling</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-900/70 p-4 rounded-2xl border border-slate-800 sticky top-20 z-40 backdrop-blur">
+            <!-- Filter Chips -->
+            <div class="flex items-center gap-2 flex-wrap text-xs" id="category-filter-bar">
+                <button onclick="filterCategory('all')" class="cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-cat="all">
+                    All Feeds (26)
+                </button>
+                <button onclick="filterCategory('commodity')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="commodity">
+                    Commodity &amp; Futures (7)
+                </button>
+                <button onclick="filterCategory('physical')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="physical">
+                    Physical &amp; Macro (6)
+                </button>
+                <button onclick="filterCategory('news')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="news">
+                    News &amp; Intelligence (6)
+                </button>
+                <button onclick="filterCategory('hazard')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="hazard">
+                    Atmospheric &amp; Hydrology (8)
+                </button>
+                <button onclick="filterCategory('state')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="state">
+                    State Open Data &amp; Retail (3)
+                </button>
+                <button onclick="filterCategory('research')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="research">
+                    Academic &amp; Catalogs (3)
+                </button>
+            </div>
+
+            <!-- Search Input -->
+            <div class="relative w-full md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" id="feed-search-input" onkeyup="searchFeeds()" placeholder="Search feeds, endpoints, tickers, APIs..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
+            </div>
+        </div>
+
+        <!-- Section 1: Quantitative Commodity Futures & Energy Benchmarks -->
+        <section class="space-y-6 feed-section" data-cat="commodity">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-black text-blue-500 font-mono">01</span>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white">Quantitative Commodity Futures &amp; Energy Benchmarks</h3>
+                        <p class="text-xs text-slate-400">Exchange-traded financial benchmarks, government energy inventory ledgers, and biofuel credit rack series.</p>
+                    </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">7 Feeds</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Card 1.1: NYMEX RBOB Futures -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="rbob rb=f nymex cme gasoline futures wholesale quantitative">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                    <i class="fa-solid fa-gas-pump"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">NYMEX RBOB Gasoline</h4>
+                                    <span class="font-mono text-xs text-blue-400">Ticker: RB=F</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily Close</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Reformulated Blendstock for Oxygenate Blending (RBOB) delivered at New York Harbor (42,000 gal contract). Primary baseline target for national wholesale price discovery.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Open, High, Low, Close, Volume, Returns</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/data_ingestion.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Yahoo Finance / CME</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 1.2: WTI Crude Oil Futures -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="wti cl=f crude oil cushing oklahoma crack spread refining margin">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                    <i class="fa-solid fa-oil-well"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">WTI Crude Oil Futures</h4>
+                                    <span class="font-mono text-xs text-blue-400">Ticker: CL=F</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily Close</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            West Texas Intermediate light sweet crude physical delivery benchmark at Cushing, Oklahoma hub ($/bbl). Used to calculate raw refining crack margins: P<sub>RBOB</sub> &minus; P<sub>WTI</sub> / 42.0.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Settlement ($/bbl), Volumetric ($/gal), Returns</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/data_ingestion.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: NYMEX / CME Group</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 1.3: Brent Crude Oil Futures -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="brent bz=f crude north sea international waterborne maritime lightering">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                    <i class="fa-solid fa-ship"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Brent Crude Futures</h4>
+                                    <span class="font-mono text-xs text-blue-400">Ticker: BZ=F</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily Close</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            North Sea sea-borne crude pricing benchmark. Governs import parity costs for East Coast (PADD 1B Delaware City) and West Coast (PADD 5 CARB) waterborne crude shipments.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Brent Settlement, Brent-WTI Spread</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/data_ingestion.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: ICE Futures Europe</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 1.4: NYMEX Heating Oil / ULSD Futures -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="heating oil diesel ulsd ho=f 3-2-1 crack spread margin distillate">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                    <i class="fa-solid fa-truck-front"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">NYMEX ULSD / Heating Oil</h4>
+                                    <span class="font-mono text-xs text-purple-400">Ticker: HO=F</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily Close</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Ultra-Low Sulfur Diesel and heating oil benchmark. Critical for computing the industry-standard 3-2-1 refining crack margin: Crack<sub>321</sub> = (2 &times; RBOB + ULSD &minus; 3 &times; WTI) / 3.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> HO Settlement ($/gal), 3-2-1 Crack Margin</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/data_ingestion.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: NYMEX / CME Group</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 1.5: U.S. EIA API v2 Open Data -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="eia api v2 energy information administration wpsr inventory stocks refinery utilization padd">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                    <i class="fa-solid fa-building-columns"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">U.S. EIA API v2 Data</h4>
+                                    <span class="font-mono text-xs text-blue-400">api.eia.gov/v2</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">Wed 10:30 ET</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Official Weekly Petroleum Status Report (WPSR). Ingests regional motor gasoline inventories, crude stocks, PADD refinery capacity utilization %, and weekly retail fuel prices.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Endpoints:</span> <code class="text-slate-300">/petroleum/pri/gnd/</code>, <code class="text-slate-300">/petroleum/stoc/</code></div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/data_ingestion.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: U.S. Dept of Energy (EIA)</span>
+                        <span class="text-emerald-400 font-semibold">Free API Key</span>
+                    </div>
+                </div>
+
+                <!-- Card 1.6: FRED St. Louis Fed Series -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="fred st louis fed gasregw gasdesw cuur0000setb01 cpi gasoline macro">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                    <i class="fa-solid fa-chart-area"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">FRED St. Louis Fed</h4>
+                                    <span class="font-mono text-xs text-blue-400">api.stlouisfed.org</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">Weekly Mon</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Federal Reserve Economic Data energy series. Tracks weekly national retail regular gasoline (<code class="text-blue-300">GASREGW</code>), diesel (<code class="text-blue-300">GASDESW</code>), and BLS CPI Gasoline index (<code class="text-blue-300">CUUR0000SETB01</code>).
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Series:</span> GASREGW, GASDESW, GASREGWCW</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/data_ingestion.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Federal Reserve Bank</span>
+                        <span class="text-emerald-400 font-semibold">Free API Key</span>
+                    </div>
+                </div>
+
+                <!-- Card 1.7: USDA Biofuel & Ethanol Market Reports -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="usda biofuel ethanol e100 rin d6 credits marsapi.ams.usda.gov e10 blendstock">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-seedling"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">USDA Ethanol &amp; RIN Credits</h4>
+                                    <span class="font-mono text-xs text-emerald-400">marsapi.ams.usda.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily &bull; Issue #141</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Spot Midwest E100 ethanol rack prices and EPA Renewable Fuel Standard (RFS) D6 Renewable Identification Number (RIN) credits. Models E10 finished unleaded cost: 0.10 &times; E100 + 0.90 &times; RBOB + RIN.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Spot E100 ($/gal), D6 RIN ($/gal)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/data_ingestion.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: USDA Agricultural Mkt Service</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open API</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 2: Alternative Physical, Upstream & Macroeconomic Telemetry -->
+        <section class="space-y-6 feed-section" data-cat="physical">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-black text-emerald-500 font-mono">02</span>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white">Alternative Physical, Upstream &amp; Macroeconomic Telemetry</h3>
+                        <p class="text-xs text-slate-400">Options implied volatility skew, drilling rig lead indicators, Treasury yields, CFTC hedge fund crowding, and interstate pipeline tariffs.</p>
+                    </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">6 Feeds</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Card 2.1: Cboe OVX Volatility Index -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="cboe ovx crude volatility index vix options tail risk panic pricing">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Cboe OVX Volatility Index</h4>
+                                    <span class="font-mono text-xs text-emerald-400">Ticker: ^OVX</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily Close</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Cboe Crude Oil Volatility Index ("VIX for Oil") measuring 30-day implied options tail-risk volatility from USO options. Spikes indicate geopolitical panic buying and downside hedging skew.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> OVX Index Level, 1-Day &amp; 5-Day &Delta;OVX</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/alternative_data_feeds.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Chicago Board Options Exchange</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 2.2: Baker Hughes Rig Counts -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="baker hughes rig counts drilling upstream oil gas permian basin supply lead indicator">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-bore-hole"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Baker Hughes Rig Counts</h4>
+                                    <span class="font-mono text-xs text-emerald-400">bakerhughes.com</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">Fri 13:00 ET</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Total active US drilling rigs, Permian Basin oil rigs, and gas rigs. Acts as a 3-to-6 month forward upstream supply pipeline indicator into medium-term commodity baseline models.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Total US Rigs, Oil Rigs, 1-Week &Delta;Rigs</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/alternative_data_feeds.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Baker Hughes Energy Services</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Feed</span>
+                    </div>
+                </div>
+
+                <!-- Card 2.3: US Treasury Yields & TIPS Real Rates -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="treasury yields 10y 2y inversion tips real yields macroeconomic inflation breakeven">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-landmark"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">US Treasury &amp; TIPS Yields</h4>
+                                    <span class="font-mono text-xs text-emerald-400">^TNX / DGS10 / DFII10</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily &bull; Issue #66</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            10-Year Treasury Yield (10Y), 10Y-2Y yield curve slope (&Delta;Y), and 10-Year TIPS real yield. Quantifies macro demand, recession probabilities, and breakeven inflation.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> 10Y Nominal, 10Y-2Y Spread, 10Y Real TIPS</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/treasury_yield_feed.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: U.S. Treasury / St. Louis Fed</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 2.4: CFTC COT Energy Positioning -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="cftc cot commitment of traders speculative positioning hedge fund crowding z-score">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-users-viewfinder"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">CFTC Commitments of Traders</h4>
+                                    <span class="font-mono text-xs text-emerald-400">cftc.gov/dea/futures/</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">Fri 15:30 ET</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Commodity Futures Trading Commission weekly positioning report. Extracts non-commercial speculative net length and 3-year rolling Z-score to diagnose hedge fund crowding.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Net Spec Length, Spec Z-Score, Commercial Ratio</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/alternative_data_feeds.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Commodity Futures Trading Comm</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 2.5: FERC Form 6 Pipeline Tariffs -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="ferc form 6 interstate pipeline tariffs colonial plantation explorer transport cost floor">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-route"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">FERC Form 6 Pipeline Tariffs</h4>
+                                    <span class="font-mono text-xs text-emerald-400">ferc.gov/industries-data/</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Annual &bull; Issue #123</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Federal Energy Regulatory Commission interstate pipeline tariff filings. Calibrates physical transport cost baselines for Colonial (Lines 1 &amp; 2), Plantation, and Explorer pipelines.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Line 1 Tariff ($/bbl), Line 2 Tariff, PADD Offset</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/feature_engineering.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Federal Energy Regulatory Comm</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 2.6: Energy Equities & Sector Movers -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="energy equities xle vlo mpc psx hes eog refining stocks beta sector">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-arrow-trend-up"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Energy Sector Equities</h4>
+                                    <span class="font-mono text-xs text-emerald-400">XLE, VLO, MPC, PSX</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily Close</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Equity valuations and intra-day returns for major independent US refiners (Valero, Marathon Petroleum, Phillips 66) and energy ETF (XLE) capturing corporate margin health.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Stock Returns, Sector Relative Strength, Refining Beta</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/energy_equities_feed.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Yahoo Finance / NYSE</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 3: Real-Time Financial Media, Web Scraping & Event Intelligence -->
+        <section class="space-y-6 feed-section" data-cat="news">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-black text-amber-500 font-mono">03</span>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white">Real-Time Financial Media, Web Scraping &amp; Event Intelligence</h3>
+                        <p class="text-xs text-slate-400">Gemini LLM news scoring, Firecrawl web-to-markdown extraction, push webhooks, executive social media, and SEC 8-K outage filings.</p>
+                    </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono">6 Feeds</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Card 3.1: Finlight.me Financial News API -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="finlight news reuters bloomberg gemini 2.5 flash quota 150/mo circuit breaker">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    <i class="fa-solid fa-newspaper"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Finlight.me REST API</h4>
+                                    <span class="font-mono text-xs text-amber-400">api.finlight.me/v1/</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-medium">Trading Hours</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Ingests real-time financial energy headlines from tier-1 media (Reuters, Bloomberg, Seeking Alpha, Investing.com). Hard quota ledger enforces 150 call/month limit with offline fallback.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Output:</span> Price Pressure (&Delta;P), Supply (S), Geo (G)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/finlight_feed.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Finlight REST API</span>
+                        <span class="text-amber-400 font-semibold">150 Call/Mo Cap</span>
+                    </div>
+                </div>
+
+                <!-- Card 3.2: Firecrawl Web-to-Markdown Scraper -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="firecrawl web scraper markdown html extraction refinery press releases tax portals">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    <i class="fa-solid fa-fire"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Firecrawl Scraper</h4>
+                                    <span class="font-mono text-xs text-amber-400">api.firecrawl.dev</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-medium">On-Demand &bull; Issue #83</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Converts raw HTML from refinery press disclosures, state tax notices, and breaking articles into clean LLM Markdown. Enforces 800 call/mo cap with zero-cost native HTML parser fallback.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Features:</span> 24h URL SHA-256 Cache, JS Rendering</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/firecrawl_scraper.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Firecrawl API / Native</span>
+                        <span class="text-amber-400 font-semibold">800 Call/Mo Cap</span>
+                    </div>
+                </div>
+
+                <!-- Card 3.3: Energy RSS Stream Feeds -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="rss google news nyt cnbc commodities 15-min polling deduplication">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    <i class="fa-solid fa-rss"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Free Energy RSS Feeds</h4>
+                                    <span class="font-mono text-xs text-amber-400">Google News / NYT / CNBC</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">15-Min Polling</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Zero-cost continuous RSS polling across Google News Energy (<code class="text-blue-300">when:1d</code>), NYT Energy, and CNBC Commodities with 24-hour timestamp deduplication.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Filter:</span> Regex Gate (|&Delta;P| &ge; 0.40 or S &ge; 0.50)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/intraday_event_monitor.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: RSS Syndicate Stream</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open RSS</span>
+                    </div>
+                </div>
+
+                <!-- Card 3.4: Incoming Push Webhook Gateway -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="webhook push ipasis zapier ifttt tradingview hmac signature security">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    <i class="fa-solid fa-satellite-dish"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Push Webhook Gateway</h4>
+                                    <span class="font-mono text-xs text-amber-400">POST /api/v1/events/webhook</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Real-Time Push</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            REST push ingestion endpoint accepting breaking alerts from Zapier, TradingView, and IFTTT. Secured by HMAC-SHA256 signature verification and IPASIS Tor/proxy filtering.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Security:</span> HMAC-SHA256, IPASIS client-IP inspection</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/api_server.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: External Webhook Senders</span>
+                        <span class="text-cyan-400 font-semibold">Instant Push</span>
+                    </div>
+                </div>
+
+                <!-- Card 3.5: Executive Social Media Gap Analysis -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="executive social media twitter truth social opec tariff weekend gap multiplier">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    <i class="fa-solid fa-bullhorn"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Executive Social Feed</h4>
+                                    <span class="font-mono text-xs text-amber-400">Twitter / Truth Social</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-medium">Intraday</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Tracks executive posts regarding OPEC pricing pressure (-1.85% single-day shock) and tariff declarations (+2.10% shock), applying a 1.42x multiplier to weekend closed-market posts.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Impact:</span> 1.42x Monday open gap volatility weighting</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/executive_social_feed.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Social API Syndication</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Feed</span>
+                    </div>
+                </div>
+
+                <!-- Card 3.6: SEC EDGAR 8-K Outage Filings -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="sec edgar 8-k unscheduled refinery outages corporate disclosures material events">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    <i class="fa-solid fa-file-contract"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">SEC EDGAR 8-K Outages</h4>
+                                    <span class="font-mono text-xs text-amber-400">sec.gov/edgar/</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Real-Time</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Monitors SEC EDGAR 8-K corporate disclosures for unscheduled refinery shutdowns, pipeline force majeure declarations, and material refining equipment failures.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Entities:</span> CVR, HF Sinclair, PBF, Valero, Marathon</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/edgar_8k_monitor.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: U.S. Securities &amp; Exchange Comm</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Data</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 4: Atmospheric, Hydrological & Seismic Hazard Telemetry -->
+        <section class="space-y-6 feed-section" data-cat="hazard">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-black text-cyan-500 font-mono">04</span>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white">Atmospheric, Hydrological &amp; Seismic Hazard Telemetry</h3>
+                        <p class="text-xs text-slate-400">NOAA NWS weather alerts, SPC convective outlooks, NHC hurricane cones, USGS river stages, USACE locks, and earthquake ShakeMaps.</p>
+                    </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">8 Feeds</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Card 4.1: NOAA NWS Weather Alerts API -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="noaa nws api.weather.gov wxs.us alerts tornado blizzard polar vortex weather">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-cloud-bolt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">NOAA NWS Weather Alerts</h4>
+                                    <span class="font-mono text-xs text-cyan-400">api.weather.gov &bull; t.wxs.us</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">15-Min &bull; 90% Token Sav</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Ingests real-time NWS active alerts across 7 regional metro county zones and 5 key refining basins. Integrates <code class="text-cyan-300">t.wxs.us</code> lightweight endpoint saving 90-95% context tokens.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Zones:</span> OKZ060, DEZ001, OHZ077, NCZ044, CAZ508</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/noaa_weather.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: National Weather Service</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open API</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.2: NOAA SPC Convective Risk Outlooks -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="noaa spc storm prediction center tornado hail wind convective risk mapping">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-tornado"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">NOAA SPC Convective Risk</h4>
+                                    <span class="font-mono text-xs text-cyan-400">spc.noaa.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">0-Token Mapping</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Deterministic 0-token SPC convective risk mapping (HIGH: 1.0, MDT: 0.8, ENH: 0.6, SLGT: 0.4, MRGL: 0.2) tracking severe tornado, hail, and straight-line wind threats to refineries.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Risk Matrix:</span> Tornado (T), Hail (H), Wind (W)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/noaa_weather.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: NOAA Storm Prediction Center</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.3: NOAA NHC Hurricane GIS Cones -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="noaa nhc national hurricane center cyclones tropical storms gulf coast refineries threat cones">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-hurricane"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">NOAA NHC Tropical Cones</h4>
+                                    <span class="font-mono text-xs text-cyan-400">nhc.noaa.gov/gis/</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 font-medium">Active Season</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            National Hurricane Center active storm GIS track and 5-day forecast cone RSS feeds. Evaluates direct landfall threat probabilities for US Gulf Coast (USGC / PADD 3) refinery clusters.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Track Wind Speed (kt), Central Pressure (mb)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/nhc_hurricane.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: National Hurricane Center</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open GIS</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.4: BSEE Offshore Production Shut-in Reports -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="bsee offshore gulf of mexico shut-in production platform evacuations oil gas">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-water"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">BSEE Gulf Shut-in Reports</h4>
+                                    <span class="font-mono text-xs text-cyan-400">bsee.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 font-medium">Event-Driven</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Bureau of Safety and Environmental Enforcement official tropical storm offshore Gulf of Mexico production shut-in percentages and offshore platform evacuation statistics.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Shut-in Oil % (bpd), Evacuated Platforms</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/bsee_shutins.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Dept of the Interior (BSEE)</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.5: USGS Water Data Telemetry -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="usgs water data streamflow gage height river temperature mississippi ohio arkansas delaware low water draft barge">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-water-ladder"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">USGS Water Data Telemetry</h4>
+                                    <span class="font-mono text-xs text-cyan-400">api.waterdata.usgs.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">15-Min Telemetry</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Real-time streamflow (cfs), gage height (ft), and water temperature across the Mississippi (Cairo, Memphis), Ohio (Cincinnati), Arkansas (Tulsa), and Delaware rivers for barge draft modeling.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Sites:</span> 03612500 (Cairo), 07032000 (Memphis), 03255000 (Cin)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/usgs_water_feed.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: U.S. Geological Survey</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open REST</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.6: USACE Lock Performance Telemetry -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="usace lock performance army corps river navigation barge delays mkarns">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">USACE Lock Performance</h4>
+                                    <span class="font-mono text-xs text-cyan-400">ndc.iwr.usace.army.mil</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Daily</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            U.S. Army Corps of Engineers Lock Performance Monitoring System (LPMS). Tracks vessel queues, barge draft restrictions, and unscheduled lock chamber closures on the Ohio and MKARNS waterways.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Lock Stall Delay Hours, Draft Limits</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/usace_locks.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: U.S. Army Corps of Engineers</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.7: USGS Earthquake Hazards Program -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="usgs earthquake seismic shakemap hayward fault new madrid refinery proximity">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-volcano"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">USGS Seismic Hazards</h4>
+                                    <span class="font-mono text-xs text-cyan-400">earthquake.usgs.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Real-Time GeoJSON</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Real-time seismic events (&ge; M3.0), ShakeMap Peak Ground Acceleration (PGA), and refinery fault proximity for the Hayward Fault (Chevron Richmond) and New Madrid Seismic Zone.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Magnitude (M), Depth (km), Refinery Distance (d)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/usgs_seismic.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: USGS Earthquake Hazards</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open GeoJSON</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.8: Air Quality & Refinery Flaring Feeds -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="aqi air quality purpleair openaq airnow flaring so2 pm2.5 refinery outage detection">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-smog"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Air Quality &amp; Flaring Index</h4>
+                                    <span class="font-mono text-xs text-cyan-400">PurpleAir &bull; OpenAQ &bull; AirNow</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Hourly &bull; Issue #110</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Multi-feed air quality sensors monitoring fence-line particulate (PM<sub>2.5</sub>) and SO<sub>2</sub> anomalies near refineries (e.g. Richmond, Martinez, Delaware City) to detect unplanned unit flaring trips.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Metrics:</span> Flaring Anomaly Z-Score, Sensor Triangulation</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/aqi_feed.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: EPA AirNow / PurpleAir / OpenAQ</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open API</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 5: State Open Data, Tax Portals & Crowdsourced Retail Pump Feeds -->
+        <section class="space-y-6 feed-section" data-cat="state">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-black text-purple-500 font-mono">05</span>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white">State Open Data, Tax Portals &amp; Crowdsourced Retail Pump Feeds</h3>
+                        <p class="text-xs text-slate-400">Universal 50-State open data connectors, state motor fuel excise tax rates, UST fees, Census commuter surveys, and crowdsourced pump prices.</p>
+                    </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-mono">3 Feeds</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Card 5.1: Universal 50-State Open Data Portals -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="state open data 50 states socrata excise tax ust fees fta motor fuel index">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                    <i class="fa-solid fa-flag-usa"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">50-State Open Data Portals</h4>
+                                    <span class="font-mono text-xs text-purple-400">data.&lt;state&gt;.gov / Socrata</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 font-medium">51 Locales &bull; Issue #141</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Connects dynamically to state open data portals (Socrata), U.S. Census State Tax API, and FTA indices across all 50 states + DC for statutory excise taxes, UST fees, and inspection fees.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> State Excise ($/gal), Local UST Fee ($/gal)</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/state_open_data.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: State Depts of Revenue / Socrata</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 5.2: U.S. Census Bureau Demographics -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="census demographics commuter surveys vehicle density median income price elasticity">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">U.S. Census Demographics</h4>
+                                    <span class="font-mono text-xs text-purple-400">api.census.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 font-medium">ACS 5-Year &bull; Issue #141</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            American Community Survey (ACS) 5-year county demographics. Quantifies vehicles per household, commute durations, and median income to calibrate localized retail elasticity.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Commute Mean Mins, Vehicle Ratio, Income</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/census_demographics.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: U.S. Census Bureau</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open API</span>
+                    </div>
+                </div>
+
+                <!-- Card 5.3: Crowdsourced Retail Pump Prices -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="live retail pump prices gasbuddy graphql aaa fuel gauge scraper opis rack margins">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                    <i class="fa-solid fa-gas-pump"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Live Retail Fuel Feeds</h4>
+                                    <span class="font-mono text-xs text-purple-400">GasBuddy / AAA Scraper</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Real-Time &bull; 6h TTL</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Ingests real-time retail street pump benchmarks via GasBuddy GraphQL API and AAA Daily Fuel Gauge scraper. Backfills actual outcomes and anchors local baseline prices.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Oakland</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/live_fuel_feed.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Crowdsourced / AAA Public</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Scraper</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 6: Continuous Academic Literature & Developer Catalog Feeds -->
+        <section class="space-y-6 feed-section" data-cat="research">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-black text-rose-500 font-mono">06</span>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white">Continuous Academic Literature &amp; Developer Catalog Feeds</h3>
+                        <p class="text-xs text-slate-400">Weekly automated research paper scans, preprint monitors, and open developer directory indexing.</p>
+                    </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-mono">3 Feeds</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Card 6.1: arXiv Research Paper Monitor -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="arxiv preprints academic research quantitative finance econometrics machine learning">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">arXiv Research Preprints</h4>
+                                    <span class="font-mono text-xs text-rose-400">export.arxiv.org/api/query</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">Weekly Sat 08:00 CT</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Queries arXiv API for newly published preprints across Quantitative Finance (<code class="text-blue-300">q-fin.PR</code>), Econometrics (<code class="text-blue-300">econ.EM</code>), and Machine Learning (<code class="text-blue-300">cs.LG</code>).
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Pipeline:</span> Ingests abstracts into Saturday review runner</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/arxiv_monitor.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Cornell University arXiv</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open API</span>
+                    </div>
+                </div>
+
+                <!-- Card 6.2: CORE Open-Access Literature Monitor -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="core open access academic journals university repositories peer-reviewed energy econometrics">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">CORE Open-Access Literature</h4>
+                                    <span class="font-mono text-xs text-rose-400">api.core.ac.uk/v3/</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 font-medium">Weekly &bull; Issue #53</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Integrates CORE API v3 to scan millions of open-access university research papers and academic journal articles covering asymmetric price transmission and rockets &amp; feathers econometrics.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Query:</span> "gasoline price", "crack spread", "refinery margin"</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/core_monitor.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: CORE (Jisc / Open Univ)</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open API</span>
+                    </div>
+                </div>
+
+                <!-- Card 6.3: Tracked Developer Catalog Indexes -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="developer catalogs public-apis free-for-dev awesome-quant awesome-python tooling discovery">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                    <i class="fa-solid fa-laptop-code"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Developer Catalogs (10 Indexes)</h4>
+                                    <span class="font-mono text-xs text-rose-400">public-apis, free-for-dev</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 font-medium">Weekly &bull; Gemini Scored</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Monitors 10 major open-source developer indexes (public-apis, awesome-quant, free-for-dev) for new $0 tools, automatically generating GitHub feature issues for tools scored &ge; 7.0/10.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Policy:</span> 100% zero-cost; explicitly bars paid Apify tools</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/catalog_monitor.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: GitHub Curated Repos</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Repos</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Master Ingestion & Governance Ledger Matrix -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-cyan-500 font-mono"><i class="fa-solid fa-table-list"></i></span>
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-white">Data Ingestion &amp; Governance Ledger Matrix</h3>
+                    <p class="text-xs text-slate-400">Master architectural summary table detailing protocols, caching TTLs, update cadences, and rate-limiting safeguards.</p>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60 shadow-xl">
+                <table class="w-full text-left text-xs text-slate-300 border-collapse min-w-[800px]" id="master-feed-table">
+                    <thead>
+                        <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400">
+                            <th class="py-3 px-4">Feed / Identifier</th>
+                            <th class="py-3 px-3">Domain Category</th>
+                            <th class="py-3 px-3">Provider / Endpoint</th>
+                            <th class="py-3 px-3">Protocol / Auth</th>
+                            <th class="py-3 px-3">Cache TTL</th>
+                            <th class="py-3 px-3">Update Cadence</th>
+                            <th class="py-3 px-3">Cost / Safeguard</th>
+                            <th class="py-3 px-3">Consumer Module</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-blue-400">RB=F</span> &bull; NYMEX RBOB</td>
+                            <td class="py-3 px-3 text-slate-400">Commodity Futures</td>
+                            <td class="py-3 px-3 text-slate-300">CME / Yahoo Finance</td>
+                            <td class="py-3 px-3">HTTPS / Zero Auth</td>
+                            <td class="py-3 px-3 text-emerald-400">6 Hours</td>
+                            <td class="py-3 px-3">Daily Settlement</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open Access</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/data_ingestion.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-blue-400">CL=F</span> &bull; WTI Crude</td>
+                            <td class="py-3 px-3 text-slate-400">Commodity Futures</td>
+                            <td class="py-3 px-3 text-slate-300">Cushing / Yahoo Finance</td>
+                            <td class="py-3 px-3">HTTPS / Zero Auth</td>
+                            <td class="py-3 px-3 text-emerald-400">6 Hours</td>
+                            <td class="py-3 px-3">Daily Settlement</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open Access</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/data_ingestion.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-purple-400">HO=F</span> &bull; Heating Oil/ULSD</td>
+                            <td class="py-3 px-3 text-slate-400">Commodity Futures</td>
+                            <td class="py-3 px-3 text-slate-300">NYMEX / CME Group</td>
+                            <td class="py-3 px-3">HTTPS / Zero Auth</td>
+                            <td class="py-3 px-3 text-emerald-400">6 Hours</td>
+                            <td class="py-3 px-3">Daily Settlement</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open Access</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/data_ingestion.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-emerald-400">^OVX</span> &bull; Cboe Volatility</td>
+                            <td class="py-3 px-3 text-slate-400">Physical &amp; Macro</td>
+                            <td class="py-3 px-3 text-slate-300">Cboe Options Exchange</td>
+                            <td class="py-3 px-3">HTTPS / Zero Auth</td>
+                            <td class="py-3 px-3 text-emerald-400">6 Hours</td>
+                            <td class="py-3 px-3">Daily Close</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open Access</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/alternative_data_feeds.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-amber-400">Finlight.me</span> &bull; Energy News</td>
+                            <td class="py-3 px-3 text-slate-400">Financial News</td>
+                            <td class="py-3 px-3 text-slate-300">api.finlight.me/v1/</td>
+                            <td class="py-3 px-3">Bearer Key</td>
+                            <td class="py-3 px-3 text-amber-400">1 Hour</td>
+                            <td class="py-3 px-3">Trading Hours</td>
+                            <td class="py-3 px-3 text-amber-400">150 Call/Mo Cap</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/finlight_feed.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-amber-400">Firecrawl</span> &bull; Web Scraper</td>
+                            <td class="py-3 px-3 text-slate-400">Web Extraction</td>
+                            <td class="py-3 px-3 text-slate-300">api.firecrawl.dev/v1/</td>
+                            <td class="py-3 px-3">Bearer Key</td>
+                            <td class="py-3 px-3 text-emerald-400">24h Disk Cache</td>
+                            <td class="py-3 px-3">On-Demand Breaking</td>
+                            <td class="py-3 px-3 text-amber-400">800 Call/Mo Cap</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/firecrawl_scraper.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-cyan-400">NOAA NWS</span> &bull; Weather Alerts</td>
+                            <td class="py-3 px-3 text-slate-400">Atmospheric Hazard</td>
+                            <td class="py-3 px-3 text-slate-300">api.weather.gov &bull; t.wxs.us</td>
+                            <td class="py-3 px-3">User-Agent Auth</td>
+                            <td class="py-3 px-3 text-emerald-400">15 Minutes</td>
+                            <td class="py-3 px-3">15-Min Polling</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open API</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/noaa_weather.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-cyan-400">USGS Water</span> &bull; River Telemetry</td>
+                            <td class="py-3 px-3 text-slate-400">Hydrology Telemetry</td>
+                            <td class="py-3 px-3 text-slate-300">api.waterdata.usgs.gov</td>
+                            <td class="py-3 px-3">HTTPS / Zero Auth</td>
+                            <td class="py-3 px-3 text-emerald-400">15 Minutes</td>
+                            <td class="py-3 px-3">15-Min Polling</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open REST</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/usgs_water_feed.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-purple-400">50-State Portals</span> &bull; Fuel Taxes</td>
+                            <td class="py-3 px-3 text-slate-400">Regulatory Tax</td>
+                            <td class="py-3 px-3 text-slate-300">data.&lt;state&gt;.gov / Socrata</td>
+                            <td class="py-3 px-3">Open SODA REST</td>
+                            <td class="py-3 px-3 text-emerald-400">24 Hours</td>
+                            <td class="py-3 px-3">Daily Sync</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open Data</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/state_open_data.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-rose-400">arXiv API</span> &bull; Research Preprints</td>
+                            <td class="py-3 px-3 text-slate-400">Academic Literature</td>
+                            <td class="py-3 px-3 text-slate-300">export.arxiv.org/api/query</td>
+                            <td class="py-3 px-3">HTTPS / Zero Auth</td>
+                            <td class="py-3 px-3 text-emerald-400">7 Days</td>
+                            <td class="py-3 px-3">Weekly Sat 08:00 CT</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open API</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/arxiv_monitor.py</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Cross-Navigation Link Banner -->
+        <div class="p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-code-fork text-blue-400"></i> Model &amp; Architecture Documentation
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                        Learn how these raw data feeds are transformed into 9 regularized econometric feature vectors, continuous shock memories, and ridge regression estimates.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <a href="math.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-graduation-cap"></i> Mathematical Architecture
+                    </a>
+                    <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-2 transition">
+                        <i class="fa-solid fa-book-bookmark text-blue-400"></i> Academic Citations
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Client-Side Search & Category Filter Script -->
+    <script>
+        function filterCategory(cat) {
+            const buttons = document.querySelectorAll('.cat-filter-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = 'cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition';
+                } else {
+                    btn.className = 'cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition';
+                }
+            });
+
+            const sections = document.querySelectorAll('.feed-section');
+            sections.forEach(sec => {
+                if (cat === 'all' || sec.getAttribute('data-cat') === cat) {
+                    sec.style.display = 'block';
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+        }
+
+        function searchFeeds() {
+            const query = document.getElementById('feed-search-input').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.feed-card');
+            
+            cards.forEach(card => {
+                const text = (card.innerText + ' ' + (card.getAttribute('data-tags') || '')).toLowerCase();
+                if (!query || text.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Also filter table rows
+            const rows = document.querySelectorAll('#master-feed-table tbody tr');
+            rows.forEach(row => {
+                const rowText = row.innerText.toLowerCase();
+                if (!query || rowText.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+    </footer>
+</body>
+</html>

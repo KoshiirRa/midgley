@@ -12,6 +12,7 @@ from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_bake
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
 from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector
 from src.feast_store import MidgleyFeastStore
+from src.cospot_spectral_engine import compute_rolling_spectral_features
 
 logger = logging.getLogger(__name__)
 
@@ -432,7 +433,20 @@ def create_feature_matrix(
     except Exception as e:
         logger.warning(f"Could not evaluate Qlib symbolic alpha factors: {e}")
 
-    # 5. Forecast Target Construction
+    # 5. CoSPOT Compositional Spectral & Wavelet Features (Issue #215, arXiv:2609.02093)
+    try:
+        df = compute_rolling_spectral_features(df, price_col='gasoline_rbob', lookback=21)
+    except Exception as e:
+        logger.warning(f"Could not compute CoSPOT spectral features: {e}")
+        for c in [
+            'cospot_dft_dominant_period', 'cospot_dft_low_freq_energy_ratio',
+            'cospot_dft_spectral_entropy', 'cospot_dwt_detail_energy_ratio',
+            'cospot_dwt_detail_shock_mag', 'cospot_dwt_approx_momentum'
+        ]:
+            if c not in df.columns:
+                df[c] = 0.0
+
+    # 6. Forecast Target Construction
     df[f'target_price_{forecast_horizon}d'] = df['gasoline_rbob'].shift(-forecast_horizon)
     df[f'target_return_{forecast_horizon}d'] = (df[f'target_price_{forecast_horizon}d'] - df['gasoline_rbob']) / df['gasoline_rbob']
     
@@ -508,10 +522,14 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'treasury_yield_10y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d',
         'rbob_rsi_14', 'rbob_macd_line', 'rbob_macd_signal',
         'rbob_bollinger_band_pct_b', 'rbob_atr_14',
+        'cospot_dft_dominant_period', 'cospot_dft_low_freq_energy_ratio',
+        'cospot_dft_spectral_entropy', 'cospot_dwt_detail_energy_ratio',
+        'cospot_dwt_detail_shock_mag', 'cospot_dwt_approx_momentum',
         'sin_day', 'cos_day'
     ]
     qlib_features = [c for c in df.columns if c.startswith('qlib_')]
-    quant_features = [f for f in quant_features if f in df.columns] + qlib_features
+    cospot_features = [c for c in df.columns if c.startswith('cospot_')]
+    quant_features = [f for f in quant_features if f in df.columns] + [f for f in cospot_features if f not in quant_features] + qlib_features
     
     event_features = [c for c in df.columns if c.startswith('event_')]
     hybrid_features = quant_features + event_features

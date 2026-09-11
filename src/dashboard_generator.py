@@ -20,7 +20,8 @@ from src.regional_metadata import render_regional_driver_cards_html
 
 logger = logging.getLogger(__name__)
 
-DOCS_DIR = "docs"
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DOCS_DIR = os.path.join(PROJECT_ROOT, "docs")
 INDEX_PATH = os.path.join(DOCS_DIR, "index.html")
 NATIONAL_PATH = os.path.join(DOCS_DIR, "national.html")
 TULSA_PATH = os.path.join(DOCS_DIR, "tulsa.html")
@@ -33,6 +34,7 @@ OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
 MATH_PATH = os.path.join(DOCS_DIR, "math.html")
+SOURCES_PATH = os.path.join(DOCS_DIR, "sources.html")
 DIESEL_PATH = os.path.join(DOCS_DIR, "diesel.html")
 TECHNICAL_BREAKDOWN_PATH = os.path.join(DOCS_DIR, "technical_breakdown.html")
 TECHNICAL_BREAKDOWN_MD_PATH = os.path.join(DOCS_DIR, "technical_breakdown.md")
@@ -48,6 +50,7 @@ PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
+SOURCES_SUB_DIR = os.path.join(DOCS_DIR, "sources")
 DIESEL_SUB_DIR = os.path.join(DOCS_DIR, "diesel")
 TELEMETRY_SUB_DIR = os.path.join(DOCS_DIR, "telemetry")
 
@@ -61,11 +64,12 @@ PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
+SOURCES_SUB_PATH = os.path.join(SOURCES_SUB_DIR, "index.html")
 DIESEL_SUB_PATH = os.path.join(DIESEL_SUB_DIR, "index.html")
 TELEMETRY_SUB_PATH = os.path.join(TELEMETRY_SUB_DIR, "index.html")
 
-KATEX_ONLOAD_SCRIPT = r'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
-HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
+KATEX_ONLOAD_SCRIPT = 'onload="renderMathInElement(document.body, { delimiters: [ {left: \'$$\', right: \'$$\', display: true}, {left: \'\\\\(\', right: \'\\\\)\', display: false} ] });"'
+HISTORY_CSV_PATH = os.path.join(PROJECT_ROOT, "data", "prediction_history.csv")
 
 
 def codecogs_url(latex_str: str) -> str:
@@ -324,6 +328,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     savings_cls = "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-semibold" if active_tab == "savings" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     diesel_cls = "bg-purple-600/30 text-purple-300 border border-purple-500/40 font-semibold" if active_tab == "diesel" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -340,6 +345,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
+    src_link = f"{rel_prefix}sources.html"
     cit_link = f"{rel_prefix}citations.html"
     sav_link = f"{rel_prefix}savings.html"
     dsl_link = f"{rel_prefix}diesel.html"
@@ -413,6 +419,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                </a>
+                <a href="{src_link}" class="px-3 py-1.5 rounded-lg {sources_cls} transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
                 </a>
                 <a href="{cit_link}" class="px-3 py-1.5 rounded-lg {citations_cls} transition flex items-center gap-1.5">
                     <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
@@ -2726,9 +2735,31 @@ def generate_public_dashboard():
                         <p class="text-xs text-slate-300 leading-relaxed">
                             Cboe OVX options tail-risk volatility &amp; Baker Hughes drilling rig counts tracking 3-6 month supply pipelines.
                         </p>
-                    </div>
-
                 </div>
+
+                <!-- Documentation & Data Sources CTA Ribbon -->
+                <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-book-open text-cyan-400"></i> Deep Dive into Model Architecture &amp; Data Streams
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Explore full mathematical specifications, continuous shock decay functions, and complete directory of all 26 monitored feeds.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+                        <a href="sources.html" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-cyan-600/20">
+                            <i class="fa-solid fa-database"></i> Data Sources Directory
+                        </a>
+                        <a href="math.html" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-graduation-cap"></i> Math Architecture
+                        </a>
+                        <a href="citations.html" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -4259,17 +4290,20 @@ def generate_public_dashboard():
         oak_chart = [round(oak_base - 0.20, 2), round(oak_base - 0.13, 2), round(oak_base - 0.05, 2), round(oak_base + 0.10, 2), round(oak_base + 0.17, 2), round(oak_base + 0.13, 2), round(oak_base + 0.03, 2), round(oak_base, 2)]
         oak_chart_str = ", ".join(str(x) for x in oak_chart)
 
-        try:
-            from src.usgs_seismic import USGSSeismicConnector
-            _seismic_c = USGSSeismicConnector()
-            _s_data = _seismic_c.fetch_live_seismic_telemetry(corridor="bay_area")
-            _s_risk = _s_data.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
-            if _s_risk >= 0.25:
-                seismic_badge = f'<span class="text-rose-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Active Risk: {_s_risk:.2f}</span>'
-            else:
-                seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
-        except Exception:
-            seismic_badge = '<span class="text-slate-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-nodes"></i> Monitored</span>'
+        if not os.environ.get("TESTING"):
+            try:
+                from src.usgs_seismic import USGSSeismicConnector
+                _seismic_c = USGSSeismicConnector()
+                _s_data = _seismic_c.fetch_live_seismic_telemetry(corridor="bay_area")
+                _s_risk = _s_data.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
+                if _s_risk >= 0.25:
+                    seismic_badge = f'<span class="text-rose-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Active Risk: {_s_risk:.2f}</span>'
+                else:
+                    seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
+            except Exception:
+                seismic_badge = '<span class="text-slate-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-nodes"></i> Monitored</span>'
+        else:
+            seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
 
         return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
 
@@ -4665,80 +4699,172 @@ def generate_public_dashboard():
                 Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.4 Finlight-LLM</strong>.
             </p>
             
-            <!-- Research Citations Ledger Link Card -->
-            <div class="pt-2">
-                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <!-- Research Citations & Data Sources Link Cards -->
+            <div class="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
                             <i class="fa-solid fa-book-bookmark text-xl"></i>
                         </div>
                         <div>
                             <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                                Peer-Reviewed Research Literature Index <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
+                                Peer-Reviewed Literature <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Ledger</span>
                             </h4>
-                            <p class="text-xs text-slate-400">Explore theoretical theorems, KaTeX formulas, arXiv pre-prints, Context Routing bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR residual decomposition, and Purged CPCV cross-validation across all 12 cited foundation papers.</p>
+                            <p class="text-xs text-slate-400 mt-1">Explore theoretical theorems, arXiv pre-prints, Context Routing bounds (\(\rho_h\) vs \(\Delta\)), Alibaba CEDAR residual decomposition, and Purged CPCV cross-validation across all 12 cited foundation papers.</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-lg shadow-blue-600/20">
-                            <i class="fa-solid fa-book-open"></i> Open Citations Portal
+                    <div class="flex items-center gap-2 pt-1">
+                        <a href="citations.html" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-book-open"></i> Citations Portal
                         </a>
-                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
-                            <i class="fa-brands fa-github"></i> RESEARCH_CITATIONS.md
+                        <a href="https://github.com/KoshiirRa/midgley/blob/main/RESEARCH_CITATIONS.md" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+                            <i class="fa-brands fa-github"></i> Markdown
+                        </a>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-cyan-500/30 flex flex-col justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shrink-0">
+                            <i class="fa-solid fa-database text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                Model Data Sources &amp; Feeds <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">26 Ingestion Feeds</span>
+                            </h4>
+                            <p class="text-xs text-slate-400 mt-1">Explore complete technical documentation, endpoints, update cadences, schemas, and zero-cost quota policies for all 26 data streams feeding the model.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1">
+                        <a href="sources.html" class="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-lg shadow-cyan-600/20">
+                            <i class="fa-solid fa-server"></i> Open Data Sources Portal
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Section 1: Refining Crack Spreads -->
+        <!-- Section 01: Quantitative Commodity Futures & 3-2-1 Crack Spread Modeling -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-blue-500">01</span>
-                <h3 class="text-2xl font-bold text-white">Quantitative Time-Series & 3-2-1 Crack Spreads</h3>
+                <h3 class="text-2xl font-bold text-white">Quantitative Commodity Futures &amp; 3-2-1 Crack Spread Modeling</h3>
             </div>
             
             <p class="text-slate-300 leading-relaxed text-sm">
-                A <strong>crack spread</strong> measures the profit margin refiners earn when "cracking" crude oil into finished petroleum products. Because crude oil is quoted in dollars per barrel (\(42\text{ gallons}\) per barrel) while wholesale gas is quoted in dollars per gallon, we convert crude prices into per-gallon equivalents.
+                Wholesale commodity benchmarks for NYMEX RBOB gasoline (<code class="text-blue-300">RB=F</code>), WTI Crude (<code class="text-blue-300">CL=F</code>), and Ultra-Low Sulfur Diesel (<code class="text-blue-300">HO=F</code>) establish the foundational quantitative baseline. Crude oil quoted in dollars per barrel (\(42\text{ gallons}\) per barrel) is converted into per-gallon volumetric equivalents to compute refining margins and technical momentum returns:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
-                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 1.1: Refining Crack Spread & Technical Returns</h4>
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 1.1: Refining Crack Spread &amp; Technical Returns</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
                     $$\text{CrackSpread}_t = P_{\text{RBOB}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad r_t = \ln\left(\frac{P_t}{P_{t-1}}\right)$$
                 </div>
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold pt-2">Equation 1.2: Industry Standard 3-2-1 Refining Crack Margin ($/bbl &amp; $/gal) (Issue #169)</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
+                    $$\text{Crack}_{321, t} = \frac{2 P_{\text{RBOB}, t} + P_{\text{ULSD}, t} - 3 \left( \frac{P_{\text{WTI}, t}}{42.0} \right)}{3.0}, \quad \text{Crack}_{321, t}^{\text{gal}} = \frac{\text{Crack}_{321, t}}{42.0}$$
+                </div>
                 <p class="text-xs text-slate-400">
-                    where \(P_{\text{RBOB}}\) is the NYMEX RBOB Futures price (\(RB=F\)) and \(P_{\text{WTI}}\) is West Texas Intermediate Crude (\(CL=F\)). Moving averages \(\text{MA}_K(t) = \frac{1}{K}\sum_{i=0}^{K-1} P_{t-i}\) are calculated across \(K \in \{7, 14, 30\}\) trading days.
+                    where \(P_{\text{RBOB}}\) is NYMEX RBOB Futures, \(P_{\text{WTI}}\) is West Texas Intermediate Crude, and \(P_{\text{ULSD}}\) is Heating Oil/Diesel. Rolling moving averages \(\text{MA}_K(t) = \frac{1}{K}\sum_{i=0}^{K-1} P_{t-i}\) across \(K \in \{7, 14, 30\}\) and technical momentum indicators (RSI-14, MACD line/signal, Bollinger %B, and ATR-14) capture autoregressive price trends.
                 </p>
             </div>
         </section>
 
-        <!-- Section 2: LLM Qualitative Vector Space -->
+        <!-- Section 02: Alternative Physical Feeds, Macroeconomics & Market Positioning (Issue #225) -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
                 <span class="text-2xl font-black text-emerald-500">02</span>
-                <h3 class="text-2xl font-bold text-white">Qualitative LLM Extraction (Google Gemini 2.5 Flash)</h3>
+                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds, Macroeconomics &amp; Market Positioning (Issue #225)</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Unstructured news bulletins and press releases are processed by <strong>Google Gemini 2.5 Flash</strong> to convert qualitative events into a bounded numerical factor vector space:
+                To capture structural macroeconomic shifts, options tail-risk panic, upstream drilling supply pipelines, and institutional positioning, Midgley ingests 7 physical and alternative market data feeds:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
-                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 2.1: LLM Bounded Impact Vector Space</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
-                    $$\mathbf{V}_{\text{event}, t} = \begin{bmatrix} S_{\text{geopolitical}} \\ S_{\text{supply}} \\ S_{\text{opec}} \\ S_{\text{demand}} \\ S_{\text{pressure}} \end{bmatrix}_t \in [-1.0, +1.0]^5$$
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 2.1: Unified Alternative Physical &amp; Macro Feature Matrix</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200 overflow-x-auto">
+                    $$\mathbf{X}_{\text{Physical}, t} = \Big[ \text{OVX}_t, \, \Delta\text{OVX}_{1\text{d}}, \, \text{Rigs}_{\text{US}, t}, \, \Delta\text{Rigs}_{1\text{w}}, \, Y_{10\text{y}}, \, \Delta Y_{10\text{y}-2\text{y}}, \, r_{\text{TIPS}}, \, \text{COT}_{\text{Spec}}, \, \text{COT}_{Z\text{-score}}, \, \text{Tariff}_{\text{FERC}}, \, \Delta\text{Inv}_{\text{EIA}}, \, \text{Ethanol}_{\text{USDA}} \Big]$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    Each component is bounded in the interval \([-1.0, +1.0]\), representing negative (bearish), zero (neutral), or positive (bullish) market pressure.
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>1. Cboe Crude Oil Volatility Index (^OVX):</strong> Options tail-risk volatility ("VIX for crude") measuring short-term hedging skew and panic buying/selling.<br>
+                    <strong>2. Baker Hughes US Active Rig Counts:</strong> Total US active drilling rigs, oil rigs, and weekly delta (\(\Delta\text{Rigs}_{1\text{w}}\)), acting as a 3-to-6 month supply pipeline lead indicator.<br>
+                    <strong>3. U.S. Treasury Yield Curve &amp; TIPS Real Yields (Issue #66):</strong> 10-Year Treasury Yield (\(Y_{10\text{y}}\)), 10Y&ndash;2Y inversion spread (\(\Delta Y_{10\text{y}-2\text{y}}\)), and 10-Year TIPS real yield (\(r_{\text{TIPS}}\)), quantifying macroeconomic demand expectations, recession probabilities, and breakeven inflation.<br>
+                    <strong>4. CFTC Commitment of Traders (COT) Energy Positioning (Issue #143):</strong> Non-commercial speculative net length, 3-year rolling \(Z\)-score, and commercial hedger ratio, measuring hedge fund crowding.<br>
+                    <strong>5. FERC Form 6 Interstate Pipeline Tariffs (Issue #123):</strong> Colonial Line 1, Plantation, and Explorer pipeline tariffs (\(\$/\text{bbl}\)) establishing physical inter-regional transport cost floors.<br>
+                    <strong>6. EIA Weekly Petroleum Status (WPSR):</strong> Commercial crude and finished motor gasoline inventory draws/builds (\(\Delta\text{Inv}_{\text{EIA}}\)) and PADD refinery capacity utilization percentage.<br>
+                    <strong>7. USDA Biofuel &amp; Ethanol Spot Rack / RIN Credits:</strong> Spot Midwest E100 ethanol rack prices and D6 RIN credit values for E10 finished unleaded blendstock cost modeling.
                 </p>
             </div>
         </section>
 
-        <!-- Section 3: Multi-Tiered NOAA Weather Risk -->
+        <!-- Section 03: Live News Streams, Web Scraping & Multi-Tiered LLM Extraction (Issue #226) -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-amber-500">03</span>
+                <span class="text-2xl font-black text-purple-500">03</span>
+                <h3 class="text-2xl font-bold text-white">Live News Streams, Web Scraping &amp; Multi-Tiered LLM Extraction (Issue #226)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Unstructured financial news bulletins, deep web articles, RSS streams, and incoming webhooks are ingested and parsed across a resilient 4-tier LLM failover architecture:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 3.1: Live News Vector Ingestion &amp; Batch Factor Scoring</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
+                    $$\mathbf{V}_{\text{News}, t} = \mathcal{M}_{\text{LLM}}\left( \text{Stream}_{\text{Finlight}} \cup \text{Scrape}_{\text{Firecrawl}}(\mathcal{U}) \cup \text{Feed}_{\text{RSS}}(\mathcal{R}) \cup \text{Hook}_{\text{Webhook}}(\mathcal{W}) \right)$$
+                </div>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold pt-2">Equation 3.2: Multi-Provider LLM &amp; Deterministic Lexicon Failover Engine (Issue #196)</h4>
+                <div class="text-center text-sm sm:text-base font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-purple-200 overflow-x-auto">
+                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
+                    $$\mathcal{M}_{\text{LLM}}(\text{payload}) = \begin{cases} 
+                    \text{Gemini 2.5 Flash} & (\text{Tier 1: Privileged Key}) \\ 
+                    \text{ZeroCostProviderHook} & (\text{Tier 1.5: Kaggle/OSS GPU}) \\ 
+                    \text{GPT-4o-mini / Claude Haiku} & (\text{Tier 2: Soft Failover}) \\ 
+                    \text{Deterministic Rule-Based Lexicon} & (\text{Tier 3: 100\% Offline Fallback}) 
+                    \end{cases}$$
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>1. Finlight.me REST API Stream:</strong> Live tier-1 financial energy headlines (Reuters, Bloomberg, Seeking Alpha, Investing.com) with a 150 call/month hard quota safety valve.<br>
+                    <strong>2. Firecrawl Web-to-Markdown API (Issue #83):</strong> JS-rendered full article extraction, refinery operator disclosures, and state tax bulletins with 800 call/month quota valve and 24-hour SHA-256 disk caching.<br>
+                    <strong>3. Free RSS News Feeds (Strategy 2):</strong> Zero-cost continuous 15-minute polling across Google News (<code class="text-purple-300">when:1d</code>), NYT Energy, and CNBC with 24-hour timestamp age filtering.<br>
+                    <strong>4. Incoming Webhook Gateway &amp; IPASIS Security (Strategy 4 &amp; Issue #87):</strong> Real-time push alerts via <code class="text-purple-300">POST /api/v1/events/webhook</code> with HMAC-SHA256 signature verification and IPASIS Tor/Abuse origin screening.<br>
+                    <strong>5. Bounded Factor Vector Space:</strong> Payloads are transformed into a 5-element numerical vector:
+                    $$\mathbf{V}_{\text{event}, t} = \begin{bmatrix} S_{\text{geopolitical}} \\ S_{\text{supply}} \\ S_{\text{opec}} \\ S_{\text{demand}} \\ S_{\text{pressure}} \end{bmatrix}_t \in [-1.0, +1.0]^5$$
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 04: Executive Social Media Stream & Weekday vs. Weekend Gap Dynamics (Issue #224) -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-blue-400">04</span>
+                <h3 class="text-2xl font-bold text-white">Executive Social Media Stream &amp; Weekday vs. Weekend Gap Dynamics (Issue #224)</h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Executive social media commentary (Twitter/X and Truth Social energy posts) directly impacts active intraday trading sessions during weekdays, while weekend posts published during commodity market closures accumulate to drive opening price gap volatility:
+            </p>
+
+            <div class="math-box p-6 rounded-r-2xl space-y-4">
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 4.1: Social Media Sentiment &amp; Weekend Market Open Gap Multiplier</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-blue-200 overflow-x-auto">
+                    $$\mathbf{V}_{\text{social}, t} = \begin{cases} 
+                    \mathbf{V}_{\text{post}, t}, & \text{if Weekday (Mon--Fri Active Trading Hours)} \\ 
+                    1.42 \times \mathbf{V}_{\text{post}, t}, & \text{if Weekend (Fri 17:00 -- Sun 18:00 EST)} 
+                    \end{cases}, \quad \sigma_{\text{SundayOpen}} = 1.42 \times \sigma_{\text{Weekday}}$$
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Weekday Active Trading Impact:</strong> Posts published during active NYMEX/CME trading hours produce immediate short-term futures return shocks. Dovish OPEC talk-downs urging production increases produce an average <strong>\(-1.85\%\)</strong> single-day RBOB return shock, while hawkish energy import tariff threats trigger <strong>\(+2.10\%\)</strong> single-day price surges.<br>
+                    <strong>Weekend Market Closure Accumulation:</strong> Because commodity futures exchanges close Friday at 17:00 EST and reopen Sunday at 18:00 EST, posts published over the weekend accumulate without real-time price discovery. When trading resumes Sunday evening, this accumulated sentiment results in <strong>\(1.42\times\) higher opening price gap volatility</strong> compared to weekday baselines.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 05: Multi-Tiered NOAA Weather Risk & Atmospheric Convective Dynamics -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl font-black text-amber-500">05</span>
                 <h3 class="text-2xl font-bold text-white">Multi-Tiered NOAA Weather Risk Dynamics</h3>
             </div>
 
@@ -4747,7 +4873,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
-                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 3.1: Multi-Tiered Weather Vulnerability Matrix</h4>
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 5.1: Multi-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
                     $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}}$$
                 </div>
@@ -4764,10 +4890,10 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 4: Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals -->
+        <!-- Section 06: Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-purple-500">04</span>
+                <span class="text-2xl font-black text-purple-500">06</span>
                 <h3 class="text-2xl font-bold text-white">Global &amp; Regional Maritime Chokepoints, Inland River Barging &amp; Waterborne Terminals</h3>
             </div>
 
@@ -4776,7 +4902,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 4.1: Unified Waterway Freight &amp; Detour Penalty Model</h4>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 6.1: Unified Waterway Freight &amp; Detour Penalty Model</h4>
                 <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-purple-200 overflow-x-auto">
                     $$\Delta P_{\text{freight}, r} = \underbrace{C_{\text{tanker}} \times \left( \frac{\Delta \text{Distance}}{v_{\text{knot}}} \right)}_{\text{Global Chokepoint Detour}} + \underbrace{\gamma_{\text{draft}} \cdot \text{Index}_{\text{barge}}}_{\text{Inland River Tow Constraints}} + \underbrace{\Delta \text{Margin}_{\text{waterborne}, r}}_{\text{Coastal Terminal / Canal Surcharge}}$$
                 </div>
@@ -4800,99 +4926,92 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 5: Executive Social Media & Weekend Gap Engine -->
+        <!-- Section 07: USGS 3D Hypocentral Seismic Attenuation, Hydrological Telemetry & Industrial AQI Outage Risk -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-blue-400">05</span>
-                <h3 class="text-2xl font-bold text-white">Executive Social Feed &amp; Weekend Volatility Multiplier (\(1.42\times\))</h3>
+                <span class="text-2xl font-black text-cyan-400">07</span>
+                <h3 class="text-2xl font-bold text-white">USGS 3D Hypocentral Attenuation, Hydrological &amp; Industrial AQI Outage Risk (Issues #54, #55, #56, #73)</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Executive social media posts (Twitter/X and Truth Social energy commentary) produce empirical return shocks and Sunday evening open gap volatility:
+                Real-time USGS seismic feeds, Mississippi/Ohio River hydrological gages, and multi-feed industrial air quality (PurpleAir, OpenAQ, AirNow) flaring monitors quantify physical infrastructure disruptions:
             </p>
 
-            <div class="math-box p-6 rounded-r-2xl space-y-4">
-                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 5.1: Weekend Market Open Gap Volatility Multiplier</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
-                    $$\sigma_{\text{SundayOpen}} = 1.42 \times \sigma_{\text{Baseline}}$$
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-cyan-500">
+                <h4 class="text-sm uppercase tracking-wider text-cyan-400 font-bold">Equation 7.1: 3D Seismic Shaking Attenuation &amp; River Bottleneck Index</h4>
+                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-cyan-200">
+                    $$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R), \quad \text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    Because commodity exchanges are closed Friday 17:00 EST to Sunday 18:00 EST, Saturday/Sunday posts generate <strong>\(1.42\times\) higher Sunday evening open price gap volatility</strong>. Dovish OPEC posts cause average \(-1.85\%\) single-day RBOB drops, while hawkish tariff threats cause \(+2.10\%\) price surges.
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>3D Hypocentral Distance:</strong> Computes hypocentral distance \(R=\sqrt{d^2+h^2}\) from epicentral distance \(d\) and focal depth \(h\), applying a Cauchy attenuation weight \(w(R)\) to evaluate seismic shaking intensity \(I\) across major refinery complexes (e.g. Hayward Fault near Chevron Richmond, Cushing storage tanks).<br>
+                    <strong>Hydrological Telemetry:</strong> Real-time USGS water gages evaluate low-water draft reductions at Memphis, TN and Cairo, IL.<br>
+                    <strong>AQI Industrial Flaring Outages:</strong> Spike detections across PM2.5, SO2, and VOC sensors detect unannounced refinery unit shutdowns and emergency flaring before financial disclosures.
                 </p>
             </div>
         </section>
 
-        <!-- Section 6: Alternative Physical Feeds & Key Movers -->
+        <!-- Section 08: Microsoft Qlib Symbolic Alpha Factor Mining, Spectral CoSPOT & Dynamic Domain Adaptation -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-emerald-400">06</span>
-                <h3 class="text-2xl font-bold text-white">Alternative Physical Feeds &amp; Key Market Movers</h3>
+                <span class="text-2xl font-black text-purple-400">08</span>
+                <h3 class="text-2xl font-bold text-white">Microsoft Qlib Symbolic Alpha Factor Mining &amp; Dynamic Domain Adaptation (Issues #127 &amp; #215)</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                Inverted options market tail-risk, active drilling rig pipelines, and high-impact policy figures:
-            </p>
-
-            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
-                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 6.1: Physical Supply &amp; Volatility Integration</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
-                    $$\mathbf{X}_{\text{Physical}} = \Big[ \text{OVX}_t, \quad \Delta \text{Rigs}_{t-90}, \quad \text{DXY}_t, \quad \text{EIA\_Inventory\_Draw}_t \Big]$$
-                </div>
-                <p class="text-xs text-slate-400">
-                    <strong>Cboe OVX Index (^OVX):</strong> Options tail-risk volatility vector ("VIX for Oil").<br>
-                    <strong>Baker Hughes Rig Count:</strong> 3-to-6 month domestic shale crude supply pipeline lead indicator.<br>
-                    <strong>Key Market Movers:</strong> Saudi Energy Minister Prince Abdulaziz (OPEC+ cuts), Fed Chair Powell (\(DXY\) demand destruction), and US DOE Strategic Petroleum Reserve (SPR buyback floor at \(\$70\text{--}\$79/\text{bbl}\)).
-                </p>
-            </div>
-        </section>
-
-        <!-- Section 7: Real-Time Financial Media Feed (Finlight.me REST API) -->
-        <section class="space-y-6">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-purple-400">07</span>
-                <h3 class="text-2xl font-bold text-white">Real-Time Financial Media Feed (Finlight.me REST API)</h3>
-            </div>
-
-            <p class="text-slate-300 leading-relaxed text-sm">
-                <code>v1.4 Finlight-LLM</code> integrates live, real-time financial media news articles via the <strong>finlight.me REST API</strong> (Reuters, Bloomberg, Seeking Alpha, Investing.com, Al Jazeera, Fox News). Targeted Boolean keyword query vectors stream raw commodity and refining bulletins directly into the Gemini 2.5 Flash batch factor extraction pipeline:
+                Midgley incorporates automated symbolic alpha factor mining inspired by Microsoft Qlib and RD-Agent, alongside CoSPOT compositional spectral/wavelet features (arXiv:2609.02093):
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 7.1: Live News Vector Ingestion &amp; Batch Factor Scoring</h4>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 8.1: Information Coefficient, CoSPOT Spectral &amp; DDG-DA GMM RBF Kernel</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
-                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
+                    $$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}, \quad w_i = \exp\left(-\gamma \|x_i - \bar{x}_{\text{recent}}\|^2\right)$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    <strong>API Endpoint:</strong> <code>POST https://api.finlight.me/v2/articles</code> with header <code>X-API-KEY</code>.<br>
-                    <strong>Target Queries:</strong> <code>oil OR gasoline OR crude OR RBOB OR OPEC OR petroleum</code>, <code>refinery OR Cushing OR outage OR inventory OR EIA</code>, and <code>Hormuz OR Red Sea OR Houthi OR Suez OR tanker OR sanctions</code>.<br>
-                    <strong>LLM Transformation:</strong> Raw news payloads (title, summary, source, publishDate) are parsed into 5 bounded quantitative factors: <code>geopolitical_risk</code>, <code>supply_disruption</code>, <code>demand_sentiment</code>, <code>opec_action</code>, and <code>overall_price_pressure</code>.
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Symbolic Alpha Evaluation:</strong> Evaluates non-lookahead symbolic factor formulas with strict point-in-time calculation rules (\(d \ge 0\)), pruning collinear factors (\(|r| > 0.70\)).<br>
+                    <strong>CoSPOT Spectral Features:</strong> Extracts rolling Discrete Fourier Transform (DFT) dominant cycle periods, low-frequency energy ratios, and Discrete Wavelet Transform (DWT) detail shock magnitudes.<br>
+                    <strong>DDG-DA Domain Adaptation:</strong> Weights historical training samples using Gaussian RBF kernels across Gaussian Mixture Model (GMM) regimes to combat concept drift during macro shocks.
                 </p>
             </div>
         </section>
 
-        <!-- Section 8: Exponential Shock Decay -->
+        <!-- Section 09: Econometric Exponential Memory Decay & Category-Specific Shock Fusion (Issue #227) -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-amber-400">08</span>
-                <h3 class="text-2xl font-bold text-white">Exponential Memory Decay &amp; Vector Fusion</h3>
+                <span class="text-2xl font-black text-amber-400">09</span>
+                <h3 class="text-2xl font-bold text-white">Econometric Exponential Memory Decay &amp; Category-Specific Shock Fusion (Issue #227)</h3>
             </div>
 
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Real-world qualitative events possess distinct econometric persistence profiles. A structural refinery outage impacts physical balances for weeks, while executive social posts shock spot sentiment for days. Midgley models this continuous decay with category-specific half-lives and Context Routing diagnostic weight modulation:
+            </p>
+
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
-                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 8.1: Continuous Memory Decay Accumulator</h4>
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 9.1: Category-Specific Continuous Memory Accumulator &amp; Fusion Weight</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-amber-200">
                     $$\mathbf{M}_t = \mathbf{M}_{t-1} \cdot \exp\left(-\frac{\ln 2}{t_{1/2}}\right) + \mathbf{V}_t$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    where half-life \(t_{1/2} = 5.0\text{ days}\) for national macroeconomic/social events and \(t_{1/2} = 4.0\text{ days}\) for regional NOAA weather shocks.
+                <div class="text-center text-base sm:text-lg font-mono py-3 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-300 overflow-x-auto">
+                    $$\mathbf{M}_{c, t} = \mathbf{M}_{c, t-1} \cdot \exp\left(-\frac{\ln 2}{t_{1/2, c}}\right) + \omega_{\text{fusion}} \cdot \mathbf{V}_{c, t}, \quad \forall c \in \mathcal{C}$$
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Econometric Category Half-Life Profiles (\(t_{1/2, c}\)):</strong><br>
+                    &bull; <strong>Supply Disruption (\(t_{1/2} = 14.0\text{ days}\)):</strong> Structural physical outages (refinery FCC trips, pipeline ruptures, hurricane damage).<br>
+                    &bull; <strong>Geopolitical Risk (\(t_{1/2} = 7.0\text{ days}\)):</strong> International sanctions, maritime blockades, Middle East conflict escalation.<br>
+                    &bull; <strong>OPEC+ Policy Action (\(t_{1/2} = 5.0\text{ days}\)):</strong> Official production quota announcements, ministerial meetings, voluntary export cuts.<br>
+                    &bull; <strong>Demand Sentiment (\(t_{1/2} = 4.0\text{ days}\)):</strong> Macroeconomic interest rate shifts, GDP revisions, recession fears.<br>
+                    &bull; <strong>Short-Term Price Pressure (\(t_{1/2} = 2.5\text{ days}\)):</strong> Executive social media posts, breaking headline sentiment, intraday rumor cycles.<br>
+                    &bull; <strong>NOAA Weather &amp; Atmospheric Shocks (\(t_{1/2} = 4.0\text{ days}\)):</strong> Regional convective storms, polar vortex freezes, and seasonal river flood stages.<br><br>
+                    <strong>Context Routing Diagnostic Fusion Weight (\(\omega_{\text{fusion}}\)) (Paper 2608.25128v1):</strong><br>
+                    Evaluates the autocorrelation coefficient \(\rho_h\) at horizon \(h=5\) against critical threshold \(\Delta = 0.95\). When \(\rho_h \ge 0.95\) (<code class="text-emerald-300">TRY_FUSION</code>), \(\omega_{\text{fusion}} = 1.00\); when \(\rho_h &lt; 0.95\) (<code class="text-amber-300">NO_FUSION</code>), \(\omega_{\text{fusion}} = 0.10\) and effective half-life is compressed to \(0.20 \times t_{1/2}\) to prevent overfitting during volatile regime transitions.
                 </p>
             </div>
         </section>
 
-        <!-- Section 9: Ridge Estimator & Live Retail Calibration -->
+        <!-- Section 10: Standardized Ridge Estimator & Purged Combinatorial Cross-Validation (CPCV) -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-blue-500">09</span>
-                <h3 class="text-2xl font-bold text-white">Standardized Ridge Estimator &amp; Live Pump Calibration</h3>
+                <span class="text-2xl font-black text-blue-500">10</span>
+                <h3 class="text-2xl font-bold text-white">Standardized Ridge Estimator &amp; Purged Combinatorial Cross-Validation (CPCV)</h3>
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
@@ -4900,7 +5019,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4">
-                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.1: Regularized Ridge Objective Function &amp; Calibration</h4>
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 10.1: Regularized Ridge Objective Function &amp; Calibration</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
                     $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Metro Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
                 </div>
@@ -4910,7 +5029,7 @@ def generate_public_dashboard():
             </div>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-blue-500">
-                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 9.2: Purged &amp; Combinatorial Cross-Validation (CPCV) Overlap Elimination (Issue #117)</h4>
+                <h4 class="text-sm uppercase tracking-wider text-blue-400 font-bold">Equation 10.2: Purged &amp; Combinatorial Cross-Validation (CPCV) Overlap Elimination (Issue #117)</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-blue-200">
                     $$\text{Purge Condition: } i \in \text{Train} \iff [t_{i,\text{start}}, t_{i,\text{end}}] \cap [t_{j,\text{test,start}}, t_{j,\text{test,end}} + h_{\text{embargo}}] = \emptyset \quad \forall j \in \text{Test}$$
                 </div>
@@ -4920,10 +5039,10 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 10: CARB Regulatory Burden & PADD 5 Refining Island -->
+        <!-- Section 11: CARB Regulatory Burden & PADD 5 Refining Island Isolation -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-amber-500">10</span>
+                <span class="text-2xl font-black text-amber-500">11</span>
                 <h3 class="text-2xl font-bold text-white">CARB Regulatory Burden &amp; PADD 5 Refining Island Isolation</h3>
             </div>
 
@@ -4932,7 +5051,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
-                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 10.1: Total Statutory CARB Tax &amp; Fee Accumulation</h4>
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 11.1: Total Statutory CARB Tax &amp; Fee Accumulation</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
                     $$\begin{aligned}
                     T_{\text{CARB}} &= \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{Local/UST}} + \tau_{\text{Federal}} \\[6pt]
@@ -4947,10 +5066,10 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 11: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread -->
+        <!-- Section 12: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread Modeling (Issue #41 - WIP) -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-purple-400">11</span>
+                <span class="text-2xl font-black text-purple-400">12</span>
                 <h3 class="text-2xl font-bold text-white">Ultra-Low Sulfur Diesel (ULSD) &amp; Distillate Crack Spread Modeling (Issue #41 - WIP)</h3>
             </div>
 
@@ -4959,7 +5078,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 11.1: Distillate Crack Spread &amp; 3-2-1 Margin Formulas</h4>
+                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 12.1: Distillate Crack Spread &amp; 3-2-1 Margin Formulas</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
                     $$\text{DistillateCrack}_t = P_{\text{ULSD}, t} - \frac{P_{\text{WTI}, t}}{42.0}, \quad \text{Crack}_{321, t} = \frac{2 P_{\text{RBOB}, t} + P_{\text{ULSD}, t} - 3 \left( \frac{P_{\text{WTI}, t}}{42.0} \right)}{3.0}$$
                 </div>
@@ -4969,10 +5088,10 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 12: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI -->
+        <!-- Section 13: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI (Issue #214) -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-emerald-400">12</span>
+                <span class="text-2xl font-black text-emerald-400">13</span>
                 <h3 class="text-2xl font-bold text-white">Dynamic Volatility-Gated Persistence Blending (DV-GPB) &amp; Empirical CI (Issue #214)</h3>
             </div>
 
@@ -4981,7 +5100,7 @@ def generate_public_dashboard():
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-emerald-500">
-                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 12.1: Adaptive Sigmoid Volatility Gate &amp; Empirical Residual Bounds</h4>
+                <h4 class="text-sm uppercase tracking-wider text-emerald-400 font-bold">Equation 13.1: Adaptive Sigmoid Volatility Gate &amp; Empirical Residual Bounds</h4>
                 <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-emerald-200">
                     $$\lambda_{\text{vol}} = \frac{1}{1 + e^{-200.0 \cdot (\sigma_{14\text{d}} - 0.015)}}, \quad \hat{y}_{t+5} = \lambda_{\text{vol}} \hat{y}_{\text{model}} + (1 - \lambda_{\text{vol}}) y_t, \quad \text{CI}_{95\%} = \hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$$
                 </div>
@@ -4991,38 +5110,29 @@ def generate_public_dashboard():
             </div>
         </section>
 
-        <!-- Section 13: USGS 3D Hypocentral Attenuation & Hydrological Barge Telemetry -->
+        <!-- Section 14: Local Metro Basis Differentials, Spatial Freight & Retail Rack Margins -->
         <section class="space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-cyan-400">13</span>
-                <h3 class="text-2xl font-bold text-white">USGS 3D Hypocentral Attenuation &amp; Hydrological Barge Telemetry (Issues #55 &amp; #56)</h3>
+                <span class="text-2xl font-black text-cyan-400">14</span>
+                <h3 class="text-2xl font-bold text-white">Local Metro Basis Differentials, Spatial Freight &amp; Retail Rack Margins</h3>
             </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm">
+                Wholesale commodity futures must be adjusted for localized transportation tariffs, state/local excise taxes, and rack margin markups across each specific metro hub:
+            </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-cyan-500">
-                <h4 class="text-sm uppercase tracking-wider text-cyan-400 font-bold">Equation 13.1: 3D Seismic Shaking Attenuation &amp; River Bottleneck Index</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-cyan-200">
-                    $$R = \sqrt{d^2 + h^2}, \quad w(R) = \frac{1}{1 + (R/35)^2}, \quad I = 10^{M - M_{\text{base}}} \times w(R), \quad \text{Index}_{\text{barge}} = \max\left(0, \min\left(1, \frac{\text{Gage}_{\text{threshold}} - \text{Gage}_t}{\text{Gage}_{\text{threshold}} - \text{Gage}_{\text{min}}}\right)\right)$$
+                <h4 class="text-sm uppercase tracking-wider text-cyan-400 font-bold">Equation 14.1: Metro Spatial Basis &amp; Retail Margin Accumulator</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-cyan-200 overflow-x-auto">
+                    $$\Delta_{\text{metro}, r} = P_{\text{Rack}, r} - P_{\text{Wholesale RBOB}} = \tau_{\text{state}, r} + \text{Tariff}_{\text{pipeline}, r} + \text{Freight}_{\text{waterborne}, r} + \text{Margin}_{\text{retail}, r}$$
                 </div>
-                <p class="text-xs text-slate-400">
-                    Models 3D hypocentral seismic shaking intensity across 5 refining/storage corridors and calculates low-water navigation draft constraints at Memphis &amp; Cairo confluence points on the Mississippi/Ohio river system.
-                </p>
-            </div>
-        </section>
-
-        <!-- Section 14: Microsoft Qlib & RD-Agent Symbolic Alpha Factor Mining -->
-        <section class="space-y-6">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-                <span class="text-2xl font-black text-purple-400">14</span>
-                <h3 class="text-2xl font-bold text-white">Microsoft Qlib Symbolic Alpha Factor Mining &amp; Dynamic Domain Adaptation (Issue #127)</h3>
-            </div>
-
-            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-purple-500">
-                <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold">Equation 14.1: Information Coefficient &amp; DDG-DA GMM RBF Kernel Similarity</h4>
-                <div class="text-center text-lg sm:text-xl font-mono py-4 bg-slate-950 rounded-xl border border-slate-800 text-purple-200">
-                    $$IC_t = \text{Corr}(f_t, r_{t+h}), \quad IC_{IR} = \frac{\mu(IC)}{\sigma(IC)}, \quad w_i = \exp\left(-\gamma \|x_i - \bar{x}_{\text{recent}}\|^2\right)$$
-                </div>
-                <p class="text-xs text-slate-400">
-                    Evaluates non-lookahead symbolic alpha factor formulas with point-in-time calculation rules ($d \ge 0$), prunes collinear factors ($|r| > 0.70$), and weights historical training samples using Gaussian RBF kernels across GMM market regimes to combat concept drift.
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Tulsa OK:</strong> Direct pipeline connection to Cushing WTI / Magellan system with Oklahoma state tax (\(\$0.190/\text{gal}\)) and minimal transit basis.<br>
+                    <strong>Newark DE:</strong> PADD 1B Delaware City refinery rack with Delaware state tax (\(\$0.230/\text{gal}\)) and Delmarva barge freight.<br>
+                    <strong>Cincinnati OH/KY:</strong> Dual-state Ohio (\(\$0.385/\text{gal}\)) and Kentucky (\(\$0.287/\text{gal}\)) tax differential and Ohio River barge transit rates.<br>
+                    <strong>Greenville NC &amp; Charlotte NC:</strong> PADD 1C Colonial Pipeline Line 1 tariffs, Selma/Apex rack differentials, and North Carolina excise tax (\(\$0.404/\text{gal}\)).<br>
+                    <strong>Oakland &amp; SF Bay Area CA:</strong> PADD 5 isolated island with statutory CARB regulatory burden (\(\$0.953/\text{gal}\)) and local county sales taxes.<br>
+                    <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).
                 </p>
             </div>
         </section>
@@ -5042,8 +5152,8 @@ def generate_public_dashboard():
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 15.1: Master Multi-Layer Retail Price Estimator</h4>
                 <div class="text-center text-base sm:text-lg font-mono py-5 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
                     $$\begin{aligned}
-                    \hat{P}_{r, t+5} &= \lambda_{\text{vol}} \cdot \Big[ \underbrace{\beta_0 + \sum_{k=1}^K \beta_k X_{k, t}}_{\text{Sec 01 \& 11: Quant Futures \& Crack}} + \underbrace{\boldsymbol{\beta}_{\text{shock}}^T \mathbf{M}_t}_{\text{Sec 02 \& 03: Decayed Shock Memory}} + \underbrace{\boldsymbol{\beta}_{\alpha}^T \mathbf{f}_{\text{Qlib}, t}}_{\text{Sec 14: Symbolic Alphas}} \\[8pt]
-                    &\qquad\qquad + \underbrace{\Delta_{\text{metro}, r}}_{\text{Sec 06 \& 09: Spatial Basis}} + \underbrace{T_{\text{tax}, r}}_{\text{Sec 08 \& 10: State/CARB Burden}} + \underbrace{\delta_{\text{physical}, r}}_{\text{Sec 07 \& 13: Seismic/River Friction}} \Big] + (1 - \lambda_{\text{vol}}) \cdot P_{r, t}
+                    \hat{P}_{r, t+5} &= \lambda_{\text{vol}} \cdot \Big[ \underbrace{\beta_0 + \sum_{k=1}^K \beta_k X_{k, t}}_{\text{Sec 01 \& 12: Quant Futures \& Crack}} + \underbrace{\boldsymbol{\beta}_{\text{phys}}^T \mathbf{X}_{\text{Physical}, t}}_{\text{Sec 02: Alternative Physical Feeds}} + \underbrace{\boldsymbol{\beta}_{\text{shock}}^T \mathbf{M}_t}_{\text{Sec 03, 04 \& 09: News/Social Decayed Memory}} \\[8pt]
+                    &\qquad\qquad + \underbrace{\boldsymbol{\beta}_{\alpha}^T \mathbf{f}_{\text{Qlib}, t}}_{\text{Sec 08: Symbolic Alphas}} + \underbrace{\Delta_{\text{metro}, r}}_{\text{Sec 14: Spatial Basis}} + \underbrace{T_{\text{tax}, r}}_{\text{Sec 11 \& 14: State/CARB Burden}} + \underbrace{\delta_{\text{physical}, r}}_{\text{Sec 05, 06 \& 07: Weather/River/Seismic Friction}} \Big] + (1 - \lambda_{\text{vol}}) \cdot P_{r, t}
                     \end{aligned}$$
                 </div>
 
@@ -5065,42 +5175,47 @@ def generate_public_dashboard():
                         <tbody class="divide-y divide-slate-800/60 text-slate-300">
                             <tr>
                                 <td class="py-2.5 font-mono text-blue-400 font-bold">\(X_{k, t}\) &amp; \(\text{Crack}_{321, t}\)</td>
-                                <td class="py-2.5 text-slate-400">Section 01 &amp; Section 11</td>
+                                <td class="py-2.5 text-slate-400">Section 01 &amp; Section 12</td>
                                 <td class="py-2.5">NYMEX RBOB (\(RB=F\)), WTI Crude (\(CL=F\)), ULSD (\(HO=F\)), and 3-2-1 refining margins.</td>
                             </tr>
                             <tr>
-                                <td class="py-2.5 font-mono text-emerald-400 font-bold">\(\mathbf{M}_t = \mathbf{M}_{t-1} e^{-\lambda} + \mathbf{V}_t\)</td>
-                                <td class="py-2.5 text-slate-400">Section 02 &amp; Section 03</td>
-                                <td class="py-2.5">Gemini 2.5 Flash 9-factor bounded vector decayed with \(t_{1/2} = 5.0\text{ days}\) half-life.</td>
+                                <td class="py-2.5 font-mono text-emerald-400 font-bold">\(\mathbf{X}_{\text{Physical}, t}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 02</td>
+                                <td class="py-2.5">Cboe OVX options volatility, Baker Hughes rig counts, Treasury yields, CFTC COT, and EIA inventories.</td>
                             </tr>
                             <tr>
-                                <td class="py-2.5 font-mono text-purple-400 font-bold">\(\boldsymbol{\beta}(\mathbf{W})\) &amp; \(\mathbf{f}_{\text{Qlib}, t}\)</td>
-                                <td class="py-2.5 text-slate-400">Section 04 &amp; Section 14</td>
-                                <td class="py-2.5">\(L_2\)-regularized Ridge projection weighted by Qlib DDG-DA GMM market regime weights \(w_i\).</td>
+                                <td class="py-2.5 font-mono text-purple-400 font-bold">\(\mathbf{V}_{\text{News}, t}\) &amp; \(\mathbf{V}_{\text{social}, t}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 03 &amp; Section 04</td>
+                                <td class="py-2.5">Live Finlight/Firecrawl/RSS/Webhook feeds with Tier 1&ndash;3 failover, and executive social media gap dynamics.</td>
                             </tr>
                             <tr>
-                                <td class="py-2.5 font-mono text-cyan-400 font-bold">\(\Delta_{\text{metro}, r}\)</td>
-                                <td class="py-2.5 text-slate-400">Section 06 &amp; Section 09</td>
-                                <td class="py-2.5">Hub-to-rack pipeline basis differentials and spatial consumer arbitrage spreads.</td>
+                                <td class="py-2.5 font-mono text-amber-400 font-bold">\(\mathbf{M}_t = \sum \mathbf{M}_{c, t-1} e^{-\lambda_c} + \omega \mathbf{V}_t\)</td>
+                                <td class="py-2.5 text-slate-400">Section 09</td>
+                                <td class="py-2.5">Category-specific half-lives (\(t_{1/2} \in [2.5, 14.0]\text{ days}\)) and Context Routing diagnostic fusion weight.</td>
                             </tr>
                             <tr>
-                                <td class="py-2.5 font-mono text-amber-400 font-bold">\(T_{\text{tax}, r}\)</td>
+                                <td class="py-2.5 font-mono text-cyan-400 font-bold">\(\boldsymbol{\beta}(\mathbf{W})\) &amp; \(\mathbf{f}_{\text{Qlib}, t}\)</td>
                                 <td class="py-2.5 text-slate-400">Section 08 &amp; Section 10</td>
-                                <td class="py-2.5">Statutory state excise taxes, UST fees, and California CARB regulatory burden (\(\$0.953/\text{gal}\)).</td>
+                                <td class="py-2.5">\(L_2\)-regularized Ridge projection with Purged CPCV and Qlib DDG-DA GMM market regime weights \(w_i\).</td>
                             </tr>
                             <tr>
-                                <td class="py-2.5 font-mono text-rose-400 font-bold">\(\delta_{\text{physical}, r}\)</td>
-                                <td class="py-2.5 text-slate-400">Section 07 &amp; Section 13</td>
-                                <td class="py-2.5">Fast-path anomaly gates, USGS 3D seismic shaking intensity \(I\), and river barge draft constraints.</td>
+                                <td class="py-2.5 font-mono text-rose-400 font-bold">\(\Delta_{\text{metro}, r}\) &amp; \(T_{\text{tax}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 11 &amp; Section 14</td>
+                                <td class="py-2.5">Hub-to-rack pipeline basis differentials, state excise taxes, and California CARB burden (\(\$0.953/\text{gal}\)).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-mono text-teal-400 font-bold">\(\delta_{\text{physical}, r}\)</td>
+                                <td class="py-2.5 text-slate-400">Section 05, Section 06 &amp; Section 07</td>
+                                <td class="py-2.5">NOAA convective storm alerts, maritime chokepoints, USGS 3D seismic intensity \(I\), and river barge draft indices.</td>
                             </tr>
                             <tr>
                                 <td class="py-2.5 font-mono text-emerald-400 font-bold">\(\lambda_{\text{vol}} = \sigma(\sigma_{14\text{d}})\)</td>
-                                <td class="py-2.5 text-slate-400">Section 12</td>
+                                <td class="py-2.5 text-slate-400">Section 13</td>
                                 <td class="py-2.5">Continuous sigmoid volatility gate dynamically blending model projection with naive persistence \(P_{r, t}\).</td>
                             </tr>
                             <tr>
                                 <td class="py-2.5 font-mono text-indigo-400 font-bold">\(\text{CI}_{95\%}\)</td>
-                                <td class="py-2.5 text-slate-400">Section 05</td>
+                                <td class="py-2.5 text-slate-400">Section 13</td>
                                 <td class="py-2.5">Empirical 30-day residual standard error establishing \(\ge 90\%\) out-of-time coverage bands.</td>
                             </tr>
                         </tbody>
@@ -5446,6 +5561,9 @@ def generate_savings_advisor_page():
     # Generate Telemetry Page (Issues #50 & #195)
     generate_telemetry_page()
 
+    # Generate Comprehensive Data Sources Page
+    generate_data_sources_page()
+
 
 def generate_quantstats_tearsheet_page(output_dir: str = "docs"):
     """
@@ -5690,7 +5808,7 @@ def generate_diesel_page():
 
 
 def generate_telemetry_page():
-    """Generates docs/telemetry.html & docs/telemetry/index.html (Issues #50 & #195)."""
+    """Generates docs/telemetry.html & docs/telemetry/index.html (Issues #50, #195, #196, #230, #237)."""
     os.makedirs(DOCS_DIR, exist_ok=True)
     os.makedirs(TELEMETRY_SUB_DIR, exist_ok=True)
 
@@ -5701,10 +5819,18 @@ def generate_telemetry_page():
     from src.finlight_feed import get_finlight_quota_status
     from src.tokentab_accounting import token_tab_manager
     from src.ipasis_security import get_ipasis_telemetry
+    from src.connector_telemetry import get_telemetry_summary
+    from src.fallback_telemetry import fallback_logger
+    from src.telemetry import _load_telemetry_ledger, get_all_quota_statuses
 
     tele_data = get_unmapped_zip_telemetry()
     quota_data = get_finlight_quota_status()
     ipasis_data = get_ipasis_telemetry()
+    all_quotas = get_all_quota_statuses()
+    fc_quota = all_quotas.get('firecrawl', {})
+    conn_summary = get_telemetry_summary(days=7)
+    fb_summary = fallback_logger.get_summary()
+
     tok_data = token_tab_manager.get_accounting_summary()
     tok_summary = tok_data.get('summary', {})
     tok_prov = tok_data.get('provider_breakdown', {})
@@ -5714,6 +5840,103 @@ def generate_telemetry_page():
     claude_stats = tok_prov.get('claude-3-5-haiku', {})
     finlight_stats = tok_prov.get('finlight', {})
     lexicon_stats = tok_prov.get('offline_lexicon', {})
+
+    # Memory totals from telemetry ledger & local SQLite
+    ledger = _load_telemetry_ledger()
+    mem_totals = ledger.get('memory_totals', {})
+    retain_count = mem_totals.get('retain_count', 0)
+    recall_count = mem_totals.get('recall_count', 0)
+    reflect_count = mem_totals.get('reflect_count', 0)
+    cloud_calls = mem_totals.get('cloud_calls', 0)
+    local_fallback_calls = mem_totals.get('local_fallback_calls', 0)
+
+    sqlite_mem_path = os.path.join(PROJECT_ROOT, "data", "agent_memory.sqlite")
+    stored_memories = 0
+    stored_reflections = 0
+    if os.path.exists(sqlite_mem_path):
+        try:
+            import sqlite3
+            conn = sqlite3.connect(sqlite_mem_path, timeout=2.0)
+            c = conn.cursor()
+            c.execute("SELECT COUNT(*) FROM memories")
+            stored_memories = c.fetchone()[0]
+            c.execute("SELECT COUNT(*) FROM reflections")
+            stored_reflections = c.fetchone()[0]
+            conn.close()
+        except Exception:
+            pass
+
+    # Connector audit rows
+    connectors_dict = conn_summary.get('connectors', {})
+    connector_rows_html = ""
+    if not connectors_dict:
+        connector_rows_html = '<tr><td colspan="6" class="py-3 px-4 text-center text-slate-500 italic">No connector calls logged in evaluation window</td></tr>'
+    else:
+        for c_name, meta in sorted(connectors_dict.items(), key=lambda x: x[1].get('total_calls', 0), reverse=True):
+            s_rate = meta.get('success_rate_pct', 100.0)
+            s_color = "text-emerald-400" if s_rate >= 95.0 else ("text-amber-400" if s_rate >= 80.0 else "text-red-400")
+            stale_c = meta.get('stale_calls', 0)
+            stale_color = "text-red-400 font-bold" if stale_c > 0 else "text-slate-400"
+            connector_rows_html += f"""
+            <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
+                <td class="py-2.5 px-3 font-semibold text-slate-200">{c_name}</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">{meta.get('total_calls', 0):,}</td>
+                <td class="py-2.5 px-3 text-center {s_color} font-bold">{s_rate:.1f}%</td>
+                <td class="py-2.5 px-3 text-center {stale_color}">{stale_c}</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">{meta.get('avg_latency_ms', 0.0):.2f} ms</td>
+                <td class="py-2.5 px-3 text-right text-slate-300">{meta.get('avg_data_age_hours', 0.0):.2f} h</td>
+            </tr>"""
+
+    # Dynamic Leaflet points
+    known_zip_coords = {
+        "90210": (34.0736, -118.4004, "Beverly Hills, CA (PADD 5)"),
+        "77002": (29.7604, -95.3698, "Houston, TX (PADD 3)"),
+        "10001": (40.7501, -73.9996, "New York, NY (PADD 1B)"),
+        "60601": (41.8781, -87.6298, "Chicago, IL (PADD 2)"),
+        "30301": (33.7490, -84.3880, "Atlanta, GA (PADD 1C)"),
+        "74101": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
+        "19711": (39.6837, -75.7497, "Newark, DE (PADD 1B)"),
+        "45202": (39.1031, -84.5120, "Cincinnati, OH (PADD 2)"),
+        "27834": (35.6127, -77.3664, "Greenville, NC (PADD 1C)"),
+        "28202": (35.2271, -80.8431, "Charlotte, NC (PADD 1C)"),
+        "94612": (37.8044, -122.2712, "Oakland, CA (PADD 5)"),
+        "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)")
+    }
+    state_center_coords = {
+        "CA": (36.7783, -119.4179),
+        "TX": (31.9686, -99.9018),
+        "NY": (40.7128, -74.0060),
+        "IL": (40.6331, -89.3985),
+        "FL": (27.6648, -81.5158),
+        "PA": (41.2033, -77.1945),
+        "OH": (40.4173, -82.9071),
+        "NC": (35.7596, -79.0193),
+        "GA": (32.1656, -82.9001),
+        "OK": (35.4676, -97.5164),
+        "DE": (38.9108, -75.5277),
+    }
+
+    zip_records = tele_data.get('top_unmapped_zips', [])
+    map_points = []
+    if zip_records:
+        for zr in zip_records:
+            z_code = str(zr.get('zip_code', ''))
+            z_hits = zr.get('hit_count', 1)
+            z_st = zr.get('state', 'US')
+            z_padd = zr.get('padd_region', 'PADD 2')
+            if z_code in known_zip_coords:
+                lat, lng, desc = known_zip_coords[z_code]
+                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {desc}", "hits": z_hits})
+            elif z_st in state_center_coords:
+                lat, lng = state_center_coords[z_st]
+                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {z_st} ({z_padd})", "hits": z_hits})
+    if not map_points:
+        map_points = [
+            {"lat": 34.0736, "lng": -118.4004, "name": "90210 - Beverly Hills, CA (PADD 5)", "hits": 20},
+            {"lat": 29.7604, "lng": -95.3698, "name": "77002 - Houston, TX (PADD 3)", "hits": 10},
+            {"lat": 40.7501, "lng": -73.9996, "name": "10001 - New York, NY (PADD 1B)", "hits": 40}
+        ]
+    map_points_json = json.dumps(map_points)
 
     def build_telemetry_html(hdr):
         return f"""<!DOCTYPE html>
@@ -5752,8 +5975,8 @@ def generate_telemetry_page():
                     <i class="fa-solid fa-chart-line text-3xl"></i>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-extrabold text-white tracking-tight">System Observability & Out-of-Metro Demand Heatmap</h2>
-                    <p class="text-slate-300 text-sm">Real-time API quota safety valves, 3-tier cache telemetry, and out-of-metro ZIP code query heatmaps for expansion planning.</p>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">System Observability & Operational Telemetry</h2>
+                    <p class="text-slate-300 text-sm">Real-time API quota safety valves, Vectorize Hindsight episodic memory, 3-tier cache telemetry, zero-cost fallback audit, and out-of-metro demand heatmaps.</p>
                 </div>
             </div>
 
@@ -5761,28 +5984,373 @@ def generate_telemetry_page():
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Unmapped ZIP Queries</span>
-                    <div class="text-2xl font-bold text-cyan-300 font-mono">{tele_data.get('total_unmapped_queries', 0)}</div>
+                    <div class="text-2xl font-bold text-cyan-300 font-mono">{tele_data.get('total_unmapped_queries', 0):,}</div>
                     <span class="text-[10px] text-slate-400 font-mono">{tele_data.get('unique_unmapped_zips', 0)} Unique Out-of-Metro ZIPs</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                    <span class="text-xs text-slate-400 font-mono">Finlight Monthly Quota</span>
-                    <div class="text-2xl font-bold text-emerald-400 font-mono">{quota_data.get('monthly_used', 0)} / {quota_data.get('monthly_cap', 150)}</div>
-                    <span class="text-[10px] text-emerald-400 font-mono">Safety Valve: {quota_data.get('status', 'OK')}</span>
+                    <span class="text-xs text-slate-400 font-mono">Connector Success Rate</span>
+                    <div class="text-2xl font-bold text-emerald-400 font-mono">{conn_summary.get('success_rate_pct', 100.0):.1f}%</div>
+                    <span class="text-[10px] text-emerald-400 font-mono">{conn_summary.get('total_calls', 0):,} Total Calls (7-Day)</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                    <span class="text-xs text-slate-400 font-mono">Cache Hit Rate</span>
-                    <div class="text-2xl font-bold text-blue-400 font-mono">94.2%</div>
-                    <span class="text-[10px] text-blue-400 font-mono">3-Tier Cascading Cache</span>
+                    <span class="text-xs text-slate-400 font-mono">Zero-Cost Fallback Savings</span>
+                    <div class="text-2xl font-bold text-blue-400 font-mono">${fb_summary.get('estimated_usd_saved', 0.0):.4f}</div>
+                    <span class="text-[10px] text-blue-400 font-mono">{fb_summary.get('tokens_saved', 0):,} Tokens Saved</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                    <span class="text-xs text-slate-400 font-mono">LLM Win Rate vs Baseline</span>
-                    <div class="text-2xl font-bold text-purple-300 font-mono">68.5%</div>
-                    <span class="text-[10px] text-purple-300 font-mono">MLOps Augmentation Uplift</span>
+                    <span class="text-xs text-slate-400 font-mono">Hindsight Stored Memories</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">{stored_memories + stored_reflections:,}</div>
+                    <span class="text-[10px] text-purple-300 font-mono">{retain_count:,} Retain / {cloud_calls:,} Cloud Calls</span>
                 </div>
             </div>
         </div>
 
-        <!-- Section 1: Interactive Out-of-Metro ZIP Demand Heatmap -->
+        <!-- Section 1: Vectorize Hindsight Episodic Agent Memory & Reflection Engine (Issue #230) -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-brain text-purple-400"></i> Vectorize Hindsight Episodic Memory & Reflection Observability
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">Issue #230 & #237</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Lifecycle Triad -->
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-spin text-purple-400"></i> Operation Triad Throughput
+                    </h4>
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
+                            <span class="text-emerald-400 font-bold">{retain_count:,} ops</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
+                            <span class="text-blue-400 font-bold">{recall_count:,} ops</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Reflect (Anomaly Synthesis)</span>
+                            <span class="text-amber-400 font-bold">{reflect_count:,} ops</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend Routing Split -->
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-network-wired text-cyan-400"></i> Backend Routing Split
+                    </h4>
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">Cloud Run + Supabase pgvector</span>
+                                <span class="text-cyan-400 font-bold">{cloud_calls:,} calls</span>
+                            </div>
+                            <p class="text-[10px] text-slate-500 font-sans">Scale-to-zero container (midgley-hindsight) with HNSW vector index</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">Local SQLite FTS5 Fallback</span>
+                                <span class="text-emerald-400 font-bold">{local_fallback_calls:,} calls</span>
+                            </div>
+                            <p class="text-[10px] text-slate-500 font-sans">Zero-cost local datastore with full-text BM25 search ranking</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Memory Bank Inventory -->
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
+                    </h4>
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="text-[10px] text-slate-500 uppercase tracking-wider">Bank Identifier</div>
+                            <div class="text-slate-200 font-bold text-sm">midgley-gas-forecasting</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                                <div class="text-lg font-bold text-purple-300">{stored_memories:,}</div>
+                                <div class="text-[10px] text-slate-400 font-sans">Experiences</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                                <div class="text-lg font-bold text-amber-300">{stored_reflections:,}</div>
+                                <div class="text-[10px] text-slate-400 font-sans">Reflections</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Zero-Cost Connector Health & Freshness Audit Grid -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-satellite-dish text-emerald-400"></i> Data Connector Performance & Freshness Audit (7-Day Window)
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">src/connector_telemetry.py</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Total Invocations</span>
+                        <div class="text-xl font-bold text-white font-mono">{conn_summary.get('total_calls', 0):,}</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Success Rate</span>
+                        <div class="text-xl font-bold text-emerald-400 font-mono">{conn_summary.get('success_rate_pct', 100.0):.1f}%</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Avg Latency</span>
+                        <div class="text-xl font-bold text-cyan-400 font-mono">{conn_summary.get('avg_latency_ms', 0.0):.2f} ms</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-[10px] text-slate-400 font-mono">Stale Payloads (>24h)</span>
+                        <div class="text-xl font-bold {'text-red-400' if conn_summary.get('stale_payload_count', 0) > 0 else 'text-slate-300'} font-mono">{conn_summary.get('stale_payload_count', 0)}</div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto pt-2">
+                    <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                <th class="py-2.5 px-3">Data Connector / Ingestion Feed</th>
+                                <th class="py-2.5 px-3 text-center">Calls</th>
+                                <th class="py-2.5 px-3 text-center">Success Rate</th>
+                                <th class="py-2.5 px-3 text-center">Stale (>24h)</th>
+                                <th class="py-2.5 px-3 text-center">Avg Latency</th>
+                                <th class="py-2.5 px-3 text-right">Avg Data Age</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                            {connector_rows_html}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Zero-Cost Fallback & Token Savings Ledger (Issue #196) -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-piggy-bank text-emerald-400"></i> Zero-Cost Fallback & Cumulative Token Savings Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">Issue #196</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Zero-Cost Invocations</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">{fb_summary.get('total_zero_cost_invocations', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{fb_summary.get('basic_tier_routed_count', 0)} Basic-Tier Routed</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Tokens Saved</span>
+                        <div class="text-2xl font-bold text-cyan-300 font-mono">{fb_summary.get('tokens_saved', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">~350 tokens per bypassed event</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. USD Saved</span>
+                        <div class="text-2xl font-bold text-emerald-300 font-mono">${fb_summary.get('estimated_usd_saved', 0.0):.4f}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">Gemini Flash blend pricing</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Avg Extraction Latency</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">{fb_summary.get('avg_zero_cost_latency_ms', 0.0):.2f} ms</div>
+                        <span class="text-[10px] text-slate-400 font-mono">Deterministic Sub-millisecond</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Zero-Cost Provider Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Zero-Cost Provider / Engine</th>
+                                    <th class="py-2 px-3 text-center">Invocations</th>
+                                    <th class="py-2 px-3 text-center">Cost Rate</th>
+                                    <th class="py-2 px-3 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Offline Domain NLP Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('lexicon', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">100% ONLINE</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">NOAA SPC Convective Deterministic Mapper</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('spc_weather', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">ACTIVE</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Kaggle GPU Open-Source LLM Hook (Tier 1.5)</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('kaggle_llm_hook', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">STANDBY (v2.0)</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-amber-300">Physical Alternative Feeds (OVX / Rigs)</td>
+                                    <td class="py-2 px-3 text-center">{fb_summary.get('provider_breakdown', {}).get('physical_feed', 0):,}</td>
+                                    <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
+                                    <td class="py-2 px-3 text-right text-amber-400 font-bold">ACTIVE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: API Provider Quota Ledgers & 3-Tier Cascading Cache Observability -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> API Provider Quota Ledgers
+                </h3>
+                <div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">finlight.me News Feed</span>
+                        <span class="text-emerald-400 font-bold">{quota_data.get('monthly_used', 12)} / {quota_data.get('monthly_cap', 150)} monthly calls</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Firecrawl.dev Web Scraper (Issue #83)</span>
+                        <span class="text-cyan-400 font-bold">{fc_quota.get('calls_used', 0)} / {fc_quota.get('limit', 800)} monthly calls</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">IPASIS IP Security API (Issue #87)</span>
+                        <span class="text-amber-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 100)} daily ({ipasis_data.get('private_bypasses', 0)} bypasses)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">NOAA NWS / wxs.us Weather API</span>
+                        <span class="text-blue-400 font-bold">Unlimited (Keyless REST)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">GasBuddy GraphQL Feed</span>
+                        <span class="text-purple-400 font-bold">Keyless Public Endpoint</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-server text-cyan-400"></i> 3-Tier Cascading Cache Observability
+                </h3>
+                <div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 1: Turso Edge SQLite</span>
+                        <span class="text-emerald-400 font-bold">HIT_FRESH (0.4ms)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 2: Cloudflare D1 Worker</span>
+                        <span class="text-blue-400 font-bold">HIT_FRESH (1.2ms)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
+                        <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
+        <section class="space-y-4 pt-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                </h3>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">{tok_summary.get('total_tokens', 0):,}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_summary.get('total_input_tokens', 0):,} In / {tok_summary.get('total_output_tokens', 0):,} Out</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">${tok_summary.get('total_cost_usd', 0.0):.6f}</div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">{tok_summary.get('total_calls', 0):,}</div>
+                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
+                        <div class="text-xl font-bold text-emerald-300 font-mono">{tok_warn.get('code', 'NORMAL')}</div>
+                        <span class="text-[10px] text-slate-400 font-mono">{tok_warn.get('message', 'Budget nominal')}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                                    <th class="py-2 px-3">Provider / Tier</th>
+                                    <th class="py-2 px-3 text-center">Calls</th>
+                                    <th class="py-2 px-3 text-center">Input Tokens</th>
+                                    <th class="py-2 px-3 text-center">Output Tokens</th>
+                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3 text-center">{gemini_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gemini_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gemini_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">${gemini_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
+                                    <td class="py-2 px-3 text-center">{gpt_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gpt_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{gpt_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">${gpt_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
+                                    <td class="py-2 px-3 text-center">{claude_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{claude_stats.get('input_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">{claude_stats.get('output_tokens', 0):,}</td>
+                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">${claude_stats.get('cost_usd', 0.0):.6f}</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
+                                    <td class="py-2 px-3 text-center">{finlight_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40">
+                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
+                                    <td class="py-2 px-3 text-center">{lexicon_stats.get('calls', 0):,}</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-center">0</td>
+                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Interactive Out-of-Metro ZIP Demand Heatmap -->
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
@@ -5836,142 +6404,6 @@ def generate_telemetry_page():
                 </div>
             </div>
         </section>
-
-        <!-- Section 2: API Quota & Cache Observability Grid -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> API Provider Quota Ledgers
-                </h3>
-                <div class="space-y-3 font-mono text-xs">
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">finlight.me News Feed</span>
-                        <span class="text-emerald-400 font-bold">{quota_data.get('monthly_used', 12)} / {quota_data.get('monthly_cap', 150)} calls</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">NOAA NWS / wxs.us API</span>
-                        <span class="text-blue-400 font-bold">Unlimited (Keyless REST)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">IPASIS IP Security API</span>
-                        <span class="text-cyan-400 font-bold">{ipasis_data.get('daily_requests_used', 0)} / {ipasis_data.get('daily_allowance', 100)} calls today ({ipasis_data.get('private_bypasses', 0)} local bypasses)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">GasBuddy GraphQL Feed</span>
-                        <span class="text-purple-400 font-bold">Keyless Public Endpoint</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-server text-cyan-400"></i> 3-Tier Cascading Cache Observability
-                </h3>
-                <div class="space-y-3 font-mono text-xs">
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">Tier 1: Turso Edge SQLite</span>
-                        <span class="text-emerald-400 font-bold">HIT_FRESH (0.4ms)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">Tier 2: Cloudflare D1 Worker</span>
-                        <span class="text-blue-400 font-bold">HIT_FRESH (1.2ms)</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-slate-300">Tier 3: Local SQLite Datastore</span>
-                        <span class="text-cyan-400 font-bold">HIT_FRESH (0.1ms)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: TokenTab LLM Token Accounting & Multi-Provider Quota Dashboard (Issue #189) -->
-        <section class="space-y-4 pt-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
-                </h3>
-                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
-            </div>
-
-            <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
-                        <div class="text-2xl font-bold text-amber-400 font-mono">{tok_summary.get('total_tokens', 0):,}</div>
-                        <span class="text-[10px] text-slate-400 font-mono">{tok_summary.get('total_input_tokens', 0):,} In / {tok_summary.get('total_output_tokens', 0):,} Out</span>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
-                        <div class="text-2xl font-bold text-emerald-400 font-mono">${tok_summary.get('total_cost_usd', 0.0):.6f}</div>
-                        <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
-                        <div class="text-2xl font-bold text-blue-400 font-mono">{tok_summary.get('total_calls', 0):,}</div>
-                        <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
-                        <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
-                        <div class="text-xl font-bold text-emerald-300 font-mono">{tok_warn.get('code', 'NORMAL')}</div>
-                        <span class="text-[10px] text-slate-400 font-mono">{tok_warn.get('message', 'Budget nominal')}</span>
-                    </div>
-                </div>
-
-                <div class="space-y-3">
-                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                    <th class="py-2 px-3">Provider / Tier</th>
-                                    <th class="py-2 px-3">Calls</th>
-                                    <th class="py-2 px-3">Input Tokens</th>
-                                    <th class="py-2 px-3">Output Tokens</th>
-                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800/50">
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
-                                    <td class="py-2 px-3">{gemini_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">{gemini_stats.get('input_tokens', 0):,}</td>
-                                    <td class="py-2 px-3">{gemini_stats.get('output_tokens', 0):,}</td>
-                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">${gemini_stats.get('cost_usd', 0.0):.6f}</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
-                                    <td class="py-2 px-3">{gpt_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">{gpt_stats.get('input_tokens', 0):,}</td>
-                                    <td class="py-2 px-3">{gpt_stats.get('output_tokens', 0):,}</td>
-                                    <td class="py-2 px-3 text-right text-blue-400 font-bold">${gpt_stats.get('cost_usd', 0.0):.6f}</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-purple-300">Anthropic Claude-3.5-Haiku (Tier 2)</td>
-                                    <td class="py-2 px-3">{claude_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">{claude_stats.get('input_tokens', 0):,}</td>
-                                    <td class="py-2 px-3">{claude_stats.get('output_tokens', 0):,}</td>
-                                    <td class="py-2 px-3 text-right text-purple-400 font-bold">${claude_stats.get('cost_usd', 0.0):.6f}</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
-                                    <td class="py-2 px-3">{finlight_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-slate-400">Offline Lexicon (Tier 3)</td>
-                                    <td class="py-2 px-3">{lexicon_stats.get('calls', 0)}</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3">0</td>
-                                    <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Leaflet Map Initialization Script -->
@@ -5983,17 +6415,11 @@ def generate_telemetry_page():
                 maxZoom: 18
             }}).addTo(map);
 
-            var zipPoints = [
-                {{ lat: 34.0736, lng: -118.4004, name: "90210 - Beverly Hills, CA (PADD 5)", hits: 14 }},
-                {{ lat: 29.7604, lng: -95.3698, name: "77002 - Houston, TX (PADD 3)", hits: 11 }},
-                {{ lat: 41.8781, lng: -87.6298, name: "60601 - Chicago, IL (PADD 2)", hits: 18 }},
-                {{ lat: 40.7501, lng: -73.9996, name: "10001 - New York, NY (PADD 1B)", hits: 9 }},
-                {{ lat: 33.7490, lng: -84.3880, name: "30301 - Atlanta, GA (PADD 1C)", hits: 7 }}
-            ];
+            var zipPoints = {map_points_json};
 
             zipPoints.forEach(function(pt) {{
                 L.circleMarker([pt.lat, pt.lng], {{
-                    radius: 8 + Math.min(pt.hits, 10),
+                    radius: 8 + Math.min(pt.hits, 12),
                     fillColor: "#06b6d4",
                     color: "#22d3ee",
                     weight: 2,
@@ -6018,5 +6444,14 @@ def generate_telemetry_page():
     logger.info(f"Successfully generated Telemetry & Map page at {TELEMETRY_PATH} and {TELEMETRY_SUB_PATH}")
 
 
+def generate_data_sources_page(docs_dir: str = DOCS_DIR):
+    """
+    Generates docs/sources.html & docs/sources/index.html documenting all 26 model data sources.
+    """
+    from src.sources_generator import generate_data_sources_page as _gen_sources
+    _gen_sources(docs_dir=docs_dir)
+
+
 if __name__ == "__main__":
     generate_public_dashboard()
+

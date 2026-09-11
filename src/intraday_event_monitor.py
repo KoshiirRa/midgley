@@ -27,6 +27,10 @@ from src.event_analyzer import extract_event_features_llm, extract_event_feature
 from src.finlight_feed import is_trading_hours, fetch_finlight_on_demand, UNIFIED_ENERGY_QUERY
 from src.lookup_cache import clear_lookup_cache
 from src.prediction_logger import log_predictions
+try:
+    from src.discord_notifier import send_intraday_discord_notification
+except ImportError:
+    send_intraday_discord_notification = None
 
 logger = logging.getLogger(__name__)
 
@@ -125,8 +129,19 @@ class IntradayEventMonitor:
         if not has_keyword:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
+        # Generate CoSPOT Spectral Context if market data is available (Issue #215)
+        spectral_ctx = ""
+        try:
+            from src.cospot_spectral_engine import generate_spectral_prompt_context
+            from src.data_ingestion import fetch_all_data
+            m_df = fetch_all_data()
+            if not m_df.empty and 'gasoline_rbob' in m_df.columns:
+                spectral_ctx = generate_spectral_prompt_context(m_df['gasoline_rbob'].values)
+        except Exception:
+            pass
+
         # Keyword matched -> Trigger impact scoring
-        scores = extract_event_features_llm(headline)
+        scores = extract_event_features_llm(headline, spectral_context=spectral_ctx)
         overall_pressure = abs(scores.get("overall_price_pressure", 0.0))
         supply_disruption = scores.get("supply_disruption", 0.0)
 
@@ -284,6 +299,15 @@ class IntradayEventMonitor:
 
         if is_anomaly:
             logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}] (Targets: {target_locales}): '{headline}' (Scores: {scores})")
+
+            # Dispatch Discord Webhook Notification (Issue #234)
+            if send_intraday_discord_notification:
+                try:
+                    discord_sent = send_intraday_discord_notification(result)
+                    result["discord_notified"] = bool(discord_sent)
+                except Exception as e:
+                    logger.warning(f"Discord notification dispatch error: {e}")
+                    result["discord_notified"] = False
 
             is_test = source.startswith("Test_") or os.environ.get("TESTING") == "1"
             if is_test:

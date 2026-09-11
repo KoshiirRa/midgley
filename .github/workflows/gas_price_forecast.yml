@@ -61,6 +61,8 @@ jobs:
           CLOUDFLARE_AUTH_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_TOKEN }}
           AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
           HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
+          HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           set -eo pipefail
           python -u run_all.py --use-llm-api 2>&1 | tee run_all_output.log

@@ -61,6 +61,8 @@ jobs:
           FINLIGHT_API_KEY: ${{ secrets.FINLIGHT_API_KEY }}
           CLOUDFLARE_ANALYTICS_TOKEN: ${{ secrets.CLOUDFLARE_ANALYTICS_TOKEN }}
           AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_INTRADAY_WEBHOOK_URL || secrets.DISCORD_WEBHOOK_URL }}
+          MIDGLEY_ENV: "prod"
         run: |
           if [ -n "$HEADLINE" ]; then
             python -m src.intraday_event_monitor --headline "$HEADLINE" --source "$SOURCE" --url "$URL"
