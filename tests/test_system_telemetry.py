@@ -10,6 +10,7 @@ from src.telemetry import (
     get_current_environment,
     calculate_llm_cost,
     log_llm_usage,
+    log_agent_memory_op,
     get_all_quota_statuses,
     format_prometheus_metrics,
     is_api_call_suppressed_for_environment
@@ -62,12 +63,27 @@ class TestSystemTelemetry(unittest.TestCase):
         self.assertIn("alpha_vantage", quotas)
         self.assertIn("gemini_llm", quotas)
 
+    def test_agent_memory_telemetry_logging(self):
+        """Verify log_agent_memory_op records retain, recall, and reflect metrics."""
+        os.environ["TEST_TELEMETRY_PERSIST"] = "1"
+        res = log_agent_memory_op(operation="retain", backend="hindsight_cloud", status="success", latency_ms=15.4, environment="dev")
+        self.assertEqual(res["operation"], "retain")
+        self.assertEqual(res["backend"], "hindsight_cloud")
+        self.assertEqual(res["latency_ms"], 15.4)
+
+        res_recall = log_agent_memory_op(operation="recall", backend="sqlite_fts5", status="success", latency_ms=2.1, environment="dev")
+        self.assertEqual(res_recall["operation"], "recall")
+        self.assertEqual(res_recall["backend"], "sqlite_fts5")
+        del os.environ["TEST_TELEMETRY_PERSIST"]
+
     def test_format_prometheus_metrics(self):
-        """Verify format_prometheus_metrics generates valid Prometheus text feed."""
+        """Verify format_prometheus_metrics generates valid Prometheus text feed with memory metrics."""
         metrics_text = format_prometheus_metrics(environment="dev")
         self.assertIn("llm_tokens_consumed_total", metrics_text)
         self.assertIn("llm_estimated_cost_usd_total", metrics_text)
         self.assertIn("api_quota_remaining_ratio", metrics_text)
+        self.assertIn("agent_memory_operations_total", metrics_text)
+        self.assertIn("agent_memory_backend_calls_total", metrics_text)
         self.assertIn('environment="dev"', metrics_text)
 
     def test_api_call_suppression(self):
@@ -80,6 +96,7 @@ class TestSystemTelemetry(unittest.TestCase):
         res = self.client.get("/metrics?environment=dev")
         self.assertEqual(res.status_code, 200)
         self.assertIn("llm_tokens_consumed_total", res.text)
+        self.assertIn("agent_memory_operations_total", res.text)
         self.assertIn('environment="dev"', res.text)
 
     def test_api_server_quota_endpoint(self):

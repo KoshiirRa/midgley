@@ -143,6 +143,49 @@
           "refId": "A"
         }
       ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 7,
+      "title": "Agent Memory Operations (Retain / Recall / Reflect)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "agent_memory_operations_total{environment=~\"$environment\"}",
+          "legendFormat": "{{operation}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 8,
+      "title": "Stored Memory Experiences & Reflections",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "agent_memory_stored_experiences_total{environment=~\"$environment\"}",
+          "legendFormat": "Experiences (SQLite)",
+          "refId": "A"
+        },
+        {
+          "expr": "agent_memory_stored_reflections_total{environment=~\"$environment\"}",
+          "legendFormat": "Reflections (SQLite)",
+          "refId": "B"
+        }
+      ]
     }
   ],
   "refresh": "10s",

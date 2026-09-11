@@ -106,3 +106,28 @@ In Sentry, navigate to **Alerts -> Create Alert** or **Monitors -> New Monitor**
 ### 4. Auto-Create GitHub Issues
 * Navigate to **Settings -> Integrations -> GitHub**.
 * Enable **Issue Link / Auto-create** for repository `KoshiirRa/midgley`.
+
+---
+
+## 🧠 Hindsight Agent Memory & Cloud Run Observability (Issue #230)
+
+### 1. Axiom Query: Cloud Run Memory Service Latency & Scale-to-Zero Boot Times
+* **APL Query:**
+  ```kql
+  ['midgley-workers']
+  | where service == "midgley-hindsight"
+  | summarize P50_Latency = percentile(duration_ms, 50), P95_Latency = percentile(duration_ms, 95), ColdStarts = countif(is_cold_start == true) by bin(1h)
+  ```
+
+### 2. Axiom Query: Episodic Retain & Recall Volume
+* **APL Query:**
+  ```kql
+  ['midgley-workers']
+  | where service == "midgley-hindsight" and action in ("retain", "recall", "reflect")
+  | summarize Operations = count() by action, bin(1h)
+  ```
+
+### 3. Sentry Alert: Hindsight Cloud Run Cold-Start Timeout Alert
+* **Filter:** `service:midgley-hindsight` and `error_type:TimeoutError`
+* **Trigger Condition:** `count() > 2` within 10 minutes.
+* **Action:** Alerts on Hindsight container startup timeouts (>15s cold starts) before falling back to local SQLite FTS5.

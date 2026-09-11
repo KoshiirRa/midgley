@@ -19,6 +19,7 @@ import pandas as pd
 import numpy as np
 
 from src.hindsight_client import HindsightClient
+from src.telemetry import log_agent_memory_op
 
 logger = logging.getLogger(__name__)
 
@@ -314,10 +315,17 @@ class AgentMemoryManager:
                 metadata=metadata
             )
 
+        active_backend = "hindsight_cloud" if self.is_cloud_engine_active else "sqlite_fts5"
+        log_agent_memory_op(
+            operation="retain",
+            backend=active_backend,
+            status="success" if local_res.get("status") == "SUCCESS" else "error"
+        )
+
         return {
             "local_status": local_res.get("status"),
             "cloud_status": cloud_res.get("status") if cloud_res else "SKIPPED",
-            "active_backend": "hindsight_cloud" if self.is_cloud_engine_active else "sqlite_fts5"
+            "active_backend": active_backend
         }
 
     def recall(
@@ -338,14 +346,17 @@ class AgentMemoryManager:
                 top_k=top_k
             )
             if cloud_memories:
+                log_agent_memory_op(operation="recall", backend="hindsight_cloud", status="success")
                 return cloud_memories
 
-        return self.sqlite_store.recall(
+        res = self.sqlite_store.recall(
             query=query,
             region=region,
             anomaly_type=anomaly_type,
             top_k=top_k
         )
+        log_agent_memory_op(operation="recall", backend="sqlite_fts5", status="success")
+        return res
 
     def reflect_on_anomalies(
         self,
@@ -364,6 +375,7 @@ class AgentMemoryManager:
             if cloud_ref.get("reflections"):
                 for r in cloud_ref["reflections"]:
                     self.sqlite_store.save_reflection(r)
+                log_agent_memory_op(operation="reflect", backend="hindsight_cloud", status="success")
                 return cloud_ref["reflections"]
 
         # 2. Try Gemini 2.5 Flash reflection
@@ -376,6 +388,7 @@ class AgentMemoryManager:
                 if reflections:
                     for r in reflections:
                         self.sqlite_store.save_reflection(r)
+                    log_agent_memory_op(operation="reflect", backend="gemini_llm", status="success")
                     return reflections
             except Exception as e:
                 logger.warning(f"Gemini reflection notice ({e}). Falling back to deterministic rule engine.")
@@ -384,6 +397,7 @@ class AgentMemoryManager:
         reflections = self._reflect_deterministic(anomalies)
         for r in reflections:
             self.sqlite_store.save_reflection(r)
+        log_agent_memory_op(operation="reflect", backend="sqlite_fts5", status="success")
         return reflections
 
     def _reflect_with_gemini(self, anomalies: List[Dict[str, Any]], api_key: str) -> List[Dict[str, Any]]:
