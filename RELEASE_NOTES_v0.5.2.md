@@ -54,6 +54,26 @@
 - **Prometheus Observability & Grafana Exporters ([`src/telemetry.py`](file:///src/telemetry.py), [`docs/TELEMETRY_HANDOFF.md`](file:///docs/TELEMETRY_HANDOFF.md), [`grafana/dashboard_observability.json`](file:///grafana/dashboard_observability.json)):**
   - Emits `agent_memory_operations_total`, `agent_memory_backend_calls_total`, `agent_memory_stored_experiences_total`, and `agent_memory_stored_reflections_total` metrics with dedicated Grafana panels and Axiom/Sentry telemetry monitors.
 
+### 3. Real-Time Discord Webhook Notification Gateway for Intraday Revisions (Issue #234)
+- **Multi-Environment Anomaly Notification Engine ([`src/discord_notifier.py`](file:///src/discord_notifier.py)):**
+  - Integrated real-time Discord webhook notifications triggered whenever breaking news headlines, refinery outages, or geopolitical supply shocks trip intraday anomaly thresholds.
+  - **Environment Distinction (`[PRODUCTION]` vs `[DEVELOPMENT]`):** Dynamically inspects `MIDGLEY_ENV` and `GITHUB_ACTIONS` runtime state via `src/telemetry.py` to label alerts with clear badges (`Production (GitHub Actions / Cloud)` vs `Development (Local / dev-vm)`), preventing staging/dev testing confusion.
+  - **Comprehensive Catalyst Telemetry:** Discord Embed payloads deliver rich real-time context:
+    - Triggering news headline prose
+    - Ingestion source (`Cloudflare_Worker`, `RSS_Feed`, `Webhook_Push`, `Manual_Dispatch`, `SEC_EDGAR_8K`)
+    - Affected target regional metro hubs (e.g. `Tulsa`, `Newark`, `Cincinnati`, `Greenville`, `Charlotte`, `Oakland`, `National`)
+    - Quantitative impact score vectors (Price Pressure $\Delta P$, Supply Disruption $S$, Geopolitical Risk $G$, OPEC Action)
+    - Clickable markdown links to original breaking news articles and Internet Archive Wayback Machine permanent snapshots
+  - **Dynamic Severity Color Coding:**
+    - 🔴 **Red (`#E74C3C`):** High supply disruption ($S \ge 0.50$) or severe upward price pressure ($\Delta P \ge +0.40$).
+    - 🟢 **Green (`#2ECC71`):** Substantial downward price relief ($\Delta P \le -0.20$).
+    - 🟠 **Orange (`#E67E22`):** General geopolitical volatility and moderate shocks.
+- **Intraday Pipeline Hook ([`src/intraday_event_monitor.py`](file:///src/intraday_event_monitor.py)):**
+  - Integrated `send_intraday_discord_notification()` into `IntradayEventMonitor.process_incoming_headline()`, recording `discord_notified` status in `data/intraday_events.json`.
+- **Workflow & Environment Variables ([`.github/workflows/intraday_event_monitor.yml`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/.github/workflows/intraday_event_monitor.yml)):**
+  - Injected `DISCORD_WEBHOOK_URL` secret and `MIDGLEY_ENV: "prod"` into the GitHub Actions intraday event dispatch workflow.
+  - Supports `DISCORD_INTRADAY_WEBHOOK_URL` and `DISCORD_WEBHOOK_URL` environment variables with graceful fallback and test-mode network suppression (`TESTING=1`).
+
 ---
 
 ## 🧪 Benchmark & Verification Results
@@ -64,6 +84,8 @@
     - **Analogy Recall Latency:** `2.02 ms / query`
     - **Reflection Synthesis Latency:** `29.98 ms`
     - **SQLite DB Storage Footprint:** `172.00 KB` (for 224 experiences)
+- **Discord Notification & Intraday Anomaly Test Suite (`tests/test_discord_notifier.py`, `tests/test_intraday_event_monitor.py`):**
+  - `23 passed in 0.55s` (100% pass rate).
 - **CoSPOT Unit & Integration Test Suite (`tests/test_cospot_spectral.py`):**
   - `10 passed in 6.61s` (100% pass rate).
 - **Hindsight Memory & Telemetry Test Suite (`tests/test_agent_memory.py`, `tests/test_system_telemetry.py`):**
@@ -74,3 +96,5 @@
 ## 📋 Closed & Superseded GitHub Issues
 - **Issue #215**: `[Feature Request] Evaluate CoSPOT Compositional Spectral Prompting & Wavelet Context for LLM Forecasting (arXiv:2609.02093)` (Completed)
 - **Issue #230**: `[Weekly Review 2.0] Evaluate Hindsight Agent Memory (Retain-Recall-Reflect) for Qualitative Anomaly Post-Mortems` (Completed)
+- **Issue #234**: `feat(notifications): Discord webhook notification for intraday forecast revisions` (Completed)
+

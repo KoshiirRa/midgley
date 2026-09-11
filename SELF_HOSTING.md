@@ -87,6 +87,10 @@ WANDB_API_KEY="wandb_v1_..."
 WANDB_PROJECT="midgley-gas-forecasting"
 WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
 
+# Discord Webhook Notification Gateway (Intraday Forecast Revisions, Issue #234)
+# Dispatches real-time alerts on intraday price shocks with environment tagging ([PRODUCTION] vs [DEVELOPMENT])
+DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
 # ==============================================================================
@@ -424,6 +428,7 @@ If you prefer serverless execution via GitHub Actions:
    - `EIA_API_KEY`
    - `FRED_API_KEY`
    - `MIDGLEY_WEBHOOK_SECRET`
+   - `DISCORD_INTRADAY_WEBHOOK_URL` (or `DISCORD_WEBHOOK_URL`, optional for intraday revision alerts)
    - `TURSO_DATABASE_URL` (optional)
    - `TURSO_AUTH_TOKEN` (optional)
 3. **Configure GitHub Pages:**

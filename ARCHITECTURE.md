@@ -335,4 +335,36 @@ Midgley exposes a standard Prometheus exposition text format endpoint (`GET /api
 ### Zero-Cost Internet Archive Wayback Machine Cloud Archiver (`src/wayback_archiver.py`)
 During intraday event evaluations in `src/intraday_event_monitor.py`, breaking headline URLs are submitted directly to the Internet Archive Save API (`https://web.archive.org/save/{url}`). The permanent `archive_url` string is attached to the event result object, saved in `data/intraday_events.json`, and cached locally at `data/wayback_archive_cache.json` for 100% zero-cost cloud web archiving.
 
+---
+
+## 12. Real-Time Discord Webhook Notification Gateway (Issue #234)
+
+```
+       ┌─────────────────────────────────────────────────────────────┐
+       │   INTRADAY SHOCK DETECTED (IntradayEventMonitor / Edge)     │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │      DISCORD NOTIFICATION ENGINE (src/discord_notifier.py)   │
+       │  • Evaluates Environment (MIDGLEY_ENV: 'prod' vs 'dev')     │
+       │  • Formats Rich Discord Embed (Color: Red / Green / Orange) │
+       │  • Attaches Headline, Source, Target Locales & Factor Vector│
+       │  • Attaches Original Article & Wayback Machine Archive URLs │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │ HTTP POST (10s Timeout, Non-blocking)
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │             DISCORD CHANNEL INCOMING WEBHOOK                │
+       │   🚨 [PRODUCTION] or [DEVELOPMENT] Intraday Revision Alert  │
+       └─────────────────────────────────────────────────────────────┘
+```
+
+When an intraday anomaly is detected by `src/intraday_event_monitor.py` or `.github/workflows/intraday_event_monitor.yml`, `src/discord_notifier.py` formats and dispatches a rich Discord Embed payload to `DISCORD_INTRADAY_WEBHOOK_URL` / `DISCORD_WEBHOOK_URL`:
+* **Environment Distinction:** Automatically tags alerts with `[PRODUCTION]` or `[DEVELOPMENT]` badges based on `MIDGLEY_ENV` / `GITHUB_ACTIONS` runtime state.
+* **Detailed Catalyst Telemetry:** Ingests headline prose, source identifier, original URL, Wayback archive link, affected metro hub locales, price pressure $\Delta P$, supply disruption $S$, and geopolitical risk $G$.
+* **Severity Color Dynamics:** Red (`#E74C3C`) for severe supply shocks ($S \ge 0.50$) / price surges ($\Delta P \ge +0.40$), Green (`#2ECC71`) for downward price relief ($\Delta P \le -0.20$), and Orange (`#E67E22`) for general volatility.
+* **Resilience & Testing Safety:** 10s non-blocking timeouts, safe fail-open handling, and unit test suppression (`TESTING=1` unless `TEST_WEBHOOK_DISPATCH=1`).
+
+
 

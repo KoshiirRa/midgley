@@ -27,6 +27,10 @@ from src.event_analyzer import extract_event_features_llm, extract_event_feature
 from src.finlight_feed import is_trading_hours, fetch_finlight_on_demand, UNIFIED_ENERGY_QUERY
 from src.lookup_cache import clear_lookup_cache
 from src.prediction_logger import log_predictions
+try:
+    from src.discord_notifier import send_intraday_discord_notification
+except ImportError:
+    send_intraday_discord_notification = None
 
 logger = logging.getLogger(__name__)
 
@@ -295,6 +299,15 @@ class IntradayEventMonitor:
 
         if is_anomaly:
             logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}] (Targets: {target_locales}): '{headline}' (Scores: {scores})")
+
+            # Dispatch Discord Webhook Notification (Issue #234)
+            if send_intraday_discord_notification:
+                try:
+                    discord_sent = send_intraday_discord_notification(result)
+                    result["discord_notified"] = bool(discord_sent)
+                except Exception as e:
+                    logger.warning(f"Discord notification dispatch error: {e}")
+                    result["discord_notified"] = False
 
             is_test = source.startswith("Test_") or os.environ.get("TESTING") == "1"
             if is_test:
