@@ -6,6 +6,19 @@ set -e
 # Issue #230: [Weekly Review 2.0] Qualitative Anomaly Post-Mortems (Retain-Recall-Reflect)
 # ============================================================================
 
+# Source .env file if present in project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    set -a
+    source "$PROJECT_ROOT/.env"
+    set +a
+elif [ -f ".env" ]; then
+    set -a
+    source ".env"
+    set +a
+fi
+
 SERVICE_NAME="midgley-hindsight"
 REGION="us-central1"
 PROJECT_ID="${GCP_PROJECT_ID:-midgley}"

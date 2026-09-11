@@ -1,8 +1,15 @@
 {
   "created_at": "2026-09-05 04:38:50",
-  "last_updated": "2026-09-07 04:00:41",
-  "total_alerts_logged": 9,
-  "active_degraded_regions": [],
+  "last_updated": "2026-09-10 19:44:23",
+  "total_alerts_logged": 10,
+  "active_degraded_regions": [
+    "BayArea_CA",
+    "Charlotte_NC",
+    "Greenville_NC",
+    "Newark_DE",
+    "Oakland_CA",
+    "Tulsa_OK"
+  ],
   "history": [
     {
       "timestamp": "2026-09-05 04:38:50",
@@ -299,6 +306,62 @@
       ],
       "github_issue_url": null,
       "webhook_sent": true
+    },
+    {
+      "timestamp": "2026-09-10 19:44:23",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 21,
+          "model_mae": 0.1804,
+          "naive_mae": 0.1608,
+          "model_uplift_mae_pct": -12.22,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 21,
+          "model_mae": 0.5955,
+          "naive_mae": 0.5549,
+          "model_uplift_mae_pct": -7.3,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 21,
+          "model_mae": 0.6251,
+          "naive_mae": 0.5849,
+          "model_uplift_mae_pct": -6.86,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Newark_DE",
+          "evaluations": 23,
+          "model_mae": 0.5798,
+          "naive_mae": 0.559,
+          "model_uplift_mae_pct": -3.72,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 21,
+          "model_mae": 0.1804,
+          "naive_mae": 0.1608,
+          "model_uplift_mae_pct": -12.22,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 23,
+          "model_mae": 0.2639,
+          "naive_mae": 0.256,
+          "model_uplift_mae_pct": -3.05,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
     }
   ]
 }

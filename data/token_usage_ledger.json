@@ -5170,6 +5170,83 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-11T00:45:11.850216+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-11T00:45:11.934981+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-11T00:45:19.774157+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-11T00:45:21.537951+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-11T00:45:21.780629+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "quota_blocked"
+    },
+    {
+      "timestamp": "2026-09-11T00:45:25.587234+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-11T00:45:25.660439+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
     }
   ]
 }
