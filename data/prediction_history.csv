@@ -2383,3 +2383,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-10 15:16:42,2026-09-16,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.882,DOWN,,,,,0.0,0.0,4.95,0.0,4.5937,5.1703,,yfinance,5.0
 2026-09-10 15:16:42,2026-09-16,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9806,DOWN,,,,,0.0,0.0,5.05,0.0,4.6923,5.2689,,yfinance,5.0
 2026-09-10 20:15:09,2026-09-17,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Copper Stocks Sink as White House Tariff Uncertainty Spooks Traders - Crude Oil Prices Today | OilPrice.com,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9715,3.5289,,yfinance,5.0
+2026-09-11 00:00:09,2026-09-18,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,RH Q2 EPS beats $1.78 estimate; tariff benefit offsets oil costs - scanx.trade,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9715,3.5289,,yfinance,5.0

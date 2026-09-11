@@ -2894,5 +2894,23 @@
       "opec_action": 0.0,
       "overall_price_pressure": 0.52
     }
+  },
+  {
+    "timestamp": "2026-09-11T00:00:09.117186",
+    "headline": "RH Q2 EPS beats $1.78 estimate; tariff benefit offsets oil costs - scanx.trade",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxORE45QXR1LUJFaDJ4R3Y4cnd3cGE5c3BlNHpHZEk0WENZaDBoOWJpXzFPZFdkdnl2T0VlOWxUd3ZSZVV1a2QwVlRxcFVpd1BrLTVMNnVhZXFNQnh1MXJsNFVaQnV6NmhJWklMQzluc3lpVDBCMlNMQV9XVEg3RGVXVzk5SFhmb3lQYUJrTHJPN2YxOTlNSUJsT3htak9yaFBCN29qMWVmWmx1Wlp5T1E?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxORE45QXR1LUJFaDJ4R3Y4cnd3cGE5c3BlNHpHZEk0WENZaDBoOWJpXzFPZFdkdnl2T0VlOWxUd3ZSZVV1a2QwVlRxcFVpd1BrLTVMNnVhZXFNQnh1MXJsNFVaQnV6NmhJWklMQzluc3lpVDBCMlNMQV9XVEg3RGVXVzk5SFhmb3lQYUJrTHJPN2YxOTlNSUJsT3htak9yaFBCN29qMWVmWmx1Wlp5T1E?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    }
   }
 ]

@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-11_00-00-15",
+    "timestamp": "2026-09-11 00:00:09",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "RH Q2 EPS beats $1.78 estimate; tariff benefit offsets oil c..."
+  },
+  {
     "run_id": "2026-09-10_20-15-15",
     "timestamp": "2026-09-10 20:15:09",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-07_18-15-17",
-    "timestamp": "2026-09-07 18:12:13",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-07 18:12:13)"
-  },
-  {
-    "run_id": "2026-09-07_18-15-04",
     "timestamp": "2026-09-07 18:12:13",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-07 18:12:13)"
