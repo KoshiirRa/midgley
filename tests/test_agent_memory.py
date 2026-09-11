@@ -95,7 +95,7 @@ class TestHindsightClient(unittest.TestCase):
             anomaly_type="CI_BREACH"
         )
         self.assertEqual(res["status"], "SUCCESS")
-        self.assertEqual(res["id"], "mem_123")
+        self.assertEqual(res["data"]["id"], "mem_123")
 
 
 class TestAgentMemoryManager(unittest.TestCase):
