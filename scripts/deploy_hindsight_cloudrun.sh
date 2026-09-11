@@ -36,7 +36,9 @@ if [ -z "$SUPABASE_DATABASE_URL" ]; then
 fi
 
 if [ -z "$GEMINI_API_KEY" ]; then
-    echo "ℹ️ Notice: GEMINI_API_KEY is not set. Defaulting to offline/deterministic mode."
+    echo "⚠️ ERROR: GEMINI_API_KEY is required by the Hindsight MemoryEngine container."
+    echo "Please export GEMINI_API_KEY='AIzaSy...' or add it to .env before running this deploy script."
+    exit 1
 fi
 
 echo "🚀 Deploying Hindsight Agent Memory Service to Google Cloud Run..."
