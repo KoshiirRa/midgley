@@ -205,6 +205,9 @@ def fetch_gasbuddy_prices_by_zip(zip_code: str = "74103") -> dict:
     """
     Queries GasBuddy's GraphQL API for real-time station prices in any zip code.
     """
+    if os.environ.get("TESTING") == "1":
+        return None
+
     graphql_query = """
     query LocationBySearchTerm($searchTerm: String!) {
         locationBySearchTerm(search: $searchTerm) {
@@ -284,6 +287,8 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
     Scrapes AAA Gas Prices (gasprices.aaa.com) for targeted metro average gas prices.
     Parses metro area accordion headers and tables before falling back to state averages.
     """
+    if os.environ.get("TESTING") == "1":
+        return None
     meta = REGION_METADATA.get(region_code, {})
     state = meta.get("state", "US")
     keywords = meta.get("aaa_keywords", ["Current Avg."])
@@ -330,6 +335,8 @@ def fetch_aaa_fuel_prices_all_grades(region_code: str = "National") -> dict:
     Scrapes AAA Gas Prices (gasprices.aaa.com) for multi-grade fuel prices (Regular, Midgrade, Premium, Diesel).
     Returns zero-cost fuel price vector without API fees or paid subscriptions.
     """
+    if os.environ.get("TESTING") == "1":
+        return None
     meta = REGION_METADATA.get(region_code, REGION_METADATA["National"])
     state = meta.get("state", "US")
     url = f"https://gasprices.aaa.com/?state={state}" if state != "US" else "https://gasprices.aaa.com/"

@@ -42,6 +42,8 @@ class HindsightClient:
     @property
     def is_configured(self) -> bool:
         """Returns True if a valid Hindsight API URL is configured."""
+        if os.environ.get("TESTING") == "1":
+            return False
         return bool(self.base_url and self.base_url.startswith("http"))
 
     def _get_headers(self) -> Dict[str, str]:

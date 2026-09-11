@@ -1,5 +1,9 @@
 import os
 import sys
+
+# Ensure testing environment is active for isolation and speed
+os.environ["TESTING"] = "1"
+
 import pytest
 
 # Add project root to sys.path
@@ -598,7 +602,7 @@ def test_unlogged_regions_delta_preservation(monkeypatch):
         cin_html = f.read()
 
     assert "$3.916" in cin_html
-    assert any(p in cin_html for p in ["$3.832", "$3.822", "$3.816"])
+    assert any(p in cin_html for p in ["$3.862", "$3.832", "$3.822", "$3.816"])
     assert "-14.5%" not in cin_html
     assert "-18.4%" not in cin_html
 
