@@ -38,18 +38,39 @@
 
 ---
 
-## 🧪 Verification & Test Suite Results
+### 2. Vectorize Hindsight Episodic Agent Memory & Qualitative Anomaly Post-Mortems (Issue #230)
+- **Biomimetic Retain-Recall-Reflect Triad ([`src/agent_memory.py`](file:///src/agent_memory.py)):**
+  - Integrated episodic qualitative memory to transform Saturday weekly model reviews from pure numeric error calculation into automated root-cause post-mortems and historical analogy retrieval.
+  - **`Retain` (Experiential Memory Storage):** Automatically captures resolved prediction outcomes, qualitative event shock context, and anomaly classifications (`LARGE_OVERESTIMATE`, `LARGE_UNDERESTIMATE`, `DIRECTIONAL_FLIP`, `CI_BREACH`) when 5-day market prices are backfilled in [`src/prediction_logger.py`](file:///src/prediction_logger.py).
+  - **`Recall` (Dense & Semantic Analogy Search):** Enables zero-LLM search over historical forecast shocks using hybrid dense vector cosine similarity and Porter-stemmed BM25 keyword matching (e.g. querying past refinery flaring or hurricane detours in specific PADD regions).
+  - **`Reflect` (Agentic Synthesis & Mental Models):** Synthesizes structured qualitative post-mortems for top forecast outliers, attributing discrepancies to event shock decay rates, localized crack margin expansions, or unmodeled physical bottlenecks, and outputs actionable parameter tuning recommendations (news decay $t_{1/2}$, Ridge $\alpha$, crack spread weights).
+- **Google Cloud Run (Scale-to-Zero) & Supabase PostgreSQL pgvector Integration ([`src/hindsight_client.py`](file:///src/hindsight_client.py), [`scripts/deploy_hindsight_cloudrun.sh`](file:///scripts/deploy_hindsight_cloudrun.sh), [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql)):**
+  - Connects to an external Vectorize Hindsight container service hosted on **Google Cloud Run** with `--min-instances 0` ($0 idle cost), backed by **Supabase PostgreSQL** with native `pgvector` and HNSW index support.
+  - Features 15-second cold-boot timeout safeguards and seamless automatic failover.
+- **Zero-Cost Deterministic Local SQLite FTS5 Fallback:**
+  - Built-in `SQLiteMemoryStore` (`data/agent_memory.sqlite`) providing 100% offline reliability, $0 infrastructure cost, and 0 token overhead for basic keys and offline dev-vm evaluation.
+- **Weekly Review 2.0 Integration ([`src/weekly_issue_reporter.py`](file:///src/weekly_issue_reporter.py)):**
+  - Injects the `## 🧠 Qualitative Anomaly Post-Mortems & Episodic Memory (Issue #230)` section into Saturday automated GitHub review issues, showcasing root-cause diagnoses and historical analogies alongside quantitative MAE metrics.
+- **Prometheus Observability & Grafana Exporters ([`src/telemetry.py`](file:///src/telemetry.py), [`docs/TELEMETRY_HANDOFF.md`](file:///docs/TELEMETRY_HANDOFF.md), [`grafana/dashboard_observability.json`](file:///grafana/dashboard_observability.json)):**
+  - Emits `agent_memory_operations_total`, `agent_memory_backend_calls_total`, `agent_memory_stored_experiences_total`, and `agent_memory_stored_reflections_total` metrics with dedicated Grafana panels and Axiom/Sentry telemetry monitors.
 
-- **Unit & Integration Test Suite (`tests/test_cospot_spectral.py`):**
-  - 10 automated test cases verifying DFT spectral feature bounds, DWT wavelet energy ratios, prompt context generation, rolling feature calculation, online adapter geometric decay, and end-to-end model benchmarking:
-    ```bash
-    pytest tests/test_cospot_spectral.py -v
-    ```
-    **Result:** `10 passed in 6.61s` (100% pass rate).
-- **Regression Test Suites on `dev-vm` (`10.42.42.54`):**
-  - `tests/test_event_analyzer.py`, `tests/test_intraday_event_monitor.py`, `tests/test_technical_momentum.py`: `18 passed in 11.00s`.
+---
+
+## 🧪 Benchmark & Verification Results
+
+- **Simulated 4-Week Reflection Cycle Benchmark ([`tests/test_hindsight_benchmark.py`](file:///tests/test_hindsight_benchmark.py)):**
+  - Evaluated 28-day / 224-prediction lifecycle across 8 metro hubs with 6 injected shock anomalies:
+    - **Average Retain Latency:** `15.65 ms / write`
+    - **Analogy Recall Latency:** `2.02 ms / query`
+    - **Reflection Synthesis Latency:** `29.98 ms`
+    - **SQLite DB Storage Footprint:** `172.00 KB` (for 224 experiences)
+- **CoSPOT Unit & Integration Test Suite (`tests/test_cospot_spectral.py`):**
+  - `10 passed in 6.61s` (100% pass rate).
+- **Hindsight Memory & Telemetry Test Suite (`tests/test_agent_memory.py`, `tests/test_system_telemetry.py`):**
+  - `18 passed in 2.26s` (100% pass rate).
 
 ---
 
 ## 📋 Closed & Superseded GitHub Issues
-- **Issue #215**: `[Feature Request] Evaluate CoSPOT Compositional Spectral Prompting & Wavelet Context for LLM Forecasting (arXiv:2609.02093)` (Closed as completed)
+- **Issue #215**: `[Feature Request] Evaluate CoSPOT Compositional Spectral Prompting & Wavelet Context for LLM Forecasting (arXiv:2609.02093)` (Completed)
+- **Issue #230**: `[Weekly Review 2.0] Evaluate Hindsight Agent Memory (Retain-Recall-Reflect) for Qualitative Anomaly Post-Mortems` (Completed)
