@@ -19,9 +19,13 @@ elif [ -f ".env" ]; then
     set +a
 fi
 
+# Default fallback configuration for Midgley Supabase instance
+SUPABASE_DATABASE_URL="${SUPABASE_DATABASE_URL:-postgresql://postgres.tmnitbsqbkmgheppogjt:M603z4gsC7E3pICG@aws-0-us-west-2.pooler.supabase.com:5432/postgres}"
+GCP_PROJECT_ID="${GCP_PROJECT_ID:-midgley}"
+
 SERVICE_NAME="midgley-hindsight"
 REGION="us-central1"
-PROJECT_ID="${GCP_PROJECT_ID:-midgley}"
+PROJECT_ID="${GCP_PROJECT_ID}"
 IMAGE="ghcr.io/vectorize-io/hindsight:latest"
 
 # 1. Check required environment variables
