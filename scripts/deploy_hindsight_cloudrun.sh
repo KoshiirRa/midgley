@@ -52,11 +52,12 @@ gcloud run deploy "$SERVICE_NAME" \
     --platform managed \
     --region "$REGION" \
     --allow-unauthenticated \
+    --port 8888 \
     --min-instances 0 \
     --max-instances 1 \
     --memory 512Mi \
     --cpu 1 \
-    --timeout 30 \
+    --timeout 300 \
     --set-env-vars HINDSIGHT_API_DATABASE_URL="$SUPABASE_DATABASE_URL",HINDSIGHT_API_LLM_PROVIDER="gemini",HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY"
 
 # 3. Retrieve service URL
