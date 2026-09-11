@@ -12,16 +12,22 @@
 - **Mathematical Frequency & Wavelet Decomposition ([`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py)):**
   - Integrated theoretical concepts from *CoSPOT: Compositional Spectral Prompts for LLM-based Online Time Series Forecasting* ([arXiv:2609.02093v1](https://arxiv.org/abs/2609.02093v1), KAIST).
   - **Discrete Fourier Transform (DFT) Basis Decomposition:** Decomposes lookback sequences into orthogonal frequency bases:
-    $$F_k = \sum_{t=0}^{L-1} X_t e^{-i 2\pi k t / L}, \quad k = 0, \dots, \lfloor L/2 \rfloor$$
+    ```math
+    F_k = \sum_{t=0}^{L-1} X_t e^{-i 2\pi k t / L}, \quad k = 0, \dots, \lfloor L/2 \rfloor
+    ```
     Extracts dominant cycle periods ($T_{\text{dom}} = L / k^*$), normalized spectral power distributions ($P_k$), low-frequency trend energy ratios ($E_{\text{low}}$), and Shannon Spectral Entropy:
-    $$H_{\text{spectral}} = -\frac{\sum P_k \ln(P_k + 1e-12)}{\ln(K)}$$
+    ```math
+    H_{\text{spectral}} = -\frac{\sum P_k \ln(P_k + 10^{-12})}{\ln(K)}
+    ```
   - **Discrete Wavelet Transform (DWT) Multi-Resolution Filtering:** Uses 2-level Haar wavelet filtering to isolate high-frequency intraday noise ($D_1$), localized 3-5 day shock fluctuations ($D_2$), and macro trend baselines ($A_2$), computing detail-to-approximation energy ratios ($R_{\text{wavelet}}$) and localized shock magnitudes ($|D_1[-1]| + |D_2[-1]|$).
 - **Gemini 2.5 Flash Prompt Context Enrichment ([`src/event_analyzer.py`](file:///src/event_analyzer.py)):**
   - Injects structured `[MARKET FREQUENCY & SPECTRAL REGIME (CoSPOT arXiv:2609.02093)]` natural language context directly into Gemini 2.5 Flash single and batch prompt contracts (`LLM_SINGLE_PROMPT` & `LLM_BATCH_PROMPT`).
   - Addresses LLM "numerical blindness" by providing explicit frequency regime descriptors (e.g. *Coherent structural trend* vs *Turbulent non-stationary dispersion*) and localized wavelet noise states.
 - **Ultra-Low Compute Online Projection Head Adaptation:**
   - Implemented `CoSPOTOnlineAdapter` with geometric loss decay ($\delta = 0.90$) and L2 regularization to rapidly adapt linear projection weights to non-stationary concept drift without full model retraining:
-    $$\mathcal{L}_{\text{online}} = \sum_{\tau=1}^T \delta^{T-\tau} \ell(f_\theta(X_\tau), \tilde{y}_\tau)$$
+    ```math
+    \mathcal{L}_{\text{online}} = \sum_{\tau=1}^T \delta^{T-\tau} \ell(f_\theta(X_\tau), \tilde{y}_\tau)
+    ```
 - **Quantitative Feature Engineering & Chronological Splits ([`src/feature_engineering.py`](file:///src/feature_engineering.py)):**
   - Added 6 rolling spectral features to `create_feature_matrix()`:
     - `cospot_dft_dominant_period`
@@ -92,13 +98,19 @@
     15. `15`: End-to-End Master Prediction Synthesis & Mathematical Factor Composition
 - **Executive Social Media Volatility & Weekend Gap Multiplier (Issue #224):**
   - Documented empirical regression coefficients ($\beta_{\text{OPEC}} = -1.85\%$, $\beta_{\text{tariff}} = +2.10\%$) and the $1.42\times$ weekend market gap multiplier applied during Friday 17:00 to Sunday 18:00 EST market closes:
-    $$\mathbf{V}_{\text{social}, t} = \gamma_{\text{weekend}} \cdot \left(\beta_{\text{OPEC}} \cdot \text{Score}_{\text{OPEC}, t} + \beta_{\text{tariff}} \cdot \text{Score}_{\text{tariff}, t}\right), \quad \gamma_{\text{weekend}} = 1.42 \text{ if weekend else } 1.0$$
+    ```math
+    \mathbf{V}_{\text{social}, t} = \gamma_{\text{weekend}} \cdot \left(\beta_{\text{OPEC}} \cdot \text{Score}_{\text{OPEC}, t} + \beta_{\text{tariff}} \cdot \text{Score}_{\text{tariff}, t}\right), \quad \gamma_{\text{weekend}} = 1.42 \text{ if weekend else } 1.0
+    ```
 - **Alternative Physical Feeds & Positioning Formulations (Issue #225):**
   - Defined explicit mathematical mappings and economic interpretations for all 7 alternative feeds: Cboe OVX, Baker Hughes Rig Counts, 10Y Treasury Yields, 10Y TIPS Breakeven Inflation, CFTC COT Managed Money Net Longs, FERC Natural Gas / LNG Spark Spreads, and USDA/EIA Ethanol/RIN blendstock costs.
 - **Live News Streams, Web Scraping & Tiered LLM Failover Pipeline (Issue #226):**
   - Detailed the multi-channel news ingestion engine: Finlight live financial feeds (150/mo quota valve), Firecrawl web-to-markdown scraper (800/mo safety cap & 24h caching), zero-cost RSS 15-min polling with `max_age_hours=24.0`, incoming webhooks with IPASIS security verification, and the 3-tier LLM failover architecture (Gemini 2.5 Flash $\rightarrow$ GPT-4o-mini $\rightarrow$ Offline Lexicon).
 - **Exponential Memory Decay with Category Half-Lives & Diagnostic Fusion (Issue #227):**
-  - Updated discrete recursive memory decay accumulator ($\mathbf{M}_t = \mathbf{M}_{t-1} \cdot e^{-\frac{\ln 2}{t_{1/2}}} + \mathbf{V}_t$) with category half-lives $t_{1/2} \in [2.5, 14.0]\text{ days}$ ($14.0\text{d}$ physical supply disruptions, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts) and Context Routing Diagnostic Fusion weighting $\omega_{\text{fusion}} \in [0.85, 1.25]$.
+  - Updated discrete recursive memory decay accumulator:
+    ```math
+    \mathbf{M}_t = \mathbf{M}_{t-1} \cdot e^{-\frac{\ln 2}{t_{1/2}}} + \mathbf{V}_t
+    ```
+    with category half-lives $t_{1/2} \in [2.5, 14.0]\text{ days}$ ($14.0\text{d}$ physical supply disruptions, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts) and Context Routing Diagnostic Fusion weighting $\omega_{\text{fusion}} \in [0.85, 1.25]$.
 
 ### 5. Interactive Model Data Sources & Ingestion Governance Matrix ([`src/sources_generator.py`](file:///src/sources_generator.py), [`docs/sources.html`](file:///docs/sources.html), [`docs/sources/index.html`](file:///docs/sources/index.html))
 - **Dedicated Public Data Sources Catalog:**
