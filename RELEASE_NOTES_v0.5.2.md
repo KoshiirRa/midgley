@@ -72,7 +72,33 @@
   - Integrated `send_intraday_discord_notification()` into `IntradayEventMonitor.process_incoming_headline()`, recording `discord_notified` status in `data/intraday_events.json`.
 - **Workflow & Environment Variables ([`.github/workflows/intraday_event_monitor.yml`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/.github/workflows/intraday_event_monitor.yml)):**
   - Injected `DISCORD_WEBHOOK_URL` secret and `MIDGLEY_ENV: "prod"` into the GitHub Actions intraday event dispatch workflow.
-  - Supports `DISCORD_INTRADAY_WEBHOOK_URL` and `DISCORD_WEBHOOK_URL` environment variables with graceful fallback and test-mode network suppression (`TESTING=1`).
+### 4. Mathematical Specification & Multi-Agent Pipeline Alignment (Issues #224, #225, #226, #227, #229)
+- **Chronological 15-Section Execution Order ([`src/dashboard_generator.py`](file:///src/dashboard_generator.py), [`docs/math.html`](file:///docs/math.html)) (Issue #229):**
+  - Restructured the mathematical documentation to mirror the exact sequence of data flow through the multi-agent system:
+    1. `01`: Quantitative Commodity Futures & 3-2-1 Crack Spread Modeling
+    2. `02`: Alternative Physical Feeds, Macroeconomics & Market Positioning
+    3. `03`: Live News Streams, Web Scraping & Multi-Tiered LLM Extraction
+    4. `04`: Executive Social Media Stream & Weekday vs. Weekend Gap Dynamics
+    5. `05`: Multi-Tiered NOAA Weather Risk & Atmospheric Convective Dynamics
+    6. `06`: Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals
+    7. `07`: USGS 3D Hypocentral Seismic Attenuation, Hydrological Telemetry & Industrial AQI Outage Risk
+    8. `08`: Microsoft Qlib Symbolic Alpha Factor Mining, Spectral CoSPOT & Dynamic Domain Adaptation
+    9. `09`: Econometric Exponential Memory Decay & Category-Specific Shock Fusion
+    10. `10`: Standardized Ridge Estimator & Purged Combinatorial Cross-Validation (CPCV)
+    11. `11`: CARB Regulatory Burden & PADD 5 Refining Island Isolation
+    12. `12`: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread Modeling
+    13. `13`: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI
+    14. `14`: Local Metro Basis Differentials, Spatial Freight & Retail Rack Margins
+    15. `15`: End-to-End Master Prediction Synthesis & Mathematical Factor Composition
+- **Executive Social Media Volatility & Weekend Gap Multiplier (Issue #224):**
+  - Documented empirical regression coefficients ($\beta_{\text{OPEC}} = -1.85\%$, $\beta_{\text{tariff}} = +2.10\%$) and the $1.42\times$ weekend market gap multiplier applied during Friday 17:00 to Sunday 18:00 EST market closes:
+    $$\mathbf{V}_{\text{social}, t} = \gamma_{\text{weekend}} \cdot \left(\beta_{\text{OPEC}} \cdot \text{Score}_{\text{OPEC}, t} + \beta_{\text{tariff}} \cdot \text{Score}_{\text{tariff}, t}\right), \quad \gamma_{\text{weekend}} = 1.42 \text{ if weekend else } 1.0$$
+- **Alternative Physical Feeds & Positioning Formulations (Issue #225):**
+  - Defined explicit mathematical mappings and economic interpretations for all 7 alternative feeds: Cboe OVX, Baker Hughes Rig Counts, 10Y Treasury Yields, 10Y TIPS Breakeven Inflation, CFTC COT Managed Money Net Longs, FERC Natural Gas / LNG Spark Spreads, and USDA/EIA Ethanol/RIN blendstock costs.
+- **Live News Streams, Web Scraping & Tiered LLM Failover Pipeline (Issue #226):**
+  - Detailed the multi-channel news ingestion engine: Finlight live financial feeds (150/mo quota valve), Firecrawl web-to-markdown scraper (800/mo safety cap & 24h caching), zero-cost RSS 15-min polling with `max_age_hours=24.0`, incoming webhooks with IPASIS security verification, and the 3-tier LLM failover architecture (Gemini 2.5 Flash $\rightarrow$ GPT-4o-mini $\rightarrow$ Offline Lexicon).
+- **Exponential Memory Decay with Category Half-Lives & Diagnostic Fusion (Issue #227):**
+  - Updated discrete recursive memory decay accumulator ($\mathbf{M}_t = \mathbf{M}_{t-1} \cdot e^{-\frac{\ln 2}{t_{1/2}}} + \mathbf{V}_t$) with category half-lives $t_{1/2} \in [2.5, 14.0]\text{ days}$ ($14.0\text{d}$ physical supply disruptions, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts) and Context Routing Diagnostic Fusion weighting $\omega_{\text{fusion}} \in [0.85, 1.25]$.
 
 ---
 
@@ -84,6 +110,8 @@
     - **Analogy Recall Latency:** `2.02 ms / query`
     - **Reflection Synthesis Latency:** `29.98 ms`
     - **SQLite DB Storage Footprint:** `172.00 KB` (for 224 experiences)
+- **Mathematical Specification & Dashboard Generator Test Suite (`tests/test_dashboard_generator.py`):**
+  - `17 passed in 420.06s` (100% pass rate) on `dev-vm`.
 - **Discord Notification & Intraday Anomaly Test Suite (`tests/test_discord_notifier.py`, `tests/test_intraday_event_monitor.py`):**
   - `23 passed in 0.55s` (100% pass rate).
 - **CoSPOT Unit & Integration Test Suite (`tests/test_cospot_spectral.py`):**
@@ -95,6 +123,12 @@
 
 ## 📋 Closed & Superseded GitHub Issues
 - **Issue #215**: `[Feature Request] Evaluate CoSPOT Compositional Spectral Prompting & Wavelet Context for LLM Forecasting (arXiv:2609.02093)` (Completed)
+- **Issue #224**: `docs(math): Clarify Step 5 Executive Social Media Volatility with Weekday vs Weekend Gap Dynamics` (Completed)
+- **Issue #225**: `docs(math): Update Step 6 Alternative Physical Feeds Formula & Feature Definitions` (Completed)
+- **Issue #226**: `docs(math): Comprehensive Update to Step 7 Live News Feed & Scraper Ingestion Pipeline` (Completed)
+- **Issue #227**: `docs(math): Update Step 8 Exponential Shock Memory Decay Formulation & Component Descriptions` (Completed)
+- **Issue #229**: `docs(math): Reorder and Structure Math Guide Sections into Chronological Pipeline Order` (Completed)
 - **Issue #230**: `[Weekly Review 2.0] Evaluate Hindsight Agent Memory (Retain-Recall-Reflect) for Qualitative Anomaly Post-Mortems` (Completed)
 - **Issue #234**: `feat(notifications): Discord webhook notification for intraday forecast revisions` (Completed)
+
 

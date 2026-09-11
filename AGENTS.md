@@ -524,14 +524,28 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 18. Mandatory Public Math & Technical Breakdown Page Synchronization Directives (`src/dashboard_generator.py`)
+### 18. Mandatory Public Math & Mathematical Guide Synchronization Directives (`src/dashboard_generator.py` & `docs/math.html`)
 
-* **Role:** Enforces mandatory synchronization between model feature formulas, mathematical estimators, regional tax structures, and the site's public Math page (`docs/technical_breakdown.html` & `docs/technical_breakdown.md`).
+* **Role:** Enforces mandatory synchronization between model feature formulas, mathematical estimators, regional tax structures, and the site's public Math page (`docs/math.html` and `docs/technical_breakdown.html`).
 * **Mandatory Math Page Synchronization Directives:**
-  1. **Mathematical & Formula Updates:** Whenever new mathematical formulas, estimators, Z-scores, quantile confidence bands, or physical threat metrics are introduced or modified (e.g., 3-2-1 Crack Spread in #169, Stacking Ensemble Quantiles in #170, EIA-930 Grid Stress Z-Scores in #179, NHC Threat Radii in #177), the agent or developer MUST update `generate_technical_breakdown_file()` in `src/dashboard_generator.py`:
-     - Add KaTeX-rendered LaTeX formulas and explanatory descriptions under **Section 6: Advanced Quantitative Feature & Physical Data Formulas** in both the HTML template and Markdown generator.
-  2. **Regional Tax & Infrastructure Adjustments:** Whenever regional statutory tax burdens, fees, or logistics adjustments are reconciled or modified (e.g. CARB tax burden in #172, C&D Canal detours, Ohio River lock delays in #181), the agent MUST update Section 4 notes and equations in `generate_technical_breakdown_file()`.
-  3. **Automatic Re-generation Execution:** The agent MUST execute `python3 -m src.dashboard_generator` to compile and output `docs/technical_breakdown.html` and `docs/technical_breakdown.md` and commit the updated pages whenever model math or connectors are updated.
+  1. **Chronological 15-Section Execution Order:** The public math guide is structured in strict chronological pipeline sequence from commodity intake to localized retail synthesis:
+     - `01`: Quantitative Commodity Futures & 3-2-1 Crack Spread Modeling
+     - `02`: Alternative Physical Feeds, Macroeconomics & Market Positioning (OVX, Rigs, 10Y Yields, TIPS, COT, FERC, EIA, USDA)
+     - `03`: Live News Streams, Web Scraping & Multi-Tiered LLM Extraction (Finlight, Firecrawl, RSS, Webhook, Tier 1–3 Failover)
+     - `04`: Executive Social Media Stream & Weekday vs. Weekend Gap Dynamics ($1.42\times$ Monday Open Multiplier)
+     - `05`: Multi-Tiered NOAA Weather Risk & Atmospheric Convective Dynamics
+     - `06`: Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals
+     - `07`: USGS 3D Hypocentral Seismic Attenuation, Hydrological Telemetry & Industrial AQI Outage Risk
+     - `08`: Microsoft Qlib Symbolic Alpha Factor Mining, Spectral CoSPOT & Dynamic Domain Adaptation
+     - `09`: Econometric Exponential Memory Decay & Category-Specific Shock Fusion ($t_{1/2} \in [2.5, 14.0]\text{d}$, $\omega_{\text{fusion}}$)
+     - `10`: Standardized Ridge Estimator & Purged Combinatorial Cross-Validation (CPCV)
+     - `11`: CARB Regulatory Burden & PADD 5 Refining Island Isolation ($T_{\text{CARB}} = \$0.953/\text{gal}$)
+     - `12`: Ultra-Low Sulfur Diesel (ULSD) & Distillate Crack Spread Modeling
+     - `13`: Dynamic Volatility-Gated Persistence Blending (DV-GPB) & Empirical Residual CI
+     - `14`: Local Metro Basis Differentials, Spatial Freight & Retail Rack Margins
+     - `15`: End-to-End Master Prediction Synthesis & Mathematical Factor Composition
+  2. **Mathematical & Formula Updates:** Whenever new mathematical formulas, estimators, Z-scores, quantile confidence bands, or physical threat metrics are introduced or modified (e.g., 3-2-1 Crack Spread in #169, Stacking Ensemble Quantiles in #170, EIA-930 Grid Stress Z-Scores in #179, NHC Threat Radii in #177, CoSPOT Spectral DFT/DWT in #215, Hindsight Memory Triad in #230), the agent or developer MUST update `generate_public_dashboard()` in `src/dashboard_generator.py`.
+  3. **Automatic Re-generation Execution:** The agent MUST execute `python3 -c "from src.dashboard_generator import generate_public_dashboard; generate_public_dashboard()"` to compile and output `docs/math.html`, `docs/technical_breakdown.html` and `docs/technical_breakdown.md` and commit the updated pages whenever model math or connectors are updated.
 
 ---
 
@@ -549,9 +563,20 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 * **Role:** Enforces single-file release notes consolidation during active development cycles and prevents draft version number sprawl.
 * **Mandatory Release Notes Versioning Directives:**
-  1. **Single Active In-Progress Release Document:** All feature implementations, bug fixes, MLOps enhancements, test results, and closed issues completed during an ongoing development cycle MUST be appended directly to the single active in-progress release notes document (e.g., `RELEASE_NOTES_v0.4.2.md`).
-  2. **No Per-Issue Release Notes Files:** Agents MUST NEVER increment the release notes version number or create new incremental release notes files (such as `RELEASE_NOTES_v0.4.3.md`, `RELEASE_NOTES_v0.4.4.md`, `RELEASE_NOTES_v0.4.8.md`) for intermediate task completions or individual issue resolutions.
-  3. **Release-Time Version Incrementing Only:** The release notes version number is bumped to a new draft file (e.g., `RELEASE_NOTES_v0.4.3.md`) ONLY when an official version release is tagged and cut by maintainers.
+  1. **Single Active In-Progress Release Document:** All feature implementations, bug fixes, MLOps enhancements, test results, and closed issues completed during an ongoing development cycle MUST be appended directly to the single active in-progress release notes document (e.g., `RELEASE_NOTES_v0.5.2.md`).
+  2. **No Per-Issue Release Notes Files:** Agents MUST NEVER increment the release notes version number or create new incremental release notes files for intermediate task completions or individual issue resolutions.
+  3. **Release-Time Version Incrementing Only:** The release notes version number is bumped to a new draft file ONLY when an official version release is tagged and cut by maintainers.
+
+---
+
+### 21. Mandatory Testing Mode Network Isolation & Fast Mocking Directives (`TESTING=1`)
+
+* **Role:** Enforces absolute test suite execution isolation, deterministic speed, and zero real-world network dependencies during automated testing.
+* **Directives:**
+  1. **Network Suppression in Test Mode:** All live network connectors (`src/live_fuel_feed.py`, `src/usgs_seismic.py`, `src/hindsight_client.py`, `src/discord_notifier.py`, `src/finlight_feed.py`, `src/firecrawl_scraper.py`) MUST check `os.environ.get("TESTING") == "1"` and immediately return mock/quiet default payloads without initiating external HTTP socket connections or timing out.
+  2. **Persistent Storage Protection:** `TESTING=1` or test sources (`Test_*`, `Test_Suite`) MUST automatically suppress persistent disk writes (`_save_anomaly_record`, `prediction_history.csv` appends) and skip non-isolated dashboard rebuilds during unit test execution.
+  3. **Monkeypatch Compatibility:** `generate_public_dashboard()` MUST call connector functions directly without outer conditional skipping, allowing test functions to monkeypatch underlying connectors (e.g. `monkeypatch.setattr(lff, "fetch_live_metro_retail_price", mock_fetch)`) while the underlying connectors internally handle `TESTING=1` fast-paths when unpatched.
+
 
 
 
