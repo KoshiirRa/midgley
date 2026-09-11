@@ -19,7 +19,7 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TIMEOUT = 5.0  # Strict 5-second timeout for scale-to-zero / network resilience
+DEFAULT_TIMEOUT = 15.0  # 15-second timeout for Cloud Run scale-to-zero cold-start resilience
 
 
 class HindsightClient:
@@ -85,28 +85,33 @@ class HindsightClient:
         if not self.is_configured:
             return {"status": "UNCONFIGURED", "message": "HINDSIGHT_API_URL not set."}
 
+        tags = [region]
+        if anomaly_type:
+            tags.append(anomaly_type)
+
+        doc_id = f"exp_{region.lower()}_{(forecast_target_date or datetime.now().strftime('%Y%m%d')).replace('-', '')}"
+
         payload = {
-            "bank_id": self.bank_id,
-            "memory_type": memory_type,
-            "region": region,
-            "content": content,
-            "anomaly_type": anomaly_type,
-            "error_dollars": error_dollars,
-            "predicted_price": predicted_price,
-            "actual_price": actual_price,
-            "forecast_target_date": forecast_target_date,
-            "metadata": metadata or {},
-            "timestamp": datetime.utcnow().isoformat() + "Z"
+            "async": False,
+            "items": [
+                {
+                    "content": content,
+                    "context": f"Gas price forecasting record for region {region} (Error: ${error_dollars or 0.0:+.4f}/gal, Anomaly: {anomaly_type or 'NORMAL'})",
+                    "document_id": doc_id,
+                    "tags": tags,
+                    "timestamp": datetime.utcnow().isoformat() + "Z"
+                }
+            ]
         }
 
         try:
-            url = f"{self.base_url}/v1/memories/retain"
+            url = f"{self.base_url}/v1/default/banks/{self.bank_id}/memories"
             data_bytes = json.dumps(payload).encode("utf-8")
             req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 res_data = json.loads(resp.read().decode("utf-8"))
                 logger.info(f"Retained memory in Hindsight bank '{self.bank_id}' (region={region})")
-                return res_data
+                return {"status": "SUCCESS", "data": res_data}
         except Exception as e:
             logger.warning(f"Hindsight retain call failed ({e}). Falling back to local storage.")
             return {"status": "ERROR", "error": str(e)}
@@ -125,24 +130,35 @@ class HindsightClient:
         if not self.is_configured:
             return []
 
+        tags = []
+        if region:
+            tags.append(region)
+        if anomaly_type:
+            tags.append(anomaly_type)
+
         payload = {
-            "bank_id": self.bank_id,
             "query": query,
-            "region": region,
-            "anomaly_type": anomaly_type,
-            "top_k": top_k,
-            "threshold": threshold
+            "budget": "mid",
+            "tags": tags if tags else None
         }
 
         try:
-            url = f"{self.base_url}/v1/memories/recall"
+            url = f"{self.base_url}/v1/default/banks/{self.bank_id}/memories/recall"
             data_bytes = json.dumps(payload).encode("utf-8")
             req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 res_data = json.loads(resp.read().decode("utf-8"))
-                memories = res_data.get("memories", [])
-                logger.info(f"Recalled {len(memories)} memories from Hindsight bank '{self.bank_id}'")
-                return memories
+                items = res_data.get("results", res_data.get("memories", []))
+                formatted = []
+                for it in items[:top_k]:
+                    formatted.append({
+                        "content": it.get("content", it.get("text", "")),
+                        "region": region or "Unknown",
+                        "score": it.get("score", 0.0),
+                        "metadata": it
+                    })
+                logger.info(f"Recalled {len(formatted)} memories from Hindsight bank '{self.bank_id}'")
+                return formatted
         except Exception as e:
             logger.debug(f"Hindsight recall call failed ({e}).")
             return []
@@ -158,20 +174,20 @@ class HindsightClient:
         if not self.is_configured:
             return {"status": "UNCONFIGURED", "reflections": []}
 
+        query = f"Reflect on these energy forecasting anomalies and summarize root causes: {json.dumps(anomalies)}"
         payload = {
-            "bank_id": self.bank_id,
-            "anomalies": anomalies,
-            "context": context or "Weekly Saturday Gas Price Model Review & Anomaly Post-Mortem"
+            "query": query,
+            "budget": "mid"
         }
 
         try:
-            url = f"{self.base_url}/v1/memories/reflect"
+            url = f"{self.base_url}/v1/default/banks/{self.bank_id}/reflect"
             data_bytes = json.dumps(payload).encode("utf-8")
             req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
-            with urllib.request.urlopen(req, timeout=self.timeout * 2) as resp:
+            with urllib.request.urlopen(req, timeout=self.timeout * 3) as resp:
                 res_data = json.loads(resp.read().decode("utf-8"))
-                logger.info(f"Generated {len(res_data.get('reflections', []))} reflections via Hindsight.")
-                return res_data
+                logger.info(f"Generated reflection via Hindsight bank '{self.bank_id}'")
+                return {"status": "SUCCESS", "reflections": res_data.get("reflections", [res_data])}
         except Exception as e:
             logger.warning(f"Hindsight reflect call failed ({e}).")
             return {"status": "ERROR", "error": str(e), "reflections": []}
