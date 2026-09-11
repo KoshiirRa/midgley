@@ -58,6 +58,7 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 10 feature layers (including Section 10 multiline `aligned` CARB tax breakdown).
 - **`/telemetry` (System Observability)**: Real-time telemetry dashboard detailing TokenTab token consumption, cache performance, IPASIS security check metrics, unmapped ZIP heatmaps, and fallback accounting.
 - **`/research` (Research Citations)**: Research literature bibliography cataloging academic papers, preprints, econometric models, and domain citations referenced in Midgley.
+- **Weekly Review 2.0 & Episodic Agent Memory (Issue #230)**: Biomimetic Retain-Recall-Reflect memory engine on Google Cloud Run (Scale-to-Zero) + Supabase `pgvector` with local SQLite FTS5 fallback, performing automated qualitative anomaly post-mortems and historical shock analogy retrieval during Saturday reviews.
 - **Automated Social Embed Cards**: Dynamic 1200x630px dark-mode Open Graph preview card PNGs (`docs/assets/embeds/*.png`) rendered for Discord, Twitter/X, and Slack link previews.
 
 
@@ -111,7 +112,8 @@ flowchart TD
 
     subgraph REVIEW["7. Model Performance Review & Feedback Loop Agent"]
         R1[".github/workflows/weekly_model_review.yml"]
-        R2["weekly_issue_reporter.py, catalog_monitor.py & arxiv_monitor.py"]
+        R2["weekly_issue_reporter.py, agent_memory.py & hindsight_client.py"]
+        R3["Retain-Recall-Reflect: Cloud Run (Scale-to-Zero) + Supabase pgvector & SQLite FTS5"]
     end
 
     subgraph DASHBOARD["8. Public Web Dashboard & Presentation Agent"]

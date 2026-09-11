@@ -100,6 +100,20 @@ CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 
 # ==============================================================================
+# HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN) (Issue #230)
+# ==============================================================================
+
+# Vectorize Hindsight Cloud Run REST API Endpoint (Scale-to-Zero)
+HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
+HINDSIGHT_API_KEY=""              # Optional bearer token if endpoint is authenticated
+
+# Supabase PostgreSQL pgvector Connection URI (Transaction Pooler Port 5432 or 6543)
+SUPABASE_DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
+
+# Google Cloud Project ID (for Cloud Run deployment)
+GCP_PROJECT_ID="midgley"
+
+# ==============================================================================
 # EDGAR 8-K REFINERY OPERATOR MONITOR (Issue #129)
 # ==============================================================================
 
@@ -194,6 +208,45 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 
 ### Option C: Standalone Local Fallback (Tier 3 Default)
 If no edge credentials are supplied, Midgley defaults to local SQLite persistence at `data/lookup_cache.sqlite` with an in-memory fast dict lookup ($0 cloud infrastructure cost, zero external setup required).
+
+---
+
+## 3.5. Setting Up Vectorize Hindsight Episodic Agent Memory (Issue #230)
+
+Midgley integrates an episodic memory layer (**Retain-Recall-Reflect**) to perform automated qualitative root-cause post-mortems and historical shock analogy search during Saturday model reviews (Agent 7).
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    HINDSIGHT EPISODIC AGENT MEMORY ENGINE                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 1. RETAIN  ──► Captures resolved predictions, actual prices & anomalies      │
+│ 2. RECALL  ──► Zero-LLM search over historical shocks via dense pgvector    │
+│ 3. REFLECT ──► Synthesizes root-cause post-mortems & calibration suggestions │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Option A: Cloud Run + Supabase pgvector Setup (Recommended)
+1. **Initialize Supabase PostgreSQL Schema:**
+   - Open your **Supabase Project Dashboard** $\rightarrow$ **SQL Editor**.
+   - Execute [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql) to enable the `vector` extension, create `hindsight_memories` and `hindsight_mental_models` tables, and construct HNSW vector indexes.
+2. **Deploy to Google Cloud Run (Scale-to-Zero):**
+   - Ensure `SUPABASE_DATABASE_URL`, `GCP_PROJECT_ID`, and `GEMINI_API_KEY` are configured in `.env`.
+   - Run the deployment script:
+     ```bash
+     bash scripts/deploy_hindsight_cloudrun.sh
+     ```
+   - Cloud Run deploys `ghcr.io/vectorize-io/hindsight:latest` with `--min-instances 0` ($0 idle cost) and `--port 8888`.
+3. **Configure Endpoint in Midgley:**
+   - Set `HINDSIGHT_API_URL` in `.env` and GitHub Repository Secrets:
+     ```bash
+     HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
+     ```
+
+### Option B: Zero-Cost Local SQLite FTS5 Fallback ($0 / Standalone Default)
+If no remote Hindsight or Supabase credentials are configured, Midgley automatically activates `SQLiteMemoryStore` at `data/agent_memory.sqlite`:
+* **Zero external services or cloud accounts required.**
+* Uses SQLite FTS5 with Porter stemming and BM25 ranking for analogy recall.
+* Generates structured post-mortems and parameter calibration recommendations via Gemini 2.5 Flash (or the Tier 3 Offline Rule-Based Lexicon).
 
 ---
 
