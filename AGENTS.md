@@ -357,9 +357,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **ArchiveBox Self-Hosted Historical Article Preservation & Snapshot Ledger (`src/archive_service.py`, Issue #97):**
     - Submits breaking news URLs and qualitative event sources to self-hosted ArchiveBox instances asynchronously via REST API (`POST /api/v1/core/add/`).
     - Features background thread pooling to ensure zero latency overhead on LLM event scoring pipelines, automatic local markdown snapshot ledger fallback (`data/archived_events_ledger.json` + `data/archives/`), and full offline resiliency.
-  - **Sapient PRAXIST Computer-Executable Autonomous Research Harness (`src/praxist_engine.py`, Issue #188):**
-    - Provides a programmatic evaluation harness (`PraxistResearchHarness`) for LLM agents to propose, execute, backtest, and statistically validate empirical feature engineering and modeling hypotheses.
-    - Evaluates out-of-sample MAE improvements, paired $t$-tests, $p$-values, and multi-parameter sweeps (e.g. Ridge $\alpha$, decay half-life $t_{1/2}$), formatting research findings into Saturday weekly review reports.
+  - **Weekly Review 2.0 Episodic Agent Memory & Qualitative Anomaly Post-Mortems (`src/agent_memory.py`, `src/hindsight_client.py`, Issue #230):**
+    - **Retain-Recall-Reflect Triad:** Implements biomimetic episodic memory capturing resolved forecast experiences, qualitative shock context, and prediction outliers ($|error| \ge \$0.25/\text{gal}$ or directional flips).
+    - **Cloud Run Scale-to-Zero & Supabase pgvector Gateway:** Connects to Vectorize Hindsight container hosted on Google Cloud Run (`midgley-hindsight`) backed by Supabase PostgreSQL (`pgvector`) with `--min-instances 0` ($0 idle hosting cost).
+    - **Zero-Cost SQLite FTS5 Fallback:** Automatically falls back to local SQLite FTS5 index (`data/agent_memory.sqlite`) with Porter stemmer BM25 retrieval, ensuring 100% offline resiliency and zero paid token requirements.
+    - **Qualitative Post-Mortem Synthesis:** Analyzes top residual anomalies during Saturday review runs to produce root-cause diagnoses, historical shock analogies, and learned parameter tuning recommendations (news decay $t_{1/2}$, Ridge $\alpha$, crack spread weight).
   - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
 
 

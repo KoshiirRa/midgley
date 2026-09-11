@@ -434,6 +434,31 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
             logger.warning(f"Background prediction cloud sync notice: {e}")
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
+        # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issue #230)
+        try:
+            from src.agent_memory import AgentMemoryManager
+            mem_mgr = AgentMemoryManager()
+            for _, row in history_df[history_df['actual_5d_price'].notna()].tail(10).iterrows():
+                err = float(row.get('error_dollars', 0.0))
+                reg = str(row.get('region', 'National'))
+                pred = float(row.get('predicted_5d_price', 0.0))
+                act = float(row.get('actual_5d_price', 0.0))
+                target_d = str(row.get('forecast_target_date', ''))
+                anom_type = "LARGE_OVERESTIMATE" if (pred - act) >= 0.25 else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25 else ("DIRECTIONAL_FLIP" if row.get('directional_hit') == 0.0 and abs(pred - act) >= 0.05 else "NORMAL"))
+                mem_mgr.retain(
+                    content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
+                    region=reg,
+                    memory_type="anomaly_shock" if anom_type != "NORMAL" else "experience",
+                    anomaly_type=anom_type,
+                    error_dollars=err,
+                    predicted_price=pred,
+                    actual_price=act,
+                    forecast_target_date=target_d,
+                    metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
+                )
+        except Exception as e:
+            logger.debug(f"Agent memory retention notice: {e}")
+            
     return history_df
 
 

@@ -18,6 +18,14 @@ from src.arxiv_monitor import format_arxiv_markdown_section
 from src.core_monitor import format_core_markdown_section
 
 try:
+    from src.agent_memory import format_qualitative_anomaly_reflections_markdown
+except ImportError:
+    try:
+        from agent_memory import format_qualitative_anomaly_reflections_markdown
+    except ImportError:
+        format_qualitative_anomaly_reflections_markdown = lambda *args, **kwargs: ""
+
+try:
     from src.wandb_logger import log_weekly_audit_run, is_wandb_enabled
 except ImportError:
     try:
@@ -1080,6 +1088,13 @@ def generate_weekly_markdown_report() -> str:
     # Fetch feature leakage & factor decay audit
     feature_audit_md = format_feature_leakage_audit_markdown_section()
 
+    # Fetch qualitative anomaly post-mortems & episodic memory reflection (Issue #230)
+    memory_reflection_md = ""
+    try:
+        memory_reflection_md = format_qualitative_anomaly_reflections_markdown(max_anomalies=3)
+    except Exception as e:
+        logger.debug(f"Notice generating memory reflections: {e}")
+
     report = f"""# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report & Performance Audit
 
 ### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
@@ -1111,6 +1126,10 @@ def generate_weekly_markdown_report() -> str:
 ---
 
 {feature_audit_md}
+
+---
+
+{memory_reflection_md}
 
 ---
 
