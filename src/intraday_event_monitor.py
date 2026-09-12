@@ -36,9 +36,9 @@ logger = logging.getLogger(__name__)
 
 # Primary Free Energy RSS Feeds for Zero-Cost 15-Min Polling
 FREE_RSS_FEEDS = [
-    "https://news.google.com/rss/search?q=unleaded+gasoline+when:3d&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=refinery+outage+when:3d&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=oil+tariff+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=unleaded+gasoline+when:1d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=refinery+outage+when:1d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=oil+tariff+when:1d&hl=en-US&gl=US&ceid=US:en",
     "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml"
 ]
 

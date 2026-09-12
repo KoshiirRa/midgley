@@ -1,6 +1,9 @@
 name: Intraday Anomaly Edge Dispatch & Dashboard Deployment
 
 on:
+  schedule:
+    # 2-hour recurring fallback intraday review
+    - cron: '0 */2 * * *'
   repository_dispatch:
     types: [intraday_anomaly]
   workflow_dispatch:
