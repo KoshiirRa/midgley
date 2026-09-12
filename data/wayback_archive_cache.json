@@ -1758,5 +1758,13 @@
     "headline": "Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairment, Refinery Outage And Inventory Draws - BernamaBiz",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/articles/sample-test": {
+    "timestamp": "2026-09-12T05:31:16.060480",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/articles/sample-test",
+    "headline": "Test Live Production Trigger: Critical Refinery Outage Shuts Pipeline Hub",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/articles/sample-test",
+    "error": "The read operation timed out"
   }
 }

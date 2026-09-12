@@ -2930,5 +2930,24 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.8
     }
+  },
+  {
+    "timestamp": "2026-09-12T05:31:16.063250",
+    "headline": "Test Live Production Trigger: Critical Refinery Outage Shuts Pipeline Hub",
+    "source": "Manual_Dispatch",
+    "url": "https://news.google.com/articles/sample-test",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/articles/sample-test",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.9,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]
