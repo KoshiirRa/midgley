@@ -1,13 +1,16 @@
 {
   "created_at": "2026-09-05 04:38:50",
-  "last_updated": "2026-09-10 19:44:23",
-  "total_alerts_logged": 10,
+  "last_updated": "2026-09-12 17:12:13",
+  "total_alerts_logged": 11,
   "active_degraded_regions": [
     "BayArea_CA",
     "Charlotte_NC",
+    "Cincinnati_KY",
     "Greenville_NC",
+    "National",
     "Newark_DE",
     "Oakland_CA",
+    "Port_St_Lucie_FL",
     "Tulsa_OK"
   ],
   "history": [
@@ -357,6 +360,86 @@
           "model_mae": 0.2639,
           "naive_mae": 0.256,
           "model_uplift_mae_pct": -3.05,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-12 17:12:13",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 22,
+          "model_mae": 0.1796,
+          "naive_mae": 0.1537,
+          "model_uplift_mae_pct": -16.85,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 22,
+          "model_mae": 0.1139,
+          "naive_mae": 0.1097,
+          "model_uplift_mae_pct": -3.86,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Cincinnati_KY",
+          "evaluations": 22,
+          "model_mae": 0.4028,
+          "naive_mae": 0.3554,
+          "model_uplift_mae_pct": -13.34,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 22,
+          "model_mae": 0.2221,
+          "naive_mae": 0.1876,
+          "model_uplift_mae_pct": -18.43,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "National",
+          "evaluations": 22,
+          "model_mae": 0.163,
+          "naive_mae": 0.1537,
+          "model_uplift_mae_pct": -6.05,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Newark_DE",
+          "evaluations": 22,
+          "model_mae": 0.5116,
+          "naive_mae": 0.4554,
+          "model_uplift_mae_pct": -12.36,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 22,
+          "model_mae": 0.1796,
+          "naive_mae": 0.1537,
+          "model_uplift_mae_pct": -16.85,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Port_St_Lucie_FL",
+          "evaluations": 22,
+          "model_mae": 0.1369,
+          "naive_mae": 0.1223,
+          "model_uplift_mae_pct": -11.92,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 22,
+          "model_mae": 0.2091,
+          "naive_mae": 0.1808,
+          "model_uplift_mae_pct": -15.64,
           "status": "DEGRADED"
         }
       ],
