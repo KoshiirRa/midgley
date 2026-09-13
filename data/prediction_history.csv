@@ -2429,3 +2429,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-13 23:36:08,2026-09-09,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.5956,3.5517,DOWN,3.7606,UP,0.2089,0.0,0.0,0.0,3.5956,0.0,3.2579,3.8455,1.0,yfinance,5.0
 2026-09-13 23:36:08,2026-09-10,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.6267,3.6005,DOWN,3.9432,UP,0.3427,0.0,0.0,0.0,3.6267,0.0,3.3067,3.8943,0.0,yfinance,5.0
 2026-09-13 23:36:30,2026-09-18,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.799,3.7673,DOWN,,,,,0.0,0.0,3.799,0.0,3.4735,4.0611,,yfinance,5.0
+2026-09-13 23:57:56,2026-09-21,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Canada's oil windfall may yet wipe out its losses from tariffs - CBC,3.184,3.2859,UP,,,,,0.0,0.0,3.184,0.0,2.9942,3.5775,,yfinance,5.0
