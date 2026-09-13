@@ -1,39 +1,21 @@
 [
   {
-    "run_id": "2026-09-13_14-17-06",
-    "timestamp": "2026-09-13 14:17:01",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Is American Eagle Outfitters (AEO) Undervalued After Earning..."
-  },
-  {
-    "run_id": "2026-09-13_13-10-25",
-    "timestamp": "2026-09-13 13:10:19",
+    "run_id": "2026-09-13_17-24-57",
+    "timestamp": "2026-09-11 01:46:50",
     "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-13 13:10:19)"
+    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
   },
   {
-    "run_id": "2026-09-12_16-43-06",
-    "timestamp": "2026-09-12 16:43:02",
+    "run_id": "2026-09-13_16-58-21",
+    "timestamp": "2026-09-11 01:46:50",
     "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-12 16:43:02)"
+    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
   },
   {
-    "run_id": "2026-09-12_12-06-38",
-    "timestamp": "2026-09-12 12:06:35",
+    "run_id": "2026-09-13_16-53-37",
+    "timestamp": "2026-09-11 01:46:50",
     "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-12 12:06:35)"
-  },
-  {
-    "run_id": "2026-09-12_05-31-20",
-    "timestamp": "2026-09-12 05:31:16",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Test Live Production Trigger: Critical Refinery Outage Shuts..."
-  },
-  {
-    "run_id": "2026-09-11_22-55-59",
-    "timestamp": "2026-09-11 22:55:55",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 22:55:55)"
+    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
   },
   {
     "run_id": "2026-09-11_21-43-37",
@@ -598,5 +580,23 @@
     "timestamp": "2026-09-08 12:45:09",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Swiss Government Releases Emergency Oil Reserves Following C..."
+  },
+  {
+    "run_id": "2026-09-08_12-30-15",
+    "timestamp": "2026-09-08 12:30:09",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Copper hits record high as tight supply, US tariff fears boo..."
+  },
+  {
+    "run_id": "2026-09-08_11-15-15",
+    "timestamp": "2026-09-08 11:15:09",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Here\u2019s how to attract investment to Newfoundland despite Tru..."
+  },
+  {
+    "run_id": "2026-09-08_10-30-14",
+    "timestamp": "2026-09-08 10:30:09",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairmen..."
   }
 ]

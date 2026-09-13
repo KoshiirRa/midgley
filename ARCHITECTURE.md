@@ -292,7 +292,7 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 
 1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):**
    * Executes every 15 minutes via Cloudflare Cron Triggers (`*/15 * * * *`).
-   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection, deduplicates dispatched items against Cloudflare Cache API (`caches.default`), and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
+   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection (filtering non-energy macro tariffs and agricultural cooking oils like canola), deduplicates dispatched items against Cloudflare D1 database (`midgley-cache-d1` `seen_rss_headlines`) across all global PoPs, and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
 
 2. **`midgley-cache-worker` ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):**
    * Acts as Tier 2 Edge Cache Gateway over Cloudflare D1 database (`midgley-cache-d1`).
@@ -385,6 +385,9 @@ The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and
 
 * **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
 * **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](file:///src/agent_memory.py) & [`src/hindsight_client.py`](file:///src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Google Cloud Run + Supabase pgvector and local SQLite FTS5 fallback.
+  - **Scale-to-Zero Proactive Warmup:** Step 0 non-blocking background initialization thread in `run_all.py` waking Cloud Run containers before batch retain/recall execution.
+  - **Socket Read Timeout Retries:** 30s configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
+  - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once Cloud Run is healthy.
 
 ---
 

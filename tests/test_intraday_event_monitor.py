@@ -188,8 +188,85 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertEqual(call_arg["headline"], headline)
         self.assertTrue(res.get("discord_notified"))
 
+    def test_normalize_headline_strips_publisher_suffixes(self):
+        from src.intraday_event_monitor import normalize_headline
+        h1 = "House Should Not Transfer More Tariff Authority to the Executive Branch - National Taxpayers Union"
+        h2 = "House Should Not Transfer More Tariff Authority to the Executive Branch - NTU"
+        h3 = "House Should Not Transfer More Tariff Authority to the Executive Branch | Reuters"
+        h4 = "“House Should Not Transfer More Tariff Authority to the Executive Branch”"
+
+        norm1 = normalize_headline(h1)
+        norm2 = normalize_headline(h2)
+        norm3 = normalize_headline(h3)
+        norm4 = normalize_headline(h4)
+
+        self.assertEqual(norm1, "house should not transfer more tariff authority to the executive branch")
+        self.assertEqual(norm1, norm2)
+        self.assertEqual(norm1, norm3)
+        self.assertEqual(norm1, norm4)
+
+    def test_evaluate_headline_non_energy_policy_tariff_exclusion(self):
+        # Generic congressional / trade policy articles should be filtered at Stage 1
+        h1 = "House Should Not Transfer More Tariff Authority to the Executive Branch - National Taxpayers Union"
+        is_anomaly1, scores1 = self.monitor.evaluate_headline_anomaly(h1)
+        self.assertFalse(is_anomaly1)
+        self.assertEqual(scores1["overall_price_pressure"], 0.0)
+
+        h2 = "White House considers new steel tariff and aluminum tariff under Section 232"
+        is_anomaly2, scores2 = self.monitor.evaluate_headline_anomaly(h2)
+        self.assertFalse(is_anomaly2)
+
+        # Canola and agricultural cooking oil headlines should be filtered
+        h3 = "China threatens retaliatory tariff on Canadian canola oil imports"
+        is_anomaly3, scores3 = self.monitor.evaluate_headline_anomaly(h3)
+        self.assertFalse(is_anomaly3)
+        self.assertEqual(scores3["overall_price_pressure"], 0.0)
+
+    def test_evaluate_headline_energy_tariff_inclusion(self):
+        # Energy-specific tariff headlines must still trigger Stage 1 evaluation
+        h1 = "Trump threatens 25% tariff on Canadian crude oil imports"
+        is_anomaly1, scores1 = self.monitor.evaluate_headline_anomaly(h1)
+        self.assertTrue(is_anomaly1)
+        self.assertGreaterEqual(abs(scores1["overall_price_pressure"]), 0.40)
+
+        h2 = "OPEC warns retaliatory energy tariff on crude blendstocks will disrupt refining"
+        is_anomaly2, scores2 = self.monitor.evaluate_headline_anomaly(h2)
+        self.assertTrue(is_anomaly2)
+
+    def test_evaluated_cache_deduplication_negative_anomaly(self):
+        import tempfile
+        from unittest.mock import patch
+        import src.intraday_event_monitor as iem
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            temp_eval_file = os.path.join(tmpdir, "evaluated_headlines.json")
+            with patch.dict(os.environ, {"TESTING": ""}), patch.object(iem, "EVALUATED_CACHE_FILE", temp_eval_file):
+                monitor = IntradayEventMonitor()
+                headline = "Routine quarterly corporate update on retail logistics"
+                url = "https://example.com/routine_news_1"
+
+                # 1. First evaluation: should evaluate as non-anomaly and save to evaluated cache
+                res1 = monitor.process_incoming_headline(headline, source="Feed_Poller", url=url)
+                self.assertFalse(res1["is_anomaly"])
+                self.assertFalse(res1.get("duplicate", False))
+                self.assertTrue(os.path.exists(temp_eval_file))
+
+                # 2. Second evaluation (simulating next 15-minute polling cycle): should be detected as duplicate
+                res2 = monitor.process_incoming_headline(headline, source="Feed_Poller", url=url)
+                self.assertTrue(res2.get("duplicate"))
+                self.assertFalse(res2["is_anomaly"])
+
+                # 3. Third evaluation with publisher suffix variation: should still match via normalized title
+                res3 = monitor.process_incoming_headline(
+                    f"{headline} - National Taxpayers Union", 
+                    source="Feed_Poller", 
+                    url="https://news.google.com/different_tracking_url"
+                )
+                self.assertTrue(res3.get("duplicate"))
+
 
 if __name__ == "__main__":
     unittest.main()
+
 
 

@@ -63,9 +63,16 @@ class SQLiteMemoryStore:
                     anomaly_type TEXT,
                     content TEXT NOT NULL,
                     metadata_json TEXT DEFAULT '{}',
+                    cloud_synced INTEGER DEFAULT 0,
                     created_at TEXT NOT NULL
                 )
             """)
+            # Migration check: Ensure cloud_synced column exists for existing databases
+            cursor.execute("PRAGMA table_info(memories)")
+            columns = [row["name"] for row in cursor.fetchall()]
+            if "cloud_synced" not in columns:
+                cursor.execute("ALTER TABLE memories ADD COLUMN cloud_synced INTEGER DEFAULT 0")
+
             # 2. FTS5 full text search virtual table
             cursor.execute("""
                 CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(
@@ -104,7 +111,8 @@ class SQLiteMemoryStore:
         predicted_price: Optional[float] = None,
         actual_price: Optional[float] = None,
         forecast_target_date: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
+        cloud_synced: int = 0
     ) -> Dict[str, Any]:
         """Stores experience memory in local SQLite with FTS5 index."""
         now_str = datetime.now(timezone.utc).isoformat()
@@ -119,12 +127,12 @@ class SQLiteMemoryStore:
                 INSERT OR REPLACE INTO memories (
                     memory_id, bank_id, memory_type, region, forecast_target_date,
                     predicted_price, actual_price, error_dollars, anomaly_type,
-                    content, metadata_json, created_at
-                ) VALUES (?, 'midgley-gas-forecasting', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    content, metadata_json, cloud_synced, created_at
+                ) VALUES (?, 'midgley-gas-forecasting', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 mem_id, memory_type, region, forecast_target_date,
                 predicted_price, actual_price, error_dollars, anomaly_type,
-                content, meta_str, now_str
+                content, meta_str, cloud_synced, now_str
             ))
 
             # Update FTS5 index
@@ -142,6 +150,53 @@ class SQLiteMemoryStore:
             return {"status": "ERROR", "error": str(e), "backend": "sqlite_fts5"}
         finally:
             conn.close()
+
+    def mark_as_synced(self, memory_id: str) -> bool:
+        """Marks a local SQLite memory record as synced to Hindsight Cloud."""
+        conn = self._get_connection()
+        try:
+            cursor = conn.cursor()
+            cursor.execute("UPDATE memories SET cloud_synced = 1 WHERE memory_id = ?", (memory_id,))
+            conn.commit()
+            return cursor.rowcount > 0
+        except Exception as e:
+            logger.debug(f"Error marking memory {memory_id} as synced: {e}")
+            return False
+        finally:
+            conn.close()
+
+    def get_unretained_memories(self, limit: int = 50) -> List[Dict[str, Any]]:
+        """Fetches pending memories that have not yet been synchronized to Hindsight Cloud."""
+        results = []
+        conn = self._get_connection()
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT memory_id, memory_type, region, forecast_target_date,
+                       predicted_price, actual_price, error_dollars, anomaly_type,
+                       content, metadata_json
+                FROM memories
+                WHERE cloud_synced = 0
+                ORDER BY id ASC LIMIT ?
+            """, (limit,))
+            for r in cursor.fetchall():
+                results.append({
+                    "memory_id": r["memory_id"],
+                    "memory_type": r["memory_type"],
+                    "region": r["region"],
+                    "forecast_target_date": r["forecast_target_date"],
+                    "predicted_price": r["predicted_price"],
+                    "actual_price": r["actual_price"],
+                    "error_dollars": r["error_dollars"],
+                    "anomaly_type": r["anomaly_type"],
+                    "content": r["content"],
+                    "metadata": json.loads(r["metadata_json"] or "{}")
+                })
+        except Exception as e:
+            logger.debug(f"Error reading pending memories from SQLite: {e}")
+        finally:
+            conn.close()
+        return results
 
     def recall(
         self,
@@ -270,7 +325,47 @@ class AgentMemoryManager:
     @property
     def is_cloud_engine_active(self) -> bool:
         """Checks if Cloud Run / Supabase Hindsight service is connected."""
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            return False
         return self.hindsight_client.is_configured and self.hindsight_client.ping()
+
+    def sync_pending_memories(self, limit: int = 50) -> int:
+        """
+        Synchronizes any memories stored only in SQLite (e.g. during cold-start or offline)
+        to the Hindsight Cloud Run memory bank. Returns number of synced memories.
+        """
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            return 0
+        if not self.hindsight_client.is_configured:
+            return 0
+
+        pending = self.sqlite_store.get_unretained_memories(limit=limit)
+        if not pending:
+            return 0
+
+        if not self.hindsight_client.ping():
+            return 0
+
+        synced_count = 0
+        for item in pending:
+            cloud_res = self.hindsight_client.retain(
+                content=item["content"],
+                region=item["region"],
+                memory_type=item.get("memory_type", "experience"),
+                anomaly_type=item.get("anomaly_type"),
+                error_dollars=item.get("error_dollars"),
+                predicted_price=item.get("predicted_price"),
+                actual_price=item.get("actual_price"),
+                forecast_target_date=item.get("forecast_target_date"),
+                metadata=item.get("metadata")
+            )
+            if cloud_res.get("status") == "SUCCESS":
+                self.sqlite_store.mark_as_synced(item["memory_id"])
+                synced_count += 1
+
+        if synced_count > 0:
+            logger.info(f"Reconciled and synced {synced_count} pending memories to Hindsight Cloud bank.")
+        return synced_count
 
     def retain(
         self,
@@ -297,12 +392,13 @@ class AgentMemoryManager:
             predicted_price=predicted_price,
             actual_price=actual_price,
             forecast_target_date=forecast_target_date,
-            metadata=metadata
+            metadata=metadata,
+            cloud_synced=0
         )
 
         # 2. Dual-dispatch to Hindsight Cloud Run if online
         cloud_res = None
-        if self.hindsight_client.is_configured:
+        if self.is_cloud_engine_active:
             cloud_res = self.hindsight_client.retain(
                 content=content,
                 region=region,
@@ -314,8 +410,12 @@ class AgentMemoryManager:
                 forecast_target_date=forecast_target_date,
                 metadata=metadata
             )
+            if cloud_res.get("status") == "SUCCESS" and local_res.get("memory_id"):
+                self.sqlite_store.mark_as_synced(local_res["memory_id"])
+                # Backfill any older pending memories that may have failed earlier
+                self.sync_pending_memories(limit=10)
 
-        active_backend = "hindsight_cloud" if self.is_cloud_engine_active else "sqlite_fts5"
+        active_backend = "hindsight_cloud" if (cloud_res and cloud_res.get("status") == "SUCCESS") else "sqlite_fts5"
         log_agent_memory_op(
             operation="retain",
             backend=active_backend,
@@ -339,6 +439,8 @@ class AgentMemoryManager:
         Recalls historical shock analogies. Prefers Cloud Run Hindsight; falls back to SQLite FTS5.
         """
         if self.is_cloud_engine_active:
+            # Sync any pending memories before performing recall
+            self.sync_pending_memories(limit=20)
             cloud_memories = self.hindsight_client.recall(
                 query=query,
                 region=region,
@@ -368,6 +470,10 @@ class AgentMemoryManager:
         """
         if not anomalies:
             return []
+
+        # Reconcile pending memories before reflection
+        if self.hindsight_client.is_configured:
+            self.sync_pending_memories(limit=50)
 
         # 1. Try Hindsight Cloud Run API first
         if self.is_cloud_engine_active:
