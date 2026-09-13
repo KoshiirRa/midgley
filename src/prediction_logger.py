@@ -449,17 +449,19 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
                 act = float(row.get('actual_5d_price', 0.0))
                 target_d = str(row.get('forecast_target_date', ''))
                 anom_type = "LARGE_OVERESTIMATE" if (pred - act) >= 0.25 else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25 else ("DIRECTIONAL_FLIP" if row.get('directional_hit') == 0.0 and abs(pred - act) >= 0.05 else "NORMAL"))
-                mem_mgr.retain(
-                    content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
-                    region=reg,
-                    memory_type="anomaly_shock" if anom_type != "NORMAL" else "experience",
-                    anomaly_type=anom_type,
-                    error_dollars=err,
-                    predicted_price=pred,
-                    actual_price=act,
-                    forecast_target_date=target_d,
-                    metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
-                )
+                # Only retain genuine prediction anomaly shocks into episodic memory to protect token spend
+                if anom_type != "NORMAL":
+                    mem_mgr.retain(
+                        content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
+                        region=reg,
+                        memory_type="anomaly_shock",
+                        anomaly_type=anom_type,
+                        error_dollars=err,
+                        predicted_price=pred,
+                        actual_price=act,
+                        forecast_target_date=target_d,
+                        metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
+                    )
         except Exception as e:
             logger.debug(f"Agent memory retention notice: {e}")
             

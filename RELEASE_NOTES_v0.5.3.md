@@ -1,8 +1,8 @@
-# Release Notes - v0.5.3 (In Progress)
-
-**Release Date:** September 12, 2026 (In Progress)  
+# Release Notes - v0.5.3
+ 
+**Release Date:** September 13, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`)  
-**Git Branch:** `dev`  
+**Git Branch:** `main`  
 
 ---
 
@@ -28,6 +28,10 @@
   - Configured non-blocking Step 0 background warmup thread in [`run_all.py`](file:///run_all.py) so model inference and data ingestion proceed in parallel while container instances initialize.
   - Increased `DEFAULT_TIMEOUT` from 15.0s to 30.0s (configurable via `HINDSIGHT_TIMEOUT`), accommodating Google Cloud Run container cold boots (20–35s) and preventing premature socket timeout failures.
   - Added 2-attempt HTTP retries with exponential backoff on socket read timeouts and connection reset errors across `retain()`, `recall()`, and `reflect()` operations.
+  - Enhanced error diagnostics via `_extract_error_detail()` to parse and surface detailed HTTP error bodies from Hindsight.
+- **Low-Cost Flash Model Pinning & Outlier Retention Filter ([`scripts/deploy_hindsight_cloudrun.sh`](file:///scripts/deploy_hindsight_cloudrun.sh), [`src/prediction_logger.py`](file:///src/prediction_logger.py)):**
+  - Configured `HINDSIGHT_API_LLM_MODEL="gemini-2.5-flash"` on Cloud Run deployment scripts, replacing unpinned default Pro models and reducing reasoning token costs by >90%.
+  - Restricted automatic prediction memory retention to genuine prediction anomaly shocks ($|error| \ge \$0.25/\text{gal}$ or directional flips), eliminating unnecessary LLM fact extraction overhead on normal forecast evaluations.
 
 ### 3. Zero-Data-Loss Pending Memory Reconciliation Ledger ([`src/agent_memory.py`](file:///src/agent_memory.py))
 - **Local SQLite Dual-State Schema & Auto-Migration:**

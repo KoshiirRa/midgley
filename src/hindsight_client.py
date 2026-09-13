@@ -23,9 +23,23 @@ logger = logging.getLogger(__name__)
 DEFAULT_TIMEOUT = float(os.environ.get("HINDSIGHT_TIMEOUT", "30.0"))  # 30-second timeout for Cloud Run scale-to-zero cold-start resilience
 
 
+def _extract_error_detail(e: Exception) -> str:
+    """Extracts a human-readable diagnostic message from HTTPError or general Exception."""
+    if isinstance(e, urllib.error.HTTPError):
+        try:
+            err_body = e.read().decode("utf-8")
+            err_json = json.loads(err_body)
+            detail = err_json.get("detail", err_body)
+            return f"HTTP {e.code}: {detail}"
+        except Exception:
+            return f"HTTP {e.code}: {e.reason}"
+    return str(e)
+
+
 class HindsightClient:
     """
-    REST API Client for Vectorize Hindsight Agent Memory Service.
+    Client for interacting with Vectorize Hindsight REST API.
+    Provides episodic agent memory integration (Retain-Recall-Reflect).
     """
 
     def __init__(
@@ -160,12 +174,13 @@ class HindsightClient:
                     logger.info(f"Retained memory in Hindsight bank '{self.bank_id}' (region={region})")
                     return {"status": "SUCCESS", "data": res_data}
             except Exception as e:
+                err_detail = _extract_error_detail(e)
                 if attempt < 2:
-                    logger.debug(f"Hindsight retain attempt {attempt} failed ({e}); retrying...")
+                    logger.debug(f"Hindsight retain attempt {attempt} failed ({err_detail}); retrying...")
                     time.sleep(1.5)
                 else:
-                    logger.warning(f"Hindsight retain call failed after {attempt} attempts ({e}). Falling back to local storage.")
-                    return {"status": "ERROR", "error": str(e)}
+                    logger.warning(f"Hindsight retain call failed after {attempt} attempts ({err_detail}). Falling back to local storage.")
+                    return {"status": "ERROR", "error": err_detail}
 
         return {"status": "ERROR", "error": "Unknown retention failure"}
 
@@ -218,10 +233,12 @@ class HindsightClient:
                     logger.info(f"Recalled {len(formatted)} memories from Hindsight bank '{self.bank_id}'")
                     return formatted
             except Exception as e:
+                err_detail = _extract_error_detail(e)
                 if attempt < 2:
+                    logger.debug(f"Hindsight recall attempt {attempt} failed ({err_detail}); retrying...")
                     time.sleep(1.0)
                 else:
-                    logger.debug(f"Hindsight recall call failed after {attempt} attempts ({e}).")
+                    logger.debug(f"Hindsight recall call failed after {attempt} attempts ({err_detail}).")
                     return []
         return []
 
@@ -256,9 +273,11 @@ class HindsightClient:
                     logger.info(f"Generated reflection via Hindsight bank '{self.bank_id}'")
                     return {"status": "SUCCESS", "reflections": res_data.get("reflections", [res_data])}
             except Exception as e:
+                err_detail = _extract_error_detail(e)
                 if attempt < 2:
+                    logger.debug(f"Hindsight reflect attempt {attempt} failed ({err_detail}); retrying...")
                     time.sleep(2.0)
                 else:
-                    logger.warning(f"Hindsight reflect call failed after {attempt} attempts ({e}).")
-                    return {"status": "ERROR", "error": str(e), "reflections": []}
+                    logger.warning(f"Hindsight reflect call failed after {attempt} attempts ({err_detail}).")
+                    return {"status": "ERROR", "error": err_detail, "reflections": []}
         return {"status": "ERROR", "error": "Reflection failed", "reflections": []}
