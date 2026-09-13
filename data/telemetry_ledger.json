@@ -4455,53 +4455,13 @@
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 1247,
-    "recall_count": 2,
-    "reflect_count": 0,
+    "retain_count": 1249,
+    "recall_count": 3,
+    "reflect_count": 2,
     "cloud_calls": 1199,
-    "local_fallback_calls": 50
+    "local_fallback_calls": 55
   },
   "memory_events": [
-    {
-      "timestamp": "2026-09-11 04:48:06",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 04:48:10",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 04:48:13",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 04:48:17",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 04:48:20",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
     {
       "timestamp": "2026-09-11 04:48:23",
       "environment": "dev",
@@ -12459,6 +12419,46 @@
       "environment": "dev",
       "operation": "retain",
       "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-13 16:02:52",
+      "environment": "dev",
+      "operation": "reflect",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-13 16:02:52",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-13 16:02:52",
+      "environment": "dev",
+      "operation": "recall",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-13 16:02:52",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-13 16:02:52",
+      "environment": "dev",
+      "operation": "reflect",
+      "backend": "sqlite_fts5",
       "status": "success",
       "latency_ms": 0.0
     }

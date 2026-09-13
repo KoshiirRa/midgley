@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-13_20-20-05",
+    "timestamp": "2026-09-13 20:20:03",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-13 20:20:03)"
+  },
+  {
     "run_id": "2026-09-13_17-24-57",
     "timestamp": "2026-09-11 01:46:50",
     "run_type": "DAILY_BATCH",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-08 11:15:09",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Here\u2019s how to attract investment to Newfoundland despite Tru..."
-  },
-  {
-    "run_id": "2026-09-08_10-30-14",
-    "timestamp": "2026-09-08 10:30:09",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairmen..."
   }
 ]
