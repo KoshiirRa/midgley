@@ -2930,5 +2930,43 @@
       "opec_action": 0.0,
       "overall_price_pressure": -0.8
     }
+  },
+  {
+    "timestamp": "2026-09-12T05:31:16.063250",
+    "headline": "Test Live Production Trigger: Critical Refinery Outage Shuts Pipeline Hub",
+    "source": "Manual_Dispatch",
+    "url": "https://news.google.com/articles/sample-test",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/articles/sample-test",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.9,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-13T14:17:01.704207",
+    "headline": "Is American Eagle Outfitters (AEO) Undervalued After Earnings Fueled By A Tariff Refund? - simplywall.st",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPRGxMOWctbDZTaVJKVm03M0xCQktwcUpmX0Vrck1QUTFqdGdJMTE2YVlnQUVtQTl4dzVCS2I5N2QxM1BybnZfckJYX1NXMkJhY2ZjbVJCbUpKcmhNemxuV1l5VUVwYVN5X1NBb01kdGV4dkVGU21ZNWVSa0hSOHB1QkU3b0RXTG5IQ2JvTU9DWXk2d3ZoYUNIRHJBUjhycTA0NXlVaE9TVVU4cDdLdF96V3pHc3NVV1ZPaHpqOUhtUGNkdS1jVmtPRFc0NHdXYURYMmxReHBMTkowZ9IB2gFBVV95cUxPRGxMOWctbDZTaVJKVm03M0xCQktwcUpmX0Vrck1QUTFqdGdJMTE2YVlnQUVtQTl4dzVCS2I5N2QxM1BybnZfckJYX1NXMkJhY2ZjbVJCbUpKcmhNemxuV1l5VUVwYVN5X1NBb01kdGV4dkVGU21ZNWVSa0hSOHB1QkU3b0RXTG5IQ2JvTU9DWXk2d3ZoYUNIRHJBUjhycTA0NXlVaE9TVVU4cDdLdF96V3pHc3NVV1ZPaHpqOUhtUGNkdS1jVmtPRFc0NHdXYURYMmxReHBMTkowZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi2gFBVV95cUxPRGxMOWctbDZTaVJKVm03M0xCQktwcUpmX0Vrck1QUTFqdGdJMTE2YVlnQUVtQTl4dzVCS2I5N2QxM1BybnZfckJYX1NXMkJhY2ZjbVJCbUpKcmhNemxuV1l5VUVwYVN5X1NBb01kdGV4dkVGU21ZNWVSa0hSOHB1QkU3b0RXTG5IQ2JvTU9DWXk2d3ZoYUNIRHJBUjhycTA0NXlVaE9TVVU4cDdLdF96V3pHc3NVV1ZPaHpqOUhtUGNkdS1jVmtPRFc0NHdXYURYMmxReHBMTkowZ9IB2gFBVV95cUxPRGxMOWctbDZTaVJKVm03M0xCQktwcUpmX0Vrck1QUTFqdGdJMTE2YVlnQUVtQTl4dzVCS2I5N2QxM1BybnZfckJYX1NXMkJhY2ZjbVJCbUpKcmhNemxuV1l5VUVwYVN5X1NBb01kdGV4dkVGU21ZNWVSa0hSOHB1QkU3b0RXTG5IQ2JvTU9DWXk2d3ZoYUNIRHJBUjhycTA0NXlVaE9TVVU4cDdLdF96V3pHc3NVV1ZPaHpqOUhtUGNkdS1jVmtPRFc0NHdXYURYMmxReHBMTkowZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": false
   }
 ]
