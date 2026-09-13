@@ -41,7 +41,6 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-11 22:48:56,2025-10-02,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,2.572,2.518,DOWN,2.401,DOWN,0.117,1.0,0.0,0.0,2.572,0.0,2.108,2.9281,1.0,yfinance,5.0
 2026-09-11 22:50:26,2025-10-02,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.0522,3.9989,DOWN,3.901,DOWN,0.0979,1.0,0.0,0.0,4.0522,0.0,3.5893,4.4085,1.0,yfinance,5.0
 2026-09-11 22:51:47,2025-10-02,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,4.1522,4.0989,DOWN,4.001,DOWN,0.0979,1.0,0.0,0.0,4.1522,0.0,3.6861,4.5117,1.0,yfinance,5.0
-2026-09-12 05:31:16,2026-09-21,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Test Live Production Trigger: Critical Refinery Outage Shuts Pipeline Hub,3.184,3.2859,UP,,,,,0.0,0.0,3.184,0.0,2.9637,3.6081,,yfinance,5.0
 2026-09-12 16:19:07,2026-09-11,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2146,3.2398,UP,3.1198,DOWN,0.12,0.0,0.0,0.0,3.2146,0.0,2.9606,3.5189,1.0,yfinance,5.0
 2026-09-12 16:19:07,2026-09-15,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2525,3.2165,DOWN,,,,,0.0,0.0,3.2525,0.0,2.9374,3.4956,,yfinance,5.0
 2026-09-12 16:19:07,2026-09-16,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2106,3.1492,DOWN,,,,,0.0,0.0,3.2106,0.0,2.8701,3.4284,,yfinance,5.0
@@ -2448,3 +2447,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-13 13:08:40,2026-09-09,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.724,3.6802,DOWN,3.7606,UP,0.0804,0.0,0.0,0.0,3.724,0.0,3.3801,3.9802,1.0,yfinance,5.0
 2026-09-13 13:08:40,2026-09-10,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.7551,3.729,DOWN,3.9432,UP,0.2142,0.0,0.0,0.0,3.7551,0.0,3.4289,4.0291,1.0,yfinance,5.0
 2026-09-13 13:10:19,2026-09-18,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.74,3.7088,DOWN,,,,,0.0,0.0,3.74,0.0,3.409,4.0087,,yfinance,5.0
+2026-09-13 14:17:01,2026-09-21,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Is American Eagle Outfitters (AEO) Undervalued After Earnings Fueled By A Tariff Refund? - simplywall.st,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9568,3.5436,,yfinance,5.0
