@@ -367,6 +367,10 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
     if history_df.empty:
         logger.warning("Prediction history log is empty. No predictions to evaluate.")
         return history_df
+
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_YFINANCE_FORCE") != "1":
+        logger.debug("TESTING=1: Returning cached prediction history without online yfinance download.")
+        return history_df
         
     history_df['actual_direction'] = history_df['actual_direction'].astype(object)
     history_df['predicted_direction'] = history_df['predicted_direction'].astype(object)
@@ -575,7 +579,7 @@ def filter_evaluated_history_by_window(
         try:
             w_int = int(window_days)
             max_dt = eval_df['target_dt'].max()
-            cutoff_dt = max_dt - pd.Timedelta(days=int(w_int))
+            cutoff_dt = max_dt - pd.to_timedelta(w_int, unit='D')
             eval_df = eval_df[eval_df['target_dt'] >= cutoff_dt]
         except (ValueError, TypeError):
             pass

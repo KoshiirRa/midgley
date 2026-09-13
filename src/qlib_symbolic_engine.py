@@ -209,9 +209,6 @@ class ASTEvaluator(ast.NodeVisitor):
     def visit_Constant(self, node: ast.Constant):
         return node.value
 
-    def visit_Num(self, node: ast.Num):  # Python 3.7 compatibility
-        return node.n
-
 
 class QlibSymbolicEngine:
     """

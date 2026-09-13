@@ -86,6 +86,13 @@ def init_wandb_run(
     if not api_key and not run_mode:
         run_mode = "offline"
 
+    # Map boolean reinit to modern wandb values to silence deprecation warning
+    reinit_val = reinit
+    if reinit is True:
+        reinit_val = "finish_previous"
+    elif reinit is False:
+        reinit_val = None
+
     try:
         run = wandb.init(
             project=project,
@@ -96,7 +103,7 @@ def init_wandb_run(
             tags=tags or ["midgley", "unleaded-gas", "forecasting"],
             notes=notes,
             mode=run_mode,
-            reinit=reinit
+            reinit=reinit_val
         )
         logger.info(f"Initialized W&B run: {getattr(run, 'name', 'unnamed')} ({getattr(run, 'url', 'offline')})")
         return run

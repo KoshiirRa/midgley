@@ -250,7 +250,7 @@ EXAMPLE_HTML = """<!DOCTYPE html>
                 <span class="text-xs font-mono text-amber-400">LaTeX KaTeX Log</span>
             </div>
             <div class="katex-display text-amber-100 bg-[#0A0705] p-5 rounded-xl border border-[#573A1B]">
-                $$P_{\text{Tulsa Retail, } t+5} = P_{\text{Wholesale RBOB, } t+5} + \text{Dynamic Rack Margin}_t + \sum_{k} \text{Shock}_{k, t} \cdot e^{-\frac{\ln(2) \cdot \Delta t}{\tau_k}}$$
+                $$P_{{\\text{{Tulsa Retail, }} t+5}} = P_{{\\text{{Wholesale RBOB, }} t+5}} + \\text{{Dynamic Rack Margin}}_t + \\sum_{{k}} \\text{{Shock}}_{{k, t}} \\cdot e^{{-\\frac{{\\ln(2) \\cdot \\Delta t}}{{\\tau_k}}}}$$
             </div>
         </section>
 
