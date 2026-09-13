@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TIMEOUT = float(os.environ.get("HINDSIGHT_TIMEOUT", "30.0"))  # 30-second timeout for Cloud Run scale-to-zero cold-start resilience
+DEFAULT_TIMEOUT = float(os.environ.get("HINDSIGHT_TIMEOUT", "60.0"))  # 60-second timeout for Cloud Run scale-to-zero cold-start resilience
 
 
 def _extract_error_detail(e: Exception) -> str:
@@ -90,7 +90,7 @@ class HindsightClient:
             logger.debug(f"Hindsight health ping failed: {e}")
             return False
 
-    def warmup(self, max_wait_seconds: float = 30.0, retry_interval: float = 2.0) -> bool:
+    def warmup(self, max_wait_seconds: float = 60.0, retry_interval: float = 2.0) -> bool:
         """
         Proactively wakes up Cloud Run / Supabase Hindsight service from scale-to-zero.
         Polls health endpoint until responsive or max_wait_seconds elapses.
