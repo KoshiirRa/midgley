@@ -110,6 +110,7 @@ CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 # Vectorize Hindsight Cloud Run REST API Endpoint (Scale-to-Zero)
 HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
 HINDSIGHT_API_KEY=""              # Optional bearer token if endpoint is authenticated
+HINDSIGHT_TIMEOUT="30.0"          # Socket read timeout in seconds (handles scale-to-zero cold boots)
 
 # Supabase PostgreSQL pgvector Connection URI (Transaction Pooler Port 5432 or 6543)
 SUPABASE_DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
@@ -244,7 +245,9 @@ Midgley integrates an episodic memory layer (**Retain-Recall-Reflect**) to perfo
    - Set `HINDSIGHT_API_URL` in `.env` and GitHub Repository Secrets:
      ```bash
      HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
+     HINDSIGHT_TIMEOUT="30.0"
      ```
+   - **Scale-to-Zero Proactive Warmup & Zero Data Loss:** When deployed with `--min-instances 0`, Cloud Run instances spin down during inactivity and require 20–35s to cold boot. Midgley automatically triggers a non-blocking proactive warmup (`warmup()`) in Step 0 of execution pipelines. If any memory retain requests occur during container cold-start, experiences are safely buffered in local SQLite with `cloud_synced = 0` and automatically reconciled (`sync_pending_memories()`) once the cloud container is fully online.
 
 ### Option B: Zero-Cost Local SQLite FTS5 Fallback ($0 / Standalone Default)
 If no remote Hindsight or Supabase credentials are configured, Midgley automatically activates `SQLiteMemoryStore` at `data/agent_memory.sqlite`:
@@ -727,4 +730,4 @@ python3 scripts/audit_feature_leakage.py --region Tulsa_OK --horizons 1,3,5,10,1
 
 ---
 
-*Midgley Version: `v0.5.2` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.5.3-dev` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*

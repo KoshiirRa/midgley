@@ -293,11 +293,11 @@ All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/U
 
 Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-tier edge caching:
 
-1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):**
+1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](file:///workers/intraday_monitor_worker.ts)):**
    * Executes every 15 minutes via Cloudflare Cron Triggers (`*/15 * * * *`).
-   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection, deduplicates dispatched items against Cloudflare Cache API (`caches.default`), and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
+   * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection (filtering non-energy macro tariffs and agricultural cooking oils like canola), deduplicates dispatched items against Cloudflare D1 database (`midgley-cache-d1` `seen_rss_headlines`) across all global PoPs, and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
 
-2. **`midgley-cache-worker` ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):**
+2. **`midgley-cache-worker` ([workers/cache_worker.ts](file:///workers/cache_worker.ts)):**
    * Acts as Tier 2 Edge Cache Gateway over Cloudflare D1 database (`midgley-cache-d1`).
    * Serves `/api/v1/cache/:key` GET/POST endpoints and `/status` health probes with optional Bearer Token authentication.
 
@@ -322,7 +322,7 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 * **Cloudflare Native Observability:** Configured in `wrangler.toml` and `wrangler.cache.toml` with `[observability]` (`enabled = true`, `head_sampling_rate = 1.0`, `persist = true`).
 * **Axiom Log Analytics (`logToAxiom`):** Ingests structured JSON cycle summaries, RSS warnings, GitHub dispatches, and cache hits/misses directly to Axiom dataset `midgley-workers` via `ctx.waitUntil()` async flushes (0 HTTP latency penalty, $0 subscription cost).
 * **Sentry Crash Reporting & Crons (`captureSentryException` & `sendSentryCronCheckIn`):** Captures unhandled runtime errors with stack trace context and executes 2-stage Sentry Cron check-ins (`in_progress` start ping + `ok`/`error` completion ping with matching `check_in_id`) for execution duration tracking and timeout detection.
-* **Axiom & Sentry Dashboard Templates & APL Queries:** See [`docs/OBSERVABILITY_DASHBOARDS.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/OBSERVABILITY_DASHBOARDS.md) for ready-to-use APL queries, dashboard widget templates, and alert rules.
+* **Axiom & Sentry Dashboard Templates & APL Queries:** See [`docs/OBSERVABILITY_DASHBOARDS.md`](file:///docs/OBSERVABILITY_DASHBOARDS.md) for ready-to-use APL queries, dashboard widget templates, and alert rules.
 
 ---
 
@@ -340,49 +340,29 @@ During intraday event evaluations in `src/intraday_event_monitor.py`, breaking h
 
 ---
 
-## 12. Healthchecks.io Pipeline Heartbeat & Dead-Man's Snitch Monitoring (`src/healthcheck_monitor.py`, Issue #98)
+## 12. Real-Time Discord Webhook Notification Gateway (Issue #234)
 
-Midgley integrates **Healthchecks.io** dead-man's snitch monitoring to guarantee visibility into scheduled pipeline executions:
-* **Heartbeat Dispatch Stages:**
-  - **Start (`/start`):** Sent when a forecasting cycle or weekly model review run begins.
-  - **Success (`/0` or `POST /`):** Dispatched upon successful completion, uploading execution duration (seconds) and summary diagnostic logs in the HTTP payload body.
-  - **Failure (`/fail`):** Sent upon uncaught exceptions or catastrophic run aborts, including the traceback in the payload.
-* **Orchestration Integration:**
-  - `src/prediction_logger.py` for daily 02:00 AM Central forecast runs.
-  - `src/weekly_issue_reporter.py` for Saturday 08:00 AM Central weekly review audits.
-  - `.github/workflows/gas_price_forecast.yml` and `.github/workflows/weekly_model_review.yml` GitHub Actions workflows.
-* **Operational Resiliency:** 100% fail-open, 10-second request timeouts, and test execution isolation (`TESTING=1`).
+```
+       ┌─────────────────────────────────────────────────────────────┐
+       │   INTRADAY SHOCK DETECTED (IntradayEventMonitor / Edge)     │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │      DISCORD NOTIFICATION ENGINE (src/discord_notifier.py)   │
+       │  • Evaluates Environment (MIDGLEY_ENV: 'prod' vs 'dev')     │
+       │  • Formats Rich Discord Embed (Color: Red / Green / Orange) │
+       │  • Attaches Headline, Source, Target Locales & Factor Vector│
+       │  • Attaches Original Article & Wayback Machine Archive URLs │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │ HTTP POST (10s Timeout, Non-blocking)
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │             DISCORD CHANNEL INCOMING WEBHOOK                │
+       │   🚨 [PRODUCTION] or [DEVELOPMENT] Intraday Revision Alert  │
+       └─────────────────────────────────────────────────────────────┘
+```
 
----
-
-## 13. Open Source AI Radar Automated Model Discovery Connector (`src/data_ingestion.py`, Issue #187)
-
-Midgley monitors the open-weights AI model landscape via **Open Source AI Radar**:
-* **`OpenSourceAIRadarConnector`:** Ingests release metadata, parameter scales, quantization benchmarks, licensing, and capabilities from `api.opensourceai.io/v1/radar/models` (or configured mirror).
-* **Caching & Resilience:** 24-hour disk cache (`data/radar_cache.json`) with deterministic fallback model registry.
-* **REST & Weekly Review Integration:** Exposes `GET /api/v1/system/radar` and automatically injects model discovery tables into Saturday weekly review issues.
-
----
-
-## 14. Self-Hosted ArchiveBox Historical Article Preservation Engine (`src/archive_service.py`, Issue #97)
-
-Midgley integrates self-hosted **ArchiveBox** (`archivebox.io`) to preserve full-fidelity historical web pages:
-* **Non-Blocking Architecture:** Dispatches archive requests (`POST /api/v1/core/add/`) via background thread pool (`concurrent.futures.ThreadPoolExecutor`) to eliminate LLM pipeline latency overhead.
-* **Dual-Tier Snapshot Ledger:** If ArchiveBox instance is unreachable or disabled, saves local markdown snapshots to `data/archives/` and records entries in `data/archived_events_ledger.json`.
-* **URL Extraction Hook:** Automatically invoked by `extract_event_features_from_url()` in `src/event_analyzer.py`.
-
----
-
-## 15. Sapient PRAXIST Autonomous Energy Research Engine (`src/praxist_engine.py`, Issue #188)
-
-Midgley provides an autonomous programmatic research harness inspired by **Sapient PRAXIST**:
-* **`PraxistResearchHarness`:** Enables LLM agents to formulate empirical feature engineering hypotheses, execute backtests, and evaluate out-of-sample MAE deltas against baseline estimators.
-* **Statistical Validation:** Computes paired $t$-tests and $p$-values to verify that candidate feature improvements are statistically significant ($p < 0.05$) rather than backtest overfitting.
----
-
-## 16. Real-Time Discord Webhook Notification Gateway (`src/discord_notifier.py`, Issue #234)
-
-When an intraday anomaly is detected by `src/intraday_event_monitor.py` or `.github/workflows/intraday_event_monitor.yml`, `src/discord_notifier.py` formats and dispatches a rich Discord Embed payload to `DISCORD_INTRADAY_WEBHOOK_URL` / `DISCORD_WEBHOOK_URL`:
 * **Environment Distinction:** Automatically tags alerts with `[PRODUCTION]` or `[DEVELOPMENT]` badges based on `MIDGLEY_ENV` / `GITHUB_ACTIONS` runtime state.
 * **Detailed Catalyst Telemetry:** Ingests headline prose, source identifier, original URL, Wayback archive link, affected metro hub locales, price pressure $\Delta P$, supply disruption $S$, and geopolitical risk $G$.
 * **Severity Color Dynamics:** Red (`#E74C3C`) for severe supply shocks ($S \ge 0.50$) / price surges ($\Delta P \ge +0.40$), Green (`#2ECC71`) for downward price relief ($\Delta P \le -0.20$), and Orange (`#E67E22`) for general volatility.
@@ -390,7 +370,7 @@ When an intraday anomaly is detected by `src/intraday_event_monitor.py` or `.git
 
 ---
 
-## 17. Chronological 15-Section Mathematical Framework & Pipeline Execution (Issues #224, #225, #226, #227, #229)
+## 13. Chronological 15-Section Mathematical Framework & Pipeline Execution (Issues #224, #225, #226, #227, #229)
 
 The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and generation engine in [`src/dashboard_generator.py`](file:///src/dashboard_generator.py) follow a strict 15-section chronological execution pipeline:
 
@@ -412,10 +392,39 @@ The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and
 
 ---
 
-## 18. CoSPOT Spectral Feature Prompting & Hindsight Episodic Agent Memory (Issues #215 & #230)
+## 14. CoSPOT Spectral Prompting & Hindsight Episodic Agent Memory (Issues #215 & #230)
 
 * **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
 * **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](file:///src/agent_memory.py) & [`src/hindsight_client.py`](file:///src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Google Cloud Run + Supabase pgvector and local SQLite FTS5 fallback.
+  - **Scale-to-Zero Proactive Warmup:** Step 0 non-blocking background initialization thread in `run_all.py` waking Cloud Run containers before batch retain/recall execution.
+  - **Socket Read Timeout Retries:** 30s configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
+  - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once Cloud Run is healthy.
+
+---
+
+## 15. System Telemetry, Connector Health Auditing & Observability Architecture (Issue #237)
+
+```
+        ┌─────────────────────────────────────────────────────────────┐
+        │            SYSTEM OBSERVABILITY & TELEMETRY HUB             │
+        │             (src/telemetry.py & src/dashboard_generator.py) │
+        └──────────────┬──────────────────────────────┬───────────────┘
+                       │                              │
+         ┌─────────────┴────────────┐   ┌─────────────┴────────────┐
+         ▼                          ▼   ▼                          ▼
+┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐
+│ HINDSIGHT MEMORY │       │ CONNECTOR AUDIT  │       │ FALLBACK SAVINGS │
+│ Retain / Recall  │       │ 7-Day EIA, FRED, │       │ Basic Tier &     │
+│ & Cloud Run vs   │       │ USDA, NOAA, AAA, │       │ Lexicon Routing  │
+│ SQLite FTS5 Hub  │       │ Socrata & USGS   │       │ Spared LLM $ & Tk│
+└──────────────────┘       └──────────────────┘       └──────────────────┘
+```
+
+* **Vectorize Hindsight Observability:** Tracks real-time memory operation volume (`retain_count`, `recall_count`, `reflect_count`), hybrid cloud container (`midgley-hindsight`) vs local SQLite FTS5 routing, and database experience totals.
+* **7-Day Connector Health Audit:** Ingests `src.connector_telemetry` to compute 7-day request volumes, failure rate %, latency, and cache freshness across all zero-cost open data connectors.
+* **Zero-Cost Fallback & Dollar Savings Accounting:** Ingests `src.fallback_telemetry` to monitor Basic Tier zero-cost routing and calculate cumulative dollar/token savings.
+* **Hard Quota Safety Valves:** Monitors Firecrawl (800/mo cap, 30/day burst limit), Finlight (150/mo cap, 10/day burst limit), and IPASIS Security Verifier (100 req/day cap).
+* **Dynamic Out-of-Metro Leaflet Map:** Renders real-time geographic clusters of out-of-metro forecast lookups from `src.telemetry.get_unmapped_zip_telemetry()`.
 
 
 

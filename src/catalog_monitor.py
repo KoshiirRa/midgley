@@ -366,19 +366,19 @@ def open_github_issue_for_item(item: dict, eval_res: dict, dry_run: bool = False
         return ""
 
     body = f"""## Summary
-Automatically discovered new candidate tool **[{item['title']}]({item['url']})** from developer catalog \`{item['catalog_key']}\`.
+Automatically discovered new candidate tool **[{item['title']}]({item['url']})** from developer catalog `{item['catalog_key']}`.
 
 **Description:** {item['description']}
 
 ## Modeling Evaluation & Value
-- **Modeling Category:** \`{eval_res['category']}\`
-- **Estimated Impact Score:** **\`{eval_res['impact_score']}/10.0\`**
-- **Architecture Target:** \`{eval_res['target_component']}\`
+- **Modeling Category:** `{eval_res['category']}`
+- **Estimated Impact Score:** **`{eval_res['impact_score']}/10.0`**
+- **Architecture Target:** `{eval_res['target_component']}`
 - **Rationale:** {eval_res['reasoning']}
-- **Assigned Labels:** \`{labels_str}\`
+- **Assigned Labels:** `{labels_str}`
 
 ## Acceptance Criteria
-- [ ] Implement {item['title']} client/connector in \`{eval_res['target_component']}\`.
+- [ ] Implement {item['title']} client/connector in `{eval_res['target_component']}`.
 - [ ] Add integration test suite.
 - [ ] Verify non-null data retrieval."""
 

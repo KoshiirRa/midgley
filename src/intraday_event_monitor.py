@@ -36,27 +36,36 @@ logger = logging.getLogger(__name__)
 
 # Primary Free Energy RSS Feeds for Zero-Cost 15-Min Polling
 FREE_RSS_FEEDS = [
-    "https://news.google.com/rss/search?q=unleaded+gasoline+when:3d&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=refinery+outage+when:3d&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=oil+tariff+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=unleaded+gasoline+when:1d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=refinery+outage+when:1d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=oil+tariff+when:1d&hl=en-US&gl=US&ceid=US:en",
     "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml"
 ]
 
 # Excluded Keywords to Filter Non-Energy Outages & Noise
 EXCLUDE_KEYWORDS = [
-    "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage"
+    "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage",
+    "canola", "cooking oil", "palm oil", "olive oil", "soybean oil"
+]
+
+# Non-Energy Policy Keywords to Filter False Positive Trade/Policy Headlines
+NON_ENERGY_TARIFF_EXCLUDE = [
+    "house should not transfer", "tariff authority", "steel tariff", "aluminum tariff", "copper tariff",
+    "lumber tariff", "auto tariff", "solar tariff", "washing machine", "semiconductor tariff", "chip tariff",
+    "reciprocal trade act", "section 301", "section 232", "canola", "canola oil"
 ]
 
 # High-Risk Keyword Lexicon for Stage 1 Cascading Gate
 TRIGGER_KEYWORDS = [
-    "tariff", "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
+    "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
+    "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
     "explosion", "tornado", "blackout", "blockade", "sanction",
     "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
     "strait of hormuz", "red sea attack", "spill",
     # Market Technicals & Volatility
     "crack spread", "crack-spread", "ovx spike", "futures spike", "futures crash", "wti surge", "rbob surge", "barrel price",
     # Executive Policy & Geopolitics
-    "executive order", "energy tariff", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
+    "executive order", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
     # Logistics & Infrastructure Hubs
     "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
     "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
@@ -68,6 +77,25 @@ TRIGGER_KEYWORDS = [
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
+EVALUATED_CACHE_FILE = os.path.join("data", "evaluated_headlines.json")
+
+
+def normalize_headline(headline: str) -> str:
+    """
+    Normalizes a news headline by stripping trailing RSS publisher attribution suffixes
+    (e.g., ' - National Taxpayers Union', ' - Reuters', ' | OilPrice.com', ' — CNBC'),
+    removing extraneous quotes/punctuation, and lowercasing for consistent deduplication.
+    """
+    if not headline:
+        return ""
+    import re
+    # Strip trailing publisher tag: " - Publisher Name" or " | Publisher Name" or " — Publisher Name"
+    cleaned = re.sub(r'\s+[-–—|]\s+[^-–—|]+$', '', headline.strip())
+    # Lowercase and collapse whitespace
+    cleaned = re.sub(r'\s+', ' ', cleaned.lower()).strip()
+    # Strip surrounding quotes or brackets
+    cleaned = re.sub(r'^[\'"“‘\[\(]+|[\'"”’\]\)]+$', '', cleaned).strip()
+    return cleaned
 
 
 class IntradayEventMonitor:
@@ -124,7 +152,16 @@ class IntradayEventMonitor:
         if any(ex in text_lower for ex in EXCLUDE_KEYWORDS):
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
+        if any(ex in text_lower for ex in NON_ENERGY_TARIFF_EXCLUDE):
+            return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+
         has_keyword = any(kw in text_lower for kw in TRIGGER_KEYWORDS)
+
+        # Allow tariff/tariffs if accompanied by energy/fuel/oil terms
+        if not has_keyword and ("tariff" in text_lower or "tariffs" in text_lower):
+            energy_context = any(e in text_lower for e in ["oil", "crude", "gasoline", "fuel", "petroleum", "refin", "diesel", "opec", "energy"])
+            if energy_context:
+                has_keyword = True
 
         if not has_keyword:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
@@ -150,45 +187,73 @@ class IntradayEventMonitor:
 
     def is_headline_already_processed(self, headline: str, url: str = "", max_age_hours: float = 24.0) -> bool:
         """
-        Checks data/intraday_events.json to see if this headline or URL has already been 
-        evaluated and logged within the last max_age_hours.
+        Checks data/intraday_events.json and data/evaluated_headlines.json to see if this
+        headline or URL has already been evaluated and logged within the last max_age_hours.
+        Uses normalized headline matching to handle publisher attribution variations.
         """
-        if not os.path.exists(ANOMALY_LOG_FILE):
-            return False
-            
-        clean_headline = headline.lower().strip()
         from datetime import timezone
         now = datetime.now(timezone.utc).replace(tzinfo=None)
-        
-        try:
-            with open(ANOMALY_LOG_FILE, "r", encoding="utf-8") as f:
-                events = json.load(f)
-                if not isinstance(events, list):
-                    return False
-                    
-                for evt in events:
-                    evt_headline = evt.get("headline", "").lower().strip()
-                    evt_url = evt.get("url", "").strip()
-                    evt_ts_str = evt.get("timestamp", "")
-                    
-                    # Match by exact URL (if present) or headline text
-                    url_match = bool(url and evt_url and url == evt_url)
-                    headline_match = bool(clean_headline == evt_headline)
-                    
-                    if url_match or headline_match:
-                        if evt_ts_str:
-                            try:
-                                evt_dt = datetime.fromisoformat(evt_ts_str).replace(tzinfo=None)
-                                age_hours = (now - evt_dt).total_seconds() / 3600.0
-                                if age_hours <= max_age_hours:
+        clean_headline = headline.lower().strip()
+        norm_headline = normalize_headline(headline)
+
+        # 1. Check positive anomaly records
+        if os.path.exists(ANOMALY_LOG_FILE):
+            try:
+                with open(ANOMALY_LOG_FILE, "r", encoding="utf-8") as f:
+                    events = json.load(f)
+                    if isinstance(events, list):
+                        for evt in events:
+                            evt_headline = evt.get("headline", "").lower().strip()
+                            evt_norm = normalize_headline(evt.get("headline", ""))
+                            evt_url = evt.get("url", "").strip()
+                            evt_ts_str = evt.get("timestamp", "")
+
+                            url_match = bool(url and evt_url and url == evt_url)
+                            headline_match = bool(clean_headline == evt_headline or (norm_headline and norm_headline == evt_norm))
+
+                            if url_match or headline_match:
+                                if evt_ts_str:
+                                    try:
+                                        evt_dt = datetime.fromisoformat(evt_ts_str).replace(tzinfo=None)
+                                        age_hours = (now - evt_dt).total_seconds() / 3600.0
+                                        if age_hours <= max_age_hours:
+                                            return True
+                                    except Exception:
+                                        return True
+                                else:
                                     return True
-                            except Exception:
-                                return True
-                        else:
-                            return True
-        except Exception as e:
-            logger.warning(f"Failed to check headline deduplication log: {e}")
-            
+            except Exception as e:
+                logger.warning(f"Failed to check anomaly deduplication log: {e}")
+
+        # 2. Check rolling evaluated ledger (captures non-anomalies as well)
+        if os.path.exists(EVALUATED_CACHE_FILE):
+            try:
+                with open(EVALUATED_CACHE_FILE, "r", encoding="utf-8") as f:
+                    evaluated = json.load(f)
+                    if isinstance(evaluated, list):
+                        for evt in evaluated:
+                            evt_headline = evt.get("headline", "").lower().strip()
+                            evt_norm = evt.get("norm_headline") or normalize_headline(evt.get("headline", ""))
+                            evt_url = evt.get("url", "").strip()
+                            evt_ts_str = evt.get("timestamp", "")
+
+                            url_match = bool(url and evt_url and url == evt_url)
+                            headline_match = bool(clean_headline == evt_headline or (norm_headline and norm_headline == evt_norm))
+
+                            if url_match or headline_match:
+                                if evt_ts_str:
+                                    try:
+                                        evt_dt = datetime.fromisoformat(evt_ts_str).replace(tzinfo=None)
+                                        age_hours = (now - evt_dt).total_seconds() / 3600.0
+                                        if age_hours <= max_age_hours:
+                                            return True
+                                    except Exception:
+                                        return True
+                                else:
+                                    return True
+            except Exception as e:
+                logger.warning(f"Failed to check evaluated headlines cache: {e}")
+
         return False
 
     def resolve_target_locales(self, headline: str) -> List[str]:
@@ -297,6 +362,10 @@ class IntradayEventMonitor:
             "scores": clean_scores
         }
 
+        is_test = source.startswith("Test_") or os.environ.get("TESTING") == "1"
+        if not is_test:
+            self._save_evaluated_record(result)
+
         if is_anomaly:
             logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}] (Targets: {target_locales}): '{headline}' (Scores: {scores})")
 
@@ -309,7 +378,6 @@ class IntradayEventMonitor:
                     logger.warning(f"Discord notification dispatch error: {e}")
                     result["discord_notified"] = False
 
-            is_test = source.startswith("Test_") or os.environ.get("TESTING") == "1"
             if is_test:
                 logger.info(f"  -> Skipping persistent storage & dashboard rebuild for test execution [{source}].")
             else:
@@ -386,6 +454,52 @@ class IntradayEventMonitor:
                 json.dump(events, f, indent=2)
         except Exception as e:
             logger.warning(f"Failed to write anomaly log '{ANOMALY_LOG_FILE}': {e}")
+
+    def _save_evaluated_record(self, record: Dict):
+        """Appends evaluated headline record to data/evaluated_headlines.json and prunes records older than 48 hours."""
+        os.makedirs("data", exist_ok=True)
+        from datetime import timezone
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+
+        evaluated = []
+        if os.path.exists(EVALUATED_CACHE_FILE):
+            try:
+                with open(EVALUATED_CACHE_FILE, "r", encoding="utf-8") as f:
+                    evaluated = json.load(f)
+                    if not isinstance(evaluated, list):
+                        evaluated = []
+            except Exception:
+                evaluated = []
+
+        entry = {
+            "timestamp": record.get("timestamp", datetime.now().isoformat()),
+            "headline": record.get("headline", ""),
+            "norm_headline": normalize_headline(record.get("headline", "")),
+            "url": record.get("url", ""),
+            "is_anomaly": record.get("is_anomaly", False),
+            "source": record.get("source", "")
+        }
+
+        # Keep records within rolling 48h
+        pruned = []
+        for e in evaluated:
+            ts_str = e.get("timestamp", "")
+            if ts_str:
+                try:
+                    dt = datetime.fromisoformat(ts_str).replace(tzinfo=None)
+                    if (now - dt).total_seconds() <= 48 * 3600.0:
+                        pruned.append(e)
+                except Exception:
+                    pruned.append(e)
+            else:
+                pruned.append(e)
+
+        pruned.append(entry)
+        try:
+            with open(EVALUATED_CACHE_FILE, "w", encoding="utf-8") as f:
+                json.dump(pruned, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Failed to write evaluated headlines cache '{EVALUATED_CACHE_FILE}': {e}")
 
 
 def main():

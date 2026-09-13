@@ -15,6 +15,7 @@ export interface Env {
   AXIOM_DATASET?: string;
   SEC_USER_AGENT?: string;
   EDGAR_8K_TICKERS?: string;
+  DB?: any;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
     sendBatch(messages: { body: any }[], options?: any): Promise<void>;
@@ -71,16 +72,24 @@ const RSS_FEEDS = [
   "https://news.google.com/rss/search?q=unleaded+gasoline+when:1d&hl=en-US&gl=US&ceid=US:en",
   "https://news.google.com/rss/search?q=refinery+outage+when:1d&hl=en-US&gl=US&ceid=US:en",
   "https://news.google.com/rss/search?q=oil+tariff+when:1d&hl=en-US&gl=US&ceid=US:en",
-  "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml",
-  "https://www.cnbc.com/id/19854911/device/rss/rss.html"
+  "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml"
 ];
 
 const EXCLUDE_KEYWORDS = [
-  "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage"
+  "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage",
+  "canola", "cooking oil", "palm oil", "olive oil", "soybean oil"
+];
+
+const NON_ENERGY_TARIFF_EXCLUDES = [
+  "house should not transfer", "tariff authority", "steel tariff", "aluminum tariff",
+  "copper tariff", "lumber tariff", "auto tariff", "solar tariff", "washing machine",
+  "semiconductor tariff", "chip tariff", "reciprocal trade act", "section 301", "section 232",
+  "canola", "canola oil"
 ];
 
 const TRIGGER_KEYWORDS = [
-  "tariff", "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
+  "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
+  "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
   "explosion", "tornado", "blackout", "blockade", "sanction",
   "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
   "strait of hormuz", "red sea attack", "spill"
@@ -253,18 +262,63 @@ function parseRSSItems(xmlText: string): RSSItem[] {
   return items;
 }
 
+export function normalizeHeadline(title: string): string {
+  if (!title) return "";
+  // Strip trailing publisher attribution tag: " - Publisher", " | Publisher", " — Publisher"
+  let cleaned = title.replace(/\s+[-–—|]\s+[^-–—|]+$/, "").trim();
+  // Lowercase and strip non-alphanumeric for clean hashing key
+  return cleaned.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 80);
+}
+
 export function isAnomalyHeadline(title: string): boolean {
   const lower = title.toLowerCase();
   if (EXCLUDE_KEYWORDS.some(k => lower.includes(k))) {
     return false;
   }
-  return TRIGGER_REGEX.test(title);
+  if (NON_ENERGY_TARIFF_EXCLUDES.some(k => lower.includes(k))) {
+    return false;
+  }
+  if (TRIGGER_REGEX.test(title)) {
+    return true;
+  }
+  // Check if headline mentions tariff/tariffs alongside energy context
+  if (/\btariffs?\b/i.test(title)) {
+    const hasEnergyContext = /(?:oil|crude|gasoline|fuel|petroleum|refin|diesel|energy|opec)/i.test(title);
+    return hasEnergyContext;
+  }
+  return false;
 }
 
-export async function isHeadlineDispatchedInCache(headline: string): Promise<boolean> {
+export async function isHeadlineDispatchedInCache(headline: string, env?: Env): Promise<boolean> {
+  const cleanKey = normalizeHeadline(headline);
+  if (!cleanKey) return false;
+
+  // 1. Check D1 Persistent Database if available
+  if (env && env.DB) {
+    try {
+      const stmt = env.DB.prepare(
+        "SELECT 1 FROM seen_rss_headlines WHERE clean_key = ? AND datetime(created_at, '+24 hours') > datetime('now') LIMIT 1"
+      );
+      const row = await stmt.bind(cleanKey).first();
+      if (row) {
+        console.log(`[D1 HIT] Headline already dispatched: "${cleanKey}"`);
+        return true;
+      }
+    } catch (d1Err: any) {
+      try {
+        await env.DB.prepare(
+          "CREATE TABLE IF NOT EXISTS seen_rss_headlines (clean_key TEXT PRIMARY KEY, raw_headline TEXT, created_at TEXT NOT NULL)"
+        ).run();
+      } catch {
+        // Ignore fallback
+      }
+      console.warn(`[D1 Query Warning] ${d1Err?.message || String(d1Err)}`);
+    }
+  }
+
+  // 2. Check local Edge Cache (caches.default) fallback
   try {
     if (typeof caches === "undefined" || !caches.default) return false;
-    const cleanKey = headline.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 80);
     const dummyUrl = `https://midgley-cache.internal/dispatched/${cleanKey}`;
     const req = new Request(dummyUrl);
     const cachedResp = await caches.default.match(req);
@@ -281,10 +335,34 @@ export async function isHeadlineDispatchedInCache(headline: string): Promise<boo
   }
 }
 
-export async function markHeadlineDispatchedInCache(headline: string): Promise<void> {
+export async function markHeadlineDispatchedInCache(headline: string, env?: Env): Promise<void> {
+  const cleanKey = normalizeHeadline(headline);
+  if (!cleanKey) return;
+
+  // 1. Store in D1 Persistent Database if available
+  if (env && env.DB) {
+    try {
+      await env.DB.prepare(
+        "INSERT OR REPLACE INTO seen_rss_headlines (clean_key, raw_headline, created_at) VALUES (?, ?, datetime('now'))"
+      ).bind(cleanKey, headline).run();
+      console.log(`[D1 STORE] Marked headline dispatched in D1: "${cleanKey}"`);
+    } catch (d1Err: any) {
+      try {
+        await env.DB.prepare(
+          "CREATE TABLE IF NOT EXISTS seen_rss_headlines (clean_key TEXT PRIMARY KEY, raw_headline TEXT, created_at TEXT NOT NULL)"
+        ).run();
+        await env.DB.prepare(
+          "INSERT OR REPLACE INTO seen_rss_headlines (clean_key, raw_headline, created_at) VALUES (?, ?, datetime('now'))"
+        ).bind(cleanKey, headline).run();
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  // 2. Also write to Edge Cache
   try {
     if (typeof caches === "undefined" || !caches.default) return;
-    const cleanKey = headline.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 80);
     const dummyUrl = `https://midgley-cache.internal/dispatched/${cleanKey}`;
     const req = new Request(dummyUrl);
     const resp = new Response("dispatched", {
@@ -396,7 +474,7 @@ export async function handleQueueBatch(
     }
 
     try {
-      const alreadyDispatched = await isHeadlineDispatchedInCache(headline);
+      const alreadyDispatched = await isHeadlineDispatchedInCache(headline, env);
       if (alreadyDispatched) {
         console.log(`[Queue Consumer Cache HIT] Skipping already dispatched event: "${headline}"`);
         message.ack();
@@ -407,7 +485,7 @@ export async function handleQueueBatch(
       const res = await dispatchGitHubEvent(env, headline, url);
       if (res.dispatched) {
         console.log(`[Queue Consumer Dispatch Success] Event dispatched for: "${headline}"`);
-        await markHeadlineDispatchedInCache(headline);
+        await markHeadlineDispatchedInCache(headline, env);
         message.ack();
         acked++;
       } else {
@@ -504,13 +582,13 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
         // D1 deduplication — skip if already seen
         // Note: D1 binding available via env when [[d1_databases]] edgar_8k_seen table exists
         // Fallback: use in-memory seen set per invocation if D1 unavailable
-        const alreadyDispatched = await isHeadlineDispatchedInCache(`edgar:${accessionId}`);
+        const alreadyDispatched = await isHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
         if (alreadyDispatched) continue;
 
         // Keyword gate on title first (saves HTML fetch round-trip for obvious noise)
         if (!isEdgarRelevant(title)) {
           // Mark noise filing as seen so we don't re-check it next cycle
-          await markHeadlineDispatchedInCache(`edgar:${accessionId}`);
+          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
           continue;
         }
 
@@ -523,7 +601,7 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
         });
 
         if (enqueued) {
-          await markHeadlineDispatchedInCache(`edgar:${accessionId}`);
+          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
           console.log(`[EDGAR8K] Enqueued relevant 8-K: ${headline}`);
           await logToAxiom(env, ctx, {
             event: "edgar_8k_enqueued",
@@ -557,9 +635,22 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
   try {
     for (const feedUrl of RSS_FEEDS) {
       try {
-        const resp = await fetch(feedUrl, {
-          headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Midgley-Worker/1.0" }
-        });
+        const fetchHeaders = {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+          "Accept": "application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.9",
+          "Cache-Control": "max-age=0"
+        };
+
+        let resp = await fetch(feedUrl, { headers: fetchHeaders });
+
+        // Retry once on transient 503 or 429 rate-limiting
+        if (resp.status === 503 || resp.status === 429) {
+          console.warn(`[RSS Retry] HTTP ${resp.status} on ${feedUrl}, retrying once with backoff...`);
+          await new Promise(r => setTimeout(r, 600));
+          resp = await fetch(feedUrl, { headers: fetchHeaders });
+        }
+
         if (!resp.ok) {
           console.warn(`[RSS Warning] HTTP ${resp.status} fetching feed: ${feedUrl}`);
           continue;
@@ -580,8 +671,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
           }
         }
       } catch (e: any) {
-        console.error(`[RSS Feed Error] Failed fetching ${feedUrl}: ${e.message || String(e)}`);
-        await captureSentryException(env, ctx, e, { feedUrl });
+        console.warn(`[RSS Feed Warning] Failed fetching ${feedUrl}: ${e.message || String(e)}`);
       }
     }
 
@@ -590,7 +680,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
 
     const dispatches: DispatchResult[] = [];
     for (const anomaly of anomalies) {
-      const alreadyDispatched = await isHeadlineDispatchedInCache(anomaly.title);
+      const alreadyDispatched = await isHeadlineDispatchedInCache(anomaly.title, env);
       if (alreadyDispatched) {
         continue;
       }
@@ -602,6 +692,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
           source: "Cloudflare_Worker_Queue"
         });
         if (enqueued) {
+          await markHeadlineDispatchedInCache(anomaly.title, env);
           dispatches.push({
             headline: anomaly.title,
             url: anomaly.link,
@@ -615,7 +706,7 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
       const res = await dispatchGitHubEvent(env, anomaly.title, anomaly.link);
       if (res.dispatched) {
         console.log(`[GitHub Dispatch Success] Event dispatched for: "${anomaly.title}"`);
-        await markHeadlineDispatchedInCache(anomaly.title);
+        await markHeadlineDispatchedInCache(anomaly.title, env);
       } else {
         console.error(`[GitHub Dispatch Failed] Error: ${res.error}`);
         await captureSentryException(env, ctx, new Error(res.error || "GitHub Dispatch Failed"), { anomalyTitle: anomaly.title });

@@ -11,20 +11,35 @@ Implements the core triad:
 
 import os
 import json
+import time
 import logging
 import urllib.request
 import urllib.error
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TIMEOUT = 15.0  # 15-second timeout for Cloud Run scale-to-zero cold-start resilience
+DEFAULT_TIMEOUT = float(os.environ.get("HINDSIGHT_TIMEOUT", "30.0"))  # 30-second timeout for Cloud Run scale-to-zero cold-start resilience
+
+
+def _extract_error_detail(e: Exception) -> str:
+    """Extracts a human-readable diagnostic message from HTTPError or general Exception."""
+    if isinstance(e, urllib.error.HTTPError):
+        try:
+            err_body = e.read().decode("utf-8")
+            err_json = json.loads(err_body)
+            detail = err_json.get("detail", err_body)
+            return f"HTTP {e.code}: {detail}"
+        except Exception:
+            return f"HTTP {e.code}: {e.reason}"
+    return str(e)
 
 
 class HindsightClient:
     """
-    REST API Client for Vectorize Hindsight Agent Memory Service.
+    Client for interacting with Vectorize Hindsight REST API.
+    Provides episodic agent memory integration (Retain-Recall-Reflect).
     """
 
     def __init__(
@@ -64,6 +79,8 @@ class HindsightClient:
         """Checks if the Hindsight API service is reachable and responsive."""
         if not self.is_configured:
             return False
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            return False
         try:
             url = f"{self.base_url}/health"
             req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
@@ -72,6 +89,38 @@ class HindsightClient:
         except Exception as e:
             logger.debug(f"Hindsight health ping failed: {e}")
             return False
+
+    def warmup(self, max_wait_seconds: float = 30.0, retry_interval: float = 2.0) -> bool:
+        """
+        Proactively wakes up Cloud Run / Supabase Hindsight service from scale-to-zero.
+        Polls health endpoint until responsive or max_wait_seconds elapses.
+        """
+        if not self.is_configured:
+            logger.debug("Hindsight warmup skipped: service unconfigured.")
+            return False
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            logger.debug("TESTING=1: Suppressed Hindsight warmup network probe.")
+            return False
+
+        start_time = time.time()
+        logger.info(f"Initiating Hindsight scale-to-zero warmup handshake (max_wait={max_wait_seconds}s)...")
+        attempt = 1
+        while (time.time() - start_time) < max_wait_seconds:
+            try:
+                url = f"{self.base_url}/health"
+                req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
+                with urllib.request.urlopen(req, timeout=min(self.timeout, 10.0)) as resp:
+                    if resp.status in (200, 204):
+                        elapsed = time.time() - start_time
+                        logger.info(f"Hindsight service responsive after {elapsed:.2f}s (attempt {attempt}).")
+                        return True
+            except Exception as e:
+                logger.debug(f"Hindsight warmup attempt {attempt} waiting: {e}")
+            attempt += 1
+            time.sleep(retry_interval)
+
+        logger.warning(f"Hindsight warmup timed out after {max_wait_seconds}s; downstream calls will use fallback.")
+        return False
 
     def retain(
         self,
@@ -91,12 +140,16 @@ class HindsightClient:
         if not self.is_configured:
             return {"status": "UNCONFIGURED", "message": "HINDSIGHT_API_URL not set."}
 
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            return {"status": "TEST_SUPPRESSED", "message": "TESTING=1: Suppressed Hindsight network retain."}
+
         tags = [region]
         if anomaly_type:
             tags.append(anomaly_type)
 
         doc_id = f"exp_{region.lower()}_{(forecast_target_date or datetime.now().strftime('%Y%m%d')).replace('-', '')}"
 
+        now_utc = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         payload = {
             "async": False,
             "items": [
@@ -105,22 +158,31 @@ class HindsightClient:
                     "context": f"Gas price forecasting record for region {region} (Error: ${error_dollars or 0.0:+.4f}/gal, Anomaly: {anomaly_type or 'NORMAL'})",
                     "document_id": doc_id,
                     "tags": tags,
-                    "timestamp": datetime.utcnow().isoformat() + "Z"
+                    "timestamp": now_utc
                 }
             ]
         }
 
-        try:
-            url = f"{self.base_url}/v1/default/banks/{self.bank_id}/memories"
-            data_bytes = json.dumps(payload).encode("utf-8")
-            req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                res_data = json.loads(resp.read().decode("utf-8"))
-                logger.info(f"Retained memory in Hindsight bank '{self.bank_id}' (region={region})")
-                return {"status": "SUCCESS", "data": res_data}
-        except Exception as e:
-            logger.warning(f"Hindsight retain call failed ({e}). Falling back to local storage.")
-            return {"status": "ERROR", "error": str(e)}
+        url = f"{self.base_url}/v1/default/banks/{self.bank_id}/memories"
+        data_bytes = json.dumps(payload).encode("utf-8")
+
+        for attempt in range(1, 3):
+            try:
+                req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    res_data = json.loads(resp.read().decode("utf-8"))
+                    logger.info(f"Retained memory in Hindsight bank '{self.bank_id}' (region={region})")
+                    return {"status": "SUCCESS", "data": res_data}
+            except Exception as e:
+                err_detail = _extract_error_detail(e)
+                if attempt < 2:
+                    logger.debug(f"Hindsight retain attempt {attempt} failed ({err_detail}); retrying...")
+                    time.sleep(1.5)
+                else:
+                    logger.warning(f"Hindsight retain call failed after {attempt} attempts ({err_detail}). Falling back to local storage.")
+                    return {"status": "ERROR", "error": err_detail}
+
+        return {"status": "ERROR", "error": "Unknown retention failure"}
 
     def recall(
         self,
@@ -136,6 +198,9 @@ class HindsightClient:
         if not self.is_configured:
             return []
 
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            return []
+
         tags = []
         if region:
             tags.append(region)
@@ -148,26 +213,34 @@ class HindsightClient:
             "tags": tags if tags else None
         }
 
-        try:
-            url = f"{self.base_url}/v1/default/banks/{self.bank_id}/memories/recall"
-            data_bytes = json.dumps(payload).encode("utf-8")
-            req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                res_data = json.loads(resp.read().decode("utf-8"))
-                items = res_data.get("results", res_data.get("memories", []))
-                formatted = []
-                for it in items[:top_k]:
-                    formatted.append({
-                        "content": it.get("content", it.get("text", "")),
-                        "region": region or "Unknown",
-                        "score": it.get("score", 0.0),
-                        "metadata": it
-                    })
-                logger.info(f"Recalled {len(formatted)} memories from Hindsight bank '{self.bank_id}'")
-                return formatted
-        except Exception as e:
-            logger.debug(f"Hindsight recall call failed ({e}).")
-            return []
+        url = f"{self.base_url}/v1/default/banks/{self.bank_id}/memories/recall"
+        data_bytes = json.dumps(payload).encode("utf-8")
+
+        for attempt in range(1, 3):
+            try:
+                req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    res_data = json.loads(resp.read().decode("utf-8"))
+                    items = res_data.get("results", res_data.get("memories", []))
+                    formatted = []
+                    for it in items[:top_k]:
+                        formatted.append({
+                            "content": it.get("content", it.get("text", "")),
+                            "region": region or "Unknown",
+                            "score": it.get("score", 0.0),
+                            "metadata": it
+                        })
+                    logger.info(f"Recalled {len(formatted)} memories from Hindsight bank '{self.bank_id}'")
+                    return formatted
+            except Exception as e:
+                err_detail = _extract_error_detail(e)
+                if attempt < 2:
+                    logger.debug(f"Hindsight recall attempt {attempt} failed ({err_detail}); retrying...")
+                    time.sleep(1.0)
+                else:
+                    logger.debug(f"Hindsight recall call failed after {attempt} attempts ({err_detail}).")
+                    return []
+        return []
 
     def reflect(
         self,
@@ -180,20 +253,31 @@ class HindsightClient:
         if not self.is_configured:
             return {"status": "UNCONFIGURED", "reflections": []}
 
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            return {"status": "TEST_SUPPRESSED", "reflections": []}
+
         query = f"Reflect on these energy forecasting anomalies and summarize root causes: {json.dumps(anomalies)}"
         payload = {
             "query": query,
             "budget": "mid"
         }
 
-        try:
-            url = f"{self.base_url}/v1/default/banks/{self.bank_id}/reflect"
-            data_bytes = json.dumps(payload).encode("utf-8")
-            req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
-            with urllib.request.urlopen(req, timeout=self.timeout * 3) as resp:
-                res_data = json.loads(resp.read().decode("utf-8"))
-                logger.info(f"Generated reflection via Hindsight bank '{self.bank_id}'")
-                return {"status": "SUCCESS", "reflections": res_data.get("reflections", [res_data])}
-        except Exception as e:
-            logger.warning(f"Hindsight reflect call failed ({e}).")
-            return {"status": "ERROR", "error": str(e), "reflections": []}
+        url = f"{self.base_url}/v1/default/banks/{self.bank_id}/reflect"
+        data_bytes = json.dumps(payload).encode("utf-8")
+
+        for attempt in range(1, 3):
+            try:
+                req = urllib.request.Request(url, data=data_bytes, headers=self._get_headers(), method="POST")
+                with urllib.request.urlopen(req, timeout=self.timeout * 2) as resp:
+                    res_data = json.loads(resp.read().decode("utf-8"))
+                    logger.info(f"Generated reflection via Hindsight bank '{self.bank_id}'")
+                    return {"status": "SUCCESS", "reflections": res_data.get("reflections", [res_data])}
+            except Exception as e:
+                err_detail = _extract_error_detail(e)
+                if attempt < 2:
+                    logger.debug(f"Hindsight reflect attempt {attempt} failed ({err_detail}); retrying...")
+                    time.sleep(2.0)
+                else:
+                    logger.warning(f"Hindsight reflect call failed after {attempt} attempts ({err_detail}).")
+                    return {"status": "ERROR", "error": err_detail, "reflections": []}
+        return {"status": "ERROR", "error": "Reflection failed", "reflections": []}

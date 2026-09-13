@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "midgley"
-version = "0.5.2"
+version = "0.5.3"
 description = "LLM-Augmented Unleaded Gasoline Price Prediction Framework"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 license = {text = "Apache-2.0"}
 authors = [
     {name = "KoshiirRa"}

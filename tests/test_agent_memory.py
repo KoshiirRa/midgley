@@ -80,6 +80,7 @@ class TestHindsightClient(unittest.TestCase):
         reflect_res = client.reflect(anomalies=[{"region": "National"}])
         self.assertEqual(reflect_res["status"], "UNCONFIGURED")
 
+    @patch.dict(os.environ, {"TEST_HINDSIGHT_FORCE": "1"})
     @patch("src.hindsight_client.urllib.request.urlopen")
     def test_configured_retain_mock(self, mock_urlopen):
         mock_resp = MagicMock()
@@ -170,6 +171,72 @@ class TestWeeklyReviewMemoryReporting(unittest.TestCase):
             temp_dir.cleanup()
         except Exception:
             pass
+
+
+class TestHindsightWarmupAndSync(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.db_path = os.path.join(self.temp_dir.name, "sync_test.sqlite")
+        self.manager = AgentMemoryManager(
+            hindsight_url="https://mock-hindsight.a.run.app",
+            hindsight_key="mock-key",
+            sqlite_path=self.db_path
+        )
+
+    def tearDown(self):
+        try:
+            self.temp_dir.cleanup()
+        except Exception:
+            pass
+
+    @patch.dict(os.environ, {"TEST_HINDSIGHT_FORCE": "1"})
+    @patch("src.hindsight_client.urllib.request.urlopen")
+    def test_warmup_success(self, mock_urlopen):
+        mock_resp = MagicMock()
+        mock_resp.status = 200
+        mock_urlopen.return_value.__enter__.return_value = mock_resp
+
+        client = HindsightClient(base_url="https://mock-hindsight.a.run.app")
+        ok = client.warmup(max_wait_seconds=2.0, retry_interval=0.1)
+        self.assertTrue(ok)
+
+    @patch.dict(os.environ, {"TEST_HINDSIGHT_FORCE": "1"})
+    @patch("src.hindsight_client.urllib.request.urlopen")
+    def test_sync_pending_memories_reconciliation(self, mock_urlopen):
+        # 1. Seed local unsynced memories
+        self.manager.sqlite_store.retain(
+            content="Historical cold boot shock",
+            region="Tulsa_OK",
+            anomaly_type="LARGE_UNDERESTIMATE",
+            error_dollars=0.28,
+            cloud_synced=0
+        )
+        self.manager.sqlite_store.retain(
+            content="Historical cold boot shock 2",
+            region="National",
+            anomaly_type="NORMAL",
+            error_dollars=0.05,
+            cloud_synced=0
+        )
+
+        unretained = self.manager.sqlite_store.get_unretained_memories()
+        self.assertEqual(len(unretained), 2)
+
+        # 2. Mock cloud service becoming healthy and responding
+        mock_resp_health = MagicMock()
+        mock_resp_health.status = 200
+
+        mock_resp_retain = MagicMock()
+        mock_resp_retain.read.return_value = json.dumps({"status": "SUCCESS"}).encode("utf-8")
+
+        mock_urlopen.return_value.__enter__.side_effect = [mock_resp_health, mock_resp_retain, mock_resp_retain]
+
+        synced = self.manager.sync_pending_memories(limit=10)
+        self.assertEqual(synced, 2)
+
+        # 3. Verify that zero unsynced records remain
+        remaining = self.manager.sqlite_store.get_unretained_memories()
+        self.assertEqual(len(remaining), 0)
 
 
 if __name__ == "__main__":

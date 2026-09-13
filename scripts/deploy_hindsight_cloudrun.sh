@@ -47,6 +47,9 @@ echo "Region:       $REGION"
 echo "Image:        $IMAGE"
 echo "Scale Policy: Min Instances = 0 (Scale-to-Zero for $0 Idle Cost)"
 
+# Default LLM model for Hindsight fact extraction & reasoning (gemini-2.5-flash for token-efficient low cost)
+HINDSIGHT_LLM_MODEL="${HINDSIGHT_LLM_MODEL:-gemini-2.5-flash}"
+
 # 2. Execute gcloud deployment
 gcloud run deploy "$SERVICE_NAME" \
     --project "$PROJECT_ID" \
@@ -60,7 +63,7 @@ gcloud run deploy "$SERVICE_NAME" \
     --memory 2Gi \
     --cpu 2 \
     --timeout 300 \
-    --set-env-vars HINDSIGHT_API_PORT="8888",HINDSIGHT_API_DATABASE_URL="$SUPABASE_DATABASE_URL",DATABASE_URL="$SUPABASE_DATABASE_URL",HINDSIGHT_API_RUN_MIGRATIONS_ON_STARTUP="true",HINDSIGHT_API_SKIP_LLM_VERIFICATION="true",HINDSIGHT_API_LLM_PROVIDER="gemini",HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY"
+    --set-env-vars HINDSIGHT_API_PORT="8888",HINDSIGHT_API_DATABASE_URL="$SUPABASE_DATABASE_URL",DATABASE_URL="$SUPABASE_DATABASE_URL",HINDSIGHT_API_RUN_MIGRATIONS_ON_STARTUP="true",HINDSIGHT_API_SKIP_LLM_VERIFICATION="true",HINDSIGHT_API_LLM_PROVIDER="gemini",HINDSIGHT_API_LLM_MODEL="$HINDSIGHT_LLM_MODEL",HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY"
 
 # 3. Retrieve service URL
 SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID" --platform managed --region "$REGION" --format 'value(status.url)')

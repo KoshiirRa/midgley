@@ -6,9 +6,11 @@ Updates live README.md forecast tables and regenerates the public docs/ index.ht
 
 import sys
 import logging
+import threading
 from src.locations import LOCATIONS, run_all_locations
 from src.readme_updater import update_readme_forecasts
 from src.dashboard_generator import generate_public_dashboard
+from src.hindsight_client import HindsightClient
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -23,6 +25,20 @@ if __name__ == "__main__":
     print("=" * 80)
     print("      MIDGLEY MASTER FORECASTING ENGINE - ALL LOCATIONS PIPELINE")
     print("=" * 80)
+
+    # Step 0: Non-blocking proactive warmup for Hindsight scale-to-zero memory service
+    try:
+        hindsight = HindsightClient()
+        if hindsight.is_configured:
+            print("  [STEP 0] Triggering proactive Hindsight Cloud Run memory service warmup...")
+            warmup_thread = threading.Thread(
+                target=lambda: hindsight.warmup(max_wait_seconds=35.0, retry_interval=2.0),
+                name="hindsight-warmup",
+                daemon=True
+            )
+            warmup_thread.start()
+    except Exception as e:
+        logger.debug(f"Notice initiating Hindsight warmup: {e}")
     
     step_num = 1
     total_steps = len(LOCATIONS) + 1

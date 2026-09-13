@@ -367,6 +367,10 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
     if history_df.empty:
         logger.warning("Prediction history log is empty. No predictions to evaluate.")
         return history_df
+
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_YFINANCE_FORCE") != "1":
+        logger.debug("TESTING=1: Returning cached prediction history without online yfinance download.")
+        return history_df
         
     history_df['actual_direction'] = history_df['actual_direction'].astype(object)
     history_df['predicted_direction'] = history_df['predicted_direction'].astype(object)
@@ -445,17 +449,19 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
                 act = float(row.get('actual_5d_price', 0.0))
                 target_d = str(row.get('forecast_target_date', ''))
                 anom_type = "LARGE_OVERESTIMATE" if (pred - act) >= 0.25 else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25 else ("DIRECTIONAL_FLIP" if row.get('directional_hit') == 0.0 and abs(pred - act) >= 0.05 else "NORMAL"))
-                mem_mgr.retain(
-                    content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
-                    region=reg,
-                    memory_type="anomaly_shock" if anom_type != "NORMAL" else "experience",
-                    anomaly_type=anom_type,
-                    error_dollars=err,
-                    predicted_price=pred,
-                    actual_price=act,
-                    forecast_target_date=target_d,
-                    metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
-                )
+                # Only retain genuine prediction anomaly shocks into episodic memory to protect token spend
+                if anom_type != "NORMAL":
+                    mem_mgr.retain(
+                        content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
+                        region=reg,
+                        memory_type="anomaly_shock",
+                        anomaly_type=anom_type,
+                        error_dollars=err,
+                        predicted_price=pred,
+                        actual_price=act,
+                        forecast_target_date=target_d,
+                        metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
+                    )
         except Exception as e:
             logger.debug(f"Agent memory retention notice: {e}")
             
@@ -575,7 +581,7 @@ def filter_evaluated_history_by_window(
         try:
             w_int = int(window_days)
             max_dt = eval_df['target_dt'].max()
-            cutoff_dt = max_dt - pd.Timedelta(days=int(w_int))
+            cutoff_dt = max_dt - pd.to_timedelta(w_int, unit='D')
             eval_df = eval_df[eval_df['target_dt'] >= cutoff_dt]
         except (ValueError, TypeError):
             pass

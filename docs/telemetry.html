@@ -32,7 +32,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.5.2</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.5.3</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -131,13 +131,13 @@
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Zero-Cost Fallback Savings</span>
-                    <div class="text-2xl font-bold text-blue-400 font-mono">$0.0250</div>
-                    <span class="text-[10px] text-blue-400 font-mono">87,500 Tokens Saved</span>
+                    <div class="text-2xl font-bold text-blue-400 font-mono">$0.0260</div>
+                    <span class="text-[10px] text-blue-400 font-mono">91,000 Tokens Saved</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Hindsight Stored Memories</span>
-                    <div class="text-2xl font-bold text-purple-300 font-mono">10</div>
-                    <span class="text-[10px] text-purple-300 font-mono">2,808 Retain / 2,442 Cloud Calls</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">25</div>
+                    <span class="text-[10px] text-purple-300 font-mono">1,247 Retain / 1,199 Cloud Calls</span>
                 </div>
             </div>
         </div>
@@ -160,15 +160,15 @@
                     <div class="space-y-3 font-mono text-xs">
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
-                            <span class="text-emerald-400 font-bold">2,808 ops</span>
+                            <span class="text-emerald-400 font-bold">1,247 ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
-                            <span class="text-blue-400 font-bold">1 ops</span>
+                            <span class="text-blue-400 font-bold">2 ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Reflect (Anomaly Synthesis)</span>
-                            <span class="text-amber-400 font-bold">1 ops</span>
+                            <span class="text-amber-400 font-bold">0 ops</span>
                         </div>
                     </div>
                 </div>
@@ -182,14 +182,14 @@
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-300">Cloud Run + Supabase pgvector</span>
-                                <span class="text-cyan-400 font-bold">2,442 calls</span>
+                                <span class="text-cyan-400 font-bold">1,199 calls</span>
                             </div>
                             <p class="text-[10px] text-slate-500 font-sans">Scale-to-zero container (midgley-hindsight) with HNSW vector index</p>
                         </div>
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-300">Local SQLite FTS5 Fallback</span>
-                                <span class="text-emerald-400 font-bold">368 calls</span>
+                                <span class="text-emerald-400 font-bold">50 calls</span>
                             </div>
                             <p class="text-[10px] text-slate-500 font-sans">Zero-cost local datastore with full-text BM25 search ranking</p>
                         </div>
@@ -208,11 +208,11 @@
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                                <div class="text-lg font-bold text-purple-300">10</div>
+                                <div class="text-lg font-bold text-purple-300">22</div>
                                 <div class="text-[10px] text-slate-400 font-sans">Experiences</div>
                             </div>
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                                <div class="text-lg font-bold text-amber-300">0</div>
+                                <div class="text-lg font-bold text-amber-300">3</div>
                                 <div class="text-[10px] text-slate-400 font-sans">Reflections</div>
                             </div>
                         </div>
@@ -307,17 +307,17 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Zero-Cost Invocations</span>
-                        <div class="text-2xl font-bold text-emerald-400 font-mono">250</div>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">260</div>
                         <span class="text-[10px] text-slate-400 font-mono">22 Basic-Tier Routed</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Tokens Saved</span>
-                        <div class="text-2xl font-bold text-cyan-300 font-mono">87,500</div>
+                        <div class="text-2xl font-bold text-cyan-300 font-mono">91,000</div>
                         <span class="text-[10px] text-slate-400 font-mono">~350 tokens per bypassed event</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Est. USD Saved</span>
-                        <div class="text-2xl font-bold text-emerald-300 font-mono">$0.0250</div>
+                        <div class="text-2xl font-bold text-emerald-300 font-mono">$0.0260</div>
                         <span class="text-[10px] text-slate-400 font-mono">Gemini Flash blend pricing</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
@@ -342,7 +342,7 @@
                             <tbody class="divide-y divide-slate-800/50">
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-emerald-300">Offline Domain NLP Lexicon (Tier 3)</td>
-                                    <td class="py-2 px-3 text-center">250</td>
+                                    <td class="py-2 px-3 text-center">260</td>
                                     <td class="py-2 px-3 text-center text-slate-400">$0.000 / event</td>
                                     <td class="py-2 px-3 text-right text-emerald-400 font-bold">100% ONLINE</td>
                                 </tr>
@@ -388,7 +388,7 @@
                     </div>
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">IPASIS IP Security API (Issue #87)</span>
-                        <span class="text-amber-400 font-bold">0 / 100 daily (0 bypasses)</span>
+                        <span class="text-amber-400 font-bold">2 / 100 daily (27 bypasses)</span>
                     </div>
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                         <span class="text-slate-300">NOAA NWS / wxs.us Weather API</span>
@@ -435,23 +435,23 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
-                        <div class="text-2xl font-bold text-amber-400 font-mono">39,139</div>
-                        <span class="text-[10px] text-slate-400 font-mono">24,512 In / 14,627 Out</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">38,523</div>
+                        <span class="text-[10px] text-slate-400 font-mono">24,136 In / 14,387 Out</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
-                        <div class="text-2xl font-bold text-emerald-400 font-mono">$0.006256</div>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">$0.006156</div>
                         <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
-                        <div class="text-2xl font-bold text-blue-400 font-mono">485</div>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">488</div>
                         <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
                         <div class="text-xl font-bold text-emerald-300 font-mono">BUDGET_NORMAL</div>
-                        <span class="text-[10px] text-slate-400 font-mono">Token accounting within limits ($0.0063 / $10.00).</span>
+                        <span class="text-[10px] text-slate-400 font-mono">Token accounting within limits ($0.0062 / $10.00).</span>
                     </div>
                 </div>
 
@@ -471,10 +471,10 @@
                             <tbody class="divide-y divide-slate-800/50">
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
-                                    <td class="py-2 px-3 text-center">181</td>
-                                    <td class="py-2 px-3 text-center">23,756</td>
-                                    <td class="py-2 px-3 text-center">14,480</td>
-                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">$0.006124</td>
+                                    <td class="py-2 px-3 text-center">178</td>
+                                    <td class="py-2 px-3 text-center">23,380</td>
+                                    <td class="py-2 px-3 text-center">14,240</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">$0.006024</td>
                                 </tr>
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
@@ -492,7 +492,7 @@
                                 </tr>
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
-                                    <td class="py-2 px-3 text-center">28</td>
+                                    <td class="py-2 px-3 text-center">24</td>
                                     <td class="py-2 px-3 text-center">0</td>
                                     <td class="py-2 px-3 text-center">0</td>
                                     <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
