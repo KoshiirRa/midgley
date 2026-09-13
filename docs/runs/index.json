@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-13_23-16-29",
+    "timestamp": "2026-09-13 23:16:25",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-13 23:16:25)"
+  },
+  {
     "run_id": "2026-09-13_20-20-05",
     "timestamp": "2026-09-13 20:20:03",
     "run_type": "DAILY_BATCH",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-08 12:30:09",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Copper hits record high as tight supply, US tariff fears boo..."
-  },
-  {
-    "run_id": "2026-09-08_11-15-15",
-    "timestamp": "2026-09-08 11:15:09",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Here\u2019s how to attract investment to Newfoundland despite Tru..."
   }
 ]

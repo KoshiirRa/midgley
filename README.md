@@ -13,16 +13,16 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-13 20:20 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-13 23:16 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.120`/gal | **`$3.149`/gal** | **UP 📈** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `$3.307`/gal | **`$3.149`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **Tulsa, OK Metro Retail** | `$3.828`/gal | **`$3.792`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `$3.286`/gal | **`$3.256`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.343`/gal | **`$3.312`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **Cincinnati, OH Retail** | `$4.096`/gal | **`$4.065`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `$3.261`/gal | **`$3.236`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
-| **Greenville, NC Metro Retail** | `$3.610`/gal | **`$3.573`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.321`/gal | **`$3.296`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **Greenville, NC Metro Retail** | `$3.669`/gal | **`$3.631`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **Oakland, CA Metro Retail** | `$6.040`/gal | **`$5.989`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **SF Bay Area 9-County Avg** | `$6.143`/gal | **`$6.092`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 
