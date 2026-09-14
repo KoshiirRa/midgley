@@ -1,10 +1,10 @@
 log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigger,current_base_price,predicted_5d_price,predicted_direction,actual_5d_price,actual_direction,error_dollars,directional_hit,llm_price_pressure,llm_supply_disruption,quant_baseline_5d_price,llm_augmentation_delta,prediction_lower_95ci,prediction_upper_95ci,within_95ci_hit,data_source_provenance,forecast_horizon_days
-2026-09-07 03:33:29,2026-09-14,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.28,3.203,DOWN,3.6802,UP,0.4772,0.0,0.0,0.0,3.28,0.0,2.769,3.6369,0.0,yfinance,
-2026-09-07 03:34:45,2026-09-14,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2146,3.3745,UP,3.1302,DOWN,0.2443,0.0,0.0,0.0,3.2146,0.0,2.9476,3.8014,1.0,yfinance,
-2026-09-07 03:35:03,2026-09-14,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.25,3.1746,DOWN,3.6802,UP,0.5056,0.0,0.0,0.0,3.25,0.0,2.7389,3.6104,0.0,yfinance,
-2026-09-07 03:35:26,2026-09-14,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.8232,DOWN,5.1802,UP,0.357,0.0,0.0,0.0,4.95,0.0,4.39,5.2564,1.0,yfinance,
-2026-09-07 03:35:26,2026-09-14,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9206,DOWN,5.2802,UP,0.3596,0.0,0.0,0.0,5.05,0.0,4.4875,5.3538,1.0,yfinance,
-2026-09-07 22:45:05,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal,3.184,3.2502,UP,3.1302,DOWN,0.12,0.0,0.0,0.0,3.184,0.0,2.9258,3.5746,1.0,yfinance,5.0
+2026-09-07 03:33:29,2026-09-14,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.28,3.203,DOWN,3.6884,UP,0.4854,0.0,0.0,0.0,3.28,0.0,2.769,3.6369,0.0,yfinance,
+2026-09-07 03:34:45,2026-09-14,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2146,3.3745,UP,3.1384,DOWN,0.2361,0.0,0.0,0.0,3.2146,0.0,2.9476,3.8014,1.0,yfinance,
+2026-09-07 03:35:03,2026-09-14,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.25,3.1746,DOWN,3.6884,UP,0.5138,0.0,0.0,0.0,3.25,0.0,2.7389,3.6104,0.0,yfinance,
+2026-09-07 03:35:26,2026-09-14,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,4.95,4.8232,DOWN,5.1884,UP,0.3652,0.0,0.0,0.0,4.95,0.0,4.39,5.2564,1.0,yfinance,
+2026-09-07 03:35:26,2026-09-14,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.05,4.9206,DOWN,5.2884,UP,0.3678,0.0,0.0,0.0,5.05,0.0,4.4875,5.3538,1.0,yfinance,
+2026-09-07 22:45:05,2026-09-14,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Lorne Gunter: Eastern pipeline more effective than oil tariffs in Canada-U.S. trade war - Edmonton Journal,3.184,3.2502,UP,3.1384,DOWN,0.1118,0.0,0.0,0.0,3.184,0.0,2.9258,3.5746,1.0,yfinance,5.0
 2026-09-08 07:00:20,2025-09-30,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,1.9991,1.9591,DOWN,1.9729,DOWN,0.0138,1.0,0.0,0.0,1.9991,0.0,1.633,2.2852,1.0,yfinance,5.0
 2026-09-08 07:00:20,2025-10-01,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,2.0188,1.9721,DOWN,1.8859,DOWN,0.0862,1.0,0.0,0.0,2.0188,0.0,1.6459,2.2982,1.0,yfinance,5.0
 2026-09-08 07:00:20,2026-09-11,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2146,3.4134,UP,3.3072,UP,0.1062,1.0,0.0,0.0,3.2146,0.0,3.0872,3.7395,1.0,yfinance,5.0
@@ -2429,4 +2429,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-14 14:26:04,2026-09-09,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.6536,3.6097,DOWN,3.7606,UP,0.1509,0.0,0.0,0.0,3.6536,0.0,3.3159,3.9035,1.0,yfinance,5.0
 2026-09-14 14:26:04,2026-09-10,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.6847,3.6585,DOWN,3.9432,UP,0.2847,0.0,0.0,0.0,3.6847,0.0,3.3647,3.9523,1.0,yfinance,5.0
 2026-09-14 14:27:18,2026-09-18,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.857,3.8248,DOWN,,,,,0.0,0.0,3.857,0.0,3.5347,4.1149,,yfinance,5.0
-2026-09-14 15:02:56,2026-09-21,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Oil prices continue surge, rising 3% amid Saudi pipeline outage after attack - Yahoo Finance",3.184,3.305,UP,,,,,0.0,0.0,3.184,0.0,2.9937,3.6162,,yfinance,5.0
+2026-09-14 19:07:07,2026-09-21,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Oil prices continue surge, rising 3pct amid Saudi pipeline outage after attack - NST Online",3.184,3.2986,UP,,,,,0.0,0.0,3.184,0.0,2.9613,3.6359,,yfinance,5.0

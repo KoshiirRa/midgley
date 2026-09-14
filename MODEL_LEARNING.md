@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-09-14 18:43 UTC` | **Repository Architecture:** `v1.4 Finlight-LLM`
+> **Last Evaluated & Synced:** `2026-09-14 19:52 UTC` | **Repository Architecture:** `v1.4 Finlight-LLM`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,9 +10,9 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 46 | `$0.2761/gal` | `$0.2475/gal` | `-11.55%` | **`28.26%`** | `19.6%` | ⚠️ Calibration Active |
-| **14-Day Window** | 96 | `$0.2462/gal` | `$0.2395/gal` | `-2.80%` | **`46.88%`** | `42.7%` | ⚠️ Calibration Active |
-| **30-Day Window** | 196 | `$0.2551/gal` | `$0.2195/gal` | `-16.21%` | **`33.16%`** | `27.6%` | ⚠️ Calibration Active |
+| **7-Day Window** | 46 | `$0.2765/gal` | `$0.2479/gal` | `-11.53%` | **`28.26%`** | `19.6%` | ⚠️ Calibration Active |
+| **14-Day Window** | 96 | `$0.2464/gal` | `$0.2397/gal` | `-2.80%` | **`46.88%`** | `42.7%` | ⚠️ Calibration Active |
+| **30-Day Window** | 196 | `$0.2552/gal` | `$0.2196/gal` | `-16.21%` | **`33.16%`** | `27.6%` | ⚠️ Calibration Active |
 | **90-Day Window** | 596 | `$0.2406/gal` | `$0.2332/gal` | `-3.17%` | **`49.66%`** | `45.8%` | ⚠️ Calibration Active |
 | **All-Time Window** | 2317 | `$0.2227/gal` | `$0.2148/gal` | `-3.67%` | **`53.22%`** | `46.9%` | ⚠️ Calibration Active |
 

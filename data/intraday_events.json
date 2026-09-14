@@ -3044,5 +3044,24 @@
       "overall_price_pressure": 0.95
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-14T19:07:07.581841",
+    "headline": "Oil prices continue surge, rising 3pct amid Saudi pipeline outage after attack - NST Online",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNUGV3a1JqU1QxVXc4MDBkQTgtU0FTQVljSUxvRmJBUXI2d0JmaTBwLW00VGpHdjhuRDBCVXFnY3VDRldsZFJqSXR6TUN1b3Z0b3lfTVdJU3dLcVF0YzdRX3N3UVVkMVVpcW9HYkdxeThQVXo4MmlNV21HZ3ZlX2hZaGNqLVBiNHdSY09uSlhKLWNjam1jWUhUbmhhZThKX2ZBclB6WHFTZlZJYlVGVXg5YTBBYWZCZWVZbkxKVzFRdw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivwFBVV95cUxNUGV3a1JqU1QxVXc4MDBkQTgtU0FTQVljSUxvRmJBUXI2d0JmaTBwLW00VGpHdjhuRDBCVXFnY3VDRldsZFJqSXR6TUN1b3Z0b3lfTVdJU3dLcVF0YzdRX3N3UVVkMVVpcW9HYkdxeThQVXo4MmlNV21HZ3ZlX2hZaGNqLVBiNHdSY09uSlhKLWNjam1jWUhUbmhhZThKX2ZBclB6WHFTZlZJYlVGVXg5YTBBYWZCZWVZbkxKVzFRdw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.7,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.9
+    },
+    "discord_notified": true
   }
 ]
