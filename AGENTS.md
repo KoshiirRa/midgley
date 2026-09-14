@@ -382,6 +382,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Fireworks Tech Graph Automated Architecture Diagram Generator (`src/fireworks_tech_graph.py`, Issue #191):**
   - Auto-synthesizes self-contained dark-theme SVG vector diagrams outputting to `docs/assets/multi_agent_architecture.svg` (~12.5 KB) and `docs/assets/regional_metro_architecture.svg` (~7.7 KB) during public web dashboard builds (`src/dashboard_generator.py`).
   - Visual embeds integrated directly into `AGENTS.md` and `docs/index.html`.
+* **Static API Exporter Subsystem (`src/static_api_exporter.py`):**
+  - Automatically exports static JSON feeds (`docs/api/v1/combined.json`, `docs/api/v1/combined_{locale}.json`, `docs/api/v1/{locale}.json`, `docs/api/v1/combined/{locale}.json`) across all 9 locales (`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `bayarea`) during every dashboard generation pass (`src/dashboard_generator.py`).
+  - Pre-renders combined live prices, 5-day out-of-time trajectories, confidence intervals, and key market catalysts into CDN-ready files for consumption by external clients (Android Auto companion `midgley-auto`, static web apps, widgets) with $0 hosting cost and 100% global uptime.
 * **Locales Metadata Discovery & Multi-Region Batch Forecast Gateway (`src/api_server.py`, Issue #48):**
   - Exposes `GET /api/v1/locales` for dynamic client discovery of all supported locale codes (`tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `port_st_lucie`, `bayarea`, `national`), `region_id`, PADD region, statutory fuel tax burdens, and refining hub metadata profiles loaded via `src/regional_metadata.py`.
   - Exposes multi-region batch REST endpoints `POST /api/v1/forecast/batch` and `POST /api/v1/combined/batch` enabling client applications to query forecasts for multiple locales in a single HTTP request payload.
@@ -449,7 +452,20 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 12. GitHub Wiki & Documentation Maintenance Directives (`https://github.com/KoshiirRa/midgley.wiki.git`)
+### 12. Automotive & In-Dash Companion Agent (`midgley-auto` / `net.n2yti.midgley.auto`)
+
+* **Role:** Coordinates the dedicated native Android Automotive OS and Android Auto companion application ecosystem ([`KoshiirRa/midgley-auto`](https://github.com/KoshiirRa/midgley-auto)), providing drivers with real-time fuel price forecasts, optimal fill-up timing recommendations, and in-dash fuel efficiency analytics.
+* **Key Specifications:**
+  - **Dual-Mode Network Client (`MidgleyRepository`):**
+    - **Production Zero-Cost CDN (Default):** Directly fetches static pre-baked JSON endpoints (`https://koshiirra.github.io/midgley/api/v1/combined_<locale>.json`) with zero backend server dependencies and 100% SLA uptime.
+    - **Dynamic API Gateway:** Dynamically connects to REST gateway (`/api/v1/combined?locale=...`) when targeting developer or custom cloud proxy URLs.
+  - **3-Tier API Gateway Switcher:** Built-in companion UI preset selector supporting **Production GitHub Pages CDN**, **Dwarvenbard Cloud Gateway**, and **Dev VM Local LAN Gateway**.
+  - **OBD-II Telemetry & Low-Fuel Overrides (`Obd2PidDecoder`):** Connects to Bluetooth/Wi-Fi ELM327 OBD-II dongles to read PID `0x2F` (Fuel Tank Level Input %). Automatically triggers immediate fill-up alert overrides (`🔴 LOW FUEL • FILL UP NOW`) when fuel drops below 15% reserve, bypassing price optimization hold signals.
+  - **6-Hour Offline Cache:** Caches latest forecast payloads with automatic staleness tracking and deterministic regional price baselines for uninterrupted operation in remote low-coverage transit corridors.
+
+---
+
+### 13. GitHub Wiki & Documentation Maintenance Directives (`https://github.com/KoshiirRa/midgley.wiki.git`)
 
 * **Role:** Ensures that the repository documentation ([`docs/SELF_HOSTING.md`](docs/SELF_HOSTING.md), [`README.md`](README.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)) and official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git`) are continuously updated and kept in full synchronization with the codebase whenever features, system architecture, data feeds, regional models, or environment states change.
 * **Core Documentation Maintenance Rules:**

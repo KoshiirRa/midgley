@@ -6,11 +6,38 @@ The **Midgley MCP & REST API Gateway** exposes real-time unleaded gasoline pump 
 
 ## 🚀 Quick Start & Endpoint Overview
 
+* **Production Static JSON API (Zero-Cost CDN)**: `https://koshiirra.github.io/midgley/api/v1/`
 * **Primary Dev API Base URL**: `http://localhost:8000` (or configured API Gateway)
-* **Local Dev VM Direct Port**: `http://localhost:8000`
+* **Local Dev VM Direct Port**: `http://10.42.42.54:8000`
 * **OpenAPI 3.1 Spec**: `https://koshiirra.github.io/midgley/openapi.json`
 * **GPT Action Manifest**: `https://koshiirra.github.io/midgley/.well-known/ai-plugin.json`
 * **MCP SSE Connection**: `http://localhost:8000/mcp/sse`
+
+---
+
+## 🌐 Production Zero-Cost Static JSON API (GitHub Pages CDN)
+
+For lightweight client applications (such as mobile apps, automotive head units, and static dashboards) that do not require live parameter evaluation or real-time shock simulations, Midgley automatically exports pre-rendered, CDN-cached JSON feeds directly onto GitHub Pages on every daily forecast batch execution (`src/static_api_exporter.py`).
+
+### Static Feed Endpoints
+| URL Pattern | Method | Description |
+| :--- | :--- | :--- |
+| `https://koshiirra.github.io/midgley/api/v1/combined.json` | `GET` | National combined live price, 5-day forecast, and top catalysts |
+| `https://koshiirra.github.io/midgley/api/v1/combined_{locale}.json` | `GET` | Metro-specific combined feed (e.g., `combined_tulsa.json`, `combined_oakland.json`) |
+| `https://koshiirra.github.io/midgley/api/v1/{locale}.json` | `GET` | Metro price and forecast payload alias |
+| `https://koshiirra.github.io/midgley/api/v1/combined/{locale}.json` | `GET` | Sub-directory route alias for REST path compatibility |
+
+### Available Locales for Static API
+`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `bayarea`
+
+### Example Request
+```bash
+curl -s "https://koshiirra.github.io/midgley/api/v1/combined_tulsa.json"
+```
+
+### Static vs Dynamic Architecture
+- **Static CDN Mode (GitHub Pages):** $0 infrastructure cost, 100% SLA global CDN delivery, zero server maintenance, ideal for end-user mobile/automotive apps (`midgley-auto`).
+- **Dynamic Gateway Mode (`src/api_server.py`):** Real-time shock simulations (`/api/v1/forecast/simulate`), authenticated API key provisioning, webhooks, and Model Context Protocol (MCP) tool executions.
 
 ---
 
