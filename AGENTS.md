@@ -366,7 +366,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
     - **Resilient Sockets & Exponential Backoff:** Employs 30.0s socket timeout (`HINDSIGHT_TIMEOUT`) and 2-attempt retries with exponential backoff on HTTP read timeouts or connection resets across `retain`, `recall`, and `reflect` endpoints.
     - **Zero-Data-Loss Pending Memory Reconciliation Ledger:** Dual-state tracking in SQLite (`data/agent_memory.sqlite`) with `cloud_synced` column. Automatically drains queued local memories to Cloud Run pgvector via `sync_pending_memories()` whenever connection is established, guaranteeing zero experience loss during cold-starts or network blips.
     - **Zero-Cost SQLite FTS5 Fallback:** Automatically falls back to local SQLite FTS5 index (`data/agent_memory.sqlite`) with Porter stemmer BM25 retrieval, ensuring 100% offline resiliency and zero paid token requirements.
-    - **Qualitative Post-Mortem Synthesis:** Analyzes top residual anomalies during Saturday review runs to produce root-cause diagnoses, historical shock analogies, and learned parameter tuning recommendations (news decay $t_{1/2}$, Ridge $\alpha$, crack spread weight).
+    - **Model Learning & Longitudinal Adaptation Tracking Suite (`src/learning_tracker.py`, `MODEL_LEARNING.md`, `docs/telemetry.html`, Issue #255):**
+    - **Longitudinal Learning Curves:** Analyzes historical prediction adaptation, baseline convergence, and qualitative LLM feature injection efficacy across all 230+ days in `data/prediction_history.csv`.
+    - **Multi-Window Horizons:** Evaluates rolling accuracy across 7-day, 14-day, 30-day, 90-day, and All-Time windows, computing rolling MAE, Naive Baseline Error, Model Uplift %, and LLM Win Rates.
+    - **Persistent Model Learning Journal (`MODEL_LEARNING.md`):** Automatically generates and updates a comprehensive Markdown journal recording cumulative learning milestones, PRAXIST hypothesis history, and categorized episodic reflections.
+    - **Interactive Telemetry Dashboard Section:** Renders Chart.js learning curve and LLM win rate visualizations in `docs/telemetry.html`.
   - **Empirical Feedback Loop:** Feeds diagnostic loss signals back into estimator re-calibration, adjusting regularized Ridge regression hyperparameters ($\alpha$), updating LLM feature decay half-lives ($t_{1/2}$), and fine-tuning prompt scoring weights to continuously refine model accuracy.
 
 
