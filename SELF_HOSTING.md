@@ -728,6 +728,13 @@ Run the quantitative research validation auditor to verify point-in-time tempora
 python3 scripts/audit_feature_leakage.py --region Tulsa_OK --horizons 1,3,5,10,14,20 --output data/feature_audit_report.json
 ```
 
+### 6. Verify Model Learning & Longitudinal Adaptation Tracker (Issue #255)
+Generate the model learning journal and verify that longitudinal learning curves and multi-window scoreboards calculate cleanly:
+```bash
+python3 -c "from src.learning_tracker import generate_learning_journal_markdown; generate_learning_journal_markdown()"
+head -n 30 MODEL_LEARNING.md
+```
+
 ---
 
-*Midgley Version: `v0.5.3-dev` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.5.4-dev` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
