@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-13 23:48:00",
-  "total_events": 646,
+  "last_updated": "2026-09-14 14:26:02",
+  "total_events": 662,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -6462,6 +6462,166 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Retrieved 6 radar models"
+    },
+    {
+      "timestamp": "2026-09-14 14:11:36",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:11:36",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-14 14:13:11",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:13:11",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-14 14:14:49",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:14:49",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-14 14:17:23",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:17:23",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-14 14:21:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:21:09",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-14 14:22:25",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:22:25",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-14 14:23:41",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:23:41",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-14 14:26:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.01,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:26:02",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
     }
   ]
 }
