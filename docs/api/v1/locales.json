@@ -1,0 +1,1887 @@
+{
+  "status": "success",
+  "system": "Midgley v1.4 Finlight-LLM",
+  "timestamp": "2026-09-14T15:31:03.028743",
+  "total_locales": 29,
+  "locales": {
+    "national": {
+      "code": "national",
+      "region_id": "National",
+      "name": "National Wholesale / US Average",
+      "padd_region": "US National",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "us": {
+      "code": "us",
+      "region_id": "National",
+      "name": "National Wholesale / US Average",
+      "padd_region": "US National",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "tulsa": {
+      "code": "tulsa",
+      "region_id": "Tulsa_OK",
+      "name": "Tulsa Metro Area, OK",
+      "padd_region": "PADD 2 Midwest",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "West Tulsa Refining & Supply Logistics",
+        "description": "HF Sinclair West Tulsa Refinery (125,000 bpd capacity) processes sweet/sour crude streams, dispatching refined unleaded blendstock across Magellan Pipeline terminals to local jobbers and retail stations.",
+        "primary_refinery": "HF Sinclair West Tulsa Refinery",
+        "capacity_bpd": 125000,
+        "pipelines": [
+          "Magellan Pipeline",
+          "Explorer Pipeline"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "tulsa_ok",
+        "display_name": "Tulsa, OK Metro Retail",
+        "padd_region": "PADD 2 Mid-Continent",
+        "primary_city": "Tulsa, OK",
+        "counties": [
+          "Tulsa",
+          "Creek",
+          "Rogers"
+        ],
+        "baseline_price": 3.89,
+        "icon_class": "fa-warehouse",
+        "theme_color": "emerald",
+        "econometric_drivers": {
+          "title": "Cushing WTI Econometric Drivers",
+          "description": "Located 50 miles west of Tulsa, Cushing, OK is the physical delivery point for NYMEX WTI crude. Localized rack margins reflect direct crude benchmark access, regional crack spreads, and Mid-Continent market competition."
+        },
+        "refining_logistics": {
+          "title": "West Tulsa Refining & Supply Logistics",
+          "description": "HF Sinclair West Tulsa Refinery (125,000 bpd capacity) processes sweet/sour crude streams, dispatching refined unleaded blendstock across Magellan Pipeline terminals to local jobbers and retail stations.",
+          "primary_refinery": "HF Sinclair West Tulsa Refinery",
+          "capacity_bpd": 125000,
+          "pipelines": [
+            "Magellan Pipeline",
+            "Explorer Pipeline"
+          ]
+        },
+        "tax_structure": {
+          "title": "Oklahoma Tax Structure & Statutory Overhead",
+          "description": "Oklahoma state motor fuel tax ($0.190/gal) plus US Federal excise tax ($0.184/gal) and UST fees create a total statutory tax burden of $0.374/gal\u2014the lowest tax overhead among Midgley metro benchmarks.",
+          "state_tax_per_gal": 0.19,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.374,
+          "notes": "Lowest statutory tax overhead among Midgley metro benchmarks"
+        },
+        "infrastructure_delivery": {
+          "title": "Tulsa Delivery Hub & Dynamic Rack Margin",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Tulsa Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.890 - \\$3.184 = \\$0.706/\\text{gal}",
+          "description": "Calibrates wholesale futures returns directly into Creek, Tulsa & Rogers county tank truck dispatch prices.",
+          "hub_distance_miles": 50,
+          "hub_name": "Cushing WTI Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "EF-3 Tornado Outbreak",
+            "subtitle": "West Tulsa HF Sinclair Strike",
+            "price_impact_per_gal": 0.173,
+            "pct_impact": 4.58,
+            "description": "Halts 125,000 bpd refinery loading racks"
+          },
+          {
+            "name": "Cushing Freeze Warning",
+            "subtitle": "Payne County Sub-Zero Freeze",
+            "price_impact_per_gal": 0.145,
+            "pct_impact": 3.84,
+            "description": "Disrupts crude tank farm pumping velocity"
+          },
+          {
+            "name": "Keystone Pipeline Spill",
+            "subtitle": "Cushing Delivery Feeder Cut",
+            "price_impact_per_gal": 0.173,
+            "pct_impact": 4.58,
+            "description": "Temporary Canadian crude influx drop"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 420500,
+          "zero_vehicle_pct": 5.4,
+          "vehicles_per_household": 1.95,
+          "drive_alone_share": 0.825,
+          "carpool_share": 0.092,
+          "public_transit_share": 0.007,
+          "work_from_home_share": 0.062,
+          "mean_commute_minutes": 21.8,
+          "vehicle_dependency_ratio": 0.917,
+          "transit_alternative_index": 0.038,
+          "inelastic_demand_score": 0.885
+        }
+      }
+    },
+    "tulsa_ok": {
+      "code": "tulsa_ok",
+      "region_id": "Tulsa_OK",
+      "name": "Tulsa Metro Area, OK",
+      "padd_region": "PADD 2 Midwest",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "West Tulsa Refining & Supply Logistics",
+        "description": "HF Sinclair West Tulsa Refinery (125,000 bpd capacity) processes sweet/sour crude streams, dispatching refined unleaded blendstock across Magellan Pipeline terminals to local jobbers and retail stations.",
+        "primary_refinery": "HF Sinclair West Tulsa Refinery",
+        "capacity_bpd": 125000,
+        "pipelines": [
+          "Magellan Pipeline",
+          "Explorer Pipeline"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "tulsa_ok",
+        "display_name": "Tulsa, OK Metro Retail",
+        "padd_region": "PADD 2 Mid-Continent",
+        "primary_city": "Tulsa, OK",
+        "counties": [
+          "Tulsa",
+          "Creek",
+          "Rogers"
+        ],
+        "baseline_price": 3.89,
+        "icon_class": "fa-warehouse",
+        "theme_color": "emerald",
+        "econometric_drivers": {
+          "title": "Cushing WTI Econometric Drivers",
+          "description": "Located 50 miles west of Tulsa, Cushing, OK is the physical delivery point for NYMEX WTI crude. Localized rack margins reflect direct crude benchmark access, regional crack spreads, and Mid-Continent market competition."
+        },
+        "refining_logistics": {
+          "title": "West Tulsa Refining & Supply Logistics",
+          "description": "HF Sinclair West Tulsa Refinery (125,000 bpd capacity) processes sweet/sour crude streams, dispatching refined unleaded blendstock across Magellan Pipeline terminals to local jobbers and retail stations.",
+          "primary_refinery": "HF Sinclair West Tulsa Refinery",
+          "capacity_bpd": 125000,
+          "pipelines": [
+            "Magellan Pipeline",
+            "Explorer Pipeline"
+          ]
+        },
+        "tax_structure": {
+          "title": "Oklahoma Tax Structure & Statutory Overhead",
+          "description": "Oklahoma state motor fuel tax ($0.190/gal) plus US Federal excise tax ($0.184/gal) and UST fees create a total statutory tax burden of $0.374/gal\u2014the lowest tax overhead among Midgley metro benchmarks.",
+          "state_tax_per_gal": 0.19,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.374,
+          "notes": "Lowest statutory tax overhead among Midgley metro benchmarks"
+        },
+        "infrastructure_delivery": {
+          "title": "Tulsa Delivery Hub & Dynamic Rack Margin",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Tulsa Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.890 - \\$3.184 = \\$0.706/\\text{gal}",
+          "description": "Calibrates wholesale futures returns directly into Creek, Tulsa & Rogers county tank truck dispatch prices.",
+          "hub_distance_miles": 50,
+          "hub_name": "Cushing WTI Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "EF-3 Tornado Outbreak",
+            "subtitle": "West Tulsa HF Sinclair Strike",
+            "price_impact_per_gal": 0.173,
+            "pct_impact": 4.58,
+            "description": "Halts 125,000 bpd refinery loading racks"
+          },
+          {
+            "name": "Cushing Freeze Warning",
+            "subtitle": "Payne County Sub-Zero Freeze",
+            "price_impact_per_gal": 0.145,
+            "pct_impact": 3.84,
+            "description": "Disrupts crude tank farm pumping velocity"
+          },
+          {
+            "name": "Keystone Pipeline Spill",
+            "subtitle": "Cushing Delivery Feeder Cut",
+            "price_impact_per_gal": 0.173,
+            "pct_impact": 4.58,
+            "description": "Temporary Canadian crude influx drop"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 420500,
+          "zero_vehicle_pct": 5.4,
+          "vehicles_per_household": 1.95,
+          "drive_alone_share": 0.825,
+          "carpool_share": 0.092,
+          "public_transit_share": 0.007,
+          "work_from_home_share": 0.062,
+          "mean_commute_minutes": 21.8,
+          "vehicle_dependency_ratio": 0.917,
+          "transit_alternative_index": 0.038,
+          "inelastic_demand_score": 0.885
+        }
+      }
+    },
+    "newark": {
+      "code": "newark",
+      "region_id": "Newark_DE",
+      "name": "Newark Metro Area, DE",
+      "padd_region": "PADD 1B Central Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "PBF Delaware City Refining & Maritime Logistics",
+        "description": "Located 12 miles south of Newark, DE, PBF's Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering at Big Stone Anchorage and C&D Canal barge routes.",
+        "primary_refinery": "PBF Delaware City Refinery",
+        "capacity_bpd": 180000,
+        "pipelines": [
+          "Colonial Pipeline North Spurt",
+          "Delaware River Barge Fleet"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "newark_de",
+        "display_name": "Newark, DE Metro Retail",
+        "padd_region": "PADD 1B Central Atlantic",
+        "primary_city": "Newark, DE",
+        "counties": [
+          "New Castle"
+        ],
+        "baseline_price": 3.35,
+        "icon_class": "fa-warehouse",
+        "theme_color": "blue",
+        "econometric_drivers": {
+          "title": "PADD 1B Import Parity & Econometric Levers",
+          "description": "Newark sits in the PADD 1B Central Atlantic pricing zone where retail pump prices track NY Harbor wholesale RBOB futures, waterborne import parity from Europe, and regional Atlantic spot margins."
+        },
+        "refining_logistics": {
+          "title": "PBF Delaware City Refining & Maritime Logistics",
+          "description": "Located 12 miles south of Newark, DE, PBF's Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering at Big Stone Anchorage and C&D Canal barge routes.",
+          "primary_refinery": "PBF Delaware City Refinery",
+          "capacity_bpd": 180000,
+          "pipelines": [
+            "Colonial Pipeline North Spurt",
+            "Delaware River Barge Fleet"
+          ]
+        },
+        "tax_structure": {
+          "title": "Delaware State Fuel Tax & Statutory Overhead",
+          "description": "Delaware state motor fuel tax ($0.230/gal) combined with US Federal excise tax ($0.184/gal) establishes a total statutory tax overhead of $0.414/gal across New Castle County stations.",
+          "state_tax_per_gal": 0.23,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.414,
+          "notes": "Maintained at flat statutory rate across New Castle County"
+        },
+        "infrastructure_delivery": {
+          "title": "Newark Delivery Hub & Dynamic Rack Margin",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.350 - \\$3.184 = \\$0.166/\\text{gal}",
+          "description": "Calibrates predicted wholesale returns directly into local I-95 corridor pump station rack prices.",
+          "hub_distance_miles": 12,
+          "hub_name": "PBF Delaware City Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "C&D Canal Detour Event",
+            "subtitle": "Barge Traffic Detour (300 nm)",
+            "price_impact_per_gal": 0.097,
+            "pct_impact": 2.9,
+            "description": "Increases marine waterborne transport tariffs"
+          },
+          {
+            "name": "Delaware City Hydrocracker Outage",
+            "subtitle": "Unplanned Unit Maintenance",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 4.93,
+            "description": "Reduces Mid-Atlantic regional supply"
+          },
+          {
+            "name": "Delaware Bay Ice Lockout",
+            "subtitle": "Big Stone Anchorage Lightering Freeze",
+            "price_impact_per_gal": 0.112,
+            "pct_impact": 3.34,
+            "description": "Delays foreign crude tanker discharge"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 225000,
+          "zero_vehicle_pct": 7.8,
+          "vehicles_per_household": 1.74,
+          "drive_alone_share": 0.742,
+          "carpool_share": 0.078,
+          "public_transit_share": 0.045,
+          "work_from_home_share": 0.118,
+          "mean_commute_minutes": 26.4,
+          "vehicle_dependency_ratio": 0.82,
+          "transit_alternative_index": 0.104,
+          "inelastic_demand_score": 0.732
+        }
+      }
+    },
+    "newark_de": {
+      "code": "newark_de",
+      "region_id": "Newark_DE",
+      "name": "Newark Metro Area, DE",
+      "padd_region": "PADD 1B Central Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "PBF Delaware City Refining & Maritime Logistics",
+        "description": "Located 12 miles south of Newark, DE, PBF's Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering at Big Stone Anchorage and C&D Canal barge routes.",
+        "primary_refinery": "PBF Delaware City Refinery",
+        "capacity_bpd": 180000,
+        "pipelines": [
+          "Colonial Pipeline North Spurt",
+          "Delaware River Barge Fleet"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "newark_de",
+        "display_name": "Newark, DE Metro Retail",
+        "padd_region": "PADD 1B Central Atlantic",
+        "primary_city": "Newark, DE",
+        "counties": [
+          "New Castle"
+        ],
+        "baseline_price": 3.35,
+        "icon_class": "fa-warehouse",
+        "theme_color": "blue",
+        "econometric_drivers": {
+          "title": "PADD 1B Import Parity & Econometric Levers",
+          "description": "Newark sits in the PADD 1B Central Atlantic pricing zone where retail pump prices track NY Harbor wholesale RBOB futures, waterborne import parity from Europe, and regional Atlantic spot margins."
+        },
+        "refining_logistics": {
+          "title": "PBF Delaware City Refining & Maritime Logistics",
+          "description": "Located 12 miles south of Newark, DE, PBF's Delaware City Refinery processes 180,000 bpd of heavy sour crude delivered via Delaware Bay lightering at Big Stone Anchorage and C&D Canal barge routes.",
+          "primary_refinery": "PBF Delaware City Refinery",
+          "capacity_bpd": 180000,
+          "pipelines": [
+            "Colonial Pipeline North Spurt",
+            "Delaware River Barge Fleet"
+          ]
+        },
+        "tax_structure": {
+          "title": "Delaware State Fuel Tax & Statutory Overhead",
+          "description": "Delaware state motor fuel tax ($0.230/gal) combined with US Federal excise tax ($0.184/gal) establishes a total statutory tax overhead of $0.414/gal across New Castle County stations.",
+          "state_tax_per_gal": 0.23,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.414,
+          "notes": "Maintained at flat statutory rate across New Castle County"
+        },
+        "infrastructure_delivery": {
+          "title": "Newark Delivery Hub & Dynamic Rack Margin",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.350 - \\$3.184 = \\$0.166/\\text{gal}",
+          "description": "Calibrates predicted wholesale returns directly into local I-95 corridor pump station rack prices.",
+          "hub_distance_miles": 12,
+          "hub_name": "PBF Delaware City Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "C&D Canal Detour Event",
+            "subtitle": "Barge Traffic Detour (300 nm)",
+            "price_impact_per_gal": 0.097,
+            "pct_impact": 2.9,
+            "description": "Increases marine waterborne transport tariffs"
+          },
+          {
+            "name": "Delaware City Hydrocracker Outage",
+            "subtitle": "Unplanned Unit Maintenance",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 4.93,
+            "description": "Reduces Mid-Atlantic regional supply"
+          },
+          {
+            "name": "Delaware Bay Ice Lockout",
+            "subtitle": "Big Stone Anchorage Lightering Freeze",
+            "price_impact_per_gal": 0.112,
+            "pct_impact": 3.34,
+            "description": "Delays foreign crude tanker discharge"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 225000,
+          "zero_vehicle_pct": 7.8,
+          "vehicles_per_household": 1.74,
+          "drive_alone_share": 0.742,
+          "carpool_share": 0.078,
+          "public_transit_share": 0.045,
+          "work_from_home_share": 0.118,
+          "mean_commute_minutes": 26.4,
+          "vehicle_dependency_ratio": 0.82,
+          "transit_alternative_index": 0.104,
+          "inelastic_demand_score": 0.732
+        }
+      }
+    },
+    "cincinnati": {
+      "code": "cincinnati",
+      "region_id": "Cincinnati_OH",
+      "name": "Cincinnati Metro Area, OH",
+      "padd_region": "PADD 2 Midwest",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Refining & River Inland Waterway Logistics",
+        "description": "Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo IL confluence, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.",
+        "primary_refinery": "Marathon Catlettsburg KY Refinery",
+        "capacity_bpd": 291000,
+        "pipelines": [
+          "Buckeye Pipeline",
+          "Ohio River Marine Barge Corridor"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "cincinnati_oh",
+        "display_name": "Cincinnati, OH & KY Tri-State",
+        "padd_region": "PADD 2 Mid-Continent / Ohio Valley",
+        "primary_city": "Cincinnati, OH",
+        "counties": [
+          "Hamilton",
+          "Kenton",
+          "Boone"
+        ],
+        "baseline_price": 3.45,
+        "icon_class": "fa-warehouse",
+        "theme_color": "purple",
+        "econometric_drivers": {
+          "title": "Tri-State Econometric Drivers & Cross-River Arbitrage",
+          "description": "Models consumer cross-river refuel switching between Hamilton County OH and Northern Kentucky (Kenton/Boone counties) driven by the persistent $0.125/gal state fuel tax differential."
+        },
+        "refining_logistics": {
+          "title": "Refining & River Inland Waterway Logistics",
+          "description": "Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo IL confluence, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.",
+          "primary_refinery": "Marathon Catlettsburg KY Refinery",
+          "capacity_bpd": 291000,
+          "pipelines": [
+            "Buckeye Pipeline",
+            "Ohio River Marine Barge Corridor"
+          ]
+        },
+        "tax_structure": {
+          "title": "Dual-State Tax Structure & Statutory Fees",
+          "description": "Ohio state fuel tax ($0.385/gal) vs Kentucky state fuel tax ($0.260/gal) combined with US Federal excise tax ($0.184/gal) creates total tax loads of $0.569/gal in OH vs $0.444/gal in KY.",
+          "state_tax_per_gal": 0.385,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.569,
+          "notes": "Ohio $0.385/gal vs Kentucky $0.260/gal creates persistent $0.125/gal cross-river gap"
+        },
+        "infrastructure_delivery": {
+          "title": "Dual-State Delivery Hub & Rack Margin Equations",
+          "equation_latex": "\\text{Rack Margin}_{\\text{OH}} = P_{\\text{OH Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.450 - \\$3.184 = \\$0.266/\\text{gal}",
+          "description": "Reflects the $0.125/gal state fuel tax differential across the Ohio River metropolitan boundary.",
+          "hub_distance_miles": 15,
+          "hub_name": "Mile 470 Ohio River Terminal Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Catlettsburg Refinery Outage",
+            "subtitle": "Marathon Hydrocracker Trip",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 4.78,
+            "description": "Tights Tri-State unleaded rack availability"
+          },
+          {
+            "name": "Ohio River Lockout",
+            "subtitle": "Markland Locks Ice Jam",
+            "price_impact_per_gal": 0.112,
+            "pct_impact": 3.25,
+            "description": "Forces expensive rail transport"
+          },
+          {
+            "name": "Lower Mississippi Low Water",
+            "subtitle": "Memphis Draft Restrictions",
+            "price_impact_per_gal": 0.145,
+            "pct_impact": 4.2,
+            "description": "Restricts Gulf Coast barge tow capacity"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 905000,
+          "zero_vehicle_pct": 6.2,
+          "vehicles_per_household": 1.86,
+          "drive_alone_share": 0.795,
+          "carpool_share": 0.075,
+          "public_transit_share": 0.024,
+          "work_from_home_share": 0.092,
+          "mean_commute_minutes": 25.1,
+          "vehicle_dependency_ratio": 0.87,
+          "transit_alternative_index": 0.07,
+          "inelastic_demand_score": 0.814
+        }
+      }
+    },
+    "cincinnati_oh": {
+      "code": "cincinnati_oh",
+      "region_id": "Cincinnati_OH",
+      "name": "Cincinnati Metro Area, OH",
+      "padd_region": "PADD 2 Midwest",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Refining & River Inland Waterway Logistics",
+        "description": "Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo IL confluence, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.",
+        "primary_refinery": "Marathon Catlettsburg KY Refinery",
+        "capacity_bpd": 291000,
+        "pipelines": [
+          "Buckeye Pipeline",
+          "Ohio River Marine Barge Corridor"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "cincinnati_oh",
+        "display_name": "Cincinnati, OH & KY Tri-State",
+        "padd_region": "PADD 2 Mid-Continent / Ohio Valley",
+        "primary_city": "Cincinnati, OH",
+        "counties": [
+          "Hamilton",
+          "Kenton",
+          "Boone"
+        ],
+        "baseline_price": 3.45,
+        "icon_class": "fa-warehouse",
+        "theme_color": "purple",
+        "econometric_drivers": {
+          "title": "Tri-State Econometric Drivers & Cross-River Arbitrage",
+          "description": "Models consumer cross-river refuel switching between Hamilton County OH and Northern Kentucky (Kenton/Boone counties) driven by the persistent $0.125/gal state fuel tax differential."
+        },
+        "refining_logistics": {
+          "title": "Refining & River Inland Waterway Logistics",
+          "description": "Cincinnati marine terminals (Mile 470 on Ohio River) receive refined fuel via barges coming up the Lower Mississippi River through the Cairo IL confluence, supplemented by Marathon's 291,000 bpd Catlettsburg KY refinery and Buckeye Pipeline.",
+          "primary_refinery": "Marathon Catlettsburg KY Refinery",
+          "capacity_bpd": 291000,
+          "pipelines": [
+            "Buckeye Pipeline",
+            "Ohio River Marine Barge Corridor"
+          ]
+        },
+        "tax_structure": {
+          "title": "Dual-State Tax Structure & Statutory Fees",
+          "description": "Ohio state fuel tax ($0.385/gal) vs Kentucky state fuel tax ($0.260/gal) combined with US Federal excise tax ($0.184/gal) creates total tax loads of $0.569/gal in OH vs $0.444/gal in KY.",
+          "state_tax_per_gal": 0.385,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.569,
+          "notes": "Ohio $0.385/gal vs Kentucky $0.260/gal creates persistent $0.125/gal cross-river gap"
+        },
+        "infrastructure_delivery": {
+          "title": "Dual-State Delivery Hub & Rack Margin Equations",
+          "equation_latex": "\\text{Rack Margin}_{\\text{OH}} = P_{\\text{OH Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.450 - \\$3.184 = \\$0.266/\\text{gal}",
+          "description": "Reflects the $0.125/gal state fuel tax differential across the Ohio River metropolitan boundary.",
+          "hub_distance_miles": 15,
+          "hub_name": "Mile 470 Ohio River Terminal Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Catlettsburg Refinery Outage",
+            "subtitle": "Marathon Hydrocracker Trip",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 4.78,
+            "description": "Tights Tri-State unleaded rack availability"
+          },
+          {
+            "name": "Ohio River Lockout",
+            "subtitle": "Markland Locks Ice Jam",
+            "price_impact_per_gal": 0.112,
+            "pct_impact": 3.25,
+            "description": "Forces expensive rail transport"
+          },
+          {
+            "name": "Lower Mississippi Low Water",
+            "subtitle": "Memphis Draft Restrictions",
+            "price_impact_per_gal": 0.145,
+            "pct_impact": 4.2,
+            "description": "Restricts Gulf Coast barge tow capacity"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 905000,
+          "zero_vehicle_pct": 6.2,
+          "vehicles_per_household": 1.86,
+          "drive_alone_share": 0.795,
+          "carpool_share": 0.075,
+          "public_transit_share": 0.024,
+          "work_from_home_share": 0.092,
+          "mean_commute_minutes": 25.1,
+          "vehicle_dependency_ratio": 0.87,
+          "transit_alternative_index": 0.07,
+          "inelastic_demand_score": 0.814
+        }
+      }
+    },
+    "cincinnati_ky": {
+      "code": "cincinnati_ky",
+      "region_id": "Cincinnati_KY",
+      "name": "Northern Kentucky Retail",
+      "padd_region": "PADD 2 Midwest",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "oakland": {
+      "code": "oakland",
+      "region_id": "Oakland_CA",
+      "name": "Oakland & SF Bay Area, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {
+        "title": "Chevron Richmond Refining & Pipeline Logistics",
+        "description": "Located 12 miles north of Oakland, Chevron's 245,000 bpd Richmond Refinery, alongside PBF Martinez and Valero Benicia, supplies East Bay retail stations via the Kinder Morgan SFPP pipeline corridor.",
+        "primary_refinery": "Chevron Richmond Refinery",
+        "capacity_bpd": 245000,
+        "pipelines": [
+          "Kinder Morgan SFPP North/South Line"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "oakland_ca",
+        "display_name": "Oakland, CA Metro Retail",
+        "padd_region": "PADD 5 West Coast",
+        "primary_city": "Oakland, CA",
+        "counties": [
+          "Alameda",
+          "Contra Costa"
+        ],
+        "baseline_price": 4.95,
+        "icon_class": "fa-warehouse",
+        "theme_color": "amber",
+        "econometric_drivers": {
+          "title": "PADD 5 West Coast Econometric Levers",
+          "description": "Oakland operates within the isolated PADD 5 West Coast pricing island where retail prices reflect strict CARB CaRFG summer/winter blend specifications, regional refining tightness, and waterborne import premiums."
+        },
+        "refining_logistics": {
+          "title": "Chevron Richmond Refining & Pipeline Logistics",
+          "description": "Located 12 miles north of Oakland, Chevron's 245,000 bpd Richmond Refinery, alongside PBF Martinez and Valero Benicia, supplies East Bay retail stations via the Kinder Morgan SFPP pipeline corridor.",
+          "primary_refinery": "Chevron Richmond Refinery",
+          "capacity_bpd": 245000,
+          "pipelines": [
+            "Kinder Morgan SFPP North/South Line"
+          ]
+        },
+        "tax_structure": {
+          "title": "CARB Environmental Tax & Regulatory Overhead",
+          "description": "California imposes $0.953/gal state environmental tax/fee burden ($0.634 excise + $0.250 Cap-and-Trade + $0.185 LCFS + $0.150 sales/UST), yielding $1.407/gal total statutory tax with Federal excise.",
+          "state_tax_per_gal": 0.953,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 1.407,
+          "notes": "Highest regulatory and environmental tax overhead in the nation"
+        },
+        "infrastructure_delivery": {
+          "title": "Physical Hazard & Delivery Hub Dynamics",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Oakland Retail}} - P_{\\text{Wholesale RBOB}} = \\$4.950 - \\$3.184 = \\$1.766/\\text{gal}",
+          "description": "East Bay rack truck and pipeline distribution monitored against USGS Hayward Fault (M>=6.0) seismic risks, PG&E PSPS Red Flag wildfire power cuts, and PTWC Tsunami marine berth closures.",
+          "hub_distance_miles": 12,
+          "hub_name": "Chevron Richmond Marine Berth & SFPP Terminal"
+        },
+        "shock_scenarios": [
+          {
+            "name": "USGS Hayward Quake (M>=6.0)",
+            "subtitle": "Pipeline Shutoff & Hydrocracker Trip",
+            "price_impact_per_gal": 0.42,
+            "pct_impact": 8.48,
+            "description": "Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips"
+          },
+          {
+            "name": "PG&E PSPS Wildfire Shutoff",
+            "subtitle": "Diablo Wind Red Flag Power Cut",
+            "price_impact_per_gal": 0.35,
+            "pct_impact": 7.07,
+            "description": "Diablo wind Red Flag power cuts force emergency flaring & 2-week unit restarts"
+          },
+          {
+            "name": "NOAA PTWC Tsunami Alert",
+            "subtitle": "Carquinez Strait Berth Closure",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 3.33,
+            "description": "Golden Gate & Carquinez Strait crude tanker berth closures delay ANS discharges"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 1820000,
+          "zero_vehicle_pct": 11.5,
+          "vehicles_per_household": 1.62,
+          "drive_alone_share": 0.585,
+          "carpool_share": 0.085,
+          "public_transit_share": 0.125,
+          "work_from_home_share": 0.185,
+          "mean_commute_minutes": 32.5,
+          "vehicle_dependency_ratio": 0.67,
+          "transit_alternative_index": 0.218,
+          "inelastic_demand_score": 0.548
+        }
+      }
+    },
+    "oakland_ca": {
+      "code": "oakland_ca",
+      "region_id": "Oakland_CA",
+      "name": "Oakland & SF Bay Area, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {
+        "title": "Chevron Richmond Refining & Pipeline Logistics",
+        "description": "Located 12 miles north of Oakland, Chevron's 245,000 bpd Richmond Refinery, alongside PBF Martinez and Valero Benicia, supplies East Bay retail stations via the Kinder Morgan SFPP pipeline corridor.",
+        "primary_refinery": "Chevron Richmond Refinery",
+        "capacity_bpd": 245000,
+        "pipelines": [
+          "Kinder Morgan SFPP North/South Line"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "oakland_ca",
+        "display_name": "Oakland, CA Metro Retail",
+        "padd_region": "PADD 5 West Coast",
+        "primary_city": "Oakland, CA",
+        "counties": [
+          "Alameda",
+          "Contra Costa"
+        ],
+        "baseline_price": 4.95,
+        "icon_class": "fa-warehouse",
+        "theme_color": "amber",
+        "econometric_drivers": {
+          "title": "PADD 5 West Coast Econometric Levers",
+          "description": "Oakland operates within the isolated PADD 5 West Coast pricing island where retail prices reflect strict CARB CaRFG summer/winter blend specifications, regional refining tightness, and waterborne import premiums."
+        },
+        "refining_logistics": {
+          "title": "Chevron Richmond Refining & Pipeline Logistics",
+          "description": "Located 12 miles north of Oakland, Chevron's 245,000 bpd Richmond Refinery, alongside PBF Martinez and Valero Benicia, supplies East Bay retail stations via the Kinder Morgan SFPP pipeline corridor.",
+          "primary_refinery": "Chevron Richmond Refinery",
+          "capacity_bpd": 245000,
+          "pipelines": [
+            "Kinder Morgan SFPP North/South Line"
+          ]
+        },
+        "tax_structure": {
+          "title": "CARB Environmental Tax & Regulatory Overhead",
+          "description": "California imposes $0.953/gal state environmental tax/fee burden ($0.634 excise + $0.250 Cap-and-Trade + $0.185 LCFS + $0.150 sales/UST), yielding $1.407/gal total statutory tax with Federal excise.",
+          "state_tax_per_gal": 0.953,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 1.407,
+          "notes": "Highest regulatory and environmental tax overhead in the nation"
+        },
+        "infrastructure_delivery": {
+          "title": "Physical Hazard & Delivery Hub Dynamics",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Oakland Retail}} - P_{\\text{Wholesale RBOB}} = \\$4.950 - \\$3.184 = \\$1.766/\\text{gal}",
+          "description": "East Bay rack truck and pipeline distribution monitored against USGS Hayward Fault (M>=6.0) seismic risks, PG&E PSPS Red Flag wildfire power cuts, and PTWC Tsunami marine berth closures.",
+          "hub_distance_miles": 12,
+          "hub_name": "Chevron Richmond Marine Berth & SFPP Terminal"
+        },
+        "shock_scenarios": [
+          {
+            "name": "USGS Hayward Quake (M>=6.0)",
+            "subtitle": "Pipeline Shutoff & Hydrocracker Trip",
+            "price_impact_per_gal": 0.42,
+            "pct_impact": 8.48,
+            "description": "Kinder Morgan SFPP pipeline shutoff & refinery hydrocracker safety trips"
+          },
+          {
+            "name": "PG&E PSPS Wildfire Shutoff",
+            "subtitle": "Diablo Wind Red Flag Power Cut",
+            "price_impact_per_gal": 0.35,
+            "pct_impact": 7.07,
+            "description": "Diablo wind Red Flag power cuts force emergency flaring & 2-week unit restarts"
+          },
+          {
+            "name": "NOAA PTWC Tsunami Alert",
+            "subtitle": "Carquinez Strait Berth Closure",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 3.33,
+            "description": "Golden Gate & Carquinez Strait crude tanker berth closures delay ANS discharges"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 1820000,
+          "zero_vehicle_pct": 11.5,
+          "vehicles_per_household": 1.62,
+          "drive_alone_share": 0.585,
+          "carpool_share": 0.085,
+          "public_transit_share": 0.125,
+          "work_from_home_share": 0.185,
+          "mean_commute_minutes": 32.5,
+          "vehicle_dependency_ratio": 0.67,
+          "transit_alternative_index": 0.218,
+          "inelastic_demand_score": 0.548
+        }
+      }
+    },
+    "bayarea": {
+      "code": "bayarea",
+      "region_id": "BayArea_CA",
+      "name": "SF Bay Area 9-County Region, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {
+        "title": "Carquinez Strait Refining & Marine Terminals",
+        "description": "Carquinez Strait & Suisun Bay refining complex (Chevron Richmond, PBF Martinez, Valero Benicia, Rodeo Renewable), marine oil terminals, and crude lightering berths.",
+        "primary_refinery": "Carquinez Strait Refining Complex",
+        "capacity_bpd": 720000,
+        "pipelines": [
+          "Kinder Morgan SFPP Bay Area Spine"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "bayarea_ca",
+        "display_name": "SF Bay Area 9-County Region",
+        "padd_region": "PADD 5 West Coast",
+        "primary_city": "San Francisco, CA",
+        "counties": [
+          "San Francisco",
+          "San Mateo",
+          "Santa Clara",
+          "Alameda",
+          "Contra Costa",
+          "Marin",
+          "Solano",
+          "Napa",
+          "Sonoma"
+        ],
+        "baseline_price": 5.05,
+        "icon_class": "fa-warehouse",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "9-County Sub-Locale Econometric Gradient",
+          "description": "San Francisco municipal tax premium vs North Bay Benicia refinery fence-line discount vs Silicon Valley tech commute corridor demand dynamics."
+        },
+        "refining_logistics": {
+          "title": "Carquinez Strait Refining & Marine Terminals",
+          "description": "Carquinez Strait & Suisun Bay refining complex (Chevron Richmond, PBF Martinez, Valero Benicia, Rodeo Renewable), marine oil terminals, and crude lightering berths.",
+          "primary_refinery": "Carquinez Strait Refining Complex",
+          "capacity_bpd": 720000,
+          "pipelines": [
+            "Kinder Morgan SFPP Bay Area Spine"
+          ]
+        },
+        "tax_structure": {
+          "title": "CARB Regulatory Tax & Bay Area Surcharges",
+          "description": "California statewide $0.953/gal state regulatory fee load plus county/city local sales tax variations across San Francisco, Santa Clara, Alameda, and Solano counties.",
+          "state_tax_per_gal": 0.953,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 1.407,
+          "notes": "Includes 8.625% SF municipal sales tax and local transportation surcharges"
+        },
+        "infrastructure_delivery": {
+          "title": "Transit Corridor & Geological Fault Infrastructure",
+          "equation_latex": "\\text{Rack Margin}_{\\text{BayArea}} = P_{\\text{BayArea Retail}} - P_{\\text{Wholesale RBOB}} = \\$5.050 - \\$3.184 = \\$1.866/\\text{gal}",
+          "description": "5 major San Francisco Bay transport bridges, Kinder Morgan SFPP pipeline distribution network, and USGS Bay Area fault line hazards.",
+          "hub_distance_miles": 15,
+          "hub_name": "Carquinez Strait Oil Terminal Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Hayward & San Andreas Seismic Event",
+            "subtitle": "Bay Bridge & Pipeline Corridor Lockout",
+            "price_impact_per_gal": 0.45,
+            "pct_impact": 8.91,
+            "description": "Throttles fuel truck passage across San Francisco Bay bridges"
+          },
+          {
+            "name": "Benicia Refinery Flaring Incident",
+            "subtitle": "Valero Coking Unit Shutdown",
+            "price_impact_per_gal": 0.285,
+            "pct_impact": 5.64,
+            "description": "Spikes North Bay and East Bay rack prices"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 1820000,
+          "zero_vehicle_pct": 11.5,
+          "vehicles_per_household": 1.62,
+          "drive_alone_share": 0.585,
+          "carpool_share": 0.085,
+          "public_transit_share": 0.125,
+          "work_from_home_share": 0.185,
+          "mean_commute_minutes": 32.5,
+          "vehicle_dependency_ratio": 0.67,
+          "transit_alternative_index": 0.218,
+          "inelastic_demand_score": 0.548
+        }
+      }
+    },
+    "bayarea_ca": {
+      "code": "bayarea_ca",
+      "region_id": "BayArea_CA",
+      "name": "SF Bay Area 9-County Region, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {
+        "title": "Carquinez Strait Refining & Marine Terminals",
+        "description": "Carquinez Strait & Suisun Bay refining complex (Chevron Richmond, PBF Martinez, Valero Benicia, Rodeo Renewable), marine oil terminals, and crude lightering berths.",
+        "primary_refinery": "Carquinez Strait Refining Complex",
+        "capacity_bpd": 720000,
+        "pipelines": [
+          "Kinder Morgan SFPP Bay Area Spine"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "bayarea_ca",
+        "display_name": "SF Bay Area 9-County Region",
+        "padd_region": "PADD 5 West Coast",
+        "primary_city": "San Francisco, CA",
+        "counties": [
+          "San Francisco",
+          "San Mateo",
+          "Santa Clara",
+          "Alameda",
+          "Contra Costa",
+          "Marin",
+          "Solano",
+          "Napa",
+          "Sonoma"
+        ],
+        "baseline_price": 5.05,
+        "icon_class": "fa-warehouse",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "9-County Sub-Locale Econometric Gradient",
+          "description": "San Francisco municipal tax premium vs North Bay Benicia refinery fence-line discount vs Silicon Valley tech commute corridor demand dynamics."
+        },
+        "refining_logistics": {
+          "title": "Carquinez Strait Refining & Marine Terminals",
+          "description": "Carquinez Strait & Suisun Bay refining complex (Chevron Richmond, PBF Martinez, Valero Benicia, Rodeo Renewable), marine oil terminals, and crude lightering berths.",
+          "primary_refinery": "Carquinez Strait Refining Complex",
+          "capacity_bpd": 720000,
+          "pipelines": [
+            "Kinder Morgan SFPP Bay Area Spine"
+          ]
+        },
+        "tax_structure": {
+          "title": "CARB Regulatory Tax & Bay Area Surcharges",
+          "description": "California statewide $0.953/gal state regulatory fee load plus county/city local sales tax variations across San Francisco, Santa Clara, Alameda, and Solano counties.",
+          "state_tax_per_gal": 0.953,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 1.407,
+          "notes": "Includes 8.625% SF municipal sales tax and local transportation surcharges"
+        },
+        "infrastructure_delivery": {
+          "title": "Transit Corridor & Geological Fault Infrastructure",
+          "equation_latex": "\\text{Rack Margin}_{\\text{BayArea}} = P_{\\text{BayArea Retail}} - P_{\\text{Wholesale RBOB}} = \\$5.050 - \\$3.184 = \\$1.866/\\text{gal}",
+          "description": "5 major San Francisco Bay transport bridges, Kinder Morgan SFPP pipeline distribution network, and USGS Bay Area fault line hazards.",
+          "hub_distance_miles": 15,
+          "hub_name": "Carquinez Strait Oil Terminal Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Hayward & San Andreas Seismic Event",
+            "subtitle": "Bay Bridge & Pipeline Corridor Lockout",
+            "price_impact_per_gal": 0.45,
+            "pct_impact": 8.91,
+            "description": "Throttles fuel truck passage across San Francisco Bay bridges"
+          },
+          {
+            "name": "Benicia Refinery Flaring Incident",
+            "subtitle": "Valero Coking Unit Shutdown",
+            "price_impact_per_gal": 0.285,
+            "pct_impact": 5.64,
+            "description": "Spikes North Bay and East Bay rack prices"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 1820000,
+          "zero_vehicle_pct": 11.5,
+          "vehicles_per_household": 1.62,
+          "drive_alone_share": 0.585,
+          "carpool_share": 0.085,
+          "public_transit_share": 0.125,
+          "work_from_home_share": 0.185,
+          "mean_commute_minutes": 32.5,
+          "vehicle_dependency_ratio": 0.67,
+          "transit_alternative_index": 0.218,
+          "inelastic_demand_score": 0.548
+        }
+      }
+    },
+    "sanfrancisco": {
+      "code": "sanfrancisco",
+      "region_id": "SanFrancisco_CA",
+      "name": "San Francisco Metro Retail, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "sanfrancisco_ca": {
+      "code": "sanfrancisco_ca",
+      "region_id": "SanFrancisco_CA",
+      "name": "San Francisco Metro Retail, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "sf": {
+      "code": "sf",
+      "region_id": "SanFrancisco_CA",
+      "name": "San Francisco Metro Retail, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "sanjose": {
+      "code": "sanjose",
+      "region_id": "SanJose_CA",
+      "name": "San Jose / Silicon Valley, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "sanjose_ca": {
+      "code": "sanjose_ca",
+      "region_id": "SanJose_CA",
+      "name": "San Jose / Silicon Valley, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "sj": {
+      "code": "sj",
+      "region_id": "SanJose_CA",
+      "name": "San Jose / Silicon Valley, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "northbay": {
+      "code": "northbay",
+      "region_id": "NorthBay_CA",
+      "name": "North Bay / Solano Region, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "northbay_ca": {
+      "code": "northbay_ca",
+      "region_id": "NorthBay_CA",
+      "name": "North Bay / Solano Region, CA",
+      "padd_region": "PADD 5 West Coast",
+      "carb_tax_regulatory_burden_per_gal": 0.953,
+      "refining_logistics": {},
+      "tax_breakdown": {},
+      "metadata_profile": {}
+    },
+    "greenville": {
+      "code": "greenville",
+      "region_id": "Greenville_NC",
+      "name": "Greenville Metro Area, NC",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Refining & Pipeline Logistics",
+        "description": "Colonial Line 1 feeds Selma & Apex breakout hubs, supplemented by Port of Wilmington marine oil terminal imports for Coastal Carolina.",
+        "primary_refinery": "Selma NC & Apex NC Breakout Hub Tank Farms",
+        "capacity_bpd": 850000,
+        "pipelines": [
+          "Colonial Pipeline Line 1",
+          "Colonial Pipeline Line 2"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "greenville_nc",
+        "display_name": "Greenville, NC Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Greenville, NC",
+        "counties": [
+          "Pitt",
+          "Lenoir",
+          "Beaufort"
+        ],
+        "baseline_price": 3.25,
+        "icon_class": "fa-network-wired",
+        "theme_color": "green",
+        "econometric_drivers": {
+          "title": "PADD 1C Econometric Drivers",
+          "description": "Retail pump prices track Gulf Coast RBOB spot indices plus Colonial Pipeline batch transit tariffs and local eastern NC jobber distributor margins."
+        },
+        "refining_logistics": {
+          "title": "Refining & Pipeline Logistics",
+          "description": "Colonial Line 1 feeds Selma & Apex breakout hubs, supplemented by Port of Wilmington marine oil terminal imports for Coastal Carolina.",
+          "primary_refinery": "Selma NC & Apex NC Breakout Hub Tank Farms",
+          "capacity_bpd": 850000,
+          "pipelines": [
+            "Colonial Pipeline Line 1",
+            "Colonial Pipeline Line 2"
+          ]
+        },
+        "tax_structure": {
+          "title": "NC Motor Fuel Tax Structure",
+          "description": "NC state motor fuel tax ($0.404/gal) + Federal excise tax ($0.184/gal) creates a total statutory tax burden of $0.588/gal.",
+          "state_tax_per_gal": 0.404,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.588,
+          "notes": "North Carolina variable formula state fuel tax"
+        },
+        "infrastructure_delivery": {
+          "title": "Delivery Hub & NOAA Risk Factors",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Greenville Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.250 - \\$3.184 = \\$0.066/\\text{gal}",
+          "description": "Selma hub tank-truck dispatch via US-264 & NC-11 corridors to Pitt, Lenoir & Beaufort counties, monitored against Tar River crests.",
+          "hub_distance_miles": 55,
+          "hub_name": "Selma NC Breakout Tank Farm"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Colonial Pipeline Mainline Outage",
+            "subtitle": "Line 1 Emergency Shutdown",
+            "price_impact_per_gal": 0.245,
+            "pct_impact": 7.54,
+            "description": "Halts batch shipments into Selma NC breakout tank farms"
+          },
+          {
+            "name": "Category 3 Atlantic Hurricane Landfall",
+            "subtitle": "Pamlico Sound Surge Flooding",
+            "price_impact_per_gal": 0.215,
+            "pct_impact": 6.62,
+            "description": "Floods US-264 distribution highways & Tar River basin"
+          },
+          {
+            "name": "Selma Hub Tank Farm Power Outage",
+            "subtitle": "Duke Energy Substation Outage",
+            "price_impact_per_gal": 0.185,
+            "pct_impact": 5.69,
+            "description": "Suspends automated rack loading"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 76500,
+          "zero_vehicle_pct": 6.8,
+          "vehicles_per_household": 1.88,
+          "drive_alone_share": 0.831,
+          "carpool_share": 0.088,
+          "public_transit_share": 0.011,
+          "work_from_home_share": 0.058,
+          "mean_commute_minutes": 21.2,
+          "vehicle_dependency_ratio": 0.919,
+          "transit_alternative_index": 0.04,
+          "inelastic_demand_score": 0.879
+        }
+      }
+    },
+    "greenville_nc": {
+      "code": "greenville_nc",
+      "region_id": "Greenville_NC",
+      "name": "Greenville Metro Area, NC",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Refining & Pipeline Logistics",
+        "description": "Colonial Line 1 feeds Selma & Apex breakout hubs, supplemented by Port of Wilmington marine oil terminal imports for Coastal Carolina.",
+        "primary_refinery": "Selma NC & Apex NC Breakout Hub Tank Farms",
+        "capacity_bpd": 850000,
+        "pipelines": [
+          "Colonial Pipeline Line 1",
+          "Colonial Pipeline Line 2"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "greenville_nc",
+        "display_name": "Greenville, NC Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Greenville, NC",
+        "counties": [
+          "Pitt",
+          "Lenoir",
+          "Beaufort"
+        ],
+        "baseline_price": 3.25,
+        "icon_class": "fa-network-wired",
+        "theme_color": "green",
+        "econometric_drivers": {
+          "title": "PADD 1C Econometric Drivers",
+          "description": "Retail pump prices track Gulf Coast RBOB spot indices plus Colonial Pipeline batch transit tariffs and local eastern NC jobber distributor margins."
+        },
+        "refining_logistics": {
+          "title": "Refining & Pipeline Logistics",
+          "description": "Colonial Line 1 feeds Selma & Apex breakout hubs, supplemented by Port of Wilmington marine oil terminal imports for Coastal Carolina.",
+          "primary_refinery": "Selma NC & Apex NC Breakout Hub Tank Farms",
+          "capacity_bpd": 850000,
+          "pipelines": [
+            "Colonial Pipeline Line 1",
+            "Colonial Pipeline Line 2"
+          ]
+        },
+        "tax_structure": {
+          "title": "NC Motor Fuel Tax Structure",
+          "description": "NC state motor fuel tax ($0.404/gal) + Federal excise tax ($0.184/gal) creates a total statutory tax burden of $0.588/gal.",
+          "state_tax_per_gal": 0.404,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.588,
+          "notes": "North Carolina variable formula state fuel tax"
+        },
+        "infrastructure_delivery": {
+          "title": "Delivery Hub & NOAA Risk Factors",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Greenville Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.250 - \\$3.184 = \\$0.066/\\text{gal}",
+          "description": "Selma hub tank-truck dispatch via US-264 & NC-11 corridors to Pitt, Lenoir & Beaufort counties, monitored against Tar River crests.",
+          "hub_distance_miles": 55,
+          "hub_name": "Selma NC Breakout Tank Farm"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Colonial Pipeline Mainline Outage",
+            "subtitle": "Line 1 Emergency Shutdown",
+            "price_impact_per_gal": 0.245,
+            "pct_impact": 7.54,
+            "description": "Halts batch shipments into Selma NC breakout tank farms"
+          },
+          {
+            "name": "Category 3 Atlantic Hurricane Landfall",
+            "subtitle": "Pamlico Sound Surge Flooding",
+            "price_impact_per_gal": 0.215,
+            "pct_impact": 6.62,
+            "description": "Floods US-264 distribution highways & Tar River basin"
+          },
+          {
+            "name": "Selma Hub Tank Farm Power Outage",
+            "subtitle": "Duke Energy Substation Outage",
+            "price_impact_per_gal": 0.185,
+            "pct_impact": 5.69,
+            "description": "Suspends automated rack loading"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 76500,
+          "zero_vehicle_pct": 6.8,
+          "vehicles_per_household": 1.88,
+          "drive_alone_share": 0.831,
+          "carpool_share": 0.088,
+          "public_transit_share": 0.011,
+          "work_from_home_share": 0.058,
+          "mean_commute_minutes": 21.2,
+          "vehicle_dependency_ratio": 0.919,
+          "transit_alternative_index": 0.04,
+          "inelastic_demand_score": 0.879
+        }
+      }
+    },
+    "charlotte": {
+      "code": "charlotte",
+      "region_id": "Charlotte_NC",
+      "name": "Charlotte Metro Area, NC",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Paw Creek Hub & Dual Pipelines",
+        "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
+        "primary_refinery": "Paw Creek Petroleum Distribution Hub",
+        "capacity_bpd": 950000,
+        "pipelines": [
+          "Colonial Pipeline Line 1",
+          "Plantation Pipeline"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "charlotte_nc",
+        "display_name": "Charlotte, NC Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Charlotte, NC",
+        "counties": [
+          "Mecklenburg",
+          "York"
+        ],
+        "baseline_price": 3.28,
+        "icon_class": "fa-network-wired",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "Cross-Border Tax Econometric Drivers",
+          "description": "NC ($0.404/gal) vs SC ($0.288/gal) motor fuel tax differential creates a persistent ~$0.116/gal cross-border price gap with Fort Mill & Rock Hill, SC."
+        },
+        "refining_logistics": {
+          "title": "Paw Creek Hub & Dual Pipelines",
+          "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
+          "primary_refinery": "Paw Creek Petroleum Distribution Hub",
+          "capacity_bpd": 950000,
+          "pipelines": [
+            "Colonial Pipeline Line 1",
+            "Plantation Pipeline"
+          ]
+        },
+        "tax_structure": {
+          "title": "NC/SC Tax Structure & Overhead",
+          "description": "NC Motor Fuel Tax ($0.404/gal) + Federal ($0.184/gal) = $0.588/gal total in NC, vs $0.472/gal total across the South Carolina border line.",
+          "state_tax_per_gal": 0.404,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.588,
+          "notes": "Cross-border tax differential with South Carolina ($0.288/gal)"
+        },
+        "infrastructure_delivery": {
+          "title": "Interstate Delivery & Weather Risk",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Charlotte Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.280 - \\$3.184 = \\$0.096/\\text{gal}",
+          "description": "I-85 & I-77 freight corridor distribution across Mecklenburg and York counties, evaluated against NOAA NCZ071 Piedmont winter ice storm alerts.",
+          "hub_distance_miles": 8,
+          "hub_name": "Paw Creek Petroleum Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Paw Creek Hub Power Blackout",
+            "subtitle": "West Charlotte Substation Outage",
+            "price_impact_per_gal": 0.185,
+            "pct_impact": 5.64,
+            "description": "Halts automated rack loading at West Charlotte distribution hub"
+          },
+          {
+            "name": "Colonial Line 1 Batch Throttling",
+            "subtitle": "Emergency Transit Reduction",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 5.03,
+            "description": "Reduces wholesale gasoline deliveries to Charlotte terminals"
+          },
+          {
+            "name": "Winter Ice Storm Transit Lockdown",
+            "subtitle": "Piedmont Freezing Rain Alert",
+            "price_impact_per_gal": 0.14,
+            "pct_impact": 4.27,
+            "description": "Locks down I-85 & I-77 logistics corridors across Mecklenburg County"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 1100000,
+          "zero_vehicle_pct": 4.9,
+          "vehicles_per_household": 1.91,
+          "drive_alone_share": 0.778,
+          "carpool_share": 0.082,
+          "public_transit_share": 0.021,
+          "work_from_home_share": 0.105,
+          "mean_commute_minutes": 27.8,
+          "vehicle_dependency_ratio": 0.86,
+          "transit_alternative_index": 0.074,
+          "inelastic_demand_score": 0.821
+        }
+      }
+    },
+    "charlotte_nc": {
+      "code": "charlotte_nc",
+      "region_id": "Charlotte_NC",
+      "name": "Charlotte Metro Area, NC",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Paw Creek Hub & Dual Pipelines",
+        "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
+        "primary_refinery": "Paw Creek Petroleum Distribution Hub",
+        "capacity_bpd": 950000,
+        "pipelines": [
+          "Colonial Pipeline Line 1",
+          "Plantation Pipeline"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "charlotte_nc",
+        "display_name": "Charlotte, NC Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Charlotte, NC",
+        "counties": [
+          "Mecklenburg",
+          "York"
+        ],
+        "baseline_price": 3.28,
+        "icon_class": "fa-network-wired",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "Cross-Border Tax Econometric Drivers",
+          "description": "NC ($0.404/gal) vs SC ($0.288/gal) motor fuel tax differential creates a persistent ~$0.116/gal cross-border price gap with Fort Mill & Rock Hill, SC."
+        },
+        "refining_logistics": {
+          "title": "Paw Creek Hub & Dual Pipelines",
+          "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
+          "primary_refinery": "Paw Creek Petroleum Distribution Hub",
+          "capacity_bpd": 950000,
+          "pipelines": [
+            "Colonial Pipeline Line 1",
+            "Plantation Pipeline"
+          ]
+        },
+        "tax_structure": {
+          "title": "NC/SC Tax Structure & Overhead",
+          "description": "NC Motor Fuel Tax ($0.404/gal) + Federal ($0.184/gal) = $0.588/gal total in NC, vs $0.472/gal total across the South Carolina border line.",
+          "state_tax_per_gal": 0.404,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.588,
+          "notes": "Cross-border tax differential with South Carolina ($0.288/gal)"
+        },
+        "infrastructure_delivery": {
+          "title": "Interstate Delivery & Weather Risk",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Charlotte Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.280 - \\$3.184 = \\$0.096/\\text{gal}",
+          "description": "I-85 & I-77 freight corridor distribution across Mecklenburg and York counties, evaluated against NOAA NCZ071 Piedmont winter ice storm alerts.",
+          "hub_distance_miles": 8,
+          "hub_name": "Paw Creek Petroleum Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Paw Creek Hub Power Blackout",
+            "subtitle": "West Charlotte Substation Outage",
+            "price_impact_per_gal": 0.185,
+            "pct_impact": 5.64,
+            "description": "Halts automated rack loading at West Charlotte distribution hub"
+          },
+          {
+            "name": "Colonial Line 1 Batch Throttling",
+            "subtitle": "Emergency Transit Reduction",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 5.03,
+            "description": "Reduces wholesale gasoline deliveries to Charlotte terminals"
+          },
+          {
+            "name": "Winter Ice Storm Transit Lockdown",
+            "subtitle": "Piedmont Freezing Rain Alert",
+            "price_impact_per_gal": 0.14,
+            "pct_impact": 4.27,
+            "description": "Locks down I-85 & I-77 logistics corridors across Mecklenburg County"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 1100000,
+          "zero_vehicle_pct": 4.9,
+          "vehicles_per_household": 1.91,
+          "drive_alone_share": 0.778,
+          "carpool_share": 0.082,
+          "public_transit_share": 0.021,
+          "work_from_home_share": 0.105,
+          "mean_commute_minutes": 27.8,
+          "vehicle_dependency_ratio": 0.86,
+          "transit_alternative_index": 0.074,
+          "inelastic_demand_score": 0.821
+        }
+      }
+    },
+    "clt": {
+      "code": "clt",
+      "region_id": "Charlotte_NC",
+      "name": "Charlotte Metro Area, NC",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Paw Creek Hub & Dual Pipelines",
+        "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
+        "primary_refinery": "Paw Creek Petroleum Distribution Hub",
+        "capacity_bpd": 950000,
+        "pipelines": [
+          "Colonial Pipeline Line 1",
+          "Plantation Pipeline"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "charlotte_nc",
+        "display_name": "Charlotte, NC Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Charlotte, NC",
+        "counties": [
+          "Mecklenburg",
+          "York"
+        ],
+        "baseline_price": 3.28,
+        "icon_class": "fa-network-wired",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "Cross-Border Tax Econometric Drivers",
+          "description": "NC ($0.404/gal) vs SC ($0.288/gal) motor fuel tax differential creates a persistent ~$0.116/gal cross-border price gap with Fort Mill & Rock Hill, SC."
+        },
+        "refining_logistics": {
+          "title": "Paw Creek Hub & Dual Pipelines",
+          "description": "Paw Creek Petroleum Distribution Hub receives dual pipeline flows from Colonial Line 1 & Plantation Pipeline, supplying major tank farms in West Charlotte.",
+          "primary_refinery": "Paw Creek Petroleum Distribution Hub",
+          "capacity_bpd": 950000,
+          "pipelines": [
+            "Colonial Pipeline Line 1",
+            "Plantation Pipeline"
+          ]
+        },
+        "tax_structure": {
+          "title": "NC/SC Tax Structure & Overhead",
+          "description": "NC Motor Fuel Tax ($0.404/gal) + Federal ($0.184/gal) = $0.588/gal total in NC, vs $0.472/gal total across the South Carolina border line.",
+          "state_tax_per_gal": 0.404,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.588,
+          "notes": "Cross-border tax differential with South Carolina ($0.288/gal)"
+        },
+        "infrastructure_delivery": {
+          "title": "Interstate Delivery & Weather Risk",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Charlotte Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.280 - \\$3.184 = \\$0.096/\\text{gal}",
+          "description": "I-85 & I-77 freight corridor distribution across Mecklenburg and York counties, evaluated against NOAA NCZ071 Piedmont winter ice storm alerts.",
+          "hub_distance_miles": 8,
+          "hub_name": "Paw Creek Petroleum Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Paw Creek Hub Power Blackout",
+            "subtitle": "West Charlotte Substation Outage",
+            "price_impact_per_gal": 0.185,
+            "pct_impact": 5.64,
+            "description": "Halts automated rack loading at West Charlotte distribution hub"
+          },
+          {
+            "name": "Colonial Line 1 Batch Throttling",
+            "subtitle": "Emergency Transit Reduction",
+            "price_impact_per_gal": 0.165,
+            "pct_impact": 5.03,
+            "description": "Reduces wholesale gasoline deliveries to Charlotte terminals"
+          },
+          {
+            "name": "Winter Ice Storm Transit Lockdown",
+            "subtitle": "Piedmont Freezing Rain Alert",
+            "price_impact_per_gal": 0.14,
+            "pct_impact": 4.27,
+            "description": "Locks down I-85 & I-77 logistics corridors across Mecklenburg County"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 1100000,
+          "zero_vehicle_pct": 4.9,
+          "vehicles_per_household": 1.91,
+          "drive_alone_share": 0.778,
+          "carpool_share": 0.082,
+          "public_transit_share": 0.021,
+          "work_from_home_share": 0.105,
+          "mean_commute_minutes": 27.8,
+          "vehicle_dependency_ratio": 0.86,
+          "transit_alternative_index": 0.074,
+          "inelastic_demand_score": 0.821
+        }
+      }
+    },
+    "port_st_lucie": {
+      "code": "port_st_lucie",
+      "region_id": "Port_St_Lucie_FL",
+      "name": "Port St. Lucie Metro Area, FL",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Refining & Waterborne Marine Logistics",
+        "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
+        "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
+        "capacity_bpd": 600000,
+        "pipelines": [
+          "Port Everglades Marine Terminal Offloading",
+          "Port Canaveral Tanker Berths",
+          "I-95 & Florida Turnpike Tank Truck Corridors"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "port_st_lucie_fl",
+        "display_name": "Port St. Lucie, FL Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Port St. Lucie, FL",
+        "counties": [
+          "St. Lucie",
+          "Martin",
+          "Indian River"
+        ],
+        "baseline_price": 3.38,
+        "icon_class": "fa-water",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "PADD 1C Waterborne Econometric Drivers",
+          "description": "Retail pump prices track Gulf Coast RBOB spot indices plus waterborne ocean barge transit freight tariffs and Treasure Coast tank-truck delivery margins."
+        },
+        "refining_logistics": {
+          "title": "Refining & Waterborne Marine Logistics",
+          "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
+          "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
+          "capacity_bpd": 600000,
+          "pipelines": [
+            "Port Everglades Marine Terminal Offloading",
+            "Port Canaveral Tanker Berths",
+            "I-95 & Florida Turnpike Tank Truck Corridors"
+          ]
+        },
+        "tax_structure": {
+          "title": "Florida Motor Fuel Tax Structure",
+          "description": "Florida state motor fuel tax ($0.384/gal state & local option) + Federal excise tax ($0.184/gal) creates a total statutory tax burden of $0.568/gal.",
+          "state_tax_per_gal": 0.384,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.568,
+          "notes": "Florida variable state fuel tax + St. Lucie County local option"
+        },
+        "infrastructure_delivery": {
+          "title": "Delivery Hub & NOAA Risk Factors",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{PSL Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.380 - \\$3.184 = \\$0.196/\\text{gal}",
+          "description": "Port Everglades tank-truck dispatch via I-95 & Florida's Turnpike corridors to St. Lucie, Martin & Indian River counties, monitored against Atlantic tropical cyclone tracks.",
+          "hub_distance_miles": 85,
+          "hub_name": "Port Everglades Petroleum Distribution Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Port Everglades Loading Rack Deluge Outage",
+            "subtitle": "Flash Flooding Rack Shutdown",
+            "price_impact_per_gal": 0.245,
+            "pct_impact": 7.25,
+            "description": "Halts tank-truck dispatches to Treasure Coast retail stations"
+          },
+          {
+            "name": "Category 3 Atlantic Hurricane Landfall",
+            "subtitle": "Marine Port Closure & Evacuation Surge",
+            "price_impact_per_gal": 0.225,
+            "pct_impact": 6.66,
+            "description": "Shuts Port Everglades & Port Canaveral marine berths"
+          },
+          {
+            "name": "Straits of Florida Tanker Transit Bottleneck",
+            "subtitle": "Gale Warning Marine Delay",
+            "price_impact_per_gal": 0.175,
+            "pct_impact": 5.18,
+            "description": "Delays Gulf Coast waterborne tank barge arrivals"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 215000,
+          "zero_vehicle_pct": 4.1,
+          "vehicles_per_household": 1.94,
+          "drive_alone_share": 0.812,
+          "carpool_share": 0.08,
+          "public_transit_share": 0.006,
+          "work_from_home_share": 0.088,
+          "mean_commute_minutes": 28.5,
+          "vehicle_dependency_ratio": 0.892,
+          "transit_alternative_index": 0.05,
+          "inelastic_demand_score": 0.868
+        }
+      }
+    },
+    "port_st_lucie_fl": {
+      "code": "port_st_lucie_fl",
+      "region_id": "Port_St_Lucie_FL",
+      "name": "Port St. Lucie Metro Area, FL",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Refining & Waterborne Marine Logistics",
+        "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
+        "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
+        "capacity_bpd": 600000,
+        "pipelines": [
+          "Port Everglades Marine Terminal Offloading",
+          "Port Canaveral Tanker Berths",
+          "I-95 & Florida Turnpike Tank Truck Corridors"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "port_st_lucie_fl",
+        "display_name": "Port St. Lucie, FL Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Port St. Lucie, FL",
+        "counties": [
+          "St. Lucie",
+          "Martin",
+          "Indian River"
+        ],
+        "baseline_price": 3.38,
+        "icon_class": "fa-water",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "PADD 1C Waterborne Econometric Drivers",
+          "description": "Retail pump prices track Gulf Coast RBOB spot indices plus waterborne ocean barge transit freight tariffs and Treasure Coast tank-truck delivery margins."
+        },
+        "refining_logistics": {
+          "title": "Refining & Waterborne Marine Logistics",
+          "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
+          "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
+          "capacity_bpd": 600000,
+          "pipelines": [
+            "Port Everglades Marine Terminal Offloading",
+            "Port Canaveral Tanker Berths",
+            "I-95 & Florida Turnpike Tank Truck Corridors"
+          ]
+        },
+        "tax_structure": {
+          "title": "Florida Motor Fuel Tax Structure",
+          "description": "Florida state motor fuel tax ($0.384/gal state & local option) + Federal excise tax ($0.184/gal) creates a total statutory tax burden of $0.568/gal.",
+          "state_tax_per_gal": 0.384,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.568,
+          "notes": "Florida variable state fuel tax + St. Lucie County local option"
+        },
+        "infrastructure_delivery": {
+          "title": "Delivery Hub & NOAA Risk Factors",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{PSL Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.380 - \\$3.184 = \\$0.196/\\text{gal}",
+          "description": "Port Everglades tank-truck dispatch via I-95 & Florida's Turnpike corridors to St. Lucie, Martin & Indian River counties, monitored against Atlantic tropical cyclone tracks.",
+          "hub_distance_miles": 85,
+          "hub_name": "Port Everglades Petroleum Distribution Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Port Everglades Loading Rack Deluge Outage",
+            "subtitle": "Flash Flooding Rack Shutdown",
+            "price_impact_per_gal": 0.245,
+            "pct_impact": 7.25,
+            "description": "Halts tank-truck dispatches to Treasure Coast retail stations"
+          },
+          {
+            "name": "Category 3 Atlantic Hurricane Landfall",
+            "subtitle": "Marine Port Closure & Evacuation Surge",
+            "price_impact_per_gal": 0.225,
+            "pct_impact": 6.66,
+            "description": "Shuts Port Everglades & Port Canaveral marine berths"
+          },
+          {
+            "name": "Straits of Florida Tanker Transit Bottleneck",
+            "subtitle": "Gale Warning Marine Delay",
+            "price_impact_per_gal": 0.175,
+            "pct_impact": 5.18,
+            "description": "Delays Gulf Coast waterborne tank barge arrivals"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 215000,
+          "zero_vehicle_pct": 4.1,
+          "vehicles_per_household": 1.94,
+          "drive_alone_share": 0.812,
+          "carpool_share": 0.08,
+          "public_transit_share": 0.006,
+          "work_from_home_share": 0.088,
+          "mean_commute_minutes": 28.5,
+          "vehicle_dependency_ratio": 0.892,
+          "transit_alternative_index": 0.05,
+          "inelastic_demand_score": 0.868
+        }
+      }
+    },
+    "psl": {
+      "code": "psl",
+      "region_id": "Port_St_Lucie_FL",
+      "name": "Port St. Lucie Metro Area, FL",
+      "padd_region": "PADD 1C South Atlantic",
+      "carb_tax_regulatory_burden_per_gal": 0.0,
+      "refining_logistics": {
+        "title": "Refining & Waterborne Marine Logistics",
+        "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
+        "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
+        "capacity_bpd": 600000,
+        "pipelines": [
+          "Port Everglades Marine Terminal Offloading",
+          "Port Canaveral Tanker Berths",
+          "I-95 & Florida Turnpike Tank Truck Corridors"
+        ]
+      },
+      "tax_breakdown": {},
+      "metadata_profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "region_id": "port_st_lucie_fl",
+        "display_name": "Port St. Lucie, FL Metro Retail",
+        "padd_region": "PADD 1C Lower Atlantic",
+        "primary_city": "Port St. Lucie, FL",
+        "counties": [
+          "St. Lucie",
+          "Martin",
+          "Indian River"
+        ],
+        "baseline_price": 3.38,
+        "icon_class": "fa-water",
+        "theme_color": "cyan",
+        "econometric_drivers": {
+          "title": "PADD 1C Waterborne Econometric Drivers",
+          "description": "Retail pump prices track Gulf Coast RBOB spot indices plus waterborne ocean barge transit freight tariffs and Treasure Coast tank-truck delivery margins."
+        },
+        "refining_logistics": {
+          "title": "Refining & Waterborne Marine Logistics",
+          "description": "Florida has zero crude oil refineries and zero interstate pipelines entering South Florida. Port St. Lucie is >95% dependent on waterborne tank barges offloading at Port Everglades and Port Canaveral.",
+          "primary_refinery": "Port Everglades & Port Canaveral Petroleum Marine Terminals",
+          "capacity_bpd": 600000,
+          "pipelines": [
+            "Port Everglades Marine Terminal Offloading",
+            "Port Canaveral Tanker Berths",
+            "I-95 & Florida Turnpike Tank Truck Corridors"
+          ]
+        },
+        "tax_structure": {
+          "title": "Florida Motor Fuel Tax Structure",
+          "description": "Florida state motor fuel tax ($0.384/gal state & local option) + Federal excise tax ($0.184/gal) creates a total statutory tax burden of $0.568/gal.",
+          "state_tax_per_gal": 0.384,
+          "federal_tax_per_gal": 0.184,
+          "total_tax_per_gal": 0.568,
+          "notes": "Florida variable state fuel tax + St. Lucie County local option"
+        },
+        "infrastructure_delivery": {
+          "title": "Delivery Hub & NOAA Risk Factors",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{PSL Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.380 - \\$3.184 = \\$0.196/\\text{gal}",
+          "description": "Port Everglades tank-truck dispatch via I-95 & Florida's Turnpike corridors to St. Lucie, Martin & Indian River counties, monitored against Atlantic tropical cyclone tracks.",
+          "hub_distance_miles": 85,
+          "hub_name": "Port Everglades Petroleum Distribution Hub"
+        },
+        "shock_scenarios": [
+          {
+            "name": "Port Everglades Loading Rack Deluge Outage",
+            "subtitle": "Flash Flooding Rack Shutdown",
+            "price_impact_per_gal": 0.245,
+            "pct_impact": 7.25,
+            "description": "Halts tank-truck dispatches to Treasure Coast retail stations"
+          },
+          {
+            "name": "Category 3 Atlantic Hurricane Landfall",
+            "subtitle": "Marine Port Closure & Evacuation Surge",
+            "price_impact_per_gal": 0.225,
+            "pct_impact": 6.66,
+            "description": "Shuts Port Everglades & Port Canaveral marine berths"
+          },
+          {
+            "name": "Straits of Florida Tanker Transit Bottleneck",
+            "subtitle": "Gale Warning Marine Delay",
+            "price_impact_per_gal": 0.175,
+            "pct_impact": 5.18,
+            "description": "Delays Gulf Coast waterborne tank barge arrivals"
+          }
+        ],
+        "commuter_demographics": {
+          "vintage_year": 2024,
+          "total_households": 215000,
+          "zero_vehicle_pct": 4.1,
+          "vehicles_per_household": 1.94,
+          "drive_alone_share": 0.812,
+          "carpool_share": 0.08,
+          "public_transit_share": 0.006,
+          "work_from_home_share": 0.088,
+          "mean_commute_minutes": 28.5,
+          "vehicle_dependency_ratio": 0.892,
+          "transit_alternative_index": 0.05,
+          "inelastic_demand_score": 0.868
+        }
+      }
+    }
+  }
+}
