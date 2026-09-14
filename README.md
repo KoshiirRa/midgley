@@ -13,16 +13,16 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-13 20:20 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-13 23:36 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.120`/gal | **`$3.149`/gal** | **UP 📈** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `$3.307`/gal | **`$3.149`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **Tulsa, OK Metro Retail** | `$3.828`/gal | **`$3.792`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `$3.286`/gal | **`$3.256`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **Newark, DE Metro Retail** | `$3.345`/gal | **`$3.314`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **Cincinnati, OH Retail** | `$4.096`/gal | **`$4.065`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `$3.261`/gal | **`$3.236`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
-| **Greenville, NC Metro Retail** | `$3.610`/gal | **`$3.573`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **Northern Kentucky Retail** | `$3.320`/gal | **`$3.295`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
+| **Greenville, NC Metro Retail** | `$3.669`/gal | **`$3.631`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **Oakland, CA Metro Retail** | `$6.040`/gal | **`$5.989`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 | **SF Bay Area 9-County Avg** | `$6.143`/gal | **`$6.092`/gal** | **DOWN 📉** | `2026-09-18` | `v1.4-Finlight-Ridge` |
 
@@ -57,7 +57,8 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 15 pipeline sections (including 3-2-1 crack spreads, executive social gap multipliers, and CARB tax breakdown).
 - **`/sources` (Data Sources Catalog)**: Comprehensive public catalog documenting all 26 quantitative commodity futures, NOAA weather sensors, USGS hydrology stations, state tax portals, and financial news feeds.
-- **`/telemetry` (System Observability)**: Real-time telemetry dashboard featuring Vectorize Hindsight episodic memory observability, 7-day zero-cost data connector health audits (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS), zero-cost LLM fallback & cumulative dollar/token savings, expanded API quota safety valves (Firecrawl, Finlight, IPASIS), and dynamic out-of-metro Leaflet demand heatmaps.
+- **`/telemetry` (System Observability & Model Evolution)**: Real-time telemetry dashboard featuring Model Learning & Longitudinal Adaptation Tracking (rolling MAE vs naive baseline, LLM win rates, multi-window scoreboards), Vectorize Hindsight episodic memory observability, 7-day zero-cost data connector health audits (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS), zero-cost LLM fallback & cumulative dollar/token savings, expanded API quota safety valves (Firecrawl, Finlight, IPASIS), and dynamic out-of-metro Leaflet demand heatmaps.
+- **`MODEL_LEARNING.md` (Longitudinal Evolution Journal)**: Automated persistent Markdown journal documenting multi-window accuracy convergence (7d, 14d, 30d, 90d, All-Time), Sapient PRAXIST hypothesis testing history, categorized episodic memory post-mortems, and multi-agent learning diagrams.
 - **`/research` (Research Citations)**: Research literature bibliography cataloging academic papers, preprints, econometric models, and domain citations referenced in Midgley.
 - **Weekly Review 2.0 & Episodic Agent Memory (Issue #230)**: Biomimetic Retain-Recall-Reflect memory engine on Google Cloud Run (Scale-to-Zero) + Supabase `pgvector` with local SQLite FTS5 fallback, performing automated qualitative anomaly post-mortems and historical shock analogy retrieval during Saturday reviews.
 - **Automated Social Embed Cards**: Dynamic 1200x630px dark-mode Open Graph preview card PNGs (`docs/assets/embeds/*.png`) rendered for Discord, Twitter/X, and Slack link previews.

@@ -2968,5 +2968,43 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-13T23:57:56.648025",
+    "headline": "Canada's oil windfall may yet wipe out its losses from tariffs - CBC",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPQTY1bmt1cE5McjFxRXVFMGRjYlJmZVdlNGJINGtYWHh3b09UbF8wbndSU2hSbkJpMWh4anF1Qy1hWFJHeTVIWjc2UVFsWXhLM2syWWs2dEdjbEtsWVNDSUE0cThsOGNGRDVvb2ZhS2lyeFVwTmFHODhIUkJYa012aW5wTmlLc19DVThGaXBOUk1CMzg?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikwFBVV95cUxPQTY1bmt1cE5McjFxRXVFMGRjYlJmZVdlNGJINGtYWHh3b09UbF8wbndSU2hSbkJpMWh4anF1Qy1hWFJHeTVIWjc2UVFsWXhLM2syWWs2dEdjbEtsWVNDSUE0cThsOGNGRDVvb2ZhS2lyeFVwTmFHODhIUkJYa012aW5wTmlLc19DVThGaXBOUk1CMzg?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.7,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-14T04:30:01.531890",
+    "headline": "\u2018Very, very difficult to deal with\u2019: Trump takes aim at Canada amid trade war - Firstpost",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNTzJOMWRPSHlURkxGYkhPQnh2cElLLUZLVUZXLUJFbi1HczNzS0N6Y0l5Q3ZJY1d4cnRQckJzRGZfa29ZNkp6Tm5aM1J2YUJYTGUySy1Ea2ZCbGdUZ25XWW1sd0FEakM5YzFLTWw3LTdUUWM5cHpkNEFybHJWMVJwZXgzRTFWd9IBiwFBVV95cUxNYko1cDBhNjg1WDdvR3pMOS01eWkyb251dU9oTl92Q0c3X3pIcnU3Q3dlVEUyZkxXdDI4SmRrNGVtcXpuUnVfMWFrdFo2LXhmMEgyZ3pPVUdyTDZaTXZKUG4tT2d6XzRPTU1NTFk5SDZqS3FiUDI2c0RBV3FzS2JhZlc5WGRzTWF3WlVR?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihgFBVV95cUxNTzJOMWRPSHlURkxGYkhPQnh2cElLLUZLVUZXLUJFbi1HczNzS0N6Y0l5Q3ZJY1d4cnRQckJzRGZfa29ZNkp6Tm5aM1J2YUJYTGUySy1Ea2ZCbGdUZ25XWW1sd0FEakM5YzFLTWw3LTdUUWM5cHpkNEFybHJWMVJwZXgzRTFWd9IBiwFBVV95cUxNYko1cDBhNjg1WDdvR3pMOS01eWkyb251dU9oTl92Q0c3X3pIcnU3Q3dlVEUyZkxXdDI4SmRrNGVtcXpuUnVfMWFrdFo2LXhmMEgyZ3pPVUdyTDZaTXZKUG4tT2d6XzRPTU1NTFk5SDZqS3FiUDI2c0RBV3FzS2JhZlc5WGRzTWF3WlVR?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.1,
+      "demand_sentiment": -0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.5
+    },
+    "discord_notified": true
   }
 ]
