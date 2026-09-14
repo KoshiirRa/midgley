@@ -1,8 +1,8 @@
-# Release Notes - v0.5.4 (In Progress)
+# Release Notes - v0.5.4
  
-**Release Date:** In Progress  
+**Release Date:** September 13, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`)  
-**Git Branch:** `dev`  
+**Git Branch:** `main`  
 
 ---
 
@@ -30,6 +30,9 @@
   - Integrated automatic execution of `generate_learning_journal_markdown()` into `generate_public_dashboard()` on daily forecast batch runs.
   - Integrated learning journal synchronization and report footer links into weekly model reviews ([`src/weekly_issue_reporter.py`](file:///src/weekly_issue_reporter.py)).
 
+### 2. High-Yield Architectural Audit & Backlog Streamlining
+- Audited candidate feature requests and catalog scans, formally closing redundant, out-of-scope, and heavyweight external dependencies in favor of native, zero-cost, standard Python and Linux systemd components.
+
 ---
 
 ## 🧪 Benchmark & Verification Results
@@ -44,6 +47,21 @@
 
 ---
 
-## 📋 Closed & Superseded GitHub Issues
+## 📋 Closed & Audited GitHub Issues
 
 - **[Issue #255](https://github.com/KoshiirRa/midgley/issues/255):** Weekly Model Review Report & Performance Audit - Underperformance Breakdown & Model Learning Tracking.
+- **[Issue #109](https://github.com/KoshiirRa/midgley/issues/109):** Ingest Open-Meteo Ensemble (Superseded by `OpenMeteoDegreeDaysConnector` in #72 & #141).
+- **[Issue #186](https://github.com/KoshiirRa/midgley/issues/186):** Evaluate Agent Memory Frameworks (Superseded by Vectorize Hindsight + Supabase pgvector in #230 & #255).
+- **[Issue #115](https://github.com/KoshiirRa/midgley/issues/115):** Scientific Agent Skills Epic (Superseded by shock simulator, knowledge graph & hindsight memory).
+- **[Issue #119](https://github.com/KoshiirRa/midgley/issues/119):** CRNG Fat-Tail Volatility Engine (Superseded by rolling 14-day volatility gating & Cboe OVX in #214).
+- **[Issue #216](https://github.com/KoshiirRa/midgley/issues/216):** Lookahead-free Scanner (Superseded by Purged CV & CPCV in #117).
+- **[Issue #99](https://github.com/KoshiirRa/midgley/issues/99):** Deploy Self-Hosted Metabase BI Server (Closed as not planned/overkill).
+- **[Issue #96](https://github.com/KoshiirRa/midgley/issues/96):** Deploy Dagu DAG Scheduler (Closed as not planned/overkill).
+- **[Issue #88](https://github.com/KoshiirRa/midgley/issues/88):** Shipyard Cloud Runner (Closed as not planned/overkill).
+- **[Issue #85](https://github.com/KoshiirRa/midgley/issues/85):** Cube Cloud Semantic Layer (Closed as not planned/overkill).
+- **[Issue #81](https://github.com/KoshiirRa/midgley/issues/81):** Trigger.dev Workflow Runner (Closed as not planned/overkill).
+- **[Issue #102](https://github.com/KoshiirRa/midgley/issues/102):** Kaggle GPU LLM Fallback (Closed as not planned/impractical).
+- **[Issue #190](https://github.com/KoshiirRa/midgley/issues/190):** HexStellar HXS Acceleration Engine (Closed as not planned/overkill).
+- **[Issue #199](https://github.com/KoshiirRa/midgley/issues/199):** REEF Multi-Agent Society Framework (Closed as not planned/overkill).
+- **[Issue #200](https://github.com/KoshiirRa/midgley/issues/200):** Archify AST Architecture Generator (Closed as not planned/redundant).
+- **[Issue #217](https://github.com/KoshiirRa/midgley/issues/217):** edgar-traps SEC Filing Scanner (Closed as not planned/out of scope).
