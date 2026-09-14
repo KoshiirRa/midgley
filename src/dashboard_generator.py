@@ -319,7 +319,12 @@ def get_head_meta_tags(
     <meta name="twitter:image" content="{image_url}">
 
     <!-- Discord Theme Accent Color -->
-    <meta name="theme-color" content="{theme_color}">"""
+    <meta name="theme-color" content="{theme_color}">
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/x-icon" href="{base_url}/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="{base_url}/assets/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{base_url}/assets/apple-touch-icon.png">"""
 
 
 def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
