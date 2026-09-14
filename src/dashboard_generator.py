@@ -5558,8 +5558,15 @@ def generate_savings_advisor_page():
 
     logger.info(f"Successfully generated Fill-Up Savings Advisor page at {SAVINGS_PATH} and {SAVINGS_SUB_PATH}")
 
-    # Generate Telemetry Page (Issues #50 & #195)
+    # Generate Telemetry Page (Issues #50 & #195 & #255)
     generate_telemetry_page()
+
+    # Generate Model Learning Journal (Issue #255)
+    try:
+        from src.learning_tracker import generate_learning_journal_markdown
+        generate_learning_journal_markdown()
+    except Exception as e:
+        logger.warning(f"Failed to generate MODEL_LEARNING.md: {e}")
 
     # Generate Comprehensive Data Sources Page
     generate_data_sources_page()
@@ -5822,6 +5829,7 @@ def generate_telemetry_page():
     from src.connector_telemetry import get_telemetry_summary
     from src.fallback_telemetry import fallback_logger
     from src.telemetry import _load_telemetry_ledger, get_all_quota_statuses
+    from src.learning_tracker import generate_learning_telemetry_html_snippet
 
     tele_data = get_unmapped_zip_telemetry()
     quota_data = get_finlight_quota_status()
@@ -5830,6 +5838,8 @@ def generate_telemetry_page():
     fc_quota = all_quotas.get('firecrawl', {})
     conn_summary = get_telemetry_summary(days=7)
     fb_summary = fallback_logger.get_summary()
+    learning_snippet = generate_learning_telemetry_html_snippet(rel_prefix="")
+    learning_sub_snippet = generate_learning_telemetry_html_snippet(rel_prefix="../")
 
     tok_data = token_tab_manager.get_accounting_summary()
     tok_summary = tok_data.get('summary', {})
@@ -5938,7 +5948,7 @@ def generate_telemetry_page():
         ]
     map_points_json = json.dumps(map_points)
 
-    def build_telemetry_html(hdr):
+    def build_telemetry_html(hdr, learning_section_html=""):
         return f"""<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -5950,6 +5960,8 @@ def generate_telemetry_page():
     <!-- Leaflet.js CSS & JS for Interactive Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Chart.js for Model Learning & Adaptation Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {{
             darkMode: 'class',
@@ -6404,6 +6416,7 @@ def generate_telemetry_page():
                 </div>
             </div>
         </section>
+        {learning_section_html}
     </main>
 
     <!-- Leaflet Map Initialization Script -->
@@ -6437,9 +6450,9 @@ def generate_telemetry_page():
 </html>"""
 
     with open(TELEMETRY_PATH, "w", encoding="utf-8") as f:
-        f.write(build_telemetry_html(header_html))
+        f.write(build_telemetry_html(header_html, learning_snippet))
     with open(TELEMETRY_SUB_PATH, "w", encoding="utf-8") as f:
-        f.write(build_telemetry_html(sub_header_html))
+        f.write(build_telemetry_html(sub_header_html, learning_sub_snippet))
 
     logger.info(f"Successfully generated Telemetry & Map page at {TELEMETRY_PATH} and {TELEMETRY_SUB_PATH}")
 
