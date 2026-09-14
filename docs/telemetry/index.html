@@ -9,6 +9,8 @@
     <!-- Leaflet.js CSS & JS for Interactive Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Chart.js for Model Learning & Adaptation Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -137,7 +139,7 @@
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Hindsight Stored Memories</span>
                     <div class="text-2xl font-bold text-purple-300 font-mono">6</div>
-                    <span class="text-[10px] text-purple-300 font-mono">1,935 Retain / 1,631 Cloud Calls</span>
+                    <span class="text-[10px] text-purple-300 font-mono">2,043 Retain / 1,631 Cloud Calls</span>
                 </div>
             </div>
         </div>
@@ -160,7 +162,7 @@
                     <div class="space-y-3 font-mono text-xs">
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
-                            <span class="text-emerald-400 font-bold">1,935 ops</span>
+                            <span class="text-emerald-400 font-bold">2,043 ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
@@ -189,7 +191,7 @@
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-300">Local SQLite FTS5 Fallback</span>
-                                <span class="text-emerald-400 font-bold">310 calls</span>
+                                <span class="text-emerald-400 font-bold">418 calls</span>
                             </div>
                             <p class="text-[10px] text-slate-500 font-sans">Zero-cost local datastore with full-text BM25 search ranking</p>
                         </div>
@@ -435,23 +437,23 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Total LLM Tokens</span>
-                        <div class="text-2xl font-bold text-amber-400 font-mono">38,941</div>
-                        <span class="text-[10px] text-slate-400 font-mono">24,394 In / 14,547 Out</span>
+                        <div class="text-2xl font-bold text-amber-400 font-mono">39,143</div>
+                        <span class="text-[10px] text-slate-400 font-mono">24,516 In / 14,627 Out</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Est. LLM Expenditure</span>
-                        <div class="text-2xl font-bold text-emerald-400 font-mono">$0.006223</div>
+                        <div class="text-2xl font-bold text-emerald-400 font-mono">$0.006256</div>
                         <span class="text-[10px] text-emerald-400 font-mono">Multi-Provider Rate Cards</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
-                        <div class="text-2xl font-bold text-blue-400 font-mono">493</div>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">494</div>
                         <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Budget Warning Status</span>
                         <div class="text-xl font-bold text-emerald-300 font-mono">BUDGET_NORMAL</div>
-                        <span class="text-[10px] text-slate-400 font-mono">Token accounting within limits ($0.0062 / $10.00).</span>
+                        <span class="text-[10px] text-slate-400 font-mono">Token accounting within limits ($0.0063 / $10.00).</span>
                     </div>
                 </div>
 
@@ -471,10 +473,10 @@
                             <tbody class="divide-y divide-slate-800/50">
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
-                                    <td class="py-2 px-3 text-center">180</td>
-                                    <td class="py-2 px-3 text-center">23,638</td>
-                                    <td class="py-2 px-3 text-center">14,400</td>
-                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">$0.006091</td>
+                                    <td class="py-2 px-3 text-center">181</td>
+                                    <td class="py-2 px-3 text-center">23,760</td>
+                                    <td class="py-2 px-3 text-center">14,480</td>
+                                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">$0.006124</td>
                                 </tr>
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-blue-300">OpenAI GPT-4o-mini (Tier 2)</td>
@@ -565,6 +567,353 @@
                 </div>
             </div>
         </section>
+        
+    <!-- MODEL LEARNING & ADAPTATION TRACKING (Issue #255) -->
+    <div class="mt-12 space-y-8" id="model-learning-section">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">MLOps Evolution</span>
+                    <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                        🧠 Model Learning, Adaptation & Longitudinal Tracking
+                    </h2>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">
+                    Continuous monitoring of empirical learning curves, baseline convergence, PRAXIST hypothesis testing, and episodic memory reflections.
+                </p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="../../MODEL_LEARNING.md" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition">
+                    <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    View MODEL_LEARNING.md
+                </a>
+            </div>
+        </div>
+
+        <!-- Longitudinal Learning Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Learning Curve Chart -->
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                            Rolling 30-Day MAE vs. Naive Persistence Baseline
+                        </h3>
+                        <span class="text-[10px] font-mono text-slate-400">Lower is better</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">
+                        Evaluates whether model forecast error (sky line) consistently tracks below or converges against the zero-change naive benchmark (amber line).
+                    </p>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="learningCurveChart"></canvas>
+                </div>
+            </div>
+
+            <!-- LLM Win Rate & Uplift Chart -->
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+                            LLM Augmentation Win Rate & Baseline Uplift (%)
+                        </h3>
+                        <span class="text-[10px] font-mono text-slate-400">Target > 55%</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">
+                        Tracks the empirical frequency where real-time qualitative LLM feature injection outperforms pure quantitative Ridge regression.
+                    </p>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="llmWinRateChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Longitudinal Multi-Window Scoreboard -->
+        <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl">
+            <h3 class="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Longitudinal Accuracy & Convergence Horizons
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 bg-slate-950/40">
+                            <th class="py-2.5 px-4 font-semibold">Horizon Window</th>
+                            <th class="py-2.5 px-4 font-semibold">Evaluations</th>
+                            <th class="py-2.5 px-4 font-semibold">Model MAE</th>
+                            <th class="py-2.5 px-4 font-semibold">Naive MAE</th>
+                            <th class="py-2.5 px-4 font-semibold">Uplift vs Naive</th>
+                            <th class="py-2.5 px-4 font-semibold">Directional Hit</th>
+                            <th class="py-2.5 px-4 font-semibold">LLM Win Rate</th>
+                            <th class="py-2.5 px-4 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
+            <td class="py-3 px-4 font-semibold text-slate-200">7-Day Window</td>
+            <td class="py-3 px-4 text-slate-400">46</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.2943</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2686</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-9.60%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">32.6%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">21.7%</td>
+            <td class="py-3 px-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
+            </td>
+        </tr>
+        
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
+            <td class="py-3 px-4 font-semibold text-slate-200">14-Day Window</td>
+            <td class="py-3 px-4 text-slate-400">96</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.2591</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2534</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-2.27%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">49.0%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">43.8%</td>
+            <td class="py-3 px-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
+            </td>
+        </tr>
+        
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
+            <td class="py-3 px-4 font-semibold text-slate-200">30-Day Window</td>
+            <td class="py-3 px-4 text-slate-400">196</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.2722</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2368</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-14.96%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">33.2%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">27.6%</td>
+            <td class="py-3 px-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
+            </td>
+        </tr>
+        
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
+            <td class="py-3 px-4 font-semibold text-slate-200">90-Day Window</td>
+            <td class="py-3 px-4 text-slate-400">596</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.2563</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2484</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-3.15%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">49.8%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">46.0%</td>
+            <td class="py-3 px-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
+            </td>
+        </tr>
+        
+        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
+            <td class="py-3 px-4 font-semibold text-slate-200">All-Time Window</td>
+            <td class="py-3 px-4 text-slate-400">2317</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.2376</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2309</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-2.87%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">54.1%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">48.2%</td>
+            <td class="py-3 px-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
+            </td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRAXIST & Episodic Memory Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- PRAXIST Parameter Timeline -->
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                            Sapient PRAXIST Hypothesis Evolution
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Autonomous testing of exogenous decay half-life & shock multipliers.</p>
+                    </div>
+                    <span class="px-2 py-1 rounded-lg bg-purple-500/20 text-purple-300 font-mono text-xs border border-purple-500/30">
+                        0 / 3 Accepted
+                    </span>
+                </div>
+                <div class="space-y-2.5">
+                    
+        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-mono font-bold text-sky-300">Weekly_Exogenous_Decay_Validation</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-700/60 text-slate-400 border border-slate-600/30">REJECTED</span>
+                </div>
+                <div class="text-slate-400 mt-1">
+                    Candidate: <code class="text-amber-300">t1/2=4.8d</code>, 
+                    Weekend Mult: <code class="text-amber-300">1.45x</code> | 
+                    Evaluated: <span class="text-slate-300">2026-09-10</span>
+                </div>
+            </div>
+            <div class="text-right font-mono text-[11px] text-slate-400">
+                ΔMAE: <span class="text-slate-300">+0.0001</span> | 
+                t=-1.19 (p=0.2371)
+            </div>
+        </div>
+        
+        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-mono font-bold text-sky-300">Weekly_Exogenous_Decay_Validation</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-700/60 text-slate-400 border border-slate-600/30">REJECTED</span>
+                </div>
+                <div class="text-slate-400 mt-1">
+                    Candidate: <code class="text-amber-300">t1/2=4.8d</code>, 
+                    Weekend Mult: <code class="text-amber-300">1.45x</code> | 
+                    Evaluated: <span class="text-slate-300">2026-09-12</span>
+                </div>
+            </div>
+            <div class="text-right font-mono text-[11px] text-slate-400">
+                ΔMAE: <span class="text-slate-300">+0.0001</span> | 
+                t=-1.19 (p=0.2371)
+            </div>
+        </div>
+        
+        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-mono font-bold text-sky-300">Weekly_Exogenous_Decay_Validation</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-700/60 text-slate-400 border border-slate-600/30">REJECTED</span>
+                </div>
+                <div class="text-slate-400 mt-1">
+                    Candidate: <code class="text-amber-300">t1/2=4.8d</code>, 
+                    Weekend Mult: <code class="text-amber-300">1.45x</code> | 
+                    Evaluated: <span class="text-slate-300">2026-09-13</span>
+                </div>
+            </div>
+            <div class="text-right font-mono text-[11px] text-slate-400">
+                ΔMAE: <span class="text-slate-300">+0.0001</span> | 
+                t=-1.19 (p=0.2371)
+            </div>
+        </div>
+        
+                </div>
+            </div>
+
+            <!-- Episodic Memory Case Studies -->
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            Episodic Memory Reflections & Failure Modes
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Retain-Recall-Reflect root cause post-mortems for major prediction errors.</p>
+                    </div>
+                    <span class="px-2 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-xs border border-amber-500/30">
+                        0 Reflections
+                    </span>
+                </div>
+                <div class="space-y-3">
+                    <p class="text-xs text-slate-500 italic">No episodic reflections indexed yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js Initialization for Model Learning -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const learningDates = ["2025-10-29", "2025-11-03", "2025-11-08", "2025-11-13", "2025-11-18", "2025-11-23", "2025-11-28", "2025-12-03", "2025-12-08", "2025-12-13", "2025-12-18", "2025-12-23", "2025-12-28", "2026-01-02", "2026-01-07", "2026-01-12", "2026-01-17", "2026-01-22", "2026-01-27", "2026-02-01", "2026-02-06", "2026-02-11", "2026-02-16", "2026-02-21", "2026-02-26", "2026-03-03", "2026-03-08", "2026-03-13", "2026-03-18", "2026-03-23", "2026-03-28", "2026-04-02", "2026-04-07", "2026-04-12", "2026-04-17", "2026-04-22", "2026-04-27", "2026-05-02", "2026-05-07", "2026-05-12", "2026-05-17", "2026-05-22", "2026-05-27", "2026-06-01", "2026-06-06", "2026-06-11", "2026-06-16", "2026-06-21", "2026-06-26", "2026-07-01", "2026-07-06", "2026-07-11", "2026-07-16", "2026-07-21", "2026-07-26", "2026-07-31", "2026-08-05", "2026-08-10", "2026-08-15", "2026-08-20", "2026-08-25", "2026-08-30", "2026-09-04", "2026-09-09", "2026-09-14"];
+        const modelMAE = [0.1837, 0.182, 0.1774, 0.1802, 0.18, 0.1819, 0.1795, 0.1722, 0.1758, 0.1707, 0.1728, 0.171, 0.1683, 0.1673, 0.1658, 0.1678, 0.1714, 0.1711, 0.1703, 0.1709, 0.1712, 0.1711, 0.1685, 0.1703, 0.1715, 0.1963, 0.2654, 0.3487, 0.408, 0.4593, 0.4371, 0.4299, 0.3799, 0.3333, 0.2612, 0.2141, 0.2481, 0.284, 0.2915, 0.2877, 0.2862, 0.2844, 0.2798, 0.24, 0.2277, 0.2274, 0.2264, 0.2255, 0.2063, 0.1918, 0.1843, 0.1894, 0.2149, 0.2392, 0.2622, 0.2492, 0.2751, 0.2864, 0.2814, 0.2701, 0.2638, 0.2888, 0.2738, 0.2607, 0.2722];
+        const naiveMAE = [0.1859, 0.1807, 0.178, 0.1809, 0.1825, 0.1814, 0.1759, 0.1692, 0.1715, 0.1665, 0.1662, 0.1672, 0.1662, 0.1655, 0.1645, 0.1689, 0.1748, 0.176, 0.1768, 0.1837, 0.1859, 0.1882, 0.1814, 0.1835, 0.1824, 0.2148, 0.2985, 0.3324, 0.369, 0.3882, 0.3664, 0.3655, 0.2889, 0.2619, 0.2302, 0.2212, 0.2745, 0.2911, 0.2949, 0.2931, 0.2999, 0.2961, 0.2829, 0.2498, 0.2323, 0.2233, 0.2122, 0.2112, 0.1934, 0.1812, 0.182, 0.1903, 0.2172, 0.2425, 0.2543, 0.2433, 0.2695, 0.2826, 0.2894, 0.2694, 0.2644, 0.2749, 0.2626, 0.2482, 0.2368];
+        const upliftData = [1.19, -0.72, 0.33, 0.39, 1.41, -0.3, -2.06, -1.77, -2.47, -2.49, -3.93, -2.27, -1.24, -1.08, -0.81, 0.61, 1.96, 2.76, 3.71, 6.97, 7.91, 9.08, 7.14, 7.19, 5.96, 8.6, 11.07, -4.91, -10.58, -18.32, -19.29, -17.63, -31.5, -27.25, -13.49, 3.2, 9.6, 2.44, 1.14, 1.82, 4.59, 3.95, 1.12, 3.93, 1.96, -1.83, -6.69, -6.76, -6.7, -5.87, -1.27, 0.48, 1.08, 1.37, -3.1, -2.4, -2.06, -1.32, 2.78, -0.27, 0.2, -5.05, -4.24, -5.05, -14.96];
+        const llmWinData = [56.56, 50.95, 50.0, 50.43, 54.09, 49.05, 42.27, 44.09, 42.11, 42.5, 37.14, 40.5, 42.63, 44.0, 45.24, 49.44, 54.74, 56.32, 56.67, 62.78, 63.5, 64.29, 60.56, 61.5, 59.52, 61.5, 68.42, 51.9, 46.19, 38.0, 35.0, 36.09, 23.81, 30.0, 36.67, 46.67, 58.95, 51.5, 48.18, 50.45, 56.67, 56.52, 50.91, 51.05, 50.0, 46.67, 41.0, 44.44, 42.5, 50.0, 52.78, 52.22, 56.32, 54.74, 47.78, 45.71, 46.82, 49.52, 53.18, 45.22, 46.82, 41.43, 44.35, 43.18, 27.55];
+
+        if (learningDates.length > 0 && document.getElementById('learningCurveChart')) {
+            const ctx1 = document.getElementById('learningCurveChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: learningDates,
+                    datasets: [
+                        {
+                            label: 'Model MAE ($/gal)',
+                            data: modelMAE,
+                            borderColor: '#38bdf8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.25
+                        },
+                        {
+                            label: 'Naive Baseline MAE ($/gal)',
+                            data: naiveMAE,
+                            borderColor: '#fbbf24',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            tension: 0.25
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => '$' + v.toFixed(2) } }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#cbd5e1', font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        if (learningDates.length > 0 && document.getElementById('llmWinRateChart')) {
+            const ctx2 = document.getElementById('llmWinRateChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: learningDates,
+                    datasets: [
+                        {
+                            label: 'LLM Win Rate (%)',
+                            data: llmWinData,
+                            borderColor: '#818cf8',
+                            backgroundColor: 'rgba(129, 140, 248, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.25,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Uplift vs Naive (%)',
+                            data: upliftData,
+                            borderColor: '#34d399',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [3, 3],
+                            tension: 0.25,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+                        y: { type: 'linear', position: 'left', grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#818cf8', callback: v => v.toFixed(0) + '%' } },
+                        y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#34d399', callback: v => v.toFixed(0) + '%' } }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#cbd5e1', font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+    });
+    </script>
+    
     </main>
 
     <!-- Leaflet Map Initialization Script -->

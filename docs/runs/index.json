@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-14_12-12-07",
+    "timestamp": "2026-09-14 12:12:02",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Goldman bullish on gasoline price amid Russia refinery outag..."
+  },
+  {
     "run_id": "2026-09-14_04-30-06",
     "timestamp": "2026-09-14 04:30:01",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-10_15-12-52",
-    "timestamp": "2026-09-10 15:12:28",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
-  },
-  {
-    "run_id": "2026-09-10_15-12-37",
     "timestamp": "2026-09-10 15:12:28",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
