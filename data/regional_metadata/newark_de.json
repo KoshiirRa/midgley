@@ -7,7 +7,7 @@
   "counties": [
     "New Castle"
   ],
-  "baseline_price": 3.35,
+  "baseline_price": 4.35,
   "icon_class": "fa-warehouse",
   "theme_color": "blue",
   "econometric_drivers": {
@@ -34,7 +34,7 @@
   },
   "infrastructure_delivery": {
     "title": "Newark Delivery Hub & Dynamic Rack Margin",
-    "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.350 - \\$3.184 = \\$0.166/\\text{gal}",
+    "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$4.354 - \\$3.169 = \\$1.185/\\text{gal}",
     "description": "Calibrates predicted wholesale returns directly into local I-95 corridor pump station rack prices.",
     "hub_distance_miles": 12,
     "hub_name": "PBF Delaware City Hub"

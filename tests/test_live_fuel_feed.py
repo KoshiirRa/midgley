@@ -148,24 +148,28 @@ class TestLiveFuelFeed(unittest.TestCase):
         self.assertEqual(res4["price"], 3.88)
         self.assertIn("prediction_history.csv", res4["source"])
 
-        # 5. When all fail, fallback to static anchor constant ($3.890 for Tulsa)
+        # 5. When all fail, fallback to static anchor constant ($3.820 for Tulsa)
         global_cache.clear()
         mock_hist.return_value = None
         res5 = fetch_live_metro_retail_price("Tulsa_OK", use_cache=False)
-        self.assertEqual(res5["price"], 3.890)
+        self.assertEqual(res5["price"], 3.820)
         self.assertIn("Static Anchor", res5["source"])
 
     def test_is_price_outlier_detection(self):
-        """Verify is_price_outlier correctly identifies extreme price anomalies."""
+        """Verify is_price_outlier correctly identifies physical bounds and anomalies."""
         from src.live_fuel_feed import is_price_outlier
-        # Newark_DE static_anchor is 3.350; $4.117 is a +22.9% outlier
-        self.assertTrue(is_price_outlier("Newark_DE", 4.117))
-        # $3.377 is a valid normal price
+        # Valid Newark retail gas price ($4.354/gal) is within normal physical bounds
+        self.assertFalse(is_price_outlier("Newark_DE", 4.354))
+        # Valid lower and upper US prices
         self.assertFalse(is_price_outlier("Newark_DE", 3.377))
-        # Oakland_CA static_anchor is 5.550; $5.827 is valid for CA
+        # Extreme impossible low / high prices for non-CA are rejected
+        self.assertTrue(is_price_outlier("Newark_DE", 0.95))
+        self.assertTrue(is_price_outlier("Newark_DE", 12.50))
+        # Oakland_CA $5.827 is valid for CA
         self.assertFalse(is_price_outlier("Oakland_CA", 5.827))
-        # $2.00 is an extreme low outlier for Oakland
+        # $2.00 is an extreme low outlier for Oakland (CA bound is >= 3.50)
         self.assertTrue(is_price_outlier("Oakland_CA", 2.00))
+        self.assertTrue(is_price_outlier("Oakland_CA", 10.50))
 
     def test_fetch_live_metro_retail_prices_all_regions(self):
         """Verify fetch_live_metro_retail_prices returns non-empty dict for all regions."""

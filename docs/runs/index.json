@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-15_00-46-21",
+    "timestamp": "2026-09-14 23:51:23",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Discount on Western Canada Select widens with Joliet refiner..."
+  },
+  {
+    "run_id": "2026-09-14_23-51-26",
+    "timestamp": "2026-09-14 23:51:23",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Discount on Western Canada Select widens with Joliet refiner..."
+  },
+  {
     "run_id": "2026-09-14_19-45-20",
     "timestamp": "2026-09-14 19:07:07",
     "run_type": "INTRADAY_REVISION",
@@ -583,18 +595,6 @@
   },
   {
     "run_id": "2026-09-10_15-14-30",
-    "timestamp": "2026-09-10 15:12:28",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
-  },
-  {
-    "run_id": "2026-09-10_15-14-16",
-    "timestamp": "2026-09-10 15:12:28",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
-  },
-  {
-    "run_id": "2026-09-10_15-14-03",
     "timestamp": "2026-09-10 15:12:28",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
