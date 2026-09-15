@@ -74,33 +74,24 @@ def is_price_outlier(region_code: str, price: float) -> bool:
     """
     Validates whether a candidate live retail gas price is a plausible value
     or an unvalidated scraper outlier anomaly.
-    Checks deviation against static_anchor or yfinance benchmark.
+    Enforces physical feasibility bounds for US fuel markets without falsely rejecting
+    legitimate macroeconomic price shifts.
     Returns True if price is an extreme outlier, False otherwise.
     """
     if price is None or not pd.notna(price) or float(price) <= 0:
         return True
-    meta = REGION_METADATA.get(region_code)
-    if not meta:
-        return False
-    anchor = float(meta.get("static_anchor", 3.50))
     p_val = float(price)
     
-    # For CA regions (Oakland, BayArea, etc.), prices are high ($4.00 - $7.50)
+    # For CA regions (Oakland, BayArea, etc.), enforce California physical bounds [$3.50, $9.00]
     if region_code in ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA"]:
-        if p_val < 4.00 or p_val > 7.50:
-            logger.warning(f"CA OUTLIER PRICE WARNING for {region_code}: ${p_val:.3f}/gal is outside expected CA range [$4.00, $7.50].")
+        if p_val < 3.50 or p_val > 9.00:
+            logger.warning(f"CA OUTLIER PRICE WARNING for {region_code}: ${p_val:.3f}/gal is outside expected CA range [$3.50, $9.00].")
             return True
         return False
     
-    # For non-CA regions, check absolute dollar deviation (> $0.75/gal) and percentage deviation (> 20%)
-    dollar_diff = abs(p_val - anchor)
-    pct_diff = dollar_diff / anchor if anchor > 0 else 0.0
-    
-    if dollar_diff > 0.75 and pct_diff > 0.20:
-        logger.warning(
-            f"OUTLIER PRICE ANOMALY DETECTED for {region_code}: ${p_val:.3f}/gal "
-            f"diverges by ${dollar_diff:.3f}/gal ({pct_diff*100:.1f}%) from static anchor ${anchor:.3f}/gal. Rejecting live scrape candidate."
-        )
+    # For non-CA regions, enforce standard US retail gasoline physical bounds [$1.50, $8.50]
+    if p_val < 1.50 or p_val > 8.50:
+        logger.warning(f"OUTLIER PRICE ANOMALY DETECTED for {region_code}: ${p_val:.3f}/gal is outside plausible US retail range [$1.50, $8.50]. Rejecting candidate.")
         return True
         
     return False
@@ -110,91 +101,91 @@ REGION_METADATA = {
     "National": {
         "zip": "20001",
         "state": "US",
-        "static_anchor": 3.184,
+        "static_anchor": 4.316,
         "name": "National Wholesale / US Average",
         "aaa_keywords": ["National Average", "US Average", "Current Avg."]
     },
     "Tulsa_OK": {
         "zip": "74103",
         "state": "OK",
-        "static_anchor": 3.890,
+        "static_anchor": 3.820,
         "name": "Tulsa, OK Metro Retail",
         "aaa_keywords": ["Tulsa"]
     },
     "Newark_DE": {
         "zip": "19711",
         "state": "DE",
-        "static_anchor": 3.350,
+        "static_anchor": 4.350,
         "name": "Newark, DE Metro Retail",
         "aaa_keywords": ["Wilmington", "New Castle", "State Average"]
     },
     "Cincinnati_OH": {
         "zip": "45202",
         "state": "OH",
-        "static_anchor": 3.450,
+        "static_anchor": 4.080,
         "name": "Cincinnati, OH Retail",
         "aaa_keywords": ["Cincinnati"]
     },
     "Cincinnati_KY": {
         "zip": "41011",
         "state": "KY",
-        "static_anchor": 3.325,
+        "static_anchor": 4.160,
         "name": "Northern Kentucky Retail",
         "aaa_keywords": ["Cincinnati", "Northern Kentucky", "Covington"]
     },
     "Oakland_CA": {
         "zip": "94612",
         "state": "CA",
-        "static_anchor": 5.550,
+        "static_anchor": 6.050,
         "name": "Oakland, CA Metro Retail",
         "aaa_keywords": ["Oakland", "East Bay", "Alameda"]
     },
     "BayArea_CA": {
         "zip": "94102",
         "state": "CA",
-        "static_anchor": 5.650,
+        "static_anchor": 6.160,
         "name": "SF Bay Area 9-County Avg",
         "aaa_keywords": ["San Francisco", "Oakland", "San Jose"]
     },
     "SanFrancisco_CA": {
         "zip": "94102",
         "state": "CA",
-        "static_anchor": 5.720,
+        "static_anchor": 6.160,
         "name": "San Francisco Metro Retail",
         "aaa_keywords": ["San Francisco"]
     },
     "SanJose_CA": {
         "zip": "95113",
         "state": "CA",
-        "static_anchor": 5.553,
+        "static_anchor": 5.990,
         "name": "San Jose / Silicon Valley Retail",
         "aaa_keywords": ["San Jose", "Santa Clara"]
     },
     "NorthBay_CA": {
         "zip": "94590",
         "state": "CA",
-        "static_anchor": 5.453,
+        "static_anchor": 5.950,
         "name": "North Bay / Solano Retail",
         "aaa_keywords": ["Vallejo", "Fairfield", "Napa"]
     },
     "Greenville_NC": {
         "zip": "27834",
         "state": "NC",
-        "static_anchor": 3.250,
+        "static_anchor": 3.950,
         "name": "Greenville, NC Metro Retail",
         "aaa_keywords": ["Greenville", "Pitt", "State Average"]
     },
     "Charlotte_NC": {
         "zip": "28202",
         "state": "NC",
-        "static_anchor": 3.280,
+        "static_anchor": 3.980,
         "name": "Charlotte, NC Metro Retail",
         "aaa_keywords": ["Charlotte", "Mecklenburg", "State Average"]
     },
     "Port_St_Lucie_FL": {
         "zip": "34952",
         "state": "FL",
-        "static_anchor": 3.380,
+        "static_anchor": 4.145,
         "name": "Port St. Lucie, FL Metro Retail",
         "aaa_keywords": ["Port St. Lucie", "St. Lucie", "State Average"]
     }
@@ -400,21 +391,21 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
             if valid_vals:
                 latest_rbob = valid_vals[-1]
                 margins = {
-                    "National": 0.0,
-                    "Tulsa_OK": 0.706,
-                    "Newark_DE": 0.166,
-                    "Cincinnati_OH": 0.266,
-                    "Cincinnati_KY": 0.141,
-                    "Oakland_CA": 2.366,
-                    "BayArea_CA": 2.466,
-                    "SanFrancisco_CA": 2.466,
-                    "SanJose_CA": 2.296,
-                    "NorthBay_CA": 2.196,
-                    "Greenville_NC": 0.490,
-                    "Charlotte_NC": 0.520,
-                    "Port_St_Lucie_FL": 0.620
+                    "National": 1.147,
+                    "Tulsa_OK": 0.649,
+                    "Newark_DE": 1.185,
+                    "Cincinnati_OH": 0.915,
+                    "Cincinnati_KY": 0.993,
+                    "Oakland_CA": 2.887,
+                    "BayArea_CA": 2.991,
+                    "SanFrancisco_CA": 2.991,
+                    "SanJose_CA": 2.821,
+                    "NorthBay_CA": 2.782,
+                    "Greenville_NC": 0.781,
+                    "Charlotte_NC": 0.811,
+                    "Port_St_Lucie_FL": 0.976
                 }
-                offset = margins.get(region_code, 0.50)
+                offset = margins.get(region_code, 0.95)
                 est_price = latest_rbob + offset
                 if pd.notna(est_price) and est_price > 0:
                     return {"average_price": round(est_price, 3), "source": "EIA/yfinance RBOB Benchmark"}

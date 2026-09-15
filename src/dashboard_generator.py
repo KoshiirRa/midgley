@@ -1991,19 +1991,19 @@ def generate_public_dashboard():
     json_hit = json.dumps(rolling_hit)
 
     prices_map = {
-        'National': {'base': 3.184, 'pred': 3.077},
-        'Tulsa_OK': {'base': 3.890, 'pred': 3.780},
-        'Newark_DE': {'base': 3.350, 'pred': 3.250},
-        'Cincinnati_OH': {'base': 3.450, 'pred': 3.350},
-        'Cincinnati_KY': {'base': 3.325, 'pred': 3.225},
-        'Greenville_NC': {'base': 3.250, 'pred': 3.150},
-        'Charlotte_NC': {'base': 3.280, 'pred': 3.180},
-        'Port_St_Lucie_FL': {'base': 3.380, 'pred': 3.290},
-        'Oakland_CA': {'base': 5.550, 'pred': 4.840},
-        'BayArea_CA': {'base': 5.650, 'pred': 4.940},
-        'SanFrancisco_CA': {'base': 5.720, 'pred': 5.010},
-        'SanJose_CA': {'base': 5.553, 'pred': 4.843},
-        'NorthBay_CA': {'base': 5.453, 'pred': 4.743}
+        'National': {'base': 4.316, 'pred': 4.205},
+        'Tulsa_OK': {'base': 3.820, 'pred': 3.710},
+        'Newark_DE': {'base': 4.350, 'pred': 4.250},
+        'Cincinnati_OH': {'base': 4.080, 'pred': 3.980},
+        'Cincinnati_KY': {'base': 4.160, 'pred': 4.060},
+        'Greenville_NC': {'base': 3.950, 'pred': 3.850},
+        'Charlotte_NC': {'base': 3.980, 'pred': 3.880},
+        'Port_St_Lucie_FL': {'base': 4.145, 'pred': 4.050},
+        'Oakland_CA': {'base': 6.050, 'pred': 5.340},
+        'BayArea_CA': {'base': 6.160, 'pred': 5.450},
+        'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
+        'SanJose_CA': {'base': 5.990, 'pred': 5.280},
+        'NorthBay_CA': {'base': 5.950, 'pred': 5.240}
     }
     initial_deltas = {reg: prices_map[reg]['pred'] - prices_map[reg]['base'] for reg in prices_map}
 
