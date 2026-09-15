@@ -580,12 +580,15 @@ def test_dynamic_trend_badges_rendering():
         assert "%" in oak_html
 
 
-def test_unlogged_regions_delta_preservation(monkeypatch):
+def test_unlogged_regions_delta_preservation(monkeypatch, tmp_path):
     """Verify Issue #208: Ensure that when live prices update for unlogged regions,
     prices_map preserves the initial model delta (pred = base + delta)
     so forecast targets move in sync with live base price updates,
     preventing artificial trend drops.
     """
+    empty_csv = tmp_path / "empty_history.csv"
+    monkeypatch.setattr("src.dashboard_generator.HISTORY_CSV_PATH", str(empty_csv))
+
     def mock_fetch(region, use_cache=True):
         live_prices = {
             'Tulsa_OK': {'price': 3.614},
