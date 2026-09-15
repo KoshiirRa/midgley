@@ -870,5 +870,13 @@
     "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNNlBWX3VvM0tnb1laVWx3aXlxQ0pqMU9DUlNzZ2NXMmN5RS0yRUhpME1ET2NNeUd4a2k3cERBRUFfMGpzWkZCVzFxb1JWVGc0T3hyUzVnOUNyR29uaS1feFBMNlR5T1UxYkdCM1hRLXR6Z29ETExpSG9VX013SVR2clhmU1EzTVVjd2Y3V1BGTGtZcFpQNGVuY3NiVDctaW94N29Oc2dKaElkMTlJLTRkT1hoVVlLOU9OTnowQ2hsajRwT3FGbFhxYW5GTXJhaVdiSm1IZW0xNA?oc=5",
     "is_anomaly": true,
     "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-15T20:03:01.336329",
+    "headline": "Data Center\u2019s Spill of 5,000 Gallons of Diesel Forces N.J. River Cleanup",
+    "norm_headline": "data center\u2019s spill of 5,000 gallons of diesel forces n.j. river cleanup",
+    "url": "https://www.nytimes.com/2026/09/15/nyregion/data-center-diesel-fuel-spill-new-jersey.html",
+    "is_anomaly": false,
+    "source": "Cloudflare_Worker"
   }
 ]
