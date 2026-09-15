@@ -483,6 +483,18 @@ class LookupCache:
         self.set(cache_key, payload, ttl_seconds=86400 * 60)
         return payload
 
+    def delete(self, key: str):
+        """Deletes a single key from memory and SQLite cache."""
+        if key in self._memory_cache:
+            del self._memory_cache[key]
+        if self._use_sqlite:
+            try:
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.execute("DELETE FROM lookup_cache WHERE key = ?", (key,))
+                    conn.commit()
+            except Exception as e:
+                logger.debug(f"Error deleting key '{key}' from SQLite cache: {e}")
+
     def clear(self):
         """Clears all cached entries from local storage and remote edge tiers."""
         if self._use_sqlite:

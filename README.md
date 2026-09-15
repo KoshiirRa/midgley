@@ -74,8 +74,8 @@ flowchart TD
         F1["Geopolitical Headlines & OPEC Press Releases"]
         F2["NOAA NWS & SPC Weather Alerts (t.wxs.us)"]
         F3["Maritime & Waterways (Hormuz, Suez, Rivers, Waterborne Terminals)"]
-        F4["Executive Social Feed (Trump Twitter / Truth Social)"]
-        F5["Physical Alternative Feeds (Cboe OVX & Baker Hughes)"]
+        F4["Executive Social Feed (Live Truth Social / X Polling & Weekend Gap Classifier)"]
+        F5["Physical Alternative Feeds (Cboe OVX & Dynamic Baker Hughes Rigs)"]
         F6["USGS Water Data Telemetry (Streamflow, Stage & Cooling Temp)"]
         F7["USGS Earthquake API Telemetry (earthquake.usgs.gov)"]
     end

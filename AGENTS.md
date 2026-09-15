@@ -127,13 +127,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Tier 3 (Safety Net - 100% Guaranteed):** **Expanded Deterministic Rule-Based Lexicon Extractor**. 100% offline, $0 cost, 0 API keys required, zero downtime guarantee.
   - **Basic Tier Zero-Cost API Routing:** API clients authenticating with `basic` tier keys automatically bypass paid Cloud LLM endpoints, routing through `ZeroCostProviderHook` ($0 paid token spend).
   - **Fallback Telemetry Accounting (`src/fallback_telemetry.py`):** Persists metrics to `data/fallback_telemetry.json` tracking basic tier routed calls, zero-cost provider invocations, and estimated token/dollar savings, exposed via `GET /api/v1/telemetry/fallback-status` and rendered on `docs/telemetry.html`.
-* **Executive Social Media & Weekend Gap Engine:**
-  - **Empirical Correlation:** Econometric analysis confirms $p < 0.01$ correlation between executive social media posts (e.g., Trump OPEC pressure & tariff declarations) and immediate short-term futures return shocks.
+* **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`) (Issue #268):**
+  - **Dynamic Ingestion & Live Polling:** `ExecutiveSocialFeedConnector` polls live public RSS/syndication feeds (Truth Social, Twitter/X mirrors) for breaking executive energy policy commentary with 15-minute lookup caching (`global_cache`), feeding breaking headlines into the intraday anomaly scanner.
+  - **Weekend Market Gap Classifier:** `is_timestamp_weekend()` automatically tags posts published between Friday 17:00 EST and Sunday 18:00 EST (while commodity futures are closed).
+  - **Empirical Correlation & Benchmarks:** Econometric analysis confirms $p < 0.01$ correlation between executive social media posts (e.g., OPEC talkdowns & tariff threats) and immediate short-term futures return shocks.
   - **Dovish OPEC Pressure:** Posts urging OPEC to lower prices cause immediate average $-1.85\%$ single-day RBOB price drops.
   - **Hawkish Tariff Shocks:** Energy import tariff threats produce $+2.10\%$ 24-hour price surges.
   - **Weekend Market Gap Multiplier:** Saturday/Sunday posts published while commodity markets are closed produce **$1.42\times$ higher Monday morning open price gap volatility**.
+  - **Bitemporal Persistence:** Observation records are logged to `data/executive_social_vintages.json` to preserve historical publication chronology.
 
-* **Zero-Cost Open-Access Energy Data Suite & Universal 50-State Connector (`src/data_ingestion.py`, `src/state_open_data.py`, & `src/noaa_weather.py`) (Issue #141):**
+* **Zero-Cost Open-Access Energy Data Suite & Universal 50-State Connector (`src/data_ingestion.py`, `src/state_open_data.py`, `src/alternative_data_feeds.py`, & `src/noaa_weather.py`) (Issues #141 & #269):**
+  - **Dynamic Baker Hughes Rig Count Feed (`src/alternative_data_feeds.py`) (Issue #269):** `BakerHughesDataConnector` dynamically ingests weekly US rotary rig counts and oil/gas splits with 7-day TTL lookup caching (`global_cache`), bitemporal vintage logging (`data/baker_hughes_vintages.json`), and deterministic offline fallback to historical benchmarks.
   - **Universal 50-State Open Data Portals Connector (`src/state_open_data.py`):** `UniversalStateOpenDataConnector` provides dynamic resolution across all 50 US States + DC (51 total locales). Queries Socrata domains (`data.<state>.gov` / `data.gov`), U.S. Census State Tax Collections API, and FTA motor fuel indices for official state excise tax rates ($/gal), UST fees, and motor fuel sales volume proxies.
   - **FRED (St. Louis Fed) Energy Series (`src/data_ingestion.py`):** `FREDDataConnector` ingests weekly national and PADD retail gasoline/diesel series (`GASREGW`, `GASDESW`, `GASREGWCW`, `GASREGWGULF`) and CPI gasoline index (`CUUR0000SETB01`).
   - **U.S. EIA API v2 Open Data (`src/data_ingestion.py`):** `EIADataConnector` ingests weekly retail price series, PADD refinery percent utilization, and regional motor gasoline/crude stock inventories (`/petroleum/pri/gnd/data/`, `/petroleum/pnp/pct/data/`, `/petroleum/stoc/wstk/data/`).

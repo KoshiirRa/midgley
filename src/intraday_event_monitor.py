@@ -142,6 +142,26 @@ class IntradayEventMonitor:
                 logger.warning(f"Failed to parse RSS feed '{url}': {e}")
         return headlines
 
+    def fetch_executive_social_headlines(self) -> List[Dict[str, str]]:
+        """Fetches breaking energy commentary from executive social feeds (Issue #268)."""
+        headlines = []
+        try:
+            from src.executive_social_feed import ExecutiveSocialFeedConnector
+            connector = ExecutiveSocialFeedConnector()
+            posts = connector.fetch_live_posts()
+            for p in posts:
+                post_text = p.get("post_text", "").strip()
+                if post_text:
+                    headlines.append({
+                        "headline": post_text,
+                        "published": p.get("date", datetime.now().isoformat()),
+                        "url": f"https://truthsocial.com/post/{abs(hash(post_text)) % 10000000}",
+                        "source": "Executive_Social_Media"
+                    })
+        except Exception as e:
+            logger.debug(f"Could not poll live executive social headlines: {e}")
+        return headlines
+
     def evaluate_headline_anomaly(self, headline: str) -> Tuple[bool, Dict[str, float]]:
         """
         Stage 1 & 2 Cascading Filter:
@@ -415,9 +435,12 @@ class IntradayEventMonitor:
         return result
 
     def run_polling_cycle(self) -> Dict:
-        """Executes a full 15-minute polling cycle across free RSS streams."""
+        """Executes a full 15-minute polling cycle across free RSS and executive social streams."""
         logger.info("Executing 15-minute Intraday Event Monitor cycle...")
         headlines_data = self.fetch_rss_headlines()
+        social_data = self.fetch_executive_social_headlines()
+        if social_data:
+            headlines_data.extend(social_data)
         anomalies_found = []
 
         for item in headlines_data:
