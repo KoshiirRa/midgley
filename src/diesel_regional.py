@@ -5,14 +5,16 @@ regional retail calibration (Midwest/Tulsa, Northeast/Newark, West Coast/Oakland
 and counterfactual distillate shock simulations.
 """
 
+import logging
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, List, Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
+logger = logging.getLogger(__name__)
 
 # Federal and State Diesel Excise Tax & Regulatory Baselines ($/gal)
 FEDERAL_DIESEL_EXCISE_TAX = 0.244  # Federal diesel tax ($0.244 vs $0.184 gasoline)
@@ -29,6 +31,43 @@ DIESEL_BASE_ANCHORS = {
     "oakland": 5.250,
     "port_st_lucie": 3.820
 }
+
+LOCALE_TO_REGION_MAP = {
+    "national": "National",
+    "tulsa": "Tulsa_OK",
+    "newark": "Newark_DE",
+    "cincinnati": "Cincinnati_OH",
+    "greenville": "Greenville_NC",
+    "charlotte": "Charlotte_NC",
+    "oakland": "Oakland_CA",
+    "port_st_lucie": "Port_St_Lucie_FL"
+}
+
+
+def get_live_or_anchor_diesel_prices(use_live_feed: bool = True) -> Dict[str, float]:
+    """
+    Dynamically resolves live retail diesel prices across metro calibration hubs.
+    Queries multi-grade AAA scraper (fetch_aaa_fuel_prices_all_grades) and falls back
+    gracefully to DIESEL_BASE_ANCHORS.
+    """
+    prices = {}
+    for locale, base_anchor in DIESEL_BASE_ANCHORS.items():
+        if not use_live_feed:
+            prices[locale] = base_anchor
+            continue
+        try:
+            from src.live_fuel_feed import fetch_aaa_fuel_prices_all_grades
+            region_key = LOCALE_TO_REGION_MAP.get(locale, "National")
+            aaa_grades = fetch_aaa_fuel_prices_all_grades(region_key)
+            diesel_p = aaa_grades.get("grades", {}).get("diesel")
+            if diesel_p and pd.notna(diesel_p) and float(diesel_p) > 1.50:
+                prices[locale] = round(float(diesel_p), 3)
+            else:
+                prices[locale] = base_anchor
+        except Exception as e:
+            logger.debug(f"Live diesel resolution notice for {locale}: {e}")
+            prices[locale] = base_anchor
+    return prices
 
 # Counterfactual Distillate Shock Scenarios
 DIESEL_SHOCK_SCENARIOS = {
@@ -125,7 +164,8 @@ class UltraLowSulfurDieselForecastingAgent:
         ulsd_price: float = 2.850,
         wti_price: float = 75.00,
         eia_distillate_draw_mbbl: float = -1.2,
-        hdd_index: float = 15.0
+        hdd_index: float = 15.0,
+        live_retail_prices: Optional[Dict[str, float]] = None
     ) -> Dict[str, Any]:
         """
         Generates 5-day out-of-time ULSD wholesale and regional retail forecasts.
@@ -145,8 +185,13 @@ class UltraLowSulfurDieselForecastingAgent:
         predicted_wholesale_ulsd = round(ulsd_price * (1.0 + predicted_pct_change), 3)
 
         # Regional Retail Calibration
+        if live_retail_prices is None:
+            active_retail_anchors = get_live_or_anchor_diesel_prices(use_live_feed=True)
+        else:
+            active_retail_anchors = live_retail_prices
+
         regional_predictions = {}
-        for locale, base_retail in DIESEL_BASE_ANCHORS.items():
+        for locale, base_retail in active_retail_anchors.items():
             pred_retail = round(base_retail * (1.0 + predicted_pct_change), 3)
             delta = round(pred_retail - base_retail, 3)
             pct_change = round(predicted_pct_change * 100.0, 2)
@@ -178,7 +223,11 @@ class UltraLowSulfurDieselForecastingAgent:
         }
 
 
-def simulate_diesel_shock(scenario_key: str, base_ulsd_price: float = 2.850) -> Dict[str, Any]:
+def simulate_diesel_shock(
+    scenario_key: str, 
+    base_ulsd_price: float = 2.850,
+    live_retail_prices: Optional[Dict[str, float]] = None
+) -> Dict[str, Any]:
     """
     Simulates a counterfactual diesel market shock scenario.
     """
@@ -190,8 +239,13 @@ def simulate_diesel_shock(scenario_key: str, base_ulsd_price: float = 2.850) -> 
     shocked_wholesale = round(base_ulsd_price + shock_delta, 3)
     pct_impact = round((shock_delta / base_ulsd_price) * 100.0, 2)
 
+    if live_retail_prices is None:
+        active_retail_anchors = get_live_or_anchor_diesel_prices(use_live_feed=True)
+    else:
+        active_retail_anchors = live_retail_prices
+
     shocked_regional = {}
-    for locale, base_retail in DIESEL_BASE_ANCHORS.items():
+    for locale, base_retail in active_retail_anchors.items():
         shocked_retail = round(base_retail + shock_delta, 3)
         shocked_regional[locale] = {
             "base_retail": base_retail,
@@ -211,4 +265,56 @@ def simulate_diesel_shock(scenario_key: str, base_ulsd_price: float = 2.850) -> 
         "shock_delta_gal": shock_delta,
         "pct_impact": pct_impact,
         "shocked_regional_calibrations": shocked_regional
+    }
+
+
+DIESEL_REGION_LOG_KEYS = {
+    "national": "National_ULSD",
+    "tulsa": "Tulsa_ULSD",
+    "newark": "Newark_ULSD",
+    "cincinnati": "Cincinnati_ULSD",
+    "greenville": "Greenville_ULSD",
+    "charlotte": "Charlotte_ULSD",
+    "oakland": "Oakland_CARB_Diesel",
+    "port_st_lucie": "Port_St_Lucie_ULSD"
+}
+
+
+def run_daily_diesel_forecast_pipeline(
+    model_version: str = "v1.6-Ipatieff-Diesel",
+    run_type: str = "SCHEDULED_DAILY",
+    rbob_price: float = 2.450,
+    ulsd_price: float = 2.850,
+    wti_price: float = 75.00
+) -> Dict[str, Any]:
+    """
+    Executes ULSD multi-regional forecast pipeline and logs 5-day out-of-time predictions
+    to prediction_history.csv.
+    """
+    agent = UltraLowSulfurDieselForecastingAgent()
+    res = agent.forecast_ulsd(rbob_price=rbob_price, ulsd_price=ulsd_price, wti_price=wti_price)
+    target_date = (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
+    today_str = datetime.now().strftime("%Y-%m-%d")
+
+    from src.prediction_logger import log_predictions
+
+    logged_records = {}
+    calibrations = res.get("regional_retail_calibrations", {})
+    for locale, data in calibrations.items():
+        region_key = DIESEL_REGION_LOG_KEYS.get(locale, f"{locale.title()}_ULSD")
+        df_pred = pd.DataFrame([{
+            "date": today_str,
+            "current_price": data["base_retail"],
+            "predicted_5d_price": data["predicted_retail"],
+            "forecast_target_date": target_date,
+            "forecast_horizon_days": 5
+        }])
+        log_predictions(df_pred, region=region_key, model_version=model_version, run_type=run_type)
+        logged_records[region_key] = data["predicted_retail"]
+
+    return {
+        "status": "success",
+        "total_logged": len(logged_records),
+        "logged_records": logged_records,
+        "forecast": res
     }

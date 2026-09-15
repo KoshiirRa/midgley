@@ -71,7 +71,7 @@ def fetch_greenville_market_data(
     return market_df
 
 
-def _generate_synthetic_greenville_data(start_date: str, end_date: str, live_current_price: float = 3.25) -> pd.DataFrame:
+def _generate_synthetic_greenville_data(start_date: str, end_date: str, live_current_price: float = 3.950) -> pd.DataFrame:
     dates = pd.date_range(start=start_date, end=end_date, freq='B')
     np.random.seed(42)
     n = len(dates)

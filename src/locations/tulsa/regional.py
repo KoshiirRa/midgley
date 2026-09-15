@@ -63,7 +63,7 @@ def fetch_tulsa_market_data(
     return market_df
 
 
-def _generate_synthetic_tulsa_data(start_date: str, end_date: str, live_current_price: float = 3.89) -> pd.DataFrame:
+def _generate_synthetic_tulsa_data(start_date: str, end_date: str, live_current_price: float = 3.820) -> pd.DataFrame:
     dates = pd.date_range(start=start_date, end=end_date, freq='B')
     np.random.seed(42)
     n = len(dates)

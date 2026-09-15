@@ -94,6 +94,20 @@ class TestLiveFuelFeed(unittest.TestCase):
         res = fetch_aaa_metro_price("Oakland_CA")
         self.assertIsNone(res)
 
+    @patch("src.live_fuel_feed.urllib.request.urlopen")
+    def test_fetch_aaa_metro_price_state_average_fallback(self, mock_urlopen):
+        """Verify AAA scraper falls back to state average table when no dedicated metro accordion exists."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_html = "<html><body><div class='tblwrap'><table><tr><td>Current Avg.</td><td>$3.970</td></tr></table></div></body></html>"
+        mock_response.read.return_value = mock_html.encode("utf-8")
+        mock_urlopen.return_value.__enter__.return_value = mock_response
+
+        res = fetch_aaa_metro_price("Greenville_NC")
+        self.assertIsNotNone(res)
+        self.assertEqual(res["average_price"], 3.970)
+        self.assertIn("State Average", res["source"])
+
     @patch("pandas.read_csv")
     @patch("os.path.exists")
     def test_fetch_history_last_known_price(self, mock_exists, mock_read_csv):

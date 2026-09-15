@@ -97,7 +97,16 @@ class DynamicRegionRunner:
         if live_pump_price is not None:
             current_base = float(live_pump_price)
         else:
-            current_base = self.base_price_anchor
+            # Dynamically resolve live retail price across multi-tiered feed before fallback anchor
+            try:
+                live_res = fetch_live_metro_retail_price(self.logger_region_key)
+                if live_res and live_res.get("price") and pd.notna(live_res.get("price")):
+                    current_base = float(live_res["price"])
+                else:
+                    current_base = self.base_price_anchor
+            except Exception as e:
+                logger.debug(f"Live retail price resolution notice for {self.logger_region_key}: {e}")
+                current_base = self.base_price_anchor
 
         # Step 3: Compute Raw 5-Day Projected Retail Pump Price
         raw_predicted_5d_price = round(current_base * (1.0 + pct_change), 4)

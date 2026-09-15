@@ -268,7 +268,8 @@ def fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict:
     res = fetch_gasbuddy_prices_by_zip(zip_code)
     if res:
         return res
-    return {"average_price": 3.89, "stations": [], "source": "Tulsa Fallback Anchor"}
+    fallback_price = REGION_METADATA.get("Tulsa_OK", {}).get("static_anchor", 3.820)
+    return {"average_price": fallback_price, "stations": [], "source": "Tulsa Fallback Anchor"}
 
 
 def fetch_aaa_metro_price(region_code: str) -> dict:
@@ -292,7 +293,7 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
                     from bs4 import BeautifulSoup
                     soup = BeautifulSoup(html, 'html.parser')
                     
-                    # Search for specific metro heading block and its corresponding table
+                    # 1. Search for specific metro heading block and its corresponding table
                     for kw in keywords:
                         kw_lower = kw.lower()
                         for el in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'button', 'a', 'td', 'th']):
@@ -309,6 +310,21 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
                                                 if 1.50 <= val <= 8.50:
                                                     logger.info(f"AAA scraper matched metro '{kw}' for {region_code}: ${val:.3f}/gal")
                                                     return {"average_price": round(val, 3), "source": f"AAA Web Scraper ({kw}, {state})"}
+
+                    # 2. State-level average table fallback (for sub-metros without dedicated AAA accordions)
+                    tables = soup.find_all('table')
+                    if tables:
+                        first_tbl = tables[0]
+                        for tr in first_tbl.find_all('tr'):
+                            tr_text = tr.get_text(strip=True)
+                            if 'current avg' in tr_text.lower():
+                                prices = re.findall(r'\$(\d+\.\d{2,4})', tr_text)
+                                if prices:
+                                    val = float(prices[0])
+                                    if 1.50 <= val <= 8.50:
+                                        label = f"State Average, {state}" if state != "US" else "National Average, US"
+                                        logger.info(f"AAA scraper matched {label} for {region_code}: ${val:.3f}/gal")
+                                        return {"average_price": round(val, 3), "source": f"AAA Web Scraper ({label})"}
                 except Exception as parse_err:
                     logger.debug(f"BS4 parsing notice for {region_code}: {type(parse_err).__name__}")
 
