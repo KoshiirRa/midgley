@@ -5522,6 +5522,39 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-09-15T14:43:46.913522+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 126,
+      "output_tokens": 80,
+      "total_tokens": 206,
+      "cost_usd": 3.3e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-15T14:44:03.231315+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 118,
+      "output_tokens": 80,
+      "total_tokens": 198,
+      "cost_usd": 3.3e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-15T14:44:19.834567+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 140,
+      "output_tokens": 80,
+      "total_tokens": 220,
+      "cost_usd": 3.4e-05,
+      "status": "success"
     }
   ]
 }
