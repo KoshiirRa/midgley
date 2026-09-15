@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-15_04-01-22",
+    "timestamp": "2026-09-15 04:01:17",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Valero Prepares Restart of Port Arthur, Texas Oil Refinery A..."
+  },
+  {
     "run_id": "2026-09-15_00-46-21",
     "timestamp": "2026-09-14 23:51:23",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-10_15-14-44",
-    "timestamp": "2026-09-10 15:12:28",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
-  },
-  {
-    "run_id": "2026-09-10_15-14-30",
     "timestamp": "2026-09-10 15:12:28",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
