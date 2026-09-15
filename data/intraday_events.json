@@ -3139,5 +3139,24 @@
       "overall_price_pressure": 0.2
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-15T19:35:35.051405",
+    "headline": "Aramco Refinery Fires via Satellite: Saudi Export Lifeline Under Strain After a Month of Attacks - Energy News Beat",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNNlBWX3VvM0tnb1laVWx3aXlxQ0pqMU9DUlNzZ2NXMmN5RS0yRUhpME1ET2NNeUd4a2k3cERBRUFfMGpzWkZCVzFxb1JWVGc0T3hyUzVnOUNyR29uaS1feFBMNlR5T1UxYkdCM1hRLXR6Z29ETExpSG9VX013SVR2clhmU1EzTVVjd2Y3V1BGTGtZcFpQNGVuY3NiVDctaW94N29Oc2dKaElkMTlJLTRkT1hoVVlLOU9OTnowQ2hsajRwT3FGbFhxYW5GTXJhaVdiSm1IZW0xNA?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1wFBVV95cUxNNlBWX3VvM0tnb1laVWx3aXlxQ0pqMU9DUlNzZ2NXMmN5RS0yRUhpME1ET2NNeUd4a2k3cERBRUFfMGpzWkZCVzFxb1JWVGc0T3hyUzVnOUNyR29uaS1feFBMNlR5T1UxYkdCM1hRLXR6Z29ETExpSG9VX013SVR2clhmU1EzTVVjd2Y3V1BGTGtZcFpQNGVuY3NiVDctaW94N29Oc2dKaElkMTlJLTRkT1hoVVlLOU9OTnowQ2hsajRwT3FGbFhxYW5GTXJhaVdiSm1IZW0xNA?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 1.0,
+      "supply_disruption": 0.9,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.95
+    },
+    "discord_notified": true
   }
 ]
