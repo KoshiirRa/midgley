@@ -80,8 +80,8 @@ def fetch_cincinnati_market_data(
 def _generate_synthetic_cincinnati_data(
     start_date: str, 
     end_date: str, 
-    live_oh_price: float = 3.450, 
-    live_ky_price: float = 3.325
+    live_oh_price: float = 4.080, 
+    live_ky_price: float = 4.160
 ) -> pd.DataFrame:
     dates = pd.date_range(start=start_date, end=end_date, freq='B')
     np.random.seed(42)

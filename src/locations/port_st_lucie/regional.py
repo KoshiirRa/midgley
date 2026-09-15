@@ -71,7 +71,7 @@ def fetch_port_st_lucie_market_data(
     return market_df
 
 
-def _generate_synthetic_port_st_lucie_data(start_date: str, end_date: str, live_current_price: float = 3.380) -> pd.DataFrame:
+def _generate_synthetic_port_st_lucie_data(start_date: str, end_date: str, live_current_price: float = 4.145) -> pd.DataFrame:
     """
     Generates synthetic time series for Port St. Lucie, FL when offline or yfinance fails.
     """

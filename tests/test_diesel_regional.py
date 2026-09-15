@@ -1,7 +1,5 @@
-"""
-Unit and Integration Tests for Ultra-Low Sulfur Diesel (ULSD) Forecasting & Distillate Calibration (Issue #41).
-"""
-
+import os
+os.environ["TESTING"] = "1"
 import pytest
 from fastapi.testclient import TestClient
 from src.api_server import app
@@ -10,7 +8,9 @@ from src.diesel_regional import (
     compute_321_refining_crack_spread,
     compute_distillate_gasoline_ratio,
     UltraLowSulfurDieselForecastingAgent,
-    simulate_diesel_shock
+    simulate_diesel_shock,
+    get_live_or_anchor_diesel_prices,
+    DIESEL_BASE_ANCHORS
 )
 
 client = TestClient(app)
@@ -75,3 +75,12 @@ def test_api_diesel_endpoints():
     assert resp_sim.status_code == 200
     data_sim = resp_sim.json()
     assert data_sim["status"] == "success"
+
+
+def test_get_live_or_anchor_diesel_prices():
+    """Tests dynamic retail diesel prices resolution."""
+    prices = get_live_or_anchor_diesel_prices(use_live_feed=False)
+    assert len(prices) == len(DIESEL_BASE_ANCHORS)
+    for locale in DIESEL_BASE_ANCHORS:
+        assert locale in prices
+        assert prices[locale] > 0.0

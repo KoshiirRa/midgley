@@ -109,8 +109,8 @@ def fetch_oakland_market_data(
 def _generate_synthetic_oakland_data(
     start_date: str, 
     end_date: str, 
-    live_oakland_price: float = 5.550, 
-    live_bayarea_price: float = 5.650
+    live_oakland_price: float = 6.050, 
+    live_bayarea_price: float = 6.160
 ) -> pd.DataFrame:
     dates = pd.date_range(start=start_date, end=end_date, freq='B')
     np.random.seed(42)

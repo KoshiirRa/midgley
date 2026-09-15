@@ -72,7 +72,7 @@ def fetch_charlotte_market_data(
     return market_df
 
 
-def _generate_synthetic_charlotte_data(start_date: str, end_date: str, live_current_price: float = 3.280) -> pd.DataFrame:
+def _generate_synthetic_charlotte_data(start_date: str, end_date: str, live_current_price: float = 3.980) -> pd.DataFrame:
     dates = pd.date_range(start=start_date, end=end_date, freq='B')
     np.random.seed(42)
     n = len(dates)
