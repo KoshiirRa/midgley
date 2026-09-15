@@ -1,10 +1,10 @@
 {
   "created_at": "2026-09-02 00:19:23",
   "llm_totals": {
-    "prompt_tokens": 28992,
-    "completion_tokens": 16520,
-    "total_tokens": 45512,
-    "estimated_cost_usd": 0.00712,
+    "prompt_tokens": 29122,
+    "completion_tokens": 16600,
+    "total_tokens": 45722,
+    "estimated_cost_usd": 0.007154,
     "fallback_activations": 198
   },
   "llm_events": [
@@ -4572,593 +4572,28 @@
       "total_tokens": 204,
       "estimated_cost_usd": 3.3e-05,
       "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-15 22:48:27",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
     }
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 3033,
+    "retain_count": 3105,
     "recall_count": 3,
     "reflect_count": 3,
     "cloud_calls": 2143,
-    "local_fallback_calls": 896
+    "local_fallback_calls": 968
   },
   "memory_events": [
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 12:12:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:12:41",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:12:55",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:13:07",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:13:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:13:33",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:13:46",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:13:57",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:09",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:21",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:25",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:29",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:33",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:37",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:41",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:14:45",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:15:02",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:15:13",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:15:24",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:15:35",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:15:46",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:15:57",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:07",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:18",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:28",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:39",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:44",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:48",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:51",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:55",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:16:59",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:17:03",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:17:07",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:17:11",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:17:15",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:17:19",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:17:37",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:17:50",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:18:00",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:18:11",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:18:23",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:18:35",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:18:46",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:18:57",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:19:08",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:19:22",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:19:36",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:19:48",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:19:59",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:10",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:25",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:31",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:34",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:38",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:42",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:46",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:50",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:54",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:20:58",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:21:02",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:21:06",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:21:24",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-14 14:21:36",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
     {
       "timestamp": "2026-09-14 14:21:47",
       "environment": "prod",
@@ -12577,6 +12012,582 @@
     },
     {
       "timestamp": "2026-09-15 19:35:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-15 22:48:48",
       "environment": "prod",
       "operation": "retain",
       "backend": "sqlite_fts5",

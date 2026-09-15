@@ -3158,5 +3158,24 @@
       "overall_price_pressure": 0.95
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-15T22:48:32.452123",
+    "headline": "US lawmakers spar over bill giving Trump more power to sanction Russia - The Guardian",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPaTFNclByR2JyRkNYMFFya2dLNVZMM0R0Z0pnbnFRMm53LWxlSVRpdlU3ZHpnN3B6dXVJOGFIcTJDcVpmSEs5V0c4Q2NvMUV4SkFVUGp4RWxOSGpQWVJpbmxVS2lqRU82OThQbUlDOExJMnFQYnkzdmFjTEhSSDRDT3R5N1FDanVzN3lkMzROWlV4bXJMUnJWTVNuWlc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinAFBVV95cUxPaTFNclByR2JyRkNYMFFya2dLNVZMM0R0Z0pnbnFRMm53LWxlSVRpdlU3ZHpnN3B6dXVJOGFIcTJDcVpmSEs5V0c4Q2NvMUV4SkFVUGp4RWxOSGpQWVJpbmxVS2lqRU82OThQbUlDOExJMnFQYnkzdmFjTEhSSDRDT3R5N1FDanVzN3lkMzROWlV4bXJMUnJWTVNuWlc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.2,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]

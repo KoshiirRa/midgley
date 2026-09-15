@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-15_22-48-35",
+    "timestamp": "2026-09-15 22:48:33",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "US lawmakers spar over bill giving Trump more power to sanct..."
+  },
+  {
     "run_id": "2026-09-15_19-35-38",
     "timestamp": "2026-09-15 19:35:35",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-10 15:30:26",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Indian exports surge in August as Jazan Refinery outage open..."
-  },
-  {
-    "run_id": "2026-09-10_15-17-17",
-    "timestamp": "2026-09-10 15:16:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:16:42)"
   }
 ]
