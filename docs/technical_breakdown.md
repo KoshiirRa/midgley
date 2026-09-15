@@ -1,28 +1,28 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-15 04:01:17`  
+**Log Timestamp:** `2026-09-15 09:23:17`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com  
+**Primary Event Trigger:** Russia-Iran Sanctions Bill Could Reach Trump’s Desk Within Days, Says Congressman - Radio Free Europe/Radio Liberty  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com
+- **Headline Trigger:** Russia-Iran Sanctions Bill Could Reach Trump’s Desk Within Days, Says Congressman - Radio Free Europe/Radio Liberty
 - **Active Ingested News Links:**
+- [Russia-Iran Sanctions Bill Could Reach Trump’s Desk Within Days, Says Congressman - Radio Free Europe/Radio Liberty](https://news.google.com/rss/articles/CBMif0FVX3lxTE5GVFVBY3JiLThMcDZsbUd0d2R2d1duNno5b1cwUngxdXplRE9QLWg2a21mWHVGcFhGRzdXdl94eW9JcnJZNUsybEpqQTNiT2xUM01jREtadnNiZm02N3owcUpBazdGaERvbkZxQWU1V0YzWXNBOEc2NE81emVIY2vSAYIBQVVfeXFMTXlpNDFsOXhSelEzNTg5anZSalYwemk2OTRyVlk2M3BlNFhsSDBldFNKc0NWeHJCcnpnNUktQ3pTdHE3R1Uxb2JkVFUySG44WWlabGhoYW0xZWtnUFpMNmpjRnVZNHRxc1lMQzVqdG1XZ1BNb0wtbDhKRy1mR21McWtUQQ?oc=5) (Google News Energy Feed)
 - [Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com](https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5) (Google News Energy Feed)
 - [Discount on Western Canada Select widens with Joliet refinery outage - BOE Report](https://news.google.com/rss/articles/CBMipAFBVV95cUxPelplei1xZm9MTlRueVdxMTQ3TzVqckdZWm9DNVFDUmVFVUQ1eDZFdE54RDFiRFhvNlo4SXFNRWJGTmxsTkdITnJ5QThVZkUyMkh6c0RVZ2E2bFlxRUVreDByeTRNd21CREZqeWxXS0JRN1g5RlhkWlF5VGt0LVphLUlxaldZTmNacGo4cEFXYjJIclVZbV83T3BQdV94blo1S2J6WNIBqgFBVV95cUxPUkxGeWh2T0NKYkFvbzUycm54R3Ayb2xJTzBMbGRQTlN5aVpYQ3NEWWlPR19CbXNBcHMyU0RtSHVSMldXc1NNZkcxeFh0QTdwYTJKSVJFM2JOYWxVR1B4NndITkpBM2ptY2UwMDAzMjZYSkFRRFBYenB1SUtCYjIwbEJUckJSZk5hTlA2Y2l4WWV0T0dUN2lTNEVJcmhJalFkUGs2Zlh1cTlhdw?oc=5) (Google News Energy Feed)
-- [Oil prices continue surge, rising 3pct amid Saudi pipeline outage after attack - NST Online](https://news.google.com/rss/articles/CBMivwFBVV95cUxNUGV3a1JqU1QxVXc4MDBkQTgtU0FTQVljSUxvRmJBUXI2d0JmaTBwLW00VGpHdjhuRDBCVXFnY3VDRldsZFJqSXR6TUN1b3Z0b3lfTVdJU3dLcVF0YzdRX3N3UVVkMVVpcW9HYkdxeThQVXo4MmlNV21HZ3ZlX2hZaGNqLVBiNHdSY09uSlhKLWNjam1jWUhUbmhhZThKX2ZBclB6WHFTZlZJYlVGVXg5YTBBYWZCZWVZbkxKVzFRdw?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.05`
-- **Price Pressure Shock ($\Delta P$):** `-0.70`
-- **Geopolitical Risk Score ($G$):** `0.00`
-- **Demand Sentiment Score ($D$):** `0.00`
+- **Supply Disruption Score ($S$):** `0.60`
+- **Price Pressure Shock ($\Delta P$):** `+0.70`
+- **Geopolitical Risk Score ($G$):** `0.80`
+- **Demand Sentiment Score ($D$):** `-0.10`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.0500$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.0500$
-- **Day 1 Decayed Shock**: $M_1 = 0.0500 \times 0.87055 = 0.0435$
-- **Day 2 Decayed Shock**: $M_2 = 0.0500 \times (0.87055)^2 = 0.0379$
-- **Day 3 Decayed Shock**: $M_3 = 0.0500 \times (0.87055)^3 = 0.0330$
-- **Day 4 Decayed Shock**: $M_4 = 0.0500 \times (0.87055)^4 = 0.0287$
-- **Day 5 (Target Horizon)**: $M_5 = 0.0500 \times 0.50000 = 0.0250$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.6000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.6000$
+- **Day 1 Decayed Shock**: $M_1 = 0.6000 \times 0.87055 = 0.5223$
+- **Day 2 Decayed Shock**: $M_2 = 0.6000 \times (0.87055)^2 = 0.4547$
+- **Day 3 Decayed Shock**: $M_3 = 0.6000 \times (0.87055)^3 = 0.3959$
+- **Day 4 Decayed Shock**: $M_4 = 0.6000 \times (0.87055)^4 = 0.3446$
+- **Day 5 (Target Horizon)**: $M_5 = 0.6000 \times 0.50000 = 0.3000$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.038) = \$3.095\text{/gal}$ (Delta: -\$0.038/gal, -1.20\%)
+- **National Wholesale**: $P = \$3.184 + (+\$0.140) = \$3.273\text{/gal}$ (Delta: +\$0.140/gal, +4.40\%)
 - **Tulsa, OK Retail**: $P = \$3.818 + (+\$0.166) = \$3.782\text{/gal}$ (Delta: +\$0.166/gal, +4.34\%)
 - **Newark, DE Retail**: $P = \$3.398 + (+\$0.170) = \$3.366\text{/gal}$ (Delta: +\$0.170/gal, +5.00\%)
 - **Cincinnati, OH/KY**: $P = \$4.084 + (+\$0.165) = \$4.053\text{/gal}$ (Delta: +\$0.165/gal, +4.04\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.0500$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-15 04:01:17]: Downward price pressure (-0.70/gal shock) detected following 'Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com'. Supply disruption score S=0.05 and geopolitical risk G=0.00 indicate easing market tightness. Residual event memory decays from initial M₀=0.0500 to Day-5 retention M₅=0.0250.
+SUMMARY FOR RUN [2026-09-15 09:23:17]: Elevated upward price shock (+$0.70/gal) observed across wholesale futures. Event trigger 'Russia-Iran Sanctions Bill Could Reach Trump’s Desk Within Days, Says Congressman - Radio Free Europe/Radio Liberty' drove supply disruption to S=0.60 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.5223 and Day-5 horizon retention M₅=0.3000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-15 04:01:17 (Mode: INTRADAY_REVISION), primary event trigger 'Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.05, Price Pressure ΔP=-0.70, Geopolitical Risk G=0.00. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.0500
-  - Day 1: M₁ = 0.0435
-  - Day 5: M₅ = 0.0250 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-15 09:23:17 (Mode: INTRADAY_REVISION), primary event trigger 'Russia-Iran Sanctions Bill Could Reach Trump’s Desk Within Days, Says Congressman - Radio Free Europe/Radio Liberty' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.60, Price Pressure ΔP=+0.70, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.6000
+  - Day 1: M₁ = 0.5223
+  - Day 5: M₅ = 0.3000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.095/gal ($-0.038/gal, -1.20%)
+  • National Wholesale: $3.273/gal (+$0.140/gal, +4.40%)
   • Tulsa, OK Retail: $3.782/gal (+$0.166/gal, +4.34%)
   • Newark, DE Retail: $3.366/gal (+$0.170/gal, +5.00%)
   • Cincinnati, OH/KY: $4.053/gal (+$0.165/gal, +4.04%)
@@ -91,15 +91,15 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.005/gal (+$0.847/gal, +13.98%)
   • SF Bay Area Region: $6.108/gal (+$0.850/gal, +13.79%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.108/gal (+0.850/gal). Largest downward shift for this run: National Wholesale at $3.095/gal (-0.038/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.108/gal (+0.850/gal). Largest downward shift for this run: National Wholesale at $3.273/gal (+0.140/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-15 04:01:17]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com'. Overall price pressure vector sits at ΔP=-0.70/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-15 09:23:17]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Russia-Iran Sanctions Bill Could Reach Trump’s Desk Within Days, Says Congressman - Radio Free Europe/Radio Liberty'. Overall price pressure vector sits at ΔP=+0.70/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.00. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-15 04:01:17.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-15 09:23:17.*

@@ -39,7 +39,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-08 07:01:44,2025-09-30,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,2.6975,2.6624,DOWN,2.5229,DOWN,0.1395,1.0,0.0,0.0,2.6975,0.0,2.2328,3.092,1.0,yfinance,5.0
 2026-09-08 07:01:44,2025-10-01,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,2.7172,2.6763,DOWN,2.4359,DOWN,0.2404,1.0,0.0,0.0,2.7172,0.0,2.2467,3.106,1.0,yfinance,5.0
 2026-09-08 07:01:45,2026-09-11,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.913,3.819,DOWN,3.8572,DOWN,0.0382,1.0,0.0,0.0,3.913,0.0,3.3893,4.2486,1.0,yfinance,5.0
-2026-09-08 20:30:24,2026-09-15,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Graham Russia Tariff Bill Contains Legal Ambiguities - Legis1,3.184,3.2502,UP,,,,,0.0,0.0,3.184,0.0,2.9241,3.5764,,yfinance,5.0
+2026-09-08 20:30:24,2026-09-15,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Graham Russia Tariff Bill Contains Legal Ambiguities - Legis1,3.184,3.2502,UP,3.1955,UP,0.0547,1.0,0.0,0.0,3.184,0.0,2.9241,3.5764,1.0,yfinance,5.0
 2026-09-10 15:12:28,2025-10-01,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,2.0882,2.0359,DOWN,2.4359,UP,0.4,0.0,0.0,0.0,2.0882,0.0,1.7512,2.3207,0.0,yfinance,5.0
 2026-09-10 15:12:28,2026-09-16,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.28,3.2359,DOWN,,,,,0.0,0.0,3.28,0.0,2.9462,3.5256,,yfinance,5.0
 2026-09-10 15:15:41,2026-09-16,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2106,3.1393,DOWN,,,,,0.0,0.0,3.2106,0.0,2.8131,3.4654,,yfinance,5.0
@@ -2430,4 +2430,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-14 14:26:04,2026-09-10,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.6847,3.6585,DOWN,3.9432,UP,0.2847,0.0,0.0,0.0,3.6847,0.0,3.3647,3.9523,1.0,yfinance,5.0
 2026-09-14 14:27:18,2026-09-18,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.857,3.8248,DOWN,,,,,0.0,0.0,3.857,0.0,3.5347,4.1149,,yfinance,5.0
 2026-09-14 23:51:23,2026-09-21,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,Discount on Western Canada Select widens with Joliet refinery outage - BOE Report,3.184,3.1331,DOWN,,,,,0.0,0.0,3.184,0.0,2.7981,3.468,,yfinance,5.0
-2026-09-15 04:01:17,2026-09-22,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com",3.184,3.0948,DOWN,,,,,0.0,0.0,3.184,0.0,2.7685,3.4212,,yfinance,5.0
+2026-09-15 09:23:17,2026-09-22,National,v1.4-Finlight-Intraday,INTRADAY_REVISION,"Russia-Iran Sanctions Bill Could Reach Trump’s Desk Within Days, Says Congressman - Radio Free Europe/Radio Liberty",3.184,3.2732,UP,,,,,0.0,0.0,3.184,0.0,2.9717,3.5746,,yfinance,5.0

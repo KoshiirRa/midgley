@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-15_09-23-20",
+    "timestamp": "2026-09-15 09:23:17",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Russia-Iran Sanctions Bill Could Reach Trump\u2019s Desk Within D..."
+  },
+  {
     "run_id": "2026-09-15_04-01-22",
     "timestamp": "2026-09-15 04:01:17",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-10_15-14-57",
-    "timestamp": "2026-09-10 15:12:28",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
-  },
-  {
-    "run_id": "2026-09-10_15-14-44",
     "timestamp": "2026-09-10 15:12:28",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
