@@ -12,6 +12,7 @@ Provides multi-regional physical risk scoring for:
 6. South Florida Coastal Drainage (Port St. Lucie FL): St. Lucie Canal flood stages.
 """
 
+import os
 import json
 import logging
 import urllib.request
@@ -25,6 +26,60 @@ logger = logging.getLogger(__name__)
 
 USER_AGENT = "(MidgleyGasPriceForecaster/1.0; contact@example.com)"
 DEFAULT_TIMEOUT = 5.0
+USGS_WATER_VINTAGE_FILE = os.path.join("data", "usgs_water_vintages.json")
+
+
+def save_water_vintage_record(record: dict, filepath: str = USGS_WATER_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time USGS water telemetry observation (Issue #293)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", record.get("timestamp", datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+        day_key = str(now_str)[:10]
+        cluster_key = record.get("filtered_cluster") or record.get("cluster") or "all"
+
+        # Deduplicate per cluster/entity and day
+        vintages = [v for v in vintages if not (v.get("cluster_key") == cluster_key and str(v.get("as_of", ""))[:10] == day_key)]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": day_key,
+            "cluster_key": cluster_key,
+            "stations_monitored": record.get("stations_monitored", len(record.get("stations", {}))),
+            "indices": record.get("indices", {}),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist USGS water vintage record: {e}")
+
+
+def get_water_vintages_as_of(as_of_date: str, cluster: Optional[str] = None, filepath: str = USGS_WATER_VINTAGE_FILE) -> list:
+    """Retrieves all USGS water vintage records available as of a given cutoff date (Issue #293)."""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (cluster is None or v.get("cluster_key") == cluster or v.get("cluster_key") == "all")
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
+
 
 # Key USGS Monitoring Stations
 USGS_STATIONS = {
@@ -116,8 +171,17 @@ class USGSWaterFeedConnector:
             "indices": indices
         }
 
+        save_water_vintage_record(result)
         global_cache.set(cache_key, result, ttl_seconds=900)
         return self._filter_by_cluster(result, cluster)
+
+    def save_water_vintage_record(self, record: dict, filepath: str = USGS_WATER_VINTAGE_FILE) -> None:
+        """Persists a bitemporal point-in-time USGS water telemetry observation (Issue #293)."""
+        save_water_vintage_record(record, filepath=filepath)
+
+    def get_water_vintages_as_of(self, as_of_date: str, cluster: Optional[str] = None, filepath: str = USGS_WATER_VINTAGE_FILE) -> List[Dict[str, Any]]:
+        """Retrieves USGS water vintage records as of a cutoff date (Issue #293)."""
+        return get_water_vintages_as_of(as_of_date, cluster=cluster, filepath=filepath)
 
     def _parse_usgs_json(self, raw_json: Dict[str, Any]) -> Dict[str, Any]:
         """Parses USGS NWIS JSON schema into clean station dictionaries."""

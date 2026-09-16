@@ -15,7 +15,8 @@ def test_oilpriceapi_fallback_benchmark_dynamic_yfinance():
     
     # Mock yfinance Ticker history
     mock_hist = pd.DataFrame({"Close": [72.50, 74.20, 75.80]}, index=pd.date_range("2026-03-01", periods=3))
-    with patch("yfinance.Ticker") as mock_ticker:
+    with patch("yfinance.Ticker") as mock_ticker, \
+         patch.object(connector, "_get_cached_response", return_value=None):
         mock_ticker.return_value.history.return_value = mock_hist
         res = connector.fetch_latest_price("WTI_USD")
         assert res["code"] == "WTI_USD"

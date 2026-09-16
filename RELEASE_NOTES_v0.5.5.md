@@ -137,6 +137,47 @@
 ## 🧪 Benchmark & Verification Results
 
 - **Targeted Sprint Unit & Integration Suite (`dev-vm` at `10.42.42.54`):**
+### 23. Census Demographics Bitemporal Tracking (Issue #290)
+- **Bitemporal Snapshot & Commuter Profiling ([`src/census_demographics.py`](file:///src/census_demographics.py)):**
+  - Added `save_census_vintage_record()` and `get_census_vintages_as_of()` writing point-in-time ACS demographic snapshots to `data/census_demographics_vintages.json`.
+  - Added test suite in `tests/test_census_vintages.py`.
+
+### 24. AQI & Industrial Emissions Telemetry Bitemporal Tracking (Issue #291)
+- **Air Quality & Refinery Outage Vintages ([`src/aqi_feed.py`](file:///src/aqi_feed.py)):**
+  - Added `save_aqi_vintage_record()` and `get_aqi_vintages_as_of()` writing fence-line sensor emissions and EPA AirNow observations to `data/aqi_vintages.json`.
+  - Added test suite in `tests/test_aqi_vintages.py`.
+
+### 25. USGS Seismic Telemetry Bitemporal Tracking (Issue #292)
+- **Earthquake Hazard Risk Vintages ([`src/usgs_seismic.py`](file:///src/usgs_seismic.py)):**
+  - Added `save_seismic_vintage_record()` and `get_seismic_vintages_as_of()` writing corridor earthquake hazard telemetry to `data/usgs_seismic_vintages.json`.
+  - Added test suite in `tests/test_usgs_seismic_vintages.py`.
+
+### 26. USGS Water Data Telemetry Bitemporal Tracking (Issue #293)
+- **Hydrological Streamflow & Barge Draft Vintages ([`src/usgs_water_feed.py`](file:///src/usgs_water_feed.py)):**
+  - Added `save_water_vintage_record()` and `get_water_vintages_as_of()` writing streamflow, barge draft constraints, and river stage observations to `data/usgs_water_vintages.json`.
+  - Added test suite in `tests/test_usgs_water_vintages.py`.
+
+### 27. U.S. Treasury Yield Telemetry Bitemporal Tracking (Issue #294)
+- **Macroeconomic Yield Curve & Spread Vintages ([`src/treasury_yield_feed.py`](file:///src/treasury_yield_feed.py)):**
+  - Added `save_treasury_vintage_record()` and `get_treasury_vintages_as_of()` writing 10Y-2Y yield curve spread and TIPS real yield observations to `data/treasury_vintages.json`.
+  - Added test suite in `tests/test_treasury_vintages.py`.
+
+### 28. ULSD Distillate Regional Engine Bitemporal Tracking (Issue #295)
+- **Distillate Crack & Regional Retail Diesel Vintages ([`src/diesel_regional.py`](file:///src/diesel_regional.py)):**
+  - Added `save_diesel_vintage_record()` and `get_diesel_vintages_as_of()` writing retail diesel prices and wholesale crack spread observations to `data/diesel_vintages.json`.
+  - Added test suite in `tests/test_diesel_vintages.py`.
+
+---
+
+## 🧪 Comprehensive Test Suite & Validation
+- **Execution Target:** Local dedicated Linux VM (`dev-vm` / `10.42.42.54`).
+- **Newly Added Unit Test Suites:**
+  - `tests/test_census_vintages.py` (Passed)
+  - `tests/test_aqi_vintages.py` (Passed)
+  - `tests/test_usgs_seismic_vintages.py` (Passed)
+  - `tests/test_usgs_water_vintages.py` (Passed)
+  - `tests/test_treasury_vintages.py` (Passed)
+  - `tests/test_diesel_vintages.py` (Passed)
   - `tests/test_oilpriceapi_dynamic.py` (2 tests passed)
   - `tests/test_pypi_community_scraper.py` (2 tests passed)
   - `tests/test_alpha_vantage_dynamic.py` (2 tests passed)
@@ -159,7 +200,7 @@
   - `tests/test_usace_locks_dynamic.py` (2 tests passed)
   - `tests/test_baker_hughes_feed.py` (4 tests passed)
   - `tests/test_executive_social_feed.py` (4 tests passed)
-  - **Status:** `55 passed in 100% pass rate`.
+  - **Status:** `100% pass rate across entire suite`.
 
 ---
 
@@ -187,3 +228,10 @@
 - **[Issue #287](https://github.com/KoshiirRa/midgley/issues/287):** Add bitemporal vintage tracking to FREDDataConnector.
 - **[Issue #288](https://github.com/KoshiirRa/midgley/issues/288):** Add 6-hour caching and bitemporal tracking to OpenMeteoDegreeDaysConnector.
 - **[Issue #289](https://github.com/KoshiirRa/midgley/issues/289):** Add bitemporal vintage tracking to OpenSourceAIRadarConnector.
+- **[Issue #290](https://github.com/KoshiirRa/midgley/issues/290):** Add bitemporal vintage tracking to CensusDemographicsConnector (`data/census_demographics_vintages.json`).
+- **[Issue #291](https://github.com/KoshiirRa/midgley/issues/291):** Add bitemporal vintage tracking to AQIFeedConnector (`data/aqi_vintages.json`).
+- **[Issue #292](https://github.com/KoshiirRa/midgley/issues/292):** Add bitemporal vintage tracking to USGSSeismicConnector (`data/usgs_seismic_vintages.json`).
+- **[Issue #293](https://github.com/KoshiirRa/midgley/issues/293):** Add bitemporal vintage tracking to USGSWaterFeedConnector (`data/usgs_water_vintages.json`).
+- **[Issue #294](https://github.com/KoshiirRa/midgley/issues/294):** Add bitemporal vintage tracking to TreasuryYieldConnector (`data/treasury_vintages.json`).
+- **[Issue #295](https://github.com/KoshiirRa/midgley/issues/295):** Add bitemporal vintage tracking to ULSD Distillate Regional Engine (`data/diesel_vintages.json`).
+
