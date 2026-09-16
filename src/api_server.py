@@ -123,10 +123,12 @@ async def get_api_key_user(
     request.state.key_info = key_info
     return key_info
 
+from src.version import get_version, get_model_version
+
 app = FastAPI(
     title="Midgley Gas Price Forecasting API Gateway",
     description="RESTful API for real-time unleaded gasoline pump prices, 5-day out-of-time quantitative forecasts, and counterfactual physical/geopolitical shock simulations.",
-    version="0.3.5",
+    version=get_version(),
     docs_url="/docs",
     redoc_url="/redoc",
     servers=[
@@ -436,7 +438,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             "name": meta["name"]
         },
         "forecast": {
-            "model_version": "v1.6 Ipatieff",
+            "model_version": get_model_version(),
             "forecast_horizon_days": days,
             "target_date": target_date,
             "current_base_price": base_price,
@@ -475,7 +477,7 @@ def get_forecast_scoreboard(
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "filters": {
             "locale": locale or "all",
@@ -499,7 +501,7 @@ def trigger_cloud_prediction_sync():
     res = sync_predictions_to_cloud()
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "result": res
     }
@@ -513,7 +515,7 @@ def get_cloud_prediction_sync_status():
     status_info = get_cloud_sync_status()
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "cloud_sync_status": status_info
     }
@@ -655,7 +657,8 @@ def get_health():
     return {
         "status": "online",
         "system": "Midgley Gas Price Forecasting API Gateway",
-        "version": "0.3.5",
+        "version": get_version(),
+        "model_version": get_model_version(),
         "timestamp": datetime.now().isoformat()
     }
 
@@ -863,7 +866,7 @@ def list_supported_locales():
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "total_locales": len(locales_dict),
         "locales": locales_dict
@@ -972,7 +975,7 @@ def get_batch_forecast(req: BatchForecastRequest):
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "total_requested": len(loc_list),
         "forecasts": results
@@ -1001,7 +1004,7 @@ def get_batch_combined(req: BatchCombinedRequest):
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "total_requested": len(loc_list),
         "combined": results

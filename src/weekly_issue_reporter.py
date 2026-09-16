@@ -1106,9 +1106,12 @@ def generate_weekly_markdown_report() -> str:
     except Exception as e:
         logger.debug(f"Notice generating memory reflections: {e}")
 
+    from src.version import get_model_version
+    model_ver = get_model_version()
+
     report = f"""# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report & Performance Audit
 
-### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
+### 🤖 Model Version: `{model_ver}` | **Branch:** `{branch}`
 
 ---
 

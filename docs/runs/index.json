@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-16_23-34-27",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
+    "run_id": "2026-09-16_23-27-55",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
     "run_id": "2026-09-16_07-16-55",
     "timestamp": "2026-09-16 07:16:50",
     "run_type": "INTRADAY_REVISION",
@@ -586,17 +598,5 @@
     "timestamp": "2026-09-10 16:30:15",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Graham Russia Tariff Bill Contains Legal Ambiguities - Legis..."
-  },
-  {
-    "run_id": "2026-09-10_16-15-21",
-    "timestamp": "2026-09-10 16:15:15",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Russia Vows to Keep Selling Oil to India Despite U.S. Tariff..."
-  },
-  {
-    "run_id": "2026-09-10_16-00-31",
-    "timestamp": "2026-09-10 16:00:20",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hike..."
   }
 ]

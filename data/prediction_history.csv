@@ -400,7 +400,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:46:07,2026-09-10,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.1349,3.1417,UP,3.3932,UP,0.2515,1.0,0.0,0.0,3.1349,0.0,2.8423,3.4412,1.0,yfinance,5.0
 2026-09-15 12:46:07,2026-09-11,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2146,3.2397,UP,3.3072,UP,0.0675,1.0,0.0,0.0,3.2146,0.0,2.9402,3.5392,1.0,yfinance,5.0
 2026-09-15 12:46:07,2026-09-15,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2525,3.2165,DOWN,3.4652,UP,0.2487,0.0,0.0,0.0,3.2525,0.0,2.917,3.516,1.0,yfinance,5.0
-2026-09-15 12:46:07,2026-09-16,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2106,3.1493,DOWN,3.231,UP,0.0817,0.0,0.0,0.0,3.2106,0.0,2.8498,3.4488,1.0,yfinance,5.0
+2026-09-15 12:46:07,2026-09-16,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.2106,3.1493,DOWN,3.2335,UP,0.0842,0.0,0.0,0.0,3.2106,0.0,2.8498,3.4488,1.0,yfinance,5.0
 2026-09-15 12:46:07,2026-09-17,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.3932,3.3055,DOWN,,,,,0.0,0.0,3.3932,0.0,3.006,3.605,,yfinance,5.0
 2026-09-15 12:46:07,2026-09-18,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.3072,3.2531,DOWN,,,,,0.0,0.0,3.3072,0.0,2.9536,3.5526,,yfinance,5.0
 2026-09-15 12:46:07,2026-09-21,National,v1.4-Finlight-National-Ridge,DAILY_BATCH,,3.3171,3.3445,UP,,,,,0.0,0.0,3.3171,0.0,3.045,3.6439,,yfinance,5.0
@@ -864,7 +864,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:50:21,2026-09-10,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.1768,4.141,DOWN,3.9432,DOWN,0.1978,1.0,0.0,0.0,4.1768,0.0,3.8464,4.4355,1.0,yfinance,5.0
 2026-09-15 12:50:21,2026-09-11,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.2565,4.2462,DOWN,3.8572,DOWN,0.389,1.0,0.0,0.0,4.2565,0.0,3.9516,4.5408,0.0,yfinance,5.0
 2026-09-15 12:50:21,2026-09-15,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.2944,4.2313,DOWN,4.0152,DOWN,0.2161,1.0,0.0,0.0,4.2944,0.0,3.9367,4.5259,1.0,yfinance,5.0
-2026-09-15 12:50:21,2026-09-16,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.2525,4.1669,DOWN,3.781,DOWN,0.3859,1.0,0.0,0.0,4.2525,0.0,3.8723,4.4615,0.0,yfinance,5.0
+2026-09-15 12:50:21,2026-09-16,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.2525,4.1669,DOWN,3.7835,DOWN,0.3834,1.0,0.0,0.0,4.2525,0.0,3.8723,4.4615,0.0,yfinance,5.0
 2026-09-15 12:50:21,2026-09-17,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.4351,4.3253,DOWN,,,,,0.0,0.0,4.4351,0.0,4.0307,4.6199,,yfinance,5.0
 2026-09-15 12:50:21,2026-09-18,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.3491,4.2749,DOWN,,,,,0.0,0.0,4.3491,0.0,3.9803,4.5694,,yfinance,5.0
 2026-09-15 12:51:47,2026-09-21,Newark_DE,v1.4-Finlight-Newark-Ridge,DAILY_BATCH,,4.359,4.3486,DOWN,,,,,0.0,0.0,4.359,0.0,4.0428,4.6543,,yfinance,5.0
@@ -1091,7 +1091,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:52:30,2026-09-10,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,3.8888,3.8585,DOWN,3.9432,UP,0.0847,0.0,0.0,0.0,3.8888,0.0,3.5613,4.1556,1.0,yfinance,5.0
 2026-09-15 12:52:30,2026-09-11,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,3.9685,3.9671,DOWN,3.8572,DOWN,0.1099,1.0,0.0,0.0,3.9685,0.0,3.6699,4.2642,1.0,yfinance,5.0
 2026-09-15 12:52:30,2026-09-15,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.0064,3.9505,DOWN,4.0152,UP,0.0647,0.0,0.0,0.0,4.0064,0.0,3.6533,4.2476,1.0,yfinance,5.0
-2026-09-15 12:52:30,2026-09-16,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,3.9645,3.8847,DOWN,3.781,DOWN,0.1037,1.0,0.0,0.0,3.9645,0.0,3.5876,4.1818,1.0,yfinance,5.0
+2026-09-15 12:52:30,2026-09-16,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,3.9645,3.8847,DOWN,3.7835,DOWN,0.1012,1.0,0.0,0.0,3.9645,0.0,3.5876,4.1818,1.0,yfinance,5.0
 2026-09-15 12:52:30,2026-09-17,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.1471,4.0412,DOWN,,,,,0.0,0.0,4.1471,0.0,3.744,4.3383,,yfinance,5.0
 2026-09-15 12:52:30,2026-09-18,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.0611,3.9927,DOWN,,,,,0.0,0.0,4.0611,0.0,3.6956,4.2898,,yfinance,5.0
 2026-09-15 12:53:26,2025-10-24,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,2.6786,2.6844,UP,2.3477,DOWN,0.3367,0.0,0.0,0.0,2.6786,0.0,2.3014,3.0674,1.0,yfinance,5.0
@@ -1317,7 +1317,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:53:26,2026-09-10,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,3.9758,3.9455,DOWN,3.8182,DOWN,0.1273,1.0,0.0,0.0,3.9758,0.0,3.5625,4.3285,1.0,yfinance,5.0
 2026-09-15 12:53:26,2026-09-11,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.0555,4.0541,DOWN,3.7322,DOWN,0.3219,1.0,0.0,0.0,4.0555,0.0,3.6711,4.437,1.0,yfinance,5.0
 2026-09-15 12:53:26,2026-09-15,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.0934,4.0375,DOWN,3.8902,DOWN,0.1473,1.0,0.0,0.0,4.0934,0.0,3.6545,4.4205,1.0,yfinance,5.0
-2026-09-15 12:53:26,2026-09-16,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.0515,3.9717,DOWN,3.656,DOWN,0.3157,1.0,0.0,0.0,4.0515,0.0,3.5887,4.3547,1.0,yfinance,5.0
+2026-09-15 12:53:26,2026-09-16,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.0515,3.9717,DOWN,3.6585,DOWN,0.3132,1.0,0.0,0.0,4.0515,0.0,3.5887,4.3547,1.0,yfinance,5.0
 2026-09-15 12:53:26,2026-09-17,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.2341,4.1282,DOWN,,,,,0.0,0.0,4.2341,0.0,3.7452,4.5112,,yfinance,5.0
 2026-09-15 12:53:26,2026-09-18,Cincinnati_KY,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.1481,4.0797,DOWN,,,,,0.0,0.0,4.1481,0.0,3.6967,4.4627,,yfinance,5.0
 2026-09-15 12:54:45,2026-09-21,Cincinnati_OH,v1.4-Finlight-Cincinnati-Ridge,DAILY_BATCH,,4.071,4.0617,DOWN,,,,,0.0,0.0,4.071,0.0,3.7569,4.3665,,yfinance,5.0
@@ -1545,7 +1545,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:55:33,2026-09-10,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.7668,3.7276,DOWN,3.9432,UP,0.2156,0.0,0.0,0.0,3.7668,0.0,3.3635,4.0918,1.0,yfinance,5.0
 2026-09-15 12:55:33,2026-09-11,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.8465,3.8297,DOWN,3.8572,UP,0.0275,0.0,0.0,0.0,3.8465,0.0,3.4655,4.1938,1.0,yfinance,5.0
 2026-09-15 12:55:33,2026-09-15,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.8844,3.8166,DOWN,4.0152,UP,0.1986,0.0,0.0,0.0,3.8844,0.0,3.4524,4.1808,1.0,yfinance,5.0
-2026-09-15 12:55:33,2026-09-16,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.8425,3.7533,DOWN,3.781,DOWN,0.0277,1.0,0.0,0.0,3.8425,0.0,3.3891,4.1175,1.0,yfinance,5.0
+2026-09-15 12:55:33,2026-09-16,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.8425,3.7533,DOWN,3.7835,DOWN,0.0302,1.0,0.0,0.0,3.8425,0.0,3.3891,4.1175,1.0,yfinance,5.0
 2026-09-15 12:55:33,2026-09-17,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,4.0251,3.909,DOWN,,,,,0.0,0.0,4.0251,0.0,3.5448,4.2732,,yfinance,5.0
 2026-09-15 12:55:33,2026-09-18,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.9391,3.8552,DOWN,,,,,0.0,0.0,3.9391,0.0,3.4911,4.2194,,yfinance,5.0
 2026-09-15 12:56:47,2026-09-21,Greenville_NC,v1.4-Finlight-Greenville-Ridge,DAILY_BATCH,,3.949,3.9225,DOWN,,,,,0.0,0.0,3.949,0.0,3.5083,4.3366,,yfinance,5.0
@@ -1772,7 +1772,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:56:54,2026-09-10,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,3.9468,3.9138,DOWN,3.9432,DOWN,0.0294,1.0,0.0,0.0,3.9468,0.0,3.492,4.3356,1.0,yfinance,5.0
 2026-09-15 12:56:54,2026-09-11,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,4.0265,4.0191,DOWN,3.8572,DOWN,0.1619,1.0,0.0,0.0,4.0265,0.0,3.5973,4.4408,1.0,yfinance,5.0
 2026-09-15 12:56:54,2026-09-15,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,4.0644,4.0042,DOWN,4.0152,DOWN,0.011,1.0,0.0,0.0,4.0644,0.0,3.5825,4.426,1.0,yfinance,5.0
-2026-09-15 12:56:54,2026-09-16,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,4.0225,3.9411,DOWN,3.781,DOWN,0.1601,1.0,0.0,0.0,4.0225,0.0,3.5193,4.3629,1.0,yfinance,5.0
+2026-09-15 12:56:54,2026-09-16,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,4.0225,3.9411,DOWN,3.7835,DOWN,0.1576,1.0,0.0,0.0,4.0225,0.0,3.5193,4.3629,1.0,yfinance,5.0
 2026-09-15 12:56:54,2026-09-17,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,4.2051,4.0966,DOWN,,,,,0.0,0.0,4.2051,0.0,3.6748,4.5184,,yfinance,5.0
 2026-09-15 12:56:54,2026-09-18,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,4.1191,4.0454,DOWN,,,,,0.0,0.0,4.1191,0.0,3.6236,4.4672,,yfinance,5.0
 2026-09-15 12:57:52,2026-09-21,Charlotte_NC,v1.4-Finlight-Charlotte-Ridge,DAILY_BATCH,,4.129,4.1106,DOWN,,,,,0.0,0.0,4.129,0.0,3.6512,4.5701,,yfinance,5.0
@@ -1999,7 +1999,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:58:03,2026-09-10,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.1849,5.1517,DOWN,5.4432,UP,0.2915,0.0,0.0,0.0,5.1849,0.0,4.7299,5.5735,1.0,yfinance,5.0
 2026-09-15 12:58:03,2026-09-11,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.2646,5.2572,DOWN,5.3572,UP,0.1,0.0,0.0,0.0,5.2646,0.0,4.8354,5.679,1.0,yfinance,5.0
 2026-09-15 12:58:03,2026-09-15,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.3025,5.243,DOWN,5.5152,UP,0.2722,0.0,0.0,0.0,5.3025,0.0,4.8212,5.6648,1.0,yfinance,5.0
-2026-09-15 12:58:03,2026-09-16,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.2606,5.179,DOWN,5.281,UP,0.102,0.0,0.0,0.0,5.2606,0.0,4.7572,5.6008,1.0,yfinance,5.0
+2026-09-15 12:58:03,2026-09-16,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.2606,5.179,DOWN,5.2835,UP,0.1045,0.0,0.0,0.0,5.2606,0.0,4.7572,5.6008,1.0,yfinance,5.0
 2026-09-15 12:58:03,2026-09-17,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.4432,5.3362,DOWN,,,,,0.0,0.0,5.4432,0.0,4.9144,5.758,,yfinance,5.0
 2026-09-15 12:58:03,2026-09-18,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,5.3572,5.2844,DOWN,,,,,0.0,0.0,5.3572,0.0,4.8626,5.7062,,yfinance,5.0
 2026-09-15 12:58:59,2025-10-24,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,3.9877,3.9994,UP,4.0727,UP,0.0733,1.0,0.0,0.0,3.9877,0.0,3.5747,4.4242,1.0,yfinance,5.0
@@ -2225,7 +2225,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 12:58:59,2026-09-10,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.2849,5.2517,DOWN,5.5432,UP,0.2915,0.0,0.0,0.0,5.2849,0.0,4.827,5.6764,1.0,yfinance,5.0
 2026-09-15 12:58:59,2026-09-11,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.3646,5.3572,DOWN,5.4572,UP,0.1,0.0,0.0,0.0,5.3646,0.0,4.9325,5.782,1.0,yfinance,5.0
 2026-09-15 12:58:59,2026-09-15,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.4025,5.343,DOWN,5.6152,UP,0.2722,0.0,0.0,0.0,5.4025,0.0,4.9183,5.7677,1.0,yfinance,5.0
-2026-09-15 12:58:59,2026-09-16,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.3606,5.279,DOWN,5.381,UP,0.102,0.0,0.0,0.0,5.3606,0.0,4.8543,5.7037,1.0,yfinance,5.0
+2026-09-15 12:58:59,2026-09-16,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.3606,5.279,DOWN,5.3835,UP,0.1045,0.0,0.0,0.0,5.3606,0.0,4.8543,5.7037,1.0,yfinance,5.0
 2026-09-15 12:58:59,2026-09-17,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.5432,5.4362,DOWN,,,,,0.0,0.0,5.5432,0.0,5.0115,5.861,,yfinance,5.0
 2026-09-15 12:58:59,2026-09-18,BayArea_CA,v1.4-BayArea-Ridge,DAILY_BATCH,,5.4572,5.3844,DOWN,,,,,0.0,0.0,5.4572,0.0,4.9597,5.8092,,yfinance,5.0
 2026-09-15 12:59:54,2026-09-21,Oakland_CA,v1.4-Oakland-Ridge,DAILY_BATCH,,6.069,6.1076,UP,,,,,0.0,0.0,6.069,0.0,5.754,6.4612,,yfinance,5.0
@@ -2453,7 +2453,7 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-15 13:00:05,2026-09-10,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,3.9378,3.9029,DOWN,3.9432,UP,0.0403,0.0,0.0,0.0,3.9378,0.0,3.6128,4.193,1.0,yfinance,5.0
 2026-09-15 13:00:05,2026-09-11,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.0175,4.0039,DOWN,3.8572,DOWN,0.1467,1.0,0.0,0.0,4.0175,0.0,3.7138,4.294,1.0,yfinance,5.0
 2026-09-15 13:00:05,2026-09-15,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.0554,3.9932,DOWN,4.0152,DOWN,0.022,1.0,0.0,0.0,4.0554,0.0,3.7032,4.2833,1.0,yfinance,5.0
-2026-09-15 13:00:05,2026-09-16,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.0135,3.935,DOWN,3.781,DOWN,0.154,1.0,0.0,0.0,4.0135,0.0,3.6449,4.2251,1.0,yfinance,5.0
+2026-09-15 13:00:05,2026-09-16,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.0135,3.935,DOWN,3.7835,DOWN,0.1515,1.0,0.0,0.0,4.0135,0.0,3.6449,4.2251,1.0,yfinance,5.0
 2026-09-15 13:00:05,2026-09-17,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.1961,4.0899,DOWN,,,,,0.0,0.0,4.1961,0.0,3.7999,4.38,,yfinance,5.0
 2026-09-15 13:00:05,2026-09-18,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.1101,4.0348,DOWN,,,,,0.0,0.0,4.1101,0.0,3.7448,4.3249,,yfinance,5.0
 2026-09-15 13:01:08,2026-09-21,Port_St_Lucie_FL,v1.4-Finlight-PortStLucie-Ridge,DAILY_BATCH,,4.12,4.0926,DOWN,,,,,0.0,0.0,4.12,0.0,3.7865,4.3988,,yfinance,5.0

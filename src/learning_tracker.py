@@ -371,11 +371,14 @@ def generate_learning_journal_markdown(
 
     now_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
+    from src.version import get_model_version
+    model_ver = get_model_version()
+
     # Build Markdown Content
     lines = [
         "# 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal",
         "",
-        f"> **Last Evaluated & Synced:** `{now_utc}` | **Repository Architecture:** `v1.4 Finlight-LLM`",
+        f"> **Last Evaluated & Synced:** `{now_utc}` | **Repository Architecture:** `{model_ver}`",
         "",
         "This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.",
         "",
