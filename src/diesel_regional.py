@@ -5,6 +5,8 @@ regional retail calibration (Midwest/Tulsa, Northeast/Newark, West Coast/Oakland
 and counterfactual distillate shock simulations.
 """
 
+import os
+import json
 import logging
 import numpy as np
 import pandas as pd
@@ -15,6 +17,60 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
 logger = logging.getLogger(__name__)
+
+DIESEL_VINTAGE_FILE = os.path.join("data", "diesel_vintages.json")
+
+
+def save_diesel_vintage_record(record: dict, filepath: str = DIESEL_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time ULSD / regional diesel price observation (Issue #295)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", record.get("timestamp", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")))
+        day_key = str(now_str)[:10]
+        locale = record.get("locale") or record.get("region") or "macro_composite"
+
+        # Deduplicate per locale and day
+        vintages = [v for v in vintages if not (v.get("locale") == locale and str(v.get("as_of", ""))[:10] == day_key)]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": day_key,
+            "locale": locale,
+            "price": record.get("price") or record.get("base_retail") or record.get("current_price"),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist diesel vintage record: {e}")
+
+
+def get_diesel_vintages_as_of(as_of_date: str, locale: Optional[str] = None, filepath: str = DIESEL_VINTAGE_FILE) -> list:
+    """Retrieves all diesel vintage records available as of a given cutoff date (Issue #295)."""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (locale is None or v.get("locale") == locale or v.get("locale") == "macro_composite")
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
+
 
 # Federal and State Diesel Excise Tax & Regulatory Baselines ($/gal)
 FEDERAL_DIESEL_EXCISE_TAX = 0.244  # Federal diesel tax ($0.244 vs $0.184 gasoline)
@@ -67,6 +123,10 @@ def get_live_or_anchor_diesel_prices(use_live_feed: bool = True) -> Dict[str, fl
         except Exception as e:
             logger.debug(f"Live diesel resolution notice for {locale}: {e}")
             prices[locale] = base_anchor
+
+    for loc, p in prices.items():
+        save_diesel_vintage_record({"locale": loc, "price": p})
+
     return prices
 
 # Counterfactual Distillate Shock Scenarios
@@ -221,6 +281,14 @@ class UltraLowSulfurDieselForecastingAgent:
             },
             "regional_retail_calibrations": regional_predictions
         }
+
+    def save_diesel_vintage_record(self, record: dict, filepath: str = DIESEL_VINTAGE_FILE) -> None:
+        """Persists a bitemporal point-in-time diesel observation (Issue #295)."""
+        save_diesel_vintage_record(record, filepath=filepath)
+
+    def get_diesel_vintages_as_of(self, as_of_date: str, locale: Optional[str] = None, filepath: str = DIESEL_VINTAGE_FILE) -> list:
+        """Retrieves diesel vintage records as of a cutoff date (Issue #295)."""
+        return get_diesel_vintages_as_of(as_of_date, locale=locale, filepath=filepath)
 
 
 def simulate_diesel_shock(

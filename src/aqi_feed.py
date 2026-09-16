@@ -35,6 +35,64 @@ USER_AGENT = "(MidgleyGasPriceForecaster/1.0; aqi-feed@midgley.local)"
 DEFAULT_TIMEOUT = 2.0
 CACHE_TTL_SECONDS = 900       # 15 minutes for hyper-local sensors
 CACHE_TTL_AIRNOW = 3600      # 1 hour for official EPA AirNow observations
+AQI_VINTAGE_FILE = os.path.join("data", "aqi_vintages.json")
+
+
+def save_aqi_vintage_record(record: dict, filepath: str = AQI_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time AQI and emissions observation (Issue #291)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"))
+        day_key = str(now_str)[:10]
+        entity_key = record.get("zip_code") or record.get("corridor") or "macro_composite"
+
+        # Deduplicate per entity and day
+        vintages = [v for v in vintages if not (v.get("entity_key") == entity_key and str(v.get("as_of", ""))[:10] == day_key)]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": record.get("valid_date", day_key),
+            "entity_key": entity_key,
+            "zip_code": record.get("zip_code"),
+            "corridor": record.get("corridor"),
+            "aqi": record.get("aqi"),
+            "category": record.get("category"),
+            "is_unplanned_outage": record.get("is_unplanned_outage", record.get("is_unplanned_refinery_outage_detected", False)),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist AQI vintage record: {e}")
+
+
+def get_aqi_vintages_as_of(as_of_date: str, corridor: str = None, zip_code: str = None, filepath: str = AQI_VINTAGE_FILE) -> list:
+    """Retrieves all AQI vintage records available as of a given cutoff date. (Issue #291)"""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (corridor is None or v.get("corridor") == corridor or v.get("entity_key") == corridor) and
+            (zip_code is None or v.get("zip_code") == zip_code or v.get("entity_key") == zip_code)
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
+
 
 # Mapping of Metropolitan Calibration Locales to Primary ZIP Codes
 METRO_ZIP_MAP: Dict[str, str] = {
@@ -561,6 +619,7 @@ class AQIFeedConnector:
             "as_of": datetime.now(timezone.utc).isoformat()
         }
 
+        save_aqi_vintage_record(result)
         if self.use_cache:
             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_AIRNOW)
         return result
@@ -810,9 +869,18 @@ class AQIFeedConnector:
             "active_ozone_action_corridors": active_ozone_action_corridors
         }
 
+        save_aqi_vintage_record(response)
         if self.use_cache:
             global_cache.set(cache_key, response, ttl_seconds=CACHE_TTL_SECONDS)
         return response
+
+    def save_aqi_vintage_record(self, record: dict, filepath: str = AQI_VINTAGE_FILE) -> None:
+        """Persists a bitemporal point-in-time AQI observation (Issue #291)."""
+        save_aqi_vintage_record(record, filepath=filepath)
+
+    def get_aqi_vintages_as_of(self, as_of_date: str, corridor: Optional[str] = None, zip_code: Optional[str] = None, filepath: str = AQI_VINTAGE_FILE) -> List[Dict[str, Any]]:
+        """Retrieves AQI vintage records as of a cutoff date (Issue #291)."""
+        return get_aqi_vintages_as_of(as_of_date, corridor=corridor, zip_code=zip_code, filepath=filepath)
 
     def generate_aqi_event_headline(
         self,

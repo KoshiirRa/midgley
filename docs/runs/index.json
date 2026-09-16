@@ -1,5 +1,35 @@
 [
   {
+    "run_id": "2026-09-16_07-16-55",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
+    "run_id": "2026-09-16_03-58-40",
+    "timestamp": "2026-09-16 03:58:34",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "100% tariffs on India over Russian oil? The US Congress vote..."
+  },
+  {
+    "run_id": "2026-09-15_22-48-35",
+    "timestamp": "2026-09-15 22:48:33",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "US lawmakers spar over bill giving Trump more power to sanct..."
+  },
+  {
+    "run_id": "2026-09-15_19-35-38",
+    "timestamp": "2026-09-15 19:35:35",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Aramco Refinery Fires via Satellite: Saudi Export Lifeline U..."
+  },
+  {
+    "run_id": "2026-09-15_14-44-28",
+    "timestamp": "2026-09-15 14:44:25",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "India still under 100% tariff threat: What\u2019s happening as US..."
+  },
+  {
     "run_id": "2026-09-15_13-01-12",
     "timestamp": "2026-09-15 13:01:08",
     "run_type": "DAILY_BATCH",
@@ -568,35 +598,5 @@
     "timestamp": "2026-09-10 16:00:20",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hike..."
-  },
-  {
-    "run_id": "2026-09-10_15-45-25",
-    "timestamp": "2026-09-10 15:45:20",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US-Canada tariffs are now in effect: Why autos and oil might..."
-  },
-  {
-    "run_id": "2026-09-10_15-30-31",
-    "timestamp": "2026-09-10 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Indian exports surge in August as Jazan Refinery outage open..."
-  },
-  {
-    "run_id": "2026-09-10_15-17-17",
-    "timestamp": "2026-09-10 15:16:42",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:16:42)"
-  },
-  {
-    "run_id": "2026-09-10_15-15-38",
-    "timestamp": "2026-09-10 15:15:31",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Oil Price Seen At US$95-US$110 On Sustained Hormuz Impairmen..."
-  },
-  {
-    "run_id": "2026-09-10_15-15-11",
-    "timestamp": "2026-09-10 15:12:28",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-10 15:12:28)"
   }
 ]

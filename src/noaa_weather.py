@@ -6,6 +6,7 @@ categorized into:
 2. Tulsa Regional Tier: Localized Tulsa County (OKZ060) & Cushing/Payne County (OKZ066) severe weather.
 """
 
+import os
 import urllib.request
 import json
 import pandas as pd
@@ -398,11 +399,71 @@ def get_all_metro_spc_convective_outlooks(custom_zip_map: dict = None) -> dict:
     return results
 
 
+DEGREE_DAYS_VINTAGE_FILE = os.path.join("data", "degree_days_vintages.json")
+
+
+def save_degree_days_vintage_record(record: dict, filepath: str = DEGREE_DAYS_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time Open-Meteo degree days observation (Issue #288)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        day_key = str(now_str)[:10]
+        hub_code = record.get("hub_code", "UNKNOWN")
+
+        # Deduplicate per hub_code and day
+        vintages = [v for v in vintages if not (v.get("hub_code") == hub_code and str(v.get("as_of", ""))[:10] == day_key)]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": record.get("valid_date", day_key),
+            "hub_code": hub_code,
+            "mean_temp_f": record.get("mean_temp_f"),
+            "heating_degree_days_hdd": record.get("heating_degree_days_hdd"),
+            "cooling_degree_days_cdd": record.get("cooling_degree_days_cdd"),
+            "freeze_warning": record.get("freeze_warning", False),
+            "extreme_heat_warning": record.get("extreme_heat_warning", False),
+            "source": record.get("source"),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist Open-Meteo degree days vintage record: {e}")
+
+
+def get_degree_days_vintages_as_of(as_of_date: str, hub_code: str = None, filepath: str = DEGREE_DAYS_VINTAGE_FILE) -> list:
+    """Retrieves all Open-Meteo degree days vintage records available as of a given cutoff date. (Issue #288)"""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (hub_code is None or v.get("hub_code") == hub_code)
+        ]
+        return sorted(matched, key=lambda x: x.get("valid_date", ""))
+    except Exception:
+        return []
+
+
 class OpenMeteoDegreeDaysConnector:
     """
-    Zero-Cost Open-Meteo & NOAA High-Resolution Degree Days Weather Connector.
+    Zero-Cost Open-Meteo & NOAA High-Resolution Degree Days Weather Connector (Issue #288).
     Computes daily Heating Degree Days (HDD), Cooling Degree Days (CDD), and
     freeze/heat stress risk indices for energy refining hubs and transit corridors.
+    Features 6-hour lookup caching and bitemporal vintage persistence.
     """
     def __init__(self):
         self.is_free_alternative = True
@@ -417,11 +478,28 @@ class OpenMeteoDegreeDaysConnector:
             "Port_St_Lucie_FL": {"lat": 27.273, "lon": -80.358, "name": "Port Everglades & Port Canaveral Marine Terminals"}
         }
 
+    def save_degree_days_vintage_record(self, record: dict, filepath: str = None) -> None:
+        save_degree_days_vintage_record(record, filepath or DEGREE_DAYS_VINTAGE_FILE)
+
+    def get_degree_days_vintages_as_of(self, as_of_date: str, hub_code: str = None, filepath: str = None) -> list:
+        return get_degree_days_vintages_as_of(as_of_date, hub_code, filepath or DEGREE_DAYS_VINTAGE_FILE)
+
     def fetch_hub_degree_days(self, hub_code: str = "Tulsa_OK") -> dict:
         import json
         import urllib.request
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         hub = self.refining_hubs.get(hub_code, self.refining_hubs["Tulsa_OK"])
+
+        # 6-Hour Cache Layer Check
+        cache_key = f"degree_days_{hub_code}"
+        try:
+            from src.lookup_cache import global_cache
+            cached_val = global_cache.get(cache_key)
+            if cached_val:
+                return cached_val
+        except Exception:
+            pass
+
         lat, lon = hub["lat"], hub["lon"]
         url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto"
         headers = {"User-Agent": "Midgley-OpenMeteoConnector/1.0"}
@@ -437,7 +515,7 @@ class OpenMeteoDegreeDaysConnector:
                     mean_t = (max_t + min_t) / 2.0
                     hdd = max(0.0, 65.0 - mean_t)
                     cdd = max(0.0, mean_t - 65.0)
-                    return {
+                    res = {
                         "hub_code": hub_code,
                         "name": hub["name"],
                         "mean_temp_f": round(mean_t, 1),
@@ -452,10 +530,17 @@ class OpenMeteoDegreeDaysConnector:
                         "cost_per_query": 0.0,
                         "timestamp": timestamp_str
                     }
+                    try:
+                        from src.lookup_cache import global_cache
+                        global_cache.set(cache_key, res, ttl_seconds=21600)  # 6 hours
+                    except Exception:
+                        pass
+                    self.save_degree_days_vintage_record(res)
+                    return res
         except Exception as e:
             logger.debug(f"Open-Meteo degree days fetch notice ({hub_code}): {e}")
             
-        return {
+        res = {
             "hub_code": hub_code,
             "name": hub["name"],
             "mean_temp_f": 65.0,
@@ -470,6 +555,13 @@ class OpenMeteoDegreeDaysConnector:
             "cost_per_query": 0.0,
             "timestamp": timestamp_str
         }
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(cache_key, res, ttl_seconds=21600)
+        except Exception:
+            pass
+        self.save_degree_days_vintage_record(res)
+        return res
 
     def fetch_all_hubs_degree_days(self) -> dict:
         results = {}

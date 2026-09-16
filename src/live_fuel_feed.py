@@ -650,8 +650,8 @@ def fetch_google_maps_fuel_prices(place_id: str = None, api_key: str = None) -> 
 
 class PyPICommunityFuelScraper:
     """
-    Zero-Cost PyPI Open-Source Community Fuel Scraper Connector.
-    Provides fallback state and regional retail gas price lookups.
+    Zero-Cost PyPI Open-Source Community Fuel Scraper Connector (Issue #285).
+    Provides dynamic multi-tier regional retail gas price lookups with graceful static anchor fallback.
     """
     def __init__(self):
         self.is_free_alternative = True
@@ -659,14 +659,32 @@ class PyPICommunityFuelScraper:
 
     def fetch_community_price(self, region_code: str = "Tulsa_OK") -> dict:
         meta = REGION_METADATA.get(region_code, REGION_METADATA["Tulsa_OK"])
-        price = meta["static_anchor"]
+        fallback_price = meta["static_anchor"]
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        # Dynamic query via live metro multi-tier resolution
+        try:
+            live_res = fetch_live_metro_retail_price(region_code, use_cache=True)
+            if live_res and live_res.get("price") and pd.notna(live_res.get("price")):
+                return {
+                    "region": region_code,
+                    "price": float(live_res["price"]),
+                    "source": f"PyPI Community Scraper ({region_code}) -> {live_res.get('source', 'Live Resolution')}",
+                    "is_free_alternative": True,
+                    "cost_per_query": 0.0,
+                    "timestamp": timestamp_str,
+                    "is_live_dynamic": True
+                }
+        except Exception as e:
+            logger.debug(f"PyPI Community Scraper dynamic resolution notice ({region_code}): {e}")
+
         return {
             "region": region_code,
-            "price": price,
+            "price": fallback_price,
             "source": f"PyPI Community Scraper ({region_code})",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
-            "timestamp": timestamp_str
+            "timestamp": timestamp_str,
+            "is_live_dynamic": False
         }
 

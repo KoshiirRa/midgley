@@ -25,6 +25,65 @@ logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CENSUS_CACHE_FILE = os.path.join(PROJECT_ROOT, "data", "census_demographics_cache.json")
+CENSUS_VINTAGE_FILE = os.path.join(PROJECT_ROOT, "data", "census_demographics_vintages.json")
+
+
+def save_census_vintage_record(record: dict, filepath: str = CENSUS_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time Census ACS demographics observation (Issue #290)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        day_key = str(now_str)[:10]
+        region_id = record.get("region_id", "UNKNOWN")
+
+        # Deduplicate per region and day
+        vintages = [v for v in vintages if not (v.get("region_id") == region_id and str(v.get("as_of", ""))[:10] == day_key)]
+
+        demographics = record.get("demographics")
+        if demographics is None:
+            demographics = {k: v for k, v in record.items() if k not in ["as_of", "valid_date", "region_id", "display_name", "provenance", "window_lifecycle", "cache_status", "is_free_alternative", "cost_per_query"]}
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": record.get("valid_date", day_key),
+            "region_id": region_id,
+            "display_name": record.get("display_name"),
+            "demographics": demographics,
+            "provenance": record.get("provenance"),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist Census vintage record: {e}")
+
+
+def get_census_vintages_as_of(as_of_date: str, region_id: str = None, filepath: str = CENSUS_VINTAGE_FILE) -> list:
+    """Retrieves all Census demographic vintage records available as of a given cutoff date. (Issue #290)"""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (region_id is None or v.get("region_id") == region_id)
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
+
 
 # Target Metro Area to Census Geography Mappings (MSA / CBSA & County FIPS)
 METRO_CENSUS_MAPPINGS: Dict[str, Dict[str, Any]] = {
@@ -457,7 +516,7 @@ class CensusDemographicsConnector:
         self._disk_cache[cache_key] = result_record
         self._save_disk_cache()
 
-        return {
+        res = {
             "region_id": reg_clean,
             "display_name": mapping["display_name"],
             "window_lifecycle": window_status,
@@ -467,6 +526,14 @@ class CensusDemographicsConnector:
             "is_free_alternative": True,
             "cost_per_query": 0.0
         }
+        self.save_census_vintage_record(res)
+        return res
+
+    def save_census_vintage_record(self, record: dict, filepath: str = None) -> None:
+        save_census_vintage_record(record, filepath or CENSUS_VINTAGE_FILE)
+
+    def get_census_vintages_as_of(self, as_of_date: str, region_id: str = None, filepath: str = None) -> list:
+        return get_census_vintages_as_of(as_of_date, region_id, filepath or CENSUS_VINTAGE_FILE)
 
     def get_all_metro_demographics(self, current_date: Optional[date] = None) -> Dict[str, Any]:
         """Returns demographic profiles across all supported metro areas."""

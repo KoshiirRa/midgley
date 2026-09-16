@@ -29,6 +29,59 @@ logger = logging.getLogger(__name__)
 USER_AGENT = "(MidgleyTreasuryYieldForecaster/1.0; contact@example.com)"
 DEFAULT_TIMEOUT = 8.0
 TREASURY_CACHE_PATH = os.path.join("data", "treasury_cache.json")
+TREASURY_VINTAGE_FILE = os.path.join("data", "treasury_vintages.json")
+
+
+def save_treasury_vintage_record(record: dict, filepath: str = TREASURY_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time U.S. Treasury yield observation (Issue #294)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        valid_date = str(record.get("date", str(now_str)[:10]))[:10]
+
+        # Deduplicate per valid_date
+        vintages = [v for v in vintages if not (v.get("valid_date") == valid_date)]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": valid_date,
+            "treasury_yield_10y": record.get("treasury_yield_10y"),
+            "treasury_yield_2y": record.get("treasury_yield_2y"),
+            "treasury_yield_10y_2y_spread": record.get("treasury_yield_10y_2y_spread"),
+            "tips_10y_real_yield": record.get("tips_10y_real_yield"),
+            "curve_state": record.get("curve_state", "Inverted" if float(record.get("treasury_yield_10y_2y_spread", 0.0) or 0.0) < 0 else "Normal Sloped"),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist Treasury yield vintage record: {e}")
+
+
+def get_treasury_vintages_as_of(as_of_date: str, filepath: str = TREASURY_VINTAGE_FILE) -> list:
+    """Retrieves all Treasury yield vintage records available as of a given cutoff date (Issue #294)."""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
 
 
 class TreasuryYieldConnector:
@@ -196,7 +249,7 @@ class TreasuryYieldConnector:
         spread = float(latest.get('treasury_yield_10y_2y_spread', 0.20))
         curve_state = "Inverted (Recessionary Warning)" if spread < 0.0 else "Normal Sloped (Expansionary)"
 
-        return {
+        res = {
             "date": str(latest['date'])[:10],
             "treasury_yield_10y": round(float(latest.get('treasury_yield_10y', 4.25)), 3),
             "treasury_yield_2y": round(float(latest.get('treasury_yield_2y', 4.05)), 3),
@@ -205,6 +258,16 @@ class TreasuryYieldConnector:
             "treasury_spread_delta_5d": round(float(latest.get('treasury_spread_delta_5d', 0.0)), 3),
             "curve_state": curve_state
         }
+        save_treasury_vintage_record(res)
+        return res
+
+    def save_treasury_vintage_record(self, record: dict, filepath: str = TREASURY_VINTAGE_FILE) -> None:
+        """Persists a bitemporal point-in-time Treasury yield observation (Issue #294)."""
+        save_treasury_vintage_record(record, filepath=filepath)
+
+    def get_treasury_vintages_as_of(self, as_of_date: str, filepath: str = TREASURY_VINTAGE_FILE) -> list:
+        """Retrieves Treasury yield vintage records as of a cutoff date (Issue #294)."""
+        return get_treasury_vintages_as_of(as_of_date, filepath=filepath)
 
     def _load_disk_cache(self, start_date: str, end_date: str) -> Optional[pd.DataFrame]:
         """Loads cached Treasury records from disk if present."""

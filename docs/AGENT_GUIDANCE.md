@@ -74,6 +74,9 @@ Midgley enforces a strict **$0 ongoing infrastructure cost** mandate. All agent 
 ### Tier 3: Dynamic FastAPI & MCP Server
 * **Server Module:** `src/api_server.py` and `src/mcp_server.py` managed by `midgley-api.service` on `dev-vm:8000`.
 * **Use Cases:** Live counterfactual shock simulations (`POST /api/v1/forecast/simulate`), API key provisioning (`/api/v1/admin/keys`), incoming webhook ingestion, and interactive AI agent MCP tools.
+* **Alternative & Physical Data Standards:**
+  - **Dynamic Ingestion & Bitemporal Tracking:** Physical and qualitative feeds (Baker Hughes rig counts, Executive Social Media posts, Key Market Movers statements, EIA PADD balances, EIA-930 grid stress, USDA biofuel costs, EIA state/metro retail surveys, FERC Form 6 tariffs, USACE Lock delays, BSEE offshore shut-ins, Geopolitical/Maritime chokepoint feeds, State Energy Agency surveys, CFTC COT positioning, NOAA NHC hurricanes, Energy Equities, and Regional Intraday Event streams) MUST store observation snapshots with `as_of` publication timestamps in `data/*_vintages.json` to eliminate lookahead bias in historical backtests.
+  - **Lookup Caching:** Cache external lookups in `global_cache` (`src/lookup_cache.py`) with appropriate TTLs (15m for social/weather/key movers/geopolitical, 1h for NHC hurricanes, 4h-6h for grid/locks, 12h for BSEE shut-ins, 24h for daily equities/indices, 7d for weekly releases/CFTC/surveys/tariffs).
 
 ---
 
