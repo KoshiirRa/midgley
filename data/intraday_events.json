@@ -3177,5 +3177,24 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-16T03:58:34.062680",
+    "headline": "100% tariffs on India over Russian oil? The US Congress vote that has put New Delhi in focus - Open Magazine",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQdlhNclBGc3ZZendfR0VvamJnNi1zZ004eHYzT1FZa0lISUtNbDEyeFRKcjRic3NONS1lMXJJNlVwdkNtUWUwV2dadEdtUmhYS2NYeUJaR0NVVlVzSkdmNm1feVJ6d0sxdGNCa015MXozM1lOaDVrZHNBY2NkWDQ5eWlMUjBpRDZrZU1leGxyUUgzT2V1YVRmWXdKTHJVV0hiUGxHbFZBWE1iUk9oSDVqZUFIMEZvbVFhZzg0RXZZVGVtZw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxQdlhNclBGc3ZZendfR0VvamJnNi1zZ004eHYzT1FZa0lISUtNbDEyeFRKcjRic3NONS1lMXJJNlVwdkNtUWUwV2dadEdtUmhYS2NYeUJaR0NVVlVzSkdmNm1feVJ6d0sxdGNCa015MXozM1lOaDVrZHNBY2NkWDQ5eWlMUjBpRDZrZU1leGxyUUgzT2V1YVRmWXdKTHJVV0hiUGxHbFZBWE1iUk9oSDVqZUFIMEZvbVFhZzg0RXZZVGVtZw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.7,
+      "demand_sentiment": -0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.7
+    },
+    "discord_notified": true
   }
 ]
