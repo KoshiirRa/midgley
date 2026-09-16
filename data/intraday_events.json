@@ -3215,5 +3215,24 @@
       "overall_price_pressure": 0.8
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-16T09:15:10.153574",
+    "headline": "India could face up to 100% US tariffs over Russian oil - DW.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNUkI3WW1hand5NEl6d3V5S0JZUVZnc3lKcXR3Yk03UEVMei1iNG54ektTa0tKMnBoUVNOZm82eDcyMXNJcEpCbXJqT0RmUnNVekZVUTFGd0FqRVlmcTRGQkRDQkdKNnpSR2tsVzhkTXdyNFR0R1JHUm41Tl9LQm1GSWEyaWN4SzZZM0xxV25EM3M0NmVSR084bWlfbTF0WG9pMmxOWEotSWJmUDJzX2c1Mlc0cnA5QQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitgFBVV95cUxNUkI3WW1hand5NEl6d3V5S0JZUVZnc3lKcXR3Yk03UEVMei1iNG54ektTa0tKMnBoUVNOZm82eDcyMXNJcEpCbXJqT0RmUnNVekZVUTFGd0FqRVlmcTRGQkRDQkdKNnpSR2tsVzhkTXdyNFR0R1JHUm41Tl9LQm1GSWEyaWN4SzZZM0xxV25EM3M0NmVSR084bWlfbTF0WG9pMmxOWEotSWJmUDJzX2c1Mlc0cnA5QQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.4,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]
