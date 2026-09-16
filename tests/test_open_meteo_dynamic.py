@@ -40,7 +40,8 @@ def test_open_meteo_degree_days_caching_and_vintages(tmp_path):
 
 def test_open_meteo_fetch_hub_fallback():
     connector = OpenMeteoDegreeDaysConnector()
-    with patch("urllib.request.urlopen", side_effect=Exception("API offline")):
+    with patch("src.lookup_cache.global_cache.get", return_value=None), \
+         patch("urllib.request.urlopen", side_effect=Exception("API offline")):
         res = connector.fetch_hub_degree_days("Tulsa_OK")
         assert res["hub_code"] == "Tulsa_OK"
         assert res["mean_temp_f"] == 65.0

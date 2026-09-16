@@ -1541,6 +1541,35 @@ class AlphaVantageDataConnector:
     def get_alpha_vantage_vintages_as_of(self, as_of_date: str, symbol: str = None, filepath: str = None) -> list:
         return get_alpha_vantage_vintages_as_of(as_of_date, symbol, filepath or ALPHA_VANTAGE_VINTAGE_FILE)
 
+    def fetch_market_failover_feed(self) -> dict:
+        """
+        Unified market failover & dual-signal feed aggregator.
+        Combines secondary WTI/Brent failover prices with Signal 1 (XLE equity) and Signal 2 (RSI technicals).
+        """
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        wti = self.fetch_commodity_series("WTI")
+        brent = self.fetch_commodity_series("BRENT")
+        xle = self.fetch_energy_equity_series("XLE")
+        rsi = self.fetch_technical_indicator("XLE", "RSI", 14)
+        quota_status = self.get_quota_status()
+
+        return {
+            "source": "Alpha Vantage Market Failover & Energy Signals Connector (Zero-Cost)",
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": timestamp_str,
+            "commodities": {
+                "WTI": wti,
+                "BRENT": brent
+            },
+            "signals": {
+                "signal_1_energy_equity": xle,
+                "signal_2_technical_rsi": rsi
+            },
+            "quota_status": quota_status,
+            "status": "SUCCESS"
+        }
+
 
 ALPHA_VANTAGE_VINTAGE_FILE = os.path.join("data", "alpha_vantage_vintages.json")
 
@@ -1590,35 +1619,6 @@ def get_alpha_vantage_vintages_as_of(as_of_date: str, symbol: str = None, filepa
         return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
     except Exception:
         return []
-
-    def fetch_market_failover_feed(self) -> dict:
-        """
-        Unified market failover & dual-signal feed aggregator.
-        Combines secondary WTI/Brent failover prices with Signal 1 (XLE equity) and Signal 2 (RSI technicals).
-        """
-        timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        wti = self.fetch_commodity_series("WTI")
-        brent = self.fetch_commodity_series("BRENT")
-        xle = self.fetch_energy_equity_series("XLE")
-        rsi = self.fetch_technical_indicator("XLE", "RSI", 14)
-        quota_status = self.get_quota_status()
-
-        return {
-            "source": "Alpha Vantage Market Failover & Energy Signals Connector (Zero-Cost)",
-            "is_free_alternative": True,
-            "cost_per_query": 0.0,
-            "timestamp": timestamp_str,
-            "commodities": {
-                "WTI": wti,
-                "BRENT": brent
-            },
-            "signals": {
-                "signal_1_energy_equity": xle,
-                "signal_2_technical_rsi": rsi
-            },
-            "quota_status": quota_status,
-            "status": "SUCCESS"
-        }
 
 
 OILPRICEAPI_QUOTA_FILE = os.path.join("data", "oilpriceapi_quota.json")
