@@ -182,6 +182,26 @@ class IntradayEventMonitor:
             logger.debug(f"Could not poll live key movers headlines: {e}")
         return headlines
 
+    def fetch_geopolitical_headlines(self) -> List[Dict[str, str]]:
+        """Fetches breaking geopolitical and maritime chokepoints news (Issue #278)."""
+        headlines = []
+        try:
+            from src.geopolitical_feeds import GeopoliticalFeedConnector
+            connector = GeopoliticalFeedConnector()
+            events = connector.fetch_geopolitical_headlines()
+            for ev in events:
+                hl = ev.get("headline", "").strip()
+                if hl:
+                    headlines.append({
+                        "headline": hl,
+                        "published": ev.get("date", datetime.now().isoformat()),
+                        "url": ev.get("url", f"https://news.google.com/search?q={abs(hash(hl)) % 10000000}"),
+                        "source": f"Geopolitical_{ev.get('chokepoint', 'Maritime')}"
+                    })
+        except Exception as e:
+            logger.debug(f"Could not poll live geopolitical headlines: {e}")
+        return headlines
+
     def evaluate_headline_anomaly(self, headline: str) -> Tuple[bool, Dict[str, float]]:
         """
         Stage 1 & 2 Cascading Filter:
@@ -464,6 +484,9 @@ class IntradayEventMonitor:
         movers_data = self.fetch_key_movers_headlines()
         if movers_data:
             headlines_data.extend(movers_data)
+        geo_data = self.fetch_geopolitical_headlines()
+        if geo_data:
+            headlines_data.extend(geo_data)
         anomalies_found = []
 
         for item in headlines_data:

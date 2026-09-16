@@ -21,6 +21,7 @@ from src.noaa_weather import get_national_production_weather_dataset
 from src.geopolitical_feeds import get_geopolitical_maritime_events
 from src.executive_social_feed import get_executive_social_energy_feed
 from src.key_movers_feed import get_key_movers_event_feed
+from src.lookup_cache import global_cache
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -179,8 +180,73 @@ def get_historical_event_dataset() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load Finlight.me news feed: {e}")
 
+    # 6. Merge Live Intraday Anomalies (Issue #283)
+    try:
+        intraday_df = load_live_regional_intraday_events("National")
+        if not intraday_df.empty:
+            events_df = pd.concat([events_df, intraday_df], ignore_index=True)
+    except Exception as e:
+        logger.debug(f"Could not load live intraday anomalies: {e}")
+
     events_df = events_df.sort_values('date').reset_index(drop=True)
     return events_df
+
+
+def load_live_regional_intraday_events(region_name: str, max_age_days: int = 30, events_path: str = None) -> pd.DataFrame:
+    """
+    Loads recent breaking intraday anomalies from data/intraday_events.json
+    matching a target region or 'National'. (Issue #283)
+    """
+    intraday_file = events_path if events_path else os.path.join("data", "intraday_events.json")
+    if not os.path.exists(intraday_file):
+        return pd.DataFrame(columns=["date", "headline", "category"])
+
+    try:
+        with open(intraday_file, "r", encoding="utf-8") as f:
+            events = json.load(f)
+        if not isinstance(events, list):
+            return pd.DataFrame(columns=["date", "headline", "category"])
+
+        records = []
+        now = datetime.now()
+        reg_clean = region_name.lower().replace("_", " ").replace("metro", "").strip()
+
+        for ev in events:
+            ts_str = ev.get("timestamp", "")
+            try:
+                dt = datetime.fromisoformat(ts_str).replace(tzinfo=None) if ts_str else now
+            except Exception:
+                dt = now
+
+            if (now - dt).days > max_age_days:
+                continue
+
+            target_locales = [str(loc).lower() for loc in ev.get("target_locales", [])]
+            headline = ev.get("headline", "")
+            
+            # Check if matching region or national
+            is_match = False
+            if "national" in target_locales or any(reg_clean in loc for loc in target_locales):
+                is_match = True
+            elif any(token in headline.lower() for token in [reg_clean]):
+                is_match = True
+
+            if is_match and headline:
+                records.append({
+                    "date": dt.strftime("%Y-%m-%d"),
+                    "headline": headline,
+                    "category": f"Intraday_Anomaly_{region_name}"
+                })
+
+        if records:
+            df = pd.DataFrame(records)
+            df["date"] = pd.to_datetime(df["date"])
+            return df
+    except Exception as e:
+        logger.debug(f"Failed to load regional intraday events for {region_name}: {e}")
+
+    return pd.DataFrame(columns=["date", "headline", "category"])
+
 
 
 def fetch_daily_us_fuel_pump_prices(region_code: str = None) -> dict:
@@ -1648,14 +1714,57 @@ def fetch_oilpriceapi_prices(by_code: str = None) -> dict:
     return connector.fetch_all_spot_prices()
 
 
+CFTC_VINTAGE_FILE = os.path.join("data", "cftc_vintages.json")
+
+
+def save_cftc_vintage_record(record: dict, filepath: str = CFTC_VINTAGE_FILE) -> None:
+    """Appends a point-in-time CFTC COT positioning vintage record."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        vintage_entry = {
+            "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "data": record
+        }
+        vintages.append(vintage_entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Failed to persist CFTC vintage record: {e}")
+
+
+def get_cftc_vintages_as_of(as_of_date: str, filepath: str = CFTC_VINTAGE_FILE) -> Optional[dict]:
+    """Retrieves CFTC observation recorded on or before as_of_date."""
+    if not os.path.exists(filepath):
+        return None
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        valid = [v for v in vintages if v.get("as_of", "")[:10] <= as_of_date]
+        if valid:
+            return valid[-1].get("data")
+    except Exception as e:
+        logger.debug(f"Error reading CFTC vintages: {e}")
+    return None
+
+
 class CFTCDataConnector:
     """
-    CFTC Commitment of Traders (COT) Energy Positioning Connector (Issue #143).
+    CFTC Commitment of Traders (COT) Energy Positioning Connector (Issue #143, #280).
     Ingests official CFTC report positioning for RBOB Gasoline (067651) and WTI Crude Oil (06765A).
     Computes Managed Money net positions, 3-year Z-scores, commercial hedging ratios, and 1-week position shifts.
 
     Features:
     - 0-Cost Open Access: Queries official CFTC Socrata REST API endpoints.
+    - Multi-Tier Caching: Caches with 7-day TTL in global_cache.
+    - Bitemporal Logging: Saves observations to data/cftc_vintages.json.
     - Zero-Cost Fallback: Operates in fallback mode returning structured defaults if offline or network calls fail.
     """
     def __init__(self):
@@ -1667,6 +1776,13 @@ class CFTCDataConnector:
         """
         Fetches official CFTC positioning data for RBOB Gasoline and WTI Crude.
         """
+        day_bucket = datetime.now().strftime("%Y-%m-%d")
+        cache_key = f"cftc_cot_positioning:{day_bucket}"
+        cached = global_cache.get(cache_key)
+        if cached and isinstance(cached, dict):
+            logger.info("Loaded CFTC COT positioning data from global lookup cache.")
+            return cached
+
         start_time = datetime.now()
         try:
             url = f"{self.endpoint}?$limit=10&$order=report_date_as_yyyy_mm_dd%20DESC"
@@ -1682,20 +1798,32 @@ class CFTCDataConnector:
                         comm_short = float(row.get("prod_merc_positions_short_all", 245000))
                         net_spec = long_mm - short_mm
                         comm_ratio = comm_long / comm_short if comm_short > 0 else 1.0
+
+                        # Dynamically compute 1-week position delta if consecutive records exist
+                        delta_1w = 3500.0
+                        if len(data) >= 2:
+                            row1 = data[1]
+                            long_mm1 = float(row1.get("m_money_positions_long_all", 0))
+                            short_mm1 = float(row1.get("m_money_positions_short_all", 0))
+                            net_spec1 = long_mm1 - short_mm1
+                            delta_1w = round(net_spec - net_spec1, 1)
                         
                         latency = (datetime.now() - start_time).total_seconds()
                         self._log_telemetry("CFTC_COT", "CFTC.gov", "SUCCESS", latency, 0.0, False, "CFTC COT data retrieved")
                         
-                        return {
+                        result = {
                             "status": "SUCCESS",
                             "report_date": row.get("report_date_as_yyyy_mm_dd", datetime.now().strftime("%Y-%m-%d")),
                             "cot_rbob_net_speculative": net_spec,
                             "cot_rbob_zscore_3y": round((net_spec - 75000.0) / 18000.0, 2),
                             "cot_commercial_hedger_ratio": round(comm_ratio, 4),
-                            "cot_net_position_delta_1w": 4200.0,
+                            "cot_net_position_delta_1w": delta_1w,
                             "is_free_alternative": True,
                             "cost_per_query": 0.0
                         }
+                        save_cftc_vintage_record(result)
+                        global_cache.set(cache_key, result, ttl_seconds=604800)
+                        return result
         except Exception as e:
             logger.warning(f"CFTC COT online fetch failed, using fallback data: {e}")
         
@@ -1703,7 +1831,7 @@ class CFTCDataConnector:
         self._log_telemetry("CFTC_COT", "CFTC.gov", "FALLBACK", latency, 0.0, False, "Fallback CFTC COT data")
 
         # Fallback benchmark data structure
-        return {
+        fallback_res = {
             "status": "FALLBACK",
             "report_date": datetime.now().strftime("%Y-%m-%d"),
             "cot_rbob_net_speculative": 83000.0,
@@ -1713,6 +1841,9 @@ class CFTCDataConnector:
             "is_free_alternative": True,
             "cost_per_query": 0.0
         }
+        save_cftc_vintage_record(fallback_res)
+        global_cache.set(cache_key, fallback_res, ttl_seconds=604800)
+        return fallback_res
 
     def _log_telemetry(self, name: str, target: str, status: str, latency: float, age: float, stale: bool, details: str):
         try:

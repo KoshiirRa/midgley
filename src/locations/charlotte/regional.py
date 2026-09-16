@@ -120,11 +120,21 @@ def get_charlotte_regional_events() -> pd.DataFrame:
     # 3. Merge Localized NOAA Weather Alerts for Mecklenburg County NC (NCZ071)
     noaa_clt_df = get_charlotte_weather_dataset()
     
+    frames = [macro_events_df, regional_df]
     if not noaa_clt_df.empty:
         noaa_clt_df['category'] = "NOAA Weather Mecklenburg County (NCZ071)"
-        combined_df = pd.concat([macro_events_df, regional_df, noaa_clt_df], ignore_index=True)
-    else:
-        combined_df = pd.concat([macro_events_df, regional_df], ignore_index=True)
-        
+        frames.append(noaa_clt_df)
+
+    # Ingest Live Regional Intraday Anomalies (Issue #283)
+    try:
+        from src.data_ingestion import load_live_regional_intraday_events
+        intraday_clt_df = load_live_regional_intraday_events("Charlotte")
+        if not intraday_clt_df.empty:
+            frames.append(intraday_clt_df)
+    except Exception as e:
+        logger.debug(f"Could not load live regional intraday events for Charlotte: {e}")
+
+    combined_df = pd.concat(frames, ignore_index=True)
     combined_df['date'] = pd.to_datetime(combined_df['date'])
     return combined_df.sort_values('date').reset_index(drop=True)
+

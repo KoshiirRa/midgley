@@ -15,9 +15,13 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
+from typing import Dict, Any, List, Optional
 import logging
+from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
+
+ENERGY_EQUITIES_VINTAGE_FILE = os.path.join("data", "energy_equities_vintages.json")
 
 ENERGY_EQUITY_TICKERS = {
     "XLE": "Energy Select Sector SPDR Fund (Sector Benchmark)",
@@ -27,13 +31,60 @@ ENERGY_EQUITY_TICKERS = {
     "XOM": "ExxonMobil Corp (Integrated Supermajor)"
 }
 
+
+def save_energy_equities_vintage_record(correlations: dict, filepath: str = ENERGY_EQUITIES_VINTAGE_FILE) -> None:
+    """Appends a point-in-time energy equity correlation observation vintage record."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        vintage_entry = {
+            "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "data": correlations
+        }
+        vintages.append(vintage_entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Failed to persist energy equities vintage record: {e}")
+
+
+def get_energy_equities_vintages_as_of(as_of_date: str, filepath: str = ENERGY_EQUITIES_VINTAGE_FILE) -> Optional[dict]:
+    """Retrieves energy equity correlations recorded on or before as_of_date."""
+    if not os.path.exists(filepath):
+        return None
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        valid = [v for v in vintages if v.get("as_of", "")[:10] <= as_of_date]
+        if valid:
+            return valid[-1].get("data")
+    except Exception as e:
+        logger.debug(f"Error reading energy equities vintages: {e}")
+    return None
+
+
 def fetch_energy_equities_data(start_date: str = "2022-01-01", end_date: str = None) -> pd.DataFrame:
     """
-    Fetches historical daily close prices for key energy sector equities & ETFs.
+    Fetches historical daily close prices for key energy sector equities & ETFs with 24-hour cache.
     """
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
-        
+
+    cache_key = f"energy_equities_dataset:{start_date}:{end_date}"
+    cached = global_cache.get(cache_key)
+    if cached and isinstance(cached, dict) and "records" in cached:
+        logger.info("Loaded energy equities market data from lookup cache.")
+        df = pd.DataFrame(cached["records"])
+        df['date'] = pd.to_datetime(df['date'])
+        return df
+
     logger.info(f"Fetching energy equities market data from {start_date} to {end_date}...")
     
     dfs = []
@@ -55,7 +106,17 @@ def fetch_energy_equities_data(start_date: str = "2022-01-01", end_date: str = N
         return pd.DataFrame()
         
     equities_df = pd.concat(dfs, axis=1).sort_index().ffill().bfill().reset_index()
+
+    # Cache records
+    try:
+        records_df = equities_df.copy()
+        records_df['date'] = records_df['date'].astype(str).str[:10]
+        global_cache.set(cache_key, {"records": records_df.to_dict(orient="records")}, ttl_seconds=86400)
+    except Exception as e:
+        logger.debug(f"Failed to cache energy equities records: {e}")
+
     return equities_df
+
 
 def compute_commodity_equity_correlations(market_df: pd.DataFrame, equities_df: pd.DataFrame) -> dict:
     """

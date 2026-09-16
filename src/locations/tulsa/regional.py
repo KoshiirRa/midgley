@@ -143,5 +143,15 @@ def get_tulsa_regional_events() -> pd.DataFrame:
     except Exception as e:
         logger.warning(f"Could not load live AQI telemetry for Tulsa: {e}")
 
+    # Ingest Live Regional Intraday Anomalies (Issue #283)
+    try:
+        from src.data_ingestion import load_live_regional_intraday_events
+        intraday_tulsa_df = load_live_regional_intraday_events("Tulsa")
+        if not intraday_tulsa_df.empty:
+            frames.append(intraday_tulsa_df)
+    except Exception as e:
+        logger.debug(f"Could not load live regional intraday events for Tulsa: {e}")
+
     merged = pd.concat(frames, ignore_index=True)
     return merged.sort_values('date').reset_index(drop=True)
+

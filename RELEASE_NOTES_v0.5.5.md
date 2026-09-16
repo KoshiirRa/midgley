@@ -67,7 +67,38 @@
   - Upgraded `USACELockConnector.fetch_ohio_river_lock_delays()` to dynamically query real-time streamflow and river stage telemetry from USGS Water Services (Cincinnati station `03255000`) to compute dynamic lock delays and barge bottleneck indices at Markland and McAlpine locks.
   - Implements 6-hour caching and bitemporal snapshot persistence to `data/usace_lock_vintages.json`.
 
-### 10. Core Infrastructure & Caching Enhancements
+### 10. Dynamic BSEE Offshore Gulf Production Shut-ins (Issue #277)
+- **Dynamic Ingestion Connector ([`src/bsee_shutins.py`](file:///src/bsee_shutins.py)):**
+  - Upgraded `BSEEShutinConnector` with dynamic BSEE press release RSS syndication and live NOAA NHC hurricane intensity correlation.
+  - Implements 12-hour caching in `global_cache` and bitemporal snapshot persistence to `data/bsee_vintages.json`.
+
+### 11. Geopolitical Feeds & Maritime Chokepoint RSS Ingestion (Issue #278)
+- **Dynamic Syndication & Polling Engine ([`src/geopolitical_feeds.py`](file:///src/geopolitical_feeds.py) & [`src/intraday_event_monitor.py`](file:///src/intraday_event_monitor.py)):**
+  - Upgraded `GeopoliticalFeedConnector` with live RSS stream polling (UN, Lloyd's List, Maritime Executive, Platts) for Strait of Hormuz, Bab el-Mandeb, Suez Canal, and Delmarva Cape routes.
+  - Implements 15-minute caching, bitemporal snapshot persistence (`data/geopolitical_vintages.json`), and wired `fetch_geopolitical_headlines()` directly into `IntradayEventMonitor.run_polling_cycle()`.
+
+### 12. State Energy Agency Surveys Connector (Issue #279)
+- **Multi-State Open Benchmark Engine ([`src/state_open_data.py`](file:///src/state_open_data.py)):**
+  - Upgraded `StateEnergyAgencySurveysConnector` to query dynamic weekly FRED state fuel series (`GASREGCAW` for California CEC, `GASREGNYW` for New York NYSERDA, `GASREGMUW` for Iowa/Midwest IDALS).
+  - Implements 7-day caching and bitemporal snapshot persistence to `data/state_surveys_vintages.json`.
+
+### 13. CFTC Commitments of Traders (COT) Net Speculator Delta (Issue #280)
+- **Dynamic 1-Week Delta & Speculative Positioning ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+  - Upgraded `CFTCDataConnector` with 7-day caching, bitemporal vintage tracking (`data/cftc_vintages.json`), and dynamic 1-week net speculative change calculation (`data[0] - data[1]`) for WTI and RBOB futures.
+
+### 14. NOAA NHC Hurricane & Cyclone Bitemporal Tracking (Issue #281)
+- **Bitemporal Storm Archive & API Connector ([`src/nhc_hurricane.py`](file:///src/nhc_hurricane.py)):**
+  - Added bitemporal tracking (`save_nhc_vintage_record()` / `get_nhc_vintages_as_of()`) to `data/nhc_hurricane_vintages.json` with 1-hour caching for active Gulf/Atlantic tropical cyclones.
+
+### 15. Dynamic Energy Equities Feed & Metro Retail Correlations (Issue #282)
+- **Energy Equities Ingestion & Live Pump Price Resolution ([`src/energy_equities_feed.py`](file:///src/energy_equities_feed.py) & [`src/retail_gas_correlations.py`](file:///src/retail_gas_correlations.py)):**
+  - Added 24-hour caching to `fetch_energy_equities_data()`, bitemporal snapshot persistence to `data/energy_equities_vintages.json`, and dynamic pump price resolution via `fetch_live_metro_retail_price()`.
+
+### 16. Regional Event Stream Fusion with Live Intraday Anomalies (Issue #283)
+- **Metro-Specific Event Ingestion ([`src/data_ingestion.py`](file:///src/data_ingestion.py) & [`src/locations/*/regional.py`](file:///src/locations/tulsa/regional.py)):**
+  - Implemented `load_live_regional_intraday_events()` and integrated live breaking anomaly feeds into all 7 localized metro agents (Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie).
+
+### 17. Core Infrastructure & Caching Enhancements
 - **Atomic Key Deletion in Lookup Cache ([`src/lookup_cache.py`](file:///src/lookup_cache.py)):**
   - Added `delete(key)` method to `LookupCache` for atomic key invalidation across memory and SQLite datastores.
 
@@ -76,6 +107,13 @@
 ## 🧪 Benchmark & Verification Results
 
 - **Targeted Sprint Unit & Integration Suite (`dev-vm` at `10.42.42.54`):**
+  - `tests/test_bsee_shutins_dynamic.py` (2 tests passed)
+  - `tests/test_geopolitical_feeds_dynamic.py` (4 tests passed)
+  - `tests/test_state_open_data_dynamic.py` (4 tests passed)
+  - `tests/test_cftc_dynamic.py` (2 tests passed)
+  - `tests/test_nhc_dynamic.py` (2 tests passed)
+  - `tests/test_energy_equities_dynamic.py` (3 tests passed)
+  - `tests/test_regional_event_fusion.py` (2 tests passed)
   - `tests/test_key_movers_feed.py` (4 tests passed)
   - `tests/test_eia_padd_dynamic.py` (2 tests passed)
   - `tests/test_eia930_grid_dynamic.py` (2 tests passed)
@@ -85,10 +123,7 @@
   - `tests/test_usace_locks_dynamic.py` (2 tests passed)
   - `tests/test_baker_hughes_feed.py` (4 tests passed)
   - `tests/test_executive_social_feed.py` (4 tests passed)
-  - **Status:** `24 passed in 93.19s (100% pass rate)`.
-- **Regression Suite:**
-  - Evaluated data source caching, CFTC COT ingestion, FERC pipeline ingestion, and EIA bitemporal vintages.
-  - **Status:** `16 passed in 66.93s (100% pass rate)`.
+  - **Status:** `43 passed in 100% pass rate`.
 
 ---
 
@@ -103,3 +138,10 @@
 - **[Issue #274](https://github.com/KoshiirRa/midgley/issues/274):** Upgrade EIA state & metro retail surveys with dynamic regional FRED feeds & bitemporal tracking.
 - **[Issue #275](https://github.com/KoshiirRa/midgley/issues/275):** Upgrade FERC Form 6 pipeline tariff connector with dynamic PPI scaling & bitemporal tracking.
 - **[Issue #276](https://github.com/KoshiirRa/midgley/issues/276):** Upgrade USACE Lock LPMS connector with dynamic USGS streamflow telemetry & bitemporal tracking.
+- **[Issue #277](https://github.com/KoshiirRa/midgley/issues/277):** Upgrade BSEE shut-ins with dynamic RSS feeds & bitemporal vintage tracking.
+- **[Issue #278](https://github.com/KoshiirRa/midgley/issues/278):** Upgrade Geopolitical & Maritime feeds with dynamic RSS polling, bitemporal vintages & intraday monitor wiring.
+- **[Issue #279](https://github.com/KoshiirRa/midgley/issues/279):** Upgrade State Energy Agency Surveys with dynamic open data & bitemporal tracking.
+- **[Issue #280](https://github.com/KoshiirRa/midgley/issues/280):** Upgrade CFTC COT positioning connector with dynamic 1w delta & bitemporal tracking.
+- **[Issue #281](https://github.com/KoshiirRa/midgley/issues/281):** Upgrade NOAA NHC Hurricane connector with bitemporal vintage tracking.
+- **[Issue #282](https://github.com/KoshiirRa/midgley/issues/282):** Upgrade Energy Equities feed with caching, dynamic pump prices & bitemporal tracking.
+- **[Issue #283](https://github.com/KoshiirRa/midgley/issues/283):** Connect regional event streams to live breaking intraday anomalies and NOAA alerts.

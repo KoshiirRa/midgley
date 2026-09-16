@@ -14,18 +14,22 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def compute_retail_gas_correlations():
+def compute_retail_gas_correlations(live_price: float = None) -> dict:
     """
     Computes exact historical correlation metrics between financial energy data
-    and retail gas pump prices.
+    and retail gas pump prices with dynamic price resolution.
     """
     from src.data_ingestion import fetch_market_data
-    from src.energy_equities_feed import fetch_energy_equities_data
+    from src.energy_equities_feed import fetch_energy_equities_data, save_energy_equities_vintage_record
     from src.locations.tulsa.regional import fetch_tulsa_market_data
+    from src.live_fuel_feed import fetch_live_metro_retail_price
     
+    if live_price is None:
+        live_price = fetch_live_metro_retail_price("Tulsa_OK")["price"]
+
     market_df = fetch_market_data("2022-01-01")
     equities_df = fetch_energy_equities_data("2022-01-01")
-    tulsa_df = fetch_tulsa_market_data("2022-01-01", live_current_price=3.89)
+    tulsa_df = fetch_tulsa_market_data("2022-01-01", live_current_price=live_price)
     
     merged = pd.merge(tulsa_df, equities_df, on='date', how='inner')
     if merged.empty:
@@ -61,6 +65,7 @@ def compute_retail_gas_correlations():
         "key_takeaway": "Wholesale RBOB futures lead retail pump prices by 5 to 7 business days."
     }
     
+    save_energy_equities_vintage_record(results)
     return results
 
 if __name__ == "__main__":
@@ -69,3 +74,4 @@ if __name__ == "__main__":
     print(" RETAIL GAS PUMP PRICE vs. FUTURES & EQUITIES CORRELATION MATRIX")
     print("="*80)
     print(json.dumps(res, indent=2))
+
