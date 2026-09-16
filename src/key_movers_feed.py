@@ -208,15 +208,29 @@ class KeyMoversFeedConnector:
         return live_events
 
     def get_combined_feed(self, include_live: bool = True) -> pd.DataFrame:
-        """
-        Returns combined historical benchmark events and newly fetched live key mover statements.
-        """
-        all_events = list(HISTORICAL_KEY_MOVERS_EVENTS)
+        base_events = None
+        try:
+            from src.benchmark_updater import load_historical_benchmark
+            loaded = load_historical_benchmark("key_movers")
+            if loaded and isinstance(loaded, list):
+                base_events = list(loaded)
+        except Exception:
+            pass
+
+        if base_events is None:
+            base_events = list(HISTORICAL_KEY_MOVERS_EVENTS)
+
+        all_events = list(base_events)
         if include_live:
             try:
                 live_events = self.fetch_live_events()
                 if live_events:
                     all_events.extend(live_events)
+                    try:
+                        from src.benchmark_updater import save_historical_benchmark
+                        save_historical_benchmark("key_movers", all_events)
+                    except Exception:
+                        pass
             except Exception as e:
                 logger.debug(f"Live key movers fetch skipped: {e}")
 
@@ -300,6 +314,12 @@ class KeyMoversFeedConnector:
             events = list(HISTORICAL_KEY_MOVERS_EVENTS)
         global_cache.set(cache_key, {"events": events}, ttl_seconds=900)
         return events
+
+    def fetch_key_movers_headlines(self, force_refresh: bool = False) -> list:
+        """
+        Alias for fetch_key_movers_events to support unified benchmark updater interface.
+        """
+        return self.fetch_key_movers_events(force_refresh=force_refresh)
 
 
 def get_key_movers_event_feed(include_live: bool = True) -> pd.DataFrame:

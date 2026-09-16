@@ -1923,7 +1923,20 @@ class OilPriceAPIDataConnector:
     def _fallback_price_benchmark(self, code: str, timestamp_str: str) -> dict:
         meta = self.benchmark_prices.get(code, {"name": code, "value": 75.0, "unit": "USD"})
         val = meta["value"]
-        source_name = f"OilpriceAPI Benchmark Anchor ({code})"
+        source_name = f"OilpriceAPI Static Fallback ({code})"
+
+        bench_val = None
+        try:
+            from src.benchmark_updater import load_historical_benchmark
+            loaded = load_historical_benchmark("oilpriceapi")
+            if loaded and isinstance(loaded, dict) and code in loaded:
+                bench_val = float(loaded[code].get("price", loaded[code].get("value", val)))
+        except Exception:
+            pass
+
+        if bench_val is not None:
+            val = bench_val
+            source_name = f"OilpriceAPI Persistent Benchmark ({code})"
 
         yf_symbol_map = {
             "WTI_USD": "CL=F",
@@ -1945,7 +1958,7 @@ class OilPriceAPIDataConnector:
             except Exception as e:
                 logger.debug(f"OilpriceAPI dynamic yfinance fallback notice ({code}): {e}")
 
-        return {
+        res = {
             "code": code,
             "name": meta["name"],
             "price": val,
@@ -1958,6 +1971,15 @@ class OilPriceAPIDataConnector:
             "timestamp": timestamp_str,
             "status": "FALLBACK"
         }
+        try:
+            from src.benchmark_updater import save_historical_benchmark, load_historical_benchmark
+            existing = load_historical_benchmark("oilpriceapi") or {}
+            if isinstance(existing, dict):
+                existing[code] = res
+                save_historical_benchmark("oilpriceapi", existing)
+        except Exception:
+            pass
+        return res
 
     def fetch_all_spot_prices(self) -> dict:
         """

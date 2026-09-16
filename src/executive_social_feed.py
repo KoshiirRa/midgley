@@ -210,16 +210,43 @@ class ExecutiveSocialFeedConnector:
 
         return live_posts
 
+    def fetch_executive_social_headlines(self, force_refresh: bool = False) -> list:
+        """
+        Fetches live or fallback executive energy commentary headlines.
+        """
+        posts = self.fetch_live_posts()
+        if not posts:
+            from src.benchmark_updater import load_historical_benchmark
+            loaded = load_historical_benchmark("executive_social")
+            if loaded and isinstance(loaded, list):
+                return list(loaded)
+            return list(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
+        return posts
+
     def get_combined_feed(self, include_live: bool = True) -> pd.DataFrame:
-        """
-        Returns combined historical benchmark posts and newly fetched live posts.
-        """
-        all_posts = list(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
+        base_posts = None
+        try:
+            from src.benchmark_updater import load_historical_benchmark
+            loaded = load_historical_benchmark("executive_social")
+            if loaded and isinstance(loaded, list):
+                base_posts = list(loaded)
+        except Exception:
+            pass
+
+        if base_posts is None:
+            base_posts = list(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
+
+        all_posts = list(base_posts)
         if include_live:
             try:
                 live_posts = self.fetch_live_posts()
                 if live_posts:
                     all_posts.extend(live_posts)
+                    try:
+                        from src.benchmark_updater import save_historical_benchmark
+                        save_historical_benchmark("executive_social", all_posts)
+                    except Exception:
+                        pass
             except Exception as e:
                 logger.debug(f"Live executive social fetch skipped: {e}")
 
