@@ -1,8 +1,8 @@
-# Release Notes - v0.5.5 (Draft)
+# Release Notes - v0.5.5
  
-**Release Date:** September 15, 2026  
+**Release Date:** September 16, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`)  
-**Git Branch:** `dev`  
+**Git Branch:** `main`  
 
 ---
 
