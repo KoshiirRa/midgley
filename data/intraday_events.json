@@ -3196,5 +3196,24 @@
       "overall_price_pressure": 0.7
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-16T07:16:50.188838",
+    "headline": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers in Control - FXEmpire",
+    "source": "Cloudflare_Worker",
+    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQODJWdThNWXhNSXFrUjNpV0I1djZwUlJhemxBaEQwc1F2XzBhX1pWQmJnMDJsdlZDMDlyVzdranNsbk15LTFoQVhUN1BHNkhwcWJpMTdCb1kwaVU0OFdHc0txQXl0WC0yLXRsV3U0djM0cmNjSFUzWk5wMnFxaTA5UU1zZUpXMFZzby1FSU9WQ29ZMlJuS0tWZFFyUnRYYXMwT3dCb3lWNXc2S3ZESnczUHREa2xNQ18wZWRmWVZ0WnJ0VVF6S1I0?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMixwFBVV95cUxQODJWdThNWXhNSXFrUjNpV0I1djZwUlJhemxBaEQwc1F2XzBhX1pWQmJnMDJsdlZDMDlyVzdranNsbk15LTFoQVhUN1BHNkhwcWJpMTdCb1kwaVU0OFdHc0txQXl0WC0yLXRsV3U0djM0cmNjSFUzWk5wMnFxaTA5UU1zZUpXMFZzby1FSU9WQ29ZMlJuS0tWZFFyUnRYYXMwT3dCb3lWNXc2S3ZESnczUHREa2xNQ18wZWRmWVZ0WnJ0VVF6S1I0?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.2,
+      "supply_disruption": 0.7,
+      "demand_sentiment": 0.8,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]

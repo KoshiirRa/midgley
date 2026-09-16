@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-16_07-16-55",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
     "run_id": "2026-09-16_03-58-40",
     "timestamp": "2026-09-16 03:58:34",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-10 16:00:20",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hike..."
-  },
-  {
-    "run_id": "2026-09-10_15-45-25",
-    "timestamp": "2026-09-10 15:45:20",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US-Canada tariffs are now in effect: Why autos and oil might..."
   }
 ]
