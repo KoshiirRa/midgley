@@ -162,6 +162,26 @@ class IntradayEventMonitor:
             logger.debug(f"Could not poll live executive social headlines: {e}")
         return headlines
 
+    def fetch_key_movers_headlines(self) -> List[Dict[str, str]]:
+        """Fetches breaking statements from key energy policymakers (Issue #270)."""
+        headlines = []
+        try:
+            from src.key_movers_feed import KeyMoversFeedConnector
+            connector = KeyMoversFeedConnector()
+            events = connector.fetch_live_events()
+            for ev in events:
+                hl = ev.get("headline", "").strip()
+                if hl:
+                    headlines.append({
+                        "headline": hl,
+                        "published": ev.get("date", datetime.now().isoformat()),
+                        "url": f"https://news.google.com/search?q={abs(hash(hl)) % 10000000}",
+                        "source": f"Key_Mover_{ev.get('entity', 'Official')}"
+                    })
+        except Exception as e:
+            logger.debug(f"Could not poll live key movers headlines: {e}")
+        return headlines
+
     def evaluate_headline_anomaly(self, headline: str) -> Tuple[bool, Dict[str, float]]:
         """
         Stage 1 & 2 Cascading Filter:
@@ -435,12 +455,15 @@ class IntradayEventMonitor:
         return result
 
     def run_polling_cycle(self) -> Dict:
-        """Executes a full 15-minute polling cycle across free RSS and executive social streams."""
+        """Executes a full 15-minute polling cycle across free RSS, executive social, and key mover streams."""
         logger.info("Executing 15-minute Intraday Event Monitor cycle...")
         headlines_data = self.fetch_rss_headlines()
         social_data = self.fetch_executive_social_headlines()
         if social_data:
             headlines_data.extend(social_data)
+        movers_data = self.fetch_key_movers_headlines()
+        if movers_data:
+            headlines_data.extend(movers_data)
         anomalies_found = []
 
         for item in headlines_data:
