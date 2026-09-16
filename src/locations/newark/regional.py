@@ -158,6 +158,16 @@ def get_newark_regional_events() -> pd.DataFrame:
     if usgs_events:
         frames.append(pd.DataFrame(usgs_events))
 
+    # Ingest Live Regional Intraday Anomalies (Issue #283)
+    try:
+        from src.data_ingestion import load_live_regional_intraday_events
+        intraday_newark_df = load_live_regional_intraday_events("Newark")
+        if not intraday_newark_df.empty:
+            frames.append(intraday_newark_df)
+    except Exception as e:
+        logger.debug(f"Could not load live regional intraday events for Newark: {e}")
+
     # Combine Macro + Regional + DE NOAA Weather + USGS Hydrology & Seismic + AQI
     combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)
+

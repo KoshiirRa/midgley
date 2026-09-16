@@ -5,11 +5,12 @@ and calculates physical supply risk scores for Gulf Coast refining hubs (PADD 3)
 and Colonial Pipeline Line 1/2 intake terminals. (Issue #177)
 """
 
+import os
 import urllib.request
 import xml.etree.ElementTree as ET
 import json
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from datetime import datetime
 from src.lookup_cache import global_cache
 
@@ -17,11 +18,51 @@ logger = logging.getLogger(__name__)
 
 NHC_RSS_URL = "https://www.nhc.noaa.gov/index-at.xml"
 USER_AGENT = "(MidgleyGasPriceForecaster, contact@example.com)"
+NHC_VINTAGE_FILE = os.path.join("data", "nhc_hurricane_vintages.json")
+
+
+def save_nhc_vintage_record(record: dict, filepath: str = NHC_VINTAGE_FILE) -> None:
+    """Appends a point-in-time NOAA NHC hurricane threat vintage record."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        vintage_entry = {
+            "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "data": record
+        }
+        vintages.append(vintage_entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Failed to persist NHC vintage record: {e}")
+
+
+def get_nhc_vintages_as_of(as_of_date: str, filepath: str = NHC_VINTAGE_FILE) -> Optional[dict]:
+    """Retrieves NHC observation recorded on or before as_of_date."""
+    if not os.path.exists(filepath):
+        return None
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        valid = [v for v in vintages if v.get("as_of", "")[:10] <= as_of_date]
+        if valid:
+            return valid[-1].get("data")
+    except Exception as e:
+        logger.debug(f"Error reading NHC vintages: {e}")
+    return None
+
 
 class NHCHurricaneConnector:
     """
     Zero-Cost NOAA NHC Tropical Cyclone Advisory Connector.
-    Parses active Atlantic & Gulf tropical storm/hurricane advisories and projects refinery threat scores.
+    Parses active Atlantic & Gulf tropical storm/hurricane advisories and projects refinery threat scores. (Issue #177, #281)
     """
     def __init__(self):
         self.is_free_alternative = True
@@ -104,5 +145,7 @@ class NHCHurricaneConnector:
             logger.warning(f"Could not fetch live NHC hurricane advisories: {e}")
             result["status"] = f"PARTIAL_FALLBACK: {e}"
 
+        save_nhc_vintage_record(result)
         global_cache.set(cache_key, result, ttl_seconds=10800)
         return result
+

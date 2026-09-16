@@ -119,11 +119,21 @@ def get_greenville_regional_events() -> pd.DataFrame:
     # 3. Merge Localized NOAA Weather Alerts for Pitt County NC (NCZ081)
     noaa_grn_df = get_greenville_weather_dataset()
     
+    frames = [macro_events_df, regional_df]
     if not noaa_grn_df.empty:
         noaa_grn_df['category'] = "NOAA Weather Pitt County (NCZ081)"
-        combined_df = pd.concat([macro_events_df, regional_df, noaa_grn_df], ignore_index=True)
-    else:
-        combined_df = pd.concat([macro_events_df, regional_df], ignore_index=True)
-        
+        frames.append(noaa_grn_df)
+
+    # Ingest Live Regional Intraday Anomalies (Issue #283)
+    try:
+        from src.data_ingestion import load_live_regional_intraday_events
+        intraday_greenville_df = load_live_regional_intraday_events("Greenville")
+        if not intraday_greenville_df.empty:
+            frames.append(intraday_greenville_df)
+    except Exception as e:
+        logger.debug(f"Could not load live regional intraday events for Greenville: {e}")
+
+    combined_df = pd.concat(frames, ignore_index=True)
     combined_df['date'] = pd.to_datetime(combined_df['date'])
     return combined_df.sort_values('date').reset_index(drop=True)
+

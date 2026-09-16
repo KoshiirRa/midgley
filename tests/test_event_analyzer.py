@@ -11,7 +11,8 @@ from src.event_analyzer import (
     extract_event_features_llm,
     extract_batch_event_features_llm,
     extract_event_features_rule_based,
-    _get_headline_sha256
+    _get_headline_sha256,
+    _LLM_SCORE_CACHE
 )
 from src.lookup_cache import global_cache
 
@@ -20,9 +21,11 @@ class TestEventAnalyzer(unittest.TestCase):
 
     def setUp(self):
         global_cache.clear()
+        _LLM_SCORE_CACHE.clear()
 
     def tearDown(self):
         global_cache.clear()
+        _LLM_SCORE_CACHE.clear()
 
     def test_headline_sha256_hashing(self):
         h1 = "OPEC Announces Sudden 1M Barrel Supply Cut"

@@ -27,6 +27,61 @@ logger = logging.getLogger(__name__)
 
 USER_AGENT = "(MidgleyGasPriceForecaster/1.0; contact@example.com)"
 DEFAULT_TIMEOUT = 5.0
+USGS_SEISMIC_VINTAGE_FILE = os.path.join("data", "usgs_seismic_vintages.json")
+
+
+def save_seismic_vintage_record(record: dict, filepath: str = USGS_SEISMIC_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time USGS seismic telemetry observation (Issue #292)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", record.get("timestamp", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")))
+        day_key = str(now_str)[:10]
+        corridor_key = record.get("filtered_corridor") or record.get("corridor") or "all"
+
+        # Deduplicate per corridor and day
+        vintages = [v for v in vintages if not (v.get("corridor_key") == corridor_key and str(v.get("as_of", ""))[:10] == day_key)]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": day_key,
+            "corridor_key": corridor_key,
+            "composite_seismic_risk_index": record.get("indices", {}).get("composite_seismic_risk_index") if "indices" in record else record.get("corridor_risk_index", 0.0),
+            "max_magnitude": record.get("indices", {}).get("max_magnitude") if "indices" in record else record.get("max_magnitude", 0.0),
+            "total_significant_quakes": record.get("indices", {}).get("total_significant_quakes") if "indices" in record else record.get("active_events_count", 0),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist USGS seismic vintage record: {e}")
+
+
+def get_seismic_vintages_as_of(as_of_date: str, corridor: Optional[str] = None, filepath: str = USGS_SEISMIC_VINTAGE_FILE) -> list:
+    """Retrieves all USGS seismic vintage records available as of a given cutoff date (Issue #292)."""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (corridor is None or v.get("corridor_key") == corridor or v.get("corridor_key") == "all")
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
+
 
 # Critical Infrastructure Coordinates & Corridors
 SEISMIC_CORRIDORS: Dict[str, Dict[str, Any]] = {
@@ -395,8 +450,17 @@ class USGSSeismicConnector:
             "indices": indices
         }
 
+        save_seismic_vintage_record(result)
         global_cache.set(cache_key, result)
         return result
+
+    def save_seismic_vintage_record(self, record: dict, filepath: str = USGS_SEISMIC_VINTAGE_FILE) -> None:
+        """Persists a bitemporal point-in-time USGS seismic observation (Issue #292)."""
+        save_seismic_vintage_record(record, filepath=filepath)
+
+    def get_seismic_vintages_as_of(self, as_of_date: str, corridor: Optional[str] = None, filepath: str = USGS_SEISMIC_VINTAGE_FILE) -> List[Dict[str, Any]]:
+        """Retrieves USGS seismic vintage records as of a cutoff date (Issue #292)."""
+        return get_seismic_vintages_as_of(as_of_date, corridor=corridor, filepath=filepath)
 
     def _parse_usgs_features(self, geojson_data: Dict[str, Any], corridor_id: str) -> List[Dict[str, Any]]:
         """Parses raw USGS GeoJSON features into structured impact events."""

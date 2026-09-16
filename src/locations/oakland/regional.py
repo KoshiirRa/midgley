@@ -228,6 +228,16 @@ def get_oakland_regional_events() -> pd.DataFrame:
     if usgs_events:
         frames.append(pd.DataFrame(usgs_events))
 
+    # Ingest Live Regional Intraday Anomalies (Issue #283)
+    try:
+        from src.data_ingestion import load_live_regional_intraday_events
+        intraday_oak_df = load_live_regional_intraday_events("Oakland")
+        if not intraday_oak_df.empty:
+            frames.append(intraday_oak_df)
+    except Exception as e:
+        logger.debug(f"Could not load live regional intraday events for Oakland: {e}")
+
     # 7. Concatenate and sort
     combined = pd.concat(frames, ignore_index=True)
     return combined.sort_values('date').reset_index(drop=True)
+
