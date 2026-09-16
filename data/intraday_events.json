@@ -3234,5 +3234,24 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-16T14:44:03.255825",
+    "headline": "US to vote on Russian Sanctions Bill, India faces 100% tariff threat - thesouthfirst.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPN2ZrOU9JU3QyY19tVUJMQnV4X1hfUDl4N1JZYl9IcEpONVhiQ1RiT2cxVXJ0ZnhHb3JzZ0loa0ZWZ0FWX2IwRFVncWttd3lFS2dOQ3k5dGgyTGFuLWxQZDBzZXNjWkNnQ3VJbXNGRUVuN2FESlVmU19tTnF2R19qOTRqNTJYVnkybWV3VF9EdmdRS1pkWDBTMFBFRlVJb28zOG5RTTlBOWJYQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqgFBVV95cUxPN2ZrOU9JU3QyY19tVUJMQnV4X1hfUDl4N1JZYl9IcEpONVhiQ1RiT2cxVXJ0ZnhHb3JzZ0loa0ZWZ0FWX2IwRFVncWttd3lFS2dOQ3k5dGgyTGFuLWxQZDBzZXNjWkNnQ3VJbXNGRUVuN2FESlVmU19tTnF2R19qOTRqNTJYVnkybWV3VF9EdmdRS1pkWDBTMFBFRlVJb28zOG5RTTlBOWJYQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.7,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]
