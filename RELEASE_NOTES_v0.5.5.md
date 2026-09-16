@@ -102,11 +102,47 @@
 - **Atomic Key Deletion in Lookup Cache ([`src/lookup_cache.py`](file:///src/lookup_cache.py)):**
   - Added `delete(key)` method to `LookupCache` for atomic key invalidation across memory and SQLite datastores.
 
+### 18. OilPriceAPI Dynamic Commodity Futures Fallback & Bitemporal Tracking (Issue #284)
+- **Dynamic yfinance Futures Benchmark Fallback ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+  - Upgraded `OilPriceAPIDataConnector` fallback benchmarks from static scalar values to dynamic `yfinance` commodity futures (`CL=F` for WTI, `BZ=F` for Brent, `RB=F` for RBOB, `NG=F` for Natural Gas, `HO=F` for Heating Oil).
+  - Preserves 25 calls/day quota safety valve (`data/oilpriceapi_quota.json`) and market hours gating.
+- **Bitemporal Vintage Tracking:**
+  - Added `save_oilpriceapi_vintage_record()` and `get_oilpriceapi_vintages_as_of()` writing point-in-time commodity spot observations to `data/oilpriceapi_vintages.json`.
+
+### 19. PyPI Community Fuel Scraper Dynamic Multi-Tier Retail Price Resolution (Issue #285)
+- **Dynamic Retail Gas Price Integration ([`src/live_fuel_feed.py`](file:///src/live_fuel_feed.py)):**
+  - Upgraded `PyPICommunityFuelScraper.fetch_community_price()` to dynamically query multi-tier retail price resolution via `fetch_live_metro_retail_price()` (GasBuddy GraphQL, AAA web scraper, EIA/yfinance, prediction history) before falling back to static regional anchors.
+
+### 20. Alpha Vantage Dynamic Equity Pricing, RSI/VWAP & Bitemporal Tracking (Issue #286)
+- **Dynamic Technicals & Equity Feeds ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+  - Upgraded `AlphaVantageDataConnector` to compute dynamic 14-day RSI and Volume-Weighted Average Price (VWAP) for `XLE` and query dynamic energy equity close prices via `yfinance` during offline or unconfigured runs.
+- **Bitemporal Vintage Tracking:**
+  - Added `save_alpha_vantage_vintage_record()` and `get_alpha_vantage_vintages_as_of()` persisting point-in-time technical and equity vintages to `data/alpha_vantage_vintages.json`.
+
+### 21. FRED Data Connector Bitemporal Vintage Tracking (Issue #287)
+- **Bitemporal Persistence & Point-in-Time Queries ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+  - Added `save_fred_vintage_record()` and `get_fred_vintages_as_of()` persisting weekly FRED macro and regional retail fuel series observations to `data/fred_vintages.json`.
+
+### 22. Open-Meteo High-Resolution Degree Days Caching & Bitemporal Tracking (Issue #288)
+- **6-Hour Lookup Caching & Bitemporal Persistence ([`src/noaa_weather.py`](file:///src/noaa_weather.py)):**
+  - Added 6-hour `global_cache` lookup caching for `OpenMeteoDegreeDaysConnector` across 7 major refining hubs (Tulsa, Newark, Cincinnati, Oakland, Greenville, Charlotte, Port St. Lucie).
+  - Added `save_degree_days_vintage_record()` and `get_degree_days_vintages_as_of()` persisting Heating/Cooling Degree Days (HDD/CDD) and freeze/heat stress warnings to `data/degree_days_vintages.json`.
+
+### 23. Open Source AI Radar Bitemporal Vintage Tracking (Issue #289)
+- **Bitemporal Snapshot Persistence ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+  - Added `save_radar_vintage_record()` and `get_radar_vintages_as_of()` logging open-source AI and time-series forecasting model catalog snapshots to `data/radar_vintages.json`.
+
 ---
 
 ## 🧪 Benchmark & Verification Results
 
 - **Targeted Sprint Unit & Integration Suite (`dev-vm` at `10.42.42.54`):**
+  - `tests/test_oilpriceapi_dynamic.py` (2 tests passed)
+  - `tests/test_pypi_community_scraper.py` (2 tests passed)
+  - `tests/test_alpha_vantage_dynamic.py` (2 tests passed)
+  - `tests/test_fred_dynamic.py` (2 tests passed)
+  - `tests/test_open_meteo_dynamic.py` (2 tests passed)
+  - `tests/test_open_source_radar_dynamic.py` (2 tests passed)
   - `tests/test_bsee_shutins_dynamic.py` (2 tests passed)
   - `tests/test_geopolitical_feeds_dynamic.py` (4 tests passed)
   - `tests/test_state_open_data_dynamic.py` (4 tests passed)
@@ -123,7 +159,7 @@
   - `tests/test_usace_locks_dynamic.py` (2 tests passed)
   - `tests/test_baker_hughes_feed.py` (4 tests passed)
   - `tests/test_executive_social_feed.py` (4 tests passed)
-  - **Status:** `43 passed in 100% pass rate`.
+  - **Status:** `55 passed in 100% pass rate`.
 
 ---
 
@@ -145,3 +181,9 @@
 - **[Issue #281](https://github.com/KoshiirRa/midgley/issues/281):** Upgrade NOAA NHC Hurricane connector with bitemporal vintage tracking.
 - **[Issue #282](https://github.com/KoshiirRa/midgley/issues/282):** Upgrade Energy Equities feed with caching, dynamic pump prices & bitemporal tracking.
 - **[Issue #283](https://github.com/KoshiirRa/midgley/issues/283):** Connect regional event streams to live breaking intraday anomalies and NOAA alerts.
+- **[Issue #284](https://github.com/KoshiirRa/midgley/issues/284):** Upgrade OilPriceAPIDataConnector with dynamic yfinance futures fallback & bitemporal tracking.
+- **[Issue #285](https://github.com/KoshiirRa/midgley/issues/285):** Upgrade PyPICommunityFuelScraper to query dynamic multi-tier retail price resolution.
+- **[Issue #286](https://github.com/KoshiirRa/midgley/issues/286):** Upgrade AlphaVantageDataConnector with dynamic yfinance 14d RSI/VWAP & bitemporal tracking.
+- **[Issue #287](https://github.com/KoshiirRa/midgley/issues/287):** Add bitemporal vintage tracking to FREDDataConnector.
+- **[Issue #288](https://github.com/KoshiirRa/midgley/issues/288):** Add 6-hour caching and bitemporal tracking to OpenMeteoDegreeDaysConnector.
+- **[Issue #289](https://github.com/KoshiirRa/midgley/issues/289):** Add bitemporal vintage tracking to OpenSourceAIRadarConnector.

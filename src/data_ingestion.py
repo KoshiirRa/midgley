@@ -301,7 +301,8 @@ class FREDDataConnector:
     Fetches weekly national & PADD retail gasoline/diesel series (GASREGW, GASDESW, GASREGWCW, GASREGWGULF)
     and Consumer Price Index for Gasoline (CUUR0000SETB01).
     """
-    def __init__(self):
+    def __init__(self, api_key: str = None):
+        self.api_key = api_key or os.environ.get("FRED_API_KEY")
         self.is_free_alternative = True
         self.cost_per_query = 0.0
         self.series_map = {
@@ -317,7 +318,7 @@ class FREDDataConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached:
+            if cached and "status" in cached:
                 return cached
         except Exception:
             pass
@@ -345,7 +346,8 @@ class FREDDataConnector:
                                 "source": "FRED API / St. Louis Fed (Zero-Cost)",
                                 "is_free_alternative": True,
                                 "cost_per_query": 0.0,
-                                "timestamp": timestamp_str
+                                "timestamp": timestamp_str,
+                                "status": "SUCCESS"
                             }
         except Exception as e:
             logger.debug(f"FRED series fetch notice ({series_id}): {e}")
@@ -361,7 +363,8 @@ class FREDDataConnector:
                 "source": "FRED Benchmark Anchor (Zero-Cost)",
                 "is_free_alternative": True,
                 "cost_per_query": 0.0,
-                "timestamp": timestamp_str
+                "timestamp": timestamp_str,
+                "status": "FALLBACK"
             }
 
         try:
@@ -370,7 +373,76 @@ class FREDDataConnector:
         except Exception:
             pass
 
+        # Save bitemporal vintage snapshot (Issue #287)
+        try:
+            self.save_fred_vintage_record({
+                "series_id": series_id,
+                "name": result.get("name", series_id),
+                "as_of": timestamp_str,
+                "valid_date": result.get("latest_date", datetime.now().strftime("%Y-%m-%d")),
+                "value": result.get("value"),
+                "source": result.get("source", "FRED API"),
+                "is_vintage_reconstructed": False
+            })
+        except Exception as e:
+            logger.debug(f"FRED vintage record save notice: {e}")
+
         return result
+
+    def save_fred_vintage_record(self, record: dict, filepath: str = None):
+        save_fred_vintage_record(record, filepath or getattr(self, "VINTAGE_FILE", FRED_VINTAGE_FILE))
+
+    def get_fred_vintages_as_of(self, as_of_date: str, series_id: str = None, filepath: str = None) -> list:
+        return get_fred_vintages_as_of(as_of_date, series_id, filepath or getattr(self, "VINTAGE_FILE", FRED_VINTAGE_FILE))
+
+
+FRED_VINTAGE_FILE = os.path.join("data", "fred_vintages.json")
+
+
+def save_fred_vintage_record(record: dict, filepath: str = FRED_VINTAGE_FILE) -> None:
+    """Appends a FRED observation vintage record to persistent JSON storage. (Issue #287)"""
+    fp = filepath or FRED_VINTAGE_FILE
+    os.makedirs(os.path.dirname(fp), exist_ok=True)
+    vintages = []
+    if os.path.exists(fp):
+        try:
+            with open(fp, "r", encoding="utf-8") as f:
+                vintages = json.load(f)
+        except Exception:
+            vintages = []
+
+    # Deduplicate by series_id and as_of
+    exists = any(
+        v.get("series_id") == record.get("series_id") and
+        str(v.get("as_of", ""))[:10] == str(record.get("as_of", ""))[:10]
+        for v in vintages
+    )
+    if not exists:
+        vintages.append(record)
+        try:
+            with open(fp, "w", encoding="utf-8") as f:
+                json.dump(vintages, f, indent=2)
+        except Exception as e:
+            logger.debug(f"Could not persist FRED vintage record: {e}")
+
+
+def get_fred_vintages_as_of(as_of_date: str, series_id: str = None, filepath: str = FRED_VINTAGE_FILE) -> list:
+    """Retrieves all FRED vintage records available as of a given cutoff date. (Issue #287)"""
+    fp = filepath or FRED_VINTAGE_FILE
+    if not os.path.exists(fp):
+        return []
+    try:
+        with open(fp, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (series_id is None or v.get("series_id") == series_id)
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
 
 
 class EIADataConnector:
@@ -1291,17 +1363,43 @@ class AlphaVantageDataConnector:
         return res
 
     def _fallback_equity_benchmark(self, symbol: str, timestamp_str: str) -> dict:
-        return {
+        close_p = 89.450
+        pct_change = 0.35
+        latest_date = datetime.now().strftime("%Y-%m-%d")
+        try:
+            import yfinance as yf
+            hist = yf.Ticker(symbol).history(period="5d")
+            if not hist.empty and 'Close' in hist.columns:
+                closes = [float(v) for v in hist['Close'].values if pd.notna(v) and float(v) > 0]
+                if closes:
+                    close_p = round(closes[-1], 3)
+                    if len(closes) > 1:
+                        pct_change = round(((closes[-1] - closes[-2]) / closes[-2]) * 100.0, 2)
+                    latest_date = str(hist.index[-1])[:10]
+        except Exception as e:
+            logger.debug(f"Alpha Vantage equity fallback notice ({symbol}): {e}")
+
+        res = {
             "symbol": symbol,
-            "latest_date": datetime.now().strftime("%Y-%m-%d"),
-            "close_price": 89.450,
-            "daily_change_pct": 0.35,
+            "latest_date": latest_date,
+            "close_price": close_p,
+            "daily_change_pct": pct_change,
             "source": f"Alpha Vantage Energy Equity Benchmark ({symbol})",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
             "status": "FALLBACK"
         }
+        self.save_alpha_vantage_vintage_record({
+            "feed_type": "equity",
+            "symbol": symbol,
+            "as_of": timestamp_str,
+            "valid_date": latest_date,
+            "value": close_p,
+            "daily_change_pct": pct_change,
+            "is_vintage_reconstructed": False
+        })
+        return res
 
     def fetch_technical_indicator(self, symbol: str = "XLE", function: str = "RSI", time_period: int = 14) -> dict:
         """
@@ -1361,6 +1459,15 @@ class AlphaVantageDataConnector:
                                 "status": "SUCCESS"
                             }
                             self._save_cache_response(cache_key, res)
+                            self.save_alpha_vantage_vintage_record({
+                                "feed_type": "technical_indicator",
+                                "symbol": sym,
+                                "indicator": fn,
+                                "as_of": timestamp_str,
+                                "valid_date": latest_date,
+                                "value": val,
+                                "is_vintage_reconstructed": False
+                            })
                             return res
             except Exception as e:
                 logger.debug(f"Alpha Vantage technical indicator fetch notice ({sym}): {e}")
@@ -1371,19 +1478,118 @@ class AlphaVantageDataConnector:
 
     def _fallback_indicator_benchmark(self, symbol: str, function: str, time_period: int, timestamp_str: str) -> dict:
         val = 54.200 if function == "RSI" else 88.900
-        return {
+        latest_date = datetime.now().strftime("%Y-%m-%d")
+        try:
+            import yfinance as yf
+            hist = yf.Ticker(symbol).history(period="60d")
+            if not hist.empty and 'Close' in hist.columns:
+                closes = [float(v) for v in hist['Close'].values if pd.notna(v) and float(v) > 0]
+                latest_date = str(hist.index[-1])[:10]
+                if function == "RSI" and len(closes) > time_period:
+                    deltas = np.diff(closes)
+                    gains = np.where(deltas > 0, deltas, 0.0)
+                    losses = np.where(deltas < 0, -deltas, 0.0)
+                    avg_gain = np.mean(gains[-time_period:])
+                    avg_loss = np.mean(losses[-time_period:])
+                    if avg_loss > 0:
+                        rs = avg_gain / avg_loss
+                        val = round(100.0 - (100.0 / (1.0 + rs)), 2)
+                    else:
+                        val = 100.0
+                elif function == "VWAP" and 'Volume' in hist.columns and len(closes) >= time_period:
+                    vols = hist['Volume'].values[-time_period:]
+                    prices = hist['Close'].values[-time_period:]
+                    if np.sum(vols) > 0:
+                        val = round(float(np.sum(prices * vols) / np.sum(vols)), 3)
+        except Exception as e:
+            logger.debug(f"Alpha Vantage indicator dynamic fallback notice ({symbol}/{function}): {e}")
+
+        interpretation = "NEUTRAL"
+        if function == "RSI":
+            if val >= 70.0:
+                interpretation = "OVERBOUGHT"
+            elif val <= 30.0:
+                interpretation = "OVERSOLD"
+
+        res = {
             "symbol": symbol,
             "indicator": function,
             "time_period": time_period,
-            "latest_date": datetime.now().strftime("%Y-%m-%d"),
+            "latest_date": latest_date,
             "value": val,
-            "interpretation": "NEUTRAL",
-            "source": f"Alpha Vantage Technical Benchmark ({function})",
+            "interpretation": interpretation,
+            "source": f"Alpha Vantage Technical Dynamic yfinance Fallback ({function})",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
             "status": "FALLBACK"
         }
+        self.save_alpha_vantage_vintage_record({
+            "feed_type": "technical_indicator",
+            "symbol": symbol,
+            "indicator": function,
+            "as_of": timestamp_str,
+            "valid_date": latest_date,
+            "value": val,
+            "is_vintage_reconstructed": False
+        })
+        return res
+
+    def save_alpha_vantage_vintage_record(self, record: dict, filepath: str = None):
+        save_alpha_vantage_vintage_record(record, filepath or ALPHA_VANTAGE_VINTAGE_FILE)
+
+    def get_alpha_vantage_vintages_as_of(self, as_of_date: str, symbol: str = None, filepath: str = None) -> list:
+        return get_alpha_vantage_vintages_as_of(as_of_date, symbol, filepath or ALPHA_VANTAGE_VINTAGE_FILE)
+
+
+ALPHA_VANTAGE_VINTAGE_FILE = os.path.join("data", "alpha_vantage_vintages.json")
+
+
+def save_alpha_vantage_vintage_record(record: dict, filepath: str = ALPHA_VANTAGE_VINTAGE_FILE) -> None:
+    """Appends an Alpha Vantage observation record to persistent JSON storage. (Issue #286)"""
+    fp = filepath or ALPHA_VANTAGE_VINTAGE_FILE
+    os.makedirs(os.path.dirname(fp), exist_ok=True)
+    vintages = []
+    if os.path.exists(fp):
+        try:
+            with open(fp, "r", encoding="utf-8") as f:
+                vintages = json.load(f)
+        except Exception:
+            vintages = []
+
+    exists = any(
+        v.get("symbol") == record.get("symbol") and
+        v.get("feed_type") == record.get("feed_type") and
+        v.get("indicator") == record.get("indicator") and
+        str(v.get("as_of", ""))[:10] == str(record.get("as_of", ""))[:10]
+        for v in vintages
+    )
+    if not exists:
+        vintages.append(record)
+        try:
+            with open(fp, "w", encoding="utf-8") as f:
+                json.dump(vintages, f, indent=2)
+        except Exception as e:
+            logger.debug(f"Could not persist Alpha Vantage vintage record: {e}")
+
+
+def get_alpha_vantage_vintages_as_of(as_of_date: str, symbol: str = None, filepath: str = ALPHA_VANTAGE_VINTAGE_FILE) -> list:
+    """Retrieves all Alpha Vantage vintage records available as of a given cutoff date. (Issue #286)"""
+    fp = filepath or ALPHA_VANTAGE_VINTAGE_FILE
+    if not os.path.exists(fp):
+        return []
+    try:
+        with open(fp, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (symbol is None or v.get("symbol") == symbol)
+        ]
+        return sorted(matched, key=lambda x: str(x.get("valid_date", "")))
+    except Exception:
+        return []
 
     def fetch_market_failover_feed(self) -> dict:
         """
@@ -1417,12 +1623,65 @@ class AlphaVantageDataConnector:
 
 OILPRICEAPI_QUOTA_FILE = os.path.join("data", "oilpriceapi_quota.json")
 OILPRICEAPI_CACHE_FILE = os.path.join("data", "oilpriceapi_cache.json")
+OILPRICEAPI_VINTAGE_FILE = os.path.join("data", "oilpriceapi_vintages.json")
 OILPRICEAPI_MAX_DAILY_CALLS = 25
+
+
+def save_oilpriceapi_vintage_record(record: dict, filepath: str = OILPRICEAPI_VINTAGE_FILE) -> None:
+    """Persists a bitemporal point-in-time OilpriceAPI observation (Issue #284)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = record.get("as_of", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        day_key = str(now_str)[:10]
+        code = record.get("code", "UNKNOWN")
+
+        # Deduplicate per code and day
+        vintages = [v for v in vintages if not (v.get("code") == code and str(v.get("as_of", ""))[:10] == day_key)]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": record.get("created_at", day_key),
+            "code": code,
+            "price": record.get("price"),
+            "source": record.get("source"),
+            "data": record
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist OilpriceAPI vintage record: {e}")
+
+
+def get_oilpriceapi_vintages_as_of(as_of_date: str, by_code: str = None, filepath: str = OILPRICEAPI_VINTAGE_FILE) -> list:
+    """Retrieves all OilpriceAPI vintage records available as of a given cutoff date. (Issue #284)"""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff and
+            (by_code is None or v.get("code") == by_code)
+        ]
+        return sorted(matched, key=lambda x: x.get("valid_date", ""))
+    except Exception:
+        return []
 
 
 class OilPriceAPIDataConnector:
     """
-    OilpriceAPI Energy & Petroleum Data Feed Connector (Issue #128).
+    OilpriceAPI Energy & Petroleum Data Feed Connector (Issue #128, #284).
     Candidate tool discovered from awesome-quant developer catalog.
     Provides Python REST API wrapper / connector for real-time oil and energy commodity spot prices
     (WTI Crude, Brent Crude, RBOB Unleaded Gasoline, Natural Gas, Heating Oil, Urals Crude, Coal).
@@ -1432,7 +1691,8 @@ class OilPriceAPIDataConnector:
       are gated to reuse cached responses for subsequent off-hours runs.
     - Persistent Daily Quota Safety Valve: Enforces a strict 25 calls/day cap (data/oilpriceapi_quota.json).
     - Disk Response Cache: Preserves response payloads (data/oilpriceapi_cache.json).
-    - Zero-Cost Fallback: Operates seamlessly in offline/fallback benchmark mode when API key is missing or quota is exhausted.
+    - Dynamic yfinance Fallback: Queries live commodity futures (CL=F, BZ=F, RB=F, NG=F, HO=F) when unconfigured.
+    - Bitemporal Vintage Tracking: Records point-in-time price vintages to data/oilpriceapi_vintages.json.
     - Connector Telemetry: Instrument execution events via src/connector_telemetry.py.
     """
     def __init__(self, api_key: str = None):
@@ -1578,6 +1838,12 @@ class OilPriceAPIDataConnector:
         except Exception as e:
             logger.warning(f"Could not save OilpriceAPI cache '{OILPRICEAPI_CACHE_FILE}': {e}")
 
+    def save_oilpriceapi_vintage_record(self, record: dict, filepath: str = None) -> None:
+        save_oilpriceapi_vintage_record(record, filepath or OILPRICEAPI_VINTAGE_FILE)
+
+    def get_oilpriceapi_vintages_as_of(self, as_of_date: str, by_code: str = None, filepath: str = None) -> list:
+        return get_oilpriceapi_vintages_as_of(as_of_date, by_code, filepath or OILPRICEAPI_VINTAGE_FILE)
+
     def fetch_latest_price(self, by_code: str = "WTI_USD") -> dict:
         """
         Fetches the latest spot price for an energy commodity code (e.g., WTI_USD, BRENT_USD, RBOB_USD).
@@ -1641,6 +1907,7 @@ class OilPriceAPIDataConnector:
                                 "status": "SUCCESS"
                             }
                             self._save_cache_response(cache_key, res)
+                            self.save_oilpriceapi_vintage_record(res)
                             self._log_telemetry("OilPriceAPIConnector", code, "SUCCESS", latency, 0.0, False, "Live REST API fetch success")
                             return res
             except Exception as e:
@@ -1649,20 +1916,43 @@ class OilPriceAPIDataConnector:
         # Fallback benchmark anchor
         res = self._fallback_price_benchmark(code, timestamp_str)
         self._save_cache_response(cache_key, res)
+        self.save_oilpriceapi_vintage_record(res)
         self._log_telemetry("OilPriceAPIConnector", code, "FALLBACK", 1.0, 0.0, False, "API offline or unconfigured, served benchmark anchor")
         return res
 
     def _fallback_price_benchmark(self, code: str, timestamp_str: str) -> dict:
         meta = self.benchmark_prices.get(code, {"name": code, "value": 75.0, "unit": "USD"})
         val = meta["value"]
+        source_name = f"OilpriceAPI Benchmark Anchor ({code})"
+
+        yf_symbol_map = {
+            "WTI_USD": "CL=F",
+            "BRENT_USD": "BZ=F",
+            "RBOB_USD": "RB=F",
+            "NG_USD": "NG=F",
+            "HO_USD": "HO=F"
+        }
+        if code in yf_symbol_map:
+            try:
+                import yfinance as yf
+                yf_sym = yf_symbol_map[code]
+                hist = yf.Ticker(yf_sym).history(period="5d")
+                if not hist.empty and 'Close' in hist.columns:
+                    closes = [float(v) for v in hist['Close'].values if pd.notna(v) and float(v) > 0]
+                    if closes:
+                        val = round(closes[-1], 3)
+                        source_name = f"OilpriceAPI Dynamic yfinance Fallback ({code} -> {yf_sym})"
+            except Exception as e:
+                logger.debug(f"OilpriceAPI dynamic yfinance fallback notice ({code}): {e}")
+
         return {
             "code": code,
             "name": meta["name"],
             "price": val,
-            "formatted": f"${val:.2f}",
+            "formatted": f"${val:.2f}" if val >= 1.0 else f"${val:.4f}",
             "currency": "USD",
             "created_at": datetime.now().strftime("%Y-%m-%d"),
-            "source": f"OilpriceAPI Benchmark Anchor ({code})",
+            "source": source_name,
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
@@ -2009,12 +2299,75 @@ class FERCDataConnector:
             pass
 
 
+RADAR_VINTAGE_FILE = os.path.join("data", "radar_vintages.json")
+
+
+def save_radar_vintage_record(models: list, filepath: str = RADAR_VINTAGE_FILE, as_of: str = None) -> None:
+    """Persists a bitemporal point-in-time Open Source AI Radar models snapshot (Issue #289)."""
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        vintages = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    vintages = json.load(f)
+            except Exception:
+                vintages = []
+
+        now_str = as_of or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        day_key = str(now_str)[:10]
+
+        # Deduplicate per day
+        vintages = [v for v in vintages if str(v.get("as_of", ""))[:10] != day_key]
+
+        entry = {
+            "as_of": now_str,
+            "valid_date": day_key,
+            "total_models": len(models),
+            "models": models
+        }
+        vintages.append(entry)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(vintages, f, indent=2)
+    except Exception as e:
+        logger.debug(f"Could not persist Open Source AI Radar vintage record: {e}")
+
+
+def get_radar_vintages_as_of(as_of_date: str, category: str = None, filepath: str = RADAR_VINTAGE_FILE) -> list:
+    """Retrieves Open Source AI Radar vintage snapshot available as of a given cutoff date. (Issue #289)"""
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        cutoff = str(as_of_date)[:10]
+        matched = [
+            v for v in vintages
+            if str(v.get("as_of", ""))[:10] <= cutoff
+        ]
+        if not matched:
+            return []
+        latest_entry = sorted(matched, key=lambda x: x.get("as_of", ""))[-1]
+        models = latest_entry.get("models", [])
+        if category:
+            cat = category.lower().strip()
+            models = [
+                m for m in models
+                if cat in [t.lower() for t in m.get("tags", [])]
+                or (cat in ("timeseries", "time_series") and m.get("is_time_series_capable"))
+                or (cat == "llm" and m.get("is_llm_reasoning"))
+            ]
+        return models
+    except Exception:
+        return []
+
+
 class OpenSourceAIRadarConnector:
     """
-    Open Source AI Radar Connector (Issue #187)
+    Open Source AI Radar Connector (Issue #187, #289)
     Fetches open-source model capabilities, parameter counts, context windows, benchmark scores,
     and release timelines from Open Source AI Radar (erbharatmalhotra.github.io/open-source-ai-radar).
-    Provides automatic disk caching and fallback datasets for 100% offline reliability.
+    Provides automatic disk caching, bitemporal vintage tracking, and fallback datasets for 100% offline reliability.
     """
 
     CACHE_FILE = os.path.join("data", "radar_cache.json")
@@ -2134,6 +2487,12 @@ class OpenSourceAIRadarConnector:
         except Exception as e:
             logger.debug(f"Error writing radar cache: {e}")
 
+    def save_radar_vintage_record(self, models: list, filepath: str = None) -> None:
+        save_radar_vintage_record(models, filepath or RADAR_VINTAGE_FILE)
+
+    def get_radar_vintages_as_of(self, as_of_date: str, category: str = None, filepath: str = None) -> list:
+        return get_radar_vintages_as_of(as_of_date, category, filepath or RADAR_VINTAGE_FILE)
+
     def fetch_radar_models(
         self,
         max_results: int = 15,
@@ -2148,6 +2507,7 @@ class OpenSourceAIRadarConnector:
         if not force_refresh:
             cached = self._load_disk_cache()
             if cached:
+                self.save_radar_vintage_record(cached)
                 self._log_telemetry("OpenSourceAIRadar", "AI_Radar_Cache", "SUCCESS", 0.001, 0.0, False, "Cached radar models retrieved")
                 return self._filter_models(cached, category, max_results)
 
@@ -2193,6 +2553,7 @@ class OpenSourceAIRadarConnector:
             status = "SUCCESS"
 
         self._save_disk_cache(models)
+        self.save_radar_vintage_record(models)
         latency = (datetime.now() - start_time).total_seconds()
         self._log_telemetry("OpenSourceAIRadar", "AI_Radar_API", status, latency, 0.0, False, f"Retrieved {len(models)} radar models")
 
