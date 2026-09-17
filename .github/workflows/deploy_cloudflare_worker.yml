@@ -28,3 +28,6 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          preCommands: |
+            npx wrangler queues create intraday-event-dlq || true
+            npx wrangler queues create intraday-event-queue || true
