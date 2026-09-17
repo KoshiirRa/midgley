@@ -409,6 +409,7 @@ async def call_tool(
                 corridor = args.get("corridor", "all")
                 corr_arg = None if corridor == "all" else corridor
                 res = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
         elif name == "search_academic_literature":
             query = args.get("query", "")
             limit = int(args.get("limit", 5))
