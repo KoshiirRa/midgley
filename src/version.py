@@ -13,7 +13,7 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-FALLBACK_PACKAGE_VERSION = "0.5.6"
+FALLBACK_PACKAGE_VERSION = "0.6.0"
 FALLBACK_MODEL_VERSION = "v1.6 Ipatieff"
 
 
