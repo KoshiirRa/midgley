@@ -1,13 +1,5 @@
 [
   {
-    "timestamp": "2026-09-15T20:03:01.336329",
-    "headline": "Data Center\u2019s Spill of 5,000 Gallons of Diesel Forces N.J. River Cleanup",
-    "norm_headline": "data center\u2019s spill of 5,000 gallons of diesel forces n.j. river cleanup",
-    "url": "https://www.nytimes.com/2026/09/15/nyregion/data-center-diesel-fuel-spill-new-jersey.html",
-    "is_anomaly": false,
-    "source": "Cloudflare_Worker"
-  },
-  {
     "timestamp": "2026-09-15T22:48:06.280358",
     "headline": "What Are The Highest Gas Prices Ever Recorded In Minnesota? - 98.1 - Minnesota's New Country",
     "norm_headline": "what are the highest gas prices ever recorded in minnesota? - 98.1",
@@ -508,6 +500,62 @@
     "headline": "India warns new US tariffs over Russian oil could impact ties - Al Jazeera",
     "norm_headline": "india warns new us tariffs over russian oil could impact ties",
     "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMl9PcjVlYklaOEduZmFaQTc4UTYydWlqdzRhWkI5SGl6YTl5blRoY042TWJidktWNDFfTmo1NHFTYU1MVVVVSXozUkVMcWVWRWZBTExJZzVhZ2hzeGJTNFBDdjZ1YzZ5cHdsRFc5T1U5WDlZdDduUE01MmMyTkZyQ3U2ZDFGb0Yya1I5U0FINW5xMzNOOUhnbVByU054WmNjYjFqZ9IBqgFBVV95cUxNQURNRGtuanJNa3FsVEZWdWJHT1BuQTN2NUJVVm11RUFnemZfbDlnN2h0NFFUU2l4dWNYNGduSGtQV28wYUQ1X3l3cGl6NU9BVFU1WXRlMl9uMDQzOU0wVzdGR3JKVHA4TzB3dW03TXpmZ2JKTFJlbzRzZU9EWGcyTEQ3djdFWFBQeHRab2duTlRfcUxWbjBZWm1oa3BBa0xBeVR4ZlJCWkhJQQ?oc=5",
+    "is_anomaly": true,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-17T21:05:16.514656",
+    "headline": "Michigan gas prices setting records with fuel costs expected to rise further - FOX 2 Detroit",
+    "norm_headline": "michigan gas prices setting records with fuel costs expected to rise further",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNX1RSN3BySVV0TmF5VW5fUENBUE14VDBJRVNGOVhSdnBzcVNBR3VRSmFKSS1IT09HX2pfblBPa29oUE1jUVAteHZLNDlqY013MGtVVWhhTHpuMjZKMjRXQlQ3OFJqckhPLUlnZUs5NlhaQi1kT3dPUXdGNnQ5MlEyd0VGQ0hTZXV3?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-17T21:05:16.774529",
+    "headline": "San Juan County sees major gasoline price hit - 96.3 KKOB",
+    "norm_headline": "san juan county sees major gasoline price hit",
+    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOWDctRnRyUWNRWThWQnQtdlRNanhjTnZFeGtLb1piYVZJV2MwVERMMW9WZ2hhYVNrUXRUaWxpZm9uRkxHYWNTVkcwV09YdlBPaFVuVmFRQVhleDNjRnRHVXNJMDNCVkNtbU12X1ZiNlBqdDI4Y2NFYTJtdjhrUlJRWEJCS29tLXhNSjFzM0ZpXzg?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-17T21:05:17.106063",
+    "headline": "FILL UP TODAY: Tank of petrol to cost $115 in Perth tomorrow - PerthNow",
+    "norm_headline": "fill up today: tank of petrol to cost $115 in perth tomorrow",
+    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOamlISXFlWlVDQjJxUGthaEQ0SDFvc0dBcEZJd0hPVDVITHpXbnlFQTQwb1hmU3JLX0ZKb250MEcwY2xOcmphNTBCalNfanhMSko0RnR3MjE5VXA0eUxSOXowMnRkd2FtSmdMal9EQS1jeHRPZFJHZ29WTnZsM2VvaWNuVElMNTg5VnFiX2plMkVIWlBpWVEtek1aV3BXR0FJVFh0OWhmWmEzZFBtTkdERmROanpkZUY5QXZWWHc4OExfVkVhdWNlMUNBRGdxYlhETzhWQWlsTQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-17T21:05:17.390475",
+    "headline": "Price of gasoline today, September 17: the 95 marks 1.914 euros and the diesel 1.905 - Dem\u00f3crata",
+    "norm_headline": "price of gasoline today, september 17: the 95 marks 1.914 euros and the diesel 1.905",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPY2FqQ3BIbkJpUGlYWmhqeVJ4dGxvV2lmckFyRHdaNy1rS2RSSEJPd2tWVGZhQ0tqT1JoNTZ1Z08xX0hOZVZnZ1U0TTlOVXQwM25hZnBzQzUwSDlsb21udWdHX2VrWTFrOGRzYWUxUEVxb3VmY0F5QlBjR0JCbkxuUTVfa1hYU1VKeXE4b2IzNWFhRW5kVlFSWWF6OVJ6YU5Hdms2LUxBaWg3MjlkZUFSUTlmN3V6dUF2bmfSAboBQVVfeXFMT2NhakNwSG5CaVBpWFpoanlSeHRsb1dpZnJBckR3Wjcta0tkUkhCT3drVlRmYUNLak9SaDU2dWdPMV9ITmVWZ2dVNE05TlV0MDNuYWZwc0M1MEg5bG9tbnVnR19la1kxazhkc2FlMVBFcW91ZmNBeUJQY0dCQm5MblE1X2tYWFNVSnlxOG9iMzVhYUVuZFZRUllhejlSemFOR3ZrNi1MQWloNzI5ZGVBUlE5Zjd1enVBdm5n?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-17T21:05:22.711471",
+    "headline": "Where to find the cheapest fuel in Bowral - The Daily Telegraph",
+    "norm_headline": "where to find the cheapest fuel in bowral",
+    "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQbkprcVZaczFidERRV0dHdmhDa2ZDV2pDNFlvY1E3a2t6RXQ5R2d4NEtFQmJRUTZmdXI4NFJ3VE9wc3NYMlJucExCTGV5ZXRWSkxKd3BlaVpFYVptcFJsZ2d4dTZMQ3FIQ0R5aWZzQjNibzFFSF9rcjBrRHhZVjNIdS1wOGtPMXN5WVhpM2NrM2QtNDlfUk1QZE14SFJGSzZ4SFI4RDZ1U3Z5MDdKWVpSekJfVzdDV2loNnJwQmlQRVdUYmtpclpCNUtSY2NIZHNCZjd5Z21XMzRmUV91WDB2Xw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-17T21:05:28.135061",
+    "headline": "Diesel sets yet another price record; supply tightness could last into '27 - Truckers News",
+    "norm_headline": "diesel sets yet another price record; supply tightness could last into '27",
+    "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPX1hXOW1PNENMS2JPRjRqaTRtUjdHNzdhTUlYcnlaVUsyTkFPcUw4c0x3SVFSNTJ5WTUyVTQxOEd4ZjZuN1VzQjlHazFNX1NtQkpsU01VeGZKX0JYVjFPQVpzSVUxNllRY0I5QkN6VjRLY3d3VnRDS09kQ0Q3SlNTR0VQclRaSkZ0eEpPMG5abnR4bGk1WjdWM1dualkzNlVYSDZ6Ry1neWsyM0NzbXQ2NW1uV0hHZFlGZXpJdEVBS0U?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-17T21:05:40.030192",
+    "headline": "India says new US tariffs over Russian oil could hit ties, vows to protect energy security - Reuters",
+    "norm_headline": "india says new us tariffs over russian oil could hit ties, vows to protect energy security",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPTEYxR3ZWQVp2WmNVWFlkTGd2QThGc3VMX2pPd3JSbkR4ekxSZm1WbjdhSU1hZ2JHaHZIZEJRSEEwdUZUOVl4REwxWU9OWUFJcWxaWm9hNk4yeXJJVU5FSUQ4WWZFVTVwQmpaZlFOem5wc1hiNnJJQklmQXo3aWpaOG1tY2tUWm9IalFnSFUzbWFoREwxNHo0RzZrb0RNbHJSa25yMDlidVk5WEt4RkNKRjQwRXpZSWkyYUE?oc=5",
     "is_anomaly": true,
     "source": "RSS_Feed"
   }
