@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-17_00-02-33",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
     "run_id": "2026-09-16_23-34-27",
     "timestamp": "2026-09-16 07:16:50",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-10 16:45:15",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Trump\u2019s Midterm Pitch Clouded by Iran War and Canada Tariffs..."
-  },
-  {
-    "run_id": "2026-09-10_16-30-21",
-    "timestamp": "2026-09-10 16:30:15",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Graham Russia Tariff Bill Contains Legal Ambiguities - Legis..."
   }
 ]
