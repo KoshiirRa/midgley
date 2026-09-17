@@ -34,7 +34,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.6.2</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.6.3</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -129,7 +129,7 @@
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Connector Success Rate</span>
                     <div class="text-2xl font-bold text-emerald-400 font-mono">0.0%</div>
-                    <span class="text-[10px] text-emerald-400 font-mono">151 Total Calls (7-Day)</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">153 Total Calls (7-Day)</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Zero-Cost Fallback Savings</span>
@@ -138,8 +138,8 @@
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Hindsight Stored Memories</span>
-                    <div class="text-2xl font-bold text-purple-300 font-mono">6</div>
-                    <span class="text-[10px] text-purple-300 font-mono">3,898 Retain / 2,459 Cloud Calls</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">48</div>
+                    <span class="text-[10px] text-purple-300 font-mono">4,015 Retain / 2,576 Cloud Calls</span>
                 </div>
             </div>
         </div>
@@ -162,7 +162,7 @@
                     <div class="space-y-3 font-mono text-xs">
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
-                            <span class="text-emerald-400 font-bold">3,898 ops</span>
+                            <span class="text-emerald-400 font-bold">4,015 ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
@@ -184,7 +184,7 @@
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-300">Cloud Run + Supabase pgvector</span>
-                                <span class="text-cyan-400 font-bold">2,459 calls</span>
+                                <span class="text-cyan-400 font-bold">2,576 calls</span>
                             </div>
                             <p class="text-[10px] text-slate-500 font-sans">Scale-to-zero container (midgley-hindsight) with HNSW vector index</p>
                         </div>
@@ -210,7 +210,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                                <div class="text-lg font-bold text-purple-300">6</div>
+                                <div class="text-lg font-bold text-purple-300">48</div>
                                 <div class="text-[10px] text-slate-400 font-sans">Experiences</div>
                             </div>
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
@@ -236,7 +236,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Total Invocations</span>
-                        <div class="text-xl font-bold text-white font-mono">151</div>
+                        <div class="text-xl font-bold text-white font-mono">153</div>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Success Rate</span>
@@ -244,7 +244,7 @@
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Avg Latency</span>
-                        <div class="text-xl font-bold text-cyan-400 font-mono">10.90 ms</div>
+                        <div class="text-xl font-bold text-cyan-400 font-mono">23.60 ms</div>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Stale Payloads (>24h)</span>
@@ -283,19 +283,19 @@
                 <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
             </tr>
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
+                <td class="py-2.5 px-3 font-semibold text-slate-200">HeadlineArena</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">4</td>
+                <td class="py-2.5 px-3 text-center text-red-400 font-bold">0.0%</td>
+                <td class="py-2.5 px-3 text-center text-slate-400">0</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">899.93 ms</td>
+                <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
                 <td class="py-2.5 px-3 font-semibold text-slate-200">OpenSourceAIRadar</td>
                 <td class="py-2.5 px-3 text-center text-slate-300">2</td>
                 <td class="py-2.5 px-3 text-center text-red-400 font-bold">0.0%</td>
                 <td class="py-2.5 px-3 text-center text-slate-400">0</td>
                 <td class="py-2.5 px-3 text-center text-cyan-300">0.24 ms</td>
-                <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
-            </tr>
-            <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
-                <td class="py-2.5 px-3 font-semibold text-slate-200">HeadlineArena</td>
-                <td class="py-2.5 px-3 text-center text-slate-300">2</td>
-                <td class="py-2.5 px-3 text-center text-red-400 font-bold">0.0%</td>
-                <td class="py-2.5 px-3 text-center text-slate-400">0</td>
-                <td class="py-2.5 px-3 text-center text-cyan-300">817.55 ms</td>
                 <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
             </tr>
                         </tbody>
@@ -455,7 +455,7 @@
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
-                        <div class="text-2xl font-bold text-blue-400 font-mono">557</div>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">558</div>
                         <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
@@ -502,7 +502,7 @@
                                 </tr>
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
-                                    <td class="py-2 px-3 text-center">31</td>
+                                    <td class="py-2 px-3 text-center">32</td>
                                     <td class="py-2 px-3 text-center">0</td>
                                     <td class="py-2 px-3 text-center">0</td>
                                     <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
@@ -663,12 +663,12 @@
                         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">7-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">53</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.4147</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$0.3622</td>
-            <td class="py-3 px-4 font-mono text-amber-400">-14.50%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">54.7%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">47.2%</td>
+            <td class="py-3 px-4 text-slate-400">58</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.4338</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2319</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-87.03%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">62.1%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">39.7%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
             </td>
@@ -676,12 +676,12 @@
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">14-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">89</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.4559</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$0.3782</td>
-            <td class="py-3 px-4 font-mono text-amber-400">-20.52%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">57.3%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">52.8%</td>
+            <td class="py-3 px-4 text-slate-400">98</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.3445</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2645</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-30.23%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">69.4%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">50.0%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
             </td>
@@ -689,12 +689,12 @@
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">30-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">197</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.4946</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$0.3629</td>
-            <td class="py-3 px-4 font-mono text-amber-400">-36.28%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">54.8%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">48.7%</td>
+            <td class="py-3 px-4 text-slate-400">218</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.3133</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2344</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-33.67%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">67.4%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">41.7%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
             </td>
@@ -702,12 +702,12 @@
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">90-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">539</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.5159</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$0.3735</td>
-            <td class="py-3 px-4 font-mono text-amber-400">-38.14%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">43.2%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">37.1%</td>
+            <td class="py-3 px-4 text-slate-400">598</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.2803</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2492</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-12.48%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">69.4%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">46.7%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
             </td>
@@ -715,12 +715,12 @@
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">All-Time Window</td>
-            <td class="py-3 px-4 text-slate-400">2162</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.3701</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$0.2955</td>
-            <td class="py-3 px-4 font-mono text-amber-400">-25.27%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">40.4%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">33.6%</td>
+            <td class="py-3 px-4 text-slate-400">2344</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.2338</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.2290</td>
+            <td class="py-3 px-4 font-mono text-amber-400">-2.11%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">57.5%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">44.1%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
             </td>
@@ -831,10 +831,10 @@
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const learningDates = ["2025-10-29", "2025-11-03", "2025-11-08", "2025-11-13", "2025-11-18", "2025-11-23", "2025-11-28", "2025-12-03", "2025-12-08", "2025-12-13", "2025-12-18", "2025-12-23", "2025-12-28", "2026-01-02", "2026-01-07", "2026-01-12", "2026-01-17", "2026-01-22", "2026-01-27", "2026-02-01", "2026-02-06", "2026-02-11", "2026-02-16", "2026-02-21", "2026-02-26", "2026-03-03", "2026-03-08", "2026-03-13", "2026-03-18", "2026-03-23", "2026-03-28", "2026-04-02", "2026-04-07", "2026-04-12", "2026-04-17", "2026-04-22", "2026-04-27", "2026-05-02", "2026-05-07", "2026-05-12", "2026-05-17", "2026-05-22", "2026-05-27", "2026-06-01", "2026-06-06", "2026-06-11", "2026-06-16", "2026-06-21", "2026-06-26", "2026-07-01", "2026-07-06", "2026-07-11", "2026-07-16", "2026-07-21", "2026-07-26", "2026-07-31", "2026-08-05", "2026-08-10", "2026-08-15", "2026-08-20", "2026-08-25", "2026-08-30", "2026-09-04", "2026-09-09", "2026-09-14", "2026-09-19"];
-        const modelMAE = [0.1679, 0.1601, 0.1663, 0.1689, 0.1726, 0.1905, 0.2076, 0.22, 0.2293, 0.2441, 0.2556, 0.2484, 0.2394, 0.2423, 0.2381, 0.2271, 0.2165, 0.2156, 0.2165, 0.2087, 0.2149, 0.2172, 0.2344, 0.2388, 0.2449, 0.2475, 0.261, 0.2879, 0.3022, 0.3264, 0.3417, 0.3719, 0.3978, 0.4281, 0.4464, 0.4569, 0.5013, 0.5322, 0.5376, 0.5361, 0.5353, 0.5354, 0.5351, 0.52, 0.5163, 0.5171, 0.5187, 0.5189, 0.5119, 0.5091, 0.5083, 0.5089, 0.5159, 0.5251, 0.5332, 0.5311, 0.5397, 0.542, 0.5379, 0.5309, 0.528, 0.5321, 0.5273, 0.5214, 0.5121, 0.491];
-        const naiveMAE = [0.1673, 0.1575, 0.1675, 0.168, 0.1696, 0.1825, 0.1992, 0.2087, 0.2121, 0.2277, 0.2441, 0.2402, 0.2293, 0.2315, 0.226, 0.2122, 0.1933, 0.1871, 0.1865, 0.1778, 0.1752, 0.1739, 0.1797, 0.181, 0.1814, 0.1906, 0.2296, 0.2576, 0.2874, 0.3156, 0.3328, 0.3564, 0.3482, 0.3682, 0.3654, 0.3631, 0.3804, 0.3853, 0.3948, 0.3908, 0.3833, 0.3918, 0.403, 0.41, 0.4041, 0.391, 0.3986, 0.4045, 0.3778, 0.3546, 0.3538, 0.3525, 0.3536, 0.3497, 0.3516, 0.3609, 0.3915, 0.4065, 0.4064, 0.3971, 0.3999, 0.3957, 0.3863, 0.3615, 0.361, 0.3655];
-        const upliftData = [-0.32, -1.65, 0.73, -0.5, -1.78, -4.38, -4.19, -5.42, -8.11, -7.17, -4.72, -3.42, -4.39, -4.66, -5.35, -7.05, -12.04, -15.2, -16.08, -17.39, -22.68, -24.91, -30.42, -31.89, -35.02, -29.83, -13.67, -11.76, -5.17, -3.43, -2.67, -4.35, -14.26, -16.29, -22.19, -25.83, -31.77, -38.13, -36.2, -37.17, -39.67, -36.64, -32.79, -26.82, -27.74, -32.26, -30.12, -28.29, -35.5, -43.6, -43.64, -44.37, -45.89, -50.15, -51.67, -47.16, -37.86, -33.34, -32.35, -33.71, -32.05, -34.47, -36.49, -44.22, -41.88, -34.36];
-        const llmWinData = [50.23, 49.05, 51.36, 49.57, 47.73, 40.0, 40.91, 34.09, 21.16, 23.59, 29.35, 32.98, 31.25, 26.92, 24.87, 19.75, 12.28, 14.62, 15.43, 20.37, 20.0, 21.16, 17.9, 18.89, 16.4, 20.56, 35.09, 37.57, 43.92, 48.33, 54.55, 52.17, 43.92, 42.11, 34.92, 31.22, 22.22, 22.22, 26.26, 30.3, 30.69, 34.3, 36.36, 36.26, 28.33, 18.52, 15.56, 19.14, 12.78, 11.11, 13.58, 19.14, 21.05, 21.05, 25.31, 33.86, 39.39, 38.62, 38.38, 40.58, 40.91, 38.62, 40.58, 41.92, 49.15, 49.16];
+        const modelMAE = [0.1679, 0.1601, 0.1663, 0.1689, 0.1726, 0.1905, 0.2076, 0.22, 0.2293, 0.2441, 0.2517, 0.2411, 0.23, 0.2287, 0.2221, 0.2082, 0.1994, 0.1985, 0.1989, 0.1923, 0.1977, 0.1998, 0.2145, 0.2191, 0.2249, 0.2305, 0.2514, 0.2599, 0.2527, 0.2588, 0.2459, 0.2382, 0.2163, 0.2065, 0.1959, 0.1885, 0.2245, 0.2791, 0.288, 0.2895, 0.2961, 0.2913, 0.2795, 0.2262, 0.2032, 0.2011, 0.1918, 0.1867, 0.1766, 0.1725, 0.1705, 0.1832, 0.2185, 0.2557, 0.2845, 0.2672, 0.2865, 0.2927, 0.2869, 0.2745, 0.2654, 0.2931, 0.2771, 0.2732, 0.2925, 0.3133];
+        const naiveMAE = [0.1673, 0.1575, 0.1675, 0.168, 0.1696, 0.1825, 0.1992, 0.2087, 0.2121, 0.2277, 0.2404, 0.2334, 0.2206, 0.2187, 0.2111, 0.1951, 0.179, 0.1737, 0.1733, 0.167, 0.1651, 0.1644, 0.1684, 0.1698, 0.1699, 0.182, 0.2263, 0.2302, 0.2356, 0.2402, 0.2435, 0.2411, 0.2063, 0.2242, 0.238, 0.2382, 0.2433, 0.2436, 0.264, 0.2555, 0.2354, 0.2563, 0.2922, 0.3294, 0.3246, 0.3006, 0.3231, 0.3359, 0.2857, 0.2407, 0.2385, 0.2307, 0.2197, 0.198, 0.1962, 0.2215, 0.2791, 0.3064, 0.3019, 0.2918, 0.3002, 0.2859, 0.2698, 0.2199, 0.2307, 0.2407];
+        const upliftData = [-0.32, -1.65, 0.73, -0.5, -1.78, -4.38, -4.19, -5.42, -8.11, -7.17, -4.71, -3.3, -4.28, -4.57, -5.25, -6.72, -11.4, -14.31, -14.74, -15.15, -19.74, -21.57, -27.42, -29.01, -32.37, -26.7, -11.06, -12.91, -7.24, -7.73, -0.97, 1.19, -4.86, 7.88, 17.71, 20.89, 7.73, -14.6, -9.05, -13.27, -25.78, -13.66, 4.34, 31.32, 37.39, 33.12, 40.62, 44.43, 38.19, 28.36, 28.52, 20.6, 0.53, -29.16, -45.04, -20.63, -2.65, 4.49, 4.97, 5.91, 11.57, -2.5, -2.72, -24.2, -26.79, -30.15];
+        const llmWinData = [50.23, 49.05, 51.36, 49.57, 47.73, 40.0, 40.91, 34.09, 21.16, 23.59, 29.76, 34.36, 32.97, 28.72, 27.32, 23.89, 17.37, 19.47, 20.56, 26.67, 27.0, 28.1, 24.44, 25.0, 21.9, 25.5, 38.42, 38.1, 44.29, 45.5, 50.0, 52.17, 44.29, 50.53, 54.76, 57.14, 54.74, 46.5, 46.82, 45.0, 41.43, 45.22, 52.27, 65.79, 68.5, 64.76, 68.0, 72.22, 65.5, 58.5, 60.0, 57.22, 50.53, 41.05, 36.11, 41.9, 48.18, 51.43, 52.73, 51.74, 54.09, 48.57, 48.7, 41.36, 39.8, 43.43];
 
         if (learningDates.length > 0 && document.getElementById('learningCurveChart')) {
             const ctx1 = document.getElementById('learningCurveChart').getContext('2d');
