@@ -82,9 +82,20 @@ if __name__ == "__main__":
             if not m_df.empty:
                 rb_open = float(m_df['gasoline_rbob'].iloc[-1])
                 cl_open = float(m_df['crude_wti'].iloc[-1]) if 'crude_wti' in m_df.columns else 75.0
+                rb_p50 = rb_open
+                try:
+                    import pandas as pd
+                    import os
+                    if os.path.exists("data/prediction_history.csv"):
+                        ph_df = pd.read_csv("data/prediction_history.csv")
+                        nat_rows = ph_df[ph_df['region'] == 'National']
+                        if not nat_rows.empty:
+                            rb_p50 = float(nat_rows['predicted_5d_price'].iloc[-1])
+                except Exception:
+                    pass
                 ha_res = submit_midgley_energy_forecasts(
                     rb_open_price=rb_open,
-                    rb_p50=rb_open,
+                    rb_p50=rb_p50,
                     cl_open_price=cl_open,
                     cl_p50=cl_open,
                     live_in_dev=live_dev

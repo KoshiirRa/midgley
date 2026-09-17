@@ -65,6 +65,8 @@ jobs:
           CLOUDFLARE_ANALYTICS_TOKEN: ${{ secrets.CLOUDFLARE_ANALYTICS_TOKEN }}
           AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_INTRADAY_WEBHOOK_URL || secrets.DISCORD_WEBHOOK_URL }}
+          HEADLINE_ARENA_CLIENT_ID: ${{ secrets.HEADLINE_ARENA_CLIENT_ID }}
+          HEADLINE_ARENA_CLIENT_SECRET: ${{ secrets.HEADLINE_ARENA_CLIENT_SECRET }}
           MIDGLEY_ENV: "prod"
         run: |
           if [ -n "$HEADLINE" ]; then

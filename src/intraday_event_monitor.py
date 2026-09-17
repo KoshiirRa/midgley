@@ -481,6 +481,32 @@ class IntradayEventMonitor:
                 except Exception as e:
                     logger.warning(f"Failed to regenerate dashboard after anomaly: {e}")
 
+                # 5. Headline Arena Benchmark Submission for Intraday Anomaly Revisions (Issue #182)
+                try:
+                    from src.headline_arena_connector import HeadlineArenaConnector, submit_midgley_energy_forecasts
+                    from src.data_ingestion import fetch_market_data
+                    ha_conn = HeadlineArenaConnector()
+                    live_dev = os.environ.get("HEADLINE_ARENA_DEV_SUBMIT") == "1"
+                    if ha_conn.is_configured and (ha_conn.is_prod or live_dev):
+                        m_df = fetch_market_data(start_date="2024-01-01")
+                        if not m_df.empty:
+                            rb_open = float(m_df['gasoline_rbob'].iloc[-1])
+                            cl_open = float(m_df['crude_wti'].iloc[-1]) if 'crude_wti' in m_df.columns else 75.0
+                            pressure = scores.get("overall_price_pressure", 0.0)
+                            rb_revised = rb_open * (1.0 + pressure * 0.04)
+                            cl_revised = cl_open * (1.0 + pressure * 0.035)
+                            ha_res = submit_midgley_energy_forecasts(
+                                rb_open_price=rb_open,
+                                rb_p50=rb_revised,
+                                cl_open_price=cl_open,
+                                cl_p50=cl_revised,
+                                live_in_dev=live_dev
+                            )
+                            logger.info(f"  -> Headline Arena Intraday Benchmark Submission: {ha_res.get('status')}")
+                            result["headline_arena_submission"] = ha_res
+                except Exception as ha_err:
+                    logger.debug(f"Notice during Headline Arena intraday submission: {ha_err}")
+
         return result
 
     def run_polling_cycle(self) -> Dict:
