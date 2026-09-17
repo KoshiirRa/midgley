@@ -4,6 +4,7 @@ Sequentially runs all registered location forecasting models using the src.locat
 Updates live README.md forecast tables and regenerates the public docs/ index.html web dashboard.
 """
 
+import os
 import sys
 import logging
 import threading
@@ -85,7 +86,6 @@ if __name__ == "__main__":
                 rb_p50 = rb_open
                 try:
                     import pandas as pd
-                    import os
                     if os.path.exists("data/prediction_history.csv"):
                         ph_df = pd.read_csv("data/prediction_history.csv")
                         nat_rows = ph_df[ph_df['region'] == 'National']
