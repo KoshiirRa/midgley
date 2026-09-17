@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-17_11-16-07",
+    "timestamp": "2026-09-17 11:16:02",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Saudi Pipeline Outage Pushes Physical Crude and Diesel Into ..."
+  },
+  {
     "run_id": "2026-09-17_04-04-25",
     "timestamp": "2026-09-17 04:04:23",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-10 17:45:14",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Canada's retaliatory tariffs may hurt its economy, but most ..."
-  },
-  {
-    "run_id": "2026-09-10_17-30-25",
-    "timestamp": "2026-09-10 17:30:19",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Canadian tariffs on US goods take effect. Which products are..."
   }
 ]
