@@ -1,0 +1,279 @@
+"""
+Unit Tests for Headline Arena Energy Forecasting Connector (tests/test_headline_arena_connector.py)
+"""
+
+import os
+import math
+import unittest
+from unittest.mock import patch, MagicMock
+import urllib.error
+
+from src.headline_arena_connector import (
+    norm_cdf,
+    compute_directional_probabilities,
+    HeadlineArenaConnector,
+    submit_midgley_energy_forecasts,
+    DEFAULT_SETTLEMENT_RULES
+)
+
+
+class TestHeadlineArenaConnector(unittest.TestCase):
+    def setUp(self):
+        self.sample_rb_forecast = {
+            "open_price": 2.4500,
+            "p50": 2.5200,
+            "p10": 2.4100,
+            "p90": 2.6300,
+            "qualitative_catalysts": {
+                "overall_price_pressure": 0.35,
+                "supply_disruption": 0.40,
+                "geopolitical_risk": 0.15
+            }
+        }
+        self.sample_cl_forecast = {
+            "open_price": 78.50,
+            "p50": 77.20,
+            "p10": 74.80,
+            "p90": 79.60,
+            "qualitative_catalysts": {
+                "overall_price_pressure": -0.25,
+                "supply_disruption": 0.10,
+                "geopolitical_risk": 0.05
+            }
+        }
+
+    def test_norm_cdf(self):
+        self.assertAlmostEqual(norm_cdf(0.0), 0.5, places=5)
+        self.assertAlmostEqual(norm_cdf(1.95996), 0.975, places=3)
+        self.assertAlmostEqual(norm_cdf(-1.95996), 0.025, places=3)
+        self.assertAlmostEqual(norm_cdf(3.0), 0.99865, places=4)
+        self.assertAlmostEqual(norm_cdf(-3.0), 0.00135, places=4)
+
+    def test_compute_directional_probabilities_bullish(self):
+        # Open: $2.40, P50: $2.60 (well above +0.30% dead zone of $2.4072)
+        res = compute_directional_probabilities(
+            open_price=2.4000,
+            p50=2.6000,
+            p10=2.5000,
+            p90=2.7000,
+            dead_zone=0.0030
+        )
+        self.assertEqual(res["direction"], "bullish")
+        self.assertGreater(res["confidence"], 0.70)
+        self.assertGreater(res["probabilities"]["bullish"], res["probabilities"]["bearish"])
+        self.assertGreater(res["probabilities"]["bullish"], res["probabilities"]["neutral"])
+        
+        # Verify probability sum equals 1.0
+        prob_sum = sum(res["probabilities"].values())
+        self.assertAlmostEqual(prob_sum, 1.0, places=3)
+
+    def test_compute_directional_probabilities_bearish(self):
+        # Open: $2.50, P50: $2.30 (well below -0.30% dead zone of $2.4925)
+        res = compute_directional_probabilities(
+            open_price=2.5000,
+            p50=2.3000,
+            p10=2.2000,
+            p90=2.4000,
+            dead_zone=0.0030
+        )
+        self.assertEqual(res["direction"], "bearish")
+        self.assertGreater(res["confidence"], 0.70)
+        self.assertGreater(res["probabilities"]["bearish"], res["probabilities"]["bullish"])
+        
+        prob_sum = sum(res["probabilities"].values())
+        self.assertAlmostEqual(prob_sum, 1.0, places=3)
+
+    def test_compute_directional_probabilities_neutral(self):
+        # Open: $2.4500, P50: $2.4502, tight sigma (0.0005) inside ±0.30% dead zone [$2.44265, $2.45735]
+        res = compute_directional_probabilities(
+            open_price=2.4500,
+            p50=2.4502,
+            residual_std=0.001,
+            dead_zone=0.0030
+        )
+        self.assertEqual(res["direction"], "neutral")
+        self.assertGreater(res["probabilities"]["neutral"], 0.80)
+
+    def test_dead_zones_rb_cl(self):
+        connector = HeadlineArenaConnector()
+        self.assertEqual(connector.get_dead_zone("RB"), 0.0030)
+        self.assertEqual(connector.get_dead_zone("CL"), 0.0020)
+
+    def test_format_direction_payload_dev_tagging(self):
+        connector = HeadlineArenaConnector(environment="dev")
+        payload = connector.format_direction_payload(
+            asset="RB",
+            open_price=self.sample_rb_forecast["open_price"],
+            p50=self.sample_rb_forecast["p50"],
+            p10=self.sample_rb_forecast["p10"],
+            p90=self.sample_rb_forecast["p90"],
+            qualitative_catalysts=self.sample_rb_forecast["qualitative_catalysts"]
+        )
+        self.assertEqual(payload["asset"], "RB")
+        self.assertIn("direction", payload)
+        self.assertIn("confidence", payload)
+        self.assertIn("[DEV-TEST]", payload["reasoning"])
+        self.assertIn("[DEVELOPMENT]", payload["reasoning"])
+        self.assertIn("Price Pressure", payload["reasoning"])
+
+    def test_format_direction_payload_prod_clean(self):
+        connector = HeadlineArenaConnector(environment="prod")
+        payload = connector.format_direction_payload(
+            asset="RB",
+            open_price=self.sample_rb_forecast["open_price"],
+            p50=self.sample_rb_forecast["p50"],
+            p10=self.sample_rb_forecast["p10"],
+            p90=self.sample_rb_forecast["p90"]
+        )
+        self.assertEqual(payload["asset"], "RB")
+        self.assertNotIn("[DEV-TEST]", payload["reasoning"])
+        self.assertNotIn("[DEVELOPMENT]", payload["reasoning"])
+        self.assertIn("Midgley multi-agent", payload["reasoning"])
+
+    def test_format_macro_numeric_payload(self):
+        connector = HeadlineArenaConnector(environment="prod")
+        payload = connector.format_macro_numeric_payload(
+            asset="CL",
+            p50=75.50,
+            p10=72.00,
+            p90=79.00
+        )
+        self.assertEqual(payload["asset"], "CL")
+        self.assertEqual(payload["predicted_value"], 75.50)
+        self.assertAlmostEqual(payload["predicted_std"], (79.0 - 72.0) / 2.5631, places=3)
+
+    def test_oauth2_token_caching_and_expiration(self):
+        connector = HeadlineArenaConnector(
+            client_id="test_id",
+            client_secret="test_secret"
+        )
+        with patch.dict(os.environ, {"TESTING": "0"}, clear=True):
+            # Mock the POST /auth/token endpoint
+            mock_response = MagicMock()
+            mock_response.read.return_value = b'{"access_token": "token_abc_123", "expires_in": 3600}'
+            mock_response.__enter__.return_value = mock_response
+
+            with patch("urllib.request.urlopen", return_value=mock_response) as mock_urlopen:
+                token1 = connector.get_bearer_token()
+                self.assertEqual(token1, "token_abc_123")
+                self.assertEqual(mock_urlopen.call_count, 1)
+
+                # Second call should use in-memory cache without hitting network
+                token2 = connector.get_bearer_token()
+                self.assertEqual(token2, "token_abc_123")
+                self.assertEqual(mock_urlopen.call_count, 1)
+
+                # Force refresh should hit network again
+                token3 = connector.get_bearer_token(force_refresh=True)
+                self.assertEqual(token3, "token_abc_123")
+                self.assertEqual(mock_urlopen.call_count, 2)
+
+    def test_submit_forecast_test_mode_suppression(self):
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            connector = HeadlineArenaConnector(client_id="test_id", client_secret="test_secret")
+            payload = {"asset": "RB", "direction": "bullish", "confidence": 0.85, "reasoning": "Test"}
+            res = connector.submit_forecast(payload)
+            self.assertEqual(res["status"], "SUCCESS")
+            self.assertEqual(res["mode"], "TEST_MOCKED")
+            self.assertEqual(res["direction"], "bullish")
+
+    def test_submit_forecast_missing_credentials(self):
+        with patch.dict(os.environ, {"TESTING": "0"}, clear=True):
+            connector = HeadlineArenaConnector(client_id="", client_secret="")
+            payload = {"asset": "RB", "direction": "bullish", "confidence": 0.85}
+            res = connector.submit_forecast(payload)
+            self.assertEqual(res["status"], "SKIPPED_NO_CREDENTIALS")
+
+    def test_submit_forecast_dev_dry_run(self):
+        with patch.dict(os.environ, {"TESTING": "0", "MIDGLEY_ENV": "dev"}, clear=True):
+            connector = HeadlineArenaConnector(
+                client_id="test_id",
+                client_secret="test_secret",
+                environment="dev"
+            )
+            payload = {"asset": "RB", "direction": "bullish", "confidence": 0.85, "reasoning": "Dev test"}
+            res = connector.submit_forecast(payload, live_in_dev=False)
+            self.assertEqual(res["status"], "DRY_RUN")
+            self.assertEqual(res["mode"], "DEVELOPMENT_DRY_RUN")
+            self.assertEqual(res["direction"], "bullish")
+
+    def test_submit_forecast_dev_live_explicit(self):
+        with patch.dict(os.environ, {"TESTING": "0", "MIDGLEY_ENV": "dev"}, clear=True):
+            connector = HeadlineArenaConnector(
+                client_id="test_id",
+                client_secret="test_secret",
+                environment="dev"
+            )
+            # Mock bearer token and submission
+            connector.get_bearer_token = MagicMock(return_value="mock_bearer_token")
+
+            mock_response = MagicMock()
+            mock_response.read.return_value = b'{"status": "accepted", "id": "sub_98765"}'
+            mock_response.__enter__.return_value = mock_response
+
+            with patch("urllib.request.urlopen", return_value=mock_response):
+                payload = {"asset": "RB", "direction": "bullish", "confidence": 0.85, "reasoning": "[DEV-TEST] Model evaluation"}
+                res = connector.submit_forecast(payload, live_in_dev=True)
+                self.assertEqual(res["status"], "SUCCESS")
+                self.assertEqual(res["mode"], "LIVE_SUBMISSION")
+                self.assertEqual(res["response"]["id"], "sub_98765")
+
+    def test_register_agent(self):
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            connector = HeadlineArenaConnector()
+            res = connector.register_agent(name="Test-Agent")
+            self.assertEqual(res["status"], "SUCCESS")
+            self.assertIn("client_id", res)
+            self.assertIn("client_secret", res)
+
+    def test_submit_midgley_energy_forecasts_multi_asset(self):
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            results = submit_midgley_energy_forecasts(
+                rb_open_price=2.4500,
+                rb_p50=2.5200,
+                rb_p10=2.4100,
+                rb_p90=2.6300,
+                cl_open_price=78.50,
+                cl_p50=77.20,
+                cl_p10=74.80,
+                cl_p90=79.60
+            )
+            self.assertIn("RB", results)
+            self.assertIn("CL", results)
+            self.assertEqual(results["RB"]["status"], "SUCCESS")
+            self.assertEqual(results["CL"]["status"], "SUCCESS")
+
+    def test_api_server_headline_arena_status(self):
+        from fastapi.testclient import TestClient
+        from src.api_server import app
+        client = TestClient(app)
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            res = client.get("/api/v1/connectors/headline-arena/status")
+            self.assertEqual(res.status_code, 200)
+            data = res.json()
+            self.assertIn("settlement_rules", data)
+            self.assertIn("RB", data["settlement_rules"])
+            self.assertIn("CL", data["settlement_rules"])
+
+    def test_api_server_headline_arena_submit(self):
+        from fastapi.testclient import TestClient
+        from src.api_server import app
+        client = TestClient(app)
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            res = client.post("/api/v1/connectors/headline-arena/submit", json={
+                "asset": "RB",
+                "open_price": 2.45,
+                "p50": 2.52,
+                "p10": 2.41,
+                "p90": 2.63,
+                "live_in_dev": False
+            })
+            self.assertEqual(res.status_code, 200)
+            data = res.json()
+            self.assertEqual(data["status"], "success")
+            self.assertIn("payload", data)
+            self.assertIn("result", data)
+
+
+if __name__ == "__main__":
+    unittest.main()

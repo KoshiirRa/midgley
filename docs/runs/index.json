@@ -1,5 +1,113 @@
 [
   {
+    "run_id": "2026-09-17_04-37-46",
+    "timestamp": "2026-09-16 22:50:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:50:18)"
+  },
+  {
+    "run_id": "2026-09-17_03-50-37",
+    "timestamp": "2026-09-16 22:50:18",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:50:18)"
+  },
+  {
+    "run_id": "2026-09-17_03-49-00",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-55",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-50",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-45",
+    "timestamp": "2026-09-17 03:48 UTC",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-17 03:48 UTC)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-40",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-34",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-29",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-23",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-18",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-13",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-07",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-48-02",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_03-47-57",
+    "timestamp": "2026-09-16 22:47:55",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-16 22:47:55)"
+  },
+  {
+    "run_id": "2026-09-17_00-02-33",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
+    "run_id": "2026-09-16_23-34-27",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
+    "run_id": "2026-09-16_23-27-55",
+    "timestamp": "2026-09-16 07:16:50",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Oil News: Saudi Pipeline Outage and China Draws Keep Buyers ..."
+  },
+  {
     "run_id": "2026-09-16_07-16-55",
     "timestamp": "2026-09-16 07:16:50",
     "run_type": "INTRADAY_REVISION",
@@ -490,113 +598,5 @@
     "timestamp": "2026-09-11 01:38:21",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-11 01:38:21)"
-  },
-  {
-    "run_id": "2026-09-11_01-39-40",
-    "timestamp": "2026-09-11 01:38:21",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:38:21)"
-  },
-  {
-    "run_id": "2026-09-11_01-39-06",
-    "timestamp": "2026-09-11 01:38:21",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:38:21)"
-  },
-  {
-    "run_id": "2026-09-11_01-38-31",
-    "timestamp": "2026-09-11 01:38:21",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:38:21)"
-  },
-  {
-    "run_id": "2026-09-11_00-00-15",
-    "timestamp": "2026-09-11 00:00:09",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "RH Q2 EPS beats $1.78 estimate; tariff benefit offsets oil c..."
-  },
-  {
-    "run_id": "2026-09-10_20-15-15",
-    "timestamp": "2026-09-10 20:15:09",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Copper Stocks Sink as White House Tariff Uncertainty Spooks ..."
-  },
-  {
-    "run_id": "2026-09-10_19-45-14",
-    "timestamp": "2026-09-10 19:45:08",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "The AI boom and tariff uncertainty are pushing copper prices..."
-  },
-  {
-    "run_id": "2026-09-10_19-15-14",
-    "timestamp": "2026-09-10 19:15:08",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariff uncertainty tests copper\u2019s record rally - ing think"
-  },
-  {
-    "run_id": "2026-09-10_18-30-38",
-    "timestamp": "2026-09-10 18:30:33",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "U.S. Sen. Tammy Baldwin meets with Janesville retailers as t..."
-  },
-  {
-    "run_id": "2026-09-10_18-15-24",
-    "timestamp": "2026-09-10 18:15:15",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Copper: Tariff uncertainty and max CTA length \u2013 TD Securitie..."
-  },
-  {
-    "run_id": "2026-09-10_18-00-28",
-    "timestamp": "2026-09-10 18:00:22",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Copper, FCX Stock Plunge On Tariff Report, Surging Yields; S..."
-  },
-  {
-    "run_id": "2026-09-10_17-45-21",
-    "timestamp": "2026-09-10 17:45:14",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Canada's retaliatory tariffs may hurt its economy, but most ..."
-  },
-  {
-    "run_id": "2026-09-10_17-30-25",
-    "timestamp": "2026-09-10 17:30:19",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Canadian tariffs on US goods take effect. Which products are..."
-  },
-  {
-    "run_id": "2026-09-10_17-15-26",
-    "timestamp": "2026-09-10 17:15:20",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Trump widens trade war with Canada beyond tariffs. Here\u2019s wh..."
-  },
-  {
-    "run_id": "2026-09-10_17-00-32",
-    "timestamp": "2026-09-10 17:00:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Oil, tariffs and uncertainty shake markets: What it means fo..."
-  },
-  {
-    "run_id": "2026-09-10_16-45-22",
-    "timestamp": "2026-09-10 16:45:15",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Trump\u2019s Midterm Pitch Clouded by Iran War and Canada Tariffs..."
-  },
-  {
-    "run_id": "2026-09-10_16-30-21",
-    "timestamp": "2026-09-10 16:30:15",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Graham Russia Tariff Bill Contains Legal Ambiguities - Legis..."
-  },
-  {
-    "run_id": "2026-09-10_16-15-21",
-    "timestamp": "2026-09-10 16:15:15",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Russia Vows to Keep Selling Oil to India Despite U.S. Tariff..."
-  },
-  {
-    "run_id": "2026-09-10_16-00-31",
-    "timestamp": "2026-09-10 16:00:20",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Tariffs, Oil Prices, and AI: A Triple Assault That Rate Hike..."
   }
 ]

@@ -66,6 +66,11 @@ FRED_API_KEY="fred_api_key_here"
 # CORE Open-Access Research Literature API Key (Weekly Model Review)
 CORE_API_KEY="core_api_key_here"
 
+# Semantic Scholar Academic Graph API Key (Optional, raises rate limits from 100 to 1000 req/5min)
+SEMANTIC_SCHOLAR_API_KEY="semantic_scholar_api_key_here"
+
+# OpenAlex CC0 Open-Access Literature API requires NO key (100k free requests/day with mailto header)
+
 # Optional Secondary LLM Tier Failovers (Soft-checked)
 OPENAI_API_KEY="sk-proj-..."
 ANTHROPIC_API_KEY="sk-ant-..."
@@ -128,6 +133,14 @@ GCP_PROJECT_ID="midgley"
 # Optional U.S. Census Bureau API Key (api.census.gov - Free public open data)
 # Optional: Public keyless queries work out-of-the-box. Add key for high-volume batch runs.
 CENSUS_API_KEY=""
+
+# ==============================================================================
+# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issue #182)
+# ==============================================================================
+# OAuth2 Client Credentials for independent Brier/CRPS daily continuous probability scoring
+HEADLINE_ARENA_CLIENT_ID="ha_agent_..."
+HEADLINE_ARENA_CLIENT_SECRET="ha_sec_..."  # Or HEADLINE_ARENA_API_KEY
+HEADLINE_ARENA_DEV_SUBMIT="0"              # Set to 1 in dev to execute live test submissions (tagged [DEV-TEST])
 
 # Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
 HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
@@ -735,6 +748,18 @@ python3 -c "from src.learning_tracker import generate_learning_journal_markdown;
 head -n 30 MODEL_LEARNING.md
 ```
 
+### 7. Execute Ingestion Feed Health Diagnostics (Issue #267)
+Run the built-in diagnostic probe to verify latency and connectivity across Google News RSS, NYT, Executive Social, Key Movers, and Geopolitical streams:
+```bash
+python3 src/intraday_event_monitor.py --check-feeds
+```
+
+### 8. Verify Model Context Protocol (MCP) Academic Literature Tools (Issue #266)
+Verify that the MCP server exposes academic search (`search_academic_literature`) and TL;DR retrieval (`get_academic_paper_tldr`):
+```bash
+python3 -m pytest tests/test_mcp_server.py tests/test_academic_openalex.py tests/test_semantic_scholar_feed.py -v
+```
+
 ---
 
-*Midgley Version: `v0.5.4-dev` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.5.6` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*

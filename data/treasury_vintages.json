@@ -1,0 +1,20 @@
+[
+  {
+    "as_of": "2026-09-16 22:50:47",
+    "valid_date": "2026-03-27",
+    "treasury_yield_10y": 4.44,
+    "treasury_yield_2y": 3.885,
+    "treasury_yield_10y_2y_spread": 0.555,
+    "tips_10y_real_yield": 2.14,
+    "curve_state": "Normal Sloped (Expansionary)",
+    "data": {
+      "date": "2026-03-27",
+      "treasury_yield_10y": 4.44,
+      "treasury_yield_2y": 3.885,
+      "treasury_yield_10y_2y_spread": 0.555,
+      "tips_10y_real_yield": 2.14,
+      "treasury_spread_delta_5d": 0.019,
+      "curve_state": "Normal Sloped (Expansionary)"
+    }
+  }
+]

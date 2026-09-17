@@ -1058,6 +1058,17 @@ def generate_weekly_markdown_report() -> str:
     degradation_res = evaluate_model_degradation_alerts(window_days=30)
     degradation_section_md = format_degradation_markdown_section(degradation_res)
 
+    # Refresh Historical Benchmarks & Fallback Datasets (Issue #297)
+    benchmark_summary_md = "✅ *All historical benchmarks up-to-date.*"
+    try:
+        from src.benchmark_updater import refresh_all_historical_benchmarks
+        bench_res = refresh_all_historical_benchmarks()
+        refreshed_count = bench_res.get("benchmarks_refreshed", "N/A")
+        benchmark_summary_md = f"✅ **Automated Historical Benchmark Refresh (Issue #297):** Refreshed **`{refreshed_count}`** persistent historical fallback datasets (`data/*_historical.json`) reflecting latest Friday market closes."
+    except Exception as e:
+        logger.warning(f"Benchmark updater error in weekly report: {e}")
+        benchmark_summary_md = f"⚠️ *Historical benchmark refresh skipped ({e}).*"
+
     # Log weekly audit metrics to Weights & Biases (Issue #80)
     try:
         if is_wandb_enabled():
@@ -1095,9 +1106,12 @@ def generate_weekly_markdown_report() -> str:
     except Exception as e:
         logger.debug(f"Notice generating memory reflections: {e}")
 
+    from src.version import get_model_version
+    model_ver = get_model_version()
+
     report = f"""# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report & Performance Audit
 
-### 🤖 Model Version: `v1.4 Finlight-LLM` | **Branch:** `{branch}`
+### 🤖 Model Version: `{model_ver}` | **Branch:** `{branch}`
 
 ---
 
@@ -1170,6 +1184,12 @@ def generate_weekly_markdown_report() -> str:
 ---
 
 {praxist_section_md}
+
+---
+
+## 🏛️ Persistent Historical Fallback & Benchmark Verification (Issue #297)
+
+{benchmark_summary_md}
 
 ---
 

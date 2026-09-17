@@ -250,11 +250,11 @@ def render_single_embed_card(spec: dict, run_payload: dict, output_path: str):
     fig = plt.figure(figsize=(12, 6.3), dpi=100)
     fig.patch.set_facecolor('#0f172a') # Slate 950
 
-    # Main Grid Specification: Title Header (Top), Left Metric Panel, Right Chart Panel
     # Top Header
+    from src.version import get_model_version
     fig.text(0.05, 0.91, "midgley", fontsize=28, fontweight='bold', color='#f8fafc', fontfamily='sans-serif')
     fig.text(0.18, 0.915, "AI FORECAST ENGINE", fontsize=11, fontweight='bold', color='#0ea5e9', bbox=dict(boxstyle='round,pad=0.3', facecolor='#0ea5e9', alpha=0.15, edgecolor='#0ea5e9'))
-    fig.text(0.95, 0.91, f"Model v1.4 Finlight-LLM", fontsize=11, color='#94a3b8', ha='right', fontfamily='sans-serif')
+    fig.text(0.95, 0.91, f"Model {get_model_version()}", fontsize=11, color='#94a3b8', ha='right', fontfamily='sans-serif')
     
     # Header separator line
     line = plt.Line2D([0.05, 0.95], [0.87, 0.87], transform=fig.transFigure, color='#334155', linewidth=1.2)

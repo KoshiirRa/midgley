@@ -264,6 +264,20 @@ class TestIntradayEventMonitor(unittest.TestCase):
                 )
                 self.assertTrue(res3.get("duplicate"))
 
+    def test_check_feed_health(self):
+        """Verifies feed health diagnostics and latency reporting."""
+        with patch.object(self.monitor, "fetch_executive_social_headlines", return_value=[{"headline": "Test Post"}]), \
+             patch.object(self.monitor, "fetch_key_movers_headlines", return_value=[{"headline": "Mover statement"}]), \
+             patch.object(self.monitor, "fetch_geopolitical_headlines", return_value=[{"headline": "Maritime update"}]):
+            health = self.monitor.check_feed_health()
+            self.assertIn("overall_healthy", health)
+            self.assertIn("feeds_tested", health)
+            self.assertGreaterEqual(health["feeds_tested"], 4)
+            self.assertIn("feed_details", health)
+            for feed in health["feed_details"]:
+                self.assertIn("status", feed)
+                self.assertIn("latency_ms", feed)
+
 
 if __name__ == "__main__":
     unittest.main()

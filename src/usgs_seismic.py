@@ -449,6 +449,11 @@ class USGSSeismicConnector:
             "corridors": corridor_data,
             "indices": indices
         }
+        try:
+            from src.benchmark_updater import save_historical_benchmark
+            save_historical_benchmark("usgs_seismic", result)
+        except Exception:
+            pass
 
         save_seismic_vintage_record(result)
         global_cache.set(cache_key, result)

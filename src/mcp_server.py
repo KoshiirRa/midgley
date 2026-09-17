@@ -248,6 +248,45 @@ async def list_tools() -> list[types.Tool]:
                     }
                 }
             }
+        ),
+        types.Tool(
+            name="search_academic_literature",
+            description="Searches peer-reviewed academic literature across OpenAlex and Semantic Scholar for energy economics, petroleum refining, and fuel market dynamics (Issue #263, #264, #266).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Search topic or keywords (e.g., 'gasoline crack spread price asymmetry', 'refinery outage pass-through')"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "description": "Max papers to return (default: 5)",
+                        "default": 5
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Academic engine filter: 'all', 'openalex', or 'semantic_scholar'",
+                        "default": "all",
+                        "enum": ["all", "openalex", "semantic_scholar"]
+                    }
+                },
+                "required": ["query"]
+            }
+        ),
+        types.Tool(
+            name="get_academic_paper_tldr",
+            description="Fetches automated single-sentence TL;DR summary, citation counts, and open-access PDF for a specific academic paper by DOI or ID (Issue #264 & #266).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "paper_id_or_doi": {
+                        "type": "string",
+                        "description": "Paper DOI, OpenAlex ID, or Semantic Scholar paperId"
+                    }
+                },
+                "required": ["paper_id_or_doi"]
+            }
         )
     ]
 
@@ -370,6 +409,40 @@ async def call_tool(
                 corridor = args.get("corridor", "all")
                 corr_arg = None if corridor == "all" else corridor
                 res = connector.fetch_live_aqi_telemetry(corridor=corr_arg)
+        elif name == "search_academic_literature":
+            query = args.get("query", "")
+            limit = int(args.get("limit", 5))
+            source = args.get("source", "all")
+            results = {}
+
+            if source in ["all", "openalex"]:
+                try:
+                    from src.academic_openalex import OpenAlexConnector
+                    oa = OpenAlexConnector()
+                    results["openalex"] = oa.search_energy_literature(topic=query, limit=limit)
+                except Exception as e:
+                    results["openalex_error"] = str(e)
+
+            if source in ["all", "semantic_scholar"]:
+                try:
+                    from src.semantic_scholar_feed import SemanticScholarConnector
+                    ss = SemanticScholarConnector()
+                    results["semantic_scholar"] = ss.search_papers(query=query, limit=limit)
+                except Exception as e:
+                    results["semantic_scholar_error"] = str(e)
+
+            return [types.TextContent(type="text", text=json.dumps({"query": query, "results": results}, indent=2))]
+
+        elif name == "get_academic_paper_tldr":
+            paper_id_or_doi = args.get("paper_id_or_doi", "")
+            from src.semantic_scholar_feed import SemanticScholarConnector
+            ss = SemanticScholarConnector()
+            tldr = ss.get_paper_tldr(paper_id_or_doi)
+            res = {
+                "paper_id_or_doi": paper_id_or_doi,
+                "tldr": tldr,
+                "status": "SUCCESS" if tldr else "NOT_FOUND"
+            }
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         else:

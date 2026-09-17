@@ -123,10 +123,12 @@ async def get_api_key_user(
     request.state.key_info = key_info
     return key_info
 
+from src.version import get_version, get_model_version
+
 app = FastAPI(
     title="Midgley Gas Price Forecasting API Gateway",
     description="RESTful API for real-time unleaded gasoline pump prices, 5-day out-of-time quantitative forecasts, and counterfactual physical/geopolitical shock simulations.",
-    version="0.3.5",
+    version=get_version(),
     docs_url="/docs",
     redoc_url="/redoc",
     servers=[
@@ -308,8 +310,19 @@ class BatchCombinedRequest(BaseModel):
     locales: List[str] = Field(default_factory=lambda: ["national"], json_schema_extra={"example": ["tulsa", "newark", "port_st_lucie"]}, description="List of locale codes")
 
 
+class HeadlineArenaSubmitRequest(BaseModel):
+    asset: str = Field(default="RB", description="Asset symbol ('RB' for RBOB Wholesale Gasoline, 'CL' for WTI Crude)")
+    open_price: float = Field(..., gt=0, description="Open spot price")
+    p50: float = Field(..., gt=0, description="Median model forecast price")
+    p10: Optional[float] = Field(None, gt=0, description="10th percentile downside band")
+    p90: Optional[float] = Field(None, gt=0, description="90th percentile upside band")
+    residual_std: Optional[float] = Field(None, gt=0, description="Residual standard deviation")
+    live_in_dev: bool = Field(default=False, description="Whether to execute live submission in dev environment (tags as [DEV-TEST])")
+
+
 BatchForecastRequest.model_rebuild()
 BatchCombinedRequest.model_rebuild()
+HeadlineArenaSubmitRequest.model_rebuild()
 
 
 # Rate Limiting & Auth Middleware helper
@@ -436,7 +449,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             "name": meta["name"]
         },
         "forecast": {
-            "model_version": "v1.6 Ipatieff",
+            "model_version": get_model_version(),
             "forecast_horizon_days": days,
             "target_date": target_date,
             "current_base_price": base_price,
@@ -475,7 +488,7 @@ def get_forecast_scoreboard(
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "filters": {
             "locale": locale or "all",
@@ -499,7 +512,7 @@ def trigger_cloud_prediction_sync():
     res = sync_predictions_to_cloud()
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "result": res
     }
@@ -513,7 +526,7 @@ def get_cloud_prediction_sync_status():
     status_info = get_cloud_sync_status()
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "cloud_sync_status": status_info
     }
@@ -655,7 +668,8 @@ def get_health():
     return {
         "status": "online",
         "system": "Midgley Gas Price Forecasting API Gateway",
-        "version": "0.3.5",
+        "version": get_version(),
+        "model_version": get_model_version(),
         "timestamp": datetime.now().isoformat()
     }
 
@@ -863,7 +877,7 @@ def list_supported_locales():
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "total_locales": len(locales_dict),
         "locales": locales_dict
@@ -972,7 +986,7 @@ def get_batch_forecast(req: BatchForecastRequest):
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "total_requested": len(loc_list),
         "forecasts": results
@@ -1001,7 +1015,7 @@ def get_batch_combined(req: BatchCombinedRequest):
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 Finlight-LLM",
+        "system": f"Midgley {get_model_version()}",
         "timestamp": datetime.now().isoformat(),
         "total_requested": len(loc_list),
         "combined": results
@@ -1286,6 +1300,45 @@ def get_connector_telemetry(days: int = Query(7, ge=1, le=90, description="Rolli
     """
     from src.connector_telemetry import get_telemetry_summary
     return get_telemetry_summary(days=days)
+
+
+@app.get("/api/v1/connectors/headline-arena/status", summary="Get Headline Arena Connector Status & Settlement Rules", tags=["Connectors & Integrations"])
+def get_headline_arena_status():
+    """Returns Headline Arena connection status, configured client ID, environment, and settlement dead-zone rules."""
+    from src.headline_arena_connector import HeadlineArenaConnector
+    connector = HeadlineArenaConnector()
+    return {
+        "configured": connector.is_configured,
+        "environment": connector.environment,
+        "is_production": connector.is_prod,
+        "base_url": connector.base_url,
+        "settlement_rules": connector.get_settlement_rules()
+    }
+
+
+@app.post("/api/v1/connectors/headline-arena/submit", dependencies=[Depends(get_api_key_user)], summary="Submit Forecast to Headline Arena", tags=["Connectors & Integrations"])
+def submit_headline_arena_forecast(req: HeadlineArenaSubmitRequest):
+    """
+    Submits or dry-runs a forecast to Headline Arena.
+    In dev environments, executes dry-run by default unless live_in_dev is explicitly True.
+    """
+    from src.headline_arena_connector import HeadlineArenaConnector
+    connector = HeadlineArenaConnector()
+    payload = connector.format_direction_payload(
+        asset=req.asset,
+        open_price=req.open_price,
+        p50=req.p50,
+        p10=req.p10,
+        p90=req.p90,
+        residual_std=req.residual_std
+    )
+    result = connector.submit_forecast(payload, live_in_dev=req.live_in_dev)
+    return {
+        "status": "success",
+        "processed_at": datetime.now().isoformat(),
+        "payload": payload,
+        "result": result
+    }
 
 
 # Knowledge Graph & Agent Memory REST API Endpoints

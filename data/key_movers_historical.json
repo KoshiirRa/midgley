@@ -1,0 +1,77 @@
+{
+  "benchmark_key": "key_movers",
+  "last_refreshed_utc": "2026-09-17 03:50:55",
+  "records_count": 7,
+  "data": [
+    {
+      "date": "2022-03-31",
+      "entity": "US_Energy_Secretary_DOE",
+      "person": "Jennifer Granholm / Biden Admin",
+      "headline": "US announces historic 180 million barrel Strategic Petroleum Reserve (SPR) release over 6 months; gasoline futures drop.",
+      "impact_category": "SPR_Release",
+      "category": "SPR_Release",
+      "source": "US Department of Energy / Executive Action",
+      "market_reaction_pct": -3.85
+    },
+    {
+      "date": "2022-06-17",
+      "entity": "US_Energy_Secretary_DOE",
+      "person": "US Energy Secretary DOE",
+      "headline": "The US Is Depleting Its Strategic Petroleum Reserve Faster Than It Looks - Bloomberg.com",
+      "impact_category": "US_Energy_Secretary_DOE_Statement",
+      "category": "US_Energy_Secretary_DOE_Statement",
+      "source": "Key Movers Live RSS (US_Energy_Secretary_DOE)",
+      "market_reaction_pct": 0.0
+    },
+    {
+      "date": "2023-06-04",
+      "entity": "Prince_Abdulaziz_bin_Salman",
+      "person": "Prince Abdulaziz bin Salman (Saudi Arabia)",
+      "headline": "Saudi Arabia announces solo 'Saudi Lollipop' voluntary oil production cut of 1.0 million barrels per day starting July; crude surges +4%.",
+      "impact_category": "OPEC_Surprise_Cut",
+      "category": "OPEC_Surprise_Cut",
+      "source": "Saudi Ministry of Energy / OPEC+",
+      "market_reaction_pct": 4.12
+    },
+    {
+      "date": "2023-07-26",
+      "entity": "Jerome_Powell",
+      "person": "Jerome Powell (Fed Chair)",
+      "headline": "Fed raises interest rates to 22-year high of 5.50%; Powell emphasizes data-dependent stance, dampening energy demand outlook.",
+      "impact_category": "Fed_Rate_Hike",
+      "category": "Fed_Rate_Hike",
+      "source": "US Federal Reserve FOMC",
+      "market_reaction_pct": -1.15
+    },
+    {
+      "date": "2023-10-19",
+      "entity": "US_Energy_Secretary_DOE",
+      "person": "US Department of Energy",
+      "headline": "US DOE solicits offers to buy back 6 million barrels of crude for Strategic Petroleum Reserve refill at $79/bbl target price.",
+      "impact_category": "SPR_Refill_Floor",
+      "category": "SPR_Refill_Floor",
+      "source": "US Department of Energy SPR Office",
+      "market_reaction_pct": 1.45
+    },
+    {
+      "date": "2024-02-15",
+      "entity": "Fatih_Birol",
+      "person": "Fatih Birol (IEA)",
+      "headline": "IEA trims 2024 global oil demand growth forecast by 100,000 bpd citing slowing Chinese industrial activity.",
+      "impact_category": "IEA_Demand_Downgrade",
+      "category": "IEA_Demand_Downgrade",
+      "source": "International Energy Agency Oil Market Report",
+      "market_reaction_pct": -1.38
+    },
+    {
+      "date": "2024-06-03",
+      "entity": "Alexander_Novak",
+      "person": "Alexander Novak (Russia)",
+      "headline": "Russia promises to compensate for overproduction in Q1 by deepening crude export cuts through Q3 2024.",
+      "impact_category": "Russian_Export_Cut",
+      "category": "Russian_Export_Cut",
+      "source": "Russian Ministry of Energy / OPEC+ JMMC",
+      "market_reaction_pct": 1.9
+    }
+  ]
+}

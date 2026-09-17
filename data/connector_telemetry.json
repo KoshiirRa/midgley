@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-15 13:00:01",
-  "total_events": 678,
+  "last_updated": "2026-09-17 12:40:20",
+  "total_events": 681,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -6782,6 +6782,36 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-16 12:42:43",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-16 12:42:47",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 3.31,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "FERC pipeline tariff data processed"
+    },
+    {
+      "timestamp": "2026-09-17 12:40:20",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
     }
   ]
 }

@@ -644,10 +644,11 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
 
         let resp = await fetch(feedUrl, { headers: fetchHeaders });
 
-        // Retry once on transient 503 or 429 rate-limiting
+        // Retry once on transient 503 or 429 rate-limiting with randomized backoff jitter
         if (resp.status === 503 || resp.status === 429) {
-          console.warn(`[RSS Retry] HTTP ${resp.status} on ${feedUrl}, retrying once with backoff...`);
-          await new Promise(r => setTimeout(r, 600));
+          const jitterMs = 500 + Math.floor(Math.random() * 500);
+          console.warn(`[RSS Retry] HTTP ${resp.status} on ${feedUrl}, retrying once after ${jitterMs}ms backoff...`);
+          await new Promise(r => setTimeout(r, jitterMs));
           resp = await fetch(feedUrl, { headers: fetchHeaders });
         }
 

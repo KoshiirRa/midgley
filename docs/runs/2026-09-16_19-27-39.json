@@ -1,0 +1,120 @@
+{
+  "run_id": "2026-09-16_19-27-39",
+  "log_timestamp": "2026-09-16 19:27:35",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "House set to pass sweeping Russia sanctions bill honoring Lindsey Graham - CNBC",
+  "headline_items": [
+    {
+      "headline": "House set to pass sweeping Russia sanctions bill honoring Lindsey Graham - CNBC",
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPcFhvRmY4VGxlaUd4NFpmcDNQR296QkhNUkdwM0U5RnQ3ZmJVT0UybXZSVEdxeDZhWHhIUFQwV0V1cWxXQzZLS0FLZ1h6WHNBN3VCQ1JCT1VES1M4ZzFWXzBHaVR3eE1xS0FYS01mOXluRU9QS1lLbklCSlY0OURHZjFUdTBmbkdGNUHSAY8BQVVfeXFMTVluWlFjSDFCMGw2U0dtak5mR2ZOV0ZicXlhQzBiWVhfRTdWNzNuYUxkOW9YOVZlRUplNk9YazR4TllhYjJfY2Y0LVZRMkt2Z0N6alJfTUEwYTRvUW1FNXlaODBxeExzbE4yMGplZ0xkZVRYSlltejJOWThQQUt2WHlvYWUyQmp0UmJTek8yMDg?oc=5",
+      "source": "Google News Energy Feed"
+    },
+    {
+      "headline": "US to vote on Russian Sanctions Bill, India faces 100% tariff threat - thesouthfirst.com",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPN2ZrOU9JU3QyY19tVUJMQnV4X1hfUDl4N1JZYl9IcEpONVhiQ1RiT2cxVXJ0ZnhHb3JzZ0loa0ZWZ0FWX2IwRFVncWttd3lFS2dOQ3k5dGgyTGFuLWxQZDBzZXNjWkNnQ3VJbXNGRUVuN2FESlVmU19tTnF2R19qOTRqNTJYVnkybWV3VF9EdmdRS1pkWDBTMFBFRlVJb28zOG5RTTlBOWJYQQ?oc=5",
+      "source": "Google News Energy Feed"
+    },
+    {
+      "headline": "India could face up to 100% US tariffs over Russian oil - DW.com",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNUkI3WW1hand5NEl6d3V5S0JZUVZnc3lKcXR3Yk03UEVMei1iNG54ektTa0tKMnBoUVNOZm82eDcyMXNJcEpCbXJqT0RmUnNVekZVUTFGd0FqRVlmcTRGQkRDQkdKNnpSR2tsVzhkTXdyNFR0R1JHUm41Tl9LQm1GSWEyaWN4SzZZM0xxV25EM3M0NmVSR084bWlfbTF0WG9pMmxOWEotSWJmUDJzX2c1Mlc0cnA5QQ?oc=5",
+      "source": "Google News Energy Feed"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.7,
+    "overall_price_pressure": 0.8,
+    "geopolitical_risk": 0.9,
+    "demand_sentiment": -0.1,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.7,
+    "m1": 0.6094,
+    "m2": 0.5305,
+    "m3": 0.4618,
+    "m4": 0.402,
+    "m5": 0.35
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.2859,
+      "delta": -0.07560000000000011,
+      "pct_change": -2.374371859296486
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 4.0,
+      "predicted_price": 5.9607,
+      "delta": 0.4828000000000001,
+      "pct_change": 12.070000000000004
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 4.361,
+      "predicted_price": 3.9587,
+      "delta": -0.07640000000000002,
+      "pct_change": -1.751891767943133
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 4.322,
+      "predicted_price": 3.9624,
+      "delta": -0.07889999999999953,
+      "pct_change": -1.8255437297547323
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 4.117,
+      "predicted_price": 3.7333,
+      "delta": -0.09100000000000019,
+      "pct_change": -2.210347340296337
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 4.194,
+      "predicted_price": 3.8159,
+      "delta": -0.011099999999999888,
+      "pct_change": -0.26466380543633494
+    },
+    {
+      "key": "Port_St_Lucie_FL",
+      "name": "Port St. Lucie, FL Retail",
+      "base_price": 4.178,
+      "predicted_price": 3.8082,
+      "delta": 0.01849999999999996,
+      "pct_change": 0.44279559597893636
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 6.088,
+      "predicted_price": 5.5088,
+      "delta": 0.35719999999999974,
+      "pct_change": 5.86727989487516
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 6.188,
+      "predicted_price": 5.5993,
+      "delta": 0.34770000000000056,
+      "pct_change": 5.618939883645775
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-09-16 19:27:35]: Elevated upward price shock (+$0.80/gal) observed across wholesale futures. Event trigger 'House set to pass sweeping Russia sanctions bill honoring Lindsey Graham - CNBC' drove supply disruption to S=0.70 and geopolitical risk to G=0.90. Exponential decay (t\u00bd=5.0d) models Day-1 retained shock M\u2081=0.6094 and Day-5 horizon retention M\u2085=0.3500.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-09-16 19:27:35 (Mode: INTRADAY_REVISION), primary event trigger 'House set to pass sweeping Russia sanctions bill honoring Lindsey Graham - CNBC' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.70, Price Pressure \u0394P=+0.80, Geopolitical Risk G=0.90. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.7000\n  - Day 1: M\u2081 = 0.6094\n  - Day 5: M\u2085 = 0.3500 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.286/gal ($-0.076/gal, -2.37%)\n  \u2022 Tulsa, OK Retail: $5.961/gal (+$0.483/gal, +12.07%)\n  \u2022 Newark, DE Retail: $3.959/gal ($-0.076/gal, -1.75%)\n  \u2022 Cincinnati, OH/KY: $3.962/gal ($-0.079/gal, -1.83%)\n  \u2022 Greenville, NC Retail: $3.733/gal ($-0.091/gal, -2.21%)\n  \u2022 Charlotte, NC Retail: $3.816/gal ($-0.011/gal, -0.26%)\n  \u2022 Port St. Lucie, FL Retail: $3.808/gal (+$0.018/gal, +0.44%)\n  \u2022 Oakland, CA Retail: $5.509/gal (+$0.357/gal, +5.87%)\n  \u2022 SF Bay Area Region: $5.599/gal (+$0.348/gal, +5.62%)\n\nLargest upward shift for this run: Tulsa, OK Retail at $5.961/gal (+0.483/gal). Largest downward shift for this run: Greenville, NC Retail at $3.733/gal (-0.091/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-09-16 19:27:35]:\n\u2022 Execution Context: Run type 'INTRADAY_REVISION' triggered by 'House set to pass sweeping Russia sanctions bill honoring Lindsey Graham - CNBC'. Overall price pressure vector sits at \u0394P=+0.80/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.90. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+  }
+}
