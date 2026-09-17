@@ -221,10 +221,9 @@ class HeadlineArenaConnector:
             self._token_cache = {"access_token": mock_token, "expires_at": now + 3600}
             return mock_token
 
-        token_url = f"{self.base_url}/auth/token"
+        token_url = f"{self.base_url}/agent/auth/token"
         payload = {
-            "grant_type": "client_credentials",
-            "client_id": self.client_id,
+            "agent_id": self.client_id,
             "client_secret": self.client_secret
         }
         data_bytes = json.dumps(payload).encode("utf-8")
@@ -290,6 +289,8 @@ class HeadlineArenaConnector:
         self,
         name: str = "Midgley-Energy-Agent",
         description: str = "Multi-agent RBOB wholesale gasoline and Cushing WTI crude forecasting engine",
+        model_provider: str = "google",
+        model_name: str = "gemini-2.5-flash",
         scopes: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
@@ -312,6 +313,8 @@ class HeadlineArenaConnector:
         payload = {
             "name": name,
             "description": description,
+            "model_provider": model_provider,
+            "model_name": model_name,
             "scopes": scopes
         }
         data_bytes = json.dumps(payload).encode("utf-8")
@@ -325,6 +328,10 @@ class HeadlineArenaConnector:
         try:
             with urllib.request.urlopen(req, timeout=15) as resp:
                 return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8") if e.fp else str(e)
+            logger.error(f"HTTP Error registering agent ({e.code}): {err_body}")
+            return {"status": "ERROR", "code": e.code, "error": err_body}
         except Exception as e:
             logger.error(f"Error registering agent with Headline Arena: {e}")
             return {"status": "ERROR", "error": str(e)}
@@ -635,6 +642,8 @@ def main():
     parser.add_argument("--register", action="store_true", help="Register a new agent with Headline Arena")
     parser.add_argument("--name", type=str, default="Midgley-Energy-Agent", help="Agent name for registration")
     parser.add_argument("--description", type=str, default="Probabilistic multi-agent RBOB gasoline and WTI crude forecaster", help="Agent description")
+    parser.add_argument("--model-provider", type=str, default="google", help="Underlying model provider (default: google)")
+    parser.add_argument("--model-name", type=str, default="gemini-2.5-flash", help="Underlying model name (default: gemini-2.5-flash)")
     parser.add_argument("--submit-test", action="store_true", help="Perform a test prediction submission")
     parser.add_argument("--live", action="store_true", help="Enable live submission in dev environment (tags as [DEV-TEST])")
     parser.add_argument("--status", action="store_true", help="Check Headline Arena connection status and settlement rules")
@@ -648,7 +657,14 @@ def main():
         print("=" * 70)
         print(f"Registering Agent: {args.name}")
         print(f"Description: {args.description}")
-        res = connector.register_agent(name=args.name, description=args.description)
+        print(f"Provider: {args.model_provider}")
+        print(f"Model: {args.model_name}")
+        res = connector.register_agent(
+            name=args.name,
+            description=args.description,
+            model_provider=args.model_provider,
+            model_name=args.model_name
+        )
         print("\nRegistration Result:")
         print(json.dumps(res, indent=2))
         if "client_id" in res and "client_secret" in res:
