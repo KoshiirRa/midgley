@@ -6,6 +6,8 @@
  * sends GitHub Repository Dispatch events, and exports trace/log telemetry to Axiom & Sentry.
  */
 
+import nacl from "tweetnacl";
+
 export interface Env {
   GH_PAT?: string;
   REPO_OWNER?: string;
@@ -15,6 +17,9 @@ export interface Env {
   AXIOM_DATASET?: string;
   SEC_USER_AGENT?: string;
   EDGAR_8K_TICKERS?: string;
+  DISCORD_PUBLIC_KEY?: string;
+  DISCORD_APP_ID?: string;
+  PROJECT_V2_ID?: string;
   DB?: any;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
@@ -747,6 +752,285 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
   }
 }
 
+const DEFAULT_DISCORD_PUBLIC_KEY = "23fd56cafbd2e02e99e228ef545bb7a350719b086537410ba5ce092170e56e9b";
+const DEFAULT_PROJECT_V2_ID = "PVT_kwHOAVnZGM4BhxKn";
+
+function hexToUint8Array(hex: string): Uint8Array {
+  const match = hex.match(/.{1,2}/g);
+  return new Uint8Array(match ? match.map(byte => parseInt(byte, 16)) : []);
+}
+
+function verifyDiscordSignature(
+  publicKeyHex: string,
+  signatureHex: string,
+  timestamp: string,
+  body: string
+): boolean {
+  try {
+    const rawKey = hexToUint8Array(publicKeyHex);
+    const signature = hexToUint8Array(signatureHex);
+    const data = new TextEncoder().encode(timestamp + body);
+
+    return nacl.sign.detached.verify(data, signature, rawKey);
+  } catch (err) {
+    console.error("[Discord Signature Verification Error]", err);
+    return false;
+  }
+}
+
+async function handleDiscordInteraction(request: Request, env: Env, ctx: any): Promise<Response> {
+  const signature = request.headers.get("X-Signature-Ed25519");
+  const timestamp = request.headers.get("X-Signature-Timestamp");
+
+  if (!signature || !timestamp) {
+    return new Response("Missing signature headers", { status: 401 });
+  }
+
+  const bodyText = await request.text();
+  const publicKey = env.DISCORD_PUBLIC_KEY || DEFAULT_DISCORD_PUBLIC_KEY;
+
+  const isValid = await verifyDiscordSignature(publicKey, signature, timestamp, bodyText);
+  if (!isValid) {
+    return new Response("Invalid request signature", { status: 401 });
+  }
+
+  let interaction: any;
+  try {
+    interaction = JSON.parse(bodyText);
+  } catch {
+    return new Response("Invalid JSON payload", { status: 400 });
+  }
+
+  // Type 1: PING -> Respond with PONG
+  if (interaction.type === 1) {
+    return new Response(JSON.stringify({ type: 1 }), {
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  // Type 3: MESSAGE_COMPONENT (User clicked "🚩 Flag False Positive" button)
+  if (interaction.type === 3) {
+    const customId = interaction.data?.custom_id || "";
+    if (customId.startsWith("flag_fp:")) {
+      const eventHash = customId.replace("flag_fp:", "");
+
+      // Return Discord Modal (Type 9)
+      const modalResponse = {
+        type: 9,
+        data: {
+          title: "Flag False Positive Anomaly",
+          custom_id: `modal_flag_fp:${eventHash}`,
+          components: [
+            {
+              type: 1,
+              components: [
+                {
+                  type: 4,
+                  custom_id: "category",
+                  label: "False Positive Category",
+                  style: 1,
+                  min_length: 3,
+                  max_length: 100,
+                  placeholder: "e.g., Non-Energy Tariff, Agricultural Oil, Geopolitical Noise",
+                  required: true
+                }
+              ]
+            },
+            {
+              type: 1,
+              components: [
+                {
+                  type: 4,
+                  custom_id: "notes",
+                  label: "Context / Reason for Review",
+                  style: 2,
+                  min_length: 3,
+                  max_length: 1000,
+                  placeholder: "Explain why this headline is unrelated to crude oil or RBOB price impact...",
+                  required: false
+                }
+              ]
+            }
+          ]
+        }
+      };
+
+      return new Response(JSON.stringify(modalResponse), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+  }
+
+  // Type 5: MODAL_SUBMIT (User submitted the review modal)
+  if (interaction.type === 5) {
+    const customId = interaction.data?.custom_id || "";
+    if (customId.startsWith("modal_flag_fp:")) {
+      const eventHash = customId.replace("modal_flag_fp:", "");
+
+      // Extract form values
+      let category = "Uncategorized False Positive";
+      let notes = "";
+      const rows = interaction.data?.components || [];
+      for (const row of rows) {
+        for (const comp of row.components || []) {
+          if (comp.custom_id === "category") category = comp.value || category;
+          if (comp.custom_id === "notes") notes = comp.value || "";
+        }
+      }
+
+      // Extract telemetry from message embed if available
+      const embed = interaction.message?.embeds?.[0];
+      let headline = "Intraday Anomaly";
+      let source = "Intraday_Monitor";
+      let pricePressure = "N/A";
+      let supplyDisruption = "N/A";
+      let geopoliticalRisk = "N/A";
+      let originalUrl = "";
+
+      if (embed) {
+        if (embed.description) {
+          const match = embed.description.match(/> \*"(.*?)"\*/s) || embed.description.match(/> (.*?)$/m);
+          if (match) headline = match[1].trim();
+        }
+        for (const field of embed.fields || []) {
+          const fName = field.name || "";
+          const fVal = (field.value || "").replace(/`/g, "").trim();
+          if (fName.includes("Ingestion Source")) source = fVal;
+          if (fName.includes("Price Pressure")) pricePressure = fVal;
+          if (fName.includes("Supply Disruption")) supplyDisruption = fVal;
+          if (fName.includes("Geopolitical Risk")) geopoliticalRisk = fVal;
+          if (fName.includes("Intelligence Sources")) {
+            const urlMatch = field.value.match(/\[Original Article\]\((.*?)\)/);
+            if (urlMatch) originalUrl = urlMatch[1].trim();
+          }
+        }
+      }
+
+      const owner = env.REPO_OWNER || "KoshiirRa";
+      const repo = env.REPO_NAME || "midgley";
+      const token = env.GH_PAT;
+
+      let issueNumber: number | null = null;
+      let issueUrl = "https://github.com/KoshiirRa/midgley/issues/258";
+      let projectAssigned = false;
+
+      if (token) {
+        const issueTitle = `[False Positive] ${headline.slice(0, 80)}`;
+        const issueBody = `## False Positive Anomaly Report (#258)\n\n` +
+          `**Parent Tracking Thread:** #258\n` +
+          `**Anomaly Fingerprint ID:** \`${eventHash}\`\n\n` +
+          `### 🚨 Trigger Catalyst\n` +
+          `> *\"${headline}\"*\n\n` +
+          `- **Ingestion Source:** \`${source}\`\n` +
+          `- **Flagged Category:** **${category}**\n` +
+          `- **Reporter Notes:** ${notes || "_No additional context provided._"}\n` +
+          (originalUrl ? `- **Source URL:** ${originalUrl}\n` : "") +
+          `\n### 📊 Extracted Catalyst Telemetry\n` +
+          `- **Price Pressure (ΔP):** \`${pricePressure}\`\n` +
+          `- **Supply Disruption (S):** \`${supplyDisruption}\`\n` +
+          `- **Geopolitical Risk (G):** \`${geopoliticalRisk}\`\n\n` +
+          `### 🤖 Automated Agent Review\n` +
+          `The automated false-positive agent reviewer will analyze the keyword gate rules in \`src/intraday_event_monitor.py\` and post diagnostic root-cause analysis and proposed exclusion rules.`;
+
+        try {
+          const createIssueRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "User-Agent": "Midgley-Discord-Worker",
+              "Accept": "application/vnd.github.v3+json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              title: issueTitle,
+              body: issueBody,
+              labels: ["data-ingestion", "false-positive", "intraday-monitor", "token-efficiency"]
+            })
+          });
+
+          if (createIssueRes.ok) {
+            const issueData: any = await createIssueRes.json();
+            issueNumber = issueData.number;
+            issueUrl = issueData.html_url;
+            const issueNodeId = issueData.node_id;
+
+            // Assign to Project V2 via GraphQL API
+            const projectId = env.PROJECT_V2_ID || DEFAULT_PROJECT_V2_ID;
+            if (issueNodeId && projectId) {
+              try {
+                const graphqlQuery = {
+                  query: `mutation AddProjectCard($projectId: ID!, $contentId: ID!) {
+                    addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                      item {
+                        id
+                      }
+                    }
+                  }`,
+                  variables: {
+                    projectId: projectId,
+                    contentId: issueNodeId
+                  }
+                };
+
+                const gqlRes = await fetch("https://api.github.com/graphql", {
+                  method: "POST",
+                  headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "User-Agent": "Midgley-Discord-Worker",
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify(graphqlQuery)
+                });
+                if (gqlRes.ok) {
+                  projectAssigned = true;
+                }
+              } catch (gqlErr) {
+                console.warn("[Project V2 Assignment Warning]", gqlErr);
+              }
+            }
+          }
+        } catch (issueErr) {
+          console.error("[GitHub Issue Creation Error]", issueErr);
+        }
+      }
+
+      await logToAxiom(env, ctx, {
+        event: "discord_false_positive_flagged",
+        eventHash,
+        category,
+        headline,
+        issueNumber,
+        issueUrl,
+        projectAssigned
+      });
+
+      const confirmationContent = issueNumber
+        ? `✅ **False Positive Logged to Issue #${issueNumber}!**\n\n` +
+          `📋 **GitHub Issue:** [${headline.slice(0, 60)}...](${issueUrl})\n` +
+          `🏷️ **Labels:** \`data-ingestion\`, \`false-positive\`, \`intraday-monitor\`, \`token-efficiency\`\n` +
+          `📌 **Project Board:** \`Project Midgley - Master Roadmap\` ${projectAssigned ? "*(Card Added)*" : ""}\n` +
+          `🔗 **Parent Tracking Thread:** https://github.com/KoshiirRa/midgley/issues/258\n\n` +
+          `*The automated agent reviewer will analyze the trigger keywords and post diagnostic feedback shortly.*`
+        : `⚠️ **Flagged Alert Recorded** (Fingerprint: \`${eventHash}\`)\n` +
+          `Note: Linked to parent tracking thread [#258](https://github.com/KoshiirRa/midgley/issues/258).`;
+
+      return new Response(JSON.stringify({
+        type: 4,
+        data: {
+          flags: 64,
+          content: confirmationContent
+        }
+      }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+  }
+
+  return new Response(JSON.stringify({ type: 4, data: { flags: 64, content: "Interaction acknowledged." } }), {
+    headers: { "Content-Type": "application/json" }
+  });
+}
+
 export default {
   async scheduled(controller: any, env: Env, ctx: any): Promise<void> {
     try {
@@ -770,6 +1054,11 @@ export default {
     const url = new URL(request.url);
 
     try {
+      // Discord Interactions Endpoint Route
+      if (url.pathname === "/discord/interactions" || request.headers.has("X-Signature-Ed25519")) {
+        return await handleDiscordInteraction(request, env, ctx);
+      }
+
       if (url.pathname === "/run" || url.pathname === "/trigger") {
         const summary = await runMonitoringCycle(env, ctx);
         return new Response(JSON.stringify(summary, null, 2), {
@@ -782,7 +1071,7 @@ export default {
           status: "active",
           service: "midgley-intraday-monitor",
           timestamp: new Date().toISOString(),
-          endpoints: ["/run", "/trigger", "/status"]
+          endpoints: ["/run", "/trigger", "/status", "/discord/interactions"]
         }, null, 2),
         { headers: { "Content-Type": "application/json" } }
       );

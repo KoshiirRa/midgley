@@ -43,4 +43,7 @@ data/feast_parquet/
 data/data/
 *.pb
 
+# Node Modules
+node_modules/
+
 
