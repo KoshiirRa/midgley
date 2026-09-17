@@ -66,6 +66,32 @@ if __name__ == "__main__":
         generate_public_dashboard()
     except Exception as e:
         logger.error(f"Error generating public dashboard: {e}", exc_info=True)
+
+    # Optional Headline Arena Independent CRPS/Brier Benchmark Submission (Issue #182)
+    submit_ha = "--submit-headline-arena" in sys.argv
+    live_dev = "--live-dev" in sys.argv or os.environ.get("HEADLINE_ARENA_DEV_SUBMIT") == "1"
+    try:
+        from src.headline_arena_connector import HeadlineArenaConnector, submit_midgley_energy_forecasts
+        from src.data_ingestion import fetch_market_data
+        connector = HeadlineArenaConnector()
+        if submit_ha or (connector.is_prod and connector.is_configured):
+            print("\n" + "=" * 80)
+            print("  HEADLINE ARENA BENCHMARK SUBMISSION (RB & CL)")
+            print("=" * 80)
+            m_df = fetch_market_data(start_date="2024-01-01")
+            if not m_df.empty:
+                rb_open = float(m_df['gasoline_rbob'].iloc[-1])
+                cl_open = float(m_df['crude_wti'].iloc[-1]) if 'crude_wti' in m_df.columns else 75.0
+                ha_res = submit_midgley_energy_forecasts(
+                    rb_open_price=rb_open,
+                    rb_p50=rb_open,
+                    cl_open_price=cl_open,
+                    cl_p50=cl_open,
+                    live_in_dev=live_dev
+                )
+                print(f"  -> Headline Arena Submission: {ha_res}")
+    except Exception as e:
+        logger.debug(f"Notice during Headline Arena execution: {e}")
     
     if failed_locations:
         print("\n" + "!" * 80)

@@ -152,10 +152,26 @@ class BakerHughesDataConnector:
                         if records:
                             df = pd.DataFrame(records)
                             df['date'] = pd.to_datetime(df['date'])
+                            try:
+                                from src.benchmark_updater import save_historical_benchmark
+                                save_historical_benchmark("baker_hughes", records)
+                            except Exception:
+                                pass
         except Exception as e:
             logger.debug(f"Dynamic online rig count fetch skipped/failed: {e}")
 
-        # Fallback to curated historical dataset if dynamic online fetch did not produce data
+        # Fallback to persistent historical benchmark file before hardcoded constant
+        if df is None or df.empty:
+            try:
+                from src.benchmark_updater import load_historical_benchmark
+                bench_records = load_historical_benchmark("baker_hughes")
+                if bench_records and isinstance(bench_records, list):
+                    df = pd.DataFrame(bench_records)
+                    df['date'] = pd.to_datetime(df['date'])
+            except Exception:
+                df = None
+
+        # Fallback to curated historical dataset constant if needed
         if df is None or df.empty:
             df = pd.DataFrame(HISTORICAL_BAKER_HUGHES_RIGS)
             df['date'] = pd.to_datetime(df['date'])

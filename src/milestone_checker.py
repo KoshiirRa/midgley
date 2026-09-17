@@ -51,6 +51,7 @@ def update_codebase_model_version(old_version_str: str, new_version_str: str, ne
     
     files_to_check = [
         "src/__init__.py",
+        "src/version.py",
         "src/api_server.py",
         "src/prediction_logger.py",
         "AGENTS.md"
@@ -74,6 +75,12 @@ def update_codebase_model_version(old_version_str: str, new_version_str: str, ne
             new_content = re.sub(
                 r'Model Engine Version:\s*.*',
                 f'Model Engine Version: {new_version_str} {new_codename}',
+                new_content
+            )
+        elif file_path == "src/version.py":
+            new_content = re.sub(
+                r'FALLBACK_MODEL_VERSION\s*=\s*".*?"',
+                f'FALLBACK_MODEL_VERSION = "{new_version_str} {new_codename}"',
                 new_content
             )
         elif file_path == "src/api_server.py":

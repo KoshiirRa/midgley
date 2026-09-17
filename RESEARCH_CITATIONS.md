@@ -23,6 +23,8 @@ Gotta give credit where credit is due! 🎓
 | **11** | [**CORE: A Global Aggregation of Open Access Research Papers**](https://core.ac.uk) | Petr Knoth, Zdenek Zdrahal | 2012 / 2024 | [`src/core_monitor.py`](file:///src/core_monitor.py) | **Open-Access Energy Literature Monitor**: Integrated CORE API v3 search works endpoint to monitor global open-access research repositories for papers on refinery crack spreads, energy commodity econometrics, and asymmetric retail price transmission during weekly review cycles (Issue #53). |
 | **12** | [**Sapient PRAXIST: Computer-Executable Autonomous Research Harness**](https://github.com/KoshiirRa/midgley) | Midgley Quantitative Research Group | Sep 2026 | [`src/praxist_engine.py`](file:///src/praxist_engine.py) | **Empirical Hypothesis Testing & Automated Parameter Sweeps**: Built programmatic research evaluation harness allowing LLM agents to formulate empirical feature hypotheses, execute out-of-sample backtests, compute paired $t$-tests and $p$-values, and optimize hyperparameters (Ridge $\alpha$, decay half-life $t_{1/2}$) (Issue #188). |
 | **13** | [**CoSPOT: Compositional Spectral Prompts for LLM-based Online Time Series Forecasting**](https://arxiv.org/abs/2609.02093v1) <br/>([PDF](https://arxiv.org/pdf/2609.02093v1)) | Seungyoon Choi, Youngin Cho, Dongmin Kim, Seung-won Hwang (KAIST) | Sep 2026 | [`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py)<br/>[`src/feature_engineering.py`](file:///src/feature_engineering.py)<br/>[`src/event_analyzer.py`](file:///src/event_analyzer.py)<br/>[`src/models.py`](file:///src/models.py) | **Compositional Spectral Prompts & DWT Wavelet Context**: Implemented Discrete Fourier Transform (DFT) orthogonal basis decomposition ($T_{\text{dom}}$, $E_{\text{low}}$, $H_{\text{spectral}}$) and 2-level Discrete Wavelet Transform (DWT) detail decomposition ($D_1, D_2, A_2$) to inject natural language frequency regime descriptors into Gemini 2.5 Flash event analysis prompts, resolving LLM "numerical blindness" and adapting online linear projection heads with geometric loss decay ($\delta = 0.90$) (Issue #215). |
+| **14** | [**OpenAlex: A fully-open index of scholarly works, authors, venues, institutions, and concepts**](https://arxiv.org/abs/2205.01833) <br/>([PDF](https://arxiv.org/pdf/2205.01833)) | Jason Priem, Heather Piwowar, Richard Orr | May 2022 / 2024 | [`src/academic_openalex.py`](file:///src/academic_openalex.py) | **Open-Access Knowledge Graph & Prior Parameter Grounding**: Implemented zero-cost REST query engine over 250M+ scientific publications to programmatically retrieve energy economics literature, empirical retail pass-through elasticities, and prior parameter intervals ($t_{1/2} \in [4.0, 5.0]$ days) (Issue #263). |
+| **15** | [**SPECTER: Document-level Representation Learning using Citation-informed Transformers**](https://arxiv.org/abs/2004.07180) & [**Semantic Scholar Academic Graph**](https://www.semanticscholar.org/product/api) | Arman Cohan, Sergey Feldman, Iz Beltagy, Doug Downey, Daniel S. Weld | 2020 / 2024 | [`src/semantic_scholar_feed.py`](file:///src/semantic_scholar_feed.py) | **Automated Paper TL;DRs & Citation Influence Traversal**: Ingested single-sentence AI-generated summaries and influential citation metrics from Semantic Scholar's academic graph for fast context distillation during quantitative agent research workflows (Issue #264). |
 
 ---
 
@@ -101,7 +103,15 @@ $$F_k = \sum_{t=0}^{L-1} X_t e^{-i 2\pi k t / L}, \quad P_k = \frac{|F_k|^2}{\su
 
 $$R_{\text{wavelet}} = \frac{\|D_1\|^2 + \|D_2\|^2}{\|A_2\|^2 + 1e-8}, \quad \mathcal{L}_{\text{online}} = \sum_{\tau=1}^T \delta^{T-\tau} \ell(f_\theta(X_\tau), \tilde{y}_\tau)$$
 
-* **Logic:** Decomposes lookback sequences into orthogonal Fourier frequency bases and multi-resolution wavelet details, generating natural language spectral regime descriptions for LLM prompts while dynamically updating a linear projection adapter head using geometric loss decay ($\delta = 0.90$) to conquer concept drift and numerical blindness.
+### 8. OpenAlex Knowledge Graph & Econometric Prior Grounding (Priem et al., 2022)
+
+* **Location:** [`src/academic_openalex.py`](file:///src/academic_openalex.py) (`OpenAlexConnector`)
+* **Logic:** Programmatically scans 250M+ open-access scholarly works to retrieve peer-reviewed petroleum market studies. Provides empirical parameter intervals ($t_{1/2} \in [4.0, 5.0]$ days, weekend gap multiplier $1.42\times$, state excise tax incidence $\approx 1.00$) backed by seminal literature citations (Borenstein et al. 1997, Marion & Muehlegger 2011, Kilian 2009).
+
+### 9. SPECTER & Semantic Scholar Academic Graph (Cohan et al., 2020)
+
+* **Location:** [`src/semantic_scholar_feed.py`](file:///src/semantic_scholar_feed.py) (`SemanticScholarConnector`)
+* **Logic:** Retrieves automated AI-generated paper TL;DRs, author citation graphs, and influential citation counts to summarize econometric literature rapidly and ground quantitative feature assumptions during autonomous research workflows.
 
 ---
 

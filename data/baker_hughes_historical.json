@@ -1,0 +1,88 @@
+{
+  "benchmark_key": "baker_hughes",
+  "last_refreshed_utc": "2026-09-17 03:50:55",
+  "records_count": 9,
+  "data": [
+    {
+      "date": "2022-01-07",
+      "us_active_oil_rigs": 481,
+      "permian_rigs": 293,
+      "baker_hughes_oil_rigs": 481,
+      "baker_hughes_us_rig_count": 481,
+      "baker_hughes_gas_rigs": 96,
+      "baker_hughes_rig_delta_1w": 0.0
+    },
+    {
+      "date": "2022-06-03",
+      "us_active_oil_rigs": 574,
+      "permian_rigs": 345,
+      "baker_hughes_oil_rigs": 574,
+      "baker_hughes_us_rig_count": 574,
+      "baker_hughes_gas_rigs": 114,
+      "baker_hughes_rig_delta_1w": 93.0
+    },
+    {
+      "date": "2022-12-02",
+      "us_active_oil_rigs": 627,
+      "permian_rigs": 353,
+      "baker_hughes_oil_rigs": 627,
+      "baker_hughes_us_rig_count": 627,
+      "baker_hughes_gas_rigs": 125,
+      "baker_hughes_rig_delta_1w": 53.0
+    },
+    {
+      "date": "2023-06-02",
+      "us_active_oil_rigs": 555,
+      "permian_rigs": 349,
+      "baker_hughes_oil_rigs": 555,
+      "baker_hughes_us_rig_count": 555,
+      "baker_hughes_gas_rigs": 111,
+      "baker_hughes_rig_delta_1w": -72.0
+    },
+    {
+      "date": "2023-12-01",
+      "us_active_oil_rigs": 505,
+      "permian_rigs": 310,
+      "baker_hughes_oil_rigs": 505,
+      "baker_hughes_us_rig_count": 505,
+      "baker_hughes_gas_rigs": 101,
+      "baker_hughes_rig_delta_1w": -50.0
+    },
+    {
+      "date": "2024-06-07",
+      "us_active_oil_rigs": 492,
+      "permian_rigs": 309,
+      "baker_hughes_oil_rigs": 492,
+      "baker_hughes_us_rig_count": 492,
+      "baker_hughes_gas_rigs": 98,
+      "baker_hughes_rig_delta_1w": -13.0
+    },
+    {
+      "date": "2024-12-06",
+      "us_active_oil_rigs": 484,
+      "permian_rigs": 304,
+      "baker_hughes_oil_rigs": 484,
+      "baker_hughes_us_rig_count": 484,
+      "baker_hughes_gas_rigs": 96,
+      "baker_hughes_rig_delta_1w": -8.0
+    },
+    {
+      "date": "2025-06-06",
+      "us_active_oil_rigs": 478,
+      "permian_rigs": 301,
+      "baker_hughes_oil_rigs": 478,
+      "baker_hughes_us_rig_count": 478,
+      "baker_hughes_gas_rigs": 95,
+      "baker_hughes_rig_delta_1w": -6.0
+    },
+    {
+      "date": "2026-01-09",
+      "us_active_oil_rigs": 472,
+      "permian_rigs": 298,
+      "baker_hughes_oil_rigs": 472,
+      "baker_hughes_us_rig_count": 472,
+      "baker_hughes_gas_rigs": 94,
+      "baker_hughes_rig_delta_1w": -6.0
+    }
+  ]
+}

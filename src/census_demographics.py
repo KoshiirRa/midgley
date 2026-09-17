@@ -501,10 +501,25 @@ class CensusDemographicsConnector:
                 cache_status = "WINDOW_POLLING_SERVED_PRIOR_VINTAGE"
                 provenance = "Census_ACS_Prior_Vintage_Cache"
             else:
-                # Deterministic fallback baseline
-                metrics = mapping["default_baseline"]
-                cache_status = "DETERMINISTIC_BASELINE_FALLBACK"
-                provenance = "Census_Deterministic_Baseline_Profile"
+                # Check persistent historical benchmark file before deterministic baseline
+                bench_metrics = None
+                try:
+                    from src.benchmark_updater import load_historical_benchmark
+                    bench_data = load_historical_benchmark("census_demographics")
+                    if bench_data and isinstance(bench_data, dict) and "metros" in bench_data:
+                        bench_metrics = bench_data["metros"].get(reg_clean, {}).get("demographics")
+                except Exception:
+                    pass
+
+                if bench_metrics:
+                    metrics = bench_metrics
+                    cache_status = "HISTORICAL_BENCHMARK_PERSISTED"
+                    provenance = "Census_Historical_Benchmark_Profile"
+                else:
+                    # Deterministic fallback baseline
+                    metrics = mapping["default_baseline"]
+                    cache_status = "DETERMINISTIC_BASELINE_FALLBACK"
+                    provenance = "Census_Deterministic_Baseline_Profile"
 
         # Update cache entry
         result_record = {
@@ -540,7 +555,7 @@ class CensusDemographicsConnector:
         results = {}
         for reg in METRO_CENSUS_MAPPINGS:
             results[reg] = self.get_metro_demographics(reg, current_date=current_date)
-        return {
+        payload = {
             "connector": "U.S. Census Bureau ACS Demographics Connector",
             "is_free_alternative": True,
             "cost_per_query": 0.0,
@@ -548,3 +563,9 @@ class CensusDemographicsConnector:
             "metros": results,
             "status": "SUCCESS"
         }
+        try:
+            from src.benchmark_updater import save_historical_benchmark
+            save_historical_benchmark("census_demographics", payload)
+        except Exception:
+            pass
+        return payload

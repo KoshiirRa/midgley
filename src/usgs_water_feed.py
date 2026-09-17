@@ -153,8 +153,17 @@ class USGSWaterFeedConnector:
                     raw_json = json.loads(response.read().decode("utf-8"))
                     station_data = self._parse_usgs_json(raw_json)
         except Exception as e:
-            logger.warning(f"USGS live API request failed ({e}); utilizing synthetic hydrological baseline.")
-            station_data = self._generate_synthetic_baseline()
+            logger.warning(f"USGS live API request failed ({e}); checking historical benchmark cache.")
+            try:
+                from src.benchmark_updater import load_historical_benchmark
+                bench = load_historical_benchmark("usgs_water")
+                if bench and isinstance(bench, dict) and "stations" in bench:
+                    station_data = bench["stations"]
+            except Exception:
+                station_data = None
+
+            if not station_data:
+                station_data = self._generate_synthetic_baseline()
 
         if not station_data:
             station_data = self._generate_synthetic_baseline()
@@ -170,6 +179,12 @@ class USGSWaterFeedConnector:
             "stations": station_data,
             "indices": indices
         }
+
+        try:
+            from src.benchmark_updater import save_historical_benchmark
+            save_historical_benchmark("usgs_water", result)
+        except Exception:
+            pass
 
         save_water_vintage_record(result)
         global_cache.set(cache_key, result, ttl_seconds=900)

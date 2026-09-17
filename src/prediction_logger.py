@@ -258,7 +258,7 @@ def compute_regional_residual_std(region: str = None, window_days: int = 30, def
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
-    model_version: str = "v1.6-Ipatieff",
+    model_version: Optional[str] = None,
     run_type: str = "DAILY_BATCH",
     headline_trigger: str = "",
     forecast_horizon_days: int = 5
@@ -270,6 +270,12 @@ def log_predictions(
                                'llm_augmentation_delta', 'prediction_lower_95ci', 'prediction_upper_95ci',
                                'data_source_provenance']
     """
+    if model_version is None:
+        try:
+            from src.version import get_model_version
+            model_version = get_model_version().replace(" ", "-")
+        except Exception:
+            model_version = "v1.6-Ipatieff"
     ensure_history_store()
     try:
         history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
@@ -473,12 +479,18 @@ def backfill_new_region_history(
     base_prices,
     predicted_prices,
     region: str,
-    model_version: str = "v1.6-Ipatieff"
+    model_version: Optional[str] = None
 ) -> int:
     """
     Backfills historical test split predictions for a newly added region into prediction_history.csv
     and automatically matches/evaluates mature target dates against ground-truth market prices.
     """
+    if model_version is None:
+        try:
+            from src.version import get_model_version
+            model_version = get_model_version().replace(" ", "-")
+        except Exception:
+            model_version = "v1.6-Ipatieff"
     dates_arr = getattr(test_dates, 'values', test_dates)
     base_arr = getattr(base_prices, 'values', base_prices)
     pred_arr = getattr(predicted_prices, 'values', predicted_prices)

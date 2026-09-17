@@ -239,10 +239,13 @@ def calculate_rolling_metrics():
         return [], [], []
 
 
+from src.version import get_version, get_model_version, get_git_branch, is_release_branch
+
 try:
-    from src import __version__
+    from src import __version__, __model_version__
 except ImportError:
-    __version__ = "0.4.1"
+    __version__ = get_version()
+    __model_version__ = get_model_version()
 
 
 def get_release_badge() -> str:
@@ -252,24 +255,17 @@ def get_release_badge() -> str:
     it displays a 'Dev Branch v{version}-dev' badge in amber.
     When running on 'main' or 'master' release branches, it displays 'Release v{version}' in orange.
     """
-    version = os.getenv("MIDGLEY_VERSION", __version__)
-    branch = os.getenv("MIDGLEY_BRANCH", os.getenv("GITHUB_REF_NAME", ""))
-    if not branch:
-        try:
-            cmd_out = subprocess.check_output(
-                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-                stderr=subprocess.DEVNULL,
-                text=True
-            ).strip()
-            if cmd_out:
-                branch = cmd_out
-        except Exception:
-            branch = "dev"
-
-    if branch in ["main", "master"] or branch.startswith("release/"):
+    version = get_version()
+    if is_release_branch():
         return f'<span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v{version}</span>'
     else:
         return f'<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v{version}-dev</span>'
+
+
+def get_model_badge() -> str:
+    """Generates dynamic HTML badge for the active quantitative model engine version."""
+    model_ver = get_model_version()
+    return f'<span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model {model_ver}</span>'
 
 
 
@@ -357,6 +353,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     tel_link = f"{rel_prefix}telemetry.html"
 
     badge_html = get_release_badge()
+    model_badge_html = get_model_badge()
 
     return f"""    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -366,7 +363,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley {badge_html} <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.4 Finlight-LLM</span>
+                        midgley {badge_html} {model_badge_html}
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -2556,7 +2553,7 @@ def generate_public_dashboard():
                             <td class="py-2.5 px-4 text-slate-400">Upgraded</td>
                         </tr>
                         <tr class="bg-blue-950/20 font-bold border-l-2 border-blue-500">
-                            <td class="py-2.5 px-4 text-white">v1.4 Finlight-LLM (Current)</td>
+                            <td class="py-2.5 px-4 text-white">{get_model_version()} (Current)</td>
                             <td class="py-2.5 px-4 text-blue-300">+ Real-Time Finlight.me Financial Media REST Stream & Live News Extraction</td>
                             <td class="py-2.5 px-4 text-emerald-400">$0.1069</td>
                             <td class="py-2.5 px-4 text-emerald-400">60.79%</td>
@@ -2995,7 +2992,7 @@ def generate_public_dashboard():
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
     <script>
@@ -3183,7 +3180,7 @@ def generate_public_dashboard():
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
     <script>
@@ -3371,7 +3368,7 @@ def generate_public_dashboard():
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
     <script>
@@ -3594,7 +3591,7 @@ def generate_public_dashboard():
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
     <script>
@@ -4235,7 +4232,7 @@ def generate_public_dashboard():
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
     <script>
@@ -4519,7 +4516,7 @@ def generate_public_dashboard():
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
     <script>
@@ -4701,7 +4698,7 @@ def generate_public_dashboard():
                 <i class="fa-solid fa-graduation-cap text-blue-400"></i> Mathematical & Econometric Architecture
             </h2>
             <p class="text-slate-300 text-base leading-relaxed">
-                Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley v1.4 Finlight-LLM</strong>.
+                Predicting energy commodity prices requires bridging quantitative financial futures with qualitative real-world shocks (war, refinery tornadoes, executive social posts, alternative physical rig data, and live financial media streams). This guide details the exact equations, vector spaces, and ML regularizations powering <strong>midgley {get_model_version()}</strong>.
             </p>
             
             <!-- Research Citations & Data Sources Link Cards -->
@@ -5461,7 +5458,7 @@ def generate_savings_advisor_page():
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 
     <!-- Interactive Calculation Script -->
@@ -5806,7 +5803,7 @@ def generate_diesel_page():
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 </body>
 </html>"""
@@ -6449,7 +6446,7 @@ def generate_telemetry_page():
     </script>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {get_model_version()}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 </body>
 </html>"""

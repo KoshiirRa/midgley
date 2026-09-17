@@ -124,6 +124,22 @@ class TreasuryYieldConnector:
 
         # Attempt fetch via market ticker download or Fiscal Data API
         df = self._fetch_live_or_yfinance(start_date, end_date)
+        if df is not None and not df.empty and len(df) >= 5:
+            try:
+                from src.benchmark_updater import save_historical_benchmark
+                save_historical_benchmark("treasury", df.assign(date=df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records"))
+            except Exception:
+                pass
+        else:
+            try:
+                from src.benchmark_updater import load_historical_benchmark
+                loaded = load_historical_benchmark("treasury")
+                if loaded and isinstance(loaded, list):
+                    df = pd.DataFrame(loaded)
+                    df['date'] = pd.to_datetime(df['date'])
+            except Exception:
+                df = None
+
         if df is None or df.empty or len(df) < 5:
             logger.warning("Live Treasury fetch returned insufficient data. Falling back to calibrated historical benchmark.")
             df = self._generate_synthetic_treasury_data(start_date, end_date)

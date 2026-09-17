@@ -106,8 +106,20 @@ def get_live_or_anchor_diesel_prices(use_live_feed: bool = True) -> Dict[str, fl
     Queries multi-grade AAA scraper (fetch_aaa_fuel_prices_all_grades) and falls back
     gracefully to DIESEL_BASE_ANCHORS.
     """
+    base_anchors = None
+    try:
+        from src.benchmark_updater import load_historical_benchmark
+        loaded = load_historical_benchmark("diesel")
+        if loaded and isinstance(loaded, dict):
+            base_anchors = loaded
+    except Exception:
+        pass
+
+    if base_anchors is None:
+        base_anchors = DIESEL_BASE_ANCHORS
+
     prices = {}
-    for locale, base_anchor in DIESEL_BASE_ANCHORS.items():
+    for locale, base_anchor in base_anchors.items():
         if not use_live_feed:
             prices[locale] = base_anchor
             continue
@@ -126,6 +138,12 @@ def get_live_or_anchor_diesel_prices(use_live_feed: bool = True) -> Dict[str, fl
 
     for loc, p in prices.items():
         save_diesel_vintage_record({"locale": loc, "price": p})
+
+    try:
+        from src.benchmark_updater import save_historical_benchmark
+        save_historical_benchmark("diesel", prices)
+    except Exception:
+        pass
 
     return prices
 

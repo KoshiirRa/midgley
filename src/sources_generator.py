@@ -1406,7 +1406,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
     </script>
 
     <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
-        <p>Project <strong class="text-slate-400">midgley v1.4 Finlight-LLM</strong> &bull; Released under Apache-2.0 License</p>
+        <p>Project <strong class="text-slate-400">midgley {{MODEL_VERSION}}</strong> &bull; Released under Apache-2.0 License</p>
     </footer>
 </body>
 </html>"""
@@ -1416,6 +1416,7 @@ def generate_data_sources_page(docs_dir: str = DOCS_DIR):
     """
     Generates docs/sources.html & docs/sources/index.html documenting all 26+ model data sources.
     """
+    from src.version import get_model_version
     from src.dashboard_generator import (
         get_nav_header,
         get_head_meta_tags,
@@ -1449,6 +1450,7 @@ def generate_data_sources_page(docs_dir: str = DOCS_DIR):
         content = content.replace("{{KATEX_ONLOAD_SCRIPT}}", KATEX_ONLOAD_SCRIPT)
         content = content.replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
         content = content.replace("{{HDR}}", hdr)
+        content = content.replace("{{MODEL_VERSION}}", get_model_version())
         return content
 
     with open(sources_path, "w", encoding="utf-8") as f:

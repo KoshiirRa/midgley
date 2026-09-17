@@ -177,3 +177,5 @@ def test_generate_learning_telemetry_html_snippet(sample_prediction_df):
     assert "learningCurveChart" in html
     assert "llmWinRateChart" in html
     assert "Longitudinal Accuracy &amp; Convergence Horizons" in html or "Longitudinal Accuracy & Convergence Horizons" in html
+    assert "https://github.com/KoshiirRa/midgley/blob/main/MODEL_LEARNING.md" in html
+

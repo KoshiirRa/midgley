@@ -235,7 +235,19 @@ def get_geopolitical_maritime_events() -> pd.DataFrame:
     Returns structured historical and real-time event feeds for Iran/Hormuz, Suez/Red Sea, and Venezuela.
     Dynamically fetched via public RSS endpoints and finlight.me when available.
     """
-    df = pd.DataFrame(HISTORICAL_GEOPOLITICAL_EVENTS)
+    base_events = None
+    try:
+        from src.benchmark_updater import load_historical_benchmark
+        loaded = load_historical_benchmark("geopolitical")
+        if loaded and isinstance(loaded, list):
+            base_events = list(loaded)
+    except Exception:
+        pass
+
+    if base_events is None:
+        base_events = list(HISTORICAL_GEOPOLITICAL_EVENTS)
+
+    df = pd.DataFrame(base_events)
     df['date'] = pd.to_datetime(df['date'])
 
     # 1. Dynamically augment with live RSS feed
@@ -247,6 +259,11 @@ def get_geopolitical_maritime_events() -> pd.DataFrame:
             live_df['date'] = pd.to_datetime(live_df['date'])
             df = pd.concat([df, live_df], ignore_index=True)
             logger.info(f"Augmented geopolitical feed with {len(live_headlines)} live RSS events.")
+            try:
+                from src.benchmark_updater import save_historical_benchmark
+                save_historical_benchmark("geopolitical", df.to_dict(orient="records"))
+            except Exception:
+                pass
     except Exception as e:
         logger.debug(f"Live RSS geopolitical augmentation notice: {e}")
 
