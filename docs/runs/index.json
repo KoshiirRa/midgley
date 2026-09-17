@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-17_19-50-02",
+    "timestamp": "2026-09-17 19:49:53",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "India warns new US tariffs over Russian oil could impact tie..."
+  },
+  {
     "run_id": "2026-09-17_19-28-06",
     "timestamp": "2026-09-17 19:28:03",
     "run_type": "INTRADAY_REVISION",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-11_01-41-21",
-    "timestamp": "2026-09-11 01:38:21",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:38:21)"
-  },
-  {
-    "run_id": "2026-09-11_01-40-47",
     "timestamp": "2026-09-11 01:38:21",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-11 01:38:21)"

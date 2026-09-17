@@ -125,21 +125,48 @@ def format_intraday_discord_payload(event_record: Dict[str, Any], environment: O
             "inline": False
         })
 
+    event_hash = event_record.get("hash")
+    if not event_hash:
+        import hashlib
+        event_hash = hashlib.sha256(headline.encode("utf-8", errors="ignore")).hexdigest()[:16]
+
     embed = {
         "title": f"🚨 {env_badge} Intraday Gas Price Forecast Revision",
         "description": f"**Trigger Catalyst:**\n> *\"{headline}\"*",
-        "url": "https://koshiirra.github.io/midgley/",
+        "url": "https://koshiirRa.github.io/midgley/",
         "color": color,
         "fields": fields,
         "footer": {
-            "text": "Midgley Energy Complex Forecasting • Automated Intraday Anomaly Gateway"
+            "text": f"Midgley Energy Complex Forecasting • Anomaly ID: {event_hash}"
         },
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
+    # Action Row Components: Interactive Flag Button & Issue #258 Tracking Link Button
+    components = [
+        {
+            "type": 1,  # Action Row
+            "components": [
+                {
+                    "type": 2,  # Button
+                    "style": 4,  # Danger / Red style
+                    "label": "🚩 Flag False Positive",
+                    "custom_id": f"flag_fp:{event_hash}"
+                },
+                {
+                    "type": 2,  # Button
+                    "style": 5,  # Link button
+                    "label": "📋 Tracking Thread #258",
+                    "url": "https://github.com/KoshiirRa/midgley/issues/258"
+                }
+            ]
+        }
+    ]
+
     return {
         "username": "Midgley Intraday Monitor",
-        "embeds": [embed]
+        "embeds": [embed],
+        "components": components
     }
 
 
