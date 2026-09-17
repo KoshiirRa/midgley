@@ -53,5 +53,60 @@
       "active_outages": [],
       "active_ozone_action_corridors": []
     }
+  },
+  {
+    "as_of": "2026-09-17T12:49:24.110137+00:00",
+    "valid_date": "2026-09-17",
+    "entity_key": "macro_composite",
+    "zip_code": null,
+    "corridor": null,
+    "aqi": null,
+    "category": null,
+    "is_unplanned_outage": false,
+    "data": {
+      "status": "SUCCESS",
+      "as_of": "2026-09-17T12:49:24.110137+00:00",
+      "indices": {
+        "bay_area_outage_risk_index": 0.0,
+        "tulsa_outage_risk_index": 0.0,
+        "delaware_valley_outage_risk_index": 0.0,
+        "tri_state_outage_risk_index": 0.0,
+        "carolinas_coastal_outage_risk_index": 0.0,
+        "carolinas_piedmont_outage_risk_index": 0.0,
+        "south_florida_outage_risk_index": 0.0,
+        "composite_aqi_shock_index": 0.0,
+        "is_unplanned_refinery_outage_detected": false,
+        "active_outage_count": 0,
+        "ozone_action_day_count": 0,
+        "max_rvp_compliance_surcharge_per_gal": 0.054
+      },
+      "corridors": {
+        "bay_area": {
+          "corridor": "bay_area",
+          "name": "SF Bay Area Refining Corridor (PADD 5)",
+          "monitored_assets": 3,
+          "primary_zip": "94612",
+          "observed_pm25": 9.83,
+          "observed_so2": 1.93,
+          "observed_ozone_aqi": 28,
+          "baseline_pm25": 9.83,
+          "baseline_so2": 1.93,
+          "z_score_pm25": 0.0,
+          "z_score_so2": 0.0,
+          "is_unplanned_outage": false,
+          "is_wildfire_smoke": false,
+          "is_ozone_action_day": false,
+          "ozone_category": "Good",
+          "statutory_rvp_psi": 7.0,
+          "seasonal_blend_state": "FALL_SHOULDER",
+          "rvp_compliance_surcharge_per_gal": 0.054,
+          "outage_risk_index": 0.0,
+          "flaring_rack_shock_per_gal": 0.0,
+          "estimated_rack_shock_per_gal": 0.054
+        }
+      },
+      "active_outages": [],
+      "active_ozone_action_corridors": []
+    }
   }
 ]
