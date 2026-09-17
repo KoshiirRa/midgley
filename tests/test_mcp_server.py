@@ -78,5 +78,20 @@ class TestMCPServer(unittest.TestCase):
         self.assertIn("TULSA", prompt_res.messages[0].content.text)
 
 
+    def test_call_tool_search_academic_literature(self):
+        res = asyncio.run(call_tool("search_academic_literature", {"query": "gasoline crack spread", "limit": 2}))
+        self.assertEqual(len(res), 1)
+        data = json.loads(res[0].text)
+        self.assertEqual(data["query"], "gasoline crack spread")
+        self.assertIn("results", data)
+
+    def test_call_tool_get_academic_paper_tldr(self):
+        res = asyncio.run(call_tool("get_academic_paper_tldr", {"paper_id_or_doi": "10.1016/j.eneco.2024.107000"}))
+        self.assertEqual(len(res), 1)
+        data = json.loads(res[0].text)
+        self.assertEqual(data["paper_id_or_doi"], "10.1016/j.eneco.2024.107000")
+        self.assertIn("tldr", data)
+
+
 if __name__ == "__main__":
     unittest.main()

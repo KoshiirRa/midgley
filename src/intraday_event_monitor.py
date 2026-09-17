@@ -11,12 +11,18 @@ Flashes 15-minute response cache, logs intraday prediction revisions, and update
 """
 
 import os
+import sys
 import json
 import time
 import logging
 import pandas as pd
 from datetime import datetime
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Any
+
+# Ensure project root is in sys.path when executed directly
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 try:
     import feedparser
@@ -402,11 +408,13 @@ class IntradayEventMonitor:
         is_anomaly_bool = bool(is_anomaly)
 
         archive_url = ""
+        resolved_url = url
         if url:
             try:
                 from src.wayback_archiver import archive_url_to_wayback
                 arch_res = archive_url_to_wayback(url, headline=headline)
                 archive_url = arch_res.get("archive_url", "")
+                resolved_url = arch_res.get("canonical_url") or url
                 logger.info(f"  -> Wayback Machine archive URL logged: {archive_url}")
             except Exception as e:
                 logger.warning(f"Wayback Machine archive trigger error: {e}")
@@ -415,7 +423,8 @@ class IntradayEventMonitor:
             "timestamp": datetime.now().isoformat(),
             "headline": headline,
             "source": source,
-            "url": url,
+            "url": resolved_url or url,
+            "raw_url": url,
             "archive_url": archive_url,
             "is_anomaly": is_anomaly_bool,
             "target_locales": target_locales,
@@ -571,6 +580,103 @@ class IntradayEventMonitor:
             logger.warning(f"Failed to write evaluated headlines cache '{EVALUATED_CACHE_FILE}': {e}")
 
 
+    def check_feed_health(self) -> Dict[str, Any]:
+        """
+        Diagnostic Health Check across all intraday news and event ingestion feeds (Issue #267).
+        Probes RSS feeds, Executive Social Media, Key Movers, and Geopolitical feeds with latency profiling.
+        """
+        import time
+        results = []
+        overall_healthy = True
+
+        # 1. Probe Free RSS Feeds
+        for feed_url in FREE_RSS_FEEDS:
+            start_t = time.time()
+            feed_res = {
+                "source": "RSS",
+                "target": feed_url,
+                "status": "UNKNOWN",
+                "latency_ms": 0.0,
+                "item_count": 0,
+                "error": None
+            }
+            try:
+                import urllib.request
+                req = urllib.request.Request(
+                    feed_url,
+                    headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+                )
+                with urllib.request.urlopen(req, timeout=8) as resp:
+                    code = resp.getcode()
+                    content = resp.read().decode("utf-8", errors="ignore")
+                    latency = (time.time() - start_t) * 1000.0
+                    item_count = 0
+                    if feedparser:
+                        parsed = feedparser.parse(content)
+                        item_count = len(parsed.entries)
+                    else:
+                        item_count = len(re.findall(r'<item>|<entry>', content, re.I))
+                    feed_res["status"] = "HEALTHY" if code == 200 and item_count > 0 else "DEGRADED"
+                    feed_res["http_code"] = code
+                    feed_res["latency_ms"] = round(latency, 2)
+                    feed_res["item_count"] = item_count
+            except Exception as e:
+                feed_res["status"] = "FAILED"
+                feed_res["error"] = str(e)
+                feed_res["latency_ms"] = round((time.time() - start_t) * 1000.0, 2)
+                overall_healthy = False
+            results.append(feed_res)
+
+        # 2. Probe Executive Social Feed
+        start_t = time.time()
+        soc_res = {"source": "Executive_Social", "target": "TruthSocial / RSS Mirror", "status": "UNKNOWN"}
+        try:
+            posts = self.fetch_executive_social_headlines()
+            soc_res["status"] = "HEALTHY" if posts else "DEGRADED"
+            soc_res["latency_ms"] = round((time.time() - start_t) * 1000.0, 2)
+            soc_res["item_count"] = len(posts)
+        except Exception as e:
+            soc_res["status"] = "FAILED"
+            soc_res["error"] = str(e)
+            soc_res["latency_ms"] = round((time.time() - start_t) * 1000.0, 2)
+        results.append(soc_res)
+
+        # 3. Probe Key Movers Feed
+        start_t = time.time()
+        mov_res = {"source": "Key_Movers", "target": "KeyMoversFeedConnector", "status": "UNKNOWN"}
+        try:
+            movers = self.fetch_key_movers_headlines()
+            mov_res["status"] = "HEALTHY" if movers else "DEGRADED"
+            mov_res["latency_ms"] = round((time.time() - start_t) * 1000.0, 2)
+            mov_res["item_count"] = len(movers)
+        except Exception as e:
+            mov_res["status"] = "FAILED"
+            mov_res["error"] = str(e)
+            mov_res["latency_ms"] = round((time.time() - start_t) * 1000.0, 2)
+        results.append(mov_res)
+
+        # 4. Probe Geopolitical Feed
+        start_t = time.time()
+        geo_res = {"source": "Geopolitical", "target": "GeopoliticalFeedConnector", "status": "UNKNOWN"}
+        try:
+            geo_items = self.fetch_geopolitical_headlines()
+            geo_res["status"] = "HEALTHY" if geo_items else "DEGRADED"
+            geo_res["latency_ms"] = round((time.time() - start_t) * 1000.0, 2)
+            geo_res["item_count"] = len(geo_items)
+        except Exception as e:
+            geo_res["status"] = "FAILED"
+            geo_res["error"] = str(e)
+            geo_res["latency_ms"] = round((time.time() - start_t) * 1000.0, 2)
+        results.append(geo_res)
+
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "overall_healthy": overall_healthy,
+            "feeds_tested": len(results),
+            "feed_details": results
+        }
+
+
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Multi-Layer Intraday Event Monitor")
@@ -578,10 +684,27 @@ def main():
     parser.add_argument("--source", type=str, default="Cloudflare_Worker", help="Headline source identifier")
     parser.add_argument("--url", type=str, default="", help="Headline URL")
     parser.add_argument("--skip-dedup", action="store_true", help="Skip 24h deduplication check")
+    parser.add_argument("--check-feeds", action="store_true", help="Execute feed health and latency diagnostics")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
     monitor = IntradayEventMonitor()
+
+    if args.check_feeds:
+        print("\n[DIAGNOSTICS] Executing Intraday Ingestion Feed Health Diagnostics...")
+        health = monitor.check_feed_health()
+        health_status = "[HEALTHY]" if health['overall_healthy'] else "[DEGRADED/ISSUES]"
+        print(f"\nOverall Health: {health_status}")
+        print(f"Feeds Tested: {health['feeds_tested']}")
+        print("\n" + "=" * 80)
+        print(f"{'Source':<18} | {'Status':<10} | {'Latency':<10} | {'Items':<6} | Target / Error")
+        print("-" * 80)
+        for f in health["feed_details"]:
+            target_desc = f.get("error") if f.get("error") else f.get("target", "")[:40]
+            lat_str = f"{f.get('latency_ms', 0):.1f}ms"
+            print(f"{f.get('source'):<18} | {f.get('status'):<10} | {lat_str:<10} | {f.get('item_count', 0):<6} | {target_desc}")
+        print("=" * 80 + "\n")
+        return health
 
     if args.headline:
         res = monitor.process_incoming_headline(
