@@ -114,8 +114,8 @@ def calculate_longitudinal_learning_curves(
             "total_points": 0
         }
 
-    min_date = df['target_date_dt'].min()
-    max_date = df['target_date_dt'].max()
+    min_date = pd.Timestamp(df['target_date_dt'].min())
+    max_date = pd.Timestamp(df['target_date_dt'].max())
 
     date_points = []
     model_mae_list = []
@@ -125,12 +125,12 @@ def calculate_longitudinal_learning_curves(
     llm_win_rate_list = []
 
     # Slide window from min_date + window_days up to max_date
-    current_end = min_date + pd.Timedelta(days=window_days)
+    current_end = min_date + pd.Timedelta(days=int(window_days))
     if current_end > max_date:
         current_end = max_date
 
-    while current_end <= max_date + pd.Timedelta(days=step_days - 1):
-        window_start = current_end - pd.Timedelta(days=window_days)
+    while current_end <= max_date + pd.Timedelta(days=int(step_days) - 1):
+        window_start = current_end - pd.Timedelta(days=int(window_days))
         window_df = df[(df['target_date_dt'] >= window_start) & (df['target_date_dt'] <= current_end)]
 
         if len(window_df) >= 5:
@@ -151,7 +151,7 @@ def calculate_longitudinal_learning_curves(
             hit_rate_list.append(round(h_rate, 2))
             llm_win_rate_list.append(round(llm_win, 2))
 
-        current_end += pd.Timedelta(days=step_days)
+        current_end += pd.Timedelta(days=int(step_days))
 
     return {
         "dates": date_points,
@@ -196,7 +196,7 @@ def get_multi_window_performance_summary(df: Optional[pd.DataFrame] = None) -> L
     if clean_df.empty:
         return []
 
-    max_dt = clean_df['target_date_dt'].max()
+    max_dt = pd.Timestamp(clean_df['target_date_dt'].max())
     windows = [
         ("7-Day Window", 7),
         ("14-Day Window", 14),
@@ -208,7 +208,7 @@ def get_multi_window_performance_summary(df: Optional[pd.DataFrame] = None) -> L
     results = []
     for label, days in windows:
         if days is not None:
-            cutoff = max_dt - pd.Timedelta(days=days)
+            cutoff = max_dt - pd.Timedelta(days=int(days))
             w_df = clean_df[clean_df['target_date_dt'] >= cutoff]
         else:
             w_df = clean_df
