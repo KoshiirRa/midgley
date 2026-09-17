@@ -3291,5 +3291,24 @@
       "overall_price_pressure": 0.4
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-17T04:04:22.923461",
+    "headline": "Alberta drivers face another jump at the pump after Illinois refinery outage - Global News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1FeFFJZ0R1NDQzR2hwOVFYckUzeVpYRmZuUkVfQTNNOFM4NlFwU1VrX1IyMnJBY3hld3NUSzRVRVBXMEN6U2tkdkdBWjFNT1ZGZzFYblpqUEdOYzZXUUJxbVJ0TlRySkhiX1hpTkxKZUo1Zw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMickFVX3lxTE1FeFFJZ0R1NDQzR2hwOVFYckUzeVpYRmZuUkVfQTNNOFM4NlFwU1VrX1IyMnJBY3hld3NUSzRVRVBXMEN6U2tkdkdBWjFNT1ZGZzFYblpqUEdOYzZXUUJxbVJ0TlRySkhiX1hpTkxKZUo1Zw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]

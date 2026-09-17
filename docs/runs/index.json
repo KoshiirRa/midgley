@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-17_04-04-25",
+    "timestamp": "2026-09-17 04:04:23",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Alberta drivers face another jump at the pump after Illinois..."
+  },
+  {
     "run_id": "2026-09-16_22-45-00",
     "timestamp": "2026-09-16 22:44:51",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-10 17:30:19",
     "run_type": "INTRADAY_REVISION",
     "trigger": "Canadian tariffs on US goods take effect. Which products are..."
-  },
-  {
-    "run_id": "2026-09-10_17-15-26",
-    "timestamp": "2026-09-10 17:15:20",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Trump widens trade war with Canada beyond tariffs. Here\u2019s wh..."
   }
 ]
