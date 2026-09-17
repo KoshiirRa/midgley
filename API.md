@@ -529,10 +529,21 @@ The Midgley MCP Server exposes tools, resources, and prompt templates for integr
    `http://localhost:8000/mcp/sse`
 
 ### Exposed MCP Tools
-- `get_live_gas_prices(locale, zip_code)`
-- `get_gas_price_prediction(locale, days)`
-- `get_live_and_forecast(locale)`
-- `simulate_fuel_market_shock(locale, scenario_id)`
+- `get_live_gas_prices(locale, zip_code)` — Fetches real-time retail pump prices via GasBuddy / AAA scrapers
+- `get_gas_price_prediction(locale, days)` — 5-day out-of-time wholesale & retail gasoline forecasts
+- `get_live_and_forecast(locale)` — Unified current live price, forecast target, rack margin, and catalysts
+- `simulate_fuel_market_shock(locale, scenario_id, custom_shock_pct)` — Counterfactual physical & geopolitical shocks
+- `get_live_diesel_prices()` — Real-time ULSD (HO=F) futures, distillate crack spreads, 3-2-1 margins
+- `get_diesel_forecast(rbob, ulsd, wti)` — 5-day out-of-time ULSD wholesale & retail diesel forecasting
+- `simulate_diesel_market_shock(scenario, base_ulsd)` — Physical and seasonal diesel shock simulations
+- `query_knowledge_graph(entity, depth)` — Traverses petroleum infrastructure, refining, and pipeline topology
+- `retrieve_event_precedents(query, top_k)` — Searches episodic memory for historical shock analogs & reflections
+- `get_usgs_water_telemetry(cluster)` — Inland waterway streamflow, gage height, and barge transport conditions
+- `get_usgs_seismic_telemetry(corridor, days, min_mag)` — Real-time USGS earthquake telemetry near refining corridors
+- `get_refinery_aqi_anomalies(corridor)` — Multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for flaring detection
+- `get_regional_ozone_alerts(corridor, zip_code)` — Official EPA AirNow ozone action days and seasonal RVP surcharges
+- `search_academic_literature(query, limit, source)` — Queries OpenAlex & Semantic Scholar for energy economics research
+- `get_academic_paper_tldr(paper_id_or_doi)` — Fetches automated single-sentence TL;DRs, citations, and open-access PDFs
 
 ### Exposed MCP Resources
 - `resource://midgley/locales/national`
@@ -540,7 +551,9 @@ The Midgley MCP Server exposes tools, resources, and prompt templates for integr
 - `resource://midgley/locales/newark`
 - `resource://midgley/locales/cincinnati`
 - `resource://midgley/locales/greenville`
+- `resource://midgley/locales/charlotte`
 - `resource://midgley/locales/oakland`
+- `resource://midgley/locales/bayarea`
 
 ### Exposed MCP Prompts
 - `prompt://midgley/market_summary` (LLM financial briefing prompt template)

@@ -1,0 +1,238 @@
+{
+  "benchmark_key": "census_demographics",
+  "last_refreshed_utc": "2026-09-17 03:51:12",
+  "records_count": 6,
+  "data": {
+    "connector": "U.S. Census Bureau ACS Demographics Connector",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "supported_metros_count": 7,
+    "metros": {
+      "tulsa_ok": {
+        "region_id": "tulsa_ok",
+        "display_name": "Tulsa, OK Metro",
+        "window_lifecycle": {
+          "current_date": "2026-09-16",
+          "is_in_release_window": true,
+          "release_window_name": "ACS 1-Year Annual Window (2026)",
+          "expected_vintage": 2025,
+          "status_mode": "WINDOW_ACTIVE_CHECKING",
+          "recommended_ttl_seconds": 86400,
+          "locked_until": "2027-08-31",
+          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+        },
+        "demographics": {
+          "vintage_year": 2024,
+          "total_households": 420500,
+          "zero_vehicle_pct": 5.4,
+          "vehicles_per_household": 1.95,
+          "drive_alone_share": 0.825,
+          "carpool_share": 0.092,
+          "public_transit_share": 0.007,
+          "work_from_home_share": 0.062,
+          "mean_commute_minutes": 21.8,
+          "vehicle_dependency_ratio": 0.917,
+          "transit_alternative_index": 0.038,
+          "inelastic_demand_score": 0.885
+        },
+        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
+        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "is_free_alternative": true,
+        "cost_per_query": 0.0
+      },
+      "newark_de": {
+        "region_id": "newark_de",
+        "display_name": "Newark, DE / Philly Corridor",
+        "window_lifecycle": {
+          "current_date": "2026-09-16",
+          "is_in_release_window": true,
+          "release_window_name": "ACS 1-Year Annual Window (2026)",
+          "expected_vintage": 2025,
+          "status_mode": "WINDOW_ACTIVE_CHECKING",
+          "recommended_ttl_seconds": 86400,
+          "locked_until": "2027-08-31",
+          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+        },
+        "demographics": {
+          "vintage_year": 2024,
+          "total_households": 225000,
+          "zero_vehicle_pct": 7.8,
+          "vehicles_per_household": 1.74,
+          "drive_alone_share": 0.742,
+          "carpool_share": 0.078,
+          "public_transit_share": 0.045,
+          "work_from_home_share": 0.118,
+          "mean_commute_minutes": 26.4,
+          "vehicle_dependency_ratio": 0.82,
+          "transit_alternative_index": 0.104,
+          "inelastic_demand_score": 0.732
+        },
+        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
+        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "is_free_alternative": true,
+        "cost_per_query": 0.0
+      },
+      "cincinnati_oh": {
+        "region_id": "cincinnati_oh",
+        "display_name": "Cincinnati, OH Tri-State",
+        "window_lifecycle": {
+          "current_date": "2026-09-16",
+          "is_in_release_window": true,
+          "release_window_name": "ACS 1-Year Annual Window (2026)",
+          "expected_vintage": 2025,
+          "status_mode": "WINDOW_ACTIVE_CHECKING",
+          "recommended_ttl_seconds": 86400,
+          "locked_until": "2027-08-31",
+          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+        },
+        "demographics": {
+          "vintage_year": 2025,
+          "total_households": 200000,
+          "zero_vehicle_pct": 5.0,
+          "vehicles_per_household": 1.8,
+          "drive_alone_share": 0.72,
+          "carpool_share": 0.1,
+          "public_transit_share": 0.04,
+          "work_from_home_share": 0.08,
+          "mean_commute_minutes": 27.0,
+          "vehicle_dependency_ratio": 0.82,
+          "transit_alternative_index": 0.08,
+          "inelastic_demand_score": 0.82
+        },
+        "cache_status": "HIT_NEW_VINTAGE_LOCKED",
+        "provenance": "Census_ACS_DiskCache",
+        "is_free_alternative": true,
+        "cost_per_query": 0.0
+      },
+      "greenville_nc": {
+        "region_id": "greenville_nc",
+        "display_name": "Greenville, NC Metro",
+        "window_lifecycle": {
+          "current_date": "2026-09-16",
+          "is_in_release_window": true,
+          "release_window_name": "ACS 1-Year Annual Window (2026)",
+          "expected_vintage": 2025,
+          "status_mode": "WINDOW_ACTIVE_CHECKING",
+          "recommended_ttl_seconds": 86400,
+          "locked_until": "2027-08-31",
+          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+        },
+        "demographics": {
+          "vintage_year": 2024,
+          "total_households": 76500,
+          "zero_vehicle_pct": 6.8,
+          "vehicles_per_household": 1.88,
+          "drive_alone_share": 0.831,
+          "carpool_share": 0.088,
+          "public_transit_share": 0.011,
+          "work_from_home_share": 0.058,
+          "mean_commute_minutes": 21.2,
+          "vehicle_dependency_ratio": 0.919,
+          "transit_alternative_index": 0.04,
+          "inelastic_demand_score": 0.879
+        },
+        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
+        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "is_free_alternative": true,
+        "cost_per_query": 0.0
+      },
+      "oakland_ca": {
+        "region_id": "oakland_ca",
+        "display_name": "Oakland / SF Bay Area, CA",
+        "window_lifecycle": {
+          "current_date": "2026-09-16",
+          "is_in_release_window": true,
+          "release_window_name": "ACS 1-Year Annual Window (2026)",
+          "expected_vintage": 2025,
+          "status_mode": "WINDOW_ACTIVE_CHECKING",
+          "recommended_ttl_seconds": 86400,
+          "locked_until": "2027-08-31",
+          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+        },
+        "demographics": {
+          "vintage_year": 2024,
+          "total_households": 1820000,
+          "zero_vehicle_pct": 11.5,
+          "vehicles_per_household": 1.62,
+          "drive_alone_share": 0.585,
+          "carpool_share": 0.085,
+          "public_transit_share": 0.125,
+          "work_from_home_share": 0.185,
+          "mean_commute_minutes": 32.5,
+          "vehicle_dependency_ratio": 0.67,
+          "transit_alternative_index": 0.218,
+          "inelastic_demand_score": 0.548
+        },
+        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
+        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "is_free_alternative": true,
+        "cost_per_query": 0.0
+      },
+      "charlotte_nc": {
+        "region_id": "charlotte_nc",
+        "display_name": "Charlotte, NC Metro",
+        "window_lifecycle": {
+          "current_date": "2026-09-16",
+          "is_in_release_window": true,
+          "release_window_name": "ACS 1-Year Annual Window (2026)",
+          "expected_vintage": 2025,
+          "status_mode": "WINDOW_ACTIVE_CHECKING",
+          "recommended_ttl_seconds": 86400,
+          "locked_until": "2027-08-31",
+          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+        },
+        "demographics": {
+          "vintage_year": 2024,
+          "total_households": 1100000,
+          "zero_vehicle_pct": 4.9,
+          "vehicles_per_household": 1.91,
+          "drive_alone_share": 0.778,
+          "carpool_share": 0.082,
+          "public_transit_share": 0.021,
+          "work_from_home_share": 0.105,
+          "mean_commute_minutes": 27.8,
+          "vehicle_dependency_ratio": 0.86,
+          "transit_alternative_index": 0.074,
+          "inelastic_demand_score": 0.821
+        },
+        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
+        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "is_free_alternative": true,
+        "cost_per_query": 0.0
+      },
+      "port_st_lucie_fl": {
+        "region_id": "port_st_lucie_fl",
+        "display_name": "Port St. Lucie, FL Metro",
+        "window_lifecycle": {
+          "current_date": "2026-09-16",
+          "is_in_release_window": true,
+          "release_window_name": "ACS 1-Year Annual Window (2026)",
+          "expected_vintage": 2025,
+          "status_mode": "WINDOW_ACTIVE_CHECKING",
+          "recommended_ttl_seconds": 86400,
+          "locked_until": "2027-08-31",
+          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+        },
+        "demographics": {
+          "vintage_year": 2024,
+          "total_households": 215000,
+          "zero_vehicle_pct": 4.1,
+          "vehicles_per_household": 1.94,
+          "drive_alone_share": 0.812,
+          "carpool_share": 0.08,
+          "public_transit_share": 0.006,
+          "work_from_home_share": 0.088,
+          "mean_commute_minutes": 28.5,
+          "vehicle_dependency_ratio": 0.892,
+          "transit_alternative_index": 0.05,
+          "inelastic_demand_score": 0.868
+        },
+        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
+        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "is_free_alternative": true,
+        "cost_per_query": 0.0
+      }
+    },
+    "status": "SUCCESS"
+  }
+}
