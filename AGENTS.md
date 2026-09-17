@@ -648,6 +648,30 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   4. **Dynamic Out-of-Metro Leaflet Map Points:** Dynamically serialize `src.telemetry.get_unmapped_zip_telemetry()` into the client-side Leaflet map script to display active geographic clusters of out-of-metro forecast requests.
   5. **Automated Re-generation & Test Execution:** Whenever telemetry schemas, memory tables, or quota ledgers change, agents MUST execute `python3 -c "from src.dashboard_generator import generate_telemetry_page; generate_telemetry_page()"` and verify pass status with `pytest tests/test_system_telemetry.py`.
 
+---
+
+### 24. Headline Arena Energy Benchmark & Continuous Calibration Directives (`src/headline_arena_connector.py`) (Issue #182)
+
+* **Role:** Manages the independent, third-party continuous probability scoring and Brier calibration interface connecting Midgley to **Headline Arena** (`headlinearena.com`) for daily **RBOB Wholesale Gasoline (RB)** and **Cushing WTI Crude (CL)** challenges.
+* **Key Directives & Architecture:**
+  1. **OAuth2 Client Credentials Authentication:** Exchanging `HEADLINE_ARENA_CLIENT_ID` and `HEADLINE_ARENA_CLIENT_SECRET` (or `HEADLINE_ARENA_API_KEY`) for short-lived bearer tokens via `POST /api/v1/auth/token` with in-memory TTL expiry caching.
+  2. **Closed-Form Normal CDF Quantile Conversion:**
+     Given median forecast $\mu = P_{50}$, standard deviation $\sigma = \frac{P_{90} - P_{10}}{2.5631}$ (or residual RMSE), open spot price $S_0$, and asset dead-zone fraction $d$ from `GET /api/v1/eval/settlement-rules` ($d = 0.0030$ for RB, $d = 0.0020$ for CL):
+     - Upper threshold: $T_{\text{upper}} = S_0 \cdot (1 + d)$
+     - Lower threshold: $T_{\text{lower}} = S_0 \cdot (1 - d)$
+     - $P(\text{bullish}) = 1 - \Phi\left(\frac{T_{\text{upper}} - \mu}{\sigma}\right)$
+     - $P(\text{bearish}) = \Phi\left(\frac{T_{\text{lower}} - \mu}{\sigma}\right)$
+     - $P(\text{neutral}) = \max\left(0, 1 - P(\text{bullish}) - P(\text{bearish})\right)$
+     - $\text{direction} = \operatorname{argmax}(P(\text{bullish}), P(\text{neutral}), P(\text{bearish}))$
+     - $\text{confidence} = \max(P(\text{bullish}), P(\text{neutral}), P(\text{bearish}))$
+  3. **Environment Isolation & Dev-Test Tagging:**
+     - **Local / Dev (`MIDGLEY_ENV=dev`):** Runs in **Dry-Run Mode** by default, computing and logging probabilities locally without external network POST requests.
+     - **Explicit Dev-Test Submissions:** Enabled via `--submit-headline-arena`, `--live`, or `HEADLINE_ARENA_DEV_SUBMIT=1`. Automatically prepends `[DEV-TEST] [DEVELOPMENT]` badges to submission reasoning strings to strictly delineate development runs from the official production track record.
+     - **Production (`MIDGLEY_ENV=prod` / GitHub Actions):** Executes live submissions headlessly during scheduled daily runs when secrets are configured.
+     - **Test Suite (`TESTING=1`):** Completely mocks and suppresses outgoing network calls.
+  4. **Connector Telemetry & Audit Logging:** Records every invocation status (`SUCCESS`, `DRY_RUN`, `SKIPPED_NO_CREDENTIALS`, `HTTP_ERROR`) and latency to `data/connector_telemetry.json` via `src/connector_telemetry.py`.
+
+
 
 
 
