@@ -10,6 +10,7 @@ import logging
 import urllib.request
 import urllib.parse
 from datetime import datetime
+from typing import Optional, Dict, Any, List
 
 logger = logging.getLogger(__name__)
 
