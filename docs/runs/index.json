@@ -1,9 +1,27 @@
 [
   {
-    "run_id": "2026-09-18_16-11-18",
-    "timestamp": "2026-09-18 04:31:38",
+    "run_id": "2026-09-18_20-37-41",
+    "timestamp": "2026-09-18 20:37:38",
     "run_type": "INTRADAY_REVISION",
-    "trigger": "Refinery outage slows cheaper gas - Audacy"
+    "trigger": "Exxon Refinery Outage Adds Pressure to Regional Fuel Prices ..."
+  },
+  {
+    "run_id": "2026-09-18_16-04-55",
+    "timestamp": "2026-09-18 16:04:53",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "House Passes Bill Allowing New Tariffs on Russia Oil Buyers ..."
+  },
+  {
+    "run_id": "2026-09-18_12-37-10",
+    "timestamp": "2026-09-18 12:37:07",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-18 12:37:07)"
+  },
+  {
+    "run_id": "2026-09-18_10-48-58",
+    "timestamp": "2026-09-18 10:48:55",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "US tariffs against Russian oil buyers pass: What it means fo..."
   },
   {
     "run_id": "2026-09-18_04-31-41",
@@ -577,24 +595,6 @@
   },
   {
     "run_id": "2026-09-11_16-32-11",
-    "timestamp": "2026-09-11 01:46:50",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
-  },
-  {
-    "run_id": "2026-09-11_16-19-43",
-    "timestamp": "2026-09-11 01:46:50",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
-  },
-  {
-    "run_id": "2026-09-11_16-17-10",
-    "timestamp": "2026-09-11 01:46:50",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
-  },
-  {
-    "run_id": "2026-09-11_16-16-56",
     "timestamp": "2026-09-11 01:46:50",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
