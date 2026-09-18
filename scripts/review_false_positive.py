@@ -200,12 +200,41 @@ def fetch_issue_data(issue_number: int, repo: str = "KoshiirRa/midgley") -> Opti
         return None
 
 
-def post_issue_comment(issue_number: int, comment: str, repo: str = "KoshiirRa/midgley") -> bool:
-    """Posts a diagnostic comment to the GitHub issue."""
+def fetch_issue_comments(issue_number: int, repo: str = "KoshiirRa/midgley") -> List[Dict[str, Any]]:
+    """Fetches comments for the GitHub issue via REST API."""
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    url = f"https://api.github.com/repos/{repo}/issues/{issue_number}/comments"
+    headers = {
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "Midgley-False-Positive-Reviewer"
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        logger.error(f"Failed to fetch comments for issue #{issue_number}: {e}")
+        return []
+
+
+def post_issue_comment(issue_number: int, comment: str, repo: str = "KoshiirRa/midgley", allow_duplicate: bool = False) -> bool:
+    """Posts a diagnostic comment to the GitHub issue with duplicate suppression."""
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if not token:
         logger.warning("No GH_TOKEN or GITHUB_TOKEN available; skipping GitHub comment dispatch.")
         return False
+
+    # Check for existing diagnostic review comment to maintain idempotency
+    if not allow_duplicate:
+        existing_comments = fetch_issue_comments(issue_number, repo=repo)
+        for c in existing_comments:
+            body = c.get("body", "")
+            if "### 🤖 Automated Agent Diagnostic Review" in body:
+                logger.info(f"Diagnostic review comment already exists on Issue #{issue_number} (Comment ID: {c.get('id')}). Skipping duplicate.")
+                return True
 
     url = f"https://api.github.com/repos/{repo}/issues/{issue_number}/comments"
     headers = {
@@ -232,13 +261,13 @@ def parse_headline_from_issue_body(body: str) -> str:
     """Extracts the catalyst headline from an issue body."""
     if not body:
         return ""
-    match = re.search(r'### 🚨 Trigger Catalyst\s*>\s*\*?"?(.*?)"?\*?\n', body, re.DOTALL)
+    match = re.search(r'### 🚨 Trigger Catalyst\s*>\s*\*?"?([^\n"\*]+)"?\*?', body)
     if match:
         return match.group(1).strip()
-    match2 = re.search(r'Headline:\s*\*?"?(.*?)"?\*?\n', body)
+    match2 = re.search(r'Headline:\s*\*?"?([^\n"\*]+)"?\*?', body)
     if match2:
         return match2.group(1).strip()
-    match3 = re.search(r'>\s*\*?"?(.*?)"?\*?', body)
+    match3 = re.search(r'>\s*\*?"?([^\n"\*]+)"?\*?', body)
     if match3:
         return match3.group(1).strip()
     return ""
