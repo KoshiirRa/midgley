@@ -13,7 +13,7 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-FALLBACK_PACKAGE_VERSION = "0.6.3"
+FALLBACK_PACKAGE_VERSION = "0.6.4"
 FALLBACK_MODEL_VERSION = "v1.6 Ipatieff"
 
 
@@ -31,6 +31,9 @@ def get_version() -> str:
     if env_ver:
         return env_ver.lstrip("v")
 
+    # Collect candidate versions across discovery tiers
+    candidates = []
+
     # Tier 2: Git describe / tag resolution
     try:
         cmd_out = subprocess.check_output(
@@ -41,7 +44,7 @@ def get_version() -> str:
         if cmd_out:
             clean_ver = cmd_out.lstrip("v").strip()
             if re.match(r"^\d+\.\d+(\.\d+)?", clean_ver):
-                return clean_ver
+                candidates.append(clean_ver)
     except Exception:
         pass
 
@@ -56,8 +59,7 @@ def get_version() -> str:
             tag_lines = [t.strip().lstrip("v") for t in cmd_out.splitlines() if t.strip()]
             valid_tags = [t for t in tag_lines if re.match(r"^\d+\.\d+(\.\d+)?", t)]
             if valid_tags:
-                valid_tags.sort(key=lambda s: [int(u) for u in s.split(".") if u.isdigit()])
-                return valid_tags[-1]
+                candidates.extend(valid_tags)
     except Exception:
         pass
 
@@ -65,16 +67,11 @@ def get_version() -> str:
     try:
         repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         rel_files = glob.glob(os.path.join(repo_root, "RELEASE_NOTES_v*.md"))
-        versions = []
         for rf in rel_files:
             fname = os.path.basename(rf)
             m = re.search(r"RELEASE_NOTES_v(\d+\.\d+(\.\d+)?)\.md", fname)
             if m:
-                v_str = m.group(1)
-                versions.append(v_str)
-        if versions:
-            versions.sort(key=lambda s: [int(u) for u in s.split(".") if u.isdigit()])
-            return versions[-1]
+                candidates.append(m.group(1))
     except Exception:
         pass
 
@@ -88,11 +85,19 @@ def get_version() -> str:
                     if line.strip().startswith("version"):
                         m = re.search(r'version\s*=\s*"([^"]+)"', line)
                         if m:
-                            return m.group(1).lstrip("v")
+                            candidates.append(m.group(1).lstrip("v"))
     except Exception:
         pass
 
     # Tier 5: Fallback constant
+    candidates.append(FALLBACK_PACKAGE_VERSION)
+
+    # Return highest semver candidate
+    clean_candidates = [c for c in candidates if re.match(r"^\d+\.\d+(\.\d+)?", c)]
+    if clean_candidates:
+        clean_candidates.sort(key=lambda s: [int(u) for u in s.split(".") if u.isdigit()])
+        return clean_candidates[-1]
+
     return FALLBACK_PACKAGE_VERSION
 
 
