@@ -10,13 +10,20 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: false-positive-review-${{ github.event.issue.number || inputs.issue_number }}
+  cancel-in-progress: false
+
 permissions:
   issues: write
   contents: read
 
 jobs:
   review_false_positive:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'false-positive')
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'false-positive')) ||
+      (github.event.action == 'labeled' && github.event.label.name == 'false-positive')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

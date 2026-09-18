@@ -204,7 +204,7 @@
     }
   },
   {
-    "as_of": "2026-09-18 03:39:13",
+    "as_of": "2026-09-18 12:19:42",
     "valid_date": "2026-09-18",
     "corridor_key": "cushing_ok",
     "composite_seismic_risk_index": 0.0,
@@ -213,7 +213,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-18 03:39:13",
+      "timestamp": "2026-09-18 12:19:42",
       "filtered_corridor": "cushing_ok",
       "temporal_window_days": 30,
       "events": [],
@@ -240,7 +240,7 @@
     }
   },
   {
-    "as_of": "2026-09-18 03:41:19",
+    "as_of": "2026-09-18 12:25:20",
     "valid_date": "2026-09-18",
     "corridor_key": "mid_atlantic",
     "composite_seismic_risk_index": 0.0,
@@ -249,7 +249,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-18 03:41:19",
+      "timestamp": "2026-09-18 12:25:20",
       "filtered_corridor": "mid_atlantic",
       "temporal_window_days": 30,
       "events": [],
@@ -276,7 +276,7 @@
     }
   },
   {
-    "as_of": "2026-09-18 04:31:59",
+    "as_of": "2026-09-18 20:37:54",
     "valid_date": "2026-09-18",
     "corridor_key": "bay_area",
     "composite_seismic_risk_index": 0.0,
@@ -285,7 +285,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-18 04:31:59",
+      "timestamp": "2026-09-18 20:37:54",
       "filtered_corridor": "bay_area",
       "temporal_window_days": 30,
       "events": [],
