@@ -93,6 +93,8 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
         try:
             if turso_url.startswith("turso://"):
                 turso_url = "https://" + turso_url[8:]
+            elif turso_url.startswith("libsql://"):
+                turso_url = "https://" + turso_url[9:]
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
             headers = {
                 "Authorization": f"Bearer {turso_token}",
@@ -193,7 +195,8 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
             headers = {"Content-Type": "application/json", "User-Agent": "MidgleyPredictionSync/1.0"}
             if cf_token:
                 headers["Authorization"] = f"Bearer {cf_token}"
-            recent_records = df.tail(50).to_dict(orient="records")
+            clean_df = df.tail(50).astype(object).where(pd.notna(df), None)
+            recent_records = clean_df.to_dict(orient="records")
             body = json.dumps({"predictions": recent_records}).encode("utf-8")
             req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
             with urllib.request.urlopen(req, timeout=3.0) as resp:

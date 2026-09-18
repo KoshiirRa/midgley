@@ -16,12 +16,13 @@ CREATE INDEX IF NOT EXISTS idx_lookup_cache_expires_at ON lookup_cache (expires_
 
 -- 2. Intraday RSS Deduplication Ledger
 CREATE TABLE IF NOT EXISTS seen_rss_headlines (
-    headline_hash TEXT PRIMARY KEY,
-    seen_at REAL NOT NULL
+    clean_key TEXT PRIMARY KEY,
+    raw_headline TEXT,
+    created_at TEXT NOT NULL
 );
 
 -- Index for aging deduplication records
-CREATE INDEX IF NOT EXISTS idx_seen_rss_seen_at ON seen_rss_headlines (seen_at);
+CREATE INDEX IF NOT EXISTS idx_seen_rss_created_at ON seen_rss_headlines (created_at);
 
 -- 3. Out-of-Time Prediction History & Evaluation Log
 CREATE TABLE IF NOT EXISTS prediction_history (
