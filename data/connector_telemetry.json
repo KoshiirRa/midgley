@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-18 04:04:53",
-  "total_events": 691,
+  "last_updated": "2026-09-18 04:32:03",
+  "total_events": 693,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -6912,6 +6912,26 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "HTTP 500: Internal Server Error"
+    },
+    {
+      "timestamp": "2026-09-18 04:32:02",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1587.3,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 51ba616b-de9a-4064-b101-e15d04e1c20d already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-18 04:32:03",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 958.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge e1421fba-53a5-4179-9792-ff1c39eb8b22 already predicted (HTTP 500)"
     }
   ]
 }

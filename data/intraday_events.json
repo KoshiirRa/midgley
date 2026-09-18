@@ -3428,5 +3428,25 @@
       "overall_price_pressure": 0.9
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-18T04:31:38.206215",
+    "headline": "Refinery outage slows cheaper gas - Audacy",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPLVZWclF3ZW1wemc3VWwwYkhzZkdHckNDeHUyczY2Vm84RXFnYkxRX3BnSlZLb0J0b1FoU1ZyWExFVUlmTWFyNTRjZGFZUmFsdUk3LV93QVRvOXpzV1FGMHJPNWZXeGhLZk5HaDJoaFZuQm5yUi1CZTVDZDJEY3M2SEM4Ny1XeGZuTGV1QnlNa2Z2U19JQXc4MHBLVE50VVpOMEpiMkhVY0ItUkY5bnVObEtxUngwUWxWZFpBQQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPLVZWclF3ZW1wemc3VWwwYkhzZkdHckNDeHUyczY2Vm84RXFnYkxRX3BnSlZLb0J0b1FoU1ZyWExFVUlmTWFyNTRjZGFZUmFsdUk3LV93QVRvOXpzV1FGMHJPNWZXeGhLZk5HaDJoaFZuQm5yUi1CZTVDZDJEY3M2SEM4Ny1XeGZuTGV1QnlNa2Z2U19JQXc4MHBLVE50VVpOMEpiMkhVY0ItUkY5bnVObEtxUngwUWxWZFpBQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivAFBVV95cUxPLVZWclF3ZW1wemc3VWwwYkhzZkdHckNDeHUyczY2Vm84RXFnYkxRX3BnSlZLb0J0b1FoU1ZyWExFVUlmTWFyNTRjZGFZUmFsdUk3LV93QVRvOXpzV1FGMHJPNWZXeGhLZk5HaDJoaFZuQm5yUi1CZTVDZDJEY3M2SEM4Ny1XeGZuTGV1QnlNa2Z2U19JQXc4MHBLVE50VVpOMEpiMkhVY0ItUkY5bnVObEtxUngwUWxWZFpBQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.7,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]
