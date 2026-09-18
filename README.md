@@ -1,6 +1,6 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.5)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.6)
 
-[![Release: v0.5](https://img.shields.io/badge/Release-v0.5-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.5)
+[![Release: v0.6](https://img.shields.io/badge/Release-v0.6-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.6)
 [![GHCR Docker](https://img.shields.io/badge/GHCR-midgley%3Aself--hosted-blue.svg?logo=docker)](https://github.com/KoshiirRa/midgley/pkgs/container/midgley)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
@@ -10,7 +10,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-green.svg)](requirements.txt)
 
-An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Executive Social Media (Trump Posts & Weekend Gap Analysis)**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
+An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
 ### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-18 12:37 UTC)
@@ -78,12 +78,14 @@ flowchart TD
         F5["Physical Alternative Feeds (Cboe OVX & Dynamic Baker Hughes Rigs)"]
         F6["USGS Water Data Telemetry (Streamflow, Stage & Cooling Temp)"]
         F7["USGS Earthquake API Telemetry (earthquake.usgs.gov)"]
+        F8["BSEE Offshore Platform Shut-ins & USACE Lock Delays"]
     end
 
     subgraph EXTRACTOR["1. Event, Weather & Physical Extraction Agent"]
         E1["Google Gemini 2.5 Flash / Domain NLP Lexicon"]
-        E2["intraday_event_monitor.py & finlight_feed.py"]
+        E2["intraday_event_monitor.py, finlight_feed.py & firecrawl_scraper.py"]
         E3["noaa_weather.py (Token-Efficient Ingestion & SPC Mapping)"]
+        E4["pasa_research_agent.py (PaSa Crawler-Selector Multi-Hop Loop)"]
     end
 
     subgraph FUSION["2. Exponential Memory Fusion Agent"]
@@ -102,20 +104,27 @@ flowchart TD
         L4["Greenville NC (greenville_main.py - Colonial Line 1/2 Hubs)"]
         L5["Charlotte NC (charlotte_main.py - Paw Creek Distribution Hub)"]
         L6["Oakland & SF Bay Area (oakland_main.py - CARB Burden & Physical Risks)"]
+        L7["Port St. Lucie FL (port_st_lucie_main.py - Waterborne Marine Freight)"]
+        L8["ULSD Distillate Diesel Engine (diesel_main.py - 3-2-1 Crack Margin)"]
     end
 
     subgraph SIMULATOR["5. Synthesis & Scenario Simulator Agent"]
-        S1["Simulates Refinery Outages, Hormuz Blockades & Weekend Posts"]
+        S1["src/scenario_engine.py & Climatology Registry (20 Scenarios)"]
+        S2["Seasonal Plausibility Gating (Active, Plausible, Dormant, Evergreen)"]
+        S3["Prospective Forward Precursor Synthesis (1–14d Lead Time)"]
+        S4["Simulates Refinery Outages, Hormuz Blockades & Weather Freezes"]
     end
 
     subgraph MLOPS["6. MLOps Prediction Logging Agent"]
         P1["prediction_logger.py → data/prediction_history.csv"]
+        P2["Rolling 30/60/90d MAE/RMSE & Directional Hit Rates"]
     end
 
     subgraph REVIEW["7. Model Performance Review & Feedback Loop Agent"]
         R1[".github/workflows/weekly_model_review.yml"]
         R2["weekly_issue_reporter.py, agent_memory.py & hindsight_client.py"]
         R3["Retain-Recall-Reflect: Cloud Run (Scale-to-Zero) + Supabase pgvector & SQLite FTS5"]
+        R4["Forward Plausibility Horizon Matrix & Multi-Hub Stress Audit"]
     end
 
     subgraph DASHBOARD["8. Public Web Dashboard & Presentation Agent"]
@@ -140,7 +149,7 @@ flowchart TD
 * **2. Exponential Memory Fusion Agent ([`src/feature_engineering.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/feature_engineering.py)):** Models point-shock persistence over 2–3 weeks using a continuous mathematical decay accumulator ($\mathbf{M}_t = \mathbf{M}_{t-1} \cdot e^{-\frac{\ln 2}{t_{1/2}}} + \mathbf{V}_t$) with dynamic category-specific half-lives $t_{1/2} \in [2.5, 14.0]\text{ days}$ ($14.0\text{d}$ physical supply disruptions, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts). Enforces point-in-time `as_of` publication date joins and bitemporal vintage tracking ([`src/data_ingestion.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/data_ingestion.py), [`data/eia_vintages.json`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/data/eia_vintages.json)) to eliminate historical scalar broadcasting and lookahead bias during model retraining (Issue #121).
 * **3. Quantitative Forecasting Agent ([`src/models.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/models.py)):** Fits regularized linear pipelines (StandardScaler + Ridge Regression $\alpha=10.0$) and XGBoost regressors on 80/20 chronological splits to predict wholesale RBOB futures return shocks. Features **Dynamic Volatility-Gated Persistence Blending (DV-GPB)** ($\lambda_{vol} = \frac{1}{1 + e^{-200.0(\sigma_{14d} - 0.015)}}$) shrinking forecasts to Naive Persistence during low-volatility plateaus while preserving 100% of event shock vectors during active market moves (Issue #214). Computes component-level feature attribution breakdowns (`compute_locale_feature_attribution_breakdown`) allocating signed price impact ($/gal) across 6 standardized domains (*Futures & Commodity, Refining Crack Margin, Weather & Environmental, Tax & Regulatory, Unstructured Sentiment, Regional Logistics*).
 * **4. Localized Metro Area Calibration Agents ([`src/locations/`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/locations/)):** Subpackage calibration modules (`tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`) that adjust wholesale commodity baselines to regional retail pump prices, dynamic rack margins, delivery hub logistics, reconciled statutory CARB tax components ($0.953/gal total burden), state fuel tax gaps, and infrastructure shocks. Integrates **Empirical Residual CI Recalibration ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$)** achieving $\ge 90.0\%$ 95% CI empirical coverage across all 10 metro calibration hubs.
-* **5. Synthesis & Scenario Simulator Agent ([`src/locations/<location>/main.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/locations/)):** Runs counterfactual "What-If" simulations (e.g. HF Sinclair EF-3 tornado shocks, Cushing pipeline spills, Hormuz blockades, Hayward Fault quakes, PG&E PSPS power shutoffs, and weekend tariff announcements).
+* **5. Synthesis & Scenario Simulator Agent ([`src/scenario_engine.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/scenario_engine.py) & [`src/locations/<location>/main.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/locations/)):** Runs counterfactual "What-If" simulations (e.g. HF Sinclair EF-3 tornado shocks, Cushing pipeline spills, Hormuz blockades, Hayward Fault quakes, PG&E PSPS power shutoffs, and weekend tariff announcements) backed by **Seasonal & Climatological Plausibility Gating** (Issue #300), date-window constraints, active real-time telemetry threshold triggers (NOAA SPC, USGS hydrology, USGS seismic), precursor forward scenario synthesis (1–14 days lookahead), and off-season counterfactual warning annotations.
 * **6. MLOps Prediction Logging Agent ([`src/prediction_logger.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/prediction_logger.py)):** Logs 5-market-day out-of-time forecasts (`pd.bdate_range`) and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, automatically backfills actual ground-truth prices from `yfinance` as target dates arrive, evaluates empirical 95% Confidence Interval Coverage (`within_95ci_hit`), and computes continuous rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Model MAE Uplift % vs. Naive Persistence, and LLM Augmentation Win Rates via `GET /api/v1/forecast/scoreboard`.
 * **7. Model Performance Review & Feedback Loop Agent ([`.github/workflows/weekly_model_review.yml`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/.github/workflows/weekly_model_review.yml), [`src/agent_memory.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/agent_memory.py), [`src/hindsight_client.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/hindsight_client.py), [`src/weekly_issue_reporter.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/weekly_issue_reporter.py), [`src/catalog_monitor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/catalog_monitor.py), [`src/arxiv_monitor.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/arxiv_monitor.py) & [`docs/research_sources.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/research_sources.md)):** Automated Saturday runner (08:00 AM Central / 13:00 UTC) evaluating rolling MAE/RMSE metrics, performing LLM self-reviews of open GitHub issues, executing **Vectorize Hindsight Episodic Memory** qualitative root-cause post-mortems and historical shock analogy recall with scale-to-zero proactive warmup and zero-data-loss pending memory reconciliation, monitoring developer catalogs & arXiv research preprints, and feeding empirical diagnostic signals back into model recalibration.
 * **8. Public Web Dashboard & Presentation Agent ([`src/dashboard_generator.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/dashboard_generator.py) & [`src/regional_metadata.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/regional_metadata.py)):** Builds the multi-page responsive public web app deployed automatically to GitHub Pages ([koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)), rendering visual driver cards dynamically from decoupled JSON metadata profiles (`data/regional_metadata/`), including interactive technical breakdown pages (`docs/technical_breakdown.html`) and run JSON payloads (`docs/runs/`).

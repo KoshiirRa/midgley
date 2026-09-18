@@ -151,3 +151,13 @@ All regional driver cards, refining logistics, state/local tax structures, physi
 - **Profiles Directory**: Maintain structured JSON files under `data/regional_metadata/<region_id>.json` (`tulsa_ok.json`, `newark_de.json`, `cincinnati_oh.json`, `greenville_nc.json`, `charlotte_nc.json`, `port_st_lucie_fl.json`, `oakland_ca.json`, `bayarea_ca.json`).
 - **Card Rendering**: Use `render_regional_driver_cards_html(region_id)` from [`src/regional_metadata.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/regional_metadata.py) inside [`src/dashboard_generator.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/dashboard_generator.py) to dynamically construct responsive Tailwind visual cards covering all 4 core dimensions. Never hardcode prose driver descriptions inside Python HTML template strings.
 
+---
+
+## 9. PaSa Dual-Agent Literature & Event Research Flow (`src/pasa_research_agent.py`)
+
+For multi-hop qualitative event investigation and econometric parameter discovery (Issue #265):
+- **Crawler Subagent**: Expands queries and navigates external citation graphs (OpenAlex, Semantic Scholar, arXiv, Firecrawl, Knowledge Graph).
+- **Selector Subagent**: Filters candidate documents against domain energy criteria, performs parameter extraction ($t_{1/2}$, $\beta$), and issues iterative next-hop directives.
+- **Quota & Safety Valve**: Enforces maximum 2–3 hops and 24-hour disk caching with zero-cost fallback under basic tier keys and offline testing.
+
+

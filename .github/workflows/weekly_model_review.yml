@@ -64,6 +64,7 @@ jobs:
           HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
           HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
           SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+          MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION: ${{ vars.MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION }}
         run: |
           python run_all.py --use-llm-api
 

@@ -68,6 +68,11 @@ if __name__ == "__main__":
         generate_public_dashboard()
     except Exception as e:
         logger.error(f"Error generating public dashboard: {e}", exc_info=True)
+    try:
+        from src.static_api_exporter import export_all_static_api_endpoints
+        export_all_static_api_endpoints()
+    except Exception as e:
+        logger.error(f"Error exporting static API endpoints: {e}", exc_info=True)
 
     # Optional Headline Arena Independent CRPS/Brier Benchmark Submission (Issue #182)
     submit_ha = "--submit-headline-arena" in sys.argv

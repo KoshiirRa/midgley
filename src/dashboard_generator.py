@@ -268,6 +268,20 @@ def get_model_badge() -> str:
     return f'<span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model {model_ver}</span>'
 
 
+def get_multi_agent_sim_badge() -> str:
+    """Generates dynamic HTML badge indicating whether MiroFish Multi-Agent Financial Simulation mode is active."""
+    try:
+        from src.scenario_simulator import is_multi_agent_sim_enabled
+        is_active = is_multi_agent_sim_enabled()
+    except Exception:
+        is_active = False
+
+    if is_active:
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-normal" title="MiroFish Multi-Agent Simulation Cohort Active"><i class="fa-solid fa-users-gear text-[10px] mr-1"></i>Multi-Agent Cohort: ON</span>'
+    else:
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 font-normal" title="Standard Linear Scenario Engine Active"><i class="fa-solid fa-users-slash text-[10px] mr-1"></i>Multi-Agent Cohort: OFF</span>'
+
+
 
 def get_analytics_script() -> str:
     """Generates Cloudflare Web Analytics script tag if CLOUDFLARE_ANALYTICS_TOKEN is present in environment.
@@ -354,6 +368,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
 
     badge_html = get_release_badge()
     model_badge_html = get_model_badge()
+    multi_agent_badge_html = get_multi_agent_sim_badge()
 
     return f"""    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -362,8 +377,8 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     <img src="{rel_prefix}assets/logo.png" alt="Midgley Logo" class="w-full h-full object-cover">
                 </a>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley {badge_html} {model_badge_html}
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
+                        midgley {badge_html} {model_badge_html} {multi_agent_badge_html}
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -1266,6 +1281,21 @@ def build_spc_style_synopsis(
     )
 
     # 3. FORECAST UNCERTAINTY & RISK SCENARIOS (Specific to this run)
+    seasonal_notes = []
+    try:
+        from src.scenario_engine import get_all_scenarios_with_plausibility
+        scen_audit = get_all_scenarios_with_plausibility(active_only=True, include_prospective=True)
+        active_items = scen_audit.get("scenarios", [])
+        if active_items:
+            for s in active_items[:4]:
+                st_badge = s.get("plausibility_status", "PLAUSIBLE")
+                s_name = s.get("name", s.get("scenario_id"))
+                seasonal_notes.append(f"[{st_badge}] {s_name}")
+    except Exception:
+        pass
+
+    seasonal_block = ("\n• Climatological Plausibility Horizon: " + "; ".join(seasonal_notes)) if seasonal_notes else ""
+
     risks_scenarios = (
         f"FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\n"
         f"Evaluated tail-risk catalysts specific to execution [{log_ts}]:\n"
@@ -1274,6 +1304,7 @@ def build_spc_style_synopsis(
         f"• Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n"
         f"• Maritime & Geopolitical Exposure: Geopolitical risk score G={geo_val:.2f}. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n"
         f"• Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+        f"{seasonal_block}"
     )
 
     return {
@@ -5877,9 +5908,19 @@ def generate_telemetry_page():
     local_fallback_calls = mem_totals.get('local_fallback_calls', 0)
 
     sqlite_mem_path = os.path.join(PROJECT_ROOT, "data", "agent_memory.sqlite")
-    stored_memories = 0
-    stored_reflections = 0
-    if os.path.exists(sqlite_mem_path):
+    mem_inventory = {}
+    try:
+        from src.agent_memory import AgentMemoryManager
+        mem_mgr = AgentMemoryManager()
+        mem_inventory = mem_mgr.get_bank_inventory()
+    except Exception as e:
+        logger.debug(f"Failed to query AgentMemoryManager inventory: {e}")
+
+    stored_memories = mem_inventory.get('memories_count', 0)
+    stored_reflections = mem_inventory.get('reflections_count', 0)
+    mem_backend_badge = mem_inventory.get('backend', 'Local SQLite FTS5')
+    mem_source_type = mem_inventory.get('source', 'local_sqlite')
+    if stored_memories == 0 and stored_reflections == 0 and os.path.exists(sqlite_mem_path):
         try:
             import sqlite3
             conn = sqlite3.connect(sqlite_mem_path, timeout=2.0)
@@ -6089,13 +6130,19 @@ def generate_telemetry_page():
 
                 <!-- Active Memory Bank Inventory -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
-                    </h4>
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
+                        </h4>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full {'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' if mem_source_type == 'remote_cloud' else 'bg-slate-800 text-slate-400 border border-slate-700'} font-mono">
+                            {'☁️ Remote Cluster' if mem_source_type == 'remote_cloud' else '💾 Local SQLite'}
+                        </span>
+                    </div>
                     <div class="space-y-3 font-mono text-xs">
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <div class="text-[10px] text-slate-500 uppercase tracking-wider">Bank Identifier</div>
-                            <div class="text-slate-200 font-bold text-sm">midgley-gas-forecasting</div>
+                            <div class="text-slate-200 font-bold text-sm">{mem_inventory.get('bank_id', 'midgley-gas-forecasting')}</div>
+                            <div class="text-[10px] text-slate-500 font-sans mt-0.5">{mem_backend_badge}</div>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
@@ -6471,6 +6518,14 @@ def generate_telemetry_page():
         f.write(build_telemetry_html(sub_header_html, learning_sub_snippet))
 
     logger.info(f"Successfully generated Telemetry & Map page at {TELEMETRY_PATH} and {TELEMETRY_SUB_PATH}")
+
+    # Synchronize static JSON API endpoints in docs/api/v1/ with live dashboard state
+    try:
+        from src.static_api_exporter import export_all_static_api_endpoints
+        export_all_static_api_endpoints(docs_dir=DOCS_DIR)
+        logger.info("Successfully synchronized static API endpoints in docs/api/v1/")
+    except Exception as api_err:
+        logger.warning(f"Could not export static API endpoints: {api_err}")
 
 
 def generate_data_sources_page(docs_dir: str = DOCS_DIR):

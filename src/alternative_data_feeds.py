@@ -50,6 +50,16 @@ ALTERNATIVE_DATA_SOURCES = {
         "frequency": "Daily real-time",
         "key_metrics": ["OVX Crude Volatility Index"],
         "predictive_power": "Options tail-risk sentiment & supply shock panic gauge."
+    },
+    "BTS_Freight_Transportation_Services_Index": {
+        "agency": "U.S. Bureau of Transportation Statistics (BTS)",
+        "frequency": "Monthly (Seasonally Adjusted)",
+        "key_metrics": ["Freight TSI (tsi_freight)", "Truck Tonnage Index (truck_d11)", "Petroleum Transport (petroleum_d11)"],
+        "predictive_power": "Leading physical freight and commercial transportation demand proxy for diesel and motor gasoline consumption (Issue #74).",
+        "bitemporal_architecture": {
+            "fields": ["valid_date", "as_of", "is_vintage_reconstructed"],
+            "description": "Bitemporal vintage tracking eliminating lookahead bias in historical backtests (Issue #74)."
+        }
     }
 }
 
@@ -287,12 +297,23 @@ def fetch_baker_hughes_rig_counts(start_date: str = None) -> pd.DataFrame:
     return df
 
 
+def fetch_bts_transportation_data(start_date: str = "2020-01-01") -> pd.DataFrame:
+    """
+    Returns U.S. BTS Freight Transportation Services Index and Truck Tonnage DataFrame (Issue #74).
+    """
+    from src.bts_transportation import BTSTransportationConnector
+    connector = BTSTransportationConnector()
+    return connector.fetch_bts_tsi_dataset(start_date=start_date)
+
+
 if __name__ == "__main__":
     ovx_df = fetch_cboe_crude_volatility_ovx("2024-01-01")
     rigs_df = get_baker_hughes_rig_count_feed()
+    bts_df = fetch_bts_transportation_data("2024-01-01")
     print("\n" + "="*80)
     print(" ALTERNATIVE & PHYSICAL DATA FEEDS SUMMARY")
     print("="*80)
     print(f"OVX Volatility Days Fetched: {len(ovx_df)}")
     print(f"Baker Hughes Rig Count Samples: {len(rigs_df)}")
+    print(f"BTS Transportation Index Samples: {len(bts_df)}")
     print(json.dumps(ALTERNATIVE_DATA_SOURCES, indent=2))

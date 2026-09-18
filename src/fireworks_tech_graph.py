@@ -56,14 +56,14 @@ def generate_multi_agent_pipeline_svg() -> str:
     <rect x="14" y="76" width="232" height="186" rx="8" fill="#0f172a" fill-opacity="0.6"/>
     <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Event &amp; Weather NLP</text>
     <text x="34" y="114" fill="#94a3b8" font-size="11">Google Gemini 2.5 Flash</text>
-    <text x="34" y="130" fill="#94a3b8" font-size="11">Finlight energy headlines</text>
+    <text x="34" y="130" fill="#94a3b8" font-size="11">Finlight &amp; Firecrawl Markdown</text>
     
-    <text x="24" y="156" fill="#e2e8f0" font-size="12" font-weight="600">• Physics &amp; Weather Feeds</text>
-    <text x="34" y="174" fill="#94a3b8" font-size="11">NOAA NWS &amp; SPC Tornado</text>
-    <text x="34" y="190" fill="#94a3b8" font-size="11">Hormuz/Suez Maritime</text>
+    <text x="24" y="156" fill="#e2e8f0" font-size="12" font-weight="600">• Physical &amp; Hydrology Feeds</text>
+    <text x="34" y="174" fill="#94a3b8" font-size="11">NOAA SPC/NHC • USGS Water/Quake</text>
+    <text x="34" y="190" fill="#94a3b8" font-size="11">BSEE Shut-ins • Cboe OVX &amp; Rigs</text>
 
     <text x="24" y="216" fill="#e2e8f0" font-size="12" font-weight="600">• Memory Fusion Engine</text>
-    <text x="34" y="234" fill="#38bdf8" font-size="11" font-weight="600">Shock Decay t½ = 4.0 - 5.0d</text>
+    <text x="34" y="234" fill="#38bdf8" font-size="11" font-weight="600">Shock Decay t½ = 2.5d - 14.0d</text>
   </g>
 
   <!-- Arrow 1 -> 2 -->
@@ -115,22 +115,22 @@ def generate_multi_agent_pipeline_svg() -> str:
   <!-- Arrow 3 -> 4 -->
   <path d="M 890 250 L 924 250" fill="none" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrow-purple)"/>
 
-  <!-- STAGE 5: Synthesis & Shock Simulator -->
+  <!-- STAGE 5: Synthesis & Scenario Simulator -->
   <g transform="translate(930, 110)">
     <rect width="240" height="280" rx="14" fill="url(#cardGrad)" stroke="#fbbf24" stroke-opacity="0.5" stroke-width="1.5"/>
     <rect x="14" y="14" width="70" height="22" rx="6" fill="#d97706" fill-opacity="0.2" stroke="#b45309" stroke-width="1"/>
     <text x="22" y="29" fill="#fbbf24" font-size="11" font-weight="700">STAGE 5</text>
-    <text x="14" y="62" fill="#f8fafc" font-size="15" font-weight="700">Shock Simulator</text>
+    <text x="14" y="62" fill="#f8fafc" font-size="15" font-weight="700">Scenario Simulator</text>
     
     <rect x="14" y="76" width="212" height="186" rx="8" fill="#0f172a" fill-opacity="0.6"/>
-    <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Scenario Engine</text>
-    <text x="34" y="114" fill="#fbbf24" font-size="11">Refinery Outage Shock</text>
-    <text x="34" y="130" fill="#fbbf24" font-size="11">Hormuz Strait Blockade</text>
-    <text x="34" y="146" fill="#fbbf24" font-size="11">Weekend Executive Post</text>
+    <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Seasonal Plausibility</text>
+    <text x="34" y="114" fill="#fbbf24" font-size="11">Active Threat / Dormant Gating</text>
+    <text x="34" y="130" fill="#fbbf24" font-size="11">Precursor Horizon (1–14d Lead)</text>
+    <text x="34" y="146" fill="#fbbf24" font-size="11">20 Regional Climatology Presets</text>
     
-    <text x="24" y="174" fill="#e2e8f0" font-size="12" font-weight="600">• Output Synthesis</text>
-    <text x="34" y="192" fill="#94a3b8" font-size="11">Real-time counterfactual</text>
-    <text x="34" y="208" fill="#94a3b8" font-size="11">shock price multipliers</text>
+    <text x="24" y="174" fill="#e2e8f0" font-size="12" font-weight="600">• Output Synthesis &amp; APIs</text>
+    <text x="34" y="192" fill="#94a3b8" font-size="11">Counterfactual Warning Badges</text>
+    <text x="34" y="208" fill="#94a3b8" font-size="11">GET /api/v1/forecast/scenarios</text>
     <text x="34" y="234" fill="#38bdf8" font-size="11" font-weight="600">MCP Server Tool Gateway</text>
   </g>
 
@@ -171,9 +171,9 @@ def generate_multi_agent_pipeline_svg() -> str:
     <text x="34" y="118" fill="#34d399" font-size="11" font-family="monospace">.github/workflows/weekly_model_review.yml</text>
     <text x="34" y="136" fill="#94a3b8" font-size="11">Automated 08:00 AM Central execution</text>
     
-    <text x="24" y="164" fill="#e2e8f0" font-size="12" font-weight="600">• Rolling Metric Evaluation</text>
-    <text x="34" y="184" fill="#94a3b8" font-size="11">MAE ($/gal) &amp; Directional Hit Rate (%) validation</text>
-    <text x="34" y="202" fill="#94a3b8" font-size="11">Empirical feedback signal feeding back to Stage 3</text>
+    <text x="24" y="164" fill="#e2e8f0" font-size="12" font-weight="600">• Hindsight Memory &amp; Plausibility Audit</text>
+    <text x="34" y="184" fill="#94a3b8" font-size="11">Retain-Recall-Reflect Cloud Run &amp; SQLite FTS5</text>
+    <text x="34" y="202" fill="#94a3b8" font-size="11">Forward Horizon Matrix &amp; Multi-Hub Stress Audit</text>
   </g>
 
   <!-- Arrow 7 -> 8 -->
@@ -559,6 +559,155 @@ def generate_worker_telemetry_architecture_svg() -> str:
     return svg_content.strip()
 
 
+def generate_scenario_engine_architecture_svg() -> str:
+    """
+    Generates scalable vector graphics (SVG) diagram for the Seasonal & Climatological Plausibility Engine (Issue #300).
+    """
+    svg_content = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 520" width="100%" height="100%" style="background-color: #0b0f19; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="cardGradScen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="headerGradScen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#dc2626" stop-opacity="0.25"/>
+    </linearGradient>
+    <marker id="arrowScen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f87171"/>
+    </marker>
+  </defs>
+
+  <!-- Header Banner -->
+  <rect x="30" y="20" width="1040" height="55" rx="10" fill="url(#headerGradScen)" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="1.2"/>
+  <text x="50" y="52" fill="#f8fafc" font-size="17" font-weight="700">SEASONAL &amp; CLIMATOLOGICAL PLAUSIBILITY GATING ENGINE</text>
+  <text x="730" y="52" fill="#fbbf24" font-size="12" font-weight="600">src/scenario_engine.py • Issue #300 Architecture</text>
+
+  <!-- STEP 1: Scenario Invocation (Left Column) -->
+  <g transform="translate(30, 95)">
+    <rect width="210" height="240" rx="12" fill="url(#cardGradScen)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="12" y="12" width="80" height="20" rx="5" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="18" y="26" fill="#38bdf8" font-size="10" font-weight="700">INVOCATION</text>
+    <text x="12" y="52" fill="#f8fafc" font-size="14" font-weight="700">Simulation Request</text>
+
+    <text x="12" y="76" fill="#e2e8f0" font-size="11" font-weight="600">• Ingestion Endpoints</text>
+    <text x="20" y="94" fill="#94a3b8" font-size="10">POST /api/v1/forecast/simulate</text>
+    <text x="20" y="110" fill="#94a3b8" font-size="10">MCP simulate_fuel_market_shock</text>
+    <text x="20" y="126" fill="#94a3b8" font-size="10">Saturday Review Stress Audit</text>
+
+    <text x="12" y="152" fill="#e2e8f0" font-size="11" font-weight="600">• Request Context</text>
+    <text x="20" y="170" fill="#38bdf8" font-size="10">locale: target regional hub</text>
+    <text x="20" y="186" fill="#38bdf8" font-size="10">scenario_id: shock identifier</text>
+    <text x="20" y="202" fill="#38bdf8" font-size="10">target_date: forecast anchor</text>
+    <text x="20" y="218" fill="#94a3b8" font-size="10">live_telemetry_override: bool</text>
+  </g>
+
+  <!-- Arrow 1 -> Middle -->
+  <path d="M 240 215 L 284 215" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowScen)"/>
+
+  <!-- STEP 2: Climatology Registry & Date Evaluation (Center Top) -->
+  <g transform="translate(290, 95)">
+    <rect width="470" height="155" rx="12" fill="url(#cardGradScen)" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="14" y="12" width="160" height="20" rx="5" fill="#d97706" fill-opacity="0.2"/>
+    <text x="20" y="26" fill="#fbbf24" font-size="10" font-weight="700">CLIMATOLOGY REGISTRY</text>
+    <text x="14" y="52" fill="#f8fafc" font-size="14" font-weight="700">Date-Window Math &amp; Plausibility State Engine</text>
+
+    <!-- 3 Branch Cards -->
+    <g transform="translate(14, 65)">
+      <rect width="135" height="75" rx="8" fill="#0f172a" stroke="#f87171" stroke-width="1"/>
+      <text x="10" y="20" fill="#f87171" font-size="10" font-weight="700">SEASONALLY_DORMANT</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="9">Date outside season</text>
+      <text x="10" y="50" fill="#94a3b8" font-size="9">Plausibility Score: 0.15</text>
+      <text x="10" y="64" fill="#fca5a5" font-size="9" font-weight="600">Counterfactual Warning</text>
+    </g>
+
+    <g transform="translate(160, 65)">
+      <rect width="145" height="75" rx="8" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+      <text x="10" y="20" fill="#34d399" font-size="10" font-weight="700">SEASONALLY_PLAUSIBLE</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="9">Date in natural window</text>
+      <text x="10" y="50" fill="#94a3b8" font-size="9">Plausibility Score: 0.70</text>
+      <text x="10" y="64" fill="#86efac" font-size="9" font-weight="600">e.g. Hurricane June-Nov</text>
+    </g>
+
+    <g transform="translate(315, 65)">
+      <rect width="140" height="75" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+      <text x="10" y="20" fill="#38bdf8" font-size="10" font-weight="700">EVERGREEN SHOCKS</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="9">Year-round applicability</text>
+      <text x="10" y="50" fill="#94a3b8" font-size="9">Plausibility Score: 1.00</text>
+      <text x="10" y="64" fill="#93c5fd" font-size="9" font-weight="600">Geopolitics &amp; Outages</text>
+    </g>
+  </g>
+
+  <!-- STEP 3: Live Physical Telemetry Trigger (Center Bottom) -->
+  <g transform="translate(290, 265)">
+    <rect width="470" height="150" rx="12" fill="url(#cardGradScen)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="14" y="12" width="165" height="20" rx="5" fill="#059669" fill-opacity="0.2"/>
+    <text x="20" y="26" fill="#34d399" font-size="10" font-weight="700">PHYSICAL TELEMETRY GATING</text>
+    <text x="14" y="52" fill="#f8fafc" font-size="14" font-weight="700">Live Environmental Sensor Verification</text>
+
+    <g transform="translate(14, 65)">
+      <rect width="210" height="70" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+      <text x="10" y="18" fill="#38bdf8" font-size="10" font-weight="600">• NOAA SPC Convective ≥ 0.40</text>
+      <text x="10" y="34" fill="#38bdf8" font-size="10" font-weight="600">• USGS River Stage ≥ 52.0 ft</text>
+      <text x="10" y="50" fill="#38bdf8" font-size="10" font-weight="600">• Carquinez Flow ≥ 40,000 cfs</text>
+      <text x="10" y="64" fill="#38bdf8" font-size="10" font-weight="600">• USGS Seismic Mag ≥ 5.5</text>
+    </g>
+
+    <g transform="translate(235, 65)">
+      <rect width="220" height="70" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="12" y="22" fill="#f87171" font-size="11" font-weight="700">ACTIVE_THREAT STATUS</text>
+      <text x="12" y="40" fill="#e2e8f0" font-size="10">Plausibility Score: 1.00 (Max)</text>
+      <text x="12" y="56" fill="#fbbf24" font-size="10" font-weight="600">Active meteorological/seismic alert</text>
+    </g>
+  </g>
+
+  <!-- Arrow Middle -> Right -->
+  <path d="M 760 250 L 794 250" fill="none" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowScen)"/>
+
+  <!-- STEP 4: Precursor Horizon & Weekly Review (Right Column) -->
+  <g transform="translate(800, 95)">
+    <rect width="270" height="320" rx="12" fill="url(#cardGradScen)" stroke="#a78bfa" stroke-width="1.5"/>
+    <rect x="14" y="12" width="130" height="20" rx="5" fill="#7c3aed" fill-opacity="0.2"/>
+    <text x="20" y="26" fill="#a78bfa" font-size="10" font-weight="700">SYNTHESIS &amp; AUDIT</text>
+    <text x="14" y="52" fill="#f8fafc" font-size="14" font-weight="700">Precursor &amp; Weekly Loop</text>
+
+    <text x="14" y="78" fill="#e2e8f0" font-size="11" font-weight="600">• Prospective Forward Precursors</text>
+    <text x="22" y="96" fill="#94a3b8" font-size="10">Formulated 1–14 days ahead</text>
+    <text x="22" y="112" fill="#a78bfa" font-size="10">CARB Summer RVP Switch</text>
+    <text x="22" y="128" fill="#a78bfa" font-size="10">Approaching Hurricane / Vortex</text>
+    <text x="22" y="144" fill="#34d399" font-size="10" font-weight="600">Status: PROSPECTIVE_FORWARD</text>
+
+    <text x="14" y="174" fill="#e2e8f0" font-size="11" font-weight="600">• Weekly Saturday Review Loop</text>
+    <text x="22" y="192" fill="#94a3b8" font-size="10">Forward Plausibility Horizon Matrix</text>
+    <text x="22" y="208" fill="#94a3b8" font-size="10">Multi-Hub Stress Shock Audit</text>
+    <text x="22" y="224" fill="#fbbf24" font-size="10">Seasonal Issue Priority Boost (1.25x)</text>
+
+    <text x="14" y="254" fill="#e2e8f0" font-size="11" font-weight="600">• Catalog Discovery Tool</text>
+    <text x="22" y="272" fill="#38bdf8" font-size="10">GET /api/v1/forecast/scenarios</text>
+    <text x="22" y="288" fill="#38bdf8" font-size="10">MCP list_market_shock_scenarios</text>
+    <text x="22" y="304" fill="#94a3b8" font-size="10">Filter: active_only, locale, date</text>
+  </g>
+
+  <!-- Bottom Banner Summary -->
+  <g transform="translate(30, 430)">
+    <rect width="1040" height="65" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+    <text x="30" y="30" fill="#38bdf8" font-size="12" font-weight="700">MULTI-AGENT INTEGRATION:</text>
+    <text x="215" y="30" fill="#e2e8f0" font-size="11">Eliminates off-season simulation hallucinations by gating shock execution through deterministic climatology calendars,</text>
+    <text x="30" y="48" fill="#94a3b8" font-size="11">live environmental sensor threshold trips (SPC / USGS), prospective forward precursor lookaheads, and weekly model review feedback.</text>
+  </g>
+</svg>'''
+    return svg_content.strip()
+
+
 def validate_svg_content(svg_string: str) -> bool:
     """
     Validates that an SVG string is valid XML with an svg root tag.
@@ -584,7 +733,8 @@ def generate_architecture_diagrams(output_dir: str = "docs/assets") -> dict:
         "weather_architecture.svg": generate_weather_architecture_svg(),
         "web_routing_architecture.svg": generate_web_routing_architecture_svg(),
         "cache_gateway_architecture.svg": generate_cache_gateway_architecture_svg(),
-        "worker_telemetry_architecture.svg": generate_worker_telemetry_architecture_svg()
+        "worker_telemetry_architecture.svg": generate_worker_telemetry_architecture_svg(),
+        "scenario_engine_architecture.svg": generate_scenario_engine_architecture_svg()
     }
 
     paths = {}
@@ -603,4 +753,5 @@ def generate_architecture_diagrams(output_dir: str = "docs/assets") -> dict:
 
 if __name__ == "__main__":
     generate_architecture_diagrams()
+
 

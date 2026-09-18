@@ -42,14 +42,14 @@
     <rect x="14" y="76" width="232" height="186" rx="8" fill="#0f172a" fill-opacity="0.6"/>
     <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Event &amp; Weather NLP</text>
     <text x="34" y="114" fill="#94a3b8" font-size="11">Google Gemini 2.5 Flash</text>
-    <text x="34" y="130" fill="#94a3b8" font-size="11">Finlight energy headlines</text>
+    <text x="34" y="130" fill="#94a3b8" font-size="11">Finlight &amp; Firecrawl Markdown</text>
     
-    <text x="24" y="156" fill="#e2e8f0" font-size="12" font-weight="600">• Physics &amp; Weather Feeds</text>
-    <text x="34" y="174" fill="#94a3b8" font-size="11">NOAA NWS &amp; SPC Tornado</text>
-    <text x="34" y="190" fill="#94a3b8" font-size="11">Hormuz/Suez Maritime</text>
+    <text x="24" y="156" fill="#e2e8f0" font-size="12" font-weight="600">• Physical &amp; Hydrology Feeds</text>
+    <text x="34" y="174" fill="#94a3b8" font-size="11">NOAA SPC/NHC • USGS Water/Quake</text>
+    <text x="34" y="190" fill="#94a3b8" font-size="11">BSEE Shut-ins • Cboe OVX &amp; Rigs</text>
 
     <text x="24" y="216" fill="#e2e8f0" font-size="12" font-weight="600">• Memory Fusion Engine</text>
-    <text x="34" y="234" fill="#38bdf8" font-size="11" font-weight="600">Shock Decay t½ = 4.0 - 5.0d</text>
+    <text x="34" y="234" fill="#38bdf8" font-size="11" font-weight="600">Shock Decay t½ = 2.5d - 14.0d</text>
   </g>
 
   <!-- Arrow 1 -> 2 -->
@@ -101,22 +101,22 @@
   <!-- Arrow 3 -> 4 -->
   <path d="M 890 250 L 924 250" fill="none" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrow-purple)"/>
 
-  <!-- STAGE 5: Synthesis & Shock Simulator -->
+  <!-- STAGE 5: Synthesis & Scenario Simulator -->
   <g transform="translate(930, 110)">
     <rect width="240" height="280" rx="14" fill="url(#cardGrad)" stroke="#fbbf24" stroke-opacity="0.5" stroke-width="1.5"/>
     <rect x="14" y="14" width="70" height="22" rx="6" fill="#d97706" fill-opacity="0.2" stroke="#b45309" stroke-width="1"/>
     <text x="22" y="29" fill="#fbbf24" font-size="11" font-weight="700">STAGE 5</text>
-    <text x="14" y="62" fill="#f8fafc" font-size="15" font-weight="700">Shock Simulator</text>
+    <text x="14" y="62" fill="#f8fafc" font-size="15" font-weight="700">Scenario Simulator</text>
     
     <rect x="14" y="76" width="212" height="186" rx="8" fill="#0f172a" fill-opacity="0.6"/>
-    <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Scenario Engine</text>
-    <text x="34" y="114" fill="#fbbf24" font-size="11">Refinery Outage Shock</text>
-    <text x="34" y="130" fill="#fbbf24" font-size="11">Hormuz Strait Blockade</text>
-    <text x="34" y="146" fill="#fbbf24" font-size="11">Weekend Executive Post</text>
+    <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Seasonal Plausibility</text>
+    <text x="34" y="114" fill="#fbbf24" font-size="11">Active Threat / Dormant Gating</text>
+    <text x="34" y="130" fill="#fbbf24" font-size="11">Precursor Horizon (1–14d Lead)</text>
+    <text x="34" y="146" fill="#fbbf24" font-size="11">20 Regional Climatology Presets</text>
     
-    <text x="24" y="174" fill="#e2e8f0" font-size="12" font-weight="600">• Output Synthesis</text>
-    <text x="34" y="192" fill="#94a3b8" font-size="11">Real-time counterfactual</text>
-    <text x="34" y="208" fill="#94a3b8" font-size="11">shock price multipliers</text>
+    <text x="24" y="174" fill="#e2e8f0" font-size="12" font-weight="600">• Output Synthesis &amp; APIs</text>
+    <text x="34" y="192" fill="#94a3b8" font-size="11">Counterfactual Warning Badges</text>
+    <text x="34" y="208" fill="#94a3b8" font-size="11">GET /api/v1/forecast/scenarios</text>
     <text x="34" y="234" fill="#38bdf8" font-size="11" font-weight="600">MCP Server Tool Gateway</text>
   </g>
 
@@ -157,9 +157,9 @@
     <text x="34" y="118" fill="#34d399" font-size="11" font-family="monospace">.github/workflows/weekly_model_review.yml</text>
     <text x="34" y="136" fill="#94a3b8" font-size="11">Automated 08:00 AM Central execution</text>
     
-    <text x="24" y="164" fill="#e2e8f0" font-size="12" font-weight="600">• Rolling Metric Evaluation</text>
-    <text x="34" y="184" fill="#94a3b8" font-size="11">MAE ($/gal) &amp; Directional Hit Rate (%) validation</text>
-    <text x="34" y="202" fill="#94a3b8" font-size="11">Empirical feedback signal feeding back to Stage 3</text>
+    <text x="24" y="164" fill="#e2e8f0" font-size="12" font-weight="600">• Hindsight Memory &amp; Plausibility Audit</text>
+    <text x="34" y="184" fill="#94a3b8" font-size="11">Retain-Recall-Reflect Cloud Run &amp; SQLite FTS5</text>
+    <text x="34" y="202" fill="#94a3b8" font-size="11">Forward Horizon Matrix &amp; Multi-Hub Stress Audit</text>
   </g>
 
   <!-- Arrow 7 -> 8 -->

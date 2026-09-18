@@ -283,3 +283,53 @@ class HindsightClient:
                     logger.warning(f"Hindsight reflect call failed after {attempt} attempts ({err_detail}).")
                     return {"status": "ERROR", "error": err_detail, "reflections": []}
         return {"status": "ERROR", "error": "Reflection failed", "reflections": []}
+
+    def get_bank_stats(self, bank_id: Optional[str] = None) -> Optional[Dict[str, int]]:
+        """
+        Retrieves live memory and reflection counts from the remote Vectorize Hindsight service
+        or Supabase pgvector backend.
+        Returns:
+            {"memories": int, "reflections": int} or None if unavailable/unconfigured.
+        """
+        if not self.is_configured:
+            return None
+
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
+            return None
+
+        target_bank = bank_id or self.bank_id
+        urls_to_try = [
+            f"{self.base_url}/v1/default/banks/{target_bank}/stats",
+            f"{self.base_url}/v1/default/banks/{target_bank}",
+            f"{self.base_url}/banks/{target_bank}/stats"
+        ]
+
+        for url in urls_to_try:
+            try:
+                req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
+                with urllib.request.urlopen(req, timeout=min(self.timeout, 5.0)) as resp:
+                    if resp.status == 200:
+                        data = json.loads(resp.read().decode("utf-8"))
+                        stats = data.get("stats", data.get("bank", data))
+                        mem_count = (
+                            stats.get("memories_count") or
+                            stats.get("memories") or
+                            stats.get("memory_count") or
+                            stats.get("total_memories") or 0
+                        )
+                        ref_count = (
+                            stats.get("reflections_count") or
+                            stats.get("reflections") or
+                            stats.get("reflection_count") or
+                            stats.get("total_reflections") or 0
+                        )
+                        return {
+                            "memories": int(mem_count),
+                            "reflections": int(ref_count)
+                        }
+            except Exception as e:
+                logger.debug(f"Hindsight bank stats query failed on {url}: {e}")
+                continue
+
+        return None
+

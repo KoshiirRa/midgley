@@ -223,6 +223,24 @@ class GeopoliticalFeedConnector:
             except Exception as e:
                 logger.debug(f"Geopolitical query failed for {chokepoint}: {e}")
 
+        # If live events are empty, trigger Reachability Cascade fallback (Issue #308)
+        if not live_events:
+            try:
+                from src.reachability_adapters import ReachabilityCascadeRouter
+                router = ReachabilityCascadeRouter()
+                for chokepoint, q in queries:
+                    resilient_items = router.fetch_resilient_posts(q.replace("+", " "), target_feed=f"geopolitical_{chokepoint.lower()}", limit=3)
+                    for item in resilient_items:
+                        live_events.append({
+                            "date": datetime.now().strftime("%Y-%m-%d"),
+                            "headline": item["text"],
+                            "category": f"Geopolitical_{chokepoint}",
+                            "chokepoint": chokepoint,
+                            "url": item.get("url", "")
+                        })
+            except Exception as e:
+                logger.debug(f"Geopolitical reachability cascade skipped: {e}")
+
         if live_events:
             save_geopolitical_vintage_record(live_events)
             global_cache.set(cache_key, {"headlines": live_events}, ttl_seconds=900)

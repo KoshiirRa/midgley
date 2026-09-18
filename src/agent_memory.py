@@ -506,6 +506,50 @@ class AgentMemoryManager:
         log_agent_memory_op(operation="reflect", backend="sqlite_fts5", status="success")
         return reflections
 
+    def get_bank_inventory(self) -> Dict[str, Any]:
+        """
+        Retrieves authoritative memory bank inventory (experience and reflection counts).
+        Checks remote Hindsight / Supabase cluster first; falls back to local SQLite FTS5 database.
+        """
+        # 1. Attempt remote cloud retrieval if client is configured
+        if self.hindsight_client.is_configured:
+            remote_stats = self.hindsight_client.get_bank_stats()
+            if remote_stats is not None:
+                return {
+                    "source": "remote_cloud",
+                    "backend": "Vectorize Hindsight (Supabase pgvector)",
+                    "bank_id": self.hindsight_client.bank_id,
+                    "memories_count": remote_stats.get("memories", 0),
+                    "reflections_count": remote_stats.get("reflections", 0)
+                }
+
+        # 2. Fallback to local SQLite database
+        local_memories = 0
+        local_reflections = 0
+        try:
+            conn = self.sqlite_store._get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM memories")
+            row = cursor.fetchone()
+            if row:
+                local_memories = row[0]
+            cursor.execute("SELECT COUNT(*) FROM reflections")
+            row = cursor.fetchone()
+            if row:
+                local_reflections = row[0]
+            conn.close()
+        except Exception as e:
+            logger.debug(f"Failed to query local SQLite memory inventory: {e}")
+
+        return {
+            "source": "local_sqlite",
+            "backend": "Local SQLite FTS5",
+            "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "midgley-gas-forecasting",
+            "memories_count": local_memories,
+            "reflections_count": local_reflections
+        }
+
+
     def _reflect_with_gemini(self, anomalies: List[Dict[str, Any]], api_key: str) -> List[Dict[str, Any]]:
         prompt = f"""
 You are an expert energy quantitative modeling engineer and MLOps qualitative post-mortem auditor.
