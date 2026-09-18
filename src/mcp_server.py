@@ -129,6 +129,14 @@ async def list_tools() -> list[types.Tool]:
                     "target_date": {
                         "type": "string",
                         "description": "Optional target evaluation date (YYYY-MM-DD) for seasonal plausibility scoring"
+                    },
+                    "enable_cohort_simulation": {
+                        "type": "boolean",
+                        "description": "Optional toggle for 4-persona multi-agent market simulation (defaults to system config)"
+                    },
+                    "custom_headline": {
+                        "type": "string",
+                        "description": "Optional custom breaking headline prose for dynamic shock modeling"
                     }
                 },
                 "required": ["scenario_id"]
@@ -360,7 +368,16 @@ async def call_tool(
             scenario_id = args.get("scenario_id", "hormuz_blockade")
             custom_shock_pct = args.get("custom_shock_pct")
             target_date = args.get("target_date")
-            req = SimulateRequest(scenario_id=scenario_id, locale=locale, custom_shock_pct=custom_shock_pct, target_date=target_date)
+            enable_cohort_simulation = args.get("enable_cohort_simulation")
+            custom_headline = args.get("custom_headline")
+            req = SimulateRequest(
+                scenario_id=scenario_id,
+                locale=locale,
+                custom_shock_pct=custom_shock_pct,
+                target_date=target_date,
+                enable_cohort_simulation=enable_cohort_simulation,
+                custom_headline=custom_headline
+            )
             res = simulate_shock(req)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 

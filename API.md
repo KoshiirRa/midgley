@@ -445,7 +445,7 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scenarios?active_only=true&lo
 ---
 
 ### 8. `POST /api/v1/forecast/simulate`
-Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks with dynamic seasonal and climatological plausibility gating (Issue #300).
+Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks with dynamic seasonal plausibility gating (Issue #300) and optional 4-persona multi-agent deliberative market simulation (Issue #307).
 
 **Request Body:**
 ```json
@@ -453,7 +453,9 @@ Simulates counterfactual physical refinery outages, weather disasters, or geopol
   "scenario_id": "port_st_lucie_hurricane",
   "locale": "port_st_lucie",
   "custom_shock_pct": 0.05,
-  "target_date": "2026-09-18"
+  "target_date": "2026-09-18",
+  "enable_cohort_simulation": true,
+  "custom_headline": "Optional breaking headline prose override"
 }
 ```
 
@@ -462,7 +464,7 @@ Simulates counterfactual physical refinery outages, weather disasters, or geopol
 curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
      -H "Content-Type: application/json" \
      -H "X-API-Key: <your_api_key>" \
-     -d '{"scenario_id": "port_st_lucie_hurricane", "locale": "port_st_lucie", "target_date": "2026-09-18"}'
+     -d '{"scenario_id": "port_st_lucie_hurricane", "locale": "port_st_lucie", "target_date": "2026-09-18", "enable_cohort_simulation": true}'
 ```
 
 **Example Response:**
@@ -491,6 +493,52 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
     "simulated_price_per_gal": 3.721,
     "shock_delta_dollars": 0.232,
     "shock_delta_percent": 6.66
+  },
+  "cohort_simulation": {
+    "status": "success",
+    "provider_used": "tier_3_deterministic_matrix",
+    "scenario_id": "port_st_lucie_hurricane",
+    "locale": "port_st_lucie",
+    "personas": {
+      "Agent_Refiner": {
+        "stance": "DISRUPTIVE",
+        "price_shock_pct": 0.0866,
+        "confidence": 0.90,
+        "key_catalysts": ["Precautionary refinery shutdowns", "Storm surge / flood risk"],
+        "reasoning": "Coastal weather forces precautionary shutdowns."
+      },
+      "Agent_Logistics": {
+        "stance": "DISRUPTIVE",
+        "price_shock_pct": 0.0833,
+        "confidence": 0.88,
+        "key_catalysts": ["Port and marine terminal closures"],
+        "reasoning": "Marine berths and ports halt petroleum offloading."
+      },
+      "Agent_Consumer": {
+        "stance": "BEARISH",
+        "price_shock_pct": 0.0400,
+        "confidence": 0.75,
+        "key_catalysts": ["Severe storm driving cessation"],
+        "reasoning": "Travel halts sharply compress regional fuel consumption."
+      },
+      "Agent_Macro": {
+        "stance": "BULLISH",
+        "price_shock_pct": 0.0700,
+        "confidence": 0.86,
+        "key_catalysts": ["Gulf of Mexico crude shut-ins"],
+        "reasoning": "Crude shut-ins create supply deficit expectations."
+      }
+    },
+    "consensus": {
+      "price_shock_pct": 0.0712,
+      "divergence_index": 0.0189,
+      "rbob_shock_dollars_per_gal": 0.248,
+      "ho_distillate_shock_dollars_per_gal": 0.285,
+      "regional_freight_basis_delta_cents": 3.72,
+      "consensus_stance": "BULLISH",
+      "consensus_summary": "Consensus indicates a +7.12% net price shock with divergence index 0.019."
+    },
+    "decision_graph_mermaid": "flowchart TD\n  ..."
   }
 }
 ```

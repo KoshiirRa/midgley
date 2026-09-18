@@ -386,6 +386,8 @@ class SimulateRequest(BaseModel):
     locale: Optional[str] = Field("national", json_schema_extra={"example": "oakland"}, description="Target locale code")
     custom_shock_pct: Optional[float] = Field(None, json_schema_extra={"example": 0.05}, description="Optional custom shock percentage")
     target_date: Optional[str] = Field(None, json_schema_extra={"example": "2026-09-18"}, description="Target date for seasonal plausibility evaluation (YYYY-MM-DD)")
+    enable_cohort_simulation: Optional[bool] = Field(None, json_schema_extra={"example": True}, description="Toggle 4-persona multi-agent deliberative market simulation (defaults to system config)")
+    custom_headline: Optional[str] = Field(None, json_schema_extra={"example": "Breaking: Pipeline leak prompts precautionary shutdown"}, description="Optional custom breaking headline prose")
 
 
 class BatchForecastRequest(BaseModel):
@@ -1288,7 +1290,24 @@ def simulate_shock(req: SimulateRequest):
     dollar_impact = round(base_price * shock_pct, 3)
     simulated_price = round(base_price + dollar_impact, 3)
 
-    return {
+    # Evaluate MiroFish Multi-Agent Financial Simulation Cohort (Issue #307)
+    cohort_sim_payload = None
+    try:
+        from src.scenario_simulator import is_multi_agent_sim_enabled, simulate_market_cohort
+        if is_multi_agent_sim_enabled(req.enable_cohort_simulation):
+            cohort_sim_payload = simulate_market_cohort(
+                scenario_id=req.scenario_id,
+                headline=req.custom_headline or scenario_info.get("headline"),
+                locale=region_code,
+                base_price=base_price,
+                base_shock_pct=shock_pct,
+                scenario_name=scenario_info.get("name"),
+                use_llm=True
+            )
+    except Exception as e:
+        logger.debug(f"Multi-agent cohort simulation evaluation notice: {e}")
+
+    resp = {
         "status": "success",
         "timestamp": datetime.now().isoformat(),
         "scenario": {
@@ -1314,6 +1333,11 @@ def simulate_shock(req: SimulateRequest):
             "shock_delta_percent": round(shock_pct * 100, 2)
         }
     }
+
+    if cohort_sim_payload is not None:
+        resp["cohort_simulation"] = cohort_sim_payload
+
+    return resp
 
 
 def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -> bool:

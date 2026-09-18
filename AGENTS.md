@@ -289,9 +289,21 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 5. Synthesis, Seasonal Plausibility & Scenario Simulator Agent (`src/scenario_engine.py` & `src/api_server.py`) (Issue #300)
+### 5. Synthesis, Seasonal Plausibility & Scenario Simulator Agent (`src/scenario_engine.py`, `src/scenario_simulator.py` & `src/api_server.py`) (Issues #300 & #307)
 
-* **Role:** Enables counterfactual "What-If" scenario simulation with dynamic seasonal, climatological, meteorological, hydrological, and regulatory plausibility gating. Formulates prospective forward shock scenarios 1–14 days ahead of reality using leading precursor indicators.
+* **Role:** Enables counterfactual "What-If" scenario simulation with dynamic seasonal, climatological, meteorological, hydrological, and regulatory plausibility gating. Formulates prospective forward shock scenarios 1–14 days ahead of reality using leading precursor indicators, and simulates cross-commodity equilibrium via a 4-persona deliberative market cohort.
+* **MiroFish Multi-Agent Market Cohort (`src/scenario_simulator.py`, Issue #307):**
+  - **4 Market Personas:**
+    - `Agent_Refiner` (Refinery Operations & Crack Spreads): Evaluates crude slates, 3-2-1 cracks, FCCU/Hydrocracker status, and product substitution.
+    - `Agent_Logistics` (Pipeline & Barge Arbitrageur): Evaluates Colonial Pipeline allocations, Ohio/Mississippi River barge tow drafts, and rack freight basis.
+    - `Agent_Consumer` (Commercial Fleet & Retail Buyer): Evaluates retail price elasticity, commuter driving patterns, and demand destruction thresholds.
+    - `Agent_Macro` (Macro Strategist & Geopolitical Analyst): Evaluates Cboe OVX tail volatility, OPEC+ production policies, central bank rates, and trade tariffs.
+  - **Single-Round Structured Prompt Consensus:** Prompts all 4 personas in a single JSON invocation (`COHORT_SIMULATION_PROMPT`) to prevent token explosion.
+  - **Behavioral Divergence Index ($\sigma$):** Computes market sentiment variance and disagreement index across personas.
+  - **Cross-Commodity Math:** Models joint impact on RBOB Unleaded Gasoline ($\Delta P_{\text{RBOB}}$), Heating Oil / ULSD Distillate ($\Delta P_{\text{HO}}$), and Regional Freight Basis ($\Delta B$).
+  - **Decision Graph Generation:** Automatically exports syntactically valid Mermaid flowchart graphs (`flowchart TD`) and JSON causal graphs.
+  - **Tier 3 Deterministic Elasticity Matrix:** 100% offline rule-based matrix mapping 6 shock archetypes (refinery, pipeline, meteorological, hydrological, geopolitical, regulatory spec) with zero API spend.
+  - **Feature Toggle & Observability:** Configured via `MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION` (`0` default / `1` active) or `enable_cohort_simulation: bool` on API requests. Renders public dashboard status badge (`Multi-Agent Cohort: ON` vs `OFF`).
 * **Plausibility Status Tiers (`PlausibilityStatus` in `src/scenario_engine.py`):**
   - **`ACTIVE_THREAT` (1.0):** Live sensor/watch trigger active (e.g. NOAA SPC severe convective warning $\ge \text{ENH}$, USGS water temp $> 28^\circ\text{C}$, active seismic event).
   - **`SEASONALLY_PLAUSIBLE` (0.70–0.90):** Target date falls within the climatological/regulatory active or peak window.
@@ -321,7 +333,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - *Weekend Foreign Energy Tariff Declaration:* +$0.067/gal (+2.10%) [Evergreen]
 * **API & MCP Interfaces:**
   - `GET /api/v1/forecast/scenarios`: Returns full scenario list with plausibility ratings, seasonal windows, and precursor outlooks (supports `?active_only=true` & `?locale=...`).
-  - `POST /api/v1/forecast/simulate`: Evaluates scenario with target date plausibility gating and emits counterfactual warning annotations.
+  - `POST /api/v1/forecast/simulate`: Evaluates scenario with target date plausibility gating and optional 4-persona multi-agent deliberative cohort (`enable_cohort_simulation: true`).
   - MCP Tools `simulate_fuel_market_shock` and `list_market_shock_scenarios`.
 
 

@@ -268,6 +268,20 @@ def get_model_badge() -> str:
     return f'<span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model {model_ver}</span>'
 
 
+def get_multi_agent_sim_badge() -> str:
+    """Generates dynamic HTML badge indicating whether MiroFish Multi-Agent Financial Simulation mode is active."""
+    try:
+        from src.scenario_simulator import is_multi_agent_sim_enabled
+        is_active = is_multi_agent_sim_enabled()
+    except Exception:
+        is_active = False
+
+    if is_active:
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-normal" title="MiroFish Multi-Agent Simulation Cohort Active"><i class="fa-solid fa-users-gear text-[10px] mr-1"></i>Multi-Agent Cohort: ON</span>'
+    else:
+        return '<span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 font-normal" title="Standard Linear Scenario Engine Active"><i class="fa-solid fa-users-slash text-[10px] mr-1"></i>Multi-Agent Cohort: OFF</span>'
+
+
 
 def get_analytics_script() -> str:
     """Generates Cloudflare Web Analytics script tag if CLOUDFLARE_ANALYTICS_TOKEN is present in environment.
@@ -354,6 +368,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
 
     badge_html = get_release_badge()
     model_badge_html = get_model_badge()
+    multi_agent_badge_html = get_multi_agent_sim_badge()
 
     return f"""    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -362,8 +377,8 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                     <img src="{rel_prefix}assets/logo.png" alt="Midgley Logo" class="w-full h-full object-cover">
                 </a>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        midgley {badge_html} {model_badge_html}
+                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
+                        midgley {badge_html} {model_badge_html} {multi_agent_badge_html}
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
