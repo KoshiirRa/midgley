@@ -40,18 +40,26 @@ Midgley **v0.6.5** synchronizes static JSON API pipeline feeds with automated ex
    - Added MCP tool `list_market_shock_scenarios` for direct LLM agent scenario discovery.
    - Integrated closed-loop Forward Plausibility Horizon Matrix, multi-hub weekly stress audit, and seasonal issue priority boosts in `src/weekly_issue_reporter.py`.
 
+7. **MiroFish Multi-Agent Financial Simulation & Scenario Decision Graphs (`src/scenario_simulator.py` - Issue #307):**
+   - Implemented 4-persona deliberative market cohort (`Agent_Refiner`, `Agent_Logistics`, `Agent_Consumer`, `Agent_Macro`) modeling joint cross-commodity price impacts on RBOB Unleaded Gasoline ($\Delta P_{\text{RBOB}}$), Heating Oil / ULSD Distillate ($\Delta P_{\text{HO}}$), and Regional Freight Basis ($\Delta B_{\text{cents}}$).
+   - Built single-round structured prompt consensus contract (`COHORT_SIMULATION_PROMPT`) preventing token explosion while calculating the Behavioral Divergence Index ($\sigma$) for market disagreement.
+   - Integrated Tier 3 Deterministic Elasticity Matrix for 100% offline fallback ($0 API cost).
+   - Exposes Mermaid flowchart markup (`flowchart TD`) and JSON causal graphs for dashboard display.
+   - Added modular feature toggle `MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION` (`0` default / `1` active) and dynamic dashboard status badge (`Multi-Agent Cohort: ON` in purple vs `Multi-Agent Cohort: OFF` in slate).
+
 ---
 
 ## 🧪 Verification & Test Suite Matrix
 
 - **Execution Target:** Dedicated Linux VM (`dev-vm` / `10.42.42.54`).
 - **Test Suite Results:**
+  - `tests/test_scenario_simulator.py` (6/6 tests passing)
   - `tests/test_scenario_engine.py` (6/6 tests passing)
   - `tests/test_api_server.py` (21/21 tests passing)
+  - `tests/test_dashboard_generator.py` (19/19 tests passing)
   - `tests/test_mcp_server.py` (8/8 tests passing)
   - `tests/test_weekly_issue_reporter.py` (6/6 tests passing)
   - `tests/test_bts_transportation.py` (8/8 tests passing)
-  - `tests/test_dashboard_generator.py` (22/22 tests passing)
   - `tests/test_feature_attribution.py` (3/3 tests passing)
   - `tests/test_baker_hughes_feed.py` (4/4 tests passing)
   - Static JSON export validated across all 9 regional metro hubs.
