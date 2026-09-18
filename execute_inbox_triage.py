@@ -187,6 +187,7 @@ TRIAGE_DATA = {
     203: {"milestone": "v0.4", "labels": ["bug", "infrastructure", "modeling"], "status": "Ready", "workstream": "Automation & Operations", "priority": "High", "target": "Now", "effort": "Medium", "risk": "Low"},
     204: {"milestone": "Weekly Review v1.0 \"Audit\"", "labels": ["enhancement", "infrastructure", "weekly-review"], "status": "Ready", "workstream": "Automation & Operations", "priority": "Medium", "target": "Next", "effort": "Small", "risk": "Low"},
     205: {"milestone": "Regular Model v1.5 \"Houdry\"", "labels": ["enhancement", "data-ingestion", "modeling"], "status": "Ready", "workstream": "Data & Providers", "priority": "Medium", "target": "Next", "effort": "Medium", "risk": "Low"},
+    300: {"milestone": "Regular Model v2.0 \"Hubbert\"", "labels": ["enhancement", "data-ingestion", "modeling", "api", "weekly-review"], "status": "Ready", "workstream": "Research & Quant", "priority": "Medium", "target": "Next", "effort": "Medium", "risk": "Low"},
 }
 
 def edit_project_field(item_id, field_key, option_name):

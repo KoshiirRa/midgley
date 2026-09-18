@@ -66,7 +66,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                         <i class="fa-solid fa-database text-cyan-400"></i> Model Data Sources &amp; Intelligence Feeds
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>26 monitored feeds</strong>.
+                        The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>27 monitored feeds</strong>.
                     </p>
                 </div>
 
@@ -86,7 +86,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
             <!-- Stats Ribbon -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-800/80">
                 <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
-                    <span class="text-2xl font-black text-blue-400 font-mono">26</span>
+                    <span class="text-2xl font-black text-blue-400 font-mono">27</span>
                     <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Ingestion Feeds</p>
                 </div>
                 <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
@@ -369,7 +369,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                         <p class="text-xs text-slate-400">Options implied volatility skew, drilling rig lead indicators, Treasury yields, CFTC hedge fund crowding, and interstate pipeline tariffs.</p>
                     </div>
                 </div>
-                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">6 Feeds</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">7 Feeds</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -545,6 +545,35 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                     <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
                         <span>Provider: Yahoo Finance / NYSE</span>
                         <span class="text-emerald-400 font-semibold">$0 Open Access</span>
+                    </div>
+                </div>
+
+                <!-- Card 2.7: U.S. BTS Freight Transportation Services Index (TSI) & Truck Tonnage -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="bts freight tsi truck tonnage index commercial transportation petroleum demand supply chain diesel">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-truck-fast"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">U.S. BTS Freight TSI &amp; Truck Tonnage</h4>
+                                    <span class="font-mono text-xs text-emerald-400">data.bts.gov &bull; bw6n-ddqk</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Monthly &bull; Issue #74</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            U.S. Bureau of Transportation Statistics Freight Transportation Services Index and Truck Tonnage Index. Serves as a leading physical commercial freight demand proxy for diesel and motor gasoline consumption.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Freight TSI, Truck Tonnage, Petroleum Transport, MoM &Delta;%</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/bts_transportation.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: U.S. Bureau of Transportation Statistics</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open SODA API</span>
                     </div>
                 </div>
 
@@ -1269,6 +1298,16 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             <td class="py-3 px-3 text-blue-300 font-sans">src/alternative_data_feeds.py</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-emerald-400">BTS TSI</span> &bull; Freight &amp; Trucking</td>
+                            <td class="py-3 px-3 text-slate-400">Physical Demand</td>
+                            <td class="py-3 px-3 text-slate-300">data.bts.gov/resource/bw6n-ddqk</td>
+                            <td class="py-3 px-3">Open SODA REST</td>
+                            <td class="py-3 px-3 text-emerald-400">7 Days</td>
+                            <td class="py-3 px-3">Monthly Release</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Open Access</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">src/bts_transportation.py</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 transition">
                             <td class="py-3 px-4 font-bold text-white"><span class="text-amber-400">Finlight.me</span> &bull; Energy News</td>
                             <td class="py-3 px-3 text-slate-400">Financial News</td>
                             <td class="py-3 px-3 text-slate-300">api.finlight.me/v1/</td>
@@ -1459,3 +1498,8 @@ def generate_data_sources_page(docs_dir: str = DOCS_DIR):
         f.write(build_page(sub_header_html))
 
     logger.info(f"Successfully generated Data Sources page at {sources_path} and {sources_sub_path}")
+
+
+if __name__ == "__main__":
+    generate_data_sources_page()
+

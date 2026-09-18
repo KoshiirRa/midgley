@@ -1,0 +1,61 @@
+{
+  "version": "0.6.5",
+  "model_version": "v1.6 Ipatieff",
+  "schema_version": 3,
+  "release_date": "2026-09-18",
+  "compatibility": {
+    "minimum_compatible_client": "0.5.0",
+    "breaking_changes": false,
+    "requires_regional_retraining": false
+  },
+  "environment_changes": {
+    "added": [
+      {
+        "name": "USGS_WATER_FEED_ENABLED",
+        "default": "true",
+        "required": false,
+        "description": "Enables inland waterway gauge tracking for river navigation constraints."
+      },
+      {
+        "name": "HINDSIGHT_API_URL",
+        "default": "",
+        "required": false,
+        "description": "Remote Vectorize Hindsight / Supabase pgvector episodic memory endpoint."
+      }
+    ],
+    "deprecated": []
+  },
+  "model_engine": {
+    "feature_matrix_columns": [
+      "rbob_return_1d",
+      "wti_return_1d",
+      "event_shock_decayed",
+      "noaa_spc_risk",
+      "ovx_implied_vol",
+      "usgs_gauge_stage",
+      "weekend_gap_shock"
+    ],
+    "added_features": [
+      "usgs_gauge_stage",
+      "weekend_gap_shock"
+    ],
+    "retrain_command": "python scripts/manage_regions.py retrain --all"
+  },
+  "database_migrations": [
+    {
+      "id": "20260917_add_gauge_stations",
+      "description": "Adds inland river gauge telemetry table",
+      "automatic": true
+    },
+    {
+      "id": "20260918_add_reachability_telemetry",
+      "description": "Adds multi-protocol reachability tracking columns",
+      "automatic": true
+    }
+  ],
+  "agent_action_items": [
+    "Verify optional environment variables are documented or defaulted.",
+    "Inspect regional calibration model weights: run `python scripts/manage_regions.py check`.",
+    "Execute `pytest tests/` to confirm all regression tests pass."
+  ]
+}

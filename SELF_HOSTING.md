@@ -590,6 +590,10 @@ Output ONLY valid JSON following this schema:
     {
       "name": "[Scenario Name]",
       "subtitle": "[Scenario Subtitle]",
+      "category": "meteorological | hydrological | convective_severe | regulatory_spec | infrastructure | geopolitical",
+      "active_window": [6, 1, 11, 30],
+      "peak_window": [8, 15, 10, 15],
+      "telemetry_hook": "noaa_nhc | noaa_spc | usgs_temp | usgs_stage | evergreen",
       "price_impact_per_gal": 0.150,
       "pct_impact": 4.25,
       "description": "..."
@@ -597,6 +601,9 @@ Output ONLY valid JSON following this schema:
   ]
 }
 ```
+
+> [!TIP]
+> **Seasonal Plausibility Gating (Issue #300):** Regional shock scenarios integrated into `src/scenario_engine.py` automatically inherit dynamic plausibility evaluation (`ACTIVE_THREAT`, `SEASONALLY_PLAUSIBLE`, `SEASONALLY_DORMANT`, `EVERGREEN`, `PROSPECTIVE_FORWARD`), ensuring simulations conducted via `POST /api/v1/forecast/simulate` or MCP tool `simulate_fuel_market_shock` respect physical climatological and statutory windows.
 
 ---
 
@@ -730,7 +737,8 @@ Verify that `docs/index.html` and regional HTML pages compile without errors.
 ### 3. Verify System Quota & REST API Health
 ```bash
 curl -s http://localhost:8000/api/v1/system/quota | jq .
-curl -s http://localhost:8000/api/v1/forecast/latest | jq .
+curl -s http://localhost:8000/api/v1/forecast/predict | jq .
+curl -s http://localhost:8000/api/v1/macro/freight-tsi | jq .
 ```
 
 ### 4. Verify Systemd Timers (Linux Deployment)
@@ -780,4 +788,32 @@ curl -s "http://localhost:8000/api/v1/system/cache-status?probe=true" | jq .
 
 ---
 
-*Midgley Version: `v0.6.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+## 10. Upstream Release Manifest & Agent Migration Protocol (Issue #299)
+
+Self-hosted instances and autonomous coding agents maintaining forks can detect upstream schema drifts, feature matrix expansions, and migration actions using the **Machine-Readable Upstream Release Manifest**:
+
+### 1. Query Upstream Release Manifest via REST API
+```bash
+curl -s http://localhost:8000/api/v1/system/releases/latest | jq .
+```
+
+### 2. Run the Compatibility & Upgrade Reconciler CLI
+```bash
+# Audit local configuration vs. upstream manifest (Dry-Run)
+python3 scripts/check_updates.py --dry-run
+
+# Automatically apply database migrations and retrain custom regional estimators
+python3 scripts/check_updates.py --auto-reconcile
+```
+
+### 🤖 AI Agent Reconciliation Block
+When upstream releases include new econometric features (e.g. Cboe OVX volatility, USGS river tow gauges, maritime chokepoints), autonomous AI agents can execute the following deterministic reconciliation sequence:
+1. Fetch latest upstream manifest: `python3 -m src.release_manifest`
+2. Run update audit: `python3 scripts/check_updates.py --dry-run`
+3. Execute regional model realignment: `python3 scripts/manage_regions.py retrain --all`
+4. Confirm test suite passes: `pytest tests/`
+
+---
+
+*Midgley Version: `v0.6.5` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+

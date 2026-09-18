@@ -8,6 +8,7 @@ import pytest
 from src.fireworks_tech_graph import (
     generate_multi_agent_pipeline_svg,
     generate_regional_metro_svg,
+    generate_scenario_engine_architecture_svg,
     validate_svg_content,
     generate_architecture_diagrams,
 )
@@ -52,12 +53,29 @@ def test_generate_regional_metro_svg():
     assert "ULSD Distillate Fuel Engine" in svg_str
 
 
+def test_generate_scenario_engine_architecture_svg():
+    svg_str = generate_scenario_engine_architecture_svg()
+    assert isinstance(svg_str, str)
+    assert len(svg_str) > 1000
+    assert svg_str.startswith("<svg")
+    assert svg_str.endswith("</svg>")
+    assert validate_svg_content(svg_str) is True
+
+    assert "SEASONAL &amp; CLIMATOLOGICAL PLAUSIBILITY GATING ENGINE" in svg_str or "SEASONAL & CLIMATOLOGICAL" in svg_str
+    assert "CLIMATOLOGY REGISTRY" in svg_str
+    assert "SEASONALLY_DORMANT" in svg_str
+    assert "SEASONALLY_PLAUSIBLE" in svg_str
+    assert "ACTIVE_THREAT" in svg_str
+    assert "PROSPECTIVE_FORWARD" in svg_str
+
+
 def test_generate_architecture_diagrams_files(tmp_path):
     output_dir = str(tmp_path / "assets")
     res = generate_architecture_diagrams(output_dir=output_dir)
 
     assert "multi_agent_architecture.svg" in res
     assert "regional_metro_architecture.svg" in res
+    assert "scenario_engine_architecture.svg" in res
 
     for fname, fpath in res.items():
         assert os.path.exists(fpath)
@@ -65,3 +83,4 @@ def test_generate_architecture_diagrams_files(tmp_path):
         with open(fpath, "r", encoding="utf-8") as f:
             content = f.read()
             assert validate_svg_content(content) is True
+

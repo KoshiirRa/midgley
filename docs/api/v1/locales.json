@@ -1,7 +1,7 @@
 {
   "status": "success",
-  "system": "Midgley v1.4 Finlight-LLM",
-  "timestamp": "2026-09-14T15:31:03.028743",
+  "system": "Midgley v1.6 Ipatieff",
+  "timestamp": "2026-09-18T16:32:37.312828",
   "total_locales": 29,
   "locales": {
     "national": {
@@ -52,7 +52,7 @@
           "Creek",
           "Rogers"
         ],
-        "baseline_price": 3.89,
+        "baseline_price": 3.82,
         "icon_class": "fa-warehouse",
         "theme_color": "emerald",
         "econometric_drivers": {
@@ -151,7 +151,7 @@
           "Creek",
           "Rogers"
         ],
-        "baseline_price": 3.89,
+        "baseline_price": 3.82,
         "icon_class": "fa-warehouse",
         "theme_color": "emerald",
         "econometric_drivers": {
@@ -248,7 +248,7 @@
         "counties": [
           "New Castle"
         ],
-        "baseline_price": 3.35,
+        "baseline_price": 4.35,
         "icon_class": "fa-warehouse",
         "theme_color": "blue",
         "econometric_drivers": {
@@ -275,7 +275,7 @@
         },
         "infrastructure_delivery": {
           "title": "Newark Delivery Hub & Dynamic Rack Margin",
-          "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.350 - \\$3.184 = \\$0.166/\\text{gal}",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$4.354 - \\$3.169 = \\$1.185/\\text{gal}",
           "description": "Calibrates predicted wholesale returns directly into local I-95 corridor pump station rack prices.",
           "hub_distance_miles": 12,
           "hub_name": "PBF Delaware City Hub"
@@ -345,7 +345,7 @@
         "counties": [
           "New Castle"
         ],
-        "baseline_price": 3.35,
+        "baseline_price": 4.35,
         "icon_class": "fa-warehouse",
         "theme_color": "blue",
         "econometric_drivers": {
@@ -372,7 +372,7 @@
         },
         "infrastructure_delivery": {
           "title": "Newark Delivery Hub & Dynamic Rack Margin",
-          "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$3.350 - \\$3.184 = \\$0.166/\\text{gal}",
+          "equation_latex": "\\text{Rack Margin} = P_{\\text{Newark Retail}} - P_{\\text{Wholesale RBOB}} = \\$4.354 - \\$3.169 = \\$1.185/\\text{gal}",
           "description": "Calibrates predicted wholesale returns directly into local I-95 corridor pump station rack prices.",
           "hub_distance_miles": 12,
           "hub_name": "PBF Delaware City Hub"
@@ -444,7 +444,7 @@
           "Kenton",
           "Boone"
         ],
-        "baseline_price": 3.45,
+        "baseline_price": 4.08,
         "icon_class": "fa-warehouse",
         "theme_color": "purple",
         "econometric_drivers": {
@@ -543,7 +543,7 @@
           "Kenton",
           "Boone"
         ],
-        "baseline_price": 3.45,
+        "baseline_price": 4.08,
         "icon_class": "fa-warehouse",
         "theme_color": "purple",
         "econometric_drivers": {
@@ -650,7 +650,7 @@
           "Alameda",
           "Contra Costa"
         ],
-        "baseline_price": 4.95,
+        "baseline_price": 6.05,
         "icon_class": "fa-warehouse",
         "theme_color": "amber",
         "econometric_drivers": {
@@ -746,7 +746,7 @@
           "Alameda",
           "Contra Costa"
         ],
-        "baseline_price": 4.95,
+        "baseline_price": 6.05,
         "icon_class": "fa-warehouse",
         "theme_color": "amber",
         "econometric_drivers": {
@@ -849,7 +849,7 @@
           "Napa",
           "Sonoma"
         ],
-        "baseline_price": 5.05,
+        "baseline_price": 6.16,
         "icon_class": "fa-warehouse",
         "theme_color": "cyan",
         "econometric_drivers": {
@@ -945,7 +945,7 @@
           "Napa",
           "Sonoma"
         ],
-        "baseline_price": 5.05,
+        "baseline_price": 6.16,
         "icon_class": "fa-warehouse",
         "theme_color": "cyan",
         "econometric_drivers": {
@@ -1116,7 +1116,7 @@
           "Lenoir",
           "Beaufort"
         ],
-        "baseline_price": 3.25,
+        "baseline_price": 3.95,
         "icon_class": "fa-network-wired",
         "theme_color": "green",
         "econometric_drivers": {
@@ -1215,7 +1215,7 @@
           "Lenoir",
           "Beaufort"
         ],
-        "baseline_price": 3.25,
+        "baseline_price": 3.95,
         "icon_class": "fa-network-wired",
         "theme_color": "green",
         "econometric_drivers": {
@@ -1313,7 +1313,7 @@
           "Mecklenburg",
           "York"
         ],
-        "baseline_price": 3.28,
+        "baseline_price": 3.98,
         "icon_class": "fa-network-wired",
         "theme_color": "cyan",
         "econometric_drivers": {
@@ -1411,7 +1411,7 @@
           "Mecklenburg",
           "York"
         ],
-        "baseline_price": 3.28,
+        "baseline_price": 3.98,
         "icon_class": "fa-network-wired",
         "theme_color": "cyan",
         "econometric_drivers": {
@@ -1509,7 +1509,7 @@
           "Mecklenburg",
           "York"
         ],
-        "baseline_price": 3.28,
+        "baseline_price": 3.98,
         "icon_class": "fa-network-wired",
         "theme_color": "cyan",
         "econometric_drivers": {
@@ -1609,7 +1609,7 @@
           "Martin",
           "Indian River"
         ],
-        "baseline_price": 3.38,
+        "baseline_price": 4.145,
         "icon_class": "fa-water",
         "theme_color": "cyan",
         "econometric_drivers": {
@@ -1710,7 +1710,7 @@
           "Martin",
           "Indian River"
         ],
-        "baseline_price": 3.38,
+        "baseline_price": 4.145,
         "icon_class": "fa-water",
         "theme_color": "cyan",
         "econometric_drivers": {
@@ -1811,7 +1811,7 @@
           "Martin",
           "Indian River"
         ],
-        "baseline_price": 3.38,
+        "baseline_price": 4.145,
         "icon_class": "fa-water",
         "theme_color": "cyan",
         "econometric_drivers": {

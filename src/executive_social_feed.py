@@ -202,6 +202,32 @@ class ExecutiveSocialFeedConnector:
                 except Exception as e:
                     logger.debug(f"Could not poll live social feed '{url}': {e}")
 
+        # If direct RSS parsing yields 0 items, leverage Agent-Reach Reachability Cascade Router (Issue #308)
+        if not live_posts:
+            try:
+                from src.reachability_adapters import ReachabilityCascadeRouter
+                router = ReachabilityCascadeRouter()
+                resilient_items = router.fetch_resilient_posts("Trump energy oil gasoline tariffs OPEC", target_feed="executive_social", limit=5)
+                for item in resilient_items:
+                    text_lower = item["text"].lower()
+                    if any(kw in text_lower for kw in self.energy_keywords):
+                        pub_dt = datetime.now()
+                        is_wknd = is_timestamp_weekend(pub_dt)
+                        post_obj = {
+                            "date": pub_dt.strftime("%Y-%m-%d %H:%M:%S"),
+                            "platform": item.get("source", "Executive Social Proxy"),
+                            "post_text": item["text"],
+                            "target": "Energy_Market",
+                            "sentiment_type": "Live_Executive_Commentary",
+                            "is_weekend": is_wknd,
+                            "actual_1d_crude_return_pct": 0.0,
+                            "actual_1d_rbob_return_pct": 0.0
+                        }
+                        live_posts.append(post_obj)
+                        self.save_executive_social_vintage_record(post_obj)
+            except Exception as e:
+                logger.debug(f"Reachability cascade execution skipped: {e}")
+
         # Cache in global_cache (15 minutes TTL)
         try:
             global_cache.set(cache_key, {"posts": live_posts}, ttl_seconds=900)

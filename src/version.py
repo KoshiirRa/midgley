@@ -13,7 +13,7 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-FALLBACK_PACKAGE_VERSION = "0.6.4"
+FALLBACK_PACKAGE_VERSION = "0.6.5"
 FALLBACK_MODEL_VERSION = "v1.6 Ipatieff"
 
 
@@ -120,6 +120,9 @@ def get_model_version() -> str:
         pass
 
     return FALLBACK_MODEL_VERSION
+
+
+get_model_engine_version = get_model_version
 
 
 def get_git_branch() -> str:
