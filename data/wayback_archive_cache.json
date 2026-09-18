@@ -3600,5 +3600,14 @@
     "headline": "Refinery outage slows cheaper gas - Audacy",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivAFBVV95cUxPLVZWclF3ZW1wemc3VWwwYkhzZkdHckNDeHUyczY2Vm84RXFnYkxRX3BnSlZLb0J0b1FoU1ZyWExFVUlmTWFyNTRjZGFZUmFsdUk3LV93QVRvOXpzV1FGMHJPNWZXeGhLZk5HaDJoaFZuQm5yUi1CZTVDZDJEY3M2SEM4Ny1XeGZuTGV1QnlNa2Z2U19JQXc4MHBLVE50VVpOMEpiMkhVY0ItUkY5bnVObEtxUngwUWxWZFpBQQ?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://energy.example.com/test-outage": {
+    "timestamp": "2026-09-18T04:36:43.924924",
+    "status": "FALLBACK_PENDING",
+    "url": "https://energy.example.com/test-outage",
+    "canonical_url": "https://energy.example.com/test-outage",
+    "headline": "[Test Alert] Refinery Power Grid Outage Halts Catalytic Cracking Capacity",
+    "archive_url": "https://web.archive.org/web/*/https://energy.example.com/test-outage",
+    "error": "HTTP Error 523: UNKNOWN"
   }
 }
