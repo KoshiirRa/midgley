@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-18_04-31-41",
+    "timestamp": "2026-09-18 04:31:38",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Refinery outage slows cheaper gas - Audacy"
+  },
+  {
     "run_id": "2026-09-18_03-53-54",
     "timestamp": "2026-09-18 03:53:53",
     "run_type": "DAILY_BATCH",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-11_16-16-41",
-    "timestamp": "2026-09-11 01:46:50",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
-  },
-  {
-    "run_id": "2026-09-11_16-16-25",
     "timestamp": "2026-09-11 01:46:50",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-11 01:46:50)"
