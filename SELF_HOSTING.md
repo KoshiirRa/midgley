@@ -115,7 +115,8 @@ CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 # Vectorize Hindsight Cloud Run REST API Endpoint (Scale-to-Zero)
 HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
 HINDSIGHT_API_KEY=""              # Optional bearer token if endpoint is authenticated
-HINDSIGHT_TIMEOUT="30.0"          # Socket read timeout in seconds (handles scale-to-zero cold boots)
+HINDSIGHT_TIMEOUT="60.0"          # Socket read timeout in seconds (handles scale-to-zero cold boots)
+HINDSIGHT_WARMUP_TIMEOUT="75.0"   # Background scale-to-zero container warmup handshake timeout in seconds
 
 # Supabase PostgreSQL pgvector Connection URI (Transaction Pooler Port 5432 or 6543)
 SUPABASE_DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
@@ -188,29 +189,31 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    turso db show midgley-cache --url
    turso db tokens create midgley-cache
    ```
-4. Set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in `.env`.
-5. Midgley automatically initializes the table schema on startup via `_turso_ensure_table()`:
-   ```sql
-   CREATE TABLE IF NOT EXISTS lookup_cache (
-       key TEXT PRIMARY KEY,
-       value TEXT NOT NULL,
-       created_at REAL NOT NULL,
-       expires_at REAL NOT NULL
-   );
+4. Set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in `.env`. Midgley automatically normalizes `turso://`, `libsql://`, and `https://` URI schemes.
+5. Midgley automatically initializes the table schema on startup via `_turso_ensure_table()`, or you can test connectivity immediately with the CLI probe:
+   ```bash
+   python3 -m src.lookup_cache --test-turso
    ```
 
 ### Option B: Setting Up Cloudflare D1 / Worker (Tier 2 Backup)
 1. Create a Cloudflare D1 database: `npx wrangler d1 create midgley-cache-d1`
-2. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):
+2. Initialize the database schema for `lookup_cache`, `seen_rss_headlines`, and `prediction_history` ([scripts/init_d1_schema.sql](file:///scripts/init_d1_schema.sql)):
+   ```bash
+   npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
+   ```
+3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
    ```bash
    npx wrangler deploy --config wrangler.cache.toml
    ```
-3. Configure optional telemetry & auth secrets for Option A2 (Axiom & Sentry):
+4. Configure optional telemetry & auth secrets for Option A2 (Axiom & Sentry):
    ```bash
    npx wrangler secret put SENTRY_DSN --config wrangler.cache.toml
    npx wrangler secret put AXIOM_TOKEN --config wrangler.cache.toml
    ```
-4. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`.
+5. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`. Test connectivity via CLI:
+   ```bash
+   python3 -m src.lookup_cache --test-cloudflare
+   ```
 
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
 1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):
@@ -258,7 +261,8 @@ Midgley integrates an episodic memory layer (**Retain-Recall-Reflect**) to perfo
    - Set `HINDSIGHT_API_URL` in `.env` and GitHub Repository Secrets:
      ```bash
      HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
-     HINDSIGHT_TIMEOUT="30.0"
+     HINDSIGHT_TIMEOUT="60.0"
+     HINDSIGHT_WARMUP_TIMEOUT="75.0"
      ```
    - **Scale-to-Zero Proactive Warmup & Zero Data Loss:** When deployed with `--min-instances 0`, Cloud Run instances spin down during inactivity and require 20–35s to cold boot. Midgley automatically triggers a non-blocking proactive warmup (`warmup()`) in Step 0 of execution pipelines. If any memory retain requests occur during container cold-start, experiences are safely buffered in local SQLite with `cloud_synced = 0` and automatically reconciled (`sync_pending_memories()`) once the cloud container is fully online.
 
@@ -760,6 +764,20 @@ Verify that the MCP server exposes academic search (`search_academic_literature`
 python3 -m pytest tests/test_mcp_server.py tests/test_academic_openalex.py tests/test_semantic_scholar_feed.py -v
 ```
 
+### 9. Active 3-Tier Edge Cache & Database Diagnostic Probes (Issues #301 & #302)
+Run active roundtrip read/write probes against Turso Edge SQLite and Cloudflare D1 layers, or inspect health via REST API:
+```bash
+# Full multi-tier connectivity probe
+python3 -m src.lookup_cache --ping
+
+# Targeted single-tier probes
+python3 -m src.lookup_cache --test-turso
+python3 -m src.lookup_cache --test-cloudflare
+
+# Query cache statistics and active probe diagnostics via REST API Gateway
+curl -s "http://localhost:8000/api/v1/system/cache-status?probe=true" | jq .
+```
+
 ---
 
-*Midgley Version: `v0.5.6` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.6.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*

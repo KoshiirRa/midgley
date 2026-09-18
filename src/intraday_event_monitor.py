@@ -32,7 +32,7 @@ except ImportError:
 from src.event_analyzer import extract_event_features_llm, extract_event_features_rule_based
 from src.finlight_feed import is_trading_hours, fetch_finlight_on_demand, UNIFIED_ENERGY_QUERY
 from src.lookup_cache import clear_lookup_cache
-from src.prediction_logger import log_predictions
+from src.prediction_logger import log_predictions, resolve_model_tag
 try:
     from src.discord_notifier import send_intraday_discord_notification
 except ImportError:
@@ -468,7 +468,7 @@ class IntradayEventMonitor:
                     log_predictions(
                         dummy_df, 
                         region=loc, 
-                        model_version="v1.4-Finlight-Intraday",
+                        model_version=resolve_model_tag(region=loc, model_type="Intraday"),
                         run_type="INTRADAY_REVISION",
                         headline_trigger=headline
                     )

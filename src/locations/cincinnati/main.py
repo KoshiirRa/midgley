@@ -19,7 +19,7 @@ from src.locations.cincinnati.regional import fetch_cincinnati_market_data, get_
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -175,19 +175,22 @@ def run_cincinnati_pipeline(
     hist_ky_base = splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + margin_ky
     hist_ky_pred = preds_hybrid + margin_ky
 
+    oh_version = resolve_model_tag("Cincinnati_OH", model_type=model_type)
+    ky_version = resolve_model_tag("Cincinnati_KY", model_type=model_type)
+
     backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_oh_base,
         predicted_prices=hist_oh_pred,
         region="Cincinnati_OH",
-        model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}"
+        model_version=oh_version
     )
     backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_ky_base,
         predicted_prices=hist_ky_pred,
         region="Cincinnati_KY",
-        model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}"
+        model_version=ky_version
     )
 
     # Log active out-of-time 5-day horizon forecasts
@@ -203,8 +206,8 @@ def run_cincinnati_pipeline(
         'predicted_5d_price': cin_ky_baseline_forecast
     }])
     
-    n_logged_oh = log_predictions(today_oh, region="Cincinnati_OH", model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}")
-    n_logged_ky = log_predictions(today_ky, region="Cincinnati_KY", model_version=f"v1.4-Finlight-Cincinnati-{model_type.capitalize()}")
+    n_logged_oh = log_predictions(today_oh, region="Cincinnati_OH", model_version=oh_version)
+    n_logged_ky = log_predictions(today_ky, region="Cincinnati_KY", model_version=ky_version)
     print(f"  -> Logged predictions for Cincinnati_OH ({n_logged_oh}) and Cincinnati_KY ({n_logged_ky})")
     
     perf_report = generate_performance_report()

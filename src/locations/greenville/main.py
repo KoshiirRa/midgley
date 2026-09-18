@@ -19,7 +19,7 @@ from src.locations.greenville.regional import fetch_greenville_market_data, get_
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -155,13 +155,14 @@ def run_greenville_pipeline(live_pump_price: float = None, use_llm_api: bool = F
     dynamic_margin = live_pump_price - latest_rbob
     hist_greenville_base = splits['test_df']['greenville_retail_gasoline'] if 'greenville_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
     hist_greenville_pred = preds_hybrid + dynamic_margin
+    greenville_version = resolve_model_tag("Greenville_NC", model_type=model_type)
 
     n_logged = backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_greenville_base,
         predicted_prices=hist_greenville_pred,
         region="Greenville_NC",
-        model_version=f"v1.4-Finlight-Greenville-{model_type.capitalize()}"
+        model_version=greenville_version
     )
 
     last_date = market_df['date'].iloc[-1]
@@ -170,7 +171,7 @@ def run_greenville_pipeline(live_pump_price: float = None, use_llm_api: bool = F
         'current_price': live_pump_price,
         'predicted_5d_price': greenville_baseline_forecast
     }])
-    log_predictions(today_df, region="Greenville_NC", model_version=f"v1.4-Finlight-Greenville-{model_type.capitalize()}")
+    log_predictions(today_df, region="Greenville_NC", model_version=greenville_version)
     print(f"  -> Logged & evaluated {n_logged} historical out-of-time test predictions for Greenville_NC.")
 
     return {

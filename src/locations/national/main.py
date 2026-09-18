@@ -13,7 +13,7 @@ from src.data_ingestion import fetch_market_data, get_historical_event_dataset
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report
+from src.prediction_logger import log_predictions, generate_performance_report, resolve_model_tag
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -129,7 +129,8 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     }])
     pred_log_df = pd.concat([pred_log_df, today_df], ignore_index=True)
     
-    n_logged = log_predictions(pred_log_df, region="National", model_version="v1.4-Finlight-National-Ridge")
+    national_version = resolve_model_tag("National", model_type="Ridge")
+    n_logged = log_predictions(pred_log_df, region="National", model_version=national_version)
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

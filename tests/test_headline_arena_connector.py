@@ -97,7 +97,7 @@ class TestHeadlineArenaConnector(unittest.TestCase):
     def test_dead_zones_rb_cl(self):
         connector = HeadlineArenaConnector()
         self.assertEqual(connector.get_dead_zone("RB"), 0.0030)
-        self.assertEqual(connector.get_dead_zone("CL"), 0.0020)
+        self.assertEqual(connector.get_dead_zone("CL"), 0.0030)
 
     def test_format_direction_payload_dev_tagging(self):
         connector = HeadlineArenaConnector(environment="dev")
@@ -204,19 +204,77 @@ class TestHeadlineArenaConnector(unittest.TestCase):
                 client_secret="test_secret",
                 environment="dev"
             )
-            # Mock bearer token and submission
+            # Mock bearer token, scope subscription, and active challenge resolution
             connector.get_bearer_token = MagicMock(return_value="mock_bearer_token")
+            connector.ensure_scope_subscription = MagicMock(return_value=True)
+            connector.get_active_challenge_for_asset = MagicMock(
+                return_value={"challenge": {"id": "chal_cl_456", "asset": "CL"}}
+            )
 
             mock_response = MagicMock()
-            mock_response.read.return_value = b'{"status": "accepted", "id": "sub_98765"}'
+            mock_response.read.return_value = b'{"status": "accepted", "counts_for_score": true}'
             mock_response.__enter__.return_value = mock_response
 
             with patch("urllib.request.urlopen", return_value=mock_response):
-                payload = {"asset": "RB", "direction": "bullish", "confidence": 0.85, "reasoning": "[DEV-TEST] Model evaluation"}
+                payload = {"asset": "CL", "direction": "bullish", "confidence": 0.85, "reasoning": "[DEV-TEST] Model evaluation"}
                 res = connector.submit_forecast(payload, live_in_dev=True)
                 self.assertEqual(res["status"], "SUCCESS")
                 self.assertEqual(res["mode"], "LIVE_SUBMISSION")
-                self.assertEqual(res["response"]["id"], "sub_98765")
+                self.assertEqual(res["challenge_id"], "chal_cl_456")
+                self.assertTrue(res["counts_for_score"])
+
+    def test_submit_forecast_no_active_challenge(self):
+        with patch.dict(os.environ, {"TESTING": "0", "MIDGLEY_ENV": "dev"}, clear=True):
+            connector = HeadlineArenaConnector(
+                client_id="test_id",
+                client_secret="test_secret",
+                environment="dev"
+            )
+            connector.get_bearer_token = MagicMock(return_value="mock_bearer_token")
+            connector.ensure_scope_subscription = MagicMock(return_value=True)
+            connector.get_active_challenge_for_asset = MagicMock(return_value=None)
+
+            payload = {"asset": "RB", "direction": "bullish", "confidence": 0.85}
+            res = connector.submit_forecast(payload, live_in_dev=True)
+            self.assertEqual(res["status"], "SKIPPED_NO_ACTIVE_CHALLENGE")
+            self.assertIn("No active challenge found", res["message"])
+
+    def test_ensure_scope_subscription_and_active_challenges(self):
+        with patch.dict(os.environ, {"TESTING": "0"}, clear=True):
+            connector = HeadlineArenaConnector(client_id="test_id", client_secret="test_secret")
+            connector.get_bearer_token = MagicMock(return_value="mock_bearer_token")
+
+            # Mock scope subscription POST and active challenges GET
+            mock_sub_resp = MagicMock()
+            mock_sub_resp.read.return_value = b'{"status": "subscribed"}'
+            mock_sub_resp.__enter__.return_value = mock_sub_resp
+
+            mock_active_resp1 = MagicMock()
+            mock_active_resp1.read.return_value = b'{"challenges": [{"challenge": {"id": "chal_cl_999", "asset": "CL"}}]}'
+            mock_active_resp1.__enter__.return_value = mock_active_resp1
+
+            mock_active_resp2 = MagicMock()
+            mock_active_resp2.read.return_value = b'{"challenges": [{"challenge": {"id": "chal_cl_999", "asset": "CL"}}]}'
+            mock_active_resp2.__enter__.return_value = mock_active_resp2
+
+            mock_active_resp3 = MagicMock()
+            mock_active_resp3.read.return_value = b'{"challenges": [{"challenge": {"id": "chal_cl_999", "asset": "CL"}}]}'
+            mock_active_resp3.__enter__.return_value = mock_active_resp3
+
+            with patch("urllib.request.urlopen", side_effect=[mock_sub_resp, mock_active_resp1, mock_active_resp2, mock_active_resp3]):
+                sub_res = connector.ensure_scope_subscription("CL")
+                self.assertTrue(sub_res)
+                self.assertIn("CL", connector._subscribed_scopes)
+
+                challenges = connector.get_active_challenges()
+                self.assertEqual(len(challenges), 1)
+                
+                cl_chal = connector.get_active_challenge_for_asset("CL")
+                self.assertIsNotNone(cl_chal)
+                self.assertEqual(cl_chal["challenge"]["id"], "chal_cl_999")
+
+                rb_chal = connector.get_active_challenge_for_asset("RB")
+                self.assertIsNone(rb_chal)
 
     def test_register_agent(self):
         with patch.dict(os.environ, {"TESTING": "1"}):

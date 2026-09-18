@@ -39,6 +39,7 @@ from src.regional_metadata import list_all_regional_metadata
 from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
 from src.tokentab_accounting import token_tab_manager
 from src.key_manager import global_key_manager
+from src.version import get_model_version
 
 logger = logging.getLogger(__name__)
 
@@ -620,7 +621,7 @@ def get_diesel_live_prices():
 
     return {
         "status": "success",
-        "system": "Midgley v1.4 ULSD Distillate Engine",
+        "system": f"Midgley {get_model_version()} ULSD Distillate Engine",
         "timestamp": datetime.now().isoformat(),
         "futures": {
             "ulsd_ny_harbor_ho_f": ulsd_spot,
@@ -687,6 +688,24 @@ def get_system_quota():
         "timestamp": datetime.now().isoformat(),
         "quota": get_finlight_quota_status(),
         "quotas": all_quotas
+    }
+
+
+@app.get("/api/v1/system/cache-status", summary="Get 3-Tier Cache Gateway Status & Edge Probes", tags=["System & Health"])
+def get_system_cache_status(
+    probe: bool = Query(False, description="Whether to execute active roundtrip write/read probe against edge databases")
+):
+    """
+    Returns statistics and configuration for the 3-Tier caching gateway (Turso Edge, Cloudflare D1, Local SQLite),
+    along with optional live connectivity probe diagnostics (Issue #301).
+    """
+    stats = global_cache.get_stats()
+    probes = global_cache.test_edge_connectivity("all") if probe else None
+    return {
+        "status": "success",
+        "timestamp": datetime.now().isoformat(),
+        "cache_stats": stats,
+        "probes": probes
     }
 
 

@@ -2552,9 +2552,23 @@ def generate_public_dashboard():
                             <td class="py-2.5 px-4 text-blue-300">60.79%</td>
                             <td class="py-2.5 px-4 text-slate-400">Upgraded</td>
                         </tr>
+                        <tr class="opacity-90">
+                            <td class="py-2.5 px-4 font-semibold">v1.4 Finlight-LLM</td>
+                            <td class="py-2.5 px-4">+ Real-Time Finlight.me Stream, Firecrawl Extraction & Anomaly Gating</td>
+                            <td class="py-2.5 px-4 text-blue-300">$0.1069</td>
+                            <td class="py-2.5 px-4 text-blue-300">60.79%</td>
+                            <td class="py-2.5 px-4 text-slate-400">Upgraded</td>
+                        </tr>
+                        <tr class="opacity-90">
+                            <td class="py-2.5 px-4 font-semibold">v1.5 Multi-Tier & Sensor MLOps</td>
+                            <td class="py-2.5 px-4">+ 3-Tier Edge Cache, SWR Revalidation, USGS Water/Seismic & Multi-Feed AQI Flaring</td>
+                            <td class="py-2.5 px-4 text-blue-300">$0.1069</td>
+                            <td class="py-2.5 px-4 text-blue-300">60.79%</td>
+                            <td class="py-2.5 px-4 text-slate-400">Upgraded</td>
+                        </tr>
                         <tr class="bg-blue-950/20 font-bold border-l-2 border-blue-500">
                             <td class="py-2.5 px-4 text-white">{get_model_version()} (Current)</td>
-                            <td class="py-2.5 px-4 text-blue-300">+ Real-Time Finlight.me Financial Media REST Stream & Live News Extraction</td>
+                            <td class="py-2.5 px-4 text-blue-300">+ CoSPOT Spectral & Wavelet Prompting, Purged CV, Volatility-Gated Blending & Symbolic Alphas</td>
                             <td class="py-2.5 px-4 text-emerald-400">$0.1069</td>
                             <td class="py-2.5 px-4 text-emerald-400">60.79%</td>
                             <td class="py-2.5 px-4 text-emerald-400"><i class="fa-solid fa-circle text-[10px] mr-1"></i> Active Production</td>

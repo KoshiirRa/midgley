@@ -19,7 +19,7 @@ from src.locations.tulsa.regional import fetch_tulsa_market_data, get_tulsa_regi
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -150,12 +150,14 @@ def run_tulsa_pipeline(live_pump_price: float = None, use_llm_api: bool = False,
     hist_tulsa_base = splits['test_df']['tulsa_retail_gasoline'] if 'tulsa_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
     hist_tulsa_pred = preds_hybrid + dynamic_margin
 
+    tulsa_version = resolve_model_tag("Tulsa_OK", model_type=model_type)
+
     backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_tulsa_base,
         predicted_prices=hist_tulsa_pred,
         region="Tulsa_OK",
-        model_version=f"v1.4-Finlight-Tulsa-{model_type.capitalize()}"
+        model_version=tulsa_version
     )
 
     # Log active out-of-time 5-day horizon forecast
@@ -165,7 +167,7 @@ def run_tulsa_pipeline(live_pump_price: float = None, use_llm_api: bool = False,
         'current_price': live_pump_price,
         'predicted_5d_price': tulsa_baseline_forecast
     }])
-    n_logged = log_predictions(today_df, region="Tulsa_OK", model_version=f"v1.4-Finlight-Tulsa-{model_type.capitalize()}")
+    n_logged = log_predictions(today_df, region="Tulsa_OK", model_version=tulsa_version)
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

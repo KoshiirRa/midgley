@@ -31,9 +31,10 @@ if __name__ == "__main__":
     try:
         hindsight = HindsightClient()
         if hindsight.is_configured:
-            print("  [STEP 0] Triggering proactive Hindsight Cloud Run memory service warmup...")
+            warmup_timeout = float(os.environ.get("HINDSIGHT_WARMUP_TIMEOUT", "75.0"))
+            print(f"  [STEP 0] Triggering proactive Hindsight Cloud Run memory service warmup (max_wait={warmup_timeout:.0f}s)...")
             warmup_thread = threading.Thread(
-                target=lambda: hindsight.warmup(max_wait_seconds=35.0, retry_interval=2.0),
+                target=lambda: hindsight.warmup(max_wait_seconds=warmup_timeout, retry_interval=2.0),
                 name="hindsight-warmup",
                 daemon=True
             )
