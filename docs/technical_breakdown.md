@@ -1,27 +1,27 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-18 03:53:53`  
-**Run Mode:** `DAILY_BATCH`  
-**Primary Event Trigger:** Daily Forecast Batch Execution (2026-09-18 03:53:53)  
+**Log Timestamp:** `2026-09-18 04:31:38`  
+**Run Mode:** `INTRADAY_REVISION`  
+**Primary Event Trigger:** Refinery outage slows cheaper gas - Audacy  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Daily Forecast Batch Execution (2026-09-18 03:53:53)
+- **Headline Trigger:** Refinery outage slows cheaper gas - Audacy
 - **Active Ingested News Links:**
-- [NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh](https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html) (CME Group / NYMEX)
-- [NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion](https://www.weather.gov) (NOAA NWS Storm Alert)
-- [Executive Policy Feed & OPEC Weekend Open Price Gap Intelligence](https://www.bloomberg.com/energy) (Bloomberg Market Wire)
+- [Refinery outage slows cheaper gas - Audacy](https://news.google.com/rss/articles/CBMivAFBVV95cUxPLVZWclF3ZW1wemc3VWwwYkhzZkdHckNDeHUyczY2Vm84RXFnYkxRX3BnSlZLb0J0b1FoU1ZyWExFVUlmTWFyNTRjZGFZUmFsdUk3LV93QVRvOXpzV1FGMHJPNWZXeGhLZk5HaDJoaFZuQm5yUi1CZTVDZDJEY3M2SEM4Ny1XeGZuTGV1QnlNa2Z2U19JQXc4MHBLVE50VVpOMEpiMkhVY0ItUkY5bnVObEtxUngwUWxWZFpBQQ?oc=5) (Google News Energy Feed)
+- [Iran War, Midwest Refinery Outage Spike Gas Prices Across Iowa - newsradio 1040 who](https://news.google.com/rss/articles/CBMirgFBVV95cUxQMmpJY2czeGNSX2VQWjF3WUJJZWFVSnJzTEJQTVhIS3RpdlpxQkxPMjhIQ0haMzdGc1M3T2JhLTNRVXpNRWVkZlRPUTdDeVNxd0hHZWxLVmJ0VER0bWtHa05Gb0drWEduVXBTQjJ3VHM5dDN2Z1FYcWFOUjFSTWQtTVJ3LXV2VXhmTVJXNTFpbi1Qd0JScndzUmdrUk9BLW45Ry1QVFliOTNNa0MyYXfSAbYBQVVfeXFMTmNZMXMxcVhUbkNIb3BCUmpqRnRMQk1URnplX1RxTVhybExBRjFnaHFZZUIwOU9ubzZYZEVUemV2SUZSWjFiQVNJTVlaSmlzRnVHeEliRm0yTURSMDVPYXdoNUppbjY0SWRBVkNTZV9BUzU2SFlIeGhBZjIxVWJ0S1VaUkxhTmowM19YUVJsOHBuLUJ2RlNXQVpzSjctNlZJZy13dkNpaEpERGVuY21RRlhrTlFzOGc?oc=5) (Google News Energy Feed)
+- [India says new US tariffs over Russian oil could hit ties, vows to protect energy security - Reuters](https://news.google.com/rss/articles/CBMiugFBVV95cUxPTEYxR3ZWQVp2WmNVWFlkTGd2QThGc3VMX2pPd3JSbkR4ekxSZm1WbjdhSU1hZ2JHaHZIZEJRSEEwdUZUOVl4REwxWU9OWUFJcWxaWm9hNk4yeXJJVU5FSUQ4WWZFVTVwQmpaZlFOem5wc1hiNnJJQklmQXo3aWpaOG1tY2tUWm9IalFnSFUzbWFoREwxNHo0RzZrb0RNbHJSa25yMDlidVk5WEt4RkNKRjQwRXpZSWkyYUE?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.10`
-- **Price Pressure Shock ($\Delta P$):** `+0.02`
-- **Geopolitical Risk Score ($G$):** `0.15`
+- **Supply Disruption Score ($S$):** `0.70`
+- **Price Pressure Shock ($\Delta P$):** `+0.60`
+- **Geopolitical Risk Score ($G$):** `0.00`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.1000$
-- **Day 1 Decayed Shock**: $M_1 = 0.1000 \times 0.87055 = 0.0871$
-- **Day 2 Decayed Shock**: $M_2 = 0.1000 \times (0.87055)^2 = 0.0758$
-- **Day 3 Decayed Shock**: $M_3 = 0.1000 \times (0.87055)^3 = 0.0660$
-- **Day 4 Decayed Shock**: $M_4 = 0.1000 \times (0.87055)^4 = 0.0574$
-- **Day 5 (Target Horizon)**: $M_5 = 0.1000 \times 0.50000 = 0.0500$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.7000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.7000$
+- **Day 1 Decayed Shock**: $M_1 = 0.7000 \times 0.87055 = 0.6094$
+- **Day 2 Decayed Shock**: $M_2 = 0.7000 \times (0.87055)^2 = 0.5305$
+- **Day 3 Decayed Shock**: $M_3 = 0.7000 \times (0.87055)^3 = 0.4618$
+- **Day 4 Decayed Shock**: $M_4 = 0.7000 \times (0.87055)^4 = 0.4020$
+- **Day 5 (Target Horizon)**: $M_5 = 0.7000 \times 0.50000 = 0.3500$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.211 + (-\$0.271) = \$3.118\text{/gal}$ (Delta: -\$0.271/gal, -8.43\%)
+- **National Wholesale**: $P = \$3.184 + (+\$0.143) = \$3.260\text{/gal}$ (Delta: +\$0.143/gal, +4.48\%)
 - **Tulsa, OK Retail**: $P = \$4.010 + (+\$0.005) = \$6.098\text{/gal}$ (Delta: +\$0.005/gal, +0.13\%)
 - **Newark, DE Retail**: $P = \$4.361 + (-\$0.182) = \$4.448\text{/gal}$ (Delta: -\$0.182/gal, -4.17\%)
 - **Cincinnati, OH/KY**: $P = \$4.500 + (-\$0.218) = \$4.444\text{/gal}$ (Delta: -\$0.218/gal, -4.85\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-18 03:53:53]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Daily Forecast Batch Execution (2026-09-18 03:53:53)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.
+SUMMARY FOR RUN [2026-09-18 04:31:38]: Elevated upward price shock (+$0.60/gal) observed across wholesale futures. Event trigger 'Refinery outage slows cheaper gas - Audacy' drove supply disruption to S=0.70 and geopolitical risk to G=0.00. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6094 and Day-5 horizon retention M₅=0.3500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-18 03:53:53 (Mode: DAILY_BATCH), primary event trigger 'Daily Forecast Batch Execution (2026-09-18 03:53:53)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (NOAA NWS Storm Alert, CME Group / NYMEX, Bloomberg Market Wire). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.1000
-  - Day 1: M₁ = 0.0871
-  - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-18 04:31:38 (Mode: INTRADAY_REVISION), primary event trigger 'Refinery outage slows cheaper gas - Audacy' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.70, Price Pressure ΔP=+0.60, Geopolitical Risk G=0.00. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.7000
+  - Day 1: M₁ = 0.6094
+  - Day 5: M₅ = 0.3500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.118/gal ($-0.271/gal, -8.43%)
+  • National Wholesale: $3.260/gal (+$0.143/gal, +4.48%)
   • Tulsa, OK Retail: $6.098/gal (+$0.005/gal, +0.13%)
   • Newark, DE Retail: $4.448/gal ($-0.182/gal, -4.17%)
   • Cincinnati, OH/KY: $4.444/gal ($-0.218/gal, -4.85%)
@@ -91,15 +91,15 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.276/gal (+$0.717/gal, +11.70%)
   • SF Bay Area Region: $6.383/gal (+$0.724/gal, +11.61%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.383/gal (+0.724/gal). Largest downward shift for this run: National Wholesale at $3.118/gal (-0.271/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.383/gal (+0.724/gal). Largest downward shift for this run: Greenville, NC Retail at $4.075/gal (-0.225/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-18 03:53:53]:
-• Execution Context: Run type 'DAILY_BATCH' triggered by 'Daily Forecast Batch Execution (2026-09-18 03:53:53)'. Overall price pressure vector sits at ΔP=+0.02/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-18 04:31:38]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Refinery outage slows cheaper gas - Audacy'. Overall price pressure vector sits at ΔP=+0.60/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.00. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 
 ---
@@ -145,4 +145,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-18 03:53:53.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-18 04:31:38.*
