@@ -3468,5 +3468,25 @@
       "overall_price_pressure": 0.8
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-18T16:04:53.565912",
+    "headline": "House Passes Bill Allowing New Tariffs on Russia Oil Buyers - Rigzone",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPallSa2xyclRfZjNuMnZpNnFrSTRJcmZFb0hzeDlDeTFzS2ZFRm91SVRTcUNnMVZVT0hPR2FPN0ZHNTFodHk1amJjOFlJODNESm9BVzZhcm52eGxCbE52ak1WYW4tN0puTHZSSVZNRTJpYnNORFFvZTNtaGNLLTZMZDNrVWNLVFB2LW9qMVFYeE14QlEzTU80SEN5OUNaYUoyeE5VV0lwUms4NkVmRklpZEZ0elpqMXBxVWlTSWF3?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPallSa2xyclRfZjNuMnZpNnFrSTRJcmZFb0hzeDlDeTFzS2ZFRm91SVRTcUNnMVZVT0hPR2FPN0ZHNTFodHk1amJjOFlJODNESm9BVzZhcm52eGxCbE52ak1WYW4tN0puTHZSSVZNRTJpYnNORFFvZTNtaGNLLTZMZDNrVWNLVFB2LW9qMVFYeE14QlEzTU80SEN5OUNaYUoyeE5VV0lwUms4NkVmRklpZEZ0elpqMXBxVWlTSWF3?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxPallSa2xyclRfZjNuMnZpNnFrSTRJcmZFb0hzeDlDeTFzS2ZFRm91SVRTcUNnMVZVT0hPR2FPN0ZHNTFodHk1amJjOFlJODNESm9BVzZhcm52eGxCbE52ak1WYW4tN0puTHZSSVZNRTJpYnNORFFvZTNtaGNLLTZMZDNrVWNLVFB2LW9qMVFYeE14QlEzTU80SEN5OUNaYUoyeE5VV0lwUms4NkVmRklpZEZ0elpqMXBxVWlTSWF3?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.6,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": false
   }
 ]
