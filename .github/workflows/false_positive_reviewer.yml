@@ -3,6 +3,12 @@ name: Automated False Positive Issue Reviewer
 on:
   issues:
     types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "GitHub Issue number to review"
+        required: true
+        type: string
 
 permissions:
   issues: write
@@ -10,7 +16,7 @@ permissions:
 
 jobs:
   review_false_positive:
-    if: contains(github.event.issue.labels.*.name, 'false-positive')
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'false-positive')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -30,4 +36,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python scripts/review_false_positive.py --issue-number ${{ github.event.issue.number }}
+          python scripts/review_false_positive.py --issue-number ${{ github.event.issue.number || inputs.issue_number }}
