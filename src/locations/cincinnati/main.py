@@ -18,8 +18,8 @@ import numpy as np
 from src.locations.cincinnati.regional import fetch_cincinnati_market_data, get_cincinnati_regional_events
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
-from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
+from src.models import train_and_compare_models, train_multi_horizon_models
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag, backfill_actual_prices_and_evaluate
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -64,20 +64,21 @@ def run_cincinnati_pipeline(
         print(f"    - [{r['date'].strftime('%Y-%m-%d')}] '{r['headline'][:65]}...'")
         print(f"       -> GeoRisk: {r['geopolitical_risk']}, SupplyDisruption: {r['supply_disruption']}, NetPressure: {r['overall_price_pressure']}")
 
-    # Step 3: Feature Engineering & Decayed Memory Fusion
-    print("\n[Step 3/6] Engineering Ohio Valley Crack Spread & Fusing Decayed Event Memory...")
-    features_df = create_feature_matrix(market_df, events_df, forecast_horizon=5)
-    splits = prepare_chronological_splits(features_df, train_ratio=0.8, forecast_horizon=5)
-    
-    print(f"  -> Chronological Train Split: {len(splits['X_train_hybrid'])} rows")
-    print(f"  -> Chronological Out-of-Time Test Split: {len(splits['X_test_hybrid'])} rows")
+    # Step 3 & 4: Multi-Horizon Feature Engineering & Model Training (1D-5D)
+    print("\n[Step 3/6] Engineering Ohio Valley Crack Spread & Fusing Decayed Event Memory (Multi-Horizon 1D-5D)...")
+    multi_horizon_results = train_multi_horizon_models(
+        market_df, 
+        events_df, 
+        horizons=[1, 2, 3, 4, 5], 
+        model_type=model_type
+    )
+    results = multi_horizon_results[5]
+    splits = results['splits']
+    results['multi_horizon_results'] = multi_horizon_results
 
-    # Step 4: Model Training & Evaluation
-    print("\n[Step 4/6] Training Models & Running Ablation Experiment...")
-    results = train_and_compare_models(splits, model_type=model_type)
-
+    print("\n[Step 4/6] Model Evaluation & Metrics Summary (5-Day Horizon Primary Baseline)...")
     print("\n" + "=" * 65)
-    print("      CINCINNATI REGIONAL MODEL EVALUATION & METRICS SUMMARY")
+    print("      CINCINNATI REGIONAL MODEL EVALUATION & METRICS SUMMARY (5-DAY)")
     print("=" * 65)
     print(f" Target Location: Cincinnati OH / NKY Metro (OH Base: ${live_oh_price:.3f}/gal | KY Base: ${live_ky_price:.3f}/gal)")
     print(f" Algorithm: {model_type.upper()}")
@@ -99,20 +100,20 @@ def run_cincinnati_pipeline(
     print("\n[Step 5/6] Real-Time Cincinnati Regional & Maritime Shock Scenario Simulations...")
     scenarios = [
         {
-            "name": "Scenario 1: Marathon Catlettsburg Refinery Unplanned Outage",
-            "headline": "Unplanned FCC unit trip at 291,000 bpd Catlettsburg KY refinery halts Ohio Valley rack loadings."
+            "name": "Scenario 1: Lower Mississippi Low-Water Barge Grounding Crisis",
+            "headline": "Historic drought drops Lower Mississippi River gage below -10ft at Memphis, halting petroleum barge tows into Ohio Valley."
         },
         {
-            "name": "Scenario 2: Lower Mississippi & Ohio River Low-Water Barge Bottleneck",
-            "headline": "Historic drought drops Mississippi River gage at Cairo & Memphis; petroleum tow barges restricted to -40% payload."
+            "name": "Scenario 2: Catlettsburg Refinery Hydrocracker Explosion",
+            "headline": "Catlettsburg 290,000 bpd refinery declares force majeure following hydrocracker unit explosion, cutting tri-state supply."
         },
         {
-            "name": "Scenario 3: Ohio River Markland Locks & Dam Ice Lockout",
-            "headline": "Sub-zero Arctic freeze locks Markland Locks & Dam on Ohio River; river barge deliveries to Cincinnati suspended."
+            "name": "Scenario 3: Ohio River Ice Gorge / Lock 52 Freeze Bottleneck",
+            "headline": "Polar vortex causes catastrophic ice gorge at Markland Locks on Ohio River, halting tank barge traffic into Cincinnati."
         },
         {
-            "name": "Scenario 4: Ohio State Motor Fuel Tax Increase",
-            "headline": "Ohio General Assembly approves +$0.035/gal motor fuel tax increase, widening Ohio vs Kentucky tax gap."
+            "name": "Scenario 4: Kentucky State Fuel Tax Rate Hike Enacted",
+            "headline": "Kentucky General Assembly passes motor fuel excise tax increase of +$0.045/gal, narrowing Ohio-Kentucky price spread."
         },
         {
             "name": "Scenario 5: Weekend Executive OPEC Talkdown Post",
@@ -132,12 +133,9 @@ def run_cincinnati_pipeline(
     cin_oh_baseline_forecast = live_oh_price * (1.0 + baseline_return)
     cin_ky_baseline_forecast = live_ky_price * (1.0 + baseline_return)
     
-    print(f"\n  CURRENT CINCINNATI LIVE PUMP PRICES:")
-    print(f"    - Ohio Side (Hamilton County):          ${live_oh_price:.3f}/gal")
-    print(f"    - Kentucky Side (Boone/Kenton/Campbell): ${live_ky_price:.3f}/gal")
-    print(f"  BASELINE 5-DAY CINCINNATI FORECASTS ({baseline_return*100:+.2f}%):")
-    print(f"    - Ohio Projected 5-Day Price:          ${cin_oh_baseline_forecast:.3f}/gal")
-    print(f"    - Kentucky Projected 5-Day Price:      ${cin_ky_baseline_forecast:.3f}/gal")
+    print(f"\n  CURRENT BASE PRICES: Ohio (OH): ${live_oh_price:.3f}/gal | Kentucky (KY): ${live_ky_price:.3f}/gal")
+    print(f"  BASELINE 5-DAY FORECAST (OH): ${cin_oh_baseline_forecast:.3f}/gal ({baseline_return*100:+.2f}%)")
+    print(f"  BASELINE 5-DAY FORECAST (KY): ${cin_ky_baseline_forecast:.3f}/gal ({baseline_return*100:+.2f}%)")
     print("-" * 80)
     
     for sc in scenarios:
@@ -160,55 +158,69 @@ def run_cincinnati_pipeline(
         print(f"  -> Shocked Kentucky 5-Day Forecast: ${shocked_forecast_ky:.3f}/gal")
         print(f"  -> Estimated Price Shock:          {delta_dollars:+.3f}/gal ({net_shock_pct*100:+.2f}%)")
         
-    # Step 6: Log Predictions to Historical Store & Report Model Performance
-    print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
-    test_dates = splits['test_df']['date']
-    preds_hybrid = results['predictions_hybrid']
-    
-    # Calculate historical test split prices for Cincinnati OH & KY (calibrated to retail pump price scale)
+    # Step 6: Log Predictions to Historical Store & Report Model Performance across 1D-5D (Issue #314)
+    print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy (Multi-Horizon 1D-5D)...")
+    oh_version = resolve_model_tag("Cincinnati_OH", model_type=model_type)
+    ky_version = resolve_model_tag("Cincinnati_KY", model_type=model_type)
+    last_date = market_df['date'].iloc[-1]
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     margin_oh = live_oh_price - latest_rbob
     margin_ky = live_ky_price - latest_rbob
-    
-    hist_oh_base = splits['test_df']['cincinnati_oh_retail_gasoline'] if 'cincinnati_oh_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + margin_oh
-    hist_oh_pred = preds_hybrid + margin_oh
-    hist_ky_base = splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + margin_ky
-    hist_ky_pred = preds_hybrid + margin_ky
 
-    oh_version = resolve_model_tag("Cincinnati_OH", model_type=model_type)
-    ky_version = resolve_model_tag("Cincinnati_KY", model_type=model_type)
+    for h in [1, 2, 3, 4, 5]:
+        h_res = multi_horizon_results.get(h)
+        if not h_res:
+            continue
+        h_splits = h_res['splits']
+        h_test_dates = h_splits['test_df']['date']
+        h_preds_hybrid = h_res['predictions_hybrid']
+        
+        hist_oh_base = h_splits['test_df']['cincinnati_oh_retail_gasoline'] if 'cincinnati_oh_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + margin_oh
+        hist_oh_pred = h_preds_hybrid + margin_oh
+        hist_ky_base = h_splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + margin_ky
+        hist_ky_pred = h_preds_hybrid + margin_ky
 
-    backfill_new_region_history(
-        test_dates=test_dates,
-        base_prices=hist_oh_base,
-        predicted_prices=hist_oh_pred,
-        region="Cincinnati_OH",
-        model_version=oh_version
-    )
-    backfill_new_region_history(
-        test_dates=test_dates,
-        base_prices=hist_ky_base,
-        predicted_prices=hist_ky_pred,
-        region="Cincinnati_KY",
-        model_version=ky_version
-    )
+        backfill_new_region_history(
+            test_dates=h_test_dates,
+            base_prices=hist_oh_base,
+            predicted_prices=hist_oh_pred,
+            region="Cincinnati_OH",
+            model_version=oh_version,
+            forecast_horizon_days=h
+        )
+        backfill_new_region_history(
+            test_dates=h_test_dates,
+            base_prices=hist_ky_base,
+            predicted_prices=hist_ky_pred,
+            region="Cincinnati_KY",
+            model_version=ky_version,
+            forecast_horizon_days=h
+        )
 
-    # Log active out-of-time 5-day horizon forecasts
-    last_date = market_df['date'].iloc[-1]
-    today_oh = pd.DataFrame([{
-        'date': last_date,
-        'current_price': live_oh_price,
-        'predicted_5d_price': cin_oh_baseline_forecast
-    }])
-    today_ky = pd.DataFrame([{
-        'date': last_date,
-        'current_price': live_ky_price,
-        'predicted_5d_price': cin_ky_baseline_forecast
-    }])
-    
-    n_logged_oh = log_predictions(today_oh, region="Cincinnati_OH", model_version=oh_version)
-    n_logged_ky = log_predictions(today_ky, region="Cincinnati_KY", model_version=ky_version)
-    print(f"  -> Logged predictions for Cincinnati_OH ({n_logged_oh}) and Cincinnati_KY ({n_logged_ky})")
+        raw_pred_h = float(h_res['live_pred_price'])
+        last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
+        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
+        cin_oh_h_forecast = live_oh_price * (1.0 + baseline_return_h)
+        cin_ky_h_forecast = live_ky_price * (1.0 + baseline_return_h)
+
+        today_oh = pd.DataFrame([{
+            'date': last_date,
+            'current_price': live_oh_price,
+            'predicted_5d_price': cin_oh_h_forecast,
+            'forecast_horizon_days': h
+        }])
+        today_ky = pd.DataFrame([{
+            'date': last_date,
+            'current_price': live_ky_price,
+            'predicted_5d_price': cin_ky_h_forecast,
+            'forecast_horizon_days': h
+        }])
+        
+        log_predictions(today_oh, region="Cincinnati_OH", model_version=oh_version, forecast_horizon_days=h)
+        log_predictions(today_ky, region="Cincinnati_KY", model_version=ky_version, forecast_horizon_days=h)
+
+    backfill_actual_prices_and_evaluate()
+    print(f"  -> Logged & backfilled discrete 1D-5D predictions for Cincinnati_OH and Cincinnati_KY")
     
     perf_report = generate_performance_report()
     if not perf_report.empty:

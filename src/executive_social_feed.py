@@ -245,22 +245,31 @@ class ExecutiveSocialFeedConnector:
             from src.benchmark_updater import load_historical_benchmark
             loaded = load_historical_benchmark("executive_social")
             if loaded and isinstance(loaded, list):
-                return list(loaded)
+                base = list(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
+                seen_keys = {(str(p.get('date')), str(p.get('post_text'))) for p in base}
+                for p in loaded:
+                    k = (str(p.get('date')), str(p.get('post_text')))
+                    if k not in seen_keys:
+                        base.append(p)
+                        seen_keys.add(k)
+                return base
             return list(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
         return posts
 
     def get_combined_feed(self, include_live: bool = True) -> pd.DataFrame:
-        base_posts = None
+        base_posts = list(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
         try:
             from src.benchmark_updater import load_historical_benchmark
             loaded = load_historical_benchmark("executive_social")
             if loaded and isinstance(loaded, list):
-                base_posts = list(loaded)
+                seen_keys = {(str(p.get('date')), str(p.get('post_text'))) for p in base_posts}
+                for p in loaded:
+                    k = (str(p.get('date')), str(p.get('post_text')))
+                    if k not in seen_keys:
+                        base_posts.append(p)
+                        seen_keys.add(k)
         except Exception:
             pass
-
-        if base_posts is None:
-            base_posts = list(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
 
         all_posts = list(base_posts)
         if include_live:

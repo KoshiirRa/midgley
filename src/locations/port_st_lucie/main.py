@@ -18,8 +18,8 @@ import numpy as np
 from src.locations.port_st_lucie.regional import fetch_port_st_lucie_market_data, get_port_st_lucie_regional_events
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
-from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
+from src.models import train_and_compare_models, train_multi_horizon_models
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag, backfill_actual_prices_and_evaluate
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -50,20 +50,21 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
         print(f"    - [{r['date'].strftime('%Y-%m-%d')}] '{r['headline'][:65]}...'")
         print(f"       -> GeoRisk: {r['geopolitical_risk']}, SupplyDisruption: {r['supply_disruption']}, NetPressure: {r['overall_price_pressure']}")
 
-    # Step 3: Feature Engineering & Decayed Memory Fusion
-    print("\n[Step 3/6] Engineering Port St. Lucie Rack Crack Spread & Fusing Decayed Event Memory...")
-    features_df = create_feature_matrix(market_df, events_df, forecast_horizon=5)
-    splits = prepare_chronological_splits(features_df, train_ratio=0.8, forecast_horizon=5)
-    
-    print(f"  -> Chronological Train Split: {len(splits['X_train_hybrid'])} rows")
-    print(f"  -> Chronological Out-of-Time Test Split: {len(splits['X_test_hybrid'])} rows")
+    # Step 3 & 4: Multi-Horizon Feature Engineering & Model Training (1D-5D)
+    print("\n[Step 3/6] Engineering Port St. Lucie Rack Crack Spread & Fusing Decayed Event Memory (Multi-Horizon 1D-5D)...")
+    multi_horizon_results = train_multi_horizon_models(
+        market_df, 
+        events_df, 
+        horizons=[1, 2, 3, 4, 5], 
+        model_type=model_type
+    )
+    results = multi_horizon_results[5]
+    splits = results['splits']
+    results['multi_horizon_results'] = multi_horizon_results
 
-    # Step 4: Model Training & Evaluation
-    print("\n[Step 4/6] Training Models & Running Ablation Experiment...")
-    results = train_and_compare_models(splits, model_type=model_type)
-
+    print("\n[Step 4/6] Training Models & Running Ablation Experiment (5-Day Horizon Primary Baseline)...")
     print("\n" + "=" * 65)
-    print("     PORT ST. LUCIE REGIONAL MODEL EVALUATION & METRICS SUMMARY")
+    print("     PORT ST. LUCIE REGIONAL MODEL EVALUATION & METRICS SUMMARY (5-DAY)")
     print("=" * 65)
     print(f" Target Location: Port St. Lucie, FL Metropolitan Area (Live Base: ${live_pump_price:.2f}/gal)")
     print(f" Algorithm: {model_type.upper()}")
@@ -146,33 +147,48 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
         print(f"  {sc['name']:<56} -> ${sim_psl_price:.3f}/gal ({dollar_change:+.3f} | {pct_change:+.2f}%)")
     print("=" * 75)
 
-    # Step 6: MLOps Prediction Logging & Backfilling
-    print("\n[Step 6/6] Logging Predictions to MLOps Store (data/prediction_history.csv)...")
-    test_dates = splits['test_df']['date']
-    preds_hybrid = results['predictions_hybrid']
-    
+    # Step 6: MLOps Prediction Logging & Backfilling across 1D-5D (Issue #314)
+    print("\n[Step 6/6] Logging Predictions to MLOps Store (Multi-Horizon 1D-5D)...")
+    psl_version = resolve_model_tag("Port_St_Lucie_FL", model_type=model_type)
+    last_date = market_df['date'].iloc[-1]
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     dynamic_margin = live_pump_price - latest_rbob
-    hist_psl_base = splits['test_df']['port_st_lucie_retail_gasoline'] if 'port_st_lucie_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
-    hist_psl_pred = preds_hybrid + dynamic_margin
-    psl_version = resolve_model_tag("Port_St_Lucie_FL", model_type=model_type)
 
-    n_logged = backfill_new_region_history(
-        test_dates=test_dates,
-        base_prices=hist_psl_base,
-        predicted_prices=hist_psl_pred,
-        region="Port_St_Lucie_FL",
-        model_version=psl_version
-    )
+    for h in [1, 2, 3, 4, 5]:
+        h_res = multi_horizon_results.get(h)
+        if not h_res:
+            continue
+        h_splits = h_res['splits']
+        h_test_dates = h_splits['test_df']['date']
+        h_preds_hybrid = h_res['predictions_hybrid']
+        
+        hist_psl_base = h_splits['test_df']['port_st_lucie_retail_gasoline'] if 'port_st_lucie_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + dynamic_margin
+        hist_psl_pred = h_preds_hybrid + dynamic_margin
 
-    last_date = market_df['date'].iloc[-1]
-    today_df = pd.DataFrame([{
-        'date': last_date,
-        'current_price': live_pump_price,
-        'predicted_5d_price': psl_baseline_forecast
-    }])
-    log_predictions(today_df, region="Port_St_Lucie_FL", model_version=psl_version)
-    print(f"  -> Logged & evaluated {n_logged} historical out-of-time test predictions for Port_St_Lucie_FL.")
+        backfill_new_region_history(
+            test_dates=h_test_dates,
+            base_prices=hist_psl_base,
+            predicted_prices=hist_psl_pred,
+            region="Port_St_Lucie_FL",
+            model_version=psl_version,
+            forecast_horizon_days=h
+        )
+
+        raw_pred_h = float(h_res['live_pred_price'])
+        last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
+        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
+        psl_h_forecast = live_pump_price * (1.0 + baseline_return_h)
+
+        today_df = pd.DataFrame([{
+            'date': last_date,
+            'current_price': live_pump_price,
+            'predicted_5d_price': psl_h_forecast,
+            'forecast_horizon_days': h
+        }])
+        log_predictions(today_df, region="Port_St_Lucie_FL", model_version=psl_version, forecast_horizon_days=h)
+
+    backfill_actual_prices_and_evaluate()
+    print(f"  -> Logged & backfilled discrete 1D-5D predictions for Port_St_Lucie_FL.")
 
     return {
         "results": results,

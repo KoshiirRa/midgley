@@ -12,8 +12,8 @@ import logging
 from src.data_ingestion import fetch_market_data, get_historical_event_dataset
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
-from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, resolve_model_tag
+from src.models import train_and_compare_models, train_multi_horizon_models
+from src.prediction_logger import log_predictions, generate_performance_report, resolve_model_tag, backfill_actual_prices_and_evaluate
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -38,21 +38,23 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         print(f"    - [{row['date'].strftime('%Y-%m-%d')}] '{row['headline'][:65]}...'")
         print(f"       -> GeoRisk: {row['geopolitical_risk']}, SupplyDisruption: {row['supply_disruption']}, OPEC: {row['opec_action']}, NetPressure: {row['overall_price_pressure']}")
         
-    # Step 3: Feature Engineering & Fusion
-    print("\n[Step 3/6] Engineering Technical Features & Fusing Decayed Event Memory...")
-    feature_df = create_feature_matrix(market_df, events_df, forecast_horizon=5, decay_half_life_days=5.0)
-    print(f"  -> Engineered dataset shape: {feature_df.shape}")
+    # Step 3 & 4: Multi-Horizon Feature Engineering & Model Training (1D-5D)
+    print("\n[Step 3/6] Engineering Technical Features & Fusing Decayed Event Memory (Multi-Horizon 1D-5D)...")
+    multi_horizon_results = train_multi_horizon_models(
+        market_df, 
+        events_df, 
+        horizons=[1, 2, 3, 4, 5], 
+        model_type=model_type
+    )
     
-    splits = prepare_chronological_splits(feature_df, train_ratio=0.8, forecast_horizon=5)
-    print(f"  -> Chronological Train Split: {len(splits['X_train_quant'])} rows")
-    print(f"  -> Chronological Out-of-Time Test Split: {len(splits['X_test_quant'])} rows")
+    # 5-Day horizon remains primary evaluation baseline
+    results = multi_horizon_results[5]
+    splits = results['splits']
+    results['multi_horizon_results'] = multi_horizon_results
     
-    # Step 4: Model Training & Ablation Evaluation
-    print("\n[Step 4/6] Training Models & Running Ablation Experiment (Quant-Only vs. LLM Hybrid)...")
-    results = train_and_compare_models(splits, model_type=model_type)
-    
+    print("\n[Step 4/6] Model Evaluation & Metrics Summary (5-Day Horizon Primary Baseline)...")
     print("\n" + "=" * 65)
-    print("             MODEL EVALUATION & METRICS SUMMARY")
+    print("             MODEL EVALUATION & METRICS SUMMARY (5-DAY)")
     print("=" * 65)
     print(f" Algorithm: {model_type.upper()}")
     print("-" * 65)
@@ -108,30 +110,42 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         print(f"  -> Shocked 5-Day Forecast:  ${shocked_forecast:.3f}/gal")
         print(f"  -> Estimated Price Shock:   +${delta_dollars:.3f}/gal ({net_shock_pct*100:+.2f}%)")
         
-    # Step 6: Log Predictions & Report Tracker
-    print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy...")
-    test_dates = splits['test_df']['date']
-    test_current_prices = splits['test_df']['gasoline_rbob']
-    preds_hybrid = results['predictions_hybrid']
-    
-    pred_log_df = pd.DataFrame({
-        'date': test_dates.values,
-        'current_price': test_current_prices.values,
-        'predicted_5d_price': preds_hybrid
-    })
-    
-    # Append latest real-time live forecast row
+    # Step 6: Log Predictions & Report Tracker across discrete horizons 1D-5D (Issue #314)
+    print("\n[Step 6/6] Logging Forecasts & Backtesting Historical Prediction Accuracy (Multi-Horizon 1D-5D)...")
+    national_version = resolve_model_tag("National", model_type=model_type.capitalize() if model_type else "Ridge")
     last_date = market_df['date'].iloc[-1]
-    today_df = pd.DataFrame([{
-        'date': last_date,
-        'current_price': float(market_df['gasoline_rbob'].iloc[-1]),
-        'predicted_5d_price': float(preds_hybrid[-1])
-    }])
-    pred_log_df = pd.concat([pred_log_df, today_df], ignore_index=True)
-    
-    national_version = resolve_model_tag("National", model_type="Ridge")
-    n_logged = log_predictions(pred_log_df, region="National", model_version=national_version)
-    print(f"  -> Logged predictions to store (data/prediction_history.csv)")
+    current_live_price = float(market_df['gasoline_rbob'].iloc[-1])
+
+    for h in [1, 2, 3, 4, 5]:
+        h_res = multi_horizon_results.get(h)
+        if not h_res:
+            continue
+        h_splits = h_res['splits']
+        h_test_dates = h_splits['test_df']['date']
+        h_test_current_prices = h_splits['test_df']['gasoline_rbob']
+        h_preds_hybrid = h_res['predictions_hybrid']
+        
+        # Backfill historical test split
+        h_log_df = pd.DataFrame({
+            'date': h_test_dates.values,
+            'current_price': h_test_current_prices.values,
+            'predicted_5d_price': h_preds_hybrid,
+            'forecast_horizon_days': h
+        })
+        
+        # Append latest live real-time forecast row
+        live_pred = float(h_res['live_pred_price'])
+        h_today_df = pd.DataFrame([{
+            'date': last_date,
+            'current_price': current_live_price,
+            'predicted_5d_price': live_pred,
+            'forecast_horizon_days': h
+        }])
+        h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
+        log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
+
+    backfill_actual_prices_and_evaluate()
+    print(f"  -> Logged & backfilled discrete 1D-5D predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()
     if not perf_report.empty:

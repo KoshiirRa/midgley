@@ -41,7 +41,7 @@ def test_is_timestamp_weekend():
 def test_historical_executive_posts_preserved():
     connector = ExecutiveSocialFeedConnector()
     df = connector.get_combined_feed(include_live=False)
-    assert len(df) == len(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
+    assert len(df) >= len(HISTORICAL_EXECUTIVE_ENERGY_POSTS)
     assert "is_weekend" in df.columns
     assert "actual_1d_rbob_return_pct" in df.columns
     assert "post_text" in df.columns

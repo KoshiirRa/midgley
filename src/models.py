@@ -521,6 +521,63 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     }
 
 
+def train_multi_horizon_models(
+    market_df: pd.DataFrame,
+    events_df: Optional[pd.DataFrame] = None,
+    horizons: Optional[list[int]] = None,
+    decay_half_life_days: float = 5.0,
+    train_ratio: float = 0.8,
+    model_type: str = "ridge",
+    log_wandb: bool = False
+) -> dict[int, dict]:
+    """
+    Trains and compares discrete step-ahead forecasting models across multi-day horizons
+    (default: h in [1, 2, 3, 4, 5]) (Issue #314).
+    
+    Returns a dictionary mapping horizon integer h -> ablation results dictionary:
+    {
+        1: results_1d,
+        2: results_2d,
+        3: results_3d,
+        4: results_4d,
+        5: results_5d
+    }
+    """
+    if horizons is None:
+        horizons = [1, 2, 3, 4, 5]
+
+    try:
+        from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
+    except ImportError:
+        from feature_engineering import create_feature_matrix, prepare_chronological_splits
+
+    multi_results = {}
+    for h in horizons:
+        feature_df = create_feature_matrix(
+            market_df, 
+            events_df, 
+            forecast_horizon=h, 
+            decay_half_life_days=decay_half_life_days
+        )
+        splits = prepare_chronological_splits(
+            feature_df, 
+            train_ratio=train_ratio, 
+            forecast_horizon=h
+        )
+        res = train_and_compare_models(splits, model_type=model_type, log_wandb=log_wandb)
+        res['splits'] = splits
+        res['forecast_horizon'] = h
+        
+        # Latest live base and hybrid forecast price
+        last_row = splits['X_test_hybrid'].iloc[-1:]
+        res['live_pred_price'] = float(res['model_hybrid'].predict(last_row)[0])
+        res['live_base_price'] = float(splits['test_df']['gasoline_rbob'].iloc[-1])
+        
+        multi_results[h] = res
+
+    return multi_results
+
+
 def predict_with_cedar_residual_decomposition(
     model_quant, 
     X_features: pd.DataFrame, 
