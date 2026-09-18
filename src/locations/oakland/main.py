@@ -19,7 +19,7 @@ from src.locations.oakland.regional import fetch_oakland_market_data, get_oaklan
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -178,12 +178,15 @@ def run_oakland_pipeline(
     hist_bayarea_base = splits['test_df']['gasoline_rbob'] + 2.15
     hist_bayarea_pred = preds_hybrid + 2.15
 
+    oakland_version = resolve_model_tag("Oakland_CA", model_type=model_type)
+    bayarea_version = resolve_model_tag("BayArea_CA", model_type=model_type)
+
     backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_oakland_base,
         predicted_prices=hist_oakland_pred,
         region="Oakland_CA",
-        model_version=f"v1.4-Oakland-{model_type.capitalize()}"
+        model_version=oakland_version
     )
 
     backfill_new_region_history(
@@ -191,7 +194,7 @@ def run_oakland_pipeline(
         base_prices=hist_bayarea_base,
         predicted_prices=hist_bayarea_pred,
         region="BayArea_CA",
-        model_version=f"v1.4-BayArea-{model_type.capitalize()}"
+        model_version=bayarea_version
     )
 
     # Log active out-of-time 5-day horizon forecast
@@ -201,14 +204,14 @@ def run_oakland_pipeline(
         'current_price': live_oakland_price,
         'predicted_5d_price': oakland_baseline_forecast
     }])
-    log_predictions(pred_oakland_df, region="Oakland_CA", model_version=f"v1.4-Oakland-{model_type.capitalize()}")
+    log_predictions(pred_oakland_df, region="Oakland_CA", model_version=oakland_version)
 
     pred_bayarea_df = pd.DataFrame([{
         'date': last_date,
         'current_price': live_bayarea_price,
         'predicted_5d_price': bayarea_baseline_forecast
     }])
-    log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=f"v1.4-BayArea-{model_type.capitalize()}")
+    log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=bayarea_version)
 
     print("\n" + "=" * 80)
     print("  OAKLAND & SF BAY AREA REGIONAL PIPELINE EXECUTION COMPLETE")

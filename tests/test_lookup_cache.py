@@ -89,6 +89,26 @@ class TestLookupCache(unittest.TestCase):
             self.assertIsNone(res)
             self.assertEqual(self.cache.stats["errors"], 0)
 
+    def test_test_edge_connectivity_unconfigured(self):
+        probes = self.cache.test_edge_connectivity("all")
+        self.assertEqual(probes["local_sqlite"]["status"], "healthy")
+        self.assertEqual(probes["turso"]["status"], "unconfigured")
+        self.assertEqual(probes["cloudflare"]["status"], "unconfigured")
+
+    def test_edge_credentials_url_normalization(self):
+        with patch.dict(os.environ, {
+            "TURSO_DATABASE_URL": "libsql://my-db.turso.io",
+            "TURSO_AUTH_TOKEN": "secret_token",
+            "CLOUDFLARE_CACHE_URL": "http://edge.workers.dev"
+        }):
+            # Stop fixture patch to test actual _get_edge_credentials implementation
+            self.edge_patcher.stop()
+            turso_url, turso_token, cf_url, cf_token = self.cache._get_edge_credentials()
+            self.assertEqual(turso_url, "https://my-db.turso.io")
+            self.assertEqual(turso_token, "secret_token")
+            self.assertEqual(cf_url, "https://edge.workers.dev")
+            self.edge_patcher.start()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -19,7 +19,7 @@ from src.locations.charlotte.regional import fetch_charlotte_market_data, get_ch
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -155,13 +155,14 @@ def run_charlotte_pipeline(live_pump_price: float = None, use_llm_api: bool = Fa
     dynamic_margin = live_pump_price - latest_rbob
     hist_charlotte_base = splits['test_df']['charlotte_retail_gasoline'] if 'charlotte_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
     hist_charlotte_pred = preds_hybrid + dynamic_margin
+    charlotte_version = resolve_model_tag("Charlotte_NC", model_type=model_type)
 
     n_logged = backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_charlotte_base,
         predicted_prices=hist_charlotte_pred,
         region="Charlotte_NC",
-        model_version=f"v1.4-Finlight-Charlotte-{model_type.capitalize()}"
+        model_version=charlotte_version
     )
 
     last_date = market_df['date'].iloc[-1]
@@ -170,7 +171,7 @@ def run_charlotte_pipeline(live_pump_price: float = None, use_llm_api: bool = Fa
         'current_price': live_pump_price,
         'predicted_5d_price': charlotte_baseline_forecast
     }])
-    log_predictions(today_df, region="Charlotte_NC", model_version=f"v1.4-Finlight-Charlotte-{model_type.capitalize()}")
+    log_predictions(today_df, region="Charlotte_NC", model_version=charlotte_version)
     print(f"  -> Logged & evaluated {n_logged} historical out-of-time test predictions for Charlotte_NC.")
 
     return {

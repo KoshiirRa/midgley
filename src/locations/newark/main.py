@@ -19,7 +19,7 @@ from src.locations.newark.regional import fetch_newark_market_data, get_newark_r
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -150,12 +150,14 @@ def run_newark_pipeline(live_pump_price: float = None, use_llm_api: bool = False
     hist_newark_base = splits['test_df']['newark_retail_gasoline'] if 'newark_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
     hist_newark_pred = preds_hybrid + dynamic_margin
 
+    newark_version = resolve_model_tag("Newark_DE", model_type=model_type)
+
     backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_newark_base,
         predicted_prices=hist_newark_pred,
         region="Newark_DE",
-        model_version=f"v1.4-Finlight-Newark-{model_type.capitalize()}"
+        model_version=newark_version
     )
 
     # Log active out-of-time 5-day horizon forecast
@@ -165,7 +167,7 @@ def run_newark_pipeline(live_pump_price: float = None, use_llm_api: bool = False
         'current_price': live_pump_price,
         'predicted_5d_price': newark_baseline_forecast
     }])
-    n_logged = log_predictions(today_df, region="Newark_DE", model_version=f"v1.4-Finlight-Newark-{model_type.capitalize()}")
+    n_logged = log_predictions(today_df, region="Newark_DE", model_version=newark_version)
     print(f"  -> Logged predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

@@ -36,7 +36,7 @@ def save_historical_benchmark(key: str, data: Any, filename: Optional[str] = Non
     
     try:
         with open(target_file, "w", encoding="utf-8") as f:
-            json.dump(payload, f, indent=2)
+            json.dump(payload, f, indent=2, default=str)
         logger.info(f"Persisted historical benchmark '{key}' to {target_file}")
     except Exception as e:
         logger.error(f"Failed to persist historical benchmark '{key}': {e}")

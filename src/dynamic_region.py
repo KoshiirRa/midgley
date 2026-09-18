@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 from src.locations.national.main import run_national_pipeline
 from src.live_fuel_feed import fetch_live_metro_retail_price
 from src.regional_metadata import get_regional_metadata
-from src.prediction_logger import log_predictions, compute_regional_residual_std, compute_rolling_scoreboard_metrics
+from src.prediction_logger import log_predictions, compute_regional_residual_std, compute_rolling_scoreboard_metrics, resolve_model_tag
 from src.models import (
     compute_rolling_volatility_index,
     compute_volatility_gate_weight,
@@ -162,7 +162,7 @@ class DynamicRegionRunner:
             log_predictions(
                 log_df,
                 region=self.logger_region_key,
-                model_version=f"v1.4-{self.region_id.title()}-Ridge",
+                model_version=resolve_model_tag(self.region_id, model_type="Ridge"),
                 run_type="DYNAMIC_REGIONAL_BATCH"
             )
         except Exception as e:

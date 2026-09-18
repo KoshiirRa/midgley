@@ -92,8 +92,11 @@ class LookupCache:
         turso_token = os.environ.get("TURSO_AUTH_TOKEN")
         cf_url = os.environ.get("CLOUDFLARE_CACHE_URL")
         cf_token = os.environ.get("CLOUDFLARE_AUTH_TOKEN")
-        if turso_url and turso_url.startswith("turso://"):
-            turso_url = "https://" + turso_url[8:]
+        if turso_url:
+            if turso_url.startswith("turso://"):
+                turso_url = "https://" + turso_url[8:]
+            elif turso_url.startswith("libsql://"):
+                turso_url = "https://" + turso_url[9:]
         if cf_url and cf_url.startswith("http://"):
             cf_url = "https://" + cf_url[7:]
         return turso_url, turso_token, cf_url, cf_token
@@ -559,6 +562,84 @@ class LookupCache:
         for k in expired_keys:
             del self._memory_cache[k]
 
+    def test_edge_connectivity(self, tier: str = "all") -> Dict[str, Any]:
+        """
+        Actively probes edge database connectivity with a live roundtrip read/write test (Issue #301).
+        tier: 'all', 'turso', or 'cloudflare'.
+        """
+        results = {
+            "timestamp": time.time(),
+            "local_sqlite": {
+                "configured": self._use_sqlite,
+                "status": "healthy" if self._use_sqlite else "degraded",
+                "db_path": self.db_path,
+            },
+            "turso": {
+                "configured": False,
+                "status": "unconfigured",
+                "url": None,
+                "latency_ms": None,
+                "error": None,
+            },
+            "cloudflare": {
+                "configured": False,
+                "status": "unconfigured",
+                "url": None,
+                "latency_ms": None,
+                "error": None,
+            }
+        }
+
+        turso_url, turso_token, cf_url, cf_token = self._get_edge_credentials()
+        probe_key = f"_probe_ping_{int(time.time() * 1000)}"
+        probe_val = json.dumps({"probe": True, "ts": time.time()})
+
+        # Test Turso Edge SQLite
+        if tier in ("all", "turso"):
+            if turso_url and turso_token:
+                results["turso"]["configured"] = True
+                results["turso"]["url"] = turso_url
+                t0 = time.time()
+                try:
+                    self._turso_set(probe_key, probe_val, time.time(), time.time() + 60, turso_url, turso_token)
+                    get_res = self._turso_get(probe_key, turso_url, turso_token)
+                    latency = round((time.time() - t0) * 1000, 2)
+                    results["turso"]["latency_ms"] = latency
+                    if get_res and get_res[0] == probe_val:
+                        results["turso"]["status"] = "healthy"
+                    else:
+                        results["turso"]["status"] = "read_mismatch"
+                        results["turso"]["error"] = "Probe value could not be read back from Turso Edge"
+                except Exception as e:
+                    results["turso"]["status"] = "error"
+                    results["turso"]["error"] = str(e)
+            else:
+                results["turso"]["status"] = "unconfigured"
+
+        # Test Cloudflare D1
+        if tier in ("all", "cloudflare"):
+            if cf_url:
+                results["cloudflare"]["configured"] = True
+                results["cloudflare"]["url"] = cf_url
+                t0 = time.time()
+                try:
+                    self._cloudflare_set(probe_key, probe_val, time.time(), time.time() + 60, cf_url, cf_token)
+                    get_res = self._cloudflare_get(probe_key, cf_url, cf_token)
+                    latency = round((time.time() - t0) * 1000, 2)
+                    results["cloudflare"]["latency_ms"] = latency
+                    if get_res and get_res[0] == probe_val:
+                        results["cloudflare"]["status"] = "healthy"
+                    else:
+                        results["cloudflare"]["status"] = "read_mismatch"
+                        results["cloudflare"]["error"] = "Probe value could not be read back from Cloudflare D1"
+                except Exception as e:
+                    results["cloudflare"]["status"] = "error"
+                    results["cloudflare"]["error"] = str(e)
+            else:
+                results["cloudflare"]["status"] = "unconfigured"
+
+        return results
+
     def get_stats(self) -> dict:
         """Returns statistics on cache activity and tier configuration."""
         turso_url, turso_token, cf_url, cf_token = self._get_edge_credentials()
@@ -582,7 +663,28 @@ def clear_lookup_cache():
 
 
 if __name__ == "__main__":
-    if "--stats" in sys.argv:
+    if "--ping" in sys.argv or "--test-all" in sys.argv:
+        print("==================================================")
+        print("   MIDGLEY MULTI-TIER EDGE CONNECTIVITY PROBE     ")
+        print("==================================================")
+        probes = global_cache.test_edge_connectivity("all")
+        print(json.dumps(probes, indent=2))
+        sys.exit(0)
+    elif "--test-turso" in sys.argv:
+        print("==================================================")
+        print("   MIDGLEY TURSO EDGE SQLITE CONNECTIVITY PROBE   ")
+        print("==================================================")
+        probes = global_cache.test_edge_connectivity("turso")
+        print(json.dumps(probes["turso"], indent=2))
+        sys.exit(0)
+    elif "--test-cloudflare" in sys.argv:
+        print("==================================================")
+        print("   MIDGLEY CLOUDFLARE D1 CONNECTIVITY PROBE       ")
+        print("==================================================")
+        probes = global_cache.test_edge_connectivity("cloudflare")
+        print(json.dumps(probes["cloudflare"], indent=2))
+        sys.exit(0)
+    elif "--stats" in sys.argv:
         stats = global_cache.get_stats()
         print("==================================================")
         print("   MIDGLEY MULTI-TIER LOOKUP CACHE GATEWAY STATS  ")

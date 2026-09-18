@@ -166,3 +166,39 @@ def test_format_mlops_observability_markdown_section(monkeypatch):
     assert "Extended MLOps Observability & Feature Attribution" in section_md
     assert "LLM Augmentation Win Rate" in section_md
     assert "95% Confidence Interval Coverage" in section_md
+
+
+def test_resolve_model_tag():
+    from src.prediction_logger import resolve_model_tag
+    from src.version import get_model_version
+    
+    expected_base = get_model_version().replace(" ", "-")
+    tag_tulsa = resolve_model_tag("Tulsa_OK", "Ridge")
+    assert tag_tulsa == f"{expected_base}-TulsaOK-Ridge"
+
+    tag_nat = resolve_model_tag("National", "ridge")
+    assert tag_nat == f"{expected_base}-National-Ridge"
+
+    tag_custom = resolve_model_tag("Tulsa_OK", "Ridge", custom_version="custom-v1.0")
+    assert tag_custom == "custom-v1.0"
+
+
+def test_log_predictions_dynamic_model_version():
+    from src.version import get_model_version
+
+    pred_df = pd.DataFrame([{
+        "date": "2026-09-17",
+        "current_price": 3.20,
+        "predicted_5d_price": 3.25
+    }])
+    
+    n_logged = log_predictions(pred_df, region="Cincinnati_OH")
+    assert n_logged == 1
+
+    csv_path = pred_logger.HISTORY_CSV_PATH
+    df = pd.read_csv(csv_path)
+    assert len(df) == 1
+    
+    expected_tag = f"{get_model_version().replace(' ', '-')}-CincinnatiOH-Ridge"
+    assert df.iloc[0]["model_version"] == expected_tag
+

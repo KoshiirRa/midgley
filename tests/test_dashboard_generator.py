@@ -771,5 +771,22 @@ def test_data_sources_page_generation():
     assert "function searchFeeds()" in sources_content
 
 
+def test_model_iteration_table_lineage():
+    """Verify that the Model Iteration Comparison Table includes complete lineage
+    from v1.0 through v1.6 and accurately describes each architecture.
+    """
+    generate_public_dashboard()
 
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index_content = f.read()
 
+    assert "v1.0 Baseline Quant" in index_content
+    assert "v1.1 Gemini LLM Hybrid" in index_content
+    assert "v1.2 NOAA-LLM Regional" in index_content
+    assert "v1.3 Physics-LLM" in index_content
+    assert "v1.4 Finlight-LLM" in index_content
+    assert "v1.5 Multi-Tier & Sensor MLOps" in index_content
+    assert "(Current)" in index_content
+    assert "CoSPOT Spectral & Wavelet Prompting" in index_content
+    assert "Real-Time Finlight.me Stream, Firecrawl Extraction & Anomaly Gating" in index_content
+    assert "3-Tier Edge Cache, SWR Revalidation, USGS Water/Seismic & Multi-Feed AQI Flaring" in index_content

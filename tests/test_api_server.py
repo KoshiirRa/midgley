@@ -300,6 +300,24 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(res_del.status_code, 200)
         self.assertEqual(res_del.json()["status"], "success")
 
+    def test_get_system_cache_status(self):
+        """Verifies GET /api/v1/system/cache-status returns cache stats and optional edge probes."""
+        res = self.client.get("/api/v1/system/cache-status")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertIn("cache_stats", data)
+        self.assertIsNone(data["probes"])
+
+        # With active probe flag
+        res_probe = self.client.get("/api/v1/system/cache-status?probe=true")
+        self.assertEqual(res_probe.status_code, 200)
+        probe_data = res_probe.json()
+        self.assertIsNotNone(probe_data["probes"])
+        self.assertIn("local_sqlite", probe_data["probes"])
+        self.assertIn("turso", probe_data["probes"])
+        self.assertIn("cloudflare", probe_data["probes"])
+
 
 if __name__ == "__main__":
     unittest.main()
