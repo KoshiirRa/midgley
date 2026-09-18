@@ -1,8 +1,8 @@
-# Release Notes - v0.6.5 (Draft)
+# Release Notes - v0.6.5
 
 **Release Date:** September 18, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`) & Cloudflare Edge  
-**Git Branch:** `dev`  
+**Git Branch:** `main`  
 
 ---
 

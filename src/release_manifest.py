@@ -4,10 +4,17 @@ Generates machine-readable release manifests and migration contracts (Issue #299
 """
 
 import os
+import sys
 import json
 import logging
 from datetime import datetime
 from typing import Dict, Any, List, Optional
+
+# Ensure repository root is in sys.path
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 from src.version import get_version, get_model_engine_version
 
 logger = logging.getLogger(__name__)
