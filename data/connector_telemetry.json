@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-18 00:00:34",
-  "total_events": 689,
+  "last_updated": "2026-09-18 04:04:53",
+  "total_events": 691,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -6892,6 +6892,26 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "HTTP 404: {\"detail\":\"Not Found\"}"
+    },
+    {
+      "timestamp": "2026-09-18 04:04:52",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "HTTP_ERROR",
+      "latency_ms": 1684.86,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 500: Internal Server Error"
+    },
+    {
+      "timestamp": "2026-09-18 04:04:53",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "HTTP_ERROR",
+      "latency_ms": 985.65,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 500: Internal Server Error"
     }
   ]
 }

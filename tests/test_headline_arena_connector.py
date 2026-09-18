@@ -99,6 +99,59 @@ class TestHeadlineArenaConnector(unittest.TestCase):
         self.assertEqual(connector.get_dead_zone("RB"), 0.0030)
         self.assertEqual(connector.get_dead_zone("CL"), 0.0030)
 
+    def test_synthesize_forecasting_rationale_rb(self):
+        from src.headline_arena_connector import synthesize_forecasting_rationale
+        rationale = synthesize_forecasting_rationale(
+            asset="RB",
+            open_price=2.4500,
+            p50=2.5200,
+            direction="bullish",
+            confidence=0.745,
+            probabilities={"bullish": 0.745, "neutral": 0.185, "bearish": 0.070},
+            dead_zone=0.0030,
+            t_upper=2.45735,
+            t_lower=2.44265,
+            p10=2.4100,
+            p90=2.6300,
+            sigma=0.0858,
+            qualitative_catalysts={"overall_price_pressure": 0.35, "supply_disruption": 0.40, "geopolitical_risk": 0.15, "opec_action": 0.20},
+            technical_indicators={"crack_spread": 26.50, "wti_price": 76.40},
+            physical_feeds={"ovx_volatility": 32.4, "rig_count": 480}
+        )
+        self.assertIn("[Midgley Multi-Agent Forecast | RBOB Wholesale Gasoline (RB=F)]", rationale)
+        self.assertIn("Executive Direction: BULLISH (Confidence: 74.5%", rationale)
+        self.assertIn("Multi-Agent Ensemble Distribution: Open $/gal2.4500, P50 Target $/gal2.5200", rationale)
+        self.assertIn("Dead-Zone CDF Decomposition: P(Bullish)=74.5%", rationale)
+        self.assertIn("Implied 3:2:1 refinery crack spread margin is positioned at $26.50/bbl", rationale)
+        self.assertIn("Price Pressure: +0.35", rationale)
+        self.assertIn("Cboe OVX crude volatility at 32.4 pts", rationale)
+        self.assertIn("Settlement Thesis:", rationale)
+
+    def test_synthesize_forecasting_rationale_cl(self):
+        from src.headline_arena_connector import synthesize_forecasting_rationale
+        rationale = synthesize_forecasting_rationale(
+            asset="CL",
+            open_price=78.50,
+            p50=77.20,
+            direction="bearish",
+            confidence=0.682,
+            probabilities={"bullish": 0.120, "neutral": 0.198, "bearish": 0.682},
+            dead_zone=0.0030,
+            t_upper=78.7355,
+            t_lower=78.2645,
+            p10=74.80,
+            p90=79.60,
+            sigma=1.8727,
+            qualitative_catalysts={"overall_price_pressure": -0.25, "supply_disruption": 0.10, "geopolitical_risk": 0.05},
+            technical_indicators={"rbob_price": 2.4500},
+            physical_feeds={"ovx_volatility": 28.5, "rig_count": 482}
+        )
+        self.assertIn("[Midgley Multi-Agent Forecast | Cushing WTI Crude Oil (CL=F)]", rationale)
+        self.assertIn("Executive Direction: BEARISH (Confidence: 68.2%", rationale)
+        self.assertIn("Multi-Agent Ensemble Distribution: Open $/bbl78.5000, P50 Target $/bbl77.2000", rationale)
+        self.assertIn("Downstream product demand from wholesale RBOB", rationale)
+        self.assertIn("Settlement Thesis:", rationale)
+
     def test_format_direction_payload_dev_tagging(self):
         connector = HeadlineArenaConnector(environment="dev")
         payload = connector.format_direction_payload(
@@ -128,7 +181,7 @@ class TestHeadlineArenaConnector(unittest.TestCase):
         self.assertEqual(payload["asset"], "RB")
         self.assertNotIn("[DEV-TEST]", payload["reasoning"])
         self.assertNotIn("[DEVELOPMENT]", payload["reasoning"])
-        self.assertIn("Midgley multi-agent", payload["reasoning"])
+        self.assertIn("Midgley Multi-Agent", payload["reasoning"])
 
     def test_format_macro_numeric_payload(self):
         connector = HeadlineArenaConnector(environment="prod")
@@ -222,6 +275,35 @@ class TestHeadlineArenaConnector(unittest.TestCase):
                 self.assertEqual(res["mode"], "LIVE_SUBMISSION")
                 self.assertEqual(res["challenge_id"], "chal_cl_456")
                 self.assertTrue(res["counts_for_score"])
+
+    def test_submit_forecast_duplicate_handled_gracefully(self):
+        with patch.dict(os.environ, {"TESTING": "0", "MIDGLEY_ENV": "prod"}, clear=True):
+            connector = HeadlineArenaConnector(
+                client_id="test_id",
+                client_secret="test_secret",
+                environment="prod"
+            )
+            connector.get_bearer_token = MagicMock(return_value="mock_bearer_token")
+            connector.ensure_scope_subscription = MagicMock(return_value=True)
+            connector.get_active_challenge_for_asset = MagicMock(
+                return_value={"challenge": {"id": "chal_cl_456", "asset": "CL"}}
+            )
+
+            # Mock HTTP 500 error from Headline Arena on duplicate submission
+            mock_err = urllib.error.HTTPError(
+                url="https://headlinearena.com/api/v1/eval/challenges/chal_cl_456/predict",
+                code=500,
+                msg="Internal Server Error",
+                hdrs={},
+                fp=None
+            )
+            with patch("urllib.request.urlopen", side_effect=mock_err):
+                payload = {"asset": "CL", "direction": "bullish", "confidence": 0.85, "reasoning": "Model evaluation"}
+                res = connector.submit_forecast(payload)
+                self.assertEqual(res["status"], "ALREADY_SUBMITTED")
+                self.assertEqual(res["mode"], "SKIPPED_ALREADY_PREDICTED")
+                self.assertEqual(res["challenge_id"], "chal_cl_456")
+                self.assertIn("already predicted", res["message"])
 
     def test_submit_forecast_no_active_challenge(self):
         with patch.dict(os.environ, {"TESTING": "0", "MIDGLEY_ENV": "dev"}, clear=True):
