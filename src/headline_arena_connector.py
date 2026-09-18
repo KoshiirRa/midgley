@@ -64,7 +64,7 @@ DEFAULT_SETTLEMENT_RULES: Dict[str, Dict[str, Any]] = {
         "unit": "$/gal"
     },
     "CL": {
-        "dead_zone": 0.0020,  # ±0.20% of open for WTI Crude Oil
+        "dead_zone": 0.0030,  # ±0.30% of open for WTI Crude Oil (Headline Arena official)
         "decimal_places": 2,
         "name": "Crude Oil Futures (CL=F)",
         "unit": "$/bbl"
@@ -191,6 +191,7 @@ class HeadlineArenaConnector:
         self.environment = self._resolve_environment(environment)
         self._token_cache: Optional[Dict[str, Any]] = None
         self._settlement_rules_cache: Optional[Dict[str, Any]] = None
+        self._subscribed_scopes: set = set()
 
     @staticmethod
     def _resolve_environment(environment: Optional[str] = None) -> str:
@@ -241,6 +242,7 @@ class HeadlineArenaConnector:
 
         token_url = f"{self.base_url}/agent/auth/token"
         payload = {
+            "grant_type": "client_credentials",
             "agent_id": self.client_id,
             "client_secret": self.client_secret
         }
@@ -299,9 +301,107 @@ class HeadlineArenaConnector:
 
     def get_dead_zone(self, asset: str) -> float:
         """Returns the dead-zone fraction for a given asset (e.g., 0.0030 for RB, 0.0020 for CL)."""
-        rules = self.get_settlement_rules()
-        asset_rule = rules.get(asset.upper(), {})
-        return float(asset_rule.get("dead_zone", DEFAULT_SETTLEMENT_RULES.get(asset.upper(), {}).get("dead_zone", 0.0030)))
+        rules_data = self.get_settlement_rules()
+        rules_dict = rules_data.get("rules", rules_data)
+        asset_rule = rules_dict.get(asset.upper(), {})
+        if "neutral_pct" in asset_rule:
+            return float(asset_rule["neutral_pct"]) / 100.0
+        if "dead_zone" in asset_rule:
+            return float(asset_rule["dead_zone"])
+        return float(DEFAULT_SETTLEMENT_RULES.get(asset.upper(), {}).get("dead_zone", 0.0030))
+
+    def ensure_scope_subscription(self, scope_key: str) -> bool:
+        """
+        Subscribes agent to a prediction scope (POST /api/v1/agent/prediction-scope/{scope_key}).
+        Maintains an in-memory set to avoid duplicate subscription requests within a session.
+        """
+        scope_clean = scope_key.upper().strip()
+        if scope_clean in self._subscribed_scopes:
+            return True
+
+        if os.environ.get("TESTING") == "1":
+            self._subscribed_scopes.add(scope_clean)
+            return True
+
+        token = self.get_bearer_token()
+        if not token:
+            return False
+
+        sub_url = f"{self.base_url}/agent/prediction-scope/{scope_clean}"
+        req = urllib.request.Request(
+            sub_url,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "User-Agent": "Midgley-Forecaster/1.0"
+            },
+            method="POST"
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                self._subscribed_scopes.add(scope_clean)
+                return True
+        except urllib.error.HTTPError as e:
+            if e.code in [400, 409]:
+                self._subscribed_scopes.add(scope_clean)
+                return True
+            logger.warning(f"Failed to subscribe to scope {scope_clean}: HTTP {e.code}")
+            return False
+        except Exception as e:
+            logger.warning(f"Error subscribing to scope {scope_clean}: {e}")
+            return False
+
+    def get_active_challenges(self) -> List[Dict[str, Any]]:
+        """
+        Fetches active challenges from GET /api/v1/eval/challenges/active.
+        """
+        if os.environ.get("TESTING") == "1":
+            return [
+                {
+                    "challenge": {
+                        "id": "mock_cl_challenge_123",
+                        "asset": "CL",
+                        "name": "Crude Oil",
+                        "deadline": "2026-09-18T16:00:00Z"
+                    }
+                }
+            ]
+
+        token = self.get_bearer_token()
+        if not token:
+            return []
+
+        active_url = f"{self.base_url}/eval/challenges/active"
+        req = urllib.request.Request(
+            active_url,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "User-Agent": "Midgley-Forecaster/1.0"
+            },
+            method="GET"
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                if isinstance(data, dict):
+                    return data.get("challenges", [])
+                elif isinstance(data, list):
+                    return data
+                return []
+        except Exception as e:
+            logger.warning(f"Failed to fetch active challenges from Headline Arena: {e}")
+            return []
+
+    def get_active_challenge_for_asset(self, asset: str) -> Optional[Dict[str, Any]]:
+        """
+        Finds the active challenge matching the target asset (e.g. 'CL').
+        """
+        challenges = self.get_active_challenges()
+        asset_upper = asset.upper().strip()
+        for ch in challenges:
+            c_data = ch.get("challenge", ch)
+            if c_data.get("asset", "").upper() == asset_upper:
+                return ch
+        return None
 
     def register_agent(
         self,
@@ -316,7 +416,7 @@ class HeadlineArenaConnector:
         Intended for one-time interactive setup in local/dev environments.
         """
         if scopes is None:
-            scopes = ["RB", "CL"]
+            scopes = ["prediction:submit", "challenge:read"]
 
         if os.environ.get("TESTING") == "1":
             return {
@@ -330,10 +430,13 @@ class HeadlineArenaConnector:
         reg_url = f"{self.base_url}/agent/registry/register"
         payload = {
             "name": name,
-            "description": description,
+            "type": "forecaster",
+            "bio": description,
+            "languages": ["en"],
             "model_provider": model_provider,
             "model_name": model_name,
-            "scopes": scopes
+            "auth_method": "client_credentials",
+            "requested_scopes": scopes
         }
         data_bytes = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(
@@ -547,16 +650,50 @@ class HeadlineArenaConnector:
                 "message": "Failed to authenticate with Headline Arena."
             }
 
-        submit_url = f"{self.base_url}/predictions/submit"
+        # 5. Ensure scope subscription
+        self.ensure_scope_subscription(asset)
+
+        # 6. Discover active challenge
+        challenge_record = self.get_active_challenge_for_asset(asset)
+        if not challenge_record:
+            latency = (time.time() - start_time) * 1000.0
+            msg = f"No active challenge found for {asset} on Headline Arena."
+            logger.info(f"{msg} Skipping submission.")
+            log_connector_event(
+                connector_name="HeadlineArena",
+                target=asset,
+                status="SKIPPED_NO_ACTIVE_CHALLENGE",
+                latency_ms=latency,
+                details=msg
+            )
+            return {
+                "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+                "asset": asset,
+                "message": msg
+            }
+
+        challenge_data = challenge_record.get("challenge", challenge_record)
+        challenge_id = challenge_data.get("id")
+        if not challenge_id:
+            latency = (time.time() - start_time) * 1000.0
+            msg = f"Challenge record for {asset} missing challenge_id."
+            logger.warning(msg)
+            return {
+                "status": "ERROR",
+                "asset": asset,
+                "message": msg
+            }
+
+        # 7. Submit prediction to /eval/challenges/{challenge_id}/predict
+        predict_url = f"{self.base_url}/eval/challenges/{challenge_id}/predict"
         post_body = {
-            "asset": payload.get("asset"),
             "direction": payload.get("direction"),
-            "confidence": payload.get("confidence"),
-            "reasoning": payload.get("reasoning")
+            "confidence": float(payload.get("confidence", 0.5)),
+            "reasoning": payload.get("reasoning", "")
         }
         data_bytes = json.dumps(post_body).encode("utf-8")
         req = urllib.request.Request(
-            submit_url,
+            predict_url,
             data=data_bytes,
             headers={
                 "Authorization": f"Bearer {bearer_token}",
@@ -570,23 +707,26 @@ class HeadlineArenaConnector:
             with urllib.request.urlopen(req, timeout=12) as resp:
                 resp_data = json.loads(resp.read().decode("utf-8"))
                 latency = (time.time() - start_time) * 1000.0
+                counts_for_score = resp_data.get("counts_for_score", True)
                 log_connector_event(
                     connector_name="HeadlineArena",
                     target=asset,
                     status="SUCCESS",
                     latency_ms=latency,
-                    details=f"Submitted {asset}: direction={payload.get('direction')}, confidence={payload.get('confidence')}"
+                    details=f"Submitted {asset} (challenge {challenge_id}): direction={payload.get('direction')}, confidence={payload.get('confidence')}, scored={counts_for_score}"
                 )
                 return {
                     "status": "SUCCESS",
                     "mode": "LIVE_SUBMISSION",
                     "asset": asset,
+                    "challenge_id": challenge_id,
+                    "counts_for_score": counts_for_score,
                     "response": resp_data
                 }
         except urllib.error.HTTPError as e:
             latency = (time.time() - start_time) * 1000.0
             err_msg = e.read().decode("utf-8") if e.fp else str(e)
-            logger.error(f"Headline Arena HTTP error {e.code} for {asset}: {err_msg}")
+            logger.error(f"Headline Arena HTTP error {e.code} for {asset} (challenge {challenge_id}): {err_msg}")
             log_connector_event(
                 connector_name="HeadlineArena",
                 target=asset,
@@ -594,10 +734,10 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=f"HTTP {e.code}: {err_msg[:100]}"
             )
-            return {"status": "HTTP_ERROR", "code": e.code, "error": err_msg}
+            return {"status": "HTTP_ERROR", "code": e.code, "error": err_msg, "asset": asset, "challenge_id": challenge_id}
         except Exception as e:
             latency = (time.time() - start_time) * 1000.0
-            logger.error(f"Headline Arena submission network error for {asset}: {e}")
+            logger.error(f"Headline Arena submission network error for {asset} (challenge {challenge_id}): {e}")
             log_connector_event(
                 connector_name="HeadlineArena",
                 target=asset,
@@ -605,7 +745,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=str(e)[:100]
             )
-            return {"status": "NETWORK_ERROR", "error": str(e)}
+            return {"status": "NETWORK_ERROR", "error": str(e), "asset": asset, "challenge_id": challenge_id}
 
 
 def submit_midgley_energy_forecasts(
