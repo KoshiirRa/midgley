@@ -130,6 +130,26 @@ def format_intraday_discord_payload(event_record: Dict[str, Any], environment: O
         import hashlib
         event_hash = hashlib.sha256(headline.encode("utf-8", errors="ignore")).hexdigest()[:16]
 
+    # Flag URL for Discord Webhook Action Button & Embed Fallback
+    import urllib.parse
+    flag_params = urllib.parse.urlencode({
+        "id": event_hash,
+        "headline": headline,
+        "source": source,
+        "p": f"{price_pressure:+.2f}",
+        "s": f"{supply_disruption:.2f}",
+        "g": f"{geopolitical_risk:.2f}",
+        "url": url
+    })
+    flag_url = f"https://midgley-intraday-monitor.m-cubed-3.workers.dev/flag?{flag_params}"
+    tracking_url = "https://github.com/KoshiirRa/midgley/issues/258"
+
+    fields.append({
+        "name": "🚩 Feedback & Review",
+        "value": f"[🚩 Flag False Positive]({flag_url}) • [📋 Tracking Thread #258]({tracking_url})",
+        "inline": False
+    })
+
     embed = {
         "title": f"🚨 {env_badge} Intraday Gas Price Forecast Revision",
         "description": f"**Trigger Catalyst:**\n> *\"{headline}\"*",
@@ -142,22 +162,22 @@ def format_intraday_discord_payload(event_record: Dict[str, Any], environment: O
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
-    # Action Row Components: Interactive Flag Button & Issue #258 Tracking Link Button
+    # Action Row Components: Link Buttons (100% compatible across all Discord webhooks)
     components = [
         {
             "type": 1,  # Action Row
             "components": [
                 {
                     "type": 2,  # Button
-                    "style": 4,  # Danger / Red style
+                    "style": 5,  # Link button
                     "label": "🚩 Flag False Positive",
-                    "custom_id": f"flag_fp:{event_hash}"
+                    "url": flag_url
                 },
                 {
                     "type": 2,  # Button
                     "style": 5,  # Link button
                     "label": "📋 Tracking Thread #258",
-                    "url": "https://github.com/KoshiirRa/midgley/issues/258"
+                    "url": tracking_url
                 }
             ]
         }

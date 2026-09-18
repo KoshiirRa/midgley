@@ -39,9 +39,9 @@ class TestDiscordInteractionsAndReviewer(unittest.TestCase):
 
         flag_btn = buttons[0]
         self.assertEqual(flag_btn["type"], 2)
-        self.assertEqual(flag_btn["style"], 4)
+        self.assertEqual(flag_btn["style"], 5)
         self.assertIn("Flag False Positive", flag_btn["label"])
-        self.assertTrue(flag_btn["custom_id"].startswith("flag_fp:"))
+        self.assertIn("/flag?", flag_btn["url"])
 
         link_btn = buttons[1]
         self.assertEqual(link_btn["type"], 2)

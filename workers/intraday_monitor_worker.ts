@@ -1031,6 +1031,385 @@ async function handleDiscordInteraction(request: Request, env: Env, ctx: any): P
   });
 }
 
+async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promise<Response> {
+  const url = new URL(request.url);
+
+  if (request.method === "GET") {
+    const id = url.searchParams.get("id") || "";
+    const headline = url.searchParams.get("headline") || "Intraday Anomaly Trigger";
+    const source = url.searchParams.get("source") || "Intraday_Monitor";
+    const p = url.searchParams.get("p") || "+0.00";
+    const s = url.searchParams.get("s") || "0.00";
+    const g = url.searchParams.get("g") || "0.00";
+    const sourceUrl = url.searchParams.get("url") || "";
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flag False Positive Alert • Midgley Forecasting</title>
+  <style>
+    :root {
+      --bg-dark: #12141a;
+      --card-bg: #1c202a;
+      --card-border: #2e3446;
+      --text-main: #f0f3f8;
+      --text-muted: #8b94a8;
+      --accent-red: #e74c3c;
+      --accent-blue: #3498db;
+      --accent-green: #2ecc71;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--text-main);
+    }
+    .headline-box {
+      background: #141720;
+      border-left: 4px solid var(--accent-red);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-style: italic;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+      background: #141720;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    .meta-item {
+      text-align: center;
+    }
+    .meta-label {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+    .meta-value {
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    select, textarea {
+      width: 100%;
+      background: #141720;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      box-sizing: border-box;
+      outline: none;
+    }
+    select:focus, textarea:focus {
+      border-color: var(--accent-blue);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .btn-submit {
+      width: 100%;
+      background: var(--accent-red);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover {
+      background: #c0392b;
+    }
+    .footer-note {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .footer-note a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-card">
+    <div class="header">
+      <span style="font-size: 1.5rem;">🚩</span>
+      <h2>Flag False Positive Alert (#258)</h2>
+    </div>
+
+    <div class="headline-box">
+      "${headline}"
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">Pressure (ΔP)</div>
+        <div class="meta-value" style="color: ${p.startsWith('+') ? '#e74c3c' : '#2ecc71'};">${p}/gal</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Supply Shock</div>
+        <div class="meta-value">${s}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Source</div>
+        <div class="meta-value">${source}</div>
+      </div>
+    </div>
+
+    <form method="POST" action="/flag">
+      <input type="hidden" name="id" value="${id}">
+      <input type="hidden" name="headline" value="${encodeURIComponent(headline)}">
+      <input type="hidden" name="source" value="${source}">
+      <input type="hidden" name="p" value="${p}">
+      <input type="hidden" name="s" value="${s}">
+      <input type="hidden" name="g" value="${g}">
+      <input type="hidden" name="url" value="${encodeURIComponent(sourceUrl)}">
+
+      <div class="form-group">
+        <label for="category">False Positive Category</label>
+        <select name="category" id="category" required>
+          <option value="Non-Energy Macro Tariff">Non-Energy Macro Tariff / Consumer Goods</option>
+          <option value="Agricultural / Edible Oil">Agricultural / Edible Oil (Canola, Palm, Olive)</option>
+          <option value="Macro Diplomatic Rhetoric">Macro Diplomatic / Political Rhetoric (No Crude Impact)</option>
+          <option value="Non-Refinery Infrastructure Outage">Non-Refinery Infrastructure Outage (IT / Aviation)</option>
+          <option value="Other False Positive">Other (Explain below)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Reviewer Context / Notes (Optional)</label>
+        <textarea name="notes" id="notes" placeholder="Explain why this headline is unrelated to crude oil or RBOB price elasticity..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">🚀 Create Tracked GitHub Issue</button>
+    </form>
+
+    <div class="footer-note">
+      Linked to <a href="https://github.com/KoshiirRa/midgley/issues/258" target="_blank">Parent Tracking Thread #258</a> & Project Midgley Roadmap.
+    </div>
+  </div>
+</body>
+</html>`;
+    return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  }
+
+  if (request.method === "POST") {
+    const formData = await request.formData();
+    const eventHash = formData.get("id")?.toString() || "";
+    const rawHeadline = formData.get("headline")?.toString() || "Intraday Anomaly";
+    let headline = rawHeadline;
+    try {
+      headline = decodeURIComponent(rawHeadline);
+    } catch {}
+
+    const source = formData.get("source")?.toString() || "Intraday_Monitor";
+    const pricePressure = formData.get("p")?.toString() || "N/A";
+    const supplyDisruption = formData.get("s")?.toString() || "N/A";
+    const geopoliticalRisk = formData.get("g")?.toString() || "N/A";
+    const rawUrl = formData.get("url")?.toString() || "";
+    let originalUrl = rawUrl;
+    try {
+      originalUrl = decodeURIComponent(rawUrl);
+    } catch {}
+
+    const category = formData.get("category")?.toString() || "Uncategorized False Positive";
+    const notes = formData.get("notes")?.toString() || "";
+
+    const owner = env.REPO_OWNER || "KoshiirRa";
+    const repo = env.REPO_NAME || "midgley";
+    const token = env.GH_PAT;
+
+    let issueNumber: number | null = null;
+    let issueUrl = "https://github.com/KoshiirRa/midgley/issues/258";
+
+    if (token) {
+      const issueTitle = `[False Positive] ${headline.slice(0, 80)}`;
+      const issueBody = `## False Positive Anomaly Report (#258)\n\n` +
+        `**Parent Tracking Thread:** #258\n` +
+        `**Anomaly Fingerprint ID:** \`${eventHash}\`\n\n` +
+        `### 🚨 Trigger Catalyst\n` +
+        `> *\"${headline}\"*\n\n` +
+        `- **Ingestion Source:** \`${source}\`\n` +
+        `- **Flagged Category:** **${category}**\n` +
+        `- **Reporter Notes:** ${notes || "_No additional context provided._"}\n` +
+        (originalUrl ? `- **Source URL:** ${originalUrl}\n` : "") +
+        `\n### 📊 Extracted Catalyst Telemetry\n` +
+        `- **Price Pressure (ΔP):** \`${pricePressure}\`\n` +
+        `- **Supply Disruption (S):** \`${supplyDisruption}\`\n` +
+        `- **Geopolitical Risk (G):** \`${geopoliticalRisk}\`\n\n` +
+        `### 🤖 Automated Agent Review\n` +
+        `The automated false-positive agent reviewer will analyze the keyword gate rules in \`src/intraday_event_monitor.py\` and post diagnostic root-cause analysis and proposed exclusion rules.`;
+
+      try {
+        const createIssueRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "User-Agent": "Midgley-Discord-Worker",
+            "Accept": "application/vnd.github.v3+json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            title: issueTitle,
+            body: issueBody,
+            labels: ["data-ingestion", "false-positive", "intraday-monitor", "token-efficiency"]
+          })
+        });
+
+        if (createIssueRes.ok) {
+          const issueData: any = await createIssueRes.json();
+          issueNumber = issueData.number;
+          issueUrl = issueData.html_url;
+          const issueNodeId = issueData.node_id;
+
+          const projectId = env.PROJECT_V2_ID || DEFAULT_PROJECT_V2_ID;
+          if (issueNodeId && projectId) {
+            try {
+              const graphqlQuery = {
+                query: `mutation AddProjectCard($projectId: ID!, $contentId: ID!) {
+                  addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                    item {
+                      id
+                    }
+                  }
+                }`,
+                variables: {
+                  projectId: projectId,
+                  contentId: issueNodeId
+                }
+              };
+
+              await fetch("https://api.github.com/graphql", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${token}`,
+                  "User-Agent": "Midgley-Discord-Worker",
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(graphqlQuery)
+              });
+            } catch (gqlErr) {
+              console.warn("[Project V2 Assignment Warning]", gqlErr);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("[Issue Creation Error]", err);
+      }
+    }
+
+    const successHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issue Created • Midgley Forecasting</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #12141a;
+      color: #f0f3f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 16px;
+    }
+    .success-card {
+      background: #1c202a;
+      border: 1px solid #2e3446;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 480px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    .badge {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+    h2 { margin: 0 0 12px 0; font-size: 1.4rem; color: #2ecc71; }
+    p { color: #8b94a8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px; }
+    .btn {
+      display: inline-block;
+      background: #3498db;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .btn:hover { background: #2980b9; }
+  </style>
+</head>
+<body>
+  <div class="success-card">
+    <div class="badge">✅</div>
+    <h2>False Positive Issue Logged!</h2>
+    <p>Issue <strong>#${issueNumber || "Created"}</strong> has been submitted with labels <code>data-ingestion</code>, <code>false-positive</code>, and attached to <strong>Project Midgley - Master Roadmap</strong>.<br><br>The automated CI reviewer is analyzing the catalyst keywords now.</p>
+    <a href="${issueUrl}" target="_blank" class="btn">View GitHub Issue #${issueNumber || ""} ➔</a>
+  </div>
+</body>
+</html>`;
+    return new Response(successHtml, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  }
+
+  return new Response("Method Not Allowed", { status: 405 });
+}
+
 export default {
   async scheduled(controller: any, env: Env, ctx: any): Promise<void> {
     try {
@@ -1054,6 +1433,11 @@ export default {
     const url = new URL(request.url);
 
     try {
+      // Flag Web Route (One-Click Discord Webhook Review Flow)
+      if (url.pathname === "/flag") {
+        return await handleFlagWebRequest(request, env, ctx);
+      }
+
       // Discord Interactions Endpoint Route
       if (url.pathname === "/discord/interactions" || request.headers.has("X-Signature-Ed25519")) {
         return await handleDiscordInteraction(request, env, ctx);
@@ -1071,7 +1455,7 @@ export default {
           status: "active",
           service: "midgley-intraday-monitor",
           timestamp: new Date().toISOString(),
-          endpoints: ["/run", "/trigger", "/status", "/discord/interactions"]
+          endpoints: ["/run", "/trigger", "/status", "/flag", "/discord/interactions"]
         }, null, 2),
         { headers: { "Content-Type": "application/json" } }
       );
