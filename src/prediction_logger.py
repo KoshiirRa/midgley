@@ -175,6 +175,12 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 if resp.status == 200:
                     logger.info(f"Successfully synced {len(recent_df)} prediction records to Turso Edge database.")
                     return {"status": "synced", "synced_rows": len(recent_df), "provider": "turso_edge"}
+        except urllib.error.HTTPError as e:
+            try:
+                err_body = e.read().decode("utf-8", errors="replace")
+            except Exception:
+                err_body = ""
+            logger.warning(f"Turso prediction cloud sync notice: HTTP Error {e.code}: {e.reason} - {err_body}")
         except Exception as e:
             logger.warning(f"Turso prediction cloud sync notice: {e}")
 
@@ -194,6 +200,12 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 if resp.status in (200, 201):
                     logger.info(f"Successfully synced {len(recent_records)} prediction records to Cloudflare D1 Edge Worker.")
                     return {"status": "synced", "synced_rows": len(recent_records), "provider": "cloudflare_d1"}
+        except urllib.error.HTTPError as e:
+            try:
+                err_body = e.read().decode("utf-8", errors="replace")
+            except Exception:
+                err_body = ""
+            logger.warning(f"Cloudflare D1 prediction sync notice: HTTP Error {e.code}: {e.reason} - {err_body}")
         except Exception as e:
             logger.warning(f"Cloudflare D1 prediction sync notice: {e}")
 
@@ -255,6 +267,29 @@ def compute_regional_residual_std(region: str = None, window_days: int = 30, def
     return default_std
 
 
+def resolve_model_tag(
+    region: str = "National", 
+    model_type: str = "Ridge", 
+    custom_version: Optional[str] = None
+) -> str:
+    """
+    Standardizes model version tag generation across national and regional prediction loggers.
+    Dynamically resolves active model version (e.g. 'v1.6-Ipatieff') and attaches region and model type.
+    Example: 'v1.6-Ipatieff-Tulsa-Ridge' or 'v1.6-Ipatieff-National-Ridge'
+    """
+    if custom_version:
+        return custom_version
+    try:
+        from src.version import get_model_version
+        base_version = get_model_version().replace(" ", "-")
+    except Exception:
+        base_version = "v1.6-Ipatieff"
+    
+    clean_region = region.replace("_", "").replace(" ", "")
+    clean_model_type = model_type.capitalize()
+    return f"{base_version}-{clean_region}-{clean_model_type}"
+
+
 def log_predictions(
     predictions_df: pd.DataFrame, 
     region: str = "Tulsa_OK", 
@@ -271,11 +306,7 @@ def log_predictions(
                                'data_source_provenance']
     """
     if model_version is None:
-        try:
-            from src.version import get_model_version
-            model_version = get_model_version().replace(" ", "-")
-        except Exception:
-            model_version = "v1.6-Ipatieff"
+        model_version = resolve_model_tag(region=region, model_type="Ridge")
     ensure_history_store()
     try:
         history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})

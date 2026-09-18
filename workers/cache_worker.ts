@@ -158,11 +158,121 @@ export default {
         }
       }
 
-      // POST /api/v1/cache/:key
-      if (request.method === "POST" && url.pathname.startsWith("/api/v1/cache/")) {
-        const key = decodeURIComponent(url.pathname.replace("/api/v1/cache/", ""));
+      // POST /api/v1/sync/predictions (Issue #302: Batch prediction sync to D1)
+      if (request.method === "POST" && (url.pathname === "/api/v1/sync/predictions" || url.pathname === "/api/v1/sync/predictions/")) {
+        console.log(`[Cache Worker SYNC] Batch prediction sync requested`);
         try {
           const body: any = await request.json();
+          const predictions = Array.isArray(body.predictions) ? body.predictions : [];
+          if (predictions.length === 0) {
+            return new Response(JSON.stringify({ status: "synced", synced_rows: 0, message: "No predictions in payload" }), {
+              headers: { "Content-Type": "application/json" }
+            });
+          }
+
+          if (env.DB) {
+            // Ensure table exists
+            await env.DB.prepare(`
+              CREATE TABLE IF NOT EXISTS prediction_history (
+                log_timestamp TEXT,
+                forecast_target_date TEXT,
+                forecast_horizon_days INTEGER,
+                region TEXT,
+                model_version TEXT,
+                run_type TEXT,
+                headline_trigger TEXT,
+                current_base_price REAL,
+                predicted_5d_price REAL,
+                predicted_direction TEXT,
+                actual_5d_price REAL,
+                actual_direction TEXT,
+                error_dollars REAL,
+                directional_hit REAL,
+                llm_price_pressure REAL,
+                llm_supply_disruption REAL,
+                quant_baseline_5d_price REAL,
+                llm_augmentation_delta REAL,
+                prediction_lower_95ci REAL,
+                prediction_upper_95ci REAL,
+                within_95ci_hit REAL,
+                data_source_provenance TEXT,
+                PRIMARY KEY (log_timestamp, forecast_target_date, region)
+              )
+            `).run();
+
+            // Prepare batch statements
+            const statements = predictions.map((row: any) => {
+              return env.DB.prepare(`
+                INSERT OR REPLACE INTO prediction_history (
+                  log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
+                  headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
+                  actual_5d_price, actual_direction, error_dollars, directional_hit,
+                  llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
+                  llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
+                  within_95ci_hit, data_source_provenance
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+              `).bind(
+                String(row.log_timestamp || ""),
+                String(row.forecast_target_date || ""),
+                Number(row.forecast_horizon_days || 5),
+                String(row.region || ""),
+                String(row.model_version || ""),
+                String(row.run_type || ""),
+                String(row.headline_trigger || ""),
+                Number(row.current_base_price || 0.0),
+                Number(row.predicted_5d_price || 0.0),
+                String(row.predicted_direction || ""),
+                row.actual_5d_price !== undefined && row.actual_5d_price !== null && !isNaN(row.actual_5d_price) ? Number(row.actual_5d_price) : null,
+                String(row.actual_direction || ""),
+                row.error_dollars !== undefined && row.error_dollars !== null && !isNaN(row.error_dollars) ? Number(row.error_dollars) : null,
+                row.directional_hit !== undefined && row.directional_hit !== null && !isNaN(row.directional_hit) ? Number(row.directional_hit) : null,
+                Number(row.llm_price_pressure || 0.0),
+                Number(row.llm_supply_disruption || 0.0),
+                Number(row.quant_baseline_5d_price || 0.0),
+                Number(row.llm_augmentation_delta || 0.0),
+                Number(row.prediction_lower_95ci || 0.0),
+                Number(row.prediction_upper_95ci || 0.0),
+                row.within_95ci_hit !== undefined && row.within_95ci_hit !== null && !isNaN(row.within_95ci_hit) ? Number(row.within_95ci_hit) : null,
+                String(row.data_source_provenance || "yfinance")
+              );
+            });
+
+            await env.DB.batch(statements);
+          }
+
+          console.log(`[Cache Worker SYNC SUCCESS] Synced ${predictions.length} records`);
+          await logToAxiom(env, ctx, { event: "prediction_sync_success", count: predictions.length });
+          return new Response(JSON.stringify({ status: "synced", synced_rows: predictions.length, provider: "cloudflare_d1" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" }
+          });
+        } catch (err: any) {
+          console.error(`[Cache Worker Error] Prediction sync failed: ${err.message || String(err)}`);
+          await captureSentryException(env, ctx, err, { action: "SYNC_PREDICTIONS" });
+          return new Response(JSON.stringify({ error: "Prediction sync failed", details: err.message || String(err) }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+      }
+
+      // POST /api/v1/cache and POST /api/v1/cache/:key
+      if (request.method === "POST" && (url.pathname === "/api/v1/cache" || url.pathname.startsWith("/api/v1/cache/"))) {
+        let key = "";
+        if (url.pathname.startsWith("/api/v1/cache/")) {
+          key = decodeURIComponent(url.pathname.replace("/api/v1/cache/", ""));
+        }
+        try {
+          const body: any = await request.json();
+          if (!key && body.key) {
+            key = String(body.key);
+          }
+          if (!key) {
+            return new Response(JSON.stringify({ error: "Missing key in path or body" }), {
+              status: 400,
+              headers: { "Content-Type": "application/json" }
+            });
+          }
           console.log(`[Cache Worker STORE] Writing entry for key: "${key}"`);
           if (env.DB) {
             const valStr = typeof body.value === "string" ? body.value : JSON.stringify(body.value);
@@ -181,7 +291,25 @@ export default {
         } catch (err: any) {
           console.error(`[Cache Worker Error] STORE for key "${key}" failed: ${err.message || String(err)}`);
           await captureSentryException(env, ctx, err, { action: "STORE", key });
-          return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+          return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message || String(err) }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+      }
+
+      // DELETE /api/v1/cache
+      if (request.method === "DELETE" && (url.pathname === "/api/v1/cache" || url.pathname === "/api/v1/cache/")) {
+        try {
+          if (env.DB) {
+            await env.DB.prepare("DELETE FROM lookup_cache").run();
+          }
+          return new Response(JSON.stringify({ status: "cleared" }), {
+            headers: { "Content-Type": "application/json" }
+          });
+        } catch (err: any) {
+          console.error(`[Cache Worker Error] DELETE cache failed: ${err.message || String(err)}`);
+          return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message || String(err) }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
           });

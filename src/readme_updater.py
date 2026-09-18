@@ -130,19 +130,29 @@ def update_readme_forecasts():
         except Exception as e:
             logger.warning(f"Could not read prediction history: {e}")
             
+    from src.prediction_logger import resolve_model_tag
+    v_nat = resolve_model_tag("National", "Ridge")
+    v_tulsa = resolve_model_tag("Tulsa", "Ridge")
+    v_newark = resolve_model_tag("Newark", "Ridge")
+    v_cin_oh = resolve_model_tag("Cincinnati_OH", "Ridge")
+    v_cin_ky = resolve_model_tag("Cincinnati_KY", "Ridge")
+    v_greenville = resolve_model_tag("Greenville", "Ridge")
+    v_oakland = resolve_model_tag("Oakland", "Ridge")
+    v_bayarea = resolve_model_tag("BayArea", "Ridge")
+
     live_table_markdown = f"""{START_TAG}
 ### 📢 Live 5-Day Price Forecasts (Updated: {now_str})
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `${base_nat:.3f}`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_nat}` | `v1.4-Finlight-Ridge` |
-| **Tulsa, OK Metro Retail** | `${base_tulsa:.3f}`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_tulsa}` | `v1.4-Finlight-Ridge` |
-| **Newark, DE Metro Retail** | `${base_newark:.3f}`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_newark}` | `v1.4-Finlight-Ridge` |
-| **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_cin_oh}` | `v1.4-Finlight-Ridge` |
-| **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_cin_ky}` | `v1.4-Finlight-Ridge` |
-| **Greenville, NC Metro Retail** | `${base_greenville:.3f}`/gal | **`${greenville_price:.3f}`/gal** | **{greenville_dir}** | `{target_greenville}` | `v1.4-Finlight-Ridge` |
-| **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_oakland}` | `v1.4-Finlight-Ridge` |
-| **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_bayarea}` | `v1.4-Finlight-Ridge` |
+| **National Wholesale (RBOB)** | `${base_nat:.3f}`/gal | **`${nat_price:.3f}`/gal** | **{nat_dir}** | `{target_nat}` | `{v_nat}` |
+| **Tulsa, OK Metro Retail** | `${base_tulsa:.3f}`/gal | **`${tulsa_price:.3f}`/gal** | **{tulsa_dir}** | `{target_tulsa}` | `{v_tulsa}` |
+| **Newark, DE Metro Retail** | `${base_newark:.3f}`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_newark}` | `{v_newark}` |
+| **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_cin_oh}` | `{v_cin_oh}` |
+| **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_cin_ky}` | `{v_cin_ky}` |
+| **Greenville, NC Metro Retail** | `${base_greenville:.3f}`/gal | **`${greenville_price:.3f}`/gal** | **{greenville_dir}** | `{target_greenville}` | `{v_greenville}` |
+| **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_oakland}` | `{v_oakland}` |
+| **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_bayarea}` | `{v_bayarea}` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 {END_TAG}"""

@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 logger = logging.getLogger(__name__)
 
 DEFAULT_TIMEOUT = float(os.environ.get("HINDSIGHT_TIMEOUT", "60.0"))  # 60-second timeout for Cloud Run scale-to-zero cold-start resilience
+DEFAULT_WARMUP_TIMEOUT = float(os.environ.get("HINDSIGHT_WARMUP_TIMEOUT", "75.0"))  # 75-second warmup window for container cold boots
 
 
 def _extract_error_detail(e: Exception) -> str:
@@ -90,11 +91,12 @@ class HindsightClient:
             logger.debug(f"Hindsight health ping failed: {e}")
             return False
 
-    def warmup(self, max_wait_seconds: float = 60.0, retry_interval: float = 2.0) -> bool:
+    def warmup(self, max_wait_seconds: Optional[float] = None, retry_interval: float = 2.0) -> bool:
         """
         Proactively wakes up Cloud Run / Supabase Hindsight service from scale-to-zero.
         Polls health endpoint until responsive or max_wait_seconds elapses.
         """
+        wait_seconds = max_wait_seconds if max_wait_seconds is not None else DEFAULT_WARMUP_TIMEOUT
         if not self.is_configured:
             logger.debug("Hindsight warmup skipped: service unconfigured.")
             return False
@@ -103,9 +105,9 @@ class HindsightClient:
             return False
 
         start_time = time.time()
-        logger.info(f"Initiating Hindsight scale-to-zero warmup handshake (max_wait={max_wait_seconds}s)...")
+        logger.info(f"Initiating Hindsight scale-to-zero warmup handshake (max_wait={wait_seconds}s)...")
         attempt = 1
-        while (time.time() - start_time) < max_wait_seconds:
+        while (time.time() - start_time) < wait_seconds:
             try:
                 url = f"{self.base_url}/health"
                 req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
@@ -119,7 +121,7 @@ class HindsightClient:
             attempt += 1
             time.sleep(retry_interval)
 
-        logger.warning(f"Hindsight warmup timed out after {max_wait_seconds}s; downstream calls will use fallback.")
+        logger.warning(f"Hindsight warmup timed out after {wait_seconds}s; downstream calls will use fallback.")
         return False
 
     def retain(

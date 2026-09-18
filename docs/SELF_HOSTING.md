@@ -36,9 +36,9 @@ This document provides a comprehensive guide for self-hosting custom instances o
 
 ## 2. Environment Configuration & API Keys
 
-Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 2.5 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys.
+Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 2.5 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys. 
 
-Create a `.env` file in the project root directory (`/home/marty/projects/midgley/.env` or root folder):
+All core mathematical transformations — including **CoSPOT Compositional Spectral & Wavelet Feature Prompting** (`src/cospot_spectral_engine.py`, Issue #215, arXiv:2609.02093), Purged Cross-Validation (`src/models.py`), Dynamic Volatility-Gated Persistence Blending (`src/dynamic_region.py`), dynamic **Baker Hughes Rig Count Ingestion** (`src/alternative_data_feeds.py`, Issue #269), **Executive Social Media Live Polling & Weekend Gap Classification** (`src/executive_social_feed.py`, Issue #268), **Key Market Movers Statement Feed** (`src/key_movers_feed.py`, Issue #270), **EIA PADD Inventory & Refinery Utilization** (`src/data_ingestion.py`, Issue #271), **EIA-930 Grid Stress Modeling** (`src/data_ingestion.py`, Issue #272), **USDA Biofuel & Ethanol Rack/RIN Feeds** (`src/data_ingestion.py`, Issue #273), **EIA State & Metro Surveys** (`src/data_ingestion.py`, Issue #274), **FERC Form 6 Pipeline Tariffs** (`src/data_ingestion.py`, Issue #275), **USACE Lock Delays & Hydrology** (`src/usace_locks.py`, Issue #276), and Qlib Symbolic Alpha mining (`src/qlib_symbolic_engine.py`) — run natively on standard Python libraries (`numpy`, `pandas`, `scipy`) without requiring extra cloud subscriptions or heavy GPU accelerators. Point-in-time publication snapshots are automatically tracked across bitemporal ledgers (`data/*_vintages.json`) and cached in `data/lookup_cache.sqlite`.
 
 ```bash
 # ==============================================================================
@@ -66,6 +66,11 @@ FRED_API_KEY="fred_api_key_here"
 # CORE Open-Access Research Literature API Key (Weekly Model Review)
 CORE_API_KEY="core_api_key_here"
 
+# Semantic Scholar Academic Graph API Key (Optional, raises rate limits from 100 to 1000 req/5min)
+SEMANTIC_SCHOLAR_API_KEY="semantic_scholar_api_key_here"
+
+# OpenAlex CC0 Open-Access Literature API requires NO key (100k free requests/day with mailto header)
+
 # Optional Secondary LLM Tier Failovers (Soft-checked)
 OPENAI_API_KEY="sk-proj-..."
 ANTHROPIC_API_KEY="sk-ant-..."
@@ -87,6 +92,10 @@ WANDB_API_KEY="wandb_v1_..."
 WANDB_PROJECT="midgley-gas-forecasting"
 WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
 
+# Discord Webhook Notification Gateway (Intraday Forecast Revisions, Issue #234)
+# Dispatches real-time alerts on intraday price shocks with environment tagging ([PRODUCTION] vs [DEVELOPMENT])
+DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
 # ==============================================================================
@@ -106,7 +115,8 @@ CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 # Vectorize Hindsight Cloud Run REST API Endpoint (Scale-to-Zero)
 HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
 HINDSIGHT_API_KEY=""              # Optional bearer token if endpoint is authenticated
-HINDSIGHT_TIMEOUT="30.0"          # Socket read timeout in seconds (handles scale-to-zero cold boots)
+HINDSIGHT_TIMEOUT="60.0"          # Socket read timeout in seconds (handles scale-to-zero cold boots)
+HINDSIGHT_WARMUP_TIMEOUT="75.0"   # Background scale-to-zero container warmup handshake timeout in seconds
 
 # Supabase PostgreSQL pgvector Connection URI (Transaction Pooler Port 5432 or 6543)
 SUPABASE_DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
@@ -124,6 +134,14 @@ GCP_PROJECT_ID="midgley"
 # Optional U.S. Census Bureau API Key (api.census.gov - Free public open data)
 # Optional: Public keyless queries work out-of-the-box. Add key for high-volume batch runs.
 CENSUS_API_KEY=""
+
+# ==============================================================================
+# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issue #182)
+# ==============================================================================
+# OAuth2 Client Credentials for independent Brier/CRPS daily continuous probability scoring
+HEADLINE_ARENA_CLIENT_ID="ha_agent_..."
+HEADLINE_ARENA_CLIENT_SECRET="ha_sec_..."  # Or HEADLINE_ARENA_API_KEY
+HEADLINE_ARENA_DEV_SUBMIT="0"              # Set to 1 in dev to execute live test submissions (tagged [DEV-TEST])
 
 # Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
 HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
@@ -171,29 +189,31 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    turso db show midgley-cache --url
    turso db tokens create midgley-cache
    ```
-4. Set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in `.env`.
-5. Midgley automatically initializes the table schema on startup via `_turso_ensure_table()`:
-   ```sql
-   CREATE TABLE IF NOT EXISTS lookup_cache (
-       key TEXT PRIMARY KEY,
-       value TEXT NOT NULL,
-       created_at REAL NOT NULL,
-       expires_at REAL NOT NULL
-   );
+4. Set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in `.env`. Midgley automatically normalizes `turso://`, `libsql://`, and `https://` URI schemes.
+5. Midgley automatically initializes the table schema on startup via `_turso_ensure_table()`, or you can test connectivity immediately with the CLI probe:
+   ```bash
+   python3 -m src.lookup_cache --test-turso
    ```
 
 ### Option B: Setting Up Cloudflare D1 / Worker (Tier 2 Backup)
 1. Create a Cloudflare D1 database: `npx wrangler d1 create midgley-cache-d1`
-2. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)):
+2. Initialize the database schema for `lookup_cache`, `seen_rss_headlines`, and `prediction_history` ([scripts/init_d1_schema.sql](file:///scripts/init_d1_schema.sql)):
+   ```bash
+   npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
+   ```
+3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
    ```bash
    npx wrangler deploy --config wrangler.cache.toml
    ```
-3. Configure optional telemetry & auth secrets for Option A2 (Axiom & Sentry):
+4. Configure optional telemetry & auth secrets for Option A2 (Axiom & Sentry):
    ```bash
    npx wrangler secret put SENTRY_DSN --config wrangler.cache.toml
    npx wrangler secret put AXIOM_TOKEN --config wrangler.cache.toml
    ```
-4. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`.
+5. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`. Test connectivity via CLI:
+   ```bash
+   python3 -m src.lookup_cache --test-cloudflare
+   ```
 
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
 1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):
@@ -241,7 +261,8 @@ Midgley integrates an episodic memory layer (**Retain-Recall-Reflect**) to perfo
    - Set `HINDSIGHT_API_URL` in `.env` and GitHub Repository Secrets:
      ```bash
      HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
-     HINDSIGHT_TIMEOUT="30.0"
+     HINDSIGHT_TIMEOUT="60.0"
+     HINDSIGHT_WARMUP_TIMEOUT="75.0"
      ```
    - **Scale-to-Zero Proactive Warmup & Zero Data Loss:** When deployed with `--min-instances 0`, Cloud Run instances spin down during inactivity and require 20–35s to cold boot. Midgley automatically triggers a non-blocking proactive warmup (`warmup()`) in Step 0 of execution pipelines. If any memory retain requests occur during container cold-start, experiences are safely buffered in local SQLite with `cloud_synced = 0` and automatically reconciled (`sync_pending_memories()`) once the cloud container is fully online.
 
@@ -427,6 +448,7 @@ If you prefer serverless execution via GitHub Actions:
    - `EIA_API_KEY`
    - `FRED_API_KEY`
    - `MIDGLEY_WEBHOOK_SECRET`
+   - `DISCORD_INTRADAY_WEBHOOK_URL` (or `DISCORD_WEBHOOK_URL`, optional for intraday revision alerts)
    - `TURSO_DATABASE_URL` (optional)
    - `TURSO_AUTH_TOKEN` (optional)
 3. **Configure GitHub Pages:**
@@ -723,6 +745,39 @@ Run the quantitative research validation auditor to verify point-in-time tempora
 python3 scripts/audit_feature_leakage.py --region Tulsa_OK --horizons 1,3,5,10,14,20 --output data/feature_audit_report.json
 ```
 
+### 6. Verify Model Learning & Longitudinal Adaptation Tracker (Issue #255)
+Generate the model learning journal and verify that longitudinal learning curves and multi-window scoreboards calculate cleanly:
+```bash
+python3 -c "from src.learning_tracker import generate_learning_journal_markdown; generate_learning_journal_markdown()"
+head -n 30 MODEL_LEARNING.md
+```
+
+### 7. Execute Ingestion Feed Health Diagnostics (Issue #267)
+Run the built-in diagnostic probe to verify latency and connectivity across Google News RSS, NYT, Executive Social, Key Movers, and Geopolitical streams:
+```bash
+python3 src/intraday_event_monitor.py --check-feeds
+```
+
+### 8. Verify Model Context Protocol (MCP) Academic Literature Tools (Issue #266)
+Verify that the MCP server exposes academic search (`search_academic_literature`) and TL;DR retrieval (`get_academic_paper_tldr`):
+```bash
+python3 -m pytest tests/test_mcp_server.py tests/test_academic_openalex.py tests/test_semantic_scholar_feed.py -v
+```
+
+### 9. Active 3-Tier Edge Cache & Database Diagnostic Probes (Issues #301 & #302)
+Run active roundtrip read/write probes against Turso Edge SQLite and Cloudflare D1 layers, or inspect health via REST API:
+```bash
+# Full multi-tier connectivity probe
+python3 -m src.lookup_cache --ping
+
+# Targeted single-tier probes
+python3 -m src.lookup_cache --test-turso
+python3 -m src.lookup_cache --test-cloudflare
+
+# Query cache statistics and active probe diagnostics via REST API Gateway
+curl -s "http://localhost:8000/api/v1/system/cache-status?probe=true" | jq .
+```
+
 ---
 
-*Midgley Version: `v0.5.3-dev` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.6.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*

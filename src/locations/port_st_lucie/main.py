@@ -19,7 +19,7 @@ from src.locations.port_st_lucie.regional import fetch_port_st_lucie_market_data
 from src.event_analyzer import process_event_dataset, extract_event_features_llm
 from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
 from src.models import train_and_compare_models
-from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history
+from src.prediction_logger import log_predictions, generate_performance_report, backfill_new_region_history, resolve_model_tag
 from src.live_fuel_feed import fetch_live_metro_retail_price
 
 logging.basicConfig(level=logging.INFO)
@@ -155,13 +155,14 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
     dynamic_margin = live_pump_price - latest_rbob
     hist_psl_base = splits['test_df']['port_st_lucie_retail_gasoline'] if 'port_st_lucie_retail_gasoline' in splits['test_df'].columns else splits['test_df']['gasoline_rbob'] + dynamic_margin
     hist_psl_pred = preds_hybrid + dynamic_margin
+    psl_version = resolve_model_tag("Port_St_Lucie_FL", model_type=model_type)
 
     n_logged = backfill_new_region_history(
         test_dates=test_dates,
         base_prices=hist_psl_base,
         predicted_prices=hist_psl_pred,
         region="Port_St_Lucie_FL",
-        model_version=f"v1.4-Finlight-PortStLucie-{model_type.capitalize()}"
+        model_version=psl_version
     )
 
     last_date = market_df['date'].iloc[-1]
@@ -170,7 +171,7 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
         'current_price': live_pump_price,
         'predicted_5d_price': psl_baseline_forecast
     }])
-    log_predictions(today_df, region="Port_St_Lucie_FL", model_version=f"v1.4-Finlight-PortStLucie-{model_type.capitalize()}")
+    log_predictions(today_df, region="Port_St_Lucie_FL", model_version=psl_version)
     print(f"  -> Logged & evaluated {n_logged} historical out-of-time test predictions for Port_St_Lucie_FL.")
 
     return {

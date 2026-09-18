@@ -6129,26 +6129,26 @@
       "status": "success"
     },
     {
-      "timestamp": "2026-09-17T22:03:44.112621+00:00",
-      "provider": "finlight",
-      "model_name": "finlight",
-      "call_type": "finlight_feed",
+      "timestamp": "2026-09-17T22:18:54.833767+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
       "input_tokens": 0,
       "output_tokens": 0,
       "total_tokens": 0,
       "cost_usd": 0.0,
-      "status": "success"
+      "status": "fallback"
     },
     {
-      "timestamp": "2026-09-18T00:00:10.523470+00:00",
-      "provider": "gemini-2.5-flash",
-      "model_name": "gemini-2.5-flash",
+      "timestamp": "2026-09-17T22:18:55.739650+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
       "call_type": "event_extraction",
-      "input_tokens": 128,
-      "output_tokens": 80,
-      "total_tokens": 208,
-      "cost_usd": 3.4e-05,
-      "status": "success"
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
     }
   ]
 }

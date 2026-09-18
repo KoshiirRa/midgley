@@ -303,11 +303,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 6. MLOps Prediction Logging Agent (`src/prediction_logger.py`)
 
-* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, evaluating 95% Confidence Interval Coverage (`within_95ci_hit`), and exposing continuous rolling performance metrics via API & web dashboard.
-* **Automated Cloud Relational Database Synchronization (`sync_predictions_to_cloud()`, Issue #82):**
-  - Synchronizes out-of-time prediction history logs and backfilled actual outcomes to remote relational databases (Turso Edge SQLite via `/v2/pipeline` REST JSON payloads, Cloudflare D1 Edge Workers via `CLOUDFLARE_CACHE_URL`, or Neon Postgres) with automatic `prediction_history` table schema creation and record upserts.
-  - Enforces 100% offline fallback: cloud sync operations execute defensively in the background so local CSV datastore (`data/prediction_history.csv`) remains fully operational without blocking execution if cloud endpoints are offline or credentials are absent.
-  - Exposed publicly via REST API endpoints `POST /api/v1/forecast/cloud-sync` and `GET /api/v1/forecast/cloud-status` (`get_cloud_sync_status()`).
+* **Role:** Manages persistent prediction tracking by writing 5-day out-of-time forecasts and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, backfilling actual historical market prices as target dates arrive, evaluating 95% Confidence Interval Coverage (`within_95ci_hit`), dynamically resolving model version tags via `resolve_model_tag()` and `get_model_version()` (Issue #303), and exposing continuous rolling performance metrics via API & web dashboard.
+* **Automated Cloud Relational Database Synchronization (`sync_predictions_to_cloud()`, Issue #82 & #302):**
+  - Synchronizes out-of-time prediction history logs and backfilled actual outcomes to remote relational databases:
+    - **Turso Edge SQLite:** via `/v2/pipeline` REST JSON payloads with scheme normalization (`turso://`, `libsql://`, `https://`).
+    - **Cloudflare D1 Edge Workers:** via `POST /api/v1/sync/predictions` endpoint on `midgley-cache-worker` (`workers/cache_worker.ts`) using batch prepared statements (`env.DB.batch()`) and database migration schemas (`scripts/init_d1_schema.sql`).
+    - **Neon Postgres / Local SQLite:** zero-downtime local CSV fallback (`data/prediction_history.csv`) if cloud endpoints are offline or credentials absent.
+  - Enhanced error diagnostics extract and log HTTP error response bodies upon `urllib.error.HTTPError` exceptions to surface exact execution issues.
+  - Exposed publicly via REST API endpoints `POST /api/v1/forecast/cloud-sync`, `GET /api/v1/forecast/cloud-status`, and `GET /api/v1/system/cache-status` (Issue #301).
+* **Multi-Tier Edge Cache & Active Diagnostics Probes (`src/lookup_cache.py`, Issue #108 & #301):**
+  - **3-Tier Cascade:** Tier 1 (Turso Edge SQLite) $\rightarrow$ Tier 2 (Cloudflare D1 Edge Worker) $\rightarrow$ Tier 3 (Local SQLite `data/lookup_cache.sqlite` + in-memory fast dict).
+  - **Active Diagnostic Probes:** `LookupCache.test_edge_connectivity(tier)` executes live end-to-end roundtrip read/write health checks and latency benchmarks against edge databases. Exposed via CLI flags (`python -m src.lookup_cache --ping`, `--test-turso`, `--test-cloudflare`, `--test-all`, `--stats`) and REST API (`GET /api/v1/system/cache-status?probe=true`).
 * **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
 * **Realized-vs-Predicted Rolling Scoreboard & Observability Engine:**
   - `compute_rolling_scoreboard_metrics(window_days=30, region=None, horizon_days=None)`: Calculates rolling 30/60/90-day and per-horizon (1d through 5d) MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices (Issue #209).
@@ -321,6 +327,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - Automatically records feature importance weights and SHAP attribution tables as W&B Artifacts.
   - Soft-dependency architecture: runs silently in `offline` mode or no-ops safely when `WANDB_API_KEY` is not present, ensuring zero cost and 100% offline resiliency.
 * **Functions:**
+  - `resolve_model_tag()`: Dynamically formats standardized model version strings (e.g. `v1.6-Ipatieff-TulsaOK-Ridge`) bound to `src.version.get_model_version()`.
   - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates, automatically triggering background cloud DB sync.
   - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, backfills actual prices in `prediction_history.csv`, and triggers background cloud DB sync.
   - `sync_predictions_to_cloud()`: Pushes prediction history rows to Turso, Cloudflare D1, or Neon cloud stores with zero-downtime local CSV fallback.
