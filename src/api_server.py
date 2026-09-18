@@ -428,12 +428,38 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     base_price = live_res.get("price", 3.184)
     meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
 
-    projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"] else 0.032)
+    projected_delta = None
+    try:
+        from src.prediction_logger import HISTORY_CSV_PATH
+        import pandas as pd
+        if os.path.exists(HISTORY_CSV_PATH):
+            df_hist = pd.read_csv(HISTORY_CSV_PATH)
+            if not df_hist.empty:
+                reg_df = df_hist[df_hist['region'] == region_code]
+                if not reg_df.empty:
+                    latest = reg_df.iloc[-1]
+                    hist_base = float(latest['current_base_price'])
+                    hist_pred = float(latest['predicted_5d_price'])
+                    projected_delta = hist_pred - hist_base
+    except Exception as e:
+        logger.debug(f"Notice reading prediction history for {region_code}: {e}")
+
+    if projected_delta is None:
+        projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"] else 0.032)
+
     predicted_price = round(base_price + projected_delta, 3)
     expected_pct = round((projected_delta / base_price) * 100, 2)
     direction = "UP" if projected_delta > 0 else ("DOWN" if projected_delta < 0 else "FLAT")
 
     target_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
+
+    # Compute smooth 5-day trajectory points for clients & mobile UI
+    day_step = projected_delta / 5.0
+    day_1 = round(base_price + day_step * 1, 3)
+    day_2 = round(base_price + day_step * 2, 3)
+    day_3 = round(base_price + day_step * 3, 3)
+    day_4 = round(base_price + day_step * 4, 3)
+    day_5 = round(predicted_price, 3)
 
     attr = compute_locale_feature_attribution_breakdown(
         region_code=region_code,
@@ -460,6 +486,11 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             "projected_direction": direction,
             "directional_hit_rate_historical": 0.6079,
             "historical_mae_dollars": 0.1069,
+            "day_1_price": day_1,
+            "day_2_price": day_2,
+            "day_3_price": day_3,
+            "day_4_price": day_4,
+            "day_5_price": day_5,
             "feature_attributions": attr["components"],
             "driver_breakdown": {
                 "summary_text": attr["summary_text"],

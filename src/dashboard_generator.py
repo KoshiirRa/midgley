@@ -6472,6 +6472,14 @@ def generate_telemetry_page():
 
     logger.info(f"Successfully generated Telemetry & Map page at {TELEMETRY_PATH} and {TELEMETRY_SUB_PATH}")
 
+    # Synchronize static JSON API endpoints in docs/api/v1/ with live dashboard state
+    try:
+        from src.static_api_exporter import export_all_static_api_endpoints
+        export_all_static_api_endpoints(docs_dir=DOCS_DIR)
+        logger.info("Successfully synchronized static API endpoints in docs/api/v1/")
+    except Exception as api_err:
+        logger.warning(f"Could not export static API endpoints: {api_err}")
+
 
 def generate_data_sources_page(docs_dir: str = DOCS_DIR):
     """
