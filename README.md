@@ -85,6 +85,7 @@ flowchart TD
         E1["Google Gemini 2.5 Flash / Domain NLP Lexicon"]
         E2["intraday_event_monitor.py, finlight_feed.py & firecrawl_scraper.py"]
         E3["noaa_weather.py (Token-Efficient Ingestion & SPC Mapping)"]
+        E4["pasa_research_agent.py (PaSa Crawler-Selector Multi-Hop Loop)"]
     end
 
     subgraph FUSION["2. Exponential Memory Fusion Agent"]

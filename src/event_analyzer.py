@@ -540,3 +540,43 @@ def extract_event_features_from_url(
         "overall_price_pressure": scores.get("overall_price_pressure", 0.0)
     }
 
+
+def investigate_event_with_pasa(
+    objective_or_headline: str,
+    mode: str = "event",
+    max_hops: int = 2,
+    api_key: str = None,
+    tier: str = "privileged"
+) -> dict:
+    """
+    Executes deep multi-hop qualitative investigation of novel supply shocks or literature
+    using the PaSa Crawler-Selector Dual-Agent Architecture (Issue #265).
+    """
+    try:
+        from src.pasa_research_agent import pasa_agent
+        result = pasa_agent.investigate(
+            objective=objective_or_headline,
+            mode=mode,
+            max_hops=max_hops,
+            api_key=api_key,
+            tier=tier
+        )
+        return result.to_dict()
+    except Exception as e:
+        logger.warning(f"PaSa multi-hop investigation fallback notice ({e}).")
+        # Fallback to standard single-pass extraction
+        single_scores = extract_event_features_llm(objective_or_headline, api_key=api_key, tier=tier)
+        return {
+            "objective": objective_or_headline,
+            "mode": mode,
+            "total_hops_executed": 1,
+            "total_candidates_evaluated": 1,
+            "selected_documents": [],
+            "synthesized_summary": f"Single-pass fallback: {objective_or_headline}",
+            "parameter_bounds": {},
+            "bibliography": [],
+            "scores": single_scores,
+            "status": "fallback"
+        }
+
+
