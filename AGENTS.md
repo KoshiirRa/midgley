@@ -156,6 +156,8 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **NOAA NHC Hurricane & Cyclone Bitemporal Tracking (`src/nhc_hurricane.py`) (Issue #281):** `NHCHurricaneConnector` tracks active tropical cyclones with 1-hour caching and bitemporal vintage logging (`data/nhc_hurricane_vintages.json`).
   - **Dynamic Energy Equities Feed & Metro Retail Correlations (`src/energy_equities_feed.py` & `src/retail_gas_correlations.py`) (Issue #282):** Ingests energy equity prices with 24-hour caching, dynamic metro pump price resolution via `fetch_live_metro_retail_price()`, and bitemporal tracking (`data/energy_equities_vintages.json`).
   - **Regional Event Stream Fusion (`src/data_ingestion.py` & `src/locations/*/regional.py`) (Issue #283):** `load_live_regional_intraday_events()` dynamically fuses breaking intraday anomalies and active NOAA alerts into all 7 localized metro agents (Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie).
+  - **AIHawk Self-Healing DOM Automation for State Motor Fuel Tax Portals (`src/state_open_data.py`) (Issue #309):** `SelfHealingDOMParser` implements autonomous fuzzy DOM selector matching and relative keyword traversal to extract point-in-time state fuel tax rates ($/gal) across dynamic state revenue/DOT portals (OH, DE, NC, CA, FL, OK). Persists rates to `data/state_open_data.json` with effective date tracking and CLI audit support (`python -m src.state_open_data --check-all`).
+  - **Agent-Reach Resilient Multi-Platform Social & News Reachability Layer (`src/reachability_adapters.py`, `src/executive_social_feed.py`, `src/geopolitical_feeds.py`) (Issue #308):** `ReachabilityCascadeRouter` orchestrates a multi-protocol fallback cascade (**Tier 1: RSS Syndication Mirrors $\rightarrow$ Tier 2: Public Nitter/Reddit JSON Proxies $\rightarrow$ Tier 3: DuckDuckGo Search Fallback**) for real-time energy commentary and maritime chokepoint alerts without requiring paid platform API tokens. Enforces 24-hour SHA-256 headline deduplication and logs connector telemetry (`reachability_success_rate`).
   - **Universal 50-State Open Data Portals Connector (`src/state_open_data.py`):** `UniversalStateOpenDataConnector` provides dynamic resolution across all 50 US States + DC (51 total locales). Queries Socrata domains (`data.<state>.gov` / `data.gov`), U.S. Census State Tax Collections API, and FTA motor fuel indices for official state excise tax rates ($/gal), UST fees, and motor fuel sales volume proxies.
   - **FRED (St. Louis Fed) Energy Series (`src/data_ingestion.py`):** `FREDDataConnector` ingests weekly national and PADD retail gasoline/diesel series (`GASREGW`, `GASDESW`, `GASREGWCW`, `GASREGWGULF`) and CPI gasoline index (`CUUR0000SETB01`).
   - **U.S. EIA API v2 Open Data & Weekly PADD Utilization (`src/data_ingestion.py`) (Issue #271):** `EIADataConnector` ingests weekly retail price series, dynamic FRED PADD refinery percent utilization (`WPULEUS1`-`5`), implied demand (`WGFUPUS2`), and regional motor gasoline/crude stock inventories with 7-day TTL caching and bitemporal persistence to `data/eia_vintages.json`.
@@ -718,6 +720,27 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
      - **Production (`MIDGLEY_ENV=prod` / GitHub Actions):** Executes live submissions headlessly during scheduled daily runs when secrets are configured.
      - **Test Suite (`TESTING=1`):** Completely mocks and suppresses outgoing network calls.
   4. **Connector Telemetry & Audit Logging:** Records every invocation status (`SUCCESS`, `DRY_RUN`, `SKIPPED_NO_CREDENTIALS`, `HTTP_ERROR`) and latency to `data/connector_telemetry.json` via `src/connector_telemetry.py`.
+
+---
+
+### 25. Remote Hindsight / Supabase Cluster Memory Inventory Directives (`src/hindsight_client.py`, `src/agent_memory.py`) (Issue #310)
+
+* **Role:** Synchronizes authoritative episodic memory bank inventory metrics between ephemeral CI/CD environments (GitHub Actions) and the persistent central Vectorize Hindsight / Supabase pgvector cluster (`midgley-gas-forecasting`).
+* **Directives:**
+  1. `AgentMemoryManager.get_bank_inventory()` MUST probe `HindsightClient.get_bank_stats()` before falling back to local SQLite on disk (`data/agent_memory.sqlite`).
+  2. The public Telemetry Dashboard (`src/dashboard_generator.py`) MUST render origin badges (`☁️ Remote Cluster` vs `💾 Local SQLite`) and indicate backend configuration.
+  3. All network queries MUST enforce fail-safe timeouts ($\le 5.0\text{s}$) and zero-cost fallback continuity.
+
+---
+
+### 26. Machine-Readable Upstream Release Manifest & Agent Migration Protocol (`src/release_manifest.py`, `src/api_server.py`, `scripts/check_updates.py`) (Issue #299)
+
+* **Role:** Enables self-hosted instances, fork maintainers, and autonomous AI coding agents to discover upstream model feature matrix expansions, required/optional environment variable changes, and database migrations.
+* **Directives:**
+  1. **Manifest Endpoint:** `GET /api/v1/system/releases/latest` MUST serve the machine-readable manifest compiled via `generate_release_manifest()`.
+  2. **Reconciler CLI:** `scripts/check_updates.py` provides deterministic `--dry-run` and `--auto-reconcile` capabilities for autonomous agent execution.
+  3. **Release Notes Protocol:** All future release documentation MUST include a structured `🤖 AI Agent Reconciliation Block` with step-by-step migration recipes.
+
 
 
 

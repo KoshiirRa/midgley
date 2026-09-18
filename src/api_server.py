@@ -843,6 +843,17 @@ def get_system_token_costs(
     )
 
 
+@app.get("/api/v1/system/releases/latest", summary="Get Latest Upstream Release Reconciliation Manifest", tags=["System & Health"])
+def get_latest_release_manifest_endpoint():
+    """
+    Returns machine-readable release reconciliation manifest with schema versions,
+    compatibility matrix, environment variable delta, model feature matrix, and migration items (Issue #299).
+    """
+    from src.release_manifest import generate_release_manifest
+    return generate_release_manifest()
+
+
+
 # ------------------------------------------------------------------------------
 # Method B: Admin Key Management Endpoints (Protected by X-Admin-Secret)
 # ------------------------------------------------------------------------------

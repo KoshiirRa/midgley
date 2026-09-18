@@ -5908,9 +5908,19 @@ def generate_telemetry_page():
     local_fallback_calls = mem_totals.get('local_fallback_calls', 0)
 
     sqlite_mem_path = os.path.join(PROJECT_ROOT, "data", "agent_memory.sqlite")
-    stored_memories = 0
-    stored_reflections = 0
-    if os.path.exists(sqlite_mem_path):
+    mem_inventory = {}
+    try:
+        from src.agent_memory import AgentMemoryManager
+        mem_mgr = AgentMemoryManager()
+        mem_inventory = mem_mgr.get_bank_inventory()
+    except Exception as e:
+        logger.debug(f"Failed to query AgentMemoryManager inventory: {e}")
+
+    stored_memories = mem_inventory.get('memories_count', 0)
+    stored_reflections = mem_inventory.get('reflections_count', 0)
+    mem_backend_badge = mem_inventory.get('backend', 'Local SQLite FTS5')
+    mem_source_type = mem_inventory.get('source', 'local_sqlite')
+    if stored_memories == 0 and stored_reflections == 0 and os.path.exists(sqlite_mem_path):
         try:
             import sqlite3
             conn = sqlite3.connect(sqlite_mem_path, timeout=2.0)
@@ -6120,13 +6130,19 @@ def generate_telemetry_page():
 
                 <!-- Active Memory Bank Inventory -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
-                    </h4>
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
+                        </h4>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full {'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' if mem_source_type == 'remote_cloud' else 'bg-slate-800 text-slate-400 border border-slate-700'} font-mono">
+                            {'☁️ Remote Cluster' if mem_source_type == 'remote_cloud' else '💾 Local SQLite'}
+                        </span>
+                    </div>
                     <div class="space-y-3 font-mono text-xs">
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <div class="text-[10px] text-slate-500 uppercase tracking-wider">Bank Identifier</div>
-                            <div class="text-slate-200 font-bold text-sm">midgley-gas-forecasting</div>
+                            <div class="text-slate-200 font-bold text-sm">{mem_inventory.get('bank_id', 'midgley-gas-forecasting')}</div>
+                            <div class="text-[10px] text-slate-500 font-sans mt-0.5">{mem_backend_badge}</div>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">

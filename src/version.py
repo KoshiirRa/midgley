@@ -122,6 +122,9 @@ def get_model_version() -> str:
     return FALLBACK_MODEL_VERSION
 
 
+get_model_engine_version = get_model_version
+
+
 def get_git_branch() -> str:
     """
     Dynamically resolves the active git branch or deployment environment context.

@@ -788,4 +788,32 @@ curl -s "http://localhost:8000/api/v1/system/cache-status?probe=true" | jq .
 
 ---
 
-*Midgley Version: `v0.6.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+## 10. Upstream Release Manifest & Agent Migration Protocol (Issue #299)
+
+Self-hosted instances and autonomous coding agents maintaining forks can detect upstream schema drifts, feature matrix expansions, and migration actions using the **Machine-Readable Upstream Release Manifest**:
+
+### 1. Query Upstream Release Manifest via REST API
+```bash
+curl -s http://localhost:8000/api/v1/system/releases/latest | jq .
+```
+
+### 2. Run the Compatibility & Upgrade Reconciler CLI
+```bash
+# Audit local configuration vs. upstream manifest (Dry-Run)
+python3 scripts/check_updates.py --dry-run
+
+# Automatically apply database migrations and retrain custom regional estimators
+python3 scripts/check_updates.py --auto-reconcile
+```
+
+### 🤖 AI Agent Reconciliation Block
+When upstream releases include new econometric features (e.g. Cboe OVX volatility, USGS river tow gauges, maritime chokepoints), autonomous AI agents can execute the following deterministic reconciliation sequence:
+1. Fetch latest upstream manifest: `python3 -m src.release_manifest`
+2. Run update audit: `python3 scripts/check_updates.py --dry-run`
+3. Execute regional model realignment: `python3 scripts/manage_regions.py retrain --all`
+4. Confirm test suite passes: `pytest tests/`
+
+---
+
+*Midgley Version: `v0.6.5` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+
