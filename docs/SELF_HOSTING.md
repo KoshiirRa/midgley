@@ -590,6 +590,10 @@ Output ONLY valid JSON following this schema:
     {
       "name": "[Scenario Name]",
       "subtitle": "[Scenario Subtitle]",
+      "category": "meteorological | hydrological | convective_severe | regulatory_spec | infrastructure | geopolitical",
+      "active_window": [6, 1, 11, 30],
+      "peak_window": [8, 15, 10, 15],
+      "telemetry_hook": "noaa_nhc | noaa_spc | usgs_temp | usgs_stage | evergreen",
       "price_impact_per_gal": 0.150,
       "pct_impact": 4.25,
       "description": "..."
@@ -597,6 +601,9 @@ Output ONLY valid JSON following this schema:
   ]
 }
 ```
+
+> [!TIP]
+> **Seasonal Plausibility Gating (Issue #300):** Regional shock scenarios integrated into `src/scenario_engine.py` automatically inherit dynamic plausibility evaluation (`ACTIVE_THREAT`, `SEASONALLY_PLAUSIBLE`, `SEASONALLY_DORMANT`, `EVERGREEN`, `PROSPECTIVE_FORWARD`), ensuring simulations conducted via `POST /api/v1/forecast/simulate` or MCP tool `simulate_fuel_market_shock` respect physical climatological and statutory windows.
 
 ---
 
@@ -730,7 +737,8 @@ Verify that `docs/index.html` and regional HTML pages compile without errors.
 ### 3. Verify System Quota & REST API Health
 ```bash
 curl -s http://localhost:8000/api/v1/system/quota | jq .
-curl -s http://localhost:8000/api/v1/forecast/latest | jq .
+curl -s http://localhost:8000/api/v1/forecast/predict | jq .
+curl -s http://localhost:8000/api/v1/macro/freight-tsi | jq .
 ```
 
 ### 4. Verify Systemd Timers (Linux Deployment)

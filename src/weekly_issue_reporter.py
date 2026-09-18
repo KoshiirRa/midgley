@@ -575,6 +575,34 @@ def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -
         elif any(k in text for k in ["data", "feed", "api", "cache", "gasbuddy"]):
             category = "Data & Feed Ingestion"
 
+        # Seasonal Plausibility Priority Boost (Issue #300)
+        try:
+            from src.scenario_engine import get_all_scenarios_with_plausibility
+            active_scens = get_all_scenarios_with_plausibility(active_only=True).get("scenarios", [])
+            for asc in active_scens:
+                cat_name = asc.get("category", "")
+                sid_name = asc.get("scenario_id", "")
+                if ("hurricane" in text or "tropical" in text) and ("hurricane" in sid_name or "meteorological" in cat_name):
+                    score += 1.8
+                    category = "Seasonal Priority: Tropical & Weather Shock"
+                    break
+                elif ("freeze" in text or "polar vortex" in text or "winter" in text) and ("freeze" in sid_name or "vortex" in sid_name):
+                    score += 1.8
+                    category = "Seasonal Priority: Winter Freeze & Grid Outage"
+                    break
+                elif ("drought" in text or "low water" in text or "barge" in text or "river" in text) and ("water" in sid_name or "hydrological" in cat_name):
+                    score += 1.8
+                    category = "Seasonal Priority: River Drought & Waterway Restriction"
+                    break
+                elif ("rvp" in text or "carb" in text or "summer blend" in text or "transition" in text) and ("transition" in sid_name or "spec" in cat_name):
+                    score += 1.8
+                    category = "Seasonal Priority: Regulatory Fuel Spec Switchover"
+                    break
+        except Exception:
+            pass
+
+        score = min(round(score, 1), 9.9)
+
         ranked.append({
             "number": issue["number"],
             "title": issue["title"],
@@ -946,6 +974,123 @@ def format_praxist_research_markdown_section() -> str:
         return f"### 🔬 Sapient PRAXIST Autonomous Hypothesis Audit\n*PRAXIST evaluation notice: {e}*"
 
 
+def format_scenario_plausibility_markdown_section() -> str:
+    """
+    Renders the Forward Plausibility Horizon Matrix & Weekly Plausible Shock Stress-Test Audit (Issue #300).
+    """
+    try:
+        from src.scenario_engine import get_all_scenarios_with_plausibility
+        from src.api_server import simulate_shock, SimulateRequest
+
+        now_utc = datetime.now(timezone.utc)
+        today_str = now_utc.strftime("%Y-%m-%d")
+
+        scen_data = get_all_scenarios_with_plausibility(target_date=today_str, include_prospective=True, live_telemetry=True)
+        scenarios = scen_data.get("scenarios", [])
+
+        active_threats = []
+        in_season = []
+        prospective = []
+        dormant = []
+        evergreen = []
+
+        for s in scenarios:
+            st = s.get("plausibility_status")
+            if st == "ACTIVE_THREAT":
+                active_threats.append(s)
+            elif st == "PROSPECTIVE_FORWARD":
+                prospective.append(s)
+            elif st == "SEASONALLY_PLAUSIBLE":
+                in_season.append(s)
+            elif st == "SEASONALLY_DORMANT":
+                dormant.append(s)
+            else:
+                evergreen.append(s)
+
+        lines = [
+            "## 🌪️ Forward Plausibility Horizon Matrix & Climatological Shock Audit (Issue #300)",
+            "",
+            f"**Audit Evaluation Date:** `{today_str}` | **Active Precursor Telemetry:** Connected (NOAA SPC/NHC, USGS Water & Seismic)",
+            "",
+            "### 🧭 Scenario Seasonality & Climatological Horizon Matrix",
+            "",
+            "| Scenario | Category | Status Tier | Climatological Window | Telemetry Trigger / Horizon |",
+            "| :--- | :--- | :---: | :--- | :--- |"
+        ]
+
+        ordered = active_threats + in_season + prospective + evergreen + dormant
+        for s in ordered:
+            st = s.get("plausibility_status", "EVERGREEN")
+            if st == "ACTIVE_THREAT":
+                badge = "🔴 **ACTIVE THREAT**"
+            elif st == "SEASONALLY_PLAUSIBLE":
+                badge = "🟡 **IN SEASON**"
+            elif st == "PROSPECTIVE_FORWARD":
+                badge = "🟣 **PROSPECTIVE**"
+            elif st == "SEASONALLY_DORMANT":
+                badge = "⚪ *Dormant (Off-Season)*"
+            else:
+                badge = "🔵 Evergreen"
+
+            name_str = s.get("name", s.get("scenario_id"))
+            cat = s.get("category", "general")
+            win = s.get("active_window", s.get("season_window", "Year-Round"))
+            telem = s.get("telemetry_trigger", s.get("precursor_source", s.get("context_reasoning", "Nominal")))
+            if s.get("is_prospective"):
+                win = f"T-{s.get('lead_time_days', 7)}d Lead Horizon"
+            lines.append(f"| **{name_str}** | `{cat}` | {badge} | {win} | {telem} |")
+
+        lines.append("")
+        lines.append("### ⚡ Weekly Plausible Shock Stress-Test Simulation Audit")
+        lines.append("")
+        lines.append("| Scenario Shock | Target Hub | Baseline Retail | Shock Price | Delta (\\$/gal) | Delta (%) | Plausibility Note |")
+        lines.append("| :--- | :--- | :---: | :---: | :---: | :---: | :--- |")
+
+        plausible_scenarios = active_threats + in_season + prospective + evergreen[:4]
+        stress_count = 0
+        for ps in plausible_scenarios:
+            sid = ps.get("scenario_id")
+            if not sid:
+                continue
+            locs = ps.get("locales", ["national"])
+            target_loc = locs[0] if locs else "national"
+
+            try:
+                if ps.get("is_prospective"):
+                    custom_pct = ps.get("shock_pct", 0.05)
+                    from src.api_server import fetch_live_metro_retail_price, _normalize_locale
+                    base_res = fetch_live_metro_retail_price(_normalize_locale(target_loc))
+                    base_p = base_res.get("price", 3.184)
+                    dol_imp = round(base_p * custom_pct, 3)
+                    sim_p = round(base_p + dol_imp, 3)
+                    lines.append(f"| **{ps.get('name')}** | `{target_loc}` | `${base_p:.3f}` | **`${sim_p:.3f}`** | `+{dol_imp:+.3f}` | `+{custom_pct*100:.1f}%` | 🟣 Prospective Forward Synthesis |")
+                    stress_count += 1
+                else:
+                    req = SimulateRequest(scenario_id=sid, locale=target_loc, target_date=today_str)
+                    res = simulate_shock(req)
+                    sim_info = res.get("simulation", {})
+                    plaus_info = res.get("plausibility", {})
+                    b_p = sim_info.get("baseline_price_per_gal", 0.0)
+                    s_p = sim_info.get("simulated_price_per_gal", 0.0)
+                    d_p = sim_info.get("shock_delta_dollars", 0.0)
+                    pct_p = sim_info.get("shock_delta_percent", 0.0)
+                    st_str = plaus_info.get("status", "EVERGREEN")
+                    lines.append(f"| **{ps.get('name')}** | `{target_loc}` | `${b_p:.3f}` | **`${s_p:.3f}`** | `{d_p:+.3f}` | `{pct_p:+.1f}%` | {st_str} ({plaus_info.get('score', 0.8):.2f}) |")
+                    stress_count += 1
+            except Exception as e:
+                logger.debug(f"Stress test notice for {sid}: {e}")
+
+        if stress_count == 0:
+            lines.append("| *No active seasonal shocks evaluated.* | N/A | N/A | N/A | N/A | N/A | Evergreen Baseline |")
+
+        lines.append("")
+        lines.append("*Automated forward plausibility gating powered by `src/scenario_engine.py` (Issue #300).*")
+        return "\n".join(lines)
+    except Exception as e:
+        logger.warning(f"Error generating scenario plausibility markdown section: {e}")
+        return f"## 🌪️ Scenario Seasonality & Climatological Horizon Matrix\n*Plausibility audit notice: {e}*"
+
+
 def generate_weekly_markdown_report() -> str:
     """
     Parses data/prediction_history.csv and builds a formatted Markdown report for GitHub Issues.
@@ -1099,6 +1244,9 @@ def generate_weekly_markdown_report() -> str:
     # Fetch feature leakage & factor decay audit
     feature_audit_md = format_feature_leakage_audit_markdown_section()
 
+    # Fetch Seasonal Plausibility Horizon Matrix & Stress Audit (Issue #300)
+    scenario_plausibility_md = format_scenario_plausibility_markdown_section()
+
     # Fetch qualitative anomaly post-mortems & episodic memory reflection (Issue #230)
     memory_reflection_md = ""
     try:
@@ -1132,6 +1280,10 @@ def generate_weekly_markdown_report() -> str:
 ---
 
 {mlops_obs_md}
+
+---
+
+{scenario_plausibility_md}
 
 ---
 

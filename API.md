@@ -427,15 +427,33 @@ curl -X GET "http://localhost:8000/api/v1/usgs/seismic?corridor=bay_area"
 
 ---
 
-### 7. `POST /api/v1/forecast/simulate`
-Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks.
+### 7. `GET /api/v1/forecast/scenarios` (Issue #300)
+Returns all catalog counterfactual and prospective forward shock scenarios augmented with dynamic seasonal and climatological plausibility tiers (`ACTIVE_THREAT`, `SEASONALLY_PLAUSIBLE`, `SEASONALLY_DORMANT`, `EVERGREEN`, `PROSPECTIVE_FORWARD`), active/peak climatological windows, and live telemetry triggers.
+
+**Query Parameters:**
+* `active_only` (bool, optional): If `true`, filters out dormant off-season scenarios.
+* `locale` (string, optional): Target metro hub code (e.g. `oakland`, `tulsa`, `port_st_lucie`).
+* `target_date` (string, optional): Evaluation target date formatted `YYYY-MM-DD`.
+* `include_prospective` (bool, optional): Include 1–14 day precursor forward-generated prospective scenarios (default: `true`).
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/forecast/scenarios?active_only=true&locale=oakland" \
+     -H "X-API-Key: <your_api_key>"
+```
+
+---
+
+### 8. `POST /api/v1/forecast/simulate`
+Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks with dynamic seasonal and climatological plausibility gating (Issue #300).
 
 **Request Body:**
 ```json
 {
-  "scenario_id": "hormuz_blockade",
-  "locale": "oakland",
-  "custom_shock_pct": 0.05
+  "scenario_id": "port_st_lucie_hurricane",
+  "locale": "port_st_lucie",
+  "custom_shock_pct": 0.05,
+  "target_date": "2026-09-18"
 }
 ```
 
@@ -443,27 +461,61 @@ Simulates counterfactual physical refinery outages, weather disasters, or geopol
 ```bash
 curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
      -H "Content-Type: application/json" \
-     -d '{"scenario_id": "hormuz_blockade", "locale": "oakland"}'
+     -H "X-API-Key: <your_api_key>" \
+     -d '{"scenario_id": "port_st_lucie_hurricane", "locale": "port_st_lucie", "target_date": "2026-09-18"}'
+```
+
+**Example Response:**
+```json
+{
+  "status": "success",
+  "timestamp": "2026-09-18T14:20:00.000000",
+  "scenario": {
+    "id": "port_st_lucie_hurricane",
+    "name": "Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown",
+    "headline": "Major Hurricane storm surge forces emergency closure of Port Everglades and Port Canaveral marine petroleum berths.",
+    "category": "meteorological",
+    "season_window": "Jun 01 – Nov 30"
+  },
+  "plausibility": {
+    "status": "SEASONALLY_PLAUSIBLE",
+    "score": 0.90,
+    "is_in_season": true,
+    "is_in_peak": true,
+    "warning_message": null,
+    "context_reasoning": "Scenario is in PEAK climatological window (Aug 15 – Oct 15). High physical probability."
+  },
+  "simulation": {
+    "target_locale": "port_st_lucie",
+    "baseline_price_per_gal": 3.489,
+    "simulated_price_per_gal": 3.721,
+    "shock_delta_dollars": 0.232,
+    "shock_delta_percent": 6.66
+  }
+}
 ```
 
 **Supported Scenarios:**
-* `hormuz_blockade`: Strait of Hormuz Tanker Blockade (21M bpd) (+2.88%)
-* `suez_rerouting`: Red Sea / Suez Canal Rerouting Crisis (+5.32%)
-* `tulsa_tornado`: West Tulsa HF Sinclair Refinery EF-3 Tornado (+4.58%)
-* `cushing_spill`: Cushing Keystone Pipeline Rupture & Lock (+4.58%)
-* `marathon_outage`: Marathon Catlettsburg KY Refinery Outage (+4.78%)
-* `mississippi_low_water`: Lower Mississippi & Ohio River Low-Water Bottleneck (+4.20%)
-* `houston_ship_channel_closure`: Houston Ship Channel Torrential Runoff & Marine Closure (+5.12%)
-* `carquinez_atmospheric_river`: Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt (+4.35%)
-* `summer_refinery_thermal_cutback`: Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment (+3.85%)
-* `colonial_outage`: Colonial Pipeline Mainline Outage / Cyberattack Shock (+7.54%)
-* `greenville_hurricane`: Category 3 Atlantic Hurricane Landfall & Tar River Flooding (+6.62%)
-* `selma_outage`: Selma NC Distribution Hub Tank Farm Outage & Blackout (+5.69%)
-* `hayward_quake`: USGS Hayward Fault M>=6.0 Seismic Quake (+8.48%)
-* `pge_psps_shutoff`: PG&E PSPS Wildfire Power Shutoff & Blackout (+7.07%)
-* `chevron_hydrocracker`: Chevron Richmond Refinery Hydrocracker Outage (+5.76%)
-* `weekend_opec_post`: Weekend Executive OPEC Talkdown Post (-1.85%)
-* `weekend_tariff_declaration`: Weekend Foreign Energy Tariff Declaration (+2.10%)
+* `greenville_hurricane`: Category 3 Atlantic Hurricane Landfall & Tar River Flooding (+6.62%) [Active: Jun 01 – Nov 30]
+* `port_st_lucie_hurricane`: Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown (+6.66%) [Active: Jun 01 – Nov 30]
+* `polar_vortex_freeze`: Polar Vortex Arctic Blast & Refining Freeze-Off Shock (+6.25%) [Active: Dec 01 – Feb 28]
+* `summer_refinery_thermal_cutback`: Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment (+3.85%) [Active: Jun 15 – Sep 15]
+* `carb_transition`: CARB CaRFG Summer-Blend Transition Compliance Surge (+4.44%) [Active: Feb 15 – May 01]
+* `pge_psps_shutoff`: PG&E PSPS Wildfire Power Shutoff & Blackout (+7.07%) [Active: Jul 01 – Nov 15]
+* `carquinez_atmospheric_river`: Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt (+4.35%) [Active: Nov 01 – Apr 01]
+* `tulsa_tornado`: West Tulsa HF Sinclair Refinery EF-3 Tornado (+4.58%) [Active: Mar 15 – Jun 30]
+* `selma_outage`: Selma NC Distribution Hub Tank Farm Outage & Blackout (+5.69%) [Active: Apr 01 – Aug 31]
+* `mississippi_low_water`: Lower Mississippi & Ohio River Low-Water Bottleneck (+4.20%) [Active: Aug 15 – Dec 15]
+* `houston_ship_channel_closure`: Houston Ship Channel Torrential Runoff & Marine Closure (+5.12%) [Active: May 01 – Oct 31]
+* `cushing_spill`: Cushing Keystone Pipeline Rupture & Lock (+4.58%) [Evergreen]
+* `hormuz_blockade`: Strait of Hormuz Tanker Blockade (21M bpd) (+2.88%) [Evergreen]
+* `suez_rerouting`: Red Sea / Suez Canal Rerouting Crisis (+5.32%) [Evergreen]
+* `colonial_outage`: Colonial Pipeline Mainline Outage / Cyberattack Shock (+7.54%) [Evergreen]
+* `marathon_outage`: Marathon Catlettsburg KY Refinery Outage (+4.78%) [Evergreen]
+* `chevron_hydrocracker`: Chevron Richmond Refinery Hydrocracker Outage (+5.76%) [Evergreen]
+* `hayward_quake`: USGS Hayward Fault M>=6.0 Seismic Quake (+8.48%) [Evergreen]
+* `weekend_opec_post`: Weekend Executive OPEC Talkdown Post (-1.85%) [Evergreen]
+* `weekend_tariff_declaration`: Weekend Foreign Energy Tariff Declaration (+2.10%) [Evergreen]
 
 ---
 
@@ -532,7 +584,8 @@ The Midgley MCP Server exposes tools, resources, and prompt templates for integr
 - `get_live_gas_prices(locale, zip_code)` — Fetches real-time retail pump prices via GasBuddy / AAA scrapers
 - `get_gas_price_prediction(locale, days)` — 5-day out-of-time wholesale & retail gasoline forecasts
 - `get_live_and_forecast(locale)` — Unified current live price, forecast target, rack margin, and catalysts
-- `simulate_fuel_market_shock(locale, scenario_id, custom_shock_pct)` — Counterfactual physical & geopolitical shocks
+- `list_market_shock_scenarios(active_only, locale, target_date)` — Discovers physical, weather, and geopolitical shock scenarios with seasonal plausibility tiers (ACTIVE_THREAT, SEASONALLY_PLAUSIBLE, SEASONALLY_DORMANT, EVERGREEN, PROSPECTIVE_FORWARD)
+- `simulate_fuel_market_shock(locale, scenario_id, custom_shock_pct, target_date)` — Counterfactual physical & geopolitical shocks with seasonal plausibility gating
 - `get_live_diesel_prices()` — Real-time ULSD (HO=F) futures, distillate crack spreads, 3-2-1 margins
 - `get_diesel_forecast(rbob, ulsd, wti)` — 5-day out-of-time ULSD wholesale & retail diesel forecasting
 - `simulate_diesel_market_shock(scenario, base_ulsd)` — Physical and seasonal diesel shock simulations

@@ -236,6 +236,28 @@ def create_feature_matrix(
         if col not in df.columns:
             df[col] = 0.0
 
+    # Merge U.S. BTS Freight Transportation Services Index & Truck Tonnage (Issue #74)
+    try:
+        from src.bts_transportation import fetch_bts_transportation_features
+        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2020-01-01"
+        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
+        bts_df = fetch_bts_transportation_features(start_date=start_str, end_date=end_str)
+        if not bts_df.empty:
+            df = pd.merge(df, bts_df, on='date', how='left')
+            for col in [c for c in bts_df.columns if c != 'date']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().bfill().fillna(0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge BTS freight transportation feed: {e}")
+
+    for col in [
+        'bts_tsi_freight', 'bts_truck_tonnage', 'bts_petroleum_transport',
+        'bts_tsi_freight_mom_pct', 'bts_truck_tonnage_mom_pct', 'bts_petroleum_transport_mom_pct',
+        'bts_tsi_total', 'bts_rail_carloads'
+    ]:
+        if col not in df.columns:
+            df[col] = 0.0
+
     # Merge Open-Meteo Weather Degree Days Data (Locale-Routed, Point-in-Time Correct - Issue #72, #175)
     # Avoid scalar broadcasting current snapshot across historical training rows
     try:

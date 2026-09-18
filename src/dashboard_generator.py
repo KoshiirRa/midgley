@@ -1266,6 +1266,21 @@ def build_spc_style_synopsis(
     )
 
     # 3. FORECAST UNCERTAINTY & RISK SCENARIOS (Specific to this run)
+    seasonal_notes = []
+    try:
+        from src.scenario_engine import get_all_scenarios_with_plausibility
+        scen_audit = get_all_scenarios_with_plausibility(active_only=True, include_prospective=True)
+        active_items = scen_audit.get("scenarios", [])
+        if active_items:
+            for s in active_items[:4]:
+                st_badge = s.get("plausibility_status", "PLAUSIBLE")
+                s_name = s.get("name", s.get("scenario_id"))
+                seasonal_notes.append(f"[{st_badge}] {s_name}")
+    except Exception:
+        pass
+
+    seasonal_block = ("\n• Climatological Plausibility Horizon: " + "; ".join(seasonal_notes)) if seasonal_notes else ""
+
     risks_scenarios = (
         f"FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\n"
         f"Evaluated tail-risk catalysts specific to execution [{log_ts}]:\n"
@@ -1274,6 +1289,7 @@ def build_spc_style_synopsis(
         f"• Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n"
         f"• Maritime & Geopolitical Exposure: Geopolitical risk score G={geo_val:.2f}. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n"
         f"• Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range."
+        f"{seasonal_block}"
     )
 
     return {

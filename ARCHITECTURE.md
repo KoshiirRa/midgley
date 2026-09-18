@@ -415,7 +415,64 @@ The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and
 * **Hard Quota Safety Valves:** Monitors Firecrawl (800/mo cap, 30/day burst limit), Finlight (150/mo cap, 10/day burst limit), and IPASIS Security Verifier (100 req/day cap).
 * **Dynamic Out-of-Metro Leaflet Map:** Renders real-time geographic clusters of out-of-metro forecast lookups from `src.telemetry.get_unmapped_zip_telemetry()`.
 
+---
 
+## 16. Seasonal & Climatological Plausibility Gating Engine (Issue #300)
 
+The scenario simulation architecture integrates a **Dynamic Climatological & Meteorological Plausibility Gating Engine** ([`src/scenario_engine.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/scenario_engine.py)) ensuring shock simulations and counterfactual stress tests align with physical seasons, regulatory calendar windows, and real-time environmental telemetry:
 
+![Seasonal Plausibility Gating Engine SVG Diagram](docs/assets/scenario_engine_architecture.svg)
 
+```
+                  ┌─────────────────────────────────────────────────────────────┐
+                  │                 SCENARIO INVOCATION REQUEST                 │
+                  │              (REST API, MCP Tool, or Weekly Audit)          │
+                  └──────────────────────────────┬──────────────────────────────┘
+                                                 │
+                                                 ▼
+                  ┌─────────────────────────────────────────────────────────────┐
+                  │         1. REGISTRY LOOKUP & DATE-WINDOW EVALUATION         │
+                  │       (SCENARIO_CLIMATOLOGY_REGISTRY & Date-Math Logic)     │
+                  └──────────────────────────────┬──────────────────────────────┘
+                                                 │
+                     ┌───────────────────────────┴───────────────────────────┐
+                     ▼                                                       ▼
+      ┌──────────────────────────────┐                       ┌──────────────────────────────┐
+      │   DATE OUTSIDE SEASON WINDOW │                       │    DATE WITHIN SEASON WINDOW │
+      │   • Status: SEASONALLY_DORMANT                       │    • Status: SEASONALLY_PLAUSIBLE│
+      │   • Counterfactual Warning   │                       │    • Plausibility Score: 0.70    │
+      └──────────────┬───────────────┘                       └──────────────┬───────────────┘
+                     │                                                       │
+                     │                 ┌─────────────────────────────────────┘
+                     │                 │ Live Physical Telemetry Triggered?
+                     │                 ▼
+                     │       ┌──────────────────────────────────────┐
+                     │       │ ACTIVE PHYSICAL THREAT IDENTIFIED   │
+                     │       │ • Status: ACTIVE_THREAT (Score 1.00) │
+                     │       │ • NOAA SPC Risk, USGS Stage/Flow/Temp│
+                     │       └──────────────────┬───────────────────┘
+                     │                          │
+                     ▼                          ▼
+      ┌─────────────────────────────────────────────────────────────────────┐
+      │                2. PROSPECTIVE PRECURSOR SYNTHESIS                   │
+      │    (1–14 Days Lead Time for RVP Transition, Storms, Runoff)        │
+      └──────────────────────────────────┬──────────────────────────────────┘
+                                         │
+                                         ▼
+      ┌─────────────────────────────────────────────────────────────────────┐
+      │            3. MULTI-HUB WEEKLY STRESS AUDIT & REPORTING             │
+      │    (Plausibility Matrix & Seasonal Issue Ranking in Saturday Review)│
+      └─────────────────────────────────────────────────────────────────────┘
+```
+
+* **Plausibility Status Classification (`PlausibilityStatus`):**
+  - `ACTIVE_THREAT`: Live physical or meteorological sensor triggers (e.g. NOAA SPC convective risk $\ge 0.40$, USGS Ohio River stage $> 52\text{ ft}$, USGS Carquinez flow $> 40,000\text{ cfs}$) confirm an active or impending hazard.
+  - `SEASONALLY_PLAUSIBLE`: Target date falls within the climatological hazard window (e.g. Atlantic Hurricane season June 1 – Nov 30).
+  - `SEASONALLY_DORMANT`: Target date falls outside the historical occurrence window. Simulation proceeds as a counterfactual with explicit warning annotations.
+  - `EVERGREEN`: Macro geopolitical, cybersecurity, or refinery mechanical failures applicable year-round.
+  - `PROSPECTIVE_FORWARD`: Precursor scenarios generated 1–14 days ahead of seasonal regulatory spec switches (e.g. CARB Summer RVP transition Feb 15 / May 1) or storm landfalls.
+* **REST API & MCP Tool Integration:**
+  - `GET /api/v1/forecast/scenarios`: Returns catalog of scenarios filtered by `active_only`, `locale`, or `target_date`.
+  - `POST /api/v1/forecast/simulate` & MCP `simulate_fuel_market_shock`: Enriched with `plausibility` object containing status, numerical score, and warning annotations.
+  - MCP `list_market_shock_scenarios`: Tool for agents to discover available shocks and seasonal validity.
+* **Weekly Review Feedback Loop:** `src/weekly_issue_reporter.py` embeds the **Forward Plausibility Horizon Matrix**, multi-hub stress audits, and applies seasonal priority boosts ($\times 1.25$) to open GitHub issues matching active threats.

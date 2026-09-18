@@ -2605,3 +2605,11 @@ def get_open_source_ai_radar_models(max_results: int = 15, category: Optional[st
     """Helper to fetch open-source AI radar models."""
     connector = OpenSourceAIRadarConnector()
     return connector.fetch_radar_models(max_results=max_results, category=category)
+
+
+def get_bts_transportation_connector():
+    """
+    Factory helper returning an instantiated BTSTransportationConnector (Issue #74).
+    """
+    from src.bts_transportation import BTSTransportationConnector
+    return BTSTransportationConnector()

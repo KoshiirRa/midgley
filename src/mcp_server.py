@@ -84,14 +84,36 @@ async def list_tools() -> list[types.Tool]:
             }
         ),
         types.Tool(
+            name="list_market_shock_scenarios",
+            description="Lists all physical refinery outage, weather disaster, and geopolitical shock scenarios augmented with seasonal plausibility tiers (ACTIVE_THREAT, SEASONALLY_PLAUSIBLE, SEASONALLY_DORMANT, EVERGREEN, PROSPECTIVE_FORWARD) and live telemetry triggers.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "active_only": {
+                        "type": "boolean",
+                        "description": "Filter for currently active / plausible scenarios only (default: false)",
+                        "default": False
+                    },
+                    "locale": {
+                        "type": "string",
+                        "description": "Optional metro hub code filter (e.g. tulsa, oakland, port_st_lucie, national)"
+                    },
+                    "target_date": {
+                        "type": "string",
+                        "description": "Optional target evaluation date (YYYY-MM-DD)"
+                    }
+                }
+            }
+        ),
+        types.Tool(
             name="simulate_fuel_market_shock",
-            description="Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoints (e.g. hormuz_blockade, suez_rerouting, tulsa_tornado, hayward_quake, pge_psps_shutoff).",
+            description="Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoints with seasonal and climatological plausibility gating (e.g. greenville_hurricane, polar_vortex_freeze, summer_refinery_thermal_cutback, carb_transition, pge_psps_shutoff, hormuz_blockade, suez_rerouting, tulsa_tornado, hayward_quake).",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "locale": {
                         "type": "string",
-                        "description": "Target locale code (national, tulsa, newark, cincinnati, oakland)",
+                        "description": "Target locale code (national, tulsa, newark, cincinnati, oakland, greenville, charlotte, port_st_lucie)",
                         "default": "national"
                     },
                     "scenario_id": {
@@ -103,6 +125,10 @@ async def list_tools() -> list[types.Tool]:
                     "custom_shock_pct": {
                         "type": "number",
                         "description": "Optional custom shock percentage override (e.g. 0.05 for +5%)"
+                    },
+                    "target_date": {
+                        "type": "string",
+                        "description": "Optional target evaluation date (YYYY-MM-DD) for seasonal plausibility scoring"
                     }
                 },
                 "required": ["scenario_id"]
@@ -315,11 +341,26 @@ async def call_tool(
             res = _get_combined_impl(locale=locale)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
+        elif name == "list_market_shock_scenarios":
+            from src.scenario_engine import get_all_scenarios_with_plausibility
+            active_only = bool(args.get("active_only", False))
+            locale = args.get("locale")
+            target_date = args.get("target_date")
+            res = get_all_scenarios_with_plausibility(
+                target_date=target_date,
+                active_only=active_only,
+                locale=locale,
+                include_prospective=True,
+                live_telemetry=True
+            )
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
         elif name == "simulate_fuel_market_shock":
             locale = args.get("locale", "national")
             scenario_id = args.get("scenario_id", "hormuz_blockade")
             custom_shock_pct = args.get("custom_shock_pct")
-            req = SimulateRequest(scenario_id=scenario_id, locale=locale, custom_shock_pct=custom_shock_pct)
+            target_date = args.get("target_date")
+            req = SimulateRequest(scenario_id=scenario_id, locale=locale, custom_shock_pct=custom_shock_pct, target_date=target_date)
             res = simulate_shock(req)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 

@@ -8,6 +8,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ![Multi-Agent Execution Pipeline SVG Diagram](docs/assets/multi_agent_architecture.svg)
 ![Regional Metro Calibration Hubs SVG Diagram](docs/assets/regional_metro_architecture.svg)
+![Seasonal Plausibility Gating Engine SVG Diagram](docs/assets/scenario_engine_architecture.svg)
 
 ```
                ┌─────────────────────────────────────────────────────────────┐
@@ -56,8 +57,11 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                                               │ Localized Metro Forecasts                        │
                                               ▼                                                  │
                ┌─────────────────────────────────────────────────────────────┐                   │
-               │             5. SYNTHESIS & SHOCK SIMULATOR AGENT            │                   │
-               │ Simulates Refinery Outages, Hormuz Blockades & Weekend Posts │                   │
+               │         5. SYNTHESIS & SCENARIO SIMULATOR AGENT             │                   │
+               │    (src/scenario_engine.py & Climatology Registry)          │                   │
+               │ • Seasonal Plausibility Gating (Active/Dormant/Evergreen)   │                   │
+               │ • Prospective Forward Precursors (1–14d Lead Time)          │                   │
+               │ • Counterfactual Warning Badges & REST/MCP Shock Gateways   │                   │
                └──────────────────────────────┬──────────────────────────────┘                   │
                                               │ Real-Time Adjusted Forecast                      │
                                               ▼                                                  │
@@ -71,8 +75,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                ┌─────────────────────────────────────────────────────────────┐                   │
                │      7. MODEL PERFORMANCE REVIEW & FEEDBACK LOOP AGENT      │                   │
                │         (.github/workflows/weekly_model_review.yml)         │                   │
-               │  Evaluates Rolling Error Metrics & Computes Validation Loss │                   │
-               │  Automated Saturday (08:00 AM Central / 13:00 UTC) Runner   │                   │
+               │ • Hindsight Episodic Memory (Retain-Recall-Reflect)         │                   │
+               │ • Forward Plausibility Horizon Matrix & Stress Audit        │                   │
+               │ • Automated Saturday (08:00 AM Central / 13:00 UTC) Runner  │                   │
                └──────────────────────────────┬──────────────────────────────┘                   │
                                               │ Empirical Feedback Signal ───────────────────────┘
                                               ▼
@@ -139,7 +144,8 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Weekend Market Gap Multiplier:** Saturday/Sunday posts published while commodity markets are closed produce **$1.42\times$ higher Monday morning open price gap volatility**.
   - **Bitemporal Persistence:** Observation records are logged to `data/executive_social_vintages.json` to preserve historical publication chronology.
 
-* **Zero-Cost Open-Access Energy Data Suite & Universal 50-State Connector (`src/data_ingestion.py`, `src/state_open_data.py`, `src/alternative_data_feeds.py`, `src/geopolitical_feeds.py`, `src/energy_equities_feed.py`, & `src/noaa_weather.py`) (Issues #141, #269, #277-#283):**
+* **Zero-Cost Open-Access Energy Data Suite & Universal 50-State Connector (`src/data_ingestion.py`, `src/bts_transportation.py`, `src/state_open_data.py`, `src/alternative_data_feeds.py`, `src/geopolitical_feeds.py`, `src/energy_equities_feed.py`, & `src/noaa_weather.py`) (Issues #74, #141, #269, #277-#283):**
+  - **U.S. BTS Freight Transportation Index & Truck Demand (`src/bts_transportation.py`) (Issue #74):** `BTSTransportationConnector` dynamically queries the official U.S. BTS Open Data SODA API (`data.bts.gov/resource/bw6n-ddqk.json`) to ingest monthly Freight TSI (`tsi_freight`), Truck Tonnage Index (`truck_d11`), and Petroleum Transport (`petroleum_d11`) with 7-day TTL caching, bitemporal vintage persistence (`data/bts_vintages.json`), multi-tier fallbacks (FRED `TSIFRGHT`/`TRUCKD11` -> benchmark -> baseline), and REST API endpoint (`GET /api/v1/macro/freight-tsi`).
   - **Dynamic Baker Hughes Rig Count Feed (`src/alternative_data_feeds.py`) (Issue #269):** `BakerHughesDataConnector` dynamically ingests weekly US rotary rig counts and oil/gas splits with 7-day TTL lookup caching (`global_cache`), bitemporal vintage logging (`data/baker_hughes_vintages.json`), and deterministic offline fallback to historical benchmarks.
   - **Dynamic Executive Social Media Feed (`src/executive_social_feed.py`) (Issue #268):** `ExecutiveSocialFeedConnector` dynamically ingests breaking energy policy commentary from executive social channels with 15-minute lookup caching, weekend market gap classification (1.42x Monday volatility multiplier), bitemporal tracking (`data/executive_social_vintages.json`), and automated intraday monitor integration.
   - **Dynamic Key Market Movers Statement Feed (`src/key_movers_feed.py`) (Issue #270):** `KeyMoversFeedConnector` dynamically ingests high-impact statements from central bankers (Fed Chair Jerome Powell), OPEC+ oil ministers (Prince Abdulaziz bin Salman, Alexander Novak), DOE leadership, and IEA directors with 15-minute lookup caching, bitemporal tracking (`data/key_movers_vintages.json`), and automated intraday monitor integration.
@@ -277,26 +283,40 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 5. Synthesis & Scenario Simulator Agent (`src/locations/<location>/main.py`)
+### 5. Synthesis, Seasonal Plausibility & Scenario Simulator Agent (`src/scenario_engine.py` & `src/api_server.py`) (Issue #300)
 
-* **Role:** Enables counterfactual "What-If" scenario simulation.
-* **Scenarios Evaluated:**
-  - *West Tulsa HF Sinclair Refinery EF-3 Tornado Shock:* +$0.173/gal (+4.58%)
-  - *Cushing Keystone Pipeline Spill:* +$0.173/gal (+4.58%)
-  - *Strait of Hormuz Tanker Blockade (21M bpd):* +$0.109/gal (+2.88%)
-  - *Red Sea / Suez Rerouting Crisis:* +$0.201/gal (+5.32%)
-  - *Marathon Catlettsburg KY Refinery Unplanned Outage:* +$0.165/gal (+4.78%)
-  - *Lower Mississippi & Ohio River Low-Water Barge Bottleneck:* +$0.145/gal (+4.20%)
-  - *Houston Ship Channel Torrential Runoff & Marine Closure:* +$0.163/gal (+5.12%)
-  - *Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt:* +$0.215/gal (+4.35%)
-  - *Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment:* +$0.133/gal (+3.85%)
-  - *USGS Hayward Fault M>=6.0 Seismic Quake & Pipeline Shutoff:* +$0.420/gal (+8.48%)
-  - *PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout:* +$0.350/gal (+7.07%)
-  - *Chevron Richmond Refinery Unplanned Hydrocracker Outage:* +$0.285/gal (+5.76%)
-  - *CARB CaRFG Summer-Blend Transition Compliance Surge:* +$0.220/gal (+4.44%)
-  - *NOAA PTWC Pacific Tsunami Berth Closure:* +$0.165/gal (+3.33%)
-  - *Weekend Executive OPEC Talkdown Post:* $3.780/gal (Monday Open Re-anchoring)
-  - *Weekend Foreign Energy Tariff Declaration:* $3.780/gal (Supply Shock Re-anchoring)
+* **Role:** Enables counterfactual "What-If" scenario simulation with dynamic seasonal, climatological, meteorological, hydrological, and regulatory plausibility gating. Formulates prospective forward shock scenarios 1–14 days ahead of reality using leading precursor indicators.
+* **Plausibility Status Tiers (`PlausibilityStatus` in `src/scenario_engine.py`):**
+  - **`ACTIVE_THREAT` (1.0):** Live sensor/watch trigger active (e.g. NOAA SPC severe convective warning $\ge \text{ENH}$, USGS water temp $> 28^\circ\text{C}$, active seismic event).
+  - **`SEASONALLY_PLAUSIBLE` (0.70–0.90):** Target date falls within the climatological/regulatory active or peak window.
+  - **`SEASONALLY_DORMANT` (0.10):** Target date is outside active window; simulation executed as transparent theoretical off-season counterfactual with `plausibility_warning`.
+  - **`EVERGREEN` (0.80):** Year-round infrastructure, pipeline, geopolitical, or trade policy event.
+  - **`PROSPECTIVE_FORWARD` (0.85):** Prospective scenario synthesized 1–14 days ahead of reality based on leading precursor telemetry (NHC tropical wave tracks, SPC multi-day outlooks, USGS drought streamflow rate-of-change $\frac{dQ}{dt}$, statutory CARB RVP countdowns).
+* **Scenarios Evaluated & Climatological Windows:**
+  - *Greenville Category 3 Atlantic Hurricane Landfall:* +$0.198/gal (+6.62%) [Active: Jun 01 – Nov 30, Peak: Aug 15 – Oct 15]
+  - *Port St. Lucie Category 3 Hurricane & Port Everglades Closure:* +$0.232/gal (+6.66%) [Active: Jun 01 – Nov 30, Peak: Aug 15 – Oct 15]
+  - *Polar Vortex Arctic Blast & Refining Freeze-Off Shock:* +$0.199/gal (+6.25%) [Active: Dec 01 – Feb 28, Peak: Jan 01 – Feb 15]
+  - *Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment:* +$0.133/gal (+3.85%) [Active: Jun 15 – Sep 15, Peak: Jul 01 – Aug 31]
+  - *CARB CaRFG Summer-Blend Transition Compliance Surge:* +$0.220/gal (+4.44%) [Active: Feb 15 – May 01, Peak: Mar 01 – Apr 15]
+  - *PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout:* +$0.350/gal (+7.07%) [Active: Jul 01 – Nov 15, Peak: Sep 01 – Oct 31]
+  - *Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt:* +$0.215/gal (+4.35%) [Active: Nov 01 – Apr 01, Peak: Dec 15 – Feb 28]
+  - *West Tulsa HF Sinclair Refinery EF-3 Tornado Shock:* +$0.173/gal (+4.58%) [Active: Mar 15 – Jun 30, Peak: Apr 15 – May 31]
+  - *Selma NC Distribution Hub Tank Farm Outage & Microburst Shock:* +$0.181/gal (+5.69%) [Active: Apr 01 – Aug 31, Peak: May 15 – Jul 15]
+  - *Lower Mississippi & Ohio River Low-Water Barge Bottleneck:* +$0.145/gal (+4.20%) [Active: Aug 15 – Dec 15, Peak: Sep 15 – Nov 15]
+  - *Houston Ship Channel Torrential Runoff & Marine Closure:* +$0.163/gal (+5.12%) [Active: May 01 – Oct 31, Peak: Jun 01 – Sep 30]
+  - *Cushing Keystone Pipeline Rupture & Lock:* +$0.173/gal (+4.58%) [Evergreen]
+  - *Strait of Hormuz Tanker Blockade (21M bpd):* +$0.109/gal (+2.88%) [Evergreen]
+  - *Red Sea / Suez Rerouting Crisis:* +$0.201/gal (+5.32%) [Evergreen]
+  - *Colonial Pipeline Mainline Outage / Cyberattack Shock:* +$0.240/gal (+7.54%) [Evergreen]
+  - *Marathon Catlettsburg KY Refinery Unplanned Outage:* +$0.165/gal (+4.78%) [Evergreen]
+  - *Chevron Richmond Refinery Unplanned Hydrocracker Outage:* +$0.285/gal (+5.76%) [Evergreen]
+  - *USGS Hayward Fault M>=6.0 Seismic Quake & Pipeline Shutoff:* +$0.420/gal (+8.48%) [Evergreen]
+  - *Weekend Executive OPEC Talkdown Post:* -$0.059/gal (-1.85%) [Evergreen]
+  - *Weekend Foreign Energy Tariff Declaration:* +$0.067/gal (+2.10%) [Evergreen]
+* **API & MCP Interfaces:**
+  - `GET /api/v1/forecast/scenarios`: Returns full scenario list with plausibility ratings, seasonal windows, and precursor outlooks (supports `?active_only=true` & `?locale=...`).
+  - `POST /api/v1/forecast/simulate`: Evaluates scenario with target date plausibility gating and emits counterfactual warning annotations.
+  - MCP Tools `simulate_fuel_market_shock` and `list_market_shock_scenarios`.
 
 
 ---

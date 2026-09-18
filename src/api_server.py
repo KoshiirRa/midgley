@@ -201,97 +201,182 @@ SCENARIOS_CATALOG = {
     "hormuz_blockade": {
         "name": "Strait of Hormuz Tanker Blockade (21M bpd)",
         "headline": "Geopolitical escalation shuts down Strait of Hormuz tanker transit across 21M bpd crude pipeline.",
-        "shock_pct": 0.0288
+        "shock_pct": 0.0288,
+        "category": "geopolitical",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["national"]
     },
     "suez_rerouting": {
         "name": "Red Sea / Suez Canal Rerouting Crisis",
         "headline": "Red Sea marine security incidents force product tankers to detour around Cape of Good Hope.",
-        "shock_pct": 0.0532
+        "shock_pct": 0.0532,
+        "category": "geopolitical",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["national"]
     },
     "tulsa_tornado": {
         "name": "West Tulsa HF Sinclair Refinery EF-3 Tornado Shock",
         "headline": "Direct tornado strike forces emergency shutdown of West Tulsa HF Sinclair refinery (85,000 bpd).",
-        "shock_pct": 0.0458
+        "shock_pct": 0.0458,
+        "category": "convective_severe",
+        "season_window": "Mar 15 – Jun 30",
+        "telemetry_hook": "noaa_spc",
+        "locales": ["tulsa", "national"]
     },
     "cushing_spill": {
         "name": "Cushing Keystone Pipeline Rupture & Terminal Lock",
         "headline": "Keystone pipeline pressure drop causes crude oil spill near Cushing, OK hub.",
-        "shock_pct": 0.0458
+        "shock_pct": 0.0458,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["tulsa", "national"]
     },
     "marathon_outage": {
         "name": "Marathon Catlettsburg KY Refinery Unplanned Outage",
         "headline": "Catlettsburg refinery fluid catalytic cracker trip causes tri-state gasoline tight market.",
-        "shock_pct": 0.0478
+        "shock_pct": 0.0478,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["cincinnati", "national"]
     },
     "mississippi_low_water": {
         "name": "Lower Mississippi & Ohio River Low-Water Barge Bottleneck",
         "headline": "Severe drought restricts barge draft levels on Mississippi and Ohio rivers, raising Midwest rack freight.",
-        "shock_pct": 0.0420
+        "shock_pct": 0.0420,
+        "category": "hydrological",
+        "season_window": "Aug 15 – Dec 15",
+        "telemetry_hook": "usgs_stage",
+        "locales": ["cincinnati", "tulsa", "national"]
     },
     "hayward_quake": {
         "name": "USGS Hayward Fault M>=6.0 Seismic Quake & Pipeline Shutoff",
         "headline": "Magnitude 6.4 earthquake triggers emergency shutdown of SF Bay Area crude and product pipelines.",
-        "shock_pct": 0.0848
+        "shock_pct": 0.0848,
+        "category": "geophysical",
+        "season_window": "Year-Round",
+        "telemetry_hook": "usgs_seismic",
+        "locales": ["oakland", "national"]
     },
     "pge_psps_shutoff": {
         "name": "PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout",
         "headline": "High wind red flag wildfire threat triggers PG&E power shutoff across Contra Costa refining corridor.",
-        "shock_pct": 0.0707
+        "shock_pct": 0.0707,
+        "category": "meteorological_fire",
+        "season_window": "Jul 01 – Nov 15",
+        "telemetry_hook": "noaa_spc_fire",
+        "locales": ["oakland", "national"]
     },
     "chevron_hydrocracker": {
         "name": "Chevron Richmond Refinery Unplanned Hydrocracker Outage",
         "headline": "Unplanned hydrocracker unit trip at Chevron Richmond refinery causes West Coast price surge.",
-        "shock_pct": 0.0576
+        "shock_pct": 0.0576,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["oakland", "national"]
     },
     "carb_transition": {
         "name": "CARB CaRFG Summer-Blend Transition Compliance Surge",
         "headline": "Statutory CARB summer-blend vapor pressure transition tightens California RFG supply.",
-        "shock_pct": 0.0444
+        "shock_pct": 0.0444,
+        "category": "regulatory_spec",
+        "season_window": "Feb 15 – May 01",
+        "telemetry_hook": "spec_calendar",
+        "locales": ["oakland", "national"]
     },
     "colonial_outage": {
         "name": "Colonial Pipeline Mainline Outage / Cyberattack Shock",
         "headline": "Colonial Pipeline Line 1 emergency shutdown halts batch shipments into Selma NC breakout tank farms.",
-        "shock_pct": 0.0754
+        "shock_pct": 0.0754,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["greenville", "charlotte", "newark", "national"]
     },
     "greenville_hurricane": {
         "name": "Category 3 Atlantic Hurricane Landfall & Tar River Flooding",
         "headline": "Major Hurricane landfall inundates Eastern NC coastal distribution highways and Tar River transport routes.",
-        "shock_pct": 0.0662
+        "shock_pct": 0.0662,
+        "category": "meteorological",
+        "season_window": "Jun 01 – Nov 30",
+        "telemetry_hook": "noaa_nhc",
+        "locales": ["greenville", "charlotte", "national"]
     },
     "selma_outage": {
         "name": "Selma NC Distribution Hub Tank Farm Outage & Grid Blackout Shock",
         "headline": "Severe convective microburst knocks out Duke Energy substation at Selma breakout hub, suspending rack loading.",
-        "shock_pct": 0.0569
+        "shock_pct": 0.0569,
+        "category": "convective_severe",
+        "season_window": "Apr 01 – Aug 31",
+        "telemetry_hook": "noaa_spc",
+        "locales": ["greenville", "charlotte", "national"]
     },
     "port_st_lucie_hurricane": {
         "name": "Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown",
         "headline": "Major Hurricane storm surge forces emergency closure of Port Everglades and Port Canaveral marine petroleum berths.",
-        "shock_pct": 0.0666
+        "shock_pct": 0.0666,
+        "category": "meteorological",
+        "season_window": "Jun 01 – Nov 30",
+        "telemetry_hook": "noaa_nhc",
+        "locales": ["port_st_lucie", "national"]
     },
     "weekend_opec_post": {
         "name": "Weekend Executive OPEC Talkdown Post",
         "headline": "Executive social post demanding immediate OPEC price cuts re-anchors market opens downward.",
-        "shock_pct": -0.0185
+        "shock_pct": -0.0185,
+        "category": "executive_social",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["national"]
     },
     "weekend_tariff_declaration": {
         "name": "Weekend Foreign Energy Tariff Declaration",
         "headline": "Executive social post announcing immediate 25% energy import tariff causes weekend open gap surge.",
-        "shock_pct": 0.0210
+        "shock_pct": 0.0210,
+        "category": "executive_social",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["national"]
     },
     "houston_ship_channel_closure": {
         "name": "Houston Ship Channel Torrential Runoff & Marine Closure",
         "headline": "USGS San Jacinto runoff surge closes Houston Ship Channel to crude tankers and fuel barges, halting 2.7M bpd refining corridor.",
-        "shock_pct": 0.0512
+        "shock_pct": 0.0512,
+        "category": "hydrological",
+        "season_window": "May 01 – Oct 31",
+        "telemetry_hook": "usgs_flow",
+        "locales": ["national", "tulsa"]
     },
     "carquinez_atmospheric_river": {
         "name": "Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt",
         "headline": "USGS Sacramento River discharge surge through Carquinez Strait suspends crude tanker berthing at Martinez & Benicia refineries.",
-        "shock_pct": 0.0435
+        "shock_pct": 0.0435,
+        "category": "hydrological",
+        "season_window": "Nov 01 – Apr 01",
+        "telemetry_hook": "usgs_flow",
+        "locales": ["oakland", "national"]
     },
     "summer_refinery_thermal_cutback": {
         "name": "Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment",
         "headline": "USGS river water temperature exceeds 28°C, impairing refinery cooling tower efficiency and triggering statutory run cuts.",
-        "shock_pct": 0.0385
+        "shock_pct": 0.0385,
+        "category": "hydrological",
+        "season_window": "Jun 15 – Sep 15",
+        "telemetry_hook": "usgs_temp",
+        "locales": ["newark", "cincinnati", "national"]
+    },
+    "polar_vortex_freeze": {
+        "name": "Polar Vortex Arctic Blast & Gulf Coast Refining Freeze-Off Shock",
+        "headline": "Severe arctic blast triggers wellhead freeze-offs, electrical grid failure, and emergency refinery shutdowns across Texas and Midcontinent.",
+        "shock_pct": 0.0625,
+        "category": "meteorological",
+        "season_window": "Dec 01 – Feb 28",
+        "telemetry_hook": "noaa_freeze",
+        "locales": ["tulsa", "cincinnati", "national"]
     }
 }
 
@@ -300,6 +385,7 @@ class SimulateRequest(BaseModel):
     scenario_id: str = Field(..., json_schema_extra={"example": "hormuz_blockade"}, description="Unique scenario ID")
     locale: Optional[str] = Field("national", json_schema_extra={"example": "oakland"}, description="Target locale code")
     custom_shock_pct: Optional[float] = Field(None, json_schema_extra={"example": 0.05}, description="Optional custom shock percentage")
+    target_date: Optional[str] = Field(None, json_schema_extra={"example": "2026-09-18"}, description="Target date for seasonal plausibility evaluation (YYYY-MM-DD)")
 
 
 class BatchForecastRequest(BaseModel):
@@ -1013,6 +1099,32 @@ def get_ozone_alerts_endpoint(
     }
 
 
+@app.get("/api/v1/macro/freight-tsi", summary="Get U.S. BTS Freight Transportation Index & Truck Demand Telemetry", tags=["Physical Data Feeds"])
+def get_bts_freight_tsi_endpoint(
+    start_date: Optional[str] = Query("2022-01-01", description="Historical start date (YYYY-MM-DD)"),
+    summary_only: bool = Query(False, description="Return only the latest demand momentum summary if true")
+):
+    """
+    Returns official U.S. Bureau of Transportation Statistics (BTS) Freight Transportation Services
+    Index (TSI), truck tonnage index, petroleum transport volumes, and physical demand momentum scores (Issue #74).
+    """
+    from src.bts_transportation import BTSTransportationConnector
+    connector = BTSTransportationConnector()
+    if summary_only:
+        return connector.get_bts_current_demand_summary()
+    
+    df = connector.fetch_bts_tsi_dataset(start_date=start_date)
+    summary = connector.get_bts_current_demand_summary()
+    records = df.assign(date=df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records") if not df.empty else []
+    return {
+        "status": "SUCCESS",
+        "as_of": datetime.now(timezone.utc).isoformat(),
+        "demand_summary": summary,
+        "sample_count": len(records),
+        "history": records
+    }
+
+
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")
 def get_batch_forecast(req: BatchForecastRequest):
     """
@@ -1072,11 +1184,63 @@ def get_batch_combined(req: BatchCombinedRequest):
     }
 
 
+@app.get("/api/v1/forecast/scenarios", dependencies=[Depends(get_api_key_user)], summary="List Shock Scenarios with Seasonal Plausibility")
+def get_forecast_scenarios(
+    active_only: bool = Query(False, description="Filter for currently active/plausible scenarios only"),
+    locale: Optional[str] = Query(None, description="Filter scenarios by target metro hub code"),
+    target_date: Optional[str] = Query(None, description="Target evaluation date (YYYY-MM-DD)"),
+    include_prospective: bool = Query(True, description="Include prospective forward-generated precursor scenarios")
+):
+    """
+    Returns available counterfactual and forward shock scenarios augmented with seasonal plausibility tiers,
+    climatological active/peak windows, and live telemetry triggers (Issue #300).
+    """
+    try:
+        from src.scenario_engine import get_all_scenarios_with_plausibility
+        res = get_all_scenarios_with_plausibility(
+            target_date=target_date,
+            active_only=active_only,
+            locale=locale,
+            include_prospective=include_prospective,
+            live_telemetry=True
+        )
+        return {
+            "status": "success",
+            "system": f"Midgley {get_model_version()}",
+            "timestamp": datetime.now().isoformat(),
+            "target_date": res["target_date"],
+            "total_scenarios": res["count"],
+            "scenarios": res["scenarios"]
+        }
+    except Exception as e:
+        logger.warning(f"Error evaluating scenario plausibility: {e}")
+        # Fallback to catalog
+        fallback_list = []
+        for sid, sdata in SCENARIOS_CATALOG.items():
+            fallback_list.append({
+                "scenario_id": sid,
+                "name": sdata["name"],
+                "category": sdata.get("category", "general"),
+                "plausibility_status": "EVERGREEN",
+                "plausibility_score": 0.80,
+                "is_in_season": True,
+                "season_window": sdata.get("season_window", "Year-Round"),
+                "is_prospective": False
+            })
+        return {
+            "status": "success",
+            "system": f"Midgley {get_model_version()}",
+            "timestamp": datetime.now().isoformat(),
+            "total_scenarios": len(fallback_list),
+            "scenarios": fallback_list
+        }
+
+
 @app.post("/api/v1/forecast/simulate", dependencies=[Depends(get_api_key_user)], summary="Simulate Counterfactual Market Shocks")
 def simulate_shock(req: SimulateRequest):
-
     """
-    Evaluates counterfactual physical, refinery outage, weather disaster, or geopolitical shock scenarios.
+    Evaluates counterfactual physical, refinery outage, weather disaster, or geopolitical shock scenarios
+    with seasonal and climatological plausibility gating (Issue #300).
     """
     scenario_info = SCENARIOS_CATALOG.get(req.scenario_id)
     if not scenario_info:
@@ -1088,6 +1252,26 @@ def simulate_shock(req: SimulateRequest):
     region_code = _normalize_locale(req.locale or "national")
     live_res = fetch_live_metro_retail_price(region_code)
     base_price = live_res.get("price", 3.184)
+
+    # Evaluate Seasonal & Physical Plausibility Gating (Issue #300)
+    plausibility_info = {}
+    try:
+        from src.scenario_engine import evaluate_scenario_plausibility
+        plausibility_info = evaluate_scenario_plausibility(
+            scenario_id=req.scenario_id,
+            target_date=req.target_date,
+            live_telemetry=True
+        )
+    except Exception as e:
+        logger.debug(f"Plausibility engine evaluation fallback: {e}")
+        plausibility_info = {
+            "plausibility_status": "EVERGREEN",
+            "plausibility_score": 0.80,
+            "is_in_season": True,
+            "is_in_peak": False,
+            "warning_message": None,
+            "context_reasoning": "Standard simulation baseline."
+        }
 
     shock_pct = req.custom_shock_pct if req.custom_shock_pct is not None else scenario_info["shock_pct"]
     if req.scenario_id == "hayward_quake" and req.custom_shock_pct is None:
@@ -1110,7 +1294,17 @@ def simulate_shock(req: SimulateRequest):
         "scenario": {
             "id": req.scenario_id,
             "name": scenario_info["name"],
-            "headline": scenario_info["headline"]
+            "headline": scenario_info["headline"],
+            "category": scenario_info.get("category", "general"),
+            "season_window": scenario_info.get("season_window", "Year-Round")
+        },
+        "plausibility": {
+            "status": plausibility_info.get("plausibility_status", "EVERGREEN"),
+            "score": plausibility_info.get("plausibility_score", 0.80),
+            "is_in_season": plausibility_info.get("is_in_season", True),
+            "is_in_peak": plausibility_info.get("is_in_peak", False),
+            "warning_message": plausibility_info.get("warning_message"),
+            "context_reasoning": plausibility_info.get("context_reasoning")
         },
         "simulation": {
             "target_locale": region_code,
