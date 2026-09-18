@@ -3488,5 +3488,25 @@
       "overall_price_pressure": 0.8
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-18T20:37:37.095249",
+    "headline": "Exxon Refinery Outage Adds Pressure to Regional Fuel Prices - Energy Intelligence",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE5CTnpydWVqdGY2QVdSRk9YVG5kM0p4V0wtcElkU2xNS0hNajZUTFJFTUc1M1hHbEY5U1h5WlBzNXFPQmUwR25WYVktVmt5TGlnSUVlUkdFYW9YUjVsY2Y1ZFoyV1hrSmFSODBOSzNjeU5jdw?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMickFVX3lxTE5CTnpydWVqdGY2QVdSRk9YVG5kM0p4V0wtcElkU2xNS0hNajZUTFJFTUc1M1hHbEY5U1h5WlBzNXFPQmUwR25WYVktVmt5TGlnSUVlUkdFYW9YUjVsY2Y1ZFoyV1hrSmFSODBOSzNjeU5jdw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMickFVX3lxTE5CTnpydWVqdGY2QVdSRk9YVG5kM0p4V0wtcElkU2xNS0hNajZUTFJFTUc1M1hHbEY5U1h5WlBzNXFPQmUwR25WYVktVmt5TGlnSUVlUkdFYW9YUjVsY2Y1ZFoyV1hrSmFSODBOSzNjeU5jdw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]
