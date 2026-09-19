@@ -650,7 +650,7 @@ __all__ = [
 Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`). If adjacent to supplying refining centers, ingest live fence-line air quality and flaring emissions telemetry via `AQIFeedConnector` (registering corridor bounding box and refinery assets in `AQI_CORRIDORS` inside `src/aqi_feed.py`).
 
 3. **`src/locations/chicago/main.py`**:
-Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering, fits the Ridge estimator, logs predictions to `data/prediction_history.csv`, and returns forecast metrics.
+Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering across multi-day horizons, trains discrete 1D–5D step-ahead estimators via `train_multi_horizon_models()`, logs and backfills predictions across all 5 horizons into `data/prediction_history.csv` via `log_predictions()` and `backfill_new_region_history()`, and returns forecast metrics.
 
 4. **`src/locations/chicago/notebook_builder.py`**:
 Implement `build_chicago_notebook()` returning export path `"chicago_gas_price_llm_forecasting.ipynb"`.
@@ -696,8 +696,8 @@ if any(k in text for k in ["chicago", "whiting refinery", "joliet refinery", "il
 4. Update Section 03 (**Equation 3.1: Multi-Tiered Weather Vulnerability Matrix**) in `docs/math.html` and `src/dashboard_generator.py` to append the new regional weather vector term ($\mathbf{W}_{\text{Metro}}$) and document localized NOAA NWS county/zone codes.
 5. Update Section 04 (**Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals** and **Equation 4.1: Unified Global Maritime Detour, Inland River Barge & Coastal Waterborne Freight Rate Model**) in `docs/math.html` and `src/dashboard_generator.py` if the region introduces inland waterway navigation/draft or coastal lightering/terminal surcharges ($\Delta \text{Margin}_{\text{waterborne}, r}$ / $\text{Index}_{\text{barge}}$).
 
-### Step 8: Connect MLOps Prediction Tracker & Backfilling (`src/prediction_logger.py`)
-Update `src/prediction_logger.py` to include `"Chicago_IL"` in target price columns and historical test-split backfilling (`backfill_new_region_history`).
+### Step 8: Connect MLOps Prediction Tracker & Multi-Horizon Backfilling (`src/prediction_logger.py`)
+Update `src/prediction_logger.py` to include `"Chicago_IL"` in target price columns and historical test-split backfilling across horizons 1 through 5 (`backfill_new_region_history(..., forecast_horizon_days=h)`).
 
 ### Step 9: Update GitHub Wiki Documentation (`KoshiirRa/midgley.wiki`)
 Whenever adding, modifying, or removing data connectors, API feeds, or regional data sources:

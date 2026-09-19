@@ -204,7 +204,7 @@
     }
   },
   {
-    "as_of": "2026-09-18 12:19:42",
+    "as_of": "2026-09-18 17:14:28",
     "valid_date": "2026-09-18",
     "corridor_key": "cushing_ok",
     "composite_seismic_risk_index": 0.0,
@@ -213,7 +213,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-18 12:19:42",
+      "timestamp": "2026-09-18 17:14:28",
       "filtered_corridor": "cushing_ok",
       "temporal_window_days": 30,
       "events": [],
@@ -240,7 +240,7 @@
     }
   },
   {
-    "as_of": "2026-09-18 12:25:20",
+    "as_of": "2026-09-18 17:14:29",
     "valid_date": "2026-09-18",
     "corridor_key": "mid_atlantic",
     "composite_seismic_risk_index": 0.0,
@@ -249,7 +249,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-18 12:25:20",
+      "timestamp": "2026-09-18 17:14:29",
       "filtered_corridor": "mid_atlantic",
       "temporal_window_days": 30,
       "events": [],
@@ -276,21 +276,45 @@
     }
   },
   {
-    "as_of": "2026-09-18 23:59:49",
+    "as_of": "2026-09-18 17:15:11",
     "valid_date": "2026-09-18",
-    "corridor_key": "bay_area",
+    "corridor_key": "all",
     "composite_seismic_risk_index": 0.0,
     "max_magnitude": 0.0,
     "total_significant_quakes": 0,
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-18 23:59:49",
-      "filtered_corridor": "bay_area",
+      "timestamp": "2026-09-18 17:15:11",
+      "filtered_corridor": "all",
       "temporal_window_days": 30,
       "events": [],
       "corridors": {
         "bay_area": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "cushing_ok": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "socal": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "mid_atlantic": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "new_madrid": {
           "corridor_risk_index": 0.0,
           "max_magnitude": 0.0,
           "active_events_count": 0,
@@ -312,8 +336,8 @@
     }
   },
   {
-    "as_of": "2026-09-19 00:00:04",
-    "valid_date": "2026-09-19",
+    "as_of": "2026-09-18 17:15:22",
+    "valid_date": "2026-09-18",
     "corridor_key": "bay_area",
     "composite_seismic_risk_index": 0.0,
     "max_magnitude": 0.0,
@@ -321,7 +345,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-19 00:00:04",
+      "timestamp": "2026-09-18 17:15:22",
       "filtered_corridor": "bay_area",
       "temporal_window_days": 30,
       "events": [],

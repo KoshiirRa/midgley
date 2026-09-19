@@ -1,0 +1,21 @@
+[
+  {
+    "source": "U.S. Bureau of Transportation Statistics (BTS SODA API)",
+    "as_of": "2026-09-18 17:16:11",
+    "valid_date": "2026-07-01",
+    "tsi_freight": 135.7,
+    "truck_tonnage": 113.5,
+    "petroleum_transport": 0.0,
+    "tsi_total": 130.7,
+    "is_vintage_reconstructed": false,
+    "data": {
+      "as_of": "2026-09-18 17:16:11",
+      "valid_date": "2026-07-01",
+      "tsi_freight": 135.7,
+      "truck_tonnage": 113.5,
+      "petroleum_transport": 0.0,
+      "tsi_total": 130.7,
+      "is_vintage_reconstructed": false
+    }
+  }
+]

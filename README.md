@@ -1,6 +1,6 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.6)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.6.6)
 
-[![Release: v0.6](https://img.shields.io/badge/Release-v0.6-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.6)
+[![Release: v0.6.6](https://img.shields.io/badge/Release-v0.6.6-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.6.6)
 [![GHCR Docker](https://img.shields.io/badge/GHCR-midgley%3Aself--hosted-blue.svg?logo=docker)](https://github.com/KoshiirRa/midgley/pkgs/container/midgley)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
@@ -13,18 +13,18 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-18 12:37 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-18 17:08 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.507`/gal | **`$3.617`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-National-Ridge` |
-| **Tulsa, OK Metro Retail** | `$4.015`/gal | **`$7.189`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-Tulsa-Ridge` |
-| **Newark, DE Metro Retail** | `$4.366`/gal | **`$4.433`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-Newark-Ridge` |
-| **Cincinnati, OH Retail** | `$4.506`/gal | **`$4.496`/gal** | **DOWN 📉** | `2026-09-24` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
-| **Northern Kentucky Retail** | `$4.509`/gal | **`$4.499`/gal** | **DOWN 📉** | `2026-09-24` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
-| **Greenville, NC Metro Retail** | `$4.163`/gal | **`$4.165`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-Greenville-Ridge` |
-| **Oakland, CA Metro Retail** | `$6.168`/gal | **`$6.113`/gal** | **DOWN 📉** | `2026-09-24` | `v1.6-Ipatieff-Oakland-Ridge` |
-| **SF Bay Area 9-County Avg** | `$6.269`/gal | **`$6.213`/gal** | **DOWN 📉** | `2026-09-24` | `v1.6-Ipatieff-BayArea-Ridge` |
+| **National Wholesale (RBOB)** | `$3.507`/gal | **`$3.542`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-National-Ridge` |
+| **Tulsa, OK Metro Retail** | `$4.015`/gal | **`$4.435`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-Tulsa-Ridge` |
+| **Newark, DE Metro Retail** | `$4.366`/gal | **`$4.369`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-Newark-Ridge` |
+| **Cincinnati, OH Retail** | `$4.506`/gal | **`$4.486`/gal** | **DOWN 📉** | `2026-09-24` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
+| **Northern Kentucky Retail** | `$4.509`/gal | **`$4.489`/gal** | **DOWN 📉** | `2026-09-24` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
+| **Greenville, NC Metro Retail** | `$4.163`/gal | **`$4.093`/gal** | **DOWN 📉** | `2026-09-24` | `v1.6-Ipatieff-Greenville-Ridge` |
+| **Oakland, CA Metro Retail** | `$6.168`/gal | **`$6.181`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-Oakland-Ridge` |
+| **SF Bay Area 9-County Avg** | `$6.269`/gal | **`$6.282`/gal** | **UP 📈** | `2026-09-24` | `v1.6-Ipatieff-BayArea-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->

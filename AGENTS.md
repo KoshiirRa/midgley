@@ -224,6 +224,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Closed-Loop Uplift Guardrail:** Automatically applies persistence bias factor $\alpha_{\text{guardrail}} = 0.5$ if a region's 14-day rolling baseline uplift drops below $-2.0\%$.
 * **Empirical Residual Confidence Interval Recalibration ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) (Issue #214):**
   - Replaces naive static $\pm 5\%$ multipliers with dynamic 95% confidence bounds ($\hat{y}_{t+5} \pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$) derived from rolling 30-day standard error of regional prediction residuals (falling back to $\sigma_{\text{default}} = 0.0612$ $/gal). Elevates empirical 95% CI coverage from 32.2% to $\ge 90.0\%$ across all 10 metro calibration hubs.
+* **Discrete Multi-Horizon Step-Ahead Forecasting Engine (`train_multi_horizon_models()`, Issue #314):**
+  - Trains separate, un-interpolated Ridge, ElasticNet, and Stacking estimators for discrete forecasting steps: **1-Day (24h Ahead)**, **2-Day (48h Ahead)**, **3-Day (72h Ahead)**, **4-Day (96h Ahead)**, and **5-Day (1-Week Ahead)**.
+  - Dynamically configures feature engineering matrices, momentum lookbacks, and exponential shock decay half-lives ($t_{1/2}$) tailored specifically to each target lead time, eliminating linear interpolation approximations.
 * **Out-of-Time Test Performance (Regular v1.6 "Ipatieff" Engine "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
@@ -354,7 +357,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Multi-Tier Edge Cache & Active Diagnostics Probes (`src/lookup_cache.py`, Issue #108 & #301):**
   - **3-Tier Cascade:** Tier 1 (Turso Edge SQLite) $\rightarrow$ Tier 2 (Cloudflare D1 Edge Worker) $\rightarrow$ Tier 3 (Local SQLite `data/lookup_cache.sqlite` + in-memory fast dict).
   - **Active Diagnostic Probes:** `LookupCache.test_edge_connectivity(tier)` executes live end-to-end roundtrip read/write health checks and latency benchmarks against edge databases. Exposed via CLI flags (`python -m src.lookup_cache --ping`, `--test-turso`, `--test-cloudflare`, `--test-all`, `--stats`) and REST API (`GET /api/v1/system/cache-status?probe=true`).
-* **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, the 5-day out-of-time target date is automatically computed as `run_date + 5 days` (e.g. run date `2026-08-24` -> target date `2026-08-29`), maintaining clean out-of-time prediction records.
+* **Automated Daily Schedule & Target Calculation:** Executes automatically during daily forecast runs (02:00 AM Central). For every daily run, out-of-time target dates are calculated for all discrete horizons ($h \in [1, 2, 3, 4, 5]$ business days), logging records with `forecast_horizon_days` to prevent overwriting.
+* **Discrete Multi-Horizon Backfilling Engine (`backfill_new_region_history()`, Issue #314):**
+  - Accepts `forecast_horizon_days` parameter to automatically backfill historical out-of-time test split predictions across all 1D–5D horizons.
+  - Aligns and scores mature target dates against historical ground-truth prices, populating non-zero rolling MAE, RMSE, and directional accuracy metrics across every discrete horizon row in the scoreboard.
 * **Realized-vs-Predicted Rolling Scoreboard & Observability Engine:**
   - `compute_rolling_scoreboard_metrics(window_days=30, region=None, horizon_days=None)`: Calculates rolling 30/60/90-day and per-horizon (1d through 5d) MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence Baseline MAE, and Model MAE Uplift % vs. ground-truth market prices (Issue #209).
   - `compute_horizon_scoreboard_breakdown(window_days=30, region=None)`: Computes granular accuracy and uplift breakdowns across all discrete forecast horizons (1-day, 2-day, 3-day, 4-day, and 5-day out-of-time projections).

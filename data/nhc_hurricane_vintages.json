@@ -40,5 +40,47 @@
       "active_advisories": [],
       "status": "SUCCESS"
     }
+  },
+  {
+    "as_of": "2026-09-18 17:11:13",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-18 17:11:13",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-18 17:14:07",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-18 17:14:07",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-18 17:14:46",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-18 17:14:46",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
   }
 ]

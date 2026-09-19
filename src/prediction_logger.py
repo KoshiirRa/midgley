@@ -26,7 +26,6 @@ def ensure_history_store():
     columns = [
         "log_timestamp",
         "forecast_target_date",
-        "forecast_horizon_days",
         "region",
         "model_version",
         "run_type",
@@ -45,7 +44,8 @@ def ensure_history_store():
         "prediction_lower_95ci",
         "prediction_upper_95ci",
         "within_95ci_hit",
-        "data_source_provenance"
+        "data_source_provenance",
+        "forecast_horizon_days"
     ]
     if not os.path.exists(HISTORY_CSV_PATH) or os.path.getsize(HISTORY_CSV_PATH) == 0:
         df = pd.DataFrame(columns=columns)
@@ -373,7 +373,7 @@ def log_predictions(
         
     new_df = pd.DataFrame(new_records)
     combined = pd.concat([history_df, new_df], ignore_index=True)
-    combined.drop_duplicates(subset=["forecast_target_date", "region", "model_version", "run_type"], keep="last", inplace=True)
+    combined.drop_duplicates(subset=["forecast_target_date", "forecast_horizon_days", "region", "model_version", "run_type"], keep="last", inplace=True)
     combined.to_csv(HISTORY_CSV_PATH, index=False)
     try:
         sync_predictions_to_cloud(combined)
@@ -513,11 +513,12 @@ def backfill_new_region_history(
     base_prices,
     predicted_prices,
     region: str,
-    model_version: Optional[str] = None
+    model_version: Optional[str] = None,
+    forecast_horizon_days: int = 5
 ) -> int:
     """
     Backfills historical test split predictions for a newly added region into prediction_history.csv
-    and automatically matches/evaluates mature target dates against ground-truth market prices.
+    and automatically matches/evaluates mature target dates against ground-truth market prices (Issue #314).
     """
     if model_version is None:
         try:
@@ -532,12 +533,13 @@ def backfill_new_region_history(
     pred_log_df = pd.DataFrame({
         'date': dates_arr,
         'current_price': base_arr,
-        'predicted_5d_price': pred_arr
+        'predicted_5d_price': pred_arr,
+        'forecast_horizon_days': forecast_horizon_days
     })
     
-    n_logged = log_predictions(pred_log_df, region=region, model_version=model_version)
+    n_logged = log_predictions(pred_log_df, region=region, model_version=model_version, forecast_horizon_days=forecast_horizon_days)
     backfill_actual_prices_and_evaluate()
-    logger.info(f"Backfilled and evaluated {n_logged} historical prediction records for region '{region}'.")
+    logger.info(f"Backfilled and evaluated {n_logged} historical prediction records for region '{region}' ({forecast_horizon_days}d horizon).")
     return n_logged
 
 

@@ -42,5 +42,49 @@
       }
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "USACE Lock Performance Monitoring System (LPMS Public Web Service)",
+    "timestamp": "2026-09-18 17:14:48",
+    "as_of": "2026-09-18 17:14:48",
+    "valid_date": "2026-09-18",
+    "is_vintage_reconstructed": false,
+    "usace_ohio_river_lock_delay_hours": 1.4,
+    "usace_cincinnati_barge_bottleneck_index": 0.18,
+    "monitored_locks": {
+      "Markland_Lock_OH_Mile531": {
+        "delay_hours": 1.2,
+        "barge_queue_count": 3,
+        "status": "OPEN"
+      },
+      "McAlpine_Lock_OH_Mile606": {
+        "delay_hours": 1.6,
+        "barge_queue_count": 4,
+        "status": "OPEN"
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "USACE Lock Performance Monitoring System (LPMS Public Web Service)",
+    "timestamp": "2026-09-18 17:14:51",
+    "as_of": "2026-09-18 17:14:51",
+    "valid_date": "2026-09-18",
+    "is_vintage_reconstructed": false,
+    "usace_ohio_river_lock_delay_hours": 1.4,
+    "usace_cincinnati_barge_bottleneck_index": 0.18,
+    "monitored_locks": {
+      "Markland_Lock_OH_Mile531": {
+        "delay_hours": 1.2,
+        "barge_queue_count": 3,
+        "status": "OPEN"
+      },
+      "McAlpine_Lock_OH_Mile606": {
+        "delay_hours": 1.6,
+        "barge_queue_count": 4,
+        "status": "OPEN"
+      }
+    },
+    "status": "SUCCESS"
   }
 ]
