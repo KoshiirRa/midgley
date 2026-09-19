@@ -1,13 +1,5 @@
 [
   {
-    "timestamp": "2026-09-16T22:47:55.188710",
-    "headline": "Test Suite Unsigned Queue Event",
-    "norm_headline": "test suite unsigned queue event",
-    "url": "https://example.com/1",
-    "is_anomaly": false,
-    "source": "Webhook_Push"
-  },
-  {
     "timestamp": "2026-09-17T19:27:16.353122",
     "headline": "Sticker shock: Gas prices soaring for Sept. 17, diesel \u2018outages\u2019 reported in 3 states - Cleveland.com",
     "norm_headline": "sticker shock: gas prices soaring for sept. 17, diesel \u2018outages\u2019 reported in 3 states",
@@ -694,5 +686,61 @@
     "url": "https://example.com/1",
     "is_anomaly": false,
     "source": "Webhook_Push"
+  },
+  {
+    "timestamp": "2026-09-19T04:26:55.771457",
+    "headline": "Detroit Evening Report: High diesel fuel prices expected to trickle down to consumers - WDET 101.9 FM",
+    "norm_headline": "detroit evening report: high diesel fuel prices expected to trickle down to consumers",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOdTYzOXBpQVgxTzJHR2xLMmVtdWVQUDJhUGp3NWVvVWVJUjMwbDV5RndJclVMNnlQUjcyQ2ViY0tCTHlROER5cXNkT1dfZXpsTXozVnRwd01BWDVGQkFHYjBHM0NkMUl1VjF1WlNiRFkyYjl3azA1NEI5aktiVGtKTVF0Z1lMMjcxOTFRa3lyOHAtbkxlN3ZhWHpDOGk5dWtveTUxbkoyR1AydVBEX2JoYlFQTQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-19T04:27:01.295255",
+    "headline": "Pausing the Michigan gas tax? Lawmakers say it may not happen - WILX",
+    "norm_headline": "pausing the michigan gas tax? lawmakers say it may not happen",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNVFp6b3VSSWEwelh3N0ticnRJWjBiazZHXzlRZjhsT182amtFNUs2YVh5WTVkc1dnb2kyc3d0UlBrSXl3dTVFRDRwdXJSejBiVWhGbjdSdFFveDJpNGtSZTFQTm5Ubl80Wkx3WlB0bEtsLVpkT3Vnb2JDSk5uUldqWVBNaC1NTzZta0VocFVsZWxRZ1XSAacBQVVfeXFMT3hqcDVRS1BzUXloS0VsX1FPYjJxcmhodVprZDFmRVVYV0RQb3pkMm43UFQ2S3lEUURzQk1jYkV1MTJiR1U0dUltNHI3UnJ3Zk5hcHJYRTdkVVdCd3pMTVE5MG5acWdnYzdDY0pWUE9CMk8yd1Y3eUJXZ2xjdUh3YjhJZXBkeG5yWkRnMW1PdGhmTzR0eXd4d3U4TW9OWElMbDlvRHpHbDA?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-19T04:27:01.555254",
+    "headline": "\u2018Astronomical\u2019: Las Vegas business owners react to record diesel prices - FOX5 Vegas",
+    "norm_headline": "astronomical\u2019: las vegas business owners react to record diesel prices",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQNHJReGVZY1JHX3dacjZ4QlNNRlFJOTV5OGx0MF9ELXJrUmkzTEYzMFZPQUpMaktHY0kzZHhFT1FLTXM4ODJrRlRGNG9xc3dPbjJySmt2Skhna2J0UG5La3RfLXJ1b1V5T2pXT243bDVyWUl0V2wxQkJmdmlQMEVxa2pWZFk1d2Q5Uk1LWVRrbVVjOFFmSmJ1d1JwMHBsYXEzcVhjQXF3?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-19T04:27:06.977468",
+    "headline": "Michigan politicians float gas tax suspension amid \u2018bloodsucking\u2019 gas prices - WLNS 6 News",
+    "norm_headline": "michigan politicians float gas tax suspension amid \u2018bloodsucking\u2019 gas prices",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPMksyV3lKLVk4d0psQ21xM0YtbFRqS2dORzJyY2tFNFdJUHJRUE95VzdOS3Z1M2pCUUJpYXAwTlZXMHB0Mmd5WC01dUFacUg3Z2hqdDZwc2FTanFGd19OYlMxbTRncXotN3g0aUlFd0lDeFdQQkIzRWYwbmI4NWdVa3VOLTVhWkczRy03M2VYMVVhaDhXN2Zhd1hLWEpRUHZNY295VE52QS1GbDdkREluVjQ3U0tCYVXSAbcBQVVfeXFMTzJLMld5Si1ZOHdKbENtcTNGLWxUaktnTkcycmNrRTRXSVByUVBPeVc3Tkt2dTNqQlFCaWFwME5WVzBwdDJneVgtNXVBWnFIN2doanQ2cHNhU2pxRndfTmJTMW00Z3F6LTd4NGlJRXdJQ3hXUEJCM0VmMG5iODVnVWt1Ti01YVpHM0ctNzNlWDFVYWg4VzdmYXdYS1hKUVB2TWNveVROdkEtRmw3ZERJblY0N1NLQmFV?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-19T04:27:07.265273",
+    "headline": "Gas prices soar, how drivers can save at the pump - WISN",
+    "norm_headline": "gas prices soar, how drivers can save at the pump",
+    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNWHRjRE5NckR1UHZPeUVGZmxXY3BnZGJBT1k1bE1jeE91bG9aaTVBNTdsQ1ljOFhkcldaRFRteHU1dC1XdTJQeHViRWVLdFpXQ2RhTU1pN3FyUzMxVE9pMnBUNjAzOHY1VXBzTUZiSUhjM1lFWVBYc3JNWU9Ib3FkQnF6N2ZIclhPNUVmS1RwWQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-19T04:27:07.570454",
+    "headline": "Gas prices approach highest level this year with just weeks to go before midterms - NBC News",
+    "norm_headline": "gas prices approach highest level this year with just weeks to go before midterms",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPT3RvUGtUWFF1Y0FsUGd6d0R5YzM4RDFHYURwQmxGNklGeDFEU1pWTzFxNEZsNTE5SjJHUjk1aVZnX19abkNXSXhSSkp4Y3p2WEE2ZHpSRnVXUU0tcTEyYlFkdUZiLTc5TU15N043YmtlMzZRbV9EeUNsSGV4MUktUUZwLV9KUUVs?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-19T04:27:22.635917",
+    "headline": "Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com",
+    "norm_headline": "valero prepares restart of port arthur, texas oil refinery after blast, sources say",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "is_anomaly": true,
+    "source": "RSS_Feed"
   }
 ]

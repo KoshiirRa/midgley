@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-18T17:14:50.215967",
+  "timestamp": "2026-09-19T04:27:49.726576",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-18T22:14:32Z"
+      "timestamp": "2026-09-19T04:27:23Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-23",
+    "target_date": "2026-09-24",
     "current_base_price": 4.366,
     "predicted_price_per_gal": 4.369,
     "expected_change_dollars": 0.003,
