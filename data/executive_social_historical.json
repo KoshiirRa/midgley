@@ -1,30 +1,10 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-09-19 14:32:28",
+  "last_refreshed_utc": "2026-09-19 17:31:35",
   "records_count": 5,
   "data": [
     {
-      "date": "2026-09-19 14:32:28",
-      "platform": "Google News RSS",
-      "post_text": "Trump Welcomes United Arab Emirates Exit From OPEC - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-09-19 14:32:28",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-09-19 14:32:28",
+      "date": "2026-09-19 17:31:35",
       "platform": "Google News RSS",
       "post_text": "COMMENTARY: Trump Broke OPEC. He May Regret It: Bousso - EnergyNow.com",
       "target": "Energy_Market",
@@ -34,7 +14,17 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-19 14:32:28",
+      "date": "2026-09-19 17:31:35",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 17:31:35",
       "platform": "Google News RSS",
       "post_text": "Congress Sends Sweeping Russia-Iran Sanctions Bill to Trump - Crude Oil Prices Today | OilPrice.com",
       "target": "Energy_Market",
@@ -44,9 +34,19 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-19 14:32:28",
+      "date": "2026-09-19 17:31:35",
       "platform": "Google News RSS",
-      "post_text": "Russian Sanctions Package Should Be Delayed to Help U.S. Consumers - energynewsbeat.co",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 17:31:35",
+      "platform": "Google News RSS",
+      "post_text": "Russian Sanctions Package Should Be Delayed to Help U.S. Consumers - Energy News Beat",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": true,

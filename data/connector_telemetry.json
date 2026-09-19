@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-19 15:38:17",
-  "total_events": 737,
+  "last_updated": "2026-09-19 17:32:00",
+  "total_events": 749,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -7372,6 +7372,126 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 16:27:50",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 248.92,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 16:43:49",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 273.92,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 16:59:19",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 255.75,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:35",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 286.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "WTI_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "BRENT_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "RBOB_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "NG_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "HO_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "RAL_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "COAL_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:32:00",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_API",
+      "status": "FALLBACK",
+      "latency_ms": 0.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Retrieved 6 radar models"
     }
   ]
 }

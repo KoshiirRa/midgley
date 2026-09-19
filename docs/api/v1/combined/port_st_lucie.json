@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-19T15:38:15.346159",
+  "timestamp": "2026-09-19T17:24:20.780260",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-19T15:37:48Z"
+      "timestamp": "2026-09-19T17:24:20Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,22 +29,22 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-09-24",
     "current_base_price": 4.356,
-    "predicted_price_per_gal": 4.364,
-    "expected_change_dollars": 0.008,
-    "expected_change_percent": 0.19,
+    "predicted_price_per_gal": 4.363,
+    "expected_change_dollars": 0.007,
+    "expected_change_percent": 0.17,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 4.349,
-    "day_2_price": 4.358,
-    "day_3_price": 4.354,
-    "day_4_price": 4.365,
-    "day_5_price": 4.364,
+    "day_1_price": 4.353,
+    "day_2_price": 4.352,
+    "day_3_price": 4.35,
+    "day_4_price": 4.354,
+    "day_5_price": 4.363,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -91,13 +91,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast +$0.008/gal (+0.18%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Futures & Commodity Benchmark (+$0.002/gal).",
+      "summary_text": "Port St Lucie FL forecast +$0.007/gal (+0.16%): Driven primarily by Regional Logistics & Hub Delivery (+$0.002/gal), Futures & Commodity Benchmark (+$0.002/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.07,
+          "impact_dollars": 0.002,
+          "impact_pct": 0.05,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -148,8 +148,8 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.07,
+      "impact_dollars": 0.002,
+      "impact_pct": 0.05,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -195,12 +195,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast +$0.008/gal (+0.18%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Futures & Commodity Benchmark (+$0.002/gal).",
+    "summary_text": "Port St Lucie FL forecast +$0.007/gal (+0.16%): Driven primarily by Regional Logistics & Hub Delivery (+$0.002/gal), Futures & Commodity Benchmark (+$0.002/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
