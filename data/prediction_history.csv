@@ -3864,4 +3864,4 @@ log_timestamp,forecast_target_date,region,model_version,run_type,headline_trigge
 2026-09-18 17:16:14,2025-01-31,Test_Region,v1.6-Ipatieff,DAILY_BATCH,,2.4092,2.4362,UP,2.4092,UP,0.027,1.0,0.0,0.0,2.4092,0.0,2.391,2.4815,1.0,yfinance,5
 2026-09-18 17:16:14,2025-02-03,Test_Region,v1.6-Ipatieff,DAILY_BATCH,,2.5095,2.5072,DOWN,2.5095,UP,0.0023,0.0,0.0,0.0,2.5095,0.0,2.4619,2.5525,1.0,yfinance,5
 2026-09-18 17:16:14,2025-02-04,Test_Region,v1.6-Ipatieff,DAILY_BATCH,,2.3596,2.3843,UP,2.3596,UP,0.0247,1.0,0.0,0.0,2.3596,0.0,2.3391,2.4296,1.0,yfinance,5
-2026-09-19 04:27:22,2026-09-28,National,v1.6-Ipatieff-National-Intraday,INTRADAY_REVISION,"Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com",3.184,3.1331,DOWN,,,,,0.0,0.0,3.184,0.0,2.7661,3.5,,yfinance,5
+2026-09-19 10:33:06,2026-09-28,National,v1.6-Ipatieff-National-Intraday,INTRADAY_REVISION,Trump signs Russia sanctions bill: What it means and will India actually face 100% tariff - The Times of India,3.184,3.2732,UP,,,,,0.0,0.0,3.184,0.0,2.9401,3.6062,,yfinance,5

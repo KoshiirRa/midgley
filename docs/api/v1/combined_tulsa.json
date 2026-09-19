@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-19T04:27:49.702836",
+  "timestamp": "2026-09-19T10:33:37.274017",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.015,
+    "current_price_per_gal": 4.013,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-19T04:27:23Z"
+      "timestamp": "2026-09-19T10:33:06Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-24",
-    "current_base_price": 4.015,
-    "predicted_price_per_gal": 4.435,
+    "current_base_price": 4.013,
+    "predicted_price_per_gal": 4.433,
     "expected_change_dollars": 0.42,
     "expected_change_percent": 10.47,
     "projected_direction": "UP",
@@ -91,7 +91,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast +$0.420/gal (+10.46%): Driven primarily by Regional Logistics & Hub Delivery (+$0.126/gal), Refining Yield & Crack Spread (+$0.126/gal).",
+      "summary_text": "Tulsa OK forecast +$0.420/gal (+10.47%): Driven primarily by Regional Logistics & Hub Delivery (+$0.126/gal), Refining Yield & Crack Spread (+$0.126/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast +$0.420/gal (+10.46%): Driven primarily by Regional Logistics & Hub Delivery (+$0.126/gal), Refining Yield & Crack Spread (+$0.126/gal).",
+    "summary_text": "Tulsa OK forecast +$0.420/gal (+10.47%): Driven primarily by Regional Logistics & Hub Delivery (+$0.126/gal), Refining Yield & Crack Spread (+$0.126/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
