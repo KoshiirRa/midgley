@@ -1,8 +1,98 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-09-18 22:15:08",
-  "records_count": 5,
+  "last_refreshed_utc": "2026-09-19 12:40:44",
+  "records_count": 34,
   "data": [
+    {
+      "date": "2018-04-20 07:42:00",
+      "platform": "Twitter",
+      "post_text": "Looks like OPEC is at it again. With record amounts of Oil all over the place, including the fully loaded ships at sea, Oil prices are artificially Very High! No good and will not be accepted!",
+      "target": "OPEC",
+      "sentiment_type": "Dovish_Pressuring_OPEC",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": -1.82,
+      "actual_1d_rbob_return_pct": -1.45
+    },
+    {
+      "date": "2018-06-30 08:15:00",
+      "platform": "Twitter",
+      "post_text": "Just spoke to King Salman of Saudi Arabia and explained to him that, because of the turmoil & disfunction in Iran and Venezuela, I am asking that Saudi Arabia increase oil production, maybe up to 2,000,000 barrels, to make up the difference... Prices to high! He has agreed!",
+      "target": "Saudi_Arabia_OPEC",
+      "sentiment_type": "Supply_Increase_Demand",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": -2.14,
+      "actual_1d_rbob_return_pct": -1.95
+    },
+    {
+      "date": "2018-11-12 11:25:00",
+      "platform": "Twitter",
+      "post_text": "Hopefully, Saudi Arabia and OPEC will not be cutting oil production. Oil prices should be much lower based on supply!",
+      "target": "OPEC",
+      "sentiment_type": "Dovish_Pressuring_OPEC",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": -1.2,
+      "actual_1d_rbob_return_pct": -1.1
+    },
+    {
+      "date": "2019-02-25 06:40:00",
+      "platform": "Twitter",
+      "post_text": "Oil prices getting too high. OPEC, please relax and take it easy. World cannot take a price hike - fragile!",
+      "target": "OPEC",
+      "sentiment_type": "Dovish_Pressuring_OPEC",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": -3.1,
+      "actual_1d_rbob_return_pct": -2.85
+    },
+    {
+      "date": "2019-03-28 07:18:00",
+      "platform": "Twitter",
+      "post_text": "Very important that OPEC increase the flow of Oil. World Markets are fragile, prices of Oil getting too high. Thank you!",
+      "target": "OPEC",
+      "sentiment_type": "Dovish_Pressuring_OPEC",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": -1.5,
+      "actual_1d_rbob_return_pct": -1.25
+    },
+    {
+      "date": "2020-03-08 14:00:00",
+      "platform": "Twitter",
+      "post_text": "Good for the consumer, gasoline prices coming down!",
+      "target": "US_Consumers",
+      "sentiment_type": "Price_Collapse_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": -24.5,
+      "actual_1d_rbob_return_pct": -22.1
+    },
+    {
+      "date": "2020-04-02 10:30:00",
+      "platform": "Twitter",
+      "post_text": "Just spoke to my friend MBS (Crown Prince) of Saudi Arabia, who spoke with President Putin of Russia... I expect & hope that they will be cutting back approximately 10 Million Barrels, and maybe substantially more...",
+      "target": "OPEC_Russia",
+      "sentiment_type": "Hawkish_Supply_Cut_Demand",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 24.67,
+      "actual_1d_rbob_return_pct": 18.5
+    },
+    {
+      "date": "2024-11-25 18:30:00",
+      "platform": "Truth Social",
+      "post_text": "On January 20th, I will sign all necessary documents to charge Mexico and Canada a 25% Tariff on ALL products coming into the United States including foreign oil and energy imports...",
+      "target": "Canada_Mexico_Energy_Tariffs",
+      "sentiment_type": "Hawkish_Tariff_Disruption",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 1.75,
+      "actual_1d_rbob_return_pct": 2.1
+    },
+    {
+      "date": "2025-02-01 11:15:00",
+      "platform": "Truth Social",
+      "post_text": "We have unlimited liquid gold under our feet! DRILL BABY DRILL! Gas prices will drop below $2.50/gal very soon as US energy independence surges!",
+      "target": "US_Domestic_Production",
+      "sentiment_type": "Dovish_Supply_Expansion",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": -1.4,
+      "actual_1d_rbob_return_pct": -1.65
+    },
     {
       "date": "2026-09-18 17:14:11",
       "platform": "Google News RSS",
@@ -47,6 +137,206 @@
       "date": "2026-09-18 17:14:11",
       "platform": "Google News RSS",
       "post_text": "Is Donald 'drill, baby, drill' Trump helping the world transition away from oil? - cbc.ca",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 11:57:53",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Trump Broke OPEC. He May Regret It: Bousso - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 11:57:53",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 11:57:53",
+      "platform": "Google News RSS",
+      "post_text": "Congress Sends Sweeping Russia-Iran Sanctions Bill to Trump - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 11:57:53",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 11:57:53",
+      "platform": "Google News RSS",
+      "post_text": "Is Donald 'drill, baby, drill' Trump helping the world transition away from oil? - CBC",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:14:44",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Trump Broke OPEC. He May Regret It: Bousso - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:14:44",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:14:44",
+      "platform": "Google News RSS",
+      "post_text": "Congress Sends Sweeping Russia-Iran Sanctions Bill to Trump - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:14:44",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:14:44",
+      "platform": "Google News RSS",
+      "post_text": "Is Donald 'drill, baby, drill' Trump helping the world transition away from oil? - CBC",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Trump Broke OPEC. He May Regret It: Bousso - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "Congress Sends Sweeping Russia-Iran Sanctions Bill to Trump - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "Russian Sanctions Package Should Be Delayed to Help U.S. Consumers - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Trump Broke OPEC. He May Regret It: Bousso - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "Congress Sends Sweeping Russia-Iran Sanctions Bill to Trump - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-19 12:33:31",
+      "platform": "Google News RSS",
+      "post_text": "Russian Sanctions Package Should Be Delayed to Help U.S. Consumers - Energy News Beat",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": true,
