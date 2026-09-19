@@ -7073,6 +7073,28 @@
       "total_tokens": 206,
       "cost_usd": 3.3e-05,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-09-19T13:35:04.391246+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-19T14:11:13.118251+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
     }
   ]
 }

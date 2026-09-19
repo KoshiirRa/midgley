@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-19T12:54:37.632752",
+  "timestamp": "2026-09-19T14:25:11.884111",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-19T12:44:11Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-19T14:25:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
