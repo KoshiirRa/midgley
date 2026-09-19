@@ -3548,5 +3548,25 @@
       "overall_price_pressure": 0.8
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-18T23:59:43.117929",
+    "headline": "Trump signs Russia sanctions bill championed by Lindsey Graham - CBS News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQdVYwSFBVcFptYTZtUVNuOXNGMEJpRUluRXVET1lvVnFhT0pFUDN1Wks2bXl3NkM5ZGt4N0o3TW1nUk5fSC10VVVSRlJudlE5VVZTMnFqNHpTWDRPMEEyVU4xOHJoTGUyd1lqQmZtUXRGRllqOHAzY01idzQzTmo1U0xoRmU?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQdVYwSFBVcFptYTZtUVNuOXNGMEJpRUluRXVET1lvVnFhT0pFUDN1Wks2bXl3NkM5ZGt4N0o3TW1nUk5fSC10VVVSRlJudlE5VVZTMnFqNHpTWDRPMEEyVU4xOHJoTGUyd1lqQmZtUXRGRllqOHAzY01idzQzTmo1U0xoRmU?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihAFBVV95cUxQdVYwSFBVcFptYTZtUVNuOXNGMEJpRUluRXVET1lvVnFhT0pFUDN1Wks2bXl3NkM5ZGt4N0o3TW1nUk5fSC10VVVSRlJudlE5VVZTMnFqNHpTWDRPMEEyVU4xOHJoTGUyd1lqQmZtUXRGRllqOHAzY01idzQzTmo1U0xoRmU?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.3,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]
