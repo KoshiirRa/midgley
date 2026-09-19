@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-09-18 21:32 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-09-18 22:08 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,11 +10,11 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 104 | `$0.4078/gal` | `$0.2742/gal` | `-48.71%` | **`53.85%`** | `43.3%` | ⚠️ Calibration Active |
-| **14-Day Window** | 180 | `$0.4025/gal` | `$0.3055/gal` | `-31.75%` | **`56.67%`** | `50.6%` | ⚠️ Calibration Active |
-| **30-Day Window** | 408 | `$0.4126/gal` | `$0.3416/gal` | `-20.78%` | **`61.27%`** | `56.4%` | ⚠️ Calibration Active |
-| **90-Day Window** | 1045 | `$0.4467/gal` | `$0.3822/gal` | `-16.89%` | **`57.03%`** | `52.7%` | ⚠️ Calibration Active |
-| **All-Time Window** | 2890 | `$0.3626/gal` | `$0.3079/gal` | `-17.78%` | **`47.13%`** | `40.9%` | ⚠️ Calibration Active |
+| **7-Day Window** | 320 | `$0.2594/gal` | `$0.2440/gal` | `-6.32%` | **`60.00%`** | `51.2%` | ⚠️ Calibration Active |
+| **14-Day Window** | 442 | `$0.2764/gal` | `$0.2507/gal` | `-10.24%` | **`55.88%`** | `47.7%` | ⚠️ Calibration Active |
+| **30-Day Window** | 754 | `$0.3043/gal` | `$0.2712/gal` | `-12.19%` | **`56.50%`** | `49.7%` | ⚠️ Calibration Active |
+| **90-Day Window** | 1562 | `$0.3532/gal` | `$0.3105/gal` | `-13.75%` | **`53.52%`** | `47.9%` | ⚠️ Calibration Active |
+| **All-Time Window** | 3527 | `$0.3171/gal` | `$0.2738/gal` | `-15.79%` | **`50.13%`** | `43.1%` | ⚠️ Calibration Active |
 
 ---
 
@@ -41,7 +41,7 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`60`** | Total synthesized reflections: **`12`**
+Total indexed episodic memories in local store: **`454`** | Total synthesized reflections: **`12`**
 
 ### 📂 Categorized Anomaly Case Studies
 

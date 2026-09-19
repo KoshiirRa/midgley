@@ -517,6 +517,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
 
     projected_delta = None
+    h_preds = {}
     try:
         from src.prediction_logger import HISTORY_CSV_PATH
         import pandas as pd
@@ -525,6 +526,13 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             if not df_hist.empty:
                 reg_df = df_hist[df_hist['region'] == region_code]
                 if not reg_df.empty:
+                    # Check for discrete multi-horizon records (Issue #314)
+                    for h_i in range(1, 6):
+                        if 'forecast_horizon_days' in reg_df.columns:
+                            sub_h = reg_df[reg_df['forecast_horizon_days'] == h_i]
+                            if not sub_h.empty:
+                                h_preds[h_i] = round(float(sub_h.iloc[-1]['predicted_5d_price']), 3)
+
                     latest = reg_df.iloc[-1]
                     hist_base = float(latest['current_base_price'])
                     hist_pred = float(latest['predicted_5d_price'])
@@ -541,13 +549,13 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
 
     target_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
 
-    # Compute smooth 5-day trajectory points for clients & mobile UI
+    # Compute 5-day trajectory points from discrete multi-horizon estimators or smooth delta fallback
     day_step = projected_delta / 5.0
-    day_1 = round(base_price + day_step * 1, 3)
-    day_2 = round(base_price + day_step * 2, 3)
-    day_3 = round(base_price + day_step * 3, 3)
-    day_4 = round(base_price + day_step * 4, 3)
-    day_5 = round(predicted_price, 3)
+    day_1 = h_preds.get(1, round(base_price + day_step * 1, 3))
+    day_2 = h_preds.get(2, round(base_price + day_step * 2, 3))
+    day_3 = h_preds.get(3, round(base_price + day_step * 3, 3))
+    day_4 = h_preds.get(4, round(base_price + day_step * 4, 3))
+    day_5 = h_preds.get(5, round(predicted_price, 3))
 
     attr = compute_locale_feature_attribution_breakdown(
         region_code=region_code,
