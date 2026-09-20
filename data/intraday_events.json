@@ -3668,5 +3668,25 @@
       "overall_price_pressure": 0.75
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-20T04:03:35.369716",
+    "headline": "Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQbXdqNUlPUVFsbkUtZndqV0ZLMl9MZ0padV9WRnVBOTBnWlM2aVR3c3BTS2s1dThCSExkamFoOW1HNmswQWpFSjZhbjhiWWt6SmxMeFZZTl80cU1BSEFaaGJjX3BhXy1mbzctODU3WmVrV1R6RVpPRGVLVTBLeDJrWkdlVVhyak5DRkV5VEFaTkxNTXFDdm9QRElKLXA2UmVWdVpPTS1teFVSd3lWMUw5Z19iUlNyVi1xZXRra3RDbjl4X1B1M0twdm4tVFduMWwyclBVZ3RYLVhjQ25IMS0ySWNCMGNpUWFkZHRF?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQbXdqNUlPUVFsbkUtZndqV0ZLMl9MZ0padV9WRnVBOTBnWlM2aVR3c3BTS2s1dThCSExkamFoOW1HNmswQWpFSjZhbjhiWWt6SmxMeFZZTl80cU1BSEFaaGJjX3BhXy1mbzctODU3WmVrV1R6RVpPRGVLVTBLeDJrWkdlVVhyak5DRkV5VEFaTkxNTXFDdm9QRElKLXA2UmVWdVpPTS1teFVSd3lWMUw5Z19iUlNyVi1xZXRra3RDbjl4X1B1M0twdm4tVFduMWwyclBVZ3RYLVhjQ25IMS0ySWNCMGNpUWFkZHRF?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi6wFBVV95cUxQbXdqNUlPUVFsbkUtZndqV0ZLMl9MZ0padV9WRnVBOTBnWlM2aVR3c3BTS2s1dThCSExkamFoOW1HNmswQWpFSjZhbjhiWWt6SmxMeFZZTl80cU1BSEFaaGJjX3BhXy1mbzctODU3WmVrV1R6RVpPRGVLVTBLeDJrWkdlVVhyak5DRkV5VEFaTkxNTXFDdm9QRElKLXA2UmVWdVpPTS1teFVSd3lWMUw5Z19iUlNyVi1xZXRra3RDbjl4X1B1M0twdm4tVFduMWwyclBVZ3RYLVhjQ25IMS0ySWNCMGNpUWFkZHRF?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.7
+    },
+    "discord_notified": false
   }
 ]

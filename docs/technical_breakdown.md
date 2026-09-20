@@ -1,26 +1,26 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-19 22:14:47`  
+**Log Timestamp:** `2026-09-20 04:03:35`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Exxon Refinery Outage Adds Pressure to Regional Fuel Prices - Energy Intelligence  
+**Primary Event Trigger:** Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Exxon Refinery Outage Adds Pressure to Regional Fuel Prices - Energy Intelligence
+- **Headline Trigger:** Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com
 - **Active Ingested News Links:**
+- [Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com](https://news.google.com/rss/articles/CBMi6wFBVV95cUxQbXdqNUlPUVFsbkUtZndqV0ZLMl9MZ0padV9WRnVBOTBnWlM2aVR3c3BTS2s1dThCSExkamFoOW1HNmswQWpFSjZhbjhiWWt6SmxMeFZZTl80cU1BSEFaaGJjX3BhXy1mbzctODU3WmVrV1R6RVpPRGVLVTBLeDJrWkdlVVhyak5DRkV5VEFaTkxNTXFDdm9QRElKLXA2UmVWdVpPTS1teFVSd3lWMUw5Z19iUlNyVi1xZXRra3RDbjl4X1B1M0twdm4tVFduMWwyclBVZ3RYLVhjQ25IMS0ySWNCMGNpUWFkZHRF?oc=5) (Google News Energy Feed)
 - [Exxon Refinery Outage Adds Pressure to Regional Fuel Prices - Energy Intelligence](https://news.google.com/rss/articles/CBMickFVX3lxTE5CTnpydWVqdGY2QVdSRk9YVG5kM0p4V0wtcElkU2xNS0hNajZUTFJFTUc1M1hHbEY5U1h5WlBzNXFPQmUwR25WYVktVmt5TGlnSUVlUkdFYW9YUjVsY2Y1ZFoyV1hrSmFSODBOSzNjeU5jdw?oc=5) (Google News Energy Feed)
 - [NCP (SP) asks Centre to spell out economic fallout of US tariff threat over Russian oil - The New Indian Express](https://news.google.com/rss/articles/CBMi5gFBVV95cUxQYXg0LWJMaTdYRVYwMmttSmdXei1GNDRILTVyVWViNHRVeFZLUWxpeE5ybnBielRHeVU1YnBHdWo3OGNhWUpGa3FsX2wyamlDdWI2SU14ZUxPLXBzUFQyQ1FMZHZJc2dTMktBUEo4NGJKUWQxS1dYYjU5d1FQLWUxMjh2VWE0TU5YTGZhVXVCV2JEVFFvOTI1SGh5OFNrTkxhTk5mc2hnYnJ5MURqRVdoMjdwMl9kd3FLWWU0by10WWVnS0pGNDdlS1hKdVE5Ti1JOHVMR0NXT190QmhUd2ktbmtoY2RhQdIB8wFBVV95cUxQUUFpd21uRXc5ZWtTR0dna1F5M3BaenZvWGpqQXMyRUdDb2k1NDdMaFMxaV9sOEpNMldmeVdXTDF0M1BwR2lIZ0kwMzIzWW1sQnlYNGIxUDl6MllaSTEtamlLakpncDd6MjZFOUxQVFBFRWpMQmU3akV3YWlTX2duTDhmcXNEMXVqaXRrWjNoS2tqVlBYUlYzLXd3TTkzRk1MRzFqMm53SzNRemdxZzhDU21tUGt2NkJQdG51OE15V3AxVnJ5TWpoLXJURjlJSVRXNjlwS3B5c1E0WmFNNU9uaWNMak1IU1JoUFpFZnVaZmRKVjg?oc=5) (Google News Energy Feed)
-- [Trump signs sanctions bill that threatens up to 100% tariffs on top importers of Russian energy - fortune.com](https://news.google.com/rss/articles/CBMiowFBVV95cUxOU25hUm84YTVMblVTRlA5Y3hzekhpSDZadkpvZTJhQ2FxeGl0Q09uZDJIbWNqSy1iejBCNXJqZ1pVaEs2alVhbnkzQTNUdG9YTzU0Y0x6ZWZwcjRYeGEwM29nRmtySGU4X1RLTUluQkNjcWVLSEFIS0tHcjQ2eXZoQjd0WjJfVFdSd24tbnFMcWltN0tROU1pUHFHTEt0VjBhNzE0?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.70`
-- **Price Pressure Shock ($\Delta P$):** `+0.75`
+- **Supply Disruption Score ($S$):** `0.80`
+- **Price Pressure Shock ($\Delta P$):** `+0.70`
 - **Geopolitical Risk Score ($G$):** `0.00`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.7000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.7000$
-- **Day 1 Decayed Shock**: $M_1 = 0.7000 \times 0.87055 = 0.6094$
-- **Day 2 Decayed Shock**: $M_2 = 0.7000 \times (0.87055)^2 = 0.5305$
-- **Day 3 Decayed Shock**: $M_3 = 0.7000 \times (0.87055)^3 = 0.4618$
-- **Day 4 Decayed Shock**: $M_4 = 0.7000 \times (0.87055)^4 = 0.4020$
-- **Day 5 (Target Horizon)**: $M_5 = 0.7000 \times 0.50000 = 0.3500$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.8000$
+- **Day 1 Decayed Shock**: $M_1 = 0.8000 \times 0.87055 = 0.6964$
+- **Day 2 Decayed Shock**: $M_2 = 0.8000 \times (0.87055)^2 = 0.6063$
+- **Day 3 Decayed Shock**: $M_3 = 0.8000 \times (0.87055)^3 = 0.5278$
+- **Day 4 Decayed Shock**: $M_4 = 0.8000 \times (0.87055)^4 = 0.4595$
+- **Day 5 (Target Horizon)**: $M_5 = 0.8000 \times 0.50000 = 0.4000$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.236) = \$3.280\text{/gal}$ (Delta: -\$0.236/gal, -7.40\%)
+- **National Wholesale**: $P = \$3.184 + (-\$0.242) = \$3.273\text{/gal}$ (Delta: -\$0.242/gal, -7.60\%)
 - **Tulsa, OK Retail**: $P = \$4.013 + (+\$0.686) = \$5.575\text{/gal}$ (Delta: +\$0.686/gal, +17.10\%)
 - **Newark, DE Retail**: $P = \$4.359 + (-\$0.001) = \$4.361\text{/gal}$ (Delta: -\$0.001/gal, -0.03\%)
 - **Cincinnati, OH/KY**: $P = \$4.507 + (-\$0.006) = \$4.505\text{/gal}$ (Delta: -\$0.006/gal, -0.13\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.7000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-19 22:14:47]: Elevated upward price shock (+$0.75/gal) observed across wholesale futures. Event trigger 'Exxon Refinery Outage Adds Pressure to Regional Fuel Prices - Energy Intelligence' drove supply disruption to S=0.70 and geopolitical risk to G=0.00. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6094 and Day-5 horizon retention M₅=0.3500.
+SUMMARY FOR RUN [2026-09-20 04:03:35]: Elevated upward price shock (+$0.70/gal) observed across wholesale futures. Event trigger 'Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.00. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-19 22:14:47 (Mode: INTRADAY_REVISION), primary event trigger 'Exxon Refinery Outage Adds Pressure to Regional Fuel Prices - Energy Intelligence' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.70, Price Pressure ΔP=+0.75, Geopolitical Risk G=0.00. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.7000
-  - Day 1: M₁ = 0.6094
-  - Day 5: M₅ = 0.3500 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-20 04:03:35 (Mode: INTRADAY_REVISION), primary event trigger 'Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.70, Geopolitical Risk G=0.00. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.8000
+  - Day 1: M₁ = 0.6964
+  - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.280/gal ($-0.236/gal, -7.40%)
+  • National Wholesale: $3.273/gal ($-0.242/gal, -7.60%)
   • Tulsa, OK Retail: $5.575/gal (+$0.686/gal, +17.10%)
   • Newark, DE Retail: $4.361/gal ($-0.001/gal, -0.03%)
   • Cincinnati, OH/KY: $4.505/gal ($-0.006/gal, -0.13%)
@@ -91,13 +91,13 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.199/gal ($-0.003/gal, -0.05%)
   • SF Bay Area Region: $6.306/gal ($-0.003/gal, -0.05%)
 
-Largest upward shift for this run: Tulsa, OK Retail at $5.575/gal (+0.686/gal). Largest downward shift for this run: National Wholesale at $3.280/gal (-0.236/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: Tulsa, OK Retail at $5.575/gal (+0.686/gal). Largest downward shift for this run: National Wholesale at $3.273/gal (-0.242/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-19 22:14:47]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Exxon Refinery Outage Adds Pressure to Regional Fuel Prices - Energy Intelligence'. Overall price pressure vector sits at ΔP=+0.75/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-20 04:03:35]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com'. Overall price pressure vector sits at ΔP=+0.70/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.00. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-19 22:14:47.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-20 04:03:35.*
