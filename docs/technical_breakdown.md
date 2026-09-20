@@ -1,28 +1,28 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-20 18:34:58`  
+**Log Timestamp:** `2026-09-20 22:17:30`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** US' 100% tariff threat: India may find it difficult to cut Russian oil buys - Business Standard  
+**Primary Event Trigger:** U.S., Russia, India In Oil Tariff Triangle—Who Wins? - Forbes  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** US' 100% tariff threat: India may find it difficult to cut Russian oil buys - Business Standard
+- **Headline Trigger:** U.S., Russia, India In Oil Tariff Triangle—Who Wins? - Forbes
 - **Active Ingested News Links:**
+- [U.S., Russia, India In Oil Tariff Triangle—Who Wins? - Forbes](https://news.google.com/rss/articles/CBMinwFBVV95cUxQejVTV3VJMTRHRWNBV1pxblh5Z25YN3lKa0lGcERsaGVEc2k3SUNPNF9iN3FjTmJNQUsxV3VmY01LYVp4SU1RU3FrRHhaUnp5YnNXUi13cE9DZWN1bjVYOEl2U01nTm9RcUVQSUlSeG0zY3lSQmtGa1VOcEFzeElXVEk4WmY3cjlKQ1NKNnJFay1jRFBjZ1IzUzduNEtMY1U?oc=5) (Google News Energy Feed)
 - [US' 100% tariff threat: India may find it difficult to cut Russian oil buys - Business Standard](https://news.google.com/rss/articles/CBMi1gFBVV95cUxNM3NKMERUcWZpMzdtMTlyQm1YU0t5U1FCVTdybUQ0RXFmTkdEYnFLVjhDOXpCWDlCQXdpVnFHSERnRF9Fd2YxelN2SElYMUhGMWNmMHhzYXhYY19mZmY1RXdTRGlBRzZVaTB2dHhXbkxySmU5LVZSemhmSFVRZDkwYmI5aFhtbkgtcVl6RFFoS0lBdi1Xc2JCSUFzYlFYeVJaS2REdlpMNVQ5TmJMRHBHdkRuQVMwX0xuSzNnNHNOb0d0M2Y5ZnVOanJNN0M5UmFDSG9fZXJR0gHbAUFVX3lxTE14NnRadGRKMkRuZ3hoejZ2YzlFVFdtM0IzbktRajRzQWJiRW5vS0J4cEtxLXk1WGZIVktxUnBZU0RmSkI0UVhRcDRSaVlPdnNzbWpUR0lZTVhhOXk0YTc1SlJBOHREYnAweDAzdTdZVHZ3TjJhZHltcGQ1cXZ2a05CV1hocE5JZDRJWHNYTUkyd0tGcDNvR1FhYUxRNm1SdGhnZDhrT0kxbUFpblI0SGVHeG5FbndlMDNRaHRDMDlVQkRGY1lXS0lDaWl5WE4wQWRfZktEcHJmTkY3dw?oc=5) (Google News Energy Feed)
 - [Illinois refinery outage drives up Iowa gas costs - weareiowa.com](https://news.google.com/rss/articles/CBMi2AFBVV95cUxPaGVqOU50RVdLM2c5bTJxbnBDbU1Ea0VEa190bWJWTVdOLTd5S2hCNTAwVlJTZ19qUFRnYkpXd040ZC02a1pCWExXZ09XcHRFdTFxNFBNbkJSYk1rVmtqMV90OGN4WGJVa1lDTDBTazlla2Y1NE1zWklqaTNaRmcyYlB6S0c4eFRNNmlQbTN6RlJ6ZXpRZkxWcnRqQ29xSWFWTUV1cmE2NW9OWkExdXB2dUk1c1ZXazg1dEdxbWVZaFI5N2tOdmVGLTNBNXlvRkZxbGlQRnVYckE?oc=5) (Google News Energy Feed)
-- [Iowa drivers see gas prices spike after Joliet refinery outage - weareiowa.com](https://news.google.com/rss/articles/CBMi6wFBVV95cUxQbXdqNUlPUVFsbkUtZndqV0ZLMl9MZ0padV9WRnVBOTBnWlM2aVR3c3BTS2s1dThCSExkamFoOW1HNmswQWpFSjZhbjhiWWt6SmxMeFZZTl80cU1BSEFaaGJjX3BhXy1mbzctODU3WmVrV1R6RVpPRGVLVTBLeDJrWkdlVVhyak5DRkV5VEFaTkxNTXFDdm9QRElKLXA2UmVWdVpPTS1teFVSd3lWMUw5Z19iUlNyVi1xZXRra3RDbjl4X1B1M0twdm4tVFduMWwyclBVZ3RYLVhjQ25IMS0ySWNCMGNpUWFkZHRF?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.40`
-- **Price Pressure Shock ($\Delta P$):** `+0.50`
-- **Geopolitical Risk Score ($G$):** `0.85`
-- **Demand Sentiment Score ($D$):** `-0.75`
+- **Supply Disruption Score ($S$):** `0.50`
+- **Price Pressure Shock ($\Delta P$):** `+0.70`
+- **Geopolitical Risk Score ($G$):** `0.80`
+- **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.4000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.4000$
-- **Day 1 Decayed Shock**: $M_1 = 0.4000 \times 0.87055 = 0.3482$
-- **Day 2 Decayed Shock**: $M_2 = 0.4000 \times (0.87055)^2 = 0.3031$
-- **Day 3 Decayed Shock**: $M_3 = 0.4000 \times (0.87055)^3 = 0.2639$
-- **Day 4 Decayed Shock**: $M_4 = 0.4000 \times (0.87055)^4 = 0.2297$
-- **Day 5 (Target Horizon)**: $M_5 = 0.4000 \times 0.50000 = 0.2000$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.5000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.5000$
+- **Day 1 Decayed Shock**: $M_1 = 0.5000 \times 0.87055 = 0.4353$
+- **Day 2 Decayed Shock**: $M_2 = 0.5000 \times (0.87055)^2 = 0.3789$
+- **Day 3 Decayed Shock**: $M_3 = 0.5000 \times (0.87055)^3 = 0.3299$
+- **Day 4 Decayed Shock**: $M_4 = 0.5000 \times (0.87055)^4 = 0.2872$
+- **Day 5 (Target Horizon)**: $M_5 = 0.5000 \times 0.50000 = 0.2500$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (+\$0.008) = \$3.248\text{/gal}$ (Delta: +\$0.008/gal, +0.25\%)
+- **National Wholesale**: $P = \$3.184 + (+\$0.033) = \$3.273\text{/gal}$ (Delta: +\$0.033/gal, +1.05\%)
 - **Tulsa, OK Retail**: $P = \$4.004 + (+\$0.740) = \$5.895\text{/gal}$ (Delta: +\$0.740/gal, +18.49\%)
 - **Newark, DE Retail**: $P = \$4.357 + (-\$0.002) = \$4.355\text{/gal}$ (Delta: -\$0.002/gal, -0.05\%)
 - **Cincinnati, OH/KY**: $P = \$4.487 + (-\$0.005) = \$4.487\text{/gal}$ (Delta: -\$0.005/gal, -0.10\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.4000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-20 18:34:58]: Elevated upward price shock (+$0.50/gal) observed across wholesale futures. Event trigger 'US' 100% tariff threat: India may find it difficult to cut Russian oil buys - Business Standard' drove supply disruption to S=0.40 and geopolitical risk to G=0.85. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.3482 and Day-5 horizon retention M₅=0.2000.
+SUMMARY FOR RUN [2026-09-20 22:17:30]: Elevated upward price shock (+$0.70/gal) observed across wholesale futures. Event trigger 'U.S., Russia, India In Oil Tariff Triangle—Who Wins? - Forbes' drove supply disruption to S=0.50 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.4353 and Day-5 horizon retention M₅=0.2500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-20 18:34:58 (Mode: INTRADAY_REVISION), primary event trigger 'US' 100% tariff threat: India may find it difficult to cut Russian oil buys - Business Standard' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.40, Price Pressure ΔP=+0.50, Geopolitical Risk G=0.85. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.4000
-  - Day 1: M₁ = 0.3482
-  - Day 5: M₅ = 0.2000 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-20 22:17:30 (Mode: INTRADAY_REVISION), primary event trigger 'U.S., Russia, India In Oil Tariff Triangle—Who Wins? - Forbes' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.50, Price Pressure ΔP=+0.70, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.5000
+  - Day 1: M₁ = 0.4353
+  - Day 5: M₅ = 0.2500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.248/gal (+$0.008/gal, +0.25%)
+  • National Wholesale: $3.273/gal (+$0.033/gal, +1.05%)
   • Tulsa, OK Retail: $5.895/gal (+$0.740/gal, +18.49%)
   • Newark, DE Retail: $4.355/gal ($-0.002/gal, -0.05%)
   • Cincinnati, OH/KY: $4.487/gal ($-0.005/gal, -0.10%)
@@ -96,10 +96,10 @@ Largest upward shift for this run: Tulsa, OK Retail at $5.895/gal (+0.740/gal). 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-20 18:34:58]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'US' 100% tariff threat: India may find it difficult to cut Russian oil buys - Business Standard'. Overall price pressure vector sits at ΔP=+0.50/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-20 22:17:30]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'U.S., Russia, India In Oil Tariff Triangle—Who Wins? - Forbes'. Overall price pressure vector sits at ΔP=+0.70/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.85. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-20 18:34:58.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-20 22:17:30.*
