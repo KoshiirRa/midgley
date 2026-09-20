@@ -3688,5 +3688,25 @@
       "overall_price_pressure": 0.7
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-20T15:43:21.881154",
+    "headline": "Illinois refinery outage drives up Iowa gas costs - weareiowa.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPaGVqOU50RVdLM2c5bTJxbnBDbU1Ea0VEa190bWJWTVdOLTd5S2hCNTAwVlJTZ19qUFRnYkpXd040ZC02a1pCWExXZ09XcHRFdTFxNFBNbkJSYk1rVmtqMV90OGN4WGJVa1lDTDBTazlla2Y1NE1zWklqaTNaRmcyYlB6S0c4eFRNNmlQbTN6RlJ6ZXpRZkxWcnRqQ29xSWFWTUV1cmE2NW9OWkExdXB2dUk1c1ZXazg1dEdxbWVZaFI5N2tOdmVGLTNBNXlvRkZxbGlQRnVYckE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPaGVqOU50RVdLM2c5bTJxbnBDbU1Ea0VEa190bWJWTVdOLTd5S2hCNTAwVlJTZ19qUFRnYkpXd040ZC02a1pCWExXZ09XcHRFdTFxNFBNbkJSYk1rVmtqMV90OGN4WGJVa1lDTDBTazlla2Y1NE1zWklqaTNaRmcyYlB6S0c4eFRNNmlQbTN6RlJ6ZXpRZkxWcnRqQ29xSWFWTUV1cmE2NW9OWkExdXB2dUk1c1ZXazg1dEdxbWVZaFI5N2tOdmVGLTNBNXlvRkZxbGlQRnVYckE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi2AFBVV95cUxPaGVqOU50RVdLM2c5bTJxbnBDbU1Ea0VEa190bWJWTVdOLTd5S2hCNTAwVlJTZ19qUFRnYkpXd040ZC02a1pCWExXZ09XcHRFdTFxNFBNbkJSYk1rVmtqMV90OGN4WGJVa1lDTDBTazlla2Y1NE1zWklqaTNaRmcyYlB6S0c4eFRNNmlQbTN6RlJ6ZXpRZkxWcnRqQ29xSWFWTUV1cmE2NW9OWkExdXB2dUk1c1ZXazg1dEdxbWVZaFI5N2tOdmVGLTNBNXlvRkZxbGlQRnVYckE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.7,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": false
   }
 ]
