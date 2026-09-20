@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-20 04:04:09",
-  "total_events": 758,
+  "last_updated": "2026-09-20 10:55:54",
+  "total_events": 770,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -7582,6 +7582,126 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:18",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 5024.58,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:18",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 20.73,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:18",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 194.55,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:44",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5013.78,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:44",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 18.33,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:44",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 52.28,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:49",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5014.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:49",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 21.42,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:49",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 83.78,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:54",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5017.57,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:54",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 18.14,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:54",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 52.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
     }
   ]
 }
