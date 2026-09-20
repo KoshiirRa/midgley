@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-20 10:55:54",
-  "total_events": 770,
+  "last_updated": "2026-09-20 13:59:16",
+  "total_events": 777,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -7702,6 +7702,76 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 12:27:46",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 383.88,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 12:30:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-20 12:43:54",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 343.08,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 12:59:31",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 413.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 13:24:41",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 314.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 13:59:15",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1821.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 13:59:16",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1221.08,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
     }
   ]
 }

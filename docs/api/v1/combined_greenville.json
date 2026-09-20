@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-20T04:04:04.077876",
+  "timestamp": "2026-09-20T13:59:11.318169",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.153,
+    "current_price_per_gal": 4.146,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-20T04:03:37Z"
+      "timestamp": "2026-09-20T13:59:10Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,55 +28,55 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-25",
-    "current_base_price": 4.153,
-    "predicted_price_per_gal": 4.148,
-    "expected_change_dollars": -0.005,
-    "expected_change_percent": -0.12,
-    "projected_direction": "DOWN",
+    "current_base_price": 4.146,
+    "predicted_price_per_gal": 4.146,
+    "expected_change_dollars": 0.0,
+    "expected_change_percent": 0.01,
+    "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 4.15,
-    "day_2_price": 4.151,
-    "day_3_price": 4.151,
-    "day_4_price": 4.146,
-    "day_5_price": 4.148,
+    "day_1_price": 4.148,
+    "day_2_price": 4.148,
+    "day_3_price": 4.147,
+    "day_4_price": 4.144,
+    "day_5_price": 4.146,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.002,
+        "delta_dollars": 0.0,
         "share_pct": 40.0,
-        "direction": "DOWN",
-        "description": "Ecodeveloped pipeline loading flows"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
-        "direction": "DOWN",
-        "description": "Softening NYMEX energy futures contract prices"
+        "direction": "FLAT",
+        "description": "Stable energy commodity baseline"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 15.0,
-        "direction": "DOWN",
-        "description": "Narrowing refining margins and elevated product yield"
+        "direction": "FLAT",
+        "description": "Steady refinery utilization"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 10.0,
-        "direction": "DOWN",
-        "description": "Favorable multi-basin weather conditions"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
         "direction": "FLAT",
         "description": "Neutral news sentiment"
@@ -91,45 +91,45 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast $-0.005/gal (-0.12%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
+      "summary_text": "Greenville NC forecast stable ($0.000/gal): Balanced supply/demand indicators.",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
-          "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.05,
+          "description": "Unrestricted terminal dispatch",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 40.0,
-          "direction": "DOWN"
+          "direction": "FLAT"
         },
         {
           "category": "Futures & Commodity Benchmark",
-          "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.001,
-          "impact_pct": -0.02,
+          "description": "Stable energy commodity baseline",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 25.0,
-          "direction": "DOWN"
+          "direction": "FLAT"
         },
         {
           "category": "Refining Yield & Crack Spread",
-          "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.001,
-          "impact_pct": -0.02,
+          "description": "Steady refinery utilization",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 15.0,
-          "direction": "DOWN"
+          "direction": "FLAT"
         },
         {
           "category": "Weather & Environmental Signals",
-          "description": "Favorable multi-basin weather conditions",
-          "impact_dollars": -0.001,
-          "impact_pct": -0.02,
+          "description": "Neutral weather impact",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 10.0,
-          "direction": "DOWN"
+          "direction": "FLAT"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Neutral news sentiment",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 5.0,
           "direction": "FLAT"
         },
@@ -147,41 +147,41 @@
   "key_drivers": [
     {
       "category": "Regional Logistics & Hub Delivery",
-      "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.002,
-      "impact_pct": -0.05,
+      "description": "Unrestricted terminal dispatch",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 40.0,
-      "direction": "DOWN"
+      "direction": "FLAT"
     },
     {
       "category": "Futures & Commodity Benchmark",
-      "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.001,
-      "impact_pct": -0.02,
+      "description": "Stable energy commodity baseline",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 25.0,
-      "direction": "DOWN"
+      "direction": "FLAT"
     },
     {
       "category": "Refining Yield & Crack Spread",
-      "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.001,
-      "impact_pct": -0.02,
+      "description": "Steady refinery utilization",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 15.0,
-      "direction": "DOWN"
+      "direction": "FLAT"
     },
     {
       "category": "Weather & Environmental Signals",
-      "description": "Favorable multi-basin weather conditions",
-      "impact_dollars": -0.001,
-      "impact_pct": -0.02,
+      "description": "Neutral weather impact",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 10.0,
-      "direction": "DOWN"
+      "direction": "FLAT"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Neutral news sentiment",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 5.0,
       "direction": "FLAT"
     },
@@ -195,44 +195,44 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast $-0.005/gal (-0.12%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
+    "summary_text": "Greenville NC forecast stable ($0.000/gal): Balanced supply/demand indicators.",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.002,
+        "delta_dollars": 0.0,
         "share_pct": 40.0,
-        "direction": "DOWN",
-        "description": "Ecodeveloped pipeline loading flows"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
-        "direction": "DOWN",
-        "description": "Softening NYMEX energy futures contract prices"
+        "direction": "FLAT",
+        "description": "Stable energy commodity baseline"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 15.0,
-        "direction": "DOWN",
-        "description": "Narrowing refining margins and elevated product yield"
+        "direction": "FLAT",
+        "description": "Steady refinery utilization"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 10.0,
-        "direction": "DOWN",
-        "description": "Favorable multi-basin weather conditions"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
         "direction": "FLAT",
         "description": "Neutral news sentiment"

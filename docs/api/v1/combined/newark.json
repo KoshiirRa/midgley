@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-20T04:04:04.064689",
+  "timestamp": "2026-09-20T13:59:11.297278",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.359,
+    "current_price_per_gal": 4.357,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-20T04:03:36Z"
+      "timestamp": "2026-09-20T13:59:10Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,39 +28,39 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-25",
-    "current_base_price": 4.359,
-    "predicted_price_per_gal": 4.361,
-    "expected_change_dollars": 0.002,
-    "expected_change_percent": 0.05,
-    "projected_direction": "UP",
+    "current_base_price": 4.357,
+    "predicted_price_per_gal": 4.355,
+    "expected_change_dollars": -0.002,
+    "expected_change_percent": -0.04,
+    "projected_direction": "DOWN",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 4.36,
-    "day_2_price": 4.364,
-    "day_3_price": 4.364,
-    "day_4_price": 4.362,
-    "day_5_price": 4.361,
+    "day_1_price": 4.358,
+    "day_2_price": 4.357,
+    "day_3_price": 4.354,
+    "day_4_price": 4.357,
+    "day_5_price": 4.355,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.001,
+        "delta_dollars": -0.001,
         "share_pct": 35.0,
-        "direction": "UP",
-        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
+        "direction": "DOWN",
+        "description": "Narrowing refining margins and elevated product yield"
       },
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.001,
+        "delta_dollars": -0.001,
         "share_pct": 25.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "DOWN",
+        "description": "Ecodeveloped pipeline loading flows"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.0,
         "share_pct": 20.0,
         "direction": "FLAT",
         "description": "Stable energy commodity baseline"
@@ -68,7 +68,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.0,
         "share_pct": 10.0,
         "direction": "FLAT",
         "description": "Neutral news sentiment"
@@ -76,7 +76,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.0,
         "share_pct": 5.0,
         "direction": "FLAT",
         "description": "Fixed statutory tax overhead"
@@ -91,45 +91,45 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast +$0.002/gal (+0.05%): Driven primarily by Refining Yield & Crack Spread (+$0.001/gal), Regional Logistics & Hub Delivery (+$0.001/gal).",
+      "summary_text": "Newark DE forecast $-0.002/gal (-0.05%): Driven primarily by Refining Yield & Crack Spread ($-0.001/gal), Regional Logistics & Hub Delivery ($-0.001/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
-          "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "description": "Narrowing refining margins and elevated product yield",
+          "impact_dollars": -0.001,
+          "impact_pct": -0.02,
           "share_pct": 35.0,
-          "direction": "UP"
+          "direction": "DOWN"
         },
         {
           "category": "Regional Logistics & Hub Delivery",
-          "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "description": "Ecodeveloped pipeline loading flows",
+          "impact_dollars": -0.001,
+          "impact_pct": -0.02,
           "share_pct": 25.0,
-          "direction": "UP"
+          "direction": "DOWN"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Stable energy commodity baseline",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "impact_dollars": -0.0,
+          "impact_pct": -0.0,
           "share_pct": 20.0,
           "direction": "FLAT"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Neutral news sentiment",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "impact_dollars": -0.0,
+          "impact_pct": -0.0,
           "share_pct": 10.0,
           "direction": "FLAT"
         },
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Fixed statutory tax overhead",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "impact_dollars": -0.0,
+          "impact_pct": -0.0,
           "share_pct": 5.0,
           "direction": "FLAT"
         },
@@ -147,41 +147,41 @@
   "key_drivers": [
     {
       "category": "Refining Yield & Crack Spread",
-      "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "description": "Narrowing refining margins and elevated product yield",
+      "impact_dollars": -0.001,
+      "impact_pct": -0.02,
       "share_pct": 35.0,
-      "direction": "UP"
+      "direction": "DOWN"
     },
     {
       "category": "Regional Logistics & Hub Delivery",
-      "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "description": "Ecodeveloped pipeline loading flows",
+      "impact_dollars": -0.001,
+      "impact_pct": -0.02,
       "share_pct": 25.0,
-      "direction": "UP"
+      "direction": "DOWN"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Stable energy commodity baseline",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "impact_dollars": -0.0,
+      "impact_pct": -0.0,
       "share_pct": 20.0,
       "direction": "FLAT"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Neutral news sentiment",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "impact_dollars": -0.0,
+      "impact_pct": -0.0,
       "share_pct": 10.0,
       "direction": "FLAT"
     },
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Fixed statutory tax overhead",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "impact_dollars": -0.0,
+      "impact_pct": -0.0,
       "share_pct": 5.0,
       "direction": "FLAT"
     },
@@ -195,28 +195,28 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast +$0.002/gal (+0.05%): Driven primarily by Refining Yield & Crack Spread (+$0.001/gal), Regional Logistics & Hub Delivery (+$0.001/gal).",
+    "summary_text": "Newark DE forecast $-0.002/gal (-0.05%): Driven primarily by Refining Yield & Crack Spread ($-0.001/gal), Regional Logistics & Hub Delivery ($-0.001/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.001,
+        "delta_dollars": -0.001,
         "share_pct": 35.0,
-        "direction": "UP",
-        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
+        "direction": "DOWN",
+        "description": "Narrowing refining margins and elevated product yield"
       },
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.001,
+        "delta_dollars": -0.001,
         "share_pct": 25.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "DOWN",
+        "description": "Ecodeveloped pipeline loading flows"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.0,
         "share_pct": 20.0,
         "direction": "FLAT",
         "description": "Stable energy commodity baseline"
@@ -224,7 +224,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.0,
         "share_pct": 10.0,
         "direction": "FLAT",
         "description": "Neutral news sentiment"
@@ -232,7 +232,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.0,
         "share_pct": 5.0,
         "direction": "FLAT",
         "description": "Fixed statutory tax overhead"
