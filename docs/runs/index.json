@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-21_19-14-34",
+    "timestamp": "2026-09-21 18:15:31",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-21 18:15:31)"
+  },
+  {
+    "run_id": "2026-09-21_18-17-23",
+    "timestamp": "2026-09-21 18:15:31",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-21 18:15:31)"
+  },
+  {
     "run_id": "2026-09-21_16-21-36",
     "timestamp": "2026-09-21 16:21:32",
     "run_type": "INTRADAY_REVISION",
@@ -583,18 +595,6 @@
   },
   {
     "run_id": "2026-09-17_22-19-17",
-    "timestamp": "2026-09-17 21:05:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India says new US tariffs over Russian oil could hit ties, v..."
-  },
-  {
-    "run_id": "2026-09-17_22-15-55",
-    "timestamp": "2026-09-17 21:05:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India says new US tariffs over Russian oil could hit ties, v..."
-  },
-  {
-    "run_id": "2026-09-17_22-14-51",
     "timestamp": "2026-09-17 21:05:40",
     "run_type": "INTRADAY_REVISION",
     "trigger": "India says new US tariffs over Russian oil could hit ties, v..."
