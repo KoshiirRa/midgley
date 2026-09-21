@@ -45,6 +45,7 @@ jobs:
         with:
           path: |
             data/lookup_cache.sqlite
+            data/agent_memory.sqlite
             data/finlight_quota.json
           key: lookup-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
