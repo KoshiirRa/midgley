@@ -144,7 +144,7 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
         log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="National")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

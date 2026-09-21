@@ -212,7 +212,8 @@ def run_oakland_pipeline(
         log_predictions(pred_oakland_df, region="Oakland_CA", model_version=oakland_version, forecast_horizon_days=h)
         log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=bayarea_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="Oakland_CA")
+    backfill_actual_prices_and_evaluate(target_region="BayArea_CA")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions for Oakland_CA and BayArea_CA.")
 
     print("\n" + "=" * 80)

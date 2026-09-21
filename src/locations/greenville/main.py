@@ -187,7 +187,7 @@ def run_greenville_pipeline(live_pump_price: float = None, use_llm_api: bool = F
         }])
         log_predictions(today_df, region="Greenville_NC", model_version=greenville_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="Greenville_NC")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions for Greenville_NC.")
 
     return {

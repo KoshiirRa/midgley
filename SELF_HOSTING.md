@@ -271,6 +271,7 @@ If no remote Hindsight or Supabase credentials are configured, Midgley automatic
 * **Zero external services or cloud accounts required.**
 * Uses SQLite FTS5 with Porter stemming and BM25 ranking for analogy recall.
 * Generates structured post-mortems and parameter calibration recommendations via Gemini 2.5 Flash (or the Tier 3 Offline Rule-Based Lexicon).
+* **Region-Scoped Memory Retention (Issue #326):** Memory shock ingestion is scoped specifically to the regional hub being evaluated (`backfill_actual_prices_and_evaluate(target_region=...)`), eliminating redundant global tail re-evaluations and protecting cloud API quotas.
 
 ---
 

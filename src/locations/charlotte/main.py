@@ -187,7 +187,7 @@ def run_charlotte_pipeline(live_pump_price: float = None, use_llm_api: bool = Fa
         }])
         log_predictions(today_df, region="Charlotte_NC", model_version=charlotte_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="Charlotte_NC")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions for Charlotte_NC.")
 
     return {

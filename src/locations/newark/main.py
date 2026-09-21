@@ -181,7 +181,7 @@ def run_newark_pipeline(live_pump_price: float = None, use_llm_api: bool = False
         }])
         log_predictions(today_df, region="Newark_DE", model_version=newark_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="Newark_DE")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

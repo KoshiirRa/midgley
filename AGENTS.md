@@ -374,9 +374,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - Soft-dependency architecture: runs silently in `offline` mode or no-ops safely when `WANDB_API_KEY` is not present, ensuring zero cost and 100% offline resiliency.
 * **Functions:**
   - `resolve_model_tag()`: Dynamically formats standardized model version strings (e.g. `v1.6-Ipatieff-TulsaOK-Ridge`) bound to `src.version.get_model_version()`.
-  - `log_predictions()`: Logs 5-day out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates, automatically triggering background cloud DB sync.
-  - `backfill_actual_prices_and_evaluate()`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, backfills actual prices in `prediction_history.csv`, and triggers background cloud DB sync.
-  - `sync_predictions_to_cloud()`: Pushes prediction history rows to Turso, Cloudflare D1, or Neon cloud stores with zero-downtime local CSV fallback.
+  - `log_predictions()`: Logs discrete multi-horizon out-of-time forecasts and extended MLOps feature vectors with dynamically calculated target dates, automatically triggering background cloud DB sync.
+  - `backfill_actual_prices_and_evaluate(target_region=None)`: Queries ground-truth market prices from `yfinance` as target dates mature, evaluates 95% CI coverage hits, backfills actual prices in `prediction_history.csv`, scopes episodic memory shock retention to `target_region` (Issue #326), and triggers background cloud DB sync.
+  - `sync_predictions_to_cloud()`: Pushes prediction history rows to Turso Edge (via Hrana HTTP protocol with string-serialized 64-bit integer values) or Cloudflare D1/Neon cloud stores with zero-downtime local CSV fallback (Issue #326).
   - `init_wandb_run()`, `log_model_training_run()`, `log_weekly_audit_run()`: Publishes experiment telemetry and rolling degradation tables to Weights & Biases.
 
 ---

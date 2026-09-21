@@ -219,7 +219,8 @@ def run_cincinnati_pipeline(
         log_predictions(today_oh, region="Cincinnati_OH", model_version=oh_version, forecast_horizon_days=h)
         log_predictions(today_ky, region="Cincinnati_KY", model_version=ky_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="Cincinnati_OH")
+    backfill_actual_prices_and_evaluate(target_region="Cincinnati_KY")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions for Cincinnati_OH and Cincinnati_KY")
     
     perf_report = generate_performance_report()

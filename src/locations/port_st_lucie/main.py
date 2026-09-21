@@ -187,7 +187,7 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
         }])
         log_predictions(today_df, region="Port_St_Lucie_FL", model_version=psl_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="Port_St_Lucie_FL")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions for Port_St_Lucie_FL.")
 
     return {

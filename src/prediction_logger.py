@@ -147,7 +147,7 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                         "args": [
                             {"type": "text", "value": str(row.get("log_timestamp", ""))},
                             {"type": "text", "value": str(row.get("forecast_target_date", ""))},
-                            {"type": "integer", "value": int(float(row.get("forecast_horizon_days", 5))) if pd.notna(row.get("forecast_horizon_days")) else 5},
+                            {"type": "integer", "value": str(int(float(row.get("forecast_horizon_days", 5)))) if pd.notna(row.get("forecast_horizon_days")) else "5"},
                             {"type": "text", "value": str(row.get("region", ""))},
                             {"type": "text", "value": str(row.get("model_version", ""))},
                             {"type": "text", "value": str(row.get("run_type", ""))},
@@ -392,7 +392,7 @@ def log_predictions(
 
 
 
-def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
+def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> pd.DataFrame:
     """
     Fetches actual historical gas prices up to today, matches them against past forecasted target dates,
     updates actual prices, error metrics, and directional hit outcomes in prediction_history.csv.
@@ -478,13 +478,16 @@ def backfill_actual_prices_and_evaluate() -> pd.DataFrame:
             logger.warning(f"Background prediction cloud sync notice: {e}")
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
-        # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issue #230)
+        # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issue #230, #326)
         try:
             from src.agent_memory import AgentMemoryManager
             mem_mgr = AgentMemoryManager()
-            for _, row in history_df[history_df['actual_5d_price'].notna()].tail(10).iterrows():
+            eval_candidates = history_df[history_df['actual_5d_price'].notna()]
+            if target_region:
+                eval_candidates = eval_candidates[eval_candidates['region'] == target_region]
+            for _, row in eval_candidates.tail(10).iterrows():
                 err = float(row.get('error_dollars', 0.0))
-                reg = str(row.get('region', 'National'))
+                reg = str(row.get('region', target_region or 'National'))
                 pred = float(row.get('predicted_5d_price', 0.0))
                 act = float(row.get('actual_5d_price', 0.0))
                 target_d = str(row.get('forecast_target_date', ''))
