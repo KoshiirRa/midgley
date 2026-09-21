@@ -1,0 +1,120 @@
+{
+  "run_id": "2026-09-19_18-30-22",
+  "log_timestamp": "2026-09-19 18:30:19",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "NCP (SP) asks Centre to spell out economic fallout of US tariff threat over Russian oil - The New Indian Express",
+  "headline_items": [
+    {
+      "headline": "NCP (SP) asks Centre to spell out economic fallout of US tariff threat over Russian oil - The New Indian Express",
+      "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQYXg0LWJMaTdYRVYwMmttSmdXei1GNDRILTVyVWViNHRVeFZLUWxpeE5ybnBielRHeVU1YnBHdWo3OGNhWUpGa3FsX2wyamlDdWI2SU14ZUxPLXBzUFQyQ1FMZHZJc2dTMktBUEo4NGJKUWQxS1dYYjU5d1FQLWUxMjh2VWE0TU5YTGZhVXVCV2JEVFFvOTI1SGh5OFNrTkxhTk5mc2hnYnJ5MURqRVdoMjdwMl9kd3FLWWU0by10WWVnS0pGNDdlS1hKdVE5Ti1JOHVMR0NXT190QmhUd2ktbmtoY2RhQdIB8wFBVV95cUxQUUFpd21uRXc5ZWtTR0dna1F5M3BaenZvWGpqQXMyRUdDb2k1NDdMaFMxaV9sOEpNMldmeVdXTDF0M1BwR2lIZ0kwMzIzWW1sQnlYNGIxUDl6MllaSTEtamlLakpncDd6MjZFOUxQVFBFRWpMQmU3akV3YWlTX2duTDhmcXNEMXVqaXRrWjNoS2tqVlBYUlYzLXd3TTkzRk1MRzFqMm53SzNRemdxZzhDU21tUGt2NkJQdG51OE15V3AxVnJ5TWpoLXJURjlJSVRXNjlwS3B5c1E0WmFNNU9uaWNMak1IU1JoUFpFZnVaZmRKVjg?oc=5",
+      "source": "Google News Energy Feed"
+    },
+    {
+      "headline": "Trump signs sanctions bill that threatens up to 100% tariffs on top importers of Russian energy - fortune.com",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOU25hUm84YTVMblVTRlA5Y3hzekhpSDZadkpvZTJhQ2FxeGl0Q09uZDJIbWNqSy1iejBCNXJqZ1pVaEs2alVhbnkzQTNUdG9YTzU0Y0x6ZWZwcjRYeGEwM29nRmtySGU4X1RLTUluQkNjcWVLSEFIS0tHcjQ2eXZoQjd0WjJfVFdSd24tbnFMcWltN0tROU1pUHFHTEt0VjBhNzE0?oc=5",
+      "source": "Google News Energy Feed"
+    },
+    {
+      "headline": "Trump signs Russia sanctions bill: What it means and will India actually face 100% tariff - The Times of India",
+      "url": "https://news.google.com/rss/articles/CBMijgJBVV95cUxNb0F3bDFOZmtuMnFRQW5LaUZQWFp4UTA0dXZaNTM2U0k5QnUtTGpja21MTFVHeFhfMWg4Z1RjelhUZGFZelFWTlJaTUxqalN6VGRZVklTbmJyQTlqVDhsU3Z3SWpXeGVJQlJkbEpvT2VWNmlSQTdqd0pOdjl2YV9hbGxTcm0zOEhTdkhYbkJzRGhCQlFzS09JWG13MlBmUnB3S3dEUGg1YWkzMER5Qy1HYXdROUlRVHNOVE9WN3pVTmV6N2lDNjdTaWp4MnRFUE9UbktxdHpkWWtxOG9YdVVfaU44OVZWUllkR3RwSlkxaEw2eWFybVBNemJ4NFcxRXVoS1FRekJzUmtLUDBxZ2fSAZMCQVVfeXFMT0s0bFBlanlGWkJyZm1xVnhfM2QxOVF6bHQ3RGc5cTZMNmxRamZFQ0xqd3RxNWJSLTVtblo0dVkzUldfd3BUeTdRS2VtamFFc3VCTURFOTRacThlcXRUdXk4TGdQZjBjNndDWmk0UGxaUEthak5KXzQ3RWFPeUFCOVNCT3QzRVRTaS1pV1RsOG5hejFsdTUwelBiQ1N0YUNyVWk2RHAwTEROaGY5eDlVRndrczR1RGFYMFk4N3huUHZfZUprd3lJOHJ3SEY4UTlYaDNENXI5VWU3dlpyU2Q2TUg0aEtMWE5NLTk1b3Atb1ZobHNubjNlZGZTeWkyX2JnR2RsbzFoY3kyLWEwYllZcjc0STg?oc=5",
+      "source": "Google News Energy Feed"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.5,
+    "overall_price_pressure": 0.7,
+    "geopolitical_risk": 0.9,
+    "demand_sentiment": -0.3,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.5,
+    "m1": 0.4353,
+    "m2": 0.3789,
+    "m3": 0.3299,
+    "m4": 0.2872,
+    "m5": 0.25
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.2732,
+      "delta": -0.24189999999999978,
+      "pct_change": -7.5973618090452195
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 4.013,
+      "predicted_price": 5.5746,
+      "delta": 0.6863999999999999,
+      "pct_change": 17.10441066533765
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 4.359,
+      "predicted_price": 4.361,
+      "delta": -0.0011999999999998678,
+      "pct_change": -0.027529249827939153
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 4.507,
+      "predicted_price": 4.5051,
+      "delta": -0.006000000000000227,
+      "pct_change": -0.13312624805858062
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 4.153,
+      "predicted_price": 4.1482,
+      "delta": 0.002500000000000391,
+      "pct_change": 0.060197447628229976
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 4.209,
+      "predicted_price": 4.2119,
+      "delta": 0.016499999999999737,
+      "pct_change": 0.3920171062009916
+    },
+    {
+      "key": "Port_St_Lucie_FL",
+      "name": "Port St. Lucie, FL Retail",
+      "base_price": 4.356,
+      "predicted_price": 4.3634,
+      "delta": 0.009600000000000719,
+      "pct_change": 0.22038567493114597
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 6.201,
+      "predicted_price": 6.1993,
+      "delta": -0.0033000000000003027,
+      "pct_change": -0.053217223028548664
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 6.308,
+      "predicted_price": 6.3063,
+      "delta": -0.0032999999999994145,
+      "pct_change": -0.052314521242856925
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-09-19 18:30:19]: Elevated upward price shock (+$0.70/gal) observed across wholesale futures. Event trigger 'NCP (SP) asks Centre to spell out economic fallout of US tariff threat over Russian oil - The New Indian Express' drove supply disruption to S=0.50 and geopolitical risk to G=0.90. Exponential decay (t\u00bd=5.0d) models Day-1 retained shock M\u2081=0.4353 and Day-5 horizon retention M\u2085=0.2500.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-09-19 18:30:19 (Mode: INTRADAY_REVISION), primary event trigger 'NCP (SP) asks Centre to spell out economic fallout of US tariff threat over Russian oil - The New Indian Express' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.50, Price Pressure \u0394P=+0.70, Geopolitical Risk G=0.90. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.5000\n  - Day 1: M\u2081 = 0.4353\n  - Day 5: M\u2085 = 0.2500 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.273/gal ($-0.242/gal, -7.60%)\n  \u2022 Tulsa, OK Retail: $5.575/gal (+$0.686/gal, +17.10%)\n  \u2022 Newark, DE Retail: $4.361/gal ($-0.001/gal, -0.03%)\n  \u2022 Cincinnati, OH/KY: $4.505/gal ($-0.006/gal, -0.13%)\n  \u2022 Greenville, NC Retail: $4.148/gal (+$0.003/gal, +0.06%)\n  \u2022 Charlotte, NC Retail: $4.212/gal (+$0.016/gal, +0.39%)\n  \u2022 Port St. Lucie, FL Retail: $4.363/gal (+$0.010/gal, +0.22%)\n  \u2022 Oakland, CA Retail: $6.199/gal ($-0.003/gal, -0.05%)\n  \u2022 SF Bay Area Region: $6.306/gal ($-0.003/gal, -0.05%)\n\nLargest upward shift for this run: Tulsa, OK Retail at $5.575/gal (+0.686/gal). Largest downward shift for this run: National Wholesale at $3.273/gal (-0.242/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-09-19 18:30:19]:\n\u2022 Execution Context: Run type 'INTRADAY_REVISION' triggered by 'NCP (SP) asks Centre to spell out economic fallout of US tariff threat over Russian oil - The New Indian Express'. Overall price pressure vector sits at \u0394P=+0.70/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.90. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.\n\u2022 Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck"
+  }
+}

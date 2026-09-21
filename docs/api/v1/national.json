@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-18T17:14:50.195349",
+  "timestamp": "2026-09-21T09:01:29.451427",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.469,
+    "current_price_per_gal": 4.479,
     "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
       "source": "AAA Web Scraper (National Average, US)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-18T22:14:31Z"
+      "timestamp": "2026-09-21T14:01:28Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,9 +27,9 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-23",
-    "current_base_price": 4.469,
-    "predicted_price_per_gal": 4.463,
+    "target_date": "2026-09-26",
+    "current_base_price": 4.479,
+    "predicted_price_per_gal": 4.473,
     "expected_change_dollars": -0.006,
     "expected_change_percent": -0.13,
     "projected_direction": "DOWN",

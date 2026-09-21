@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
+    dashboard_only = "--dashboard-only" in sys.argv
     use_api = "--use-llm-api" in sys.argv
     model_choice = "ridge"
     for arg in sys.argv:
@@ -46,16 +47,19 @@ if __name__ == "__main__":
     total_steps = len(LOCATIONS) + 1
     
     failed_locations = []
-    for loc_id, loc_info in LOCATIONS.items():
-        print(f"\n" + "=" * 80)
-        print(f"  STEP {step_num}/{total_steps}: RUNNING {loc_info['name'].upper()} MODEL")
-        print("=" * 80)
-        try:
-            loc_info["run_pipeline"](use_llm_api=use_api, model_type=model_choice)
-        except Exception as e:
-            logger.error(f"Error executing pipeline for location {loc_id}: {e}", exc_info=True)
-            failed_locations.append((loc_id, str(e)))
-        step_num += 1
+    if not dashboard_only:
+        for loc_id, loc_info in LOCATIONS.items():
+            print(f"\n" + "=" * 80)
+            print(f"  STEP {step_num}/{total_steps}: RUNNING {loc_info['name'].upper()} MODEL")
+            print("=" * 80)
+            try:
+                loc_info["run_pipeline"](use_llm_api=use_api, model_type=model_choice)
+            except Exception as e:
+                logger.error(f"Error executing pipeline for location {loc_id}: {e}", exc_info=True)
+                failed_locations.append((loc_id, str(e)))
+            step_num += 1
+    else:
+        print("\n  [INFO] Running in --dashboard-only mode: skipping individual location training pipelines.")
 
     print("\n" + "=" * 80)
     print(f"  STEP {total_steps}/{total_steps}: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")
