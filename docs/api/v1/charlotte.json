@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-21T04:01:41.221977",
+  "timestamp": "2026-09-21T09:54:21.591551",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.204,
+    "current_price_per_gal": 4.199,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-21T04:01:10Z"
+      "timestamp": "2026-09-21T09:53:51Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-26",
-    "current_base_price": 4.204,
-    "predicted_price_per_gal": 4.214,
+    "current_base_price": 4.199,
+    "predicted_price_per_gal": 4.209,
     "expected_change_dollars": 0.01,
     "expected_change_percent": 0.23,
     "projected_direction": "UP",

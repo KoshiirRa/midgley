@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-21T04:01:41.242309",
+  "timestamp": "2026-09-21T09:54:21.614607",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.329,
+    "current_price_per_gal": 6.332,
     "source": "AAA Web Scraper (San Francisco, CA)",
     "provenance": {
       "source": "AAA Web Scraper (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-21T04:01:11Z"
+      "timestamp": "2026-09-21T09:53:52Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-26",
-    "current_base_price": 6.329,
-    "predicted_price_per_gal": 6.359,
+    "current_base_price": 6.332,
+    "predicted_price_per_gal": 6.362,
     "expected_change_dollars": 0.03,
     "expected_change_percent": 0.48,
     "projected_direction": "UP",

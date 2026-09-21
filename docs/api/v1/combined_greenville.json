@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-21T04:01:41.210894",
+  "timestamp": "2026-09-21T09:54:21.579734",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.146,
+    "current_price_per_gal": 4.139,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-21T04:01:10Z"
+      "timestamp": "2026-09-21T09:53:51Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-26",
-    "current_base_price": 4.146,
-    "predicted_price_per_gal": 4.146,
+    "current_base_price": 4.139,
+    "predicted_price_per_gal": 4.139,
     "expected_change_dollars": 0.0,
     "expected_change_percent": 0.01,
     "projected_direction": "UP",

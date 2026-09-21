@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-21T04:01:41.197606",
+  "timestamp": "2026-09-21T09:54:21.567727",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.487,
+    "current_price_per_gal": 4.471,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-21T04:01:09Z"
+      "timestamp": "2026-09-21T09:53:50Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-26",
-    "current_base_price": 4.487,
-    "predicted_price_per_gal": 4.487,
+    "current_base_price": 4.471,
+    "predicted_price_per_gal": 4.471,
     "expected_change_dollars": -0.0,
     "expected_change_percent": -0.01,
     "projected_direction": "DOWN",

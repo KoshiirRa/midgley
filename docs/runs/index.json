@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-21_09-53-52",
+    "timestamp": "2026-09-21 09:53:49",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Trump signs Russia sanction bill into law giving him power t..."
+  },
+  {
     "run_id": "2026-09-21_04-01-12",
     "timestamp": "2026-09-21 04:01:08",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-17 22:20 UTC",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-17 22:20 UTC)"
-  },
-  {
-    "run_id": "2026-09-17_22-20-14",
-    "timestamp": "2026-09-17 21:05:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India says new US tariffs over Russian oil could hit ties, v..."
   }
 ]

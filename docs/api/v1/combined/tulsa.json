@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-21T04:01:41.164873",
+  "timestamp": "2026-09-21T09:54:21.531984",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.004,
+    "current_price_per_gal": 3.991,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-21T04:01:09Z"
+      "timestamp": "2026-09-21T09:53:50Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,10 +28,10 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-26",
-    "current_base_price": 4.004,
-    "predicted_price_per_gal": 5.895,
+    "current_base_price": 3.991,
+    "predicted_price_per_gal": 5.882,
     "expected_change_dollars": 1.891,
-    "expected_change_percent": 47.22,
+    "expected_change_percent": 47.37,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -91,13 +91,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast +$1.891/gal (+47.23%): Driven primarily by Regional Logistics & Hub Delivery (+$0.567/gal), Refining Yield & Crack Spread (+$0.567/gal).",
+      "summary_text": "Tulsa OK forecast +$1.891/gal (+47.38%): Driven primarily by Regional Logistics & Hub Delivery (+$0.567/gal), Refining Yield & Crack Spread (+$0.567/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.567,
-          "impact_pct": 14.16,
+          "impact_pct": 14.21,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -105,7 +105,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.567,
-          "impact_pct": 14.16,
+          "impact_pct": 14.21,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -113,7 +113,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.473,
-          "impact_pct": 11.81,
+          "impact_pct": 11.85,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -121,7 +121,7 @@
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
           "impact_dollars": 0.189,
-          "impact_pct": 4.72,
+          "impact_pct": 4.74,
           "share_pct": 10.0,
           "direction": "UP"
         },
@@ -129,7 +129,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.057,
-          "impact_pct": 1.42,
+          "impact_pct": 1.43,
           "share_pct": 3.0,
           "direction": "UP"
         },
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.567,
-      "impact_pct": 14.16,
+      "impact_pct": 14.21,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -157,7 +157,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.567,
-      "impact_pct": 14.16,
+      "impact_pct": 14.21,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -165,7 +165,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.473,
-      "impact_pct": 11.81,
+      "impact_pct": 11.85,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -173,7 +173,7 @@
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
       "impact_dollars": 0.189,
-      "impact_pct": 4.72,
+      "impact_pct": 4.74,
       "share_pct": 10.0,
       "direction": "UP"
     },
@@ -181,7 +181,7 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.057,
-      "impact_pct": 1.42,
+      "impact_pct": 1.43,
       "share_pct": 3.0,
       "direction": "UP"
     },
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast +$1.891/gal (+47.23%): Driven primarily by Regional Logistics & Hub Delivery (+$0.567/gal), Refining Yield & Crack Spread (+$0.567/gal).",
+    "summary_text": "Tulsa OK forecast +$1.891/gal (+47.38%): Driven primarily by Regional Logistics & Hub Delivery (+$0.567/gal), Refining Yield & Crack Spread (+$0.567/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
