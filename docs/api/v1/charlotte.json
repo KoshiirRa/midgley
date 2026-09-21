@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-18T17:14:50.240527",
+  "timestamp": "2026-09-21T09:01:29.503818",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.221,
+    "current_price_per_gal": 4.199,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-18T22:14:33Z"
+      "timestamp": "2026-09-21T14:00:58Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,11 +27,11 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-23",
-    "current_base_price": 4.221,
-    "predicted_price_per_gal": 4.186,
+    "target_date": "2026-09-26",
+    "current_base_price": 4.199,
+    "predicted_price_per_gal": 4.164,
     "expected_change_dollars": -0.035,
-    "expected_change_percent": -0.83,
+    "expected_change_percent": -0.84,
     "projected_direction": "DOWN",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -121,7 +121,7 @@
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.004,
-          "impact_pct": -0.09,
+          "impact_pct": -0.1,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -173,7 +173,7 @@
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.004,
-      "impact_pct": -0.09,
+      "impact_pct": -0.1,
       "share_pct": 10.0,
       "direction": "DOWN"
     },

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-18T17:14:50.255127",
+  "timestamp": "2026-09-21T09:01:29.519997",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.269,
+    "current_price_per_gal": 6.332,
     "source": "AAA Web Scraper (San Francisco, CA)",
     "provenance": {
       "source": "AAA Web Scraper (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-18T22:14:34Z"
+      "timestamp": "2026-09-21T14:00:59Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,11 +27,11 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-23",
-    "current_base_price": 6.269,
-    "predicted_price_per_gal": 6.223,
+    "target_date": "2026-09-26",
+    "current_base_price": 6.332,
+    "predicted_price_per_gal": 6.286,
     "expected_change_dollars": -0.046,
-    "expected_change_percent": -0.73,
+    "expected_change_percent": -0.72,
     "projected_direction": "DOWN",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -97,7 +97,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
           "impact_dollars": -0.016,
-          "impact_pct": -0.26,
+          "impact_pct": -0.25,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -105,7 +105,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.011,
-          "impact_pct": -0.18,
+          "impact_pct": -0.17,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -149,7 +149,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
       "impact_dollars": -0.016,
-      "impact_pct": -0.26,
+      "impact_pct": -0.25,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -157,7 +157,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.011,
-      "impact_pct": -0.18,
+      "impact_pct": -0.17,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
