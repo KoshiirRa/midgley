@@ -3,13 +3,13 @@
 **Release Date:** September 21, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`), GitHub Actions & Cloudflare Edge  
 **Git Branch:** `dev` / `main`  
-**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365)
+**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365), [Issue #364](https://github.com/KoshiirRa/midgley/issues/364), [Issue #366](https://github.com/KoshiirRa/midgley/issues/366), [Issue #368](https://github.com/KoshiirRa/midgley/issues/368)
 
 ---
 
 ## 🚀 Overview & Release Highlights
 
-Midgley **v0.7.0** is a landmark reliability, security, and econometric expansion release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, and introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion.
+Midgley **v0.7.0** is a landmark reliability, security, and econometric expansion release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, and introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion, California Energy Commission (CEC) fuels watch ingestion, EPA statutory RVP blend transition schedules, and NOAA CO-OPS marine terminal telemetry.
 
 ---
 
@@ -68,7 +68,25 @@ Midgley **v0.7.0** is a landmark reliability, security, and econometric expansio
 
 ---
 
-### 9. Automated Verification & Regression Test Suite
+### 9. California Energy Commission (CEC) Weekly Fuels Watch (`src/data_ingestion.py` - Issue #364)
+- **Zero-Cost PADD 5 Supply Balances:** Implemented `CECWeeklyFuelsConnector` fetching California refinery crude input, CARBOB production, NorCal vs. SoCal refinery utilization rates, and finished gasoline stocks.
+- **Thursday Vintage Scheduling:** Tracks Thursday afternoon publication lag with bitemporal point-in-time snapshots in `data/cec_fuels_vintages.json`.
+
+---
+
+### 10. EPA Reid Vapor Pressure (RVP) Standards & Blend Transitions (`src/rvp_regulations.py` - Issue #366)
+- **Statutory Volatility Limits (40 CFR Part 1090 & CARB):** Implemented `RVPRegulatoryEngine` modeling jurisdiction-specific RVP constraints (7.8 psi Non-Attainment, 9.0 psi Attainment, 7.4 psi RFG, 6.99 psi CARB CaRFG).
+- **Seasonal Countdown & Compliance Premiums:** Computes exact countdown features for terminal delivery (May 1), retail compliance (June 1 - Sept 15), winter transitions (Sept 16), and spring transition ramp-ups with estimated summer compliance premiums ($+\$0.08$ to $+\$0.28$/gal). Supports emergency fuel waiver tracking.
+
+---
+
+### 11. NOAA CO-OPS Coastal Marine Disruption Telemetry (`src/data_ingestion.py` - Issue #368)
+- **Marine Fuel Terminal Telemetry:** Implemented `NOAACOOPSConnector` fetching coastal water levels, draft anomalies, and storm surge residuals across key terminals (Station `8770613` Houston, `8557380` Delaware River, `9415144` Carquinez Strait, `8722237` Fort Pierce/Port St. Lucie).
+- **Operational Risk Indices:** Converts tidal surge and shallow draft extremes to operational marine terminal disruption risk metrics with bitemporal persistence in `data/noaa_coops_vintages.json`.
+
+---
+
+### 12. Automated Verification & Regression Test Suite
 - **`tests/test_check_updates.py`:** Validates RCE prevention, allowlisted action execution, legacy command translation, and insecure URL fallback rejection (4/4 passing).
 - **`tests/test_temporal_leakage.py`:** Validates absence of backward filling, $h$-step split boundary purging, train-slice diagnostic computation, stacking CV purging, and chronological ordering (5/5 passing).
 - **`tests/test_api_server.py`:** Verifies fail-closed admin secret verification and global API key middleware route enforcement (23/23 passing).
@@ -76,4 +94,7 @@ Midgley **v0.7.0** is a landmark reliability, security, and econometric expansio
 - **`tests/test_wandb_logger.py`:** Validates multi-region telemetry aggregation and performance table logging (8/8 passing).
 - **`tests/test_eia_spot_connector.py`:** Validates daily regional spot price fetching, basis calculations, and vintage persistence (2/2 passing).
 - **`tests/test_epa_rin_connector.py`:** Validates EPA EMTS RIN ingestion, dynamic RVO calculation, and biofuel connector integration (3/3 passing).
-- **Total Test Results:** 100% pass rate across all 65 test suites with zero regressions.
+- **`tests/test_cec_fuels_connector.py`:** Validates California Energy Commission Weekly Fuels Watch ingestion and Thursday vintages (3/3 passing).
+- **`tests/test_rvp_regulations.py`:** Validates statutory RVP limits, transition dates, and emergency waiver simulation (5/5 passing).
+- **`tests/test_noaa_coops_connector.py`:** Validates NOAA CO-OPS coastal water level fetching and marine risk indices (3/3 passing).
+- **Total Test Results:** 100% pass rate across all 68 test suites with zero regressions.

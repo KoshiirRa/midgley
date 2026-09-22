@@ -452,6 +452,60 @@ def create_feature_matrix(
         df['aqi_ozone_action_day_count'] = 0.0
         df['aqi_max_rvp_surcharge_per_gal'] = 0.0
 
+    # Merge California Energy Commission (CEC) Weekly Fuels Watch (Issue #364)
+    try:
+        from src.data_ingestion import CECWeeklyFuelsConnector
+        cec_connector = CECWeeklyFuelsConnector()
+        cec_data = cec_connector.fetch_weekly_fuels_data()
+        cec_metrics = cec_data.get('metrics', {})
+        df['cec_carbob_stocks_thousand_barrels'] = 0.0
+        df['norcal_refinery_utilization_pct'] = 0.0
+        df['socal_refinery_utilization_pct'] = 0.0
+        df['statewide_refinery_utilization_pct'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'cec_carbob_stocks_thousand_barrels'] = cec_metrics.get('ca_carbob_stocks_thousand_barrels', 5820.0)
+            df.loc[df.index[-1], 'norcal_refinery_utilization_pct'] = cec_metrics.get('norcal_refinery_utilization_pct', 86.4)
+            df.loc[df.index[-1], 'socal_refinery_utilization_pct'] = cec_metrics.get('socal_refinery_utilization_pct', 88.2)
+            df.loc[df.index[-1], 'statewide_refinery_utilization_pct'] = cec_metrics.get('statewide_refinery_utilization_pct', 87.3)
+    except Exception as e:
+        logger.warning(f"Could not merge CEC Weekly Fuels telemetry: {e}")
+        df['cec_carbob_stocks_thousand_barrels'] = 0.0
+        df['norcal_refinery_utilization_pct'] = 0.0
+        df['socal_refinery_utilization_pct'] = 0.0
+        df['statewide_refinery_utilization_pct'] = 0.0
+
+    # Merge EPA Reid Vapor Pressure (RVP) Regulatory Standards & Seasonal Transitions (Issue #366)
+    try:
+        from src.rvp_regulations import RVPRegulatoryEngine
+        rvp_engine = RVPRegulatoryEngine()
+        if 'date' in df.columns and len(df) > 0:
+            rvp_features_df = rvp_engine.compute_rvp_feature_dataframe(df['date'], region="National")
+            df = pd.merge(df, rvp_features_df, on='date', how='left')
+            for col in ['rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
+                        'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().fillna(0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge EPA RVP regulatory features: {e}")
+        for col in ['rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
+                    'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium']:
+            df[col] = 0.0
+
+    # Merge NOAA CO-OPS Coastal Marine Terminal Disruption Telemetry (Issue #368)
+    try:
+        from src.data_ingestion import NOAACOOPSConnector
+        coops_connector = NOAACOOPSConnector()
+        coops_data = coops_connector.fetch_coastal_marine_telemetry()
+        df['marine_terminal_surge_risk'] = 0.0
+        df['marine_terminal_shallow_draft_risk'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'marine_terminal_surge_risk'] = coops_data.get('marine_terminal_surge_risk', 0.0)
+            df.loc[df.index[-1], 'marine_terminal_shallow_draft_risk'] = coops_data.get('marine_terminal_shallow_draft_risk', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge NOAA CO-OPS coastal marine telemetry: {e}")
+        df['marine_terminal_surge_risk'] = 0.0
+        df['marine_terminal_shallow_draft_risk'] = 0.0
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     
@@ -604,6 +658,11 @@ def prepare_chronological_splits(
         'cospot_dft_dominant_period', 'cospot_dft_low_freq_energy_ratio',
         'cospot_dft_spectral_entropy', 'cospot_dwt_detail_energy_ratio',
         'cospot_dwt_detail_shock_mag', 'cospot_dwt_approx_momentum',
+        'cec_carbob_stocks_thousand_barrels', 'norcal_refinery_utilization_pct',
+        'socal_refinery_utilization_pct', 'statewide_refinery_utilization_pct',
+        'rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
+        'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium',
+        'marine_terminal_surge_risk', 'marine_terminal_shallow_draft_risk',
         'sin_day', 'cos_day'
     ]
     qlib_features = [c for c in df.columns if c.startswith('qlib_')]

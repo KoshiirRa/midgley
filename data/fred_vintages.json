@@ -16,5 +16,14 @@
     "value": 4.319,
     "source": "FRED API / St. Louis Fed (Zero-Cost)",
     "is_vintage_reconstructed": false
+  },
+  {
+    "series_id": "GASREGW",
+    "name": "U.S. Regular Gasoline Retail Price ($/gal)",
+    "as_of": "2026-09-22 00:23:20",
+    "valid_date": "2026-09-22",
+    "value": 3.184,
+    "source": "FRED Benchmark Anchor (Zero-Cost)",
+    "is_vintage_reconstructed": false
   }
 ]

@@ -820,7 +820,7 @@ python3 scripts/check_updates.py --auto-reconcile
 ```
 
 ### 🤖 AI Agent Reconciliation Block
-When upstream releases include new econometric features (e.g. Cboe OVX volatility, USGS river tow gauges, maritime chokepoints), autonomous AI agents can execute the following deterministic reconciliation sequence:
+When upstream releases include new econometric features (e.g. Cboe OVX volatility, USGS river tow gauges, maritime chokepoints, California Energy Commission Fuels Watch, EPA RVP regulatory standards, NOAA CO-OPS marine water levels), autonomous AI agents can execute the following deterministic reconciliation sequence:
 1. Fetch latest upstream manifest: `python3 -m src.release_manifest`
 2. Run update audit: `python3 scripts/check_updates.py --dry-run`
 3. Execute regional model realignment: `python3 scripts/manage_regions.py retrain --all`
@@ -828,6 +828,16 @@ When upstream releases include new econometric features (e.g. Cboe OVX volatilit
 
 ---
 
+## 9. Zero-Cost Physical & Regulatory Data Ingestion Connectors
+
+Midgley ingests state and federal physical telemetry at **$0 recurring API cost** with 100% offline fallback resilience:
+* **California Energy Commission (CEC) Weekly Fuels Watch (`CECWeeklyFuelsConnector`, Issue #364):** Ingests weekly California refinery crude inputs, CARBOB production, NorCal/SoCal refinery utilization, and fuel inventory levels. Enforces Thursday publication schedules with bitemporal tracking in `data/cec_fuels_vintages.json`.
+* **EPA & CARB Reid Vapor Pressure (RVP) Regulatory Engine (`RVPRegulatoryEngine`, Issue #366):** Models statutory Title 40 CFR Part 1090 and CARB Phase 3 CaRFG limits (7.8 psi, 9.0 psi, CARB 6.99 psi, RFG 7.4 psi), seasonal transition countdowns (May 1 terminal, June 1 retail, Sept 16 winter), and summer-blend compliance cost premiums.
+* **NOAA CO-OPS Coastal Water Levels & Marine Disruption Telemetry (`NOAACOOPSConnector`, Issue #368):** Ingests tidal anomalies and storm surge residuals across critical fuel marine terminals (Houston Ship Channel, Delaware River, Carquinez Strait, Port St. Lucie) with bitemporal snapshots in `data/noaa_coops_vintages.json`.
+
+---
+
 *Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Stacking Ensemble & Purged CV | License: Apache 2.0*
+
 
 

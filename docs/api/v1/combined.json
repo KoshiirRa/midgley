@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-09-21T09:01:29.521607",
+  "timestamp": "2026-09-22T00:25:35.979190",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.451427",
+      "timestamp": "2026-09-22T00:25:35.885435",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -22,7 +22,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:01:28Z"
+          "timestamp": "2026-09-22T05:24:43Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -31,7 +31,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 4.479,
         "predicted_price_per_gal": 4.473,
         "expected_change_dollars": -0.006,
@@ -254,7 +254,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.461919",
+      "timestamp": "2026-09-22T00:25:35.897361",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -272,7 +272,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:56Z"
+          "timestamp": "2026-09-22T05:24:43Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -281,7 +281,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 3.991,
         "predicted_price_per_gal": 4.411,
         "expected_change_dollars": 0.42,
@@ -504,7 +504,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.470283",
+      "timestamp": "2026-09-22T00:25:35.909226",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -522,7 +522,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:59Z"
+          "timestamp": "2026-09-22T05:24:44Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -531,7 +531,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 6.22,
         "predicted_price_per_gal": 6.175,
         "expected_change_dollars": -0.045,
@@ -754,7 +754,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.479211",
+      "timestamp": "2026-09-22T00:25:35.919612",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -772,7 +772,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:57Z"
+          "timestamp": "2026-09-22T05:24:43Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -781,7 +781,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 4.361,
         "predicted_price_per_gal": 4.364,
         "expected_change_dollars": 0.003,
@@ -1004,7 +1004,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.487540",
+      "timestamp": "2026-09-22T00:25:35.929588",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1022,7 +1022,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:57Z"
+          "timestamp": "2026-09-22T05:24:43Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1031,7 +1031,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 4.471,
         "predicted_price_per_gal": 4.451,
         "expected_change_dollars": -0.02,
@@ -1254,7 +1254,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.495451",
+      "timestamp": "2026-09-22T00:25:35.942054",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1272,7 +1272,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:58Z"
+          "timestamp": "2026-09-22T05:24:46Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1281,7 +1281,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 4.139,
         "predicted_price_per_gal": 4.105,
         "expected_change_dollars": -0.034,
@@ -1504,7 +1504,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.503818",
+      "timestamp": "2026-09-22T00:25:35.953029",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1522,7 +1522,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:58Z"
+          "timestamp": "2026-09-22T05:24:47Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1531,7 +1531,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 4.199,
         "predicted_price_per_gal": 4.164,
         "expected_change_dollars": -0.035,
@@ -1754,7 +1754,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.512202",
+      "timestamp": "2026-09-22T00:25:35.967211",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1772,7 +1772,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:58Z"
+          "timestamp": "2026-09-22T05:24:47Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1781,7 +1781,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 4.319,
         "predicted_price_per_gal": 4.307,
         "expected_change_dollars": -0.012,
@@ -2004,7 +2004,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-09-21T09:01:29.519997",
+      "timestamp": "2026-09-22T00:25:35.977131",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2022,7 +2022,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-21T14:00:59Z"
+          "timestamp": "2026-09-22T05:24:45Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2031,7 +2031,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-09-26",
+        "target_date": "2026-09-27",
         "current_base_price": 6.332,
         "predicted_price_per_gal": 6.286,
         "expected_change_dollars": -0.046,

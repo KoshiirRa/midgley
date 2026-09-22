@@ -110,5 +110,61 @@
       "premium_unleaded_avg": 3.65,
       "status": "SUCCESS"
     }
+  },
+  {
+    "as_of": "2026-09-22 00:25:23",
+    "survey_type": "CEC_CA",
+    "data": {
+      "agency": "California Energy Commission (CEC)",
+      "state": "CA",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-09-22 00:25:23",
+      "retail_unleaded_avg": 5.184,
+      "price_breakdown": {
+        "crude_oil_cost": 2.25,
+        "refining_margin": 1.072,
+        "distribution_marketing_margin": 0.459,
+        "state_excise_tax": 0.634,
+        "federal_excise_tax": 0.184,
+        "carb_cap_and_trade_fee": 0.25,
+        "lcfs_overhead_fee": 0.185,
+        "local_sales_tax_est": 0.15
+      },
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-22 00:25:23",
+    "survey_type": "NYSERDA_NY",
+    "data": {
+      "agency": "NYSERDA Transportation Fuels Dashboard",
+      "state": "NY",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-09-22 00:25:23",
+      "regions": {
+        "Statewide": 3.45,
+        "NYC_Metropolitan": 3.55,
+        "Downstate": 3.519,
+        "Upstate": 3.381
+      },
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-22 00:25:23",
+    "survey_type": "IDALS_MIDWEST",
+    "data": {
+      "agency": "Iowa Dept of Agriculture (IDALS) & Midwest Surveys",
+      "region": "Midwest / PADD 2",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-09-22 00:25:23",
+      "e10_unleaded_avg": 3.12,
+      "e85_flex_fuel_avg": 2.449,
+      "premium_unleaded_avg": 3.65,
+      "status": "SUCCESS"
+    }
   }
 ]
