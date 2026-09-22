@@ -248,16 +248,23 @@ def get_cloud_sync_status() -> dict:
     }
 
 
-def compute_regional_residual_std(region: str = None, window_days: int = 30, default_std: float = 0.0612) -> float:
+def compute_regional_residual_std(
+    region: str = None, 
+    window_days: int = 30, 
+    default_std: float = 0.0612,
+    horizon_days: Optional[int] = None
+) -> float:
     """
-    Computes rolling 30-day standard error of regional prediction residuals (Issue #214).
+    Computes rolling 30-day standard error of regional prediction residuals (Issue #214, #394).
     sigma_residual = std(actual_5d_price - predicted_5d_price)
-    Returns default_std (0.0612 $/gal) if evaluated history has < 3 records.
+    Optionally scales by sqrt(horizon_days / 5) for multi-horizon forecast bounds.
+    Returns default_std (0.0612 $/gal) scaled by horizon if evaluated history has < 3 records.
     """
+    base_std = default_std
     try:
         if os.path.exists(HISTORY_CSV_PATH):
             df = pd.read_csv(HISTORY_CSV_PATH)
-            filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region)
+            filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region, horizon_days=horizon_days)
             if not filtered.empty and 'actual_5d_price' in filtered.columns:
                 actuals = filtered['actual_5d_price'].astype(float).values
                 preds = filtered['predicted_5d_price'].astype(float).values
@@ -265,9 +272,24 @@ def compute_regional_residual_std(region: str = None, window_days: int = 30, def
                 if len(residuals) >= 3:
                     res_std = float(np.std(residuals, ddof=1))
                     return max(0.01, round(res_std, 4))
+            
+            # If not enough records for specific horizon, compute over all horizons for region
+            if horizon_days is not None:
+                all_h_filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region)
+                if not all_h_filtered.empty and 'actual_5d_price' in all_h_filtered.columns:
+                    actuals = all_h_filtered['actual_5d_price'].astype(float).values
+                    preds = all_h_filtered['predicted_5d_price'].astype(float).values
+                    residuals = actuals - preds
+                    if len(residuals) >= 3:
+                        base_std = float(np.std(residuals, ddof=1))
     except Exception as e:
         logger.debug(f"Notice computing regional residual std for {region}: {e}")
-    return default_std
+
+    if horizon_days is not None and horizon_days > 0:
+        scaled_std = base_std * np.sqrt(horizon_days / 5.0)
+        return max(0.01, round(scaled_std, 4))
+
+    return base_std
 
 
 def resolve_model_tag(
@@ -445,17 +467,26 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
         return 0
 
 
-def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> pd.DataFrame:
+def backfill_actual_prices_and_evaluate(
+    target_region: Optional[str] = None,
+    actuals_map_override: Optional[dict] = None,
+    eia_feed_override: Optional[Any] = None,
+    csv_path: Optional[str] = None,
+    force_eval: bool = False
+) -> pd.DataFrame:
     """
     Fetches actual historical gas prices up to today, matches them against past forecasted target dates,
     updates actual prices, error metrics, and directional hit outcomes in prediction_history.csv.
     Uses official observed U.S. EIA weekly retail prices by PADD/State (Issue #403, #391, #392) as ground truth.
     Eliminates synthetic offset ladders and identity fallbacks.
+    Allows dependency injection for testing without network calls (Issue #395).
     """
     global _GLOBAL_RBOB_ACTUALS_CACHE
-    ensure_history_store()
+    target_csv = csv_path or HISTORY_CSV_PATH
+    if not csv_path:
+        ensure_history_store()
     try:
-        history_df = pd.read_csv(HISTORY_CSV_PATH)
+        history_df = pd.read_csv(target_csv)
     except Exception as e:
         logger.warning(f"Could not read prediction history log ({e}). Returning empty DataFrame.")
         return pd.DataFrame()
@@ -464,7 +495,9 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
         logger.warning("Prediction history log is empty. No predictions to evaluate.")
         return history_df
 
-    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_YFINANCE_FORCE") != "1":
+    # If dependency injection or force_eval is active, proceed even under TESTING=1 (Issue #395)
+    is_injected = (actuals_map_override is not None) or (eia_feed_override is not None) or (csv_path is not None) or force_eval
+    if not is_injected and os.environ.get("TESTING") == "1" and os.environ.get("TEST_YFINANCE_FORCE") != "1":
         logger.debug("TESTING=1: Returning cached prediction history without online yfinance download.")
         return history_df
         
@@ -473,39 +506,45 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
     
     logger.info("Fetching actual historical market prices to backfill prediction log...")
     
-    actuals_map = _GLOBAL_RBOB_ACTUALS_CACHE
-    if not actuals_map and os.path.exists(RBOB_ACTUALS_CACHE_FILE):
-        try:
-            with open(RBOB_ACTUALS_CACHE_FILE, "r", encoding="utf-8") as f:
-                actuals_map = json.load(f)
-                _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
-        except Exception:
-            actuals_map = {}
-
-    if not actuals_map:
-        try:
-            data = yf.download("RB=F", start="2022-01-01", progress=False)
-            close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
-            dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
-            actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
-            actuals_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
-            _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+    if actuals_map_override is not None:
+        actuals_map = actuals_map_override
+    else:
+        actuals_map = _GLOBAL_RBOB_ACTUALS_CACHE
+        if not actuals_map and os.path.exists(RBOB_ACTUALS_CACHE_FILE):
             try:
-                os.makedirs(os.path.dirname(os.path.abspath(RBOB_ACTUALS_CACHE_FILE)), exist_ok=True)
-                with open(RBOB_ACTUALS_CACHE_FILE, "w", encoding="utf-8") as f:
-                    json.dump(actuals_map, f, indent=2)
+                with open(RBOB_ACTUALS_CACHE_FILE, "r", encoding="utf-8") as f:
+                    actuals_map = json.load(f)
+                    _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
             except Exception:
-                pass
-        except Exception as e:
-            logger.warning(f"Could not download actuals from yfinance: {e}")
-            actuals_map = {}
+                actuals_map = {}
+
+        if not actuals_map and (not is_injected or force_eval):
+            try:
+                data = yf.download("RB=F", start="2022-01-01", progress=False)
+                close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
+                dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
+                actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
+                actuals_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
+                _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+                try:
+                    os.makedirs(os.path.dirname(os.path.abspath(RBOB_ACTUALS_CACHE_FILE)), exist_ok=True)
+                    with open(RBOB_ACTUALS_CACHE_FILE, "w", encoding="utf-8") as f:
+                        json.dump(actuals_map, f, indent=2)
+                except Exception:
+                    pass
+            except Exception as e:
+                logger.warning(f"Could not download actuals from yfinance: {e}")
+                actuals_map = {}
         
-    try:
-        from src.eia_retail_feed import EIARetailFeed
-        eia_feed = EIARetailFeed()
-    except Exception as e:
-        logger.debug(f"EIARetailFeed unavailable, fallback to basis: {e}")
-        eia_feed = None
+    if eia_feed_override is not None:
+        eia_feed = eia_feed_override
+    else:
+        try:
+            from src.eia_retail_feed import EIARetailFeed
+            eia_feed = EIARetailFeed()
+        except Exception as e:
+            logger.debug(f"EIARetailFeed unavailable, fallback to basis: {e}")
+            eia_feed = None
 
     unevaluated_mask = history_df['actual_5d_price'].isna()
     if target_region:
@@ -527,7 +566,7 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
         source_prov = None
 
         if reg == "National":
-            if target_date_str in actuals_map:
+            if actuals_map and target_date_str in actuals_map:
                 candidate_price = float(actuals_map[target_date_str])
                 if validate_price_plausibility(candidate_price, "National", is_retail=False):
                     actual_price = candidate_price
@@ -550,13 +589,19 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
             err_dollars = abs(actual_price - pred_price)
             hit = 1 if pred_dir == actual_dir else 0
 
-            # 95% Confidence Interval Coverage Hit Evaluation
+            # 95% Confidence Interval Coverage Hit Evaluation (Issue #394)
             lower_ci = row.get('prediction_lower_95ci')
             upper_ci = row.get('prediction_upper_95ci')
-            if pd.notna(lower_ci) and pd.notna(upper_ci):
-                ci_hit = 1 if (float(lower_ci) <= actual_price <= float(upper_ci)) else 0
-            else:
-                ci_hit = 1 if (abs(actual_price - pred_price) <= 0.12) else 0
+            if pd.isna(lower_ci) or pd.isna(upper_ci):
+                h_days = _infer_horizon_days(row)
+                r_std = compute_regional_residual_std(reg, window_days=30, horizon_days=h_days)
+                half_width = 1.96 * r_std
+                lower_ci = pred_price - half_width
+                upper_ci = pred_price + half_width
+                history_df.at[idx, 'prediction_lower_95ci'] = round(lower_ci, 4)
+                history_df.at[idx, 'prediction_upper_95ci'] = round(upper_ci, 4)
+
+            ci_hit = 1 if (float(lower_ci) <= actual_price <= float(upper_ci)) else 0
 
             history_df.at[idx, 'actual_5d_price'] = round(actual_price, 4)
             history_df.at[idx, 'actual_direction'] = str(actual_dir)
@@ -568,36 +613,38 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
             updated = True
             
     if updated:
-        history_df.to_csv(HISTORY_CSV_PATH, index=False)
-        try:
-            sync_predictions_to_cloud(history_df)
-        except Exception as e:
-            logger.warning(f"Background prediction cloud sync notice: {e}")
+        history_df.to_csv(target_csv, index=False)
+        if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
+            try:
+                sync_predictions_to_cloud(history_df)
+            except Exception as e:
+                logger.warning(f"Background prediction cloud sync notice: {e}")
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
         # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issue #230, #326)
-        try:
-            from src.agent_memory import AgentMemoryManager
-            mem_mgr = AgentMemoryManager()
-            eval_candidates = history_df[history_df['actual_5d_price'].notna()]
-            if target_region:
-                eval_candidates = eval_candidates[eval_candidates['region'] == target_region]
-            for _, row in eval_candidates.tail(10).iterrows():
-                err = float(row.get('error_dollars', 0.0))
-                reg = str(row.get('region', target_region or 'National'))
-                pred = float(row.get('predicted_5d_price', 0.0))
-                act = float(row.get('actual_5d_price', 0.0))
-                target_d = str(row.get('forecast_target_date', ''))
-                anom_type = "LARGE_OVERESTIMATE" if (pred - act) >= 0.25 else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25 else ("DIRECTIONAL_FLIP" if row.get('directional_hit') == 0.0 and abs(pred - act) >= 0.05 else "NORMAL"))
-                # Only retain genuine prediction anomaly shocks into episodic memory to protect token spend
-                if anom_type != "NORMAL":
-                    mem_mgr.retain(
-                        content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
-                        region=reg,
-                        memory_type="anomaly_shock",
-                        anomaly_type=anom_type,
-                        error_dollars=err,
-                        predicted_price=pred,
+        if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
+            try:
+                from src.agent_memory import AgentMemoryManager
+                mem_mgr = AgentMemoryManager()
+                eval_candidates = history_df[history_df['actual_5d_price'].notna()]
+                if target_region:
+                    eval_candidates = eval_candidates[eval_candidates['region'] == target_region]
+                for _, row in eval_candidates.tail(10).iterrows():
+                    err = float(row.get('error_dollars', 0.0))
+                    reg = str(row.get('region', target_region or 'National'))
+                    pred = float(row.get('predicted_5d_price', 0.0))
+                    act = float(row.get('actual_5d_price', 0.0))
+                    target_d = str(row.get('forecast_target_date', ''))
+                    anom_type = "LARGE_OVERESTIMATE" if (pred - act) >= 0.25 else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25 else ("DIRECTIONAL_FLIP" if row.get('directional_hit') == 0.0 and abs(pred - act) >= 0.05 else "NORMAL"))
+                    # Only retain genuine prediction anomaly shocks into episodic memory to protect token spend
+                    if anom_type != "NORMAL":
+                        mem_mgr.retain(
+                            content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
+                            region=reg,
+                            memory_type="anomaly_shock",
+                            anomaly_type=anom_type,
+                            error_dollars=err,
+                            predicted_price=pred,
                         actual_price=act,
                         forecast_target_date=target_d,
                         metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
@@ -773,6 +820,7 @@ def compute_rolling_scoreboard_metrics(
             "directional_hit_rate_pct": 0.0,
             "naive_persistence_mae": 0.0,
             "model_uplift_mae_pct": 0.0,
+            "empirical_95ci_coverage_pct": 0.0,
         }
 
     actuals = filtered_df['actual_5d_price'].astype(float).values
@@ -785,6 +833,13 @@ def compute_rolling_scoreboard_metrics(
     rmse = float(np.sqrt(np.mean((actuals - preds) ** 2)))
     mape = float(np.mean(np.abs((actuals - preds) / actuals)) * 100.0)
     hit_rate = float(np.mean(hits) * 100.0)
+
+    # Empirical 95% Confidence Interval Coverage Hit Rate (Issue #394)
+    if 'within_95ci_hit' in filtered_df.columns and filtered_df['within_95ci_hit'].notna().any():
+        ci_hits = filtered_df['within_95ci_hit'].dropna().astype(float)
+        ci_coverage = float(ci_hits.mean() * 100.0) if len(ci_hits) > 0 else 0.0
+    else:
+        ci_coverage = 0.0
 
     naive_errors = np.abs(actuals - bases)
     naive_mae = float(np.mean(naive_errors)) if len(naive_errors) > 0 else 0.0
@@ -805,6 +860,7 @@ def compute_rolling_scoreboard_metrics(
         "directional_hit_rate_pct": round(hit_rate, 2),
         "naive_persistence_mae": round(naive_mae, 4),
         "model_uplift_mae_pct": round(model_uplift, 2),
+        "empirical_95ci_coverage_pct": round(ci_coverage, 2),
     }
 
 
@@ -836,6 +892,7 @@ def compute_regional_scoreboard_breakdown(
                 "directional_hit_rate_pct": metrics["directional_hit_rate_pct"],
                 "naive_persistence_mae": metrics["naive_persistence_mae"],
                 "model_uplift_mae_pct": metrics["model_uplift_mae_pct"],
+                "empirical_95ci_coverage_pct": metrics["empirical_95ci_coverage_pct"],
             })
 
     return breakdown
@@ -873,7 +930,8 @@ def compute_horizon_scoreboard_breakdown(
             "mape_pct": metrics["mape_pct"],
             "directional_hit_rate_pct": metrics["directional_hit_rate_pct"],
             "naive_persistence_mae": metrics["naive_persistence_mae"],
-            "model_uplift_mae_pct": metrics["model_uplift_mae_pct"]
+            "model_uplift_mae_pct": metrics["model_uplift_mae_pct"],
+            "empirical_95ci_coverage_pct": metrics["empirical_95ci_coverage_pct"],
         })
 
     return breakdown

@@ -3,7 +3,7 @@
 **Release Date:** September 21, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`), GitHub Actions & Cloudflare Edge  
 **Git Branch:** `dev` / `main`  
-**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365), [Issue #364](https://github.com/KoshiirRa/midgley/issues/364), [Issue #366](https://github.com/KoshiirRa/midgley/issues/366), [Issue #368](https://github.com/KoshiirRa/midgley/issues/368), [Issue #418](https://github.com/KoshiirRa/midgley/issues/418), [Issue #408](https://github.com/KoshiirRa/midgley/issues/408), [Issue #400](https://github.com/KoshiirRa/midgley/issues/400), [Issue #403](https://github.com/KoshiirRa/midgley/issues/403), [Issue #404](https://github.com/KoshiirRa/midgley/issues/404), [Issue #393](https://github.com/KoshiirRa/midgley/issues/393), [Issue #391](https://github.com/KoshiirRa/midgley/issues/391), [Issue #392](https://github.com/KoshiirRa/midgley/issues/392), [Issue #399](https://github.com/KoshiirRa/midgley/issues/399), [Issue #401](https://github.com/KoshiirRa/midgley/issues/401), [Issue #397](https://github.com/KoshiirRa/midgley/issues/397), [Issue #396](https://github.com/KoshiirRa/midgley/issues/396)
+**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365), [Issue #364](https://github.com/KoshiirRa/midgley/issues/364), [Issue #366](https://github.com/KoshiirRa/midgley/issues/366), [Issue #368](https://github.com/KoshiirRa/midgley/issues/368), [Issue #418](https://github.com/KoshiirRa/midgley/issues/418), [Issue #408](https://github.com/KoshiirRa/midgley/issues/408), [Issue #400](https://github.com/KoshiirRa/midgley/issues/400), [Issue #403](https://github.com/KoshiirRa/midgley/issues/403), [Issue #404](https://github.com/KoshiirRa/midgley/issues/404), [Issue #393](https://github.com/KoshiirRa/midgley/issues/393), [Issue #391](https://github.com/KoshiirRa/midgley/issues/391), [Issue #392](https://github.com/KoshiirRa/midgley/issues/392), [Issue #399](https://github.com/KoshiirRa/midgley/issues/399), [Issue #401](https://github.com/KoshiirRa/midgley/issues/401), [Issue #397](https://github.com/KoshiirRa/midgley/issues/397), [Issue #396](https://github.com/KoshiirRa/midgley/issues/396), [Issue #395](https://github.com/KoshiirRa/midgley/issues/395), [Issue #394](https://github.com/KoshiirRa/midgley/issues/394), [Issue #398](https://github.com/KoshiirRa/midgley/issues/398)
 
 ---
 
@@ -147,9 +147,28 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 - **Chronological Embargo Buffer & Purged Cross-Validation (#396):** Enforced an embargo gap equal to $\text{forecast\_horizon} + \text{embargo\_steps}$ in `prepare_chronological_splits()`, ensuring training target intervals never touch the test slice. Upgraded Ridge regression pipelines in `train_and_compare_models()` to optimize hyperparameter $\alpha \in [0.01, 0.1, 1.0, 10.0, 50.0, 100.0, 500.0]$ dynamically across purged walk-forward cross-validation folds via `PurgedGroupTimeSeriesSplit(chronological_only=True)`.
 - **Vectorized Exact Business Day Inference:** Replaced approximate integer day scaling in `_infer_horizon_days()` with `np.busday_count()` for nanosecond-speed exact business day calculation.
 
+### 20. Injectable Evaluation Architecture & Offline Unit Test Coverage (`src/prediction_logger.py` - Issue #395)
+- **Dependency Injected Evaluation Overrides:** Added `actuals_map_override`, `eia_feed_override`, `csv_path`, and `force_eval` parameters to `backfill_actual_prices_and_evaluate()`.
+- **Enabled Comprehensive Evaluation Under `TESTING=1`:** Enabled testing of directional accuracy, error calculation, actual price assignments, and confidence interval bounds in continuous integration without requiring external network access, paid API tokens, or yfinance requests.
+
 ---
 
-### 20. Automated Verification & Regression Test Suite
+### 21. Calibrated 95% Confidence Interval Coverage & Dynamic Standard Error Scaling (`src/prediction_logger.py` - Issue #394)
+- **Eliminated Conflicting Arbitrary Fallback:** Removed the conflicting `abs(actual_price - pred_price) <= 0.12` fallback rule in `src/prediction_logger.py` that caused empirical coverage to diverge from nominal confidence levels.
+- **Dynamic Residual Standard Error Scaling:** Upgraded `compute_regional_residual_std()` to support multi-horizon square-root scaling ($\sigma_{\text{residual}} \times \sqrt{h/5}$), dynamically reconstructing calibrated 95% CI bands ($[\hat{P} - 1.96\sigma, \hat{P} + 1.96\sigma]$) when explicit bounds are absent.
+- **Scoreboard Coverage Telemetry:** Added `empirical_95ci_coverage_pct` tracking across rolling scoreboards, regional matrix breakdowns, forecast horizon tables, and public dashboard KPI cards.
+
+---
+
+### 22. README Live Summary Automation, Workflow DST Alignment & Freshness Gating (`scripts/readme_updater.py`, `.github/workflows/gas_price_forecast.yml` - Issue #398)
+- **Standalone README Live Summary CLI:** Created `scripts/readme_updater.py` (and enhanced `src/readme_updater.py`) to inject live 5-day forecast tables across all 10 active regional locales into `README.md`.
+- **Automated Workflow Execution Step:** Added explicit `python scripts/readme_updater.py` step in `.github/workflows/gas_price_forecast.yml` guaranteeing summary table freshness on every daily batch execution.
+- **UTC vs Central DST Schedule Drift Documentation:** Documented GitHub Actions cron UTC scheduling (`17 7 * * *`) and seasonal Daylight Saving Time transitions (02:17 AM CDT vs 01:17 AM CST).
+- **Dashboard Forecast Staleness Gate:** Added an automated forecast age check in `src/dashboard_generator.py` rendering a visual warning badge (`Forecast Stale (>36h)`) whenever the latest prediction record exceeds 36 hours of age.
+
+---
+
+### 23. Automated Verification & Regression Test Suite
 - **`tests/test_check_updates.py`:** Validates RCE prevention, allowlisted action execution, legacy command translation, and insecure URL fallback rejection (4/4 passing).
 - **`tests/test_temporal_leakage.py`:** Validates absence of backward filling, $h$-step split boundary purging, train-slice diagnostic computation, stacking CV purging, and chronological ordering (5/5 passing).
 - **`tests/test_api_server.py`:** Verifies fail-closed admin secret verification and global API key middleware route enforcement (23/23 passing).
@@ -167,5 +186,6 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 - **`tests/test_prediction_logger_hardening.py`:** Validates price plausibility checking, Test_Region cleansing, unmapped hub handling without forced UP direction, and EIA ground truth integration (4/4 passing).
 - **`tests/test_crack_spread_321.py`:** Validates 3-2-1 crack spread calculation against manual mathematical benchmark ($32.80/bbl, $0.78095/gal) (3/3 passing).
 - **`tests/test_model_returns_and_embargo.py`:** Validates return target modeling, price level reconstruction, chronological split embargo gaps, and purged walk-forward RidgeCV hyperparameter tuning (5/5 passing).
+- **`tests/test_ci_and_evaluation_coverage.py`:** Validates injectable evaluation under TESTING=1, strict calibrated 95% CI coverage without fallback, residual std horizon scaling, scoreboard empirical coverage metrics, and README updater execution (5/5 passing).
 - **Total Test Results:** 100% pass rate across all test suites with zero regressions.
 

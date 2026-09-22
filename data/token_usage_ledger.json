@@ -7843,6 +7843,61 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-22T06:51:06.771289+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-22T06:51:06.907795+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-22T06:51:07.023800+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-22T06:51:07.140797+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-09-22T06:51:13.309906+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "pasa_selector_eval",
+      "input_tokens": 400,
+      "output_tokens": 200,
+      "total_tokens": 600,
+      "cost_usd": 9e-05,
+      "status": "success"
     }
   ]
 }

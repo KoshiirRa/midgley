@@ -168,12 +168,24 @@ When submitting probabilistic forecasts to [Headline Arena](https://headlinearen
    - Use `EIARetailFeed` (`src/eia_retail_feed.py`) to query weekly retail price series across PADDs and states (`GASREGW`, `GASREGW01B`, `GASREGW01C`, `GASREGWMW`, `GASREGWOK`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`).
    - In `prediction_logger.py`, regional metro ground truth is resolved strictly from `EIARetailFeed.get_retail_price_for_date()`.
    - **Synthetic Offset Elimination:** Never use hardcoded offset ladders (e.g. `raw_actual + 0.55` or `raw_actual + 2.05`) or fallback identities (`margin_offset = base_price - raw_actual`) that force artificial `actual_direction = UP`. If ground truth is unavailable for an unmapped region or date, record `actual_5d_price = np.nan` and exclude from directional hit scoring.
-2. **Prediction History Sanitation & Plausibility Validation (Issue #399):**
+2. **Injectable MLOps Evaluation & Offline Testing Directives (Issue #395):**
+   - All evaluation routines in `src/prediction_logger.py` (`backfill_actual_prices_and_evaluate`) must accept optional dependency injection overrides (`actuals_map_override`, `eia_feed_override`, `csv_path`, `force_eval`).
+   - When overrides or `force_eval=True` are supplied, the evaluation loop must execute fully even when `TESTING=1`, enabling comprehensive automated testing of directional accuracy, actual assignments, error calculations, and CI bounds without querying external networks or paid APIs.
+3. **Calibrated 95% Confidence Interval Evaluation (Issue #394):**
+   - Strictly evaluate interval coverage against explicit bounds: `within_95ci_hit = 1 if (lower_ci <= actual_price <= upper_ci) else 0`.
+   - Never use arbitrary fixed fallback bands (e.g. `±$0.12`). When CI bounds are absent, dynamically reconstruct calibrated intervals using regional residual standard error scaled by forecast horizon ($\sigma_{\text{residual}} \times \sqrt{h/5}$ via `compute_regional_residual_std()`).
+   - Report `empirical_95ci_coverage_pct` in scoreboard metrics, regional breakdowns, horizon tables, and public dashboard KPI cards.
+4. **README Live Summary Automation & DST Workflow Drift (Issue #398):**
+   - Always keep `README.md` live forecast tables synchronized via `scripts/readme_updater.py` (`src/readme_updater.py`).
+   - Ensure all 10 active regional locales are rendered in the summary table.
+   - Note that GitHub Actions cron triggers evaluate on UTC (`17 7 * * *`); during DST transitions, local US Central Time drifts between 02:17 AM CDT (UTC-5) and 01:17 AM CST (UTC-6).
+   - Display a dashboard forecast staleness badge whenever the latest prediction timestamp is older than 36 hours.
+5. **Prediction History Sanitation & Plausibility Validation (Issue #399):**
    - `cleanse_prediction_history()` purges test fixture artifacts (`Test_Region`, `Test_*`) from production history.
    - `validate_price_plausibility()` validates price observations against realistic economic bounds ($[\$1.00, \$10.00]$ retail, $[\$0.50, \$7.00]$ wholesale) before logging or evaluating.
    - `RBOB_ACTUALS_CACHE_FILE` caches national futures downloads to disk (`data/rbob_actuals_cache.json`) to prevent redundant full-series network calls.
-3. **NYMEX Forward Curve & Crack Futures (Issue #404):** Compute prompt ($M_1$) vs second month ($M_2$) calendar spreads for RBOB and WTI crude, theoretical 1:1 crack spread, and 3-2-1 crack futures margins via `NYMEXForwardCurveConnector` (`src/data_ingestion.py`), merging into feature engineering matrices and tracking backwardation regimes.
-4. **Dynamic Dashboard Metrics (Issue #393):** Never hardcode static metric strings or static rolling performance arrays in dashboard templates. All MAE, RMSE, MAPE, sample sizes $N$, and directional hit rates must be computed dynamically via `compute_dynamic_accuracy_stats()` and `calculate_rolling_metrics()` from the forward evaluated slice of `data/prediction_history.csv` with `Insufficient Data (N < 30)` gating.
+6. **NYMEX Forward Curve & Crack Futures (Issue #404):** Compute prompt ($M_1$) vs second month ($M_2$) calendar spreads for RBOB and WTI crude, theoretical 1:1 crack spread, and 3-2-1 crack futures margins via `NYMEXForwardCurveConnector` (`src/data_ingestion.py`), merging into feature engineering matrices and tracking backwardation regimes.
+7. **Dynamic Dashboard Metrics (Issue #393):** Never hardcode static metric strings or static rolling performance arrays in dashboard templates. All MAE, RMSE, MAPE, sample sizes $N$, and directional hit rates must be computed dynamically via `compute_dynamic_accuracy_stats()` and `calculate_rolling_metrics()` from the forward evaluated slice of `data/prediction_history.csv` with `Insufficient Data (N < 30)` gating.
 
 ---
 

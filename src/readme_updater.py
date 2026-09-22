@@ -18,10 +18,13 @@ HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 START_TAG = "<!-- START_LIVE_FORECAST -->"
 END_TAG = "<!-- END_LIVE_FORECAST -->"
 
-def update_readme_forecasts():
+def update_readme_forecasts(
+    readme_path: str = README_PATH,
+    history_csv_path: str = HISTORY_CSV_PATH
+):
     """Reads latest forecast records and injects formatted table into README.md."""
-    if not os.path.exists(README_PATH):
-        logger.warning("README.md not found.")
+    if not os.path.exists(readme_path):
+        logger.warning(f"{readme_path} not found.")
         return
         
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M UTC")
@@ -31,14 +34,23 @@ def update_readme_forecasts():
     nat_dir = "DOWN 📉"
     tulsa_price = 3.780
     tulsa_dir = "DOWN 📉"
+    newark_price = 3.280
+    newark_dir = "DOWN 📉"
     cin_oh_price = 3.350
     cin_oh_dir = "DOWN 📉"
     cin_ky_price = 3.225
     cin_ky_dir = "DOWN 📉"
     greenville_price = 3.150
     greenville_dir = "DOWN 📉"
+    charlotte_price = 3.210
+    charlotte_dir = "DOWN 📉"
+    psl_price = 3.320
+    psl_dir = "DOWN 📉"
     oakland_price = 5.440
     oakland_dir = "DOWN 📉"
+    bayarea_price = 5.540
+    bayarea_dir = "DOWN 📉"
+
     # Base price defaults
     base_nat = 3.184
     base_tulsa = 3.890
@@ -46,20 +58,25 @@ def update_readme_forecasts():
     base_cin_oh = 3.450
     base_cin_ky = 3.325
     base_greenville = 3.250
+    base_charlotte = 3.310
+    base_psl = 3.420
     base_oakland = 5.550
     base_bayarea = 5.650
+
     target_nat = "Next 5 Business Days"
     target_tulsa = "Next 5 Business Days"
     target_newark = "Next 5 Business Days"
     target_cin_oh = "Next 5 Business Days"
     target_cin_ky = "Next 5 Business Days"
     target_greenville = "Next 5 Business Days"
+    target_charlotte = "Next 5 Business Days"
+    target_psl = "Next 5 Business Days"
     target_oakland = "Next 5 Business Days"
     target_bayarea = "Next 5 Business Days"
     
-    if os.path.exists(HISTORY_CSV_PATH):
+    if os.path.exists(history_csv_path):
         try:
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = pd.read_csv(history_csv_path)
             if not df.empty:
                 nat_df = df[df['region'] == 'National']
                 tulsa_df = df[df['region'] == 'Tulsa_OK']
@@ -114,6 +131,20 @@ def update_readme_forecasts():
                     greenville_dir = "UP 📈" if greenville_price >= base_greenville else "DOWN 📉"
                     target_greenville = latest_greenville['forecast_target_date']
 
+                if not charlotte_df.empty:
+                    latest_charlotte = charlotte_df.iloc[-1]
+                    charlotte_price = latest_charlotte['predicted_5d_price']
+                    base_charlotte = latest_charlotte['current_base_price']
+                    charlotte_dir = "UP 📈" if charlotte_price >= base_charlotte else "DOWN 📉"
+                    target_charlotte = latest_charlotte['forecast_target_date']
+
+                if not psl_df.empty:
+                    latest_psl = psl_df.iloc[-1]
+                    psl_price = latest_psl['predicted_5d_price']
+                    base_psl = latest_psl['current_base_price']
+                    psl_dir = "UP 📈" if psl_price >= base_psl else "DOWN 📉"
+                    target_psl = latest_psl['forecast_target_date']
+
                 if not oakland_df.empty:
                     latest_oakland = oakland_df.iloc[-1]
                     oakland_price = latest_oakland['predicted_5d_price']
@@ -137,6 +168,8 @@ def update_readme_forecasts():
     v_cin_oh = resolve_model_tag("Cincinnati_OH", "Ridge")
     v_cin_ky = resolve_model_tag("Cincinnati_KY", "Ridge")
     v_greenville = resolve_model_tag("Greenville", "Ridge")
+    v_charlotte = resolve_model_tag("Charlotte", "Ridge")
+    v_psl = resolve_model_tag("Port_St_Lucie", "Ridge")
     v_oakland = resolve_model_tag("Oakland", "Ridge")
     v_bayarea = resolve_model_tag("BayArea", "Ridge")
 
@@ -151,6 +184,8 @@ def update_readme_forecasts():
 | **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_cin_oh}` | `{v_cin_oh}` |
 | **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_cin_ky}` | `{v_cin_ky}` |
 | **Greenville, NC Metro Retail** | `${base_greenville:.3f}`/gal | **`${greenville_price:.3f}`/gal** | **{greenville_dir}** | `{target_greenville}` | `{v_greenville}` |
+| **Charlotte, NC Metro Retail** | `${base_charlotte:.3f}`/gal | **`${charlotte_price:.3f}`/gal** | **{charlotte_dir}** | `{target_charlotte}` | `{v_charlotte}` |
+| **Port St. Lucie, FL Waterborne** | `${base_psl:.3f}`/gal | **`${psl_price:.3f}`/gal** | **{psl_dir}** | `{target_psl}` | `{v_psl}` |
 | **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_oakland}` | `{v_oakland}` |
 | **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_bayarea}` | `{v_bayarea}` |
 
@@ -158,7 +193,7 @@ def update_readme_forecasts():
 {END_TAG}"""
 
 
-    with open(README_PATH, "r", encoding="utf-8") as f:
+    with open(readme_path, "r", encoding="utf-8") as f:
         content = f.read()
         
     if START_TAG in content and END_TAG in content:
@@ -172,7 +207,7 @@ def update_readme_forecasts():
         else:
             updated_content = live_table_markdown + "\n\n" + content
             
-    with open(README_PATH, "w", encoding="utf-8") as f:
+    with open(readme_path, "w", encoding="utf-8") as f:
         f.write(updated_content)
         
     logger.info("Successfully updated README.md live forecast table!")

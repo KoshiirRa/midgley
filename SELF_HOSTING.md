@@ -386,7 +386,7 @@ After=network.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/marty/projects/midgley
-ExecStart=/home/marty/projects/midgley/.venv/bin/python -m src.locations.national.main --llm
+ExecStart=/bin/bash -c "/home/marty/projects/midgley/.venv/bin/python run_all.py --use-llm-api && /home/marty/projects/midgley/.venv/bin/python scripts/readme_updater.py"
 EnvironmentFile=/home/marty/projects/midgley/.env
 ```
 
@@ -396,6 +396,7 @@ EnvironmentFile=/home/marty/projects/midgley/.env
 Description=Run Midgley Daily Gas Price Forecast at 06:00 AM Central
 
 [Timer]
+# Uses native IANA timezone: automatically adjusts between CDT (UTC-5) and CST (UTC-6) during DST transitions
 OnCalendar=*-*-* 06:00:00 America/Chicago
 Persistent=true
 

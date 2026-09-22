@@ -873,6 +873,7 @@ def build_scoreboard_section_html() -> str:
     mae_str = f"${metrics['mae_dollars']:.4f}"
     hit_str = f"{metrics['directional_hit_rate_pct']:.1f}%"
     uplift_str = f"{metrics['model_uplift_mae_pct']:+.1f}%"
+    ci_cov_str = f"{metrics.get('empirical_95ci_coverage_pct', 0.0):.1f}%"
     evals_count = metrics['total_evaluations']
 
     rows_html = ""
@@ -895,6 +896,7 @@ def build_scoreboard_section_html() -> str:
     horizon_rows_html = ""
     for h_item in horizon_breakdown:
         h_up_color = "text-emerald-400" if h_item['model_uplift_mae_pct'] > 0 else "text-slate-400"
+        h_ci = f"{h_item.get('empirical_95ci_coverage_pct', 0.0):.1f}%"
         horizon_rows_html += f"""
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
             <td class="p-2.5 font-bold text-slate-200 text-xs flex items-center gap-1.5">
@@ -905,6 +907,7 @@ def build_scoreboard_section_html() -> str:
             <td class="p-2.5 font-semibold text-emerald-400 text-xs">${h_item['mae_dollars']:.4f}</td>
             <td class="p-2.5 text-slate-300 text-xs">${h_item['rmse_dollars']:.4f}</td>
             <td class="p-2.5 font-semibold text-cyan-400 text-xs">{h_item['directional_hit_rate_pct']:.1f}%</td>
+            <td class="p-2.5 text-amber-300 font-semibold text-xs">{h_ci}</td>
             <td class="p-2.5 font-bold {h_up_color} text-xs">{h_item['model_uplift_mae_pct']:+.1f}%</td>
         </tr>
         """
@@ -912,6 +915,7 @@ def build_scoreboard_section_html() -> str:
     regional_rows_html = ""
     for reg in regional:
         up_color = "text-emerald-400" if reg['model_uplift_mae_pct'] > 0 else "text-slate-400"
+        reg_ci = f"{reg.get('empirical_95ci_coverage_pct', 0.0):.1f}%"
         regional_rows_html += f"""
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
             <td class="p-2.5 font-bold text-slate-200 text-xs">{reg['region']}</td>
@@ -919,6 +923,7 @@ def build_scoreboard_section_html() -> str:
             <td class="p-2.5 font-semibold text-emerald-400 text-xs">${reg['mae_dollars']:.4f}</td>
             <td class="p-2.5 text-slate-300 text-xs">${reg['rmse_dollars']:.4f}</td>
             <td class="p-2.5 font-semibold text-cyan-400 text-xs">{reg['directional_hit_rate_pct']:.1f}%</td>
+            <td class="p-2.5 text-amber-300 font-semibold text-xs">{reg_ci}</td>
             <td class="p-2.5 font-bold {up_color} text-xs">{reg['model_uplift_mae_pct']:+.1f}%</td>
         </tr>
         """
@@ -942,7 +947,7 @@ def build_scoreboard_section_html() -> str:
             </div>
 
             <!-- Scoreboard Hero KPI Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
                     <span class="text-xs text-slate-400">30-Day Mean Absolute Error (MAE)</span>
                     <p class="text-2xl font-extrabold text-white">{mae_str}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
@@ -952,6 +957,11 @@ def build_scoreboard_section_html() -> str:
                     <span class="text-xs text-slate-400">30-Day Directional Hit Rate</span>
                     <p class="text-2xl font-extrabold text-emerald-400">{hit_str}</p>
                     <p class="text-[11px] text-slate-500">Correct Trend Direction Calls</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
+                    <span class="text-xs text-slate-400">95% CI Coverage</span>
+                    <p class="text-2xl font-extrabold text-amber-400">{ci_cov_str}</p>
+                    <p class="text-[11px] text-slate-500">Empirical Interval Reliability</p>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
                     <span class="text-xs text-slate-400">Model MAE Uplift vs Naive</span>
@@ -981,6 +991,7 @@ def build_scoreboard_section_html() -> str:
                                     <th class="p-2.5">MAE</th>
                                     <th class="p-2.5">RMSE</th>
                                     <th class="p-2.5">Hit %</th>
+                                    <th class="p-2.5">95% CI</th>
                                     <th class="p-2.5">Uplift</th>
                                 </tr>
                             </thead>
@@ -1005,6 +1016,7 @@ def build_scoreboard_section_html() -> str:
                                     <th class="p-2.5">MAE</th>
                                     <th class="p-2.5">RMSE</th>
                                     <th class="p-2.5">Hit %</th>
+                                    <th class="p-2.5">95% CI</th>
                                     <th class="p-2.5">Uplift</th>
                                 </tr>
                             </thead>
@@ -2207,6 +2219,24 @@ def generate_public_dashboard():
     # 1. MAIN OVERVIEW LANDING PAGE (docs/index.html)
     # ---------------------------------------------------------------------------
     last_run_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+
+    # Forecast Staleness Gate & Freshness Badge (Issue #398)
+    forecast_freshness_badge = '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"><i class="fa-solid fa-circle-check mr-1"></i>Forecast Fresh (&lt;36h)</span>'
+    try:
+        hist_csv = os.path.join(DATA_DIR, "prediction_history.csv")
+        if os.path.exists(hist_csv):
+            _hist_df = pd.read_csv(hist_csv)
+            if not _hist_df.empty and 'log_timestamp' in _hist_df.columns:
+                _latest_ts = pd.to_datetime(_hist_df['log_timestamp'], errors='coerce').dropna().max()
+                if pd.notna(_latest_ts):
+                    if _latest_ts.tzinfo is None:
+                        _latest_ts = _latest_ts.tz_localize(timezone.utc)
+                    _age_hours = (datetime.now(timezone.utc) - _latest_ts).total_seconds() / 3600.0
+                    if _age_hours > 36.0:
+                        forecast_freshness_badge = f'<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Forecast Stale ({_age_hours:.1f}h old)</span>'
+    except Exception as stale_err:
+        logger.debug(f"Staleness check notice: {stale_err}")
+
     nav_overview = get_nav_header("overview")
     head_meta_index = get_head_meta_tags(
         title="Midgley - Multi-Agent Gas Price Forecasting Engine",
@@ -2251,6 +2281,7 @@ def generate_public_dashboard():
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
+                {forecast_freshness_badge}
                 <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: {last_run_str}</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">

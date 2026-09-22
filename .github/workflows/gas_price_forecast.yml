@@ -2,7 +2,10 @@ name: Daily Gas Price LLM Forecasting & Public Dashboard
 
 on:
   schedule:
-    # Run every day at 07:17 UTC (02:17 AM Central) - off-peak minute to prevent runner queue delays
+    # Run every day at 07:17 UTC (02:17 AM CDT / 01:17 AM CST) - off-peak minute to prevent runner queue delays.
+    # Note: GitHub Actions cron triggers evaluate strictly against UTC. During US Daylight Saving Time (DST)
+    # transitions (March to November), local US Central Time is UTC-5 (CDT, 02:17 AM); during standard time
+    # (November to March), local US Central Time is UTC-6 (CST, 01:17 AM).
     - cron: '17 7 * * *'
   workflow_dispatch:
 
@@ -73,6 +76,10 @@ jobs:
         run: |
           set -eo pipefail
           python -u run_all.py --use-llm-api 2>&1 | tee run_all_output.log
+
+      - name: Update README Live Forecast Summary Table
+        run: |
+          python scripts/readme_updater.py
 
       - name: Upload Pipeline Execution Log
         if: always()

@@ -137,9 +137,35 @@ To ensure stationarity and prevent non-stationary drift or lookahead data leakag
 
 ---
 
-## 4. MLOps Prediction Logging & Backfilling Engine (`src/prediction_logger.py`)
+## 4. MLOps Prediction Logging, Calibrated CI Evaluation & Backfilling Engine (`src/prediction_logger.py`)
 
-All 5-day out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from `yfinance` and populates actual price records. When a new regional forecasting pipeline is launched, `backfill_new_region_history()` automatically populates historical test split predictions and evaluates mature target dates against historical market actuals immediately.
+All multi-horizon out-of-time forecasts are persisted directly to `data/prediction_history.csv` during daily execution runs. As forecast target dates mature, `src/prediction_logger.py` queries ground-truth historical market prices from official EIA retail feeds (`src/eia_retail_feed.py`) and national futures (`yfinance`), evaluating actual price outcomes, directional hit rates, and calibrated confidence interval coverage.
+
+### 4.1. Injectable Evaluation Architecture (Issue #395)
+`backfill_actual_prices_and_evaluate()` supports dependency injection parameters:
+* `actuals_map_override: Optional[dict]`: Injects point-in-time commodity futures mappings without network queries.
+* `eia_feed_override: Optional[Any]`: Injects mock or cached regional retail ground truth instances.
+* `csv_path: Optional[str]`: Routes read/write operations to isolated evaluation test ledgers.
+* `force_eval: bool`: Bypasses `TESTING=1` execution guards to ensure 100% test coverage of evaluation logic without external API calls.
+
+### 4.2. Calibrated 95% Confidence Interval Coverage (Issue #394)
+Prediction intervals are evaluated strictly against explicit forecast bounds without arbitrary fixed fallback bands:
+\[
+\text{Hit}_{95\text{CI}, i} = \begin{cases} 1 & \text{if } \hat{P}_{\text{lower}, 95, i} \le P_{\text{actual}, i} \le \hat{P}_{\text{upper}, 95, i} \\ 0 & \text{otherwise} \end{cases}
+\]
+When interval bounds are missing from legacy records, calibrated bands are dynamically reconstructed using regional residual standard error scaled by the forecast horizon:
+\[
+\sigma_{\text{res}}(h) = \sigma_{\text{res}} \times \sqrt{\frac{h}{5}}, \quad \hat{P}_{\pm 95} = \hat{P}_{\text{pred}} \pm 1.96 \cdot \sigma_{\text{res}}(h)
+\]
+The empirical 95% CI coverage rate is tracked and exposed in rolling scoreboard metrics:
+\[
+\text{Coverage}_{95\text{CI}} = \frac{1}{N} \sum_{i=1}^{N} \text{Hit}_{95\text{CI}, i} \times 100\%
+\]
+
+### 4.3. Live Forecast README Automation & Workflow Freshness Gating (Issue #398)
+* **README Table Injector (`scripts/readme_updater.py` / `src/readme_updater.py`):** Automatically compiles multi-horizon projections across all 10 active regional hubs into the Markdown live summary table between `<!-- START_LIVE_FORECAST -->` and `<!-- END_LIVE_FORECAST -->` tags.
+* **UTC vs Central DST Schedule Alignment:** GitHub Actions cron schedules (`17 7 * * *`) evaluate strictly on UTC (07:17 UTC); during Daylight Saving Time (March to November), US Central Time is CDT (02:17 AM CDT / UTC-5), and during standard time (November to March), Central Time is CST (01:17 AM CST / UTC-6).
+* **Forecast Freshness Gating:** The public dashboard (`src/dashboard_generator.py`) evaluates the timestamp of the latest prediction record; if data age exceeds 36 hours, a warning badge (`Forecast Stale (>36h)`) is rendered to alert operators.
 
 ---
 
