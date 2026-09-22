@@ -1,28 +1,28 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-22 00:40:19`  
+**Log Timestamp:** `2026-09-22 07:29:45`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** TSX energy stocks best positioned for tariffs, war and rising oil prices - The Globe and Mail  
+**Primary Event Trigger:** India warns new US tariffs over Russian oil could hit ties, vows to protect energy security - The Business Standard  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** TSX energy stocks best positioned for tariffs, war and rising oil prices - The Globe and Mail
+- **Headline Trigger:** India warns new US tariffs over Russian oil could hit ties, vows to protect energy security - The Business Standard
 - **Active Ingested News Links:**
+- [India warns new US tariffs over Russian oil could hit ties, vows to protect energy security - The Business Standard](https://news.google.com/rss/articles/CBMiuwFBVV95cUxOMElLX3FsNnhidy03WWczdnMzb0lqZFBYRlVMRUJacVg4alRreXhiRWUyUzBWNnExLUgzUTRzeGcwU0w1d011RW5TNTB0Q3p2QmlDSEQ4OVdBQjBTQVZBU2VSUkpHRVRSWDVWNUhnT1loU284d0hNWDhWcU5vY0Q4TWk4dFRWNmg1RE9xRWNsQ1FSZXhVOTVmMmF1S0VFQ3NWdkNXdzdVTzlwR0hUcTd1M1l5M25aQXJWWDFB?oc=5) (Google News Energy Feed)
 - [TSX energy stocks best positioned for tariffs, war and rising oil prices - The Globe and Mail](https://news.google.com/rss/articles/CBMi4gFBVV95cUxNMkVOWEJCSHpVUmNZckdXNWRqZ1F1SERxZ1cxZ000eDd5UEliMnhJRzRkbUhvems1cm01V2tNQXRkSVVyeVJKenZMMHE0Y25YZVhDUUVQUjBtRW05Z2RpcVpBUFBTYURhVXRad0w0a08tM0pGemxqQS1XQkhLejhFZDlGVDg1aGNhZkVuZTRoOHQwaFZ2dmltRE82YVU4bXB4SFQ3WHRnM1BRUlY0cll0eUE2T1pvMjBFQ2FFeVk0YW54TVBPVHU0Y1J0eXl6aXZUcWN1Z2NQdlZuWXRibms3cnB3?oc=5) (Google News Energy Feed)
 - [India examining new US tariff powers targeting Russian oil buyers: Piyush Goyal - The Times of India](https://news.google.com/rss/articles/CBMi9wFBVV95cUxNRGlac182dUJXUGZZaGJlZ2UxbThCR3lVSHBYTUM3a1NtVkRWYWNodUZ6ZnFhS29JdTYtNXBuNjBMcUtCMTBtdkZJeVVYSTZ4YW1DUUR3d0pVMHd4bmFpSnVVRV9NTThpZnRiRDFpOGpsWXdTb1BZQ0tXSW1HY3hyaE1iQlU4TFRfUjdKYmZ1YlQ3WTBhRnBrX0oyVWo0amwxS0NZQVB6ZE82c2ZfeDdJc2l2OFZCR3F1MkFET0RjLVVrejEzNmUwcEdzUlRaMXhrY3BwZnRaY2JVaUZ4eXFLNHBhV2s4d2JFZ1g1N2hKN0E0bHpoZUJZ0gH8AUFVX3lxTE9XX3BLUll3bHFhZVNPNUdVdUg3V2xBRENTQnd2RkRqaFJNb3o2M3BiUGxYSFRBRGRjNTJOVjZMRGdZanFmMi1tTVIycGtZcWJnRTdrT1o0NEJIMmFUd25WSm5pS3d3dXhuTlVoa0g0RFJ6MnlGRC05dVlZa0tWa3k4dkxKNWxoSDRqNFJfY1BRNkRLN2NILXdwY0kyczBEdFQwLVBHVDdTZ05YX2h3VHNNTjVnVGVZNkZVMzZVa0FhYllLQ3cyTVJsRGVTOGc4bkNoTk5uT0RuYjJKZ1lKUmxia29yc0pJZVNxUC1ZZk94eWMwSUdOSGd6ZmdzSQ?oc=5) (Google News Energy Feed)
-- [Trump signs Russia sanctions bill with 100% tariff threat for India, China - The American Bazaar](https://news.google.com/rss/articles/CBMirAFBVV95cUxOWUZBMk5NVU1IQWVESXl4LVZPRlB1VDUxWXlDZ0lKc3JETmplQ25EdDBmTHRfWDBrbC1WNmgxUVFydlF3bnZnUFVCR0tEWmdKY1ZndnphbENjaXA4VjJ5eVdMWFNmeVYwSXUtbGdua29zWGd6VDZqNFZLcjZTeDBJdUZkTlZXdV9ZMmJzTUhma19Pb01LQlBiRUlLVGxHcVR5UDVyUFJEM1JsRFQ1?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.70`
-- **Price Pressure Shock ($\Delta P$):** `+0.90`
-- **Geopolitical Risk Score ($G$):** `0.90`
-- **Demand Sentiment Score ($D$):** `-0.20`
+- **Supply Disruption Score ($S$):** `0.40`
+- **Price Pressure Shock ($\Delta P$):** `+0.60`
+- **Geopolitical Risk Score ($G$):** `0.70`
+- **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.7000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.7000$
-- **Day 1 Decayed Shock**: $M_1 = 0.7000 \times 0.87055 = 0.6094$
-- **Day 2 Decayed Shock**: $M_2 = 0.7000 \times (0.87055)^2 = 0.5305$
-- **Day 3 Decayed Shock**: $M_3 = 0.7000 \times (0.87055)^3 = 0.4618$
-- **Day 4 Decayed Shock**: $M_4 = 0.7000 \times (0.87055)^4 = 0.4020$
-- **Day 5 (Target Horizon)**: $M_5 = 0.7000 \times 0.50000 = 0.3500$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.4000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.4000$
+- **Day 1 Decayed Shock**: $M_1 = 0.4000 \times 0.87055 = 0.3482$
+- **Day 2 Decayed Shock**: $M_2 = 0.4000 \times (0.87055)^2 = 0.3031$
+- **Day 3 Decayed Shock**: $M_3 = 0.4000 \times (0.87055)^3 = 0.2639$
+- **Day 4 Decayed Shock**: $M_4 = 0.4000 \times (0.87055)^4 = 0.2297$
+- **Day 5 (Target Horizon)**: $M_5 = 0.4000 \times 0.50000 = 0.2000$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (+\$0.038) = \$3.299\text{/gal}$ (Delta: +\$0.038/gal, +1.20\%)
+- **National Wholesale**: $P = \$3.184 + (+\$0.000) = \$3.260\text{/gal}$ (Delta: +\$0.000/gal, 0.00\%)
 - **Tulsa, OK Retail**: $P = \$3.991 + (+\$0.677) = \$5.545\text{/gal}$ (Delta: +\$0.677/gal, +16.96\%)
 - **Newark, DE Retail**: $P = \$4.361 + (+\$0.004) = \$4.360\text{/gal}$ (Delta: +\$0.004/gal, +0.10\%)
 - **Cincinnati, OH/KY**: $P = \$4.471 + (+\$0.002) = \$4.471\text{/gal}$ (Delta: +\$0.002/gal, +0.04\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.7000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-22 00:40:19]: Elevated upward price shock (+$0.90/gal) observed across wholesale futures. Event trigger 'TSX energy stocks best positioned for tariffs, war and rising oil prices - The Globe and Mail' drove supply disruption to S=0.70 and geopolitical risk to G=0.90. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6094 and Day-5 horizon retention M₅=0.3500.
+SUMMARY FOR RUN [2026-09-22 07:29:45]: Elevated upward price shock (+$0.60/gal) observed across wholesale futures. Event trigger 'India warns new US tariffs over Russian oil could hit ties, vows to protect energy security - The Business Standard' drove supply disruption to S=0.40 and geopolitical risk to G=0.70. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.3482 and Day-5 horizon retention M₅=0.2000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-22 00:40:19 (Mode: INTRADAY_REVISION), primary event trigger 'TSX energy stocks best positioned for tariffs, war and rising oil prices - The Globe and Mail' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.70, Price Pressure ΔP=+0.90, Geopolitical Risk G=0.90. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.7000
-  - Day 1: M₁ = 0.6094
-  - Day 5: M₅ = 0.3500 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-22 07:29:45 (Mode: INTRADAY_REVISION), primary event trigger 'India warns new US tariffs over Russian oil could hit ties, vows to protect energy security - The Business Standard' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.40, Price Pressure ΔP=+0.60, Geopolitical Risk G=0.70. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.4000
+  - Day 1: M₁ = 0.3482
+  - Day 5: M₅ = 0.2000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.299/gal (+$0.038/gal, +1.20%)
+  • National Wholesale: $3.260/gal ($0.000/gal, 0.00%)
   • Tulsa, OK Retail: $5.545/gal (+$0.677/gal, +16.96%)
   • Newark, DE Retail: $4.360/gal (+$0.004/gal, +0.10%)
   • Cincinnati, OH/KY: $4.471/gal (+$0.002/gal, +0.04%)
@@ -96,10 +96,10 @@ Largest upward shift for this run: Tulsa, OK Retail at $5.545/gal (+0.677/gal). 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-22 00:40:19]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'TSX energy stocks best positioned for tariffs, war and rising oil prices - The Globe and Mail'. Overall price pressure vector sits at ΔP=+0.90/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-22 07:29:45]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'India warns new US tariffs over Russian oil could hit ties, vows to protect energy security - The Business Standard'. Overall price pressure vector sits at ΔP=+0.60/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.90. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.70. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-22 00:40:19.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-22 07:29:45.*
