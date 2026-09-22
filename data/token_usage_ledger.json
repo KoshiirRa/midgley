@@ -7403,6 +7403,39 @@
       "total_tokens": 220,
       "cost_usd": 3.4e-05,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T12:40:11.925562+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T13:10:18.588241+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T13:48:59.163167+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
     }
   ]
 }

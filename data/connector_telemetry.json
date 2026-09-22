@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-22 07:30:37",
-  "total_events": 825,
+  "last_updated": "2026-09-22 14:46:16",
+  "total_events": 833,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -8252,6 +8252,86 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge 932b4b4a-0133-41b8-98ac-4b60ae1d0852 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-22 12:40:13",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 407.1,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 12:43:15",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-22 13:02:24",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 379.82,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 13:29:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 458.88,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 13:49:00",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 334.95,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 14:06:38",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 450.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 14:46:06",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10058.34,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-22 14:46:16",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10054.91,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
     }
   ]
 }
