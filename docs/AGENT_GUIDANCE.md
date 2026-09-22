@@ -153,7 +153,15 @@ When submitting probabilistic forecasts to [Headline Arena](https://headlinearen
 
 ---
 
-## 📝 9. Documentation Synchronization Mandate
+## 📊 9. Ground Truth Ingestion, Forward Curves & Dynamic Accuracy (Issues #403, #404, #393)
+
+1. **Official EIA/FRED Retail Ground Truth (Issue #403):** Use `EIARetailFeed` (`src/eia_retail_feed.py`) to query weekly retail price series across PADDs and states (`GASREGW`, `GASREGW01B`, `GASREGW01C`, `GASREGWMW`, `GASREGWOK`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`). In `prediction_logger.py`, ground-truth actual prices for regional metro forecasts are resolved from `EIARetailFeed.get_retail_price_for_date()`.
+2. **NYMEX Forward Curve & Crack Futures (Issue #404):** Compute prompt ($M_1$) vs second month ($M_2$) calendar spreads for RBOB and WTI crude, theoretical 1:1 crack spread, and 3-2-1 crack futures margins via `NYMEXForwardCurveConnector` (`src/data_ingestion.py`), merging into feature engineering matrices and tracking backwardation regimes.
+3. **Dynamic Dashboard Metrics (Issue #393):** Never hardcode static metric strings or static rolling performance arrays in dashboard templates. All MAE, RMSE, MAPE, sample sizes $N$, and directional hit rates must be computed dynamically via `compute_dynamic_accuracy_stats()` and `calculate_rolling_metrics()` from the forward evaluated slice of `data/prediction_history.csv` with `Insufficient Data (N < 30)` gating.
+
+---
+
+## 📝 10. Documentation Synchronization Mandate
 
 Whenever new features, regional models, data feeds, or API endpoints are added:
 1. Update **`AGENTS.md`** to reflect modified or new agent roles.

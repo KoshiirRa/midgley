@@ -307,6 +307,23 @@ def create_feature_matrix(
         if col not in df.columns:
             df[col] = 0.0
 
+    # Merge NYMEX Forward Curve & Calendar Spread Data (Issue #404)
+    try:
+        from src.data_ingestion import NYMEXForwardCurveConnector
+        nymex_conn = NYMEXForwardCurveConnector()
+        nymex_res = nymex_conn.fetch_forward_curve_spreads()
+        fwd_feats = nymex_res.get("forward_features", {})
+        df['rbob_calendar_spread_m1_m2'] = fwd_feats.get("rbob_calendar_spread_m1_m2", 0.025)
+        df['wti_calendar_spread_m1_m2'] = fwd_feats.get("wti_calendar_spread_m1_m2", 0.40)
+        df['crack_spread_forward_321'] = fwd_feats.get("crack_spread_321", 0.58)
+        df['nymex_backwardation_regime'] = fwd_feats.get("curve_backwardation_flag", 1.0)
+    except Exception as e:
+        logger.warning(f"Could not merge NYMEX forward curve feed: {e}")
+
+    for col in ['rbob_calendar_spread_m1_m2', 'wti_calendar_spread_m1_m2', 'crack_spread_forward_321', 'nymex_backwardation_regime']:
+        if col not in df.columns:
+            df[col] = 0.0
+
     # Merge Open-Meteo Weather Degree Days Data (Locale-Routed, Point-in-Time Correct - Issue #72, #175)
     # Avoid scalar broadcasting current snapshot across historical training rows
     try:
@@ -663,6 +680,7 @@ def prepare_chronological_splits(
         'rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
         'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium',
         'marine_terminal_surge_risk', 'marine_terminal_shallow_draft_risk',
+        'rbob_calendar_spread_m1_m2', 'wti_calendar_spread_m1_m2', 'crack_spread_forward_321', 'nymex_backwardation_regime',
         'sin_day', 'cos_day'
     ]
     qlib_features = [c for c in df.columns if c.startswith('qlib_')]

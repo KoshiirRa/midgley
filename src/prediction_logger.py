@@ -392,11 +392,15 @@ def log_predictions(
 
 
 
+_GLOBAL_RBOB_ACTUALS_CACHE: Dict[str, float] = {}
+
 def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> pd.DataFrame:
     """
     Fetches actual historical gas prices up to today, matches them against past forecasted target dates,
     updates actual prices, error metrics, and directional hit outcomes in prediction_history.csv.
+    Uses official observed U.S. EIA weekly retail prices by PADD/State (Issue #403) as ground truth.
     """
+    global _GLOBAL_RBOB_ACTUALS_CACHE
     ensure_history_store()
     try:
         history_df = pd.read_csv(HISTORY_CSV_PATH)
@@ -417,40 +421,61 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
     
     logger.info("Fetching actual historical market prices to backfill prediction log...")
     
-    try:
-        data = yf.download("RB=F", start="2022-01-01", progress=False)
-        close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
-        dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
-        actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
-        actuals_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
-    except Exception as e:
-        logger.warning(f"Could not download actuals from yfinance: {e}")
-        actuals_map = {}
+    actuals_map = _GLOBAL_RBOB_ACTUALS_CACHE
+    if not actuals_map:
+        try:
+            data = yf.download("RB=F", start="2022-01-01", progress=False)
+            close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
+            dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
+            actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
+            actuals_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
+            _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+        except Exception as e:
+            logger.warning(f"Could not download actuals from yfinance: {e}")
+            actuals_map = {}
         
+    try:
+        from src.eia_retail_feed import EIARetailFeed
+        eia_feed = EIARetailFeed()
+    except Exception as e:
+        logger.debug(f"EIARetailFeed unavailable, fallback to basis: {e}")
+        eia_feed = None
+
     updated = False
     for idx, row in history_df.iterrows():
         target_date_str = str(row['forecast_target_date'])
         base_price = float(row['current_base_price'])
         pred_price = float(row['predicted_5d_price'])
         pred_dir = str(row['predicted_direction'])
+        reg = str(row['region'])
         
-        if target_date_str in actuals_map:
-            raw_actual = float(actuals_map[target_date_str])
-            if row['region'] == "Cincinnati_KY":
-                actual_price = raw_actual + 0.425
-            elif row['region'] in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"]:
-                actual_price = raw_actual + 0.55
-            elif row['region'] == "Oakland_CA":
-                actual_price = raw_actual + 2.05
-            elif row['region'] == "BayArea_CA":
-                actual_price = raw_actual + 2.15
-            elif row['region'] == "National":
-                actual_price = raw_actual
-            else:
-                # Dynamic rack margin offset fallback for newly added regional markets
-                margin_offset = base_price - raw_actual if base_price > raw_actual else 0.55
-                actual_price = raw_actual + margin_offset
+        actual_price = None
 
+        if reg == "National":
+            if target_date_str in actuals_map:
+                actual_price = float(actuals_map[target_date_str])
+            elif eia_feed:
+                actual_price = eia_feed.get_retail_price_for_date("National", target_date_str)
+        else:
+            # Regional metro ground-truth lookup via EIA weekly retail feed
+            if eia_feed:
+                actual_price = eia_feed.get_retail_price_for_date(reg, target_date_str)
+            
+            if actual_price is None and target_date_str in actuals_map:
+                raw_actual = float(actuals_map[target_date_str])
+                if reg == "Cincinnati_KY":
+                    actual_price = raw_actual + 0.425
+                elif reg in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"]:
+                    actual_price = raw_actual + 0.55
+                elif reg == "Oakland_CA":
+                    actual_price = raw_actual + 2.05
+                elif reg == "BayArea_CA":
+                    actual_price = raw_actual + 2.15
+                else:
+                    margin_offset = base_price - raw_actual if base_price > raw_actual else 0.55
+                    actual_price = raw_actual + margin_offset
+
+        if actual_price is not None:
             actual_dir = "UP" if actual_price >= base_price else "DOWN"
             err_dollars = abs(actual_price - pred_price)
             hit = 1 if pred_dir == actual_dir else 0

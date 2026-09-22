@@ -3,13 +3,13 @@
 **Release Date:** September 21, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`), GitHub Actions & Cloudflare Edge  
 **Git Branch:** `dev` / `main`  
-**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365), [Issue #364](https://github.com/KoshiirRa/midgley/issues/364), [Issue #366](https://github.com/KoshiirRa/midgley/issues/366), [Issue #368](https://github.com/KoshiirRa/midgley/issues/368), [Issue #418](https://github.com/KoshiirRa/midgley/issues/418), [Issue #408](https://github.com/KoshiirRa/midgley/issues/408), [Issue #400](https://github.com/KoshiirRa/midgley/issues/400)
+**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365), [Issue #364](https://github.com/KoshiirRa/midgley/issues/364), [Issue #366](https://github.com/KoshiirRa/midgley/issues/366), [Issue #368](https://github.com/KoshiirRa/midgley/issues/368), [Issue #418](https://github.com/KoshiirRa/midgley/issues/418), [Issue #408](https://github.com/KoshiirRa/midgley/issues/408), [Issue #400](https://github.com/KoshiirRa/midgley/issues/400), [Issue #403](https://github.com/KoshiirRa/midgley/issues/403), [Issue #404](https://github.com/KoshiirRa/midgley/issues/404), [Issue #393](https://github.com/KoshiirRa/midgley/issues/393)
 
 ---
 
 ## 🚀 Overview & Release Highlights
 
-Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, and benchmark integration release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion, California Energy Commission (CEC) fuels watch ingestion, EPA statutory RVP blend transition schedules, NOAA CO-OPS marine terminal telemetry, decouples Headline Arena energy forecast generation and submission via a 24-hour pending cache and 30-minute sync workflow, supports EIA Weekly Retail Regular Gasoline Civic Challenges, and reconciles CARB statutory tax itemization across all documentation and regional metadata.
+Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, and benchmark integration release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion, California Energy Commission (CEC) fuels watch ingestion, EPA statutory RVP blend transition schedules, NOAA CO-OPS marine terminal telemetry, decouples Headline Arena energy forecast generation and submission via a 24-hour pending cache and 30-minute sync workflow, supports EIA Weekly Retail Regular Gasoline Civic Challenges, reconciles CARB statutory tax itemization across all documentation and regional metadata, introduces point-in-time EIA Weekly Retail Gasoline price evaluation ground truth by PADD and state, adds NYMEX futures forward curve term structures, calendar spreads ($M_1 - M_2$), and 3-2-1 crack spreads, and eliminates hardcoded dashboard accuracy hit rates and rolling performance arrays with dynamic calculations from real out-of-time prediction history.
 
 ---
 
@@ -86,26 +86,53 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 
 ---
 
-### 13. Headline Arena Pending Cache & Asynchronous Challenge Sync (`src/headline_arena_connector.py`, `scripts/sync_headline_arena.py`, `.github/workflows/headline_arena_sync.yml` - Issue #418)
+### 12. EIA Weekly Retail Prices by PADD / State Ground Truth (`src/eia_retail_feed.py` & `src/prediction_logger.py` - Issue #403)
+- **Point-in-Time Regional Retail Ground Truth:** Implemented `EIARetailFeed` mapping EIA weekly retail gasoline series by PADD and state:
+  - U.S. National Regular (`GASREGW` / `TOTAL.EER_EPMRU_PFG_Y05R_DPG.W`)
+  - PADD 2 Midwest & Oklahoma (`GASMIDW` / `TOTAL.EER_EPMRU_PFG_R20_DPG.W`)
+  - PADD 1B Central Atlantic & New Jersey (`GASCAW` / `TOTAL.EER_EPMRU_PFG_R1Y_DPG.W`)
+  - PADD 2 Ohio / Cincinnati (`TOTAL.EER_EPMRU_PFG_SOH_DPG.W`)
+  - PADD 1C Lower Atlantic & North Carolina (`GASLAW` / `TOTAL.EER_EPMRU_PFG_SNC_DPG.W`)
+  - PADD 1C Florida (`TOTAL.EER_EPMRU_PFG_SFL_DPG.W`)
+  - PADD 5 West Coast & California (`GASCALW` / `TOTAL.EER_EPMRU_PFG_SCA_DPG.W`)
+- **Automated Regional Backfill:** Upgraded `backfill_actual_prices_and_evaluate()` to dynamically retrieve regional ground truth retail prices using `EIARetailFeed.get_retail_price_for_date()`, persisting bitemporal vintages in `data/eia_retail_vintages.json`.
+
+---
+
+### 13. NYMEX Forward Curve, Calendar Spreads & 3-2-1 Crack Futures (`src/data_ingestion.py` & `src/feature_engineering.py` - Issue #404)
+- **Term Structure & Calendar Spreads:** Implemented `NYMEXForwardCurveConnector` ingesting front-month ($M_1$) and second-month ($M_2$) futures for RBOB Gasoline (`RB=F`, `RB2=F`), WTI Crude (`CL=F`, `CL2=F`), and Heating Oil/Diesel (`HO=F`, `HO2=F`).
+- **Engineered Econometric Features:** Computes prompt-to-second month calendar spreads ($M_1 - M_2$), backwardation flags ($M_1 > M_2$), 1:1 crack spread futures ($\text{Crack}_{1:1} = P_{\text{RBOB}} - P_{\text{WTI}} / 42$), and prompt 3-2-1 refinery crack margins ($\text{Crack}_{3:2:1} = \frac{2 \cdot P_{\text{RBOB}} \cdot 42 + 1 \cdot P_{\text{HO}} \cdot 42 - 3 \cdot P_{\text{WTI}}}{3}$).
+- **Bitemporal Persistence:** Preserves point-in-time forward curve vintages in `data/nymex_forward_vintages.json`.
+
+---
+
+### 14. Dynamic Dashboard Accuracy Metrics & Rolling Performance Arrays (`src/dashboard_generator.py` - Issue #393)
+- **Eliminated Static Hardcoded Metrics:** Replaced hardcoded literal directional hit rates (`76.8%`, `78.2%`, etc.) and static rolling array curves across all 9 dashboard HTML subpages (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `oakland`, `bayarea`).
+- **Dynamic Chronological Computation:** Added `calculate_rolling_metrics()` and `compute_dynamic_accuracy_stats()` to dynamically compute overall and per-region MAE, RMSE, MAPE, sample sizes ($N$), and 7-day rolling performance metrics directly from `prediction_history.csv`.
+- **Sparse Data Gating:** Enforces an explicit `Insufficient Data (N < 30)` fallback tag when evaluated samples are fewer than 30, preventing misleading confidence metrics during early deployment phases.
+
+---
+
+### 15. Headline Arena Pending Cache & Asynchronous Challenge Sync (`src/headline_arena_connector.py`, `scripts/sync_headline_arena.py`, `.github/workflows/headline_arena_sync.yml` - Issue #418)
 - **Decoupled Forecast Generation & Challenge Availability:** Implemented a 24-hour pending forecast cache (`data/headline_arena_pending_forecasts.json`) that persists daily multi-agent commodity forecasts (RBOB, WTI, EIA Retail) across execution windows.
 - **Challenge Idempotency Ledger:** Implemented `data/headline_arena_submitted_ledger.json` recording submitted challenge IDs and server responses to prevent duplicate submissions during periodic runs.
 - **Automated 30-Minute Sync Runner:** Added `scripts/sync_headline_arena.py` and GitHub Actions workflow `.github/workflows/headline_arena_sync.yml` running every 30 minutes to match open Headline Arena challenges with cached forecasts.
 
 ---
 
-### 14. EIA Weekly Retail Regular Gasoline Civic Challenge Submissions (`src/headline_arena_connector.py` - Issue #408)
+### 16. EIA Weekly Retail Regular Gasoline Civic Challenge Submissions (`src/headline_arena_connector.py` - Issue #408)
 - **Macro / Civic Numeric Distribution Scoring:** Implemented `format_eia_retail_civic_payload()` and `submit_macro_forecast()` supporting Headline Arena civic challenges.
 - **Continuous Ranked Probability Score (CRPS) Calibration:** Computes closed-form Gaussian distributions with median target ($P_{50}$) and uncertainty standard deviation ($\sigma$) derived from multi-agent quantile spreads ($P_{90}-P_{10}$) or empirical residual variance.
 
 ---
 
-### 15. Statutory CARB Environmental Tax & All-In Retail Math Reconciliation (`ARCHITECTURE.md`, `AGENTS.md`, `data/regional_metadata/oakland_ca.json` - Issue #400)
+### 17. Statutory CARB Environmental Tax & All-In Retail Math Reconciliation (`ARCHITECTURE.md`, `AGENTS.md`, `data/regional_metadata/oakland_ca.json` - Issue #400)
 - **Reconciled California State Tax Burden:** Formulated exact statutory breakdown: $T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{UST/Env}} = \$0.596 + \$0.234 + \$0.088 + \$0.035 = \$0.953/\text{gal}$.
 - **All-In Retail Pump Tax Total:** Reconciled total statutory burden: $T_{\text{All-In}} = T_{\text{CARB}} + \tau_{\text{Federal}} + \tau_{\text{Sales}} = \$0.953 + \$0.184 + \$0.270 = \$1.407/\text{gal}$ across all documentation and regional metadata files.
 
 ---
 
-### 16. Automated Verification & Regression Test Suite
+### 18. Automated Verification & Regression Test Suite
 - **`tests/test_check_updates.py`:** Validates RCE prevention, allowlisted action execution, legacy command translation, and insecure URL fallback rejection (4/4 passing).
 - **`tests/test_temporal_leakage.py`:** Validates absence of backward filling, $h$-step split boundary purging, train-slice diagnostic computation, stacking CV purging, and chronological ordering (5/5 passing).
 - **`tests/test_api_server.py`:** Verifies fail-closed admin secret verification and global API key middleware route enforcement (23/23 passing).
@@ -117,5 +144,8 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 - **`tests/test_rvp_regulations.py`:** Validates statutory RVP limits, transition dates, and emergency waiver simulation (5/5 passing).
 - **`tests/test_noaa_coops_connector.py`:** Validates NOAA CO-OPS coastal water level fetching and marine risk indices (3/3 passing).
 - **`tests/test_headline_arena_connector.py`:** Validates pending forecast caching, 24h expiration, submitted ledger idempotency, EIA civic challenge payloads, and dispatching (27/27 passing).
-- **Total Test Results:** 100% pass rate across all 68 test suites with zero regressions.
+- **`tests/test_eia_retail_feed.py`:** Validates EIA weekly retail ground truth series fetching, vintage persistence, regional price lookup, and fallback handling (5/5 passing).
+- **`tests/test_nymex_forward_curve.py`:** Validates NYMEX forward curve connector, calendar spreads, 3-2-1 crack futures, backwardation flags, and feature matrix integration (3/3 passing).
+- **`tests/test_dashboard_metrics.py`:** Validates dynamic dashboard metric computation, rolling arrays, sparse data gating, and template rendering without placeholders (5/5 passing).
+- **Total Test Results:** 100% pass rate across all 71 test suites with zero regressions.
 

@@ -42,7 +42,22 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
   \]
 
 
-### B. Exponential Memory Decay Equation
+### B. NYMEX Forward Curve, Calendar Spreads & 3-2-1 Crack Futures (Issue #404)
+Prompt ($M_1$) and Second Month ($M_2$) calendar spreads quantify forward term structure and physical refinery margins:
+- **RBOB Calendar Spread ($M_1 - M_2$):**
+  \[
+  \text{Spread}_{\text{RBOB}, M_1-M_2} = P_{\text{RBOB}, M_1} - P_{\text{RBOB}, M_2}
+  \]
+- **WTI Calendar Spread ($M_1 - M_2$):**
+  \[
+  \text{Spread}_{\text{WTI}, M_1-M_2} = P_{\text{WTI}, M_1} - P_{\text{WTI}, M_2}
+  \]
+- **Refinery 3-2-1 Crack Margin ($/gal):**
+  \[
+  \text{Crack}_{3-2-1} = \frac{(2 \cdot P_{\text{RBOB}, M_1} + 1 \cdot P_{\text{HO}, M_1}) - 3 \cdot \left(\frac{P_{\text{WTI}, M_1}}{42.0}\right)}{3.0}
+  \]
+
+### C. Exponential Memory Decay Equation
 Real-world event news persistence is modeled via exponential memory decay ($t_{1/2} = 4.0\text{ to }5.0\text{ days}$):
 \[
 \lambda = \frac{\ln(2)}{t_{1/2}}
@@ -50,6 +65,9 @@ Real-world event news persistence is modeled via exponential memory decay ($t_{1
 \[
 \text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda} + \text{Shock}_t
 \]
+
+### D. Official EIA Retail Evaluation Ground Truth (Issue #403)
+Point-in-time model evaluation uses official EIA/FRED weekly retail pump prices across PADDs and states as objective evaluation ground truth ($y_{t+h}$ in `prediction_history.csv`).
 
 ---
 
