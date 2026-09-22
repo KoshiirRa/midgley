@@ -392,13 +392,65 @@ def log_predictions(
 
 
 
+RBOB_ACTUALS_CACHE_FILE = "data/rbob_actuals_cache.json"
 _GLOBAL_RBOB_ACTUALS_CACHE: Dict[str, float] = {}
+
+
+def validate_price_plausibility(price: Optional[float], region: str = "National", is_retail: bool = True) -> bool:
+    """
+    Validates whether a price observation falls within economically plausible bands (Issue #399).
+    Retail gasoline plausibility band: [$1.00, $10.00]/gal.
+    Wholesale RBOB futures plausibility band: [$0.50, $7.00]/gal.
+    """
+    if price is None:
+        return False
+    try:
+        val = float(price)
+        if np.isnan(val) or np.isinf(val):
+            return False
+        if is_retail and region != "National":
+            return 1.00 <= val <= 10.00
+        elif region == "National" and not is_retail:
+            return 0.50 <= val <= 7.00
+        return 0.50 <= val <= 10.00
+    except (ValueError, TypeError):
+        return False
+
+
+def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
+    """
+    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399).
+    Returns the number of rows purged.
+    """
+    path = csv_path or HISTORY_CSV_PATH
+    if not os.path.exists(path):
+        return 0
+    try:
+        df = pd.read_csv(path)
+        initial_len = len(df)
+        if initial_len == 0:
+            return 0
+        # Filter out Test_Region and test artifacts
+        valid_mask = ~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)
+        # Filter out NaN or completely invalid base prices
+        valid_mask = valid_mask & df['current_base_price'].notna() & (df['current_base_price'] > 0.10)
+        cleansed_df = df[valid_mask].copy()
+        purged = initial_len - len(cleansed_df)
+        if purged > 0:
+            cleansed_df.to_csv(path, index=False)
+            logger.info(f"Cleanse: Purged {purged} invalid/test fixture rows from {path}.")
+        return purged
+    except Exception as e:
+        logger.warning(f"Failed to cleanse prediction history at {path}: {e}")
+        return 0
+
 
 def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> pd.DataFrame:
     """
     Fetches actual historical gas prices up to today, matches them against past forecasted target dates,
     updates actual prices, error metrics, and directional hit outcomes in prediction_history.csv.
-    Uses official observed U.S. EIA weekly retail prices by PADD/State (Issue #403) as ground truth.
+    Uses official observed U.S. EIA weekly retail prices by PADD/State (Issue #403, #391, #392) as ground truth.
+    Eliminates synthetic offset ladders and identity fallbacks.
     """
     global _GLOBAL_RBOB_ACTUALS_CACHE
     ensure_history_store()
@@ -422,6 +474,14 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
     logger.info("Fetching actual historical market prices to backfill prediction log...")
     
     actuals_map = _GLOBAL_RBOB_ACTUALS_CACHE
+    if not actuals_map and os.path.exists(RBOB_ACTUALS_CACHE_FILE):
+        try:
+            with open(RBOB_ACTUALS_CACHE_FILE, "r", encoding="utf-8") as f:
+                actuals_map = json.load(f)
+                _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+        except Exception:
+            actuals_map = {}
+
     if not actuals_map:
         try:
             data = yf.download("RB=F", start="2022-01-01", progress=False)
@@ -430,6 +490,12 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
             actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
             actuals_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
             _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+            try:
+                os.makedirs(os.path.dirname(os.path.abspath(RBOB_ACTUALS_CACHE_FILE)), exist_ok=True)
+                with open(RBOB_ACTUALS_CACHE_FILE, "w", encoding="utf-8") as f:
+                    json.dump(actuals_map, f, indent=2)
+            except Exception:
+                pass
         except Exception as e:
             logger.warning(f"Could not download actuals from yfinance: {e}")
             actuals_map = {}
@@ -441,8 +507,16 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
         logger.debug(f"EIARetailFeed unavailable, fallback to basis: {e}")
         eia_feed = None
 
+    unevaluated_mask = history_df['actual_5d_price'].isna()
+    if target_region:
+        unevaluated_mask = unevaluated_mask & (history_df['region'] == target_region)
+    target_indices = history_df[unevaluated_mask].index
+    if len(target_indices) == 0:
+        return history_df
+
     updated = False
-    for idx, row in history_df.iterrows():
+    for idx in target_indices:
+        row = history_df.loc[idx]
         target_date_str = str(row['forecast_target_date'])
         base_price = float(row['current_base_price'])
         pred_price = float(row['predicted_5d_price'])
@@ -450,30 +524,26 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
         reg = str(row['region'])
         
         actual_price = None
+        source_prov = None
 
         if reg == "National":
             if target_date_str in actuals_map:
-                actual_price = float(actuals_map[target_date_str])
+                candidate_price = float(actuals_map[target_date_str])
+                if validate_price_plausibility(candidate_price, "National", is_retail=False):
+                    actual_price = candidate_price
+                    source_prov = "yfinance:RB=F"
             elif eia_feed:
-                actual_price = eia_feed.get_retail_price_for_date("National", target_date_str)
+                candidate_price = eia_feed.get_retail_price_for_date("National", target_date_str)
+                if validate_price_plausibility(candidate_price, "National", is_retail=True):
+                    actual_price = candidate_price
+                    source_prov = "eia_retail_feed:GASREGW"
         else:
-            # Regional metro ground-truth lookup via EIA weekly retail feed
+            # Regional metro ground-truth lookup via EIA weekly retail feed (Issue #403, #391, #392)
             if eia_feed:
-                actual_price = eia_feed.get_retail_price_for_date(reg, target_date_str)
-            
-            if actual_price is None and target_date_str in actuals_map:
-                raw_actual = float(actuals_map[target_date_str])
-                if reg == "Cincinnati_KY":
-                    actual_price = raw_actual + 0.425
-                elif reg in ["Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"]:
-                    actual_price = raw_actual + 0.55
-                elif reg == "Oakland_CA":
-                    actual_price = raw_actual + 2.05
-                elif reg == "BayArea_CA":
-                    actual_price = raw_actual + 2.15
-                else:
-                    margin_offset = base_price - raw_actual if base_price > raw_actual else 0.55
-                    actual_price = raw_actual + margin_offset
+                candidate_price = eia_feed.get_retail_price_for_date(reg, target_date_str)
+                if validate_price_plausibility(candidate_price, reg, is_retail=True):
+                    actual_price = candidate_price
+                    source_prov = f"eia_retail_feed:{reg}"
 
         if actual_price is not None:
             actual_dir = "UP" if actual_price >= base_price else "DOWN"
@@ -493,6 +563,8 @@ def backfill_actual_prices_and_evaluate(target_region: Optional[str] = None) -> 
             history_df.at[idx, 'error_dollars'] = round(err_dollars, 4)
             history_df.at[idx, 'directional_hit'] = hit
             history_df.at[idx, 'within_95ci_hit'] = ci_hit
+            if source_prov:
+                history_df.at[idx, 'data_source_provenance'] = source_prov
             updated = True
             
     if updated:
@@ -615,12 +687,12 @@ def _infer_horizon_days(row) -> int:
             pass
     try:
         if pd.notna(row.get('forecast_target_date')) and pd.notna(row.get('log_timestamp')):
-            log_d = pd.to_datetime(row['log_timestamp']).date()
-            tgt_d = pd.to_datetime(row['forecast_target_date']).date()
+            log_d = str(row['log_timestamp'])[:10]
+            tgt_d = str(row['forecast_target_date'])[:10]
             if tgt_d > log_d:
-                bdays = len(pd.bdate_range(start=log_d + timedelta(days=1), end=tgt_d))
-                if 1 <= bdays <= 30:
-                    return bdays
+                days = (pd.to_datetime(tgt_d) - pd.to_datetime(log_d)).days
+                bdays = max(1, min(30, int(days * 5 / 7)))
+                return bdays
     except Exception:
         pass
     return 5

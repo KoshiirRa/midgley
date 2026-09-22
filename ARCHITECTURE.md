@@ -497,3 +497,16 @@ The scenario simulation architecture integrates a **Dynamic Climatological & Met
   - `POST /api/v1/forecast/simulate` & MCP `simulate_fuel_market_shock`: Enriched with `plausibility` object containing status, numerical score, and warning annotations.
   - MCP `list_market_shock_scenarios`: Tool for agents to discover available shocks and seasonal validity.
 * **Weekly Review Feedback Loop:** `src/weekly_issue_reporter.py` embeds the **Forward Plausibility Horizon Matrix**, multi-hub stress audits, and applies seasonal priority boosts ($\times 1.25$) to open GitHub issues matching active threats.
+
+---
+
+## 17. MLOps Ground Truth Integrity, Plausibility Guards & History Sanitation (Issues #391, #392, #399)
+
+1. **Official EIA/FRED Regional Ground Truth:** Regional metro actual price outcomes are resolved strictly from official weekly EIA retail series via `EIARetailFeed` (`src/eia_retail_feed.py`).
+2. **Elimination of Synthetic Offsets:** Hardcoded offset ladders (such as `RB=F + $0.55` or `RB=F + $2.05`) and identity fallbacks (`margin_offset = base_price - raw_actual`) are eliminated. If real ground-truth data is unavailable for a date or region, the observation is recorded as unobserved (`np.nan`), preventing artificial directional hits or forced `actual_direction = UP` biases.
+3. **Plausibility Validation Guards (`validate_price_plausibility`):** Enforces strict economic boundaries on historical and incoming price inputs:
+   - Retail Gasoline Plausibility: $\$1.00/\text{gal} \le P_{\text{Retail}} \le \$10.00/\text{gal}$.
+   - Wholesale RBOB Futures Plausibility: $\$0.50/\text{gal} \le P_{\text{Wholesale}} \le \$7.00/\text{gal}$.
+4. **Production History Cleansing (`cleanse_prediction_history`):** Automated purification routine purges test fixture entries (`Test_Region`, `Test_*`) and invalid records from `data/prediction_history.csv`.
+5. **Disk-Backed Actuals Caching:** National futures actuals are cached locally in `data/rbob_actuals_cache.json`, preventing redundant full-series network calls during backfill cycles.
+
