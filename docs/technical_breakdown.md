@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-22 18:01:16`  
+**Log Timestamp:** `2026-09-22 21:15:36`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** WCS crude oil discount to Mars weakens amid US refinery outages - Quantum Commodity Intelligence  
+**Primary Event Trigger:** Watch | US-Russia sanctions law: What 100 pc tariff power means for India - The Federal  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** WCS crude oil discount to Mars weakens amid US refinery outages - Quantum Commodity Intelligence
+- **Headline Trigger:** Watch | US-Russia sanctions law: What 100 pc tariff power means for India - The Federal
 - **Active Ingested News Links:**
+- [Watch | US-Russia sanctions law: What 100 pc tariff power means for India - The Federal](https://news.google.com/rss/articles/CBMikgFBVV95cUxNNTVKeDVvNTYxSWJOWHRJMHduYW1FSUxXUV9GcXNucHFqVXJmMERTd2Q5N1VhMXFMNzJwaXR4aVNMRDVOQ0pLTUFfYk5XV0RkaTg4NkdTODAxVl9YRUVDLWtjQ01SdUdZOTBEYmlTNkRIU0NHYzNwSTVxbXhHTE1mcHo4cVJPVEZmb3BuLUZJY0dhdw?oc=5) (Google News Energy Feed)
 - [WCS crude oil discount to Mars weakens amid US refinery outages - Quantum Commodity Intelligence](https://news.google.com/rss/articles/CBMiqgFBVV95cUxQTGhVdHpPTVdRcWJFci1oNzZ6Rld4NlVzRHA0ZUhlYzhjNEJWRWZkOEpLN2VYZUVnWFF6NUpZcGl2Mjk4ZGZBWWJiRlpMYVlacHZiVTlUeG55U3F4VkplME15bUt6Zmt6VEJCbnhoLWxCUS1Ec0ktNkxxcnZFbjNOSjZGQlpMMnNYcXF1b1NqMHRZUlVvR3oxMmpuajdvX1haaXdwOW1RRzdLZw?oc=5) (Google News Energy Feed)
 - [India warns new US tariffs over Russian oil could hit ties, vows to protect energy security - The Business Standard](https://news.google.com/rss/articles/CBMiuwFBVV95cUxOMElLX3FsNnhidy03WWczdnMzb0lqZFBYRlVMRUJacVg4alRreXhiRWUyUzBWNnExLUgzUTRzeGcwU0w1d011RW5TNTB0Q3p2QmlDSEQ4OVdBQjBTQVZBU2VSUkpHRVRSWDVWNUhnT1loU284d0hNWDhWcU5vY0Q4TWk4dFRWNmg1RE9xRWNsQ1FSZXhVOTVmMmF1S0VFQ3NWdkNXdzdVTzlwR0hUcTd1M1l5M25aQXJWWDFB?oc=5) (Google News Energy Feed)
-- [TSX energy stocks best positioned for tariffs, war and rising oil prices - The Globe and Mail](https://news.google.com/rss/articles/CBMi4gFBVV95cUxNMkVOWEJCSHpVUmNZckdXNWRqZ1F1SERxZ1cxZ000eDd5UEliMnhJRzRkbUhvems1cm01V2tNQXRkSVVyeVJKenZMMHE0Y25YZVhDUUVQUjBtRW05Z2RpcVpBUFBTYURhVXRad0w0a08tM0pGemxqQS1XQkhLejhFZDlGVDg1aGNhZkVuZTRoOHQwaFZ2dmltRE82YVU4bXB4SFQ3WHRnM1BRUlY0cll0eUE2T1pvMjBFQ2FFeVk0YW54TVBPVHU0Y1J0eXl6aXZUcWN1Z2NQdlZuWXRibms3cnB3?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -20,9 +20,9 @@
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
 - **Supply Disruption Score ($S$):** `0.60`
-- **Price Pressure Shock ($\Delta P$):** `+0.30`
-- **Geopolitical Risk Score ($G$):** `0.00`
-- **Demand Sentiment Score ($D$):** `0.00`
+- **Price Pressure Shock ($\Delta P$):** `+0.80`
+- **Geopolitical Risk Score ($G$):** `0.90`
+- **Demand Sentiment Score ($D$):** `-0.30`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -51,7 +51,7 @@ Numeric Retention Schedule for This Run ($M_0 = 0.6000$):
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.291) = \$3.222\text{/gal}$ (Delta: -\$0.291/gal, -9.14\%)
+- **National Wholesale**: $P = \$3.184 + (-\$0.227) = \$3.286\text{/gal}$ (Delta: -\$0.227/gal, -7.14\%)
 - **Tulsa, OK Retail**: $P = \$3.993 + (+\$0.222) = \$6.391\text{/gal}$ (Delta: +\$0.222/gal, +5.55\%)
 - **Newark, DE Retail**: $P = \$4.353 + (+\$0.033) = \$4.447\text{/gal}$ (Delta: +\$0.033/gal, +0.77\%)
 - **Cincinnati, OH/KY**: $P = \$4.441 + (+\$0.017) = \$4.517\text{/gal}$ (Delta: +\$0.017/gal, +0.39\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.6000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-22 18:01:16]: Elevated upward price shock (+$0.30/gal) observed across wholesale futures. Event trigger 'WCS crude oil discount to Mars weakens amid US refinery outages - Quantum Commodity Intelligence' drove supply disruption to S=0.60 and geopolitical risk to G=0.00. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.5223 and Day-5 horizon retention M₅=0.3000.
+SUMMARY FOR RUN [2026-09-22 21:15:36]: Elevated upward price shock (+$0.80/gal) observed across wholesale futures. Event trigger 'Watch | US-Russia sanctions law: What 100 pc tariff power means for India - The Federal' drove supply disruption to S=0.60 and geopolitical risk to G=0.90. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.5223 and Day-5 horizon retention M₅=0.3000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-22 18:01:16 (Mode: INTRADAY_REVISION), primary event trigger 'WCS crude oil discount to Mars weakens amid US refinery outages - Quantum Commodity Intelligence' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.60, Price Pressure ΔP=+0.30, Geopolitical Risk G=0.00. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-22 21:15:36 (Mode: INTRADAY_REVISION), primary event trigger 'Watch | US-Russia sanctions law: What 100 pc tariff power means for India - The Federal' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.60, Price Pressure ΔP=+0.80, Geopolitical Risk G=0.90. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.6000
   - Day 1: M₁ = 0.5223
   - Day 5: M₅ = 0.3000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.222/gal ($-0.291/gal, -9.14%)
+  • National Wholesale: $3.286/gal ($-0.227/gal, -7.14%)
   • Tulsa, OK Retail: $6.391/gal (+$0.222/gal, +5.55%)
   • Newark, DE Retail: $4.447/gal (+$0.033/gal, +0.77%)
   • Cincinnati, OH/KY: $4.517/gal (+$0.017/gal, +0.39%)
@@ -91,15 +91,15 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.341/gal (+$0.761/gal, +12.21%)
   • SF Bay Area Region: $6.446/gal (+$0.767/gal, +12.10%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.446/gal (+0.767/gal). Largest downward shift for this run: National Wholesale at $3.222/gal (-0.291/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.446/gal (+0.767/gal). Largest downward shift for this run: National Wholesale at $3.286/gal (-0.227/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-22 18:01:16]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'WCS crude oil discount to Mars weakens amid US refinery outages - Quantum Commodity Intelligence'. Overall price pressure vector sits at ΔP=+0.30/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-22 21:15:36]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Watch | US-Russia sanctions law: What 100 pc tariff power means for India - The Federal'. Overall price pressure vector sits at ΔP=+0.80/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.00. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.90. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-22 18:01:16.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-22 21:15:36.*
