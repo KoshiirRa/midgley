@@ -7273,6 +7273,7 @@
       "status": "success"
     },
     {
+<<<<<<< HEAD
       "timestamp": "2026-09-22T05:22:44.070316+00:00",
       "provider": "zero_cost_hook",
       "model_name": "zero_cost_hook",
@@ -7307,6 +7308,9 @@
     },
     {
       "timestamp": "2026-09-22T05:24:23.111832+00:00",
+=======
+      "timestamp": "2026-09-21T14:16:30.321652+00:00",
+>>>>>>> main
       "provider": "finlight",
       "model_name": "finlight",
       "call_type": "finlight_feed",
@@ -7317,6 +7321,7 @@
       "status": "success"
     },
     {
+<<<<<<< HEAD
       "timestamp": "2026-09-22T05:24:23.216438+00:00",
       "provider": "finlight",
       "model_name": "finlight",
@@ -7417,6 +7422,9 @@
     },
     {
       "timestamp": "2026-09-22T05:36:07.281394+00:00",
+=======
+      "timestamp": "2026-09-21T14:52:09.671194+00:00",
+>>>>>>> main
       "provider": "finlight",
       "model_name": "finlight",
       "call_type": "finlight_feed",
@@ -7427,6 +7435,7 @@
       "status": "success"
     },
     {
+<<<<<<< HEAD
       "timestamp": "2026-09-22T05:36:07.379679+00:00",
       "provider": "finlight",
       "model_name": "finlight",
@@ -7670,6 +7679,9 @@
     },
     {
       "timestamp": "2026-09-22T06:48:54.039854+00:00",
+=======
+      "timestamp": "2026-09-21T15:27:27.319175+00:00",
+>>>>>>> main
       "provider": "finlight",
       "model_name": "finlight",
       "call_type": "finlight_feed",
@@ -7680,6 +7692,7 @@
       "status": "success"
     },
     {
+<<<<<<< HEAD
       "timestamp": "2026-09-22T06:48:54.143789+00:00",
       "provider": "finlight",
       "model_name": "finlight",
@@ -8271,6 +8284,137 @@
       "output_tokens": 200,
       "total_tokens": 600,
       "cost_usd": 9e-05,
+=======
+      "timestamp": "2026-09-21T16:21:05.445107+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 124,
+      "output_tokens": 80,
+      "total_tokens": 204,
+      "cost_usd": 3.3e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-21T16:21:26.530835+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 132,
+      "output_tokens": 80,
+      "total_tokens": 212,
+      "cost_usd": 3.4e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-21T16:55:13.371369+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-21T17:30:49.731375+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-21T18:05:34.050950+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-21T21:50:36.263323+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 154,
+      "output_tokens": 80,
+      "total_tokens": 234,
+      "cost_usd": 3.6e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-21T21:50:57.533170+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 134,
+      "output_tokens": 80,
+      "total_tokens": 214,
+      "cost_usd": 3.4e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T00:40:12.847771+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 134,
+      "output_tokens": 80,
+      "total_tokens": 214,
+      "cost_usd": 3.4e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T07:29:39.915008+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 140,
+      "output_tokens": 80,
+      "total_tokens": 220,
+      "cost_usd": 3.4e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T12:40:11.925562+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T13:10:18.588241+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-22T13:48:59.163167+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+>>>>>>> main
       "status": "success"
     }
   ]

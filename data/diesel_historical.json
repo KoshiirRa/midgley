@@ -1,5 +1,6 @@
 {
   "benchmark_key": "diesel",
+<<<<<<< HEAD
   "last_refreshed_utc": "2026-09-22 17:41:08",
   "records_count": 8,
   "data": {
@@ -11,5 +12,18 @@
     "charlotte": 6.234,
     "oakland": 8.439,
     "port_st_lucie": 6.258
+=======
+  "last_refreshed_utc": "2026-09-21 19:12:49",
+  "records_count": 8,
+  "data": {
+    "national": 6.511,
+    "tulsa": 6.025,
+    "newark": 6.414,
+    "cincinnati": 6.768,
+    "greenville": 6.246,
+    "charlotte": 6.246,
+    "oakland": 8.421,
+    "port_st_lucie": 6.285
+>>>>>>> main
   }
 }

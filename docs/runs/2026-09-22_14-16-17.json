@@ -1,15 +1,8 @@
 {
-<<<<<<< HEAD
-  "run_id": "2026-09-22_17-40-20",
-  "log_timestamp": "2026-09-22 12:39:47",
-  "run_type": "DAILY_BATCH",
-  "primary_trigger": "Daily Forecast Batch Execution (2026-09-22 12:39:47)",
-=======
   "run_id": "2026-09-22_14-16-17",
   "log_timestamp": "2026-09-22 14:14:31",
   "run_type": "DAILY_BATCH",
   "primary_trigger": "Daily Forecast Batch Execution (2026-09-22 14:14:31)",
->>>>>>> main
   "headline_items": [
     {
       "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
@@ -50,15 +43,9 @@
       "key": "National",
       "name": "National Wholesale",
       "base_price": 3.4699,
-<<<<<<< HEAD
-      "predicted_price": 3.4919,
-      "delta": -0.03810000000000002,
-      "pct_change": -1.0980143519986174
-=======
       "predicted_price": 3.5133,
       "delta": -0.016000000000000014,
       "pct_change": -0.46110838929075804
->>>>>>> main
     },
     {
       "key": "Tulsa_OK",
@@ -87,32 +74,18 @@
     {
       "key": "Greenville_NC",
       "name": "Greenville, NC Retail",
-<<<<<<< HEAD
-      "base_price": 3.25,
-      "predicted_price": 3.2639,
-      "delta": -0.03359999999999985,
-      "pct_change": -1.0338461538461492
-=======
       "base_price": 4.128,
       "predicted_price": 4.1809,
       "delta": -0.005700000000000038,
       "pct_change": -0.13808139534883815
->>>>>>> main
     },
     {
       "key": "Charlotte_NC",
       "name": "Charlotte, NC Retail",
-<<<<<<< HEAD
-      "base_price": 3.28,
-      "predicted_price": 3.2858,
-      "delta": -0.04930000000000012,
-      "pct_change": -1.5030487804878085
-=======
       "base_price": 4.187,
       "predicted_price": 4.2476,
       "delta": 0.000900000000000567,
       "pct_change": 0.02149510389301569
->>>>>>> main
     },
     {
       "key": "Port_St_Lucie_FL",
@@ -125,33 +98,14 @@
     {
       "key": "Oakland_CA",
       "name": "Oakland, CA Retail",
-<<<<<<< HEAD
-      "base_price": 4.95,
-      "predicted_price": 4.9616,
-      "delta": -0.6093999999999999,
-      "pct_change": -12.31111111111111
-=======
       "base_price": 6.232,
       "predicted_price": 6.3406,
       "delta": 0.7608000000000006,
       "pct_change": 12.20795892169449
->>>>>>> main
     },
     {
       "key": "BayArea_CA",
       "name": "SF Bay Area Region",
-<<<<<<< HEAD
-      "base_price": 5.05,
-      "predicted_price": 5.0618,
-      "delta": -0.6092000000000004,
-      "pct_change": -12.06336633663367
-    }
-  ],
-  "spc_synopsis": {
-    "summary": "SUMMARY FOR RUN [2026-09-22 12:39:47]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of \u0394P=+0.02/gal. Primary trigger: 'Daily Forecast Batch Execution (2026-09-22 12:39:47)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M\u2080=0.1000 down to M\u2085=0.0500.",
-    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-09-22 12:39:47 (Mode: DAILY_BATCH), primary event trigger 'Daily Forecast Batch Execution (2026-09-22 12:39:47)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (CME Group / NYMEX, Bloomberg Market Wire, NOAA NWS Storm Alert). Ingested factor vector: Supply Disruption S=0.10, Price Pressure \u0394P=+0.02, Geopolitical Risk G=0.15. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.1000\n  - Day 1: M\u2081 = 0.0871\n  - Day 5: M\u2085 = 0.0500 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.492/gal ($-0.038/gal, -1.10%)\n  \u2022 Tulsa, OK Retail: $4.435/gal ($-0.213/gal, -5.32%)\n  \u2022 Newark, DE Retail: $4.369/gal (+$0.094/gal, +2.15%)\n  \u2022 Cincinnati, OH/KY: $4.486/gal (+$0.024/gal, +0.53%)\n  \u2022 Greenville, NC Retail: $3.264/gal ($-0.034/gal, -1.03%)\n  \u2022 Charlotte, NC Retail: $3.286/gal ($-0.049/gal, -1.50%)\n  \u2022 Port St. Lucie, FL Retail: $4.353/gal (+$0.036/gal, +0.83%)\n  \u2022 Oakland, CA Retail: $4.962/gal ($-0.609/gal, -12.31%)\n  \u2022 SF Bay Area Region: $5.062/gal ($-0.609/gal, -12.06%)\n\nLargest upward shift for this run: Newark, DE Retail at $4.369/gal (+0.094/gal). Largest downward shift for this run: Oakland, CA Retail at $4.962/gal (-0.609/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
-    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-09-22 12:39:47]:\n\u2022 Execution Context: Run type 'DAILY_BATCH' triggered by 'Daily Forecast Batch Execution (2026-09-22 12:39:47)'. Overall price pressure vector sits at \u0394P=+0.02/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.\n\u2022 Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck"
-=======
       "base_price": 6.336,
       "predicted_price": 6.4464,
       "delta": 0.7665999999999995,
@@ -162,6 +116,5 @@
     "summary": "SUMMARY FOR RUN [2026-09-22 14:14:31]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of \u0394P=+0.02/gal. Primary trigger: 'Daily Forecast Batch Execution (2026-09-22 14:14:31)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M\u2080=0.1000 down to M\u2085=0.0500.",
     "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-09-22 14:14:31 (Mode: DAILY_BATCH), primary event trigger 'Daily Forecast Batch Execution (2026-09-22 14:14:31)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Bloomberg Market Wire, CME Group / NYMEX, NOAA NWS Storm Alert). Ingested factor vector: Supply Disruption S=0.10, Price Pressure \u0394P=+0.02, Geopolitical Risk G=0.15. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.1000\n  - Day 1: M\u2081 = 0.0871\n  - Day 5: M\u2085 = 0.0500 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.513/gal ($-0.016/gal, -0.46%)\n  \u2022 Tulsa, OK Retail: $6.391/gal (+$0.222/gal, +5.55%)\n  \u2022 Newark, DE Retail: $4.447/gal (+$0.033/gal, +0.77%)\n  \u2022 Cincinnati, OH/KY: $4.517/gal (+$0.017/gal, +0.39%)\n  \u2022 Greenville, NC Retail: $4.181/gal ($-0.006/gal, -0.14%)\n  \u2022 Charlotte, NC Retail: $4.248/gal (+$0.001/gal, +0.02%)\n  \u2022 Port St. Lucie, FL Retail: $4.350/gal (+$0.003/gal, +0.07%)\n  \u2022 Oakland, CA Retail: $6.341/gal (+$0.761/gal, +12.21%)\n  \u2022 SF Bay Area Region: $6.446/gal (+$0.767/gal, +12.10%)\n\nLargest upward shift for this run: SF Bay Area Region at $6.446/gal (+0.767/gal). Largest downward shift for this run: National Wholesale at $3.513/gal (-0.016/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
     "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-09-22 14:14:31]:\n\u2022 Execution Context: Run type 'DAILY_BATCH' triggered by 'Daily Forecast Batch Execution (2026-09-22 14:14:31)'. Overall price pressure vector sits at \u0394P=+0.02/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.\n\u2022 Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck"
->>>>>>> main
   }
 }

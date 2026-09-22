@@ -217,6 +217,7 @@
   },
   {
     "source": "Baker Hughes Rig Count (Zero-Cost)",
+<<<<<<< HEAD
     "as_of": "2026-09-22 00:23:37",
     "valid_date": "2026-01-09",
     "latest_us_active_oil_rigs": 472,
@@ -514,6 +515,9 @@
   {
     "source": "Baker Hughes Rig Count (Zero-Cost)",
     "as_of": "2026-09-22 12:41:07",
+=======
+    "as_of": "2026-09-21 19:12:46",
+>>>>>>> main
     "valid_date": "2026-01-09",
     "latest_us_active_oil_rigs": 472,
     "latest_us_total_rigs": 472,

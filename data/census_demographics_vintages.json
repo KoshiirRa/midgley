@@ -1060,6 +1060,7 @@
     }
   },
   {
+<<<<<<< HEAD
     "as_of": "2026-09-22 12:31:27",
     "valid_date": "2026-09-22",
     "region_id": "cincinnati_oh",
@@ -1115,6 +1116,10 @@
   {
     "as_of": "2026-09-22 12:41:12",
     "valid_date": "2026-09-22",
+=======
+    "as_of": "2026-09-21 19:12:56",
+    "valid_date": "2026-09-21",
+>>>>>>> main
     "region_id": "tulsa_ok",
     "display_name": "Tulsa, OK Metro",
     "demographics": {
@@ -1136,7 +1141,11 @@
       "region_id": "tulsa_ok",
       "display_name": "Tulsa, OK Metro",
       "window_lifecycle": {
+<<<<<<< HEAD
         "current_date": "2026-09-22",
+=======
+        "current_date": "2026-09-21",
+>>>>>>> main
         "is_in_release_window": true,
         "release_window_name": "ACS 1-Year Annual Window (2026)",
         "expected_vintage": 2025,
@@ -1166,8 +1175,13 @@
     }
   },
   {
+<<<<<<< HEAD
     "as_of": "2026-09-22 12:41:13",
     "valid_date": "2026-09-22",
+=======
+    "as_of": "2026-09-21 19:12:57",
+    "valid_date": "2026-09-21",
+>>>>>>> main
     "region_id": "newark_de",
     "display_name": "Newark, DE / Philly Corridor",
     "demographics": {
@@ -1189,7 +1203,11 @@
       "region_id": "newark_de",
       "display_name": "Newark, DE / Philly Corridor",
       "window_lifecycle": {
+<<<<<<< HEAD
         "current_date": "2026-09-22",
+=======
+        "current_date": "2026-09-21",
+>>>>>>> main
         "is_in_release_window": true,
         "release_window_name": "ACS 1-Year Annual Window (2026)",
         "expected_vintage": 2025,
@@ -1219,8 +1237,13 @@
     }
   },
   {
+<<<<<<< HEAD
     "as_of": "2026-09-22 12:41:15",
     "valid_date": "2026-09-22",
+=======
+    "as_of": "2026-09-21 19:12:57",
+    "valid_date": "2026-09-21",
+>>>>>>> main
     "region_id": "greenville_nc",
     "display_name": "Greenville, NC Metro",
     "demographics": {
@@ -1242,7 +1265,11 @@
       "region_id": "greenville_nc",
       "display_name": "Greenville, NC Metro",
       "window_lifecycle": {
+<<<<<<< HEAD
         "current_date": "2026-09-22",
+=======
+        "current_date": "2026-09-21",
+>>>>>>> main
         "is_in_release_window": true,
         "release_window_name": "ACS 1-Year Annual Window (2026)",
         "expected_vintage": 2025,
@@ -1272,8 +1299,13 @@
     }
   },
   {
+<<<<<<< HEAD
     "as_of": "2026-09-22 12:41:16",
     "valid_date": "2026-09-22",
+=======
+    "as_of": "2026-09-21 19:12:57",
+    "valid_date": "2026-09-21",
+>>>>>>> main
     "region_id": "oakland_ca",
     "display_name": "Oakland / SF Bay Area, CA",
     "demographics": {
@@ -1295,7 +1327,11 @@
       "region_id": "oakland_ca",
       "display_name": "Oakland / SF Bay Area, CA",
       "window_lifecycle": {
+<<<<<<< HEAD
         "current_date": "2026-09-22",
+=======
+        "current_date": "2026-09-21",
+>>>>>>> main
         "is_in_release_window": true,
         "release_window_name": "ACS 1-Year Annual Window (2026)",
         "expected_vintage": 2025,
@@ -1325,8 +1361,13 @@
     }
   },
   {
+<<<<<<< HEAD
     "as_of": "2026-09-22 12:41:18",
     "valid_date": "2026-09-22",
+=======
+    "as_of": "2026-09-21 19:12:57",
+    "valid_date": "2026-09-21",
+>>>>>>> main
     "region_id": "charlotte_nc",
     "display_name": "Charlotte, NC Metro",
     "demographics": {
@@ -1348,7 +1389,11 @@
       "region_id": "charlotte_nc",
       "display_name": "Charlotte, NC Metro",
       "window_lifecycle": {
+<<<<<<< HEAD
         "current_date": "2026-09-22",
+=======
+        "current_date": "2026-09-21",
+>>>>>>> main
         "is_in_release_window": true,
         "release_window_name": "ACS 1-Year Annual Window (2026)",
         "expected_vintage": 2025,
@@ -1378,8 +1423,13 @@
     }
   },
   {
+<<<<<<< HEAD
     "as_of": "2026-09-22 12:41:19",
     "valid_date": "2026-09-22",
+=======
+    "as_of": "2026-09-21 19:12:58",
+    "valid_date": "2026-09-21",
+>>>>>>> main
     "region_id": "port_st_lucie_fl",
     "display_name": "Port St. Lucie, FL Metro",
     "demographics": {
@@ -1401,7 +1451,11 @@
       "region_id": "port_st_lucie_fl",
       "display_name": "Port St. Lucie, FL Metro",
       "window_lifecycle": {
+<<<<<<< HEAD
         "current_date": "2026-09-22",
+=======
+        "current_date": "2026-09-21",
+>>>>>>> main
         "is_in_release_window": true,
         "release_window_name": "ACS 1-Year Annual Window (2026)",
         "expected_vintage": 2025,

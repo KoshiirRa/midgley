@@ -182,6 +182,7 @@
     }
   },
   {
+<<<<<<< HEAD
     "as_of": "2026-09-22 00:22:56",
     "data": {
       "status": "FALLBACK",
@@ -417,6 +418,22 @@
   },
   {
     "as_of": "2026-09-22 12:39:24",
+=======
+    "as_of": "2026-09-21 14:19:09",
+    "data": {
+      "status": "FALLBACK",
+      "report_date": "2026-09-21",
+      "cot_rbob_net_speculative": 83000.0,
+      "cot_rbob_zscore_3y": 0.44,
+      "cot_commercial_hedger_ratio": 0.8571,
+      "cot_net_position_delta_1w": 3500.0,
+      "is_free_alternative": true,
+      "cost_per_query": 0.0
+    }
+  },
+  {
+    "as_of": "2026-09-22 12:43:15",
+>>>>>>> main
     "data": {
       "status": "FALLBACK",
       "report_date": "2026-09-22",
