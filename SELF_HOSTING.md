@@ -78,6 +78,13 @@ ANTHROPIC_API_KEY="sk-ant-..."
 # Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation)
 MIDGLEY_WEBHOOK_SECRET="super-secret-hmac-key-change-me"
 
+# Admin API Gateway Secret for Key Provisioning (/api/v1/admin/keys - Issue #341)
+# MANDATORY: Fails closed (HTTP 401) if unset, empty, or whitespace-only.
+MIDGLEY_ADMIN_SECRET="super-secret-admin-token-change-me"
+
+# Master API Key for Administrative System Access (Bypasses per-key rate limits)
+MIDGLEY_API_KEY="mg_master_secret_key_change_me"
+
 # IPASIS API Gateway Security Key & Controls (ipasis.com - 100 req/day free)
 IPASIS_API_KEY="ipasis_c92c28445c93_d65965edd3bfc851770b9573f777e152"
 IPASIS_BLOCK_HIGH_RISK="1"       # Set to 1 to block Tor/Abuse origins with HTTP 403
@@ -798,12 +805,17 @@ Self-hosted instances and autonomous coding agents maintaining forks can detect 
 curl -s http://localhost:8000/api/v1/system/releases/latest | jq .
 ```
 
-### 2. Run the Compatibility & Upgrade Reconciler CLI
+### 2. Run the Compatibility & Upgrade Reconciler CLI (Issue #343)
+The upgrade reconciler audits local environment configuration against upstream release manifests. To prevent Arbitrary Code Execution (RCE), the reconciler strictly validates upstream URLs (enforcing HTTPS scheme) and executes only pre-defined, parameterized allowlisted actions without shell interpolation (`shell=False`):
+* `retrain_regional_models`: Executes `scripts/manage_regions.py retrain --all`
+* `update_static_dashboard`: Executes `src/dashboard_generator.py`
+* `run_migrations`: Executes migration utilities with safe argument vectors
+
 ```bash
 # Audit local configuration vs. upstream manifest (Dry-Run)
 python3 scripts/check_updates.py --dry-run
 
-# Automatically apply database migrations and retrain custom regional estimators
+# Automatically apply database migrations and retrain custom regional estimators safely
 python3 scripts/check_updates.py --auto-reconcile
 ```
 
@@ -816,5 +828,6 @@ When upstream releases include new econometric features (e.g. Cboe OVX volatilit
 
 ---
 
-*Midgley Version: `v0.6.5` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Stacking Ensemble & Purged CV | License: Apache 2.0*
+
 

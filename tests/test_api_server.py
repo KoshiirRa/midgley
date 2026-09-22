@@ -272,33 +272,94 @@ class TestAPIServer(unittest.TestCase):
         self.assertIn("X-Admin-Secret", res.json()["detail"])
 
     def test_admin_api_key_provisioning_method_b(self):
-        """Verifies Method B admin endpoints allow key creation, listing, and revocation with valid secret."""
-        admin_secret = "midgley_dev_admin_secret_2026"
-        headers = {"X-Admin-Secret": admin_secret}
+        """Verifies Method B admin endpoints allow key creation, listing, and revocation with valid configured secret."""
+        admin_secret = "test_custom_admin_secret_12345"
+        with patch.dict(os.environ, {"MIDGLEY_ADMIN_SECRET": admin_secret}):
+            headers = {"X-Admin-Secret": admin_secret}
 
-        # 1. Create key via Method B
-        res = self.client.post(
-            "/api/v1/admin/keys",
-            json={"user_id": "method_b_user", "tier": "privileged", "rate_limit_rpm": 30, "environment": "dev"},
-            headers=headers
-        )
-        self.assertEqual(res.status_code, 200)
-        data = res.json()
-        self.assertEqual(data["status"], "success")
-        key_data = data["key_data"]
-        self.assertEqual(key_data["user_id"], "method_b_user")
-        self.assertEqual(key_data["tier"], "privileged")
-        prefix = key_data["key_prefix"]
+            # 1. Create key via Method B
+            res = self.client.post(
+                "/api/v1/admin/keys",
+                json={"user_id": "method_b_user", "tier": "privileged", "rate_limit_rpm": 30, "environment": "dev"},
+                headers=headers
+            )
+            self.assertEqual(res.status_code, 200)
+            data = res.json()
+            self.assertEqual(data["status"], "success")
+            key_data = data["key_data"]
+            self.assertEqual(key_data["user_id"], "method_b_user")
+            self.assertEqual(key_data["tier"], "privileged")
+            prefix = key_data["key_prefix"]
 
-        # 2. List keys via Method B
-        res_list = self.client.get("/api/v1/admin/keys", headers=headers)
-        self.assertEqual(res_list.status_code, 200)
-        self.assertGreater(res_list.json()["total_keys"], 0)
+            # 2. List keys via Method B
+            res_list = self.client.get("/api/v1/admin/keys", headers=headers)
+            self.assertEqual(res_list.status_code, 200)
+            self.assertGreater(res_list.json()["total_keys"], 0)
 
-        # 3. Revoke key via Method B
-        res_del = self.client.delete(f"/api/v1/admin/keys/{prefix}", headers=headers)
-        self.assertEqual(res_del.status_code, 200)
-        self.assertEqual(res_del.json()["status"], "success")
+            # 3. Revoke key via Method B
+            res_del = self.client.delete(f"/api/v1/admin/keys/{prefix}", headers=headers)
+            self.assertEqual(res_del.status_code, 200)
+            self.assertEqual(res_del.json()["status"], "success")
+
+    def test_admin_secret_fails_closed_when_unconfigured(self):
+        """Verifies admin endpoints fail closed (401) when MIDGLEY_ADMIN_SECRET is unset or empty (Issue #341)."""
+        env_without_secret = os.environ.copy()
+        env_without_secret.pop("MIDGLEY_ADMIN_SECRET", None)
+
+        with patch.dict(os.environ, env_without_secret, clear=True):
+            # Test with former hardcoded fallback secret
+            res = self.client.post(
+                "/api/v1/admin/keys",
+                json={"user_id": "attacker"},
+                headers={"X-Admin-Secret": "midgley_dev_admin_secret_2026"}
+            )
+            self.assertEqual(res.status_code, 401)
+
+            # Test with empty secret in env
+            with patch.dict(os.environ, {"MIDGLEY_ADMIN_SECRET": ""}):
+                res_empty = self.client.post(
+                    "/api/v1/admin/keys",
+                    json={"user_id": "attacker"},
+                    headers={"X-Admin-Secret": "any_secret"}
+                )
+                self.assertEqual(res_empty.status_code, 401)
+
+    def test_global_api_key_middleware_enforcement(self):
+        """Verifies global middleware enforces MIDGLEY_API_KEY on protected routes while exempting public routes (Issue #344)."""
+        valid_api_key = "midgley_global_secret_key_999"
+        with patch.dict(os.environ, {"MIDGLEY_API_KEY": valid_api_key}):
+            # Protected endpoint without API key should return 401
+            res_unauth = self.client.get("/api/v1/forecast/predict?locale=tulsa")
+            self.assertEqual(res_unauth.status_code, 401)
+            self.assertEqual(res_unauth.json()["error"], "Unauthorized")
+
+            # Protected endpoint with invalid key should return 401
+            res_bad = self.client.get(
+                "/api/v1/forecast/predict?locale=tulsa",
+                headers={"X-API-Key": "wrong_key"}
+            )
+            self.assertEqual(res_bad.status_code, 401)
+
+            # Protected endpoint with valid Bearer token should succeed
+            res_bearer = self.client.get(
+                "/api/v1/prices/live?locale=tulsa",
+                headers={"Authorization": f"Bearer {valid_api_key}"}
+            )
+            self.assertEqual(res_bearer.status_code, 200)
+
+            # Protected endpoint with valid X-API-Key header should succeed
+            res_header = self.client.get(
+                "/api/v1/prices/live?locale=tulsa",
+                headers={"X-API-Key": valid_api_key}
+            )
+            self.assertEqual(res_header.status_code, 200)
+
+            # Truly public endpoints must remain accessible without API key
+            res_health = self.client.get("/health")
+            self.assertEqual(res_health.status_code, 200)
+
+            res_root = self.client.get("/")
+            self.assertEqual(res_root.status_code, 200)
 
     def test_get_system_cache_status(self):
         """Verifies GET /api/v1/system/cache-status returns cache stats and optional edge probes."""

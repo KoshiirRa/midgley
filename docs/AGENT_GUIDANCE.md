@@ -121,7 +121,26 @@ ssh marty@10.42.42.54 "cd /home/marty/projects/midgley-auto && ./gradlew test as
 
 ---
 
-## 📝 6. Documentation Synchronization Mandate
+## 🛡️ 6. Security Guardrails & Hardening Directives
+
+AI agents and contributors must strictly enforce the following security protocols:
+1. **Zero Shell Command Interpolation (Issue #343):** Never execute dynamic shell commands or subprocess calls with `shell=True` using untrusted remote manifest data or unverified strings. All reconciler and CLI scripts must route operations through strictly allowlisted, parameterized argument vectors (`ALLOWLISTED_ACTIONS`) with HTTPS scheme enforcement.
+2. **Fail-Closed Administrative Authentication (Issue #341):** Admin endpoints (e.g. `/api/v1/admin/keys`) must fail closed with `HTTP 401 Unauthorized` if `MIDGLEY_ADMIN_SECRET` is unset, empty, or whitespace. Never provide a fallback or default development secret in production codebase.
+3. **Exact Middleware Route Matching (Issue #344):** API authentication and rate-limiting middleware must match root paths exactly (`request.url.path == "/"`) and never exempt subpaths via generic prefix matches like `"/"`. Only explicit public paths (`/docs`, `/redoc`, `/openapi.json`, `/.well-known`, `/health`) may bypass API key verification.
+
+---
+
+## 📈 7. Quantitative Modeling & Temporal Leakage Prevention (Issue #354)
+
+To prevent lookahead bias and synthetic inflation of out-of-time forecasting performance:
+1. **No Backward Filling (`bfill`):** Time-series feature pipelines must never use `bfill()` or backward imputation across time-ordered rows. Forward fill missing values using past observations (`ffill()`) and fill remaining leading initializations with neutral defaults (`fillna(0.0)`).
+2. **Chronological Boundary Purging:** When partitioning chronological datasets into train/test splits, enforce an $h$-step boundary purge gap (`train_slice_end = max(1, split_idx - forecast_horizon)`). This guarantees that forward-looking targets $y_t = P_{t+h}$ in the training slice cannot leak future test set prices.
+3. **Train-Slice Context Routing Diagnostics:** When computing diagnostic metrics (such as target autocorrelation for dynamic routing), calculate statistics exclusively on the training slice rather than across the full dataset.
+4. **Purged Cross-Validation for Stacking Ensembles:** Stacking meta-regressors must use partitioned, purged cross-validation (`PurgedGroupTimeSeriesSplit`) with explicit label horizons and embargo gaps ($h \ge 5$) to prevent out-of-fold training contamination.
+
+---
+
+## 📝 8. Documentation Synchronization Mandate
 
 Whenever new features, regional models, data feeds, or API endpoints are added:
 1. Update **`AGENTS.md`** to reflect modified or new agent roles.
@@ -129,3 +148,4 @@ Whenever new features, regional models, data feeds, or API endpoints are added:
 3. Update **`ARCHITECTURE.md`** with mathematical formulations, vector layouts, or data flow changes.
 4. Update **`README.md`** with current status badges, supported metros, and quick-start instructions.
 5. Synchronize changes to the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git`).
+

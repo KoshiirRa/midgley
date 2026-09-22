@@ -8,6 +8,7 @@ and qualitative features chronologically without lookahead bias.
 import pandas as pd
 import numpy as np
 import logging
+from typing import Optional, Dict, Any, List, Tuple
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed, fetch_baker_hughes_rig_counts
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
 from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector
@@ -472,9 +473,9 @@ def create_feature_matrix(
     df[f'target_price_{forecast_horizon}d'] = df['gasoline_rbob'].shift(-forecast_horizon)
     df[f'target_return_{forecast_horizon}d'] = (df[f'target_price_{forecast_horizon}d'] - df['gasoline_rbob']) / df['gasoline_rbob']
     
-    # Fill feature NaNs safely to prevent premature row purging
+    # Fill feature NaNs safely with forward-fill only to prevent backward lookahead leakage (Issue #354)
     feature_cols = [c for c in df.columns if not c.startswith('target_')]
-    df[feature_cols] = df[feature_cols].bfill().ffill().fillna(0.0)
+    df[feature_cols] = df[feature_cols].ffill().fillna(0.0)
     
     df = df.dropna(subset=[f'target_price_{forecast_horizon}d']).reset_index(drop=True)
     return df
@@ -484,21 +485,23 @@ def compute_context_routing_diagnostic(
     df: pd.DataFrame, 
     target_col: str = 'gasoline_rbob', 
     horizon: int = 5, 
-    threshold: float = 0.95
+    threshold: float = 0.95,
+    train_ratio: Optional[float] = None
 ) -> dict:
     """
     Implements the Pre-Training Context Routing Diagnostic from Zhou et al. (arXiv:2608.25128v1).
-    Calculates target temporal autocorrelation rho_h = Corr(X_t, X_{t+h}).
+    Calculates target temporal autocorrelation rho_h = Corr(X_t, X_{t+h}) strictly on training slice.
     
     If rho_h > threshold (0.95), returns SKIP_FUSION because last-value shortcuts dominate.
     If rho_h <= threshold, returns TRY_FUSION because exogenous context can provide relative gain.
     
     Reference: Zhou et al. (2026), 'When Does Context Routing Help?', arXiv:2608.25128v1
     """
-    if target_col not in df.columns or len(df) <= horizon + 1:
+    eval_df = df.iloc[:int(len(df) * train_ratio)] if train_ratio and train_ratio > 0 else df
+    if target_col not in eval_df.columns or len(eval_df) <= horizon + 1:
         return {'rho_h': 0.0, 'recommendation': 'TRY_FUSION', 'rbu_bound': 1.0}
         
-    series = df[target_col].values
+    series = eval_df[target_col].values
     s_t = series[:-horizon]
     s_th = series[horizon:]
     
@@ -523,9 +526,15 @@ def compute_context_routing_diagnostic(
 
 
 
-def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, forecast_horizon: int = 5):
+def prepare_chronological_splits(
+    df: pd.DataFrame, 
+    train_ratio: float = 0.8, 
+    forecast_horizon: int = 5,
+    purge_overlap: bool = True
+):
     """
-    Splits dataset chronologically to prevent temporal data leakage.
+    Splits dataset chronologically to prevent temporal data leakage (Issue #354).
+    Purges boundary forecast_horizon instances so training target labels do not overlap test observations.
     Returns: X_train_quant, X_train_hybrid, y_train, X_test_quant, X_test_hybrid, y_test, test_df
     """
     quant_features = [
@@ -560,7 +569,13 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
     
     split_idx = int(len(df) * train_ratio)
     
-    train_df = df.iloc[:split_idx]
+    # Enforce purge window so train target (t + horizon) never samples into test_df (>= split_idx)
+    if purge_overlap and forecast_horizon >= 1:
+        train_slice_end = max(1, split_idx - forecast_horizon)
+        train_df = df.iloc[:train_slice_end]
+    else:
+        train_df = df.iloc[:split_idx]
+
     test_df = df.iloc[split_idx:]
     
     X_train_quant = train_df[quant_features]

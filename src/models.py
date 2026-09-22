@@ -347,12 +347,14 @@ def compute_locale_feature_attribution_breakdown(
 
 from sklearn.ensemble import StackingRegressor
 from sklearn.linear_model import Ridge, ElasticNet, RidgeCV
+from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
-def build_stacking_ensemble_pipeline():
+def build_stacking_ensemble_pipeline(cv: Optional[Any] = None):
     """
-    Builds a Stacking Ensemble Regressor combining Ridge, ElasticNet, RandomForest, and XGBoost base estimators (Issue #170).
+    Builds a Stacking Ensemble Regressor combining Ridge, ElasticNet, RandomForest, and XGBoost base estimators (Issue #170, #354).
+    Uses PurgedGroupTimeSeriesSplit(n_splits=5, label_horizon_steps=5, embargo_steps=5) by default to eliminate lookahead leakage in stacking cross-validation.
     """
     estimators = [
         ('ridge', make_pipeline(StandardScaler(), Ridge(alpha=10.0))),
@@ -363,7 +365,8 @@ def build_stacking_ensemble_pipeline():
         estimators.append(('xgb', XGBRegressor(n_estimators=50, max_depth=3, learning_rate=0.03, random_state=42)))
         
     final_estimator = RidgeCV()
-    return StackingRegressor(estimators=estimators, final_estimator=final_estimator, cv=5)
+    splitter = cv if cv is not None else PurgedGroupTimeSeriesSplit(n_splits=5, label_horizon_steps=5, embargo_steps=5)
+    return StackingRegressor(estimators=estimators, final_estimator=final_estimator, cv=splitter)
 
 
 def compute_quantile_uncertainty_bands(y_pred: np.ndarray, residual_std: float = 0.05) -> dict:
@@ -604,15 +607,23 @@ def predict_with_cedar_residual_decomposition(
 
 class PurgedGroupTimeSeriesSplit:
     """
-    Purged Group Time Series Cross-Validation Splitter (Issue #117).
+    Purged Group Time Series Cross-Validation Splitter (Issue #117, #354).
     Prevents lookahead data leakage in time series models with overlapping labels (e.g. 5-day step-ahead forecasts).
+    Supports both Purged K-Fold Cross-Validation and strict Chronological Purged Walk-Forward Splitting.
     
     Ref: Marcos López de Prado (2018), 'Advances in Financial Machine Learning', Chapter 7.
     """
-    def __init__(self, n_splits: int = 5, label_horizon_steps: int = 5, embargo_steps: int = 5):
+    def __init__(
+        self, 
+        n_splits: int = 5, 
+        label_horizon_steps: int = 5, 
+        embargo_steps: int = 5,
+        chronological_only: bool = False
+    ):
         self.n_splits = n_splits
         self.label_horizon_steps = label_horizon_steps
         self.embargo_steps = embargo_steps
+        self.chronological_only = chronological_only
 
     def split(self, X, y=None, groups=None):
         n_samples = len(X)
@@ -642,6 +653,11 @@ class PurgedGroupTimeSeriesSplit:
                 obs_start = i
                 obs_end = i + self.label_horizon_steps
                 
+                # If chronological_only, training cannot use observations that occurred at or after test_eval_start
+                if self.chronological_only and obs_start >= test_eval_start:
+                    train_mask[i] = False
+                    continue
+
                 overlap = (obs_start <= test_eval_end) and (obs_end >= test_eval_start)
                 in_embargo = (test_eval_end <= obs_start < embargo_end)
                 

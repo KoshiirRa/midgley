@@ -71,7 +71,8 @@ python scripts/manage_keys.py revoke --prefix mg_prod_a1b2c3d4
 ```
 
 #### Method B: Admin REST API Gateway (`/api/v1/admin/keys`)
-Secured by the `MIDGLEY_ADMIN_SECRET` environment variable (passed via `X-Admin-Secret` header):
+Secured by the `MIDGLEY_ADMIN_SECRET` environment variable (passed via `X-Admin-Secret` header). **Fail-Closed Security (Issue #341):** If `MIDGLEY_ADMIN_SECRET` is unset, empty, or whitespace-only on the server, all admin provisioning endpoints immediately fail closed with `HTTP 401 Unauthorized` (`Admin secret is not configured or invalid`). No default or fallback admin secret is permitted.
+
 ```bash
 # Provision a new key programmatically
 curl -X POST "http://localhost:8000/api/v1/admin/keys" \
@@ -92,6 +93,9 @@ curl -X GET "http://localhost:8000/api/v1/admin/keys" \
 curl -X DELETE "http://localhost:8000/api/v1/admin/keys/mg_prod_a1b2c3d4" \
   -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET"
 ```
+
+### Global Middleware Authentication Enforcement (Issue #344)
+Global API Key rate limiting and authentication middleware enforces exact root matching (`request.url.path == "/"`) for public root documentation rather than a prefix match on `"/"`. All protected API routes under `/api/v1/*` (including `/api/v1/prices/*`, `/api/v1/forecast/*`, and `/api/v1/combined`) and `/mcp/*` strictly require API key authentication (or master `MIDGLEY_API_KEY`), while public metadata endpoints (`/docs`, `/redoc`, `/openapi.json`, `/.well-known`, `/health`) remain exempt.
 
 ---
 

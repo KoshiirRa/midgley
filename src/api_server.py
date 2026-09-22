@@ -43,7 +43,7 @@ from src.version import get_model_version
 
 logger = logging.getLogger(__name__)
 
-MIDGLEY_ADMIN_SECRET = os.environ.get("MIDGLEY_ADMIN_SECRET", "midgley_dev_admin_secret_2026")
+MIDGLEY_ADMIN_SECRET = os.environ.get("MIDGLEY_ADMIN_SECRET")
 
 
 class CreateKeyRequest(BaseModel):
@@ -57,12 +57,12 @@ class CreateKeyRequest(BaseModel):
 async def verify_admin_secret(
     x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")
 ) -> str:
-    """Method B Admin Auth Dependency: Verifies X-Admin-Secret header against MIDGLEY_ADMIN_SECRET."""
-    expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET", MIDGLEY_ADMIN_SECRET)
-    if not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+    """Method B Admin Auth Dependency: Verifies X-Admin-Secret header against MIDGLEY_ADMIN_SECRET (fails closed if unconfigured)."""
+    expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
+    if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
         raise HTTPException(
             status_code=401,
-            detail="Unauthorized: Invalid or missing X-Admin-Secret header."
+            detail="Unauthorized: Invalid, missing, or unconfigured X-Admin-Secret header."
         )
     return x_admin_secret
 
@@ -102,6 +102,18 @@ async def get_api_key_user(
             status_code=401,
             detail="Unauthorized: Missing API key. Pass key via X-API-Key header, Authorization: Bearer <token>, or ?api_key=<token>."
         )
+
+    expected_global = os.environ.get("MIDGLEY_API_KEY")
+    if expected_global and token == expected_global:
+        key_info = {
+            "key_prefix": "mg_global_master",
+            "user_id": "master_admin",
+            "tier": "privileged",
+            "rate_limit_rpm": 1000,
+            "environment": "prod"
+        }
+        request.state.key_info = key_info
+        return key_info
 
     is_valid, key_info, err_msg = global_key_manager.verify_key(token)
     if not is_valid or not key_info:
@@ -420,12 +432,23 @@ async def add_rate_limit_headers(request: Request, call_next):
     expected_token = os.environ.get("MIDGLEY_API_KEY")
     if expected_token:
         auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
-        if not auth_header or auth_header.replace("Bearer ", "") != expected_token:
-            if not request.url.path.startswith(("/docs", "/redoc", "/openapi.json", "/.well-known", "/health", "/")):
-                return JSONResponse(
-                    status_code=401,
-                    content={"error": "Unauthorized", "message": "Invalid or missing API key"}
-                )
+        token = None
+        if auth_header:
+            if auth_header.startswith("Bearer "):
+                token = auth_header[7:].strip()
+            else:
+                token = auth_header.strip()
+
+        path = request.url.path
+        is_public = (
+            path == "/"
+            or path.startswith(("/docs", "/redoc", "/openapi.json", "/.well-known", "/health"))
+        )
+        if not is_public and (not token or token != expected_token):
+            return JSONResponse(
+                status_code=401,
+                content={"error": "Unauthorized", "message": "Invalid or missing API key"}
+            )
 
     response = await call_next(request)
     response.headers["X-RateLimit-Limit"] = "60"
