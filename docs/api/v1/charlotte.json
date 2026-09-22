@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-21T21:51:26.931049",
+  "timestamp": "2026-09-22T00:40:50.064933",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-21T21:51:05Z"
+      "timestamp": "2026-09-22T00:40:20Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-26",
+    "target_date": "2026-09-27",
     "current_base_price": 4.199,
     "predicted_price_per_gal": 4.199,
     "expected_change_dollars": 0.0,
