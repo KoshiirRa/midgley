@@ -103,5 +103,110 @@
       "los_angeles_basis": 0.47
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA Daily Petroleum Spot Prices (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 00:35:23",
+    "as_of": "2026-09-22 00:35:23",
+    "valid_date": "2026-09-22",
+    "publication_lag_days": 1,
+    "is_vintage_reconstructed": false,
+    "spot_prices": {
+      "gulf_coast_spot_per_gal": 2.285,
+      "ny_harbor_spot_per_gal": 2.395,
+      "los_angeles_spot_per_gal": 2.89
+    },
+    "spot_basis": {
+      "gulf_coast_basis": -0.135,
+      "ny_harbor_basis": -0.025,
+      "los_angeles_basis": 0.47
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA Daily Petroleum Spot Prices (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 00:35:49",
+    "as_of": "2026-09-22 00:35:49",
+    "valid_date": "2026-09-22",
+    "publication_lag_days": 1,
+    "is_vintage_reconstructed": false,
+    "spot_prices": {
+      "gulf_coast_spot_per_gal": 2.285,
+      "ny_harbor_spot_per_gal": 2.395,
+      "los_angeles_spot_per_gal": 2.89
+    },
+    "spot_basis": {
+      "gulf_coast_basis": -0.135,
+      "ny_harbor_basis": -0.025,
+      "los_angeles_basis": 0.47
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA Daily Petroleum Spot Prices (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 00:36:38",
+    "as_of": "2026-09-22 00:36:38",
+    "valid_date": "2026-09-22",
+    "publication_lag_days": 1,
+    "is_vintage_reconstructed": false,
+    "spot_prices": {
+      "gulf_coast_spot_per_gal": 2.285,
+      "ny_harbor_spot_per_gal": 2.395,
+      "los_angeles_spot_per_gal": 2.89
+    },
+    "spot_basis": {
+      "gulf_coast_basis": -0.135,
+      "ny_harbor_basis": -0.025,
+      "los_angeles_basis": 0.47
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA Daily Petroleum Spot Prices (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 00:39:37",
+    "as_of": "2026-09-22 00:39:37",
+    "valid_date": "2026-09-22",
+    "publication_lag_days": 1,
+    "is_vintage_reconstructed": false,
+    "spot_prices": {
+      "gulf_coast_spot_per_gal": 2.285,
+      "ny_harbor_spot_per_gal": 2.395,
+      "los_angeles_spot_per_gal": 2.89
+    },
+    "spot_basis": {
+      "gulf_coast_basis": -0.135,
+      "ny_harbor_basis": -0.025,
+      "los_angeles_basis": 0.47
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA Daily Petroleum Spot Prices (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 00:40:03",
+    "as_of": "2026-09-22 00:40:03",
+    "valid_date": "2026-09-22",
+    "publication_lag_days": 1,
+    "is_vintage_reconstructed": false,
+    "spot_prices": {
+      "gulf_coast_spot_per_gal": 2.285,
+      "ny_harbor_spot_per_gal": 2.395,
+      "los_angeles_spot_per_gal": 2.89
+    },
+    "spot_basis": {
+      "gulf_coast_basis": -0.135,
+      "ny_harbor_basis": -0.025,
+      "los_angeles_basis": 0.47
+    },
+    "status": "SUCCESS"
   }
 ]

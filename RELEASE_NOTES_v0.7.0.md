@@ -3,13 +3,13 @@
 **Release Date:** September 21, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`), GitHub Actions & Cloudflare Edge  
 **Git Branch:** `dev` / `main`  
-**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365), [Issue #364](https://github.com/KoshiirRa/midgley/issues/364), [Issue #366](https://github.com/KoshiirRa/midgley/issues/366), [Issue #368](https://github.com/KoshiirRa/midgley/issues/368)
+**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365), [Issue #364](https://github.com/KoshiirRa/midgley/issues/364), [Issue #366](https://github.com/KoshiirRa/midgley/issues/366), [Issue #368](https://github.com/KoshiirRa/midgley/issues/368), [Issue #418](https://github.com/KoshiirRa/midgley/issues/418), [Issue #408](https://github.com/KoshiirRa/midgley/issues/408), [Issue #400](https://github.com/KoshiirRa/midgley/issues/400)
 
 ---
 
 ## 🚀 Overview & Release Highlights
 
-Midgley **v0.7.0** is a landmark reliability, security, and econometric expansion release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, and introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion, California Energy Commission (CEC) fuels watch ingestion, EPA statutory RVP blend transition schedules, and NOAA CO-OPS marine terminal telemetry.
+Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, and benchmark integration release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion, California Energy Commission (CEC) fuels watch ingestion, EPA statutory RVP blend transition schedules, NOAA CO-OPS marine terminal telemetry, decouples Headline Arena energy forecast generation and submission via a 24-hour pending cache and 30-minute sync workflow, supports EIA Weekly Retail Regular Gasoline Civic Challenges, and reconciles CARB statutory tax itemization across all documentation and regional metadata.
 
 ---
 
@@ -86,7 +86,26 @@ Midgley **v0.7.0** is a landmark reliability, security, and econometric expansio
 
 ---
 
-### 12. Automated Verification & Regression Test Suite
+### 13. Headline Arena Pending Cache & Asynchronous Challenge Sync (`src/headline_arena_connector.py`, `scripts/sync_headline_arena.py`, `.github/workflows/headline_arena_sync.yml` - Issue #418)
+- **Decoupled Forecast Generation & Challenge Availability:** Implemented a 24-hour pending forecast cache (`data/headline_arena_pending_forecasts.json`) that persists daily multi-agent commodity forecasts (RBOB, WTI, EIA Retail) across execution windows.
+- **Challenge Idempotency Ledger:** Implemented `data/headline_arena_submitted_ledger.json` recording submitted challenge IDs and server responses to prevent duplicate submissions during periodic runs.
+- **Automated 30-Minute Sync Runner:** Added `scripts/sync_headline_arena.py` and GitHub Actions workflow `.github/workflows/headline_arena_sync.yml` running every 30 minutes to match open Headline Arena challenges with cached forecasts.
+
+---
+
+### 14. EIA Weekly Retail Regular Gasoline Civic Challenge Submissions (`src/headline_arena_connector.py` - Issue #408)
+- **Macro / Civic Numeric Distribution Scoring:** Implemented `format_eia_retail_civic_payload()` and `submit_macro_forecast()` supporting Headline Arena civic challenges.
+- **Continuous Ranked Probability Score (CRPS) Calibration:** Computes closed-form Gaussian distributions with median target ($P_{50}$) and uncertainty standard deviation ($\sigma$) derived from multi-agent quantile spreads ($P_{90}-P_{10}$) or empirical residual variance.
+
+---
+
+### 15. Statutory CARB Environmental Tax & All-In Retail Math Reconciliation (`ARCHITECTURE.md`, `AGENTS.md`, `data/regional_metadata/oakland_ca.json` - Issue #400)
+- **Reconciled California State Tax Burden:** Formulated exact statutory breakdown: $T_{\text{CARB}} = \tau_{\text{Excise}} + \tau_{\text{CapTrade}} + \tau_{\text{LCFS}} + \tau_{\text{UST/Env}} = \$0.596 + \$0.234 + \$0.088 + \$0.035 = \$0.953/\text{gal}$.
+- **All-In Retail Pump Tax Total:** Reconciled total statutory burden: $T_{\text{All-In}} = T_{\text{CARB}} + \tau_{\text{Federal}} + \tau_{\text{Sales}} = \$0.953 + \$0.184 + \$0.270 = \$1.407/\text{gal}$ across all documentation and regional metadata files.
+
+---
+
+### 16. Automated Verification & Regression Test Suite
 - **`tests/test_check_updates.py`:** Validates RCE prevention, allowlisted action execution, legacy command translation, and insecure URL fallback rejection (4/4 passing).
 - **`tests/test_temporal_leakage.py`:** Validates absence of backward filling, $h$-step split boundary purging, train-slice diagnostic computation, stacking CV purging, and chronological ordering (5/5 passing).
 - **`tests/test_api_server.py`:** Verifies fail-closed admin secret verification and global API key middleware route enforcement (23/23 passing).
@@ -97,4 +116,6 @@ Midgley **v0.7.0** is a landmark reliability, security, and econometric expansio
 - **`tests/test_cec_fuels_connector.py`:** Validates California Energy Commission Weekly Fuels Watch ingestion and Thursday vintages (3/3 passing).
 - **`tests/test_rvp_regulations.py`:** Validates statutory RVP limits, transition dates, and emergency waiver simulation (5/5 passing).
 - **`tests/test_noaa_coops_connector.py`:** Validates NOAA CO-OPS coastal water level fetching and marine risk indices (3/3 passing).
+- **`tests/test_headline_arena_connector.py`:** Validates pending forecast caching, 24h expiration, submitted ledger idempotency, EIA civic challenge payloads, and dispatching (27/27 passing).
 - **Total Test Results:** 100% pass rate across all 68 test suites with zero regressions.
+

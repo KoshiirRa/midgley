@@ -1,0 +1,56 @@
+name: Headline Arena Async Challenge Sync
+
+on:
+  schedule:
+    # Run every 30 minutes to match active challenge windows against 24h pending forecast cache
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "headline-arena-sync-workflow"
+  cancel-in-progress: false
+
+jobs:
+  sync-headline-arena:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Dispatch Cached Forecasts to Headline Arena
+        env:
+          HEADLINE_ARENA_BASE_URL: ${{ secrets.HEADLINE_ARENA_BASE_URL || 'https://headlinearena.com/api/v1' }}
+          HEADLINE_ARENA_CLIENT_ID: ${{ secrets.HEADLINE_ARENA_CLIENT_ID }}
+          HEADLINE_ARENA_CLIENT_SECRET: ${{ secrets.HEADLINE_ARENA_CLIENT_SECRET }}
+          MIDGLEY_ENV: prod
+        run: |
+          python scripts/sync_headline_arena.py
+
+      - name: Commit and Push Updated Pending Cache and Ledger
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/headline_arena_pending_forecasts.json data/headline_arena_submitted_ledger.json 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(headline-arena): Update pending forecasts cache and submission ledger [skip ci]"
+            git pull --rebase origin dev || true
+            git push origin dev || git push origin main || true
+          else
+            echo "No changes to pending forecasts or submitted ledger."
+          fi

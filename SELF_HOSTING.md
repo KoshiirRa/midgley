@@ -143,9 +143,12 @@ GCP_PROJECT_ID="midgley"
 CENSUS_API_KEY=""
 
 # ==============================================================================
-# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issue #182)
+# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issues #182, #408, #418)
 # ==============================================================================
 # OAuth2 Client Credentials for independent Brier/CRPS daily continuous probability scoring
+# Caches pending forecasts in data/headline_arena_pending_forecasts.json (24h TTL)
+# Tracks submitted challenges in data/headline_arena_submitted_ledger.json
+# Sync script: python scripts/sync_headline_arena.py (runs every 30m via GitHub Actions or systemd)
 HEADLINE_ARENA_CLIENT_ID="ha_agent_..."
 HEADLINE_ARENA_CLIENT_SECRET="ha_sec_..."  # Or HEADLINE_ARENA_API_KEY
 HEADLINE_ARENA_DEV_SUBMIT="0"              # Set to 1 in dev to execute live test submissions (tagged [DEV-TEST])

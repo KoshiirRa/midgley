@@ -26,7 +26,7 @@
   },
   "tax_structure": {
     "title": "CARB Environmental Tax & Regulatory Overhead",
-    "description": "California imposes $0.953/gal state environmental tax/fee burden ($0.634 excise + $0.250 Cap-and-Trade + $0.185 LCFS + $0.150 sales/UST), yielding $1.407/gal total statutory tax with Federal excise.",
+    "description": "California imposes $0.953/gal state environmental tax/fee burden ($0.596 excise + $0.234 Cap-and-Trade + $0.088 LCFS + $0.035 UST/fees), yielding $1.407/gal total statutory tax with Federal excise and sales tax.",
     "state_tax_per_gal": 0.953,
     "federal_tax_per_gal": 0.184,
     "total_tax_per_gal": 1.407,

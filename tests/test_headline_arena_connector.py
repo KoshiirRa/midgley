@@ -19,6 +19,9 @@ from src.headline_arena_connector import (
 
 class TestHeadlineArenaConnector(unittest.TestCase):
     def setUp(self):
+        from src.headline_arena_connector import load_submitted_ledger, load_pending_forecasts
+        load_submitted_ledger._test_mock_ledger = {"submitted_challenges": {}}
+        load_pending_forecasts._test_mock_pending = []
         self.sample_rb_forecast = {
             "open_price": 2.4500,
             "p50": 2.5200,
@@ -383,6 +386,176 @@ class TestHeadlineArenaConnector(unittest.TestCase):
             self.assertEqual(results["RB"]["status"], "SUCCESS")
             self.assertEqual(results["CL"]["status"], "SUCCESS")
 
+    def test_pending_forecast_cache_and_expiration(self):
+        import tempfile
+        import time
+        from src.headline_arena_connector import (
+            save_pending_forecast,
+            load_pending_forecasts,
+            clear_expired_pending_forecasts
+        )
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tf:
+            temp_path = tf.name
+
+        try:
+            # 1. Save active pending forecast (TTL: 24h)
+            rec1 = save_pending_forecast(
+                asset="RB",
+                payload={"direction": "bullish", "confidence": 0.75},
+                forecast_type="direction",
+                ttl_hours=24.0,
+                filepath=temp_path
+            )
+            self.assertEqual(rec1["asset"], "RB")
+
+            # 2. Save expired pending forecast (negative TTL)
+            rec2 = save_pending_forecast(
+                asset="CL",
+                payload={"direction": "bearish", "confidence": 0.65},
+                forecast_type="direction",
+                ttl_hours=-1.0,
+                filepath=temp_path
+            )
+
+            # 3. Load active only (should return RB, not CL)
+            active = load_pending_forecasts(active_only=True, filepath=temp_path)
+            self.assertEqual(len(active), 1)
+            self.assertEqual(active[0]["asset"], "RB")
+
+            # 4. Load all records (should return both)
+            all_records = load_pending_forecasts(active_only=False, filepath=temp_path)
+            self.assertEqual(len(all_records), 2)
+
+            # 5. Clear expired
+            purged = clear_expired_pending_forecasts(filepath=temp_path)
+            self.assertEqual(purged, 1)
+
+            # 6. Verify only active remains on disk
+            after_purge = load_pending_forecasts(active_only=False, filepath=temp_path)
+            self.assertEqual(len(after_purge), 1)
+            self.assertEqual(after_purge[0]["asset"], "RB")
+        finally:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+    def test_submitted_ledger_idempotency(self):
+        import tempfile
+        from src.headline_arena_connector import (
+            is_challenge_already_submitted,
+            record_submitted_challenge,
+            load_submitted_ledger
+        )
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tf:
+            temp_path = tf.name
+
+        try:
+            self.assertFalse(is_challenge_already_submitted("chal_test_101", filepath=temp_path))
+            record_submitted_challenge("chal_test_101", "RB", {"status": "SUCCESS"}, filepath=temp_path)
+            self.assertTrue(is_challenge_already_submitted("chal_test_101", filepath=temp_path))
+
+            ledger = load_submitted_ledger(filepath=temp_path)
+            self.assertIn("chal_test_101", ledger["submitted_challenges"])
+            self.assertEqual(ledger["submitted_challenges"]["chal_test_101"]["asset"], "RB")
+        finally:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+    def test_eia_retail_civic_payload_formatting(self):
+        connector = HeadlineArenaConnector()
+        payload = connector.format_eia_retail_civic_payload(
+            predicted_value=3.215,
+            p10=3.120,
+            p90=3.310
+        )
+        self.assertEqual(payload["asset"], "EIA_RETAIL_GASOLINE")
+        self.assertEqual(payload["predicted_value"], 3.215)
+        self.assertAlmostEqual(payload["predicted_std"], (3.310 - 3.120) / 2.5631, places=3)
+        self.assertIn("EIA US Regular Gasoline", payload["reasoning"])
+        self.assertIn("metadata", payload)
+        self.assertEqual(payload["metadata"]["p50"], 3.215)
+
+    def test_submit_macro_forecast_testing_mode(self):
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            connector = HeadlineArenaConnector()
+            payload = connector.format_eia_retail_civic_payload(
+                predicted_value=3.185,
+                p10=3.090,
+                p90=3.280
+            )
+            res = connector.submit_macro_forecast(
+                challenge_id="mock_civic_chal_555",
+                payload=payload
+            )
+            self.assertEqual(res["status"], "SUCCESS")
+            self.assertEqual(res["predicted_value"], 3.185)
+            self.assertEqual(res["mode"], "TEST_MOCKED")
+
+    def test_dispatch_pending_forecasts(self):
+        import tempfile
+        from src.headline_arena_connector import (
+            save_pending_forecast,
+            load_pending_forecasts
+        )
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tf_p:
+            pending_path = tf_p.name
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tf_l:
+            ledger_path = tf_l.name
+
+        try:
+            with patch.dict(os.environ, {"TESTING": "1"}):
+                connector = HeadlineArenaConnector()
+                # Seed pending forecast
+                save_pending_forecast(
+                    asset="CL",
+                    payload={"direction": "bearish", "confidence": 0.70},
+                    forecast_type="direction",
+                    filepath=pending_path
+                )
+
+                # Dispatch (in TESTING mode, mock challenge matches CL)
+                res = connector.dispatch_pending_forecasts(
+                    pending_file=pending_path,
+                    ledger_file=ledger_path
+                )
+                self.assertEqual(res["status"], "COMPLETED")
+                self.assertEqual(res["dispatched"], 1)
+                self.assertIn("CL", res["results"])
+
+                # Second dispatch should recognize challenge as ALREADY_SUBMITTED
+                res2 = connector.dispatch_pending_forecasts(
+                    pending_file=pending_path,
+                    ledger_file=ledger_path
+                )
+                self.assertEqual(res2["status"], "COMPLETED")
+                self.assertEqual(res2["results"]["CL"]["status"], "ALREADY_SUBMITTED")
+        finally:
+            if os.path.exists(pending_path):
+                os.remove(pending_path)
+            if os.path.exists(ledger_path):
+                os.remove(ledger_path)
+
+    def test_submit_midgley_energy_forecasts_with_eia_retail(self):
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            results = submit_midgley_energy_forecasts(
+                rb_open_price=2.4500,
+                rb_p50=2.5200,
+                rb_p10=2.4100,
+                rb_p90=2.6300,
+                cl_open_price=78.50,
+                cl_p50=77.20,
+                cl_p10=74.80,
+                cl_p90=79.60,
+                eia_retail_p50=3.215,
+                eia_retail_p10=3.120,
+                eia_retail_p90=3.310
+            )
+            self.assertIn("RB", results)
+            self.assertIn("CL", results)
+            self.assertIn("EIA_RETAIL_GASOLINE", results)
+            self.assertEqual(results["RB"]["status"], "SUCCESS")
+            self.assertEqual(results["CL"]["status"], "SUCCESS")
+
+
     def test_api_server_headline_arena_status(self):
         from fastapi.testclient import TestClient
         from src.api_server import app
@@ -417,3 +590,4 @@ class TestHeadlineArenaConnector(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
