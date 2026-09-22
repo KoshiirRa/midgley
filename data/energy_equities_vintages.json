@@ -34,5 +34,23 @@
         "key_takeaway": "Wholesale RBOB futures lead retail pump prices by 5 to 7 business days."
       }
     }
+  },
+  {
+    "as_of": "2026-09-22 01:48:22",
+    "data": {
+      "level_correlations_with_retail_gas": {
+        "RBOB_Gasoline_Futures_(RB=F)": 1.0,
+        "WTI_Crude_Futures_(CL=F)": 0.888,
+        "Energy_Sector_ETF_(XLE)": 0.115,
+        "Valero_Refining_(VLO)": 0.243,
+        "HF_Sinclair_Tulsa_Refining_(DINO)": 0.329,
+        "ExxonMobil_(XOM)": 0.038
+      },
+      "lead_lag_analysis": {
+        "max_correlation_lag": "Futures_Lead_0_Days",
+        "peak_correlation_score": 1.0,
+        "key_takeaway": "Wholesale RBOB futures lead retail pump prices by 5 to 7 business days."
+      }
+    }
   }
 ]

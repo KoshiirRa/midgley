@@ -106,5 +106,32 @@
       }
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-22 01:46:40",
+    "as_of": "2026-09-22 01:46:40",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.4,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67324.9,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81204.4,
+        "stress_index": 0.25
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 94005.6,
+        "stress_index": 0.3
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31722.7,
+        "stress_index": 0.25
+      }
+    },
+    "status": "SUCCESS"
   }
 ]

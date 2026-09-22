@@ -690,9 +690,8 @@ def _infer_horizon_days(row) -> int:
             log_d = str(row['log_timestamp'])[:10]
             tgt_d = str(row['forecast_target_date'])[:10]
             if tgt_d > log_d:
-                days = (pd.to_datetime(tgt_d) - pd.to_datetime(log_d)).days
-                bdays = max(1, min(30, int(days * 5 / 7)))
-                return bdays
+                bdays = int(np.busday_count(log_d, tgt_d))
+                return max(1, min(30, bdays))
     except Exception:
         pass
     return 5

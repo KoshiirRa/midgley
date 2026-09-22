@@ -1058,5 +1058,111 @@
       "is_free_alternative": true,
       "cost_per_query": 0.0
     }
+  },
+  {
+    "as_of": "2026-09-22 01:43:17",
+    "valid_date": "2026-09-22",
+    "region_id": "tulsa_ok",
+    "display_name": "Tulsa, OK Metro",
+    "demographics": {
+      "vintage_year": 2024,
+      "total_households": 420500,
+      "zero_vehicle_pct": 5.4,
+      "vehicles_per_household": 1.95,
+      "drive_alone_share": 0.825,
+      "carpool_share": 0.092,
+      "public_transit_share": 0.007,
+      "work_from_home_share": 0.062,
+      "mean_commute_minutes": 21.8,
+      "vehicle_dependency_ratio": 0.917,
+      "transit_alternative_index": 0.038,
+      "inelastic_demand_score": 0.885
+    },
+    "provenance": "Census_ACS_Prior_Vintage_Cache",
+    "data": {
+      "region_id": "tulsa_ok",
+      "display_name": "Tulsa, OK Metro",
+      "window_lifecycle": {
+        "current_date": "2026-03-01",
+        "is_in_release_window": false,
+        "release_window_name": "ACS 1-Year Annual Window (2026)",
+        "expected_vintage": 2024,
+        "status_mode": "LOCKED_ANNUAL_CACHE",
+        "recommended_ttl_seconds": 15811200,
+        "locked_until": "2026-08-31",
+        "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
+      },
+      "demographics": {
+        "vintage_year": 2024,
+        "total_households": 420500,
+        "zero_vehicle_pct": 5.4,
+        "vehicles_per_household": 1.95,
+        "drive_alone_share": 0.825,
+        "carpool_share": 0.092,
+        "public_transit_share": 0.007,
+        "work_from_home_share": 0.062,
+        "mean_commute_minutes": 21.8,
+        "vehicle_dependency_ratio": 0.917,
+        "transit_alternative_index": 0.038,
+        "inelastic_demand_score": 0.885
+      },
+      "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
+      "provenance": "Census_ACS_Prior_Vintage_Cache",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0
+    }
+  },
+  {
+    "as_of": "2026-09-22 01:43:17",
+    "valid_date": "2026-09-22",
+    "region_id": "cincinnati_oh",
+    "display_name": "Cincinnati, OH Tri-State",
+    "demographics": {
+      "vintage_year": 2025,
+      "total_households": 200000,
+      "zero_vehicle_pct": 5.0,
+      "vehicles_per_household": 1.8,
+      "drive_alone_share": 0.72,
+      "carpool_share": 0.1,
+      "public_transit_share": 0.04,
+      "work_from_home_share": 0.08,
+      "mean_commute_minutes": 27.0,
+      "vehicle_dependency_ratio": 0.82,
+      "transit_alternative_index": 0.08,
+      "inelastic_demand_score": 0.82
+    },
+    "provenance": "US_Census_Bureau_ACS_2025_Live",
+    "data": {
+      "region_id": "cincinnati_oh",
+      "display_name": "Cincinnati, OH Tri-State",
+      "window_lifecycle": {
+        "current_date": "2026-09-15",
+        "is_in_release_window": true,
+        "release_window_name": "ACS 1-Year Annual Window (2026)",
+        "expected_vintage": 2025,
+        "status_mode": "WINDOW_ACTIVE_CHECKING",
+        "recommended_ttl_seconds": 86400,
+        "locked_until": "2027-08-31",
+        "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+      },
+      "demographics": {
+        "vintage_year": 2025,
+        "total_households": 200000,
+        "zero_vehicle_pct": 5.0,
+        "vehicles_per_household": 1.8,
+        "drive_alone_share": 0.72,
+        "carpool_share": 0.1,
+        "public_transit_share": 0.04,
+        "work_from_home_share": 0.08,
+        "mean_commute_minutes": 27.0,
+        "vehicle_dependency_ratio": 0.82,
+        "transit_alternative_index": 0.08,
+        "inelastic_demand_score": 0.82
+      },
+      "cache_status": "LIVE_VINTAGE_UPGRADE_FETCHED",
+      "provenance": "US_Census_Bureau_ACS_2025_Live",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0
+    }
   }
 ]

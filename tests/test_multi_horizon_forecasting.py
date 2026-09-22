@@ -73,7 +73,7 @@ def test_train_multi_horizon_models(sample_market_df):
         test_x = splits["X_test_quant"].iloc[-1:]
         pred_quant = res["model_quant"].predict(test_x)[0]
         assert isinstance(pred_quant, (float, np.floating))
-        assert pred_quant > 0.0
+        assert res["live_pred_price"] > 0.0
 
 
 def test_infer_horizon_days():

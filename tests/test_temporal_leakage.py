@@ -75,7 +75,7 @@ class TestTemporalLeakage(unittest.TestCase):
         self.assertLessEqual(last_train_idx, split_idx - forecast_horizon)
 
         # Target value of the last training observation must correspond to a date BEFORE the first test observation
-        last_train_target = y_train.iloc[-1]
+        last_train_target = splits["y_train_price"].iloc[-1]
         expected_target_at_boundary = df["gasoline_rbob"].iloc[last_train_idx + forecast_horizon]
         self.assertEqual(last_train_target, expected_target_at_boundary)
         self.assertLess(last_train_idx + forecast_horizon, split_idx)

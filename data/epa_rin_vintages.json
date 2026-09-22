@@ -271,5 +271,89 @@
     },
     "calculated_rvo_cost_per_gal": 0.091,
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 01:45:52",
+    "as_of": "2026-09-22 01:45:52",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.52,
+      "d4_biodiesel_per_rin": 0.785,
+      "d3_cellulosic_per_rin": 1.42
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.091,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 01:46:13",
+    "as_of": "2026-09-22 01:46:13",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.52,
+      "d4_biodiesel_per_rin": 0.785,
+      "d3_cellulosic_per_rin": 1.42
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.091,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 01:48:39",
+    "as_of": "2026-09-22 01:48:39",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.52,
+      "d4_biodiesel_per_rin": 0.785,
+      "d3_cellulosic_per_rin": 1.42
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.091,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 01:49:12",
+    "as_of": "2026-09-22 01:49:12",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.52,
+      "d4_biodiesel_per_rin": 0.785,
+      "d3_cellulosic_per_rin": 1.42
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.091,
+    "status": "SUCCESS"
   }
 ]

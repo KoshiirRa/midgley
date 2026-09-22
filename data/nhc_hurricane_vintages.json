@@ -82,5 +82,44 @@
       "active_advisories": [],
       "status": "SUCCESS"
     }
+  },
+  {
+    "as_of": "2026-09-22 01:41:09",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-22 01:41:08",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY CONTINUES TO WEAKEN... As of 3:00 AM GMT Tue Sep 22 the center of Fay was located near 32.3, -33.1 with movement SW at 8 mph. The minimum central pressure was 1008 mb with maximum sustained win"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT31 KNHC 220233\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 20"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nWTNT21 KNHC 220233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  11\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC TUE SEP 22 2026\n "
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT41 KNHC 220233\nTCDAT1\n \nTropical Storm Fay Discussion Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 2026\n \nFa"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nFONT11 KNHC 220233\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  11       "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032251.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
   }
 ]

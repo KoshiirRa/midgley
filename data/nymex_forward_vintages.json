@@ -1,0 +1,86 @@
+[
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 00:57:27",
+    "as_of": "2026-09-22 00:57:27",
+    "valid_date": "2026-09-22",
+    "forward_features": {
+      "rbob_m1_price": 3.2175,
+      "rbob_m2_price": 3.1918,
+      "wti_m1_price": 93.53,
+      "wti_m2_price": 93.0623,
+      "ho_m1_price": 4.7423,
+      "rbob_calendar_spread_m1_m2": 0.0257,
+      "wti_calendar_spread_m1_m2": 0.4677,
+      "crack_spread_11": 0.9906,
+      "crack_spread_321": 1.4989,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 01:46:16",
+    "as_of": "2026-09-22 01:46:16",
+    "valid_date": "2026-09-22",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 01:48:42",
+    "as_of": "2026-09-22 01:48:42",
+    "valid_date": "2026-09-22",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 01:49:15",
+    "as_of": "2026-09-22 01:49:15",
+    "valid_date": "2026-09-22",
+    "forward_features": {
+      "rbob_m1_price": 3.2251,
+      "rbob_m2_price": 3.1993,
+      "wti_m1_price": 93.64,
+      "wti_m2_price": 93.1718,
+      "ho_m1_price": 4.7457,
+      "rbob_calendar_spread_m1_m2": 0.0258,
+      "wti_calendar_spread_m1_m2": 0.4682,
+      "crack_spread_11": 0.9956,
+      "crack_spread_321": 1.5024,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  }
+]

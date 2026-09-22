@@ -130,13 +130,22 @@ AI agents and contributors must strictly enforce the following security protocol
 
 ---
 
-## 📈 7. Quantitative Modeling & Temporal Leakage Prevention (Issue #354)
+## 📈 7. Quantitative Modeling, Return Targets & Temporal Leakage Prevention (Issues #354, #396, #397, #401)
 
-To prevent lookahead bias and synthetic inflation of out-of-time forecasting performance:
-1. **No Backward Filling (`bfill`):** Time-series feature pipelines must never use `bfill()` or backward imputation across time-ordered rows. Forward fill missing values using past observations (`ffill()`) and fill remaining leading initializations with neutral defaults (`fillna(0.0)`).
-2. **Chronological Boundary Purging:** When partitioning chronological datasets into train/test splits, enforce an $h$-step boundary purge gap (`train_slice_end = max(1, split_idx - forecast_horizon)`). This guarantees that forward-looking targets $y_t = P_{t+h}$ in the training slice cannot leak future test set prices.
-3. **Train-Slice Context Routing Diagnostics:** When computing diagnostic metrics (such as target autocorrelation for dynamic routing), calculate statistics exclusively on the training slice rather than across the full dataset.
-4. **Purged Cross-Validation for Stacking Ensembles:** Stacking meta-regressors must use partitioned, purged cross-validation (`PurgedGroupTimeSeriesSplit`) with explicit label horizons and embargo gaps ($h \ge 5$) to prevent out-of-fold training contamination.
+To prevent lookahead bias, non-stationary target leakage, and synthetic inflation of out-of-time forecasting performance:
+1. **Stationary Return Target Formulation & Price Level Reconstruction (Issue #397):**
+   - Regressors are trained on forward percentage price returns ($\hat{r}_{t+h} = \frac{P_{t+h} - P_t}{P_t}$) rather than non-stationary raw price levels.
+   - Price levels are reconstructed out-of-sample via $\hat{P}_{t+h} = P_t \times (1 + \hat{r}_{t+h})$.
+   - Model tracking records both stationary return error metrics and level-denominated dollar error metrics (MAE/RMSE) for direct cross-regional benchmarking.
+2. **Refinery 3-2-1 Crack Spread Margin Standardization (Issue #401):**
+   - Feature pipelines compute standard 3-2-1 crack spreads ($\frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{HO}} - 3 \cdot (P_{\text{WTI}}/42)}{3}$) in both barrel-equivalent ($\$/\text{bbl}$) and gallon ($\$/\text{gal}$) units alongside prompt 1:1 crack spread proxies.
+3. **Chronological Boundary Purging & Embargo Gaps (Issues #354, #396):**
+   - When partitioning chronological datasets into train/test splits, enforce an explicit purge + embargo gap (`train_slice_end = max(1, split_idx - (forecast_horizon + max(0, embargo_steps)))`). This guarantees that multi-step forward-looking labels $y_t$ and overlapping post-split auto-correlations cannot leak future test set information.
+4. **Purged Walk-Forward Cross-Validation & RidgeCV (Issue #396):**
+   - All time-series cross-validation and hyperparameter tuning ($\alpha$ penalty optimization) MUST route through `PurgedGroupTimeSeriesSplit(chronological_only=True)` using `RidgeCV`.
+   - Prevents lookahead data leakage by ensuring every validation fold only trains on strictly preceding chronological windows with enforced purge and embargo gaps.
+5. **No Backward Filling (`bfill`):** Time-series feature pipelines must never use `bfill()` or backward imputation across time-ordered rows. Forward fill missing values using past observations (`ffill()`) and fill remaining leading initializations with neutral defaults (`fillna(0.0)`).
+6. **Train-Slice Context Routing Diagnostics:** When computing diagnostic metrics (such as target autocorrelation for dynamic routing), calculate statistics exclusively on the training slice rather than across the full dataset.
 
 ---
 

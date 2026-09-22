@@ -9,7 +9,7 @@ import os
 from typing import Any, Optional, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import Ridge, RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 try:
     from xgboost import XGBRegressor
@@ -389,6 +389,7 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     """
     Trains Baseline Quantitative Model and Hybrid LLM-Augmented Model.
     Performs ablation comparison on the out-of-time test set.
+    Supports return-based target formulation with price level reconstruction (Issues #396, #397).
     """
     X_train_quant = split_data['X_train_quant']
     X_train_hybrid = split_data['X_train_hybrid']
@@ -399,9 +400,16 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     y_test = split_data['y_test']
     
     test_df = split_data['test_df']
-    y_current = test_df['gasoline_rbob']
+    y_current = test_df['gasoline_rbob'] if 'gasoline_rbob' in test_df.columns else pd.Series(1.0, index=test_df.index)
+    forecast_horizon = split_data.get('forecast_horizon', 5)
+
+    predict_returns = split_data.get('predict_returns', None)
+    if predict_returns is None:
+        is_return_target = ('y_train_return' in split_data and split_data['y_train'] is split_data['y_train_return']) or (float(np.nanmax(np.abs(y_train))) < 1.0)
+    else:
+        is_return_target = bool(predict_returns)
     
-    logger.info(f"Training forecasting models using algorithm: {model_type}...")
+    logger.info(f"Training forecasting models using algorithm: {model_type} (is_return_target={is_return_target})...")
     
     if model_type == "stacking":
         model_quant = build_stacking_ensemble_pipeline()
@@ -422,27 +430,58 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         model_quant = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
         model_hybrid = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
     else:
-        # Standardized Ridge Pipeline
-        model_quant = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
-        model_hybrid = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+        # Standardized Ridge Pipeline with Purged CV Hyperparameter Tuning (Issues #396, #397)
+        n_cv_splits = min(5, max(2, len(X_train_quant) // max(1, forecast_horizon * 3)))
+        if n_cv_splits >= 2 and len(X_train_quant) >= (forecast_horizon * 6):
+            purged_cv = PurgedGroupTimeSeriesSplit(
+                n_splits=n_cv_splits,
+                label_horizon_steps=forecast_horizon,
+                embargo_steps=forecast_horizon,
+                chronological_only=True
+            )
+            model_quant = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0, 50.0, 100.0, 500.0], cv=purged_cv))
+            model_hybrid = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0, 50.0, 100.0, 500.0], cv=purged_cv))
+        else:
+            model_quant = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+            model_hybrid = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
         
     # 1. Fit Baseline Model (Quantitative Features Only)
     model_quant.fit(X_train_quant, y_train)
-    pred_quant = model_quant.predict(X_test_quant)
-    metrics_quant = evaluate_predictions(y_test, pred_quant, y_current)
+    raw_pred_quant = model_quant.predict(X_test_quant)
     
     # 2. Fit Hybrid Model (Quantitative + LLM Unstructured Event Features)
     model_hybrid.fit(X_train_hybrid, y_train)
-    pred_hybrid = model_hybrid.predict(X_test_hybrid)
-    metrics_hybrid = evaluate_predictions(y_test, pred_hybrid, y_current)
+    raw_pred_hybrid = model_hybrid.predict(X_test_hybrid)
+    
+    # Reconstruct price levels if trained on percentage returns (Issue #397)
+    y_curr_arr = np.array(y_current)
+    if is_return_target:
+        pred_quant = y_curr_arr * (1.0 + np.array(raw_pred_quant))
+        pred_hybrid = y_curr_arr * (1.0 + np.array(raw_pred_hybrid))
+        y_test_eval = np.array(split_data.get('y_test_price', y_curr_arr * (1.0 + np.array(y_test))))
+        pred_quant_ret = np.array(raw_pred_quant)
+        pred_hybrid_ret = np.array(raw_pred_hybrid)
+        y_test_ret = np.array(split_data.get('y_test_return', y_test))
+    else:
+        pred_quant = np.array(raw_pred_quant)
+        pred_hybrid = np.array(raw_pred_hybrid)
+        y_test_eval = np.array(y_test)
+        pred_quant_ret = (pred_quant - y_curr_arr) / y_curr_arr
+        pred_hybrid_ret = (pred_hybrid - y_curr_arr) / y_curr_arr
+        y_test_ret = (y_test_eval - y_curr_arr) / y_curr_arr
+
+    metrics_quant = evaluate_predictions(pd.Series(y_test_eval), pred_quant, y_current)
+    metrics_hybrid = evaluate_predictions(pd.Series(y_test_eval), pred_hybrid, y_current)
+    metrics_quant_return = evaluate_predictions(pd.Series(y_test_ret), pred_quant_ret)
+    metrics_hybrid_return = evaluate_predictions(pd.Series(y_test_ret), pred_hybrid_ret)
     
     # 3. Calculate Improvement Metrics
-    mae_imp = ((metrics_quant['MAE'] - metrics_hybrid['MAE']) / metrics_quant['MAE']) * 100.0
-    rmse_imp = ((metrics_quant['RMSE'] - metrics_hybrid['RMSE']) / metrics_quant['RMSE']) * 100.0
+    mae_imp = ((metrics_quant['MAE'] - metrics_hybrid['MAE']) / metrics_quant['MAE']) * 100.0 if metrics_quant['MAE'] > 0 else 0.0
+    rmse_imp = ((metrics_quant['RMSE'] - metrics_hybrid['RMSE']) / metrics_quant['RMSE']) * 100.0 if metrics_quant['RMSE'] > 0 else 0.0
 
     # 4. Compute Benchmark Baseline Comparisons (Issue #43)
     ma_5d = test_df['gas_ma_7'] if 'gas_ma_7' in test_df.columns else None
-    baselines = evaluate_baseline_comparisons(y_test, y_current, ma_5d)
+    baselines = evaluate_baseline_comparisons(pd.Series(y_test_eval), y_current, ma_5d)
     metrics_persistence = baselines['metrics_persistence']
     metrics_moving_avg = baselines['metrics_moving_avg']
     
@@ -454,7 +493,7 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     quantiles = compute_quantile_uncertainty_bands(pred_hybrid, residual_std=metrics_hybrid.get('RMSE', 0.05))
 
     # 6. Compute QuantStats Risk & Performance Metrics (Issue #120)
-    hybrid_returns = (pred_hybrid - np.array(y_current)) / np.array(y_current)
+    hybrid_returns = (pred_hybrid - y_curr_arr) / y_curr_arr
     risk_metrics = compute_quantstats_risk_metrics(hybrid_returns)
 
     # 7. Compute SHAP Feature Attributions (Issue #114)
@@ -462,7 +501,10 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
 
     # Feature Importance for Hybrid Model
     feature_importance = {}
-    estimator = model_hybrid.named_steps['ridge'] if hasattr(model_hybrid, 'named_steps') and 'ridge' in model_hybrid.named_steps else model_hybrid
+    if hasattr(model_hybrid, 'named_steps'):
+        estimator = model_hybrid.named_steps.get('ridgecv', model_hybrid.named_steps.get('ridge', model_hybrid))
+    else:
+        estimator = model_hybrid
     
     if hasattr(estimator, 'feature_importances_'):
         importances = estimator.feature_importances_
@@ -503,6 +545,8 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "model_hybrid": model_hybrid,
         "metrics_quant": metrics_quant,
         "metrics_hybrid": metrics_hybrid,
+        "metrics_quant_return": metrics_quant_return,
+        "metrics_hybrid_return": metrics_hybrid_return,
         "metrics_persistence": metrics_persistence,
         "metrics_moving_avg": metrics_moving_avg,
         "mae_improvement_pct": round(mae_imp, 2),
@@ -513,13 +557,17 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "shap_feature_attributions": shap_attributions,
         "predictions_quant": pred_quant,
         "predictions_hybrid": pred_hybrid,
+        "predictions_quant_return": pred_quant_ret,
+        "predictions_hybrid_return": pred_hybrid_ret,
         "predictions_p10": quantiles["p10"],
         "predictions_p50": quantiles["p50"],
         "predictions_p90": quantiles["p90"],
         "predictions_persistence": baselines['predictions_persistence'],
-        "y_test": np.array(y_test),
+        "y_test": np.array(y_test_eval),
+        "y_test_return": np.array(y_test_ret),
         "test_dates": test_df['date'].values,
         "current_prices": np.array(y_current),
+        "is_return_target": is_return_target,
         "wandb_run_url": wandb_run_url
     }
 
@@ -573,8 +621,16 @@ def train_multi_horizon_models(
         
         # Latest live base and hybrid forecast price
         last_row = splits['X_test_hybrid'].iloc[-1:]
-        res['live_pred_price'] = float(res['model_hybrid'].predict(last_row)[0])
-        res['live_base_price'] = float(splits['test_df']['gasoline_rbob'].iloc[-1])
+        raw_live_pred = float(res['model_hybrid'].predict(last_row)[0])
+        live_base = float(splits['test_df']['gasoline_rbob'].iloc[-1])
+        if res.get('is_return_target', False) or splits.get('predict_returns', False):
+            res['live_pred_price'] = float(live_base * (1.0 + raw_live_pred))
+            res['live_base_price'] = live_base
+            res['live_pred_return'] = raw_live_pred
+        else:
+            res['live_pred_price'] = raw_live_pred
+            res['live_base_price'] = live_base
+            res['live_pred_return'] = (raw_live_pred - live_base) / live_base if live_base > 0 else 0.0
         
         multi_results[h] = res
 
@@ -607,7 +663,7 @@ def predict_with_cedar_residual_decomposition(
 
 class PurgedGroupTimeSeriesSplit:
     """
-    Purged Group Time Series Cross-Validation Splitter (Issue #117, #354).
+    Purged Group Time Series Cross-Validation Splitter (Issue #117, #354, #396).
     Prevents lookahead data leakage in time series models with overlapping labels (e.g. 5-day step-ahead forecasts).
     Supports both Purged K-Fold Cross-Validation and strict Chronological Purged Walk-Forward Splitting.
     
@@ -631,8 +687,9 @@ class PurgedGroupTimeSeriesSplit:
         
         # Divide indices into n_splits contiguous groups
         fold_bounds = np.linspace(0, n_samples, self.n_splits + 1, dtype=int)
+        start_k = 1 if self.chronological_only else 0
         
-        for k in range(self.n_splits):
+        for k in range(start_k, self.n_splits):
             test_start = fold_bounds[k]
             test_end = fold_bounds[k + 1]
             test_indices = indices[test_start:test_end]
@@ -665,10 +722,12 @@ class PurgedGroupTimeSeriesSplit:
                     train_mask[i] = False
                     
             train_indices = indices[train_mask]
+            if len(train_indices) == 0:
+                continue
             yield train_indices, test_indices
 
     def get_n_splits(self, X=None, y=None, groups=None):
-        return self.n_splits
+        return self.n_splits - 1 if self.chronological_only else self.n_splits
 
 
 class CombinatorialPurgedCV:

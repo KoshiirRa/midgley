@@ -572,9 +572,9 @@
     }
   },
   {
-    "as_of": "2026-09-22 00:40:14",
+    "as_of": "2026-09-22 00:58:17",
     "valid_date": "2026-09-22",
-    "hub_code": "Tulsa_OK",
+    "hub_code": "National",
     "mean_temp_f": 75.1,
     "heating_degree_days_hdd": 0.0,
     "cooling_degree_days_cdd": 10.1,
@@ -582,7 +582,7 @@
     "extreme_heat_warning": false,
     "source": "Open-Meteo Weather API (Zero-Cost)",
     "data": {
-      "hub_code": "Tulsa_OK",
+      "hub_code": "National",
       "name": "West Tulsa HF Sinclair & Cushing Hub",
       "mean_temp_f": 75.1,
       "max_temp_f": 85.2,
@@ -594,7 +594,33 @@
       "source": "Open-Meteo Weather API (Zero-Cost)",
       "is_free_alternative": true,
       "cost_per_query": 0.0,
-      "timestamp": "2026-09-22 00:40:13"
+      "timestamp": "2026-09-22 00:58:16"
+    }
+  },
+  {
+    "as_of": "2026-09-22 01:49:15",
+    "valid_date": "2026-09-22",
+    "hub_code": "Tulsa_OK",
+    "mean_temp_f": 75.2,
+    "heating_degree_days_hdd": 0.0,
+    "cooling_degree_days_cdd": 10.2,
+    "freeze_warning": false,
+    "extreme_heat_warning": false,
+    "source": "Open-Meteo Weather API (Zero-Cost)",
+    "data": {
+      "hub_code": "Tulsa_OK",
+      "name": "West Tulsa HF Sinclair & Cushing Hub",
+      "mean_temp_f": 75.2,
+      "max_temp_f": 85.2,
+      "min_temp_f": 65.3,
+      "heating_degree_days_hdd": 0.0,
+      "cooling_degree_days_cdd": 10.2,
+      "freeze_warning": false,
+      "extreme_heat_warning": false,
+      "source": "Open-Meteo Weather API (Zero-Cost)",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-09-22 01:49:15"
     }
   }
 ]

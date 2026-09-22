@@ -162,13 +162,13 @@ def create_feature_matrix(
         df['crude_return_1d'] = 0.0
         df['crude_return_5d'] = 0.0
 
-    # 3-2-1 Crack Spread Calculation ($/bbl and $/gal) (Issue #169)
+    # 3-2-1 Crack Spread Calculation ($/bbl and $/gal) (Issue #169, #401)
     # 3 bbl WTI -> 2 bbl RBOB Gasoline + 1 bbl Heating Oil (Distillate)
     if 'heating_oil' in df.columns and 'wti_crude' in df.columns and 'gasoline_rbob' in df.columns:
         rbob_bbl = df['gasoline_rbob'] * 42.0
         ho_bbl = df['heating_oil'] * 42.0
         df['crack_spread_321'] = (2.0 * rbob_bbl + 1.0 * ho_bbl - 3.0 * df['wti_crude']) / 3.0
-        df['crack_spread_321_gal'] = df['crack_spread_321'] / 42.0
+        df['crack_spread_321_gal'] = (2.0 * df['gasoline_rbob'] + 1.0 * df['heating_oil'] - 3.0 * (df['wti_crude'] / 42.0)) / 3.0
         df['crack_spread_321_delta_5d'] = df['crack_spread_321'].pct_change(5)
     else:
         df['crack_spread_321'] = df['crack_spread'] * 42.0 if 'crack_spread' in df.columns else 0.0
@@ -649,16 +649,18 @@ def prepare_chronological_splits(
     df: pd.DataFrame, 
     train_ratio: float = 0.8, 
     forecast_horizon: int = 5,
-    purge_overlap: bool = True
+    purge_overlap: bool = True,
+    embargo_steps: Optional[int] = None,
+    predict_returns: bool = True
 ):
     """
-    Splits dataset chronologically to prevent temporal data leakage (Issue #354).
-    Purges boundary forecast_horizon instances so training target labels do not overlap test observations.
-    Returns: X_train_quant, X_train_hybrid, y_train, X_test_quant, X_test_hybrid, y_test, test_df
+    Splits dataset chronologically to prevent temporal data leakage (Issues #354, #396, #397).
+    Purges boundary forecast_horizon instances and applies post-boundary embargo gap so training target labels do not overlap test observations.
+    Returns: X_train_quant, X_train_hybrid, y_train, y_train_price, y_train_return, X_test_quant, X_test_hybrid, y_test, y_test_price, y_test_return, quant_feature_names, hybrid_feature_names, test_df
     """
     quant_features = [
         'gasoline_rbob', 'wti_crude', 'crack_spread',
-        'crack_spread_321', 'crack_spread_321_delta_5d',
+        'crack_spread_321', 'crack_spread_321_gal', 'crack_spread_321_delta_5d',
         'gas_return_1d', 'gas_return_5d', 'gas_return_10d',
         'crude_return_1d', 'crude_return_5d',
         'gas_ma_7', 'gas_ma_14', 'gas_ma_30',
@@ -690,13 +692,18 @@ def prepare_chronological_splits(
     event_features = [c for c in df.columns if c.startswith('event_')]
     hybrid_features = quant_features + event_features
     
-    target_col = f'target_price_{forecast_horizon}d'
+    target_price_col = f'target_price_{forecast_horizon}d'
+    target_return_col = f'target_return_{forecast_horizon}d'
     
     split_idx = int(len(df) * train_ratio)
     
-    # Enforce purge window so train target (t + horizon) never samples into test_df (>= split_idx)
+    if embargo_steps is None:
+        embargo_steps = forecast_horizon
+
+    # Enforce purge window and post-test embargo window to eliminate label overlap leakage (Issues #354, #396)
     if purge_overlap and forecast_horizon >= 1:
-        train_slice_end = max(1, split_idx - forecast_horizon)
+        total_purge_gap = forecast_horizon + max(0, embargo_steps)
+        train_slice_end = max(1, split_idx - total_purge_gap)
         train_df = df.iloc[:train_slice_end]
     else:
         train_df = df.iloc[:split_idx]
@@ -705,20 +712,49 @@ def prepare_chronological_splits(
     
     X_train_quant = train_df[quant_features]
     X_train_hybrid = train_df[hybrid_features]
-    y_train = train_df[target_col]
     
+    y_train_price = train_df[target_price_col] if target_price_col in train_df.columns else (
+        train_df['gasoline_rbob'] if 'gasoline_rbob' in train_df.columns else pd.Series(0.0, index=train_df.index)
+    )
+    y_test_price = test_df[target_price_col] if target_price_col in test_df.columns else (
+        test_df['gasoline_rbob'] if 'gasoline_rbob' in test_df.columns else pd.Series(0.0, index=test_df.index)
+    )
+    
+    if target_return_col in train_df.columns:
+        y_train_return = train_df[target_return_col]
+    elif 'gasoline_rbob' in train_df.columns and target_price_col in train_df.columns:
+        y_train_return = (y_train_price - train_df['gasoline_rbob']) / train_df['gasoline_rbob']
+    else:
+        y_train_return = y_train_price
+
+    if target_return_col in test_df.columns:
+        y_test_return = test_df[target_return_col]
+    elif 'gasoline_rbob' in test_df.columns and target_price_col in test_df.columns:
+        y_test_return = (y_test_price - test_df['gasoline_rbob']) / test_df['gasoline_rbob']
+    else:
+        y_test_return = y_test_price
+
+    y_train = y_train_return if predict_returns else y_train_price
+    y_test = y_test_return if predict_returns else y_test_price
+
     X_test_quant = test_df[quant_features]
     X_test_hybrid = test_df[hybrid_features]
-    y_test = test_df[target_col]
     
     return {
         'X_train_quant': X_train_quant,
         'X_train_hybrid': X_train_hybrid,
         'y_train': y_train,
+        'y_train_price': y_train_price,
+        'y_train_return': y_train_return,
         'X_test_quant': X_test_quant,
         'X_test_hybrid': X_test_hybrid,
         'y_test': y_test,
+        'y_test_price': y_test_price,
+        'y_test_return': y_test_return,
         'quant_feature_names': quant_features,
         'hybrid_feature_names': hybrid_features,
-        'test_df': test_df
+        'test_df': test_df,
+        'forecast_horizon': forecast_horizon,
+        'embargo_steps': embargo_steps,
+        'predict_returns': predict_returns
     }

@@ -42,7 +42,7 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
   \]
 
 
-### B. NYMEX Forward Curve, Calendar Spreads & 3-2-1 Crack Futures (Issue #404)
+### B. NYMEX Forward Curve, Calendar Spreads & 3-2-1 Crack Margin Formulations (Issues #401, #404)
 Prompt ($M_1$) and Second Month ($M_2$) calendar spreads quantify forward term structure and physical refinery margins:
 - **RBOB Calendar Spread ($M_1 - M_2$):**
   \[
@@ -52,9 +52,13 @@ Prompt ($M_1$) and Second Month ($M_2$) calendar spreads quantify forward term s
   \[
   \text{Spread}_{\text{WTI}, M_1-M_2} = P_{\text{WTI}, M_1} - P_{\text{WTI}, M_2}
   \]
-- **Refinery 3-2-1 Crack Margin ($/gal):**
+- **Refinery 3-2-1 Crack Margin Barrel-Equivalent ($\$ / \text{bbl}$):**
   \[
-  \text{Crack}_{3-2-1} = \frac{(2 \cdot P_{\text{RBOB}, M_1} + 1 \cdot P_{\text{HO}, M_1}) - 3 \cdot \left(\frac{P_{\text{WTI}, M_1}}{42.0}\right)}{3.0}
+  \text{Crack}_{321}^{\text{bbl}} = 2 \cdot (P_{\text{RBOB}} \times 42.0) + 1 \cdot (P_{\text{HO}} \times 42.0) - 3 \cdot P_{\text{WTI}}
+  \]
+- **Refinery 3-2-1 Crack Margin Gallon-Equivalent ($\$ / \text{gal}$):**
+  \[
+  \text{Crack}_{321}^{\text{gal}} = \frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{HO}} - 3 \cdot \left(\frac{P_{\text{WTI}}}{42.0}\right)}{3.0} = \frac{\text{Crack}_{321}^{\text{bbl}}}{3 \cdot 42.0}
   \]
 
 ### C. Exponential Memory Decay Equation
@@ -109,16 +113,27 @@ The forecasting engine integrates a **two-tiered weather ingestion model** via t
 
 ---
 
-## 3. Live Pump Price Anchoring & Return Modeling
+## 3. Stationary Return Target Modeling, Level Reconstruction & Purged Embargo CV (Issues #396, #397)
 
-Instead of predicting raw non-stationary price levels directly, the model learns **5-day percentage price returns** ($\Delta \%$):
-\[
-\Delta \%_t = \frac{P_{t+5} - P_t}{P_t}
-\]
-The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\text{gal}$) is calculated as:
-\[
-\hat{P}_{t+5} = P_{\text{Live}} \times (1 + \hat{\Delta}_{\%})
-\]
+To ensure stationarity and prevent non-stationary drift or lookahead data leakage:
+1. **Target Return Formulation:**
+   Instead of predicting raw non-stationary price levels directly, quantitative models (Ridge/XGBoost) are trained on $h$-day forward percentage returns:
+   \[
+   \hat{r}_{t+h} = \frac{P_{t+h} - P_t}{P_t}
+   \]
+2. **Out-of-Sample Price Level Reconstruction:**
+   Predicted returns are converted back to calibrated price levels ($/gal):
+   \[
+   \hat{P}_{t+h} = P_t \times (1 + \hat{r}_{t+h})
+   \]
+3. **Chronological Purge and Embargo Partitions:**
+   When generating chronological train/test splits, an explicit boundary gap of $\text{forecast\_horizon} + \text{embargo\_steps}$ is enforced:
+   \[
+   \text{train\_slice\_end} = \max(1, \text{split\_idx} - (h + \text{embargo}))
+   \]
+   This prevents overlapping multi-day target returns $r_{t+h}$ from leaking information from the test evaluation window into model training.
+4. **Purged Walk-Forward Cross-Validation (`RidgeCV`):**
+   Model hyperparameter tuning ($\alpha$ penalty search) and comparative evaluation utilize `PurgedGroupTimeSeriesSplit(chronological_only=True)`. Each validation fold evaluates strictly on out-of-sample data following purged training splits.
 
 ---
 
