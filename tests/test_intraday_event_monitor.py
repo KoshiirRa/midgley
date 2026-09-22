@@ -279,6 +279,31 @@ class TestIntradayEventMonitor(unittest.TestCase):
                 self.assertIn("latency_ms", feed)
 
 
+    @patch("src.intraday_event_monitor.extract_event_features_llm")
+    @patch("src.data_ingestion.fetch_market_data")
+    def test_evaluate_headline_spectral_context_generation(self, mock_fetch_market_data, mock_extract):
+        """Verifies fetch_market_data is invoked and spectral_context is passed to LLM extractor (Issue #327)."""
+        import pandas as pd
+        import numpy as np
+        # Mock market dataframe with gasoline_rbob series
+        mock_df = pd.DataFrame({
+            "gasoline_rbob": np.linspace(2.20, 2.65, 30)
+        })
+        mock_fetch_market_data.return_value = mock_df
+        mock_extract.return_value = {"overall_price_pressure": 0.50, "supply_disruption": 0.60}
+
+        headline = "OPEC Emergency Meeting Called as Middle East Pipeline Halts"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(headline)
+
+        self.assertTrue(is_anomaly)
+        mock_fetch_market_data.assert_called_once()
+        mock_extract.assert_called_once()
+        _, kwargs = mock_extract.call_args
+        self.assertIn("spectral_context", kwargs)
+        self.assertTrue(len(kwargs["spectral_context"]) > 0)
+        self.assertIn("Spectral Regime:", kwargs["spectral_context"])
+
+
 if __name__ == "__main__":
     unittest.main()
 

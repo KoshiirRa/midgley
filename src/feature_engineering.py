@@ -210,7 +210,7 @@ def create_feature_matrix(
             df = pd.merge(df, rig_df, on='date', how='left')
             for col in [c for c in rig_df.columns if c != 'date']:
                 if col in df.columns:
-                    df[col] = df[col].ffill().bfill().fillna(0.0)
+                    df[col] = df[col].ffill().fillna(0.0)
     except Exception as e:
         logger.warning(f"Could not merge Baker Hughes rig count feed: {e}")
         
@@ -229,7 +229,7 @@ def create_feature_matrix(
             df = pd.merge(df, treasury_df, on='date', how='left')
             for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
                 if col in df.columns:
-                    df[col] = df[col].ffill().bfill().fillna(0.0)
+                    df[col] = df[col].ffill().fillna(0.0)
     except Exception as e:
         logger.warning(f"Could not merge U.S. Treasury yield feed: {e}")
 
@@ -247,7 +247,7 @@ def create_feature_matrix(
             df = pd.merge(df, bts_df, on='date', how='left')
             for col in [c for c in bts_df.columns if c != 'date']:
                 if col in df.columns:
-                    df[col] = df[col].ffill().bfill().fillna(0.0)
+                    df[col] = df[col].ffill().fillna(0.0)
     except Exception as e:
         logger.warning(f"Could not merge BTS freight transportation feed: {e}")
 
@@ -256,6 +256,54 @@ def create_feature_matrix(
         'bts_tsi_freight_mom_pct', 'bts_truck_tonnage_mom_pct', 'bts_petroleum_transport_mom_pct',
         'bts_tsi_total', 'bts_rail_carloads'
     ]:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Merge EIA Daily Regional Spot Prices & Basis Spreads (Issue #363)
+    try:
+        from src.data_ingestion import EIARegionalSpotConnector
+        spot_conn = EIARegionalSpotConnector()
+        spot_res = spot_conn.fetch_daily_regional_spot_prices()
+        spot_prices = spot_res.get("spot_prices", {})
+        spot_basis = spot_res.get("spot_basis", {})
+        
+        reg_lower = str(region).lower()
+        if "tulsa" in reg_lower or "cincinnati" in reg_lower or "gulf" in reg_lower:
+            reg_spot = spot_prices.get("gulf_coast_spot_per_gal", 2.285)
+            reg_basis = spot_basis.get("gulf_coast_basis", -0.135)
+        elif "oakland" in reg_lower or "bayarea" in reg_lower or "california" in reg_lower or "la" in reg_lower:
+            reg_spot = spot_prices.get("los_angeles_spot_per_gal", 2.890)
+            reg_basis = spot_basis.get("los_angeles_basis", 0.470)
+        else: # Newark, Greenville, Charlotte, Port St. Lucie, National
+            reg_spot = spot_prices.get("ny_harbor_spot_per_gal", 2.395)
+            reg_basis = spot_basis.get("ny_harbor_basis", -0.025)
+            
+        df['eia_regional_spot_price'] = reg_spot
+        df['eia_regional_spot_basis'] = reg_basis
+        df['eia_spot_gulf_coast'] = spot_prices.get("gulf_coast_spot_per_gal", 2.285)
+        df['eia_spot_ny_harbor'] = spot_prices.get("ny_harbor_spot_per_gal", 2.395)
+        df['eia_spot_los_angeles'] = spot_prices.get("los_angeles_spot_per_gal", 2.890)
+    except Exception as e:
+        logger.warning(f"Could not merge EIA daily regional spot feed: {e}")
+
+    for col in ['eia_regional_spot_price', 'eia_regional_spot_basis', 'eia_spot_gulf_coast', 'eia_spot_ny_harbor', 'eia_spot_los_angeles']:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Merge EPA Weekly RIN Prices & RVO Compliance Costs (Issue #365)
+    try:
+        from src.data_ingestion import EPARINDataConnector
+        rin_conn = EPARINDataConnector()
+        rin_res = rin_conn.fetch_rin_market_data()
+        rin_prices = rin_res.get("rin_prices", {})
+        df['epa_rin_d6_price'] = rin_prices.get("d6_ethanol_per_rin", 0.520)
+        df['epa_rin_d4_price'] = rin_prices.get("d4_biodiesel_per_rin", 0.785)
+        df['epa_rin_d3_price'] = rin_prices.get("d3_cellulosic_per_rin", 1.420)
+        df['epa_rvo_compliance_cost'] = rin_res.get("calculated_rvo_cost_per_gal", 0.091)
+    except Exception as e:
+        logger.warning(f"Could not merge EPA RIN feed: {e}")
+
+    for col in ['epa_rin_d6_price', 'epa_rin_d4_price', 'epa_rin_d3_price', 'epa_rvo_compliance_cost']:
         if col not in df.columns:
             df[col] = 0.0
 

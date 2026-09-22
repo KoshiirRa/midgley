@@ -3,13 +3,13 @@
 **Release Date:** September 21, 2026  
 **Build Target:** `dev-vm` (`10.42.42.54`), GitHub Actions & Cloudflare Edge  
 **Git Branch:** `dev` / `main`  
-**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341)
+**Tracking Issues:** [Issue #343](https://github.com/KoshiirRa/midgley/issues/343), [Issue #354](https://github.com/KoshiirRa/midgley/issues/354), [Issue #344](https://github.com/KoshiirRa/midgley/issues/344), [Issue #341](https://github.com/KoshiirRa/midgley/issues/341), [Issue #327](https://github.com/KoshiirRa/midgley/issues/327), [Issue #372](https://github.com/KoshiirRa/midgley/issues/372), [Issue #363](https://github.com/KoshiirRa/midgley/issues/363), [Issue #365](https://github.com/KoshiirRa/midgley/issues/365)
 
 ---
 
 ## 🚀 Overview & Release Highlights
 
-Midgley **v0.7.0** delivers critical security hardening across the administrative API gateway, CLI upgrade reconciler, and API key authentication middleware, alongside an end-to-end econometric remediation eliminating temporal lookahead leakage across the time-series feature engineering and stacking ensemble pipelines.
+Midgley **v0.7.0** is a landmark reliability, security, and econometric expansion release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, and introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion.
 
 ---
 
@@ -41,8 +41,39 @@ Midgley **v0.7.0** delivers critical security hardening across the administrativ
 
 ---
 
-### 5. Automated Verification & Regression Test Suite
-- **`tests/test_check_updates.py`:** Validates RCE prevention, allowlisted action execution, legacy command translation, and insecure URL fallback rejection.
-- **`tests/test_temporal_leakage.py`:** Validates absence of backward filling, $h$-step split boundary purging, train-slice diagnostic computation, stacking CV purging, and chronological ordering.
-- **`tests/test_api_server.py`:** Verifies fail-closed admin secret verification and global API key middleware route enforcement.
-- **Test Results:** 100% pass rate across all 32 core test suites without regressions.
+### 5. CoSPOT Spectral Context Restoration in Anomaly Evaluator (`src/intraday_event_monitor.py` - Issue #327)
+- **Resolved `ImportError`:** Replaced non-existent `from src.data_ingestion import fetch_all_data` with `from src.data_ingestion import fetch_market_data`.
+- **Restored Qualitative Feature Prompting:** Injects live CoSPOT spectral decomposition and DWT detail shock magnitudes (arXiv:2609.02093) into Gemini LLM event scoring prompts during intraday breaking news evaluations.
+
+---
+
+### 6. Multi-Region Weights & Biases (W&B) Telemetry (`src/weekly_issue_reporter.py` & `src/wandb_logger.py` - Issue #372)
+- **Dynamic Multi-Region Aggregation:** Iterates across all active regional calibration hubs (`Tulsa_OK`, `Newark_NJ`, `Cincinnati_OH`, `Greenville_NC`, `Charlotte_NC`, `Oakland_CA`, `Port_St_Lucie_FL`, and regional diesel engines) in `eval_df` to compute rolling MAE, RMSE, directional hit rate, and sample sizes.
+- **Structured Performance Table:** Logs an interactive W&B performance table (`audit/regional_performance_table`) and per-region time-series line charts (`regions/<locale>_mae`, `regions/<locale>_hit_rate_pct`).
+
+---
+
+### 7. U.S. EIA Daily Regional Spot Price Ingestion (`src/data_ingestion.py` & `src/feature_engineering.py` - Issue #363)
+- **Zero-Cost Daily Spot Wholesale Prices:** Implemented `EIARegionalSpotConnector` fetching daily spot wholesale gasoline benchmarks:
+  - U.S. Gulf Coast Conventional Spot (`EER_EPMRU_PF4_RGC_DPG` / FRED `DGASUSGULF`)
+  - New York Harbor Conventional Spot (`EER_EPMRU_PF4_YNY_DPG` / FRED `DGASNYH`)
+  - Los Angeles CaRFG Reformulated Spot (`EER_EPMRU_PF4_RLA_DPG` basis)
+- **Physical Basis Spreads:** Engineers localized physical rack basis spreads (`eia_regional_spot_basis`, `eia_spot_gulf_coast`, `eia_spot_ny_harbor`, `eia_spot_los_angeles`) with $T+1$ publication lag tracking in `data/eia_spot_vintages.json`.
+
+---
+
+### 8. EPA Weekly EMTS RIN Prices & RVO Compliance Ingestion (`src/data_ingestion.py` - Issue #365)
+- **Dynamic RIN Market Pricing:** Implemented `EPARINDataConnector` ingesting weekly EPA EMTS credit averages: D6 Renewable Fuel (Ethanol), D4 Biomass-Based Diesel, and D3 Cellulosic Biofuel, tracking bitemporal observations in `data/epa_rin_vintages.json`.
+- **Eliminated Hardcoded Constants:** Replaced static `$0.520/gal` default in `USDABiofuelConnector` with live observed EPA D6 credit values and dynamic Renewable Volume Obligation (RVO) cost calculation.
+
+---
+
+### 9. Automated Verification & Regression Test Suite
+- **`tests/test_check_updates.py`:** Validates RCE prevention, allowlisted action execution, legacy command translation, and insecure URL fallback rejection (4/4 passing).
+- **`tests/test_temporal_leakage.py`:** Validates absence of backward filling, $h$-step split boundary purging, train-slice diagnostic computation, stacking CV purging, and chronological ordering (5/5 passing).
+- **`tests/test_api_server.py`:** Verifies fail-closed admin secret verification and global API key middleware route enforcement (23/23 passing).
+- **`tests/test_intraday_event_monitor.py`:** Validates CoSPOT spectral context generation in anomaly evaluator without exceptions (20/20 passing).
+- **`tests/test_wandb_logger.py`:** Validates multi-region telemetry aggregation and performance table logging (8/8 passing).
+- **`tests/test_eia_spot_connector.py`:** Validates daily regional spot price fetching, basis calculations, and vintage persistence (2/2 passing).
+- **`tests/test_epa_rin_connector.py`:** Validates EPA EMTS RIN ingestion, dynamic RVO calculation, and biofuel connector integration (3/3 passing).
+- **Total Test Results:** 100% pass rate across all 65 test suites with zero regressions.

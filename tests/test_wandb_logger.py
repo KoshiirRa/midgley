@@ -118,6 +118,15 @@ class TestWandbLogger(unittest.TestCase):
         )
         self.assertEqual(res["status"], "SUCCESS")
         self.assertEqual(res["run_url"], "https://wandb.ai/mock/audit-456")
+        mock_run.log.assert_called()
+        logged_calls = [c[0][0] for c in mock_run.log.call_args_list if c[0]]
+        all_logged_keys = {}
+        for d in logged_calls:
+            if isinstance(d, dict):
+                all_logged_keys.update(d)
+        self.assertIn("regions/Tulsa_OK_mae", all_logged_keys)
+        self.assertIn("regions/Newark_NJ_mae", all_logged_keys)
+        self.assertIn("audit/regional_performance_table", all_logged_keys)
 
     @patch("src.wandb_logger.wandb")
     def test_finish_wandb_run(self, mock_wandb):

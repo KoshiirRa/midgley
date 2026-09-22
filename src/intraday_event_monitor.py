@@ -232,16 +232,16 @@ class IntradayEventMonitor:
         if not has_keyword:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
-        # Generate CoSPOT Spectral Context if market data is available (Issue #215)
+        # Generate CoSPOT Spectral Context if market data is available (Issue #215, #327)
         spectral_ctx = ""
         try:
             from src.cospot_spectral_engine import generate_spectral_prompt_context
-            from src.data_ingestion import fetch_all_data
-            m_df = fetch_all_data()
-            if not m_df.empty and 'gasoline_rbob' in m_df.columns:
+            from src.data_ingestion import fetch_market_data
+            m_df = fetch_market_data()
+            if m_df is not None and not m_df.empty and 'gasoline_rbob' in m_df.columns:
                 spectral_ctx = generate_spectral_prompt_context(m_df['gasoline_rbob'].values)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"CoSPOT spectral context generation notice in intraday anomaly evaluator: {e}")
 
         # Keyword matched -> Trigger impact scoring
         scores = extract_event_features_llm(headline, spectral_context=spectral_ctx)

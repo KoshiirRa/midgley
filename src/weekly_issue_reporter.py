@@ -1117,6 +1117,7 @@ def generate_weekly_markdown_report() -> str:
 
     # Dynamic Rolling Accuracy Summary Table across ALL Regions
     summary_rows = ""
+    regions_summary = {}
     for reg in df['region'].unique():
         meta = REGION_METADATA.get(reg, {
             "display_name": f"{reg} Retail",
@@ -1125,10 +1126,18 @@ def generate_weekly_markdown_report() -> str:
         reg_eval = eval_df[eval_df['region'] == reg]
         if not reg_eval.empty:
             mae = round(float(reg_eval['error_dollars'].mean()), 4)
+            rmse = round(float(np.sqrt((reg_eval['error_dollars'] ** 2).mean())), 4)
             hit_rate = round(float(reg_eval['directional_hit'].mean() * 100.0), 2)
             n_days = len(reg_eval)
             status_str = "🟢 Optimal" if mae < (0.25 if reg == "National" else 0.70) else "⚠️ Calibrating"
             summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | {n_days} | **`${mae:.4f}/gal`** | **`{hit_rate:.2f}%`** | {status_str} |\n"
+            regions_summary[reg] = {
+                "mae": mae,
+                "rmse": rmse,
+                "hit_rate_pct": hit_rate,
+                "sample_count": n_days,
+                "display_name": meta.get("display_name", reg)
+            }
         else:
             n_total = len(df[df['region'] == reg])
             summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | 0 / {n_total} (Pending) | *Pending Horizon* | *Pending Horizon* | ⏳ New Region |\n"
@@ -1214,14 +1223,15 @@ def generate_weekly_markdown_report() -> str:
         logger.warning(f"Benchmark updater error in weekly report: {e}")
         benchmark_summary_md = f"⚠️ *Historical benchmark refresh skipped ({e}).*"
 
-    # Log weekly audit metrics to Weights & Biases (Issue #80)
+    # Log weekly audit metrics to Weights & Biases (Issue #80, #372)
     try:
         if is_wandb_enabled():
             log_weekly_audit_run(
                 audit_summary={
                     "nat_mae": nat_mae,
                     "tulsa_mae": tulsa_mae,
-                    "total_records": len(eval_df)
+                    "total_records": len(eval_df),
+                    "regions": regions_summary
                 },
                 degradation_alerts=degradation_res,
                 window_days=30
