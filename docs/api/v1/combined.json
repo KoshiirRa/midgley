@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T14:45:45.403142",
+  "timestamp": "2026-09-22T18:01:46.216434",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:43.827864",
+      "timestamp": "2026-09-22T18:01:46.123326",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -22,7 +22,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-22T14:45:43Z"
+          "timestamp": "2026-09-22T18:01:46Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -33,9 +33,9 @@
         "forecast_horizon_days": 5,
         "target_date": "2026-09-27",
         "current_base_price": 4.475,
-        "predicted_price_per_gal": 4.518,
-        "expected_change_dollars": 0.043,
-        "expected_change_percent": 0.97,
+        "predicted_price_per_gal": 4.513,
+        "expected_change_dollars": 0.038,
+        "expected_change_percent": 0.85,
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
@@ -43,12 +43,12 @@
         "day_2_price": 3.504,
         "day_3_price": 3.516,
         "day_4_price": 3.509,
-        "day_5_price": 3.513,
+        "day_5_price": 3.222,
         "feature_attributions": {
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
             "category": "futures_commodity",
-            "delta_dollars": 0.019,
+            "delta_dollars": 0.017,
             "share_pct": 45.0,
             "direction": "UP",
             "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -56,7 +56,7 @@
           "refining_crack_margin": {
             "name": "Refining Yield & Crack Spread",
             "category": "refining_crack_margin",
-            "delta_dollars": 0.011,
+            "delta_dollars": 0.009,
             "share_pct": 25.0,
             "direction": "UP",
             "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -88,28 +88,28 @@
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
             "category": "tax_regulatory",
-            "delta_dollars": 0.002,
+            "delta_dollars": 0.001,
             "share_pct": 2.5,
             "direction": "UP",
             "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
           }
         },
         "driver_breakdown": {
-          "summary_text": "National forecast +$0.043/gal (+0.96%): Driven primarily by Futures & Commodity Benchmark (+$0.019/gal), Refining Yield & Crack Spread (+$0.011/gal).",
+          "summary_text": "National forecast +$0.038/gal (+0.85%): Driven primarily by Futures & Commodity Benchmark (+$0.017/gal), Refining Yield & Crack Spread (+$0.009/gal).",
           "key_drivers": [
             {
               "category": "Futures & Commodity Benchmark",
               "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-              "impact_dollars": 0.019,
-              "impact_pct": 0.42,
+              "impact_dollars": 0.017,
+              "impact_pct": 0.38,
               "share_pct": 45.0,
               "direction": "UP"
             },
             {
               "category": "Refining Yield & Crack Spread",
               "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-              "impact_dollars": 0.011,
-              "impact_pct": 0.25,
+              "impact_dollars": 0.009,
+              "impact_pct": 0.2,
               "share_pct": 25.0,
               "direction": "UP"
             },
@@ -140,8 +140,8 @@
             {
               "category": "Tax & Regulatory Overhead",
               "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-              "impact_dollars": 0.002,
-              "impact_pct": 0.04,
+              "impact_dollars": 0.001,
+              "impact_pct": 0.02,
               "share_pct": 2.5,
               "direction": "UP"
             }
@@ -152,16 +152,16 @@
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.019,
-          "impact_pct": 0.42,
+          "impact_dollars": 0.017,
+          "impact_pct": 0.38,
           "share_pct": 45.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.011,
-          "impact_pct": 0.25,
+          "impact_dollars": 0.009,
+          "impact_pct": 0.2,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -192,19 +192,19 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.04,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.02,
           "share_pct": 2.5,
           "direction": "UP"
         }
       ],
       "driver_breakdown": {
-        "summary_text": "National forecast +$0.043/gal (+0.96%): Driven primarily by Futures & Commodity Benchmark (+$0.019/gal), Refining Yield & Crack Spread (+$0.011/gal).",
+        "summary_text": "National forecast +$0.038/gal (+0.85%): Driven primarily by Futures & Commodity Benchmark (+$0.017/gal), Refining Yield & Crack Spread (+$0.009/gal).",
         "components": {
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
             "category": "futures_commodity",
-            "delta_dollars": 0.019,
+            "delta_dollars": 0.017,
             "share_pct": 45.0,
             "direction": "UP",
             "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -212,7 +212,7 @@
           "refining_crack_margin": {
             "name": "Refining Yield & Crack Spread",
             "category": "refining_crack_margin",
-            "delta_dollars": 0.011,
+            "delta_dollars": 0.009,
             "share_pct": 25.0,
             "direction": "UP",
             "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -244,7 +244,7 @@
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
             "category": "tax_regulatory",
-            "delta_dollars": 0.002,
+            "delta_dollars": 0.001,
             "share_pct": 2.5,
             "direction": "UP",
             "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -254,7 +254,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:43.843364",
+      "timestamp": "2026-09-22T18:01:46.134920",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -271,8 +271,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-22T14:16:06Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-22T18:01:16Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -504,7 +504,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:44.141402",
+      "timestamp": "2026-09-22T18:01:46.146366",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -521,8 +521,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-22T14:16:13Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-22T18:01:17Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -754,7 +754,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:45.041666",
+      "timestamp": "2026-09-22T18:01:46.157918",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -771,8 +771,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-22T14:16:07Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-22T18:01:16Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1004,7 +1004,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:45.307714",
+      "timestamp": "2026-09-22T18:01:46.169205",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1022,7 +1022,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-22T14:45:44Z"
+          "timestamp": "2026-09-22T18:01:16Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1254,7 +1254,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:45.370938",
+      "timestamp": "2026-09-22T18:01:46.180864",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1272,7 +1272,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-22T14:45:44Z"
+          "timestamp": "2026-09-22T18:01:17Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1504,7 +1504,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:45.381204",
+      "timestamp": "2026-09-22T18:01:46.192061",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1522,7 +1522,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-22T14:45:44Z"
+          "timestamp": "2026-09-22T18:01:17Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1754,7 +1754,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:45.391194",
+      "timestamp": "2026-09-22T18:01:46.203458",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1772,7 +1772,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-22T14:45:44Z"
+          "timestamp": "2026-09-22T18:01:17Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2004,7 +2004,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-09-22T14:45:45.401344",
+      "timestamp": "2026-09-22T18:01:46.214830",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2022,7 +2022,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-22T14:45:45Z"
+          "timestamp": "2026-09-22T18:01:17Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
