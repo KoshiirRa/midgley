@@ -271,7 +271,8 @@ class TestHeadlineArenaConnector(unittest.TestCase):
             mock_response.read.return_value = b'{"status": "accepted", "counts_for_score": true}'
             mock_response.__enter__.return_value = mock_response
 
-            with patch("urllib.request.urlopen", return_value=mock_response):
+            with patch("urllib.request.urlopen", return_value=mock_response), \
+                 patch("src.headline_arena_connector.load_submitted_ledger", return_value={"submitted_challenges": {}}):
                 payload = {"asset": "CL", "direction": "bullish", "confidence": 0.85, "reasoning": "[DEV-TEST] Model evaluation"}
                 res = connector.submit_forecast(payload, live_in_dev=True)
                 self.assertEqual(res["status"], "SUCCESS")
