@@ -103,7 +103,7 @@ class TestAgentMemoryManager(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.db_path = os.path.join(self.temp_dir.name, "manager_test.sqlite")
-        self.manager = AgentMemoryManager(sqlite_path=self.db_path)
+        self.manager = AgentMemoryManager(hindsight_url="", sqlite_path=self.db_path)
 
     def tearDown(self):
         try:
@@ -152,7 +152,7 @@ class TestWeeklyReviewMemoryReporting(unittest.TestCase):
     def test_format_qualitative_anomaly_reflections_markdown(self):
         temp_dir = tempfile.TemporaryDirectory()
         db_path = os.path.join(temp_dir.name, "report_test.sqlite")
-        manager = AgentMemoryManager(sqlite_path=db_path)
+        manager = AgentMemoryManager(hindsight_url="", sqlite_path=db_path)
 
         # Seed an experience
         manager.retain(
