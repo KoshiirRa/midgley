@@ -68,6 +68,8 @@ jobs:
           AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
           HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
           HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
+          HINDSIGHT_BANK_ID: "Midgley"
           SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
           HEADLINE_ARENA_CLIENT_ID: ${{ secrets.HEADLINE_ARENA_CLIENT_ID }}
           HEADLINE_ARENA_CLIENT_SECRET: ${{ secrets.HEADLINE_ARENA_CLIENT_SECRET }}

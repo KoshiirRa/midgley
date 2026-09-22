@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T01:52:06.579586",
+  "timestamp": "2026-09-22T12:40:47.166438",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.319,
+    "current_price_per_gal": 4.286,
     "source": "AAA Web Scraper (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Web Scraper (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-22T06:51:30Z"
+      "timestamp": "2026-09-22T17:40:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-27",
-    "current_base_price": 4.319,
-    "predicted_price_per_gal": 4.307,
+    "current_base_price": 4.286,
+    "predicted_price_per_gal": 4.274,
     "expected_change_dollars": -0.012,
     "expected_change_percent": -0.29,
     "projected_direction": "DOWN",

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T01:52:06.568019",
+  "timestamp": "2026-09-22T12:40:47.156809",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.199,
+    "current_price_per_gal": 4.187,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-22T06:51:30Z"
+      "timestamp": "2026-09-22T17:40:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,18 +28,18 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-27",
-    "current_base_price": 4.199,
-    "predicted_price_per_gal": 4.204,
-    "expected_change_dollars": 0.005,
-    "expected_change_percent": 0.12,
+    "current_base_price": 4.187,
+    "predicted_price_per_gal": 4.193,
+    "expected_change_dollars": 0.006,
+    "expected_change_percent": 0.14,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 3.286,
+    "day_1_price": 3.285,
     "day_2_price": 3.293,
-    "day_3_price": 3.29,
-    "day_4_price": 3.283,
-    "day_5_price": 3.285,
+    "day_3_price": 3.291,
+    "day_4_price": 3.284,
+    "day_5_price": 3.286,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -52,7 +52,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.002,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -91,7 +91,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast +$0.005/gal (+0.12%): Driven primarily by Regional Logistics & Hub Delivery (+$0.002/gal), Futures & Commodity Benchmark (+$0.001/gal).",
+      "summary_text": "Charlotte NC forecast +$0.006/gal (+0.14%): Driven primarily by Regional Logistics & Hub Delivery (+$0.002/gal), Futures & Commodity Benchmark (+$0.002/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -104,8 +104,8 @@
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "impact_dollars": 0.002,
+          "impact_pct": 0.05,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -156,8 +156,8 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "impact_dollars": 0.002,
+      "impact_pct": 0.05,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast +$0.005/gal (+0.12%): Driven primarily by Regional Logistics & Hub Delivery (+$0.002/gal), Futures & Commodity Benchmark (+$0.001/gal).",
+    "summary_text": "Charlotte NC forecast +$0.006/gal (+0.14%): Driven primarily by Regional Logistics & Hub Delivery (+$0.002/gal), Futures & Commodity Benchmark (+$0.002/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -208,7 +208,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.002,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"

@@ -443,13 +443,13 @@ The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and
 
 ---
 
-## 14. CoSPOT Spectral Prompting & Hindsight Episodic Agent Memory (Issues #215 & #230)
+## 14. CoSPOT Spectral Prompting & Hindsight Episodic Agent Memory (Issues #215, #230 & #421)
 
 * **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
-* **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](file:///src/agent_memory.py) & [`src/hindsight_client.py`](file:///src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Google Cloud Run + Supabase pgvector and local SQLite FTS5 fallback.
-  - **Scale-to-Zero Proactive Warmup:** Step 0 non-blocking background initialization thread in `run_all.py` waking Cloud Run containers before batch retain/recall execution.
-  - **Socket Read Timeout Retries:** 30s configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
-  - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once Cloud Run is healthy.
+* **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](file:///src/agent_memory.py) & [`src/hindsight_client.py`](file:///src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Vectorize Hindsight-Hosted SaaS (Issue #421), local Dev-VM Docker container, and local SQLite FTS5 fallback.
+  - **Zero-Cold-Start Hosted Gateway:** Connects to `https://api.hindsight.vectorize.io` with Bearer auth, eliminating the compute cost and 75-second cold boot latencies associated with serverless Cloud Run containers.
+  - **Socket Read Timeout Retries:** Configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
+  - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once the remote bank is reachable.
 
 ---
 
@@ -466,12 +466,12 @@ The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and
 ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐
 │ HINDSIGHT MEMORY │       │ CONNECTOR AUDIT  │       │ FALLBACK SAVINGS │
 │ Retain / Recall  │       │ 7-Day EIA, FRED, │       │ Basic Tier &     │
-│ & Cloud Run vs   │       │ USDA, NOAA, AAA, │       │ Lexicon Routing  │
+│ & Hosted SaaS vs │       │ USDA, NOAA, AAA, │       │ Lexicon Routing  │
 │ SQLite FTS5 Hub  │       │ Socrata & USGS   │       │ Spared LLM $ & Tk│
 └──────────────────┘       └──────────────────┘       └──────────────────┘
 ```
 
-* **Vectorize Hindsight Observability:** Tracks real-time memory operation volume (`retain_count`, `recall_count`, `reflect_count`), hybrid cloud container (`midgley-hindsight`) vs local SQLite FTS5 routing, and database experience totals.
+* **Vectorize Hindsight Observability:** Tracks real-time memory operation volume (`retain_count`, `recall_count`, `reflect_count`), hosted cloud bank (`Midgley`) vs local SQLite FTS5 routing, and database experience totals.
 * **7-Day Connector Health Audit:** Ingests `src.connector_telemetry` to compute 7-day request volumes, failure rate %, latency, and cache freshness across all zero-cost open data connectors.
 * **Zero-Cost Fallback & Dollar Savings Accounting:** Ingests `src.fallback_telemetry` to monitor Basic Tier zero-cost routing and calculate cumulative dollar/token savings.
 * **Hard Quota Safety Valves:** Monitors Firecrawl (800/mo cap, 30/day burst limit), Finlight (150/mo cap, 10/day burst limit), and IPASIS Security Verifier (100 req/day cap).

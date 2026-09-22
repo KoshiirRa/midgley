@@ -1,10 +1,10 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-09-22 06:52:28",
+  "last_refreshed_utc": "2026-09-22 17:41:07",
   "records_count": 5,
   "data": [
     {
-      "date": "2026-09-22 01:50:57",
+      "date": "2026-09-22 12:39:35",
       "platform": "Google News RSS",
       "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
@@ -14,7 +14,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-22 01:50:57",
+      "date": "2026-09-22 12:39:35",
       "platform": "Google News RSS",
       "post_text": "New U.S. Sanctions Law Threatens India's Huge Russian Oil Trade - Crude Oil Prices Today | OilPrice.com",
       "target": "Energy_Market",
@@ -24,9 +24,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-22 01:50:57",
+      "date": "2026-09-22 12:39:35",
       "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -34,19 +34,19 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-22 01:50:57",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-09-22 01:50:57",
+      "date": "2026-09-22 12:39:35",
       "platform": "Google News RSS",
       "post_text": "How Will This Week\u2019s China-U.S. Meeting Impact LNG Exports? - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-22 12:39:35",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Here\u2019s How to Attract Investment to Newfoundland Despite Trump\u2019s Tariffs - Fraser Institute - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,

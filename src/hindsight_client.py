@@ -47,7 +47,7 @@ class HindsightClient:
         self,
         base_url: Optional[str] = None,
         api_key: Optional[str] = None,
-        bank_id: str = "midgley-gas-forecasting",
+        bank_id: Optional[str] = None,
         timeout: float = DEFAULT_TIMEOUT
     ):
         if base_url is not None:
@@ -58,7 +58,10 @@ class HindsightClient:
             self.api_key = api_key
         else:
             self.api_key = os.environ.get("HINDSIGHT_API_KEY", "")
-        self.bank_id = bank_id
+        if bank_id is not None:
+            self.bank_id = bank_id
+        else:
+            self.bank_id = os.environ.get("HINDSIGHT_BANK_ID", "Midgley")
         self.timeout = timeout
 
     @property
@@ -315,7 +318,11 @@ class HindsightClient:
                             stats.get("memories_count") or
                             stats.get("memories") or
                             stats.get("memory_count") or
-                            stats.get("total_memories") or 0
+                            stats.get("total_memories") or
+                            stats.get("total_documents") or
+                            stats.get("total_nodes") or
+                            stats.get("total_observations") or
+                            stats.get("fact_count") or 0
                         )
                         ref_count = (
                             stats.get("reflections_count") or

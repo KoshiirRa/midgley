@@ -256,27 +256,41 @@ Midgley integrates an episodic memory layer (**Retain-Recall-Reflect**) to perfo
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Option A: Cloud Run + Supabase pgvector Setup (Recommended)
-1. **Initialize Supabase PostgreSQL Schema:**
-   - Open your **Supabase Project Dashboard** $\rightarrow$ **SQL Editor**.
-   - Execute [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql) to enable the `vector` extension, create `hindsight_memories` and `hindsight_mental_models` tables, and construct HNSW vector indexes.
-2. **Deploy to Google Cloud Run (Scale-to-Zero):**
-   - Ensure `SUPABASE_DATABASE_URL`, `GCP_PROJECT_ID`, and `GEMINI_API_KEY` are configured in `.env`.
-   - Run the deployment script:
-     ```bash
-     bash scripts/deploy_hindsight_cloudrun.sh
-     ```
-   - Cloud Run deploys `ghcr.io/vectorize-io/hindsight:latest` with `--min-instances 0` ($0 idle cost) and `--port 8888`.
-3. **Configure Endpoint in Midgley:**
-   - Set `HINDSIGHT_API_URL` in `.env` and GitHub Repository Secrets:
-     ```bash
-     HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
-     HINDSIGHT_TIMEOUT="60.0"
-     HINDSIGHT_WARMUP_TIMEOUT="75.0"
-     ```
-   - **Scale-to-Zero Proactive Warmup & Zero Data Loss:** When deployed with `--min-instances 0`, Cloud Run instances spin down during inactivity and require 20–35s to cold boot. Midgley automatically triggers a non-blocking proactive warmup (`warmup()`) in Step 0 of execution pipelines. If any memory retain requests occur during container cold-start, experiences are safely buffered in local SQLite with `cloud_synced = 0` and automatically reconciled (`sync_pending_memories()`) once the cloud container is fully online.
+### Option A: Vectorize Hindsight-Hosted SaaS (Recommended Cloud Option - Issue #421)
+For managed cloud deployment without managing containers or incurring serverless compute costs:
+1. **Create an API Key:** Generate an API key on [Vectorize Hindsight Cloud](https://hindsight.vectorize.io).
+2. **Configure Environment:** Set the following variables in `.env` and GitHub Repository Secrets:
+   ```bash
+   HINDSIGHT_API_URL="https://api.hindsight.vectorize.io"
+   HINDSIGHT_API_KEY="hsk_..."
+   HINDSIGHT_BANK_ID="Midgley"
+   ```
+3. **Migration & Zero Cold Starts:** Hindsight-Hosted is always warm ($0$ cold-start latency) and operates on a purely pay-per-token/call pricing model (**~$3.50/month** for daily + weekly forecasting workloads, with initial \$5.00 free credit balance). Historical SQLite memories can be bulk-uploaded using `python scripts/migrate_memory_to_hosted.py`.
 
-### Option B: Zero-Cost Local SQLite FTS5 Fallback ($0 / Standalone Default)
+> [!CAUTION]
+> **Cloud Run Scale-to-Zero Cost Overrun Warning (Issue #421):**
+> Deploying the `vectorize-io/hindsight` container to Google Cloud Run with `--min-instances 0` (scale-to-zero) was found in production to incur **~$17.14–$35.66/month** in GCP billing. Because the container was provisioned with 2 vCPU / 2GiB RAM and frequently woken up by daily forecast pipelines, weekly model reviews, and telemetry syncs, accumulated container boot/keep-alive seconds exceeded the cost of a dedicated VPS or hosted SaaS. Self-hosted Docker or Hindsight-Hosted SaaS is recommended.
+
+### Option B: Local Dev-VM / Linux Server Self-Hosting ($0 / Dedicated Host)
+To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
+1. **Initialize Supabase PostgreSQL Schema:**
+   - Execute [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql) in your Supabase SQL editor.
+2. **Run Docker Container on Host:**
+   ```bash
+   docker run -d \
+     --name midgley-hindsight \
+     --restart unless-stopped \
+     -p 8888:8888 \
+     -e HINDSIGHT_API_PORT="8888" \
+     -e DATABASE_URL="$SUPABASE_DATABASE_URL" \
+     -e HINDSIGHT_API_LLM_PROVIDER="gemini" \
+     -e HINDSIGHT_API_LLM_MODEL="gemini-2.5-flash" \
+     -e HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY" \
+     ghcr.io/vectorize-io/hindsight:latest
+   ```
+3. **Configure Endpoint:** Point `HINDSIGHT_API_URL="http://10.42.42.54:8888"` in `.env`.
+
+### Option C: Zero-Cost Local SQLite FTS5 Fallback ($0 / Standalone Default)
 If no remote Hindsight or Supabase credentials are configured, Midgley automatically activates `SQLiteMemoryStore` at `data/agent_memory.sqlite`:
 * **Zero external services or cloud accounts required.**
 * Uses SQLite FTS5 with Porter stemming and BM25 ranking for analogy recall.

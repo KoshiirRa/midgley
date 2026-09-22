@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T01:52:06.511725",
+  "timestamp": "2026-09-22T12:40:47.105137",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.991,
+    "current_price_per_gal": 3.993,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-22T06:51:16Z"
+      "timestamp": "2026-09-22T17:39:57Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,10 +28,10 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-27",
-    "current_base_price": 3.991,
-    "predicted_price_per_gal": 4.411,
+    "current_base_price": 3.993,
+    "predicted_price_per_gal": 4.413,
     "expected_change_dollars": 0.42,
-    "expected_change_percent": 10.53,
+    "expected_change_percent": 10.52,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,

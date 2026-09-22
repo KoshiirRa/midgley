@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T01:52:06.546266",
+  "timestamp": "2026-09-22T12:40:47.136498",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.471,
+    "current_price_per_gal": 4.441,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-22T06:51:29Z"
+      "timestamp": "2026-09-22T17:40:10Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-27",
-    "current_base_price": 4.471,
-    "predicted_price_per_gal": 4.451,
+    "current_base_price": 4.441,
+    "predicted_price_per_gal": 4.421,
     "expected_change_dollars": -0.02,
     "expected_change_percent": -0.45,
     "projected_direction": "DOWN",
@@ -121,7 +121,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
           "impact_dollars": -0.002,
-          "impact_pct": -0.04,
+          "impact_pct": -0.05,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -173,7 +173,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
       "impact_dollars": -0.002,
-      "impact_pct": -0.04,
+      "impact_pct": -0.05,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
