@@ -237,7 +237,12 @@ export default {
               );
             });
 
-            await env.DB.batch(statements);
+            // Execute batch statements in chunks of 50 to respect Cloudflare D1's 100-statement limit (Issue #333)
+            const CHUNK_SIZE = 50;
+            for (let i = 0; i < statements.length; i += CHUNK_SIZE) {
+              const chunk = statements.slice(i, i + CHUNK_SIZE);
+              await env.DB.batch(chunk);
+            }
           }
 
           console.log(`[Cache Worker SYNC SUCCESS] Synced ${predictions.length} records`);

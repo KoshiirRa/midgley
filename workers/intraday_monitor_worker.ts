@@ -97,7 +97,19 @@ const TRIGGER_KEYWORDS = [
   "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
   "explosion", "tornado", "blackout", "blockade", "sanction",
   "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
-  "strait of hormuz", "red sea attack", "spill"
+  "strait of hormuz", "red sea attack", "spill",
+  // Market Technicals & Volatility
+  "crack spread", "crack-spread", "ovx spike", "futures spike", "futures crash", "wti surge", "rbob surge", "barrel price",
+  // Executive Policy & Geopolitics
+  "executive order", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
+  // Logistics & Infrastructure Hubs
+  "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
+  "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
+  // Refinery Operator 8-K Signals (Issue #129 & #332)
+  "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+  "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
+  "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
+  "sweeny refinery", "bayway refinery"
 ];
 
 const TRIGGER_REGEX = new RegExp(

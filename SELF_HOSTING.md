@@ -241,7 +241,7 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```bash
    npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
    ```
-3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
+3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`). Predictions are automatically chunked in batches of 50 statements to adhere strictly to Cloudflare D1's 100-statement batch limit:
    ```bash
    npx wrangler deploy --config wrangler.cache.toml
    ```
@@ -256,7 +256,7 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```
 
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
-1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):
+1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)), which evaluates breaking energy headlines against the full 47+ domain trigger lexicon (Form 8-K disclosures, refinery trips, waterway chokepoints, pipeline halts, and volatility spikes):
    ```bash
    npx wrangler deploy
    ```

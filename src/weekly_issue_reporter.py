@@ -4,6 +4,8 @@ Generates a comprehensive weekly model review report and creates an automated Gi
 in the KoshiirRa/midgley repository detailing rolling accuracy, backtest errors, and recommendations.
 """
 
+from __future__ import annotations
+
 import os
 import json
 import subprocess

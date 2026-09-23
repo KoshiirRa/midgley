@@ -4,6 +4,8 @@ Logs model predictions over time, backfills actual historical prices, evaluates 
 (MAE, RMSE, Directional Hit Rate), and enables continuous iterative improvement.
 """
 
+from __future__ import annotations
+
 import os
 import json
 import urllib.request

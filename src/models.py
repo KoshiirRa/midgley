@@ -4,6 +4,8 @@ Trains Quantitative Baseline vs. LLM-Augmented Hybrid Forecasting Models
 and computes rigorous error metrics & directional accuracy.
 """
 
+from __future__ import annotations
+
 import itertools
 import os
 from typing import Any, Optional, Dict, List, Tuple, Union
