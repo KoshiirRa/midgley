@@ -278,6 +278,62 @@ class TestIntradayEventMonitor(unittest.TestCase):
                 self.assertIn("status", feed)
                 self.assertIn("latency_ms", feed)
 
+    @patch("src.intraday_event_monitor.feedparser", None)
+    @patch("urllib.request.urlopen")
+    def test_check_feed_health_rss_fallback_without_feedparser(self, mock_urlopen):
+        """Verifies check_feed_health regex counting of <item> elements without feedparser (Issue #347)."""
+        rss_content = b"""<?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+        <channel>
+            <title>Energy News</title>
+            <item><title>Item 1</title></item>
+            <item><title>Item 2</title></item>
+            <item><title>Item 3</title></item>
+        </channel>
+        </rss>"""
+        mock_resp = MagicMock()
+        mock_resp.getcode.return_value = 200
+        mock_resp.read.return_value = rss_content
+        mock_resp.__enter__.return_value = mock_resp
+        mock_urlopen.return_value = mock_resp
+
+        with patch.object(self.monitor, "fetch_executive_social_headlines", return_value=[{"headline": "Test"}]), \
+             patch.object(self.monitor, "fetch_key_movers_headlines", return_value=[{"headline": "Mover"}]), \
+             patch.object(self.monitor, "fetch_geopolitical_headlines", return_value=[{"headline": "Maritime"}]):
+            health = self.monitor.check_feed_health()
+            self.assertTrue(health["overall_healthy"])
+            rss_feeds = [f for f in health["feed_details"] if f["source"] == "RSS"]
+            for f in rss_feeds:
+                self.assertEqual(f["status"], "HEALTHY")
+                self.assertEqual(f["item_count"], 3)
+
+    @patch("src.intraday_event_monitor.feedparser", None)
+    @patch("urllib.request.urlopen")
+    def test_check_feed_health_atom_fallback_without_feedparser(self, mock_urlopen):
+        """Verifies check_feed_health regex counting of <entry> elements without feedparser (Issue #347)."""
+        atom_content = b"""<?xml version="1.0" encoding="utf-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>Atom Feed</title>
+            <entry><title>Entry 1</title></entry>
+            <entry><title>Entry 2</title></entry>
+        </feed>"""
+        mock_resp = MagicMock()
+        mock_resp.getcode.return_value = 200
+        mock_resp.read.return_value = atom_content
+        mock_resp.__enter__.return_value = mock_resp
+        mock_urlopen.return_value = mock_resp
+
+        with patch.object(self.monitor, "fetch_executive_social_headlines", return_value=[{"headline": "Test"}]), \
+             patch.object(self.monitor, "fetch_key_movers_headlines", return_value=[{"headline": "Mover"}]), \
+             patch.object(self.monitor, "fetch_geopolitical_headlines", return_value=[{"headline": "Maritime"}]):
+            health = self.monitor.check_feed_health()
+            self.assertTrue(health["overall_healthy"])
+            rss_feeds = [f for f in health["feed_details"] if f["source"] == "RSS"]
+            for f in rss_feeds:
+                self.assertEqual(f["status"], "HEALTHY")
+                self.assertEqual(f["item_count"], 2)
+
+
 
     @patch("src.intraday_event_monitor.extract_event_features_llm")
     @patch("src.data_ingestion.fetch_market_data")
