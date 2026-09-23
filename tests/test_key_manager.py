@@ -129,6 +129,33 @@ class TestKeyManager(unittest.TestCase):
         self.assertEqual(len(prod_keys), 2)
         self.assertEqual(len(all_keys), 3)
 
+    def test_concurrent_rate_limiting(self):
+        """Verifies multi-threaded concurrent rate limiting requests never trigger UNIQUE constraint race conditions (Issue #329)."""
+        import concurrent.futures
+
+        res = self.km.create_key(user_id="concurrent_user", rate_limit_rpm=50)
+        prefix = res["key_prefix"]
+
+        def send_req(_):
+            return self.km.check_rate_limit(prefix, rate_limit_rpm=50)
+
+        # Fire 25 concurrent threads simultaneously
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            results = list(executor.map(send_req, range(25)))
+
+        # All 25 should succeed without sqlite3.IntegrityError
+        for allowed, retry_after in results:
+            self.assertTrue(allowed)
+            self.assertEqual(retry_after, 0)
+
+        # Inspect recorded count in SQLite
+        with self.km._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT request_count FROM rate_limits WHERE key_prefix = ?", (prefix,))
+            row = cursor.fetchone()
+            self.assertIsNotNone(row)
+            self.assertEqual(row["request_count"], 25)
+
 
 if __name__ == "__main__":
     unittest.main()
