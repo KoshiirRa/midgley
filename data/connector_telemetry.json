@@ -1,7 +1,7 @@
 {
   "created_at": "2026-09-23 20:31:12",
-  "last_updated": "2026-09-23 20:36:47",
-  "total_events": 9,
+  "last_updated": "2026-09-23 20:46:09",
+  "total_events": 19,
   "events": [
     {
       "timestamp": "2026-09-23 20:31:12",
@@ -92,6 +92,106 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Stats: 1065 docs, 0 obs, 66 refs"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 119.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 95.82,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 91.72,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 103.63,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 104.27,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 108.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 92.13,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 100.39,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:08",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "ERROR",
+      "latency_ms": 100.09,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "timestamp": "2026-09-23 20:46:09",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "ERROR",
+      "latency_ms": 297.47,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to query bank stats across endpoints"
     }
   ]
 }

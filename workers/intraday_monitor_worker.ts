@@ -81,9 +81,14 @@ const RSS_FEEDS = [
 ];
 
 const EXCLUDE_KEYWORDS = [
-  "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage",
+  "wikipedia", "software outage", "airline outage", "it outage", "it system outage", "it systems outage", "cloud outage", "gaming outage", "network outage",
   "canola", "cooking oil", "palm oil", "olive oil", "soybean oil"
 ];
+
+const EXCLUDE_REGEX = new RegExp(
+  `\\b(${EXCLUDE_KEYWORDS.join("|")})\\b`,
+  "i"
+);
 
 const NON_ENERGY_TARIFF_EXCLUDES = [
   "house should not transfer", "tariff authority", "steel tariff", "aluminum tariff",
@@ -92,7 +97,13 @@ const NON_ENERGY_TARIFF_EXCLUDES = [
   "canola", "canola oil"
 ];
 
+const NON_ENERGY_TARIFF_REGEX = new RegExp(
+  `\\b(${NON_ENERGY_TARIFF_EXCLUDES.join("|")})\\b`,
+  "i"
+);
+
 const TRIGGER_KEYWORDS = [
+
   "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
   "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
   "explosion", "tornado", "blackout", "blockade", "sanction",
@@ -288,11 +299,10 @@ export function normalizeHeadline(title: string): string {
 }
 
 export function isAnomalyHeadline(title: string): boolean {
-  const lower = title.toLowerCase();
-  if (EXCLUDE_KEYWORDS.some(k => lower.includes(k))) {
+  if (EXCLUDE_REGEX.test(title)) {
     return false;
   }
-  if (NON_ENERGY_TARIFF_EXCLUDES.some(k => lower.includes(k))) {
+  if (NON_ENERGY_TARIFF_REGEX.test(title)) {
     return false;
   }
   if (TRIGGER_REGEX.test(title)) {
@@ -305,6 +315,7 @@ export function isAnomalyHeadline(title: string): boolean {
   }
   return false;
 }
+
 
 export async function isHeadlineDispatchedInCache(headline: string, env?: Env): Promise<boolean> {
   const cleanKey = normalizeHeadline(headline);
@@ -767,12 +778,12 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
 const DEFAULT_DISCORD_PUBLIC_KEY = "23fd56cafbd2e02e99e228ef545bb7a350719b086537410ba5ce092170e56e9b";
 const DEFAULT_PROJECT_V2_ID = "PVT_kwHOAVnZGM4BhxKn";
 
-function hexToUint8Array(hex: string): Uint8Array {
+export function hexToUint8Array(hex: string): Uint8Array {
   const match = hex.match(/.{1,2}/g);
   return new Uint8Array(match ? match.map(byte => parseInt(byte, 16)) : []);
 }
 
-function verifyDiscordSignature(
+export function verifyDiscordSignature(
   publicKeyHex: string,
   signatureHex: string,
   timestamp: string,
@@ -790,9 +801,10 @@ function verifyDiscordSignature(
   }
 }
 
-async function handleDiscordInteraction(request: Request, env: Env, ctx: any): Promise<Response> {
+export async function handleDiscordInteraction(request: Request, env: Env, ctx: any): Promise<Response> {
   const signature = request.headers.get("X-Signature-Ed25519");
   const timestamp = request.headers.get("X-Signature-Timestamp");
+
 
   if (!signature || !timestamp) {
     return new Response("Missing signature headers", { status: 401 });

@@ -201,11 +201,11 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 
 ### Option B: Setting Up Cloudflare D1 / Worker (Tier 2 Backup)
 1. Create a Cloudflare D1 database: `npx wrangler d1 create midgley-cache-d1`
-2. Initialize the database schema for `lookup_cache`, `seen_rss_headlines`, and `prediction_history` ([scripts/init_d1_schema.sql](file:///scripts/init_d1_schema.sql)):
+2. Initialize the database schema for `lookup_cache`, `seen_rss_headlines`, and `prediction_history` (`scripts/init_d1_schema.sql`):
    ```bash
    npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
    ```
-3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
+3. Deploy the `midgley-cache-worker` proxy (`workers/cache_worker.ts`) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
    ```bash
    npx wrangler deploy --config wrangler.cache.toml
    ```
@@ -220,11 +220,16 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```
 
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
-1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):
+1. Validate TypeScript types and run automated Worker test suite:
+   ```bash
+   npm run typecheck
+   npm test
+   ```
+2. Deploy the 15-minute intraday RSS monitor worker (`workers/intraday_monitor_worker.ts`):
    ```bash
    npx wrangler deploy
    ```
-2. Configure worker secrets:
+3. Configure worker secrets:
    ```bash
    npx wrangler secret put GH_PAT
    npx wrangler secret put SENTRY_DSN
@@ -268,7 +273,8 @@ For managed cloud deployment without managing containers or incurring serverless
 ### Option B: Local Dev-VM / Linux Server Self-Hosting ($0 / Dedicated Host)
 To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
 1. **Initialize Supabase PostgreSQL Schema:**
-   - Execute [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql) in your Supabase SQL editor.
+   - Execute [`scripts/init_supabase_hindsight.sql`](scripts/init_supabase_hindsight.sql) in your Supabase SQL editor.
+
 2. **Run Docker Container on Host:**
    ```bash
    docker run -d \

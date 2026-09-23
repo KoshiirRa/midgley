@@ -98,6 +98,15 @@ export default {
     const authHeader = request.headers.get("Authorization");
 
     try {
+      // Public health check endpoint
+      if (url.pathname === "/health" || url.pathname === "/status") {
+        console.log(`[Cache Health Check] Status requested`);
+        return new Response(
+          JSON.stringify({ status: "healthy", service: "midgley-cache-worker", timestamp: new Date().toISOString() }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
       // Optional Bearer Authentication check
       if (env.CLOUDFLARE_AUTH_TOKEN) {
         const token = authHeader?.replace("Bearer ", "");
@@ -111,14 +120,6 @@ export default {
         }
       }
 
-      // Health check endpoint
-      if (url.pathname === "/health" || url.pathname === "/status") {
-        console.log(`[Cache Health Check] Status requested`);
-        return new Response(
-          JSON.stringify({ status: "ok", service: "midgley-cache-worker", timestamp: new Date().toISOString() }),
-          { headers: { "Content-Type": "application/json" } }
-        );
-      }
 
       // GET /api/v1/cache/:key
       if (request.method === "GET" && url.pathname.startsWith("/api/v1/cache/")) {

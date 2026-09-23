@@ -43,7 +43,16 @@ curl -s "https://koshiirra.github.io/midgley/api/v1/combined_tulsa.json"
 
 ## 🔒 Security, Authentication & Key Management (Issue #40)
 
-Midgley endpoints under `/api/v1/prices/*`, `/api/v1/forecast/*`, and `/mcp/*` are secured with API Key authentication and per-key rate limiting (**default: 30 requests/minute**).
+Midgley endpoints under `/api/v1/prices/*`, `/api/v1/forecast/*`, `/api/v1/combined*`, `/api/v1/diesel/*`, `/api/v1/connectors/headline-arena/submit`, and `/mcp/*` are secured with API Key authentication and per-key rate limiting (**default: 30 requests/minute**).
+
+### Route Access Classification Matrix
+
+| Route Category | Authentication Required | Header / Param | Description |
+| :--- | :--- | :--- | :--- |
+| **Public / Unauthenticated** | None | None | `/health`, `/`, `/api/v1/locales`, `/api/v1/system/*`, `/api/v1/telemetry/*`, `/api/v1/usgs/*`, `/api/v1/aqi/*`, `/api/v1/macro/*`, `/api/v1/graph/topology`, `/api/v1/graph/subgraph`, `/api/v1/memory/precedents`, `/metrics` |
+| **API Key Authenticated** | API Key (`basic` or `privileged`) | `X-API-Key` or `Authorization: Bearer` | `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/forecast/batch`, `/api/v1/combined`, `/api/v1/combined/batch`, `/api/v1/forecast/scenarios`, `/api/v1/forecast/simulate`, `/api/v1/forecast/scoreboard`, `/api/v1/forecast/purged-cv`, `/api/v1/diesel/*`, `/api/v1/graph/ingest`, `/api/v1/connectors/headline-arena/submit`, `/mcp/*` |
+| **Admin Secret Protected** | Admin Secret | `X-Admin-Secret` | `/api/v1/admin/keys` (POST, GET), `/api/v1/admin/keys/{prefix}` (DELETE), `/api/v1/forecast/cloud-sync` (POST) |
+| **HMAC Webhook Signed** | HMAC-SHA256 Signature | `X-Midgley-Signature` | `/api/v1/events/webhook`, `/api/v1/events/queue-consumer`, `/api/v1/events/poll` |
 
 ### Authentication Headers
 Callers can authenticate using any of the following methods:
@@ -94,9 +103,6 @@ curl -X DELETE "http://localhost:8000/api/v1/admin/keys/mg_prod_a1b2c3d4" \
   -H "X-Admin-Secret: $MIDGLEY_ADMIN_SECRET"
 ```
 
-### Global Middleware Authentication Enforcement (Issue #344)
-Global API Key rate limiting and authentication middleware enforces exact root matching (`request.url.path == "/"`) for public root documentation rather than a prefix match on `"/"`. All protected API routes under `/api/v1/*` (including `/api/v1/prices/*`, `/api/v1/forecast/*`, and `/api/v1/combined`) and `/mcp/*` strictly require API key authentication (or master `MIDGLEY_API_KEY`), while public metadata endpoints (`/docs`, `/redoc`, `/openapi.json`, `/.well-known`, `/health`) remain exempt.
-
 ---
 
 ## 📡 REST API Endpoints
@@ -105,37 +111,19 @@ Global API Key rate limiting and authentication middleware enforces exact root m
 Fetches real-time unleaded gas price data using the multi-tiered fallback chain (GasBuddy GraphQL -> AAA Web Scraper -> EIA/yfinance Benchmark -> Prediction History -> Static Anchor) with 15-minute response caching.
 
 **Query Parameters:**
-* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `oakland`, `bayarea`. Default: `national`.
+* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `oakland`, `bayarea`. Default: `national`.
 * `zip_code` (optional, string): 5-digit US zip code for station-level GasBuddy search.
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/prices/live?locale=oakland"
-```
-
-**Example Response:**
-```json
-{
-  "status": "success",
-  "timestamp": "2026-08-24T19:18:24Z",
-  "locale": {
-    "code": "oakland",
-    "region_id": "Oakland_CA",
-    "name": "Oakland & SF Bay Area, CA",
-    "padd_region": "PADD 5 West Coast"
-  },
-  "price_per_gal": 4.950,
-  "source": "AAA Web Scraper (CA)",
-  "cache_hit": true,
-  "cache_age_seconds": 35.8,
-  "carb_tax_regulatory_burden_per_gal": 0.953
-}
+curl -X GET "http://localhost:8000/api/v1/prices/live?locale=oakland" \
+  -H "X-API-Key: $MIDGLEY_API_KEY"
 ```
 
 ---
 
 ### 2. `GET /api/v1/forecast/predict`
-Generates 1-to-5 day out-of-time discrete quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), component-level feature attributions (XAI), and natural language driver summary text. Discrete multi-horizon models ($h \in [1..5]$) evaluate unlabelled contemporary $t=0$ features while preserving lookahead-safe label maturity in historical training folds (Issue #353).
+Generates 1-to-5 day out-of-time discrete quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), component-level feature attributions (XAI), and natural language driver summary text.
 
 **Query Parameters:**
 * `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `oakland`, `bayarea`).
@@ -143,224 +131,24 @@ Generates 1-to-5 day out-of-time discrete quantitative price predictions, expect
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5"
-```
-
-**Example Response:**
-```json
-{
-  "status": "success",
-  "timestamp": "2026-09-02T19:10:00Z",
-  "locale": {
-    "code": "tulsa",
-    "region_id": "Tulsa_OK",
-    "name": "Tulsa, OK Metro Area"
-  },
-  "forecast": {
-    "model_version": "v1.4 Finlight-LLM",
-    "forecast_horizon_days": 5,
-    "target_date": "2026-09-07",
-    "current_base_price": 3.89,
-    "predicted_price_per_gal": 3.935,
-    "expected_change_dollars": 0.045,
-    "expected_change_percent": 1.16,
-    "projected_direction": "UP",
-    "feature_attributions": {
-      "futures_commodity": { "delta_dollars": 0.009, "share_pct": 20.0 },
-      "refining_crack_margin": { "delta_dollars": 0.0135, "share_pct": 30.0 },
-      "weather_environmental": { "delta_dollars": 0.0023, "share_pct": 5.0 },
-      "tax_regulatory": { "delta_dollars": 0.0022, "share_pct": 5.0 },
-      "unstructured_sentiment": { "delta_dollars": 0.0045, "share_pct": 10.0 },
-      "regional_logistics": { "delta_dollars": 0.0135, "share_pct": 30.0 }
-    },
-    "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast +$0.045/gal driven primarily by refining crack margin, regional logistics.",
-      "key_drivers": [
-        "Refining Yield & Crack Spread: +$0.0135/gal (30.0% share)",
-        "Regional Logistics & Hub Delivery: +$0.0135/gal (30.0% share)"
-      ]
-    }
-  }
-}
+curl -X GET "http://localhost:8000/api/v1/forecast/predict?locale=tulsa&days=5" \
+  -H "X-API-Key: $MIDGLEY_API_KEY"
 ```
 
 ---
 
-## 🍃 Zero-Cost Fallback & Basic Tier Telemetry Endpoint (`GET /api/v1/telemetry/fallback-status` - Issue #196)
-
-* **Endpoint:** `GET /api/v1/telemetry/fallback-status`
-* **Description:** Returns aggregated telemetry statistics for zero-cost fallback provider invocations (`ZeroCostProviderHook`), basic tier API key request routing counts, provider distribution (`lexicon`, `kaggle_llm_hook`, `spc_weather`), and estimated LLM token/dollar cost savings.
-
-* **Example Response:**
-```json
-{
-  "total_zero_cost_invocations": 12,
-  "basic_tier_routed_count": 5,
-  "provider_breakdown": {
-    "lexicon": 12,
-    "kaggle_llm_hook": 0,
-    "spc_weather": 0
-  },
-  "tokens_saved": 4200,
-  "estimated_usd_saved": 0.00126,
-  "avg_zero_cost_latency_ms": 1.45,
-  "last_updated": "2026-09-04T01:10:00Z"
-}
-```
-
----
-
-## 📊 System Observability, Telemetry & Memory Endpoints
-
-### `GET /api/v1/system/telemetry` (Issue #237)
-Returns aggregated 7-day health audit metrics across zero-cost open data connectors (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS) including request volumes, error counts, failure rate %, latency, and cache freshness.
-
-### `GET /api/v1/telemetry/unmapped-zips` (Issues #50 & #195)
-Returns aggregated telemetry for out-of-metro ZIP code lookups, including top unmapped ZIPs, state and PADD distributions, total query counts, and candidate expansion metro hubs.
-
-### `GET /api/v1/memory/precedents` (Issues #230 & #237)
-Queries the Vectorize Hindsight episodic agent memory engine for historical shock precedents, matching query keywords and tags against stored resolved prediction experiences and reflections.
-
-**Query Parameters:**
-* `q` (required, string): Query string (e.g. `refinery fire`, `hurricane flood`, `tariffs`).
-* `locale` (optional, string): Filter by locale (`tulsa`, `newark`, `oakland`, etc.).
-* `limit` (optional, integer): Max results to return. Default: `5`.
-
-### `GET /api/v1/system/quota` (Issues #83, #87, #237)
-Returns real-time usage metrics and hard quota safety valve limits for Firecrawl (800/mo cap, 30/day burst limit), Finlight (150/mo cap, 10/day burst limit), IPASIS Security Verifier (100 req/day cap), and NOAA Weather endpoints.
-
-### `GET /api/v1/system/token-costs` (Issue #107)
-Returns TokenTab cumulative token consumption (input/output tokens), cache read/write tokens, and estimated USD expenditure across LLM providers.
-
-### `GET /api/v1/security/ip-status` (Issue #87)
-Returns IPASIS security telemetry including inspected request counts, blocked high-risk IP origins, and cache hit ratios.
-
----
-
-### 3. `GET /api/v1/forecast/scoreboard`
-Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices over a rolling evaluation window (30, 60, 90, or all days) and discrete forecast horizons (1d through 5d) (Issue #209).
-
-**Query Parameters:**
-* `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`, `all`). Default: `all`.
-* `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
-* `horizon` (optional, string): Filter by forecast target horizon in days (`1`, `2`, `3`, `4`, `5`, `all`). Default: `all`.
-* `include_retroactive` (optional, boolean): Whether to include retroactive historical backtest records (`true`) or restrict strictly to genuine forward out-of-time predictions (`false`). Default: `false` (Issue #389).
+### 3. `POST /api/v1/forecast/batch` (Issue #377)
+Generates 5-day out-of-time forecasts across multiple regional locales in a single batched HTTP request.
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=5&include_retroactive=false"
-```
-
-**Example Response:**
-```json
-{
-  "status": "success",
-  "system": "Midgley v1.4 Finlight-LLM",
-  "timestamp": "2026-09-07T11:00:00Z",
-  "filters": {
-    "locale": "tulsa",
-    "region_code": "Tulsa_OK",
-    "window_days": "30",
-    "horizon": "5"
-  },
-  "summary": {
-    "window_days": "30",
-    "region_filter": "Tulsa_OK",
-    "horizon_filter": 5,
-    "total_evaluations": 30,
-    "mae_dollars": 0.1331,
-    "rmse_dollars": 0.1620,
-    "mape_pct": 3.42,
-    "directional_hit_rate_pct": 58.15,
-    "naive_persistence_mae": 0.1740,
-    "model_uplift_mae_pct": 23.51,
-    "model_vs_persistence_win_rate_pct": 65.52,
-    "llm_vs_quant_win_rate_pct": 58.62,
-    "empirical_95ci_coverage_pct": 92.50
-  },
-  "horizon_breakdown": [
-    {
-      "horizon_days": 1,
-      "horizon_label": "1-Day (24h Ahead)",
-      "evaluations": 30,
-      "mae_dollars": 0.0412,
-      "rmse_dollars": 0.0583,
-      "mape_pct": 1.28,
-      "directional_hit_rate_pct": 68.33,
-      "naive_persistence_mae": 0.0520,
-      "model_uplift_mae_pct": 20.77
-    },
-    {
-      "horizon_days": 2,
-      "horizon_label": "2-Day (48h Ahead)",
-      "evaluations": 30,
-      "mae_dollars": 0.0685,
-      "rmse_dollars": 0.0892,
-      "mape_pct": 1.84,
-      "directional_hit_rate_pct": 64.50,
-      "naive_persistence_mae": 0.0841,
-      "model_uplift_mae_pct": 18.55
-    },
-    {
-      "horizon_days": 3,
-      "horizon_label": "3-Day (72h Ahead)",
-      "evaluations": 30,
-      "mae_dollars": 0.0910,
-      "rmse_dollars": 0.1145,
-      "mape_pct": 2.45,
-      "directional_hit_rate_pct": 61.20,
-      "naive_persistence_mae": 0.1180,
-      "model_uplift_mae_pct": 22.88
-    },
-    {
-      "horizon_days": 4,
-      "horizon_label": "4-Day (96h Ahead)",
-      "evaluations": 30,
-      "mae_dollars": 0.1140,
-      "rmse_dollars": 0.1410,
-      "mape_pct": 2.98,
-      "directional_hit_rate_pct": 59.80,
-      "naive_persistence_mae": 0.1460,
-      "model_uplift_mae_pct": 21.92
-    },
-    {
-      "horizon_days": 5,
-      "horizon_label": "5-Day (1-Week Ahead)",
-      "evaluations": 30,
-      "mae_dollars": 0.1331,
-      "rmse_dollars": 0.1620,
-      "mape_pct": 3.42,
-      "directional_hit_rate_pct": 58.15,
-      "naive_persistence_mae": 0.1740,
-      "model_uplift_mae_pct": 23.51
-    }
-  ],
-  "regional_breakdown": [
-    {
-      "region": "Tulsa_OK",
-      "evaluations": 30,
-      "mae_dollars": 0.1331,
-      "rmse_dollars": 0.1620,
-      "mape_pct": 3.42,
-      "directional_hit_rate_pct": 58.15,
-      "naive_persistence_mae": 0.1740,
-      "model_uplift_mae_pct": 23.51
-    }
-  ],
-  "recent_evaluations": [
-    {
-      "log_timestamp": "2026-09-02 08:00:00",
-      "forecast_target_date": "2026-08-25",
-      "forecast_horizon_days": 5,
-      "region": "Tulsa_OK",
-      "current_base_price": 3.89,
-      "predicted_5d_price": 3.935,
-      "actual_5d_price": 3.93,
-      "error_dollars": 0.005,
-      "directional_hit": 1
-    }
-  ]
-}
+curl -X POST "http://localhost:8000/api/v1/forecast/batch" \
+  -H "X-API-Key: $MIDGLEY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "locales": ["national", "tulsa", "newark", "oakland"],
+    "days": 5
+  }'
 ```
 
 ---
@@ -370,208 +158,135 @@ Unified endpoint returning live current pump price, predicted 5-day target forec
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/combined?locale=cincinnati"
+curl -X GET "http://localhost:8000/api/v1/combined?locale=cincinnati" \
+  -H "X-API-Key: $MIDGLEY_API_KEY"
 ```
 
 ---
 
-### 5. `GET /api/v1/usgs/water_levels`
-Returns real-time streamflow (`00060`), gage height (`00065`), water temperature (`00010`), and specific conductance (`00095`) telemetry across USGS monitoring stations in 6 hydrological clusters (Inland Barge Corridor, Gulf Coast Refining Origin, Bay Area Carquinez Strait, Delaware River/Bay, Tulsa MKARNS, and South Florida Coastal Drainage) (Issue #56).
-
-**Query Parameters:**
-* `cluster` (optional): Filter by regional cluster (`inland_barge`, `gulf_coast`, `bay_area`, `delaware`, `tulsa`, `florida`).
+### 5. `POST /api/v1/combined/batch` (Issue #377)
+Batch unified endpoint returning live current pump prices, 5-day forecasts, and top drivers for multiple locales concurrently.
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/usgs/water_levels?cluster=inland_barge"
+curl -X POST "http://localhost:8000/api/v1/combined/batch" \
+  -H "X-API-Key: $MIDGLEY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "locales": ["national", "tulsa", "cincinnati", "port_st_lucie"]
+  }'
 ```
 
 ---
 
-### 6. `GET /api/v1/usgs/seismic`
-Returns real-time and historical earthquake telemetry from the USGS Earthquake Web Service API (`earthquake.usgs.gov/fdsnws/event/1/`) evaluated against critical refining, pipeline, and storage infrastructure (Issue #55).
+### 6. `GET /api/v1/forecast/scoreboard`
+Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices.
 
 **Query Parameters:**
-* `corridor` (optional, default: `bay_area`): Filter by regional refining and delivery corridor (`bay_area`, `cushing_ok`, `socal`, `mid_atlantic`, `new_madrid`, or `all`).
-* `days` (optional, default: `30`): Rolling temporal observation window in days.
-* `min_mag` (optional): Minimum earthquake magnitude filter (defaults to corridor-specific threshold: $4.0$ in California, $3.8$ in Oklahoma/Mid-Atlantic).
+* `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`, `all`). Default: `all`.
+* `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
+* `horizon` (optional, string): Filter by forecast target horizon in days (`1`, `2`, `3`, `4`, `5`, `all`). Default: `all`.
+* `include_retroactive` (optional, boolean): Restrict strictly to forward out-of-time predictions (`false`). Default: `false`.
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/usgs/seismic?corridor=bay_area"
-```
-
-**Example Response:**
-```json
-{
-  "status": "SUCCESS",
-  "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-  "timestamp": "2026-09-06 00:00:00",
-  "filtered_corridor": "bay_area",
-  "temporal_window_days": 30,
-  "events": [],
-  "corridors": {
-    "bay_area": {
-      "corridor_risk_index": 0.0,
-      "max_magnitude": 0.0,
-      "active_events_count": 0,
-      "highest_impact_event": null
-    }
-  },
-  "indices": {
-    "bay_area_seismic_risk_index": 0.0,
-    "cushing_storage_seismic_risk_index": 0.0,
-    "socal_refining_seismic_risk_index": 0.0,
-    "mid_atlantic_seismic_risk_index": 0.0,
-    "new_madrid_seismic_risk_index": 0.0,
-    "composite_seismic_risk_index": 0.0,
-    "is_pipeline_emergency_shutdown_risk": false,
-    "is_refinery_inspection_advisory": false,
-    "max_magnitude": 0.0,
-    "total_significant_quakes": 0
-  }
-}
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=5&include_retroactive=false" \
+  -H "X-API-Key: $MIDGLEY_API_KEY"
 ```
 
 ---
 
-### 7. `GET /api/v1/forecast/scenarios` (Issue #300)
-Returns all catalog counterfactual and prospective forward shock scenarios augmented with dynamic seasonal and climatological plausibility tiers (`ACTIVE_THREAT`, `SEASONALLY_PLAUSIBLE`, `SEASONALLY_DORMANT`, `EVERGREEN`, `PROSPECTIVE_FORWARD`), active/peak climatological windows, and live telemetry triggers.
-
-**Query Parameters:**
-* `active_only` (bool, optional): If `true`, filters out dormant off-season scenarios.
-* `locale` (string, optional): Target metro hub code (e.g. `oakland`, `tulsa`, `port_st_lucie`).
-* `target_date` (string, optional): Evaluation target date formatted `YYYY-MM-DD`.
-* `include_prospective` (bool, optional): Include 1–14 day precursor forward-generated prospective scenarios (default: `true`).
+### 7. `GET /api/v1/forecast/purged-cv`
+Returns out-of-sample purged and combinatorial cross-validation metrics for Ridge, Stacking Ensemble, and Baseline models with enforced embargo gaps to ensure temporal leakage prevention.
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/forecast/scenarios?active_only=true&locale=oakland" \
-     -H "X-API-Key: <your_api_key>"
+curl -X GET "http://localhost:8000/api/v1/forecast/purged-cv" \
+  -H "X-API-Key: $MIDGLEY_API_KEY"
 ```
 
 ---
 
-### 8. `POST /api/v1/forecast/simulate`
-Simulates counterfactual physical refinery outages, weather disasters, or geopolitical chokepoint shocks with dynamic seasonal plausibility gating (Issue #300) and optional 4-persona multi-agent deliberative market simulation (Issue #307).
-
-**Request Body:**
-```json
-{
-  "scenario_id": "port_st_lucie_hurricane",
-  "locale": "port_st_lucie",
-  "custom_shock_pct": 0.05,
-  "target_date": "2026-09-18",
-  "enable_cohort_simulation": true,
-  "custom_headline": "Optional breaking headline prose override"
-}
-```
+### 8. `GET /api/v1/forecast/scenarios` & `POST /api/v1/forecast/simulate`
+Discovers and executes counterfactual market shocks with seasonal plausibility gating and MiroFish multi-agent cohort simulation (`Agent_Refiner`, `Agent_Logistics`, `Agent_Consumer`, `Agent_Macro`).
 
 **Example Request:**
 ```bash
 curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
-     -H "Content-Type: application/json" \
-     -H "X-API-Key: <your_api_key>" \
-     -d '{"scenario_id": "port_st_lucie_hurricane", "locale": "port_st_lucie", "target_date": "2026-09-18", "enable_cohort_simulation": true}'
-```
-
-**Example Response:**
-```json
-{
-  "status": "success",
-  "timestamp": "2026-09-18T14:20:00.000000",
-  "scenario": {
-    "id": "port_st_lucie_hurricane",
-    "name": "Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown",
-    "headline": "Major Hurricane storm surge forces emergency closure of Port Everglades and Port Canaveral marine petroleum berths.",
-    "category": "meteorological",
-    "season_window": "Jun 01 – Nov 30"
-  },
-  "plausibility": {
-    "status": "SEASONALLY_PLAUSIBLE",
-    "score": 0.90,
-    "is_in_season": true,
-    "is_in_peak": true,
-    "warning_message": null,
-    "context_reasoning": "Scenario is in PEAK climatological window (Aug 15 – Oct 15). High physical probability."
-  },
-  "simulation": {
-    "target_locale": "port_st_lucie",
-    "baseline_price_per_gal": 3.489,
-    "simulated_price_per_gal": 3.721,
-    "shock_delta_dollars": 0.232,
-    "shock_delta_percent": 6.66
-  },
-  "cohort_simulation": {
-    "status": "success",
-    "provider_used": "tier_3_deterministic_matrix",
+  -H "X-API-Key: $MIDGLEY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
     "scenario_id": "port_st_lucie_hurricane",
     "locale": "port_st_lucie",
-    "personas": {
-      "Agent_Refiner": {
-        "stance": "DISRUPTIVE",
-        "price_shock_pct": 0.0866,
-        "confidence": 0.90,
-        "key_catalysts": ["Precautionary refinery shutdowns", "Storm surge / flood risk"],
-        "reasoning": "Coastal weather forces precautionary shutdowns."
-      },
-      "Agent_Logistics": {
-        "stance": "DISRUPTIVE",
-        "price_shock_pct": 0.0833,
-        "confidence": 0.88,
-        "key_catalysts": ["Port and marine terminal closures"],
-        "reasoning": "Marine berths and ports halt petroleum offloading."
-      },
-      "Agent_Consumer": {
-        "stance": "BEARISH",
-        "price_shock_pct": 0.0400,
-        "confidence": 0.75,
-        "key_catalysts": ["Severe storm driving cessation"],
-        "reasoning": "Travel halts sharply compress regional fuel consumption."
-      },
-      "Agent_Macro": {
-        "stance": "BULLISH",
-        "price_shock_pct": 0.0700,
-        "confidence": 0.86,
-        "key_catalysts": ["Gulf of Mexico crude shut-ins"],
-        "reasoning": "Crude shut-ins create supply deficit expectations."
-      }
-    },
-    "consensus": {
-      "price_shock_pct": 0.0712,
-      "divergence_index": 0.0189,
-      "rbob_shock_dollars_per_gal": 0.248,
-      "ho_distillate_shock_dollars_per_gal": 0.285,
-      "regional_freight_basis_delta_cents": 3.72,
-      "consensus_stance": "BULLISH",
-      "consensus_summary": "Consensus indicates a +7.12% net price shock with divergence index 0.019."
-    },
-    "decision_graph_mermaid": "flowchart TD\n  ..."
-  }
-}
+    "target_date": "2026-09-25",
+    "enable_cohort_simulation": true
+  }'
 ```
 
-**Supported Scenarios:**
-* `greenville_hurricane`: Category 3 Atlantic Hurricane Landfall & Tar River Flooding (+6.62%) [Active: Jun 01 – Nov 30]
-* `port_st_lucie_hurricane`: Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown (+6.66%) [Active: Jun 01 – Nov 30]
-* `polar_vortex_freeze`: Polar Vortex Arctic Blast & Refining Freeze-Off Shock (+6.25%) [Active: Dec 01 – Feb 28]
-* `summer_refinery_thermal_cutback`: Delaware & Ohio River Summer Refinery Cooling Water Thermal Curtailment (+3.85%) [Active: Jun 15 – Sep 15]
-* `carb_transition`: CARB CaRFG Summer-Blend Transition Compliance Surge (+4.44%) [Active: Feb 15 – May 01]
-* `pge_psps_shutoff`: PG&E PSPS Wildfire Power Shutoff & Blackout (+7.07%) [Active: Jul 01 – Nov 15]
-* `carquinez_atmospheric_river`: Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt (+4.35%) [Active: Nov 01 – Apr 01]
-* `tulsa_tornado`: West Tulsa HF Sinclair Refinery EF-3 Tornado (+4.58%) [Active: Mar 15 – Jun 30]
-* `selma_outage`: Selma NC Distribution Hub Tank Farm Outage & Blackout (+5.69%) [Active: Apr 01 – Aug 31]
-* `mississippi_low_water`: Lower Mississippi & Ohio River Low-Water Bottleneck (+4.20%) [Active: Aug 15 – Dec 15]
-* `houston_ship_channel_closure`: Houston Ship Channel Torrential Runoff & Marine Closure (+5.12%) [Active: May 01 – Oct 31]
-* `cushing_spill`: Cushing Keystone Pipeline Rupture & Lock (+4.58%) [Evergreen]
-* `hormuz_blockade`: Strait of Hormuz Tanker Blockade (21M bpd) (+2.88%) [Evergreen]
-* `suez_rerouting`: Red Sea / Suez Canal Rerouting Crisis (+5.32%) [Evergreen]
-* `colonial_outage`: Colonial Pipeline Mainline Outage / Cyberattack Shock (+7.54%) [Evergreen]
-* `marathon_outage`: Marathon Catlettsburg KY Refinery Outage (+4.78%) [Evergreen]
-* `chevron_hydrocracker`: Chevron Richmond Refinery Hydrocracker Outage (+5.76%) [Evergreen]
-* `hayward_quake`: USGS Hayward Fault M>=6.0 Seismic Quake (+8.48%) [Evergreen]
-* `weekend_opec_post`: Weekend Executive OPEC Talkdown Post (-1.85%) [Evergreen]
-* `weekend_tariff_declaration`: Weekend Foreign Energy Tariff Declaration (+2.10%) [Evergreen]
+---
+
+### 9. Distillate & Ultra-Low Sulfur Diesel (ULSD) Endpoints (Issue #41)
+
+* `GET /api/v1/diesel/live`: Fetches real-time retail diesel prices across metro hubs and prompt heating oil crack futures (`HO=F`).
+* `GET /api/v1/diesel/forecast`: Generates 5-day out-of-time ULSD wholesale and retail price forecasts.
+* `GET /api/v1/diesel/simulate`: Simulates counterfactual distillate market shocks (Colonial Line 2 outage, Polar Vortex, Midwest planting rush).
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/diesel/live" \
+  -H "X-API-Key: $MIDGLEY_API_KEY"
+```
+
+---
+
+### 10. Knowledge Graph Endpoints (Issue #230)
+
+* `GET /api/v1/graph/topology`: Returns full knowledge graph topology (nodes, edges, node degrees) mapping refineries, pipelines, delivery hubs, and regulatory bodies.
+* `GET /api/v1/graph/subgraph?entity={entity_name}&depth={depth}`: Traverses localized subgraph neighborhood around a specific entity.
+* `POST /api/v1/graph/ingest`: Ingests a new event shock or observation into the persistent graph structure.
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/graph/subgraph?entity=Colonial_Pipeline&depth=2"
+```
+
+---
+
+### 11. Headline Arena Benchmarking Connectors (Issue #182 & #408)
+
+* `GET /api/v1/connectors/headline-arena/status`: Returns current pending forecast cache status, submitted challenge ledger, and settlement rules.
+* `POST /api/v1/connectors/headline-arena/submit`: Triggers forecast dispatching to Headline Arena civic / macro challenges.
+
+**Example Request:**
+```bash
+curl -X GET "http://localhost:8000/api/v1/connectors/headline-arena/status"
+```
+
+---
+
+### 12. Physical & Macro Data Feed Endpoints
+
+* `GET /api/v1/macro/freight-tsi`: Returns U.S. Bureau of Transportation Statistics (BTS) Freight Transportation Services Index (TSI) and truck tonnage demand momentum.
+* `GET /api/v1/macro/traffic-volume`: Returns Federal Highway Administration (FHWA) Monthly Traffic Volume Trends (TVT) and Vehicle Miles Traveled (VMT).
+* `GET /api/v1/usgs/water_levels?cluster={cluster}`: Real-time river gage height, streamflow, and water temperature across 6 marine clusters.
+* `GET /api/v1/usgs/seismic?corridor={corridor}`: Real-time USGS earthquake telemetry evaluated near refining assets.
+* `GET /api/v1/aqi/live`: Fence-line air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring detection.
+* `GET /api/v1/aqi/ozone-alerts`: EPA AirNow regional ground-level ozone action days and summer RVP compliance surcharges.
+
+---
+
+### 13. System Observability & Prometheus Metrics
+
+* `GET /metrics` and `GET /api/v1/metrics`: Exports Prometheus-compatible plaintext metrics for scrape collectors (Grafana, Datadog).
+* `GET /api/v1/system/quota`: Real-time safety valve quota accounting (Firecrawl 800/mo cap, Finlight 150/mo cap, IPASIS 100/day cap).
+* `GET /api/v1/system/telemetry`: 7-day health audit across zero-cost open data connectors.
+* `GET /api/v1/system/token-costs`: TokenTab cumulative LLM token consumption and USD costs.
+* `GET /api/v1/system/cache-status`: 3-tier cache gateway health and edge probe latencies.
+
+**Example Request:**
+```bash
+curl -s "http://localhost:8000/metrics"
+```
 
 ---
 
@@ -580,47 +295,20 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
 * **Endpoint:** `POST /api/v1/events/webhook`
 * **Content-Type:** `application/json`
 * **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature; **mandatory in production** under fail-closed security when `MIDGLEY_ENV=prod`).
-* **Authentication Behavior (Issue #173 & Issue #381):**
+* **Authentication Behavior:**
   - **Production (`MIDGLEY_ENV=prod`):** Fails closed with `401 Unauthorized` if `MIDGLEY_WEBHOOK_SECRET` is unset or signature is missing/invalid.
   - **Development (`MIDGLEY_ENV=dev` / `TESTING=1`):** Permits unauthenticated pushes when `MIDGLEY_WEBHOOK_SECRET` is unset for local testing convenience.
-* **Payload Transformer Aliases:**
-  - `headline` $\leftarrow$ `headline`, `title`, `text`, `summary`, `tweet_content`, `article_title`, `content`
-  - `url` $\leftarrow$ `url`, `link`, `article_url`, `web_url`, `href`
-  - `source` $\leftarrow$ `source`, `origin`, `provider`, `channel`, `service`
 
-* **IPASIS Security Filter (Issue #87):** Inspects client IP (`CF-Connecting-IP`, `X-Forwarded-For`), rejecting high-risk Tor/Abuse origins with HTTP 403 Forbidden.
-* **Security Telemetry Endpoint:** `GET /api/v1/security/ip-status` — Returns IPASIS IP security gateway status, daily API request accounting (used / 100 allowance), private IP bypass statistics, and blocked origin counts.
-
-For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView), security matrix, and copy-pasteable HMAC signature snippets, see **[WEBHOOK_FORMATTING_GUIDE.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/WEBHOOK_FORMATTING_GUIDE.md)**.
+For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView), security matrix, and copy-pasteable HMAC signature snippets, see **[WEBHOOK_FORMATTING_GUIDE.md](docs/WEBHOOK_FORMATTING_GUIDE.md)**.
 
 ---
 
-## 📦 Cloudflare Queue Batch Consumer Endpoint (`POST /api/v1/events/queue-consumer` - Issue #194)
+## 📦 Cloudflare Queue Batch Consumer Endpoint (`POST /api/v1/events/queue-consumer`)
 
 * **Endpoint:** `POST /api/v1/events/queue-consumer`
 * **Content-Type:** `application/json`
-* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature when `MIDGLEY_WEBHOOK_SECRET` is set).
-* **Description:** Asynchronously receives batch queued event payloads pushed by Cloudflare Queue consumers or local queue workers. Processes queued event items in batch, executing deduplication against edge cache, fast-path anomaly scoring, and regional metro forecast updates.
-
-* **Example Payload:**
-```json
-{
-  "queue_name": "intraday-event-queue",
-  "batch_id": "batch_884920",
-  "events": [
-    {
-      "headline": "OPEC Emergency Cut Announced",
-      "url": "https://news.example.com/opec1",
-      "source": "Cloudflare_Queue_Consumer"
-    },
-    {
-      "headline": "Refinery Outage Reported in PADD 1B",
-      "url": "https://news.example.com/refinery2",
-      "source": "Cloudflare_Queue_Consumer"
-    }
-  ]
-}
-```
+* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature when `MIDGLEY_WEBHOOK_SECRET` is configured).
+* **Description:** Asynchronously receives batch queued event payloads pushed by Cloudflare Queue consumers or local queue workers.
 
 ---
 
@@ -630,55 +318,9 @@ The Midgley MCP Server exposes tools, resources, and prompt templates for integr
 
 ### Transport Modes
 1. **Stdio Mode**:
-   Execute directly in CLI / agent environments:
-   ```bash
-   python -m src.mcp_server
-   ```
-
+   `python -m src.mcp_server`
 2. **HTTP/SSE Transport**:
-   Connect via Server-Sent Events (SSE):
    `http://localhost:8000/mcp/sse`
-
-### Exposed MCP Tools
-- `get_live_gas_prices(locale, zip_code)` — Fetches real-time retail pump prices via GasBuddy / AAA scrapers
-- `get_gas_price_prediction(locale, days)` — 5-day out-of-time wholesale & retail gasoline forecasts
-- `get_live_and_forecast(locale)` — Unified current live price, forecast target, rack margin, and catalysts
-- `list_market_shock_scenarios(active_only, locale, target_date)` — Discovers physical, weather, and geopolitical shock scenarios with seasonal plausibility tiers (ACTIVE_THREAT, SEASONALLY_PLAUSIBLE, SEASONALLY_DORMANT, EVERGREEN, PROSPECTIVE_FORWARD)
-- `simulate_fuel_market_shock(locale, scenario_id, custom_shock_pct, target_date)` — Counterfactual physical & geopolitical shocks with seasonal plausibility gating
-- `get_live_diesel_prices()` — Real-time ULSD (HO=F) futures, distillate crack spreads, 3-2-1 margins
-- `get_diesel_forecast(rbob, ulsd, wti)` — 5-day out-of-time ULSD wholesale & retail diesel forecasting
-- `simulate_diesel_market_shock(scenario, base_ulsd)` — Physical and seasonal diesel shock simulations
-- `query_knowledge_graph(entity, depth)` — Traverses petroleum infrastructure, refining, and pipeline topology
-- `retrieve_event_precedents(query, top_k)` — Searches episodic memory for historical shock analogs & reflections
-- `get_usgs_water_telemetry(cluster)` — Inland waterway streamflow, gage height, and barge transport conditions
-- `get_usgs_seismic_telemetry(corridor, days, min_mag)` — Real-time USGS earthquake telemetry near refining corridors
-- `get_refinery_aqi_anomalies(corridor)` — Multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for flaring detection
-- `get_regional_ozone_alerts(corridor, zip_code)` — Official EPA AirNow ozone action days and seasonal RVP surcharges
-- `search_academic_literature(query, limit, source)` — Queries OpenAlex & Semantic Scholar for energy economics research
-- `get_academic_paper_tldr(paper_id_or_doi)` — Fetches automated single-sentence TL;DRs, citations, and open-access PDFs
-
-### Exposed MCP Resources
-- `resource://midgley/locales/national`
-- `resource://midgley/locales/tulsa`
-- `resource://midgley/locales/newark`
-- `resource://midgley/locales/cincinnati`
-- `resource://midgley/locales/greenville`
-- `resource://midgley/locales/charlotte`
-- `resource://midgley/locales/oakland`
-- `resource://midgley/locales/bayarea`
-
-### Exposed MCP Prompts
-- `prompt://midgley/market_summary` (LLM financial briefing prompt template)
-
----
-
-## 🛡️ Remote Data Connector Security & Defused XML Feed Parsing (Issue #351)
-
-To protect the prediction pipeline against denial-of-service and parser disruption from untrusted or adversarial upstream network responses, all remote data connectors parsing unauthenticated XML feeds (including arXiv API preprints, BSEE offshore shut-in reports, SEC EDGAR 8-K filings, Fireworks SVG diagrams, Geopolitical maritime RSS feeds, NOAA NHC hurricane advisories, and Reachability social syndication streams) are hardened using `defusedxml.ElementTree`:
-
-- **Entity Expansion Protection:** Defuses Billion Laughs attacks, nested entity expansions, and quadratic blowup payloads.
-- **DTD Forbiddance:** Prohibits unauthorized document type definition entity resolutions from remote hosts.
-- **Fail-Safe Fallbacks:** Gracefully captures `DefusedXmlException` and malformed XML parse errors, routing to cached observations or zero-cost deterministic fallbacks without crashing pipeline execution.
 
 ---
 
@@ -696,11 +338,4 @@ systemctl --user restart midgley-api.service
 
 The Midgley REST API Gateway powers the dedicated **[Android Auto & Automotive Fuel Assistant (`midgley-auto`)](https://github.com/KoshiirRa/midgley-auto)**.
 
-### Mobile Client Endpoints:
-- `GET /api/v1/locations/resolve?lat={lat}&lon={lon}` — Resolves vehicle GPS coordinates to refining hub MSA.
-- `GET /api/v1/forecasts/{location_id}` — Returns 5-day out-of-time price trajectory & quantile bands ($P_{10}$, $P_{50}$, $P_{90}$).
-- `GET /api/v1/savings?location_id={location_id}&tank_capacity={gallons}` — Returns optimal fill-up recommendation signal (`🟢 WAIT TO FILL UP`, `🔴 FILL UP NOW`), optimal fill day, and net tank savings.
-- `GET /api/v1/events/active?location_id={location_id}` — Returns active severe weather alerts (NOAA tornado/polar vortex) & refinery outage warnings.
-
 For complete client schemas, SDK configuration, and AndroidX Car App integration guidelines, see **[API_CONTRACT.md](https://github.com/KoshiirRa/midgley-auto/blob/main/docs/API_CONTRACT.md)** in `midgley-auto`.
-

@@ -5,14 +5,14 @@
     "completion_tokens": 50,
     "total_tokens": 200,
     "estimated_cost_usd": 2.6e-05,
-    "fallback_activations": 4
+    "fallback_activations": 6
   },
   "memory_totals": {
-    "retain_count": 44,
+    "retain_count": 53,
     "recall_count": 1,
     "reflect_count": 0,
     "cloud_calls": 24,
-    "local_fallback_calls": 21
+    "local_fallback_calls": 30
   },
   "llm_events": [
     {
@@ -69,6 +69,28 @@
       "total_tokens": 200,
       "estimated_cost_usd": 2.6e-05,
       "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 20:45:28",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-23 20:53:05",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
     }
   ],
   "api_events": [],
@@ -432,6 +454,78 @@
       "backend": "sqlite_fts5",
       "status": "success",
       "latency_ms": 2.1
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:06",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:07",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:46:08",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
     }
   ]
 }

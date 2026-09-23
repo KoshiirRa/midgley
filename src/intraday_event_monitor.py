@@ -216,11 +216,12 @@ class IntradayEventMonitor:
         via Tiered LLM / Lexicon failover. Returns (is_anomaly, scores).
         """
         text_lower = headline.lower()
-        if any(ex in text_lower for ex in EXCLUDE_KEYWORDS):
+        if any(re.search(rf"\b{re.escape(ex)}\b", text_lower) for ex in EXCLUDE_KEYWORDS):
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
-        if any(ex in text_lower for ex in NON_ENERGY_TARIFF_EXCLUDE):
+        if any(re.search(rf"\b{re.escape(ex)}\b", text_lower) for ex in NON_ENERGY_TARIFF_EXCLUDE):
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+
 
         has_keyword = any(kw in text_lower for kw in TRIGGER_KEYWORDS)
 

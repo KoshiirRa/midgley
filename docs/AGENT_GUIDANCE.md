@@ -115,6 +115,14 @@ ssh marty@10.42.42.54 "cd /home/marty/projects/midgley && TESTING=1 pytest tests
 * **Tiered Key Routing:** API requests provisioned with `basic` tier keys automatically route event scoring to zero-cost deterministic offline lexicons (`ZeroCostProviderHook` in `src/event_analyzer.py`), preserving paid Gemini LLM quota for `privileged` tier keys and administrative jobs.
 * **External Connector Mocks:** Unit tests for external physical and regulatory data connectors (NOAA, USGS, EIA, BTS, CEC, EPA, FERC) must mock HTTP responses and test both offline caching and bitemporal vintage persistence.
 
+### Cloudflare Edge Workers (`workers/`)
+```bash
+# Run TypeScript type-checking and worker tests on dev-vm
+ssh marty@10.42.42.54 "cd /home/marty/projects/midgley && npm run typecheck && npm test"
+```
+* **Type-Checking Mandate (`npm run typecheck`):** Executes `tsc --noEmit` under strict TypeScript compiler options (`tsconfig.json`) to catch type mismatches, missing properties, or incorrect Cloudflare Worker bindings prior to deployment.
+* **Vitest Worker Test Suite (`npm test`):** Executes automated unit tests (`tests/workers.test.ts`) covering Ed25519 Discord signature verification, Cloudflare Queues batch consumption & DLQ handling, D1 deduplication cache persistence, and Bearer token auth validation.
+
 ### Automotive Android App (`midgley-auto`)
 ```bash
 # Run unit tests and assemble APK on dev-vm
@@ -122,6 +130,7 @@ ssh marty@10.42.42.54 "cd /home/marty/projects/midgley-auto && ./gradlew test as
 ```
 
 ---
+
 
 ## 🛡️ 6. Security Guardrails & Hardening Directives
 
