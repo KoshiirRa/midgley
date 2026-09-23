@@ -318,10 +318,13 @@ curl http://localhost:8000/api/v1/system/quota
 ```
 
 ### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
-Execute the full multi-region prediction pipeline once:
+Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, regional diesel engines, and generates the public web dashboard):
 ```bash
-python3 -m src.locations.national.main --llm
+python3 run_all.py --use-llm-api
 ```
+
+> [!NOTE]
+> If you wish to run only the standalone National Wholesale RBOB model without calibrating regional metros, execute `python3 -m src.locations.national.main --use-llm-api`. Note that `--use-llm-api` is the canonical CLI flag (the `--llm` flag is deprecated and ignored). If `GEMINI_API_KEY` is omitted, `--use-llm-api` gracefully routes event scoring to the zero-cost Tier 3 offline lexicon.
 
 Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
 ```bash
@@ -390,7 +393,7 @@ After=network.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/marty/projects/midgley
-ExecStart=/home/marty/projects/midgley/.venv/bin/python -m src.locations.national.main --llm
+ExecStart=/bin/bash -c "/home/marty/projects/midgley/.venv/bin/python run_all.py --use-llm-api && /home/marty/projects/midgley/.venv/bin/python scripts/readme_updater.py"
 EnvironmentFile=/home/marty/projects/midgley/.env
 ```
 

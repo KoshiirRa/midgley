@@ -235,8 +235,11 @@ docker run -d \
   -e FINLIGHT_API_KEY="fl_live_..." \
   ghcr.io/koshiirra/midgley:self-hosted
 
-# Verify API server health
-curl http://localhost:8000/api/v1/forecast/summary
+# Verify unauthenticated API server health
+curl http://localhost:8000/health
+
+# Verify authenticated functional prediction route (if API key authentication is enabled)
+curl -H "X-API-Key: $MIDGLEY_API_KEY" "http://localhost:8000/api/v1/forecast/predict?locale=national"
 ```
 
 Key guide coverage includes:

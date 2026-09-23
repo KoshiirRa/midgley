@@ -406,10 +406,13 @@ curl http://localhost:8000/api/v1/system/quota
 ```
 
 ### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
-Execute the full multi-region prediction pipeline once:
+Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, regional diesel engines, and generates the public web dashboard):
 ```bash
-python3 -m src.locations.national.main --llm
+python3 run_all.py --use-llm-api
 ```
+
+> [!NOTE]
+> If you wish to run only the standalone National Wholesale RBOB model without calibrating regional metros, execute `python3 -m src.locations.national.main --use-llm-api`. Note that `--use-llm-api` is the canonical CLI flag (the `--llm` flag is deprecated and ignored). If `GEMINI_API_KEY` is omitted, `--use-llm-api` gracefully routes event scoring to the zero-cost Tier 3 offline lexicon.
 
 Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
 ```bash
@@ -910,7 +913,7 @@ curl -s http://localhost:8000/api/v1/system/releases/latest | jq .
 
 ### 2. Run the Compatibility & Upgrade Reconciler CLI (Issue #343)
 The upgrade reconciler audits local environment configuration against upstream release manifests. To prevent Arbitrary Code Execution (RCE), the reconciler strictly validates upstream URLs (enforcing HTTPS scheme) and executes only pre-defined, parameterized allowlisted actions without shell interpolation (`shell=False`):
-* `retrain_regional_models`: Executes `scripts/manage_regions.py retrain --all`
+* `retrain_regional_models`: Executes `scripts/manage_regions.py retrain --all` (or full pipeline `run_all.py`)
 * `update_static_dashboard`: Executes `src/dashboard_generator.py`
 * `run_migrations`: Executes migration utilities with safe argument vectors
 
@@ -926,7 +929,7 @@ python3 scripts/check_updates.py --auto-reconcile
 When upstream releases include new econometric features (e.g. Cboe OVX volatility, USGS river tow gauges, maritime chokepoints, California Energy Commission Fuels Watch, EPA RVP regulatory standards, NOAA CO-OPS marine water levels), autonomous AI agents can execute the following deterministic reconciliation sequence:
 1. Fetch latest upstream manifest: `python3 -m src.release_manifest`
 2. Run update audit: `python3 scripts/check_updates.py --dry-run`
-3. Execute regional model realignment: `python3 scripts/manage_regions.py retrain --all`
+3. Execute regional model realignment: `python3 scripts/manage_regions.py retrain --all` (or `python3 run_all.py --use-llm-api`)
 4. Confirm test suite passes: `pytest tests/`
 
 ---

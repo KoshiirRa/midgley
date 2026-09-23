@@ -107,11 +107,13 @@ When modifying or extending the Android companion application:
 
 ### Core Python Engine (`midgley`)
 ```bash
-# Run on dev-vm
-ssh marty@10.42.42.54 "cd /home/marty/projects/midgley && pytest tests/ -v"
+# Run on dev-vm with test isolation
+ssh marty@10.42.42.54 "cd /home/marty/projects/midgley && TESTING=1 pytest tests/ -v"
 ```
-* **Quota Safety:** Ensure tests set `TESTING=1` or mock network calls to avoid consuming Gemini LLM tokens or Finlight/Firecrawl API quotas.
-* **Test Isolation:** Verify that unit test runs do not pollute persistent stores (`data/intraday_events.json`, `data/evaluated_headlines.json`, or `docs/`).
+* **Test Isolation & Quota Safety (`TESTING=1`):** All automated test executions must set `TESTING=1`. This environment variable suppresses external network egress to Gemini LLM APIs, Finlight/Firecrawl scrapers, Discord webhooks, and W&B logging.
+* **Test Data Prefixing (`Test_*`):** When generating test fixtures or mocking headlines in unit tests, prefix sources with `Test_` (e.g. `source="Test_Fixture"`). The intraday event monitor and prediction logger automatically drop or segregate `Test_*` entities, preventing test fixture pollution in production ledgers (`data/intraday_events.json`, `data/evaluated_headlines.json`, `data/prediction_history.csv`, or `docs/`).
+* **Tiered Key Routing:** API requests provisioned with `basic` tier keys automatically route event scoring to zero-cost deterministic offline lexicons (`ZeroCostProviderHook` in `src/event_analyzer.py`), preserving paid Gemini LLM quota for `privileged` tier keys and administrative jobs.
+* **External Connector Mocks:** Unit tests for external physical and regulatory data connectors (NOAA, USGS, EIA, BTS, CEC, EPA, FERC) must mock HTTP responses and test both offline caching and bitemporal vintage persistence.
 
 ### Automotive Android App (`midgley-auto`)
 ```bash
