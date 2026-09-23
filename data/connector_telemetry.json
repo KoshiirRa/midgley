@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-23 13:12:49",
-  "total_events": 851,
+  "last_updated": "2026-09-23 13:29:33",
+  "total_events": 854,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -8512,6 +8512,36 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-23 13:27:51",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 277.77,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 13:29:30",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 4831.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 1ede9d79-db5d-4451-9010-efaba7033c65 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-23 13:29:33",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 2642.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 5722a71d-0c5a-4cf8-84ed-be91cfb60261 already predicted (HTTP 500)"
     }
   ]
 }
