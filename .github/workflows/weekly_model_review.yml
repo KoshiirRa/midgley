@@ -40,6 +40,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run Ruff Static Analysis Gate (Fatal & Syntax Errors)
+        run: |
+          ruff check src/ scripts/ tests/
+
       - name: Cache Lookup Datastore & Quota Ledger
         uses: actions/cache@v4
         with:

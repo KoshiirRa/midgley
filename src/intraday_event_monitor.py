@@ -14,6 +14,7 @@ import os
 import sys
 import json
 import time
+import re
 import logging
 import pandas as pd
 from datetime import datetime
@@ -617,7 +618,6 @@ class IntradayEventMonitor:
         Diagnostic Health Check across all intraday news and event ingestion feeds (Issue #267).
         Probes RSS feeds, Executive Social Media, Key Movers, and Geopolitical feeds with latency profiling.
         """
-        import time
         results = []
         overall_healthy = True
 

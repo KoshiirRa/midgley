@@ -39,7 +39,7 @@ from src.regional_metadata import list_all_regional_metadata
 from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
 from src.tokentab_accounting import token_tab_manager
 from src.key_manager import global_key_manager
-from src.version import get_model_version
+from src.version import get_version, get_model_version
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +136,6 @@ async def get_api_key_user(
     request.state.key_info = key_info
     return key_info
 
-from src.version import get_version, get_model_version
 
 app = FastAPI(
     title="Midgley Gas Price Forecasting API Gateway",

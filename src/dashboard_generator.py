@@ -2223,7 +2223,7 @@ def generate_public_dashboard():
     # Forecast Staleness Gate & Freshness Badge (Issue #398)
     forecast_freshness_badge = '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"><i class="fa-solid fa-circle-check mr-1"></i>Forecast Fresh (&lt;36h)</span>'
     try:
-        hist_csv = os.path.join(DATA_DIR, "prediction_history.csv")
+        hist_csv = os.path.join(PROJECT_ROOT, "data", "prediction_history.csv")
         if os.path.exists(hist_csv):
             _hist_df = pd.read_csv(hist_csv)
             if not _hist_df.empty and 'log_timestamp' in _hist_df.columns:

@@ -147,6 +147,12 @@ class AlphaFactorMiner:
             logger.info("GEMINI_API_KEY absent. Using RD-Agent default seed factors.")
             return DEFAULT_SEED_FACTORS[:count]
 
+        prompt = (
+            f"You are a quantitative commodities researcher. Formulate {count} novel alpha factor hypotheses "
+            f"for predicting 5-day gasoline price returns using available columns: {available_columns}.\n"
+            "Return a JSON array of objects with keys: 'name', 'expression', 'hypothesis'."
+        )
+
         try:
             text_out = None
             try:

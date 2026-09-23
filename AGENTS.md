@@ -601,6 +601,17 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
+### 12. Ruff Fatal-Error & Syntax Static Analysis Gate (`pyproject.toml` & GitHub Actions, Issue #350)
+
+* **Role:** Enforces continuous static analysis and syntax validation across all core source code (`src/`), maintenance scripts (`scripts/`), and unit test suites (`tests/`).
+* **Rule Selection & Quality Guard:** Configured in `pyproject.toml` targeting high-signal fatal errors (`select = ["F", "E9"]`):
+  - **`E9`**: Fatal syntax errors (`E999`), invalid escape sequences, and unparseable ASTs.
+  - **`F821` / `F822` / `F823`**: Undefined variable references and scope leakage.
+  - **`F811`**: Duplicate function or symbol definitions.
+* **CI/CD Integration:** Executed as a blocking gate (`ruff check src/ scripts/ tests/`) in GitHub Actions workflows (`gas_price_forecast.yml`, `weekly_model_review.yml`) prior to pipeline execution.
+
+---
+
 ### 13. GitHub Credential Health & Rate Limit Directives
 
 * **Role:** Ensures agents and development tools maintain GitHub credential health during issue management, milestone tracking, and repository operations.

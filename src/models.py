@@ -346,7 +346,7 @@ def compute_locale_feature_attribution_breakdown(
 
 
 from sklearn.ensemble import StackingRegressor
-from sklearn.linear_model import Ridge, ElasticNet, RidgeCV
+from sklearn.linear_model import ElasticNet
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline

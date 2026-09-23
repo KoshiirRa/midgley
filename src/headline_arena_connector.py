@@ -1233,7 +1233,7 @@ class HeadlineArenaConnector:
             return {
                 "status": "AUTH_ERROR",
                 "asset": asset,
-                "challenge_id": challenge_id,
+                "challenge_id": None,
                 "message": "Failed to authenticate with Headline Arena."
             }
 
