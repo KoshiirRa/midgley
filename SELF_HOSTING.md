@@ -166,7 +166,21 @@ CENSUS_API_KEY=""
 # Sync script: python scripts/sync_headline_arena.py (runs every 30m via GitHub Actions or systemd)
 HEADLINE_ARENA_CLIENT_ID="ha_agent_..."
 HEADLINE_ARENA_CLIENT_SECRET="ha_sec_..."  # Or HEADLINE_ARENA_API_KEY
-HEADLINE_ARENA_DEV_SUBMIT="0"              # Set to 1 in dev to execute live test submissions (tagged [DEV-TEST])
+# ==============================================================================
+# DISCORD INTRADAY WEBHOOK NOTIFICATIONS (Issues #234, #258, #330)
+# ==============================================================================
+# Real-time Discord alerts on breaking intraday forecast revisions
+# Supports standard incoming webhooks (clean embeds with feedback links)
+DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+DISCORD_WEBHOOK_URL=""            # Fallback webhook URL
+DISCORD_INCLUDE_COMPONENTS="0"    # Set to 1 only if using Discord Bot Application authorization
+
+# ==============================================================================
+# FHWA MONTHLY TRAFFIC VOLUME TRENDS (TVT / VMT) (Issue #369)
+# ==============================================================================
+# Free public data from Federal Highway Administration (FHWA)
+# Ingests national & 5-census division vehicle-miles traveled with 60-day publication lag
+# Endpoint: GET /api/v1/macro/traffic-volume; bitemporal cache at data/fhwa_vmt_vintages.json
 
 # Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
 HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
@@ -828,6 +842,7 @@ Verify that `docs/index.html` and regional HTML pages compile without errors.
 curl -s http://localhost:8000/api/v1/system/quota | jq .
 curl -s http://localhost:8000/api/v1/forecast/predict | jq .
 curl -s http://localhost:8000/api/v1/macro/freight-tsi | jq .
+curl -s http://localhost:8000/api/v1/macro/traffic-volume | jq .
 ```
 
 ### 4. Verify Systemd Timers (Linux Deployment)

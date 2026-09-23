@@ -15,7 +15,8 @@ from typing import Tuple, Dict, Any, List, Optional, Union, Callable
 import pandas as pd
 import numpy as np
 import yfinance as yf
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 import logging
 from src.noaa_weather import get_national_production_weather_dataset
 from src.geopolitical_feeds import get_geopolitical_maritime_events
@@ -1823,10 +1824,17 @@ class AlphaVantageDataConnector:
     def is_trading_hours(self, now_dt: datetime = None) -> bool:
         """
         Checks if current time is within US Energy & Equity Commodity Trading Hours
-        (08:00 AM - 05:00 PM EST, Monday through Friday).
+        (08:00 AM - 05:00 PM US Eastern Time, Monday through Friday).
+        Uses zoneinfo.ZoneInfo("America/New_York") for timezone-aware evaluation.
         """
+        eastern = ZoneInfo("America/New_York")
         if now_dt is None:
-            now_dt = datetime.now()
+            now_dt = datetime.now(timezone.utc).astimezone(eastern)
+        elif now_dt.tzinfo is None:
+            now_dt = now_dt.replace(tzinfo=eastern)
+        else:
+            now_dt = now_dt.astimezone(eastern)
+
         if now_dt.weekday() >= 5:  # Saturday/Sunday
             return False
         return 8 <= now_dt.hour < 17
@@ -2429,10 +2437,17 @@ class OilPriceAPIDataConnector:
     def is_trading_hours(self, now_dt: datetime = None) -> bool:
         """
         Checks if current time is within US Energy Commodity Trading Hours
-        (08:00 AM - 05:00 PM EST, Monday through Friday).
+        (08:00 AM - 05:00 PM US Eastern Time, Monday through Friday).
+        Uses zoneinfo.ZoneInfo("America/New_York") for timezone-aware evaluation.
         """
+        eastern = ZoneInfo("America/New_York")
         if now_dt is None:
-            now_dt = datetime.now()
+            now_dt = datetime.now(timezone.utc).astimezone(eastern)
+        elif now_dt.tzinfo is None:
+            now_dt = now_dt.replace(tzinfo=eastern)
+        else:
+            now_dt = now_dt.astimezone(eastern)
+
         if now_dt.weekday() >= 5:  # Saturday/Sunday
             return False
         return 8 <= now_dt.hour < 17
@@ -3345,3 +3360,22 @@ def fetch_nasa_power_features() -> Dict[str, Any]:
     """
     client = get_nasa_power_client()
     return client.get_combined_nasa_power_features()
+
+
+def get_fhwa_traffic_volume_connector():
+    """
+    Factory helper returning an instantiated FHWATrafficVolumeConnector (Issue #369).
+    """
+    from src.bts_transportation import FHWATrafficVolumeConnector
+    return FHWATrafficVolumeConnector()
+
+
+def fetch_fhwa_traffic_volume_features(
+    start_date: str = "2020-01-01",
+    end_date: Optional[str] = None
+) -> pd.DataFrame:
+    """
+    Helper function extracting monthly FHWA vehicle-miles traveled and consumer gasoline demand features.
+    """
+    from src.bts_transportation import fetch_fhwa_traffic_features
+    return fetch_fhwa_traffic_features(start_date=start_date, end_date=end_date)

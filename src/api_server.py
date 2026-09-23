@@ -1188,6 +1188,32 @@ def get_bts_freight_tsi_endpoint(
     }
 
 
+@app.get("/api/v1/macro/traffic-volume", summary="Get U.S. FHWA Monthly Traffic Volume Trends (TVT) & VMT Telemetry", tags=["Physical Data Feeds"])
+def get_fhwa_traffic_volume_endpoint(
+    start_date: Optional[str] = Query("2022-01-01", description="Historical start date (YYYY-MM-DD)"),
+    summary_only: bool = Query(False, description="Return only the latest demand momentum summary if true")
+):
+    """
+    Returns official Federal Highway Administration (FHWA) Monthly Traffic Volume Trends (TVT),
+    estimated vehicle-miles traveled (VMT), and macroeconomic passenger fuel demand momentum (Issue #369).
+    """
+    from src.bts_transportation import FHWATrafficVolumeConnector
+    connector = FHWATrafficVolumeConnector()
+    if summary_only:
+        return connector.get_fhwa_current_demand_summary()
+
+    df = connector.fetch_fhwa_vmt_dataset(start_date=start_date)
+    summary = connector.get_fhwa_current_demand_summary()
+    records = df.assign(date=df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records") if not df.empty else []
+    return {
+        "status": "SUCCESS",
+        "as_of": datetime.now(timezone.utc).isoformat(),
+        "demand_summary": summary,
+        "sample_count": len(records),
+        "history": records
+    }
+
+
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")
 def get_batch_forecast(req: BatchForecastRequest):
     """

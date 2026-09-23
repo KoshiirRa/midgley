@@ -262,6 +262,29 @@ def create_feature_matrix(
         if col not in df.columns:
             df[col] = 0.0
 
+    # Merge FHWA Monthly Traffic Volume Trends (TVT / VMT) (Issue #369)
+    try:
+        from src.bts_transportation import fetch_fhwa_traffic_features
+        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2020-01-01"
+        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
+        fhwa_df = fetch_fhwa_traffic_features(start_date=start_str, end_date=end_str)
+        if not fhwa_df.empty:
+            df = pd.merge(df, fhwa_df, on='date', how='left')
+            for col in [c for c in fhwa_df.columns if c != 'date']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().fillna(0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge FHWA traffic volume trends feed: {e}")
+
+    for col in [
+        'fhwa_vmt_national_billions', 'fhwa_vmt_mom_pct', 'fhwa_vmt_yoy_growth_pct',
+        'fhwa_vmt_12m_moving_total', 'fhwa_gasoline_demand_proxy',
+        'fhwa_vmt_northeast_index', 'fhwa_vmt_south_atlantic_index',
+        'fhwa_vmt_north_central_index', 'fhwa_vmt_south_central_index', 'fhwa_vmt_west_index'
+    ]:
+        if col not in df.columns:
+            df[col] = 0.0
+
     # Merge EIA Daily Regional Spot Prices & Basis Spreads (Issue #363)
     try:
         from src.data_ingestion import EIARegionalSpotConnector
