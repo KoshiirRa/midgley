@@ -13,7 +13,7 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-FALLBACK_PACKAGE_VERSION = "0.6.6"
+FALLBACK_PACKAGE_VERSION = "0.6.8"
 FALLBACK_MODEL_VERSION = "v1.6 Ipatieff"
 
 
@@ -21,10 +21,10 @@ def get_version() -> str:
     """
     Dynamically resolves the current Midgley package version using a 5-tier fallback chain:
     1. MIDGLEY_VERSION environment variable.
-    2. Latest git release tag (e.g. 'v0.5.5' -> '0.5.5') via git describe/tags.
+    2. Latest git release tag (e.g. 'v0.6.8' -> '0.6.8') via git describe/tags.
     3. Highest semver version from RELEASE_NOTES_v*.md files in repository root.
     4. pyproject.toml package version.
-    5. Immutable fallback constant ('0.5.5').
+    5. Immutable fallback constant ('0.6.8').
     """
     # Tier 1: Explicit environment variable
     env_ver = os.getenv("MIDGLEY_VERSION", "").strip()

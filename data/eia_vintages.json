@@ -2620,5 +2620,435 @@
       "padd3_to_padd2_pipeline_thousand_bpd": 980.0
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. Energy Information Administration API v2 / FRED (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:27:25",
+    "as_of": "2026-09-23 20:27:25",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false,
+    "refinery_utilization": {
+      "PADD1_EastCoast": 87.4,
+      "PADD2_Midwest": 92.1,
+      "PADD3_GulfCoast": 94.6,
+      "PADD5_WestCoast": 85.2
+    },
+    "gasoline_stocks_million_bbl": {
+      "PADD1": 54.2,
+      "PADD2": 48.6,
+      "PADD3": 82.1,
+      "PADD5": 28.4
+    },
+    "product_supplied_thousand_bpd": {
+      "us_motor_gasoline": 8850.0,
+      "us_distillate_fuel": 3920.0
+    },
+    "refiner_net_production_thousand_bpd": {
+      "padd1_finished_gasoline": 310.0,
+      "padd2_finished_gasoline": 2450.0,
+      "padd3_finished_gasoline": 2680.0,
+      "padd5_finished_gasoline": 1420.0
+    },
+    "inter_padd_movements": {
+      "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+      "padd3_to_padd2_pipeline_thousand_bpd": 980.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "state_code": "CA",
+    "price": 5.184,
+    "source": "U.S. EIA API v2 Weekly Survey (CA)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:27:41",
+    "as_of": "2026-09-23 20:27:41",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "SanFrancisco",
+    "price": 5.716,
+    "source": "U.S. EIA API v2 Metro Survey (SanFrancisco)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:27:44",
+    "as_of": "2026-09-23 20:27:44",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "source": "U.S. Energy Information Administration API v2 / FRED (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:29:20",
+    "as_of": "2026-09-23 20:29:20",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false,
+    "refinery_utilization": {
+      "PADD1_EastCoast": 87.4,
+      "PADD2_Midwest": 92.1,
+      "PADD3_GulfCoast": 94.6,
+      "PADD5_WestCoast": 85.2
+    },
+    "gasoline_stocks_million_bbl": {
+      "PADD1": 54.2,
+      "PADD2": 48.6,
+      "PADD3": 82.1,
+      "PADD5": 28.4
+    },
+    "product_supplied_thousand_bpd": {
+      "us_motor_gasoline": 8850.0,
+      "us_distillate_fuel": 3920.0
+    },
+    "refiner_net_production_thousand_bpd": {
+      "padd1_finished_gasoline": 310.0,
+      "padd2_finished_gasoline": 2450.0,
+      "padd3_finished_gasoline": 2680.0,
+      "padd5_finished_gasoline": 1420.0
+    },
+    "inter_padd_movements": {
+      "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+      "padd3_to_padd2_pipeline_thousand_bpd": 980.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "state_code": "CA",
+    "price": 5.184,
+    "source": "U.S. EIA API v2 Weekly Survey (CA)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:29:36",
+    "as_of": "2026-09-23 20:29:36",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "SanFrancisco",
+    "price": 5.716,
+    "source": "U.S. EIA API v2 Metro Survey (SanFrancisco)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:29:39",
+    "as_of": "2026-09-23 20:29:39",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "source": "U.S. Energy Information Administration API v2 / FRED (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:29:42",
+    "as_of": "2026-09-23 20:29:42",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false,
+    "refinery_utilization": {
+      "PADD1_EastCoast": 87.4,
+      "PADD2_Midwest": 92.1,
+      "PADD3_GulfCoast": 94.6,
+      "PADD5_WestCoast": 85.2
+    },
+    "gasoline_stocks_million_bbl": {
+      "PADD1": 54.2,
+      "PADD2": 48.6,
+      "PADD3": 82.1,
+      "PADD5": 28.4
+    },
+    "product_supplied_thousand_bpd": {
+      "us_motor_gasoline": 8850.0,
+      "us_distillate_fuel": 3920.0
+    },
+    "refiner_net_production_thousand_bpd": {
+      "padd1_finished_gasoline": 310.0,
+      "padd2_finished_gasoline": 2450.0,
+      "padd3_finished_gasoline": 2680.0,
+      "padd5_finished_gasoline": 1420.0
+    },
+    "inter_padd_movements": {
+      "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+      "padd3_to_padd2_pipeline_thousand_bpd": 980.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "state_code": "CA",
+    "price": 5.184,
+    "source": "U.S. EIA API v2 Weekly Survey (CA)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:29:58",
+    "as_of": "2026-09-23 20:29:58",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "TX",
+    "price": 2.85,
+    "source": "U.S. EIA API v2 Weekly Survey (TX)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:01",
+    "as_of": "2026-09-23 20:30:01",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "NY",
+    "price": 3.45,
+    "source": "U.S. EIA API v2 Weekly Survey (NY)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:04",
+    "as_of": "2026-09-23 20:30:04",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "OH",
+    "price": 3.38,
+    "source": "U.S. EIA API v2 Weekly Survey (OH)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:07",
+    "as_of": "2026-09-23 20:30:07",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "FL",
+    "price": 3.25,
+    "source": "U.S. EIA API v2 Weekly Survey (FL)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:10",
+    "as_of": "2026-09-23 20:30:10",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "MA",
+    "price": 3.35,
+    "source": "U.S. EIA API v2 Weekly Survey (MA)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:13",
+    "as_of": "2026-09-23 20:30:13",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "MI",
+    "price": 3.42,
+    "source": "U.S. EIA API v2 Weekly Survey (MI)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:17",
+    "as_of": "2026-09-23 20:30:17",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "MN",
+    "price": 3.15,
+    "source": "U.S. EIA API v2 Weekly Survey (MN)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:20",
+    "as_of": "2026-09-23 20:30:20",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "CO",
+    "price": 3.12,
+    "source": "U.S. EIA API v2 Weekly Survey (CO)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:23",
+    "as_of": "2026-09-23 20:30:23",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "WA",
+    "price": 4.55,
+    "source": "U.S. EIA API v2 Weekly Survey (WA)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:26",
+    "as_of": "2026-09-23 20:30:26",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "SanFrancisco",
+    "price": 5.716,
+    "source": "U.S. EIA API v2 Metro Survey (SanFrancisco)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:29",
+    "as_of": "2026-09-23 20:30:29",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "LosAngeles",
+    "price": 5.316,
+    "source": "U.S. EIA API v2 Metro Survey (LosAngeles)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:32",
+    "as_of": "2026-09-23 20:30:32",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "Chicago",
+    "price": 4.32,
+    "source": "U.S. EIA API v2 Metro Survey (Chicago)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:36",
+    "as_of": "2026-09-23 20:30:36",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "Houston",
+    "price": 2.79,
+    "source": "U.S. EIA API v2 Metro Survey (Houston)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:39",
+    "as_of": "2026-09-23 20:30:39",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "Cleveland",
+    "price": 3.26,
+    "source": "U.S. EIA API v2 Metro Survey (Cleveland)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:42",
+    "as_of": "2026-09-23 20:30:42",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "NewYorkCity",
+    "price": 3.65,
+    "source": "U.S. EIA API v2 Metro Survey (NewYorkCity)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:45",
+    "as_of": "2026-09-23 20:30:45",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "Miami",
+    "price": 3.31,
+    "source": "U.S. EIA API v2 Metro Survey (Miami)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:48",
+    "as_of": "2026-09-23 20:30:48",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "Boston",
+    "price": 3.41,
+    "source": "U.S. EIA API v2 Metro Survey (Boston)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:51",
+    "as_of": "2026-09-23 20:30:51",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "Denver",
+    "price": 3.18,
+    "source": "U.S. EIA API v2 Metro Survey (Denver)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:55",
+    "as_of": "2026-09-23 20:30:55",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "Seattle",
+    "price": 4.69,
+    "source": "U.S. EIA API v2 Metro Survey (Seattle)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:30:58",
+    "as_of": "2026-09-23 20:30:58",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "state_code": "CA",
+    "price": 5.184,
+    "source": "U.S. EIA API v2 Weekly Survey (CA)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:38:49",
+    "as_of": "2026-09-23 20:38:49",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "metro_name": "SanFrancisco",
+    "price": 5.716,
+    "source": "U.S. EIA API v2 Metro Survey (SanFrancisco)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:38:52",
+    "as_of": "2026-09-23 20:38:52",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "source": "U.S. Energy Information Administration API v2 / FRED (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-23 20:39:14",
+    "as_of": "2026-09-23 20:39:14",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false,
+    "refinery_utilization": {
+      "PADD1_EastCoast": 87.4,
+      "PADD2_Midwest": 92.1,
+      "PADD3_GulfCoast": 94.6,
+      "PADD5_WestCoast": 85.2
+    },
+    "gasoline_stocks_million_bbl": {
+      "PADD1": 54.2,
+      "PADD2": 48.6,
+      "PADD3": 82.1,
+      "PADD5": 28.4
+    },
+    "product_supplied_thousand_bpd": {
+      "us_motor_gasoline": 8850.0,
+      "us_distillate_fuel": 3920.0
+    },
+    "refiner_net_production_thousand_bpd": {
+      "padd1_finished_gasoline": 310.0,
+      "padd2_finished_gasoline": 2450.0,
+      "padd3_finished_gasoline": 2680.0,
+      "padd5_finished_gasoline": 1420.0
+    },
+    "inter_padd_movements": {
+      "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+      "padd3_to_padd2_pipeline_thousand_bpd": 980.0
+    },
+    "status": "SUCCESS"
   }
 ]

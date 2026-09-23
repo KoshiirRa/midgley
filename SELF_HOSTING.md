@@ -27,7 +27,9 @@ This document provides a comprehensive guide for self-hosting custom instances o
 - **Storage:** 10 GB SSD disk space.
 
 ### Software Prerequisites
-- **Python:** Python 3.11+ (Python 3.11 is recommended for optimal compatibility with `scikit-learn` and `xgboost`).
+- **Python:** Python 3.10, 3.11, 3.12, 3.13 (Python 3.11/3.13 tested in CI; Docker image uses `python:3.13-slim` with `uv`).
+- **Node & Cloudflare Workers:** Node.js 20+, Wrangler CLI v3.x+ (for deploying Cloudflare edge cache and intraday RSS workers).
+- **Database & Storage:** SQLite 3.35+ (with JSON1 & FTS5 support), Turso libSQL (Hrana protocol v2), Cloudflare D1.
 - **Package Manager:** [`uv`](https://github.com/astral-sh/uv) (recommended for 10–100x faster package resolution) or standard `pip`.
 - **Feed Parser Security:** `defusedxml>=0.7.1` is bundled in dependencies to secure unauthenticated upstream XML feeds (arXiv, BSEE, EDGAR 8-K, NHC, RSS) against entity expansion (Billion Laughs) and DoS attacks (Issue #351).
 - **Static Analysis Gate:** `ruff>=0.9.0` is bundled to validate syntax and catch fatal scope errors across CI/CD and self-hosted instances (Issue #350).
@@ -40,7 +42,7 @@ This document provides a comprehensive guide for self-hosting custom instances o
 
 Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 2.5 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys. 
 
-All core mathematical transformations — including **CoSPOT Compositional Spectral & Wavelet Feature Prompting** (`src/cospot_spectral_engine.py`, Issue #215, arXiv:2609.02093), Purged Cross-Validation (`src/models.py`), Dynamic Volatility-Gated Persistence Blending (`src/dynamic_region.py`), dynamic **Baker Hughes Rig Count Ingestion** (`src/alternative_data_feeds.py`, Issue #269), **Executive Social Media Live Polling & Weekend Gap Classification** (`src/executive_social_feed.py`, Issue #268), **Key Market Movers Statement Feed** (`src/key_movers_feed.py`, Issue #270), **EIA PADD Inventory & Refinery Utilization** (`src/data_ingestion.py`, Issue #271), **EIA-930 Grid Stress Modeling** (`src/data_ingestion.py`, Issue #272), **USDA Biofuel & Ethanol Rack Feeds** (`src/data_ingestion.py`, Issue #273), **EIA Daily Regional Spot Wholesale Prices** (`src/data_ingestion.py`, Issue #363), **EPA Weekly EMTS RIN Credit Ingestion** (`src/data_ingestion.py`, Issue #365), **EIA State & Metro Surveys** (`src/data_ingestion.py`, Issue #274), **FERC Form 6 Pipeline Tariffs** (`src/data_ingestion.py`, Issue #275), **USACE Lock Delays & Hydrology** (`src/usace_locks.py`, Issue #276), and Qlib Symbolic Alpha mining (`src/qlib_symbolic_engine.py`) — run natively on standard Python libraries (`numpy`, `pandas`, `scipy`) without requiring extra cloud subscriptions or heavy GPU accelerators. Point-in-time publication snapshots are automatically tracked across bitemporal ledgers (`data/*_vintages.json`) and cached in `data/lookup_cache.sqlite`.
+All core mathematical transformations — including **CoSPOT Compositional Spectral & Wavelet Feature Prompting** (`src/cospot_spectral_engine.py`, Issue #215, arXiv:2609.02093), Purged Cross-Validation (`src/models.py`), Dynamic Volatility-Gated Persistence Blending (`src/dynamic_region.py`), dynamic **Baker Hughes Rig Count Ingestion** (`src/alternative_data_feeds.py`, Issue #269), **Executive Social Media Live Polling & Weekend Gap Classification** (`src/executive_social_feed.py`, Issue #268), **Key Market Movers Statement Feed** (`src/key_movers_feed.py`, Issue #270), **EIA PADD Inventory & Refinery Utilization** (`src/data_ingestion.py`, Issue #271), **EIA-930 Grid Stress Modeling** (`src/data_ingestion.py`, Issue #272), **USDA Biofuel & Ethanol Rack/RIN Feeds** (`src/data_ingestion.py`, Issue #273), **EIA State & Metro Surveys** (`src/data_ingestion.py`, Issue #274), **FERC Form 6 Pipeline Tariffs** (`src/data_ingestion.py`, Issue #275), **USACE Lock Delays & Hydrology** (`src/usace_locks.py`, Issue #276), and Qlib Symbolic Alpha mining (`src/qlib_symbolic_engine.py`) — run natively on standard Python libraries (`numpy`, `pandas`, `scipy`) without requiring extra cloud subscriptions or heavy GPU accelerators. Point-in-time publication snapshots are automatically tracked across bitemporal ledgers (`data/*_vintages.json`) and cached in `data/lookup_cache.sqlite`.
 
 ```bash
 # ==============================================================================
@@ -77,16 +79,8 @@ SEMANTIC_SCHOLAR_API_KEY="semantic_scholar_api_key_here"
 OPENAI_API_KEY="sk-proj-..."
 ANTHROPIC_API_KEY="sk-ant-..."
 
-# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation - Issues #173, #381)
-# MANDATORY IN PRODUCTION: Fails closed (HTTP 401) in prod (MIDGLEY_ENV=prod) if unset or missing.
+# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation)
 MIDGLEY_WEBHOOK_SECRET="super-secret-hmac-key-change-me"
-
-# Admin API Gateway Secret for Key Provisioning (/api/v1/admin/keys - Issue #341)
-# MANDATORY: Fails closed (HTTP 401) if unset, empty, or whitespace-only.
-MIDGLEY_ADMIN_SECRET="super-secret-admin-token-change-me"
-
-# Master API Key for Administrative System Access (Bypasses per-key rate limits)
-MIDGLEY_API_KEY="mg_master_secret_key_change_me"
 
 # IPASIS API Gateway Security Key & Controls (ipasis.com - 100 req/day free)
 IPASIS_API_KEY="ipasis_live_key_here"
@@ -119,15 +113,12 @@ CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 
 # ==============================================================================
-# HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN / SAAS) (Issues #230, #421, #422)
+# HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN) (Issue #230)
 # ==============================================================================
 
-# Vectorize Hindsight Cloud Run REST API Endpoint or Hosted SaaS
-# Hosted SaaS (Recommended): HINDSIGHT_API_URL="https://api.hindsight.vectorize.io"
-# Self-Hosted / Dev-VM:      HINDSIGHT_API_URL="http://10.42.42.54:8888"
-HINDSIGHT_API_URL="https://api.hindsight.vectorize.io"
-HINDSIGHT_API_KEY="hsk_..."        # API key from https://hindsight.vectorize.io
-HINDSIGHT_BANK_ID="Midgley"        # Memory bank identifier
+# Vectorize Hindsight Cloud Run REST API Endpoint (Scale-to-Zero)
+HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
+HINDSIGHT_API_KEY=""              # Optional bearer token if endpoint is authenticated
 HINDSIGHT_TIMEOUT="60.0"          # Socket read timeout in seconds (handles scale-to-zero cold boots)
 HINDSIGHT_WARMUP_TIMEOUT="75.0"   # Background scale-to-zero container warmup handshake timeout in seconds
 
@@ -136,15 +127,6 @@ SUPABASE_DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REG
 
 # Google Cloud Project ID (for Cloud Run deployment)
 GCP_PROJECT_ID="midgley"
-
-# ==============================================================================
-# NASA POWER CLIMATOLOGY & AGROCLIMATOLOGY ENGINE (Issues #370, #420)
-# ==============================================================================
-# Free public REST API (https://power.larc.nasa.gov/api/temporal/daily/point)
-# Ingests daily T2M, T2M_MAX, T2M_MIN, PRECTOTCORR, RH2M, ALLSKY_SFC_SW_DWN
-# Computes Distillate HDD/CDD for PADD 1 (NY Harbor, Delaware City, Boston)
-# and Corn GDD / Soil Moisture for PADD 2 Ethanol hubs (Des Moines, Peoria, Omaha).
-# No API key required; automatic 24-hour disk caching at data/nasa_power_cache.json.
 
 # ==============================================================================
 # EDGAR 8-K REFINERY OPERATOR MONITOR (Issue #129)
@@ -158,30 +140,12 @@ GCP_PROJECT_ID="midgley"
 CENSUS_API_KEY=""
 
 # ==============================================================================
-# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issues #182, #408, #410, #418)
+# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issue #182)
 # ==============================================================================
 # OAuth2 Client Credentials for independent Brier/CRPS daily continuous probability scoring
-# Supports multi-asset challenges: RBOB Gasoline (RB), Cushing WTI (CL), Henry Hub Natural Gas (NG), and US Dollar Index (DXY)
-# Caches pending forecasts in data/headline_arena_pending_forecasts.json (24h TTL)
-# Tracks submitted challenges in data/headline_arena_submitted_ledger.json
-# Sync script: python scripts/sync_headline_arena.py (runs every 30m via GitHub Actions or systemd)
 HEADLINE_ARENA_CLIENT_ID="ha_agent_..."
 HEADLINE_ARENA_CLIENT_SECRET="ha_sec_..."  # Or HEADLINE_ARENA_API_KEY
-# ==============================================================================
-# DISCORD INTRADAY WEBHOOK NOTIFICATIONS (Issues #234, #258, #330)
-# ==============================================================================
-# Real-time Discord alerts on breaking intraday forecast revisions
-# Supports standard incoming webhooks (clean embeds with feedback links)
-DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/..."
-DISCORD_WEBHOOK_URL=""            # Fallback webhook URL
-DISCORD_INCLUDE_COMPONENTS="0"    # Set to 1 only if using Discord Bot Application authorization
-
-# ==============================================================================
-# FHWA MONTHLY TRAFFIC VOLUME TRENDS (TVT / VMT) (Issue #369)
-# ==============================================================================
-# Free public data from Federal Highway Administration (FHWA)
-# Ingests national & 5-census division vehicle-miles traveled with 60-day publication lag
-# Endpoint: GET /api/v1/macro/traffic-volume; bitemporal cache at data/fhwa_vmt_vintages.json
+HEADLINE_ARENA_DEV_SUBMIT="0"              # Set to 1 in dev to execute live test submissions (tagged [DEV-TEST])
 
 # Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
 HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
@@ -241,7 +205,7 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```bash
    npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
    ```
-3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`). Predictions are automatically chunked in batches of 50 statements to adhere strictly to Cloudflare D1's 100-statement batch limit:
+3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
    ```bash
    npx wrangler deploy --config wrangler.cache.toml
    ```
@@ -256,7 +220,7 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```
 
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
-1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)), which evaluates breaking energy headlines against the full 47+ domain trigger lexicon (Form 8-K disclosures, refinery trips, waterway chokepoints, pipeline halts, and volatility spikes):
+1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):
    ```bash
    npx wrangler deploy
    ```
@@ -295,55 +259,7 @@ For managed cloud deployment without managing containers or incurring serverless
    HINDSIGHT_API_KEY="hsk_..."
    HINDSIGHT_BANK_ID="Midgley"
    ```
-3. **Configure Bank Settings in Hindsight Control Plane (`Midgley`):**
-   * **Retain (Ingestion & Extraction):**
-     * **Chunk Size:** `1500` (Default)
-     * **Extraction Mode:** `Concise`
-     * **Mission:**
-       ```text
-       Extract quantitative price anomalies, physical supply catalysts, and forecasting post-mortem facts.
-
-       Always extract:
-       - Prediction outcomes: target metro/region, forecast vs actual price, error magnitude ($/gal), and horizon date.
-       - Catalyst details: refinery outages, pipeline shutdowns, hurricane landfalls, river navigation draft limits, regulatory RVP deadlines, and tariff or geopolitical actions.
-       - Empirical market reactions: magnitude of prompt RBOB/WTI calendar spread movements, wholesale-to-retail pass-through lag, and localized crack margins.
-
-       Ignore:
-       - Routine predictions with negligible error (<$0.01/gal) having no notable market catalysts.
-       - Unsubstantiated social media commentary lacking market impact.
-       ```
-   * **Observations (Consolidation):**
-     * **Enable Observations:** On
-     * **Mission:**
-       ```text
-       Synthesize durable market relationships, regional fuel pricing dynamics, and forecasting calibration lessons across wholesale RBOB, crude benchmarks, and retail metro hubs.
-
-       Always consolidate:
-       1. Energy market shock dynamics: price elasticity and decay patterns from geopolitical events, OPEC decisions, refinery outages, and pipeline/maritime chokepoint disruptions.
-       2. Regional metro basis spreads & refining constraints: localized dynamics across Tulsa (Cushing/PADD 2), Newark (PADD 1B/Delaware River), Cincinnati (Ohio River barges/dual-state tax), Carolinas (Colonial Pipeline), Oakland/SF (CARB Phase 3/PADD 5), and Port St. Lucie (waterborne freight).
-       3. Seasonal transitions and regulatory rules: EPA/CARB RVP summer blend transitions, winter volatility, and extreme weather impacts (hurricanes, polar vortexes, tornadic grid trips).
-       4. Model performance & calibration lessons: recurring prediction error patterns (under/over-shoots), structural parameter drift, and feature decay half-life insights from weekly model reviews.
-
-       Ignore:
-       - Transient minor daily price jitter within normal noise bounds (<$0.02/gal).
-       - Ephemeral raw diagnostic logs or routine status pings that contain no market insights.
-       ```
-   * **Reflect (Post-Mortem & Analogy Reasoning):**
-     * **Mission:**
-       ```text
-       You are an expert energy economist and quantitative commodity forecasting analyst for Project Midgley.
-
-       Core reasoning rules:
-       - Ground all post-mortems in observed historical price spreads, actual vs predicted errors, physical refining constraints, and verifiable market catalysts.
-       - When evaluating forecast errors or price spikes, identify root causes: supply disruptions, pipeline bottlenecks, seasonal RVP transitions, crude pass-through lags, or unexpected demand shifts.
-       - Synthesize actionable model recalibration recommendations (e.g., adjusting shock decay half-lives, seasonal spread buffers, or regional basis offsets).
-       - When drawing historical analogies, match on physical mechanisms (e.g., refinery flaring, pipeline outages, river navigation drafts) rather than superficial headline similarities.
-       ```
-     * **Sliders:**
-       * **Skepticism:** `4 / 5` (Skeptical — prevents unverified macro narratives from distorting physical forecasts)
-       * **Literalism:** `4 / 5` (Literal — enforces exact dollar errors, basis spreads, and regulatory dates)
-       * **Empathy:** `1 / 5` (Detached — commodity econometrics and quantitative error analysis)
-4. **Migration & Zero Cold Starts:** Hindsight-Hosted is always warm ($0$ cold-start latency) and operates on a purely pay-per-token/call pricing model (**~$3.50/month** for daily + weekly forecasting workloads, with initial \$5.00 free credit balance). Historical SQLite memories can be bulk-uploaded using `python scripts/migrate_memory_to_hosted.py`.
+3. **Migration & Zero Cold Starts:** Hindsight-Hosted is always warm ($0$ cold-start latency) and operates on a purely pay-per-token/call pricing model (**~$3.50/month** for daily + weekly forecasting workloads, with initial \$5.00 free credit balance). Historical SQLite memories can be bulk-uploaded using `python scripts/migrate_memory_to_hosted.py`.
 
 > [!CAUTION]
 > **Cloud Run Scale-to-Zero Cost Overrun Warning (Issue #421):**
@@ -491,7 +407,6 @@ EnvironmentFile=/home/marty/projects/midgley/.env
 Description=Run Midgley Daily Gas Price Forecast at 06:00 AM Central
 
 [Timer]
-# Uses native IANA timezone: automatically adjusts between CDT (UTC-5) and CST (UTC-6) during DST transitions
 OnCalendar=*-*-* 06:00:00 America/Chicago
 Persistent=true
 
@@ -757,7 +672,7 @@ __all__ = [
 Implement `fetch_chicago_market_data()` calibrated to local live pump prices ($3.95/gal base) and `get_chicago_regional_events()` defining regional shock scenarios. If adjacent to inland waterways, refinery cooling intakes, or coastal shipping channels, ingest live hydrological risk telemetry via `USGSWaterFeedConnector` (registering any newly discovered 8-digit USGS stations in `USGS_STATIONS` inside `src/usgs_water_feed.py`). If located within an active seismic fault or induced seismicity corridor, ingest live earthquake telemetry via `USGSSeismicConnector` (registering corridor bounding box and facility coordinates in `SEISMIC_CORRIDORS` inside `src/usgs_seismic.py`). If adjacent to supplying refining centers, ingest live fence-line air quality and flaring emissions telemetry via `AQIFeedConnector` (registering corridor bounding box and refinery assets in `AQI_CORRIDORS` inside `src/aqi_feed.py`).
 
 3. **`src/locations/chicago/main.py`**:
-Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering across multi-day horizons, trains discrete 1D–5D step-ahead estimators via `train_multi_horizon_models()`, logs and backfills predictions across all 5 horizons into `data/prediction_history.csv` via `log_predictions()` and `backfill_new_region_history()`, and returns forecast metrics.
+Implement `run_chicago_pipeline(live_pump_price=None, use_llm_api=False, model_type="ridge")` which ingests market data, applies exponential decay feature engineering, fits the Ridge estimator, logs predictions to `data/prediction_history.csv`, and returns forecast metrics.
 
 4. **`src/locations/chicago/notebook_builder.py`**:
 Implement `build_chicago_notebook()` returning export path `"chicago_gas_price_llm_forecasting.ipynb"`.
@@ -803,8 +718,8 @@ if any(k in text for k in ["chicago", "whiting refinery", "joliet refinery", "il
 4. Update Section 03 (**Equation 3.1: Multi-Tiered Weather Vulnerability Matrix**) in `docs/math.html` and `src/dashboard_generator.py` to append the new regional weather vector term ($\mathbf{W}_{\text{Metro}}$) and document localized NOAA NWS county/zone codes.
 5. Update Section 04 (**Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals** and **Equation 4.1: Unified Global Maritime Detour, Inland River Barge & Coastal Waterborne Freight Rate Model**) in `docs/math.html` and `src/dashboard_generator.py` if the region introduces inland waterway navigation/draft or coastal lightering/terminal surcharges ($\Delta \text{Margin}_{\text{waterborne}, r}$ / $\text{Index}_{\text{barge}}$).
 
-### Step 8: Connect MLOps Prediction Tracker & Multi-Horizon Backfilling (`src/prediction_logger.py`)
-Update `src/prediction_logger.py` to include `"Chicago_IL"` in target price columns and historical test-split backfilling across horizons 1 through 5 (`backfill_new_region_history(..., forecast_horizon_days=h)`).
+### Step 8: Connect MLOps Prediction Tracker & Backfilling (`src/prediction_logger.py`)
+Update `src/prediction_logger.py` to include `"Chicago_IL"` in target price columns and historical test-split backfilling (`backfill_new_region_history`).
 
 ### Step 9: Update GitHub Wiki Documentation (`KoshiirRa/midgley.wiki`)
 Whenever adding, modifying, or removing data connectors, API feeds, or regional data sources:
@@ -846,7 +761,6 @@ Verify that `docs/index.html` and regional HTML pages compile without errors.
 curl -s http://localhost:8000/api/v1/system/quota | jq .
 curl -s http://localhost:8000/api/v1/forecast/predict | jq .
 curl -s http://localhost:8000/api/v1/macro/freight-tsi | jq .
-curl -s http://localhost:8000/api/v1/macro/traffic-volume | jq .
 ```
 
 ### 4. Verify Systemd Timers (Linux Deployment)
@@ -894,57 +808,6 @@ python3 -m src.lookup_cache --test-cloudflare
 curl -s "http://localhost:8000/api/v1/system/cache-status?probe=true" | jq .
 ```
 
-### 10. Run Ruff Fatal-Error & Syntax Static Analysis Gate (Issue #350)
-Validate that all source modules, maintenance scripts, and unit tests pass static syntax and fatal error checks:
-```bash
-ruff check src/ scripts/ tests/
-```
-
 ---
 
-## 10. Upstream Release Manifest & Agent Migration Protocol (Issue #299)
-
-Self-hosted instances and autonomous coding agents maintaining forks can detect upstream schema drifts, feature matrix expansions, and migration actions using the **Machine-Readable Upstream Release Manifest**:
-
-### 1. Query Upstream Release Manifest via REST API
-```bash
-curl -s http://localhost:8000/api/v1/system/releases/latest | jq .
-```
-
-### 2. Run the Compatibility & Upgrade Reconciler CLI (Issue #343)
-The upgrade reconciler audits local environment configuration against upstream release manifests. To prevent Arbitrary Code Execution (RCE), the reconciler strictly validates upstream URLs (enforcing HTTPS scheme) and executes only pre-defined, parameterized allowlisted actions without shell interpolation (`shell=False`):
-* `retrain_regional_models`: Executes `scripts/manage_regions.py retrain --all` (or full pipeline `run_all.py`)
-* `update_static_dashboard`: Executes `src/dashboard_generator.py`
-* `run_migrations`: Executes migration utilities with safe argument vectors
-
-```bash
-# Audit local configuration vs. upstream manifest (Dry-Run)
-python3 scripts/check_updates.py --dry-run
-
-# Automatically apply database migrations and retrain custom regional estimators safely
-python3 scripts/check_updates.py --auto-reconcile
-```
-
-### 🤖 AI Agent Reconciliation Block
-When upstream releases include new econometric features (e.g. Cboe OVX volatility, USGS river tow gauges, maritime chokepoints, California Energy Commission Fuels Watch, EPA RVP regulatory standards, NOAA CO-OPS marine water levels), autonomous AI agents can execute the following deterministic reconciliation sequence:
-1. Fetch latest upstream manifest: `python3 -m src.release_manifest`
-2. Run update audit: `python3 scripts/check_updates.py --dry-run`
-3. Execute regional model realignment: `python3 scripts/manage_regions.py retrain --all` (or `python3 run_all.py --use-llm-api`)
-4. Confirm test suite passes: `pytest tests/`
-
----
-
-* **U.S. EIA Weekly Retail Gasoline Prices Ground Truth (`EIARetailFeed`, Issue #403):** Ingests official weekly retail unleaded regular gasoline series across PADDs and state jurisdictions (`GASREGW`, `GASREGW01B`, `GASREGW01C`, `GASREGWMW`, `GASREGWOK`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`) mapped to regional metro prediction targets for point-in-time ground truth evaluation with snapshot vintages in `data/eia_retail_vintages.json`.
-* **MLOps Ground Truth Integrity & History Cleansing (Issues #391, #392, #399):** Enforces zero-offset regional evaluation by eliminating synthetic ladders (`RB=F + $0.55`) and identity fallbacks (`margin_offset = base_price - raw_actual`), purges test fixture artifacts via `cleanse_prediction_history()`, caches national futures downloads to `data/rbob_actuals_cache.json`, and enforces plausibility validation guards ($[\$1.00, \$10.00]$ retail, $[\$0.50, \$7.00]$ wholesale).
-* **NYMEX Forward Curve, Calendar Spreads & 3-2-1 Crack Futures (`NYMEXForwardCurveConnector`, Issue #404):** Ingests prompt ($M_1$) vs second month ($M_2$) futures forward curves for RBOB and WTI, computing calendar spreads, 1:1 and 3-2-1 crack spreads, and backwardation flags with snapshot vintages in `data/nymex_forward_vintages.json`.
-* **California Energy Commission (CEC) Weekly Fuels Watch (`CECWeeklyFuelsConnector`, Issue #364):** Ingests weekly California refinery crude inputs, CARBOB production, NorCal/SoCal refinery utilization, and fuel inventory levels. Enforces Thursday publication schedules with bitemporal tracking in `data/cec_fuels_vintages.json`.
-* **EPA & CARB Reid Vapor Pressure (RVP) Regulatory Engine (`RVPRegulatoryEngine`, Issue #366):** Models statutory Title 40 CFR Part 1090 and CARB Phase 3 CaRFG limits (7.8 psi, 9.0 psi, CARB 6.99 psi, RFG 7.4 psi), seasonal transition countdowns (May 1 terminal, June 1 retail, Sept 16 winter), and summer-blend compliance cost premiums.
-* **Multi-Horizon Inference Freshness & Unlabelled Frame Preservation (`src/feature_engineering.py`, Issue #353):** Decouples training label maturity ($t \le T-h$) from live inference ($t=0$). Unlabelled trailing rows are preserved in `labelled_df.attrs["unlabelled_inference_frame"]`, ensuring that multi-horizon models (1D to 5D) and regional runners evaluate today's latest spot prices, momentum features, and event shock decay state rather than stale $t-h$ inputs.
-* **NOAA CO-OPS Coastal Water Levels & Marine Disruption Telemetry (`NOAACOOPSConnector`, Issue #368):** Ingests tidal anomalies and storm surge residuals across critical fuel marine terminals (Houston Ship Channel, Delaware River, Carquinez Strait, Port St. Lucie) with bitemporal snapshots in `data/noaa_coops_vintages.json`.
-
----
-
-*Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Stacking Ensemble & Purged CV | License: Apache 2.0*
-
-
-
+*Midgley Version: `v0.6.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*

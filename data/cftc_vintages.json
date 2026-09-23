@@ -1,9 +1,9 @@
 [
   {
-    "as_of": "2026-09-16 22:47:50",
+    "as_of": "2026-09-23 20:25:36",
     "data": {
       "status": "FALLBACK",
-      "report_date": "2026-09-16",
+      "report_date": "2026-09-23",
       "cot_rbob_net_speculative": 83000.0,
       "cot_rbob_zscore_3y": 0.44,
       "cot_commercial_hedger_ratio": 0.8571,
@@ -13,10 +13,10 @@
     }
   },
   {
-    "as_of": "2026-09-16 22:49:17",
+    "as_of": "2026-09-23 20:28:21",
     "data": {
       "status": "FALLBACK",
-      "report_date": "2026-09-16",
+      "report_date": "2026-09-23",
       "cot_rbob_net_speculative": 83000.0,
       "cot_rbob_zscore_3y": 0.44,
       "cot_commercial_hedger_ratio": 0.8571,
@@ -26,10 +26,10 @@
     }
   },
   {
-    "as_of": "2026-09-16 22:49:38",
+    "as_of": "2026-09-23 20:31:39",
     "data": {
       "status": "FALLBACK",
-      "report_date": "2026-09-16",
+      "report_date": "2026-09-23",
       "cot_rbob_net_speculative": 83000.0,
       "cot_rbob_zscore_3y": 0.44,
       "cot_commercial_hedger_ratio": 0.8571,
@@ -39,10 +39,10 @@
     }
   },
   {
-    "as_of": "2026-09-16 22:49:45",
+    "as_of": "2026-09-23 20:32:47",
     "data": {
       "status": "FALLBACK",
-      "report_date": "2026-09-16",
+      "report_date": "2026-09-23",
       "cot_rbob_net_speculative": 83000.0,
       "cot_rbob_zscore_3y": 0.44,
       "cot_commercial_hedger_ratio": 0.8571,
@@ -52,10 +52,10 @@
     }
   },
   {
-    "as_of": "2026-09-16 22:50:12",
+    "as_of": "2026-09-23 20:37:03",
     "data": {
       "status": "FALLBACK",
-      "report_date": "2026-09-16",
+      "report_date": "2026-09-23",
       "cot_rbob_net_speculative": 83000.0,
       "cot_rbob_zscore_3y": 0.44,
       "cot_commercial_hedger_ratio": 0.8571,
@@ -65,378 +65,10 @@
     }
   },
   {
-    "as_of": "2026-09-16 22:50:17",
+    "as_of": "2026-09-23 20:37:38",
     "data": {
       "status": "FALLBACK",
-      "report_date": "2026-09-16",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-18 17:01:52",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-18",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-18 17:12:56",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-18",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-18 17:13:24",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-18",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-18 17:13:33",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-18",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-18 17:14:06",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-18",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-18 17:14:14",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-18",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-19 12:04:49",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-19",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-20 12:30:02",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-20",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-<<<<<<< HEAD
-    "as_of": "2026-09-22 00:22:56",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:23:48",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:24:15",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:25:05",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:35:33",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:35:59",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:36:48",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:39:47",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 00:40:14",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 01:46:16",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 01:48:42",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 01:49:15",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 01:50:15",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 01:50:46",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 12:34:47",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 12:37:16",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 12:37:55",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 12:38:53",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 12:39:24",
-=======
-    "as_of": "2026-09-21 14:19:09",
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-21",
-      "cot_rbob_net_speculative": 83000.0,
-      "cot_rbob_zscore_3y": 0.44,
-      "cot_commercial_hedger_ratio": 0.8571,
-      "cot_net_position_delta_1w": 3500.0,
-      "is_free_alternative": true,
-      "cost_per_query": 0.0
-    }
-  },
-  {
-    "as_of": "2026-09-22 12:43:15",
->>>>>>> main
-    "data": {
-      "status": "FALLBACK",
-      "report_date": "2026-09-22",
+      "report_date": "2026-09-23",
       "cot_rbob_net_speculative": 83000.0,
       "cot_rbob_zscore_3y": 0.44,
       "cot_commercial_hedger_ratio": 0.8571,

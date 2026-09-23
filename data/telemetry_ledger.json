@@ -1,18 +1,18 @@
 {
   "created_at": "2026-09-22 23:11:20",
   "llm_totals": {
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "total_tokens": 0,
-    "estimated_cost_usd": 0.0,
-    "fallback_activations": 2
+    "prompt_tokens": 150,
+    "completion_tokens": 50,
+    "total_tokens": 200,
+    "estimated_cost_usd": 2.6e-05,
+    "fallback_activations": 4
   },
   "memory_totals": {
-    "retain_count": 40,
-    "recall_count": 0,
+    "retain_count": 44,
+    "recall_count": 1,
     "reflect_count": 0,
-    "cloud_calls": 23,
-    "local_fallback_calls": 17
+    "cloud_calls": 24,
+    "local_fallback_calls": 21
   },
   "llm_events": [
     {
@@ -36,6 +36,39 @@
       "total_tokens": 0,
       "estimated_cost_usd": 0.0,
       "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-23 20:30:35",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-23 20:36:06",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-23 20:39:32",
+      "environment": "dev",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 150,
+      "completion_tokens": 50,
+      "total_tokens": 200,
+      "estimated_cost_usd": 2.6e-05,
+      "is_fallback": false
     }
   ],
   "api_events": [],
@@ -359,6 +392,46 @@
       "backend": "hindsight_cloud",
       "status": "success",
       "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:31:12",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:31:12",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:31:12",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-23 20:39:31",
+      "environment": "dev",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 15.4
+    },
+    {
+      "timestamp": "2026-09-23 20:39:31",
+      "environment": "dev",
+      "operation": "recall",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 2.1
     }
   ]
 }
