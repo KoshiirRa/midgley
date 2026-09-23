@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T00:09:13.912480",
+  "timestamp": "2026-09-23T07:33:04.944076",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.336,
+    "current_price_per_gal": 6.357,
     "source": "AAA Web Scraper (San Francisco, CA)",
     "provenance": {
       "source": "AAA Web Scraper (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T00:08:39Z"
+      "timestamp": "2026-09-23T07:32:37Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-28",
-    "current_base_price": 6.336,
-    "predicted_price_per_gal": 6.446,
+    "current_base_price": 6.357,
+    "predicted_price_per_gal": 6.467,
     "expected_change_dollars": 0.11,
     "expected_change_percent": 1.74,
     "projected_direction": "UP",
@@ -91,7 +91,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "BayArea CA forecast +$0.110/gal (+1.74%): Driven primarily by Tax & Regulatory Overhead (+$0.038/gal), Refining Yield & Crack Spread (+$0.028/gal).",
+      "summary_text": "BayArea CA forecast +$0.110/gal (+1.73%): Driven primarily by Tax & Regulatory Overhead (+$0.038/gal), Refining Yield & Crack Spread (+$0.028/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "BayArea CA forecast +$0.110/gal (+1.74%): Driven primarily by Tax & Regulatory Overhead (+$0.038/gal), Refining Yield & Crack Spread (+$0.028/gal).",
+    "summary_text": "BayArea CA forecast +$0.110/gal (+1.73%): Driven primarily by Tax & Regulatory Overhead (+$0.038/gal), Refining Yield & Crack Spread (+$0.028/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T00:09:13.889122",
+  "timestamp": "2026-09-23T07:33:04.920197",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.187,
+    "current_price_per_gal": 4.17,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T00:08:39Z"
+      "timestamp": "2026-09-23T07:32:35Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-28",
-    "current_base_price": 4.187,
-    "predicted_price_per_gal": 4.248,
+    "current_base_price": 4.17,
+    "predicted_price_per_gal": 4.231,
     "expected_change_dollars": 0.061,
     "expected_change_percent": 1.45,
     "projected_direction": "UP",
@@ -97,7 +97,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.024,
-          "impact_pct": 0.57,
+          "impact_pct": 0.58,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -113,7 +113,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.009,
-          "impact_pct": 0.21,
+          "impact_pct": 0.22,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.024,
-      "impact_pct": 0.57,
+      "impact_pct": 0.58,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -165,7 +165,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.009,
-      "impact_pct": 0.21,
+      "impact_pct": 0.22,
       "share_pct": 15.0,
       "direction": "UP"
     },

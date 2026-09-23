@@ -1,28 +1,28 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-23 00:08:38`  
+**Log Timestamp:** `2026-09-23 07:32:34`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** JP Morgan CEO urges Washington to rethink Russian oil tariffs: 'Don't end up punishing India' - Moneycontrol.com  
+**Primary Event Trigger:** ‘Hopefully America won’t punish India’: Jamie Dimon on 100% tariff threat over Russian oil - Firstpost  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** JP Morgan CEO urges Washington to rethink Russian oil tariffs: 'Don't end up punishing India' - Moneycontrol.com
+- **Headline Trigger:** ‘Hopefully America won’t punish India’: Jamie Dimon on 100% tariff threat over Russian oil - Firstpost
 - **Active Ingested News Links:**
+- [‘Hopefully America won’t punish India’: Jamie Dimon on 100% tariff threat over Russian oil - Firstpost](https://news.google.com/rss/articles/CBMi1AFBVV95cUxNTnc3eThQM01nUEl3MXdZMFpYcGFSNVM0blZHRk5LVUlhNHU3bElOMlpSejhyNnZIdDZNQzBSWmN2dG1VOEdoV0NqaFpISmJXaEZUV3VZUzdSNXkwWXJ2UGZqUE9LZGxtRnRXQ2FDcmlxY29aM0xpekRVb3pINzNZMDhNbVR6TEVqQV9nMUdHd0p0akNWeklOUHdkMHN3ZTR4OXUyUmFUSzBXU0JDRmEtOTQ4bXlWZVpSeVhIekNwVVVfZnFzYzFzTlF6Q2p1SXpyaF9VTNIB1AFBVV95cUxNTnc3eThQM01nUEl3MXdZMFpYcGFSNVM0blZHRk5LVUlhNHU3bElOMlpSejhyNnZIdDZNQzBSWmN2dG1VOEdoV0NqaFpISmJXaEZUV3VZUzdSNXkwWXJ2UGZqUE9LZGxtRnRXQ2FDcmlxY29aM0xpekRVb3pINzNZMDhNbVR6TEVqQV9nMUdHd0p0akNWeklOUHdkMHN3ZTR4OXUyUmFUSzBXU0JDRmEtOTQ4bXlWZVpSeVhIekNwVVVfZnFzYzFzTlF6Q2p1SXpyaF9VTA?oc=5) (Google News Energy Feed)
 - [JP Morgan CEO urges Washington to rethink Russian oil tariffs: 'Don't end up punishing India' - Moneycontrol.com](https://news.google.com/rss/articles/CBMi7gFBVV95cUxPNVJnWDlXOWFBWXlpV0xfV1k5ckRCcy1wY0wwOEJsYXJYT1NZcjZMQ3dVWlpMWU40aGdoSEtSRzRnbDZpODdEekNPaU1aQjJBTkRXd196NDJELW9wa0luM29OdnlJS3ZnVk5tMUc2VU9sT2hSbXVkX1BzZW9uUl9kdGY0VVBTWFhYRXNDRUN4elhYaF92bTVKUlppV0hjZGo3VGNpTXh4em1qS0dZdm1FRTZBSjZFYXB0YlBwWHZiLTNZTzdxLTg0c3R5aG0yVjJQeEpGaXYxWDl6bl9KZHl1X3NsOFJubGtpdU5GVVJn0gHuAUFVX3lxTE81UmdYOVc5YUFZeWlXTF9XWTlyREJzLXBjTDA4QmxhclhPU1lyNkxDd1VaWkxZTjRoZ2hIS1JHNGdsNmk4N0R6Q09pTVpCMkFORFd3X3o0MkQtb3BrSW4zb052eUlLdmdWTm0xRzZVT2xPaFJtdWRfUHNlb25SX2R0ZjRVUFNYWFhFc0NFQ3h6WFhoX3ZtNUpSWmlXSGNkajdUY2lNeHh6bWpLR1l2bUVFNkFKNkVhcHRiUHBYdmItM1lPN3EtODRzdHlobTJWMlB4SkZpdjFYOXpuX0pkeXVfc2w4Um5sa2l1TkZVUmc?oc=5) (Google News Energy Feed)
 - [Watch | US-Russia sanctions law: What 100 pc tariff power means for India - The Federal](https://news.google.com/rss/articles/CBMikgFBVV95cUxNNTVKeDVvNTYxSWJOWHRJMHduYW1FSUxXUV9GcXNucHFqVXJmMERTd2Q5N1VhMXFMNzJwaXR4aVNMRDVOQ0pLTUFfYk5XV0RkaTg4NkdTODAxVl9YRUVDLWtjQ01SdUdZOTBEYmlTNkRIU0NHYzNwSTVxbXhHTE1mcHo4cVJPVEZmb3BuLUZJY0dhdw?oc=5) (Google News Energy Feed)
-- [WCS crude oil discount to Mars weakens amid US refinery outages - Quantum Commodity Intelligence](https://news.google.com/rss/articles/CBMiqgFBVV95cUxQTGhVdHpPTVdRcWJFci1oNzZ6Rld4NlVzRHA0ZUhlYzhjNEJWRWZkOEpLN2VYZUVnWFF6NUpZcGl2Mjk4ZGZBWWJiRlpMYVlacHZiVTlUeG55U3F4VkplME15bUt6Zmt6VEJCbnhoLWxCUS1Ec0ktNkxxcnZFbjNOSjZGQlpMMnNYcXF1b1NqMHRZUlVvR3oxMmpuajdvX1haaXdwOW1RRzdLZw?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.00`
-- **Price Pressure Shock ($\Delta P$):** `-0.50`
-- **Geopolitical Risk Score ($G$):** `-0.30`
-- **Demand Sentiment Score ($D$):** `0.00`
+- **Supply Disruption Score ($S$):** `0.10`
+- **Price Pressure Shock ($\Delta P$):** `+0.70`
+- **Geopolitical Risk Score ($G$):** `0.90`
+- **Demand Sentiment Score ($D$):** `-0.10`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.0000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.0000$
-- **Day 1 Decayed Shock**: $M_1 = 0.0000 \times 0.87055 = 0.0000$
-- **Day 2 Decayed Shock**: $M_2 = 0.0000 \times (0.87055)^2 = 0.0000$
-- **Day 3 Decayed Shock**: $M_3 = 0.0000 \times (0.87055)^3 = 0.0000$
-- **Day 4 Decayed Shock**: $M_4 = 0.0000 \times (0.87055)^4 = 0.0000$
-- **Day 5 (Target Horizon)**: $M_5 = 0.0000 \times 0.50000 = 0.0000$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.1000$
+- **Day 1 Decayed Shock**: $M_1 = 0.1000 \times 0.87055 = 0.0871$
+- **Day 2 Decayed Shock**: $M_2 = 0.1000 \times (0.87055)^2 = 0.0758$
+- **Day 3 Decayed Shock**: $M_3 = 0.1000 \times (0.87055)^3 = 0.0660$
+- **Day 4 Decayed Shock**: $M_4 = 0.1000 \times (0.87055)^4 = 0.0574$
+- **Day 5 (Target Horizon)**: $M_5 = 0.1000 \times 0.50000 = 0.0500$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.166) = \$3.120\text{/gal}$ (Delta: -\$0.166/gal, -5.20\%)
+- **National Wholesale**: $P = \$3.184 + (-\$0.013) = \$3.273\text{/gal}$ (Delta: -\$0.013/gal, -0.40\%)
 - **Tulsa, OK Retail**: $P = \$3.993 + (+\$0.222) = \$6.391\text{/gal}$ (Delta: +\$0.222/gal, +5.55\%)
 - **Newark, DE Retail**: $P = \$4.353 + (+\$0.033) = \$4.447\text{/gal}$ (Delta: +\$0.033/gal, +0.77\%)
 - **Cincinnati, OH/KY**: $P = \$4.441 + (+\$0.017) = \$4.517\text{/gal}$ (Delta: +\$0.017/gal, +0.39\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.0000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-23 00:08:38]: Downward price pressure (-0.50/gal shock) detected following 'JP Morgan CEO urges Washington to rethink Russian oil tariffs: 'Don't end up punishing India' - Moneycontrol.com'. Supply disruption score S=0.00 and geopolitical risk G=-0.30 indicate easing market tightness. Residual event memory decays from initial M₀=0.0000 to Day-5 retention M₅=0.0000.
+SUMMARY FOR RUN [2026-09-23 07:32:34]: Elevated upward price shock (+$0.70/gal) observed across wholesale futures. Event trigger '‘Hopefully America won’t punish India’: Jamie Dimon on 100% tariff threat over Russian oil - Firstpost' drove supply disruption to S=0.10 and geopolitical risk to G=0.90. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.0871 and Day-5 horizon retention M₅=0.0500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-23 00:08:38 (Mode: INTRADAY_REVISION), primary event trigger 'JP Morgan CEO urges Washington to rethink Russian oil tariffs: 'Don't end up punishing India' - Moneycontrol.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.00, Price Pressure ΔP=-0.50, Geopolitical Risk G=-0.30. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.0000
-  - Day 1: M₁ = 0.0000
-  - Day 5: M₅ = 0.0000 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-23 07:32:34 (Mode: INTRADAY_REVISION), primary event trigger '‘Hopefully America won’t punish India’: Jamie Dimon on 100% tariff threat over Russian oil - Firstpost' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.70, Geopolitical Risk G=0.90. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.1000
+  - Day 1: M₁ = 0.0871
+  - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.120/gal ($-0.166/gal, -5.20%)
+  • National Wholesale: $3.273/gal ($-0.013/gal, -0.40%)
   • Tulsa, OK Retail: $6.391/gal (+$0.222/gal, +5.55%)
   • Newark, DE Retail: $4.447/gal (+$0.033/gal, +0.77%)
   • Cincinnati, OH/KY: $4.517/gal (+$0.017/gal, +0.39%)
@@ -91,15 +91,15 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.341/gal (+$0.761/gal, +12.21%)
   • SF Bay Area Region: $6.446/gal (+$0.767/gal, +12.10%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.446/gal (+0.767/gal). Largest downward shift for this run: National Wholesale at $3.120/gal (-0.166/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.446/gal (+0.767/gal). Largest downward shift for this run: National Wholesale at $3.273/gal (-0.013/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-23 00:08:38]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'JP Morgan CEO urges Washington to rethink Russian oil tariffs: 'Don't end up punishing India' - Moneycontrol.com'. Overall price pressure vector sits at ΔP=-0.50/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-23 07:32:34]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by '‘Hopefully America won’t punish India’: Jamie Dimon on 100% tariff threat over Russian oil - Firstpost'. Overall price pressure vector sits at ΔP=+0.70/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=-0.30. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.90. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-23 00:08:38.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-23 07:32:34.*
