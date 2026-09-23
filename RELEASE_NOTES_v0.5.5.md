@@ -9,7 +9,7 @@
 ## 🚀 Key Features, Architectural Enhancements & Algorithmic Upgrades
 
 ### 1. Dynamic Baker Hughes Rotary Drilling Rig Count Pipeline (Issue #269)
-- **Dynamic Ingestion Connector ([`src/alternative_data_feeds.py`](file:///src/alternative_data_feeds.py)):**
+- **Dynamic Ingestion Connector ([`src/alternative_data_feeds.py`](src/alternative_data_feeds.py)):**
   - Replaced the static 9-row sample array with `BakerHughesDataConnector`, enabling dynamic weekly rotary rig count retrieval from open public data feeds (FRED/EIA open series).
   - Implements 7-day TTL caching via `global_cache` (`data/lookup_cache.sqlite`) to synchronize with the weekly Friday 1:00 PM EST release cycle.
   - Maintains strict column schema guarantees expected by the quantitative feature matrix: `['date', 'baker_hughes_us_rig_count', 'baker_hughes_oil_rigs', 'baker_hughes_gas_rigs', 'baker_hughes_rig_delta_1w']`.
@@ -20,116 +20,116 @@
   - Preserves curated historical benchmark series (`HISTORICAL_BAKER_HUGHES_RIGS`) for seamless, zero-error execution during offline or air-gapped runs.
 
 ### 2. Dynamic Executive Social Media Feed & Weekend Market Gap Classifier (Issue #268)
-- **Live Syndication & Polling Engine ([`src/executive_social_feed.py`](file:///src/executive_social_feed.py)):**
+- **Live Syndication & Polling Engine ([`src/executive_social_feed.py`](src/executive_social_feed.py)):**
   - Introduced `ExecutiveSocialFeedConnector` supporting dynamic polling across public Truth Social and Twitter/X syndication RSS feeds.
   - Implements 15-minute lookup caching in `global_cache` and filters breaking posts for energy and trade policy keywords.
 - **Automated Weekend Market Gap Classifier:**
   - Implemented `is_timestamp_weekend()` to accurately detect whether posts are published while commodity futures markets are closed (Friday 17:00 EST through Sunday 18:00 EST).
   - Feeds into `calculate_weekend_social_sentiment_index()` to calibrate the empirical **$1.42\times$ Monday morning open price gap volatility multiplier**.
-- **Intraday Anomaly Monitor Integration ([`src/intraday_event_monitor.py`](file:///src/intraday_event_monitor.py)):**
+- **Intraday Anomaly Monitor Integration ([`src/intraday_event_monitor.py`](src/intraday_event_monitor.py)):**
   - Connected `fetch_executive_social_headlines()` directly into `IntradayEventMonitor.run_polling_cycle()`, allowing real-time executive statements to trigger cascading anomaly evaluations and automated Discord/Webhook alert dispatches.
 - **Bitemporal Snapshot Persistence:**
   - Ingested posts are logged to `data/executive_social_vintages.json`, deduplicated by post text and publication date.
 
 ### 3. Key Market Movers Dynamic Feed & Anomaly Integration (Issue #270)
-- **Live Statement Ingestion ([`src/key_movers_feed.py`](file:///src/key_movers_feed.py)):**
+- **Live Statement Ingestion ([`src/key_movers_feed.py`](src/key_movers_feed.py)):**
   - Upgraded `KeyMoversFeedConnector` with dynamic public RSS polling for breaking statements from central bankers (Fed Chair Jerome Powell), OPEC+ oil ministers (Prince Abdulaziz bin Salman, Alexander Novak), DOE leadership, and IEA directors.
   - Implements 15-minute lookup caching (`global_cache`) and bitemporal vintage logging (`data/key_movers_vintages.json`).
-  - Integrated `fetch_key_movers_headlines()` directly into `IntradayEventMonitor.run_polling_cycle()` in [`src/intraday_event_monitor.py`](file:///src/intraday_event_monitor.py).
+  - Integrated `fetch_key_movers_headlines()` directly into `IntradayEventMonitor.run_polling_cycle()` in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py).
 
 ### 4. Dynamic EIA PADD Refinery Utilization & Gasoline Stocks (Issue #271)
-- **Zero-Cost Open Data Integration ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Zero-Cost Open Data Integration ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `EIADataConnector.fetch_padd_inventory_and_refinery_data()` to dynamically query weekly FRED open series (`WPULEUS1`-`5`, `WGFUPUS2`) for PADD 1-5 refinery utilization and gasoline product supplied.
   - Implements 7-day TTL caching and bitemporal persistence to `data/eia_vintages.json`.
 
 ### 5. EIA-930 Hourly Electric Grid Stress Connector (Issue #272)
-- **Balancing Authority Diurnal/Seasonal Anomaly Engine ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Balancing Authority Diurnal/Seasonal Anomaly Engine ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `EIA930GridMonitorConnector.fetch_refinery_hub_grid_stress()` to compute dynamic diurnal load modeling and stress indices across major refining balancing authorities (ERCOT, MISO, PJM, CAISO).
   - Implements 4-hour caching and bitemporal snapshot persistence to `data/eia930_vintages.json`.
 
 ### 6. USDA Biofuel & Ethanol Market Reports Dynamic Connector (Issue #273)
-- **Dynamic Ethanol Rack & RIN D6 Offset Engine ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Dynamic Ethanol Rack & RIN D6 Offset Engine ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `USDABiofuelConnector.fetch_ethanol_blendstock_costs()` with dynamic biofuel price index scaling and real-time E10 blendstock offset calculations.
   - Implements 7-day caching and bitemporal snapshot persistence to `data/usda_biofuel_vintages.json`.
 
 ### 7. EIA State & Metro Retail Survey Dynamic Calibration (Issue #274)
-- **Regional FRED Open Benchmark Calibration ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Regional FRED Open Benchmark Calibration ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `EIAStateMetroRetailConnector` (`fetch_state_retail_price` and `fetch_metro_retail_price`) to dynamically index prices across 10 states and 10 major metropolitan areas against regional weekly FRED gasoline series (`GASREGW`, `GASREGWCA`, `GASREGWGULF`, `GASREGWEC`, `GASREGWMW`).
   - Implements 7-day caching and bitemporal snapshot persistence to `data/eia_vintages.json`.
 
 ### 8. FERC Form 6 Interstate Liquid Pipeline Tariff Connector (Issue #275)
-- **Dynamic Pipeline PPI Tariff Escalation ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Dynamic Pipeline PPI Tariff Escalation ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `FERCDataConnector.fetch_pipeline_tariff_data()` to dynamically scale Colonial, Plantation, and Explorer pipeline tariffs using the FRED Pipeline Transportation PPI series (`PCU486110486110`).
   - Implements 7-day caching and bitemporal snapshot persistence to `data/ferc_vintages.json`.
 
 ### 9. USACE Lock Performance Monitoring System (LPMS) Connector (Issue #276)
-- **Dynamic Ohio River Hydrology & Lock Queue Modeling ([`src/usace_locks.py`](file:///src/usace_locks.py)):**
+- **Dynamic Ohio River Hydrology & Lock Queue Modeling ([`src/usace_locks.py`](src/usace_locks.py)):**
   - Upgraded `USACELockConnector.fetch_ohio_river_lock_delays()` to dynamically query real-time streamflow and river stage telemetry from USGS Water Services (Cincinnati station `03255000`) to compute dynamic lock delays and barge bottleneck indices at Markland and McAlpine locks.
   - Implements 6-hour caching and bitemporal snapshot persistence to `data/usace_lock_vintages.json`.
 
 ### 10. Dynamic BSEE Offshore Gulf Production Shut-ins (Issue #277)
-- **Dynamic Ingestion Connector ([`src/bsee_shutins.py`](file:///src/bsee_shutins.py)):**
+- **Dynamic Ingestion Connector ([`src/bsee_shutins.py`](src/bsee_shutins.py)):**
   - Upgraded `BSEEShutinConnector` with dynamic BSEE press release RSS syndication and live NOAA NHC hurricane intensity correlation.
   - Implements 12-hour caching in `global_cache` and bitemporal snapshot persistence to `data/bsee_vintages.json`.
 
 ### 11. Geopolitical Feeds & Maritime Chokepoint RSS Ingestion (Issue #278)
-- **Dynamic Syndication & Polling Engine ([`src/geopolitical_feeds.py`](file:///src/geopolitical_feeds.py) & [`src/intraday_event_monitor.py`](file:///src/intraday_event_monitor.py)):**
+- **Dynamic Syndication & Polling Engine ([`src/geopolitical_feeds.py`](src/geopolitical_feeds.py) & [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py)):**
   - Upgraded `GeopoliticalFeedConnector` with live RSS stream polling (UN, Lloyd's List, Maritime Executive, Platts) for Strait of Hormuz, Bab el-Mandeb, Suez Canal, and Delmarva Cape routes.
   - Implements 15-minute caching, bitemporal snapshot persistence (`data/geopolitical_vintages.json`), and wired `fetch_geopolitical_headlines()` directly into `IntradayEventMonitor.run_polling_cycle()`.
 
 ### 12. State Energy Agency Surveys Connector (Issue #279)
-- **Multi-State Open Benchmark Engine ([`src/state_open_data.py`](file:///src/state_open_data.py)):**
+- **Multi-State Open Benchmark Engine ([`src/state_open_data.py`](src/state_open_data.py)):**
   - Upgraded `StateEnergyAgencySurveysConnector` to query dynamic weekly FRED state fuel series (`GASREGCAW` for California CEC, `GASREGNYW` for New York NYSERDA, `GASREGMUW` for Iowa/Midwest IDALS).
   - Implements 7-day caching and bitemporal snapshot persistence to `data/state_surveys_vintages.json`.
 
 ### 13. CFTC Commitments of Traders (COT) Net Speculator Delta (Issue #280)
-- **Dynamic 1-Week Delta & Speculative Positioning ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Dynamic 1-Week Delta & Speculative Positioning ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `CFTCDataConnector` with 7-day caching, bitemporal vintage tracking (`data/cftc_vintages.json`), and dynamic 1-week net speculative change calculation (`data[0] - data[1]`) for WTI and RBOB futures.
 
 ### 14. NOAA NHC Hurricane & Cyclone Bitemporal Tracking (Issue #281)
-- **Bitemporal Storm Archive & API Connector ([`src/nhc_hurricane.py`](file:///src/nhc_hurricane.py)):**
+- **Bitemporal Storm Archive & API Connector ([`src/nhc_hurricane.py`](src/nhc_hurricane.py)):**
   - Added bitemporal tracking (`save_nhc_vintage_record()` / `get_nhc_vintages_as_of()`) to `data/nhc_hurricane_vintages.json` with 1-hour caching for active Gulf/Atlantic tropical cyclones.
 
 ### 15. Dynamic Energy Equities Feed & Metro Retail Correlations (Issue #282)
-- **Energy Equities Ingestion & Live Pump Price Resolution ([`src/energy_equities_feed.py`](file:///src/energy_equities_feed.py) & [`src/retail_gas_correlations.py`](file:///src/retail_gas_correlations.py)):**
+- **Energy Equities Ingestion & Live Pump Price Resolution ([`src/energy_equities_feed.py`](src/energy_equities_feed.py) & [`src/retail_gas_correlations.py`](src/retail_gas_correlations.py)):**
   - Added 24-hour caching to `fetch_energy_equities_data()`, bitemporal snapshot persistence to `data/energy_equities_vintages.json`, and dynamic pump price resolution via `fetch_live_metro_retail_price()`.
 
 ### 16. Regional Event Stream Fusion with Live Intraday Anomalies (Issue #283)
-- **Metro-Specific Event Ingestion ([`src/data_ingestion.py`](file:///src/data_ingestion.py) & [`src/locations/*/regional.py`](file:///src/locations/tulsa/regional.py)):**
+- **Metro-Specific Event Ingestion ([`src/data_ingestion.py`](src/data_ingestion.py) & [`src/locations/*/regional.py`](src/locations/tulsa/regional.py)):**
   - Implemented `load_live_regional_intraday_events()` and integrated live breaking anomaly feeds into all 7 localized metro agents (Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie).
 
 ### 17. Core Infrastructure & Caching Enhancements
-- **Atomic Key Deletion in Lookup Cache ([`src/lookup_cache.py`](file:///src/lookup_cache.py)):**
+- **Atomic Key Deletion in Lookup Cache ([`src/lookup_cache.py`](src/lookup_cache.py)):**
   - Added `delete(key)` method to `LookupCache` for atomic key invalidation across memory and SQLite datastores.
 
 ### 18. OilPriceAPI Dynamic Commodity Futures Fallback & Bitemporal Tracking (Issue #284)
-- **Dynamic yfinance Futures Benchmark Fallback ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Dynamic yfinance Futures Benchmark Fallback ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `OilPriceAPIDataConnector` fallback benchmarks from static scalar values to dynamic `yfinance` commodity futures (`CL=F` for WTI, `BZ=F` for Brent, `RB=F` for RBOB, `NG=F` for Natural Gas, `HO=F` for Heating Oil).
   - Preserves 25 calls/day quota safety valve (`data/oilpriceapi_quota.json`) and market hours gating.
 - **Bitemporal Vintage Tracking:**
   - Added `save_oilpriceapi_vintage_record()` and `get_oilpriceapi_vintages_as_of()` writing point-in-time commodity spot observations to `data/oilpriceapi_vintages.json`.
 
 ### 19. PyPI Community Fuel Scraper Dynamic Multi-Tier Retail Price Resolution (Issue #285)
-- **Dynamic Retail Gas Price Integration ([`src/live_fuel_feed.py`](file:///src/live_fuel_feed.py)):**
+- **Dynamic Retail Gas Price Integration ([`src/live_fuel_feed.py`](src/live_fuel_feed.py)):**
   - Upgraded `PyPICommunityFuelScraper.fetch_community_price()` to dynamically query multi-tier retail price resolution via `fetch_live_metro_retail_price()` (GasBuddy GraphQL, AAA web scraper, EIA/yfinance, prediction history) before falling back to static regional anchors.
 
 ### 20. Alpha Vantage Dynamic Equity Pricing, RSI/VWAP & Bitemporal Tracking (Issue #286)
-- **Dynamic Technicals & Equity Feeds ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Dynamic Technicals & Equity Feeds ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Upgraded `AlphaVantageDataConnector` to compute dynamic 14-day RSI and Volume-Weighted Average Price (VWAP) for `XLE` and query dynamic energy equity close prices via `yfinance` during offline or unconfigured runs.
 - **Bitemporal Vintage Tracking:**
   - Added `save_alpha_vantage_vintage_record()` and `get_alpha_vantage_vintages_as_of()` persisting point-in-time technical and equity vintages to `data/alpha_vantage_vintages.json`.
 
 ### 21. FRED Data Connector Bitemporal Vintage Tracking (Issue #287)
-- **Bitemporal Persistence & Point-in-Time Queries ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Bitemporal Persistence & Point-in-Time Queries ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Added `save_fred_vintage_record()` and `get_fred_vintages_as_of()` persisting weekly FRED macro and regional retail fuel series observations to `data/fred_vintages.json`.
 
 ### 22. Open-Meteo High-Resolution Degree Days Caching & Bitemporal Tracking (Issue #288)
-- **6-Hour Lookup Caching & Bitemporal Persistence ([`src/noaa_weather.py`](file:///src/noaa_weather.py)):**
+- **6-Hour Lookup Caching & Bitemporal Persistence ([`src/noaa_weather.py`](src/noaa_weather.py)):**
   - Added 6-hour `global_cache` lookup caching for `OpenMeteoDegreeDaysConnector` across 7 major refining hubs (Tulsa, Newark, Cincinnati, Oakland, Greenville, Charlotte, Port St. Lucie).
   - Added `save_degree_days_vintage_record()` and `get_degree_days_vintages_as_of()` persisting Heating/Cooling Degree Days (HDD/CDD) and freeze/heat stress warnings to `data/degree_days_vintages.json`.
 
 ### 23. Open Source AI Radar Bitemporal Vintage Tracking (Issue #289)
-- **Bitemporal Snapshot Persistence ([`src/data_ingestion.py`](file:///src/data_ingestion.py)):**
+- **Bitemporal Snapshot Persistence ([`src/data_ingestion.py`](src/data_ingestion.py)):**
   - Added `save_radar_vintage_record()` and `get_radar_vintages_as_of()` logging open-source AI and time-series forecasting model catalog snapshots to `data/radar_vintages.json`.
 
 ---
@@ -138,32 +138,32 @@
 
 - **Targeted Sprint Unit & Integration Suite (`dev-vm` at `10.42.42.54`):**
 ### 23. Census Demographics Bitemporal Tracking (Issue #290)
-- **Bitemporal Snapshot & Commuter Profiling ([`src/census_demographics.py`](file:///src/census_demographics.py)):**
+- **Bitemporal Snapshot & Commuter Profiling ([`src/census_demographics.py`](src/census_demographics.py)):**
   - Added `save_census_vintage_record()` and `get_census_vintages_as_of()` writing point-in-time ACS demographic snapshots to `data/census_demographics_vintages.json`.
   - Added test suite in `tests/test_census_vintages.py`.
 
 ### 24. AQI & Industrial Emissions Telemetry Bitemporal Tracking (Issue #291)
-- **Air Quality & Refinery Outage Vintages ([`src/aqi_feed.py`](file:///src/aqi_feed.py)):**
+- **Air Quality & Refinery Outage Vintages ([`src/aqi_feed.py`](src/aqi_feed.py)):**
   - Added `save_aqi_vintage_record()` and `get_aqi_vintages_as_of()` writing fence-line sensor emissions and EPA AirNow observations to `data/aqi_vintages.json`.
   - Added test suite in `tests/test_aqi_vintages.py`.
 
 ### 25. USGS Seismic Telemetry Bitemporal Tracking (Issue #292)
-- **Earthquake Hazard Risk Vintages ([`src/usgs_seismic.py`](file:///src/usgs_seismic.py)):**
+- **Earthquake Hazard Risk Vintages ([`src/usgs_seismic.py`](src/usgs_seismic.py)):**
   - Added `save_seismic_vintage_record()` and `get_seismic_vintages_as_of()` writing corridor earthquake hazard telemetry to `data/usgs_seismic_vintages.json`.
   - Added test suite in `tests/test_usgs_seismic_vintages.py`.
 
 ### 26. USGS Water Data Telemetry Bitemporal Tracking (Issue #293)
-- **Hydrological Streamflow & Barge Draft Vintages ([`src/usgs_water_feed.py`](file:///src/usgs_water_feed.py)):**
+- **Hydrological Streamflow & Barge Draft Vintages ([`src/usgs_water_feed.py`](src/usgs_water_feed.py)):**
   - Added `save_water_vintage_record()` and `get_water_vintages_as_of()` writing streamflow, barge draft constraints, and river stage observations to `data/usgs_water_vintages.json`.
   - Added test suite in `tests/test_usgs_water_vintages.py`.
 
 ### 27. U.S. Treasury Yield Telemetry Bitemporal Tracking (Issue #294)
-- **Macroeconomic Yield Curve & Spread Vintages ([`src/treasury_yield_feed.py`](file:///src/treasury_yield_feed.py)):**
+- **Macroeconomic Yield Curve & Spread Vintages ([`src/treasury_yield_feed.py`](src/treasury_yield_feed.py)):**
   - Added `save_treasury_vintage_record()` and `get_treasury_vintages_as_of()` writing 10Y-2Y yield curve spread and TIPS real yield observations to `data/treasury_vintages.json`.
   - Added test suite in `tests/test_treasury_vintages.py`.
 
 ### 28. ULSD Distillate Regional Engine Bitemporal Tracking (Issue #295)
-- **Distillate Crack & Regional Retail Diesel Vintages ([`src/diesel_regional.py`](file:///src/diesel_regional.py)):**
+- **Distillate Crack & Regional Retail Diesel Vintages ([`src/diesel_regional.py`](src/diesel_regional.py)):**
   - Added `save_diesel_vintage_record()` and `get_diesel_vintages_as_of()` writing retail diesel prices and wholesale crack spread observations to `data/diesel_vintages.json`.
   - Added test suite in `tests/test_diesel_vintages.py`.
 

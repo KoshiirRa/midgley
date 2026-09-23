@@ -9,12 +9,13 @@ This document provides a comprehensive guide for self-hosting custom instances o
 1. [System Requirements & Prerequisites](#1-system-requirements--prerequisites)
 2. [Environment Configuration & API Keys](#2-environment-configuration--api-keys)
 3. [Setting Up the 3-Tier Multi-Tier Edge Cache Gateway](#3-setting-up-the-3-tier-multi-tier-edge-cache-gateway)
-4. [Standalone Linux Server & VM Deployment](#4-standalone-linux-server--vm-deployment)
-5. [Systemd Services & Automated Timer Schedules](#5-systemd-services--automated-timer-schedules)
-6. [Cloud & GitHub Actions Self-Hosting (Fork Deployment)](#6-cloud--github-actions-self-hosting-fork-deployment)
-7. [LLM Guidance Prompts for Econometric & Logistics Discovery](#7-llm-guidance-prompts-for-econometric--logistics-discovery)
-8. [Step-by-Step Developer Guide: Adding New Metro Regions](#8-step-by-step-developer-guide-adding-new-metro-regions)
-9. [Verification, Health Checks & Diagnostics](#9-verification-health-checks--diagnostics)
+4. [Production Docker Container & Durable State Architecture](#4-production-docker-container--durable-state-architecture)
+5. [Standalone Linux Server & VM Deployment](#5-standalone-linux-server--vm-deployment)
+6. [Systemd Services & Automated Timer Schedules](#6-systemd-services--automated-timer-schedules)
+7. [Cloud & GitHub Actions Self-Hosting (Fork Deployment)](#7-cloud--github-actions-self-hosting-fork-deployment)
+8. [LLM Guidance Prompts for Econometric & Logistics Discovery](#8-llm-guidance-prompts-for-econometric--logistics-discovery)
+9. [Step-by-Step Developer Guide: Adding New Metro Regions](#9-step-by-step-developer-guide-adding-new-metro-regions)
+10. [Verification, Health Checks & Diagnostics](#10-verification-health-checks--diagnostics)
 
 ---
 
@@ -299,7 +300,164 @@ If no remote Hindsight or Supabase credentials are configured, Midgley automatic
 
 ---
 
-## 4. Standalone Linux Server & VM Deployment
+## 4. Production Docker Container & Durable State Architecture
+
+Midgley provides a production-hardened multi-stage Docker container built on `python:3.13-slim` with `uv`, OpenMP acceleration for XGBoost, and FastAPI/MCP transport.
+
+```
+       ┌─────────────────────────────────────────────────────────────┐
+       │              HOST PERSISTENT VOLUME: ./data                 │
+       │  • security.db (PBKDF2 Keys & Rate Limits)                  │
+       │  • agent_memory.sqlite (Hindsight Episodic Memory)          │
+       │  • lookup_cache.sqlite (Geocoding & Edge Cache)             │
+       │  • prediction_history.csv (Out-of-Time Prediction Ledger)   │
+       │  • intraday_events.json & evaluated_headlines.json          │
+       │  • finlight_quota.json & firecrawl_quota.json               │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │  Mount: -v $(pwd)/data:/app/data
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │             MIDGLEY CONTAINER (PORT 8000)                   │
+       │  • FastAPI REST Server & Model Inference Pipeline           │
+       │  • MCP Standard Model Context Protocol Server               │
+       │  • Automatic SQLite Schema Bootstrap on Fresh Mount         │
+       └─────────────────────────────────────────────────────────────┘
+```
+
+### Docker Quick Start with Persistent Host Volume
+
+```bash
+# 1. Pull the pinned release container image
+docker pull ghcr.io/koshiirra/midgley:v0.6.8
+
+# 2. Ensure host data directory exists
+mkdir -p data backups
+
+# 3. Run container with persistent volume mount (Issue #375)
+docker run -d \
+  --name midgley \
+  --restart unless-stopped \
+  -p 8000:8000 \
+  -v $(pwd)/data:/app/data \
+  -e GEMINI_API_KEY="AIzaSy..." \
+  -e FINLIGHT_API_KEY="fl_live_..." \
+  -e MIDGLEY_ADMIN_SECRET="sec_admin_secret_here" \
+  ghcr.io/koshiirra/midgley:v0.6.8
+
+# 4. Verify unauthenticated API server health
+curl http://localhost:8000/health
+
+# 5. Verify authenticated functional prediction route
+curl -H "X-API-Key: $MIDGLEY_API_KEY" "http://localhost:8000/api/v1/forecast/predict?locale=national"
+```
+
+### Docker Compose Configuration (`docker-compose.yml`)
+
+```yaml
+version: '3.8'
+
+services:
+  midgley:
+    image: ghcr.io/koshiirra/midgley:v0.6.8
+    container_name: midgley
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FINLIGHT_API_KEY=${FINLIGHT_API_KEY}
+      - MIDGLEY_ADMIN_SECRET=${MIDGLEY_ADMIN_SECRET}
+      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+```
+
+### Durable Container State Inventory
+
+The container writes all persistent application state into `/app/data`. When mounted to the host via `-v $(pwd)/data:/app/data`, all records remain durable across container upgrades:
+
+| Path on Host / Container | Storage Engine | Purpose & Operator Impact |
+| :--- | :--- | :--- |
+| `data/security.db` | SQLite 3 | Stores PBKDF2 hashed API keys, roles, and rate limit counters. |
+| `data/agent_memory.sqlite` | SQLite 3 + FTS5 | Stores episodic memory vectors and qualitative root-cause reflections. |
+| `data/lookup_cache.sqlite` | SQLite 3 | Stores geocoding results, HTTP cache responses, and EIA vintages. |
+| `data/prediction_history.csv` | CSV Ledger | Continuous historical record of 5-day out-of-time forecasts and actuals. |
+| `data/intraday_events.json` | JSON Ledger | Deduplication ledger and audit log of evaluated breaking news shocks. |
+| `data/evaluated_headlines.json` | JSON Ledger | 24-hour headline hash deduplication ledger. |
+| `data/finlight_quota.json` | JSON Ledger | Monthly and daily API quota counter for `finlight.me` (150 call limit). |
+| `data/firecrawl_quota.json` | JSON Ledger | Monthly and daily API quota counter for `firecrawl.dev` (800 call limit). |
+| `data/telemetry_alerts.json` | JSON Ledger | Active MLOps model degradation threshold alerts. |
+| `data/fallback_telemetry.json` | JSON Ledger | Cumulative token and dollar savings from Tier 3 offline lexicon fallbacks. |
+
+### Empty Volume Bootstrap Lifecycle
+
+When launching a container with an empty host volume (e.g. fresh `./data` folder):
+1. **KeyManager Bootstrap:** Automatically executes schema migrations, creating `api_keys` and `rate_limits` tables in `data/security.db`.
+2. **Episodic Memory Bootstrap:** Initializes `memories` table with FTS5 virtual tables and Porter stemming tokenizer in `data/agent_memory.sqlite`.
+3. **Lookup Cache Bootstrap:** Initializes key-value HTTP cache tables in `data/lookup_cache.sqlite`.
+4. **Prediction History Bootstrap:** Generates standard CSV headers with full 8-dimensional MLOps attribution fields on first forecast run.
+5. **Quota Safety Valves:** Initializes zeroed JSON ledgers with statutory safety caps.
+6. **Regional Metadata:** Regional driver profiles reside within the versioned application image (`data/regional_metadata/`) and fall back cleanly if customized profiles are omitted.
+
+### Online Backup Runbook
+
+Execute atomic, zero-downtime backups of live SQLite databases and flat-file ledgers on the host:
+
+```bash
+# 1. Create timestamped backup destination
+BACKUP_DATE=$(date +%F_%H%M%S)
+mkdir -p backups/${BACKUP_DATE}
+
+# 2. Atomic online SQLite database snapshots
+sqlite3 data/security.db ".backup 'backups/${BACKUP_DATE}/security.db'"
+sqlite3 data/agent_memory.sqlite ".backup 'backups/${BACKUP_DATE}/agent_memory.sqlite'"
+if [ -f data/lookup_cache.sqlite ]; then
+  sqlite3 data/lookup_cache.sqlite ".backup 'backups/${BACKUP_DATE}/lookup_cache.sqlite'"
+fi
+
+# 3. Archive prediction logs and JSON deduplication ledgers
+tar -czf backups/${BACKUP_DATE}/midgley_ledgers.tar.gz data/*.csv data/*.json
+
+echo "Backup completed successfully at backups/${BACKUP_DATE}"
+```
+
+### Restore & Stateful Rollback Runbook
+
+If rolling back a deployment or restoring from disaster:
+
+```bash
+# 1. Stop and remove the active container
+docker stop midgley && docker rm midgley
+
+# 2. Restore databases and ledgers from backup snapshot
+RESTORE_DATE="2026-09-23_120000"
+sqlite3 data/security.db ".restore 'backups/${RESTORE_DATE}/security.db'"
+sqlite3 data/agent_memory.sqlite ".restore 'backups/${RESTORE_DATE}/agent_memory.sqlite'"
+tar -xzf backups/${RESTORE_DATE}/midgley_ledgers.tar.gz -C .
+
+# 3. Pin and run the target release image
+docker run -d \
+  --name midgley \
+  --restart unless-stopped \
+  -p 8000:8000 \
+  -v $(pwd)/data:/app/data \
+  --env-file .env \
+  ghcr.io/koshiirra/midgley:v0.6.8
+
+# 4. Verify API recovery
+curl http://localhost:8000/health
+curl http://localhost:8000/api/v1/system/quota
+```
+
+---
+
+## 5. Standalone Linux Server & VM Deployment
 
 Follow these steps to deploy Midgley on a dedicated Linux host (e.g. `dev-vm` / Ubuntu host):
 
@@ -353,7 +511,7 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
 
 ---
 
-## 5. Systemd Services & Automated Timer Schedules
+## 6. Systemd Services & Automated Timer Schedules
 
 To run Midgley 24/7 on a Linux machine with automated background execution, set up `systemd` user services and timers.
 
@@ -465,7 +623,7 @@ systemctl --user list-timers
 
 ---
 
-## 6. Cloud & GitHub Actions Self-Hosting (Fork Deployment)
+## 7. Cloud & GitHub Actions Self-Hosting (Fork Deployment)
 
 If you prefer serverless execution via GitHub Actions:
 
@@ -479,15 +637,29 @@ If you prefer serverless execution via GitHub Actions:
    - `DISCORD_INTRADAY_WEBHOOK_URL` (or `DISCORD_WEBHOOK_URL`, optional for intraday revision alerts)
    - `TURSO_DATABASE_URL` (optional)
    - `TURSO_AUTH_TOKEN` (optional)
-3. **Configure GitHub Pages:**
+3. **Configure GitHub Pages (Issue #378):**
    - Navigate to **Settings -> Pages**.
-   - Under **Build and deployment**, set **Source** to `Deploy from a branch`.
-   - Select branch `main` (or `dev`) and folder `/docs`.
-4. **Automated Workflows:**
-   - `.github/workflows/gas_price_forecast.yml`: Runs daily forecasting & updates GitHub Pages.
-   - `.github/workflows/intraday_event_monitor.yml`: Runs 15-minute event monitoring & webhook gateways.
-   - `.github/workflows/weekly_model_review.yml`: Runs Saturday performance audits.
-   - `.github/workflows/nightly_dev_release.yml`: Builds nightly releases at 08:00 UTC.
+   - Under **Build and deployment**, set **Source** to `GitHub Actions`.
+   - The repository uses modern Pages Artifact deployment (`actions/configure-pages@v6`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`) in `.github/workflows/gas_price_forecast.yml`.
+   - *Do NOT select "Deploy from a branch", as that legacy mechanism conflicts with the artifact workflow.*
+
+### Dual-Tier Intraday Monitoring Architecture
+
+Midgley uses a resilient dual-tier architecture for intraday headline monitoring:
+- **Tier 1 (Primary — 15-minute Edge Polling):** Cloudflare Worker cron (`workers/intraday_monitor_worker.ts`) executing on a `*/15 * * * *` schedule. Ingests free RSS feeds, evaluates price impact, dispatches real-time Discord Embed alerts, and triggers a repository dispatch when thresholds are tripped.
+- **Tier 2 (Fallback — 2-hour Scheduled Runner):** GitHub Actions workflow (`.github/workflows/intraday_event_monitor.yml`) running on a `0 */2 * * *` schedule. Provides reliable scheduled execution and processes incoming webhook push dispatches.
+
+### Master Workflow Cron Schedule Matrix
+
+All workflow triggers in `.github/workflows/` evaluate strictly against UTC. The table below provides the exact schedule mappings:
+
+| Workflow Name | Workflow File | Cron Expression | UTC Time | US Central Time (CDT / CST) | US Eastern Time (EDT / EST) | Purpose |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Daily Gas Price Forecast** | `.github/workflows/gas_price_forecast.yml` | `17 7 * * *` | 07:17 UTC | 02:17 AM CDT / 01:17 AM CST | 03:17 AM EDT / 02:17 AM EST | Full multi-region forecasting & Pages deployment |
+| **Weekly Model Review** | `.github/workflows/weekly_model_review.yml` | `12 13 * * 6` | Sat 13:12 UTC | Sat 08:12 AM CDT / 07:12 AM CST | Sat 09:12 AM EDT / 08:12 AM EST | Saturday performance audit & Hindsight reflection |
+| **Intraday Fallback Monitor** | `.github/workflows/intraday_event_monitor.yml` | `0 */2 * * *` | Every 2 hours | Every 2 hours | Every 2 hours | 2-hour fallback RSS polling & webhook gateway |
+| **Nightly Dev Release** | `.github/workflows/nightly_dev_release.yml` | `0 8 * * *` | 08:00 UTC | 03:00 AM CDT / 02:00 AM CST | 04:00 AM EDT / 03:00 AM EST | Automated nightly development snapshot release |
+| **Edge Intraday Monitor** | `workers/intraday_monitor_worker.ts` | `*/15 * * * *` | Every 15 min | Every 15 min | Every 15 min | Primary edge headline evaluation & Discord alerts |
 
 ---
 

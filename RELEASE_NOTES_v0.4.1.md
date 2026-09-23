@@ -9,7 +9,7 @@
 ## 🚀 Key Features, Bug Fixes & Architectural Enhancements
 
 ### 1. Python 3.11 SyntaxError Fix in Dashboard Generator (Issue #52 Follow-Up)
-- **Precomputed CodeCogs Math URLs:** Precomputes LaTeX equation rendering URLs outside inline f-strings in [`src/dashboard_generator.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/src/dashboard_generator.py), resolving Python 3.11 f-string quote nesting syntax errors (`SyntaxError: f-string expression part cannot include a backslash`).
+- **Precomputed CodeCogs Math URLs:** Precomputes LaTeX equation rendering URLs outside inline f-strings in [`src/dashboard_generator.py`](src/dashboard_generator.py), resolving Python 3.11 f-string quote nesting syntax errors (`SyntaxError: f-string expression part cannot include a backslash`).
 - **Cross-Python Compatibility:** Restores clean template rendering across Python 3.11, 3.12, 3.13, and 3.14 runtimes.
 
 ### 2. Dependency Reconciliation & Security Patches (PR #198)
@@ -17,7 +17,7 @@
 - **Edge Worker Security:** Eliminates potential HTTP request smuggling and header parsing vulnerabilities in Cloudflare Workers and Node.js fetch runtimes.
 
 ### 3. Formalized 3-Branch Synchronization Protocol (`AGENTS.md`)
-- **Repository Architecture Specification:** Updated [`AGENTS.md`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/AGENTS.md) and [`scripts/wiki_update.py`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/scripts/wiki_update.py) to explicitly mandate the 3-branch workflow (`dev`, `main`, and `self-hosted`).
+- **Repository Architecture Specification:** Updated [`AGENTS.md`](AGENTS.md) and [`scripts/wiki_update.py`](scripts/wiki_update.py) to explicitly mandate the 3-branch workflow (`dev`, `main`, and `self-hosted`).
 - **Mandatory Reconciliation Rule:** Establishes that whenever `dev` is merged into `main`, `self-hosted` MUST also be reconciled with `dev` (`git checkout self-hosted && git merge dev && git push origin self-hosted`) to maintain feature parity between the production showcase and the blank-slate container framework.
 
 ### 4. Continuous Forecast & Intraday Anomaly Log Revisions

@@ -340,11 +340,11 @@ All external data ingestion connectors (REST APIs, Socrata open data, EIA/FRED/U
 
 Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-tier edge caching:
 
-1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](file:///workers/intraday_monitor_worker.ts)):**
+1. **`midgley-intraday-monitor` ([workers/intraday_monitor_worker.ts](workers/intraday_monitor_worker.ts)):**
    * Executes every 15 minutes via Cloudflare Cron Triggers (`*/15 * * * *`).
    * Scans 5 primary energy RSS streams, runs fast-path keyword/regex anomaly detection (filtering non-energy macro tariffs and agricultural cooking oils like canola), deduplicates dispatched items against Cloudflare D1 database (`midgley-cache-d1` `seen_rss_headlines`) across all global PoPs, and fires GitHub Repository Dispatch events (`event_type: "intraday_anomaly"`).
 
-2. **`midgley-cache-worker` ([workers/cache_worker.ts](file:///workers/cache_worker.ts)):**
+2. **`midgley-cache-worker` ([workers/cache_worker.ts](workers/cache_worker.ts)):**
    * Acts as Tier 2 Edge Cache Gateway over Cloudflare D1 database (`midgley-cache-d1`).
    * Serves `/api/v1/cache/:key` GET/POST endpoints and `/status` health probes with optional Bearer Token authentication.
 
@@ -369,7 +369,7 @@ Midgley deploys two Cloudflare Edge Workers to handle edge triggers and multi-ti
 * **Cloudflare Native Observability:** Configured in `wrangler.toml` and `wrangler.cache.toml` with `[observability]` (`enabled = true`, `head_sampling_rate = 1.0`, `persist = true`).
 * **Axiom Log Analytics (`logToAxiom`):** Ingests structured JSON cycle summaries, RSS warnings, GitHub dispatches, and cache hits/misses directly to Axiom dataset `midgley-workers` via `ctx.waitUntil()` async flushes (0 HTTP latency penalty, $0 subscription cost).
 * **Sentry Crash Reporting & Crons (`captureSentryException` & `sendSentryCronCheckIn`):** Captures unhandled runtime errors with stack trace context and executes 2-stage Sentry Cron check-ins (`in_progress` start ping + `ok`/`error` completion ping with matching `check_in_id`) for execution duration tracking and timeout detection.
-* **Axiom & Sentry Dashboard Templates & APL Queries:** See [`docs/OBSERVABILITY_DASHBOARDS.md`](file:///docs/OBSERVABILITY_DASHBOARDS.md) for ready-to-use APL queries, dashboard widget templates, and alert rules.
+* **Axiom & Sentry Dashboard Templates & APL Queries:** See [`docs/OBSERVABILITY_DASHBOARDS.md`](docs/OBSERVABILITY_DASHBOARDS.md) for ready-to-use APL queries, dashboard widget templates, and alert rules.
 
 ---
 
@@ -419,7 +419,7 @@ During intraday event evaluations in `src/intraday_event_monitor.py`, breaking h
 
 ## 13. Chronological 15-Section Mathematical Framework & Pipeline Execution (Issues #224, #225, #226, #227, #229)
 
-The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and generation engine in [`src/dashboard_generator.py`](file:///src/dashboard_generator.py) follow a strict 15-section chronological execution pipeline:
+The mathematical documentation in [`docs/math.html`](docs/math.html) and generation engine in [`src/dashboard_generator.py`](src/dashboard_generator.py) follow a strict 15-section chronological execution pipeline:
 
 1. **`01` Commodity Futures & 3-2-1 Crack Spread:** NYMEX RBOB ($P_{\text{RBOB}}$), WTI ($P_{\text{WTI}}$), ULSD Heating Oil ($P_{\text{ULSD}}$), and standard 3-2-1 crack spread $\text{Crack}_{321} = \frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{ULSD}} - 3 \cdot (P_{\text{WTI}} / 42)}{3}$.
 2. **`02` Alternative Physical Feeds & Positioning:** 7 quantitative macro and positioning feeds: Cboe OVX, Baker Hughes Rig Counts, 10-Year Treasury Yields, 10-Year TIPS Breakevens, CFTC COT Managed Money Net Longs, FERC Natural Gas / LNG Spark Spreads, and USDA/EIA Ethanol/RIN blendstock margins.
@@ -441,8 +441,8 @@ The mathematical documentation in [`docs/math.html`](file:///docs/math.html) and
 
 ## 14. CoSPOT Spectral Prompting & Hindsight Episodic Agent Memory (Issues #215, #230 & #421)
 
-* **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
-* **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](file:///src/agent_memory.py) & [`src/hindsight_client.py`](file:///src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Vectorize Hindsight-Hosted SaaS (Issue #421), local Dev-VM Docker container, and local SQLite FTS5 fallback.
+* **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
+* **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](src/agent_memory.py) & [`src/hindsight_client.py`](src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Vectorize Hindsight-Hosted SaaS (Issue #421), local Dev-VM Docker container, and local SQLite FTS5 fallback.
   - **Zero-Cold-Start Hosted Gateway:** Connects to `https://api.hindsight.vectorize.io` with Bearer auth, eliminating the compute cost and 75-second cold boot latencies associated with serverless Cloud Run containers.
   - **Socket Read Timeout Retries:** Configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
   - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once the remote bank is reachable.
