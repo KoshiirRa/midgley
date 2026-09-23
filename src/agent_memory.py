@@ -10,6 +10,7 @@ Architecture:
 """
 
 import os
+import re
 import json
 import sqlite3
 import logging
@@ -205,48 +206,56 @@ class SQLiteMemoryStore:
         anomaly_type: Optional[str] = None,
         top_k: int = 3
     ) -> List[Dict[str, Any]]:
-        """Searches memories using SQLite FTS5 full-text ranking."""
+        """Searches memories using SQLite FTS5 full-text ranking with sanitized token matching."""
         results = []
         conn = self._get_connection()
         try:
             cursor = conn.cursor()
-            # Clean query for FTS5 syntax
-            clean_query = " ".join([w for w in query.replace("'", "").replace('"', '').split() if len(w) > 2])
-            if not clean_query:
-                clean_query = region or "refinery price shock"
+            # Clean query for FTS5 syntax: strip special boolean punctuation (+, -, *, :, ^) and wrap tokens in double quotes (Issue #331)
+            raw_query = query or ""
+            clean_words = [w for w in re.sub(r'[^\w\s]', ' ', raw_query).split() if len(w) > 2]
+            if not clean_words:
+                fallback_term = region or "refinery price shock"
+                clean_words = [w for w in re.sub(r'[^\w\s]', ' ', fallback_term).split() if len(w) > 2]
 
-            sql = """
-                SELECT m.*, bm25(memories_fts) as score
-                FROM memories_fts f
-                JOIN memories m ON m.memory_id = f.memory_id
-                WHERE memories_fts MATCH ?
-            """
-            params = [clean_query]
-            if region:
-                sql += " AND m.region = ?"
-                params.append(region)
-            if anomaly_type:
-                sql += " AND m.anomaly_type = ?"
-                params.append(anomaly_type)
+            clean_query = " ".join(f'"{w}"' for w in clean_words) if clean_words else ""
 
-            sql += " ORDER BY score LIMIT ?"
-            params.append(top_k)
+            if clean_query:
+                try:
+                    sql = """
+                        SELECT m.*, bm25(memories_fts) as score
+                        FROM memories_fts f
+                        JOIN memories m ON m.memory_id = f.memory_id
+                        WHERE memories_fts MATCH ?
+                    """
+                    params = [clean_query]
+                    if region:
+                        sql += " AND m.region = ?"
+                        params.append(region)
+                    if anomaly_type:
+                        sql += " AND m.anomaly_type = ?"
+                        params.append(anomaly_type)
 
-            cursor.execute(sql, params)
-            rows = cursor.fetchall()
-            for r in rows:
-                results.append({
-                    "memory_id": r["memory_id"],
-                    "region": r["region"],
-                    "anomaly_type": r["anomaly_type"],
-                    "content": r["content"],
-                    "predicted_price": r["predicted_price"],
-                    "actual_price": r["actual_price"],
-                    "error_dollars": r["error_dollars"],
-                    "forecast_target_date": r["forecast_target_date"],
-                    "score": r["score"],
-                    "metadata": json.loads(r["metadata_json"] or "{}")
-                })
+                    sql += " ORDER BY score LIMIT ?"
+                    params.append(top_k)
+
+                    cursor.execute(sql, params)
+                    rows = cursor.fetchall()
+                    for r in rows:
+                        results.append({
+                            "memory_id": r["memory_id"],
+                            "region": r["region"],
+                            "anomaly_type": r["anomaly_type"],
+                            "content": r["content"],
+                            "predicted_price": r["predicted_price"],
+                            "actual_price": r["actual_price"],
+                            "error_dollars": r["error_dollars"],
+                            "forecast_target_date": r["forecast_target_date"],
+                            "score": r["score"],
+                            "metadata": json.loads(r["metadata_json"] or "{}")
+                        })
+                except Exception as fts_err:
+                    logger.debug(f"FTS5 match error for query '{clean_query}', falling back to recent: {fts_err}")
 
             # Fallback to recent records if FTS match returned 0
             if not results:
