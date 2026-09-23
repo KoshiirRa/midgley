@@ -42,7 +42,7 @@ Gasoline crack spreads represent refiner acquisition and processing margins:
   \]
 
 
-### B. NYMEX Forward Curve, Calendar Spreads & 3-2-1 Crack Futures (Issue #404)
+### B. NYMEX Forward Curve, Calendar Spreads & 3-2-1 Crack Margin Formulations (Issues #401, #404)
 Prompt ($M_1$) and Second Month ($M_2$) calendar spreads quantify forward term structure and physical refinery margins:
 - **RBOB Calendar Spread ($M_1 - M_2$):**
   \[
@@ -52,9 +52,13 @@ Prompt ($M_1$) and Second Month ($M_2$) calendar spreads quantify forward term s
   \[
   \text{Spread}_{\text{WTI}, M_1-M_2} = P_{\text{WTI}, M_1} - P_{\text{WTI}, M_2}
   \]
-- **Refinery 3-2-1 Crack Margin ($/gal):**
+- **Refinery 3-2-1 Crack Margin Barrel-Equivalent ($\$ / \text{bbl}$):**
   \[
-  \text{Crack}_{3-2-1} = \frac{(2 \cdot P_{\text{RBOB}, M_1} + 1 \cdot P_{\text{HO}, M_1}) - 3 \cdot \left(\frac{P_{\text{WTI}, M_1}}{42.0}\right)}{3.0}
+  \text{Crack}_{321}^{\text{bbl}} = 2 \cdot (P_{\text{RBOB}} \times 42.0) + 1 \cdot (P_{\text{HO}} \times 42.0) - 3 \cdot P_{\text{WTI}}
+  \]
+- **Refinery 3-2-1 Crack Margin Gallon-Equivalent ($\$ / \text{gal}$):**
+  \[
+  \text{Crack}_{321}^{\text{gal}} = \frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{HO}} - 3 \cdot \left(\frac{P_{\text{WTI}}}{42.0}\right)}{3.0} = \frac{\text{Crack}_{321}^{\text{bbl}}}{3 \cdot 42.0}
   \]
 
 ### C. Exponential Memory Decay Equation
@@ -109,16 +113,27 @@ The forecasting engine integrates a **two-tiered weather ingestion model** via t
 
 ---
 
-## 3. Live Pump Price Anchoring & Return Modeling
+## 3. Stationary Return Target Modeling, Level Reconstruction & Purged Embargo CV (Issues #396, #397)
 
-Instead of predicting raw non-stationary price levels directly, the model learns **5-day percentage price returns** ($\Delta \%$):
-\[
-\Delta \%_t = \frac{P_{t+5} - P_t}{P_t}
-\]
-The forecasted price calibrated to live pump prices ($P_{\text{Live}} = \$3.89/\text{gal}$) is calculated as:
-\[
-\hat{P}_{t+5} = P_{\text{Live}} \times (1 + \hat{\Delta}_{\%})
-\]
+To ensure stationarity and prevent non-stationary drift or lookahead data leakage:
+1. **Target Return Formulation:**
+   Instead of predicting raw non-stationary price levels directly, quantitative models (Ridge/XGBoost) are trained on $h$-day forward percentage returns:
+   \[
+   \hat{r}_{t+h} = \frac{P_{t+h} - P_t}{P_t}
+   \]
+2. **Out-of-Sample Price Level Reconstruction:**
+   Predicted returns are converted back to calibrated price levels ($/gal):
+   \[
+   \hat{P}_{t+h} = P_t \times (1 + \hat{r}_{t+h})
+   \]
+3. **Chronological Purge and Embargo Partitions:**
+   When generating chronological train/test splits, an explicit boundary gap of $\text{forecast\_horizon} + \text{embargo\_steps}$ is enforced:
+   \[
+   \text{train\_slice\_end} = \max(1, \text{split\_idx} - (h + \text{embargo}))
+   \]
+   This prevents overlapping multi-day target returns $r_{t+h}$ from leaking information from the test evaluation window into model training.
+4. **Purged Walk-Forward Cross-Validation (`RidgeCV`):**
+   Model hyperparameter tuning ($\alpha$ penalty search) and comparative evaluation utilize `PurgedGroupTimeSeriesSplit(chronological_only=True)`. Each validation fold evaluates strictly on out-of-sample data following purged training splits.
 
 ---
 
@@ -214,12 +229,9 @@ The public presentation layer is compiled by `src/dashboard_generator.py` into s
                        └────────────────────────────────┘
 ```
 
-Static web routing compatibility is preserved across both direct file routes (`/<page>.html`) and clean directory routes (`/<page>/index.html`) by outputting dual matching file trees (e.g. `docs/tulsa.html` and `docs/tulsa/index.html`, `docs/sources.html` and `docs/sources/index.html`). 
+Static web routing compatibility is preserved across both direct file routes (`/<page>.html`) and clean directory routes (`/<page>/index.html`) by outputting dual matching file trees (e.g. `docs/tulsa.html` and `docs/tulsa/index.html`). 
 
 Visual driver cards detailing regional econometric factors, refining logistics, statutory tax burdens, and delivery hub equations are rendered dynamically from decoupled JSON profiles (`data/regional_metadata/<region_id>.json`) via `render_regional_driver_cards_html()`, decoupling UI HTML templates from domain metadata.
-
-The **Model Data Sources Directory** (`docs/sources.html` & `docs/sources/index.html`) documents all 26+ input data streams (quantitative commodity futures, options volatility, drilling rig counts, NOAA NWS/SPC/NHC weather telemetry, USGS streamflow gages, USACE lock queues, USGS seismic alerts, multi-sensor air quality/flaring, 50-state open data tax portals, crowdsourced pump feeds, and academic preprint scans) with real-time category filtering and search.
-
 
 ---
 
@@ -407,14 +419,6 @@ During intraday event evaluations in `src/intraday_event_monitor.py`, breaking h
        ┌─────────────────────────────────────────────────────────────┐
        │             DISCORD CHANNEL INCOMING WEBHOOK                │
        │   🚨 [PRODUCTION] or [DEVELOPMENT] Intraday Revision Alert  │
-       └─────────────────────────────────────────────────────────────┘
-```
-
-* **Environment Distinction:** Automatically tags alerts with `[PRODUCTION]` or `[DEVELOPMENT]` badges based on `MIDGLEY_ENV` / `GITHUB_ACTIONS` runtime state.
-* **Detailed Catalyst Telemetry:** Ingests headline prose, source identifier, original URL, Wayback archive link, affected metro hub locales, price pressure $\Delta P$, supply disruption $S$, and geopolitical risk $G$.
-* **Severity Color Dynamics:** Red (`#E74C3C`) for severe supply shocks ($S \ge 0.50$) / price surges ($\Delta P \ge +0.40$), Green (`#2ECC71`) for downward price relief ($\Delta P \le -0.20$), and Orange (`#E67E22`) for general volatility.
-* **Resilience & Testing Safety:** 10s non-blocking timeouts, safe fail-open handling, and unit test suppression (`TESTING=1` unless `TEST_WEBHOOK_DISPATCH=1`).
-
 ---
 
 ## 13. Chronological 15-Section Mathematical Framework & Pipeline Execution (Issues #224, #225, #226, #227, #229)
@@ -444,6 +448,10 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
 * **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
 * **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](src/agent_memory.py) & [`src/hindsight_client.py`](src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Vectorize Hindsight-Hosted SaaS (Issue #421), local Dev-VM Docker container, and local SQLite FTS5 fallback.
   - **Zero-Cold-Start Hosted Gateway:** Connects to `https://api.hindsight.vectorize.io` with Bearer auth, eliminating the compute cost and 75-second cold boot latencies associated with serverless Cloud Run containers.
+  - **Standardized Bank Mission & Reasoning Profiles (`Midgley`):**
+    - **Retain Extraction:** Concise extraction of quantitative prediction deviations ($|error| \ge \$0.25/\text{gal}$ or directional flips), physical supply catalysts (refinery outages, pipeline shut-ins, maritime navigation restrictions, EPA/CARB RVP deadlines), and calendar spreads.
+    - **Observations Consolidation:** Consolidates durable market dynamics, localized basis spreads (Tulsa, Newark, Cincinnati, Carolinas, Oakland, Port St. Lucie), regulatory blend transitions, and weekly model recalibration lessons into persistent economic beliefs.
+    - **Reflect Post-Mortems & Analogies:** Synthesizes qualitative root causes and parameter adjustments (shock decay half-lives $t_{1/2}$, seasonal transition buffers), parameterized with **Skepticism: 4/5**, **Literalism: 4/5**, and **Empathy: 1/5** (Detached).
   - **Socket Read Timeout Retries:** Configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
   - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once the remote bank is reachable.
 
@@ -475,6 +483,68 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
 
 ---
 
+## 16. Seasonal & Climatological Plausibility Gating Engine (Issue #300)
+
+The scenario simulation architecture integrates a **Dynamic Climatological & Meteorological Plausibility Gating Engine** ([`src/scenario_engine.py`](src/scenario_engine.py)) ensuring shock simulations and counterfactual stress tests align with physical seasons, regulatory calendar windows, and real-time environmental telemetry:
+
+![Seasonal Plausibility Gating Engine SVG Diagram](docs/assets/scenario_engine_architecture.svg)
+
+```
+                  ┌─────────────────────────────────────────────────────────────┐
+                  │                 SCENARIO INVOCATION REQUEST                 │
+                  │              (REST API, MCP Tool, or Weekly Audit)          │
+                  └──────────────────────────────┬──────────────────────────────┘
+                                                 │
+                                                 ▼
+                  ┌─────────────────────────────────────────────────────────────┐
+                  │         1. REGISTRY LOOKUP & DATE-WINDOW EVALUATION         │
+                  │       (SCENARIO_CLIMATOLOGY_REGISTRY & Date-Math Logic)     │
+                  └──────────────────────────────┬──────────────────────────────┘
+                                                 │
+                     ┌───────────────────────────┴───────────────────────────┐
+                     ▼                                                       ▼
+      ┌──────────────────────────────┐                       ┌──────────────────────────────┐
+      │   DATE OUTSIDE SEASON WINDOW │                       │    DATE WITHIN SEASON WINDOW │
+      │   • Status: SEASONALLY_DORMANT                       │    • Status: SEASONALLY_PLAUSIBLE│
+      │   • Counterfactual Warning   │                       │    • Plausibility Score: 0.70    │
+      └──────────────┬───────────────┘                       └──────────────┬───────────────┘
+                     │                                                       │
+                     │                 ┌─────────────────────────────────────┘
+                     │                 │ Live Physical Telemetry Triggered?
+                     │                 ▼
+                     │       ┌──────────────────────────────────────┐
+                     │       │ ACTIVE PHYSICAL THREAT IDENTIFIED   │
+                     │       │ • Status: ACTIVE_THREAT (Score 1.00) │
+                     │       │ • NOAA SPC Risk, USGS Stage/Flow/Temp│
+                     │       └──────────────────┬───────────────────┘
+                     │                          │
+                     ▼                          ▼
+      ┌─────────────────────────────────────────────────────────────────────┐
+      │                2. PROSPECTIVE PRECURSOR SYNTHESIS                   │
+      │    (1–14 Days Lead Time for RVP Transition, Storms, Runoff)        │
+      └──────────────────────────────────┬──────────────────────────────────┘
+                                         │
+                                         ▼
+      ┌─────────────────────────────────────────────────────────────────────┐
+      │            3. MULTI-HUB WEEKLY STRESS AUDIT & REPORTING             │
+      │    (Plausibility Matrix & Seasonal Issue Ranking in Saturday Review)│
+      └─────────────────────────────────────────────────────────────────────┘
+```
+
+* **Plausibility Status Classification (`PlausibilityStatus`):**
+  - `ACTIVE_THREAT`: Live physical or meteorological sensor triggers (e.g. NOAA SPC convective risk $\ge 0.40$, USGS Ohio River stage $> 52\text{ ft}$, USGS Carquinez flow $> 40,000\text{ cfs}$) confirm an active or impending hazard.
+  - `SEASONALLY_PLAUSIBLE`: Target date falls within the climatological hazard window (e.g. Atlantic Hurricane season June 1 – Nov 30).
+  - `SEASONALLY_DORMANT`: Target date falls outside the historical occurrence window. Simulation proceeds as a counterfactual with explicit warning annotations.
+  - `EVERGREEN`: Macro geopolitical, cybersecurity, or refinery mechanical failures applicable year-round.
+  - `PROSPECTIVE_FORWARD`: Precursor scenarios generated 1–14 days ahead of seasonal regulatory spec switches (e.g. CARB Summer RVP transition Feb 15 / May 1) or storm landfalls.
+* **REST API & MCP Tool Integration:**
+  - `GET /api/v1/forecast/scenarios`: Returns catalog of scenarios filtered by `active_only`, `locale`, or `target_date`.
+  - `POST /api/v1/forecast/simulate` & MCP `simulate_fuel_market_shock`: Enriched with `plausibility` object containing status, numerical score, and warning annotations.
+  - MCP `list_market_shock_scenarios`: Tool for agents to discover available shocks and seasonal validity.
+* **Weekly Review Feedback Loop:** `src/weekly_issue_reporter.py` embeds the **Forward Plausibility Horizon Matrix**, multi-hub stress audits, and applies seasonal priority boosts ($\times 1.25$) to open GitHub issues matching active threats.
+
+---
+
 ## 17. MLOps Ground Truth Integrity, Plausibility Guards & History Sanitation (Issues #391, #392, #399)
 
 1. **Official EIA/FRED Regional Ground Truth:** Regional metro actual price outcomes are resolved strictly from official weekly EIA retail series via `EIARetailFeed` (`src/eia_retail_feed.py`).
@@ -484,8 +554,4 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
    - Wholesale RBOB Futures Plausibility: $\$0.50/\text{gal} \le P_{\text{Wholesale}} \le \$7.00/\text{gal}$.
 4. **Production History Cleansing (`cleanse_prediction_history`):** Automated purification routine purges test fixture entries (`Test_Region`, `Test_*`) and invalid records from `data/prediction_history.csv`.
 5. **Disk-Backed Actuals Caching:** National futures actuals are cached locally in `data/rbob_actuals_cache.json`, preventing redundant full-series network calls during backfill cycles.
-
-
-
-
 

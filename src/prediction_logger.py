@@ -384,7 +384,7 @@ def log_predictions(
         llm_press = float(row.get('llm_price_pressure')) if 'llm_price_pressure' in row and pd.notna(row['llm_price_pressure']) else (float(row.get('event_overall_price_pressure', row.get('overall_price_pressure', 0.0))) if pd.notna(row.get('event_overall_price_pressure', row.get('overall_price_pressure'))) else 0.0)
         llm_disr = float(row.get('llm_supply_disruption')) if 'llm_supply_disruption' in row and pd.notna(row['llm_supply_disruption']) else (float(row.get('event_supply_disruption', row.get('supply_disruption', 0.0))) if pd.notna(row.get('event_supply_disruption', row.get('supply_disruption'))) else 0.0)
 
-        # Determine retroactive backtest status (Issue #389)
+        # Determine retroactive backtest status and run_type (Issue #389, #357)
         if is_retroactive_backtest is not None:
             is_retro = bool(is_retroactive_backtest)
         elif 'is_retroactive_backtest' in row and pd.notna(row['is_retroactive_backtest']):
@@ -397,13 +397,18 @@ def log_predictions(
             except Exception:
                 is_retro = False
 
+        # Normalize semantic run_type (Issue #357)
+        record_run_type = run_type
+        if record_run_type in ["DAILY_BATCH", "DAILY_FORECAST", None] or not record_run_type:
+            record_run_type = "RETROSPECTIVE_BACKTEST" if is_retro else "LIVE_PROSPECTIVE"
+
         new_records.append({
             "log_timestamp": timestamp_str,
             "forecast_target_date": target_date,
             "forecast_horizon_days": h_days,
             "region": region,
             "model_version": model_version,
-            "run_type": run_type,
+            "run_type": record_run_type,
             "headline_trigger": headline_trigger,
             "current_base_price": round(base_price, 4),
             "predicted_5d_price": round(pred_price, 4),
@@ -425,7 +430,19 @@ def log_predictions(
         
     new_df = pd.DataFrame(new_records)
     combined = pd.concat([history_df, new_df], ignore_index=True)
-    combined.drop_duplicates(subset=["forecast_target_date", "forecast_horizon_days", "region", "model_version", "run_type"], keep="last", inplace=True)
+    
+    # Ledger Immutability & Backtest Segregation (Issue #357)
+    # Ensure live prospective records with ground-truth actuals take priority over unevaluated backtests
+    if not combined.empty:
+        has_actual = combined['actual_5d_price'].notna().astype(int) if 'actual_5d_price' in combined.columns else pd.Series(0, index=combined.index)
+        is_live = (~combined['is_retroactive_backtest'].fillna(True).astype(bool)).astype(int) if 'is_retroactive_backtest' in combined.columns else pd.Series(0, index=combined.index)
+        combined['_priority'] = has_actual * 10 + is_live
+        combined['_orig_idx'] = combined.index
+        combined.sort_values(by=['_priority'], inplace=True)
+        combined.drop_duplicates(subset=["forecast_target_date", "forecast_horizon_days", "region", "model_version", "run_type"], keep="last", inplace=True)
+        combined.sort_values(by=['_orig_idx'], inplace=True, ignore_index=True)
+        combined.drop(columns=['_priority', '_orig_idx'], inplace=True)
+
     combined.to_csv(HISTORY_CSV_PATH, index=False)
     try:
         sync_predictions_to_cloud(combined)
@@ -728,6 +745,7 @@ def backfill_new_region_history(
         pred_log_df, 
         region=region, 
         model_version=model_version, 
+        run_type="RETROSPECTIVE_BACKTEST",
         forecast_horizon_days=forecast_horizon_days,
         is_retroactive_backtest=True
     )
