@@ -360,8 +360,22 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
                     logger.info(f"  -> Single-Batch LLM extractions complete in 1 request!")
                 else:
                     logger.warning("Batch size mismatch from LLM. Falling back to itemized processing.")
+                    for h in uncached:
+                        scores = extract_event_features_llm(h, api_key=api_key, spectral_context=spectral_context)
+                        cache_key = f"{h}|{spectral_context}"
+                        _LLM_SCORE_CACHE[cache_key] = scores
+                        _LLM_SCORE_CACHE[h] = scores
+                        sha_key = f"llm_score:{_get_headline_sha256(h, spectral_context)}"
+                        global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
             except Exception as e:
                 logger.warning(f"Batch LLM processing notice ({e}). Falling back to itemized processing.")
+                for h in uncached:
+                    scores = extract_event_features_llm(h, api_key=api_key, spectral_context=spectral_context)
+                    cache_key = f"{h}|{spectral_context}"
+                    _LLM_SCORE_CACHE[cache_key] = scores
+                    _LLM_SCORE_CACHE[h] = scores
+                    sha_key = f"llm_score:{_get_headline_sha256(h, spectral_context)}"
+                    global_cache.set(sha_key, scores, ttl_seconds=86400 * 30)
                 
     # Gather final scores for all headlines from cache or rule-based fallback
     results = []

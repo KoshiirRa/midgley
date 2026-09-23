@@ -62,6 +62,37 @@ class TestEventAnalyzer(unittest.TestCase):
         self.assertEqual(len(results2), 2)
         self.assertEqual(results1[0]["overall_price_pressure"], results2[0]["overall_price_pressure"])
 
+    @patch("src.event_analyzer.extract_event_features_llm")
+    def test_batch_size_mismatch_itemized_fallback(self, mock_extract_llm):
+        """Verifies that when LLM returns a batch length mismatch, itemized extract_event_features_llm is invoked (Issue #334)."""
+        mock_extract_llm.side_effect = lambda h, **kwargs: {
+            "geopolitical_risk": 0.5,
+            "supply_disruption": 0.6,
+            "demand_sentiment": 0.0,
+            "opec_action": 0.0,
+            "overall_price_pressure": 0.36
+        }
+
+        headlines = [
+            "Unexpected refinery fire in Delaware City",
+            "Pipeline valve leak halts Colonial Line 1",
+            "OPEC delegates signal rollover"
+        ]
+
+        # Simulate Gemini returning only 1 item for a 3-item batch
+        with patch("google.genai.Client") as mock_genai_client:
+            mock_client_instance = MagicMock()
+            mock_resp = MagicMock()
+            # Only 1 item returned instead of 3
+            mock_resp.text = '[{"geopolitical_risk": 0.1, "supply_disruption": 0.2, "demand_sentiment": 0.0, "opec_action": 0.0, "overall_price_pressure": 0.1}]'
+            mock_client_instance.models.generate_content.return_value = mock_resp
+            mock_genai_client.return_value = mock_client_instance
+
+            results = extract_batch_event_features_llm(headlines, api_key="test_api_key")
+            self.assertEqual(len(results), 3)
+            # Itemized LLM extractor should have been called for all 3 uncached headlines
+            self.assertEqual(mock_extract_llm.call_count, 3)
+
 
 if __name__ == "__main__":
     unittest.main()
