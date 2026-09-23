@@ -589,6 +589,86 @@ class TestHeadlineArenaConnector(unittest.TestCase):
             self.assertIn("result", data)
 
 
+    def test_dead_zones_ng_dxy(self):
+        connector = HeadlineArenaConnector()
+        self.assertEqual(connector.get_dead_zone("NG"), 0.0050)
+        self.assertEqual(connector.get_dead_zone("DXY"), 0.0020)
+
+    def test_synthesize_forecasting_rationale_ng(self):
+        from src.headline_arena_connector import synthesize_forecasting_rationale
+        rationale = synthesize_forecasting_rationale(
+            asset="NG",
+            open_price=2.850,
+            p50=2.980,
+            direction="bullish",
+            confidence=0.760,
+            probabilities={"bullish": 0.760, "neutral": 0.160, "bearish": 0.080},
+            dead_zone=0.0050,
+            t_upper=2.86425,
+            t_lower=2.83575,
+            p10=2.800,
+            p90=3.100,
+            sigma=0.117
+        )
+        self.assertIn("Henry Hub Natural Gas Futures (NG=F)", rationale)
+        self.assertIn("$/MMBtu", rationale)
+        self.assertIn("heating/cooling degree day", rationale)
+        self.assertIn("BULLISH", rationale)
+
+    def test_synthesize_forecasting_rationale_dxy(self):
+        from src.headline_arena_connector import synthesize_forecasting_rationale
+        rationale = synthesize_forecasting_rationale(
+            asset="DXY",
+            open_price=101.500,
+            p50=101.100,
+            direction="bearish",
+            confidence=0.720,
+            probabilities={"bullish": 0.090, "neutral": 0.190, "bearish": 0.720},
+            dead_zone=0.0020,
+            t_upper=101.703,
+            t_lower=101.297,
+            p10=100.800,
+            p90=101.400
+        )
+        self.assertIn("US Dollar Index (DXY)", rationale)
+        self.assertIn("pts", rationale)
+        self.assertIn("Federal Reserve rate expectation", rationale)
+        self.assertIn("BEARISH", rationale)
+
+    def test_submit_midgley_energy_forecasts_with_ng_and_dxy(self):
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            results = submit_midgley_energy_forecasts(
+                rb_open_price=2.4500,
+                rb_p50=2.5200,
+                rb_p10=2.4100,
+                rb_p90=2.6300,
+                cl_open_price=78.50,
+                cl_p50=77.20,
+                cl_p10=74.80,
+                cl_p90=79.60,
+                ng_open_price=2.850,
+                ng_p50=2.980,
+                ng_p10=2.800,
+                ng_p90=3.100,
+                dxy_open_price=101.500,
+                dxy_p50=101.100,
+                dxy_p10=100.800,
+                dxy_p90=101.400,
+                eia_retail_p50=3.215,
+                eia_retail_p10=3.120,
+                eia_retail_p90=3.310
+            )
+            self.assertIn("RB", results)
+            self.assertIn("CL", results)
+            self.assertIn("NG", results)
+            self.assertIn("DXY", results)
+            self.assertIn("EIA_RETAIL_GASOLINE", results)
+            self.assertEqual(results["RB"]["status"], "SUCCESS")
+            self.assertEqual(results["CL"]["status"], "SUCCESS")
+            self.assertEqual(results["NG"]["status"], "SUCCESS")
+            self.assertEqual(results["DXY"]["status"], "SUCCESS")
+
+
 if __name__ == "__main__":
     unittest.main()
 

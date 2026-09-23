@@ -6051,7 +6051,9 @@ def generate_telemetry_page():
         logger.debug(f"Failed to query AgentMemoryManager inventory: {e}")
 
     stored_memories = mem_inventory.get('memories_count', 0)
+    stored_observations = mem_inventory.get('observations_count', 0)
     stored_reflections = mem_inventory.get('reflections_count', 0)
+    pending_reconciliation = mem_inventory.get('pending_reconciliation_count', 0)
     mem_backend_badge = mem_inventory.get('backend', 'Local SQLite FTS5')
     mem_source_type = mem_inventory.get('source', 'local_sqlite')
     if stored_memories == 0 and stored_reflections == 0 and os.path.exists(sqlite_mem_path):
@@ -6063,6 +6065,8 @@ def generate_telemetry_page():
             stored_memories = c.fetchone()[0]
             c.execute("SELECT COUNT(*) FROM reflections")
             stored_reflections = c.fetchone()[0]
+            c.execute("SELECT COUNT(*) FROM memories WHERE cloud_synced = 0")
+            pending_reconciliation = c.fetchone()[0]
             conn.close()
         except Exception:
             pass
@@ -6202,7 +6206,7 @@ def generate_telemetry_page():
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Hindsight Stored Memories</span>
-                    <div class="text-2xl font-bold text-purple-300 font-mono">{stored_memories + stored_reflections:,}</div>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">{stored_memories + stored_observations + stored_reflections:,}</div>
                     <span class="text-[10px] text-purple-300 font-mono">{retain_count:,} Retain / {cloud_calls:,} Cloud Calls</span>
                 </div>
             </div>
@@ -6214,7 +6218,7 @@ def generate_telemetry_page():
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-brain text-purple-400"></i> Vectorize Hindsight Episodic Memory & Reflection Observability
                 </h3>
-                <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">Issue #230 & #237</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">Issue #230 & #422</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -6278,15 +6282,22 @@ def generate_telemetry_page():
                             <div class="text-slate-200 font-bold text-sm">{mem_inventory.get('bank_id', 'midgley-gas-forecasting')}</div>
                             <div class="text-[10px] text-slate-500 font-sans mt-0.5">{mem_backend_badge}</div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                                <div class="text-lg font-bold text-purple-300">{stored_memories:,}</div>
-                                <div class="text-[10px] text-slate-400 font-sans">Experiences</div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                                <div class="text-base font-bold text-purple-300">{stored_memories:,}</div>
+                                <div class="text-[9px] text-slate-400 font-sans">Experiences</div>
                             </div>
-                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                                <div class="text-lg font-bold text-amber-300">{stored_reflections:,}</div>
-                                <div class="text-[10px] text-slate-400 font-sans">Reflections</div>
+                            <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                                <div class="text-base font-bold text-cyan-300">{stored_observations:,}</div>
+                                <div class="text-[9px] text-slate-400 font-sans">Observations</div>
                             </div>
+                            <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                                <div class="text-base font-bold text-amber-300">{stored_reflections:,}</div>
+                                <div class="text-[9px] text-slate-400 font-sans">Reflections</div>
+                            </div>
+                        </div>
+                        <div class="pt-1">
+                            {"<div class='p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-circle-check text-emerald-400'></i> Cloud Sync Queue</span><span class='font-bold'>0 Pending (Synced)</span></div>" if pending_reconciliation == 0 else f"<div class='p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-cloud-arrow-up text-amber-400'></i> Cloud Sync Queue</span><span class='font-bold'>{pending_reconciliation:,} Queued for Sync</span></div>"}
                         </div>
                     </div>
                 </div>

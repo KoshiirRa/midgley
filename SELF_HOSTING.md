@@ -118,12 +118,15 @@ CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 
 # ==============================================================================
-# HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN) (Issue #230)
+# HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN / SAAS) (Issues #230, #421, #422)
 # ==============================================================================
 
-# Vectorize Hindsight Cloud Run REST API Endpoint (Scale-to-Zero)
-HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
-HINDSIGHT_API_KEY=""              # Optional bearer token if endpoint is authenticated
+# Vectorize Hindsight Cloud Run REST API Endpoint or Hosted SaaS
+# Hosted SaaS (Recommended): HINDSIGHT_API_URL="https://api.hindsight.vectorize.io"
+# Self-Hosted / Dev-VM:      HINDSIGHT_API_URL="http://10.42.42.54:8888"
+HINDSIGHT_API_URL="https://api.hindsight.vectorize.io"
+HINDSIGHT_API_KEY="hsk_..."        # API key from https://hindsight.vectorize.io
+HINDSIGHT_BANK_ID="Midgley"        # Memory bank identifier
 HINDSIGHT_TIMEOUT="60.0"          # Socket read timeout in seconds (handles scale-to-zero cold boots)
 HINDSIGHT_WARMUP_TIMEOUT="75.0"   # Background scale-to-zero container warmup handshake timeout in seconds
 
@@ -132,6 +135,15 @@ SUPABASE_DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REG
 
 # Google Cloud Project ID (for Cloud Run deployment)
 GCP_PROJECT_ID="midgley"
+
+# ==============================================================================
+# NASA POWER CLIMATOLOGY & AGROCLIMATOLOGY ENGINE (Issues #370, #420)
+# ==============================================================================
+# Free public REST API (https://power.larc.nasa.gov/api/temporal/daily/point)
+# Ingests daily T2M, T2M_MAX, T2M_MIN, PRECTOTCORR, RH2M, ALLSKY_SFC_SW_DWN
+# Computes Distillate HDD/CDD for PADD 1 (NY Harbor, Delaware City, Boston)
+# and Corn GDD / Soil Moisture for PADD 2 Ethanol hubs (Des Moines, Peoria, Omaha).
+# No API key required; automatic 24-hour disk caching at data/nasa_power_cache.json.
 
 # ==============================================================================
 # EDGAR 8-K REFINERY OPERATOR MONITOR (Issue #129)
@@ -145,9 +157,10 @@ GCP_PROJECT_ID="midgley"
 CENSUS_API_KEY=""
 
 # ==============================================================================
-# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issues #182, #408, #418)
+# HEADLINE ARENA BENCHMARK & CALIBRATION (headlinearena.com, Issues #182, #408, #410, #418)
 # ==============================================================================
 # OAuth2 Client Credentials for independent Brier/CRPS daily continuous probability scoring
+# Supports multi-asset challenges: RBOB Gasoline (RB), Cushing WTI (CL), Henry Hub Natural Gas (NG), and US Dollar Index (DXY)
 # Caches pending forecasts in data/headline_arena_pending_forecasts.json (24h TTL)
 # Tracks submitted challenges in data/headline_arena_submitted_ledger.json
 # Sync script: python scripts/sync_headline_arena.py (runs every 30m via GitHub Actions or systemd)

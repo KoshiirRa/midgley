@@ -517,9 +517,23 @@ class AgentMemoryManager:
 
     def get_bank_inventory(self) -> Dict[str, Any]:
         """
-        Retrieves authoritative memory bank inventory (experience and reflection counts).
+        Retrieves authoritative memory bank inventory (experience, observation, and reflection counts,
+        plus local-to-cloud pending reconciliation queue depth).
         Checks remote Hindsight / Supabase cluster first; falls back to local SQLite FTS5 database.
         """
+        # Count un-synced experiences in local SQLite
+        pending_sync_count = 0
+        try:
+            conn = self.sqlite_store._get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM memories WHERE cloud_synced = 0")
+            row = cursor.fetchone()
+            if row:
+                pending_sync_count = int(row[0])
+            conn.close()
+        except Exception as e:
+            logger.debug(f"Failed to query pending reconciliation queue count: {e}")
+
         # 1. Attempt remote cloud retrieval if client is configured
         if self.hindsight_client.is_configured:
             remote_stats = self.hindsight_client.get_bank_stats()
@@ -529,7 +543,9 @@ class AgentMemoryManager:
                     "backend": "Vectorize Hindsight (Supabase pgvector)",
                     "bank_id": self.hindsight_client.bank_id,
                     "memories_count": remote_stats.get("memories", 0),
-                    "reflections_count": remote_stats.get("reflections", 0)
+                    "observations_count": remote_stats.get("observations", 0),
+                    "reflections_count": remote_stats.get("reflections", 0),
+                    "pending_reconciliation_count": pending_sync_count
                 }
 
         # 2. Fallback to local SQLite database
@@ -541,11 +557,11 @@ class AgentMemoryManager:
             cursor.execute("SELECT COUNT(*) FROM memories")
             row = cursor.fetchone()
             if row:
-                local_memories = row[0]
+                local_memories = int(row[0])
             cursor.execute("SELECT COUNT(*) FROM reflections")
             row = cursor.fetchone()
             if row:
-                local_reflections = row[0]
+                local_reflections = int(row[0])
             conn.close()
         except Exception as e:
             logger.debug(f"Failed to query local SQLite memory inventory: {e}")
@@ -555,7 +571,9 @@ class AgentMemoryManager:
             "backend": "Local SQLite FTS5",
             "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "midgley-gas-forecasting",
             "memories_count": local_memories,
-            "reflections_count": local_reflections
+            "observations_count": 0,
+            "reflections_count": local_reflections,
+            "pending_reconciliation_count": pending_sync_count
         }
 
 

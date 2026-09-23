@@ -273,14 +273,26 @@ DEFAULT_SETTLEMENT_RULES: Dict[str, Dict[str, Any]] = {
     "RB": {
         "dead_zone": 0.0030,  # ±0.30% of open for RBOB Wholesale Gasoline
         "decimal_places": 4,
-        "name": "RBOB Gasoline Futures (RB=F)",
+        "name": "RBOB Wholesale Gasoline (RB=F)",
         "unit": "$/gal"
     },
     "CL": {
         "dead_zone": 0.0030,  # ±0.30% of open for WTI Crude Oil (Headline Arena official)
         "decimal_places": 2,
-        "name": "Crude Oil Futures (CL=F)",
+        "name": "Cushing WTI Crude Oil (CL=F)",
         "unit": "$/bbl"
+    },
+    "NG": {
+        "dead_zone": 0.0050,  # ±0.50% of open for Henry Hub Natural Gas Futures (NG=F)
+        "decimal_places": 3,
+        "name": "Henry Hub Natural Gas Futures (NG=F)",
+        "unit": "$/MMBtu"
+    },
+    "DXY": {
+        "dead_zone": 0.0020,  # ±0.20% of open for US Dollar Index (DXY)
+        "decimal_places": 3,
+        "name": "US Dollar Index (DXY)",
+        "unit": "pts"
     }
 }
 
@@ -404,11 +416,13 @@ def synthesize_forecasting_rationale(
     for Headline Arena commodity forecasting challenges.
     """
     asset_clean = asset.upper().strip()
-    unit = "$/gal" if asset_clean == "RB" else "$/bbl"
-    asset_name = "RBOB Wholesale Gasoline (RB=F)" if asset_clean == "RB" else "Cushing WTI Crude Oil (CL=F)"
+    rule = DEFAULT_SETTLEMENT_RULES.get(asset_clean, {})
+    unit = rule.get("unit", "$/gal" if asset_clean == "RB" else "$/bbl")
+    asset_name = rule.get("name", "RBOB Wholesale Gasoline (RB=F)" if asset_clean == "RB" else "Cushing WTI Crude Oil (CL=F)")
+    dec = int(rule.get("decimal_places", 4 if asset_clean == "RB" else 2))
     
-    p10_str = f"{unit}{p10:.4f}" if (p10 is not None and asset_clean == "RB") else (f"{unit}{p10:.2f}" if p10 is not None else "N/A")
-    p90_str = f"{unit}{p90:.4f}" if (p90 is not None and asset_clean == "RB") else (f"{unit}{p90:.2f}" if p90 is not None else "N/A")
+    p10_str = f"{unit}{p10:.{dec}f}" if p10 is not None else "N/A"
+    p90_str = f"{unit}{p90:.{dec}f}" if p90 is not None else "N/A"
     sigma_val = sigma if sigma is not None else (0.02 * open_price)
     
     p_bull = probabilities.get("bullish", 0.0) * 100.0
@@ -436,11 +450,17 @@ def synthesize_forecasting_rationale(
             margin_narrative = f"Underlying WTI crude feedstock (${float(wti_feed):.2f}/bbl) establishes an implied RBOB crack spread of ${implied_crack:.2f}/bbl."
         else:
             margin_narrative = "Refinery crack spread margins track seasonal equilibrium across PADD 1B and PADD 2 distribution hubs."
-    else:
+    elif asset_clean == "CL":
         if rb_feed is not None:
             margin_narrative = f"Downstream product demand from wholesale RBOB (${float(rb_feed):.4f}/gal) provides steady crack absorption for prompt physical crude."
         else:
             margin_narrative = "Prompt physical crude balances at Cushing reflect standard pipeline delivery flows and backwardation/contango structure."
+    elif asset_clean == "NG":
+        margin_narrative = "Henry Hub physical balances reflect regional heating/cooling degree day departures, underground storage injection/withdrawal momentum, and LNG feedgas export facility utilization."
+    elif asset_clean == "DXY":
+        margin_narrative = "US Dollar Index trajectory reflects Federal Reserve rate expectation differentials, transatlantic sovereign yield spreads, and global commodity trade liquidity flows."
+    else:
+        margin_narrative = f"Market structure and supply/demand fundamentals for {asset_name} remain anchored to baseline commodity fundamentals."
             
     # 3. Physical feeds & macro factors
     phys = physical_feeds or {}
@@ -672,6 +692,30 @@ class HeadlineArenaConnector:
                         "id": "mock_cl_challenge_123",
                         "asset": "CL",
                         "name": "Crude Oil",
+                        "deadline": "2026-09-18T16:00:00Z"
+                    }
+                },
+                {
+                    "challenge": {
+                        "id": "mock_rb_challenge_123",
+                        "asset": "RB",
+                        "name": "RBOB Gasoline",
+                        "deadline": "2026-09-18T16:00:00Z"
+                    }
+                },
+                {
+                    "challenge": {
+                        "id": "mock_ng_challenge_123",
+                        "asset": "NG",
+                        "name": "Natural Gas",
+                        "deadline": "2026-09-18T16:00:00Z"
+                    }
+                },
+                {
+                    "challenge": {
+                        "id": "mock_dxy_challenge_123",
+                        "asset": "DXY",
+                        "name": "US Dollar Index",
                         "deadline": "2026-09-18T16:00:00Z"
                     }
                 }
@@ -1477,6 +1521,16 @@ def submit_midgley_energy_forecasts(
     cl_p10: Optional[float] = None,
     cl_p90: Optional[float] = None,
     cl_residual_std: Optional[float] = None,
+    ng_open_price: Optional[float] = None,
+    ng_p50: Optional[float] = None,
+    ng_p10: Optional[float] = None,
+    ng_p90: Optional[float] = None,
+    ng_residual_std: Optional[float] = None,
+    dxy_open_price: Optional[float] = None,
+    dxy_p50: Optional[float] = None,
+    dxy_p10: Optional[float] = None,
+    dxy_p90: Optional[float] = None,
+    dxy_residual_std: Optional[float] = None,
     eia_retail_p50: Optional[float] = None,
     eia_retail_p10: Optional[float] = None,
     eia_retail_p90: Optional[float] = None,
@@ -1488,8 +1542,8 @@ def submit_midgley_energy_forecasts(
     live_in_dev: bool = False
 ) -> Dict[str, Any]:
     """
-    Submits daily forecasts for RBOB Gasoline (RB), Cushing WTI Crude (CL), and optional
-    EIA US Regular Retail Gasoline (Issue #408) to Headline Arena.
+    Submits daily forecasts for RBOB Gasoline (RB), Cushing WTI Crude (CL), Henry Hub Natural Gas (NG),
+    US Dollar Index (DXY), and optional EIA US Regular Retail Gasoline (Issue #408 & #410) to Headline Arena.
     Automatically persists generated forecasts into the 24h pending cache (Issue #418).
     """
     connector = HeadlineArenaConnector()
@@ -1538,7 +1592,41 @@ def submit_midgley_energy_forecasts(
             save_pending_forecast(asset="CL", payload=cl_payload, forecast_type="direction")
         results["CL"] = connector.submit_forecast(cl_payload, live_in_dev=live_in_dev)
 
-    # 3. EIA US Regular Retail Gasoline Civic / Macro Challenge (Issue #408)
+    # 3. Henry Hub Natural Gas (Issue #410)
+    if ng_open_price and ng_p50 and ng_open_price > 0 and ng_p50 > 0:
+        ng_payload = connector.format_direction_payload(
+            asset="NG",
+            open_price=ng_open_price,
+            p50=ng_p50,
+            p10=ng_p10,
+            p90=ng_p90,
+            residual_std=ng_residual_std,
+            qualitative_catalysts=qualitative_catalysts,
+            technical_indicators=tech,
+            physical_feeds=physical_feeds
+        )
+        if save_pending:
+            save_pending_forecast(asset="NG", payload=ng_payload, forecast_type="direction")
+        results["NG"] = connector.submit_forecast(ng_payload, live_in_dev=live_in_dev)
+
+    # 4. US Dollar Index (Issue #410)
+    if dxy_open_price and dxy_p50 and dxy_open_price > 0 and dxy_p50 > 0:
+        dxy_payload = connector.format_direction_payload(
+            asset="DXY",
+            open_price=dxy_open_price,
+            p50=dxy_p50,
+            p10=dxy_p10,
+            p90=dxy_p90,
+            residual_std=dxy_residual_std,
+            qualitative_catalysts=qualitative_catalysts,
+            technical_indicators=tech,
+            physical_feeds=physical_feeds
+        )
+        if save_pending:
+            save_pending_forecast(asset="DXY", payload=dxy_payload, forecast_type="direction")
+        results["DXY"] = connector.submit_forecast(dxy_payload, live_in_dev=live_in_dev)
+
+    # 5. EIA US Regular Retail Gasoline Civic / Macro Challenge (Issue #408)
     if eia_retail_p50 and eia_retail_p50 > 0:
         eia_payload = connector.format_eia_retail_civic_payload(
             predicted_value=eia_retail_p50,

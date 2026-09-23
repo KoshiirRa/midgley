@@ -269,6 +269,42 @@ class TestHindsightWarmupAndSync(unittest.TestCase):
         remaining = self.manager.sqlite_store.get_unretained_memories()
         self.assertEqual(len(remaining), 0)
 
+    @patch.dict(os.environ, {"TEST_HINDSIGHT_FORCE": "1"})
+    @patch("src.hindsight_client.urllib.request.urlopen")
+    def test_hindsight_bank_stats_and_inventory_metrics(self, mock_urlopen):
+        # 1. Mock remote bank stats response with durable observations
+        mock_resp = MagicMock()
+        mock_resp.status = 200
+        mock_resp.read.return_value = json.dumps({
+            "bank": {
+                "total_documents": 42,
+                "total_observations": 18,
+                "total_reflections": 7
+            }
+        }).encode("utf-8")
+        mock_urlopen.return_value.__enter__.return_value = mock_resp
+
+        client = HindsightClient(base_url="https://mock-hindsight.a.run.app")
+        stats = client.get_bank_stats()
+        self.assertIsNotNone(stats)
+        self.assertEqual(stats["memories"], 42)
+        self.assertEqual(stats["observations"], 18)
+        self.assertEqual(stats["reflections"], 7)
+
+        # 2. Seed an unsynced memory locally to check pending reconciliation queue
+        self.manager.sqlite_store.retain(
+            content="Local unsynced anomaly",
+            region="Greenville_NC",
+            cloud_synced=0
+        )
+
+        inventory = self.manager.get_bank_inventory()
+        self.assertEqual(inventory["source"], "remote_cloud")
+        self.assertEqual(inventory["memories_count"], 42)
+        self.assertEqual(inventory["observations_count"], 18)
+        self.assertEqual(inventory["reflections_count"], 7)
+        self.assertEqual(inventory["pending_reconciliation_count"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

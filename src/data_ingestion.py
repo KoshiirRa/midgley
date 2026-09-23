@@ -3329,3 +3329,19 @@ def get_bts_transportation_connector():
     """
     from src.bts_transportation import BTSTransportationConnector
     return BTSTransportationConnector()
+
+
+def get_nasa_power_client():
+    """
+    Factory helper returning an instantiated NASAPowerClient (Issues #420 & #370).
+    """
+    from src.nasa_power import NASAPowerClient
+    return NASAPowerClient()
+
+
+def fetch_nasa_power_features() -> Dict[str, Any]:
+    """
+    Helper function extracting unified NASA POWER distillate HDD/CDD and biofuel GDD features.
+    """
+    client = get_nasa_power_client()
+    return client.get_combined_nasa_power_features()
