@@ -669,6 +669,16 @@ The Midgley MCP Server exposes tools, resources, and prompt templates for integr
 
 ---
 
+## 🛡️ Remote Data Connector Security & Defused XML Feed Parsing (Issue #351)
+
+To protect the prediction pipeline against denial-of-service and parser disruption from untrusted or adversarial upstream network responses, all remote data connectors parsing unauthenticated XML feeds (including arXiv API preprints, BSEE offshore shut-in reports, SEC EDGAR 8-K filings, Fireworks SVG diagrams, Geopolitical maritime RSS feeds, NOAA NHC hurricane advisories, and Reachability social syndication streams) are hardened using `defusedxml.ElementTree`:
+
+- **Entity Expansion Protection:** Defuses Billion Laughs attacks, nested entity expansions, and quadratic blowup payloads.
+- **DTD Forbiddance:** Prohibits unauthorized document type definition entity resolutions from remote hosts.
+- **Fail-Safe Fallbacks:** Gracefully captures `DefusedXmlException` and malformed XML parse errors, routing to cached observations or zero-cost deterministic fallbacks without crashing pipeline execution.
+
+---
+
 ## ⚙️ Service Orchestration (Dev VM)
 
 Managed by systemd user service `midgley-api.service`:

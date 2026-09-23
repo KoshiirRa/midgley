@@ -7,7 +7,7 @@ and Colonial Pipeline Line 1/2 intake terminals. (Issue #177)
 
 import os
 import urllib.request
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import json
 import logging
 from typing import Dict, Any, List, Optional

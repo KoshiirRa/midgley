@@ -29,6 +29,7 @@ This document provides a comprehensive guide for self-hosting custom instances o
 ### Software Prerequisites
 - **Python:** Python 3.11+ (Python 3.11 is recommended for optimal compatibility with `scikit-learn` and `xgboost`).
 - **Package Manager:** [`uv`](https://github.com/astral-sh/uv) (recommended for 10–100x faster package resolution) or standard `pip`.
+- **Feed Parser Security:** `defusedxml>=0.7.1` is bundled in dependencies to secure unauthenticated upstream XML feeds (arXiv, BSEE, EDGAR 8-K, NHC, RSS) against entity expansion (Billion Laughs) and DoS attacks (Issue #351).
 - **Git:** Version 2.34+.
 - **System Service Manager:** `systemd` (for background service and timer management on Linux).
 

@@ -6,7 +6,7 @@ Ingests daily offshore Gulf of Mexico oil & gas production shut-in reports durin
 import os
 import re
 import urllib.request
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import json
 import logging
 from typing import Dict, Any, List, Optional

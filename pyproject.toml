@@ -23,7 +23,8 @@ dependencies = [
     "seaborn>=0.13.0",
     "requests>=2.31.0",
     "py-gasbuddy>=0.7.1",
-    "networkx>=3.0"
+    "networkx>=3.0",
+    "defusedxml>=0.7.1"
 ]
 
 [project.urls]

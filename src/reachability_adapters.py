@@ -12,7 +12,7 @@ import hashlib
 import logging
 import urllib.request
 import urllib.parse
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from abc import ABC, abstractmethod

@@ -14,7 +14,7 @@ import re
 import time
 import json
 import logging
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 from html.parser import HTMLParser
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
@@ -166,7 +166,7 @@ class EDGAR8KMonitor:
 
         try:
             root = ET.fromstring(xml_text)
-        except ET.ParseError as e:
+        except Exception as e:
             logger.warning(f"[EDGAR8K] XML parse error for {ticker}: {e}")
             return []
 
