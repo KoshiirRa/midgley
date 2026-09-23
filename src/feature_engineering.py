@@ -523,7 +523,7 @@ def create_feature_matrix(
         df['marine_terminal_surge_risk'] = 0.0
         df['marine_terminal_shallow_draft_risk'] = 0.0
 
-    # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
+    # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing & Issue #355)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     
     diagnostic = compute_context_routing_diagnostic(df, target_col='gasoline_rbob', horizon=forecast_horizon, threshold=0.95)
@@ -533,22 +533,67 @@ def create_feature_matrix(
         events = events_df.copy()
         events['date'] = pd.to_datetime(events['date'])
         
-        merged = pd.merge(df, events[['date'] + llm_feature_cols], on='date', how='left')
-        merged[llm_feature_cols] = merged[llm_feature_cols].fillna(0.0)
+        # Ensure available market trading dates are sorted and normalized
+        df['date'] = pd.to_datetime(df['date'])
+        trading_dates = np.sort(df['date'].dropna().unique())
         
-        # Modulate decay half-lives dynamically per event category & context routing diagnostic (Issue #168)
+        if len(trading_dates) > 0:
+            # Forward-map weekend/holiday/non-trading event dates to the next active market trading session (Issue #355)
+            indices = np.searchsorted(trading_dates, events['date'].values, side='left')
+            indices = np.clip(indices, 0, len(trading_dates) - 1)
+            events['date'] = trading_dates[indices]
+            
+            # Ensure qualitative feature columns exist in events before aggregation
+            for col in llm_feature_cols:
+                if col not in events.columns:
+                    events[col] = 0.0
+            
+            # Aggregate multiple qualitative shocks occurring on the same trading session (Issue #355)
+            agg_events = events.groupby('date', as_index=False)[llm_feature_cols].sum()
+            # Bounding aggregated qualitative shock scores to their statutory domains
+            for col in llm_feature_cols:
+                if col in ['overall_price_pressure', 'demand_sentiment']:
+                    agg_events[col] = agg_events[col].clip(-1.0, 1.0)
+                else:
+                    agg_events[col] = agg_events[col].clip(0.0, 1.0)
+            
+            # Strict 1-to-1 merge preserving exact length and index of df
+            orig_cols = [c for c in df.columns if c not in llm_feature_cols]
+            merged = pd.merge(df[orig_cols], agg_events[['date'] + llm_feature_cols], on='date', how='left')
+            merged[llm_feature_cols] = merged[llm_feature_cols].fillna(0.0)
+        else:
+            merged = df.copy()
+            for col in llm_feature_cols:
+                merged[col] = 0.0
+        
+        # Modulate decay half-lives dynamically per event category & context routing diagnostic (Issue #168, #355)
         fusion_weight = 1.0 if diagnostic['recommendation'] == 'TRY_FUSION' else 0.10
+        
+        # Calculate calendar elapsed days (dt) between consecutive market trading dates for continuous time decay (Issue #355)
+        date_series = pd.to_datetime(merged['date'])
+        if len(merged) > 1:
+            diffs = (date_series - date_series.shift(1)).dt.total_seconds() / 86400.0
+            delta_days = np.maximum(1.0, diffs.fillna(1.0).values)
+        else:
+            delta_days = np.ones(len(merged), dtype=float)
         
         for col in llm_feature_cols:
             base_half_life = CATEGORY_HALF_LIVES_DAYS.get(col, decay_half_life_days)
             effective_half_life = base_half_life if diagnostic['recommendation'] == 'TRY_FUSION' else base_half_life * 0.20
-            decay_factor = np.exp(-np.log(2) / effective_half_life)
+            lambda_decay = np.log(2) / max(effective_half_life, 1e-6)
             
             decayed_values = np.zeros(len(merged))
             current_val = 0.0
+            col_shocks = merged[col].values
             for i in range(len(merged)):
-                new_shock = merged.loc[i, col] * fusion_weight
-                current_val = current_val * decay_factor + new_shock
+                dt = delta_days[i]
+                decay_factor_i = np.exp(-lambda_decay * dt) if i > 0 else 1.0
+                new_shock = col_shocks[i] * fusion_weight
+                current_val = current_val * decay_factor_i + new_shock
+                if col in ['overall_price_pressure', 'demand_sentiment']:
+                    current_val = float(np.clip(current_val, -1.0, 1.0))
+                else:
+                    current_val = float(np.clip(current_val, 0.0, 1.0))
                 decayed_values[i] = current_val
             merged[f'event_{col}'] = decayed_values
         df = merged

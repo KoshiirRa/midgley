@@ -211,12 +211,18 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ### 2. Exponential Memory Fusion Agent (`src/feature_engineering.py`)
 
-* **Role:** Solves point-shock persistence by modeling event decay over 2–3 weeks using dynamic taxonomy-based half-life decay curves (`CATEGORY_HALF_LIVES_DAYS`).
-* **Mathematical Decay:**
+* **Role:** Solves point-shock persistence and prevents sample distortion by modeling qualitative event shock decay over 2–3 weeks using dynamic taxonomy-based half-life decay curves (`CATEGORY_HALF_LIVES_DAYS`), 1-to-1 trading session forward mapping, and calendar-elapsed continuous decay (Issue #355).
+* **Trading Session Forward Mapping & 1-to-1 Shock Aggregation (Issue #355):**
+  - **Weekend / Holiday Forward Mapping:** Non-trading event dates (Saturdays, Sundays, exchange holidays) are forward-mapped to the next active market trading session via `np.searchsorted(trading_dates, event_dates, side='left')`.
+  - **Same-Day Shock Aggregation & Domain Clamping:** Multiple qualitative shocks occurring on or mapped to the same trading day are summed and clamped to their valid mathematical domains (signed features like `overall_price_pressure` and `demand_sentiment` $\in [-1.0, 1.0]$; unidirectional features like `supply_disruption`, `geopolitical_risk`, and `opec_action` $\in [0.0, 1.0]$).
+  - **Strict 1-to-1 Merge:** Prevents row duplication and preserves the exact length and time step of the underlying market price series (`len(merged) == len(df)`).
+* **Continuous Calendar-Elapsed Exponential Decay (Issue #355):**
+  - Evaluates elapsed calendar days $\Delta t_i = \max(1, (\text{date}_i - \text{date}_{i-1}).\text{days})$ between consecutive trading dates:
   \[
-  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2)}{t_{1/2}(\text{category})}} + \text{NewShock}_t
+  \text{Memory}_{t} = \text{Memory}_{t-1} \times e^{-\frac{\ln(2) \cdot \Delta t}{t_{1/2}(\text{category})}} + \text{NewShock}_t
   \]
-  where dynamic half-lives $t_{1/2}(\text{category})$ are mapped by shock taxonomy:
+  Ensures that multi-day market gaps (e.g. 3-day weekends Friday $\to$ Monday) decay memory by $e^{-3\lambda}$ rather than treating the gap as a single discrete 1-day step $e^{-\lambda}$.
+* **Dynamic Taxonomy Half-Lives ($t_{1/2}$):**
   - **`supply_disruption`** (structural physical outages, refinery fires, pipeline shut-ins, hurricane damage): **$t_{1/2} = 14.0\text{ days}$**
   - **`geopolitical_risk`** (Hormuz/Suez chokepoint blockades, military escalation, sanctions): **$t_{1/2} = 7.0\text{ days}$**
   - **`opec_action`** (OPEC+ production quota policy shifts): **$t_{1/2} = 5.0\text{ days}$**
