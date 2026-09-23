@@ -27,8 +27,12 @@ This document provides a comprehensive guide for self-hosting custom instances o
 - **Storage:** 10 GB SSD disk space.
 
 ### Software Prerequisites
-- **Python:** Python 3.11+ (Python 3.11 is recommended for optimal compatibility with `scikit-learn` and `xgboost`).
+- **Python:** Python 3.10, 3.11, 3.12, 3.13 (Python 3.11/3.13 tested in CI; Docker image uses `python:3.13-slim` with `uv`).
+- **Node & Cloudflare Workers:** Node.js 20+, Wrangler CLI v3.x+ (for deploying Cloudflare edge cache and intraday RSS workers).
+- **Database & Storage:** SQLite 3.35+ (with JSON1 & FTS5 support), Turso libSQL (Hrana protocol v2), Cloudflare D1.
 - **Package Manager:** [`uv`](https://github.com/astral-sh/uv) (recommended for 10–100x faster package resolution) or standard `pip`.
+- **Feed Parser Security:** `defusedxml>=0.7.1` is bundled in dependencies to secure unauthenticated upstream XML feeds (arXiv, BSEE, EDGAR 8-K, NHC, RSS) against entity expansion (Billion Laughs) and DoS attacks (Issue #351).
+- **Static Analysis Gate:** `ruff>=0.9.0` is bundled to validate syntax and catch fatal scope errors across CI/CD and self-hosted instances (Issue #350).
 - **Git:** Version 2.34+.
 - **System Service Manager:** `systemd` (for background service and timer management on Linux).
 

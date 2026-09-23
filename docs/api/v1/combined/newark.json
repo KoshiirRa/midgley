@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T23:14:42.850137",
+  "timestamp": "2026-09-23T20:31:15.360755",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.353,
+    "current_price_per_gal": 4.343,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T04:12:05Z"
+      "timestamp": "2026-09-23T20:30:39Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,11 +27,11 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-27",
-    "current_base_price": 4.353,
-    "predicted_price_per_gal": 4.447,
+    "target_date": "2026-09-28",
+    "current_base_price": 4.343,
+    "predicted_price_per_gal": 4.437,
     "expected_change_dollars": 0.094,
-    "expected_change_percent": 2.15,
+    "expected_change_percent": 2.16,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -129,7 +129,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.005,
-          "impact_pct": 0.11,
+          "impact_pct": 0.12,
           "share_pct": 5.0,
           "direction": "UP"
         },
@@ -181,7 +181,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.005,
-      "impact_pct": 0.11,
+      "impact_pct": 0.12,
       "share_pct": 5.0,
       "direction": "UP"
     },

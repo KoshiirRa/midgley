@@ -1,6 +1,7 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.6.6)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.6.8 / v0.7.0-dev)
 
-[![Release: v0.6.6](https://img.shields.io/badge/Release-v0.6.6-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.6.6)
+[![Release: v0.6.8](https://img.shields.io/badge/Release-v0.6.8-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.6.8)
+[![Development: v0.7.0-dev](https://img.shields.io/badge/Dev-v0.7.0--dev-blue.svg)](https://github.com/KoshiirRa/midgley/tree/dev)
 [![GHCR Docker](https://img.shields.io/badge/GHCR-midgley%3Aself--hosted-blue.svg?logo=docker)](https://github.com/KoshiirRa/midgley/pkgs/container/midgley)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
@@ -8,7 +9,7 @@
 
 [![Public Dashboard](https://img.shields.io/badge/Public_Dashboard-koshiirra.github.io%2Fmidgley-blue.svg)](https://koshiirra.github.io/midgley/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Python 3.13](https://img.shields.io/badge/Python-3.13-green.svg)](requirements.txt)
+[![Python 3.10 | 3.11 | 3.12 | 3.13](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-green.svg)](pyproject.toml)
 
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 

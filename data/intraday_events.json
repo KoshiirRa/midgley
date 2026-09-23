@@ -3868,5 +3868,25 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-23T20:30:37.502728",
+    "headline": "Discount on Western Canada Select Widens with Joliet Refinery Outage - EnergyNow",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOTS00VjJiZWtoNHlMSEhTQU03RDZvdjdUd00xZFIwLUZteE1DQVhPbTJRdEpaSDFLZUo3TlpZaE9ZOWVoWG8tMkFQcnltOWFBWFE0SWVidkxvcGdYR01INXhHS2hnc3NGc3JyN1ZOVlZtZXg3aXJtR2x3bDMxRTBuYm1KLWJ5bDdOMnFROVplTFpjUXNhM3lodUpwRy1oVXM?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOTS00VjJiZWtoNHlMSEhTQU03RDZvdjdUd00xZFIwLUZteE1DQVhPbTJRdEpaSDFLZUo3TlpZaE9ZOWVoWG8tMkFQcnltOWFBWFE0SWVidkxvcGdYR01INXhHS2hnc3NGc3JyN1ZOVlZtZXg3aXJtR2x3bDMxRTBuYm1KLWJ5bDdOMnFROVplTFpjUXNhM3lodUpwRy1oVXM?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinwFBVV95cUxOTS00VjJiZWtoNHlMSEhTQU03RDZvdjdUd00xZFIwLUZteE1DQVhPbTJRdEpaSDFLZUo3TlpZaE9ZOWVoWG8tMkFQcnltOWFBWFE0SWVidkxvcGdYR01INXhHS2hnc3NGc3JyN1ZOVlZtZXg3aXJtR2x3bDMxRTBuYm1KLWJ5bDdOMnFROVplTFpjUXNhM3lodUpwRy1oVXM?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    },
+    "discord_notified": true
   }
 ]

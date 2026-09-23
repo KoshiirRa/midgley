@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T23:14:42.875611",
+  "timestamp": "2026-09-23T20:31:15.395424",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.128,
+    "current_price_per_gal": 4.115,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T04:12:08Z"
+      "timestamp": "2026-09-23T20:30:40Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,11 +27,11 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-27",
-    "current_base_price": 4.128,
-    "predicted_price_per_gal": 4.181,
+    "target_date": "2026-09-28",
+    "current_base_price": 4.115,
+    "predicted_price_per_gal": 4.168,
     "expected_change_dollars": 0.053,
-    "expected_change_percent": 1.28,
+    "expected_change_percent": 1.29,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -91,7 +91,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast +$0.053/gal (+1.28%): Driven primarily by Regional Logistics & Hub Delivery (+$0.021/gal), Futures & Commodity Benchmark (+$0.013/gal).",
+      "summary_text": "Greenville NC forecast +$0.053/gal (+1.29%): Driven primarily by Regional Logistics & Hub Delivery (+$0.021/gal), Futures & Commodity Benchmark (+$0.013/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -105,7 +105,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.013,
-          "impact_pct": 0.31,
+          "impact_pct": 0.32,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -157,7 +157,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.013,
-      "impact_pct": 0.31,
+      "impact_pct": 0.32,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast +$0.053/gal (+1.28%): Driven primarily by Regional Logistics & Hub Delivery (+$0.021/gal), Futures & Commodity Benchmark (+$0.013/gal).",
+    "summary_text": "Greenville NC forecast +$0.053/gal (+1.29%): Driven primarily by Regional Logistics & Hub Delivery (+$0.021/gal), Futures & Commodity Benchmark (+$0.013/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
