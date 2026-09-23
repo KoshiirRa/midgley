@@ -579,7 +579,10 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
 
 * **Endpoint:** `POST /api/v1/events/webhook`
 * **Content-Type:** `application/json`
-* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature when `MIDGLEY_WEBHOOK_SECRET` is set).
+* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature; **mandatory in production** under fail-closed security when `MIDGLEY_ENV=prod`).
+* **Authentication Behavior (Issue #173 & Issue #381):**
+  - **Production (`MIDGLEY_ENV=prod`):** Fails closed with `401 Unauthorized` if `MIDGLEY_WEBHOOK_SECRET` is unset or signature is missing/invalid.
+  - **Development (`MIDGLEY_ENV=dev` / `TESTING=1`):** Permits unauthenticated pushes when `MIDGLEY_WEBHOOK_SECRET` is unset for local testing convenience.
 * **Payload Transformer Aliases:**
   - `headline` $\leftarrow$ `headline`, `title`, `text`, `summary`, `tweet_content`, `article_title`, `content`
   - `url` $\leftarrow$ `url`, `link`, `article_url`, `web_url`, `href`
@@ -588,7 +591,7 @@ curl -X POST "http://localhost:8000/api/v1/forecast/simulate" \
 * **IPASIS Security Filter (Issue #87):** Inspects client IP (`CF-Connecting-IP`, `X-Forwarded-For`), rejecting high-risk Tor/Abuse origins with HTTP 403 Forbidden.
 * **Security Telemetry Endpoint:** `GET /api/v1/security/ip-status` — Returns IPASIS IP security gateway status, daily API request accounting (used / 100 allowance), private IP bypass statistics, and blocked origin counts.
 
-For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView) and HMAC signature examples, see **[WEBHOOK_FORMATTING_GUIDE.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/WEBHOOK_FORMATTING_GUIDE.md)**.
+For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView), security matrix, and copy-pasteable HMAC signature snippets, see **[WEBHOOK_FORMATTING_GUIDE.md](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/docs/WEBHOOK_FORMATTING_GUIDE.md)**.
 
 ---
 

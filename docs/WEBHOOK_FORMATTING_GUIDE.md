@@ -8,7 +8,7 @@ This guide details how to format, sign, and push real-time breaking news, social
 
 * **Endpoint URL:** `POST /api/v1/events/webhook`
 * **Content-Type:** `application/json`
-* **Authentication Header:** `X-Midgley-Signature: sha256=<hmac_hex_digest>` (Optional in local dev, mandatory in production when `MIDGLEY_WEBHOOK_SECRET` is set).
+* **Authentication Header:** `X-Midgley-Signature: sha256=<hmac_hex_digest>` (**Mandatory in production**; requests fail closed with `401 Unauthorized` if secret is unset or signature is missing/invalid).
 
 Strategy 4 serves as an event-driven ingestion hub that evaluates incoming payloads in real time, extracts factor impact vectors via tiered LLM scoring, triggers dynamic 15-minute response cache invalidation, logs intraday prediction revisions, and updates affected regional metro web app dashboards.
 
@@ -28,9 +28,23 @@ The Midgley Webhook Gateway includes an automatic **Payload Transformer** (`Webh
 
 ---
 
-## 3. HMAC-SHA256 Signature Verification
+## 3. HMAC-SHA256 Signature Verification & Fail-Closed Security
 
-To prevent unauthorized payload injection, production instances enforce HMAC-SHA256 signature verification via the `X-Midgley-Signature` header when `MIDGLEY_WEBHOOK_SECRET` is defined in the environment.
+To prevent unauthorized payload injection, Midgley enforces a strict **Fail-Closed Security Model** (Issue #173 & Issue #381) via `verify_webhook_signature()` in `src/api_server.py`.
+
+### Security Behavior Matrix
+
+| Environment (`MIDGLEY_ENV`) | `MIDGLEY_WEBHOOK_SECRET` | `X-Midgley-Signature` Header | Outcome | HTTP Status Code |
+| :--- | :--- | :--- | :--- | :--- |
+| `prod` (Production) | Set (`secret_key`) | Valid HMAC-SHA256 hex digest | **Allowed** | `200 OK` |
+| `prod` (Production) | **Unset (Missing)** | Any / None | **Rejected (Fail-Closed)** | `401 Unauthorized` |
+| `prod` (Production) | Set (`secret_key`) | Missing / Invalid signature | **Rejected** | `401 Unauthorized` |
+| `dev` / `test` (Development) | **Unset** | Any / None | **Allowed (Dev Bypass)** | `200 OK` |
+| `dev` / `test` (Development) | Set (`secret_key`) | Valid HMAC-SHA256 hex digest | **Allowed** | `200 OK` |
+| `dev` / `test` (Development) | Set (`secret_key`) | Invalid signature | **Rejected** | `401 Unauthorized` |
+
+> [!IMPORTANT]
+> **Production Fail-Closed Requirement**: In production (`MIDGLEY_ENV=prod`), if `MIDGLEY_WEBHOOK_SECRET` is omitted from the environment, all incoming webhook calls are automatically blocked with `401 Unauthorized`. You must set `MIDGLEY_WEBHOOK_SECRET` in your production environment variables.
 
 ### Calculating the Signature
 1. Compute the HMAC-SHA256 digest over the raw JSON payload bytes using your shared secret:
@@ -39,6 +53,75 @@ To prevent unauthorized payload injection, production instances enforce HMAC-SHA
    ```http
    X-Midgley-Signature: sha256=a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0
    ```
+
+### Copy-Pasteable Signing Snippets
+
+#### Python (`requests` / `hmac`)
+```python
+import hmac
+import hashlib
+import json
+import requests
+
+secret = "your_webhook_secret_here"
+payload = {
+    "headline": "Explorer Pipeline restarts Line 1 after unscheduled pump maintenance",
+    "url": "https://energy.example.com/explorer-restart",
+    "source": "Pipeline_Alert"
+}
+
+raw_bytes = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+signature = hmac.new(secret.encode("utf-8"), raw_bytes, hashlib.sha256).hexdigest()
+
+headers = {
+    "Content-Type": "application/json",
+    "X-Midgley-Signature": f"sha256={signature}"
+}
+
+response = requests.post(
+    "https://your-midgley-domain.com/api/v1/events/webhook",
+    data=raw_bytes,
+    headers=headers
+)
+print(response.status_code, response.json())
+```
+
+#### Node.js / TypeScript (`crypto` / `axios`)
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+const secret = 'your_webhook_secret_here';
+const payload = {
+  headline: 'Delaware City Refinery fluid catalytic cracker resumes operations',
+  url: 'https://energy.example.com/delaware-city-fcc-restart',
+  source: 'Refinery_Watch'
+};
+
+const rawBytes = Buffer.from(JSON.stringify(payload), 'utf8');
+const signature = crypto.createHmac('sha256', secret).update(rawBytes).digest('hex');
+
+axios.post('https://your-midgley-domain.com/api/v1/events/webhook', rawBytes, {
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Midgley-Signature': `sha256=${signature}`
+  }
+}).then(res => console.log(res.status, res.data))
+  .catch(err => console.error(err.response ? err.response.status : err));
+```
+
+#### cURL & OpenSSL (Bash)
+```bash
+SECRET="your_webhook_secret_here"
+PAYLOAD='{"headline":"Colonial Pipeline Line 1 normalizes cycle batch delivery schedules","source":"Colonial_Notice"}'
+
+SIGNATURE=$(printf '%s' "$PAYLOAD" | openssl dgst -sha256 -hmac "$SECRET" | sed 's/^.* //')
+
+curl -X POST https://your-midgley-domain.com/api/v1/events/webhook \
+  -H "Content-Type: application/json" \
+  -H "X-Midgley-Signature: sha256=$SIGNATURE" \
+  -d "$PAYLOAD"
+```
 
 ### IPASIS IP Gateway Security & Threat Filtering (Issue #87)
 In addition to HMAC signatures, incoming client IP addresses are inspected by the **IPASIS Security Verifier** (`src/ipasis_security.py`).

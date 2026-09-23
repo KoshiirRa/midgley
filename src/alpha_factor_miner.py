@@ -148,9 +148,18 @@ class AlphaFactorMiner:
             return DEFAULT_SEED_FACTORS[:count]
 
         prompt = (
-            f"You are a quantitative commodities researcher. Formulate {count} novel alpha factor hypotheses "
-            f"for predicting 5-day gasoline price returns using available columns: {available_columns}.\n"
-            "Return a JSON array of objects with keys: 'name', 'expression', 'hypothesis'."
+            f"You are an expert quantitative energy economist and algorithmic factor researcher (Microsoft RD-Agent architecture).\n"
+            f"Formulate {count} distinct, economically sound alpha factor hypotheses to forecast 5-day gasoline price returns.\n"
+            f"Available feature columns: {json.dumps(available_columns)}\n\n"
+            f"Allowed mathematical operators for symbolic expressions:\n"
+            f"- Time-series lag & momentum: Ref(col, d), Delta(col, d), Roc(col, d)\n"
+            f"- Rolling statistics: Mean(col, d), Std(col, d), Var(col, d), ZScore(col, d), Skew(col, d), Kurt(col, d), Max(col, d), Min(col, d)\n"
+            f"- Cross-sectional / bivariate: Add(col1, col2), Sub(col1, col2), Mul(col1, col2), Div(col1, col2), Corr(col1, col2, d), Cov(col1, col2, d)\n\n"
+            f"Return ONLY a valid JSON array of objects with the following keys:\n"
+            f"- 'name': Unique snake_case factor identifier string (e.g. 'ovx_crude_momentum_ratio')\n"
+            f"- 'expression': Valid Qlib symbolic expression string using only available columns and operators\n"
+            f"- 'hypothesis': Clear 1-2 sentence economic rationale\n"
+            f"- 'category': One of 'refining_margin', 'volatility_momentum', 'cross_asset', 'physical_supply', 'qualitative_macro'\n"
         )
 
         try:
@@ -164,7 +173,8 @@ class AlphaFactorMiner:
                     config={"temperature": 0.2, "response_mime_type": "application/json"}
                 )
                 text_out = response.text.strip()
-            except Exception:
+            except Exception as e_modern:
+                logger.debug(f"Modern google.genai invocation failed ({e_modern}), trying legacy google.generativeai...")
                 import google.generativeai as genai_legacy
                 genai_legacy.configure(api_key=self.api_key)
                 model = genai_legacy.GenerativeModel('gemini-1.5-flash')
@@ -178,8 +188,27 @@ class AlphaFactorMiner:
             if text_out:
                 parsed = json.loads(text_out)
                 if isinstance(parsed, list) and len(parsed) > 0:
-                    logger.info(f"Successfully generated {len(parsed)} factor hypotheses via Gemini.")
-                    return parsed
+                    validated_factors = []
+                    for item in parsed:
+                        if not isinstance(item, dict):
+                            continue
+                        name = item.get("name")
+                        # Support both 'expression' and 'formula' key aliases
+                        expr = item.get("expression") or item.get("formula")
+                        hypothesis = item.get("hypothesis", "")
+                        category = item.get("category", "alpha_factor")
+
+                        if name and expr:
+                            validated_factors.append({
+                                "name": str(name),
+                                "expression": str(expr),
+                                "hypothesis": str(hypothesis),
+                                "category": str(category)
+                            })
+
+                    if validated_factors:
+                        logger.info(f"Successfully generated {len(validated_factors)} factor hypotheses via Gemini.")
+                        return validated_factors[:count]
         except Exception as e:
             logger.warning(f"LLM factor hypothesis generation failed ({e}). Falling back to seed factors.")
 

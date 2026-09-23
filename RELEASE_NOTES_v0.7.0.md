@@ -327,10 +327,30 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 
 ---
 
-### 43. Automated Verification & Regression Test Suite
+### 44. LLM Alpha-Factor Hypothesis Generator Prompt Formulation (`src/alpha_factor_miner.py` - Issue #345)
+- **Structured Prompt Construction:** Formats prompt strings with available feature matrix column lists, domain metadata, and allowed Qlib mathematical operators (`Ref`, `Mean`, `Std`, `Var`, `Delta`, `Roc`, `ZScore`, `Skew`, `Kurt`, `Max`, `Min`, `Mul`, `Div`, `Add`, `Sub`, `Corr`, `Cov`).
+- **Schema Validation & Alias Handling:** Supports `expression` and `formula` key aliases, parses JSON responses from `google.genai` (`gemini-2.5-flash`) and `google.generativeai` (`gemini-1.5-flash`), and validates factor fields before persisting.
+- **Graceful Error Recovery:** Falls back to deterministic seed factors on JSON decoding errors, empty responses, or missing API keys.
+
+---
+
+### 45. Version Control Hygiene & Cloudflare Tooling Isolation (`.gitignore` - Issue #349)
+- **Wrangler State Isolation:** Removed tracked `.wrangler/cache/wrangler-account.json` from git tracking index.
+- **Gitignore Protection:** Added `.wrangler/` and `dist/` directories to `.gitignore` to prevent committing Cloudflare Wrangler CLI state, session caches, and account identifiers.
+
+---
+
+### 46. Webhook Fail-Closed Authentication & Integration Guide (`docs/WEBHOOK_FORMATTING_GUIDE.md`, `API.md` - Issue #381)
+- **Fail-Closed Security Matrix:** Clarified production behavior where unset `MIDGLEY_WEBHOOK_SECRET` in `MIDGLEY_ENV=prod` strictly rejects all incoming requests with `HTTP 401 Unauthorized` (Fail-Closed).
+- **Multi-Language Signing Recipes:** Added complete, copy-pasteable HMAC-SHA256 signature computation examples in Python (`requests` / `hmac`), Node.js / TypeScript (`crypto` / `axios`), and Bash (`openssl dgst -sha256 -hmac`).
+
+---
+
+### 47. Automated Verification & Regression Test Suite
+- **`tests/test_alpha_factor_miner.py`:** Validates prompt construction, modern `google.genai` client invocation, legacy fallback `google.generativeai`, JSON error recovery, and seed factor fallbacks (5/5 passing).
 - **`tests/test_fhwa_traffic_volume.py`:** Validates FHWA TVT schema, numerical metrics, demand momentum summary, lookup caching, bitemporal vintage persistence, feature engineering matrix fusion, and REST API endpoint (7/7 passing).
 - **`tests/test_trading_hours_timezone.py`:** Validates timezone-aware trading hours evaluation across Finlight, AlphaVantage, and OilPriceAPI under UTC, EST/EDT, weekends, and naive timestamps (6/6 passing).
-- **`tests/test_discord_notifier.py`:** Validates environment resolution, color coding, payload structure, component omission on standard webhooks, bot component attachment, and testing HTTP suppression (10/10 passing).
+- **`tests/test_discord_notifier.py` & `tests/test_discord_interactions.py`:** Validates environment resolution, color coding, payload structure, component omission on standard webhooks, bot component attachment, and testing HTTP suppression (15/15 passing).
 - **`tests/test_nasa_power.py`:** Validates NASA POWER temperature conversions, degree day formulas (HDD/CDD/GDD), mock API retrieval, disk caching, and PADD 1/PADD 2 feature extraction (8/8 passing).
 - **`tests/test_headline_arena_connector.py`:** Validates pending forecast caching, 24h expiration, submitted ledger idempotency, EIA civic challenge payloads, NG/DXY dead-zones, rationale synthesis, and multi-asset dispatching (32/32 passing).
 - **`tests/test_agent_memory.py` & `tests/test_memory_telemetry_sync.py`:** Validates Hindsight-Hosted API integration, durable observations parsing, reconciliation queue counting, SQLite FTS5 punctuation sanitization, Retain-Recall-Reflect workflows, and bank inventory telemetry (14/14 passing).
@@ -361,5 +381,6 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 - **`tests/test_model_returns_and_embargo.py`:** Validates return target modeling, price level reconstruction, chronological split embargo gaps, and purged walk-forward RidgeCV hyperparameter tuning (5/5 passing).
 - **`tests/test_ci_and_evaluation_coverage.py`:** Validates injectable evaluation under TESTING=1, strict calibrated 95% CI coverage without fallback, residual std horizon scaling, scoreboard empirical coverage metrics, and README updater execution (5/5 passing).
 - **`tests/test_prediction_scoreboard.py`:** Validates rolling scoreboard metrics, window filtering, regional breakdowns, discrete horizon breakdowns, and recent evaluated record retrieval (7/7 passing).
-- **Total Test Results:** 100% pass rate across all 801 test suites with zero regressions.
+- **Total Test Results:** 100% pass rate across all 812 test suites with zero regressions.
+
 

@@ -77,7 +77,8 @@ SEMANTIC_SCHOLAR_API_KEY="semantic_scholar_api_key_here"
 OPENAI_API_KEY="sk-proj-..."
 ANTHROPIC_API_KEY="sk-ant-..."
 
-# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation)
+# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation - Issues #173, #381)
+# MANDATORY IN PRODUCTION: Fails closed (HTTP 401) in prod (MIDGLEY_ENV=prod) if unset or missing.
 MIDGLEY_WEBHOOK_SECRET="super-secret-hmac-key-change-me"
 
 # Admin API Gateway Secret for Key Provisioning (/api/v1/admin/keys - Issue #341)
