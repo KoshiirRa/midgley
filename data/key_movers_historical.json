@@ -1,11 +1,7 @@
 {
   "benchmark_key": "key_movers",
-<<<<<<< HEAD
-  "last_refreshed_utc": "2026-09-22 17:41:07",
-=======
-  "last_refreshed_utc": "2026-09-21 19:12:47",
->>>>>>> main
-  "records_count": 7,
+  "last_refreshed_utc": "2026-09-23 04:15:35",
+  "records_count": 10,
   "data": [
     {
       "date": "2022-03-31",
@@ -16,16 +12,6 @@
       "category": "SPR_Release",
       "source": "US Department of Energy / Executive Action",
       "market_reaction_pct": -3.85
-    },
-    {
-      "date": "2022-06-17",
-      "entity": "US_Energy_Secretary_DOE",
-      "person": "US Energy Secretary DOE",
-      "headline": "The US Is Depleting Its Strategic Petroleum Reserve Faster Than It Looks - Bloomberg.com",
-      "impact_category": "US_Energy_Secretary_DOE_Statement",
-      "category": "US_Energy_Secretary_DOE_Statement",
-      "source": "Key Movers Live RSS (US_Energy_Secretary_DOE)",
-      "market_reaction_pct": 0.0
     },
     {
       "date": "2023-06-04",
@@ -76,6 +62,46 @@
       "category": "Russian_Export_Cut",
       "source": "Russian Ministry of Energy / OPEC+ JMMC",
       "market_reaction_pct": 1.9
+    },
+    {
+      "date": "2022-06-17",
+      "entity": "US_Energy_Secretary_DOE",
+      "person": "US Energy Secretary DOE",
+      "headline": "The US Is Depleting Its Strategic Petroleum Reserve Faster Than It Looks - Bloomberg.com",
+      "impact_category": "US_Energy_Secretary_DOE_Statement",
+      "category": "US_Energy_Secretary_DOE_Statement",
+      "source": "Key Movers Live RSS (US_Energy_Secretary_DOE)",
+      "market_reaction_pct": 0.0
+    },
+    {
+      "date": "2022-06-17",
+      "entity": "US_Energy_Secretary_DOE",
+      "person": "US Energy Secretary DOE",
+      "headline": "The US Is Depleting Its Strategic Petroleum Reserve Faster Than It Looks - Bloomberg.com",
+      "impact_category": "US_Energy_Secretary_DOE_Statement",
+      "category": "US_Energy_Secretary_DOE_Statement",
+      "source": "Key Movers Live RSS (US_Energy_Secretary_DOE)",
+      "market_reaction_pct": 0.0
+    },
+    {
+      "date": "2022-06-17",
+      "entity": "US_Energy_Secretary_DOE",
+      "person": "US Energy Secretary DOE",
+      "headline": "The US Is Depleting Its Strategic Petroleum Reserve Faster Than It Looks - Bloomberg.com",
+      "impact_category": "US_Energy_Secretary_DOE_Statement",
+      "category": "US_Energy_Secretary_DOE_Statement",
+      "source": "Key Movers Live RSS (US_Energy_Secretary_DOE)",
+      "market_reaction_pct": 0.0
+    },
+    {
+      "date": "2022-06-17",
+      "entity": "US_Energy_Secretary_DOE",
+      "person": "US Energy Secretary DOE",
+      "headline": "The US Is Depleting Its Strategic Petroleum Reserve Faster Than It Looks - Bloomberg.com",
+      "impact_category": "US_Energy_Secretary_DOE_Statement",
+      "category": "US_Energy_Secretary_DOE_Statement",
+      "source": "Key Movers Live RSS (US_Energy_Secretary_DOE)",
+      "market_reaction_pct": 0.0
     }
   ]
 }

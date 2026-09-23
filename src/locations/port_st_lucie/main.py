@@ -161,9 +161,11 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
         h_splits = h_res['splits']
         h_test_dates = h_splits['test_df']['date']
         h_preds_hybrid = h_res['predictions_hybrid']
+        h_preds_quant = h_res['predictions_quant']
         
         hist_psl_base = h_splits['test_df']['port_st_lucie_retail_gasoline'] if 'port_st_lucie_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + dynamic_margin
         hist_psl_pred = h_preds_hybrid + dynamic_margin
+        hist_psl_quant = h_preds_quant + dynamic_margin
 
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -171,18 +173,23 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
             predicted_prices=hist_psl_pred,
             region="Port_St_Lucie_FL",
             model_version=psl_version,
-            forecast_horizon_days=h
+            forecast_horizon_days=h,
+            quant_baseline_prices=hist_psl_quant
         )
 
         raw_pred_h = float(h_res['live_pred_price'])
+        raw_quant_h = float(h_res.get('live_pred_quant_price', raw_pred_h))
         last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
         baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h
         psl_h_forecast = live_pump_price * (1.0 + baseline_return_h)
+        psl_h_quant = live_pump_price * (1.0 + quant_return_h)
 
         today_df = pd.DataFrame([{
             'date': last_date,
             'current_price': live_pump_price,
             'predicted_5d_price': psl_h_forecast,
+            'quant_baseline_5d_price': psl_h_quant,
             'forecast_horizon_days': h
         }])
         log_predictions(today_df, region="Port_St_Lucie_FL", model_version=psl_version, forecast_horizon_days=h)

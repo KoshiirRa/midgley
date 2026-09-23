@@ -161,9 +161,11 @@ def run_charlotte_pipeline(live_pump_price: float = None, use_llm_api: bool = Fa
         h_splits = h_res['splits']
         h_test_dates = h_splits['test_df']['date']
         h_preds_hybrid = h_res['predictions_hybrid']
+        h_preds_quant = h_res['predictions_quant']
         
         hist_charlotte_base = h_splits['test_df']['charlotte_retail_gasoline'] if 'charlotte_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + dynamic_margin
         hist_charlotte_pred = h_preds_hybrid + dynamic_margin
+        hist_charlotte_quant = h_preds_quant + dynamic_margin
 
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -171,18 +173,23 @@ def run_charlotte_pipeline(live_pump_price: float = None, use_llm_api: bool = Fa
             predicted_prices=hist_charlotte_pred,
             region="Charlotte_NC",
             model_version=charlotte_version,
-            forecast_horizon_days=h
+            forecast_horizon_days=h,
+            quant_baseline_prices=hist_charlotte_quant
         )
 
         raw_pred_h = float(h_res['live_pred_price'])
+        raw_quant_h = float(h_res.get('live_pred_quant_price', raw_pred_h))
         last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
         baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h
         charlotte_h_forecast = live_pump_price * (1.0 + baseline_return_h)
+        charlotte_h_quant = live_pump_price * (1.0 + quant_return_h)
 
         today_df = pd.DataFrame([{
             'date': last_date,
             'current_price': live_pump_price,
             'predicted_5d_price': charlotte_h_forecast,
+            'quant_baseline_5d_price': charlotte_h_quant,
             'forecast_horizon_days': h
         }])
         log_predictions(today_df, region="Charlotte_NC", model_version=charlotte_version, forecast_horizon_days=h)

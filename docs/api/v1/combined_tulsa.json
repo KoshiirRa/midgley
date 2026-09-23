@@ -1,10 +1,6 @@
 {
   "status": "success",
-<<<<<<< HEAD
-  "timestamp": "2026-09-22T12:40:47.105137",
-=======
-  "timestamp": "2026-09-22T14:45:43.843364",
->>>>>>> main
+  "timestamp": "2026-09-22T23:14:42.825896",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -21,13 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-<<<<<<< HEAD
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-22T17:39:57Z"
-=======
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-22T14:16:06Z"
->>>>>>> main
+      "timestamp": "2026-09-23T04:12:04Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -38,15 +29,9 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-09-27",
     "current_base_price": 3.993,
-<<<<<<< HEAD
-    "predicted_price_per_gal": 4.413,
-    "expected_change_dollars": 0.42,
-    "expected_change_percent": 10.52,
-=======
     "predicted_price_per_gal": 6.391,
     "expected_change_dollars": 2.398,
     "expected_change_percent": 60.06,
->>>>>>> main
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,

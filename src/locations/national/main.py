@@ -124,21 +124,25 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         h_test_dates = h_splits['test_df']['date']
         h_test_current_prices = h_splits['test_df']['gasoline_rbob']
         h_preds_hybrid = h_res['predictions_hybrid']
+        h_preds_quant = h_res['predictions_quant']
         
         # Backfill historical test split
         h_log_df = pd.DataFrame({
             'date': h_test_dates.values,
             'current_price': h_test_current_prices.values,
             'predicted_5d_price': h_preds_hybrid,
+            'quant_baseline_5d_price': h_preds_quant,
             'forecast_horizon_days': h
         })
         
         # Append latest live real-time forecast row
         live_pred = float(h_res['live_pred_price'])
+        live_quant_pred = float(h_res.get('live_pred_quant_price', live_pred))
         h_today_df = pd.DataFrame([{
             'date': last_date,
             'current_price': current_live_price,
             'predicted_5d_price': live_pred,
+            'quant_baseline_5d_price': live_quant_pred,
             'forecast_horizon_days': h
         }])
         h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)

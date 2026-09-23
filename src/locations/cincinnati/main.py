@@ -174,11 +174,14 @@ def run_cincinnati_pipeline(
         h_splits = h_res['splits']
         h_test_dates = h_splits['test_df']['date']
         h_preds_hybrid = h_res['predictions_hybrid']
+        h_preds_quant = h_res['predictions_quant']
         
         hist_oh_base = h_splits['test_df']['cincinnati_oh_retail_gasoline'] if 'cincinnati_oh_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + margin_oh
         hist_oh_pred = h_preds_hybrid + margin_oh
+        hist_oh_quant = h_preds_quant + margin_oh
         hist_ky_base = h_splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + margin_ky
         hist_ky_pred = h_preds_hybrid + margin_ky
+        hist_ky_quant = h_preds_quant + margin_ky
 
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -186,7 +189,8 @@ def run_cincinnati_pipeline(
             predicted_prices=hist_oh_pred,
             region="Cincinnati_OH",
             model_version=oh_version,
-            forecast_horizon_days=h
+            forecast_horizon_days=h,
+            quant_baseline_prices=hist_oh_quant
         )
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -194,25 +198,32 @@ def run_cincinnati_pipeline(
             predicted_prices=hist_ky_pred,
             region="Cincinnati_KY",
             model_version=ky_version,
-            forecast_horizon_days=h
+            forecast_horizon_days=h,
+            quant_baseline_prices=hist_ky_quant
         )
 
         raw_pred_h = float(h_res['live_pred_price'])
+        raw_quant_h = float(h_res.get('live_pred_quant_price', raw_pred_h))
         last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
         baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h
         cin_oh_h_forecast = live_oh_price * (1.0 + baseline_return_h)
+        cin_oh_h_quant = live_oh_price * (1.0 + quant_return_h)
         cin_ky_h_forecast = live_ky_price * (1.0 + baseline_return_h)
+        cin_ky_h_quant = live_ky_price * (1.0 + quant_return_h)
 
         today_oh = pd.DataFrame([{
             'date': last_date,
             'current_price': live_oh_price,
             'predicted_5d_price': cin_oh_h_forecast,
+            'quant_baseline_5d_price': cin_oh_h_quant,
             'forecast_horizon_days': h
         }])
         today_ky = pd.DataFrame([{
             'date': last_date,
             'current_price': live_ky_price,
             'predicted_5d_price': cin_ky_h_forecast,
+            'quant_baseline_5d_price': cin_ky_h_quant,
             'forecast_horizon_days': h
         }])
         

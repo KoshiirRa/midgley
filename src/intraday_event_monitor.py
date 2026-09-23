@@ -460,10 +460,16 @@ class IntradayEventMonitor:
 
                 # 3. Log Intraday Revision Record across target locales
                 for loc in target_locales:
+                    base_p = 3.184
+                    shocked_p = base_p * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
                     dummy_df = pd.DataFrame([{
                         "date": datetime.now().strftime("%Y-%m-%d"),
-                        "current_price": 3.184,
-                        "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
+                        "current_price": base_p,
+                        "predicted_5d_price": shocked_p,
+                        "quant_baseline_5d_price": base_p,
+                        "llm_price_pressure": scores.get("overall_price_pressure", 0.0),
+                        "llm_supply_disruption": scores.get("supply_disruption", 0.0),
+                        "llm_augmentation_delta": round(shocked_p - base_p, 4)
                     }])
                     log_predictions(
                         dummy_df, 

@@ -1,10 +1,6 @@
 {
   "status": "success",
-<<<<<<< HEAD
-  "timestamp": "2026-09-22T12:40:47.166438",
-=======
-  "timestamp": "2026-09-22T14:45:45.391194",
->>>>>>> main
+  "timestamp": "2026-09-22T23:14:42.902158",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -22,11 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-<<<<<<< HEAD
-      "timestamp": "2026-09-22T17:40:11Z"
-=======
-      "timestamp": "2026-09-22T14:45:44Z"
->>>>>>> main
+      "timestamp": "2026-09-23T04:12:06Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -37,17 +29,10 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-09-27",
     "current_base_price": 4.286,
-<<<<<<< HEAD
-    "predicted_price_per_gal": 4.274,
-    "expected_change_dollars": -0.012,
-    "expected_change_percent": -0.29,
-    "projected_direction": "DOWN",
-=======
     "predicted_price_per_gal": 4.35,
     "expected_change_dollars": 0.064,
     "expected_change_percent": 1.5,
     "projected_direction": "UP",
->>>>>>> main
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
     "day_1_price": 4.315,

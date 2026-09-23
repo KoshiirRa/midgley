@@ -619,18 +619,24 @@ def train_multi_horizon_models(
         res['splits'] = splits
         res['forecast_horizon'] = h
         
-        # Latest live base and hybrid forecast price
-        last_row = splits['X_test_hybrid'].iloc[-1:]
-        raw_live_pred = float(res['model_hybrid'].predict(last_row)[0])
+        # Latest live base, hybrid, and pure quantitative forecast price
+        last_row_hybrid = splits['X_test_hybrid'].iloc[-1:]
+        raw_live_pred = float(res['model_hybrid'].predict(last_row_hybrid)[0])
+        last_row_quant = splits['X_test_quant'].iloc[-1:]
+        raw_live_pred_quant = float(res['model_quant'].predict(last_row_quant)[0])
         live_base = float(splits['test_df']['gasoline_rbob'].iloc[-1])
         if res.get('is_return_target', False) or splits.get('predict_returns', False):
             res['live_pred_price'] = float(live_base * (1.0 + raw_live_pred))
+            res['live_pred_quant_price'] = float(live_base * (1.0 + raw_live_pred_quant))
             res['live_base_price'] = live_base
             res['live_pred_return'] = raw_live_pred
+            res['live_pred_quant_return'] = raw_live_pred_quant
         else:
             res['live_pred_price'] = raw_live_pred
+            res['live_pred_quant_price'] = raw_live_pred_quant
             res['live_base_price'] = live_base
             res['live_pred_return'] = (raw_live_pred - live_base) / live_base if live_base > 0 else 0.0
+            res['live_pred_quant_return'] = (raw_live_pred_quant - live_base) / live_base if live_base > 0 else 0.0
         
         multi_results[h] = res
 

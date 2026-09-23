@@ -214,7 +214,10 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
     "mape_pct": 3.42,
     "directional_hit_rate_pct": 58.15,
     "naive_persistence_mae": 0.1740,
-    "model_uplift_mae_pct": 23.51
+    "model_uplift_mae_pct": 23.51,
+    "model_vs_persistence_win_rate_pct": 65.52,
+    "llm_vs_quant_win_rate_pct": 58.62,
+    "empirical_95ci_coverage_pct": 92.50
   },
   "horizon_breakdown": [
     {

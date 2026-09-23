@@ -145,6 +145,7 @@ class DynamicRegionRunner:
         try:
             today = datetime.now()
             target_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
+            quant_base = round(current_base * (1.0 + (nat_res.get("quant_baseline_price", nat_current_base) - nat_current_base)/nat_current_base), 3)
             log_df = pd.DataFrame([{
                 "log_timestamp": today.strftime("%Y-%m-%d %H:%M:%S"),
                 "forecast_target_date": target_date,
@@ -153,8 +154,8 @@ class DynamicRegionRunner:
                 "predicted_direction": "UP" if predicted_5d_price >= current_base else "DOWN",
                 "llm_price_pressure": nat_res.get("llm_price_pressure", 0.0),
                 "llm_supply_disruption": nat_res.get("llm_supply_disruption", 0.0),
-                "quant_baseline_5d_price": round(current_base * (1.0 + (nat_res.get("quant_baseline_price", nat_current_base) - nat_current_base)/nat_current_base), 3),
-                "llm_augmentation_delta": round(predicted_5d_price - current_base, 3),
+                "quant_baseline_5d_price": quant_base,
+                "llm_augmentation_delta": round(predicted_5d_price - quant_base, 3),
                 "prediction_lower_95ci": lower_95ci,
                 "prediction_upper_95ci": upper_95ci,
                 "data_source_provenance": f"DynamicRegionRunner_{self.region_id}"

@@ -818,5 +818,46 @@
     "marine_terminal_surge_risk": 0.06,
     "marine_terminal_shallow_draft_risk": 0.0,
     "status": "SUCCESS"
+  },
+  {
+    "source": "NOAA CO-OPS Center for Operational Oceanographic Products and Services (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 23:12:43",
+    "as_of": "2026-09-22 23:12:43",
+    "valid_date": "2026-09-22",
+    "stations": {
+      "Houston_TX": {
+        "station_id": "8770613",
+        "surge_residual_ft": 0.35,
+        "draft_anomaly_ft": 0.1,
+        "surge_risk": 0.05,
+        "shallow_draft_risk": 0.0
+      },
+      "Delaware_River_DE": {
+        "station_id": "8557380",
+        "surge_residual_ft": 0.42,
+        "draft_anomaly_ft": -0.05,
+        "surge_risk": 0.06,
+        "shallow_draft_risk": 0.0
+      },
+      "BayArea_CA": {
+        "station_id": "9415144",
+        "surge_residual_ft": 0.2,
+        "draft_anomaly_ft": 0.05,
+        "surge_risk": 0.02,
+        "shallow_draft_risk": 0.0
+      },
+      "Port_St_Lucie_FL": {
+        "station_id": "8722237",
+        "surge_residual_ft": 0.28,
+        "draft_anomaly_ft": -0.12,
+        "surge_risk": 0.04,
+        "shallow_draft_risk": 0.0
+      }
+    },
+    "marine_terminal_surge_risk": 0.06,
+    "marine_terminal_shallow_draft_risk": 0.0,
+    "status": "SUCCESS"
   }
 ]

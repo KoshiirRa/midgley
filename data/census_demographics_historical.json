@@ -1,10 +1,6 @@
 {
   "benchmark_key": "census_demographics",
-<<<<<<< HEAD
-  "last_refreshed_utc": "2026-09-22 17:41:19",
-=======
-  "last_refreshed_utc": "2026-09-21 19:12:58",
->>>>>>> main
+  "last_refreshed_utc": "2026-09-23 04:12:44",
   "records_count": 6,
   "data": {
     "connector": "U.S. Census Bureau ACS Demographics Connector",
@@ -16,18 +12,14 @@
         "region_id": "tulsa_ok",
         "display_name": "Tulsa, OK Metro",
         "window_lifecycle": {
-<<<<<<< HEAD
-          "current_date": "2026-09-22",
-=======
-          "current_date": "2026-09-21",
->>>>>>> main
-          "is_in_release_window": true,
+          "current_date": "2026-04-01",
+          "is_in_release_window": false,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
-          "expected_vintage": 2025,
-          "status_mode": "WINDOW_ACTIVE_CHECKING",
-          "recommended_ttl_seconds": 86400,
-          "locked_until": "2027-08-31",
-          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+          "expected_vintage": 2024,
+          "status_mode": "LOCKED_ANNUAL_CACHE",
+          "recommended_ttl_seconds": 13132800,
+          "locked_until": "2026-08-31",
+          "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
         },
         "demographics": {
           "vintage_year": 2024,
@@ -43,8 +35,8 @@
           "transit_alternative_index": 0.038,
           "inelastic_demand_score": 0.885
         },
-        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
-        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "cache_status": "HIT_LOCKED_ANNUAL",
+        "provenance": "Census_ACS_DiskCache",
         "is_free_alternative": true,
         "cost_per_query": 0.0
       },
@@ -52,18 +44,14 @@
         "region_id": "newark_de",
         "display_name": "Newark, DE / Philly Corridor",
         "window_lifecycle": {
-<<<<<<< HEAD
-          "current_date": "2026-09-22",
-=======
-          "current_date": "2026-09-21",
->>>>>>> main
-          "is_in_release_window": true,
+          "current_date": "2026-04-01",
+          "is_in_release_window": false,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
-          "expected_vintage": 2025,
-          "status_mode": "WINDOW_ACTIVE_CHECKING",
-          "recommended_ttl_seconds": 86400,
-          "locked_until": "2027-08-31",
-          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+          "expected_vintage": 2024,
+          "status_mode": "LOCKED_ANNUAL_CACHE",
+          "recommended_ttl_seconds": 13132800,
+          "locked_until": "2026-08-31",
+          "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
         },
         "demographics": {
           "vintage_year": 2024,
@@ -79,8 +67,8 @@
           "transit_alternative_index": 0.104,
           "inelastic_demand_score": 0.732
         },
-        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
-        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "cache_status": "DETERMINISTIC_BASELINE_FALLBACK",
+        "provenance": "Census_Deterministic_Baseline_Profile",
         "is_free_alternative": true,
         "cost_per_query": 0.0
       },
@@ -88,18 +76,14 @@
         "region_id": "cincinnati_oh",
         "display_name": "Cincinnati, OH Tri-State",
         "window_lifecycle": {
-<<<<<<< HEAD
-          "current_date": "2026-09-22",
-=======
-          "current_date": "2026-09-21",
->>>>>>> main
-          "is_in_release_window": true,
+          "current_date": "2026-04-01",
+          "is_in_release_window": false,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
-          "expected_vintage": 2025,
-          "status_mode": "WINDOW_ACTIVE_CHECKING",
-          "recommended_ttl_seconds": 86400,
-          "locked_until": "2027-08-31",
-          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+          "expected_vintage": 2024,
+          "status_mode": "LOCKED_ANNUAL_CACHE",
+          "recommended_ttl_seconds": 13132800,
+          "locked_until": "2026-08-31",
+          "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
         },
         "demographics": {
           "vintage_year": 2025,
@@ -115,7 +99,7 @@
           "transit_alternative_index": 0.08,
           "inelastic_demand_score": 0.82
         },
-        "cache_status": "HIT_NEW_VINTAGE_LOCKED",
+        "cache_status": "HIT_LOCKED_ANNUAL",
         "provenance": "Census_ACS_DiskCache",
         "is_free_alternative": true,
         "cost_per_query": 0.0
@@ -124,18 +108,14 @@
         "region_id": "greenville_nc",
         "display_name": "Greenville, NC Metro",
         "window_lifecycle": {
-<<<<<<< HEAD
-          "current_date": "2026-09-22",
-=======
-          "current_date": "2026-09-21",
->>>>>>> main
-          "is_in_release_window": true,
+          "current_date": "2026-04-01",
+          "is_in_release_window": false,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
-          "expected_vintage": 2025,
-          "status_mode": "WINDOW_ACTIVE_CHECKING",
-          "recommended_ttl_seconds": 86400,
-          "locked_until": "2027-08-31",
-          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+          "expected_vintage": 2024,
+          "status_mode": "LOCKED_ANNUAL_CACHE",
+          "recommended_ttl_seconds": 13132800,
+          "locked_until": "2026-08-31",
+          "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
         },
         "demographics": {
           "vintage_year": 2024,
@@ -151,8 +131,8 @@
           "transit_alternative_index": 0.04,
           "inelastic_demand_score": 0.879
         },
-        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
-        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "cache_status": "DETERMINISTIC_BASELINE_FALLBACK",
+        "provenance": "Census_Deterministic_Baseline_Profile",
         "is_free_alternative": true,
         "cost_per_query": 0.0
       },
@@ -160,18 +140,14 @@
         "region_id": "oakland_ca",
         "display_name": "Oakland / SF Bay Area, CA",
         "window_lifecycle": {
-<<<<<<< HEAD
-          "current_date": "2026-09-22",
-=======
-          "current_date": "2026-09-21",
->>>>>>> main
-          "is_in_release_window": true,
+          "current_date": "2026-04-01",
+          "is_in_release_window": false,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
-          "expected_vintage": 2025,
-          "status_mode": "WINDOW_ACTIVE_CHECKING",
-          "recommended_ttl_seconds": 86400,
-          "locked_until": "2027-08-31",
-          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+          "expected_vintage": 2024,
+          "status_mode": "LOCKED_ANNUAL_CACHE",
+          "recommended_ttl_seconds": 13132800,
+          "locked_until": "2026-08-31",
+          "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
         },
         "demographics": {
           "vintage_year": 2024,
@@ -187,8 +163,8 @@
           "transit_alternative_index": 0.218,
           "inelastic_demand_score": 0.548
         },
-        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
-        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "cache_status": "DETERMINISTIC_BASELINE_FALLBACK",
+        "provenance": "Census_Deterministic_Baseline_Profile",
         "is_free_alternative": true,
         "cost_per_query": 0.0
       },
@@ -196,18 +172,14 @@
         "region_id": "charlotte_nc",
         "display_name": "Charlotte, NC Metro",
         "window_lifecycle": {
-<<<<<<< HEAD
-          "current_date": "2026-09-22",
-=======
-          "current_date": "2026-09-21",
->>>>>>> main
-          "is_in_release_window": true,
+          "current_date": "2026-04-01",
+          "is_in_release_window": false,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
-          "expected_vintage": 2025,
-          "status_mode": "WINDOW_ACTIVE_CHECKING",
-          "recommended_ttl_seconds": 86400,
-          "locked_until": "2027-08-31",
-          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+          "expected_vintage": 2024,
+          "status_mode": "LOCKED_ANNUAL_CACHE",
+          "recommended_ttl_seconds": 13132800,
+          "locked_until": "2026-08-31",
+          "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
         },
         "demographics": {
           "vintage_year": 2024,
@@ -223,8 +195,8 @@
           "transit_alternative_index": 0.074,
           "inelastic_demand_score": 0.821
         },
-        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
-        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "cache_status": "DETERMINISTIC_BASELINE_FALLBACK",
+        "provenance": "Census_Deterministic_Baseline_Profile",
         "is_free_alternative": true,
         "cost_per_query": 0.0
       },
@@ -232,18 +204,14 @@
         "region_id": "port_st_lucie_fl",
         "display_name": "Port St. Lucie, FL Metro",
         "window_lifecycle": {
-<<<<<<< HEAD
-          "current_date": "2026-09-22",
-=======
-          "current_date": "2026-09-21",
->>>>>>> main
-          "is_in_release_window": true,
+          "current_date": "2026-04-01",
+          "is_in_release_window": false,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
-          "expected_vintage": 2025,
-          "status_mode": "WINDOW_ACTIVE_CHECKING",
-          "recommended_ttl_seconds": 86400,
-          "locked_until": "2027-08-31",
-          "description": "Inside annual ACS release window (Sept 1-30). Checking daily for 2025 vintage release."
+          "expected_vintage": 2024,
+          "status_mode": "LOCKED_ANNUAL_CACHE",
+          "recommended_ttl_seconds": 13132800,
+          "locked_until": "2026-08-31",
+          "description": "Outside release window. Locked on 2024 vintage until 2026-08-31."
         },
         "demographics": {
           "vintage_year": 2024,
@@ -259,8 +227,8 @@
           "transit_alternative_index": 0.05,
           "inelastic_demand_score": 0.868
         },
-        "cache_status": "WINDOW_POLLING_SERVED_PRIOR_VINTAGE",
-        "provenance": "Census_ACS_Prior_Vintage_Cache",
+        "cache_status": "DETERMINISTIC_BASELINE_FALLBACK",
+        "provenance": "Census_Deterministic_Baseline_Profile",
         "is_free_alternative": true,
         "cost_per_query": 0.0
       }

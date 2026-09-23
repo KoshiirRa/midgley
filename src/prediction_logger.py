@@ -367,7 +367,9 @@ def log_predictions(
         lower_ci = float(row.get('prediction_lower_95ci')) if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) else round(pred_price - (1.96 * res_std), 4)
         upper_ci = float(row.get('prediction_upper_95ci')) if 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']) else round(pred_price + (1.96 * res_std), 4)
 
-        
+        llm_press = float(row.get('llm_price_pressure')) if 'llm_price_pressure' in row and pd.notna(row['llm_price_pressure']) else (float(row.get('event_overall_price_pressure', row.get('overall_price_pressure', 0.0))) if pd.notna(row.get('event_overall_price_pressure', row.get('overall_price_pressure'))) else 0.0)
+        llm_disr = float(row.get('llm_supply_disruption')) if 'llm_supply_disruption' in row and pd.notna(row['llm_supply_disruption']) else (float(row.get('event_supply_disruption', row.get('supply_disruption', 0.0))) if pd.notna(row.get('event_supply_disruption', row.get('supply_disruption'))) else 0.0)
+
         new_records.append({
             "log_timestamp": timestamp_str,
             "forecast_target_date": target_date,
@@ -383,8 +385,8 @@ def log_predictions(
             "actual_direction": "",
             "error_dollars": np.nan,
             "directional_hit": np.nan,
-            "llm_price_pressure": float(row.get('llm_price_pressure')) if 'llm_price_pressure' in row and pd.notna(row['llm_price_pressure']) else 0.0,
-            "llm_supply_disruption": float(row.get('llm_supply_disruption')) if 'llm_supply_disruption' in row and pd.notna(row['llm_supply_disruption']) else 0.0,
+            "llm_price_pressure": round(llm_press, 4),
+            "llm_supply_disruption": round(llm_disr, 4),
             "quant_baseline_5d_price": round(quant_base, 4) if pd.notna(quant_base) else round(base_price, 4),
             "llm_augmentation_delta": round(aug_delta, 4),
             "prediction_lower_95ci": round(lower_ci, 4),
@@ -660,11 +662,14 @@ def backfill_new_region_history(
     predicted_prices,
     region: str,
     model_version: Optional[str] = None,
-    forecast_horizon_days: int = 5
+    forecast_horizon_days: int = 5,
+    quant_baseline_prices: Optional[Any] = None,
+    llm_price_pressures: Optional[Any] = None,
+    llm_supply_disruptions: Optional[Any] = None
 ) -> int:
     """
     Backfills historical test split predictions for a newly added region into prediction_history.csv
-    and automatically matches/evaluates mature target dates against ground-truth market prices (Issue #314).
+    and automatically matches/evaluates mature target dates against ground-truth market prices (Issue #314, #390).
     """
     if model_version is None:
         try:
@@ -676,12 +681,20 @@ def backfill_new_region_history(
     base_arr = getattr(base_prices, 'values', base_prices)
     pred_arr = getattr(predicted_prices, 'values', predicted_prices)
 
-    pred_log_df = pd.DataFrame({
+    log_dict = {
         'date': dates_arr,
         'current_price': base_arr,
         'predicted_5d_price': pred_arr,
         'forecast_horizon_days': forecast_horizon_days
-    })
+    }
+    if quant_baseline_prices is not None:
+        log_dict['quant_baseline_5d_price'] = getattr(quant_baseline_prices, 'values', quant_baseline_prices)
+    if llm_price_pressures is not None:
+        log_dict['llm_price_pressure'] = getattr(llm_price_pressures, 'values', llm_price_pressures)
+    if llm_supply_disruptions is not None:
+        log_dict['llm_supply_disruption'] = getattr(llm_supply_disruptions, 'values', llm_supply_disruptions)
+
+    pred_log_df = pd.DataFrame(log_dict)
     
     n_logged = log_predictions(pred_log_df, region=region, model_version=model_version, forecast_horizon_days=forecast_horizon_days)
     backfill_actual_prices_and_evaluate()
@@ -848,6 +861,18 @@ def compute_rolling_scoreboard_metrics(
     else:
         model_uplift = 0.0
 
+    # Model vs Persistence win rate & LLM vs Quant win rate (Issue #390)
+    pers_wins = (np.abs(actuals - preds) <= naive_errors).sum()
+    model_vs_pers_win_rate = float((pers_wins / n_eval) * 100.0)
+
+    if 'quant_baseline_5d_price' in filtered_df.columns and filtered_df['quant_baseline_5d_price'].notna().any():
+        quant_preds = filtered_df['quant_baseline_5d_price'].astype(float).fillna(pd.Series(bases, index=filtered_df.index))
+        quant_errors = np.abs(actuals - quant_preds.values)
+        llm_wins = (np.abs(actuals - preds) <= quant_errors).sum()
+        llm_vs_quant_win_rate = float((llm_wins / n_eval) * 100.0)
+    else:
+        llm_vs_quant_win_rate = model_vs_pers_win_rate
+
     return {
         "window_days": window_days,
         "region_filter": region or "All",
@@ -859,6 +884,8 @@ def compute_rolling_scoreboard_metrics(
         "directional_hit_rate_pct": round(hit_rate, 2),
         "naive_persistence_mae": round(naive_mae, 4),
         "model_uplift_mae_pct": round(model_uplift, 2),
+        "model_vs_persistence_win_rate_pct": round(model_vs_pers_win_rate, 2),
+        "llm_vs_quant_win_rate_pct": round(llm_vs_quant_win_rate, 2),
         "empirical_95ci_coverage_pct": round(ci_coverage, 2),
     }
 
@@ -876,7 +903,7 @@ def compute_regional_scoreboard_breakdown(
     if eval_df.empty:
         return []
 
-    regions = eval_df['region'].unique()
+    regions = [str(r) for r in eval_df['region'].dropna().unique() if pd.notna(r) and str(r).strip()]
     breakdown = []
 
     for reg in sorted(regions):
@@ -891,6 +918,8 @@ def compute_regional_scoreboard_breakdown(
                 "directional_hit_rate_pct": metrics["directional_hit_rate_pct"],
                 "naive_persistence_mae": metrics["naive_persistence_mae"],
                 "model_uplift_mae_pct": metrics["model_uplift_mae_pct"],
+                "model_vs_persistence_win_rate_pct": metrics.get("model_vs_persistence_win_rate_pct", 0.0),
+                "llm_vs_quant_win_rate_pct": metrics.get("llm_vs_quant_win_rate_pct", 0.0),
                 "empirical_95ci_coverage_pct": metrics["empirical_95ci_coverage_pct"],
             })
 
@@ -930,6 +959,8 @@ def compute_horizon_scoreboard_breakdown(
             "directional_hit_rate_pct": metrics["directional_hit_rate_pct"],
             "naive_persistence_mae": metrics["naive_persistence_mae"],
             "model_uplift_mae_pct": metrics["model_uplift_mae_pct"],
+            "model_vs_persistence_win_rate_pct": metrics.get("model_vs_persistence_win_rate_pct", 0.0),
+            "llm_vs_quant_win_rate_pct": metrics.get("llm_vs_quant_win_rate_pct", 0.0),
             "empirical_95ci_coverage_pct": metrics["empirical_95ci_coverage_pct"],
         })
 
@@ -995,19 +1026,23 @@ def compute_mlops_observability_summary(window_days: int | str = 30) -> dict:
 
     n_eval = len(filtered_df)
 
-    # 1. LLM Augmentation Win Rate calculation
-    # Quant baseline error vs Hybrid LLM error
-    if 'quant_baseline_5d_price' in filtered_df.columns:
-        actuals = filtered_df['actual_5d_price'].astype(float)
-        preds = filtered_df['predicted_5d_price'].astype(float)
-        quant_preds = filtered_df['quant_baseline_5d_price'].astype(float).fillna(filtered_df['current_base_price'].astype(float))
-        
-        hybrid_errors = (actuals - preds).abs()
+    # 1. LLM Augmentation Win Rate & Model vs Persistence Win Rate calculation (Issue #390)
+    actuals = filtered_df['actual_5d_price'].astype(float)
+    preds = filtered_df['predicted_5d_price'].astype(float)
+    bases = filtered_df['current_base_price'].astype(float)
+    
+    hybrid_errors = (actuals - preds).abs()
+    pers_errors = (actuals - bases).abs()
+    pers_wins = (hybrid_errors <= pers_errors).sum()
+    model_vs_pers_win_rate = float((pers_wins / n_eval) * 100.0)
+
+    if 'quant_baseline_5d_price' in filtered_df.columns and filtered_df['quant_baseline_5d_price'].notna().any():
+        quant_preds = filtered_df['quant_baseline_5d_price'].astype(float).fillna(bases)
         quant_errors = (actuals - quant_preds).abs()
         llm_wins = (hybrid_errors <= quant_errors).sum()
         llm_win_rate = float((llm_wins / n_eval) * 100.0)
     else:
-        llm_win_rate = 50.0
+        llm_win_rate = model_vs_pers_win_rate
 
     # 2. 95% CI Coverage Hit Rate
     if 'within_95ci_hit' in filtered_df.columns and filtered_df['within_95ci_hit'].notna().any():
@@ -1034,6 +1069,7 @@ def compute_mlops_observability_summary(window_days: int | str = 30) -> dict:
         "window_days": window_days,
         "total_evaluations": n_eval,
         "llm_augmentation_win_rate_pct": round(llm_win_rate, 2),
+        "model_vs_persistence_win_rate_pct": round(model_vs_pers_win_rate, 2),
         "ci_95_coverage_pct": round(ci_coverage, 2),
         "avg_llm_price_pressure": round(avg_pressure, 4),
         "avg_llm_supply_disruption": round(avg_disruption, 4),
