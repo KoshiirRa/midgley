@@ -540,6 +540,33 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         except Exception as e:
             logger.debug(f"Notice logging to W&B: {e}")
 
+    # Live inference evaluation using unlabelled contemporary features (t=0) (Issue #353)
+    X_live_hybrid = split_data.get('X_live_hybrid', X_test_hybrid.iloc[-1:] if len(X_test_hybrid) > 0 else pd.DataFrame())
+    X_live_quant = split_data.get('X_live_quant', X_test_quant.iloc[-1:] if len(X_test_quant) > 0 else pd.DataFrame())
+    live_base = float(split_data.get('live_current_price', y_current.iloc[-1] if len(y_current) > 0 else 1.0))
+    live_origin_date = split_data.get('live_feature_origin_date', str(test_df['date'].iloc[-1]) if 'date' in test_df.columns and len(test_df) > 0 else None)
+
+    if len(X_live_hybrid) > 0:
+        raw_live_pred = float(model_hybrid.predict(X_live_hybrid)[0])
+    else:
+        raw_live_pred = float(pred_hybrid[-1]) if len(pred_hybrid) > 0 else 0.0
+
+    if len(X_live_quant) > 0:
+        raw_live_pred_quant = float(model_quant.predict(X_live_quant)[0])
+    else:
+        raw_live_pred_quant = float(pred_quant[-1]) if len(pred_quant) > 0 else 0.0
+
+    if is_return_target:
+        live_pred_price = float(live_base * (1.0 + raw_live_pred))
+        live_pred_quant_price = float(live_base * (1.0 + raw_live_pred_quant))
+        live_pred_return = raw_live_pred
+        live_pred_quant_return = raw_live_pred_quant
+    else:
+        live_pred_price = raw_live_pred
+        live_pred_quant_price = raw_live_pred_quant
+        live_pred_return = (raw_live_pred - live_base) / live_base if live_base > 0 else 0.0
+        live_pred_quant_return = (raw_live_pred_quant - live_base) / live_base if live_base > 0 else 0.0
+
     return {
         "model_quant": model_quant,
         "model_hybrid": model_hybrid,
@@ -568,7 +595,19 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "test_dates": test_df['date'].values,
         "current_prices": np.array(y_current),
         "is_return_target": is_return_target,
-        "wandb_run_url": wandb_run_url
+        "wandb_run_url": wandb_run_url,
+        "live_pred_price": live_pred_price,
+        "live_pred_quant_price": live_pred_quant_price,
+        "live_base_price": live_base,
+        "live_pred_return": live_pred_return,
+        "live_pred_quant_return": live_pred_quant_return,
+        "live_feature_origin_date": str(live_origin_date) if live_origin_date is not None else None,
+        "forecast_origin_date": str(live_origin_date) if live_origin_date is not None else None,
+        "feature_cutoff_date": str(live_origin_date) if live_origin_date is not None else None,
+        "forecast_target_date": (
+            pd.bdate_range(start=pd.to_datetime(live_origin_date), periods=int(split_data.get('forecast_horizon', 5)) + 1)[-1].strftime('%Y-%m-%d')
+            if live_origin_date is not None else None
+        ),
     }
 
 
@@ -584,6 +623,7 @@ def train_multi_horizon_models(
     """
     Trains and compares discrete step-ahead forecasting models across multi-day horizons
     (default: h in [1, 2, 3, 4, 5]) (Issue #314).
+    Preserves contemporary unlabelled inference features (t=0) across all forecast horizons (Issue #353).
     
     Returns a dictionary mapping horizon integer h -> ablation results dictionary:
     {
@@ -619,12 +659,15 @@ def train_multi_horizon_models(
         res['splits'] = splits
         res['forecast_horizon'] = h
         
-        # Latest live base, hybrid, and pure quantitative forecast price
-        last_row_hybrid = splits['X_test_hybrid'].iloc[-1:]
+        # Ensure latest live base, hybrid, and pure quantitative forecast prices use t=0 features
+        last_row_hybrid = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:])
+        last_row_quant = splits.get('X_live_quant', splits['X_test_quant'].iloc[-1:])
+        live_base = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
+        live_origin_date = splits.get('live_feature_origin_date', str(splits['test_df']['date'].iloc[-1]) if 'date' in splits['test_df'].columns else None)
+
         raw_live_pred = float(res['model_hybrid'].predict(last_row_hybrid)[0])
-        last_row_quant = splits['X_test_quant'].iloc[-1:]
         raw_live_pred_quant = float(res['model_quant'].predict(last_row_quant)[0])
-        live_base = float(splits['test_df']['gasoline_rbob'].iloc[-1])
+        
         if res.get('is_return_target', False) or splits.get('predict_returns', False):
             res['live_pred_price'] = float(live_base * (1.0 + raw_live_pred))
             res['live_pred_quant_price'] = float(live_base * (1.0 + raw_live_pred_quant))
@@ -638,6 +681,19 @@ def train_multi_horizon_models(
             res['live_pred_return'] = (raw_live_pred - live_base) / live_base if live_base > 0 else 0.0
             res['live_pred_quant_return'] = (raw_live_pred_quant - live_base) / live_base if live_base > 0 else 0.0
         
+        res['live_feature_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
+        res['forecast_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
+        res['feature_cutoff_date'] = str(live_origin_date) if live_origin_date is not None else None
+        if live_origin_date is not None:
+            try:
+                origin_dt = pd.to_datetime(live_origin_date)
+                target_dt = pd.bdate_range(start=origin_dt, periods=h+1)[-1]
+                res['forecast_target_date'] = target_dt.strftime('%Y-%m-%d')
+            except Exception:
+                res['forecast_target_date'] = None
+        else:
+            res['forecast_target_date'] = None
+
         multi_results[h] = res
 
     return multi_results

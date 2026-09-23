@@ -8,7 +8,7 @@ and qualitative features chronologically without lookahead bias.
 import pandas as pd
 import numpy as np
 import logging
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Optional, Dict, Any, List, Tuple, Union
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed, fetch_baker_hughes_rig_counts
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
 from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector
@@ -121,13 +121,16 @@ def create_feature_matrix(
     decay_half_life_days: float = 5.0,
     region: str = "Tulsa_OK",
     as_of_cutoff: str = None,
-    use_feast: bool = False
-) -> pd.DataFrame:
+    use_feast: bool = False,
+    return_unlabelled_frame: bool = False
+) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
     """
     Creates a unified feature dataset for time-series forecasting.
+    Preserves contemporary unlabelled inference features (t=0) on DataFrame attrs and returns clean labelled dataset (Issue #353).
     
     Parameters:
     - market_df: DataFrame with 'date', 'gasoline_rbob', 'wti_crude', 'brent_crude'
+    - return_unlabelled_frame: If True, returns tuple (labelled_df, unlabelled_inference_frame)
     - events_df: DataFrame with LLM scored events containing 'date', 'geopolitical_risk', etc.
     - forecast_horizon: Number of business days ahead to forecast (default 5 days = 1 week)
     - decay_half_life_days: Exponential decay half-life for news event sentiment impact
@@ -641,8 +644,23 @@ def create_feature_matrix(
     feature_cols = [c for c in df.columns if not c.startswith('target_')]
     df[feature_cols] = df[feature_cols].ffill().fillna(0.0)
     
-    df = df.dropna(subset=[f'target_price_{forecast_horizon}d']).reset_index(drop=True)
-    return df
+    # Preserve unlabelled contemporary inference frame for live forecasting (Issue #353)
+    unlabelled_inference_frame = df.iloc[-forecast_horizon:].copy().reset_index(drop=True)
+    latest_inference_row = df.iloc[-1:].copy().reset_index(drop=True)
+    
+    labelled_df = df.dropna(subset=[f'target_price_{forecast_horizon}d']).reset_index(drop=True)
+    
+    forecast_origin = str(df['date'].iloc[-1]) if 'date' in df.columns and len(df) > 0 else None
+    labelled_df.attrs['unlabelled_inference_frame'] = unlabelled_inference_frame
+    labelled_df.attrs['latest_inference_row'] = latest_inference_row
+    labelled_df.attrs['full_feature_matrix'] = df.copy()
+    labelled_df.attrs['forecast_horizon'] = forecast_horizon
+    labelled_df.attrs['forecast_origin_date'] = forecast_origin
+    labelled_df.attrs['feature_cutoff_date'] = forecast_origin
+    
+    if return_unlabelled_frame:
+        return labelled_df, unlabelled_inference_frame
+    return labelled_df
 
 
 def compute_context_routing_diagnostic(
@@ -696,12 +714,14 @@ def prepare_chronological_splits(
     forecast_horizon: int = 5,
     purge_overlap: bool = True,
     embargo_steps: Optional[int] = None,
-    predict_returns: bool = True
+    predict_returns: bool = True,
+    unlabelled_inference_frame: Optional[pd.DataFrame] = None
 ):
     """
     Splits dataset chronologically to prevent temporal data leakage (Issues #354, #396, #397).
     Purges boundary forecast_horizon instances and applies post-boundary embargo gap so training target labels do not overlap test observations.
-    Returns: X_train_quant, X_train_hybrid, y_train, y_train_price, y_train_return, X_test_quant, X_test_hybrid, y_test, y_test_price, y_test_return, quant_feature_names, hybrid_feature_names, test_df
+    Preserves unlabelled contemporary inference features (t=0) for live multi-step forecasting (Issue #353).
+    Returns: X_train_quant, X_train_hybrid, y_train, y_train_price, y_train_return, X_test_quant, X_test_hybrid, y_test, y_test_price, y_test_return, quant_feature_names, hybrid_feature_names, test_df, unlabelled_inference_frame, X_live_quant, X_live_hybrid, live_current_price
     """
     quant_features = [
         'gasoline_rbob', 'wti_crude', 'crack_spread',
@@ -740,7 +760,20 @@ def prepare_chronological_splits(
     target_price_col = f'target_price_{forecast_horizon}d'
     target_return_col = f'target_return_{forecast_horizon}d'
     
-    split_idx = int(len(df) * train_ratio)
+    # Retrieve unlabelled inference frame from arguments or DataFrame attrs (Issue #353)
+    if unlabelled_inference_frame is None:
+        unlabelled_inference_frame = getattr(df, 'attrs', {}).get('unlabelled_inference_frame', None)
+    
+    # Check if df contains unmatured target rows at the tail
+    if target_price_col in df.columns and df[target_price_col].isna().any():
+        clean_labelled_df = df.dropna(subset=[target_price_col]).reset_index(drop=True)
+        if unlabelled_inference_frame is None:
+            unlabelled_inference_frame = df[df[target_price_col].isna()].copy().reset_index(drop=True)
+        eval_df = clean_labelled_df
+    else:
+        eval_df = df
+
+    split_idx = int(len(eval_df) * train_ratio)
     
     if embargo_steps is None:
         embargo_steps = forecast_horizon
@@ -749,11 +782,11 @@ def prepare_chronological_splits(
     if purge_overlap and forecast_horizon >= 1:
         total_purge_gap = forecast_horizon + max(0, embargo_steps)
         train_slice_end = max(1, split_idx - total_purge_gap)
-        train_df = df.iloc[:train_slice_end]
+        train_df = eval_df.iloc[:train_slice_end]
     else:
-        train_df = df.iloc[:split_idx]
+        train_df = eval_df.iloc[:split_idx]
 
-    test_df = df.iloc[split_idx:]
+    test_df = eval_df.iloc[split_idx:]
     
     X_train_quant = train_df[quant_features]
     X_train_hybrid = train_df[hybrid_features]
@@ -785,6 +818,26 @@ def prepare_chronological_splits(
     X_test_quant = test_df[quant_features]
     X_test_hybrid = test_df[hybrid_features]
     
+    # Extract contemporary live inference feature row (t=0)
+    if unlabelled_inference_frame is not None and len(unlabelled_inference_frame) > 0:
+        unlabelled_df = unlabelled_inference_frame.copy()
+        for f in hybrid_features:
+            if f not in unlabelled_df.columns:
+                unlabelled_df[f] = 0.0
+        unlabelled_df[hybrid_features] = unlabelled_df[hybrid_features].ffill().fillna(0.0)
+        X_live_quant = unlabelled_df[quant_features].iloc[-1:]
+        X_live_hybrid = unlabelled_df[hybrid_features].iloc[-1:]
+        live_origin_date = unlabelled_df['date'].iloc[-1] if 'date' in unlabelled_df.columns else None
+        live_current_price = float(unlabelled_df['gasoline_rbob'].iloc[-1]) if 'gasoline_rbob' in unlabelled_df.columns else (
+            float(test_df['gasoline_rbob'].iloc[-1]) if len(test_df) > 0 else 0.0
+        )
+    else:
+        unlabelled_df = test_df.iloc[-1:].copy() if len(test_df) > 0 else pd.DataFrame()
+        X_live_quant = test_df[quant_features].iloc[-1:] if len(test_df) > 0 else pd.DataFrame()
+        X_live_hybrid = test_df[hybrid_features].iloc[-1:] if len(test_df) > 0 else pd.DataFrame()
+        live_origin_date = test_df['date'].iloc[-1] if 'date' in test_df.columns and len(test_df) > 0 else None
+        live_current_price = float(test_df['gasoline_rbob'].iloc[-1]) if 'gasoline_rbob' in test_df.columns and len(test_df) > 0 else 0.0
+
     return {
         'X_train_quant': X_train_quant,
         'X_train_hybrid': X_train_hybrid,
@@ -801,5 +854,12 @@ def prepare_chronological_splits(
         'test_df': test_df,
         'forecast_horizon': forecast_horizon,
         'embargo_steps': embargo_steps,
-        'predict_returns': predict_returns
+        'predict_returns': predict_returns,
+        'unlabelled_inference_frame': unlabelled_df,
+        'X_live_quant': X_live_quant,
+        'X_live_hybrid': X_live_hybrid,
+        'live_feature_origin_date': live_origin_date,
+        'live_current_price': live_current_price,
+        'forecast_origin_date': live_origin_date,
+        'feature_cutoff_date': live_origin_date
     }

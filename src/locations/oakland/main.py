@@ -125,9 +125,9 @@ def run_oakland_pipeline(
         }
     ]
 
-    base_row = splits['X_test_hybrid'].iloc[-1:].copy()
+    base_row = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:]).copy()
     raw_pred_price = results['model_hybrid'].predict(base_row)[0]
-    last_hist_price = splits['test_df']['gasoline_rbob'].iloc[-1]
+    last_hist_price = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
 
     baseline_return = (raw_pred_price - last_hist_price) / last_hist_price
     oakland_baseline_forecast = live_oakland_price * (1.0 + baseline_return)

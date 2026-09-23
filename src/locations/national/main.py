@@ -83,9 +83,9 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         }
     ]
     
-    base_row = splits['X_test_hybrid'].iloc[-1:].copy()
-    raw_pred_price = results['model_hybrid'].predict(base_row)[0]
-    current_market_price = splits['test_df']['gasoline_rbob'].iloc[-1]
+    base_row = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:]).copy()
+    raw_pred_price = results.get('live_pred_price', results['model_hybrid'].predict(base_row)[0])
+    current_market_price = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
     
     print(f"\n  LATEST WHOLESALE MARKET PRICE:   ${current_market_price:.3f}/gal")
     print(f"  BASELINE 5-DAY NATIONAL FORECAST: ${raw_pred_price:.3f}/gal")

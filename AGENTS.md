@@ -252,6 +252,10 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Discrete Multi-Horizon Step-Ahead Forecasting Engine (`train_multi_horizon_models()`, Issue #314):**
   - Trains separate, un-interpolated Ridge, ElasticNet, and Stacking estimators for discrete forecasting steps: **1-Day (24h Ahead)**, **2-Day (48h Ahead)**, **3-Day (72h Ahead)**, **4-Day (96h Ahead)**, and **5-Day (1-Week Ahead)**.
   - Dynamically configures feature engineering matrices, momentum lookbacks, and exponential shock decay half-lives ($t_{1/2}$) tailored specifically to each target lead time, eliminating linear interpolation approximations.
+* **Unlabelled Inference Frame Preservation & Multi-Horizon Inference Freshness (`src/feature_engineering.py` & `src/models.py`, Issue #353):**
+  - **Decoupled Training vs Inference Horizons:** Eliminates stale input selection where longer lead-time models ($h > 1$) evaluated input features from $t - h$ rather than contemporary today ($t = 0$).
+  - **Unlabelled Frame Preservation:** `create_feature_matrix()` computes rolling and decayed features across the entire historical series, preserving the final $h$ unlabelled rows in `labelled_df.attrs["unlabelled_inference_frame"]` with `forecast_origin_date` and `feature_cutoff_date`.
+  - **Contemporary $t=0$ Ingestion:** `prepare_chronological_splits()` and `train_multi_horizon_models()` extract `X_live_hybrid`, `X_live_quant`, and `live_current_price` from contemporary $t=0$ features, ensuring that all 1D–5D horizons evaluate the latest session's market indicators, spot prices, and event shock memory while training folds strictly enforce lookahead-safe label maturity ($t \le T - h$).
 * **Out-of-Time Test Performance (Regular v1.6 "Ipatieff" Engine "Dubbs" Finlight-LLM Engine):**
   - **National Model:** **60.79% Directional Accuracy** ($0.1069 MAE).
   - **Tulsa Model:** **58.15% Directional Accuracy** ($0.1331 MAE).
