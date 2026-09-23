@@ -1,0 +1,7 @@
+report_number,incident_date,operator_name,corridor_id,commodity,commodity_subgroup,unintentional_release_bbls,spill_barrels,shutdown_indicated,shutdown_duration_hours,shutdown_hours,significant_disruption,location_city,location_county,location_state,latitude,longitude,system_part,fire_or_explosion
+20160298,2016-09-09,COLONIAL PIPELINE CO,Colonial_Mainline_PADD1,GASOLINE,GASOLINE,6000.0,6000.0,True,288.0,288.0,True,Helena,Shelby,AL,33.2968,-86.8436,Mainline Pipe Line 1,False
+20160352,2016-10-31,COLONIAL PIPELINE CO,Colonial_Mainline_PADD1,GASOLINE,GASOLINE,4500.0,4500.0,True,144.0,144.0,True,Helena,Shelby,AL,33.3105,-86.825,Mainline Pipe Line 1,True
+20200145,2020-08-14,COLONIAL PIPELINE CO,Colonial_Mainline_PADD1,GASOLINE,GASOLINE,47000.0,47000.0,True,168.0,168.0,True,Huntersville,Mecklenburg,NC,35.4106,-80.8428,Mainline Pipe Line 1,False
+20210189,2021-05-07,COLONIAL PIPELINE CO,Colonial_Mainline_PADD1,REFINED PETROLEUM PRODUCTS,REFINED PRODUCTS,0.0,0.0,True,130.0,130.0,True,Alpharetta,Fulton,GA,34.0754,-84.2941,Entire System Cyber Outage,False
+20220087,2022-03-11,EXPLORER PIPELINE CO,Explorer_Midwest_PADD2,CRUDE OIL,CRUDE OIL,1250.0,1250.0,True,48.0,48.0,True,Glenpool,Tulsa,OK,35.947,-96.0028,Mainline Pipe,False
+20230214,2023-09-18,"SFPP, L.P.",SFPP_KinderMorgan_PADD5,GASOLINE,GASOLINE,320.0,320.0,True,36.0,36.0,True,Concord,Contra Costa,CA,37.978,-122.0311,Terminal Distribution Rack,False
