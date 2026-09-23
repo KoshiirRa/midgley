@@ -986,6 +986,17 @@ python3 -m src.lookup_cache --test-cloudflare
 curl -s "http://localhost:8000/api/v1/system/cache-status?probe=true" | jq .
 ```
 
+### 10. Verify PortWatch Shipping & CARB Compliance Connectors (Issues #384 & #383)
+Run diagnostic probes to verify IMF PortWatch maritime activity and CARB regulatory carbon compliance calculations:
+```bash
+# Verify IMF PortWatch maritime chokepoint transit telemetry
+python3 -c "from src.portwatch_connector import IMFPortWatchConnector; c = IMFPortWatchConnector(); print(c.get_global_chokepoint_risk_summary())"
+
+# Verify CARB LCFS and Cap-and-Trade dynamic compliance fee breakdown
+python3 -c "from src.carb_compliance import get_dynamic_carb_compliance_breakdown; print(get_dynamic_carb_compliance_breakdown())"
+```
+
 ---
 
-*Midgley Version: `v0.6.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+

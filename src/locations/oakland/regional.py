@@ -17,15 +17,18 @@ import logging
 from src.noaa_weather import get_oakland_weather_dataset
 from src.data_ingestion import get_historical_event_dataset
 from src.live_fuel_feed import fetch_live_metro_retail_price
+from src.carb_compliance import get_dynamic_carb_compliance_breakdown
 
 logger = logging.getLogger(__name__)
 
-# CARB (California Air Resources Board) & CA State Regulatory Tax Breakdown (USD per gallon)
-CARB_EXCISE_TAX = 0.596      # CA State Excise Tax
-CAP_AND_TRADE_FEE = 0.185    # Cap-and-Trade (Cap-and-Invest) Carbon Allowance Fee
-LCFS_CREDIT_FEE = 0.084      # Low Carbon Fuel Standard (LCFS) Compliance Overhead
-LOCAL_TAX_UST_FEE = 0.088    # Local Sales Tax + Underground Storage Tank (UST) Fee
-TOTAL_CARB_TAX_BURDEN = CARB_EXCISE_TAX + CAP_AND_TRADE_FEE + LCFS_CREDIT_FEE + LOCAL_TAX_UST_FEE # $0.953/gal
+# CARB (California Air Resources Board) & CA State Regulatory Tax Baseline Breakdown (USD per gallon)
+# Dynamic point-in-time compliance fees computed via src.carb_compliance (Issue #383)
+_default_carb = get_dynamic_carb_compliance_breakdown()
+CARB_EXCISE_TAX = _default_carb["carb_state_excise_tax"]         # CA State Excise Tax ($0.596/gal)
+CAP_AND_TRADE_FEE = _default_carb["cap_and_trade_fee_per_gal"]   # Dynamic Cap-and-Trade Allowance Fee
+LCFS_CREDIT_FEE = _default_carb["lcfs_credit_fee_per_gal"]       # Dynamic Low Carbon Fuel Standard (LCFS) Fee
+LOCAL_TAX_UST_FEE = _default_carb["local_sales_ust_fee"]         # Local Sales Tax + UST Fee ($0.088/gal)
+TOTAL_CARB_TAX_BURDEN = _default_carb["total_carb_tax_burden"]   # Dynamic Total Tax Burden (~$0.953–$1.02/gal)
 
 def fetch_oakland_market_data(
     start_date: str = "2022-01-01", 

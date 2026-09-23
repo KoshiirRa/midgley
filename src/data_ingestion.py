@@ -3379,3 +3379,40 @@ def fetch_fhwa_traffic_volume_features(
     """
     from src.bts_transportation import fetch_fhwa_traffic_features
     return fetch_fhwa_traffic_features(start_date=start_date, end_date=end_date)
+
+
+def get_portwatch_connector():
+    """
+    Factory helper returning an instantiated IMFPortWatchConnector (Issue #384).
+    """
+    from src.portwatch_connector import IMFPortWatchConnector
+    return IMFPortWatchConnector()
+
+
+def fetch_portwatch_chokepoint_series(
+    chokepoint_key: str = "Strait_of_Hormuz",
+    start_date: str = "2023-01-01",
+    end_date: Optional[str] = None
+) -> pd.DataFrame:
+    """
+    Helper function extracting daily IMF PortWatch vessel transit and anomaly series.
+    """
+    connector = get_portwatch_connector()
+    return connector.fetch_chokepoint_daily_series(chokepoint_key, start_date=start_date, end_date=end_date)
+
+
+def get_carb_compliance_connector():
+    """
+    Factory helper returning an instantiated CARBComplianceConnector (Issue #383).
+    """
+    from src.carb_compliance import CARBComplianceConnector
+    return CARBComplianceConnector()
+
+
+def fetch_carb_compliance_breakdown(as_of_date: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Helper function returning dynamic California tax and carbon compliance burden breakdown.
+    """
+    from src.carb_compliance import get_dynamic_carb_compliance_breakdown
+    return get_dynamic_carb_compliance_breakdown(as_of_date=as_of_date)
+

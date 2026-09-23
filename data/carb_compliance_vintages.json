@@ -1,0 +1,29 @@
+{
+  "vintages": {
+    "2024-03-01": {
+      "recorded_at": "2026-09-23T21:48:00.619344",
+      "as_of_date": "2024-03-01",
+      "lcfs_credit_price_mt": 62.0,
+      "cap_trade_allowance_price_mt": 38.73,
+      "carb_state_excise_tax": 0.596,
+      "cap_and_trade_fee_per_gal": 0.3442,
+      "lcfs_credit_fee_per_gal": 0.0949,
+      "local_sales_ust_fee": 0.088,
+      "total_carb_tax_burden": 1.1231,
+      "provenance": "CARB_OFFICIAL_ARCHIVE"
+    },
+    "2026-09-23": {
+      "recorded_at": "2026-09-23T21:48:00.642472",
+      "as_of_date": "2026-09-23",
+      "lcfs_credit_price_mt": 72.5,
+      "cap_trade_allowance_price_mt": 38.2,
+      "carb_state_excise_tax": 0.596,
+      "cap_and_trade_fee_per_gal": 0.3395,
+      "lcfs_credit_fee_per_gal": 0.111,
+      "local_sales_ust_fee": 0.088,
+      "total_carb_tax_burden": 1.1345,
+      "provenance": "CARB_OFFICIAL_ARCHIVE"
+    }
+  },
+  "last_updated": "2026-09-23T21:48:00.642472"
+}

@@ -7,6 +7,7 @@ and computes rigorous error metrics & directional accuracy.
 from __future__ import annotations
 
 import itertools
+import math
 import os
 from typing import Any, Optional, Dict, List, Tuple, Union
 import numpy as np
@@ -1067,22 +1068,116 @@ def apply_gated_persistence_blending(
     return round(float(gated_pred), 4)
 
 
+def compute_empirical_residual_prediction_interval(
+    predicted_price: float,
+    residual_std_30d: float = 0.0612,
+    confidence_level: float = 0.95,
+    horizon_days: Optional[int] = None
+) -> tuple[float, float]:
+    """
+    Computes dynamic Empirical Residual Prediction Interval bounds (Issues #214, #358, #394):
+    PI_{1-\\alpha} = predicted_price +/- z_score * residual_std
+    Distinct from a Confidence Interval for the conditional mean E[Y|X], this Prediction Interval
+    quantifies the uncertainty of the future price realization Y_{t+h}.
+    """
+    z_score = 1.96 if confidence_level >= 0.95 else 1.645
+    std_val = max(0.01, float(residual_std_30d))
+
+    lower_bound = round(predicted_price - (z_score * std_val), 4)
+    upper_bound = round(predicted_price + (z_score * std_val), 4)
+    return lower_bound, upper_bound
+
+
 def compute_empirical_residual_ci(
     predicted_price: float,
     residual_std_30d: float = 0.0612,
     confidence_level: float = 0.95
 ) -> tuple[float, float]:
     """
-    Computes dynamic Empirical Residual Confidence Interval bounds (Issue #214):
-    CI_95% = predicted_price +/- z_score * residual_std_30d
-    replaces static +/- 5% multipliers with empirical residual variance.
+    Legacy alias for compute_empirical_residual_prediction_interval (Issue #214, #358).
+    Computes 95% prediction interval bounds using empirical residual standard deviation.
     """
-    z_score = 1.96 if confidence_level >= 0.95 else 1.645
-    std_val = max(0.01, float(residual_std_30d))
+    return compute_empirical_residual_prediction_interval(
+        predicted_price=predicted_price,
+        residual_std_30d=residual_std_30d,
+        confidence_level=confidence_level
+    )
 
-    lower_ci = round(predicted_price - (z_score * std_val), 4)
-    upper_ci = round(predicted_price + (z_score * std_val), 4)
-    return lower_ci, upper_ci
+
+def compute_conformal_prediction_intervals(
+    y_pred: Union[float, np.ndarray, List[float]],
+    calibration_residuals: Union[np.ndarray, List[float]],
+    alpha: float = 0.05
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Computes Split Conformal Prediction Intervals with finite-sample (1 - alpha) coverage guarantee (Issue #358).
+    Given calibration nonconformity scores s_i = |y_i - \\hat{y}_i|, computes the empirical quantile:
+      q = quantile(|residuals|, ceil((n+1)*(1-alpha))/n)
+    Returns (lower_bounds, upper_bounds) around point predictions y_pred.
+    """
+    residuals = np.abs(np.asarray(calibration_residuals, dtype=float))
+    n = len(residuals)
+    if n == 0:
+        # Fallback to standard 1.96 * 0.0612 heuristic if no calibration residuals
+        q = 1.96 * 0.0612
+    else:
+        quantile_level = min(1.0, math.ceil((n + 1) * (1.0 - alpha)) / n)
+        q = float(np.quantile(residuals, quantile_level))
+
+    preds = np.asarray(y_pred, dtype=float)
+    lower_bounds = np.round(preds - q, 4)
+    upper_bounds = np.round(preds + q, 4)
+    return lower_bounds, upper_bounds
+
+
+def evaluate_prediction_interval_quality(
+    actuals: Union[np.ndarray, List[float]],
+    lower_bounds: Union[np.ndarray, List[float]],
+    upper_bounds: Union[np.ndarray, List[float]],
+    nominal_confidence: float = 0.95
+) -> Dict[str, Any]:
+    """
+    Evaluates prediction interval performance (empirical coverage, mean interval width, pinball loss) (Issue #358).
+    """
+    y_true = np.asarray(actuals, dtype=float)
+    y_low = np.asarray(lower_bounds, dtype=float)
+    y_high = np.asarray(upper_bounds, dtype=float)
+
+    n = len(y_true)
+    if n == 0:
+        return {
+            "nominal_coverage": nominal_confidence,
+            "empirical_coverage_pct": 0.0,
+            "mean_interval_width": 0.0,
+            "sample_size": 0,
+            "status": "NO_DATA"
+        }
+
+    in_bounds = (y_true >= y_low) & (y_true <= y_high)
+    coverage_pct = round(float(np.mean(in_bounds) * 100.0), 2)
+    mean_width = round(float(np.mean(y_high - y_low)), 4)
+
+    # Pinball Quantile Loss for Lower (alpha/2) and Upper (1 - alpha/2)
+    alpha = 1.0 - nominal_confidence
+    tau_low = alpha / 2.0
+    tau_high = 1.0 - (alpha / 2.0)
+
+    err_low = y_true - y_low
+    loss_low = float(np.mean(np.maximum(tau_low * err_low, (tau_low - 1.0) * err_low)))
+
+    err_high = y_true - y_high
+    loss_high = float(np.mean(np.maximum(tau_high * err_high, (tau_high - 1.0) * err_high)))
+
+    return {
+        "nominal_coverage": nominal_confidence,
+        "empirical_coverage_pct": coverage_pct,
+        "mean_interval_width": mean_width,
+        "pinball_loss_lower": round(loss_low, 4),
+        "pinball_loss_upper": round(loss_high, 4),
+        "total_pinball_loss": round(loss_low + loss_high, 4),
+        "sample_size": n,
+        "status": "VALID"
+    }
 
 
 def train_models_with_feast_point_in_time(

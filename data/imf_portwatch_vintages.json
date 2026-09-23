@@ -1,0 +1,49 @@
+{
+  "vintages": {
+    "Strait_of_Hormuz": {
+      "latest_observation_date": "2026-09-23",
+      "recorded_at": "2026-09-23T21:48:00.513591",
+      "metrics": {
+        "daily_vessel_count": 122.9,
+        "daily_tanker_count": 43.9,
+        "daily_transit_tonnage_mt": 51732155.0,
+        "daily_tanker_tonnage_mt": 20692862.0,
+        "transit_anomaly_7d_28d": -0.0254
+      }
+    },
+    "Suez_Canal": {
+      "latest_observation_date": "2026-02-01",
+      "recorded_at": "2026-09-23T21:48:00.607339",
+      "metrics": {
+        "daily_vessel_count": 48.2,
+        "daily_tanker_count": 17.2,
+        "daily_transit_tonnage_mt": 9495188.0,
+        "daily_tanker_tonnage_mt": 3798075.0,
+        "transit_anomaly_7d_28d": -0.0621
+      }
+    },
+    "Bab_el_Mandeb": {
+      "latest_observation_date": "2026-09-23",
+      "recorded_at": "2026-09-23T21:48:00.560914",
+      "metrics": {
+        "daily_vessel_count": 40.9,
+        "daily_tanker_count": 14.6,
+        "daily_transit_tonnage_mt": 10905698.0,
+        "daily_tanker_tonnage_mt": 4362279.0,
+        "transit_anomaly_7d_28d": -0.0254
+      }
+    },
+    "Panama_Canal": {
+      "latest_observation_date": "2026-09-23",
+      "recorded_at": "2026-09-23T21:48:00.583696",
+      "metrics": {
+        "daily_vessel_count": 23.5,
+        "daily_tanker_count": 8.4,
+        "daily_transit_tonnage_mt": 5872298.0,
+        "daily_tanker_tonnage_mt": 2348919.0,
+        "transit_anomaly_7d_28d": -0.0254
+      }
+    }
+  },
+  "last_updated": "2026-09-23T21:48:00.607339"
+}
