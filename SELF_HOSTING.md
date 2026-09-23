@@ -265,7 +265,55 @@ For managed cloud deployment without managing containers or incurring serverless
    HINDSIGHT_API_KEY="hsk_..."
    HINDSIGHT_BANK_ID="Midgley"
    ```
-3. **Migration & Zero Cold Starts:** Hindsight-Hosted is always warm ($0$ cold-start latency) and operates on a purely pay-per-token/call pricing model (**~$3.50/month** for daily + weekly forecasting workloads, with initial \$5.00 free credit balance). Historical SQLite memories can be bulk-uploaded using `python scripts/migrate_memory_to_hosted.py`.
+3. **Configure Bank Settings in Hindsight Control Plane (`Midgley`):**
+   * **Retain (Ingestion & Extraction):**
+     * **Chunk Size:** `1500` (Default)
+     * **Extraction Mode:** `Concise`
+     * **Mission:**
+       ```text
+       Extract quantitative price anomalies, physical supply catalysts, and forecasting post-mortem facts.
+
+       Always extract:
+       - Prediction outcomes: target metro/region, forecast vs actual price, error magnitude ($/gal), and horizon date.
+       - Catalyst details: refinery outages, pipeline shutdowns, hurricane landfalls, river navigation draft limits, regulatory RVP deadlines, and tariff or geopolitical actions.
+       - Empirical market reactions: magnitude of prompt RBOB/WTI calendar spread movements, wholesale-to-retail pass-through lag, and localized crack margins.
+
+       Ignore:
+       - Routine predictions with negligible error (<$0.01/gal) having no notable market catalysts.
+       - Unsubstantiated social media commentary lacking market impact.
+       ```
+   * **Observations (Consolidation):**
+     * **Enable Observations:** On
+     * **Mission:**
+       ```text
+       Synthesize durable market relationships, regional fuel pricing dynamics, and forecasting calibration lessons across wholesale RBOB, crude benchmarks, and retail metro hubs.
+
+       Always consolidate:
+       1. Energy market shock dynamics: price elasticity and decay patterns from geopolitical events, OPEC decisions, refinery outages, and pipeline/maritime chokepoint disruptions.
+       2. Regional metro basis spreads & refining constraints: localized dynamics across Tulsa (Cushing/PADD 2), Newark (PADD 1B/Delaware River), Cincinnati (Ohio River barges/dual-state tax), Carolinas (Colonial Pipeline), Oakland/SF (CARB Phase 3/PADD 5), and Port St. Lucie (waterborne freight).
+       3. Seasonal transitions and regulatory rules: EPA/CARB RVP summer blend transitions, winter volatility, and extreme weather impacts (hurricanes, polar vortexes, tornadic grid trips).
+       4. Model performance & calibration lessons: recurring prediction error patterns (under/over-shoots), structural parameter drift, and feature decay half-life insights from weekly model reviews.
+
+       Ignore:
+       - Transient minor daily price jitter within normal noise bounds (<$0.02/gal).
+       - Ephemeral raw diagnostic logs or routine status pings that contain no market insights.
+       ```
+   * **Reflect (Post-Mortem & Analogy Reasoning):**
+     * **Mission:**
+       ```text
+       You are an expert energy economist and quantitative commodity forecasting analyst for Project Midgley.
+
+       Core reasoning rules:
+       - Ground all post-mortems in observed historical price spreads, actual vs predicted errors, physical refining constraints, and verifiable market catalysts.
+       - When evaluating forecast errors or price spikes, identify root causes: supply disruptions, pipeline bottlenecks, seasonal RVP transitions, crude pass-through lags, or unexpected demand shifts.
+       - Synthesize actionable model recalibration recommendations (e.g., adjusting shock decay half-lives, seasonal spread buffers, or regional basis offsets).
+       - When drawing historical analogies, match on physical mechanisms (e.g., refinery flaring, pipeline outages, river navigation drafts) rather than superficial headline similarities.
+       ```
+     * **Sliders:**
+       * **Skepticism:** `4 / 5` (Skeptical — prevents unverified macro narratives from distorting physical forecasts)
+       * **Literalism:** `4 / 5` (Literal — enforces exact dollar errors, basis spreads, and regulatory dates)
+       * **Empathy:** `1 / 5` (Detached — commodity econometrics and quantitative error analysis)
+4. **Migration & Zero Cold Starts:** Hindsight-Hosted is always warm ($0$ cold-start latency) and operates on a purely pay-per-token/call pricing model (**~$3.50/month** for daily + weekly forecasting workloads, with initial \$5.00 free credit balance). Historical SQLite memories can be bulk-uploaded using `python scripts/migrate_memory_to_hosted.py`.
 
 > [!CAUTION]
 > **Cloud Run Scale-to-Zero Cost Overrun Warning (Issue #421):**
