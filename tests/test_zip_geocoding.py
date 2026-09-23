@@ -118,3 +118,32 @@ def test_api_server_zip_code_query_integration():
     data_tele = resp_tele.json()
     assert data_tele["status"] == "success"
     assert "total_unmapped_queries" in data_tele
+
+
+def test_leading_zero_zip_resolution():
+    """Verifies that integer and short string ZIP codes with leading zeros (e.g. NJ 07001, MA 02138) are zero-padded correctly (Issue #335)."""
+    # 1. New Jersey ZIP passed as 4-digit int/string (should resolve to NJ / PADD 1B Newark, not LA 700)
+    res_nj_int = resolve_zip_code(7001)
+    assert res_nj_int["zip_code"] == "07001"
+    assert res_nj_int["state"] == "NJ"
+    assert res_nj_int["padd_region"] == "PADD 1B"
+    assert res_nj_int["locale_code"] == "newark"
+
+    res_nj_str = resolve_zip_code("7001")
+    assert res_nj_str["zip_code"] == "07001"
+    assert res_nj_str["state"] == "NJ"
+    assert res_nj_str["padd_region"] == "PADD 1B"
+    assert res_nj_str["locale_code"] == "newark"
+
+    # 2. Massachusetts ZIP passed as 4-digit int/string
+    res_ma_int = resolve_zip_code(2138)
+    assert res_ma_int["zip_code"] == "02138"
+    assert res_ma_int["state"] == "MA"
+    assert res_ma_int["prefix_3"] == "021"
+
+    # 3. ZIP+4 with leading zero
+    res_nj_plus4 = resolve_zip_code("07001-1234")
+    assert res_nj_plus4["zip_code"] == "07001"
+    assert res_nj_plus4["state"] == "NJ"
+    assert res_nj_plus4["padd_region"] == "PADD 1B"
+

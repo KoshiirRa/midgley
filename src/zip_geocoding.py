@@ -120,12 +120,13 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     """
     Resolves a 5-digit US ZIP code to mapped metro area locale, PADD region, state,
     state fuel tax, and resolution tier. Logs unmapped out-of-metro lookups.
+    Zero-pads numeric inputs (e.g. 7001 -> 07001 NJ) to prevent leading-zero misrouting (Issue #335).
     """
-    zip_clean = str(zip_code).strip()[:5]
-    if len(zip_clean) < 3 or not zip_clean.isdigit():
+    raw_str = str(zip_code).strip().split("-")[0].strip()
+    if len(raw_str) < 3 or not raw_str.isdigit():
         return {
             "status": "fallback",
-            "zip_code": zip_clean,
+            "zip_code": raw_str[:5] if raw_str else "",
             "resolution_tier": "INVALID_INPUT_FALLBACK",
             "is_metro_cluster_hit": False,
             "locale_code": "national",
@@ -135,6 +136,7 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
             "state_tax_rate_per_gal": 0.184
         }
 
+    zip_clean = raw_str.zfill(5)[:5]
     prefix_3 = zip_clean[:3]
 
     # Check Tier 1: Primary Metro Cluster Hit
