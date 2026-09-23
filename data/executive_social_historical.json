@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-09-22 14:06:38",
-  "records_count": 39,
+  "last_refreshed_utc": "2026-09-23 13:06:11",
+  "records_count": 54,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -387,6 +387,156 @@
       "date": "2026-09-22 14:06:38",
       "platform": "Google News RSS",
       "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 12:48:27",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 12:48:27",
+      "platform": "Google News RSS",
+      "post_text": "New U.S. Sanctions Law Threatens India's Huge Russian Oil Trade - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 12:48:27",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Here\u2019s How to Attract Investment to Newfoundland Despite Trump\u2019s Tariffs - Fraser Institute - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 12:48:27",
+      "platform": "Google News RSS",
+      "post_text": "How Will This Week\u2019s China-U.S. Meeting Impact LNG Exports? - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 12:48:27",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "New U.S. Sanctions Law Threatens India's Huge Russian Oil Trade - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Here\u2019s How to Attract Investment to Newfoundland Despite Trump\u2019s Tariffs - Fraser Institute - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "How Will This Week\u2019s China-U.S. Meeting Impact LNG Exports? - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "New U.S. Sanctions Law Threatens India's Huge Russian Oil Trade - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Here\u2019s How to Attract Investment to Newfoundland Despite Trump\u2019s Tariffs - Fraser Institute - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "How Will This Week\u2019s China-U.S. Meeting Impact LNG Exports? - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-23 13:03:51",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,

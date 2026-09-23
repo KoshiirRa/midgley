@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-23 07:33:47",
-  "total_events": 845,
+  "last_updated": "2026-09-23 13:12:49",
+  "total_events": 851,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -8452,6 +8452,66 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-23 12:48:27",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 353.54,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 12:51:07",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-23 12:51:11",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 3.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "FERC pipeline tariff data processed"
+    },
+    {
+      "timestamp": "2026-09-23 13:03:51",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 369.49,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 13:12:39",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10062.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-23 13:12:49",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10056.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
     }
   ]
 }
