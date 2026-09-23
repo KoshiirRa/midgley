@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-22T21:16:02.769939",
+  "timestamp": "2026-09-23T00:09:13.900870",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-22T21:15:38Z"
+      "timestamp": "2026-09-23T00:08:39Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-27",
+    "target_date": "2026-09-28",
     "current_base_price": 4.286,
     "predicted_price_per_gal": 4.35,
     "expected_change_dollars": 0.064,
