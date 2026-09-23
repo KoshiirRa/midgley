@@ -45,24 +45,35 @@ def ensure_history_store():
         "prediction_upper_95ci",
         "within_95ci_hit",
         "data_source_provenance",
-        "forecast_horizon_days"
+        "forecast_horizon_days",
+        "is_retroactive_backtest"
     ]
     if not os.path.exists(HISTORY_CSV_PATH) or os.path.getsize(HISTORY_CSV_PATH) == 0:
         df = pd.DataFrame(columns=columns)
         df.to_csv(HISTORY_CSV_PATH, index=False)
         logger.info(f"Initialized new prediction history log at {HISTORY_CSV_PATH}")
     else:
-        # Migrate existing CSV if missing extended columns
+        # Migrate existing CSV if missing extended columns (Issue #389)
         try:
             df = pd.read_csv(HISTORY_CSV_PATH)
             updated = False
             for col in columns:
                 if col not in df.columns:
-                    df[col] = np.nan
+                    if col == "is_retroactive_backtest":
+                        log_ts = pd.to_datetime(df['log_timestamp'], errors='coerce')
+                        tgt_dt = pd.to_datetime(df['forecast_target_date'], errors='coerce')
+                        df['is_retroactive_backtest'] = (log_ts.dt.date >= tgt_dt.dt.date).fillna(True)
+                    else:
+                        df[col] = np.nan
                     updated = True
+            if "is_retroactive_backtest" in df.columns and df["is_retroactive_backtest"].isna().any():
+                log_ts = pd.to_datetime(df['log_timestamp'], errors='coerce')
+                tgt_dt = pd.to_datetime(df['forecast_target_date'], errors='coerce')
+                df['is_retroactive_backtest'] = df['is_retroactive_backtest'].fillna(log_ts.dt.date >= tgt_dt.dt.date).fillna(True)
+                updated = True
             if updated:
                 df.to_csv(HISTORY_CSV_PATH, index=False)
-                logger.info(f"Migrated existing prediction history log with extended MLOps schema columns.")
+                logger.info(f"Migrated existing prediction history log with extended MLOps schema columns and is_retroactive_backtest flags.")
         except Exception as e:
             logger.warning(f"Failed to inspect/migrate prediction history CSV: {e}")
 
@@ -321,14 +332,15 @@ def log_predictions(
     model_version: Optional[str] = None,
     run_type: str = "DAILY_BATCH",
     headline_trigger: str = "",
-    forecast_horizon_days: int = 5
+    forecast_horizon_days: int = 5,
+    is_retroactive_backtest: Optional[bool] = None
 ) -> int:
     """
     Logs a DataFrame of model predictions into prediction_history.csv.
     Expected columns: ['date', 'current_price', 'predicted_5d_price']
     Optional extended columns: ['forecast_horizon_days', 'llm_price_pressure', 'llm_supply_disruption', 'quant_baseline_5d_price',
                                'llm_augmentation_delta', 'prediction_lower_95ci', 'prediction_upper_95ci',
-                               'data_source_provenance']
+                               'data_source_provenance', 'is_retroactive_backtest']
     """
     if model_version is None:
         model_version = resolve_model_tag(region=region, model_type="Ridge")
@@ -370,6 +382,19 @@ def log_predictions(
         llm_press = float(row.get('llm_price_pressure')) if 'llm_price_pressure' in row and pd.notna(row['llm_price_pressure']) else (float(row.get('event_overall_price_pressure', row.get('overall_price_pressure', 0.0))) if pd.notna(row.get('event_overall_price_pressure', row.get('overall_price_pressure'))) else 0.0)
         llm_disr = float(row.get('llm_supply_disruption')) if 'llm_supply_disruption' in row and pd.notna(row['llm_supply_disruption']) else (float(row.get('event_supply_disruption', row.get('supply_disruption', 0.0))) if pd.notna(row.get('event_supply_disruption', row.get('supply_disruption'))) else 0.0)
 
+        # Determine retroactive backtest status (Issue #389)
+        if is_retroactive_backtest is not None:
+            is_retro = bool(is_retroactive_backtest)
+        elif 'is_retroactive_backtest' in row and pd.notna(row['is_retroactive_backtest']):
+            is_retro = bool(row['is_retroactive_backtest'])
+        else:
+            try:
+                log_dt = pd.to_datetime(timestamp_str).date()
+                tgt_dt = pd.to_datetime(target_date).date()
+                is_retro = bool(log_dt >= tgt_dt)
+            except Exception:
+                is_retro = False
+
         new_records.append({
             "log_timestamp": timestamp_str,
             "forecast_target_date": target_date,
@@ -392,7 +417,8 @@ def log_predictions(
             "prediction_lower_95ci": round(lower_ci, 4),
             "prediction_upper_95ci": round(upper_ci, 4),
             "within_95ci_hit": np.nan,
-            "data_source_provenance": str(row.get('data_source_provenance', 'yfinance'))
+            "data_source_provenance": str(row.get('data_source_provenance', 'yfinance')),
+            "is_retroactive_backtest": is_retro
         })
         
     new_df = pd.DataFrame(new_records)
@@ -696,7 +722,13 @@ def backfill_new_region_history(
 
     pred_log_df = pd.DataFrame(log_dict)
     
-    n_logged = log_predictions(pred_log_df, region=region, model_version=model_version, forecast_horizon_days=forecast_horizon_days)
+    n_logged = log_predictions(
+        pred_log_df, 
+        region=region, 
+        model_version=model_version, 
+        forecast_horizon_days=forecast_horizon_days,
+        is_retroactive_backtest=True
+    )
     backfill_actual_prices_and_evaluate()
     logger.info(f"Backfilled and evaluated {n_logged} historical prediction records for region '{region}' ({forecast_horizon_days}d horizon).")
     return n_logged
@@ -760,13 +792,21 @@ def filter_evaluated_history_by_window(
     df: pd.DataFrame, 
     window_days: int | str = 30, 
     region: str = None,
-    horizon_days: Optional[int | str] = None
+    horizon_days: Optional[int | str] = None,
+    include_retroactive: bool = False
 ) -> pd.DataFrame:
-    """Filters evaluated prediction history records by rolling window (in days), region, and forecast horizon."""
+    """Filters evaluated prediction history records by rolling window (in days), region, forecast horizon, and retroactive backtest status (Issue #389)."""
     if df.empty or 'actual_5d_price' not in df.columns:
         return pd.DataFrame()
 
     eval_df = df.dropna(subset=['actual_5d_price']).copy()
+    if eval_df.empty:
+        return eval_df
+
+    if not include_retroactive and 'is_retroactive_backtest' in eval_df.columns:
+        is_retro = eval_df['is_retroactive_backtest'].map(lambda x: str(x).strip().lower() in ['true', '1', '1.0', 't'])
+        eval_df = eval_df[~is_retro]
+
     if eval_df.empty:
         return eval_df
 
@@ -809,14 +849,21 @@ def filter_evaluated_history_by_window(
 def compute_rolling_scoreboard_metrics(
     window_days: int | str = 30, 
     region: str = None,
-    horizon_days: Optional[int | str] = None
+    horizon_days: Optional[int | str] = None,
+    include_retroactive: bool = False
 ) -> dict:
     """
     Computes rolling performance metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
     Naive Persistence Baseline MAE, and Model MAE Uplift %) over a given rolling day window and horizon.
     """
     df = backfill_actual_prices_and_evaluate()
-    filtered_df = filter_evaluated_history_by_window(df, window_days=window_days, region=region, horizon_days=horizon_days)
+    filtered_df = filter_evaluated_history_by_window(
+        df, 
+        window_days=window_days, 
+        region=region, 
+        horizon_days=horizon_days,
+        include_retroactive=include_retroactive
+    )
 
     h_filter = int(horizon_days) if (horizon_days is not None and str(horizon_days).lower() not in ["all", "none", ""]) else "All"
 
@@ -825,6 +872,7 @@ def compute_rolling_scoreboard_metrics(
             "window_days": window_days,
             "region_filter": region or "All",
             "horizon_filter": h_filter,
+            "include_retroactive": include_retroactive,
             "total_evaluations": 0,
             "mae_dollars": 0.0,
             "rmse_dollars": 0.0,
@@ -877,6 +925,7 @@ def compute_rolling_scoreboard_metrics(
         "window_days": window_days,
         "region_filter": region or "All",
         "horizon_filter": h_filter,
+        "include_retroactive": include_retroactive,
         "total_evaluations": n_eval,
         "mae_dollars": round(mae, 4),
         "rmse_dollars": round(rmse, 4),
@@ -892,7 +941,8 @@ def compute_rolling_scoreboard_metrics(
 
 def compute_regional_scoreboard_breakdown(
     window_days: int | str = 30,
-    horizon_days: Optional[int | str] = None
+    horizon_days: Optional[int | str] = None,
+    include_retroactive: bool = False
 ) -> list[dict]:
     """Computes rolling performance metrics for each active region under optional horizon filter."""
     df = backfill_actual_prices_and_evaluate()
@@ -903,11 +953,23 @@ def compute_regional_scoreboard_breakdown(
     if eval_df.empty:
         return []
 
+    if not include_retroactive and 'is_retroactive_backtest' in eval_df.columns:
+        is_retro = eval_df['is_retroactive_backtest'].map(lambda x: str(x).strip().lower() in ['true', '1', '1.0', 't'])
+        eval_df = eval_df[~is_retro]
+
+    if eval_df.empty:
+        return []
+
     regions = [str(r) for r in eval_df['region'].dropna().unique() if pd.notna(r) and str(r).strip()]
     breakdown = []
 
     for reg in sorted(regions):
-        metrics = compute_rolling_scoreboard_metrics(window_days=window_days, region=reg, horizon_days=horizon_days)
+        metrics = compute_rolling_scoreboard_metrics(
+            window_days=window_days, 
+            region=reg, 
+            horizon_days=horizon_days,
+            include_retroactive=include_retroactive
+        )
         if metrics["total_evaluations"] > 0:
             breakdown.append({
                 "region": reg,
@@ -929,7 +991,8 @@ def compute_regional_scoreboard_breakdown(
 def compute_horizon_scoreboard_breakdown(
     window_days: int | str = 30, 
     region: str = None,
-    horizons: Optional[list[int]] = None
+    horizons: Optional[list[int]] = None,
+    include_retroactive: bool = False
 ) -> list[dict]:
     """
     Computes rolling performance metrics broken down across discrete forecast horizons (1d through 5d).
@@ -947,7 +1010,12 @@ def compute_horizon_scoreboard_breakdown(
     }
 
     for h in horizons:
-        metrics = compute_rolling_scoreboard_metrics(window_days=window_days, region=region, horizon_days=h)
+        metrics = compute_rolling_scoreboard_metrics(
+            window_days=window_days, 
+            region=region, 
+            horizon_days=h,
+            include_retroactive=include_retroactive
+        )
         label = horizon_labels.get(h, f"{h}-Day Forward")
         breakdown.append({
             "horizon_days": h,
@@ -970,11 +1038,18 @@ def compute_horizon_scoreboard_breakdown(
 def get_recent_evaluated_records(
     region: str = None, 
     limit: int = 50,
-    horizon_days: Optional[int | str] = None
+    horizon_days: Optional[int | str] = None,
+    include_retroactive: bool = False
 ) -> list[dict]:
     """Returns chronologically sorted evaluated forecast records."""
     df = backfill_actual_prices_and_evaluate()
-    filtered_df = filter_evaluated_history_by_window(df, window_days="all", region=region, horizon_days=horizon_days)
+    filtered_df = filter_evaluated_history_by_window(
+        df, 
+        window_days="all", 
+        region=region, 
+        horizon_days=horizon_days,
+        include_retroactive=include_retroactive
+    )
 
     if filtered_df.empty:
         return []
@@ -997,12 +1072,16 @@ def get_recent_evaluated_records(
             "actual_direction": str(row.get("actual_direction", "")),
             "error_dollars": round(float(row.get("error_dollars", 0.0)), 4),
             "directional_hit": int(row.get("directional_hit", 0)),
+            "is_retroactive_backtest": bool(str(row.get("is_retroactive_backtest", "False")).lower() in ["true", "1", "1.0", "t"])
         })
 
     return records
 
 
-def compute_mlops_observability_summary(window_days: int | str = 30) -> dict:
+def compute_mlops_observability_summary(
+    window_days: int | str = 30,
+    include_retroactive: bool = False
+) -> dict:
     """
     Computes MLOps observability statistics over evaluated predictions:
     - LLM Intelligence Augmentation Win Rate (vs Pure Quant Baseline)
@@ -1011,13 +1090,19 @@ def compute_mlops_observability_summary(window_days: int | str = 30) -> dict:
     - Performance Breakdown by Data Source Provenance
     """
     df = backfill_actual_prices_and_evaluate()
-    filtered_df = filter_evaluated_history_by_window(df, window_days=window_days)
+    filtered_df = filter_evaluated_history_by_window(
+        df, 
+        window_days=window_days,
+        include_retroactive=include_retroactive
+    )
 
     if filtered_df.empty:
         return {
             "window_days": window_days,
+            "include_retroactive": include_retroactive,
             "total_evaluations": 0,
             "llm_augmentation_win_rate_pct": 0.0,
+            "model_vs_persistence_win_rate_pct": 0.0,
             "ci_95_coverage_pct": 0.0,
             "avg_llm_price_pressure": 0.0,
             "avg_llm_supply_disruption": 0.0,
@@ -1067,6 +1152,7 @@ def compute_mlops_observability_summary(window_days: int | str = 30) -> dict:
 
     return {
         "window_days": window_days,
+        "include_retroactive": include_retroactive,
         "total_evaluations": n_eval,
         "llm_augmentation_win_rate_pct": round(llm_win_rate, 2),
         "model_vs_persistence_win_rate_pct": round(model_vs_pers_win_rate, 2),

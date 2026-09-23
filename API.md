@@ -244,10 +244,11 @@ Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Di
 * `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`, `all`). Default: `all`.
 * `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
 * `horizon` (optional, string): Filter by forecast target horizon in days (`1`, `2`, `3`, `4`, `5`, `all`). Default: `all`.
+* `include_retroactive` (optional, boolean): Whether to include retroactive historical backtest records (`true`) or restrict strictly to genuine forward out-of-time predictions (`false`). Default: `false` (Issue #389).
 
 **Example Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=5"
+curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&window=30&horizon=5&include_retroactive=false"
 ```
 
 **Example Response:**
