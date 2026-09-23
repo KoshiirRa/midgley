@@ -37,45 +37,56 @@ class TestIPASISSecurity(unittest.TestCase):
         self.assertEqual(res["provider"], "IPASIS_Bypass")
         self.assertEqual(res["reason"], "Private/Local IP Bypass")
 
+    def test_check_ip_reputation_unconfigured_api_key(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with patch("src.ipasis_security.IPASIS_API_KEY", None):
+                res = self.verifier.check_ip_reputation("93.184.216.34")
+                self.assertFalse(res["is_blocked"])
+                self.assertEqual(res["provider"], "IPASIS_Unconfigured")
+                self.assertEqual(res["reason"], "Unconfigured IPASIS (Allowlisted)")
+
     @patch("urllib.request.urlopen")
     def test_check_ip_reputation_clean_public_ip(self, mock_urlopen):
-        mock_response = MagicMock()
-        mock_response.status = 200
-        mock_response.read.return_value = json.dumps({
-            "ip": "93.184.216.34",
-            "privacy": {"Tor": False, "Proxy": False, "VPN": False, "Abuse": False}
-        }).encode("utf-8")
-        mock_urlopen.return_value.__enter__.return_value = mock_response
+        with patch.dict(os.environ, {"IPASIS_API_KEY": "test_key_123"}):
+            mock_response = MagicMock()
+            mock_response.status = 200
+            mock_response.read.return_value = json.dumps({
+                "ip": "93.184.216.34",
+                "privacy": {"Tor": False, "Proxy": False, "VPN": False, "Abuse": False}
+            }).encode("utf-8")
+            mock_urlopen.return_value.__enter__.return_value = mock_response
 
-        res = self.verifier.check_ip_reputation("93.184.216.34")
-        self.assertFalse(res["is_blocked"])
-        self.assertEqual(res["provider"], "IPASIS")
-        self.assertEqual(res["reason"], "Clean Origin")
+            res = self.verifier.check_ip_reputation("93.184.216.34")
+            self.assertFalse(res["is_blocked"])
+            self.assertEqual(res["provider"], "IPASIS")
+            self.assertEqual(res["reason"], "Clean Origin")
 
     @patch("urllib.request.urlopen")
     def test_check_ip_reputation_blocked_tor_ip(self, mock_urlopen):
-        mock_response = MagicMock()
-        mock_response.status = 200
-        mock_response.read.return_value = json.dumps({
-            "ip": "87.118.116.103",
-            "privacy": {"Tor": True, "Proxy": False, "VPN": True, "Abuse": True}
-        }).encode("utf-8")
-        mock_urlopen.return_value.__enter__.return_value = mock_response
+        with patch.dict(os.environ, {"IPASIS_API_KEY": "test_key_123"}):
+            mock_response = MagicMock()
+            mock_response.status = 200
+            mock_response.read.return_value = json.dumps({
+                "ip": "87.118.116.103",
+                "privacy": {"Tor": True, "Proxy": False, "VPN": True, "Abuse": True}
+            }).encode("utf-8")
+            mock_urlopen.return_value.__enter__.return_value = mock_response
 
-        res = self.verifier.check_ip_reputation("87.118.116.103")
-        self.assertTrue(res["is_blocked"])
-        self.assertEqual(res["reason"], "High-Risk Tor/Abuse Origin")
+            res = self.verifier.check_ip_reputation("87.118.116.103")
+            self.assertTrue(res["is_blocked"])
+            self.assertEqual(res["reason"], "High-Risk Tor/Abuse Origin")
 
     @patch("urllib.request.urlopen")
     def test_check_ip_reputation_fail_open_fallback(self, mock_urlopen):
-        # Simulate network timeout / unreachable service
-        mock_urlopen.side_effect = Exception("Connection timed out")
+        with patch.dict(os.environ, {"IPASIS_API_KEY": "test_key_123"}):
+            # Simulate network timeout / unreachable service
+            mock_urlopen.side_effect = Exception("Connection timed out")
 
-        res = self.verifier.check_ip_reputation("93.184.216.34")
-        # Should fail open so legitimate traffic is never blocked by API outages
-        self.assertFalse(res["is_blocked"])
-        self.assertEqual(res["provider"], "IPASIS_FailOpen")
-        self.assertIn("Fail-Open Fallback", res["reason"])
+            res = self.verifier.check_ip_reputation("93.184.216.34")
+            # Should fail open so legitimate traffic is never blocked by API outages
+            self.assertFalse(res["is_blocked"])
+            self.assertEqual(res["provider"], "IPASIS_FailOpen")
+            self.assertIn("Fail-Open Fallback", res["reason"])
 
     def test_get_ipasis_telemetry_structure(self):
         tele = get_ipasis_telemetry()
@@ -85,6 +96,18 @@ class TestIPASISSecurity(unittest.TestCase):
         self.assertEqual(tele["daily_allowance"], 100)
         self.assertIn("status", tele)
         self.assertIn("private_bypasses", tele)
+        self.assertIn("unconfigured_checks", tele)
+
+    def test_get_ipasis_telemetry_status_unconfigured(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with patch("src.ipasis_security.IPASIS_API_KEY", None):
+                tele = get_ipasis_telemetry()
+                self.assertEqual(tele["status"], "UNCONFIGURED")
+
+    def test_get_ipasis_telemetry_status_configured(self):
+        with patch.dict(os.environ, {"IPASIS_API_KEY": "test_key_123"}):
+            tele = get_ipasis_telemetry()
+            self.assertIn(tele["status"], ["OK", "CAP_EXCEEDED"])
 
 
 if __name__ == "__main__":

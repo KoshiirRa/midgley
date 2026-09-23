@@ -88,7 +88,7 @@ MIDGLEY_ADMIN_SECRET="super-secret-admin-token-change-me"
 MIDGLEY_API_KEY="mg_master_secret_key_change_me"
 
 # IPASIS API Gateway Security Key & Controls (ipasis.com - 100 req/day free)
-IPASIS_API_KEY="ipasis_c92c28445c93_d65965edd3bfc851770b9573f777e152"
+IPASIS_API_KEY="ipasis_live_key_here"
 IPASIS_BLOCK_HIGH_RISK="1"       # Set to 1 to block Tor/Abuse origins with HTTP 403
 MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 
