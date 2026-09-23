@@ -12,11 +12,20 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 EXCLUDED_DIRS = {
     ".git",
     ".venv",
+    "venv",
+    "env",
+    ".env",
     "node_modules",
     ".pytest_cache",
     "__pycache__",
     "scratch",
     ".gemini",
+    "build",
+    "dist",
+    "site-packages",
+    ".tox",
+    ".mypy_cache",
+    ".ruff_cache",
 }
 
 EXCLUDED_FILES = {

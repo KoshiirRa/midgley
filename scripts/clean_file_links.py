@@ -57,7 +57,7 @@ def process_directory(base_dir: str, is_wiki: bool = False, apply_fix: bool = Fa
     total_instances = 0
     
     for root, dirs, files in os.walk(base_dir):
-        dirs[:] = [d for d in dirs if d not in {'.git', '.venv', 'node_modules', '.pytest_cache', '__pycache__', 'scratch'}]
+        dirs[:] = [d for d in dirs if d not in {'.git', '.venv', 'venv', 'env', '.env', 'node_modules', '.pytest_cache', '__pycache__', 'scratch', 'build', 'dist', 'site-packages', '.tox', '.mypy_cache', '.ruff_cache', '.gemini'}]
         for f in files:
             if f in EXCLUDED_FILES:
                 continue
