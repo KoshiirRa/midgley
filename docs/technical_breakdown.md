@@ -10,9 +10,9 @@
 
 - **Headline Trigger:** New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com
 - **Active Ingested News Links:**
+- [New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com](https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5) (Google News Energy Feed)
 - [Airlangga Says Indonesia Won’t Face US Tariffs Over Russian Oil - Jakarta Globe](https://news.google.com/rss/articles/CBMimwFBVV95cUxQYWVqbFdHaWNMdjBsRDBzVmlBSnRuTXRjQ2tsZEpHMV9oUXhucTlPdTVjQVItQ2NvR1JYeFZ3WkVIOUJJZmxpQWR3UFpYMHBSZ0VZNE5Pc0ZPQ0FWSnpPOVlPNGMyeVF4XzFSMm5JVmdEWHBIWmNYRXNjV2xkQlRzTm9tSnhYQXdFQXpSS1c2UTdEbndNdkMwMFJMdw?oc=5) (Google News Energy Feed)
 - [Jaishankar Raises India’s Concerns Over Russian Oil Tariff Law With Rubio - INDIA New England News](https://news.google.com/rss/articles/CBMiowFBVV95cUxPQ1lBdDVpWk80R01ULTk2NFY0WHFCOWt2cGpoNXZoUGY0Rmlzam9QVXd4UHI0ZzNwXzM2WWY0bUlCZzFSM1ZfcEZ5dUo2RVRqOEE0QURLNTZZdEpwdE1xaWFFcXVwMnlWTDRpWUlld3R4aDM0TDF6ZlpHb0FZa2YtZ2N0X2gxVmpfV0NBQkQ3V0Q2QWUxaURFNElHX0Z2dXJZNEJZ?oc=5) (Google News Energy Feed)
-- [Discount on Western Canada Select Widens with Joliet Refinery Outage - EnergyNow](https://news.google.com/rss/articles/CBMinwFBVV95cUxOTS00VjJiZWtoNHlMSEhTQU03RDZvdjdUd00xZFIwLUZteE1DQVhPbTJRdEpaSDFLZUo3TlpZaE9ZOWVoWG8tMkFQcnltOWFBWFE0SWVidkxvcGdYR01INXhHS2hnc3NGc3JyN1ZOVlZtZXg3aXJtR2x3bDMxRTBuYm1KLWJ5bDdOMnFROVplTFpjUXNhM3lodUpwRy1oVXM?oc=5) (Google News Energy Feed)
 
 
 ---
