@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-24T00:38:38.936631",
+  "timestamp": "2026-09-24T14:46:01.851268",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.309,
+    "current_price_per_gal": 4.399,
     "source": "AAA Web Scraper (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Web Scraper (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-24T05:38:17Z"
+      "timestamp": "2026-09-24T14:45:43Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,18 +28,18 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-29",
-    "current_base_price": 4.309,
-    "predicted_price_per_gal": 4.373,
+    "current_base_price": 4.399,
+    "predicted_price_per_gal": 4.463,
     "expected_change_dollars": 0.064,
-    "expected_change_percent": 1.49,
+    "expected_change_percent": 1.46,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 4.322,
-    "day_2_price": 4.36,
-    "day_3_price": 4.393,
-    "day_4_price": 4.375,
-    "day_5_price": 4.373,
+    "day_1_price": 4.412,
+    "day_2_price": 4.45,
+    "day_3_price": 4.483,
+    "day_4_price": 4.465,
+    "day_5_price": 4.463,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -91,13 +91,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast +$0.064/gal (+1.49%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.016/gal).",
+      "summary_text": "Port St Lucie FL forecast +$0.064/gal (+1.45%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.016/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.022,
-          "impact_pct": 0.51,
+          "impact_pct": 0.5,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -105,7 +105,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.016,
-          "impact_pct": 0.37,
+          "impact_pct": 0.36,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -121,7 +121,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.008,
-          "impact_pct": 0.19,
+          "impact_pct": 0.18,
           "share_pct": 12.0,
           "direction": "UP"
         },
@@ -129,7 +129,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.005,
-          "impact_pct": 0.12,
+          "impact_pct": 0.11,
           "share_pct": 8.0,
           "direction": "UP"
         },
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.022,
-      "impact_pct": 0.51,
+      "impact_pct": 0.5,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -157,7 +157,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.016,
-      "impact_pct": 0.37,
+      "impact_pct": 0.36,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -173,7 +173,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.008,
-      "impact_pct": 0.19,
+      "impact_pct": 0.18,
       "share_pct": 12.0,
       "direction": "UP"
     },
@@ -181,7 +181,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.005,
-      "impact_pct": 0.12,
+      "impact_pct": 0.11,
       "share_pct": 8.0,
       "direction": "UP"
     },
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast +$0.064/gal (+1.49%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.016/gal).",
+    "summary_text": "Port St Lucie FL forecast +$0.064/gal (+1.45%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.016/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
