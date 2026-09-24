@@ -1,27 +1,27 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-24 23:00:20`  
-**Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** 'India Can't Belong To Any Bloc': CEA On US Law Threatening 100% Tariffs On Russian Oil Buyers - NDTV Profit  
+**Log Timestamp:** `2026-09-24 23:15:32`  
+**Run Mode:** `RETROSPECTIVE_BACKTEST`  
+**Primary Event Trigger:** Daily Forecast Batch Execution (2026-09-24 23:15:32)  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** 'India Can't Belong To Any Bloc': CEA On US Law Threatening 100% Tariffs On Russian Oil Buyers - NDTV Profit
+- **Headline Trigger:** Daily Forecast Batch Execution (2026-09-24 23:15:32)
 - **Active Ingested News Links:**
-- ['India Can't Belong To Any Bloc': CEA On US Law Threatening 100% Tariffs On Russian Oil Buyers - NDTV Profit](https://news.google.com/rss/articles/CBMizgFBVV95cUxNa1RBQzZiUFhReVQ4UmVZVWdzM2gtTkZkQjRuRVhlX0JIamJZSHNGbENqdmFVU01mTFNxOE5BNU5hTFNndExLdFRzTWpEZlZ1SzFXWTJfc1g5TTR2THhQbnpVRG9VT2VHZEkteExBRUpxdmRGVGtFb3BIMHlFTmNJS0RIQmxjcjBDdmhMMklTS0pvN2E5OHJBZ3JxTVFMR2NjVDFKQnk3UzUzR1R6VHlJc1djbXB5SHhtZTVhS3doeGMtbXhzbjEyUU82TFZSQdIB1gFBVV95cUxPXy1oZ3RDNzdidU8ybjVtTzJqQmllQWtteVVKOHdrVXBYRmh2cHV0c0Y4T3BjM0g2NmZKQmNjTzRYUGJYcnNmSjk3TVQyZ250MzlaUXYxbGU0WlgtXy1laUF1OHdqWnJJUUFwaTE5czNVVURlSXRSV3hLZTNnbjZXdjF1WnlOWS1ENzhZUXlhaEJmU04yUlc4UDNkLUhCZndhSkt4b011TE5pODFVeklCTm1NbVp1WlEtVVpiS3ROU3JRcWswWFZBMUE4Yk5ySTlhZlFwV0tn?oc=5) (Google News Energy Feed)
-- [US, India Discuss Trump-Signed Russia Sanctions Bill and Tariffs - Global Banking & Finance Review](https://news.google.com/rss/articles/CBMiowFBVV95cUxOODdiT09sTnoyNFBlbm9sY3cyQjVFXzJJMjIyTVJRNnRRNFN2NEY3V3EzYWhXbXFoemZZNzB3WWhjTG5UNV9reTRWdXVqd0JsZ0VUTHNZTTVCcjFYbFB1b1ZfbVdNa0toVTBiaHdoQm01VFkwRU5UZU5VUTlJWGxkRnZSYTd4Zlo2c2otdHhLMkFUcXZlOGdkVHRQOW8tOTNqSHRZ?oc=5) (Google News Energy Feed)
-- [With the threat of 100% tariffs looming, India's trade in Russian oil has become a new bargaining chip for Trump. - 富途牛牛](https://news.google.com/rss/articles/CBMimwFBVV95cUxONGtjZXlEMHhXZG9UWndaaXRuT1FHZ2s0ZnRNNmliVVR1ZE9UVDZDQW1BZ3MxLWNkX0luQXg4dlprazRFa3laSFNNOUtUemVKUzlGM09pTXN2ZXJTNDQyYnVucDZ0aUF1RV9ZOXg4Qi1raUt3dExpRDVlUGd0RUZSNmEybUxaYmtVbGJYcVVjb2ZBclBWa0t1MUhlZw?oc=5) (Google News Energy Feed)
+- [NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh](https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html) (CME Group / NYMEX)
+- [NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion](https://www.weather.gov) (NOAA NWS Storm Alert)
+- [Executive Policy Feed & OPEC Weekend Open Price Gap Intelligence](https://www.bloomberg.com/energy) (Bloomberg Market Wire)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.80`
-- **Price Pressure Shock ($\Delta P$):** `+0.52`
-- **Geopolitical Risk Score ($G$):** `0.80`
+- **Supply Disruption Score ($S$):** `0.10`
+- **Price Pressure Shock ($\Delta P$):** `+0.02`
+- **Geopolitical Risk Score ($G$):** `0.15`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -39,13 +39,13 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.8000$
-- **Day 1 Decayed Shock**: $M_1 = 0.8000 \times 0.87055 = 0.6964$
-- **Day 2 Decayed Shock**: $M_2 = 0.8000 \times (0.87055)^2 = 0.6063$
-- **Day 3 Decayed Shock**: $M_3 = 0.8000 \times (0.87055)^3 = 0.5278$
-- **Day 4 Decayed Shock**: $M_4 = 0.8000 \times (0.87055)^4 = 0.4595$
-- **Day 5 (Target Horizon)**: $M_5 = 0.8000 \times 0.50000 = 0.4000$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.1000$
+- **Day 1 Decayed Shock**: $M_1 = 0.1000 \times 0.87055 = 0.0871$
+- **Day 2 Decayed Shock**: $M_2 = 0.1000 \times (0.87055)^2 = 0.0758$
+- **Day 3 Decayed Shock**: $M_3 = 0.1000 \times (0.87055)^3 = 0.0660$
+- **Day 4 Decayed Shock**: $M_4 = 0.1000 \times (0.87055)^4 = 0.0574$
+- **Day 5 (Target Horizon)**: $M_5 = 0.1000 \times 0.50000 = 0.0500$ (50.0% residual event memory)
 
 ---
 
@@ -56,7 +56,7 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 - **Newark, DE Retail**: $P = \$4.353 + (+\$0.033) = \$4.447\text{/gal}$ (Delta: +\$0.033/gal, +0.77\%)
 - **Cincinnati, OH/KY**: $P = \$4.441 + (+\$0.017) = \$4.517\text{/gal}$ (Delta: +\$0.017/gal, +0.39\%)
 - **Greenville, NC Retail**: $P = \$3.250 + (-\$0.249) = \$2.894\text{/gal}$ (Delta: -\$0.249/gal, -7.66\%)
-- **Charlotte, NC Retail**: $P = \$3.280 + (-\$0.234) = \$2.928\text{/gal}$ (Delta: -\$0.234/gal, -7.15\%)
+- **Charlotte, NC Retail**: $P = \$3.251 + (+\$0.031) = \$3.260\text{/gal}$ (Delta: +\$0.031/gal, +0.94\%)
 - **Port St. Lucie, FL Retail**: $P = \$4.286 + (+\$0.003) = \$4.350\text{/gal}$ (Delta: +\$0.003/gal, +0.07\%)
 - **Oakland, CA Retail**: $P = \$4.950 + (-\$0.438) = \$4.469\text{/gal}$ (Delta: -\$0.438/gal, -8.84\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 - **SF Bay Area Region**: $P = \$5.050 + (-\$0.449) = \$4.559\text{/gal}$ (Delta: -\$0.449/gal, -8.89\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
@@ -68,16 +68,16 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-24 23:00:20]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger ''India Can't Belong To Any Bloc': CEA On US Law Threatening 100% Tariffs On Russian Oil Buyers - NDTV Profit' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-24 23:15:32]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Daily Forecast Batch Execution (2026-09-24 23:15:32)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-24 23:00:20 (Mode: INTRADAY_REVISION), primary event trigger ''India Can't Belong To Any Bloc': CEA On US Law Threatening 100% Tariffs On Russian Oil Buyers - NDTV Profit' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.8000
-  - Day 1: M₁ = 0.6964
-  - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-24 23:15:32 (Mode: RETROSPECTIVE_BACKTEST), primary event trigger 'Daily Forecast Batch Execution (2026-09-24 23:15:32)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (NOAA NWS Storm Alert, Bloomberg Market Wire, CME Group / NYMEX). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.1000
+  - Day 1: M₁ = 0.0871
+  - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
@@ -86,7 +86,7 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Newark, DE Retail: $4.447/gal (+$0.033/gal, +0.77%)
   • Cincinnati, OH/KY: $4.517/gal (+$0.017/gal, +0.39%)
   • Greenville, NC Retail: $2.894/gal ($-0.249/gal, -7.66%)
-  • Charlotte, NC Retail: $2.928/gal ($-0.234/gal, -7.15%)
+  • Charlotte, NC Retail: $3.260/gal (+$0.031/gal, +0.94%)
   • Port St. Lucie, FL Retail: $4.350/gal (+$0.003/gal, +0.07%)
   • Oakland, CA Retail: $4.469/gal ($-0.438/gal, -8.84%)
   • SF Bay Area Region: $4.559/gal ($-0.449/gal, -8.89%)
@@ -96,10 +96,10 @@ Largest upward shift for this run: Tulsa, OK Retail at $4.091/gal (+0.081/gal). 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-24 23:00:20]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by ''India Can't Belong To Any Bloc': CEA On US Law Threatening 100% Tariffs On Russian Oil Buyers - NDTV Profit'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-24 23:15:32]:
+• Execution Context: Run type 'RETROSPECTIVE_BACKTEST' triggered by 'Daily Forecast Batch Execution (2026-09-24 23:15:32)'. Overall price pressure vector sits at ΔP=+0.02/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-24 23:00:20.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-24 23:15:32.*

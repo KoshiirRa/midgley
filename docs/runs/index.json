@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-24_23-15-35",
+    "timestamp": "2026-09-24 23:15:32",
+    "run_type": "RETROSPECTIVE_BACKTEST",
+    "trigger": "Daily Forecast Batch Execution (2026-09-24 23:15:32)"
+  },
+  {
+    "run_id": "2026-09-24_23-08-23",
+    "timestamp": "2026-09-24 23:00:20",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "'India Can't Belong To Any Bloc': CEA On US Law Threatening ..."
+  },
+  {
     "run_id": "2026-09-24_23-00-26",
     "timestamp": "2026-09-24 23:00:20",
     "run_type": "INTRADAY_REVISION",
@@ -586,17 +598,5 @@
     "timestamp": "2026-09-24 14:45:39",
     "run_type": "INTRADAY_REVISION",
     "trigger": "New US Sanctions Law Takes Effect, India's Russian Oil Purch..."
-  },
-  {
-    "run_id": "2026-09-24_05-38-25",
-    "timestamp": "2026-09-24 00:37:58",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-09-24 00:37:58)"
-  },
-  {
-    "run_id": "2026-09-24_05-35-34",
-    "timestamp": "2026-09-24 00:33:12",
-    "run_type": "RETROSPECTIVE_BACKTEST",
-    "trigger": "Daily Forecast Batch Execution (2026-09-24 00:33:12)"
   }
 ]

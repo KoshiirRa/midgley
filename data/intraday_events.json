@@ -4088,5 +4088,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-24T23:15:28.885518",
+    "headline": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+    "source": "Executive_Social_Media",
+    "url": "https://truthsocial.com/post/6188839",
+    "raw_url": "https://truthsocial.com/post/6188839",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/6188839",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
