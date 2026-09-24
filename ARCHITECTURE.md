@@ -127,10 +127,10 @@ To ensure stationarity and prevent non-stationary drift or lookahead data leakag
    \hat{P}_{t+h} = P_t \times (1 + \hat{r}_{t+h})
    \]
 3. **Chronological Purge and Embargo Partitions:**
-   When generating chronological train/test splits, an explicit boundary gap of $\text{forecast\_horizon} + \text{embargo\_steps}$ is enforced:
-   \[
-   \text{train\_slice\_end} = \max(1, \text{split\_idx} - (h + \text{embargo}))
-   \]
+   When generating chronological train/test splits, an explicit boundary gap equal to `forecast_horizon` + `embargo_steps` is enforced:
+   ```python
+   train_slice_end = max(1, split_idx - (forecast_horizon + embargo_steps))
+   ```
    This prevents overlapping multi-day target returns $r_{t+h}$ from leaking information from the test evaluation window into model training.
 4. **Purged Walk-Forward Cross-Validation (`RidgeCV`):**
    Model hyperparameter tuning ($\alpha$ penalty search) and comparative evaluation utilize `PurgedGroupTimeSeriesSplit(chronological_only=True)`. Each validation fold evaluates strictly on out-of-sample data following purged training splits.

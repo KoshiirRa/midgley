@@ -48,7 +48,7 @@ To prevent unauthorized payload injection, Midgley enforces a strict **Fail-Clos
 
 ### Calculating the Signature
 1. Compute the HMAC-SHA256 digest over the raw JSON payload bytes using your shared secret:
-   $$\text{Signature} = \text{HMAC-SHA256}(\text{MIDGLEY\_WEBHOOK\_SECRET}, \text{RawBodyBytes})$$
+   $$\text{Signature} = \text{HMAC-SHA256}(\text{SecretKey}, \text{RawBodyBytes})$$
 2. Send the resulting 64-character lowercase hex string in the header:
    ```http
    X-Midgley-Signature: sha256=a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0
