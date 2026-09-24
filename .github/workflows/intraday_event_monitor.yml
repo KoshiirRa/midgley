@@ -27,8 +27,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "intraday-event-monitor-workflow"
-  cancel-in-progress: true
+  group: "production-data-deployment"
+  cancel-in-progress: false
 
 jobs:
   intraday-monitor-and-deploy:
@@ -81,7 +81,6 @@ jobs:
         with:
           commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update [skip ci]"
           file_pattern: "README.md docs/ data/"
-          push_options: '--force'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

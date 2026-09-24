@@ -12,7 +12,8 @@ if ! flock -w 900 9; then
     exit 75  # EX_TEMPFAIL
 fi
 
-PROJECT_DIR="/home/marty/projects/midgley"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${MIDGLEY_PROJECT_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
 cd "$PROJECT_DIR"
 
 # Source environment variables if .env exists
@@ -25,8 +26,11 @@ fi
 echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Starting Local Dev Daily Gas Price Forecast..."
 
 # Activate python virtual environment
-if [ -f "/home/marty/.antigravity-env/bin/activate" ]; then
-    source /home/marty/.antigravity-env/bin/activate
+VENV_PATH="${MIDGLEY_VENV_DIR:-${HOME}/.antigravity-env}"
+if [ -f "${VENV_PATH}/bin/activate" ]; then
+    source "${VENV_PATH}/bin/activate"
+elif [ -f "${PROJECT_DIR}/.venv/bin/activate" ]; then
+    source "${PROJECT_DIR}/.venv/bin/activate"
 fi
 
 # Execute Full LLM Gas Price Forecasting Pipeline

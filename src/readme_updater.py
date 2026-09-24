@@ -6,6 +6,7 @@ and automatically updates the Live Forecast Summary Table near the top of README
 
 import os
 import re
+from typing import Optional, Any
 import pandas as pd
 from datetime import datetime
 import logging
@@ -82,10 +83,13 @@ def update_readme_forecasts(
             return None
         
         # Prioritize prospective live runs and 5-day horizon (Issue #428)
-        live_df = reg_df[
-            (~reg_df['run_type'].astype(str).str.contains("RETROSPECTIVE", case=False)) &
-            (~reg_df['run_type'].astype(str).str.contains("TEST", case=False))
-        ]
+        if 'run_type' in reg_df.columns:
+            live_df = reg_df[
+                (~reg_df['run_type'].astype(str).str.contains("RETROSPECTIVE", case=False)) &
+                (~reg_df['run_type'].astype(str).str.contains("TEST", case=False))
+            ]
+        else:
+            live_df = reg_df
         if not live_df.empty and 'forecast_horizon_days' in live_df.columns:
             h5_df = live_df[live_df['forecast_horizon_days'].fillna(5).astype(float) == 5.0]
             if not h5_df.empty:

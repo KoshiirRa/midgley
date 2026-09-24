@@ -15,7 +15,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "production-data-deployment"
   cancel-in-progress: false
 
 jobs:
@@ -27,13 +27,13 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.13
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v5
         with:
           python-version: '3.13'
           cache: 'pip'
@@ -48,7 +48,7 @@ jobs:
           ruff check src/ scripts/ tests/
 
       - name: Cache Lookup Datastore & Quota Ledger
-        uses: actions/cache@v6
+        uses: actions/cache@v4
         with:
           path: |
             data/lookup_cache.sqlite
@@ -89,18 +89,17 @@ jobs:
 
       - name: Upload Pipeline Execution Log
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: pipeline-run-log
           path: run_all_output.log
           if-no-files-found: ignore
 
       - name: Commit Updated README, Dashboard & Prediction Logs
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: Daily automated gas price prediction & public dashboard update [skip ci]"
           file_pattern: "README.md docs/ data/"
-          push_options: '--force'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v6

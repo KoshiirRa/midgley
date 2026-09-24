@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "weekly-review-${{ github.ref }}"
+  group: "production-data-deployment"
   cancel-in-progress: false
 
 jobs:
@@ -96,7 +96,6 @@ jobs:
         with:
           commit_message: "chrono: Weekly Saturday model performance review & rolling accuracy update"
           file_pattern: "README.md docs/ data/"
-          push_options: '--force'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

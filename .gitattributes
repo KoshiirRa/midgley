@@ -1,0 +1,15 @@
+# Enforce LF line endings for shell scripts and source code
+* text=auto
+
+# Shell scripts must always use LF line endings for POSIX / Linux compatibility
+*.sh text eol=lf
+
+# Python, config, and systemd files
+*.py text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.service text eol=lf
+*.timer text eol=lf

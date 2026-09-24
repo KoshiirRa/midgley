@@ -503,23 +503,32 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
             return 0
         
         # 1. Filter out Test_Region and test artifacts (Issue #427)
-        valid_mask = ~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)
+        valid_mask = pd.Series(True, index=df.index)
+        if 'region' in df.columns:
+            valid_mask = valid_mask & ~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)
         # Filter out NaN or completely invalid base prices
-        valid_mask = valid_mask & df['current_base_price'].notna() & (df['current_base_price'] > 0.10)
+        if 'current_base_price' in df.columns:
+            valid_mask = valid_mask & df['current_base_price'].notna() & (df['current_base_price'] > 0.10)
         cleansed_df = df[valid_mask].copy()
         purged = initial_len - len(cleansed_df)
 
         # 2. Reset unmatured future actual prices (Issue #427)
         today_str = datetime.now().strftime("%Y-%m-%d")
-        future_mask = cleansed_df['forecast_target_date'].astype(str) > today_str
-        future_actuals_count = (future_mask & cleansed_df['actual_5d_price'].notna()).sum()
-        if future_actuals_count > 0:
-            cleansed_df.loc[future_mask, 'actual_5d_price'] = np.nan
-            cleansed_df.loc[future_mask, 'actual_direction'] = ""
-            cleansed_df.loc[future_mask, 'error_dollars'] = np.nan
-            cleansed_df.loc[future_mask, 'directional_hit'] = np.nan
-            cleansed_df.loc[future_mask, 'within_95ci_hit'] = np.nan
-            logger.info(f"Cleanse: Cleared {future_actuals_count} premature future actuals from {path}.")
+        future_actuals_count = 0
+        if 'forecast_target_date' in cleansed_df.columns and 'actual_5d_price' in cleansed_df.columns:
+            future_mask = cleansed_df['forecast_target_date'].astype(str) > today_str
+            future_actuals_count = (future_mask & cleansed_df['actual_5d_price'].notna()).sum()
+            if future_actuals_count > 0:
+                cleansed_df.loc[future_mask, 'actual_5d_price'] = np.nan
+                if 'actual_direction' in cleansed_df.columns:
+                    cleansed_df.loc[future_mask, 'actual_direction'] = ""
+                if 'error_dollars' in cleansed_df.columns:
+                    cleansed_df.loc[future_mask, 'error_dollars'] = np.nan
+                if 'directional_hit' in cleansed_df.columns:
+                    cleansed_df.loc[future_mask, 'directional_hit'] = np.nan
+                if 'within_95ci_hit' in cleansed_df.columns:
+                    cleansed_df.loc[future_mask, 'within_95ci_hit'] = np.nan
+                logger.info(f"Cleanse: Cleared {future_actuals_count} premature future actuals from {path}.")
 
         if purged > 0 or future_actuals_count > 0:
             atomic_write_csv(path, cleansed_df, index=False)

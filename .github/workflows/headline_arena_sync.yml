@@ -43,14 +43,7 @@ jobs:
           python scripts/sync_headline_arena.py
 
       - name: Commit and Push Updated Pending Cache and Ledger
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/headline_arena_pending_forecasts.json data/headline_arena_submitted_ledger.json 2>/dev/null || true
-          if ! git diff --staged --quiet; then
-            git commit -m "chore(headline-arena): Update pending forecasts cache and submission ledger [skip ci]"
-            git pull --rebase origin dev || true
-            git push origin dev || git push origin main || true
-          else
-            echo "No changes to pending forecasts or submitted ledger."
-          fi
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(headline-arena): Update pending forecasts cache and submission ledger [skip ci]"
+          file_pattern: "data/headline_arena_pending_forecasts.json data/headline_arena_submitted_ledger.json"

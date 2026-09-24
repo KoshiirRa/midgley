@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "midgley"
-version = "0.6.8"
+version = "0.7.0"
 description = "LLM-Augmented Unleaded Gasoline Price Prediction Framework"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {text = "Apache-2.0"}
 authors = [
     {name = "KoshiirRa"}
@@ -26,7 +26,7 @@ dependencies = [
     "fastapi>=0.110.0",
     "uvicorn>=0.30.0",
     "httpx>=0.25.0",
-    "py-gasbuddy>=0.7.1",
+    "py-gasbuddy>=0.4.2",
     "networkx>=3.0",
     "scipy>=1.11.0",
     "python-dotenv>=1.0.0",
