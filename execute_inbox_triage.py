@@ -63,7 +63,7 @@ TRIAGE_DATA = {
     7: {"milestone": "v0.6", "labels": ["enhancement", "integration"], "status": "Ready", "workstream": "UI & UX", "priority": "Medium", "target": "Next", "effort": "Large", "risk": "Medium"},
     16: {"milestone": "Weekly Review v1.0 \"Audit\"", "labels": ["weekly-review", "documentation"], "status": "Done", "workstream": "Reporting & Tax", "priority": "Low", "target": "Later", "effort": "Small", "risk": "Low"},
     20: {"milestone": "v0.6", "labels": ["enhancement", "integration"], "status": "Ready", "workstream": "UI & UX", "priority": "Medium", "target": "Next", "effort": "Medium", "risk": "Low"},
-    21: {"milestone": "v0.6", "labels": ["enhancement", "integration"], "status": "Ready", "workstream": "UI & UX", "priority": "Medium", "target": "Next", "effort": "Large", "risk": "Low", "cross_link": true},
+    21: {"milestone": "v0.6", "labels": ["enhancement", "integration"], "status": "Ready", "workstream": "UI & UX", "priority": "Medium", "target": "Next", "effort": "Large", "risk": "Low", "cross_link": True},
     22: {"milestone": "v0.6", "labels": ["enhancement", "integration"], "status": "Ready", "workstream": "Data & Providers", "priority": "Medium", "target": "Next", "effort": "Medium", "risk": "Low"},
     25: {"milestone": "v0.3.1", "labels": ["bug", "modeling"], "status": "Done", "workstream": "Research & Quant", "priority": "High", "target": "Now", "effort": "Small", "risk": "Low"},
     26: {"milestone": "v0.3.1", "labels": ["bug", "documentation"], "status": "Done", "workstream": "UI & UX", "priority": "Medium", "target": "Now", "effort": "Small", "risk": "Low"},
