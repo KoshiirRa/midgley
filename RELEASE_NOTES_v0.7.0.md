@@ -690,7 +690,7 @@ Midgley **v0.7.0** is a major milestone release delivering significant reliabili
 - **Unified Master & Provisioned Key Auth:** Seamlessly resolved both `MIDGLEY_API_KEY` and dynamic SQLite keys from `data/security.db` across all headers and query parameters.
 - **Asynchronous PBKDF2 Offloading:** Wrapped compute-intensive PBKDF2 SHA-256 iterations in `verify_key_async()` and `check_rate_limit_async()` using `asyncio.to_thread()`, keeping FastAPI request throughput high during high-concurrency bursts.
 - **Tier-Gated Endpoint Security:** Implemented `require_privileged_tier()` dependency restricting LLM cohort simulations, graph modifications, and headline arena submissions to verified `privileged` tier keys.
-- **Webhook Timestamp Freshness:** Added `X-Signature-Timestamp` validation to `verify_webhook_signature()`. Inbound payloads are verified against $f"{ts}." + \text{raw\_body}$ with a $\pm 300$-second tolerance window, eliminating replay attack vulnerability while preserving backward compatibility for legacy non-timestamped payloads.
+- **Webhook Timestamp Freshness:** Added `X-Signature-Timestamp` validation to `verify_webhook_signature()`. Inbound payloads are verified against `f"{ts}." + raw_body` with a $\pm 300$-second tolerance window, eliminating replay attack vulnerability while preserving backward compatibility for legacy non-timestamped payloads.
 - **Diagnostic Route Security & Probe Cleanup:** Gated `/api/v1/system/cache-status?probe=true` behind `X-Admin-Secret` and enhanced `test_edge_connectivity()` in `src/lookup_cache.py` to automatically delete probe records from local SQLite, Turso libSQL, and Cloudflare D1.
 
 ---
