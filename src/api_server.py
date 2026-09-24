@@ -545,20 +545,39 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
         import pandas as pd
         if os.path.exists(HISTORY_CSV_PATH):
             df_hist = pd.read_csv(HISTORY_CSV_PATH)
-            if not df_hist.empty:
+            if not df_hist.empty and 'region' in df_hist.columns:
                 reg_df = df_hist[df_hist['region'] == region_code]
                 if not reg_df.empty:
-                    # Check for discrete multi-horizon records (Issue #314)
-                    for h_i in range(1, 6):
-                        if 'forecast_horizon_days' in reg_df.columns:
-                            sub_h = reg_df[reg_df['forecast_horizon_days'] == h_i]
-                            if not sub_h.empty:
-                                h_preds[h_i] = round(float(sub_h.iloc[-1]['predicted_5d_price']), 3)
+                    # Segregate prospective predictions from retroactive backtests (Issues #357, #389)
+                    is_retro = reg_df.get('is_retroactive_backtest', pd.Series(False, index=reg_df.index)).fillna(False).astype(bool)
+                    is_backtest_run = reg_df.get('run_type', pd.Series('', index=reg_df.index)).astype(str).str.upper() == 'RETROSPECTIVE_BACKTEST'
+                    prospective_df = reg_df[~is_retro & ~is_backtest_run]
 
-                    latest = reg_df.iloc[-1]
+                    target_pool = prospective_df if not prospective_df.empty else reg_df
+
+                    # Sort chronologically by log_timestamp if available
+                    if 'log_timestamp' in target_pool.columns:
+                        target_pool = target_pool.sort_values(by='log_timestamp')
+
+                    # Extract discrete multi-horizon records (Issue #314)
+                    for h_i in range(1, 6):
+                        if 'forecast_horizon_days' in target_pool.columns:
+                            sub_h = target_pool[target_pool['forecast_horizon_days'] == h_i]
+                            if not sub_h.empty:
+                                sub_latest = sub_h.iloc[-1]
+                                sub_base = float(sub_latest.get('current_base_price', base_price))
+                                sub_pred = float(sub_latest.get('predicted_5d_price', base_price))
+                                sub_delta = sub_pred - sub_base
+                                # Physical delta sanity guardrail: clamp step delta to physical plausibility
+                                sub_delta = max(-0.75, min(0.75, sub_delta))
+                                h_preds[h_i] = round(base_price + sub_delta, 3)
+
+                    latest = target_pool.iloc[-1]
                     hist_base = float(latest['current_base_price'])
                     hist_pred = float(latest['predicted_5d_price'])
-                    projected_delta = hist_pred - hist_base
+                    raw_delta = hist_pred - hist_base
+                    # Physical delta sanity guardrail: clamp 5-day delta between -$0.75 and +$0.75/gal
+                    projected_delta = max(-0.75, min(0.75, raw_delta))
     except Exception as e:
         logger.debug(f"Notice reading prediction history for {region_code}: {e}")
 

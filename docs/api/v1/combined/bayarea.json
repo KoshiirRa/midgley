@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T20:46:11.440730",
+  "timestamp": "2026-09-23T23:14:45.063315",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T20:45:35Z"
+      "timestamp": "2026-09-23T23:14:31Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -35,11 +35,11 @@
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 5.144,
-    "day_2_price": 5.147,
-    "day_3_price": 5.293,
-    "day_4_price": 5.389,
-    "day_5_price": 5.457,
+    "day_1_price": 6.438,
+    "day_2_price": 6.454,
+    "day_3_price": 6.6,
+    "day_4_price": 6.697,
+    "day_5_price": 6.764,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

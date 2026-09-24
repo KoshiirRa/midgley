@@ -176,12 +176,15 @@ def run_cincinnati_pipeline(
         h_preds_hybrid = h_res['predictions_hybrid']
         h_preds_quant = h_res['predictions_quant']
         
-        hist_oh_base = h_splits['test_df']['cincinnati_oh_retail_gasoline'] if 'cincinnati_oh_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + margin_oh
-        hist_oh_pred = h_preds_hybrid + margin_oh
-        hist_oh_quant = h_preds_quant + margin_oh
-        hist_ky_base = h_splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + margin_ky
-        hist_ky_pred = h_preds_hybrid + margin_ky
-        hist_ky_quant = h_preds_quant + margin_ky
+        hist_oh_base = h_splits['test_df']['cincinnati_oh_retail_gasoline'] if 'cincinnati_oh_retail_gasoline' in h_splits['test_df'].columns else (h_splits['test_df']['gasoline_rbob'] + margin_oh)
+        hist_ky_base = h_splits['test_df']['cincinnati_ky_retail_gasoline'] if 'cincinnati_ky_retail_gasoline' in h_splits['test_df'].columns else (h_splits['test_df']['gasoline_rbob'] + margin_ky)
+        rbob_hist = h_splits['test_df']['gasoline_rbob']
+        pred_ret_hybrid = (h_preds_hybrid - rbob_hist) / rbob_hist
+        pred_ret_quant = (h_preds_quant - rbob_hist) / rbob_hist
+        hist_oh_pred = hist_oh_base * (1.0 + pred_ret_hybrid)
+        hist_oh_quant = hist_oh_base * (1.0 + pred_ret_quant)
+        hist_ky_pred = hist_ky_base * (1.0 + pred_ret_hybrid)
+        hist_ky_quant = hist_ky_base * (1.0 + pred_ret_quant)
 
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -204,9 +207,9 @@ def run_cincinnati_pipeline(
 
         raw_pred_h = float(h_res['live_pred_price'])
         raw_quant_h = float(h_res.get('live_pred_quant_price', raw_pred_h))
-        last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
-        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
-        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h
+        last_hist_price_h = float(h_splits.get('live_current_price', h_splits['test_df']['gasoline_rbob'].iloc[-1]))
+        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
         cin_oh_h_forecast = live_oh_price * (1.0 + baseline_return_h)
         cin_oh_h_quant = live_oh_price * (1.0 + quant_return_h)
         cin_ky_h_forecast = live_ky_price * (1.0 + baseline_return_h)
@@ -217,18 +220,20 @@ def run_cincinnati_pipeline(
             'current_price': live_oh_price,
             'predicted_5d_price': cin_oh_h_forecast,
             'quant_baseline_5d_price': cin_oh_h_quant,
-            'forecast_horizon_days': h
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
         }])
         today_ky = pd.DataFrame([{
             'date': last_date,
             'current_price': live_ky_price,
             'predicted_5d_price': cin_ky_h_forecast,
             'quant_baseline_5d_price': cin_ky_h_quant,
-            'forecast_horizon_days': h
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
         }])
         
-        log_predictions(today_oh, region="Cincinnati_OH", model_version=oh_version, forecast_horizon_days=h)
-        log_predictions(today_ky, region="Cincinnati_KY", model_version=ky_version, forecast_horizon_days=h)
+        log_predictions(today_oh, region="Cincinnati_OH", model_version=oh_version, run_type="LIVE_PROSPECTIVE", forecast_horizon_days=h, is_retroactive_backtest=False)
+        log_predictions(today_ky, region="Cincinnati_KY", model_version=ky_version, run_type="LIVE_PROSPECTIVE", forecast_horizon_days=h, is_retroactive_backtest=False)
 
     backfill_actual_prices_and_evaluate(target_region="Cincinnati_OH")
     backfill_actual_prices_and_evaluate(target_region="Cincinnati_KY")

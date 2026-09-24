@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T20:46:11.293645",
+  "timestamp": "2026-09-23T23:14:44.868048",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T20:45:35Z"
+      "timestamp": "2026-09-23T23:13:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -35,11 +35,11 @@
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 5.042,
-    "day_2_price": 5.045,
-    "day_3_price": 5.188,
-    "day_4_price": 5.283,
-    "day_5_price": 5.349,
+    "day_1_price": 6.324,
+    "day_2_price": 6.339,
+    "day_3_price": 6.482,
+    "day_4_price": 6.577,
+    "day_5_price": 6.643,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

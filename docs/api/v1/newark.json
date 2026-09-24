@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T20:46:11.318228",
+  "timestamp": "2026-09-23T23:14:44.899657",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T20:45:32Z"
+      "timestamp": "2026-09-23T23:14:31Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -35,11 +35,11 @@
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 4.384,
-    "day_2_price": 4.401,
-    "day_3_price": 4.419,
-    "day_4_price": 4.436,
-    "day_5_price": 4.447,
+    "day_1_price": 4.362,
+    "day_2_price": 4.391,
+    "day_3_price": 4.409,
+    "day_4_price": 4.426,
+    "day_5_price": 4.437,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",

@@ -156,9 +156,12 @@ def run_tulsa_pipeline(live_pump_price: float = None, use_llm_api: bool = False,
         h_preds_hybrid = h_res['predictions_hybrid']
         h_preds_quant = h_res['predictions_quant']
         
-        hist_tulsa_base = h_splits['test_df']['tulsa_retail_gasoline'] if 'tulsa_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + dynamic_margin
-        hist_tulsa_pred = h_preds_hybrid + dynamic_margin
-        hist_tulsa_quant = h_preds_quant + dynamic_margin
+        hist_tulsa_base = h_splits['test_df']['tulsa_retail_gasoline'] if 'tulsa_retail_gasoline' in h_splits['test_df'].columns else (h_splits['test_df']['gasoline_rbob'] + dynamic_margin)
+        rbob_hist = h_splits['test_df']['gasoline_rbob']
+        pred_ret_hybrid = (h_preds_hybrid - rbob_hist) / rbob_hist
+        pred_ret_quant = (h_preds_quant - rbob_hist) / rbob_hist
+        hist_tulsa_pred = hist_tulsa_base * (1.0 + pred_ret_hybrid)
+        hist_tulsa_quant = hist_tulsa_base * (1.0 + pred_ret_quant)
 
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -173,9 +176,9 @@ def run_tulsa_pipeline(live_pump_price: float = None, use_llm_api: bool = False,
         # Log active out-of-time h-day horizon forecast
         raw_pred_h = float(h_res['live_pred_price'])
         raw_quant_h = float(h_res.get('live_pred_quant_price', raw_pred_h))
-        last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
-        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
-        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h
+        last_hist_price_h = float(h_splits.get('live_current_price', h_splits['test_df']['gasoline_rbob'].iloc[-1]))
+        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
         tulsa_h_forecast = live_pump_price * (1.0 + baseline_return_h)
         tulsa_h_quant = live_pump_price * (1.0 + quant_return_h)
 
@@ -184,9 +187,10 @@ def run_tulsa_pipeline(live_pump_price: float = None, use_llm_api: bool = False,
             'current_price': live_pump_price,
             'predicted_5d_price': tulsa_h_forecast,
             'quant_baseline_5d_price': tulsa_h_quant,
-            'forecast_horizon_days': h
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
         }])
-        log_predictions(today_df, region="Tulsa_OK", model_version=tulsa_version, forecast_horizon_days=h)
+        log_predictions(today_df, region="Tulsa_OK", model_version=tulsa_version, run_type="LIVE_PROSPECTIVE", forecast_horizon_days=h, is_retroactive_backtest=False)
 
     backfill_actual_prices_and_evaluate(target_region="Tulsa_OK")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions to store (data/prediction_history.csv)")

@@ -163,9 +163,12 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
         h_preds_hybrid = h_res['predictions_hybrid']
         h_preds_quant = h_res['predictions_quant']
         
-        hist_psl_base = h_splits['test_df']['port_st_lucie_retail_gasoline'] if 'port_st_lucie_retail_gasoline' in h_splits['test_df'].columns else h_splits['test_df']['gasoline_rbob'] + dynamic_margin
-        hist_psl_pred = h_preds_hybrid + dynamic_margin
-        hist_psl_quant = h_preds_quant + dynamic_margin
+        hist_psl_base = h_splits['test_df']['port_st_lucie_retail_gasoline'] if 'port_st_lucie_retail_gasoline' in h_splits['test_df'].columns else (h_splits['test_df']['gasoline_rbob'] + dynamic_margin)
+        rbob_hist = h_splits['test_df']['gasoline_rbob']
+        pred_ret_hybrid = (h_preds_hybrid - rbob_hist) / rbob_hist
+        pred_ret_quant = (h_preds_quant - rbob_hist) / rbob_hist
+        hist_psl_pred = hist_psl_base * (1.0 + pred_ret_hybrid)
+        hist_psl_quant = hist_psl_base * (1.0 + pred_ret_quant)
 
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -179,9 +182,9 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
 
         raw_pred_h = float(h_res['live_pred_price'])
         raw_quant_h = float(h_res.get('live_pred_quant_price', raw_pred_h))
-        last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
-        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
-        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h
+        last_hist_price_h = float(h_splits.get('live_current_price', h_splits['test_df']['gasoline_rbob'].iloc[-1]))
+        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
         psl_h_forecast = live_pump_price * (1.0 + baseline_return_h)
         psl_h_quant = live_pump_price * (1.0 + quant_return_h)
 
@@ -190,9 +193,10 @@ def run_port_st_lucie_pipeline(live_pump_price: float = None, use_llm_api: bool 
             'current_price': live_pump_price,
             'predicted_5d_price': psl_h_forecast,
             'quant_baseline_5d_price': psl_h_quant,
-            'forecast_horizon_days': h
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
         }])
-        log_predictions(today_df, region="Port_St_Lucie_FL", model_version=psl_version, forecast_horizon_days=h)
+        log_predictions(today_df, region="Port_St_Lucie_FL", model_version=psl_version, run_type="LIVE_PROSPECTIVE", forecast_horizon_days=h, is_retroactive_backtest=False)
 
     backfill_actual_prices_and_evaluate(target_region="Port_St_Lucie_FL")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions for Port_St_Lucie_FL.")

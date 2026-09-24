@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T20:46:11.242071",
+  "timestamp": "2026-09-23T23:14:44.800152",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T20:46:11Z"
+      "timestamp": "2026-09-23T23:14:42Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -35,11 +35,11 @@
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 3.517,
-    "day_2_price": 3.569,
-    "day_3_price": 3.649,
-    "day_4_price": 3.716,
-    "day_5_price": 3.25,
+    "day_1_price": 4.487,
+    "day_2_price": 4.555,
+    "day_3_price": 4.635,
+    "day_4_price": 4.703,
+    "day_5_price": 4.54,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",

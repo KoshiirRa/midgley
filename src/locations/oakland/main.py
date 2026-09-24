@@ -169,12 +169,15 @@ def run_oakland_pipeline(
         h_preds_quant = h_res['predictions_quant']
 
         # Calculate historical test split prices for Oakland ($2.05 margin) and Bay Area ($2.15 margin)
-        hist_oakland_base = h_splits['test_df']['gasoline_rbob'] + 2.05
-        hist_oakland_pred = h_preds_hybrid + 2.05
-        hist_oakland_quant = h_preds_quant + 2.05
-        hist_bayarea_base = h_splits['test_df']['gasoline_rbob'] + 2.15
-        hist_bayarea_pred = h_preds_hybrid + 2.15
-        hist_bayarea_quant = h_preds_quant + 2.15
+        hist_oakland_base = h_splits['test_df']['oakland_retail_gasoline'] if 'oakland_retail_gasoline' in h_splits['test_df'].columns else (h_splits['test_df']['gasoline_rbob'] + 2.05)
+        hist_bayarea_base = h_splits['test_df']['bayarea_avg_retail_gasoline'] if 'bayarea_avg_retail_gasoline' in h_splits['test_df'].columns else (h_splits['test_df']['gasoline_rbob'] + 2.15)
+        rbob_hist = h_splits['test_df']['gasoline_rbob']
+        pred_ret_hybrid = (h_preds_hybrid - rbob_hist) / rbob_hist
+        pred_ret_quant = (h_preds_quant - rbob_hist) / rbob_hist
+        hist_oakland_pred = hist_oakland_base * (1.0 + pred_ret_hybrid)
+        hist_oakland_quant = hist_oakland_base * (1.0 + pred_ret_quant)
+        hist_bayarea_pred = hist_bayarea_base * (1.0 + pred_ret_hybrid)
+        hist_bayarea_quant = hist_bayarea_base * (1.0 + pred_ret_quant)
 
         backfill_new_region_history(
             test_dates=h_test_dates,
@@ -198,9 +201,9 @@ def run_oakland_pipeline(
 
         raw_pred_h = float(h_res['live_pred_price'])
         raw_quant_h = float(h_res.get('live_pred_quant_price', raw_pred_h))
-        last_hist_price_h = float(h_splits['test_df']['gasoline_rbob'].iloc[-1])
-        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h
-        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h
+        last_hist_price_h = float(h_splits.get('live_current_price', h_splits['test_df']['gasoline_rbob'].iloc[-1]))
+        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
         oakland_h_forecast = live_oakland_price * (1.0 + baseline_return_h)
         oakland_h_quant = live_oakland_price * (1.0 + quant_return_h)
         bayarea_h_forecast = live_bayarea_price * (1.0 + baseline_return_h)
@@ -211,17 +214,20 @@ def run_oakland_pipeline(
             'current_price': live_oakland_price,
             'predicted_5d_price': oakland_h_forecast,
             'quant_baseline_5d_price': oakland_h_quant,
-            'forecast_horizon_days': h
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
         }])
         pred_bayarea_df = pd.DataFrame([{
             'date': last_date,
             'current_price': live_bayarea_price,
             'predicted_5d_price': bayarea_h_forecast,
             'quant_baseline_5d_price': bayarea_h_quant,
-            'forecast_horizon_days': h
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
         }])
-        log_predictions(pred_oakland_df, region="Oakland_CA", model_version=oakland_version, forecast_horizon_days=h)
-        log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=bayarea_version, forecast_horizon_days=h)
+
+        log_predictions(pred_oakland_df, region="Oakland_CA", model_version=oakland_version, run_type="LIVE_PROSPECTIVE", forecast_horizon_days=h, is_retroactive_backtest=False)
+        log_predictions(pred_bayarea_df, region="BayArea_CA", model_version=bayarea_version, run_type="LIVE_PROSPECTIVE", forecast_horizon_days=h, is_retroactive_backtest=False)
 
     backfill_actual_prices_and_evaluate(target_region="Oakland_CA")
     backfill_actual_prices_and_evaluate(target_region="BayArea_CA")

@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T20:46:11.441745",
+  "timestamp": "2026-09-23T23:14:45.064285",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.242071",
+      "timestamp": "2026-09-23T23:14:44.800152",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -22,7 +22,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:46:11Z"
+          "timestamp": "2026-09-23T23:14:42Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -39,11 +39,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 3.517,
-        "day_2_price": 3.569,
-        "day_3_price": 3.649,
-        "day_4_price": 3.716,
-        "day_5_price": 3.25,
+        "day_1_price": 4.487,
+        "day_2_price": 4.555,
+        "day_3_price": 4.635,
+        "day_4_price": 4.703,
+        "day_5_price": 4.54,
         "feature_attributions": {
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
@@ -254,7 +254,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.266663",
+      "timestamp": "2026-09-23T23:14:44.835174",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -272,7 +272,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:32Z"
+          "timestamp": "2026-09-23T23:13:33Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -283,22 +283,22 @@
         "forecast_horizon_days": 5,
         "target_date": "2026-09-28",
         "current_base_price": 3.994,
-        "predicted_price_per_gal": 6.392,
-        "expected_change_dollars": 2.398,
-        "expected_change_percent": 60.05,
+        "predicted_price_per_gal": 3.998,
+        "expected_change_dollars": 0.004,
+        "expected_change_percent": 0.1,
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 4.445,
-        "day_2_price": 5.181,
-        "day_3_price": 6.765,
-        "day_4_price": 6.244,
-        "day_5_price": 6.391,
+        "day_1_price": 4.011,
+        "day_2_price": 4.026,
+        "day_3_price": 4.038,
+        "day_4_price": 4.046,
+        "day_5_price": 3.998,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
             "category": "regional_logistics",
-            "delta_dollars": 0.719,
+            "delta_dollars": 0.001,
             "share_pct": 30.0,
             "direction": "UP",
             "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -306,7 +306,7 @@
           "refining_crack_margin": {
             "name": "Refining Yield & Crack Spread",
             "category": "refining_crack_margin",
-            "delta_dollars": 0.719,
+            "delta_dollars": 0.001,
             "share_pct": 30.0,
             "direction": "UP",
             "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -314,7 +314,7 @@
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
             "category": "futures_commodity",
-            "delta_dollars": 0.6,
+            "delta_dollars": 0.001,
             "share_pct": 25.0,
             "direction": "UP",
             "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -322,78 +322,78 @@
           "weather_environmental": {
             "name": "Weather & Environmental Signals",
             "category": "weather_environmental",
-            "delta_dollars": 0.24,
+            "delta_dollars": 0.0,
             "share_pct": 10.0,
-            "direction": "UP",
-            "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+            "direction": "FLAT",
+            "description": "Neutral weather impact"
           },
           "unstructured_sentiment": {
             "name": "Unstructured Intelligence & Sentiment",
             "category": "unstructured_sentiment",
-            "delta_dollars": 0.072,
+            "delta_dollars": 0.0,
             "share_pct": 3.0,
-            "direction": "UP",
-            "description": "Geopolitical supply risk news & executive social media hawkish posts"
+            "direction": "FLAT",
+            "description": "Neutral news sentiment"
           },
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
             "category": "tax_regulatory",
-            "delta_dollars": 0.048,
+            "delta_dollars": 0.001,
             "share_pct": 2.0,
             "direction": "UP",
             "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
           }
         },
         "driver_breakdown": {
-          "summary_text": "Tulsa OK forecast +$2.398/gal (+60.04%): Driven primarily by Regional Logistics & Hub Delivery (+$0.719/gal), Refining Yield & Crack Spread (+$0.719/gal).",
+          "summary_text": "Tulsa OK forecast +$0.004/gal (+0.10%): Driven primarily by Regional Logistics & Hub Delivery (+$0.001/gal), Refining Yield & Crack Spread (+$0.001/gal).",
           "key_drivers": [
             {
               "category": "Regional Logistics & Hub Delivery",
               "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-              "impact_dollars": 0.719,
-              "impact_pct": 18.0,
+              "impact_dollars": 0.001,
+              "impact_pct": 0.03,
               "share_pct": 30.0,
               "direction": "UP"
             },
             {
               "category": "Refining Yield & Crack Spread",
               "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-              "impact_dollars": 0.719,
-              "impact_pct": 18.0,
+              "impact_dollars": 0.001,
+              "impact_pct": 0.03,
               "share_pct": 30.0,
               "direction": "UP"
             },
             {
               "category": "Futures & Commodity Benchmark",
               "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-              "impact_dollars": 0.6,
-              "impact_pct": 15.02,
+              "impact_dollars": 0.001,
+              "impact_pct": 0.03,
               "share_pct": 25.0,
-              "direction": "UP"
-            },
-            {
-              "category": "Weather & Environmental Signals",
-              "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-              "impact_dollars": 0.24,
-              "impact_pct": 6.01,
-              "share_pct": 10.0,
-              "direction": "UP"
-            },
-            {
-              "category": "Unstructured Intelligence & Sentiment",
-              "description": "Geopolitical supply risk news & executive social media hawkish posts",
-              "impact_dollars": 0.072,
-              "impact_pct": 1.8,
-              "share_pct": 3.0,
               "direction": "UP"
             },
             {
               "category": "Tax & Regulatory Overhead",
               "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-              "impact_dollars": 0.048,
-              "impact_pct": 1.2,
+              "impact_dollars": 0.001,
+              "impact_pct": 0.03,
               "share_pct": 2.0,
               "direction": "UP"
+            },
+            {
+              "category": "Weather & Environmental Signals",
+              "description": "Neutral weather impact",
+              "impact_dollars": 0.0,
+              "impact_pct": 0.0,
+              "share_pct": 10.0,
+              "direction": "FLAT"
+            },
+            {
+              "category": "Unstructured Intelligence & Sentiment",
+              "description": "Neutral news sentiment",
+              "impact_dollars": 0.0,
+              "impact_pct": 0.0,
+              "share_pct": 3.0,
+              "direction": "FLAT"
             }
           ]
         }
@@ -402,59 +402,59 @@
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.719,
-          "impact_pct": 18.0,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.03,
           "share_pct": 30.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.719,
-          "impact_pct": 18.0,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.03,
           "share_pct": 30.0,
           "direction": "UP"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.6,
-          "impact_pct": 15.02,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.03,
           "share_pct": 25.0,
-          "direction": "UP"
-        },
-        {
-          "category": "Weather & Environmental Signals",
-          "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.24,
-          "impact_pct": 6.01,
-          "share_pct": 10.0,
-          "direction": "UP"
-        },
-        {
-          "category": "Unstructured Intelligence & Sentiment",
-          "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.072,
-          "impact_pct": 1.8,
-          "share_pct": 3.0,
           "direction": "UP"
         },
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.048,
-          "impact_pct": 1.2,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.03,
           "share_pct": 2.0,
           "direction": "UP"
+        },
+        {
+          "category": "Weather & Environmental Signals",
+          "description": "Neutral weather impact",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
+          "share_pct": 10.0,
+          "direction": "FLAT"
+        },
+        {
+          "category": "Unstructured Intelligence & Sentiment",
+          "description": "Neutral news sentiment",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
+          "share_pct": 3.0,
+          "direction": "FLAT"
         }
       ],
       "driver_breakdown": {
-        "summary_text": "Tulsa OK forecast +$2.398/gal (+60.04%): Driven primarily by Regional Logistics & Hub Delivery (+$0.719/gal), Refining Yield & Crack Spread (+$0.719/gal).",
+        "summary_text": "Tulsa OK forecast +$0.004/gal (+0.10%): Driven primarily by Regional Logistics & Hub Delivery (+$0.001/gal), Refining Yield & Crack Spread (+$0.001/gal).",
         "components": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
             "category": "regional_logistics",
-            "delta_dollars": 0.719,
+            "delta_dollars": 0.001,
             "share_pct": 30.0,
             "direction": "UP",
             "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -462,7 +462,7 @@
           "refining_crack_margin": {
             "name": "Refining Yield & Crack Spread",
             "category": "refining_crack_margin",
-            "delta_dollars": 0.719,
+            "delta_dollars": 0.001,
             "share_pct": 30.0,
             "direction": "UP",
             "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -470,7 +470,7 @@
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
             "category": "futures_commodity",
-            "delta_dollars": 0.6,
+            "delta_dollars": 0.001,
             "share_pct": 25.0,
             "direction": "UP",
             "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -478,23 +478,23 @@
           "weather_environmental": {
             "name": "Weather & Environmental Signals",
             "category": "weather_environmental",
-            "delta_dollars": 0.24,
+            "delta_dollars": 0.0,
             "share_pct": 10.0,
-            "direction": "UP",
-            "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+            "direction": "FLAT",
+            "description": "Neutral weather impact"
           },
           "unstructured_sentiment": {
             "name": "Unstructured Intelligence & Sentiment",
             "category": "unstructured_sentiment",
-            "delta_dollars": 0.072,
+            "delta_dollars": 0.0,
             "share_pct": 3.0,
-            "direction": "UP",
-            "description": "Geopolitical supply risk news & executive social media hawkish posts"
+            "direction": "FLAT",
+            "description": "Neutral news sentiment"
           },
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
             "category": "tax_regulatory",
-            "delta_dollars": 0.048,
+            "delta_dollars": 0.001,
             "share_pct": 2.0,
             "direction": "UP",
             "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -504,7 +504,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.293645",
+      "timestamp": "2026-09-23T23:14:44.868048",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -522,7 +522,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:35Z"
+          "timestamp": "2026-09-23T23:13:36Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -539,11 +539,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 5.042,
-        "day_2_price": 5.045,
-        "day_3_price": 5.188,
-        "day_4_price": 5.283,
-        "day_5_price": 5.349,
+        "day_1_price": 6.324,
+        "day_2_price": 6.339,
+        "day_3_price": 6.482,
+        "day_4_price": 6.577,
+        "day_5_price": 6.643,
         "feature_attributions": {
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
@@ -754,7 +754,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.318228",
+      "timestamp": "2026-09-23T23:14:44.899657",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -772,7 +772,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:32Z"
+          "timestamp": "2026-09-23T23:14:31Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -789,11 +789,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 4.384,
-        "day_2_price": 4.401,
-        "day_3_price": 4.419,
-        "day_4_price": 4.436,
-        "day_5_price": 4.447,
+        "day_1_price": 4.362,
+        "day_2_price": 4.391,
+        "day_3_price": 4.409,
+        "day_4_price": 4.426,
+        "day_5_price": 4.437,
         "feature_attributions": {
           "refining_crack_margin": {
             "name": "Refining Yield & Crack Spread",
@@ -1004,7 +1004,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.342425",
+      "timestamp": "2026-09-23T23:14:44.932266",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1022,7 +1022,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:33Z"
+          "timestamp": "2026-09-23T23:13:33Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1039,11 +1039,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 4.475,
-        "day_2_price": 4.5,
-        "day_3_price": 4.522,
-        "day_4_price": 4.511,
-        "day_5_price": 4.517,
+        "day_1_price": 4.434,
+        "day_2_price": 4.478,
+        "day_3_price": 4.5,
+        "day_4_price": 4.489,
+        "day_5_price": 4.495,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1254,7 +1254,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.366666",
+      "timestamp": "2026-09-23T23:14:44.964875",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1272,7 +1272,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:33Z"
+          "timestamp": "2026-09-23T23:13:35Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1289,11 +1289,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 3.281,
-        "day_2_price": 3.279,
-        "day_3_price": 3.354,
-        "day_4_price": 3.418,
-        "day_5_price": 3.479,
+        "day_1_price": 4.161,
+        "day_2_price": 4.144,
+        "day_3_price": 4.219,
+        "day_4_price": 4.283,
+        "day_5_price": 4.344,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1504,7 +1504,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.391079",
+      "timestamp": "2026-09-23T23:14:44.997627",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1522,7 +1522,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:34Z"
+          "timestamp": "2026-09-23T23:13:33Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1539,11 +1539,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 3.327,
-        "day_2_price": 3.328,
-        "day_3_price": 3.403,
-        "day_4_price": 3.47,
-        "day_5_price": 3.523,
+        "day_1_price": 4.219,
+        "day_2_price": 4.218,
+        "day_3_price": 4.293,
+        "day_4_price": 4.36,
+        "day_5_price": 4.413,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1754,7 +1754,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.415335",
+      "timestamp": "2026-09-23T23:14:45.030529",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1772,7 +1772,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:34Z"
+          "timestamp": "2026-09-23T23:13:35Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1789,11 +1789,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 4.315,
-        "day_2_price": 4.337,
-        "day_3_price": 4.37,
-        "day_4_price": 4.351,
-        "day_5_price": 4.35,
+        "day_1_price": 4.322,
+        "day_2_price": 4.36,
+        "day_3_price": 4.393,
+        "day_4_price": 4.375,
+        "day_5_price": 4.373,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -2004,7 +2004,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-09-23T20:46:11.440730",
+      "timestamp": "2026-09-23T23:14:45.063315",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2022,7 +2022,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-09-23T20:45:35Z"
+          "timestamp": "2026-09-23T23:14:31Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2039,11 +2039,11 @@
         "projected_direction": "UP",
         "directional_hit_rate_historical": 0.6079,
         "historical_mae_dollars": 0.1069,
-        "day_1_price": 5.144,
-        "day_2_price": 5.147,
-        "day_3_price": 5.293,
-        "day_4_price": 5.389,
-        "day_5_price": 5.457,
+        "day_1_price": 6.438,
+        "day_2_price": 6.454,
+        "day_3_price": 6.6,
+        "day_4_price": 6.697,
+        "day_5_price": 6.764,
         "feature_attributions": {
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",

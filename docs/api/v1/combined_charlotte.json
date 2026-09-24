@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-23T20:46:11.391079",
+  "timestamp": "2026-09-23T23:14:44.997627",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-23T20:45:34Z"
+      "timestamp": "2026-09-23T23:13:33Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -35,11 +35,11 @@
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
-    "day_1_price": 3.327,
-    "day_2_price": 3.328,
-    "day_3_price": 3.403,
-    "day_4_price": 3.47,
-    "day_5_price": 3.523,
+    "day_1_price": 4.219,
+    "day_2_price": 4.218,
+    "day_3_price": 4.293,
+    "day_4_price": 4.36,
+    "day_5_price": 4.413,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
