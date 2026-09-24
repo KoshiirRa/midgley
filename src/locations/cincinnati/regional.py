@@ -22,7 +22,8 @@ def fetch_cincinnati_market_data(
     start_date: str = "2022-01-01", 
     end_date: str = None,
     live_oh_price: float = None,
-    live_ky_price: float = None
+    live_ky_price: float = None,
+    live_current_price: float = None
 ) -> pd.DataFrame:
     """
     Fetches market data tailored to Cincinnati, OH & Northern KY (Tri-State Metro Area)
@@ -32,9 +33,9 @@ def fetch_cincinnati_market_data(
       - Cross-River Tax & Retail Differential: ~$0.125/gal.
     """
     if live_oh_price is None:
-        live_oh_price = fetch_live_metro_retail_price("Cincinnati_OH")["price"]
+        live_oh_price = live_current_price if live_current_price is not None else fetch_live_metro_retail_price("Cincinnati_OH")["price"]
     if live_ky_price is None:
-        live_ky_price = fetch_live_metro_retail_price("Cincinnati_KY")["price"]
+        live_ky_price = live_current_price if live_current_price is not None else fetch_live_metro_retail_price("Cincinnati_KY")["price"]
 
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")

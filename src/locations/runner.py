@@ -87,11 +87,32 @@ def run_regional_pipeline(
     logger.info(f"Executing Regional Pipeline for '{display_name}' ({logger_region_key}) | Anchor: ${live_pump_price:.2f}/gal")
 
     # Step 1: Ingest Market Data for Region
-    market_df = fetch_market_fn(start_date="2022-01-01", live_current_price=live_pump_price)
+    import inspect
+    sig = inspect.signature(fetch_market_fn)
+    kwargs = {"start_date": "2022-01-01"}
+    if "live_current_price" in sig.parameters:
+        kwargs["live_current_price"] = live_pump_price
+    elif "live_pump_price" in sig.parameters:
+        kwargs["live_pump_price"] = live_pump_price
+    elif "live_oakland_price" in sig.parameters:
+        kwargs["live_oakland_price"] = live_pump_price
+    elif "live_oh_price" in sig.parameters:
+        kwargs["live_oh_price"] = live_pump_price
+
+    market_df = fetch_market_fn(**kwargs)
 
     # Step 2: Extract Features from Localized News & Feeds
     events_raw = get_events_fn()
-    events_df = process_event_dataset(events_raw, use_llm_api=use_llm_api) if events_raw else None
+    has_events = False
+    if events_raw is not None:
+        if isinstance(events_raw, pd.DataFrame):
+            has_events = not events_raw.empty
+        elif hasattr(events_raw, '__len__'):
+            has_events = len(events_raw) > 0
+        else:
+            has_events = bool(events_raw)
+
+    events_df = process_event_dataset(events_raw, use_llm_api=use_llm_api) if has_events else None
 
     # Step 3 & 4: Multi-Horizon Feature Engineering & Model Training (1D-5D)
     multi_horizon_results = train_multi_horizon_models(

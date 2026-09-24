@@ -34,7 +34,8 @@ def fetch_oakland_market_data(
     start_date: str = "2022-01-01", 
     end_date: str = None,
     live_oakland_price: float = None,
-    live_bayarea_price: float = None
+    live_bayarea_price: float = None,
+    live_current_price: float = None
 ) -> pd.DataFrame:
     """
     Fetches market data tailored to Oakland, CA & 9-County SF Bay Area (PADD 5 West Coast)
@@ -47,9 +48,9 @@ def fetch_oakland_market_data(
       - Embedded Total Tax & Regulatory Burden: $0.953/gal.
     """
     if live_oakland_price is None:
-        live_oakland_price = fetch_live_metro_retail_price("Oakland_CA")["price"]
+        live_oakland_price = live_current_price if live_current_price is not None else fetch_live_metro_retail_price("Oakland_CA")["price"]
     if live_bayarea_price is None:
-        live_bayarea_price = fetch_live_metro_retail_price("BayArea_CA")["price"]
+        live_bayarea_price = live_current_price if live_current_price is not None else fetch_live_metro_retail_price("BayArea_CA")["price"]
 
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
