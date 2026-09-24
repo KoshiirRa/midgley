@@ -2,8 +2,8 @@ name: Headline Arena Async Challenge Sync
 
 on:
   schedule:
-    # Run every 30 minutes to match active challenge windows against 24h pending forecast cache
-    - cron: '*/30 * * * *'
+    # Run every 30 minutes (at XX:15 and XX:45) to avoid collision with top-of-hour workflows
+    - cron: '15,45 * * * *'
   workflow_dispatch:
 
 permissions:
