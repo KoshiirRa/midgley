@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-24_14-44-09",
+    "timestamp": "2026-09-24 14:44:06",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "'India Can't Belong To Any Bloc': CEA On US Law Threatening ..."
+  },
+  {
     "run_id": "2026-09-24_13-07-30",
     "timestamp": "2026-09-24 13:07:07",
     "run_type": "DAILY_BATCH",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-18_00-57-55",
-    "timestamp": "2026-09-17 21:05:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India says new US tariffs over Russian oil could hit ties, v..."
-  },
-  {
-    "run_id": "2026-09-18_00-57-51",
     "timestamp": "2026-09-17 21:05:40",
     "run_type": "INTRADAY_REVISION",
     "trigger": "India says new US tariffs over Russian oil could hit ties, v..."
