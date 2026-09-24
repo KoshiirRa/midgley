@@ -219,5 +219,18 @@
       "is_free_alternative": true,
       "cost_per_query": 0.0
     }
+  },
+  {
+    "as_of": "2026-09-24 12:49:59",
+    "data": {
+      "status": "FALLBACK",
+      "report_date": "2026-09-24",
+      "cot_rbob_net_speculative": 83000.0,
+      "cot_rbob_zscore_3y": 0.44,
+      "cot_commercial_hedger_ratio": 0.8571,
+      "cot_net_position_delta_1w": 3500.0,
+      "is_free_alternative": true,
+      "cost_per_query": 0.0
+    }
   }
 ]
