@@ -193,6 +193,102 @@ def compute_shap_feature_attributions(model, X_sample: pd.DataFrame, feature_nam
     return {name: round(float(val), 4) for name, val in sorted_pairs}
 
 
+def transform_target(
+    y_future: pd.Series,
+    y_current: pd.Series,
+    target_mode: str = "level"
+) -> np.ndarray:
+    """
+    Transforms forward target commodity price into difference, log-return, or persistence residual target (Issue #360).
+    Modes:
+    - 'level': y = P_{t+h}
+    - 'difference': y = P_{t+h} - P_t
+    - 'return': y = ln(P_{t+h} / P_t)
+    - 'persistence_residual': y = P_{t+h} - P_t
+    """
+    y_fut = np.array(y_future, dtype=float)
+    y_curr = np.array(y_current, dtype=float)
+    y_curr_safe = np.where(y_curr <= 0, 1.0, y_curr)
+
+    if target_mode == "difference":
+        return y_fut - y_curr
+    elif target_mode == "return":
+        return np.log(np.maximum(y_fut, 1e-4) / y_curr_safe)
+    elif target_mode == "persistence_residual":
+        return y_fut - y_curr
+    else:
+        return y_fut
+
+
+def reconstruct_price_forecasts(
+    y_pred: np.ndarray,
+    y_current: np.ndarray,
+    target_mode: str = "level"
+) -> np.ndarray:
+    """
+    Reconstructs level price forecast P_{t+h} from model predictions under difference,
+    return, or persistence-residual targets with stability bounds. (Issue #360)
+    """
+    y_p = np.array(y_pred, dtype=float)
+    y_c = np.array(y_current, dtype=float)
+
+    if target_mode == "difference" or target_mode == "persistence_residual":
+        reconstructed = y_c + y_p
+    elif target_mode == "return":
+        bounded_return = np.clip(y_p, -0.25, 0.25)
+        reconstructed = y_c * np.exp(bounded_return)
+    else:
+        reconstructed = y_p
+
+    return np.clip(reconstructed, 0.10, 20.0)
+
+
+def evaluate_target_formulations(
+    X_train: pd.DataFrame,
+    y_train_future: pd.Series,
+    y_train_current: pd.Series,
+    X_test: pd.DataFrame,
+    y_test_future: pd.Series,
+    y_test_current: pd.Series,
+    target_modes: Optional[List[str]] = None
+) -> Dict[str, Dict[str, Any]]:
+    """
+    Compares Level vs Difference vs Return vs Persistence-Residual target formulations (Issue #360).
+    Computes Out-of-Sample MAE, RMSE, Directional Accuracy, and Persistence Uplift.
+    """
+    modes = target_modes or ["level", "difference", "return", "persistence_residual"]
+    results = {}
+
+    y_test_arr = np.array(y_test_future, dtype=float)
+    y_test_curr_arr = np.array(y_test_current, dtype=float)
+
+    # Persistence baseline
+    err_pers = np.abs(y_test_curr_arr - y_test_arr)
+    mae_pers = float(np.mean(err_pers))
+
+    for mode in modes:
+        y_tr_trans = transform_target(y_train_future, y_train_current, target_mode=mode)
+        reg = Ridge(alpha=1.0)
+        reg.fit(X_train, y_tr_trans)
+
+        raw_preds = reg.predict(X_test)
+        reconstructed_preds = reconstruct_price_forecasts(raw_preds, y_test_curr_arr, target_mode=mode)
+
+        metrics = evaluate_predictions(y_test_future, reconstructed_preds, y_test_current)
+        mae = metrics["MAE"]
+        uplift = ((mae_pers - mae) / mae_pers) * 100.0 if mae_pers > 0 else 0.0
+
+        results[mode] = {
+            "target_mode": mode,
+            "metrics": metrics,
+            "persistence_uplift_pct": round(uplift, 2),
+            "reconstructed_predictions": reconstructed_preds
+        }
+
+    return results
+
+
+
 COMPONENT_NAMES = {
     "futures_commodity": "Futures & Commodity Benchmark",
     "refining_crack_margin": "Refining Yield & Crack Spread",

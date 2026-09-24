@@ -996,7 +996,21 @@ python3 -c "from src.portwatch_connector import IMFPortWatchConnector; c = IMFPo
 python3 -c "from src.carb_compliance import get_dynamic_carb_compliance_breakdown; print(get_dynamic_carb_compliance_breakdown())"
 ```
 
+### 11. Verify Gulf Coast Refinery Outage Telemetry & Attribution (Issue #406)
+Verify unified TCEQ, LDEQ, and NRC emission and outage data ingestion and run attribution reports:
+```bash
+python3 -c "from src.tceq_emissions import get_unified_gulf_coast_outages; df = get_unified_gulf_coast_outages(); print(f'Total outages logged: {len(df)}')"
+python3 -c "from src.weekly_issue_reporter import format_refinery_outage_attribution_markdown; print(format_refinery_outage_attribution_markdown(30))"
+```
+
+### 12. Execute 5-Tier Nested Model Evaluation Hierarchy (Issue #362)
+Execute formal 5-tier nested baseline hierarchy evaluations with Diebold-Mariano and block bootstrap across all hubs and horizons:
+```bash
+python3 scripts/evaluate_model_hierarchy.py --all-locales --horizons 1,2,3,4,5 --format all --output data/model_hierarchy_evaluation.json
+```
+
 ---
 
 *Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+
 

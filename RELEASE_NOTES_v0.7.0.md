@@ -565,23 +565,45 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 
 ---
 
-### 78. Automated Verification & Regression Test Suite
-- **`tests/test_tceq_emissions.py`:** Validates TCEQ emissions event ingestion, facility RN filtering, live EEERD scraping, disruption benchmark matrix generation, and vintage snapshot persistence (6/6 passing).
-- **`tests/test_alfred_vintages.py`:** Validates ALFRED connector initialization, series vintage retrieval, point-in-time snapshot reconstruction, and vintage dates enumeration (4/4 passing).
-- **`tests/test_feature_matrix_integrity.py`:** Validates non-zero feature variance across historical splits, EIA/USDA status transparency, and active quant feature inclusion (4/4 passing).
-- **`tests/test_jodi_oil_feed.py`:** Validates JODI oil data ingestion, country filtering, publication lag guards, supply tightness indices, and latest supply snapshots (5/5 passing).
-- **`tests/test_census_trade_feed.py`:** Validates Census trade connector initialization, port-level HS code filtering, publication lag enforcement, supplier HHI computation, and coastal metro exposure mapping (5/5 passing).
-- **`tests/test_baaqmd_flares.py`:** Validates BAAQMD flare report ingestion, facility filtering, root cause categorization, and disruption benchmark matrix generation (5/5 passing).
-- **`tests/test_asymmetric_ecm.py`:** Validates AsymmetricECM cointegration fitting, parameter bounds, rockets-and-feathers asymmetry diagnostics, and recursive 5-day forecasting (4/4 passing).
-- **`tests/test_phmsa_pipeline.py`:** Validates PHMSA connector initialization, incident filtering, corridor catalog queries, and disruption validation matrix generation (4/4 passing).
-- **`tests/test_evaluation_ground_truth_audit.py`:** Validates absence of synthetic margin offsets, distinct regional EIA ground truth matching, missing date NaN preservation, and price plausibility bounds (3/3 passing).
-- **`tests/test_portwatch_connector.py`:** Validates IMF PortWatch API retrieval, chokepoint transit parsing, 7d/28d anomaly formulas, and bitemporal vintage persistence (5/5 passing).
-- **`tests/test_carb_compliance.py`:** Validates CARB LCFS weekly credit price parsing, Cap-and-Trade auction settlements, CI-to-\$/gal conversion formulas, and Oakland regional dynamic tax integration (4/4 passing).
-- **`tests/test_prediction_intervals_and_conformal.py`:** Validates discrete horizon residual segmentation, monotonic horizon scaling, split conformal prediction interval bounds, and interval quality evaluation metrics (5/5 passing).
-- **`tests/test_docs_parity.py`:** Validates byte-for-byte documentation mirror parity across all 6 core documentation file pairs between repository root and `docs/` (7/7 passing).
-- **`tests/test_docs_links.py`:** Validates zero `file:///` local URLs across repository markdown documents, HTML templates, and code generators (2/2 passing).
-- **`tests/workers.test.ts` (Vitest):** Validates Cloudflare Worker TypeScript code, Ed25519 Discord signature verification, queue batch handling, D1 cache deduplication, and Bearer authentication (13/13 passing).
-- **Total Test Results:** 100% pass rate across all 889 automated Python test suites + 13 automated TypeScript Worker test suites with zero regressions.
+### 79. TCEQ, LDEQ & USCG NRC Disruption & Refinery Outage Telemetry (`src/tceq_emissions.py`, `src/ldeq_emissions.py`, `src/nrc_incidents.py` - Issue #406)
+- **Live Multi-Agency Ingestion & Zero Static Mocks:** Implemented live web scrapers and feed connectors querying public Texas Commission on Environmental Quality (TCEQ EEERD), Louisiana DEQ Electronic Document Management System (LDEQ EDMS), and USCG National Response Center (NRC) incident disclosures.
+- **Persistent Outage Datastore & Deduplication:** Consolidates verified operational upset records in `data/benchmarks/gulf_coast_refinery_outages.csv` and bitemporal vintage snapshots (`data/*_vintages.json`) with primary key deduplication.
+- **Weekly Review Historical Outage Attribution:** Integrates outage cross-referencing into `src/weekly_issue_reporter.py` to calculate Outage Regime vs Normal Operations MAE and pass episodic reflections to Hindsight memory.
+
+---
+
+### 80. Empirical Event Econometric Calibration & Decoupled PRAXIST Benchmark (`src/event_calibration.py` & `src/praxist_engine.py` - Issue #361)
+- **Abnormal Return Residual Matching:** Quantifies realized price innovations $\epsilon_{t, t+k} = R_{t+k} - \mathbb{E}[R_{t+k} | \mathcal{F}_t^{\text{quant}}]$ over verified historical energy event episodes (2022–2026) in `data/benchmarks/historical_event_episodes_2022_2026.csv`.
+- **Econometric Parameter Estimation:** Fits empirical category decay half-lives $t_{1/2}$ and sensitivity weights $\beta_{\text{event}}$ by minimizing out-of-sample forecast error, replacing heuristic values.
+- **PRAXIST Decoupling:** Decouples hypothesis evaluation from synthetic data defaults, enforcing validation on historical market episodes and isolating synthetic mocks to unit test fixtures.
+
+---
+
+### 81. Prediction Target Formulations: Differences, Returns & Persistence Residuals (`src/models.py` & `src/feature_engineering.py` - Issue #360)
+- **Near-Unit-Root De-biasing:** Resolves near-unit-root autocorrelation dominance ($\rho_1 > 0.98$) by formulating Difference ($\Delta P_{t+h} = P_{t+h} - P_t$), Log-Return ($\ln(P_{t+h}/P_t)$), and Persistence-Residual ($P_{t+h} - \hat{P}^{\text{naive}}$) prediction targets.
+- **Stable Inverse Price Reconstruction:** Implements `reconstruct_price_forecasts()` with bounded exponential transformations and positive price gating ($P > 0$).
+- **Exogenous Feature Amplification:** Proves that difference and return targets force linear models to allocate meaningful variance and weight to weather degree days, CFTC COT positioning, pipeline tariffs, and refinery flaring shocks.
+
+---
+
+### 82. Standardized 5-Tier Nested Model Evaluation Hierarchy & Statistical Promotion Protocol (`src/model_evaluation.py` & `scripts/evaluate_model_hierarchy.py` - Issue #362)
+- **5-Tier Nested Hierarchy:** Implemented standardized comparative hierarchy on identical rolling forecast origins:
+  - **Tier 0:** Naive Persistence Baseline ($P_{t+h} = P_t$)
+  - **Tier 1:** Price-Only Autoregressive Technical Baseline (Lags, RSI, MACD, Volatility)
+  - **Tier 2:** Price + Physical Fundamentals (EIA balances, weather degree days, COT, tariffs, outages)
+  - **Tier 3:** Price + Qualitative Events (Decayed NLP event vectors)
+  - **Tier 4:** Full Hybrid Estimator (Combined physical, technical, qualitative, ECM, and conformal inference)
+- **Statistical Significance Testing:** Implements Diebold-Mariano tests with Harvey-Leybourne-Newbold (HLN) multi-horizon small-sample correction ($p < 0.05$) and Stationary Block Bootstrap empirical confidence intervals.
+- **Automated Promotion Script:** `scripts/evaluate_model_hierarchy.py` evaluates all 10 regional calibration hubs across forecast horizons ($h \in [1..5]$) and generates structured markdown/JSON scorecards.
+
+---
+
+### 83. Automated Verification & Regression Test Suite
+- **`tests/test_outage_connectors.py`:** Validates TCEQ, LDEQ, and NRC connector ingestion, unified benchmark table generation, deduplication, and weekly review attribution formatting (5/5 passing).
+- **`tests/test_event_calibration.py`:** Validates historical event episode loading, empirical decay half-life optimization convergence, and decoupled PRAXIST historical evaluation (3/3 passing).
+- **`tests/test_target_formulations.py`:** Validates Level, Difference, Return, and Persistence-Residual target transforms, exact mathematical inversion, boundary clipping, and multi-target comparative evaluation (3/3 passing).
+- **`tests/test_model_hierarchy.py`:** Validates Diebold-Mariano testing with HLN correction, Stationary Block Bootstrap, pinball quantile loss, 5-tier model hierarchy evaluation, and automated promotion runner script (5/5 passing).
+- **Total Test Results:** 100% pass rate across all automated Python test suites + TypeScript Worker test suites with zero regressions.
 
 
 

@@ -360,3 +360,99 @@ class TCEQEmissionsConnector:
                 "disruption_severity": row.get("disruption_severity", "Medium")
             })
         return pd.DataFrame(records)
+
+
+def get_unified_gulf_coast_outages(
+    storage_path: Optional[str] = None,
+    force_refresh: bool = False
+) -> pd.DataFrame:
+    """
+    Consolidates unplanned outage, flaring, and equipment failure disclosures across
+    TCEQ (Texas), LDEQ (Louisiana), and USCG NRC (Hazardous Liquid Discharges) into a unified
+    benchmark matrix persisted at data/benchmarks/gulf_coast_refinery_outages.csv. (Issue #406)
+    """
+    unified_path = storage_path or os.path.join("data", "benchmarks", "gulf_coast_refinery_outages.csv")
+    os.makedirs(os.path.dirname(os.path.abspath(unified_path)), exist_ok=True)
+
+    tceq = TCEQEmissionsConnector()
+    df_tceq = tceq.fetch_emissions_events(only_unplanned=True, force_refresh=force_refresh)
+
+    try:
+        from src.ldeq_emissions import LDEQEmissionsConnector
+        ldeq = LDEQEmissionsConnector()
+        df_ldeq = ldeq.fetch_emissions_events(only_unplanned=True, force_refresh=force_refresh)
+    except Exception:
+        df_ldeq = pd.DataFrame()
+
+    try:
+        from src.nrc_incidents import NRCIncidentConnector
+        nrc = NRCIncidentConnector()
+        df_nrc = nrc.fetch_incident_events(only_unplanned=True, force_refresh=force_refresh)
+    except Exception:
+        df_nrc = pd.DataFrame()
+
+    unified_records = []
+
+    for _, row in df_tceq.iterrows():
+        dt_str = row["event_date"].strftime("%Y-%m-%d") if hasattr(row["event_date"], "strftime") else str(row["event_date"])
+        unified_records.append({
+            "incident_id": row.get("incident_id", ""),
+            "source_agency": "TCEQ",
+            "facility_id": row.get("facility_rn", ""),
+            "facility_name": row.get("facility_name", ""),
+            "state": "TX",
+            "event_date": dt_str,
+            "duration_hours": float(row.get("duration_hours", 0.0)),
+            "affected_unit": row.get("affected_unit", "Refinery Process Unit"),
+            "event_category": row.get("event_category", "unplanned_upset"),
+            "so2_emitted_lbs": float(row.get("so2_emitted_lbs", 0.0)),
+            "voc_emitted_lbs": float(row.get("voc_emitted_lbs", 0.0)),
+            "disruption_severity": row.get("disruption_severity", "Medium"),
+            "unplanned_shutdown": bool(row.get("unplanned_shutdown", True))
+        })
+
+    for _, row in df_ldeq.iterrows():
+        dt_str = row["event_date"].strftime("%Y-%m-%d") if hasattr(row["event_date"], "strftime") else str(row["event_date"])
+        unified_records.append({
+            "incident_id": row.get("incident_id", ""),
+            "source_agency": "LDEQ",
+            "facility_id": row.get("agency_interest_id", ""),
+            "facility_name": row.get("facility_name", ""),
+            "state": "LA",
+            "event_date": dt_str,
+            "duration_hours": float(row.get("duration_hours", 0.0)),
+            "affected_unit": row.get("affected_unit", "Refinery Process Unit"),
+            "event_category": row.get("event_category", "unplanned_upset"),
+            "so2_emitted_lbs": float(row.get("so2_emitted_lbs", 0.0)),
+            "voc_emitted_lbs": float(row.get("voc_emitted_lbs", 0.0)),
+            "disruption_severity": row.get("disruption_severity", "Medium"),
+            "unplanned_shutdown": bool(row.get("unplanned_shutdown", True))
+        })
+
+    for _, row in df_nrc.iterrows():
+        dt_str = row["incident_date"].strftime("%Y-%m-%d") if hasattr(row["incident_date"], "strftime") else str(row["incident_date"])
+        unified_records.append({
+            "incident_id": row.get("incident_id", ""),
+            "source_agency": "USCG_NRC",
+            "facility_id": row.get("corridor", "Gulf_Coast"),
+            "facility_name": row.get("facility_or_carrier", ""),
+            "state": "US_GULF",
+            "event_date": dt_str,
+            "duration_hours": float(row.get("duration_hours", 0.0)),
+            "affected_unit": row.get("incident_type", "Equipment Failure"),
+            "event_category": "unplanned_upset",
+            "so2_emitted_lbs": 0.0,
+            "voc_emitted_lbs": float(row.get("quantity_released_gallons", 0.0)),
+            "disruption_severity": row.get("disruption_severity", "Medium"),
+            "unplanned_shutdown": bool(row.get("unplanned_shutdown", True))
+        })
+
+    df_unified = pd.DataFrame(unified_records)
+    if not df_unified.empty:
+        df_unified = df_unified.drop_duplicates(subset=["incident_id"], keep="last")
+        df_unified["event_date"] = pd.to_datetime(df_unified["event_date"])
+        df_unified = df_unified.sort_values("event_date")
+        df_unified.to_csv(unified_path, index=False)
+
+    return df_unified
+
