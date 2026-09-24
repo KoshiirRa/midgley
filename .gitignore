@@ -48,4 +48,11 @@ node_modules/
 .wrangler/
 dist/
 
+# Temporary Atomic Write Files & Locks
+**/.tmp-*
+*.partial
+data/.tmp-*
+*.tmp
+
+
 

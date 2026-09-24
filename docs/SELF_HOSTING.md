@@ -515,6 +515,23 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
 
 To run Midgley 24/7 on a Linux machine with automated background execution, set up `systemd` user services and timers.
 
+### Process Concurrency & Advisory Lock Barrier (Issue #425)
+
+Scheduled execution units (`midgley-daily-forecast`, `midgley-intraday-polling`, and `midgley-weekly-review`) serialize access to the `data/` directory using an advisory lock barrier (`flock` on file descriptor 9):
+```bash
+LOCK="${XDG_RUNTIME_DIR:-/tmp}/midgley-data.lock"
+exec 9>"$LOCK"
+if ! flock -w 900 9; then
+    echo "midgley: timed out waiting for data lock" >&2
+    exit 75   # EX_TEMPFAIL
+fi
+```
+* **Timeout & Queueing:** Run scripts queue behind active jobs for up to 900 seconds (15 minutes). If a lock acquisition times out, the runner exits with code `75` (`EX_TEMPFAIL`), signalling transient failure rather than terminal corruption.
+* **Timer Jitter (`RandomizedDelaySec=120`):** All timers include a 120-second randomized jitter window to prevent simultaneous execution spikes across overlapping cron events or following system cold boots.
+* **Intraday Timer Offset (`*:7/15`):** The intraday poller triggers on the 7th minute past each quarter hour (`:07`, `:22`, `:37`, `:52`), eliminating collisions with daily (07:00 UTC) and weekly (13:00 UTC) pipelines.
+
+---
+
 ### 1. API Server Service (`~/.config/systemd/user/midgley-api.service`)
 ```ini
 [Unit]
@@ -561,24 +578,54 @@ After=network.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/marty/projects/midgley
-ExecStart=/bin/bash -c "/home/marty/projects/midgley/.venv/bin/python run_all.py --use-llm-api && /home/marty/projects/midgley/.venv/bin/python scripts/readme_updater.py"
+ExecStart=/home/marty/projects/midgley/scripts/run_local_daily_forecast.sh
 EnvironmentFile=/home/marty/projects/midgley/.env
 ```
 
 **`midgley-daily-forecast.timer`:**
 ```ini
 [Unit]
-Description=Run Midgley Daily Gas Price Forecast at 06:00 AM Central
+Description=Run Midgley Daily Gas Price Forecast at 02:00 AM Central / 07:00 UTC
 
 [Timer]
-OnCalendar=*-*-* 06:00:00 America/Chicago
+OnCalendar=*-*-* 07:00:00 UTC
+RandomizedDelaySec=120
 Persistent=true
 
 [Install]
 WantedBy=timers.target
 ```
 
-### 4. Weekly Model Review Timer (`~/.config/systemd/user/midgley-weekly-review.service` & `.timer`)
+### 4. Intraday Event Polling Timer (`~/.config/systemd/user/midgley-intraday-polling.service` & `.timer`)
+
+**`midgley-intraday-polling.service`:**
+```ini
+[Unit]
+Description=Midgley Intraday Event Polling & Anomaly Monitor
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/marty/projects/midgley
+ExecStart=/home/marty/projects/midgley/scripts/run_local_intraday_polling.sh
+EnvironmentFile=/home/marty/projects/midgley/.env
+```
+
+**`midgley-intraday-polling.timer`:**
+```ini
+[Unit]
+Description=Run Midgley Intraday Event Polling Every 15 Minutes (Offset :07/:22/:37/:52)
+
+[Timer]
+OnCalendar=*:7/15
+RandomizedDelaySec=120
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+### 5. Weekly Model Review Timer (`~/.config/systemd/user/midgley-weekly-review.service` & `.timer`)
 
 **`midgley-weekly-review.service`:**
 ```ini
@@ -589,17 +636,18 @@ After=network.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/marty/projects/midgley
-ExecStart=/home/marty/projects/midgley/.venv/bin/python -m src.weekly_issue_reporter
+ExecStart=/home/marty/projects/midgley/scripts/run_local_weekly_review.sh
 EnvironmentFile=/home/marty/projects/midgley/.env
 ```
 
 **`midgley-weekly-review.timer`:**
 ```ini
 [Unit]
-Description=Run Midgley Weekly Review Every Saturday at 08:00 AM Central
+Description=Run Midgley Weekly Review Every Saturday at 08:00 AM Central / 13:00 UTC
 
 [Timer]
-OnCalendar=Sat *-*-* 08:00:00 America/Chicago
+OnCalendar=Sat *-*-* 13:00:00 UTC
+RandomizedDelaySec=120
 Persistent=true
 
 [Install]
@@ -615,6 +663,7 @@ systemctl --user daemon-reload
 systemctl --user enable --now midgley-api.service
 systemctl --user enable --now midgley-dev.service
 systemctl --user enable --now midgley-daily-forecast.timer
+systemctl --user enable --now midgley-intraday-polling.timer
 systemctl --user enable --now midgley-weekly-review.timer
 
 # Check active status
@@ -996,7 +1045,21 @@ python3 -c "from src.portwatch_connector import IMFPortWatchConnector; c = IMFPo
 python3 -c "from src.carb_compliance import get_dynamic_carb_compliance_breakdown; print(get_dynamic_carb_compliance_breakdown())"
 ```
 
+### 11. Verify Gulf Coast Refinery Outage Telemetry & Attribution (Issue #406)
+Verify unified TCEQ, LDEQ, and NRC emission and outage data ingestion and run attribution reports:
+```bash
+python3 -c "from src.tceq_emissions import get_unified_gulf_coast_outages; df = get_unified_gulf_coast_outages(); print(f'Total outages logged: {len(df)}')"
+python3 -c "from src.weekly_issue_reporter import format_refinery_outage_attribution_markdown; print(format_refinery_outage_attribution_markdown(30))"
+```
+
+### 12. Execute 5-Tier Nested Model Evaluation Hierarchy (Issue #362)
+Execute formal 5-tier nested baseline hierarchy evaluations with Diebold-Mariano and block bootstrap across all hubs and horizons:
+```bash
+python3 scripts/evaluate_model_hierarchy.py --all-locales --horizons 1,2,3,4,5 --format all --output data/model_hierarchy_evaluation.json
+```
+
 ---
 
 *Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+
 

@@ -1,16 +1,40 @@
 {
   "benchmark_key": "usgs_seismic",
-  "last_refreshed_utc": "2026-09-24 05:42:11",
+  "last_refreshed_utc": "2026-09-24 15:47:40",
   "records_count": 8,
   "data": {
     "status": "SUCCESS",
     "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-    "timestamp": "2026-09-24 00:42:11",
-    "filtered_corridor": "bay_area",
+    "timestamp": "2026-09-24 15:47:40",
+    "filtered_corridor": "all",
     "temporal_window_days": 30,
     "events": [],
     "corridors": {
       "bay_area": {
+        "corridor_risk_index": 0.0,
+        "max_magnitude": 0.0,
+        "active_events_count": 0,
+        "highest_impact_event": null
+      },
+      "cushing_ok": {
+        "corridor_risk_index": 0.0,
+        "max_magnitude": 0.0,
+        "active_events_count": 0,
+        "highest_impact_event": null
+      },
+      "socal": {
+        "corridor_risk_index": 0.0,
+        "max_magnitude": 0.0,
+        "active_events_count": 0,
+        "highest_impact_event": null
+      },
+      "mid_atlantic": {
+        "corridor_risk_index": 0.0,
+        "max_magnitude": 0.0,
+        "active_events_count": 0,
+        "highest_impact_event": null
+      },
+      "new_madrid": {
         "corridor_risk_index": 0.0,
         "max_magnitude": 0.0,
         "active_events_count": 0,

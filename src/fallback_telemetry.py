@@ -13,6 +13,7 @@ import time
 import logging
 from datetime import datetime, timezone
 from typing import Dict, Any
+from src.storage_io import atomic_write_json
 
 logger = logging.getLogger(__name__)
 
@@ -67,10 +68,7 @@ class FallbackTelemetryLogger:
         """Saves telemetry data to disk atomically."""
         try:
             data["last_updated"] = datetime.now(timezone.utc).isoformat()
-            temp_path = f"{self.filepath}.tmp"
-            with open(temp_path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-            os.replace(temp_path, self.filepath)
+            atomic_write_json(self.filepath, data, indent=2)
             return True
         except Exception as e:
             logger.error(f"Failed to save fallback telemetry to {self.filepath}: {e}")

@@ -1,0 +1,34 @@
+{
+  "calibrated_parameters": {
+    "geopolitical_risk": {
+      "half_life_days": 5.0,
+      "impact_weight_beta": 0.138,
+      "sample_size": 2,
+      "optimization_converged": true
+    },
+    "supply_disruption": {
+      "half_life_days": 5.0,
+      "impact_weight_beta": 0.0615,
+      "sample_size": 4,
+      "optimization_converged": true
+    },
+    "opec_action": {
+      "half_life_days": 5.0,
+      "impact_weight_beta": 0.1291,
+      "sample_size": 2,
+      "optimization_converged": true
+    },
+    "weather_extremes": {
+      "half_life_days": 5.0,
+      "impact_weight_beta": 0.12,
+      "sample_size": 1,
+      "optimization_converged": true
+    },
+    "demand_sentiment": {
+      "half_life_days": 3.8,
+      "impact_weight_beta": 0.045,
+      "sample_size": 1,
+      "optimization_converged": true
+    }
+  }
+}

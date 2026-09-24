@@ -10,6 +10,7 @@
 [![Public Dashboard](https://img.shields.io/badge/Public_Dashboard-koshiirra.github.io%2Fmidgley-blue.svg)](https://koshiirra.github.io/midgley/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.10 | 3.11 | 3.12 | 3.13](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-green.svg)](pyproject.toml)
+[![AI Use Disclosure](https://img.shields.io/badge/AI_Use-Disclosed-blueviolet.svg)](AI_DISCLOSURE.md)
 
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
@@ -214,6 +215,10 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 41. **IMF PortWatch Maritime Shipping Activity & Chokepoint Ingestion (`src/portwatch_connector.py`, Issue #384):** Ingests daily vessel counts, tanker transit volumes, and metric tonnage from the IMF PortWatch platform across global maritime energy bottlenecks (Strait of Hormuz, Suez Canal, Bab el-Mandeb, Panama Canal) and major U.S. petroleum ports (Houston Ship Channel, NY/NJ, LA/LB) with 7-day vs. 28-day rolling transit anomaly features.
 42. **CARB LCFS & Cap-and-Trade Regulatory Compliance Engine (`src/carb_compliance.py`, Issue #383):** Ingests weekly CARB Low Carbon Fuel Standard (LCFS) credit transfer prices (\$/MT) and quarterly Cap-and-Trade (WCI) allowance auction settlements to dynamically calculate per-gallon carbon compliance fees for California regional models based on statutory carbon intensity benchmarks.
 43. **Horizon-Calibrated Prediction Intervals & Conformal Inference (`src/models.py` & `src/prediction_logger.py`, Issue #358):** Replaces static heuristics with discrete horizon residual segmentation ($h \in [1..5]$) in `compute_regional_residual_std()`, computes split conformal prediction intervals guaranteeing finite-sample coverage $1 - \alpha$, and evaluates empirical coverage percentage, mean interval width, and pinball loss.
+44. **TCEQ, LDEQ & NRC Gulf Coast Refinery Outage & Incident Telemetry (`src/tceq_emissions.py`, `src/ldeq_emissions.py`, `src/nrc_incidents.py`, Issue #406):** Ingests live emission event notifications and flaring reports from Texas Commission on Environmental Quality (TCEQ EEERD / STEERS), Louisiana Department of Environmental Quality (LDEQ EDMS), and the USCG National Response Center (NRC) across major Gulf Coast refining complexes. Persists bitemporal release vintages and benchmark histories (`data/benchmarks/gulf_coast_refinery_outages.csv`) for weekly model reviews and outage regime attribution.
+45. **5-Tier Nested Model Evaluation Hierarchy & Statistical Validation (`src/model_evaluation.py` & `scripts/evaluate_model_hierarchy.py`, Issue #362):** Formalizes a 5-tier evaluation hierarchy (Tier 0: Naive Persistence $\to$ Tier 1: Price-Only $\to$ Tier 2: Price + Physical $\to$ Tier 3: Price + Qualitative Events $\to$ Tier 4: Full Hybrid Ensemble) with Diebold-Mariano tests (Harvey-Leybourne-Newbold horizon adjustment), stationary block bootstrap, and multi-horizon pinball quantile loss.
+46. **Empirical Event Parameter Calibration & Decoupled PRAXIST Engine (`src/event_calibration.py` & `src/praxist_engine.py`, Issue #361):** Matches real historical energy shocks against commodity abnormal returns (2022–2026) using L-BFGS-B optimization to calibrate empirical half-lives $t_{1/2}$ and sensitivity weights $\beta_{\text{event}}$, decoupling PRAXIST empirical research evaluations from synthetic data.
+47. **Alternative Forecasting Target Formulations & Residual Modeling (`src/models.py`, Issue #360):** Supports `level`, `difference`, `return`, and `persistence_residual` target modes with clipping bounds and automatic price reconstruction, comparing stationarity, variance properties, and out-of-sample forecasting accuracy.
 
 ---
 
@@ -275,3 +280,16 @@ Key guide coverage includes:
 | **Charlotte, NC Metro Retail** | EIA PADD 1C & Colonial | Ridge (α=10.0) + Pipeline Cycle Basis | **$0.1272** | **$0.1735** | **4.48%** | **59.85%** | **93.6%** |
 | **Oakland, CA Metro Retail** | EIA PADD 5 & CARB CaRFG | Ridge (α=10.0) + Richmond Refinery | **$0.1620** | **$0.2190** | **4.25%** | **61.40%** | **90.5%** |
 | **Port St. Lucie, FL Metro** | EIA PADD 1C & Freight | Ridge (α=10.0) + Waterborne Freight | **$0.1310** | **$0.1795** | **4.60%** | **59.20%** | **92.0%** |
+
+---
+
+## 🤖 AI Use & Assistance Disclosure
+
+In commitment to transparency, engineering integrity, and clear attribution:
+* **Code Authoring & Development:** Assisted by **Google Gemini** (Gemini 3.7 Flash / Gemini 2.5 Flash / Gemini Pro via Antigravity Agentic Assistant).
+* **Code Review & Quality Assurance:** Multi-pass pull request reviews and architectural audits utilizing **Anthropic Claude** (Claude Opus 5.5 / Claude 3.7 Sonnet) and **OpenAI ChatGPT** (ChatGPT 6 Astra / GPT-4o / o-series).
+* **Runtime Pipeline & In-Engine Event Extraction:** Live unstructured event extraction, NOAA alert parsing, and weekly issue triage powered strictly by **Google Gemini** (`gemini-2.5-flash` / `gemini-1.5-flash`) with deterministic rule lexicons for fail-safe offline execution.
+* **Quantitative Commodity Estimator:** Price forecasts are generated by regularized statistical models (**Standardized Ridge Regression** $\alpha=10.0$ and **XGBoost Regressors**) on numerical feature matrices, not generative text models.
+
+👉 **Read the complete policy: [`AI_DISCLOSURE.md`](AI_DISCLOSURE.md)**
+

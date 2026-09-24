@@ -578,6 +578,8 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
                     raw_delta = hist_pred - hist_base
                     # Physical delta sanity guardrail: clamp 5-day delta between -$0.75 and +$0.75/gal
                     projected_delta = max(-0.75, min(0.75, raw_delta))
+    except (FileNotFoundError, pd.errors.EmptyDataError, pd.errors.ParserError, OSError) as e:
+        logger.debug(f"Transient or missing prediction history for {region_code}: {e}")
     except Exception as e:
         logger.debug(f"Notice reading prediction history for {region_code}: {e}")
 

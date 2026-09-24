@@ -17,6 +17,7 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime, timedelta
 import logging
+from src.storage_io import atomic_write_csv, atomic_write_json
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +53,7 @@ def ensure_history_store():
     ]
     if not os.path.exists(HISTORY_CSV_PATH) or os.path.getsize(HISTORY_CSV_PATH) == 0:
         df = pd.DataFrame(columns=columns)
-        df.to_csv(HISTORY_CSV_PATH, index=False)
+        atomic_write_csv(HISTORY_CSV_PATH, df, index=False)
         logger.info(f"Initialized new prediction history log at {HISTORY_CSV_PATH}")
     else:
         # Migrate existing CSV if missing extended columns (Issue #389)
@@ -74,7 +75,7 @@ def ensure_history_store():
                 df['is_retroactive_backtest'] = df['is_retroactive_backtest'].fillna(log_ts.dt.date >= tgt_dt.dt.date).fillna(True)
                 updated = True
             if updated:
-                df.to_csv(HISTORY_CSV_PATH, index=False)
+                atomic_write_csv(HISTORY_CSV_PATH, df, index=False)
                 logger.info(f"Migrated existing prediction history log with extended MLOps schema columns and is_retroactive_backtest flags.")
         except Exception as e:
             logger.warning(f"Failed to inspect/migrate prediction history CSV: {e}")
@@ -443,7 +444,7 @@ def log_predictions(
         combined.sort_values(by=['_orig_idx'], inplace=True, ignore_index=True)
         combined.drop(columns=['_priority', '_orig_idx'], inplace=True)
 
-    combined.to_csv(HISTORY_CSV_PATH, index=False)
+    atomic_write_csv(HISTORY_CSV_PATH, combined, index=False)
     try:
         sync_predictions_to_cloud(combined)
     except Exception as e:
@@ -506,7 +507,7 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
         cleansed_df = df[valid_mask].copy()
         purged = initial_len - len(cleansed_df)
         if purged > 0:
-            cleansed_df.to_csv(path, index=False)
+            atomic_write_csv(path, cleansed_df, index=False)
             logger.info(f"Cleanse: Purged {purged} invalid/test fixture rows from {path}.")
         return purged
     except Exception as e:
@@ -574,9 +575,7 @@ def backfill_actual_prices_and_evaluate(
                 actuals_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
                 _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
                 try:
-                    os.makedirs(os.path.dirname(os.path.abspath(RBOB_ACTUALS_CACHE_FILE)), exist_ok=True)
-                    with open(RBOB_ACTUALS_CACHE_FILE, "w", encoding="utf-8") as f:
-                        json.dump(actuals_map, f, indent=2)
+                    atomic_write_json(RBOB_ACTUALS_CACHE_FILE, actuals_map, indent=2)
                 except Exception:
                     pass
             except Exception as e:
@@ -660,7 +659,7 @@ def backfill_actual_prices_and_evaluate(
             updated = True
             
     if updated:
-        history_df.to_csv(target_csv, index=False)
+        atomic_write_csv(target_csv, history_df, index=False)
         if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
             try:
                 sync_predictions_to_cloud(history_df)

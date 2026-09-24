@@ -17,6 +17,7 @@ DOC_PAIRS = [
     ("ARCHITECTURE.md", "docs/ARCHITECTURE.md"),
     ("DESIGN.md", "docs/DESIGN.md"),
     ("AGENTS.md", "docs/AGENTS.md"),
+    ("AI_DISCLOSURE.md", "docs/AI_DISCLOSURE.md"),
 ]
 
 
