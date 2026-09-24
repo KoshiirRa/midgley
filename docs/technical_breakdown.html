@@ -22,6 +22,9 @@
     <!-- Discord Theme Accent Color -->
     <meta name="theme-color" content="#0ea5e9">
 
+    <!-- Content Security Policy (Issue #438) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval';">
+
     <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/x-icon" href="https://koshiirra.github.io/midgley/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="https://koshiirra.github.io/midgley/assets/favicon.png">
@@ -90,7 +93,7 @@
             <!-- Run Selector Dropdown & Download Buttons -->
             <div class="flex items-center gap-2">
                 <select id="runSelect" onchange="switchRun(this.value)" class="bg-slate-800 text-slate-200 text-xs font-mono px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500">
-                    <option value="2026-09-24_15-47-07">2026-09-24 14:45:39 (INTRADAY_REVISION)</option>
+                    <option value="2026-09-24_21-30-47">2026-09-24 14:45:39 (INTRADAY_REVISION)</option>
                 </select>
                 <a id="jsonLink" href="runs/latest.json" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 transition text-xs font-mono flex items-center gap-1">
                     <i class="fa-solid fa-code"></i> JSON Payload
@@ -131,7 +134,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
                     <span class="text-slate-500 uppercase text-[10px] block">Active Ingested News Bulletins (3)</span>
                     <ul class="space-y-1.5">
-                        <li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5" target="_blank" class="hover:underline text-blue-300">New US Sanctions Law Takes Effect, India&#x27;s Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com</a> <span class="text-slate-500">(Google News Energy Feed)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQYWVqbFdHaWNMdjBsRDBzVmlBSnRuTXRjQ2tsZEpHMV9oUXhucTlPdTVjQVItQ2NvR1JYeFZ3WkVIOUJJZmxpQWR3UFpYMHBSZ0VZNE5Pc0ZPQ0FWSnpPOVlPNGMyeVF4XzFSMm5JVmdEWHBIWmNYRXNjV2xkQlRzTm9tSnhYQXdFQXpSS1c2UTdEbndNdkMwMFJMdw?oc=5" target="_blank" class="hover:underline text-blue-300">Airlangga Says Indonesia Won’t Face US Tariffs Over Russian Oil - Jakarta Globe</a> <span class="text-slate-500">(Google News Energy Feed)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxPQ1lBdDVpWk80R01ULTk2NFY0WHFCOWt2cGpoNXZoUGY0Rmlzam9QVXd4UHI0ZzNwXzM2WWY0bUlCZzFSM1ZfcEZ5dUo2RVRqOEE0QURLNTZZdEpwdE1xaWFFcXVwMnlWTDRpWUlld3R4aDM0TDF6ZlpHb0FZa2YtZ2N0X2gxVmpfV0NBQkQ3V0Q2QWUxaURFNElHX0Z2dXJZNEJZ?oc=5" target="_blank" class="hover:underline text-blue-300">Jaishankar Raises India’s Concerns Over Russian Oil Tariff Law With Rubio - INDIA New England News</a> <span class="text-slate-500">(Google News Energy Feed)</span></li>
+                        <li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxNN2NwTGktOXBDcnRlSUpzVDBPcUhuOS1pTnlHdTIxUFFscDU5SFJ3RUx2Tk5Yall0Y0NJb2VKbF9WcXBIbEZucjFWQWpHWGxZVXhaUE1FbnZQc2VTRUV5Sl9XZW1CbW45SHJueHBZRzVNQXliVk1NRFhCQVl3NG01MWhTaC1PX1BzNW5vbTJHa05ERmlqdEE?oc=5" target="_blank" class="hover:underline text-blue-300">Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest</a> <span class="text-slate-500">(Google News Energy Feed)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5" target="_blank" class="hover:underline text-blue-300">New US Sanctions Law Takes Effect, India&#x27;s Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com</a> <span class="text-slate-500">(Google News Energy Feed)</span></li><li class="text-xs text-slate-300 font-mono flex items-center gap-2"><i class="fa-solid fa-newspaper text-blue-400 text-[10px]"></i> <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQYWVqbFdHaWNMdjBsRDBzVmlBSnRuTXRjQ2tsZEpHMV9oUXhucTlPdTVjQVItQ2NvR1JYeFZ3WkVIOUJJZmxpQWR3UFpYMHBSZ0VZNE5Pc0ZPQ0FWSnpPOVlPNGMyeVF4XzFSMm5JVmdEWHBIWmNYRXNjV2xkQlRzTm9tSnhYQXdFQXpSS1c2UTdEbndNdkMwMFJMdw?oc=5" target="_blank" class="hover:underline text-blue-300">Airlangga Says Indonesia Won’t Face US Tariffs Over Russian Oil - Jakarta Globe</a> <span class="text-slate-500">(Google News Energy Feed)</span></li>
                     </ul>
                 </div>
             </div>
