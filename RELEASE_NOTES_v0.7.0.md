@@ -117,6 +117,7 @@ Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, a
 - **Decoupled Forecast Generation & Challenge Availability:** Implemented a 24-hour pending forecast cache (`data/headline_arena_pending_forecasts.json`) that persists daily multi-agent commodity forecasts (RBOB, WTI, EIA Retail) across execution windows.
 - **Challenge Idempotency Ledger:** Implemented `data/headline_arena_submitted_ledger.json` recording submitted challenge IDs and server responses to prevent duplicate submissions during periodic runs.
 - **Automated 30-Minute Sync Runner:** Added `scripts/sync_headline_arena.py` and GitHub Actions workflow `.github/workflows/headline_arena_sync.yml` running every 30 minutes to match open Headline Arena challenges with cached forecasts.
+- **Offset Cron Schedule (`15,45 * * * *`):** Scheduled `.github/workflows/headline_arena_sync.yml` to trigger at the XX:15 and XX:45 minute marks, preventing workflow and git push collisions with top-of-the-hour actions (e.g., `.github/workflows/intraday_event_monitor.yml`).
 
 ---
 
