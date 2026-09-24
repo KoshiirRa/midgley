@@ -649,5 +649,173 @@
     },
     "calculated_rvo_cost_per_gal": 0.091,
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:32:06",
+    "as_of": "2026-09-24 00:32:06",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:35:52",
+    "as_of": "2026-09-24 00:35:52",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:36:01",
+    "as_of": "2026-09-24 00:36:01",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:36:26",
+    "as_of": "2026-09-24 00:36:26",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:36:43",
+    "as_of": "2026-09-24 00:36:43",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:37:29",
+    "as_of": "2026-09-24 00:37:29",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:37:38",
+    "as_of": "2026-09-24 00:37:38",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-24 00:42:05",
+    "as_of": "2026-09-24 00:42:05",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "rin_prices": {
+      "d6_ethanol_per_rin": 0.451,
+      "d4_biodiesel_per_rin": 0.681,
+      "d3_cellulosic_per_rin": 1.231
+    },
+    "rin_weekly_volume": {
+      "d6_volume_million": 142.5,
+      "d4_volume_million": 38.2,
+      "d3_volume_million": 12.1
+    },
+    "calculated_rvo_cost_per_gal": 0.0789,
+    "status": "SUCCESS"
   }
 ]

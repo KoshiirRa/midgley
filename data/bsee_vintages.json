@@ -118,5 +118,53 @@
       "is_storm_evacuation_active": false,
       "status": "SUCCESS"
     }
+  },
+  {
+    "as_of": "2026-09-24 00:32:56",
+    "data": {
+      "source": "Bureau of Safety and Environmental Enforcement (BSEE Public Web)",
+      "timestamp": "2026-09-24 00:32:55",
+      "bsee_gulf_oil_shutin_pct": 0.0,
+      "bsee_gulf_gas_shutin_pct": 0.0,
+      "bsee_evacuated_platforms_count": 0,
+      "is_storm_evacuation_active": false,
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:35:52",
+    "data": {
+      "source": "Bureau of Safety and Environmental Enforcement (BSEE Public Web)",
+      "timestamp": "2026-09-24 00:35:52",
+      "bsee_gulf_oil_shutin_pct": 0.0,
+      "bsee_gulf_gas_shutin_pct": 0.0,
+      "bsee_evacuated_platforms_count": 0,
+      "is_storm_evacuation_active": false,
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:38:34",
+    "data": {
+      "source": "Bureau of Safety and Environmental Enforcement (BSEE Public Web)",
+      "timestamp": "2026-09-24 00:38:34",
+      "bsee_gulf_oil_shutin_pct": 0.0,
+      "bsee_gulf_gas_shutin_pct": 0.0,
+      "bsee_evacuated_platforms_count": 0,
+      "is_storm_evacuation_active": false,
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:42:06",
+    "data": {
+      "source": "Bureau of Safety and Environmental Enforcement (BSEE Public Web)",
+      "timestamp": "2026-09-24 00:42:06",
+      "bsee_gulf_oil_shutin_pct": 0.0,
+      "bsee_gulf_gas_shutin_pct": 0.0,
+      "bsee_evacuated_platforms_count": 0,
+      "is_storm_evacuation_active": false,
+      "status": "SUCCESS"
+    }
   }
 ]

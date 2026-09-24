@@ -560,10 +560,12 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         raw_live_pred_quant = float(pred_quant[-1]) if len(pred_quant) > 0 else 0.0
 
     if is_return_target:
-        live_pred_price = float(live_base * (1.0 + raw_live_pred))
-        live_pred_quant_price = float(live_base * (1.0 + raw_live_pred_quant))
-        live_pred_return = raw_live_pred
-        live_pred_quant_return = raw_live_pred_quant
+        bounded_live_pred = float(np.clip(raw_live_pred, -0.60, 0.60))
+        bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.60, 0.60))
+        live_pred_price = float(live_base * (1.0 + bounded_live_pred))
+        live_pred_quant_price = float(live_base * (1.0 + bounded_live_pred_quant))
+        live_pred_return = bounded_live_pred
+        live_pred_quant_return = bounded_live_pred_quant
     else:
         live_pred_price = raw_live_pred
         live_pred_quant_price = raw_live_pred_quant
@@ -672,11 +674,13 @@ def train_multi_horizon_models(
         raw_live_pred_quant = float(res['model_quant'].predict(last_row_quant)[0])
         
         if res.get('is_return_target', False) or splits.get('predict_returns', False):
-            res['live_pred_price'] = float(live_base * (1.0 + raw_live_pred))
-            res['live_pred_quant_price'] = float(live_base * (1.0 + raw_live_pred_quant))
+            bounded_live_pred = float(np.clip(raw_live_pred, -0.60, 0.60))
+            bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.60, 0.60))
+            res['live_pred_price'] = float(live_base * (1.0 + bounded_live_pred))
+            res['live_pred_quant_price'] = float(live_base * (1.0 + bounded_live_pred_quant))
             res['live_base_price'] = live_base
-            res['live_pred_return'] = raw_live_pred
-            res['live_pred_quant_return'] = raw_live_pred_quant
+            res['live_pred_return'] = bounded_live_pred
+            res['live_pred_quant_return'] = bounded_live_pred_quant
         else:
             res['live_pred_price'] = raw_live_pred
             res['live_pred_quant_price'] = raw_live_pred_quant

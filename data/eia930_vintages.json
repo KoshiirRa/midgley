@@ -268,5 +268,86 @@
       }
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 00:36:15",
+    "as_of": "2026-09-24 00:36:15",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.33,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67100.0,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81000.0,
+        "stress_index": 0.24
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 93750.0,
+        "stress_index": 0.29
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31600.0,
+        "stress_index": 0.24
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 00:38:34",
+    "as_of": "2026-09-24 00:38:34",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.33,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67100.0,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81000.0,
+        "stress_index": 0.24
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 93750.0,
+        "stress_index": 0.29
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31600.0,
+        "stress_index": 0.24
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 00:42:06",
+    "as_of": "2026-09-24 00:42:06",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.33,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67100.0,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81000.0,
+        "stress_index": 0.24
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 93750.0,
+        "stress_index": 0.29
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31600.0,
+        "stress_index": 0.24
+      }
+    },
+    "status": "SUCCESS"
   }
 ]

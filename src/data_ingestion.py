@@ -488,6 +488,7 @@ class EIADataConnector:
         }
 
         # Attempt dynamic fetch from open FRED weekly series (Zero-Cost public CSVs)
+        dynamic_fetches_succeeded = 0
         try:
             series_to_fetch = {
                 "WPULEUS1": ("ref_util", "PADD1_EastCoast"),
@@ -509,12 +510,21 @@ class EIADataConnector:
                                     val = float(last_row[1])
                                     if target_dict == "ref_util":
                                         ref_util[target_key] = round(val, 1)
+                                        dynamic_fetches_succeeded += 1
                                     elif target_dict == "prod_supplied":
                                         prod_supplied[target_key] = round(val, 1)
+                                        dynamic_fetches_succeeded += 1
                 except Exception:
                     continue
         except Exception as e:
             logger.debug(f"Dynamic EIA/FRED series fetch notice: {e}")
+
+        if dynamic_fetches_succeeded >= 4:
+            status_tag = "OBSERVED"
+        elif dynamic_fetches_succeeded > 0:
+            status_tag = "ESTIMATED"
+        else:
+            status_tag = "FALLBACK"
 
         result = {
             "source": "U.S. Energy Information Administration API v2 / FRED (Zero-Cost)",
@@ -537,7 +547,7 @@ class EIADataConnector:
                 "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
                 "padd3_to_padd2_pipeline_thousand_bpd": 980.0
             },
-            "status": "SUCCESS"
+            "status": status_tag
         }
 
         try:
@@ -768,6 +778,7 @@ class USDABiofuelConnector:
         rbob_wholesale_ref = 2.420
 
         # Attempt dynamic fetch of agricultural commodity proxy / FRED series if available
+        ppi_fetched = False
         try:
             url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WPU06140341"  # PPI Refined Petroleum / Biofuel
             req = urllib.request.Request(url, headers={"User-Agent": "Midgley-USDAConnector/1.0"})
@@ -780,21 +791,31 @@ class USDABiofuelConnector:
                             # Scale index to $/gal rack baseline
                             idx_val = float(last_row[1])
                             e100_rack = round(max(1.20, min(3.00, (idx_val / 300.0) * 1.65)), 3)
+                            ppi_fetched = True
         except Exception:
             pass
 
         # Dynamic EPA EMTS RIN D6 market credit integration (Issue #365)
+        rin_fetched = False
         try:
             rin_conn = EPARINDataConnector()
             rin_data = rin_conn.fetch_rin_market_data()
             if rin_data and "rin_prices" in rin_data and "d6_ethanol_per_rin" in rin_data["rin_prices"]:
                 rin_d6 = float(rin_data["rin_prices"]["d6_ethanol_per_rin"])
+                rin_fetched = True
         except Exception:
             pass
 
         # Dynamic E10 blendstock offset calculation:
         # 10% ethanol blend substitution delta minus RIN value benefit
         offset = round(0.10 * (e100_rack - rbob_wholesale_ref) - (0.10 * rin_d6), 3)
+
+        if ppi_fetched and rin_fetched:
+            status_tag = "OBSERVED"
+        elif ppi_fetched or rin_fetched:
+            status_tag = "ESTIMATED"
+        else:
+            status_tag = "FALLBACK"
 
         result = {
             "source": "USDA Agricultural Marketing Service (Zero-Cost)",
@@ -807,7 +828,7 @@ class USDABiofuelConnector:
             "e100_ethanol_rack_price_per_gal": e100_rack,
             "rin_d6_credit_value_per_gal": rin_d6,
             "calculated_e10_blendstock_offset_per_gal": offset,
-            "status": "SUCCESS"
+            "status": status_tag
         }
 
         try:
