@@ -333,9 +333,9 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 4. Localized Metro Area Calibration Agents (`src/locations/<location>/regional.py`)
+### 4. Localized Metro Area Calibration Agents (`src/locations/<location>/regional.py` & `src/locations/runner.py`)
 
-* **Role:** Ingest the base commodity forecast from the Main Quantitative Model and calibrate to local retail pump prices, dynamic regional rack margins, refinery dynamics, delivery hub logistics, and localized infrastructure shocks. Organized as modular subpackages within `src/locations/`.
+* **Role:** Ingest the base commodity forecast from the Main Quantitative Model and calibrate to local retail pump prices, dynamic regional rack margins, refinery dynamics, delivery hub logistics, and localized infrastructure shocks. Organized as modular subpackages within `src/locations/` and executed via the unified parameterized runner `src/locations/runner.py` (`run_regional_pipeline()`, Issue #433). Regional context (`region`) is explicitly forwarded through `train_multi_horizon_models()` and `create_feature_matrix()` to drive localized EPA/CARB RVP summer/winter blend countdowns and terminal compliance deadlines (`RVPRegulatoryEngine`).
 * **Tulsa Regional Calibration Agent (`src/locations/tulsa/`):**
   - Tailors market time series to the Tulsa, OK metropolitan area calibrated to live pump prices ($3.89/gal base) & Cushing WTI delivery hub dynamics.
   - Ingests **USGS Arkansas River at Tulsa (`07179000`)** stage levels and Verdigris River MKARNS barge navigation telemetry (`07177500`) to monitor flood crests threatening HF Sinclair West Tulsa Refinery loading racks.
