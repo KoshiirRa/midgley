@@ -782,12 +782,13 @@ def train_multi_horizon_models(
     horizons: Optional[list[int]] = None,
     decay_half_life_days: float = 5.0,
     train_ratio: float = 0.8,
+    region: str = "Tulsa_OK",
     model_type: str = "ridge",
     log_wandb: bool = False
 ) -> dict[int, dict]:
     """
     Trains and compares discrete step-ahead forecasting models across multi-day horizons
-    (default: h in [1, 2, 3, 4, 5]) (Issue #314).
+    (default: h in [1, 2, 3, 4, 5]) (Issue #314, #433).
     Preserves contemporary unlabelled inference features (t=0) across all forecast horizons (Issue #353).
     Enforces post-inference plausibility gating (Issue #428).
     
@@ -814,7 +815,8 @@ def train_multi_horizon_models(
             market_df, 
             events_df, 
             forecast_horizon=h, 
-            decay_half_life_days=decay_half_life_days
+            decay_half_life_days=decay_half_life_days,
+            region=region
         )
         splits = prepare_chronological_splits(
             feature_df, 

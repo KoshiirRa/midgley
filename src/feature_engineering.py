@@ -842,7 +842,7 @@ def create_feature_matrix(
         from src.rvp_regulations import RVPRegulatoryEngine
         rvp_engine = RVPRegulatoryEngine()
         if 'date' in df.columns and len(df) > 0:
-            rvp_features_df = rvp_engine.compute_rvp_feature_dataframe(df['date'], region="National")
+            rvp_features_df = rvp_engine.compute_rvp_feature_dataframe(df['date'], region=region)
             df = pd.merge(df, rvp_features_df, on='date', how='left')
             for col in ['rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
                         'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium']:

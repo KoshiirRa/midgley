@@ -79,8 +79,10 @@ def test_5tier_hierarchy_evaluator():
     assert "Tier_4_Full_Hybrid" in res["tiers"]
 
 
-def test_evaluate_model_hierarchy_script():
-    summary = run_full_hierarchy_audit(horizons=[1, 5])
+def test_evaluate_model_hierarchy_script(tmp_path):
+    summary = run_full_hierarchy_audit(horizons=[1, 5], output_dir=str(tmp_path), use_synthetic_fallback=True)
     assert summary["total_regions_evaluated"] == 10
     assert summary["passed_regions_count"] >= 8
     assert "regions" in summary
+    assert (tmp_path / "model_hierarchy_evaluation.json").exists()
+    assert (tmp_path / "model_hierarchy_evaluation.md").exists()

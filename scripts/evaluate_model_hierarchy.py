@@ -85,43 +85,95 @@ def generate_benchmark_feature_matrix(n_samples: int = 150, seed: int = 42) -> T
     return X, y_future, y_current
 
 
-def run_full_hierarchy_audit(horizons: Optional[List[int]] = None) -> Dict[str, Any]:
-    """Runs the 5-tier evaluation across all regional hubs and horizons."""
-    os.makedirs(REPORTS_DIR, exist_ok=True)
+def run_full_hierarchy_audit(
+    horizons: Optional[List[int]] = None,
+    output_dir: Optional[str] = None,
+    use_synthetic_fallback: bool = False
+) -> Dict[str, Any]:
+    """
+    Runs the 5-tier evaluation across all regional hubs and horizons (Issues #362, #435).
+    Evaluates on authentic historical market data and purged walking origins when available.
+    """
+    target_dir = output_dir or REPORTS_DIR
+    os.makedirs(target_dir, exist_ok=True)
+    json_path = os.path.join(target_dir, "model_hierarchy_evaluation.json")
+    md_path = os.path.join(target_dir, "model_hierarchy_evaluation.md")
+
     horizons = horizons or [1, 3, 5]
-    
     all_region_results: Dict[str, Any] = {}
     passed_hubs = 0
+
+    # Try loading real market data and historical events once
+    real_market_df = None
+    real_events_df = None
+    if not use_synthetic_fallback:
+        try:
+            from src.data_ingestion import fetch_market_data, get_historical_event_dataset
+            from src.event_analyzer import process_event_dataset
+            from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
+            
+            raw_market = fetch_market_data(start_date="2022-01-01")
+            if raw_market is not None and len(raw_market) >= 60:
+                real_market_df = raw_market
+                raw_events = get_historical_event_dataset()
+                real_events_df = process_event_dataset(raw_events, use_llm_api=False) if raw_events is not None else None
+        except Exception as e:
+            logger.warning(f"Could not load authentic market dataset for hierarchy evaluation: {e}. Falling back to benchmark simulation.")
 
     for idx, reg in enumerate(REGIONS):
         logger.info(f"Evaluating 5-Tier Hierarchy for region: {reg}")
         evaluator = ModelHierarchyEvaluator(region=reg)
-        
-        # Load or generate feature matrix
-        X, y_fut, y_curr = generate_benchmark_feature_matrix(n_samples=180, seed=42 + idx)
-        
-        # Train / Test split (last 30% held out)
-        split_idx = int(len(X) * 0.7)
-        X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
-        y_tr_fut, y_te_fut = y_fut.iloc[:split_idx], y_fut.iloc[split_idx:]
-        y_tr_curr, y_te_curr = y_curr.iloc[:split_idx], y_curr.iloc[split_idx:]
-        
         region_horizon_results = {}
         reg_passed = True
-        
+
         for h in horizons:
-            res_h = evaluator.evaluate_5tier_hierarchy(
-                X_train, y_tr_fut, y_tr_curr,
-                X_test, y_te_fut, y_te_curr,
-                horizon=h
-            )
+            used_real_data = False
+            if real_market_df is not None:
+                try:
+                    feat_df = create_feature_matrix(
+                        real_market_df,
+                        real_events_df,
+                        forecast_horizon=h,
+                        region=reg
+                    )
+                    splits = prepare_chronological_splits(feat_df, train_ratio=0.75, forecast_horizon=h)
+                    X_train = splits['X_train_hybrid']
+                    X_test = splits['X_test_hybrid']
+                    
+                    y_tr_fut = splits['y_train_hybrid']
+                    y_te_fut = splits['y_test_hybrid']
+                    y_tr_curr = splits['train_df']['gasoline_rbob']
+                    y_te_curr = splits['test_df']['gasoline_rbob']
+
+                    res_h = evaluator.evaluate_5tier_hierarchy(
+                        X_train, y_tr_fut, y_tr_curr,
+                        X_test, y_te_fut, y_te_curr,
+                        horizon=h
+                    )
+                    used_real_data = True
+                except Exception as e:
+                    logger.debug(f"Real data evaluation error for {reg} h={h}: {e}")
+
+            if not used_real_data:
+                X, y_fut, y_curr = generate_benchmark_feature_matrix(n_samples=180, seed=42 + idx + h * 7)
+                split_idx = int(len(X) * 0.7)
+                X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
+                y_tr_fut, y_te_fut = y_fut.iloc[:split_idx], y_fut.iloc[split_idx:]
+                y_tr_curr, y_te_curr = y_curr.iloc[:split_idx], y_curr.iloc[split_idx:]
+
+                res_h = evaluator.evaluate_5tier_hierarchy(
+                    X_train, y_tr_fut, y_tr_curr,
+                    X_test, y_te_fut, y_te_curr,
+                    horizon=h
+                )
+
             region_horizon_results[f"h_{h}d"] = res_h
             if not res_h["promotion_gate_passed"]:
                 reg_passed = False
-                
+
         if reg_passed:
             passed_hubs += 1
-            
+
         all_region_results[reg] = {
             "region": reg,
             "horizons": region_horizon_results,
@@ -137,9 +189,9 @@ def run_full_hierarchy_audit(horizons: Optional[List[int]] = None) -> Dict[str, 
     }
 
     # Save JSON report
-    with open(OUTPUT_JSON_FILE, "w", encoding="utf-8") as f:
+    with open(json_path, "w", encoding="utf-8") as f:
         json.dump(audit_summary, f, indent=2)
-    logger.info(f"Exported JSON audit report to {OUTPUT_JSON_FILE}")
+    logger.info(f"Exported JSON audit report to {json_path}")
 
     # Generate Markdown Scorecard
     md_lines = [
@@ -173,12 +225,12 @@ def run_full_hierarchy_audit(horizons: Optional[List[int]] = None) -> Dict[str, 
         "- **Tier 3:** Price + Qualitative Events (Decayed NLP news/social/geopolitical vectors)",
         "- **Tier 4:** Full Hybrid Estimator (Full feature matrix + ECM + Conformal inference)",
         "",
-        "*Generated by `scripts/evaluate_model_hierarchy.py` (Issue #362).*"
+        "*Generated by `scripts/evaluate_model_hierarchy.py` (Issue #362, #435).*"
     ])
 
-    with open(OUTPUT_MD_FILE, "w", encoding="utf-8") as f:
+    with open(md_path, "w", encoding="utf-8") as f:
         f.write("\n".join(md_lines))
-    logger.info(f"Exported Markdown audit scorecard to {OUTPUT_MD_FILE}")
+    logger.info(f"Exported Markdown audit scorecard to {md_path}")
 
     return audit_summary
 
@@ -186,7 +238,9 @@ def run_full_hierarchy_audit(horizons: Optional[List[int]] = None) -> Dict[str, 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="5-Tier Model Hierarchy Evaluator")
     parser.add_argument("--horizons", nargs="+", type=int, default=[1, 3, 5], help="Forecast horizons to evaluate")
+    parser.add_argument("--output-dir", type=str, default=None, help="Directory to save audit output files")
+    parser.add_argument("--synthetic", action="store_true", help="Force synthetic benchmark generation")
     args = parser.parse_args()
     
-    summary = run_full_hierarchy_audit(horizons=args.horizons)
+    summary = run_full_hierarchy_audit(horizons=args.horizons, output_dir=args.output_dir, use_synthetic_fallback=args.synthetic)
     print(f"\nAudit complete: {summary['passed_regions_count']}/{summary['total_regions_evaluated']} regions passed statistical promotion gate.")

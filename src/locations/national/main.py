@@ -44,6 +44,7 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         market_df, 
         events_df, 
         horizons=[1, 2, 3, 4, 5], 
+        region="National",
         model_type=model_type
     )
     

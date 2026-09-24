@@ -259,11 +259,11 @@ class ModelHierarchyEvaluator:
             }
             prev_tier_errors = errors
 
-        # Statistical Promotion Decision Gate (Issue #362)
+        # Statistical Promotion Decision Gate (Issue #362, #435)
         tier4 = tier_results["Tier_4_Full_Hybrid"]
         promotion_gate_passed = bool(
             tier4["persistence_uplift_pct"] > 0.0
-            and tier4["dm_p_value_vs_naive"] < 0.10
+            and tier4["dm_p_value_vs_naive"] < 0.05
         )
 
         return {
