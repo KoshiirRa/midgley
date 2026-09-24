@@ -48,6 +48,17 @@ def _load_vintage_timeseries(
         if not isinstance(vintages, list) or not vintages:
             return pd.DataFrame()
 
+        def _find_val(obj: Any, key: str) -> Any:
+            if isinstance(obj, dict):
+                if key in obj:
+                    return obj[key]
+                for sub in obj.values():
+                    if isinstance(sub, dict):
+                        found = _find_val(sub, key)
+                        if found is not None:
+                            return found
+            return None
+
         records = []
         for v in vintages:
             if not isinstance(v, dict):
@@ -67,7 +78,9 @@ def _load_vintage_timeseries(
             rec = {"date": pd.to_datetime(obs_date), "_as_of": str(as_of_ts)}
             has_val = False
             for src_k, target_col in feature_mapping.items():
-                val = payload.get(src_k)
+                val = payload.get(src_k) if isinstance(payload, dict) else None
+                if val is None:
+                    val = _find_val(v, src_k)
                 if val is not None and not (isinstance(val, float) and np.isnan(val)):
                     try:
                         rec[target_col] = float(val)
@@ -434,36 +447,44 @@ def create_feature_matrix(
 
     # 1. Open-Meteo Weather Degree Days Data (Locale-Routed, Point-in-Time Correct - Issues #72, #175, #356, #432)
     try:
-        weather_connector = OpenMeteoDegreeDaysConnector()
-        hub_weather = weather_connector.fetch_hub_degree_days(region)
-        hdd_val = hub_weather.get("heating_degree_days_hdd", 0.0) if hub_weather else 0.0
-        cdd_val = hub_weather.get("cooling_degree_days_cdd", 0.0) if hub_weather else 0.0
-        freeze_flag = 1.0 if hub_weather and hub_weather.get("freeze_warning", False) else 0.0
+        # Climatological baseline across time series
+        _mean_temp_clim = 65.0 - 22.0 * np.cos(2.0 * np.pi * (_day_of_year - 15.0) / 365.25)
+        df['hdd_daily'] = np.maximum(0.0, 65.0 - _mean_temp_clim)
+        df['cdd_daily'] = np.maximum(0.0, _mean_temp_clim - 65.0)
+        df['freeze_warning_flag'] = (df['hdd_daily'] > 25.0).astype(float)
 
         deg_v_df = _load_vintage_timeseries(
             "data/degree_days_vintages.json",
-            {"heating_degree_days_hdd": "hdd_daily", "cooling_degree_days_cdd": "cdd_daily", "freeze_warning": "freeze_warning_flag"},
+            {"heating_degree_days_hdd": "hdd_daily_v", "cooling_degree_days_cdd": "cdd_daily_v", "freeze_warning": "freeze_warning_flag_v"},
             as_of_cutoff=as_of_cutoff
         )
         if not deg_v_df.empty:
             df = pd.merge(df, deg_v_df, on='date', how='left')
-            df['hdd_daily'] = df['hdd_daily'].ffill().bfill().fillna(hdd_val)
-            df['cdd_daily'] = df['cdd_daily'].ffill().bfill().fillna(cdd_val)
-            df['freeze_warning_flag'] = df['freeze_warning_flag'].ffill().bfill().fillna(freeze_flag)
-        else:
-            df['hdd_daily'] = hdd_val
-            df['cdd_daily'] = cdd_val
-            df['freeze_warning_flag'] = freeze_flag
+            df['hdd_daily'] = df['hdd_daily_v'].combine_first(df['hdd_daily'])
+            df['cdd_daily'] = df['cdd_daily_v'].combine_first(df['cdd_daily'])
+            df['freeze_warning_flag'] = df['freeze_warning_flag_v'].combine_first(df['freeze_warning_flag'])
+            df.drop(columns=[c for c in ['hdd_daily_v', 'cdd_daily_v', 'freeze_warning_flag_v'] if c in df.columns], inplace=True)
+
+        weather_connector = OpenMeteoDegreeDaysConnector()
+        hub_weather = weather_connector.fetch_hub_degree_days(region)
+        if hub_weather and len(df) > 0:
+            hdd_val = hub_weather.get("heating_degree_days_hdd", float(df['hdd_daily'].iloc[-1]))
+            cdd_val = hub_weather.get("cooling_degree_days_cdd", float(df['cdd_daily'].iloc[-1]))
+            freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else float(df['freeze_warning_flag'].iloc[-1])
+            df.loc[df.index[-1], 'hdd_daily'] = hdd_val
+            df.loc[df.index[-1], 'cdd_daily'] = cdd_val
+            df.loc[df.index[-1], 'freeze_warning_flag'] = freeze_flag
             
         df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
         df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
     except Exception as e:
         logger.warning(f"Could not merge Open-Meteo degree days feed: {e}")
-        df['hdd_daily'] = 0.0
-        df['cdd_daily'] = 0.0
-        df['freeze_warning_flag'] = 0.0
-        df['hdd_5d_rolling'] = 0.0
-        df['cdd_5d_rolling'] = 0.0
+        _mean_temp_clim = 65.0 - 22.0 * np.cos(2.0 * np.pi * (_day_of_year - 15.0) / 365.25)
+        df['hdd_daily'] = np.maximum(0.0, 65.0 - _mean_temp_clim)
+        df['cdd_daily'] = np.maximum(0.0, _mean_temp_clim - 65.0)
+        df['freeze_warning_flag'] = (df['hdd_daily'] > 25.0).astype(float)
+        df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
+        df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
 
     # 2. CFTC Commitment of Traders (COT) Energy Positioning Data (Issues #143, #175, #356, #432)
     try:
