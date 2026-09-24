@@ -488,129 +488,165 @@ def create_feature_matrix(
 
     # 2. CFTC Commitment of Traders (COT) Energy Positioning Data (Issues #143, #175, #356, #432)
     try:
+        cot_spec_series = 80000.0 + 16000.0 * np.sin(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_rbob_net_speculative'] = cot_spec_series
+        df['cot_rbob_zscore_3y'] = (df['cot_rbob_net_speculative'] - 75000.0) / 20000.0
+        df['cot_commercial_hedger_ratio'] = 0.85 + 0.05 * np.cos(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_net_position_delta_1w'] = df['cot_rbob_net_speculative'].diff(5).fillna(0.0)
+
         cftc_v_df = _load_vintage_timeseries(
             "data/cftc_vintages.json",
             {
-                "cot_rbob_net_speculative": "cot_rbob_net_speculative",
-                "cot_rbob_zscore_3y": "cot_rbob_zscore_3y",
-                "cot_commercial_hedger_ratio": "cot_commercial_hedger_ratio",
-                "cot_net_position_delta_1w": "cot_net_position_delta_1w"
+                "cot_rbob_net_speculative": "cot_rbob_net_speculative_v",
+                "cot_rbob_zscore_3y": "cot_rbob_zscore_3y_v",
+                "cot_commercial_hedger_ratio": "cot_commercial_hedger_ratio_v",
+                "cot_net_position_delta_1w": "cot_net_position_delta_1w_v"
             },
             as_of_cutoff=as_of_cutoff,
             nested_key="data"
         )
         if not cftc_v_df.empty:
             df = pd.merge(df, cftc_v_df, on='date', how='left')
-            df['cot_rbob_net_speculative'] = df['cot_rbob_net_speculative'].ffill().bfill().fillna(83000.0)
-            df['cot_rbob_zscore_3y'] = df['cot_rbob_zscore_3y'].ffill().bfill().fillna(0.44)
-            df['cot_commercial_hedger_ratio'] = df['cot_commercial_hedger_ratio'].ffill().bfill().fillna(0.8571)
-            df['cot_net_position_delta_1w'] = df['cot_net_position_delta_1w'].ffill().bfill().fillna(3500.0)
-        else:
-            cftc_connector = CFTCDataConnector()
-            cot_data = cftc_connector.fetch_cot_positioning_data() or {}
-            df['cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', 83000.0)
-            df['cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', 0.44)
-            df['cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', 0.8571)
-            df['cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', 3500.0)
+            for col in ['cot_rbob_net_speculative', 'cot_rbob_zscore_3y', 'cot_commercial_hedger_ratio', 'cot_net_position_delta_1w']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        cftc_connector = CFTCDataConnector()
+        cot_data = cftc_connector.fetch_cot_positioning_data()
+        if len(df) > 0 and cot_data:
+            df.loc[df.index[-1], 'cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', df['cot_rbob_net_speculative'].iloc[-1])
+            df.loc[df.index[-1], 'cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', df['cot_rbob_zscore_3y'].iloc[-1])
+            df.loc[df.index[-1], 'cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', df['cot_commercial_hedger_ratio'].iloc[-1])
+            df.loc[df.index[-1], 'cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', df['cot_net_position_delta_1w'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge CFTC COT positioning data: {e}")
-        df['cot_rbob_net_speculative'] = 83000.0
-        df['cot_rbob_zscore_3y'] = 0.44
-        df['cot_commercial_hedger_ratio'] = 0.8571
-        df['cot_net_position_delta_1w'] = 0.0
+        cot_spec_series = 80000.0 + 16000.0 * np.sin(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_rbob_net_speculative'] = cot_spec_series
+        df['cot_rbob_zscore_3y'] = (df['cot_rbob_net_speculative'] - 75000.0) / 20000.0
+        df['cot_commercial_hedger_ratio'] = 0.85 + 0.05 * np.cos(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_net_position_delta_1w'] = df['cot_rbob_net_speculative'].diff(5).fillna(0.0)
 
     # 3. FERC Form 6 Interstate Pipeline Tariff Data (Issues #123, #175, #356, #432)
     try:
+        tariff_offset = (_years - 2026) + (_day_of_year / 365.25 - 0.5) * 0.04
+        colonial_rates = np.maximum(1.50, 2.15 + tariff_offset * 0.07)
+        df['ferc_colonial_line1_tariff_per_bbl'] = colonial_rates
+        df['ferc_plantation_tariff_per_bbl'] = colonial_rates * (1.85 / 2.15)
+        df['ferc_explorer_tariff_per_bbl'] = colonial_rates * (1.62 / 2.15)
+        df['ferc_pipeline_tariff_index_5d'] = (df['ferc_colonial_line1_tariff_per_bbl'] + df['ferc_plantation_tariff_per_bbl'] + df['ferc_explorer_tariff_per_bbl']) / 3.0
+
         ferc_v_df = _load_vintage_timeseries(
             "data/ferc_vintages.json",
             {
-                "ferc_colonial_line1_tariff_per_bbl": "ferc_colonial_line1_tariff_per_bbl",
-                "ferc_plantation_tariff_per_bbl": "ferc_plantation_tariff_per_bbl",
-                "ferc_explorer_tariff_per_bbl": "ferc_explorer_tariff_per_bbl",
-                "ferc_pipeline_tariff_index_5d": "ferc_pipeline_tariff_index_5d"
+                "ferc_colonial_line1_tariff_per_bbl": "ferc_colonial_line1_tariff_per_bbl_v",
+                "ferc_plantation_tariff_per_bbl": "ferc_plantation_tariff_per_bbl_v",
+                "ferc_explorer_tariff_per_bbl": "ferc_explorer_tariff_per_bbl_v",
+                "ferc_pipeline_tariff_index_5d": "ferc_pipeline_tariff_index_5d_v"
             },
             as_of_cutoff=as_of_cutoff
         )
         if not ferc_v_df.empty:
             df = pd.merge(df, ferc_v_df, on='date', how='left')
-            df['ferc_colonial_line1_tariff_per_bbl'] = df['ferc_colonial_line1_tariff_per_bbl'].ffill().bfill().fillna(3.22)
-            df['ferc_plantation_tariff_per_bbl'] = df['ferc_plantation_tariff_per_bbl'].ffill().bfill().fillna(2.78)
-            df['ferc_explorer_tariff_per_bbl'] = df['ferc_explorer_tariff_per_bbl'].ffill().bfill().fillna(2.43)
-            df['ferc_pipeline_tariff_index_5d'] = df['ferc_pipeline_tariff_index_5d'].ffill().bfill().fillna(2.81)
-        else:
-            ferc_connector = FERCDataConnector()
-            ferc_data = ferc_connector.fetch_pipeline_tariff_data() or {}
-            df['ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', 3.22)
-            df['ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', 2.78)
-            df['ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', 2.43)
-            df['ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', 2.81)
+            for col in ['ferc_colonial_line1_tariff_per_bbl', 'ferc_plantation_tariff_per_bbl', 'ferc_explorer_tariff_per_bbl', 'ferc_pipeline_tariff_index_5d']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        ferc_connector = FERCDataConnector()
+        ferc_data = ferc_connector.fetch_pipeline_tariff_data()
+        if len(df) > 0 and ferc_data:
+            df.loc[df.index[-1], 'ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', df['ferc_colonial_line1_tariff_per_bbl'].iloc[-1])
+            df.loc[df.index[-1], 'ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', df['ferc_plantation_tariff_per_bbl'].iloc[-1])
+            df.loc[df.index[-1], 'ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', df['ferc_explorer_tariff_per_bbl'].iloc[-1])
+            df.loc[df.index[-1], 'ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', df['ferc_pipeline_tariff_index_5d'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge FERC pipeline tariff data: {e}")
-        df['ferc_colonial_line1_tariff_per_bbl'] = 3.22
-        df['ferc_plantation_tariff_per_bbl'] = 2.78
-        df['ferc_explorer_tariff_per_bbl'] = 2.43
-        df['ferc_pipeline_tariff_index_5d'] = 2.81
+        tariff_offset = (_years - 2026) + (_day_of_year / 365.25 - 0.5) * 0.04
+        colonial_rates = np.maximum(1.50, 2.15 + tariff_offset * 0.07)
+        df['ferc_colonial_line1_tariff_per_bbl'] = colonial_rates
+        df['ferc_plantation_tariff_per_bbl'] = colonial_rates * (1.85 / 2.15)
+        df['ferc_explorer_tariff_per_bbl'] = colonial_rates * (1.62 / 2.15)
+        df['ferc_pipeline_tariff_index_5d'] = (df['ferc_colonial_line1_tariff_per_bbl'] + df['ferc_plantation_tariff_per_bbl'] + df['ferc_explorer_tariff_per_bbl']) / 3.0
 
     # 4. USGS Water Data Telemetry (Issues #56, #356, #432)
     try:
+        barge_risk = np.maximum(0.0, 0.25 * np.sin(2.0 * np.pi * (_day_of_year - 180.0) / 365.25))
+        df['usgs_hydrological_barge_bottleneck_index'] = barge_risk
+        df['usgs_gulf_marine_departure_risk_index'] = np.maximum(0.0, 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 220.0) / 365.25))
+        df['usgs_carquinez_berthing_risk_index'] = 0.05 + 0.05 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['usgs_delaware_refinery_thermal_index'] = np.maximum(0.0, (_mean_temp_clim - 80.0) / 20.0)
+
         usgs_water_v_df = _load_vintage_timeseries(
             "data/usgs_water_vintages.json",
             {
-                "hydrological_barge_bottleneck_index": "usgs_hydrological_barge_bottleneck_index",
-                "gulf_marine_departure_risk_index": "usgs_gulf_marine_departure_risk_index",
-                "carquinez_berthing_risk_index": "usgs_carquinez_berthing_risk_index",
-                "delaware_refinery_thermal_index": "usgs_delaware_refinery_thermal_index"
+                "hydrological_barge_bottleneck_index": "usgs_hydrological_barge_bottleneck_index_v",
+                "gulf_marine_departure_risk_index": "usgs_gulf_marine_departure_risk_index_v",
+                "carquinez_berthing_risk_index": "usgs_carquinez_berthing_risk_index_v",
+                "delaware_refinery_thermal_index": "usgs_delaware_refinery_thermal_index_v"
             },
             as_of_cutoff=as_of_cutoff,
             nested_key="indices"
         )
         if not usgs_water_v_df.empty:
             df = pd.merge(df, usgs_water_v_df, on='date', how='left')
-            df['usgs_hydrological_barge_bottleneck_index'] = df['usgs_hydrological_barge_bottleneck_index'].ffill().bfill().fillna(0.0)
-            df['usgs_gulf_marine_departure_risk_index'] = df['usgs_gulf_marine_departure_risk_index'].ffill().bfill().fillna(0.0)
-            df['usgs_carquinez_berthing_risk_index'] = df['usgs_carquinez_berthing_risk_index'].ffill().bfill().fillna(0.05)
-            df['usgs_delaware_refinery_thermal_index'] = df['usgs_delaware_refinery_thermal_index'].ffill().bfill().fillna(0.0)
-        else:
-            from src.usgs_water_feed import USGSWaterFeedConnector
-            usgs_connector = USGSWaterFeedConnector()
-            usgs_data = usgs_connector.fetch_live_water_telemetry() or {}
-            usgs_indices = usgs_data.get('indices', {})
-            df['usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', 0.0)
-            df['usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', 0.0)
-            df['usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', 0.05)
-            df['usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', 0.0)
+            for col in ['usgs_hydrological_barge_bottleneck_index', 'usgs_gulf_marine_departure_risk_index', 'usgs_carquinez_berthing_risk_index', 'usgs_delaware_refinery_thermal_index']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        from src.usgs_water_feed import USGSWaterFeedConnector
+        usgs_connector = USGSWaterFeedConnector()
+        usgs_data = usgs_connector.fetch_live_water_telemetry() or {}
+        usgs_indices = usgs_data.get('indices', {})
+        if len(df) > 0 and usgs_indices:
+            df.loc[df.index[-1], 'usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', df['usgs_hydrological_barge_bottleneck_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', df['usgs_gulf_marine_departure_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', df['usgs_carquinez_berthing_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', df['usgs_delaware_refinery_thermal_index'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USGS water data telemetry: {e}")
-        df['usgs_hydrological_barge_bottleneck_index'] = 0.0
-        df['usgs_gulf_marine_departure_risk_index'] = 0.0
-        df['usgs_carquinez_berthing_risk_index'] = 0.0
-        df['usgs_delaware_refinery_thermal_index'] = 0.0
+        barge_risk = np.maximum(0.0, 0.25 * np.sin(2.0 * np.pi * (_day_of_year - 180.0) / 365.25))
+        df['usgs_hydrological_barge_bottleneck_index'] = barge_risk
+        df['usgs_gulf_marine_departure_risk_index'] = np.maximum(0.0, 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 220.0) / 365.25))
+        df['usgs_carquinez_berthing_risk_index'] = 0.05 + 0.05 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['usgs_delaware_refinery_thermal_index'] = np.maximum(0.0, (_mean_temp_clim - 80.0) / 20.0)
 
     # 5. USGS Seismic Data Telemetry (Issues #55, #356, #432)
     try:
+        df['usgs_bay_area_seismic_risk_index'] = 0.02
+        df['usgs_cushing_seismic_risk_index'] = 0.01
+        df['usgs_composite_seismic_risk_index'] = 0.015
+
         usgs_seismic_v_df = _load_vintage_timeseries(
             "data/usgs_seismic_vintages.json",
             {
-                "bay_area_seismic_risk_index": "usgs_bay_area_seismic_risk_index",
-                "cushing_storage_seismic_risk_index": "usgs_cushing_seismic_risk_index",
-                "composite_seismic_risk_index": "usgs_composite_seismic_risk_index"
+                "bay_area_seismic_risk_index": "usgs_bay_area_seismic_risk_index_v",
+                "cushing_storage_seismic_risk_index": "usgs_cushing_seismic_risk_index_v",
+                "composite_seismic_risk_index": "usgs_composite_seismic_risk_index_v"
             },
             as_of_cutoff=as_of_cutoff,
             nested_key="indices"
         )
         if not usgs_seismic_v_df.empty:
             df = pd.merge(df, usgs_seismic_v_df, on='date', how='left')
-            df['usgs_bay_area_seismic_risk_index'] = df['usgs_bay_area_seismic_risk_index'].ffill().bfill().fillna(0.02)
-            df['usgs_cushing_seismic_risk_index'] = df['usgs_cushing_seismic_risk_index'].ffill().bfill().fillna(0.01)
-            df['usgs_composite_seismic_risk_index'] = df['usgs_composite_seismic_risk_index'].ffill().bfill().fillna(0.015)
-        else:
-            from src.usgs_seismic import USGSSeismicConnector
-            seismic_connector = USGSSeismicConnector()
-            seismic_data = seismic_connector.fetch_live_seismic_telemetry() or {}
-            seismic_indices = seismic_data.get('indices', {})
-            df['usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', 0.02)
-            df['usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', 0.01)
-            df['usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', 0.015)
+            for col in ['usgs_bay_area_seismic_risk_index', 'usgs_cushing_seismic_risk_index', 'usgs_composite_seismic_risk_index']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        from src.usgs_seismic import USGSSeismicConnector
+        seismic_connector = USGSSeismicConnector()
+        seismic_data = seismic_connector.fetch_live_seismic_telemetry() or {}
+        seismic_indices = seismic_data.get('indices', {})
+        if len(df) > 0 and seismic_indices:
+            df.loc[df.index[-1], 'usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', df['usgs_bay_area_seismic_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', df['usgs_cushing_seismic_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', df['usgs_composite_seismic_risk_index'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USGS seismic data telemetry: {e}")
         df['usgs_bay_area_seismic_risk_index'] = 0.02
@@ -619,158 +655,187 @@ def create_feature_matrix(
 
     # 6. Air Quality (AQI) Industrial Emissions & Ozone Telemetry (Issues #54, #73, #356, #432)
     try:
+        ozone_season = ((_day_of_year >= 120) & (_day_of_year <= 270)).astype(float)
+        df['aqi_bay_area_outage_risk_index'] = 0.05 + 0.10 * ozone_season
+        df['aqi_tulsa_outage_risk_index'] = 0.04 + 0.08 * ozone_season
+        df['aqi_delaware_outage_risk_index'] = 0.05 + 0.09 * ozone_season
+        df['aqi_catlettsburg_outage_risk_index'] = 0.04 + 0.07 * ozone_season
+        df['aqi_composite_outage_risk_index'] = (df['aqi_bay_area_outage_risk_index'] + df['aqi_tulsa_outage_risk_index'] + df['aqi_delaware_outage_risk_index']) / 3.0
+        df['aqi_ozone_action_day_count'] = ozone_season * 2.0
+        df['aqi_max_rvp_surcharge_per_gal'] = ozone_season * 0.08
+
         aqi_v_df = _load_vintage_timeseries(
             "data/aqi_vintages.json",
             {
-                "bay_area_outage_risk_index": "aqi_bay_area_outage_risk_index",
-                "tulsa_outage_risk_index": "aqi_tulsa_outage_risk_index",
-                "delaware_valley_outage_risk_index": "aqi_delaware_outage_risk_index",
-                "tri_state_outage_risk_index": "aqi_catlettsburg_outage_risk_index",
-                "composite_aqi_shock_index": "aqi_composite_outage_risk_index",
-                "ozone_action_day_count": "aqi_ozone_action_day_count",
-                "max_rvp_compliance_surcharge_per_gal": "aqi_max_rvp_surcharge_per_gal"
+                "bay_area_outage_risk_index": "aqi_bay_area_outage_risk_index_v",
+                "tulsa_outage_risk_index": "aqi_tulsa_outage_risk_index_v",
+                "delaware_valley_outage_risk_index": "aqi_delaware_outage_risk_index_v",
+                "tri_state_outage_risk_index": "aqi_catlettsburg_outage_risk_index_v",
+                "composite_aqi_shock_index": "aqi_composite_outage_risk_index_v",
+                "ozone_action_day_count": "aqi_ozone_action_day_count_v",
+                "max_rvp_compliance_surcharge_per_gal": "aqi_max_rvp_surcharge_per_gal_v"
             },
             as_of_cutoff=as_of_cutoff,
             nested_key="indices"
         )
         if not aqi_v_df.empty:
             df = pd.merge(df, aqi_v_df, on='date', how='left')
-            df['aqi_bay_area_outage_risk_index'] = df['aqi_bay_area_outage_risk_index'].ffill().bfill().fillna(0.05)
-            df['aqi_tulsa_outage_risk_index'] = df['aqi_tulsa_outage_risk_index'].ffill().bfill().fillna(0.04)
-            df['aqi_delaware_outage_risk_index'] = df['aqi_delaware_outage_risk_index'].ffill().bfill().fillna(0.05)
-            df['aqi_catlettsburg_outage_risk_index'] = df['aqi_catlettsburg_outage_risk_index'].ffill().bfill().fillna(0.04)
-            df['aqi_composite_outage_risk_index'] = df['aqi_composite_outage_risk_index'].ffill().bfill().fillna(0.05)
-            df['aqi_ozone_action_day_count'] = df['aqi_ozone_action_day_count'].ffill().bfill().fillna(0.0)
-            df['aqi_max_rvp_surcharge_per_gal'] = df['aqi_max_rvp_surcharge_per_gal'].ffill().bfill().fillna(0.0)
-        else:
-            from src.aqi_feed import AQIFeedConnector
-            aqi_connector = AQIFeedConnector()
-            aqi_data = aqi_connector.fetch_live_aqi_telemetry() or {}
-            aqi_indices = aqi_data.get('indices', {})
-            df['aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', 0.05)
-            df['aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', 0.04)
-            df['aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', 0.05)
-            df['aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', 0.04)
-            df['aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', 0.05)
-            df['aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', 0))
-            df['aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', 0.0)
+            for col in ['aqi_bay_area_outage_risk_index', 'aqi_tulsa_outage_risk_index', 'aqi_delaware_outage_risk_index', 'aqi_catlettsburg_outage_risk_index', 'aqi_composite_outage_risk_index', 'aqi_ozone_action_day_count', 'aqi_max_rvp_surcharge_per_gal']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        from src.aqi_feed import AQIFeedConnector
+        aqi_connector = AQIFeedConnector()
+        aqi_data = aqi_connector.fetch_live_aqi_telemetry() or {}
+        aqi_indices = aqi_data.get('indices', {})
+        if len(df) > 0 and aqi_indices:
+            df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', df['aqi_bay_area_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', df['aqi_tulsa_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', df['aqi_delaware_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', df['aqi_catlettsburg_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', df['aqi_composite_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', df['aqi_ozone_action_day_count'].iloc[-1]))
+            df.loc[df.index[-1], 'aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', df['aqi_max_rvp_surcharge_per_gal'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge AQI industrial emissions telemetry: {e}")
-        df['aqi_bay_area_outage_risk_index'] = 0.05
-        df['aqi_tulsa_outage_risk_index'] = 0.04
-        df['aqi_delaware_outage_risk_index'] = 0.05
-        df['aqi_catlettsburg_outage_risk_index'] = 0.04
-        df['aqi_composite_outage_risk_index'] = 0.05
-        df['aqi_ozone_action_day_count'] = 0.0
-        df['aqi_max_rvp_surcharge_per_gal'] = 0.0
+        ozone_season = ((_day_of_year >= 120) & (_day_of_year <= 270)).astype(float)
+        df['aqi_bay_area_outage_risk_index'] = 0.05 + 0.10 * ozone_season
+        df['aqi_tulsa_outage_risk_index'] = 0.04 + 0.08 * ozone_season
+        df['aqi_delaware_outage_risk_index'] = 0.05 + 0.09 * ozone_season
+        df['aqi_catlettsburg_outage_risk_index'] = 0.04 + 0.07 * ozone_season
+        df['aqi_composite_outage_risk_index'] = (df['aqi_bay_area_outage_risk_index'] + df['aqi_tulsa_outage_risk_index'] + df['aqi_delaware_outage_risk_index']) / 3.0
+        df['aqi_ozone_action_day_count'] = ozone_season * 2.0
+        df['aqi_max_rvp_surcharge_per_gal'] = ozone_season * 0.08
 
     # 7. California Energy Commission (CEC) Weekly Fuels Watch (Issues #364, #356, #432)
     try:
+        df['cec_carbob_stocks_thousand_barrels'] = 5820.0 + 350.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
+        df['norcal_refinery_utilization_pct'] = np.clip(86.4 + 3.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 75.0, 98.0)
+        df['socal_refinery_utilization_pct'] = np.clip(88.2 + 3.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 75.0, 98.0)
+        df['statewide_refinery_utilization_pct'] = (df['norcal_refinery_utilization_pct'] + df['socal_refinery_utilization_pct']) / 2.0
+
         cec_v_df = _load_vintage_timeseries(
             "data/cec_fuels_vintages.json",
             {
-                "ca_carbob_stocks_thousand_barrels": "cec_carbob_stocks_thousand_barrels",
-                "norcal_refinery_utilization_pct": "norcal_refinery_utilization_pct",
-                "socal_refinery_utilization_pct": "socal_refinery_utilization_pct",
-                "statewide_refinery_utilization_pct": "statewide_refinery_utilization_pct"
+                "ca_carbob_stocks_thousand_barrels": "cec_carbob_stocks_thousand_barrels_v",
+                "norcal_refinery_utilization_pct": "norcal_refinery_utilization_pct_v",
+                "socal_refinery_utilization_pct": "socal_refinery_utilization_pct_v",
+                "statewide_refinery_utilization_pct": "statewide_refinery_utilization_pct_v"
             },
             as_of_cutoff=as_of_cutoff,
             nested_key="metrics"
         )
         if not cec_v_df.empty:
             df = pd.merge(df, cec_v_df, on='date', how='left')
-            df['cec_carbob_stocks_thousand_barrels'] = df['cec_carbob_stocks_thousand_barrels'].ffill().bfill().fillna(5820.0)
-            df['norcal_refinery_utilization_pct'] = df['norcal_refinery_utilization_pct'].ffill().bfill().fillna(86.4)
-            df['socal_refinery_utilization_pct'] = df['socal_refinery_utilization_pct'].ffill().bfill().fillna(88.2)
-            df['statewide_refinery_utilization_pct'] = df['statewide_refinery_utilization_pct'].ffill().bfill().fillna(87.3)
-        else:
-            from src.data_ingestion import CECWeeklyFuelsConnector
-            cec_connector = CECWeeklyFuelsConnector()
-            cec_data = cec_connector.fetch_weekly_fuels_data() or {}
-            cec_metrics = cec_data.get('metrics', {})
-            df['cec_carbob_stocks_thousand_barrels'] = cec_metrics.get('ca_carbob_stocks_thousand_barrels', 5820.0)
-            df['norcal_refinery_utilization_pct'] = cec_metrics.get('norcal_refinery_utilization_pct', 86.4)
-            df['socal_refinery_utilization_pct'] = cec_metrics.get('socal_refinery_utilization_pct', 88.2)
-            df['statewide_refinery_utilization_pct'] = cec_metrics.get('statewide_refinery_utilization_pct', 87.3)
+            for col in ['cec_carbob_stocks_thousand_barrels', 'norcal_refinery_utilization_pct', 'socal_refinery_utilization_pct', 'statewide_refinery_utilization_pct']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        from src.data_ingestion import CECWeeklyFuelsConnector
+        cec_connector = CECWeeklyFuelsConnector()
+        cec_data = cec_connector.fetch_weekly_fuels_data() or {}
+        cec_metrics = cec_data.get('metrics', {})
+        if len(df) > 0 and cec_metrics:
+            df.loc[df.index[-1], 'cec_carbob_stocks_thousand_barrels'] = cec_metrics.get('ca_carbob_stocks_thousand_barrels', df['cec_carbob_stocks_thousand_barrels'].iloc[-1])
+            df.loc[df.index[-1], 'norcal_refinery_utilization_pct'] = cec_metrics.get('norcal_refinery_utilization_pct', df['norcal_refinery_utilization_pct'].iloc[-1])
+            df.loc[df.index[-1], 'socal_refinery_utilization_pct'] = cec_metrics.get('socal_refinery_utilization_pct', df['socal_refinery_utilization_pct'].iloc[-1])
+            df.loc[df.index[-1], 'statewide_refinery_utilization_pct'] = cec_metrics.get('statewide_refinery_utilization_pct', df['statewide_refinery_utilization_pct'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge CEC Weekly Fuels telemetry: {e}")
-        df['cec_carbob_stocks_thousand_barrels'] = 5820.0
+        df['cec_carbob_stocks_thousand_barrels'] = 5820.0 + 350.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
         df['norcal_refinery_utilization_pct'] = 86.4
         df['socal_refinery_utilization_pct'] = 88.2
         df['statewide_refinery_utilization_pct'] = 87.3
 
     # 8. U.S. EIA Petroleum Balances & Refinery Movements (Issues #141, #356, #432)
     try:
+        df['eia_gasoline_stocks_us_total'] = 225.0 + 15.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
+        df['eia_refinery_utilization_us_total'] = np.clip(89.0 + 4.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 80.0, 98.0)
+        df['eia_refinery_net_production_padd1'] = 310.0 + 20.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_refinery_net_production_padd3'] = 2680.0 + 100.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_pipeline_movements_padd3_to_padd1'] = 2850.0 + 120.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+
         eia_v_df = _load_vintage_timeseries(
             "data/eia_vintages.json",
             {
-                "eia_gasoline_stocks_us_total": "eia_gasoline_stocks_us_total",
-                "eia_refinery_utilization_us_total": "eia_refinery_utilization_us_total",
-                "eia_refinery_net_production_padd1": "eia_refinery_net_production_padd1",
-                "eia_refinery_net_production_padd3": "eia_refinery_net_production_padd3",
-                "eia_pipeline_movements_padd3_to_padd1": "eia_pipeline_movements_padd3_to_padd1"
+                "eia_gasoline_stocks_us_total": "eia_gasoline_stocks_us_total_v",
+                "eia_refinery_utilization_us_total": "eia_refinery_utilization_us_total_v",
+                "eia_refinery_net_production_padd1": "eia_refinery_net_production_padd1_v",
+                "eia_refinery_net_production_padd3": "eia_refinery_net_production_padd3_v",
+                "eia_pipeline_movements_padd3_to_padd1": "eia_pipeline_movements_padd3_to_padd1_v"
             },
             as_of_cutoff=as_of_cutoff
         )
         if not eia_v_df.empty:
             df = pd.merge(df, eia_v_df, on='date', how='left')
-            df['eia_gasoline_stocks_us_total'] = df['eia_gasoline_stocks_us_total'].ffill().bfill().fillna(225.0)
-            df['eia_refinery_utilization_us_total'] = df['eia_refinery_utilization_us_total'].ffill().bfill().fillna(89.0)
-            df['eia_refinery_net_production_padd1'] = df['eia_refinery_net_production_padd1'].ffill().bfill().fillna(310.0)
-            df['eia_refinery_net_production_padd3'] = df['eia_refinery_net_production_padd3'].ffill().bfill().fillna(2680.0)
-            df['eia_pipeline_movements_padd3_to_padd1'] = df['eia_pipeline_movements_padd3_to_padd1'].ffill().bfill().fillna(2850.0)
-        else:
-            eia_connector = EIADataConnector()
-            eia_data = eia_connector.fetch_padd_inventory_and_refinery_data() or {}
+            for col in ['eia_gasoline_stocks_us_total', 'eia_refinery_utilization_us_total', 'eia_refinery_net_production_padd1', 'eia_refinery_net_production_padd3', 'eia_pipeline_movements_padd3_to_padd1']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        eia_connector = EIADataConnector()
+        eia_data = eia_connector.fetch_padd_inventory_and_refinery_data() or {}
+        if len(df) > 0 and eia_data:
             stocks_dict = eia_data.get('gasoline_stocks_million_bbl', {})
             ref_dict = eia_data.get('refinery_utilization', {})
             prod_dict = eia_data.get('refiner_net_production_thousand_bpd', {})
             mov_dict = eia_data.get('inter_padd_movements', {})
-            total_stocks = sum(stocks_dict.values()) if stocks_dict else 225.0
-            avg_util = float(np.mean(list(ref_dict.values()))) if ref_dict else 89.0
-            df['eia_gasoline_stocks_us_total'] = total_stocks
-            df['eia_refinery_utilization_us_total'] = avg_util
-            df['eia_refinery_net_production_padd1'] = prod_dict.get('padd1_finished_gasoline', 310.0)
-            df['eia_refinery_net_production_padd3'] = prod_dict.get('padd3_finished_gasoline', 2680.0)
-            df['eia_pipeline_movements_padd3_to_padd1'] = mov_dict.get('padd3_to_padd1_pipeline_thousand_bpd', 2850.0)
+            total_stocks = sum(stocks_dict.values()) if stocks_dict else df['eia_gasoline_stocks_us_total'].iloc[-1]
+            avg_util = float(np.mean(list(ref_dict.values()))) if ref_dict else df['eia_refinery_utilization_us_total'].iloc[-1]
+            df.loc[df.index[-1], 'eia_gasoline_stocks_us_total'] = total_stocks
+            df.loc[df.index[-1], 'eia_refinery_utilization_us_total'] = avg_util
+            df.loc[df.index[-1], 'eia_refinery_net_production_padd1'] = prod_dict.get('padd1_finished_gasoline', df['eia_refinery_net_production_padd1'].iloc[-1])
+            df.loc[df.index[-1], 'eia_refinery_net_production_padd3'] = prod_dict.get('padd3_finished_gasoline', df['eia_refinery_net_production_padd3'].iloc[-1])
+            df.loc[df.index[-1], 'eia_pipeline_movements_padd3_to_padd1'] = mov_dict.get('padd3_to_padd1_pipeline_thousand_bpd', df['eia_pipeline_movements_padd3_to_padd1'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge EIA petroleum balances: {e}")
-        df['eia_gasoline_stocks_us_total'] = 225.0
-        df['eia_refinery_utilization_us_total'] = 89.0
-        df['eia_refinery_net_production_padd1'] = 310.0
-        df['eia_refinery_net_production_padd3'] = 2680.0
-        df['eia_pipeline_movements_padd3_to_padd1'] = 2850.0
+        df['eia_gasoline_stocks_us_total'] = 225.0 + 15.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
+        df['eia_refinery_utilization_us_total'] = np.clip(89.0 + 4.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 80.0, 98.0)
+        df['eia_refinery_net_production_padd1'] = 310.0 + 20.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_refinery_net_production_padd3'] = 2680.0 + 100.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_pipeline_movements_padd3_to_padd1'] = 2850.0 + 120.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
 
     # 9. USDA Biofuels & E10 Blendstock Offsets (Issues #182, #273, #356, #432)
     try:
+        df['usda_ethanol_rack_price'] = 1.65 + 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 120.0) / 365.25)
+        df['usda_rin_d6_credit_value'] = 0.52 + 0.08 * np.sin(2.0 * np.pi * (_day_of_year - 150.0) / 365.25)
+        rbob_ref = df['gasoline_rbob'] if 'gasoline_rbob' in df.columns else 2.40
+        df['usda_e10_blendstock_offset'] = 0.10 * (df['usda_ethanol_rack_price'] - rbob_ref) - (0.10 * df['usda_rin_d6_credit_value'])
+
         usda_v_df = _load_vintage_timeseries(
             "data/usda_biofuel_vintages.json",
             {
-                "e100_ethanol_rack_price_per_gal": "usda_ethanol_rack_price",
-                "rin_d6_credit_value_per_gal": "usda_rin_d6_credit_value",
-                "calculated_e10_blendstock_offset_per_gal": "usda_e10_blendstock_offset"
+                "e100_ethanol_rack_price_per_gal": "usda_ethanol_rack_price_v",
+                "rin_d6_credit_value_per_gal": "usda_rin_d6_credit_value_v",
+                "calculated_e10_blendstock_offset_per_gal": "usda_e10_blendstock_offset_v"
             },
             as_of_cutoff=as_of_cutoff
         )
         if not usda_v_df.empty:
             df = pd.merge(df, usda_v_df, on='date', how='left')
-            df['usda_ethanol_rack_price'] = df['usda_ethanol_rack_price'].ffill().bfill().fillna(1.65)
-            df['usda_rin_d6_credit_value'] = df['usda_rin_d6_credit_value'].ffill().bfill().fillna(0.52)
-            rbob_ref = df['gasoline_rbob'] if 'gasoline_rbob' in df.columns else 2.40
-            calc_offset = 0.10 * (df['usda_ethanol_rack_price'] - rbob_ref) - (0.10 * df['usda_rin_d6_credit_value'])
-            df['usda_e10_blendstock_offset'] = df['usda_e10_blendstock_offset'].ffill().bfill().fillna(calc_offset)
-        else:
-            usda_connector = USDABiofuelConnector()
-            usda_data = usda_connector.fetch_ethanol_blendstock_costs() or {}
-            df['usda_ethanol_rack_price'] = usda_data.get('e100_ethanol_rack_price_per_gal', 1.65)
-            df['usda_rin_d6_credit_value'] = usda_data.get('rin_d6_credit_value_per_gal', 0.52)
-            rbob_ref = df['gasoline_rbob'] if 'gasoline_rbob' in df.columns else 2.40
-            df['usda_e10_blendstock_offset'] = usda_data.get('calculated_e10_blendstock_offset_per_gal', 0.10 * (df['usda_ethanol_rack_price'] - rbob_ref) - (0.10 * df['usda_rin_d6_credit_value']))
+            for col in ['usda_ethanol_rack_price', 'usda_rin_d6_credit_value', 'usda_e10_blendstock_offset']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        usda_connector = USDABiofuelConnector()
+        usda_data = usda_connector.fetch_ethanol_blendstock_costs() or {}
+        if len(df) > 0 and usda_data:
+            df.loc[df.index[-1], 'usda_ethanol_rack_price'] = usda_data.get('e100_ethanol_rack_price_per_gal', df['usda_ethanol_rack_price'].iloc[-1])
+            df.loc[df.index[-1], 'usda_rin_d6_credit_value'] = usda_data.get('rin_d6_credit_value_per_gal', df['usda_rin_d6_credit_value'].iloc[-1])
+            df.loc[df.index[-1], 'usda_e10_blendstock_offset'] = usda_data.get('calculated_e10_blendstock_offset_per_gal', df['usda_e10_blendstock_offset'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USDA biofuel feed: {e}")
-        df['usda_ethanol_rack_price'] = 1.65
-        df['usda_rin_d6_credit_value'] = 0.52
-        df['usda_e10_blendstock_offset'] = -0.12
+        df['usda_ethanol_rack_price'] = 1.65 + 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 120.0) / 365.25)
+        df['usda_rin_d6_credit_value'] = 0.52 + 0.08 * np.sin(2.0 * np.pi * (_day_of_year - 150.0) / 365.25)
+        rbob_ref = df['gasoline_rbob'] if 'gasoline_rbob' in df.columns else 2.40
+        df['usda_e10_blendstock_offset'] = 0.10 * (df['usda_ethanol_rack_price'] - rbob_ref) - (0.10 * df['usda_rin_d6_credit_value'])
 
     # 10. EPA Reid Vapor Pressure (RVP) Regulatory Standards & Seasonal Transitions (Issue #366)
     try:
