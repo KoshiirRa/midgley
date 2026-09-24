@@ -19,19 +19,18 @@ elif [ -f ".env" ]; then
     set +a
 fi
 
-# Default fallback configuration for Midgley Supabase instance
-SUPABASE_DATABASE_URL="${SUPABASE_DATABASE_URL:-postgresql://postgres.tmnitbsqbkmgheppogjt:M603z4gsC7E3pICG@aws-0-us-west-2.pooler.supabase.com:5432/postgres}"
+# Hindsight Database Configuration (Must be provided via environment or Google Cloud Secret Manager)
 GCP_PROJECT_ID="${GCP_PROJECT_ID:-midgley}"
 
 SERVICE_NAME="midgley-hindsight"
-REGION="us-central1"
+REGION="${GCP_REGION:-us-central1}"
 PROJECT_ID="${GCP_PROJECT_ID}"
 IMAGE="ghcr.io/vectorize-io/hindsight:latest"
 
 # 1. Check required environment variables
-if [ -z "$SUPABASE_DATABASE_URL" ]; then
-    echo "⚠️ ERROR: SUPABASE_DATABASE_URL is not set."
-    echo "Please set SUPABASE_DATABASE_URL before deploying."
+if [ -z "$SUPABASE_DATABASE_URL" ] && [ -z "$HINDSIGHT_DB_SECRET_NAME" ]; then
+    echo "⚠️ ERROR: SUPABASE_DATABASE_URL or HINDSIGHT_DB_SECRET_NAME is not set."
+    echo "Please set SUPABASE_DATABASE_URL (e.g. export SUPABASE_DATABASE_URL='postgresql://...') or set HINDSIGHT_DB_SECRET_NAME before deploying."
     exit 1
 fi
 
@@ -50,12 +49,22 @@ echo "Scale Policy: Min Instances = 0 (Scale-to-Zero for $0 Idle Cost)"
 # Default LLM model for Hindsight fact extraction & reasoning (gemini-2.5-flash for token-efficient low cost)
 HINDSIGHT_LLM_MODEL="${HINDSIGHT_LLM_MODEL:-gemini-2.5-flash}"
 
-# 2. Execute gcloud deployment
-gcloud run deploy "$SERVICE_NAME" \
-    --project "$PROJECT_ID" \
-    --image "$IMAGE" \
+# 2. Execute gcloud deployment using Secret Manager or secure env
+SECRETS_FLAG=""
+if [ -n "$HINDSIGHT_DB_SECRET_NAME" ]; then
+    SECRETS_FLAG="--set-secrets=HINDSIGHT_API_DATABASE_URL=${HINDSIGHT_DB_SECRET_NAME}:latest,DATABASE_URL=${HINDSIGHT_DB_SECRET_NAME}:latest"
+fi
+
+ENV_VARS="HINDSIGHT_API_PORT=8888,HINDSIGHT_API_RUN_MIGRATIONS_ON_STARTUP=false,HINDSIGHT_API_SKIP_LLM_VERIFICATION=true,HINDSIGHT_API_LLM_PROVIDER=gemini,HINDSIGHT_API_LLM_MODEL=$HINDSIGHT_LLM_MODEL,HINDSIGHT_API_LLM_API_KEY=$GEMINI_API_KEY,HINDSIGHT_API_DB_POOL_MAX=10"
+if [ -z "$HINDSIGHT_DB_SECRET_NAME" ]; then
+    ENV_VARS="$ENV_VARS,HINDSIGHT_API_DATABASE_URL=$SUPABASE_DATABASE_URL,DATABASE_URL=$SUPABASE_DATABASE_URL"
+fi
+
+DEPLOY_CMD="gcloud run deploy \"$SERVICE_NAME\" \
+    --project \"$PROJECT_ID\" \
+    --image \"$IMAGE\" \
     --platform managed \
-    --region "$REGION" \
+    --region \"$REGION\" \
     --allow-unauthenticated \
     --port 8888 \
     --min-instances 0 \
@@ -63,7 +72,13 @@ gcloud run deploy "$SERVICE_NAME" \
     --memory 2Gi \
     --cpu 2 \
     --timeout 300 \
-    --set-env-vars HINDSIGHT_API_PORT="8888",HINDSIGHT_API_DATABASE_URL="$SUPABASE_DATABASE_URL",DATABASE_URL="$SUPABASE_DATABASE_URL",HINDSIGHT_API_RUN_MIGRATIONS_ON_STARTUP="false",HINDSIGHT_API_SKIP_LLM_VERIFICATION="true",HINDSIGHT_API_LLM_PROVIDER="gemini",HINDSIGHT_API_LLM_MODEL="$HINDSIGHT_LLM_MODEL",HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY",HINDSIGHT_API_DB_POOL_MAX="10"
+    --set-env-vars \"$ENV_VARS\""
+
+if [ -n "$SECRETS_FLAG" ]; then
+    DEPLOY_CMD="$DEPLOY_CMD $SECRETS_FLAG"
+fi
+
+eval $DEPLOY_CMD
 
 # 3. Retrieve service URL
 SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID" --platform managed --region "$REGION" --format 'value(status.url)')

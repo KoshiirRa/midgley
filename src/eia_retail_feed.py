@@ -128,16 +128,12 @@ class EIARetailFeed:
         except Exception as e:
             logger.debug(f"FRED fetch failed for {series_id} ({e}), trying fallback.")
 
-        # Fallback to stored vintages or default
+        # Fallback to stored vintages
         if not date_map:
             vintages = self.load_eia_retail_vintages()
             for rec in vintages:
                 if rec.get("series_id") == series_id and "history" in rec:
                     date_map.update(rec["history"])
-
-        if not date_map:
-            today_str = datetime.now().strftime("%Y-%m-%d")
-            date_map[today_str] = FALLBACK_RETAIL_PRICES.get(series_id, 3.40)
 
         self._series_cache[series_id] = date_map
 
@@ -152,8 +148,8 @@ class EIARetailFeed:
     def get_retail_price_for_date(self, region: str, target_date_str: str) -> Optional[float]:
         """
         Retrieves the observed weekly retail price for a given region as of target_date_str.
-        Finds the closest published weekly release date on or before target_date_str (lookahead-safe),
-        or within +3 days if target_date falls mid-week between Monday releases.
+        Issue #427: Strictly lookahead-safe. Never returns synthetic constants or future actuals.
+        If target_date is in the future or no observation exists, returns None.
         """
         series_configs = REGION_TO_EIA_SERIES.get(region, [("GASREGW", "U.S. Regular Retail Price")])
         
@@ -162,34 +158,32 @@ class EIARetailFeed:
         except Exception:
             target_dt = pd.to_datetime(datetime.now().strftime("%Y-%m-%d"))
 
+        today_dt = pd.to_datetime(datetime.now().strftime("%Y-%m-%d"))
+        # Strict maturity check: Cannot provide actuals for future target dates
+        if target_dt > today_dt:
+            return None
+
         for series_id, _ in series_configs:
             history = self.fetch_series_history(series_id)
             if not history:
                 continue
 
             if target_date_str in history:
-                return history[target_date_str]
+                return float(history[target_date_str])
 
-            # Look for closest date in history within a 7-day window
+            # Look for closest date in history within a 7-day past window (dt <= target_dt)
             dates = [pd.to_datetime(d) for d in history.keys()]
             if not dates:
                 continue
 
-            # Prioritize lookahead-safe dates (dt <= target_dt)
-            past_dates = [d for d in dates if (target_dt - d).days >= 0 and (target_dt - d).days <= 7]
+            # Strictly prioritize lookahead-safe dates (dt <= target_dt and within 14 days)
+            past_dates = [d for d in dates if 0 <= (target_dt - d).days <= 14]
             if past_dates:
                 closest_dt = max(past_dates)
-                return history[closest_dt.strftime("%Y-%m-%d")]
+                return float(history[closest_dt.strftime("%Y-%m-%d")])
 
-            # Window lookup within 4 days forward if near Monday release
-            near_dates = [d for d in dates if abs((d - target_dt).days) <= 4]
-            if near_dates:
-                closest_dt = min(near_dates, key=lambda d: abs((d - target_dt).days))
-                return history[closest_dt.strftime("%Y-%m-%d")]
-
-        # Return series baseline if nothing found
-        fallback_series = series_configs[0][0]
-        return FALLBACK_RETAIL_PRICES.get(fallback_series, 3.450)
+        # Return None when no valid historical ground truth observation is found (Issue #427)
+        return None
 
     def fetch_all_retail_series(self) -> Dict[str, Any]:
         """Fetches the latest snapshot across all regional retail series."""

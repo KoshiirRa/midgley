@@ -489,8 +489,9 @@ def validate_price_plausibility(price: Optional[float], region: str = "National"
 
 def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
     """
-    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399).
-    Returns the number of rows purged.
+    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399, #427).
+    Also clears premature future actual prices (where forecast_target_date > today).
+    Returns the number of rows purged or corrected.
     """
     path = csv_path or HISTORY_CSV_PATH
     if not os.path.exists(path):
@@ -500,16 +501,30 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
         initial_len = len(df)
         if initial_len == 0:
             return 0
-        # Filter out Test_Region and test artifacts
+        
+        # 1. Filter out Test_Region and test artifacts (Issue #427)
         valid_mask = ~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)
         # Filter out NaN or completely invalid base prices
         valid_mask = valid_mask & df['current_base_price'].notna() & (df['current_base_price'] > 0.10)
         cleansed_df = df[valid_mask].copy()
         purged = initial_len - len(cleansed_df)
-        if purged > 0:
+
+        # 2. Reset unmatured future actual prices (Issue #427)
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        future_mask = cleansed_df['forecast_target_date'].astype(str) > today_str
+        future_actuals_count = (future_mask & cleansed_df['actual_5d_price'].notna()).sum()
+        if future_actuals_count > 0:
+            cleansed_df.loc[future_mask, 'actual_5d_price'] = np.nan
+            cleansed_df.loc[future_mask, 'actual_direction'] = ""
+            cleansed_df.loc[future_mask, 'error_dollars'] = np.nan
+            cleansed_df.loc[future_mask, 'directional_hit'] = np.nan
+            cleansed_df.loc[future_mask, 'within_95ci_hit'] = np.nan
+            logger.info(f"Cleanse: Cleared {future_actuals_count} premature future actuals from {path}.")
+
+        if purged > 0 or future_actuals_count > 0:
             atomic_write_csv(path, cleansed_df, index=False)
-            logger.info(f"Cleanse: Purged {purged} invalid/test fixture rows from {path}.")
-        return purged
+            logger.info(f"Cleanse: Purged {purged} invalid/test fixture rows and corrected future actuals in {path}.")
+        return purged + int(future_actuals_count)
     except Exception as e:
         logger.warning(f"Failed to cleanse prediction history at {path}: {e}")
         return 0
@@ -526,8 +541,8 @@ def backfill_actual_prices_and_evaluate(
     Fetches actual historical gas prices up to today, matches them against past forecasted target dates,
     updates actual prices, error metrics, and directional hit outcomes in prediction_history.csv.
     Uses official observed U.S. EIA weekly retail prices by PADD/State (Issue #403, #391, #392) as ground truth.
-    Eliminates synthetic offset ladders and identity fallbacks.
-    Allows dependency injection for testing without network calls (Issue #395).
+    Issue #427: Enforces strict maturity gating (forecast_target_date <= today).
+    Strictly separates wholesale NYMEX RBOB (RB=F) and retail ground truth.
     """
     global _GLOBAL_RBOB_ACTUALS_CACHE
     target_csv = csv_path or HISTORY_CSV_PATH
@@ -592,10 +607,15 @@ def backfill_actual_prices_and_evaluate(
             logger.debug(f"EIARetailFeed unavailable, fallback to basis: {e}")
             eia_feed = None
 
+    today_str = datetime.now().strftime("%Y-%m-%d")
     unevaluated_mask = history_df['actual_5d_price'].isna()
+    
+    # ISSUE #427 FIX: Strict maturity gating - target date must be on or before today
+    target_dates = history_df['forecast_target_date'].astype(str)
+    matured_mask = unevaluated_mask & (target_dates <= today_str)
     if target_region:
-        unevaluated_mask = unevaluated_mask & (history_df['region'] == target_region)
-    target_indices = history_df[unevaluated_mask].index
+        matured_mask = matured_mask & (history_df['region'] == target_region)
+    target_indices = history_df[matured_mask].index
     if len(target_indices) == 0:
         return history_df
 
@@ -612,21 +632,18 @@ def backfill_actual_prices_and_evaluate(
         source_prov = None
 
         if reg == "National":
+            # Wholesale RBOB Futures Ground Truth (RB=F)
             if actuals_map and target_date_str in actuals_map:
                 candidate_price = float(actuals_map[target_date_str])
                 if validate_price_plausibility(candidate_price, "National", is_retail=False):
                     actual_price = candidate_price
                     source_prov = "yfinance:RB=F"
-            elif eia_feed:
-                candidate_price = eia_feed.get_retail_price_for_date("National", target_date_str)
-                if validate_price_plausibility(candidate_price, "National", is_retail=True):
-                    actual_price = candidate_price
-                    source_prov = "eia_retail_feed:GASREGW"
+            # Strict segregation: Never substitute retail GASREGW for wholesale National target (Issue #427)
         else:
-            # Regional metro ground-truth lookup via EIA weekly retail feed (Issue #403, #391, #392)
+            # Regional metro ground-truth lookup via EIA weekly retail feed (Issue #403, #391, #392, #427)
             if eia_feed:
                 candidate_price = eia_feed.get_retail_price_for_date(reg, target_date_str)
-                if validate_price_plausibility(candidate_price, reg, is_retail=True):
+                if candidate_price is not None and validate_price_plausibility(candidate_price, reg, is_retail=True):
                     actual_price = candidate_price
                     source_prov = f"eia_retail_feed:{reg}"
 

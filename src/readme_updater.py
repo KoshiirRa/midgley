@@ -74,90 +74,100 @@ def update_readme_forecasts(
     target_oakland = "Next 5 Business Days"
     target_bayarea = "Next 5 Business Days"
     
+    def get_latest_valid_region_forecast(df: pd.DataFrame, region: str) -> Optional[pd.Series]:
+        if df.empty or 'region' not in df.columns:
+            return None
+        reg_df = df[df['region'] == region]
+        if reg_df.empty:
+            return None
+        
+        # Prioritize prospective live runs and 5-day horizon (Issue #428)
+        live_df = reg_df[
+            (~reg_df['run_type'].astype(str).str.contains("RETROSPECTIVE", case=False)) &
+            (~reg_df['run_type'].astype(str).str.contains("TEST", case=False))
+        ]
+        if not live_df.empty and 'forecast_horizon_days' in live_df.columns:
+            h5_df = live_df[live_df['forecast_horizon_days'].fillna(5).astype(float) == 5.0]
+            if not h5_df.empty:
+                live_df = h5_df
+                
+        chosen_df = live_df if not live_df.empty else reg_df
+        return chosen_df.iloc[-1]
+
     if os.path.exists(history_csv_path):
         try:
             df = pd.read_csv(history_csv_path)
             if not df.empty:
-                nat_df = df[df['region'] == 'National']
-                tulsa_df = df[df['region'] == 'Tulsa_OK']
-                newark_df = df[df['region'] == 'Newark_DE']
-                cin_oh_df = df[df['region'] == 'Cincinnati_OH']
-                cin_ky_df = df[df['region'] == 'Cincinnati_KY']
-                greenville_df = df[df['region'] == 'Greenville_NC']
-                charlotte_df = df[df['region'] == 'Charlotte_NC']
-                psl_df = df[df['region'] == 'Port_St_Lucie_FL']
-                oakland_df = df[df['region'] == 'Oakland_CA']
-                bayarea_df = df[df['region'] == 'BayArea_CA']
+                latest_nat = get_latest_valid_region_forecast(df, 'National')
+                latest_tulsa = get_latest_valid_region_forecast(df, 'Tulsa_OK')
+                latest_newark = get_latest_valid_region_forecast(df, 'Newark_DE')
+                latest_cin_oh = get_latest_valid_region_forecast(df, 'Cincinnati_OH')
+                latest_cin_ky = get_latest_valid_region_forecast(df, 'Cincinnati_KY')
+                latest_greenville = get_latest_valid_region_forecast(df, 'Greenville_NC')
+                latest_charlotte = get_latest_valid_region_forecast(df, 'Charlotte_NC')
+                latest_psl = get_latest_valid_region_forecast(df, 'Port_St_Lucie_FL')
+                latest_oakland = get_latest_valid_region_forecast(df, 'Oakland_CA')
+                latest_bayarea = get_latest_valid_region_forecast(df, 'BayArea_CA')
                 
-                if not nat_df.empty:
-                    latest_nat = nat_df.iloc[-1]
-                    nat_price = latest_nat['predicted_5d_price']
-                    base_nat = latest_nat['current_base_price']
+                if latest_nat is not None:
+                    nat_price = float(latest_nat['predicted_5d_price'])
+                    base_nat = float(latest_nat['current_base_price'])
                     nat_dir = "UP 📈" if nat_price >= base_nat else "DOWN 📉"
-                    target_nat = latest_nat['forecast_target_date']
+                    target_nat = str(latest_nat['forecast_target_date'])
                     
-                if not tulsa_df.empty:
-                    latest_tulsa = tulsa_df.iloc[-1]
-                    tulsa_price = latest_tulsa['predicted_5d_price']
-                    base_tulsa = latest_tulsa['current_base_price']
+                if latest_tulsa is not None:
+                    tulsa_price = float(latest_tulsa['predicted_5d_price'])
+                    base_tulsa = float(latest_tulsa['current_base_price'])
                     tulsa_dir = "UP 📈" if tulsa_price >= base_tulsa else "DOWN 📉"
-                    target_tulsa = latest_tulsa['forecast_target_date']
+                    target_tulsa = str(latest_tulsa['forecast_target_date'])
 
-                if not newark_df.empty:
-                    latest_newark = newark_df.iloc[-1]
-                    newark_price = latest_newark['predicted_5d_price']
-                    base_newark = latest_newark['current_base_price']
+                if latest_newark is not None:
+                    newark_price = float(latest_newark['predicted_5d_price'])
+                    base_newark = float(latest_newark['current_base_price'])
                     newark_dir = "UP 📈" if newark_price >= base_newark else "DOWN 📉"
-                    target_newark = latest_newark['forecast_target_date']
+                    target_newark = str(latest_newark['forecast_target_date'])
 
-                if not cin_oh_df.empty:
-                    latest_cin_oh = cin_oh_df.iloc[-1]
-                    cin_oh_price = latest_cin_oh['predicted_5d_price']
-                    base_cin_oh = latest_cin_oh['current_base_price']
+                if latest_cin_oh is not None:
+                    cin_oh_price = float(latest_cin_oh['predicted_5d_price'])
+                    base_cin_oh = float(latest_cin_oh['current_base_price'])
                     cin_oh_dir = "UP 📈" if cin_oh_price >= base_cin_oh else "DOWN 📉"
-                    target_cin_oh = latest_cin_oh['forecast_target_date']
+                    target_cin_oh = str(latest_cin_oh['forecast_target_date'])
 
-                if not cin_ky_df.empty:
-                    latest_cin_ky = cin_ky_df.iloc[-1]
-                    cin_ky_price = latest_cin_ky['predicted_5d_price']
-                    base_cin_ky = latest_cin_ky['current_base_price']
+                if latest_cin_ky is not None:
+                    cin_ky_price = float(latest_cin_ky['predicted_5d_price'])
+                    base_cin_ky = float(latest_cin_ky['current_base_price'])
                     cin_ky_dir = "UP 📈" if cin_ky_price >= base_cin_ky else "DOWN 📉"
-                    target_cin_ky = latest_cin_ky['forecast_target_date']
+                    target_cin_ky = str(latest_cin_ky['forecast_target_date'])
 
-                if not greenville_df.empty:
-                    latest_greenville = greenville_df.iloc[-1]
-                    greenville_price = latest_greenville['predicted_5d_price']
-                    base_greenville = latest_greenville['current_base_price']
+                if latest_greenville is not None:
+                    greenville_price = float(latest_greenville['predicted_5d_price'])
+                    base_greenville = float(latest_greenville['current_base_price'])
                     greenville_dir = "UP 📈" if greenville_price >= base_greenville else "DOWN 📉"
-                    target_greenville = latest_greenville['forecast_target_date']
+                    target_greenville = str(latest_greenville['forecast_target_date'])
 
-                if not charlotte_df.empty:
-                    latest_charlotte = charlotte_df.iloc[-1]
-                    charlotte_price = latest_charlotte['predicted_5d_price']
-                    base_charlotte = latest_charlotte['current_base_price']
+                if latest_charlotte is not None:
+                    charlotte_price = float(latest_charlotte['predicted_5d_price'])
+                    base_charlotte = float(latest_charlotte['current_base_price'])
                     charlotte_dir = "UP 📈" if charlotte_price >= base_charlotte else "DOWN 📉"
-                    target_charlotte = latest_charlotte['forecast_target_date']
+                    target_charlotte = str(latest_charlotte['forecast_target_date'])
 
-                if not psl_df.empty:
-                    latest_psl = psl_df.iloc[-1]
-                    psl_price = latest_psl['predicted_5d_price']
-                    base_psl = latest_psl['current_base_price']
+                if latest_psl is not None:
+                    psl_price = float(latest_psl['predicted_5d_price'])
+                    base_psl = float(latest_psl['current_base_price'])
                     psl_dir = "UP 📈" if psl_price >= base_psl else "DOWN 📉"
-                    target_psl = latest_psl['forecast_target_date']
+                    target_psl = str(latest_psl['forecast_target_date'])
 
-                if not oakland_df.empty:
-                    latest_oakland = oakland_df.iloc[-1]
-                    oakland_price = latest_oakland['predicted_5d_price']
-                    base_oakland = latest_oakland['current_base_price']
+                if latest_oakland is not None:
+                    oakland_price = float(latest_oakland['predicted_5d_price'])
+                    base_oakland = float(latest_oakland['current_base_price'])
                     oakland_dir = "UP 📈" if oakland_price >= base_oakland else "DOWN 📉"
-                    target_oakland = latest_oakland['forecast_target_date']
+                    target_oakland = str(latest_oakland['forecast_target_date'])
 
-                if not bayarea_df.empty:
-                    latest_bayarea = bayarea_df.iloc[-1]
-                    bayarea_price = latest_bayarea['predicted_5d_price']
-                    base_bayarea = latest_bayarea['current_base_price']
+                if latest_bayarea is not None:
+                    bayarea_price = float(latest_bayarea['predicted_5d_price'])
+                    base_bayarea = float(latest_bayarea['current_base_price'])
                     bayarea_dir = "UP 📈" if bayarea_price >= base_bayarea else "DOWN 📉"
-                    target_bayarea = latest_bayarea['forecast_target_date']
+                    target_bayarea = str(latest_bayarea['forecast_target_date'])
         except Exception as e:
             logger.warning(f"Could not read prediction history: {e}")
             

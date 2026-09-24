@@ -223,7 +223,7 @@
     }
   },
   {
-    "as_of": "2026-09-24T15:45:08.439413+00:00",
+    "as_of": "2026-09-24T17:26:41.054921+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "94612",
     "zip_code": "94612",
@@ -243,11 +243,11 @@
       "pm25_aqi": 45,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-24T15:45:08.439413+00:00"
+      "as_of": "2026-09-24T17:26:41.054921+00:00"
     }
   },
   {
-    "as_of": "2026-09-24T15:45:08.520855+00:00",
+    "as_of": "2026-09-24T17:26:41.225566+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "74101",
     "zip_code": "74101",
@@ -267,11 +267,11 @@
       "pm25_aqi": 40,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-24T15:45:08.520855+00:00"
+      "as_of": "2026-09-24T17:26:41.225566+00:00"
     }
   },
   {
-    "as_of": "2026-09-24T15:45:08.602907+00:00",
+    "as_of": "2026-09-24T17:26:41.400108+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "19711",
     "zip_code": "19711",
@@ -291,11 +291,11 @@
       "pm25_aqi": 42,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-24T15:45:08.602907+00:00"
+      "as_of": "2026-09-24T17:26:41.400108+00:00"
     }
   },
   {
-    "as_of": "2026-09-24T15:45:08.707295+00:00",
+    "as_of": "2026-09-24T17:26:41.575097+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "45202",
     "zip_code": "45202",
@@ -315,11 +315,11 @@
       "pm25_aqi": 48,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-24T15:45:08.707295+00:00"
+      "as_of": "2026-09-24T17:26:41.575097+00:00"
     }
   },
   {
-    "as_of": "2026-09-24T15:45:08.777724+00:00",
+    "as_of": "2026-09-24T17:26:41.739585+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "27834",
     "zip_code": "27834",
@@ -339,11 +339,11 @@
       "pm25_aqi": 35,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-24T15:45:08.777724+00:00"
+      "as_of": "2026-09-24T17:26:41.739585+00:00"
     }
   },
   {
-    "as_of": "2026-09-24T15:45:08.844284+00:00",
+    "as_of": "2026-09-24T17:26:41.914182+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "28202",
     "zip_code": "28202",
@@ -363,11 +363,11 @@
       "pm25_aqi": 38,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-24T15:45:08.844284+00:00"
+      "as_of": "2026-09-24T17:26:41.914182+00:00"
     }
   },
   {
-    "as_of": "2026-09-24T15:45:08.901102+00:00",
+    "as_of": "2026-09-24T17:26:42.077608+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "34984",
     "zip_code": "34984",
@@ -387,11 +387,11 @@
       "pm25_aqi": 30,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-24T15:45:08.901102+00:00"
+      "as_of": "2026-09-24T17:26:42.077608+00:00"
     }
   },
   {
-    "as_of": "2026-09-24T15:46:45.379919+00:00",
+    "as_of": "2026-09-24T17:26:49.172708+00:00",
     "valid_date": "2026-09-24",
     "entity_key": "macro_composite",
     "zip_code": null,
@@ -401,7 +401,7 @@
     "is_unplanned_outage": false,
     "data": {
       "status": "SUCCESS",
-      "as_of": "2026-09-24T15:46:45.379919+00:00",
+      "as_of": "2026-09-24T17:26:49.172708+00:00",
       "indices": {
         "bay_area_outage_risk_index": 0.0,
         "tulsa_outage_risk_index": 0.0,
@@ -414,31 +414,31 @@
         "is_unplanned_refinery_outage_detected": false,
         "active_outage_count": 0,
         "ozone_action_day_count": 0,
-        "max_rvp_compliance_surcharge_per_gal": 0.0255
+        "max_rvp_compliance_surcharge_per_gal": 0.054
       },
       "corridors": {
-        "tri_state": {
-          "corridor": "tri_state",
-          "name": "Ohio River Valley / Tri-State Refining Hub (PADD 2)",
-          "monitored_assets": 1,
-          "primary_zip": "45202",
-          "observed_pm25": 12.0,
-          "observed_so2": 3.0,
-          "observed_ozone_aqi": 68,
-          "baseline_pm25": 12.0,
-          "baseline_so2": 3.0,
+        "bay_area": {
+          "corridor": "bay_area",
+          "name": "SF Bay Area Refining Corridor (PADD 5)",
+          "monitored_assets": 3,
+          "primary_zip": "94612",
+          "observed_pm25": 9.83,
+          "observed_so2": 1.93,
+          "observed_ozone_aqi": 58,
+          "baseline_pm25": 9.83,
+          "baseline_so2": 1.93,
           "z_score_pm25": 0.0,
           "z_score_so2": 0.0,
           "is_unplanned_outage": false,
           "is_wildfire_smoke": false,
           "is_ozone_action_day": false,
           "ozone_category": "Moderate",
-          "statutory_rvp_psi": 7.8,
+          "statutory_rvp_psi": 7.0,
           "seasonal_blend_state": "FALL_SHOULDER",
-          "rvp_compliance_surcharge_per_gal": 0.0255,
+          "rvp_compliance_surcharge_per_gal": 0.054,
           "outage_risk_index": 0.0,
           "flaring_rack_shock_per_gal": 0.0,
-          "estimated_rack_shock_per_gal": 0.0255
+          "estimated_rack_shock_per_gal": 0.054
         }
       },
       "active_outages": [],

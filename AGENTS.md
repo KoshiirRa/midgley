@@ -153,6 +153,19 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
     - **Tier 4:** Full Hybrid Estimator (Full feature matrix + ECM + Conformal uncertainty bounds)
   - **Statistical Hypothesis Testing:** Implements Diebold-Mariano (DM) tests with Harvey-Leybourne-Newbold (HLN) small-sample and multi-step horizon corrections ($p < 0.05$) and Stationary Block Bootstrap empirical confidence intervals.
   - **Automated Promotion Script:** `scripts/evaluate_model_hierarchy.py` evaluates all 10 regional hubs across multi-day horizons ($h \in [1..5]$) and outputs structured audit scorecards.
+* **Security Hardening, Postgres RLS on Hindsight & Secret Manager (`scripts/deploy_hindsight_cloudrun.sh` & `scripts/init_supabase_hindsight.sql` - Issue #426):**
+  - **Zero Plaintext Credentials:** Removed hardcoded fallback database connection strings from deployment scripts, requiring explicit environment or Google Cloud Secret Manager (`--set-secrets`) bindings.
+  - **Postgres Row-Level Security (RLS):** Enforced `ENABLE ROW LEVEL SECURITY` across all Hindsight memory tables (`hindsight_memories`, `hindsight_mental_models`) with `service_role` authorization policies.
+  - **Template Sanitization:** Scrubbed concrete keys, UUIDs, and network addresses from `SELF_HOSTING.md` and documentation scripts.
+* **Prediction Ledger Ground Truth Maturity Gating & Test Sandbox Isolation (`src/prediction_logger.py`, `src/eia_retail_feed.py` & `tests/conftest.py` - Issue #427):**
+  - **Target Date Maturity Gating:** Enforces strict maturity gating `forecast_target_date <= today` before backfilling actual prices in `src/prediction_logger.py`, ensuring un-matured future predictions remain `null`.
+  - **Strict EIA Retail Provenance:** Prohibits recording synthetic fallback constants or mock formulas as observed EIA ground truth in `src/eia_retail_feed.py`.
+  - **Wholesale vs Retail Segregation:** Strictly isolates wholesale RBOB futures (`RB=F`) from retail `GASREGW`, prohibiting cross-substitution.
+  - **Pytest Sandbox Isolation:** Provides global `tests/conftest.py` autouse fixtures redirecting `HISTORY_CSV_PATH` to `tmp_path`, preventing test runs and `Test_Region` rows from polluting the production ledger.
+* **Regional Intraday Shock Scoping & Post-Inference Plausibility Gating (`src/data_ingestion.py` & `src/models.py` - Issue #428):**
+  - **Locale-Specific Event Scoping:** Refactored `load_live_regional_intraday_events()` with an explicit regional keyword taxonomy, ensuring national headlines are not indiscriminately broadcasted as local refinery disruptions to regional metro models.
+  - **Post-Inference Hybrid-vs-Quant Plausibility Gate:** Implemented `enforce_forecast_plausibility_gate()` in `src/models.py`, clamping LLM hybrid divergences back to statistically calibrated bounds ($|\hat{P}_{\text{hybrid}} - \hat{P}_{\text{quant}}| \le 2.5\sigma_{\text{residual}}$) and enforcing multi-day return boundaries ($[-0.25, +0.25]$).
+  - **Single-Source Validated Publication:** Aligned `src/readme_updater.py` and `docs/runs/latest.json` to consume only validated, prospective, 5-day horizon forecast records.
 * **ALFRED Historical Publication Vintages Connector (`src/alfred_vintages.py` - Issue #367):**
   - **Point-in-Time Macroeconomic & Energy Series:** Reconstructs historical observations as published on specific historical calendar dates from the St. Louis Fed ALFRED (ArchivaL Federal Reserve Economic Data) API.
   - **Bitemporal Snapshot Tracking:** Tracks vintage publication tables for `GASREGW` (weekly retail gasoline prices), `WPULEUS1-5` (PADD refinery utilization), `CUUR0000SETB01` (CPI motor fuel index), and `WGFUPUS2` (product supplied), persisting snapshot tables in `data/alfred_vintages.json`.

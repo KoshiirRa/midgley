@@ -210,7 +210,21 @@ def load_live_regional_intraday_events(region_name: str, max_age_days: int = 30,
 
         records = []
         now = datetime.now()
-        reg_clean = region_name.lower().replace("_", " ").replace("metro", "").strip()
+        reg_key = region_name.lower().replace("_", "").replace("metro", "").strip()
+        is_national = (reg_key == "national")
+
+        # Regional geographic and refining hub keyword taxonomy (Issue #428)
+        REGIONAL_KEYWORDS = {
+            "tulsa": ["tulsa", "oklahoma", "cushing", "hollyfrontier", "hf sinclair", "midcontinent"],
+            "newark": ["newark", "delaware", "padd 1b", "delaware city", "philadelphia", "paulsboro", "pbf energy"],
+            "cincinnati": ["cincinnati", "ohio", "kentucky", "tri-state", "marathon catlettsburg", "ohio river"],
+            "greenville": ["greenville", "north carolina", "colonial pipeline", "padd 1c", "plantation pipeline"],
+            "charlotte": ["charlotte", "north carolina", "colonial pipeline", "padd 1c", "plantation pipeline"],
+            "oakland": ["oakland", "san francisco", "bay area", "richmond", "chevron richmond", "martinez", "valero benicia", "padd 5", "carbob", "phillips 66 rodeo"],
+            "bayarea": ["oakland", "san francisco", "bay area", "richmond", "chevron richmond", "martinez", "valero benicia", "padd 5", "carbob", "phillips 66 rodeo"],
+            "portstlucie": ["port st lucie", "florida", "port everglades", "tampa", "straits of florida", "waterborne terminal"]
+        }
+        regional_tokens = REGIONAL_KEYWORDS.get(reg_key, [reg_key])
 
         for ev in events:
             ts_str = ev.get("timestamp", "")
@@ -222,15 +236,22 @@ def load_live_regional_intraday_events(region_name: str, max_age_days: int = 30,
             if (now - dt).days > max_age_days:
                 continue
 
-            target_locales = [str(loc).lower() for loc in ev.get("target_locales", [])]
+            target_locales = [str(loc).lower().replace("_", "").strip() for loc in ev.get("target_locales", [])]
             headline = ev.get("headline", "")
             
-            # Check if matching region or national
+            # Issue #428: Scope regional intraday shocks properly.
+            # National events match ONLY when region_name is 'National'.
+            # Regional metros require explicit target_locale match or headline mention of the specific locale.
             is_match = False
-            if "national" in target_locales or any(reg_clean in loc for loc in target_locales):
-                is_match = True
-            elif any(token in headline.lower() for token in [reg_clean]):
-                is_match = True
+            if is_national:
+                if "national" in target_locales or not target_locales:
+                    is_match = True
+            else:
+                # Regional metro matching
+                if any(any(tok in loc or loc in tok for tok in regional_tokens) for loc in target_locales):
+                    is_match = True
+                elif any(token in headline.lower() for token in regional_tokens):
+                    is_match = True
 
             if is_match and headline:
                 records.append({

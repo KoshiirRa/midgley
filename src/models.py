@@ -484,7 +484,59 @@ def compute_quantile_uncertainty_bands(y_pred: np.ndarray, residual_std: float =
     }
 
 
+def enforce_forecast_plausibility_gate(
+    hybrid_pred_price: float,
+    quant_pred_price: float,
+    base_price: float,
+    horizon_days: int = 5,
+    residual_std: Optional[float] = None
+) -> Tuple[float, bool, str]:
+    """
+    Enforces post-inference plausibility bounds between hybrid LLM forecast and quantitative baseline (Issue #428).
+    Clamps extreme runaway divergences back to statistically calibrated bounds.
+    """
+    if base_price <= 0:
+        return float(hybrid_pred_price), False, "INVALID_BASE"
+    
+    # 1. Maximum plausible return over h business days: 
+    # Scaled from +/- 8% (1d) to +/- 20% (5d), with absolute cap at +/- 25%
+    max_return_bound = min(0.25, max(0.08, 0.05 + 0.03 * horizon_days))
+    
+    # 2. Maximum allowable absolute divergence from physical quantitative baseline
+    sigma = residual_std if residual_std and residual_std > 0 else 0.05
+    max_divergence_dollars = max(0.20, 2.5 * sigma * np.sqrt(max(1, horizon_days) / 5.0))
+    
+    # Compute hybrid return
+    raw_return = (hybrid_pred_price - base_price) / base_price
+    clamped_price = hybrid_pred_price
+    gated = False
+    reasons = []
+    
+    # Check return limit
+    if abs(raw_return) > max_return_bound:
+        clamped_return = float(np.clip(raw_return, -max_return_bound, max_return_bound))
+        clamped_price = base_price * (1.0 + clamped_return)
+        gated = True
+        reasons.append(f"RETURN_BOUND_CLAMP (raw={raw_return:+.1%}, max=+/-{max_return_bound:.1%})")
+    
+    # Check quant baseline divergence
+    if quant_pred_price > 0:
+        delta = clamped_price - quant_pred_price
+        if abs(delta) > max_divergence_dollars:
+            clamped_delta = float(np.clip(delta, -max_divergence_dollars, max_divergence_dollars))
+            clamped_price = quant_pred_price + clamped_delta
+            gated = True
+            reasons.append(f"QUANT_DIVERGENCE_CLAMP (raw_delta=${delta:+.2f}, max=+/-${max_divergence_dollars:.2f})")
+            
+    reason_str = "; ".join(reasons) if reasons else "PLAUSIBLE"
+    if gated:
+        logger.warning(f"⚠️ Forecast Plausibility Gate Triggered (h={horizon_days}d): {reason_str}. Clamped price: ${hybrid_pred_price:.4f} -> ${clamped_price:.4f}")
+        
+    return round(float(clamped_price), 4), gated, reason_str
+
+
 def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wandb: bool = False, wandb_run: Any = None) -> dict:
+
     """
     Trains Baseline Quantitative Model and Hybrid LLM-Augmented Model.
     Performs ablation comparison on the out-of-time test set.
@@ -656,17 +708,27 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         raw_live_pred_quant = float(pred_quant[-1]) if len(pred_quant) > 0 else 0.0
 
     if is_return_target:
-        bounded_live_pred = float(np.clip(raw_live_pred, -0.60, 0.60))
-        bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.60, 0.60))
-        live_pred_price = float(live_base * (1.0 + bounded_live_pred))
-        live_pred_quant_price = float(live_base * (1.0 + bounded_live_pred_quant))
-        live_pred_return = bounded_live_pred
-        live_pred_quant_return = bounded_live_pred_quant
+        bounded_live_pred = float(np.clip(raw_live_pred, -0.25, 0.25))
+        bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.25, 0.25))
+        raw_hybrid_price = float(live_base * (1.0 + bounded_live_pred))
+        raw_quant_price = float(live_base * (1.0 + bounded_live_pred_quant))
     else:
-        live_pred_price = raw_live_pred
-        live_pred_quant_price = raw_live_pred_quant
-        live_pred_return = (raw_live_pred - live_base) / live_base if live_base > 0 else 0.0
-        live_pred_quant_return = (raw_live_pred_quant - live_base) / live_base if live_base > 0 else 0.0
+        raw_hybrid_price = raw_live_pred
+        raw_quant_price = raw_live_pred_quant
+
+    # Plausibility Gating (Issue #428)
+    h_eval = int(split_data.get('forecast_horizon', 5))
+    r_std = metrics_hybrid.get('RMSE', 0.05)
+    live_pred_price, is_gated, gate_reason = enforce_forecast_plausibility_gate(
+        hybrid_pred_price=raw_hybrid_price,
+        quant_pred_price=raw_quant_price,
+        base_price=live_base,
+        horizon_days=h_eval,
+        residual_std=r_std
+    )
+    live_pred_quant_price = raw_quant_price
+    live_pred_return = (live_pred_price - live_base) / live_base if live_base > 0 else 0.0
+    live_pred_quant_return = (live_pred_quant_price - live_base) / live_base if live_base > 0 else 0.0
 
     return {
         "model_quant": model_quant,
@@ -705,6 +767,8 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "live_feature_origin_date": str(live_origin_date) if live_origin_date is not None else None,
         "forecast_origin_date": str(live_origin_date) if live_origin_date is not None else None,
         "feature_cutoff_date": str(live_origin_date) if live_origin_date is not None else None,
+        "plausibility_gated": is_gated,
+        "plausibility_reason": gate_reason,
         "forecast_target_date": (
             pd.bdate_range(start=pd.to_datetime(live_origin_date), periods=int(split_data.get('forecast_horizon', 5)) + 1)[-1].strftime('%Y-%m-%d')
             if live_origin_date is not None else None
@@ -725,6 +789,7 @@ def train_multi_horizon_models(
     Trains and compares discrete step-ahead forecasting models across multi-day horizons
     (default: h in [1, 2, 3, 4, 5]) (Issue #314).
     Preserves contemporary unlabelled inference features (t=0) across all forecast horizons (Issue #353).
+    Enforces post-inference plausibility gating (Issue #428).
     
     Returns a dictionary mapping horizon integer h -> ablation results dictionary:
     {
@@ -770,19 +835,31 @@ def train_multi_horizon_models(
         raw_live_pred_quant = float(res['model_quant'].predict(last_row_quant)[0])
         
         if res.get('is_return_target', False) or splits.get('predict_returns', False):
-            bounded_live_pred = float(np.clip(raw_live_pred, -0.60, 0.60))
-            bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.60, 0.60))
-            res['live_pred_price'] = float(live_base * (1.0 + bounded_live_pred))
-            res['live_pred_quant_price'] = float(live_base * (1.0 + bounded_live_pred_quant))
-            res['live_base_price'] = live_base
-            res['live_pred_return'] = bounded_live_pred
-            res['live_pred_quant_return'] = bounded_live_pred_quant
+            bounded_live_pred = float(np.clip(raw_live_pred, -0.25, 0.25))
+            bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.25, 0.25))
+            raw_hybrid_price = float(live_base * (1.0 + bounded_live_pred))
+            raw_quant_price = float(live_base * (1.0 + bounded_live_pred_quant))
         else:
-            res['live_pred_price'] = raw_live_pred
-            res['live_pred_quant_price'] = raw_live_pred_quant
-            res['live_base_price'] = live_base
-            res['live_pred_return'] = (raw_live_pred - live_base) / live_base if live_base > 0 else 0.0
-            res['live_pred_quant_return'] = (raw_live_pred_quant - live_base) / live_base if live_base > 0 else 0.0
+            raw_hybrid_price = raw_live_pred
+            raw_quant_price = raw_live_pred_quant
+
+        # Plausibility Gating (Issue #428)
+        r_std = res.get('metrics_hybrid', {}).get('RMSE', 0.05)
+        gated_price, is_gated, gate_reason = enforce_forecast_plausibility_gate(
+            hybrid_pred_price=raw_hybrid_price,
+            quant_pred_price=raw_quant_price,
+            base_price=live_base,
+            horizon_days=h,
+            residual_std=r_std
+        )
+        
+        res['live_pred_price'] = gated_price
+        res['live_pred_quant_price'] = raw_quant_price
+        res['live_base_price'] = live_base
+        res['live_pred_return'] = (gated_price - live_base) / live_base if live_base > 0 else 0.0
+        res['live_pred_quant_return'] = (raw_quant_price - live_base) / live_base if live_base > 0 else 0.0
+        res['plausibility_gated'] = is_gated
+        res['plausibility_reason'] = gate_reason
         
         res['live_feature_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
         res['forecast_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
