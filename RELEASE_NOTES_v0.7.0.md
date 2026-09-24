@@ -9,7 +9,35 @@
 
 ## 🚀 Overview & Release Highlights
 
-Midgley **v0.7.0** is a landmark reliability, security, econometric expansion, and benchmark integration release. It eliminates critical security vulnerabilities across reconcilers and API middleware, resolves lookahead temporal leakage in feature engineering, restores CoSPOT spectral context in intraday anomaly scoring, expands Weights & Biases telemetry to all active metropolitan hubs, introduces zero-cost daily EIA physical spot wholesale price and weekly EPA EMTS RIN credit ingestion, California Energy Commission (CEC) fuels watch ingestion, EPA statutory RVP blend transition schedules, NOAA CO-OPS marine terminal telemetry, integrates NASA POWER Point Daily Climatology for distillate heating/cooling degree days and Midwest biofuel agroclimatology, expands Headline Arena daily challenge continuous probability forecasting across RBOB Gasoline, Cushing WTI, Henry Hub Natural Gas (NG), and US Dollar Index (DXY), exposes granular Hindsight Hosted episodic memory telemetry (durable observations, cloud reconciliation queue, and connector event health), decouples Headline Arena energy forecast generation and submission via a 24-hour pending cache and 30-minute sync workflow, supports EIA Weekly Retail Regular Gasoline Civic Challenges, reconciles CARB statutory tax itemization across all documentation and regional metadata, introduces point-in-time EIA Weekly Retail Gasoline price evaluation ground truth by PADD and state, adds NYMEX futures forward curve term structures, calendar spreads ($M_1 - M_2$), and 3-2-1 crack spreads, eliminates hardcoded dashboard accuracy hit rates and rolling performance arrays with dynamic calculations from real out-of-time prediction history, eliminates synthetic offset ladders and identity fallbacks in MLOps prediction logging, purges test fixture artifacts from production history with runtime plausibility validation guards, modernizes CI/CD GitHub Actions workflows with major `actions-workflows` version bumps (`actions/checkout@v7`, `actions/setup-python@v7`), and updates ASGI server dependencies (`uvicorn>=0.53.0`).
+Midgley **v0.7.0** is a major milestone release delivering significant reliability, security, econometric, and infrastructure enhancements across the multi-agent forecasting framework:
+
+* **🔒 Security Hardening & Safe Execution:**
+  * Remediated remote code execution vectors in upgrade reconcilers via allowlisted argument execution (`shell=False`).
+  * Enforced fail-closed admin authentication, exact route prefix matching on API middleware, and Postgres Row-Level Security (RLS) on Hindsight episodic memory tables.
+  * Scrubbed hardcoded fallback credentials and integrated Google Cloud Secret Manager.
+
+* **📈 Econometric Modeling & Quantitative Feature Expansion:**
+  * Added NYMEX futures forward curves, prompt-to-second month calendar spreads ($M_1 - M_2$), prompt 1:1 crack spreads, and standardized 3-2-1 refinery crack margins.
+  * Formulated return-based model targets with boundary-clipped inverse level reconstruction to eliminate near-unit-root autocorrelation dominance.
+  * Implemented two-step Engle-Granger Asymmetric Error-Correction Models (ECM) to capture downward pump price stickiness ("rockets and feathers").
+
+* **🌐 Real-Time Physical Feeds & Regulatory Standards:**
+  * Integrated zero-cost daily EIA regional spot wholesale prices and weekly EPA EMTS RIN credit pricing (D6, D4, D3).
+  * Connected California Energy Commission (CEC) fuels watch balances, EPA/CARB Reid Vapor Pressure (RVP) seasonal transition countdowns, and NOAA CO-OPS marine fuel terminal water level telemetry.
+  * Ingested NASA POWER point climatology for heating/cooling degree days and Midwest corn agroclimatology.
+  * Added IMF PortWatch maritime chokepoint transit monitoring and Census Bureau port petroleum trade tracking.
+
+* **🎯 MLOps Ground Truth Integrity & Conformal Uncertainty:**
+  * Established point-in-time EIA Weekly Retail Regular Gasoline ground truth by PADD and state for out-of-time evaluation.
+  * Enforced target-date maturity gating (`forecast_target_date <= today`), eliminated synthetic fallback prices, and purged test fixture artifacts from the prediction ledger.
+  * Implemented post-inference hybrid-vs-quant plausibility gating, horizon-calibrated residual variance scaling, and split conformal prediction intervals.
+  * Isolated pytest test executions via sandbox fixtures in `tests/conftest.py`.
+
+* **⚡ Infrastructure, Memory & Telemetry Modernization:**
+  * Migrated agent episodic memory to Vectorize Hindsight Hosted SaaS, reducing recurring memory compute costs by 90% (~\$3.50/mo) with zero cold starts.
+  * Replaced static dashboard accuracy stats with dynamic rolling calculations from out-of-time historical logs.
+  * Hardened persistence with atomic write engines (`atomic_write`) and advisory file locking (`flock`) for concurrent pipeline executions.
+  * Upgraded ASGI server dependencies (`uvicorn>=0.53.0`) and modernized GitHub Actions workflows (`actions/checkout@v7`, `actions/setup-python@v7`).
 
 ---
 
