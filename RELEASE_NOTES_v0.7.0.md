@@ -722,7 +722,20 @@ Midgley **v0.7.0** is a major milestone release delivering significant reliabili
 ### 95. Automated Pull Request CI Testing Gate & Concurrency Serialization (`.github/workflows/` & `src/version.py` - Issue #439)
 - **Pull Request CI Test Workflow:** Created `.github/workflows/ci.yml` running `ruff check .` and `pytest -v tests/` across Python 3.11, 3.12, and 3.13 on `pull_request` and `push` to `main` and `dev`.
 - **Concurrency Serialization:** Unified data-writing scheduled workflows (`gas_price_forecast.yml`, `intraday_event_monitor.yml`, `weekly_model_review.yml`) under the shared concurrency group `production-data-deployment` and eliminated destructive `--force` push options.
-- **Single-Source Version Resolution:** Refactored `src/version.py` to single-source project version from `pyproject.toml` (`0.7.0`) with `@functools.lru_cache` and `tomllib` parsing.
+### 96. Prediction Ledger Immutability, Forecast Revision History & Advisory File Lock Coverage (`src/prediction_logger.py`, `src/storage_io.py`, `src/ipasis_security.py`, `src/telemetry.py` & `src/tokentab_accounting.py` - Issue #434)
+- **Immutable Forecast Revisions:** Added unique UUIDv4 `forecast_id` and UTC timestamp `issued_at_utc` to `data/prediction_history.csv` schema with automatic backward-compatible schema migration.
+- **Append-Only Prediction Logging:** Removed destructive deduplication on `(target_date, forecast_horizon, region)`. Consecutive forecasts or intra-day revision runs for the same target date are preserved chronologically as distinct revision records.
+- **Universal Advisory File-Lock Coverage:** Wrapped all state, prediction, cache, and ledger disk writes with cross-platform advisory locking (`file_lock(..., shared=False)` and `fcntl.flock` on POSIX / `msvcrt` on Windows).
+- **Atomic JSON IO Conversion:** Migrated all state ledger serializers across `src/ipasis_security.py`, `src/telemetry.py`, `src/tokentab_accounting.py`, and `src/eia_retail_feed.py` to `storage_io.atomic_write_json`.
+
+---
+
+### 97. Point-in-Time Historical Feature Vintages & Incremental RBOB Actuals Caching (`src/feature_engineering.py`, `src/data_ingestion.py` & `src/prediction_logger.py` - Issue #432)
+- **Bitemporal Point-in-Time Feature Joins:** Implemented `_load_vintage_timeseries()` in `src/feature_engineering.py` to ingest point-in-time observations from `data/*_vintages.json` (CFTC, FERC, USGS, AQI, CEC, EIA, USDA, Degree Days) filtered by `as_of_cutoff` without lookahead bias.
+- **Preserved Climatological & Seasonal Baselines:** Retained cyclical/physical baseline equations for historical splits where vintage records have not yet accumulated, seamlessly overlaying vintage observations as they arrive.
+- **Eliminated Synthetic Forward Curve Multipliers:** Removed synthetic heuristic multipliers (e.g. `0.992`) on NYMEX calendar spreads in `src/data_ingestion.py`, ensuring only authentic forward curve quotes are used.
+- **Incremental Actuals Cache Refresh:** Updated `src/prediction_logger.py` to automatically refresh the national RBOB actuals cache from yfinance when unevaluated matured predictions exist in the ledger.
+
 
 
 
