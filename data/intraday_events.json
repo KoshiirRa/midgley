@@ -4028,5 +4028,25 @@
       "overall_price_pressure": 0.75
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-24T09:08:09.049157",
+    "headline": "New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.7,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]

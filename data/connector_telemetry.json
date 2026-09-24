@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-24 03:49:39",
-  "total_events": 863,
+  "last_updated": "2026-09-24 09:09:00",
+  "total_events": 866,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -8632,6 +8632,36 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge 7de0cfff-1cce-4c81-8bfb-68a6cc842f42 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-24 09:07:49",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 335.1,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 09:08:50",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10032.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-24 09:09:00",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10031.63,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
     }
   ]
 }

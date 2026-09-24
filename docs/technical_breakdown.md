@@ -1,28 +1,28 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-24 03:49:07`  
+**Log Timestamp:** `2026-09-24 09:08:09`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** In Meeting With Rubio, Jaishankar Raises USs ‘100% Tariff’ Law Against Russian Oil Customers - TheWire.in  
+**Primary Event Trigger:** New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** In Meeting With Rubio, Jaishankar Raises USs ‘100% Tariff’ Law Against Russian Oil Customers - TheWire.in
+- **Headline Trigger:** New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com
 - **Active Ingested News Links:**
+- [New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com](https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5) (Google News Energy Feed)
 - [In Meeting With Rubio, Jaishankar Raises USs ‘100% Tariff’ Law Against Russian Oil Customers - TheWire.in](https://news.google.com/rss/articles/CBMifkFVX3lxTE5ib3RKWVJ5MVFDYWhqT1Q1djQ4TEs0WUJ2ZHlvV0pJLTBmbmYwQmJ6anJqQjdVYkFmcERHMHgycm1lVTdHTmg0SFhvblFwQ1JLS3phQTJqVjhPZ3RWTXFwZ2lrbFU2bkRwQTIzTDVTSWtNck9IdWJmYjd3NjdjUdIBkAFBVV95cUxNNTF5VkV5N1lnal9JQV9saTFDRWVLMnMyNEdJSm45WHVpbEdRbXMtcVlVRlU0dEFqc2o5aXBMSWFYWTZYY2d6eXlwMjBSQklKeDBfbEFQZmlyZVU3ZHFYazluTFZJRUpQVFNWXzNMZ0FBZmtJV2U2RFlvSUNLT2FTd29PWFU5S3Z2aTZqMndMMVY?oc=5) (Google News Energy Feed)
 - [Copper Erases Tariff Selloff as Shanghai Stockpiles Hit Three-Year Low - Crude Oil Prices Today | OilPrice.com](https://news.google.com/rss/articles/CBMitgFBVV95cUxQUFhCVG9mR09LTHBySG5zUk9Nc2hZQ1BKQndvRnN3aEstbE9BREhSWi16Uy1oRHJwMEhuM2NLTXRST25PbnJ0OGpYanVPeUF4ZmZmcHJ5UC1pSUNNZXZ1VEFyTjhOTjU5bHFWZmJ4cWJzMDVNeDVBblF5UTVOaW9NT09yLWFEMzhjX2ZFdWZtZW42S3Mwb2RDdmZ1RVgwd21wRVh6UnB2YWZIaFQ0NFJrOGNYM2UxQdIBuwFBVV95cUxNZnR3V194VnFNdW1EX0FxMzVQOU9fdUplMmJ5Q0oyZnBRQVU4cy1SaFpqVTFQNjNNa0RVaEhjTzkzbFhKbXMzOVZWSGVwdF9vR3lxWXVhdElpUWprV2NMWjB0ZWg5S0djc0s0RDdhaVNXMHd2TDc2R1FWVEU4UllBU1MtM2ROOFlMUUowVUxPWE9YUS1lSFRiWDd0SkJabXdnS3lKcUk4N1FwODY4ZGtZUm5SdWJ6cDhPdkFz?oc=5) (Google News Energy Feed)
-- [Discount on Western Canada Select Widens with Joliet Refinery Outage - EnergyNow](https://news.google.com/rss/articles/CBMinwFBVV95cUxOTS00VjJiZWtoNHlMSEhTQU03RDZvdjdUd00xZFIwLUZteE1DQVhPbTJRdEpaSDFLZUo3TlpZaE9ZOWVoWG8tMkFQcnltOWFBWFE0SWVidkxvcGdYR01INXhHS2hnc3NGc3JyN1ZOVlZtZXg3aXJtR2x3bDMxRTBuYm1KLWJ5bDdOMnFROVplTFpjUXNhM3lodUpwRy1oVXM?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.75`
-- **Price Pressure Shock ($\Delta P$):** `+0.75`
-- **Geopolitical Risk Score ($G$):** `0.85`
-- **Demand Sentiment Score ($D$):** `-0.25`
+- **Supply Disruption Score ($S$):** `0.70`
+- **Price Pressure Shock ($\Delta P$):** `+0.80`
+- **Geopolitical Risk Score ($G$):** `0.90`
+- **Demand Sentiment Score ($D$):** `-0.20`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
 
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.7500$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.7500$
-- **Day 1 Decayed Shock**: $M_1 = 0.7500 \times 0.87055 = 0.6529$
-- **Day 2 Decayed Shock**: $M_2 = 0.7500 \times (0.87055)^2 = 0.5684$
-- **Day 3 Decayed Shock**: $M_3 = 0.7500 \times (0.87055)^3 = 0.4948$
-- **Day 4 Decayed Shock**: $M_4 = 0.7500 \times (0.87055)^4 = 0.4308$
-- **Day 5 (Target Horizon)**: $M_5 = 0.7500 \times 0.50000 = 0.3750$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.7000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.7000$
+- **Day 1 Decayed Shock**: $M_1 = 0.7000 \times 0.87055 = 0.6094$
+- **Day 2 Decayed Shock**: $M_2 = 0.7000 \times (0.87055)^2 = 0.5305$
+- **Day 3 Decayed Shock**: $M_3 = 0.7000 \times (0.87055)^3 = 0.4618$
+- **Day 4 Decayed Shock**: $M_4 = 0.7000 \times (0.87055)^4 = 0.4020$
+- **Day 5 (Target Horizon)**: $M_5 = 0.7000 \times 0.50000 = 0.3500$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (+\$0.000) = \$3.280\text{/gal}$ (Delta: +\$0.000/gal, 0.00\%)
+- **National Wholesale**: $P = \$3.184 + (+\$0.006) = \$3.286\text{/gal}$ (Delta: +\$0.006/gal, +0.20\%)
 - **Tulsa, OK Retail**: $P = \$3.994 + (+\$0.502) = \$7.685\text{/gal}$ (Delta: +\$0.502/gal, +12.57\%)
 - **Newark, DE Retail**: $P = \$4.343 + (-\$0.052) = \$4.322\text{/gal}$ (Delta: -\$0.052/gal, -1.19\%)
 - **Cincinnati, OH/KY**: $P = \$4.419 + (-\$0.071) = \$4.382\text{/gal}$ (Delta: -\$0.071/gal, -1.62\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.7500$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-24 03:49:07]: Elevated upward price shock (+$0.75/gal) observed across wholesale futures. Event trigger 'In Meeting With Rubio, Jaishankar Raises USs ‘100% Tariff’ Law Against Russian Oil Customers - TheWire.in' drove supply disruption to S=0.75 and geopolitical risk to G=0.85. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6529 and Day-5 horizon retention M₅=0.3750.
+SUMMARY FOR RUN [2026-09-24 09:08:09]: Elevated upward price shock (+$0.80/gal) observed across wholesale futures. Event trigger 'New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com' drove supply disruption to S=0.70 and geopolitical risk to G=0.90. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6094 and Day-5 horizon retention M₅=0.3500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-24 03:49:07 (Mode: INTRADAY_REVISION), primary event trigger 'In Meeting With Rubio, Jaishankar Raises USs ‘100% Tariff’ Law Against Russian Oil Customers - TheWire.in' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.75, Price Pressure ΔP=+0.75, Geopolitical Risk G=0.85. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.7500
-  - Day 1: M₁ = 0.6529
-  - Day 5: M₅ = 0.3750 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-24 09:08:09 (Mode: INTRADAY_REVISION), primary event trigger 'New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.70, Price Pressure ΔP=+0.80, Geopolitical Risk G=0.90. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.7000
+  - Day 1: M₁ = 0.6094
+  - Day 5: M₅ = 0.3500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.280/gal ($0.000/gal, 0.00%)
+  • National Wholesale: $3.286/gal (+$0.006/gal, +0.20%)
   • Tulsa, OK Retail: $7.685/gal (+$0.502/gal, +12.57%)
   • Newark, DE Retail: $4.322/gal ($-0.052/gal, -1.19%)
   • Cincinnati, OH/KY: $4.382/gal ($-0.071/gal, -1.62%)
@@ -96,10 +96,10 @@ Largest upward shift for this run: SF Bay Area Region at $6.340/gal (+0.676/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-24 03:49:07]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'In Meeting With Rubio, Jaishankar Raises USs ‘100% Tariff’ Law Against Russian Oil Customers - TheWire.in'. Overall price pressure vector sits at ΔP=+0.75/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-24 09:08:09]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com'. Overall price pressure vector sits at ΔP=+0.80/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.85. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.90. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-24 03:49:07.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-24 09:08:09.*

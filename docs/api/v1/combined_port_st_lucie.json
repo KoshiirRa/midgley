@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-24T03:49:34.686557",
+  "timestamp": "2026-09-24T09:08:29.576489",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.309,
+    "current_price_per_gal": 4.399,
     "source": "AAA Web Scraper (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Web Scraper (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-24T03:49:10Z"
+      "timestamp": "2026-09-24T09:08:12Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,10 +28,10 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-29",
-    "current_base_price": 4.309,
-    "predicted_price_per_gal": 4.266,
+    "current_base_price": 4.399,
+    "predicted_price_per_gal": 4.356,
     "expected_change_dollars": -0.043,
-    "expected_change_percent": -1.0,
+    "expected_change_percent": -0.98,
     "projected_direction": "DOWN",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -91,13 +91,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast $-0.043/gal (-1.00%): Driven primarily by Regional Logistics & Hub Delivery ($-0.015/gal), Futures & Commodity Benchmark ($-0.011/gal).",
+      "summary_text": "Port St Lucie FL forecast $-0.043/gal (-0.98%): Driven primarily by Regional Logistics & Hub Delivery ($-0.015/gal), Futures & Commodity Benchmark ($-0.011/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.015,
-          "impact_pct": -0.35,
+          "impact_pct": -0.34,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -105,7 +105,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.011,
-          "impact_pct": -0.26,
+          "impact_pct": -0.25,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -121,7 +121,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
           "impact_dollars": -0.005,
-          "impact_pct": -0.12,
+          "impact_pct": -0.11,
           "share_pct": 12.0,
           "direction": "DOWN"
         },
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.015,
-      "impact_pct": -0.35,
+      "impact_pct": -0.34,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -157,7 +157,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.011,
-      "impact_pct": -0.26,
+      "impact_pct": -0.25,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -173,7 +173,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
       "impact_dollars": -0.005,
-      "impact_pct": -0.12,
+      "impact_pct": -0.11,
       "share_pct": 12.0,
       "direction": "DOWN"
     },
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast $-0.043/gal (-1.00%): Driven primarily by Regional Logistics & Hub Delivery ($-0.015/gal), Futures & Commodity Benchmark ($-0.011/gal).",
+    "summary_text": "Port St Lucie FL forecast $-0.043/gal (-0.98%): Driven primarily by Regional Logistics & Hub Delivery ($-0.015/gal), Futures & Commodity Benchmark ($-0.011/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

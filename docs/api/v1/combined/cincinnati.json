@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-24T03:49:34.658433",
+  "timestamp": "2026-09-24T09:08:29.556740",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.419,
+    "current_price_per_gal": 4.389,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-24T03:49:08Z"
+      "timestamp": "2026-09-24T09:08:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-29",
-    "current_base_price": 4.419,
-    "predicted_price_per_gal": 4.382,
+    "current_base_price": 4.389,
+    "predicted_price_per_gal": 4.352,
     "expected_change_dollars": -0.037,
     "expected_change_percent": -0.84,
     "projected_direction": "DOWN",
@@ -97,7 +97,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.013,
-          "impact_pct": -0.29,
+          "impact_pct": -0.3,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -105,7 +105,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.009,
-          "impact_pct": -0.2,
+          "impact_pct": -0.21,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.013,
-      "impact_pct": -0.29,
+      "impact_pct": -0.3,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -157,7 +157,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.009,
-      "impact_pct": -0.2,
+      "impact_pct": -0.21,
       "share_pct": 25.0,
       "direction": "DOWN"
     },

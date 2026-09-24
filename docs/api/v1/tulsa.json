@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-24T03:49:34.630623",
+  "timestamp": "2026-09-24T09:08:29.537505",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.994,
+    "current_price_per_gal": 3.995,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-24T03:49:08Z"
+      "timestamp": "2026-09-24T09:08:10Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,10 +28,10 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-29",
-    "current_base_price": 3.994,
-    "predicted_price_per_gal": 7.685,
+    "current_base_price": 3.995,
+    "predicted_price_per_gal": 7.686,
     "expected_change_dollars": 3.691,
-    "expected_change_percent": 92.41,
+    "expected_change_percent": 92.39,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -91,13 +91,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast +$3.691/gal (+92.41%): Driven primarily by Regional Logistics & Hub Delivery (+$1.107/gal), Refining Yield & Crack Spread (+$1.107/gal).",
+      "summary_text": "Tulsa OK forecast +$3.691/gal (+92.39%): Driven primarily by Regional Logistics & Hub Delivery (+$1.107/gal), Refining Yield & Crack Spread (+$1.107/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 1.107,
-          "impact_pct": 27.72,
+          "impact_pct": 27.71,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -105,7 +105,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 1.107,
-          "impact_pct": 27.72,
+          "impact_pct": 27.71,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -113,7 +113,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.923,
-          "impact_pct": 23.11,
+          "impact_pct": 23.1,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 1.107,
-      "impact_pct": 27.72,
+      "impact_pct": 27.71,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -157,7 +157,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 1.107,
-      "impact_pct": 27.72,
+      "impact_pct": 27.71,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -165,7 +165,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.923,
-      "impact_pct": 23.11,
+      "impact_pct": 23.1,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast +$3.691/gal (+92.41%): Driven primarily by Regional Logistics & Hub Delivery (+$1.107/gal), Refining Yield & Crack Spread (+$1.107/gal).",
+    "summary_text": "Tulsa OK forecast +$3.691/gal (+92.39%): Driven primarily by Regional Logistics & Hub Delivery (+$1.107/gal), Refining Yield & Crack Spread (+$1.107/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

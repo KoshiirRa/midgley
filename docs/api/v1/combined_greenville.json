@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-24T03:49:34.667947",
+  "timestamp": "2026-09-24T09:08:29.563449",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.115,
+    "current_price_per_gal": 4.129,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-24T03:49:09Z"
+      "timestamp": "2026-09-24T09:08:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-29",
-    "current_base_price": 4.115,
-    "predicted_price_per_gal": 4.083,
+    "current_base_price": 4.129,
+    "predicted_price_per_gal": 4.097,
     "expected_change_dollars": -0.032,
     "expected_change_percent": -0.78,
     "projected_direction": "DOWN",
@@ -97,7 +97,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.013,
-          "impact_pct": -0.32,
+          "impact_pct": -0.31,
           "share_pct": 40.0,
           "direction": "DOWN"
         },
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.013,
-      "impact_pct": -0.32,
+      "impact_pct": -0.31,
       "share_pct": 40.0,
       "direction": "DOWN"
     },
