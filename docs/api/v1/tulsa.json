@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-24T23:33:23.638511",
+  "timestamp": "2026-09-24T23:50:28.854384",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-24T23:30:19Z"
+      "timestamp": "2026-09-24T23:45:19Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,14 +27,19 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-29",
+    "target_date": "2025-10-15",
     "current_base_price": 3.995,
     "predicted_price_per_gal": 3.999,
     "expected_change_dollars": 0.004,
     "expected_change_percent": 0.1,
     "projected_direction": "UP",
-    "directional_hit_rate_historical": 0.6079,
-    "historical_mae_dollars": 0.1069,
+    "prediction_lower_95ci": 2.2463,
+    "prediction_upper_95ci": 2.8426,
+    "calibration_method": "gaussian_scaled",
+    "calibration_sample_size": 2,
+    "directional_hit_rate_historical": 0.0,
+    "historical_mae_dollars": 1.8966,
+    "evaluation_sample_size": 3,
     "day_1_price": 4.012,
     "day_2_price": 4.027,
     "day_3_price": 4.039,

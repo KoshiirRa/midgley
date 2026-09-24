@@ -492,7 +492,7 @@
                     $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Metro Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>\(\text{MAE} = \$0.1069/\text{gal}\)</strong>.
+                    where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, evaluated out-of-sample across rolling forward forecast horizons and walking origins.
                 </p>
             </div>
 
