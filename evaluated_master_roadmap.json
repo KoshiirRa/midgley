@@ -1328,5 +1328,203 @@
     "risk": "Medium Risk",
     "risk_color": "Yellow",
     "body_snippet": "## Summary Automatically discovered new candidate tool **[QFO Quant Platform](https://www.qfo-quant-platform.com/)** from developer catalog \\`awesome-quant\\`.  **Description:** `Python` `React` `A-shares` - Local-first quantitative research and backtesting platform with data synchronization, multi-asset screening, factor analysis, portfolio optimization, risk analysis, and optional LLM-assisted ne..."
+  },
+  {
+    "number": 460,
+    "title": "feat(modeling): Make asymmetric wholesale-to-retail pass-through ECM the core retail forecaster",
+    "category": "Econometric Modeling & Core Forecasting",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "math",
+      "econometrics"
+    ],
+    "effort": "M (Medium)",
+    "effort_days": "1-3 weeks",
+    "risk": "Medium Risk",
+    "risk_color": "Yellow",
+    "body_snippet": "### Summary\nRetail gasoline prices respond to wholesale price innovations with a lag of several weeks, and adjust faster to wholesale cost increases than to decreases (\"rockets and feathers\", Borenstein et al. 1997). Currently, regional metro models ..."
+  },
+  {
+    "number": 461,
+    "title": "fix(data-ingestion): Implement roll-adjusted RBOB futures returns and map metros to regional wholesale supply hubs",
+    "category": "Data Ingestion & Commodity Feeds",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "bug",
+      "data-ingestion",
+      "modeling",
+      "math"
+    ],
+    "effort": "S (Small)",
+    "effort_days": "3-5 days",
+    "risk": "Low Risk",
+    "risk_color": "Green",
+    "body_snippet": "### Summary\nThe continuous `RB=F` series from yfinance splices contracts across seasonal delivery months without roll adjustments. NYMEX RBOB specifications enforce maximum RVP of 13.5 psi in March, 7.4 psi from April to mid-September, and 13.5 psi i..."
+  },
+  {
+    "number": 462,
+    "title": "feat(state-estimation): Build mixed-frequency Kalman filter metro 'true price' nowcast engine",
+    "category": "State Estimation & Ground Truth",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "math",
+      "data-ingestion"
+    ],
+    "effort": "M (Medium)",
+    "effort_days": "1-2 weeks",
+    "risk": "Medium Risk",
+    "risk_color": "Yellow",
+    "body_snippet": "### Summary\nEvaluation accuracy is compromised by geographic and source mismatches between live forecast base prices (daily AAA metro readings) and recorded ground truth actuals (weekly state-level EIA survey releases or constant fallbacks), producin..."
+  },
+  {
+    "number": 463,
+    "title": "feat(nlp): Rework news-event features with semantic deduplication, rolling scaling, and local projections",
+    "category": "NLP & Qualitative Shock Engineering",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "nlp",
+      "modeling",
+      "econometrics"
+    ],
+    "effort": "M (Medium)",
+    "effort_days": "1-2 weeks",
+    "risk": "Medium Risk",
+    "risk_color": "Yellow",
+    "body_snippet": "### Summary\nNational news events currently match all regional metros indiscriminately, same-day shock scores are summed and clipped to fixed arbitrary bounds (causing saturation during high news velocity), and exponential decay rates are hand-configu..."
+  },
+  {
+    "number": 464,
+    "title": "feat(microstructure): Implement Edgeworth price cycle diagnostics and restoration-hazard model (Cincinnati first)",
+    "category": "Microstructure & Price Cycle Modeling",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "math",
+      "econometrics"
+    ],
+    "effort": "M (Medium)",
+    "effort_days": "1-2 weeks",
+    "risk": "Medium Risk",
+    "risk_color": "Yellow",
+    "body_snippet": "### Summary\nCertain Midwestern retail gasoline markets (including Ohio/Cincinnati) exhibit Edgeworth price cycles characterized by rapid, coordinated price spikes (\"restorations\") followed by prolonged daily price undercutting. In cycling markets, cy..."
+  },
+  {
+    "number": 465,
+    "title": "feat(volatility): Wholesale RBOB volatility distribution forecasting via GARCH and HAR-RV",
+    "category": "Volatility & Quantitative Distribution Forecasting",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "math",
+      "volatility"
+    ],
+    "effort": "M (Medium)",
+    "effort_days": "1-2 weeks",
+    "risk": "Low Risk",
+    "risk_color": "Green",
+    "body_snippet": "### Summary\nFront-month wholesale RBOB futures prices behave approximately as a random walk over 5-day horizons. Rather than attempting low-signal directional prediction, wholesale forecasting should model the predictive return distribution, volatili..."
+  },
+  {
+    "number": 466,
+    "title": "feat(uncertainty): Calibrated prediction intervals and proper quantile generation via Adaptive Conformal Inference",
+    "category": "Probabilistic Forecasting & Conformal Inference",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "math",
+      "statistics"
+    ],
+    "effort": "S (Small)",
+    "effort_days": "3-5 days",
+    "risk": "Low Risk",
+    "risk_color": "Green",
+    "body_snippet": "### Summary\nPrediction intervals currently rely on single 30-day pooled residual standard deviations across entire forecast batches, and Headline Arena submissions map 95% confidence intervals incorrectly as P10/P90 quantiles.\n\n### Proposed Implement..."
+  },
+  {
+    "number": 467,
+    "title": "feat(hierarchical): Partial pooling and MinT hierarchical reconciliation across metro, state, and national forecasts",
+    "category": "Hierarchical Forecasting & Multi-Metro Calibration",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "modeling",
+      "math",
+      "architecture"
+    ],
+    "effort": "L (High)",
+    "effort_days": "2-3 weeks",
+    "risk": "Medium Risk",
+    "risk_color": "Yellow",
+    "body_snippet": "### Summary\nIndividual metro models are currently trained in isolation across largely duplicated directory packages (`src/locations/<metro>/`), leading to noisy parameter estimates in thin data regimes and aggregate incoherence between metro, state/P..."
+  },
+  {
+    "number": 468,
+    "title": "feat(calendar): Integrate known-future regulatory and tax covariates into pass-through forecasts",
+    "category": "Regulatory Compliance & Forward Calendar",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling",
+      "regulations"
+    ],
+    "effort": "S (Small)",
+    "effort_days": "3-5 days",
+    "risk": "Low Risk",
+    "risk_color": "Green",
+    "body_snippet": "### Summary\nScheduled state fuel excise tax adjustments (e.g. California annual July 1 rate reset), EPA/CARB seasonal RVP blend transitions (May 1 terminal / June 1 retail / Sept 16 winter transition), and exchange settlement holidays are determinist..."
+  },
+  {
+    "number": 469,
+    "title": "feat(evaluation): Build unified statistical evaluation harness, Model Confidence Set & feature admission gate",
+    "category": "Evaluation Protocol & Validation Rigor",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "testing",
+      "statistics",
+      "mlops"
+    ],
+    "effort": "S (Small)",
+    "effort_days": "3-5 days",
+    "risk": "Low Risk",
+    "risk_color": "Green",
+    "body_snippet": "### Summary\nModel evaluation lacks rigorous statistical hypothesis testing for directional hit rates (Pesaran-Timmermann), data-snooping controls for comparing many model variants (Model Confidence Set), false discovery rate corrections across multip..."
+  },
+  {
+    "number": 470,
+    "title": "feat(topology): Model supply network outage exposure via Knowledge Graph and NASA FIRMS active fire telemetry",
+    "category": "Spatial Economics & Network Outage Topology",
+    "status": "Ready",
+    "milestone": "v0.8",
+    "labels": [
+      "enhancement",
+      "data-ingestion",
+      "modeling",
+      "spatial"
+    ],
+    "effort": "M (Medium)",
+    "effort_days": "1-2 weeks",
+    "risk": "Low Risk",
+    "risk_color": "Green",
+    "body_snippet": "### Summary\nRefinery and pipeline outages currently propagate to metro forecasts through isotropic Euclidean distance decay (150-mile radius), which fails to account for actual pipeline connectivity, terminal origins, and physical supply chain depend..."
   }
 ]
