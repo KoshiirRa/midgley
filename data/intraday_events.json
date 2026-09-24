@@ -4108,5 +4108,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-24T23:30:16.687497",
+    "headline": "Given No Choice by Trump \u2013 Canada Embraces Asia to Save Auto Heartland Squeezed by U.S. Tariffs - EnergyNow.com",
+    "source": "Executive_Social_Media",
+    "url": "https://truthsocial.com/post/7218498",
+    "raw_url": "https://truthsocial.com/post/7218498",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/7218498",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
