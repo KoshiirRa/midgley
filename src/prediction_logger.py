@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os
 import json
+import uuid
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -15,9 +16,9 @@ from typing import Optional, Dict, Any
 import pandas as pd
 import numpy as np
 import yfinance as yf
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 import logging
-from src.storage_io import atomic_write_csv, atomic_write_json
+from src.storage_io import atomic_write_csv, atomic_write_json, file_lock
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,8 @@ def ensure_history_store():
     """Ensures data directory and prediction_history.csv file exist with standard and extended MLOps schema."""
     os.makedirs("data", exist_ok=True)
     columns = [
+        "forecast_id",
+        "issued_at_utc",
         "log_timestamp",
         "forecast_target_date",
         "region",
@@ -51,34 +54,48 @@ def ensure_history_store():
         "forecast_horizon_days",
         "is_retroactive_backtest"
     ]
-    if not os.path.exists(HISTORY_CSV_PATH) or os.path.getsize(HISTORY_CSV_PATH) == 0:
-        df = pd.DataFrame(columns=columns)
-        atomic_write_csv(HISTORY_CSV_PATH, df, index=False)
-        logger.info(f"Initialized new prediction history log at {HISTORY_CSV_PATH}")
-    else:
-        # Migrate existing CSV if missing extended columns (Issue #389)
-        try:
-            df = pd.read_csv(HISTORY_CSV_PATH)
-            updated = False
-            for col in columns:
-                if col not in df.columns:
-                    if col == "is_retroactive_backtest":
-                        log_ts = pd.to_datetime(df['log_timestamp'], errors='coerce')
-                        tgt_dt = pd.to_datetime(df['forecast_target_date'], errors='coerce')
-                        df['is_retroactive_backtest'] = (log_ts.dt.date >= tgt_dt.dt.date).fillna(True)
-                    else:
-                        df[col] = np.nan
+    with file_lock(HISTORY_CSV_PATH):
+        if not os.path.exists(HISTORY_CSV_PATH) or os.path.getsize(HISTORY_CSV_PATH) == 0:
+            df = pd.DataFrame(columns=columns)
+            atomic_write_csv(HISTORY_CSV_PATH, df, index=False)
+            logger.info(f"Initialized new prediction history log at {HISTORY_CSV_PATH}")
+        else:
+            # Migrate existing CSV if missing extended columns (Issue #389, #434)
+            try:
+                df = pd.read_csv(HISTORY_CSV_PATH)
+                updated = False
+                for col in columns:
+                    if col not in df.columns:
+                        if col == "is_retroactive_backtest":
+                            log_ts = pd.to_datetime(df['log_timestamp'], errors='coerce')
+                            tgt_dt = pd.to_datetime(df['forecast_target_date'], errors='coerce')
+                            df['is_retroactive_backtest'] = (log_ts.dt.date >= tgt_dt.dt.date).fillna(True)
+                        elif col == "forecast_id":
+                            df['forecast_id'] = [str(uuid.uuid4()) for _ in range(len(df))]
+                        elif col == "issued_at_utc":
+                            if 'log_timestamp' in df.columns:
+                                df['issued_at_utc'] = pd.to_datetime(df['log_timestamp'], errors='coerce').dt.tz_localize('UTC').dt.strftime("%Y-%m-%dT%H:%M:%SZ").fillna(datetime.now(timezone.utc).isoformat())
+                            else:
+                                df['issued_at_utc'] = datetime.now(timezone.utc).isoformat()
+                        else:
+                            df[col] = np.nan
+                        updated = True
+                if "is_retroactive_backtest" in df.columns and df["is_retroactive_backtest"].isna().any():
+                    log_ts = pd.to_datetime(df['log_timestamp'], errors='coerce')
+                    tgt_dt = pd.to_datetime(df['forecast_target_date'], errors='coerce')
+                    df['is_retroactive_backtest'] = df['is_retroactive_backtest'].fillna(log_ts.dt.date >= tgt_dt.dt.date).fillna(True)
                     updated = True
-            if "is_retroactive_backtest" in df.columns and df["is_retroactive_backtest"].isna().any():
-                log_ts = pd.to_datetime(df['log_timestamp'], errors='coerce')
-                tgt_dt = pd.to_datetime(df['forecast_target_date'], errors='coerce')
-                df['is_retroactive_backtest'] = df['is_retroactive_backtest'].fillna(log_ts.dt.date >= tgt_dt.dt.date).fillna(True)
-                updated = True
-            if updated:
-                atomic_write_csv(HISTORY_CSV_PATH, df, index=False)
-                logger.info(f"Migrated existing prediction history log with extended MLOps schema columns and is_retroactive_backtest flags.")
-        except Exception as e:
-            logger.warning(f"Failed to inspect/migrate prediction history CSV: {e}")
+                if "forecast_id" in df.columns and df["forecast_id"].isna().any():
+                    df['forecast_id'] = df['forecast_id'].apply(lambda x: str(uuid.uuid4()) if pd.isna(x) else str(x))
+                    updated = True
+                if "issued_at_utc" in df.columns and df["issued_at_utc"].isna().any():
+                    df['issued_at_utc'] = df['issued_at_utc'].fillna(df['log_timestamp'] if 'log_timestamp' in df.columns else datetime.now(timezone.utc).isoformat())
+                    updated = True
+                if updated:
+                    atomic_write_csv(HISTORY_CSV_PATH, df, index=False)
+                    logger.info(f"Migrated existing prediction history log with extended MLOps schema columns, forecast_id, and is_retroactive_backtest flags.")
+            except Exception as e:
+                logger.warning(f"Failed to inspect/migrate prediction history CSV: {e}")
 
 
 def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
@@ -354,6 +371,7 @@ def log_predictions(
         history_df = pd.DataFrame()
     
     timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_utc_str = datetime.now(timezone.utc).isoformat()
     new_records = []
 
     res_std = compute_regional_residual_std(region=region, window_days=30)
@@ -403,7 +421,13 @@ def log_predictions(
         if record_run_type in ["DAILY_BATCH", "DAILY_FORECAST", None] or not record_run_type:
             record_run_type = "RETROSPECTIVE_BACKTEST" if is_retro else "LIVE_PROSPECTIVE"
 
+        # Unique forecast identifier and UTC issuance timestamp (Issue #434)
+        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else str(uuid.uuid4())
+        issued_utc = str(row.get('issued_at_utc')) if ('issued_at_utc' in row and pd.notna(row['issued_at_utc'])) else now_utc_str
+
         new_records.append({
+            "forecast_id": f_id,
+            "issued_at_utc": issued_utc,
             "log_timestamp": timestamp_str,
             "forecast_target_date": target_date,
             "forecast_horizon_days": h_days,
@@ -430,21 +454,22 @@ def log_predictions(
         })
         
     new_df = pd.DataFrame(new_records)
-    combined = pd.concat([history_df, new_df], ignore_index=True)
-    
-    # Ledger Immutability & Backtest Segregation (Issue #357)
-    # Ensure live prospective records with ground-truth actuals take priority over unevaluated backtests
-    if not combined.empty:
-        has_actual = combined['actual_5d_price'].notna().astype(int) if 'actual_5d_price' in combined.columns else pd.Series(0, index=combined.index)
-        is_live = (~combined['is_retroactive_backtest'].fillna(True).astype(bool)).astype(int) if 'is_retroactive_backtest' in combined.columns else pd.Series(0, index=combined.index)
-        combined['_priority'] = has_actual * 10 + is_live
-        combined['_orig_idx'] = combined.index
-        combined.sort_values(by=['_priority'], inplace=True)
-        combined.drop_duplicates(subset=["forecast_target_date", "forecast_horizon_days", "region", "model_version", "run_type"], keep="last", inplace=True)
-        combined.sort_values(by=['_orig_idx'], inplace=True, ignore_index=True)
-        combined.drop(columns=['_priority', '_orig_idx'], inplace=True)
+    with file_lock(HISTORY_CSV_PATH):
+        try:
+            history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
+        except Exception:
+            history_df = pd.DataFrame()
 
-    atomic_write_csv(HISTORY_CSV_PATH, combined, index=False)
+        combined = pd.concat([history_df, new_df], ignore_index=True)
+        
+        # Ledger Immutability & Concurrency Safety (Issue #434):
+        # Prior issued forecasts are never overwritten. Revisions are recorded as distinct ledger rows.
+        # Only deduplicate if identical unique forecast_id is encountered.
+        if not combined.empty and "forecast_id" in combined.columns:
+            combined.drop_duplicates(subset=["forecast_id"], keep="last", inplace=True)
+            combined.reset_index(drop=True, inplace=True)
+
+        atomic_write_csv(HISTORY_CSV_PATH, combined, index=False)
     try:
         sync_predictions_to_cloud(combined)
     except Exception as e:
@@ -557,64 +582,86 @@ def backfill_actual_prices_and_evaluate(
     target_csv = csv_path or HISTORY_CSV_PATH
     if not csv_path:
         ensure_history_store()
-    try:
-        history_df = pd.read_csv(target_csv)
-    except Exception as e:
-        logger.warning(f"Could not read prediction history log ({e}). Returning empty DataFrame.")
-        return pd.DataFrame()
     
-    if history_df.empty:
-        logger.warning("Prediction history log is empty. No predictions to evaluate.")
-        return history_df
-
-    # If dependency injection or force_eval is active, proceed even under TESTING=1 (Issue #395)
-    is_injected = (actuals_map_override is not None) or (eia_feed_override is not None) or (csv_path is not None) or force_eval
-    if not is_injected and os.environ.get("TESTING") == "1" and os.environ.get("TEST_YFINANCE_FORCE") != "1":
-        logger.debug("TESTING=1: Returning cached prediction history without online yfinance download.")
-        return history_df
-        
-    history_df['actual_direction'] = history_df['actual_direction'].astype(object)
-    history_df['predicted_direction'] = history_df['predicted_direction'].astype(object)
-    
-    logger.info("Fetching actual historical market prices to backfill prediction log...")
-    
-    if actuals_map_override is not None:
-        actuals_map = actuals_map_override
-    else:
-        actuals_map = _GLOBAL_RBOB_ACTUALS_CACHE
-        if not actuals_map and os.path.exists(RBOB_ACTUALS_CACHE_FILE):
-            try:
-                with open(RBOB_ACTUALS_CACHE_FILE, "r", encoding="utf-8") as f:
-                    actuals_map = json.load(f)
-                    _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
-            except Exception:
-                actuals_map = {}
-
-        if not actuals_map and (not is_injected or force_eval):
-            try:
-                data = yf.download("RB=F", start="2022-01-01", progress=False)
-                close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
-                dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
-                actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
-                actuals_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
-                _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
-                try:
-                    atomic_write_json(RBOB_ACTUALS_CACHE_FILE, actuals_map, indent=2)
-                except Exception:
-                    pass
-            except Exception as e:
-                logger.warning(f"Could not download actuals from yfinance: {e}")
-                actuals_map = {}
-        
-    if eia_feed_override is not None:
-        eia_feed = eia_feed_override
-    else:
+    with file_lock(target_csv):
         try:
-            from src.eia_retail_feed import EIARetailFeed
-            eia_feed = EIARetailFeed()
+            history_df = pd.read_csv(target_csv)
         except Exception as e:
-            logger.debug(f"EIARetailFeed unavailable, fallback to basis: {e}")
-            eia_feed = None
+            logger.warning(f"Could not read prediction history log ({e}). Returning empty DataFrame.")
+            return pd.DataFrame()
+        
+        if history_df.empty:
+            logger.warning("Prediction history log is empty. No predictions to evaluate.")
+            return history_df
+
+        # If dependency injection or force_eval is active, proceed even under TESTING=1 (Issue #395)
+        is_injected = (actuals_map_override is not None) or (eia_feed_override is not None) or (csv_path is not None) or force_eval
+        if not is_injected and os.environ.get("TESTING") == "1" and os.environ.get("TEST_YFINANCE_FORCE") != "1":
+            logger.debug("TESTING=1: Returning cached prediction history without online yfinance download.")
+            return history_df
+            
+        history_df['actual_direction'] = history_df['actual_direction'].astype(object)
+        history_df['predicted_direction'] = history_df['predicted_direction'].astype(object)
+        
+        logger.info("Fetching actual historical market prices to backfill prediction log...")
+        
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        unevaluated_mask = history_df['actual_5d_price'].isna()
+        target_dates = history_df['forecast_target_date'].astype(str)
+        matured_mask = unevaluated_mask & (target_dates <= today_str)
+        if target_region:
+            matured_mask = matured_mask & (history_df['region'] == target_region)
+        matured_national = history_df[matured_mask & (history_df['region'] == "National")]
+
+        if actuals_map_override is not None:
+            actuals_map = actuals_map_override
+        else:
+            actuals_map = _GLOBAL_RBOB_ACTUALS_CACHE
+            if not actuals_map and os.path.exists(RBOB_ACTUALS_CACHE_FILE):
+                try:
+                    with open(RBOB_ACTUALS_CACHE_FILE, "r", encoding="utf-8") as f:
+                        actuals_map = json.load(f)
+                        _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+                except Exception:
+                    actuals_map = {}
+
+            # Refresh RBOB actuals cache if empty, force_eval, or if unevaluated matured dates are missing (Issue #432)
+            needs_refresh = (not actuals_map) or force_eval
+            if not needs_refresh and not matured_national.empty:
+                missing_dates = [d for d in matured_national['forecast_target_date'].unique() if str(d) not in actuals_map]
+                if missing_dates:
+                    needs_refresh = True
+
+            if needs_refresh and (not is_injected or force_eval):
+                try:
+                    data = yf.download("RB=F", start="2022-01-01", progress=False)
+                    close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
+                    dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
+                    actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
+                    fresh_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
+                    if not actuals_map:
+                        actuals_map = fresh_map
+                    else:
+                        actuals_map.update(fresh_map)
+                    _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+                    try:
+                        atomic_write_json(RBOB_ACTUALS_CACHE_FILE, actuals_map, indent=2)
+                    except Exception:
+                        pass
+                except Exception as e:
+                    logger.warning(f"Could not download actuals from yfinance: {e}")
+                    if actuals_map is None:
+                        actuals_map = {}
+            
+        if eia_feed_override is not None:
+            eia_feed = eia_feed_override
+        else:
+            try:
+                from src.eia_retail_feed import EIARetailFeed
+                eia_feed = EIARetailFeed()
+            except Exception as e:
+                logger.debug(f"EIARetailFeed unavailable, fallback to basis: {e}")
+                eia_feed = None
 
     today_str = datetime.now().strftime("%Y-%m-%d")
     unevaluated_mask = history_df['actual_5d_price'].isna()

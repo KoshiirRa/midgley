@@ -26,6 +26,7 @@ import urllib.request
 from datetime import datetime
 from typing import Dict, Any, Optional, List, Tuple
 import pandas as pd
+from src.storage_io import atomic_write_json, file_lock
 
 logger = logging.getLogger("midgley.eia_retail_feed")
 
@@ -224,20 +225,20 @@ class EIARetailFeed:
         if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
             return
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        records = []
-        if os.path.exists(filepath):
-            try:
-                with open(filepath, "r", encoding="utf-8") as f:
-                    records = json.load(f)
-                    if not isinstance(records, list):
-                        records = []
-            except Exception:
-                records = []
-        records.append(record)
-        if len(records) > 200:
-            records = records[-200:]
-        with open(filepath, "w", encoding="utf-8") as f:
-            json.dump(records, f, indent=2)
+        with file_lock(filepath):
+            records = []
+            if os.path.exists(filepath):
+                try:
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        records = json.load(f)
+                        if not isinstance(records, list):
+                            records = []
+                except Exception:
+                    records = []
+            records.append(record)
+            if len(records) > 200:
+                records = records[-200:]
+            atomic_write_json(filepath, records, indent=2)
 
     @staticmethod
     def load_eia_retail_vintages(filepath: str = VINTAGES_FILE) -> List[dict]:

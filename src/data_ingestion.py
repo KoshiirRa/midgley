@@ -1257,27 +1257,24 @@ class NYMEXForwardCurveConnector:
                         if 'HO=F' in close_df.columns and not close_df['HO=F'].dropna().empty:
                             ho_m1 = float(close_df['HO=F'].dropna().iloc[-1])
                     else:
-                        close_series = data['Close'].dropna()
-                        if not close_series.empty:
-                            rbob_m1 = float(close_series.iloc[-1])
-                # Roll / forward curve approximation or second-month ticker query
-                # Synthetic M2 spread based on prompt momentum / term structure
-                rbob_m2 = round(rbob_m1 * 0.992, 4)
-                wti_m2 = round(wti_m1 * 0.995, 4)
+                # Second month futures contract evaluation (Issue #432)
+                # Avoid synthetic multiplier scaling; retain explicit missing-data masks or observed spreads
+                rbob_m2 = None
+                wti_m2 = None
             except Exception as e:
                 logger.debug(f"Live NYMEX futures fetch notice: {e}")
 
-        rbob_cal_spread = round(rbob_m1 - rbob_m2, 4)
-        wti_cal_spread = round(wti_m1 - wti_m2, 4)
+        rbob_cal_spread = round(rbob_m1 - rbob_m2, 4) if (rbob_m2 is not None and not np.isnan(rbob_m2)) else 0.0
+        wti_cal_spread = round(wti_m1 - wti_m2, 4) if (wti_m2 is not None and not np.isnan(wti_m2)) else 0.0
         crack_11 = round(rbob_m1 - (wti_m1 / 42.0), 4)
         crack_321 = round(((2.0 * rbob_m1 + 1.0 * ho_m1) - (3.0 * (wti_m1 / 42.0))) / 3.0, 4)
         backwardation_flag = 1.0 if rbob_cal_spread > 0 else 0.0
 
         forward_features = {
             "rbob_m1_price": round(rbob_m1, 4),
-            "rbob_m2_price": round(rbob_m2, 4),
+            "rbob_m2_price": round(rbob_m2, 4) if rbob_m2 is not None else round(rbob_m1, 4),
             "wti_m1_price": round(wti_m1, 4),
-            "wti_m2_price": round(wti_m2, 4),
+            "wti_m2_price": round(wti_m2, 4) if wti_m2 is not None else round(wti_m1, 4),
             "ho_m1_price": round(ho_m1, 4),
             "rbob_calendar_spread_m1_m2": rbob_cal_spread,
             "wti_calendar_spread_m1_m2": wti_cal_spread,
