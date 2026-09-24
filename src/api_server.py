@@ -9,6 +9,7 @@ import json
 import hmac
 import hashlib
 import logging
+import pandas as pd
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta, timezone
 
