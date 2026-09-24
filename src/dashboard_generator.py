@@ -2732,8 +2732,8 @@ def generate_public_dashboard():
                         <tr class="bg-blue-950/20 font-bold border-l-2 border-blue-500">
                             <td class="py-2.5 px-4 text-white">{get_model_version()} (Current)</td>
                             <td class="py-2.5 px-4 text-blue-300">+ CoSPOT Spectral & Wavelet Prompting, Purged CV, Volatility-Gated Blending & Symbolic Alphas</td>
-                            <td class="py-2.5 px-4 text-emerald-400">$0.1069</td>
-                            <td class="py-2.5 px-4 text-emerald-400">60.79%</td>
+                            <td class="py-2.5 px-4 text-emerald-400">{accuracy_stats['overall_mae_str']}</td>
+                            <td class="py-2.5 px-4 text-emerald-400">{accuracy_stats['overall_hit_rate_str']}</td>
                             <td class="py-2.5 px-4 text-emerald-400"><i class="fa-solid fa-circle text-[10px] mr-1"></i> Active Production</td>
                         </tr>
                     </tbody>
@@ -5208,7 +5208,7 @@ def generate_public_dashboard():
                     $$\min_{\boldsymbol{\beta}} \sum_{i=1}^{N} \left( y_i - \mathbf{x}_i^T \boldsymbol{\beta} \right)^2 + \alpha \|\boldsymbol{\beta}\|_2^2, \quad \hat{P}_{\text{Metro Retail}, t+5} = P_{\text{Live Base}} \times (1 + \hat{y}_{t+5})$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, achieving a record low out-of-time error of <strong>\(\text{MAE} = \$0.1069/\text{gal}\)</strong>.
+                    where \(\alpha = 10.0\) prevents overfitting across high-dimensional hybrid features, evaluated out-of-sample across rolling forward forecast horizons and walking origins.
                 </p>
             </div>
 
@@ -5795,9 +5795,18 @@ def generate_quantstats_tearsheet_page(output_dir: str = "docs"):
                 <h1 class="text-3xl font-extrabold text-white mt-2 flex items-center gap-3">
                     <i class="fa-solid fa-chart-pie text-emerald-400"></i> QuantStats Performance Tear Sheet
                 </h1>
-                <p class="text-sm text-slate-400 mt-1">Institutional risk metrics & out-of-time model backtest tear sheet.</p>
-            </div>
         </header>
+
+        <!-- Synthetic Demo Disclosure Banner (Issue #440) -->
+        <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+            <i class="fa-solid fa-flask text-amber-400 text-lg mt-0.5"></i>
+            <div>
+                <span class="text-xs font-bold font-mono text-amber-300 uppercase tracking-wider block">Synthetic Verification Demonstration</span>
+                <p class="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                    This QuantStats tear sheet executes statistical risk and drawdown calculations across an illustrative synthetic portfolio return sample (\(N=100\)) to benchmark mathematical estimator pipelines under controlled conditions.
+                </p>
+            </div>
+        </div>
 
         <!-- Risk Metric Cards Grid -->
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">

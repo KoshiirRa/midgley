@@ -292,8 +292,17 @@ def render_single_embed_card(spec: dict, run_payload: dict, output_path: str):
     ax_card.axhline(y=0.30, xmin=0.06, xmax=0.94, color='#334155', linewidth=1)
 
     # Bottom Details Grid
+    acc_val = spec["accuracy"]
+    try:
+        from src.prediction_logger import compute_rolling_scoreboard_metrics
+        m = compute_rolling_scoreboard_metrics(window_days=30, region=key if key not in ["Overview", "Math"] else None, horizon_days=5, include_retroactive=False)
+        if m.get("total_evaluations", 0) >= 5:
+            acc_val = f"{m['directional_hit_rate_pct']:.1f}%"
+    except Exception:
+        pass
+
     ax_card.text(0.06, 0.22, "Directional Accuracy", fontsize=9, color='#94a3b8', transform=ax_card.transAxes)
-    ax_card.text(0.06, 0.14, spec["accuracy"], fontsize=12, fontweight='bold', color='#38bdf8', transform=ax_card.transAxes)
+    ax_card.text(0.06, 0.14, acc_val, fontsize=12, fontweight='bold', color='#38bdf8', transform=ax_card.transAxes)
 
     ax_card.text(0.52, 0.22, "Rack / Tax Overhead", fontsize=9, color='#94a3b8', transform=ax_card.transAxes)
     ax_card.text(0.52, 0.14, spec["margin"], fontsize=12, fontweight='bold', color='#cbd5e1', transform=ax_card.transAxes)

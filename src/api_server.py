@@ -580,9 +580,17 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
 
     projected_delta = None
     h_preds = {}
+    h_lowers = {}
+    h_uppers = {}
+    target_date = (pd.Timestamp.now() + pd.offsets.BDay(days)).strftime("%Y-%m-%d")
+
     try:
-        from src.prediction_logger import HISTORY_CSV_PATH
-        import pandas as pd
+        from src.prediction_logger import (
+            HISTORY_CSV_PATH,
+            compute_rolling_scoreboard_metrics,
+            get_regional_calibration_residuals,
+            compute_regional_residual_std
+        )
         if os.path.exists(HISTORY_CSV_PATH):
             df_hist = pd.read_csv(HISTORY_CSV_PATH)
             if not df_hist.empty and 'region' in df_hist.columns:
@@ -599,7 +607,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
                     if 'log_timestamp' in target_pool.columns:
                         target_pool = target_pool.sort_values(by='log_timestamp')
 
-                    # Extract discrete multi-horizon records (Issue #314)
+                    # Extract discrete multi-horizon records (Issue #314, #436)
                     for h_i in range(1, 6):
                         if 'forecast_horizon_days' in target_pool.columns:
                             sub_h = target_pool[target_pool['forecast_horizon_days'] == h_i]
@@ -608,16 +616,23 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
                                 sub_base = float(sub_latest.get('current_base_price', base_price))
                                 sub_pred = float(sub_latest.get('predicted_5d_price', base_price))
                                 sub_delta = sub_pred - sub_base
-                                # Physical delta sanity guardrail: clamp step delta to physical plausibility
                                 sub_delta = max(-0.75, min(0.75, sub_delta))
                                 h_preds[h_i] = round(base_price + sub_delta, 3)
+                                if 'prediction_lower_95ci' in sub_latest and pd.notna(sub_latest['prediction_lower_95ci']):
+                                    h_lowers[h_i] = float(sub_latest['prediction_lower_95ci'])
+                                if 'prediction_upper_95ci' in sub_latest and pd.notna(sub_latest['prediction_upper_95ci']):
+                                    h_uppers[h_i] = float(sub_latest['prediction_upper_95ci'])
+                                if h_i == days and 'forecast_target_date' in sub_latest and pd.notna(sub_latest['forecast_target_date']):
+                                    target_date = str(sub_latest['forecast_target_date'])
 
-                    latest = target_pool.iloc[-1]
-                    hist_base = float(latest['current_base_price'])
-                    hist_pred = float(latest['predicted_5d_price'])
-                    raw_delta = hist_pred - hist_base
-                    # Physical delta sanity guardrail: clamp 5-day delta between -$0.75 and +$0.75/gal
-                    projected_delta = max(-0.75, min(0.75, raw_delta))
+                    if days in h_preds:
+                        projected_delta = round(h_preds[days] - base_price, 3)
+                    else:
+                        latest = target_pool.iloc[-1]
+                        hist_base = float(latest['current_base_price'])
+                        hist_pred = float(latest['predicted_5d_price'])
+                        raw_delta = hist_pred - hist_base
+                        projected_delta = max(-0.75, min(0.75, raw_delta))
     except (FileNotFoundError, pd.errors.EmptyDataError, pd.errors.ParserError, OSError) as e:
         logger.debug(f"Transient or missing prediction history for {region_code}: {e}")
     except Exception as e:
@@ -630,8 +645,6 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     expected_pct = round((projected_delta / base_price) * 100, 2)
     direction = "UP" if projected_delta > 0 else ("DOWN" if projected_delta < 0 else "FLAT")
 
-    target_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
-
     # Compute 5-day trajectory points from discrete multi-horizon estimators or smooth delta fallback
     day_step = projected_delta / 5.0
     day_1 = h_preds.get(1, round(base_price + day_step * 1, 3))
@@ -639,6 +652,41 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     day_3 = h_preds.get(3, round(base_price + day_step * 3, 3))
     day_4 = h_preds.get(4, round(base_price + day_step * 4, 3))
     day_5 = h_preds.get(5, round(predicted_price, 3))
+
+    # Compute dynamic rolling accuracy metrics from ledger (Issue #440)
+    score_metrics = compute_rolling_scoreboard_metrics(
+        window_days=30,
+        region=region_code,
+        horizon_days=days if days <= 5 else 5,
+        include_retroactive=False
+    )
+    if score_metrics.get("total_evaluations", 0) < 5:
+        score_metrics = compute_rolling_scoreboard_metrics(
+            window_days="all",
+            region=region_code,
+            horizon_days=days if days <= 5 else 5,
+            include_retroactive=False
+        )
+
+    hit_rate = round(score_metrics.get("directional_hit_rate_pct", 51.1) / 100.0, 4)
+    mae_val = round(score_metrics.get("mae_dollars", 0.149), 4)
+    total_evals = score_metrics.get("total_evaluations", 0)
+
+    # Compute discrete-horizon conformal / calibrated prediction intervals (Issue #358, #436)
+    resids = get_regional_calibration_residuals(region=region_code, horizon_days=days, window_days=60)
+    calibration_method = "conformal" if len(resids) >= 10 else "gaussian_scaled"
+    if days in h_lowers and days in h_uppers:
+        lower_95ci = h_lowers[days]
+        upper_95ci = h_uppers[days]
+    elif len(resids) >= 10:
+        from src.models import compute_conformal_prediction_intervals
+        low_b, high_b = compute_conformal_prediction_intervals(predicted_price, resids, alpha=0.05)
+        lower_95ci = float(low_b[0] if hasattr(low_b, '__len__') else low_b)
+        upper_95ci = float(high_b[0] if hasattr(high_b, '__len__') else high_b)
+    else:
+        h_std = compute_regional_residual_std(region=region_code, window_days=30, horizon_days=days)
+        lower_95ci = round(predicted_price - (1.96 * h_std), 4)
+        upper_95ci = round(predicted_price + (1.96 * h_std), 4)
 
     attr = compute_locale_feature_attribution_breakdown(
         region_code=region_code,
@@ -663,8 +711,13 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             "expected_change_dollars": round(projected_delta, 3),
             "expected_change_percent": expected_pct,
             "projected_direction": direction,
-            "directional_hit_rate_historical": 0.6079,
-            "historical_mae_dollars": 0.1069,
+            "prediction_lower_95ci": lower_95ci,
+            "prediction_upper_95ci": upper_95ci,
+            "calibration_method": calibration_method,
+            "calibration_sample_size": len(resids),
+            "directional_hit_rate_historical": hit_rate,
+            "historical_mae_dollars": mae_val,
+            "evaluation_sample_size": total_evals,
             "day_1_price": day_1,
             "day_2_price": day_2,
             "day_3_price": day_3,
@@ -831,6 +884,9 @@ def get_purged_cv_metrics(
     
     return {
         "status": "success",
+        "demonstration_type": "SYNTHETIC_ILLUSTRATIVE_DEMO",
+        "is_synthetic_demonstration": True,
+        "note": "Demonstration endpoint executing PurgedGroupTimeSeriesSplit and CPCV evaluation across synthetic feature matrices for algorithmic verification (Issue #440).",
         "timestamp": datetime.now().isoformat(),
         "purged_cv_evaluation": res
     }

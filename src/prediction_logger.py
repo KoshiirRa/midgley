@@ -323,6 +323,45 @@ def compute_regional_residual_std(
     return base_std
 
 
+def get_regional_calibration_residuals(
+    region: Optional[str] = None,
+    horizon_days: Optional[int | str] = None,
+    window_days: int | str = 60
+) -> np.ndarray:
+    """
+    Extracts absolute out-of-sample prediction residuals |actual - predicted| for split conformal interval calibration (Issue #358, #436).
+    Restricted strictly to mature prospective forecasts or clean evaluated history.
+    """
+    try:
+        if os.path.exists(HISTORY_CSV_PATH):
+            df = pd.read_csv(HISTORY_CSV_PATH)
+            filtered = filter_evaluated_history_by_window(
+                df,
+                window_days=window_days,
+                region=region,
+                horizon_days=horizon_days,
+                include_retroactive=False
+            )
+            if filtered.empty or 'actual_5d_price' not in filtered.columns:
+                # Broader window or include retroactive if clean prospective sample is small
+                filtered = filter_evaluated_history_by_window(
+                    df,
+                    window_days="all",
+                    region=region,
+                    horizon_days=horizon_days,
+                    include_retroactive=True
+                )
+            if not filtered.empty and 'actual_5d_price' in filtered.columns and 'predicted_5d_price' in filtered.columns:
+                actuals = filtered['actual_5d_price'].astype(float).values
+                preds = filtered['predicted_5d_price'].astype(float).values
+                resids = np.abs(actuals - preds)
+                clean_resids = resids[np.isfinite(resids) & (resids > 0.0)]
+                return clean_resids
+    except Exception as e:
+        logger.debug(f"Notice extracting calibration residuals for {region} (h={horizon_days}): {e}")
+    return np.array([], dtype=float)
+
+
 def resolve_model_tag(
     region: str = "National", 
     model_type: str = "Ridge", 
@@ -373,8 +412,6 @@ def log_predictions(
     timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     now_utc_str = datetime.now(timezone.utc).isoformat()
     new_records = []
-
-    res_std = compute_regional_residual_std(region=region, window_days=30)
     
     for idx, row in predictions_df.iterrows():
         base_price = float(row['current_price'])
@@ -397,8 +434,26 @@ def log_predictions(
         quant_base = float(row.get('quant_baseline_5d_price')) if 'quant_baseline_5d_price' in row and pd.notna(row['quant_baseline_5d_price']) else np.nan
         aug_delta = float(row.get('llm_augmentation_delta')) if 'llm_augmentation_delta' in row and pd.notna(row['llm_augmentation_delta']) else (round(pred_price - quant_base, 4) if pd.notna(quant_base) else 0.0)
 
-        lower_ci = float(row.get('prediction_lower_95ci')) if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) else round(pred_price - (1.96 * res_std), 4)
-        upper_ci = float(row.get('prediction_upper_95ci')) if 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']) else round(pred_price + (1.96 * res_std), 4)
+        # Wire discrete-horizon conformal prediction intervals (Issue #358, #436)
+        if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) and 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']):
+            lower_ci = float(row['prediction_lower_95ci'])
+            upper_ci = float(row['prediction_upper_95ci'])
+        else:
+            try:
+                from src.models import compute_conformal_prediction_intervals
+                cal_resids = get_regional_calibration_residuals(region=region, horizon_days=h_days, window_days=60)
+                if len(cal_resids) >= 10:
+                    low_arr, high_arr = compute_conformal_prediction_intervals(pred_price, cal_resids, alpha=0.05)
+                    lower_ci = float(low_arr[0] if hasattr(low_arr, '__len__') else low_arr)
+                    upper_ci = float(high_arr[0] if hasattr(high_arr, '__len__') else high_arr)
+                else:
+                    h_res_std = compute_regional_residual_std(region=region, window_days=30, horizon_days=h_days)
+                    lower_ci = round(pred_price - (1.96 * h_res_std), 4)
+                    upper_ci = round(pred_price + (1.96 * h_res_std), 4)
+            except Exception:
+                h_res_std = compute_regional_residual_std(region=region, window_days=30, horizon_days=h_days)
+                lower_ci = round(pred_price - (1.96 * h_res_std), 4)
+                upper_ci = round(pred_price + (1.96 * h_res_std), 4)
 
         llm_press = float(row.get('llm_price_pressure')) if 'llm_price_pressure' in row and pd.notna(row['llm_price_pressure']) else (float(row.get('event_overall_price_pressure', row.get('overall_price_pressure', 0.0))) if pd.notna(row.get('event_overall_price_pressure', row.get('overall_price_pressure'))) else 0.0)
         llm_disr = float(row.get('llm_supply_disruption')) if 'llm_supply_disruption' in row and pd.notna(row['llm_supply_disruption']) else (float(row.get('event_supply_disruption', row.get('supply_disruption', 0.0))) if pd.notna(row.get('event_supply_disruption', row.get('supply_disruption'))) else 0.0)
