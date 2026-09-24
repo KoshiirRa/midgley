@@ -127,7 +127,34 @@ def run_regional_pipeline(
     splits = results['splits']
     results['multi_horizon_results'] = multi_horizon_results
 
-    # Step 5: Multi-Horizon Prediction Logging & Historical Backfill
+    # Step 5: Real-Time Scenario Simulations & Prediction Logging
+    last_row_hybrid_5 = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:])
+    raw_pred_5 = float(results.get('live_pred_price', results['model_hybrid'].predict(last_row_hybrid_5)[0]))
+    last_hist_5 = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
+    base_ret_5 = (raw_pred_5 - last_hist_5) / last_hist_5 if last_hist_5 > 0 else 0.0
+    baseline_forecast = live_pump_price * (1.0 + base_ret_5)
+
+    default_scenarios = [
+        {"name": "Scenario 1: Regional Supply Disruption", "headline": "Regional refinery flaring and rack outage halts distribution.", "shock_pct": 0.045},
+        {"name": "Scenario 2: Key Pipeline Constraint", "headline": "Major pipeline batch throttling reduces wholesale terminal intake.", "shock_pct": 0.035},
+        {"name": "Scenario 3: Severe Weather Shock", "headline": "Severe storm disruption impacts coastal fuel logistics and rack operations.", "shock_pct": 0.030},
+        {"name": "Scenario 4: Maritime Chokepoint Detour", "headline": "International maritime bottleneck forces vessel rerouting and freight increases.", "shock_pct": 0.025},
+        {"name": "Scenario 5: Executive Policy Action", "headline": "Executive social post announces trade and tariff policy revisions.", "shock_pct": -0.020},
+    ]
+
+    scenario_results = []
+    for sc in default_scenarios:
+        shock_pct = sc["shock_pct"]
+        sim_price = baseline_forecast * (1.0 + shock_pct)
+        dollar_change = sim_price - baseline_forecast
+        pct_change = (dollar_change / baseline_forecast) * 100
+        scenario_results.append({
+            "Scenario": sc["name"],
+            "Adjusted 5D Price": f"${sim_price:.3f}/gal",
+            "Impact ($)": f"{dollar_change:+.3f}/gal",
+            "Impact (%)": f"{pct_change:+.2f}%"
+        })
+
     model_tag = resolve_model_tag(region=logger_region_key, model_type=model_type)
     last_date = market_df['date'].iloc[-1]
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
@@ -204,6 +231,9 @@ def run_regional_pipeline(
     except Exception as e:
         logger.debug(f"Backfill actual prices skipped: {e}")
 
+    results["results"] = results
+    results["baseline_forecast"] = baseline_forecast
+    results["scenarios"] = scenario_results
     results["region"] = logger_region_key
     results["display_name"] = display_name
     results["live_pump_price"] = live_pump_price
