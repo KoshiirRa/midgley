@@ -1055,6 +1055,15 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
   });
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promise<Response> {
   const url = new URL(request.url);
 
@@ -1066,6 +1075,16 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     const s = url.searchParams.get("s") || "0.00";
     const g = url.searchParams.get("g") || "0.00";
     const sourceUrl = url.searchParams.get("url") || "";
+    const authToken = url.searchParams.get("token") || "";
+
+    const idEsc = escapeHtml(id);
+    const headlineEsc = escapeHtml(headline);
+    const sourceEsc = escapeHtml(source);
+    const pEsc = escapeHtml(p);
+    const sEsc = escapeHtml(s);
+    const gEsc = escapeHtml(g);
+    const sourceUrlEsc = escapeHtml(sourceUrl);
+    const authTokenEsc = escapeHtml(authToken);
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -1214,32 +1233,33 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     </div>
 
     <div class="headline-box">
-      "${headline}"
+      "${headlineEsc}"
     </div>
 
     <div class="meta-grid">
       <div class="meta-item">
         <div class="meta-label">Pressure (ΔP)</div>
-        <div class="meta-value" style="color: ${p.startsWith('+') ? '#e74c3c' : '#2ecc71'};">${p}/gal</div>
+        <div class="meta-value" style="color: ${pEsc.startsWith('+') ? '#e74c3c' : '#2ecc71'};">${pEsc}/gal</div>
       </div>
       <div class="meta-item">
         <div class="meta-label">Supply Shock</div>
-        <div class="meta-value">${s}</div>
+        <div class="meta-value">${sEsc}</div>
       </div>
       <div class="meta-item">
         <div class="meta-label">Source</div>
-        <div class="meta-value">${source}</div>
+        <div class="meta-value">${sourceEsc}</div>
       </div>
     </div>
 
     <form method="POST" action="/flag">
-      <input type="hidden" name="id" value="${id}">
+      <input type="hidden" name="id" value="${idEsc}">
       <input type="hidden" name="headline" value="${encodeURIComponent(headline)}">
-      <input type="hidden" name="source" value="${source}">
-      <input type="hidden" name="p" value="${p}">
-      <input type="hidden" name="s" value="${s}">
-      <input type="hidden" name="g" value="${g}">
+      <input type="hidden" name="source" value="${sourceEsc}">
+      <input type="hidden" name="p" value="${pEsc}">
+      <input type="hidden" name="s" value="${sEsc}">
+      <input type="hidden" name="g" value="${gEsc}">
       <input type="hidden" name="url" value="${encodeURIComponent(sourceUrl)}">
+      <input type="hidden" name="token" value="${authTokenEsc}">
 
       <div class="form-group">
         <label for="category">False Positive Category</label>
@@ -1290,6 +1310,17 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
 
     const category = formData.get("category")?.toString() || "Uncategorized False Positive";
     const notes = formData.get("notes")?.toString() || "";
+
+    const formToken = formData.get("token")?.toString() || request.headers.get("Authorization")?.replace("Bearer ", "").trim();
+    const requiredToken = env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT;
+
+    // Reject unauthenticated issue creation requests (Issue #438)
+    if (requiredToken && (!formToken || formToken !== requiredToken)) {
+      return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid authentication token for issue creation" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
 
     const owner = env.REPO_OWNER || "KoshiirRa";
     const repo = env.REPO_NAME || "midgley";
@@ -1467,7 +1498,20 @@ export default {
         return await handleDiscordInteraction(request, env, ctx);
       }
 
+      // Secure manual run & trigger endpoints (Issue #438)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
+        const authHeader = request.headers.get("Authorization");
+        const queryToken = url.searchParams.get("token");
+        const expectedToken = env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT;
+        if (expectedToken) {
+          const token = authHeader?.replace("Bearer ", "").trim() || queryToken?.trim();
+          if (!token || token !== expectedToken) {
+            return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid admin token" }), {
+              status: 401,
+              headers: { "Content-Type": "application/json" }
+            });
+          }
+        }
         const summary = await runMonitoringCycle(env, ctx);
         return new Response(JSON.stringify(summary, null, 2), {
           headers: { "Content-Type": "application/json" }

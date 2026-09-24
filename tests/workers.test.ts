@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import nacl from "tweetnacl";
-import {
+import intradayWorker, {
   normalizeHeadline,
   isAnomalyHeadline,
   hexToUint8Array,
@@ -257,13 +257,27 @@ describe("Cloudflare Intraday Monitor Worker", () => {
 });
 
 describe("Cloudflare Cache Worker", () => {
+  it("fails closed and rejects cache requests when auth token is unconfigured", async () => {
+    const env: CacheEnv = {};
+
+    const req = new Request("https://cache.local/api/v1/cache/test_key", {
+      method: "GET"
+    });
+
+    const res = await cacheWorker.fetch(req, env, {});
+    expect(res.status).toBe(401);
+    const data = (await res.json()) as { error: string };
+    expect(data.error).toContain("Unauthorized");
+  });
+
   it("rejects unauthorized cache requests when auth token is configured", async () => {
     const env: CacheEnv = {
       CLOUDFLARE_AUTH_TOKEN: "secret-token-12345"
     };
 
     const req = new Request("https://cache.local/api/v1/cache/get?key=test", {
-      method: "GET"
+      method: "GET",
+      headers: { Authorization: "Bearer wrong-token" }
     });
 
     const res = await cacheWorker.fetch(req, env, {});
@@ -283,5 +297,58 @@ describe("Cloudflare Cache Worker", () => {
     expect(res.status).toBe(200);
     const data = (await res.json()) as { status: string };
     expect(data.status).toBe("healthy");
+  });
+});
+
+describe("Intraday Monitor Worker Security (Issue #438)", () => {
+  it("escapes malicious HTML query parameters on GET /flag", async () => {
+    const maliciousHeadline = "<script>alert('XSS')</script>";
+    const maliciousSource = "<b onmouseover=alert(1)>Source</b>";
+    const req = new Request(
+      `https://worker.local/flag?id=123&headline=${encodeURIComponent(maliciousHeadline)}&source=${encodeURIComponent(maliciousSource)}`,
+      { method: "GET" }
+    );
+
+    const env: IntradayEnv = { GH_PAT: "test_token" };
+    const res = await intradayWorker.fetch(req, env, {});
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).not.toContain("<script>alert('XSS')</script>");
+    expect(html).toContain("&lt;script&gt;alert(&#039;XSS&#039;)&lt;/script&gt;");
+    expect(html).not.toContain("<b onmouseover=alert(1)>");
+    expect(html).toContain("&lt;b onmouseover=alert(1)&gt;Source&lt;/b&gt;");
+  });
+
+  it("rejects unauthenticated POST /flag submissions", async () => {
+    const formData = new FormData();
+    formData.append("id", "test_id");
+    formData.append("headline", "Test Headline");
+    formData.append("token", "invalid_token");
+
+    const req = new Request("https://worker.local/flag", {
+      method: "POST",
+      body: formData
+    });
+
+    const env: IntradayEnv = {
+      GH_PAT: "real_gh_pat_token",
+      ADMIN_TOKEN: "admin_secret_token"
+    };
+
+    const res = await intradayWorker.fetch(req, env, {});
+    expect(res.status).toBe(401);
+  });
+
+  it("rejects unauthenticated requests to /run and /trigger when admin token is set", async () => {
+    const req = new Request("https://worker.local/run", {
+      method: "GET"
+    });
+
+    const env: IntradayEnv = {
+      ADMIN_TOKEN: "admin_secret_token"
+    };
+
+    const res = await intradayWorker.fetch(req, env, {});
+    expect(res.status).toBe(401);
   });
 });

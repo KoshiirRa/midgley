@@ -107,17 +107,25 @@ export default {
         );
       }
 
-      // Optional Bearer Authentication check
-      if (env.CLOUDFLARE_AUTH_TOKEN) {
-        const token = authHeader?.replace("Bearer ", "");
-        if (token !== env.CLOUDFLARE_AUTH_TOKEN) {
-          console.warn(`[Cache Auth Warning] Unauthorized request from ${request.headers.get("CF-Connecting-IP") || "unknown"}`);
-          await logToAxiom(env, ctx, { event: "cache_auth_unauthorized", ip: request.headers.get("CF-Connecting-IP") });
-          return new Response(JSON.stringify({ error: "Unauthorized" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" }
-          });
-        }
+      // Fail-Closed Bearer Authentication check (Issue #438)
+      const expectedToken = env.CLOUDFLARE_AUTH_TOKEN;
+      if (!expectedToken) {
+        console.warn(`[Cache Auth Error] CLOUDFLARE_AUTH_TOKEN is not configured on worker; rejecting request in fail-closed mode.`);
+        await logToAxiom(env, ctx, { event: "cache_auth_unconfigured", ip: request.headers.get("CF-Connecting-IP") });
+        return new Response(JSON.stringify({ error: "Unauthorized: Worker authentication is not configured" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      const token = authHeader?.replace("Bearer ", "").trim();
+      if (!token || token !== expectedToken) {
+        console.warn(`[Cache Auth Warning] Unauthorized request from ${request.headers.get("CF-Connecting-IP") || "unknown"}`);
+        await logToAxiom(env, ctx, { event: "cache_auth_unauthorized", ip: request.headers.get("CF-Connecting-IP") });
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" }
+        });
       }
 
 

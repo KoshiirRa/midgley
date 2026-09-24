@@ -421,6 +421,9 @@ def get_head_meta_tags(
     <!-- Discord Theme Accent Color -->
     <meta name="theme-color" content="{theme_color}">
 
+    <!-- Content Security Policy (Issue #438) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval';">
+
     <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/x-icon" href="{base_url}/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="{base_url}/assets/favicon.png">
@@ -1077,7 +1080,7 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
             </span>
             🚨 Intraday Anomaly Shock
         </span>"""
-        trigger_title = f"🚨 Intraday Anomaly Shock: {headline}" if headline else "🚨 High-Impact Intraday Anomaly Event"
+        trigger_title = f"🚨 Intraday Anomaly Shock: {html.escape(headline)}" if headline else "🚨 High-Impact Intraday Anomaly Event"
         trigger_desc = "Triggered by automated 15-minute energy RSS polling / Webhook anomaly threshold evaluation."
         run_mode_tag = "INTRADAY_REVISION"
     else:
@@ -1085,7 +1088,7 @@ def build_last_run_audit_card_html(audit_data: dict, rel_prefix: str = "") -> st
             <i class="fa-solid fa-circle-check text-emerald-400"></i> Daily Forecast Batch Execution
         </span>"""
         timestamp_utc = log_ts if log_ts else datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-        trigger_title = f"Daily Forecast Batch Execution ({timestamp_utc})"
+        trigger_title = f"Daily Forecast Batch Execution ({html.escape(str(timestamp_utc))})"
         trigger_desc = "Automated 24-hour commodity futures, weather alerts, and executive social media ingestion."
         run_mode_tag = "DAILY_BATCH"
 

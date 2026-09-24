@@ -327,7 +327,7 @@ class TestAPIServer(unittest.TestCase):
     def test_global_api_key_middleware_enforcement(self):
         """Verifies global middleware enforces MIDGLEY_API_KEY on protected routes while exempting public routes (Issue #344)."""
         valid_api_key = "midgley_global_secret_key_999"
-        with patch.dict(os.environ, {"MIDGLEY_API_KEY": valid_api_key}):
+        with patch.dict(os.environ, {"MIDGLEY_API_KEY": valid_api_key, "TESTING": "0"}):
             # Protected endpoint without API key should return 401
             res_unauth = self.client.get("/api/v1/forecast/predict?locale=tulsa")
             self.assertEqual(res_unauth.status_code, 401)
@@ -362,7 +362,7 @@ class TestAPIServer(unittest.TestCase):
             self.assertEqual(res_root.status_code, 200)
 
     def test_get_system_cache_status(self):
-        """Verifies GET /api/v1/system/cache-status returns cache stats and optional edge probes."""
+        """Verifies GET /api/v1/system/cache-status returns cache stats and requires admin auth for active probes."""
         res = self.client.get("/api/v1/system/cache-status")
         self.assertEqual(res.status_code, 200)
         data = res.json()
@@ -370,14 +370,133 @@ class TestAPIServer(unittest.TestCase):
         self.assertIn("cache_stats", data)
         self.assertIsNone(data["probes"])
 
-        # With active probe flag
-        res_probe = self.client.get("/api/v1/system/cache-status?probe=true")
-        self.assertEqual(res_probe.status_code, 200)
-        probe_data = res_probe.json()
-        self.assertIsNotNone(probe_data["probes"])
-        self.assertIn("local_sqlite", probe_data["probes"])
-        self.assertIn("turso", probe_data["probes"])
-        self.assertIn("cloudflare", probe_data["probes"])
+        # With active probe flag in non-test mode without admin header -> 401
+        with patch.dict(os.environ, {"TESTING": "0", "MIDGLEY_ADMIN_SECRET": "admin_probe_secret"}):
+            res_unauth = self.client.get("/api/v1/system/cache-status?probe=true")
+            self.assertEqual(res_unauth.status_code, 401)
+
+            # With active probe flag and valid admin header -> 200
+            res_auth = self.client.get(
+                "/api/v1/system/cache-status?probe=true",
+                headers={"X-Admin-Secret": "admin_probe_secret"}
+            )
+            self.assertEqual(res_auth.status_code, 200)
+            probe_data = res_auth.json()
+            self.assertIsNotNone(probe_data["probes"])
+            self.assertIn("local_sqlite", probe_data["probes"])
+            self.assertIn("turso", probe_data["probes"])
+            self.assertIn("cloudflare", probe_data["probes"])
+
+    def test_tier_enforcement_basic_vs_privileged(self):
+        """Verifies basic tier keys are rejected with 403 on LLM simulation, graph ingest, and arena submit (Issue #437)."""
+        from src.key_manager import global_key_manager
+        basic_key_dict = global_key_manager.create_key(user_id="bob", tier="basic", environment="dev")
+        basic_token = basic_key_dict["token"]
+
+        priv_key_dict = global_key_manager.create_key(user_id="alice", tier="privileged", environment="dev")
+        priv_token = priv_key_dict["token"]
+
+        with patch.dict(os.environ, {"TESTING": "0"}):
+            # 1. POST /api/v1/forecast/simulate with custom_headline -> Basic should 403, Privileged should 200
+            res_basic_sim = self.client.post(
+                "/api/v1/forecast/simulate",
+                json={"scenario_id": "hormuz_blockade", "custom_headline": "Oil tanker blocked in Hormuz"},
+                headers={"X-API-Key": basic_token}
+            )
+            self.assertEqual(res_basic_sim.status_code, 403)
+
+            res_priv_sim = self.client.post(
+                "/api/v1/forecast/simulate",
+                json={"scenario_id": "hormuz_blockade", "custom_headline": "Oil tanker blocked in Hormuz"},
+                headers={"X-API-Key": priv_token}
+            )
+            self.assertEqual(res_priv_sim.status_code, 200)
+
+            # 2. POST /api/v1/connectors/headline-arena/submit -> Basic 403, Privileged 200
+            arena_payload = {
+                "asset": "RB",
+                "open_price": 2.50,
+                "p50": 2.55,
+                "p10": 2.45,
+                "p90": 2.65,
+                "live_in_dev": False
+            }
+            res_basic_arena = self.client.post(
+                "/api/v1/connectors/headline-arena/submit",
+                json=arena_payload,
+                headers={"X-API-Key": basic_token}
+            )
+            self.assertEqual(res_basic_arena.status_code, 403)
+
+            res_priv_arena = self.client.post(
+                "/api/v1/connectors/headline-arena/submit",
+                json=arena_payload,
+                headers={"X-API-Key": priv_token}
+            )
+            self.assertEqual(res_priv_arena.status_code, 200)
+
+            # 3. POST /api/v1/graph/ingest -> Basic 403, Privileged 200
+            graph_payload = {
+                "headline": "New refining capacity comes online",
+                "supply_disruption": 0.2
+            }
+            res_basic_graph = self.client.post(
+                "/api/v1/graph/ingest",
+                json=graph_payload,
+                headers={"X-API-Key": basic_token}
+            )
+            self.assertEqual(res_basic_graph.status_code, 403)
+
+            res_priv_graph = self.client.post(
+                "/api/v1/graph/ingest",
+                json=graph_payload,
+                headers={"X-API-Key": priv_token}
+            )
+            self.assertEqual(res_priv_graph.status_code, 200)
+
+    def test_webhook_timestamp_replay_protection(self):
+        """Verifies webhook requests reject expired or replayed timestamps outside 5-minute freshness window (Issue #437)."""
+        import time
+        import hmac
+        import hashlib
+
+        secret = "super_test_webhook_secret_999"
+        raw_body = b'{"headline": "Breaking energy crisis news"}'
+        current_ts = int(time.time())
+        expired_ts = current_ts - 600 # 10 minutes ago (> 300s window)
+
+        # Fresh signature: hmac(f"{current_ts}." + raw_body)
+        fresh_payload = f"{current_ts}.".encode("utf-8") + raw_body
+        fresh_sig = hmac.new(secret.encode("utf-8"), fresh_payload, hashlib.sha256).hexdigest()
+
+        # Expired signature
+        expired_payload = f"{expired_ts}.".encode("utf-8") + raw_body
+        expired_sig = hmac.new(secret.encode("utf-8"), expired_payload, hashlib.sha256).hexdigest()
+
+        with patch.dict(os.environ, {"MIDGLEY_WEBHOOK_SECRET": secret, "MIDGLEY_ENV": "prod", "TESTING": "0"}):
+            # Expired timestamp should be rejected with 401
+            res_expired = self.client.post(
+                "/api/v1/events/webhook",
+                content=raw_body,
+                headers={
+                    "Content-Type": "application/json",
+                    "X-Midgley-Signature": expired_sig,
+                    "X-Signature-Timestamp": str(expired_ts)
+                }
+            )
+            self.assertEqual(res_expired.status_code, 401)
+
+            # Fresh timestamp should pass
+            res_fresh = self.client.post(
+                "/api/v1/events/webhook",
+                content=raw_body,
+                headers={
+                    "Content-Type": "application/json",
+                    "X-Midgley-Signature": fresh_sig,
+                    "X-Signature-Timestamp": str(current_ts)
+                }
+            )
+            self.assertEqual(res_fresh.status_code, 200)
 
 
 if __name__ == "__main__":

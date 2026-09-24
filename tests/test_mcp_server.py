@@ -92,6 +92,45 @@ class TestMCPServer(unittest.TestCase):
         self.assertEqual(data["paper_id_or_doi"], "10.1016/j.eneco.2024.107000")
         self.assertIn("tldr", data)
 
+    def test_mcp_tier_gating_on_simulate_fuel_market_shock(self):
+        """Verifies MCP simulate tool disallows unprivileged LLM cohort execution for basic tier sessions (Issue #431)."""
+        from src.mcp_server import set_active_mcp_session_context
+        import os
+        from unittest.mock import patch
+
+        # 1. Basic Tier Session: LLM cohort simulation flag should be automatically downgraded
+        set_active_mcp_session_context({"user_id": "bob", "tier": "basic", "rate_limit_rpm": 30})
+        with patch.dict(os.environ, {"TESTING": "0"}):
+            res = asyncio.run(call_tool("simulate_fuel_market_shock", {
+                "locale": "tulsa",
+                "scenario_id": "hormuz_blockade",
+                "enable_cohort_simulation": True,
+                "custom_headline": "Custom fire shock"
+            }))
+            data = json.loads(res[0].text)
+            self.assertEqual(data["status"], "success")
+            self.assertNotIn("cohort_simulation", data)
+
+        # 2. Reset context
+        set_active_mcp_session_context(None)
+
+    def test_mcp_sse_http_endpoint_auth_enforcement(self):
+        """Verifies HTTP /mcp/sse and /mcp/messages endpoints reject unauthenticated requests in non-test mode (Issue #431)."""
+        import os
+        from unittest.mock import patch
+        from fastapi.testclient import TestClient
+        from src.api_server import app
+
+        client = TestClient(app)
+        with patch.dict(os.environ, {"TESTING": "0"}):
+            # GET /mcp/sse without credentials should be rejected with 401
+            res_sse_unauth = client.get("/mcp/sse")
+            self.assertEqual(res_sse_unauth.status_code, 401)
+
+            # POST /mcp/messages without credentials should be rejected with 401
+            res_msg_unauth = client.post("/mcp/messages")
+            self.assertEqual(res_msg_unauth.status_code, 401)
+
 
 if __name__ == "__main__":
     unittest.main()

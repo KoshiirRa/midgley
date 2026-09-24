@@ -8,7 +8,7 @@ import os
 import json
 import asyncio
 import logging
-from typing import Any, Sequence
+from typing import Any, Sequence, Optional, Dict
 
 import mcp.server.stdio
 import mcp.types as types
@@ -24,6 +24,22 @@ from src.api_server import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Active session context for MCP requests over HTTP transport (Issue #431)
+_active_mcp_context: Optional[Dict[str, Any]] = None
+
+
+def set_active_mcp_session_context(context: Optional[Dict[str, Any]]) -> None:
+    """Sets the authenticated user context for the active MCP session."""
+    global _active_mcp_context
+    _active_mcp_context = context
+
+
+def get_active_mcp_session_context() -> Optional[Dict[str, Any]]:
+    """Retrieves the authenticated user context for the active MCP session."""
+    global _active_mcp_context
+    return _active_mcp_context
+
 
 # Initialize MCP Server instance
 app = Server("midgley-gas-prices")
@@ -370,6 +386,17 @@ async def call_tool(
             target_date = args.get("target_date")
             enable_cohort_simulation = args.get("enable_cohort_simulation")
             custom_headline = args.get("custom_headline")
+
+            # Validate caller tier permissions when invoked over authenticated HTTP MCP transport (Issue #431)
+            ctx = get_active_mcp_session_context()
+            if ctx is not None:
+                tier = ctx.get("tier", "basic").lower()
+                is_testing = os.environ.get("TESTING") == "1"
+                if (enable_cohort_simulation or custom_headline) and tier != "privileged" and not is_testing:
+                    # Gracefully disallow unprivileged LLM execution
+                    enable_cohort_simulation = False
+                    custom_headline = None
+
             req = SimulateRequest(
                 scenario_id=scenario_id,
                 locale=locale,

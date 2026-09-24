@@ -46,13 +46,18 @@ To prevent unauthorized payload injection, Midgley enforces a strict **Fail-Clos
 > [!IMPORTANT]
 > **Production Fail-Closed Requirement**: In production (`MIDGLEY_ENV=prod`), if `MIDGLEY_WEBHOOK_SECRET` is omitted from the environment, all incoming webhook calls are automatically blocked with `401 Unauthorized`. You must set `MIDGLEY_WEBHOOK_SECRET` in your production environment variables.
 
-### Calculating the Signature
-1. Compute the HMAC-SHA256 digest over the raw JSON payload bytes using your shared secret:
-   $$\text{Signature} = \text{HMAC-SHA256}(\text{SecretKey}, \text{RawBodyBytes})$$
-2. Send the resulting 64-character lowercase hex string in the header:
+### Calculating the Signature with Replay Protection (Issue #437)
+To defeat replay attacks, callers should include the `X-Signature-Timestamp` header containing the current Unix timestamp in seconds. The signature is computed over `f"{timestamp}.{raw_body_bytes}"`:
+
+1. Get current Unix timestamp: $t = \text{floor}(\text{time}())$
+2. Compute the HMAC-SHA256 digest over formatted string `f"{t}." + raw_body_utf8`:
+   $$\text{Signature} = \text{HMAC-SHA256}(\text{SecretKey}, \text{Timestamp} + "." + \text{RawBodyBytes})$$
+3. Send headers:
    ```http
+   X-Signature-Timestamp: 1727197200
    X-Midgley-Signature: sha256=a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0
    ```
+*(Legacy requests omitting `X-Signature-Timestamp` fall back to validating the HMAC directly over `RawBodyBytes`).*
 
 ### Copy-Pasteable Signing Snippets
 
@@ -61,6 +66,7 @@ To prevent unauthorized payload injection, Midgley enforces a strict **Fail-Clos
 import hmac
 import hashlib
 import json
+import time
 import requests
 
 secret = "your_webhook_secret_here"
@@ -70,11 +76,14 @@ payload = {
     "source": "Pipeline_Alert"
 }
 
+ts = str(int(time.time()))
 raw_bytes = json.dumps(payload, separators=(",", ":")).encode("utf-8")
-signature = hmac.new(secret.encode("utf-8"), raw_bytes, hashlib.sha256).hexdigest()
+to_sign = f"{ts}.".encode("utf-8") + raw_bytes
+signature = hmac.new(secret.encode("utf-8"), to_sign, hashlib.sha256).hexdigest()
 
 headers = {
     "Content-Type": "application/json",
+    "X-Signature-Timestamp": ts,
     "X-Midgley-Signature": f"sha256={signature}"
 }
 

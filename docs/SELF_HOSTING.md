@@ -80,8 +80,14 @@ SEMANTIC_SCHOLAR_API_KEY="semantic_scholar_api_key_here"
 OPENAI_API_KEY="sk-proj-..."
 ANTHROPIC_API_KEY="sk-ant-..."
 
-# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation)
+# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation with Timestamp Replay Defense)
 MIDGLEY_WEBHOOK_SECRET="super-secret-hmac-key-change-me"
+
+# REST & MCP API Gateway Master Key (Full Privileged Access)
+MIDGLEY_API_KEY="mg_prod_master_key_change_me"
+
+# Admin Secret for Key Provisioning & Edge Probe Diagnostics (Fail-Closed)
+MIDGLEY_ADMIN_SECRET="admin-secret-provisioning-token-change-me"
 
 # IPASIS API Gateway Security Key & Controls (ipasis.com - 100 req/day free)
 IPASIS_API_KEY="ipasis_live_key_here"
@@ -206,14 +212,20 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```bash
    npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
    ```
-3. Deploy the `midgley-cache-worker` proxy (`workers/cache_worker.ts`) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
+3. Deploy the `midgley-cache-worker` proxy (`workers/cache_worker.ts` with `workers/wrangler.cache.toml`):
    ```bash
-   npx wrangler deploy --config wrangler.cache.toml
+   # Deploy staging or production environment
+   npx wrangler deploy --config workers/wrangler.cache.toml --env staging
+   # Or for production:
+   npx wrangler deploy --config workers/wrangler.cache.toml --env production
    ```
-4. Configure optional telemetry & auth secrets for Option A2 (Axiom & Sentry):
+4. Configure required authentication token and optional telemetry secrets (Axiom & Sentry):
+   > [!IMPORTANT]
+   > **Fail-Closed Security (Issue #438)**: `midgley-cache-worker` strictly enforces Bearer token authentication against `CLOUDFLARE_AUTH_TOKEN`. If `CLOUDFLARE_AUTH_TOKEN` is unset or invalid, all cache write, read, and sync endpoints reject requests with `401 Unauthorized`.
    ```bash
-   npx wrangler secret put SENTRY_DSN --config wrangler.cache.toml
-   npx wrangler secret put AXIOM_TOKEN --config wrangler.cache.toml
+   npx wrangler secret put CLOUDFLARE_AUTH_TOKEN --config workers/wrangler.cache.toml --env staging
+   npx wrangler secret put SENTRY_DSN --config workers/wrangler.cache.toml --env staging
+   npx wrangler secret put AXIOM_TOKEN --config workers/wrangler.cache.toml --env staging
    ```
 5. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`. Test connectivity via CLI:
    ```bash
@@ -226,15 +238,18 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    npm run typecheck
    npm test
    ```
-2. Deploy the 15-minute intraday RSS monitor worker (`workers/intraday_monitor_worker.ts`):
+2. Deploy the 15-minute intraday RSS monitor worker (`workers/intraday_monitor_worker.ts` with `wrangler.toml`):
    ```bash
-   npx wrangler deploy
+   npx wrangler deploy --env staging
+   # Or for production:
+   npx wrangler deploy --env production
    ```
-3. Configure worker secrets:
+3. Configure worker secrets (including `CLOUDFLARE_AUTH_TOKEN` for authenticating `POST /flag`, `/run`, `/trigger` endpoints):
    ```bash
-   npx wrangler secret put GH_PAT
-   npx wrangler secret put SENTRY_DSN
-   npx wrangler secret put AXIOM_TOKEN
+   npx wrangler secret put CLOUDFLARE_AUTH_TOKEN --env staging
+   npx wrangler secret put GH_PAT --env staging
+   npx wrangler secret put SENTRY_DSN --env staging
+   npx wrangler secret put AXIOM_TOKEN --env staging
    ```
 
 ### Option C: Standalone Local Fallback (Tier 3 Default)

@@ -49,20 +49,23 @@ Midgley endpoints under `/api/v1/prices/*`, `/api/v1/forecast/*`, `/api/v1/combi
 
 | Route Category | Authentication Required | Header / Param | Description |
 | :--- | :--- | :--- | :--- |
-| **Public / Unauthenticated** | None | None | `/health`, `/`, `/api/v1/locales`, `/api/v1/system/*`, `/api/v1/telemetry/*`, `/api/v1/usgs/*`, `/api/v1/aqi/*`, `/api/v1/macro/*`, `/api/v1/graph/topology`, `/api/v1/graph/subgraph`, `/api/v1/memory/precedents`, `/metrics` |
-| **API Key Authenticated** | API Key (`basic` or `privileged`) | `X-API-Key` or `Authorization: Bearer` | `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/forecast/batch`, `/api/v1/combined`, `/api/v1/combined/batch`, `/api/v1/forecast/scenarios`, `/api/v1/forecast/simulate`, `/api/v1/forecast/scoreboard`, `/api/v1/forecast/purged-cv`, `/api/v1/diesel/*`, `/api/v1/graph/ingest`, `/api/v1/connectors/headline-arena/submit`, `/mcp/*` |
-| **Admin Secret Protected** | Admin Secret | `X-Admin-Secret` | `/api/v1/admin/keys` (POST, GET), `/api/v1/admin/keys/{prefix}` (DELETE), `/api/v1/forecast/cloud-sync` (POST) |
-| **HMAC Webhook Signed** | HMAC-SHA256 Signature | `X-Midgley-Signature` | `/api/v1/events/webhook`, `/api/v1/events/queue-consumer`, `/api/v1/events/poll` |
+| **Public / Unauthenticated** | None | None | `/health`, `/`, `/api/v1/locales`, `/api/v1/system/*` (read-only), `/api/v1/telemetry/*`, `/api/v1/usgs/*`, `/api/v1/aqi/*`, `/api/v1/macro/*`, `/api/v1/graph/topology`, `/api/v1/graph/subgraph`, `/api/v1/memory/precedents`, `/metrics` |
+| **Basic Tier API Key** | API Key (`basic` or `privileged`) | `X-API-Key`, `Authorization: Bearer`, or `?api_key=` | `/api/v1/prices/live`, `/api/v1/forecast/predict`, `/api/v1/forecast/batch`, `/api/v1/combined`, `/api/v1/combined/batch`, `/api/v1/forecast/scenarios`, `/api/v1/forecast/simulate` (standard catalog scenarios), `/api/v1/forecast/scoreboard`, `/api/v1/forecast/purged-cv`, `/api/v1/diesel/*`, `/mcp/*` (standard catalog simulations & queries) |
+| **Privileged Tier API Key** | API Key (`privileged` only) | `X-API-Key`, `Authorization: Bearer`, or `?api_key=` | `/api/v1/forecast/simulate` (with custom headline / LLM cohort simulation), `/api/v1/connectors/headline-arena/submit`, `/api/v1/graph/ingest` |
+| **Admin Secret Protected** | Admin Secret | `X-Admin-Secret` | `/api/v1/admin/keys` (POST, GET), `/api/v1/admin/keys/{prefix}` (DELETE), `/api/v1/forecast/cloud-sync` (POST), `/api/v1/system/cache-status?probe=true` |
+| **HMAC Webhook Signed** | HMAC-SHA256 Signature + Timestamp | `X-Midgley-Signature`, `X-Signature-Timestamp` | `/api/v1/events/webhook`, `/api/v1/events/queue-consumer`, `/api/v1/events/poll` |
 
-### Authentication Headers
+### Authentication Headers & Parameter Methods
 Callers can authenticate using any of the following methods:
 * **Header**: `X-API-Key: mg_prod_a1b2c3d4_...`
 * **Bearer Token Header**: `Authorization: Bearer mg_prod_a1b2c3d4_...`
 * **Query Parameter** (for SSE/browser connections): `?api_key=mg_prod_a1b2c3d4_...`
 
+Master environment key `MIDGLEY_API_KEY` operates seamlessly alongside SQLite provisioned user keys (`data/security.db`) across all header and query parameter formats. Key verification and rate limiting use non-blocking asynchronous threads (`verify_key_async`, `check_rate_limit_async`) to prevent event-loop latency.
+
 ### Key Access Tiers
-* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 2.5 Flash event analysis, full Stacking Ensemble, and counterfactual shock simulations).
-* 🛡️ **`basic` tier**: Automatically routes LLM event scoring to zero-cost fallback providers (Tier 3 Rule-Based Lexicon, SPC weather mapping, cached news vectors, standard linear Ridge baseline) to conserve Gemini tokens and Finlight API quotas.
+* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 2.5 Flash event analysis, MiroFish multi-agent cohort simulation, custom headline scenario shocks, knowledge graph ingestion, and headline arena benchmark submission).
+* 🛡️ **`basic` tier**: Standard forecasts and catalog shocks. Routes event scoring to zero-cost fallback providers (Tier 3 Rule-Based Lexicon, SPC weather mapping, cached news vectors, standard linear Ridge baseline) to conserve Gemini tokens and Finlight API quotas. Calling privileged-only endpoints returns `HTTP 403 Forbidden` (`Privileged API key tier required`).
 
 ### Key Provisioning Methods
 
@@ -294,7 +297,13 @@ curl -s "http://localhost:8000/metrics"
 
 * **Endpoint:** `POST /api/v1/events/webhook`
 * **Content-Type:** `application/json`
-* **Security Header:** `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature; **mandatory in production** under fail-closed security when `MIDGLEY_ENV=prod`).
+* **Security Headers:**
+  * `X-Midgley-Signature: sha256=<hmac_hex>` (HMAC-SHA256 signature; **mandatory in production** under fail-closed security when `MIDGLEY_ENV=prod`).
+  * `X-Signature-Timestamp: <unix_timestamp>` (Unix epoch seconds; prevents replay attacks by enforcing a $\pm 300\text{s}$ freshness window).
+* **Signature Verification Algorithm (Issue #437):**
+  1. If `X-Signature-Timestamp` is provided, the signature is computed over `f"{timestamp}.{raw_body_utf8}"`.
+  2. The timestamp must fall within $|t_{\text{server}} - t_{\text{header}}| \le 300\text{ seconds}$.
+  3. Constant-time comparison (`hmac.compare_digest`) validates authenticity.
 * **Authentication Behavior:**
   - **Production (`MIDGLEY_ENV=prod`):** Fails closed with `401 Unauthorized` if `MIDGLEY_WEBHOOK_SECRET` is unset or signature is missing/invalid.
   - **Development (`MIDGLEY_ENV=dev` / `TESTING=1`):** Permits unauthenticated pushes when `MIDGLEY_WEBHOOK_SECRET` is unset for local testing convenience.
@@ -312,15 +321,28 @@ For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView), se
 
 ---
 
-## 🤖 Model Context Protocol (MCP) Server Integration
+## 🤖 Model Context Protocol (MCP) Server Integration (Issue #431)
 
 The Midgley MCP Server exposes tools, resources, and prompt templates for integration with Claude Desktop, Antigravity CLI (`agy`), and OpenAI Custom GPTs.
 
-### Transport Modes
-1. **Stdio Mode**:
-   `python -m src.mcp_server`
-2. **HTTP/SSE Transport**:
-   `http://localhost:8000/mcp/sse`
+### Transport Modes & Security Architecture
+
+1. **Local CLI `stdio` Mode (Unrestricted)**:
+   ```bash
+   python -m src.mcp_server
+   ```
+   * Runs locally on server/workstation.
+   * Unauthenticated and unrestricted (full access to all tools, simulations, and parameters).
+
+2. **Remote HTTP / SSE Transport (`GET /mcp/sse` & `POST /mcp/messages`)**:
+   * **Authentication Required**: All HTTP/SSE connections require a valid API key (`MIDGLEY_API_KEY` or provisioned key via `X-API-Key`, `Authorization: Bearer`, or query parameter `?api_key=mg_prod_...`).
+   * **Rate Limiting**: Enforces 30 requests/minute per key on connection and tool message dispatches.
+   * **Session Context & Tier Binding**: Each SSE session maps connection parameters to the client's tier (`basic` vs `privileged`). Unprivileged callers running `simulate_fuel_market_shock` are safely downgraded to catalog scenario shocks, preventing unauthorized LLM token spend.
+
+### Example MCP SSE Connection URL
+```
+http://localhost:8000/mcp/sse?api_key=mg_prod_a1b2c3d4_example
+```
 
 ---
 

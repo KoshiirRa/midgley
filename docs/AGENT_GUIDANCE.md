@@ -69,10 +69,20 @@ Midgley enforces a strict **$0 ongoing infrastructure cost** mandate. All agent 
 * **Workers:** `workers/cache_worker.ts` and `workers/intraday_monitor_worker.ts`.
 * **Database:** Cloudflare D1 (`midgley-cache-d1`).
 * **Queue:** `intraday-event-queue` with dead-letter queue `intraday-event-dlq`.
+* **Security & Staging Isolation (Issue #438):**
+  - `workers/cache_worker.ts` enforces fail-closed Bearer token verification against `CLOUDFLARE_AUTH_TOKEN`.
+  - `workers/intraday_monitor_worker.ts` enforces token authentication on `POST /flag`, `/run`, `/trigger` and HTML-escapes query reflections on `GET /flag`.
+  - Staging deployments (`--env staging`) run on `dev` branch; production deployments (`--env production`) run on `main`.
 * **Telemetry:** Axiom log streaming and Sentry cron heartbeat monitoring.
 
 ### Tier 3: Dynamic FastAPI & MCP Server
 * **Server Module:** `src/api_server.py` and `src/mcp_server.py` managed by `midgley-api.service` on `dev-vm:8000`.
+* **Authentication & Key Tiers (Issues #431, #437):**
+  - Unified master key `MIDGLEY_API_KEY` and SQLite provisioned keys verified via non-blocking `verify_key_async` threads.
+  - Remote MCP HTTP/SSE transport (`/mcp/sse`, `/mcp/messages`) requires API key authentication and 30 RPM rate limiting with active session tier context binding. Local CLI `stdio` MCP transport remains unauthenticated and unrestricted.
+  - Calling privileged endpoints (`/api/v1/forecast/simulate` with custom headlines/cohort sim, `/api/v1/connectors/headline-arena/submit`, `/api/v1/graph/ingest`) requires `privileged` tier keys; unprivileged callers receive HTTP 403.
+  - Webhook gateway enforces timestamp freshness ($\pm 300\text{s}$) via `X-Signature-Timestamp` to prevent replay attacks.
+  - Cache status probe `/api/v1/system/cache-status?probe=true` requires `X-Admin-Secret` and cleans transient probe keys across D1/Turso/SQLite.
 * **Use Cases:** Live counterfactual shock simulations (`POST /api/v1/forecast/simulate`), scenario discovery (`GET /api/v1/forecast/scenarios`), API key provisioning (`/api/v1/admin/keys`), incoming webhook ingestion, and interactive AI agent MCP tools (`simulate_fuel_market_shock`, `list_market_shock_scenarios`).
 * **Seasonal & Climatological Plausibility Engine (`src/scenario_engine.py` - Issue #300):**
   - **Dynamic Plausibility Gating:** Classifies scenarios into `ACTIVE_THREAT` (1.0), `SEASONALLY_PLAUSIBLE` (0.70–0.90), `SEASONALLY_DORMANT` (0.10), `EVERGREEN` (0.80), and `PROSPECTIVE_FORWARD` (0.85).

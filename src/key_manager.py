@@ -10,6 +10,7 @@ import sqlite3
 import secrets
 import hashlib
 import time
+import asyncio
 import logging
 from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, Tuple, List, Optional
@@ -302,6 +303,14 @@ class KeyManager:
         if updated:
             logger.info(f"Revoked API key prefix [{key_prefix}]")
         return updated
+
+    async def verify_key_async(self, token: str) -> Tuple[bool, Optional[Dict[str, Any]], Optional[str]]:
+        """Non-blocking asynchronous wrapper for verify_key (offloads PBKDF2 to worker thread)."""
+        return await asyncio.to_thread(self.verify_key, token)
+
+    async def check_rate_limit_async(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int]:
+        """Non-blocking asynchronous wrapper for check_rate_limit (offloads SQLite I/O to worker thread)."""
+        return await asyncio.to_thread(self.check_rate_limit, key_prefix, rate_limit_rpm)
 
 
 # Default singleton instance
