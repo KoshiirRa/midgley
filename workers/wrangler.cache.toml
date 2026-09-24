@@ -10,9 +10,3 @@ head_sampling_rate = 1.0 # 1.0 = 100% trace/log sampling rate
 binding = "DB"
 database_name = "midgley-cache-d1"
 database_id = "midgley-cache-d1-id"
-
-[env.staging]
-name = "midgley-cache-staging"
-
-[env.production]
-name = "midgley-cache"

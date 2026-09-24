@@ -38,9 +38,3 @@ binding = "DB"
 database_name = "midgley-cache-d1"
 database_id = "bd1954f1-33b6-4adb-9219-ea5ec43fe2b7"
 
-[env.staging]
-name = "midgley-intraday-monitor-staging"
-
-[env.production]
-name = "midgley-intraday-monitor"
-

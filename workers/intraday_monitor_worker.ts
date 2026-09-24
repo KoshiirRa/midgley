@@ -20,6 +20,8 @@ export interface Env {
   DISCORD_PUBLIC_KEY?: string;
   DISCORD_APP_ID?: string;
   PROJECT_V2_ID?: string;
+  CLOUDFLARE_AUTH_TOKEN?: string;
+  ADMIN_TOKEN?: string;
   DB?: any;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
