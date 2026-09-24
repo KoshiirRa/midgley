@@ -4088,5 +4088,25 @@
       "overall_price_pressure": 0.5
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-24T23:06:32.767493",
+    "headline": "AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD \u2013 The Talk of Delmarva",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQc2UxenRKc3FCcENUTy02cGZFdVBtTzhRdV9naDZCTzZfYldNRTMxQ19JTmFfM0NyQmhfR0lOMVNFYmU2Rk81Ml9UU3hkZ1JvU3FuZXB0a0FmdHh0YUxWU1NzbGVmNkFUNm5HLUZtVVNYNGZjYjB3YzNVUFRUOThqek92OVVIZFIzeE1zbm40bkNvel9qQ0tPRVcyVXo?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQc2UxenRKc3FCcENUTy02cGZFdVBtTzhRdV9naDZCTzZfYldNRTMxQ19JTmFfM0NyQmhfR0lOMVNFYmU2Rk81Ml9UU3hkZ1JvU3FuZXB0a0FmdHh0YUxWU1NzbGVmNkFUNm5HLUZtVVNYNGZjYjB3YzNVUFRUOThqek92OVVIZFIzeE1zbm40bkNvel9qQ0tPRVcyVXo?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinAFBVV95cUxQc2UxenRKc3FCcENUTy02cGZFdVBtTzhRdV9naDZCTzZfYldNRTMxQ19JTmFfM0NyQmhfR0lOMVNFYmU2Rk81Ml9UU3hkZ1JvU3FuZXB0a0FmdHh0YUxWU1NzbGVmNkFUNm5HLUZtVVNYNGZjYjB3YzNVUFRUOThqek92OVVIZFIzeE1zbm40bkNvel9qQ0tPRVcyVXo?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.85
+    },
+    "discord_notified": false
   }
 ]

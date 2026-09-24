@@ -1,27 +1,27 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-24 19:54:02`  
+**Log Timestamp:** `2026-09-24 23:06:32`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest  
+**Primary Event Trigger:** AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD – The Talk of Delmarva  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest
+- **Headline Trigger:** AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD – The Talk of Delmarva
 - **Active Ingested News Links:**
+- [AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD – The Talk of Delmarva](https://news.google.com/rss/articles/CBMinAFBVV95cUxQc2UxenRKc3FCcENUTy02cGZFdVBtTzhRdV9naDZCTzZfYldNRTMxQ19JTmFfM0NyQmhfR0lOMVNFYmU2Rk81Ml9UU3hkZ1JvU3FuZXB0a0FmdHh0YUxWU1NzbGVmNkFUNm5HLUZtVVNYNGZjYjB3YzNVUFRUOThqek92OVVIZFIzeE1zbm40bkNvel9qQ0tPRVcyVXo?oc=5) (Google News Energy Feed)
 - [Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest](https://news.google.com/rss/articles/CBMilgFBVV95cUxNN2NwTGktOXBDcnRlSUpzVDBPcUhuOS1pTnlHdTIxUFFscDU5SFJ3RUx2Tk5Yall0Y0NJb2VKbF9WcXBIbEZucjFWQWpHWGxZVXhaUE1FbnZQc2VTRUV5Sl9XZW1CbW45SHJueHBZRzVNQXliVk1NRFhCQVl3NG01MWhTaC1PX1BzNW5vbTJHa05ERmlqdEE?oc=5) (Google News Energy Feed)
 - ['India Can't Belong To Any Bloc': CEA On US Law Threatening 100% Tariffs On Russian Oil Buyers - NDTV Profit](https://news.google.com/rss/articles/CBMizgFBVV95cUxNa1RBQzZiUFhReVQ4UmVZVWdzM2gtTkZkQjRuRVhlX0JIamJZSHNGbENqdmFVU01mTFNxOE5BNU5hTFNndExLdFRzTWpEZlZ1SzFXWTJfc1g5TTR2THhQbnpVRG9VT2VHZEkteExBRUpxdmRGVGtFb3BIMHlFTmNJS0RIQmxjcjBDdmhMMklTS0pvN2E5OHJBZ3JxTVFMR2NjVDFKQnk3UzUzR1R6VHlJc1djbXB5SHhtZTVhS3doeGMtbXhzbjEyUU82TFZSQdIB1gFBVV95cUxPXy1oZ3RDNzdidU8ybjVtTzJqQmllQWtteVVKOHdrVXBYRmh2cHV0c0Y4T3BjM0g2NmZKQmNjTzRYUGJYcnNmSjk3TVQyZ250MzlaUXYxbGU0WlgtXy1laUF1OHdqWnJJUUFwaTE5czNVVURlSXRSV3hLZTNnbjZXdjF1WnlOWS1ENzhZUXlhaEJmU04yUlc4UDNkLUhCZndhSkt4b011TE5pODFVeklCTm1NbVp1WlEtVVpiS3ROU3JRcWswWFZBMUE4Yk5ySTlhZlFwV0tn?oc=5) (Google News Energy Feed)
-- [New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com](https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.30`
-- **Price Pressure Shock ($\Delta P$):** `+0.50`
-- **Geopolitical Risk Score ($G$):** `0.60`
+- **Supply Disruption Score ($S$):** `0.50`
+- **Price Pressure Shock ($\Delta P$):** `+0.85`
+- **Geopolitical Risk Score ($G$):** `0.80`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.3000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.3000$
-- **Day 1 Decayed Shock**: $M_1 = 0.3000 \times 0.87055 = 0.2612$
-- **Day 2 Decayed Shock**: $M_2 = 0.3000 \times (0.87055)^2 = 0.2274$
-- **Day 3 Decayed Shock**: $M_3 = 0.3000 \times (0.87055)^3 = 0.1979$
-- **Day 4 Decayed Shock**: $M_4 = 0.3000 \times (0.87055)^4 = 0.1723$
-- **Day 5 (Target Horizon)**: $M_5 = 0.3000 \times 0.50000 = 0.1500$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.5000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.5000$
+- **Day 1 Decayed Shock**: $M_1 = 0.5000 \times 0.87055 = 0.4353$
+- **Day 2 Decayed Shock**: $M_2 = 0.5000 \times (0.87055)^2 = 0.3789$
+- **Day 3 Decayed Shock**: $M_3 = 0.5000 \times (0.87055)^3 = 0.3299$
+- **Day 4 Decayed Shock**: $M_4 = 0.5000 \times (0.87055)^4 = 0.2872$
+- **Day 5 (Target Horizon)**: $M_5 = 0.5000 \times 0.50000 = 0.2500$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.283) = \$3.248\text{/gal}$ (Delta: -\$0.283/gal, -8.88\%)
+- **National Wholesale**: $P = \$3.184 + (-\$0.238) = \$3.292\text{/gal}$ (Delta: -\$0.238/gal, -7.47\%)
 - **Tulsa, OK Retail**: $P = \$3.995 + (+\$0.178) = \$4.610\text{/gal}$ (Delta: +\$0.178/gal, +4.45\%)
 - **Newark, DE Retail**: $P = \$4.335 + (+\$0.091) = \$4.303\text{/gal}$ (Delta: +\$0.091/gal, +2.11\%)
 - **Cincinnati, OH/KY**: $P = \$4.389 + (+\$0.063) = \$4.347\text{/gal}$ (Delta: +\$0.063/gal, +1.43\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.3000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-24 19:54:02]: Elevated upward price shock (+$0.50/gal) observed across wholesale futures. Event trigger 'Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest' drove supply disruption to S=0.30 and geopolitical risk to G=0.60. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.2612 and Day-5 horizon retention M₅=0.1500.
+SUMMARY FOR RUN [2026-09-24 23:06:32]: Elevated upward price shock (+$0.85/gal) observed across wholesale futures. Event trigger 'AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD – The Talk of Delmarva' drove supply disruption to S=0.50 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.4353 and Day-5 horizon retention M₅=0.2500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-24 19:54:02 (Mode: INTRADAY_REVISION), primary event trigger 'Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.30, Price Pressure ΔP=+0.50, Geopolitical Risk G=0.60. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.3000
-  - Day 1: M₁ = 0.2612
-  - Day 5: M₅ = 0.1500 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-24 23:06:32 (Mode: INTRADAY_REVISION), primary event trigger 'AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD – The Talk of Delmarva' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.50, Price Pressure ΔP=+0.85, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.5000
+  - Day 1: M₁ = 0.4353
+  - Day 5: M₅ = 0.2500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.248/gal ($-0.283/gal, -8.88%)
+  • National Wholesale: $3.292/gal ($-0.238/gal, -7.47%)
   • Tulsa, OK Retail: $4.610/gal (+$0.178/gal, +4.45%)
   • Newark, DE Retail: $4.303/gal (+$0.091/gal, +2.11%)
   • Cincinnati, OH/KY: $4.347/gal (+$0.063/gal, +1.43%)
@@ -91,15 +91,15 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.213/gal (+$0.694/gal, +11.03%)
   • SF Bay Area Region: $6.325/gal (+$0.705/gal, +11.02%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.325/gal (+0.705/gal). Largest downward shift for this run: National Wholesale at $3.248/gal (-0.283/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.325/gal (+0.705/gal). Largest downward shift for this run: National Wholesale at $3.292/gal (-0.238/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-24 19:54:02]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest'. Overall price pressure vector sits at ΔP=+0.50/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-24 23:06:32]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD – The Talk of Delmarva'. Overall price pressure vector sits at ΔP=+0.85/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.60. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-24 19:54:02.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-24 23:06:32.*
