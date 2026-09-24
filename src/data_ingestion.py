@@ -1257,6 +1257,9 @@ class NYMEXForwardCurveConnector:
                         if 'HO=F' in close_df.columns and not close_df['HO=F'].dropna().empty:
                             ho_m1 = float(close_df['HO=F'].dropna().iloc[-1])
                     else:
+                        close_series = data['Close'].dropna()
+                        if not close_series.empty:
+                            rbob_m1 = float(close_series.iloc[-1])
                 # Second month futures contract evaluation (Issue #432)
                 # Avoid synthetic multiplier scaling; retain explicit missing-data masks or observed spreads
                 rbob_m2 = None
