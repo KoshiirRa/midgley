@@ -127,52 +127,82 @@ def run_regional_pipeline(
     splits = results['splits']
     results['multi_horizon_results'] = multi_horizon_results
 
-    # Step 5: Multi-Horizon Prediction Logging
-    model_tag = resolve_model_tag(model_type, use_llm=True)
+    # Step 5: Multi-Horizon Prediction Logging & Historical Backfill
+    model_tag = resolve_model_tag(region=logger_region_key, model_type=model_type)
+    last_date = market_df['date'].iloc[-1]
+    latest_rbob = market_df['gasoline_rbob'].iloc[-1]
+    dynamic_margin = live_pump_price - latest_rbob
+
     for h in [1, 2, 3, 4, 5]:
-        h_res = multi_horizon_results[h]
+        h_res = multi_horizon_results.get(h)
+        if not h_res:
+            continue
         h_splits = h_res['splits']
-        live_base = float(h_splits.get('live_current_price', h_splits['test_df']['gasoline_rbob'].iloc[-1]))
-        
-        # Calculate target delivery date
-        log_ts = pd.Timestamp.now(tz="UTC")
-        trading_days_ahead = int(h)
-        target_date = (log_ts + pd.offsets.BDay(trading_days_ahead)).strftime("%Y-%m-%d")
-        
+        h_test_dates = h_splits['test_df']['date']
+        h_preds_hybrid = h_res.get('predictions_hybrid', h_res.get('y_pred_hybrid'))
+        h_preds_quant = h_res.get('predictions_quant', h_res.get('y_pred_quant'))
+
+        # Determine regional baseline series
+        reg_col = f"{reg_clean}_retail_gasoline"
+        if reg_col in h_splits['test_df'].columns:
+            hist_base = h_splits['test_df'][reg_col]
+        else:
+            hist_base = h_splits['test_df']['gasoline_rbob'] + dynamic_margin
+
+        rbob_hist = h_splits['test_df']['gasoline_rbob']
+        pred_ret_hybrid = (h_preds_hybrid - rbob_hist) / rbob_hist
+        pred_ret_quant = (h_preds_quant - rbob_hist) / rbob_hist
+        hist_pred = hist_base * (1.0 + pred_ret_hybrid)
+        hist_quant = hist_base * (1.0 + pred_ret_quant)
+
+        try:
+            backfill_new_region_history(
+                test_dates=h_test_dates,
+                base_prices=hist_base,
+                predicted_prices=hist_pred,
+                region=logger_region_key,
+                model_version=model_tag,
+                forecast_horizon_days=h,
+                quant_baseline_prices=hist_quant
+            )
+        except Exception as e:
+            logger.debug(f"Regional backfill history update skipped: {e}")
+
+        # Log active out-of-time h-day horizon forecast
         last_row_hybrid = h_splits.get('X_live_hybrid', h_splits['X_test_hybrid'].iloc[-1:])
         last_row_quant = h_splits.get('X_live_quant', h_splits['X_test_quant'].iloc[-1:])
-        
-        pred_h = float(h_res['model_hybrid'].predict(last_row_hybrid)[0])
-        pred_q = float(h_res['model_quant'].predict(last_row_quant)[0])
-        
-        if h_res.get('is_return_target', False) or h_splits.get('predict_returns', False):
-            pred_h = float(live_base * (1.0 + np.clip(pred_h, -0.25, 0.25)))
-            pred_q = float(live_base * (1.0 + np.clip(pred_q, -0.25, 0.25)))
+        raw_pred_h = float(h_res.get('live_pred_price', h_res['model_hybrid'].predict(last_row_hybrid)[0]))
+        raw_quant_h = float(h_res.get('live_pred_quant_price', h_res['model_quant'].predict(last_row_quant)[0]))
+        last_hist_price_h = float(h_splits.get('live_current_price', h_splits['test_df']['gasoline_rbob'].iloc[-1]))
+        baseline_return_h = (raw_pred_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
+        quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
+        h_forecast = live_pump_price * (1.0 + baseline_return_h)
+        h_quant = live_pump_price * (1.0 + quant_return_h)
 
-        log_predictions(
-            target_date=target_date,
-            predicted_price=pred_h,
-            quant_baseline_price=pred_q,
-            current_base_price=live_base,
-            region=logger_region_key,
-            forecast_horizon_days=h,
-            model_version=model_tag,
-            is_retroactive_backtest=False
-        )
+        today_df = pd.DataFrame([{
+            'date': last_date,
+            'current_price': live_pump_price,
+            'predicted_5d_price': h_forecast,
+            'quant_baseline_5d_price': h_quant,
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
+        }])
+        try:
+            log_predictions(
+                today_df,
+                region=logger_region_key,
+                model_version=model_tag,
+                run_type="LIVE_PROSPECTIVE",
+                forecast_horizon_days=h,
+                is_retroactive_backtest=False
+            )
+        except Exception as e:
+            logger.debug(f"Live prediction logging skipped: {e}")
 
-    # Optional historical backfill if needed
     try:
-        backfill_new_region_history(
-            region=logger_region_key,
-            test_df=splits['test_df'],
-            predicted_prices=results['y_pred_hybrid'],
-            actual_prices=splits['y_test_hybrid'].values if 'y_test_hybrid' in splits else None,
-            forecast_horizon_days=5,
-            quant_baseline_prices=results['y_pred_quant'],
-            model_version=model_tag
-        )
+        backfill_actual_prices_and_evaluate(target_region=logger_region_key)
     except Exception as e:
-        logger.debug(f"Regional backfill history update skipped: {e}")
+        logger.debug(f"Backfill actual prices skipped: {e}")
 
     results["region"] = logger_region_key
     results["display_name"] = display_name
