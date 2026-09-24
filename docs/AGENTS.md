@@ -894,6 +894,18 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
      - GitHub Pages MUST be documented as using the modern **GitHub Actions** artifact deployment rather than the legacy branch deployment.
   3. **Zero-Defect Link Sanitization (Issue #379):** All published Markdown documentation, HTML generators, and Wiki pages MUST use repository-relative or canonical HTTPS URLs, strictly barring local machine `file:///` paths. Automated validation in `tests/test_docs_links.py` MUST continuously enforce zero `file:///` occurrences.
 
+---
+
+### 28. Packaging Invariants, LF Line Endings, CI Gates & Concurrency Serialization Directives (`requirements.txt`, `pyproject.toml`, `requirements.lock`, `.gitattributes`, `.github/workflows/ci.yml`) (Issues #429, #430, #439)
+
+* **Role:** Enforces reproducible builds, POSIX Linux shell runner compatibility, automated test regression gating on pull requests, and non-destructive concurrency serialization across data-writing workflows.
+* **Directives:**
+  1. **Python Compatibility & Packaging Invariants (Issue #429):** The project requires Python $\ge 3.11$. Dependency versions and version floors MUST be strictly aligned between `pyproject.toml` and `requirements.txt`. Reproducible locked dependencies are maintained in `requirements.lock` generated via `pip-compile`.
+  2. **LF Line Endings & Dynamic Pathing (Issue #430):** All shell scripts, Python files, systemd units, and YAML manifests MUST enforce LF line endings (`\n`) via `.gitattributes` (`*.sh text eol=lf`). Shell runner scripts MUST dynamically resolve `PROJECT_DIR` and `VENV_PATH` via `BASH_SOURCE` with fallback to `MIDGLEY_*` environment variables rather than hardcoding machine-specific user home paths. Systemd service templates MUST use `%h` user home pathing.
+  3. **Pull Request CI Test Gating (Issue #439):** All pull requests and pushes to `main` and `dev` MUST trigger `.github/workflows/ci.yml` running static lint analysis (`ruff check .`) and regression test suites (`pytest -v tests/`) across Python 3.11, 3.12, and 3.13.
+  4. **Data Concurrency & Non-Destructive Git Push (Issue #439):** All scheduled workflows that persist data or build artifacts (`gas_price_forecast.yml`, `intraday_event_monitor.yml`, `weekly_model_review.yml`) MUST execute within the shared concurrency group `production-data-deployment` without `--force` push flags, using rebase and retry mechanisms to prevent lost updates.
+
+
 
 
 
