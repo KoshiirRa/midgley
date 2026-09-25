@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T04:35:53.687477",
+  "timestamp": "2026-09-25T08:08:19.117131",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.995,
+    "current_price_per_gal": 4.114,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-25T04:13:00Z"
+      "timestamp": "2026-09-25T07:45:20Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2025-10-15",
-    "current_base_price": 3.995,
-    "predicted_price_per_gal": 3.999,
+    "current_base_price": 4.114,
+    "predicted_price_per_gal": 4.118,
     "expected_change_dollars": 0.004,
     "expected_change_percent": 0.1,
     "projected_direction": "UP",
@@ -40,11 +40,11 @@
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 1.8966,
     "evaluation_sample_size": 3,
-    "day_1_price": 4.012,
-    "day_2_price": 4.027,
-    "day_3_price": 4.039,
-    "day_4_price": 4.047,
-    "day_5_price": 3.999,
+    "day_1_price": 4.131,
+    "day_2_price": 4.146,
+    "day_3_price": 4.158,
+    "day_4_price": 4.166,
+    "day_5_price": 4.118,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -102,7 +102,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.001,
-          "impact_pct": 0.03,
+          "impact_pct": 0.02,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.001,
-          "impact_pct": 0.03,
+          "impact_pct": 0.02,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.001,
-          "impact_pct": 0.03,
+          "impact_pct": 0.02,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -126,7 +126,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.001,
-          "impact_pct": 0.03,
+          "impact_pct": 0.02,
           "share_pct": 2.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.001,
-      "impact_pct": 0.03,
+      "impact_pct": 0.02,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.001,
-      "impact_pct": 0.03,
+      "impact_pct": 0.02,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.001,
-      "impact_pct": 0.03,
+      "impact_pct": 0.02,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -178,7 +178,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.001,
-      "impact_pct": 0.03,
+      "impact_pct": 0.02,
       "share_pct": 2.0,
       "direction": "UP"
     },

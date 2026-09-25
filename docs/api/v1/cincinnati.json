@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T04:38:43.987720",
+  "timestamp": "2026-09-25T08:11:09.741701",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.389,
+    "current_price_per_gal": 4.359,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-25T04:13:00Z"
+      "timestamp": "2026-09-25T07:45:21Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,10 +28,10 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-28",
-    "current_base_price": 4.389,
-    "predicted_price_per_gal": 4.465,
+    "current_base_price": 4.359,
+    "predicted_price_per_gal": 4.435,
     "expected_change_dollars": 0.076,
-    "expected_change_percent": 1.73,
+    "expected_change_percent": 1.74,
     "projected_direction": "UP",
     "prediction_lower_95ci": 4.1743,
     "prediction_upper_95ci": 4.8591,
@@ -40,11 +40,11 @@
     "directional_hit_rate_historical": 0.5,
     "historical_mae_dollars": 0.9142,
     "evaluation_sample_size": 4,
-    "day_1_price": 4.404,
-    "day_2_price": 4.448,
-    "day_3_price": 4.47,
-    "day_4_price": 4.459,
-    "day_5_price": 4.465,
+    "day_1_price": 4.374,
+    "day_2_price": 4.418,
+    "day_3_price": 4.44,
+    "day_4_price": 4.429,
+    "day_5_price": 4.435,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast +$0.076/gal (+1.73%): Driven primarily by Regional Logistics & Hub Delivery (+$0.027/gal), Refining Yield & Crack Spread (+$0.019/gal).",
+      "summary_text": "Cincinnati OH forecast +$0.076/gal (+1.74%): Driven primarily by Regional Logistics & Hub Delivery (+$0.027/gal), Refining Yield & Crack Spread (+$0.019/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.019,
-          "impact_pct": 0.43,
+          "impact_pct": 0.44,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.019,
-      "impact_pct": 0.43,
+      "impact_pct": 0.44,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast +$0.076/gal (+1.73%): Driven primarily by Regional Logistics & Hub Delivery (+$0.027/gal), Refining Yield & Crack Spread (+$0.019/gal).",
+    "summary_text": "Cincinnati OH forecast +$0.076/gal (+1.74%): Driven primarily by Regional Logistics & Hub Delivery (+$0.027/gal), Refining Yield & Crack Spread (+$0.019/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
