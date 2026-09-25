@@ -787,7 +787,32 @@ def backfill_actual_prices_and_evaluate(
             updated = True
             
     if updated:
-        atomic_write_csv(target_csv, history_df, index=False)
+        with file_lock(target_csv):
+            try:
+                disk_df = pd.read_csv(target_csv)
+            except Exception:
+                disk_df = history_df.copy()
+
+            if not disk_df.empty and 'forecast_id' in disk_df.columns and 'forecast_id' in history_df.columns:
+                # Merge evaluated fields back into freshest on-disk dataframe preserving concurrently appended rows
+                eval_cols = [
+                    'actual_5d_price', 'actual_direction', 'error_dollars',
+                    'directional_hit', 'within_95ci_hit', 'data_source_provenance',
+                    'prediction_lower_95ci', 'prediction_upper_95ci'
+                ]
+                updated_rows = history_df[history_df['actual_5d_price'].notna()].set_index('forecast_id')
+                for f_id, u_row in updated_rows.iterrows():
+                    match_mask = disk_df['forecast_id'] == f_id
+                    if match_mask.any():
+                        for col in eval_cols:
+                            if col in u_row and pd.notna(u_row[col]):
+                                disk_df.loc[match_mask, col] = u_row[col]
+                history_df = disk_df
+            else:
+                history_df = disk_df if not disk_df.empty else history_df
+
+            atomic_write_csv(target_csv, history_df, index=False)
+
         if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
             try:
                 sync_predictions_to_cloud(history_df)

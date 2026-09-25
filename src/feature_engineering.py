@@ -34,11 +34,13 @@ def _load_vintage_timeseries(
     vintage_file: str,
     feature_mapping: Dict[str, str],
     as_of_cutoff: Optional[str] = None,
-    nested_key: Optional[str] = None
+    nested_key: Optional[str] = None,
+    target_dates: Optional[pd.Series] = None
 ) -> pd.DataFrame:
     """
     Loads historical observations from a bitemporal vintage JSON file up to as_of_cutoff,
     extracting target features and aligning them by observation date without lookahead bias.
+    Enforces point-in-time publication filtering (Issues #354, #432, #457).
     """
     if not os.path.exists(vintage_file):
         return pd.DataFrame()
@@ -75,7 +77,10 @@ def _load_vintage_timeseries(
             if not isinstance(payload, dict):
                 payload = v
 
-            rec = {"date": pd.to_datetime(obs_date), "_as_of": str(as_of_ts)}
+            rec = {
+                "date": pd.to_datetime(obs_date),
+                "_as_of": str(as_of_ts) if as_of_ts else str(obs_date)
+            }
             has_val = False
             for src_k, target_col in feature_mapping.items():
                 val = payload.get(src_k) if isinstance(payload, dict) else None
@@ -101,6 +106,7 @@ def _load_vintage_timeseries(
     except Exception as e:
         logger.debug(f"Could not load vintage timeseries from {vintage_file}: {e}")
         return pd.DataFrame()
+
 
 
 def compute_technical_momentum_indicators(df: pd.DataFrame) -> pd.DataFrame:
@@ -884,33 +890,43 @@ def create_feature_matrix(
         trading_dates = np.sort(df['date'].dropna().unique())
         
         if len(trading_dates) > 0:
-            # Forward-map weekend/holiday/non-trading event dates to the next active market trading session (Issue #355)
-            indices = np.searchsorted(trading_dates, events['date'].values, side='left')
-            indices = np.clip(indices, 0, len(trading_dates) - 1)
-            events['date'] = trading_dates[indices]
+            # Forward-map weekend/holiday/non-trading event dates to the next active market trading session (Issue #355, #457, #468)
+            raw_event_dates = events['date'].values
+            indices = np.searchsorted(trading_dates, raw_event_dates, side='left')
+            # Filter out events occurring strictly after the latest available trading date to prevent backward lookahead leakage
+            valid_mask = indices < len(trading_dates)
+            events = events.iloc[np.where(valid_mask)[0]].copy()
             
-            # Ensure qualitative feature columns exist in events before aggregation
-            for col in llm_feature_cols:
-                if col not in events.columns:
-                    events[col] = 0.0
-            
-            # Aggregate multiple qualitative shocks occurring on the same trading session (Issue #355)
-            agg_events = events.groupby('date', as_index=False)[llm_feature_cols].sum()
-            # Bounding aggregated qualitative shock scores to their statutory domains
-            for col in llm_feature_cols:
-                if col in ['overall_price_pressure', 'demand_sentiment']:
-                    agg_events[col] = agg_events[col].clip(-1.0, 1.0)
-                else:
-                    agg_events[col] = agg_events[col].clip(0.0, 1.0)
-            
-            # Strict 1-to-1 merge preserving exact length and index of df
-            orig_cols = [c for c in df.columns if c not in llm_feature_cols]
-            merged = pd.merge(df[orig_cols], agg_events[['date'] + llm_feature_cols], on='date', how='left')
-            merged[llm_feature_cols] = merged[llm_feature_cols].fillna(0.0)
+            if len(events) > 0:
+                events['date'] = trading_dates[indices[valid_mask]]
+                
+                # Ensure qualitative feature columns exist in events before aggregation
+                for col in llm_feature_cols:
+                    if col not in events.columns:
+                        events[col] = 0.0
+                
+                # Aggregate multiple qualitative shocks occurring on the same trading session (Issue #355)
+                agg_events = events.groupby('date', as_index=False)[llm_feature_cols].sum()
+                # Bounding aggregated qualitative shock scores to their statutory domains
+                for col in llm_feature_cols:
+                    if col in ['overall_price_pressure', 'demand_sentiment']:
+                        agg_events[col] = agg_events[col].clip(-1.0, 1.0)
+                    else:
+                        agg_events[col] = agg_events[col].clip(0.0, 1.0)
+                
+                # Strict 1-to-1 merge preserving exact length and index of df
+                orig_cols = [c for c in df.columns if c not in llm_feature_cols]
+                merged = pd.merge(df[orig_cols], agg_events[['date'] + llm_feature_cols], on='date', how='left')
+                merged[llm_feature_cols] = merged[llm_feature_cols].fillna(0.0)
+            else:
+                merged = df.copy()
+                for col in llm_feature_cols:
+                    merged[col] = 0.0
         else:
             merged = df.copy()
             for col in llm_feature_cols:
                 merged[col] = 0.0
+
         
         # Modulate decay half-lives dynamically per event category & context routing diagnostic (Issue #168, #355)
         fusion_weight = 1.0 if diagnostic['recommendation'] == 'TRY_FUSION' else 0.10

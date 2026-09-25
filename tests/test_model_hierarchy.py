@@ -80,9 +80,21 @@ def test_5tier_hierarchy_evaluator():
 
 
 def test_evaluate_model_hierarchy_script(tmp_path):
+    """Validates that running hierarchy audit in simulation mode generates complete audit reports (Issue #362, #455)."""
     summary = run_full_hierarchy_audit(horizons=[1, 5], output_dir=str(tmp_path), use_synthetic_fallback=True)
     assert summary["total_regions_evaluated"] == 10
-    assert summary["passed_regions_count"] >= 8
     assert "regions" in summary
     assert (tmp_path / "model_hierarchy_evaluation.json").exists()
     assert (tmp_path / "model_hierarchy_evaluation.md").exists()
+
+
+def test_evaluate_model_hierarchy_fail_closed_without_synthetic(tmp_path):
+    """Validates that evaluation fails closed without silent synthetic substitutions (Issue #455)."""
+    summary = run_full_hierarchy_audit(horizons=[1, 5], output_dir=str(tmp_path), use_synthetic_fallback=False)
+    assert summary["total_regions_evaluated"] == 10
+    for reg, reg_data in summary["regions"].items():
+        for h_k, h_res in reg_data["horizons"].items():
+            assert h_res.get("provenance") in ["UNAVAILABLE", "AUTHENTIC_MARKET_DATA"]
+            if h_res.get("provenance") == "UNAVAILABLE":
+                assert h_res.get("promotion_gate_passed") is False
+

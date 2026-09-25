@@ -608,7 +608,10 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
                     if 'log_timestamp' in target_pool.columns:
                         target_pool = target_pool.sort_values(by='log_timestamp')
 
-                    # Extract discrete multi-horizon records (Issue #314, #436)
+                    today_str = datetime.now().strftime("%Y-%m-%d")
+                    today_dt = datetime.now()
+
+                    # Extract discrete multi-horizon records (Issue #314, #436, #462)
                     for h_i in range(1, 6):
                         if 'forecast_horizon_days' in target_pool.columns:
                             sub_h = target_pool[target_pool['forecast_horizon_days'] == h_i]
@@ -618,13 +621,20 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
                                 sub_pred = float(sub_latest.get('predicted_5d_price', base_price))
                                 sub_delta = sub_pred - sub_base
                                 sub_delta = max(-0.75, min(0.75, sub_delta))
-                                h_preds[h_i] = round(base_price + sub_delta, 3)
-                                if 'prediction_lower_95ci' in sub_latest and pd.notna(sub_latest['prediction_lower_95ci']):
-                                    h_lowers[h_i] = float(sub_latest['prediction_lower_95ci'])
-                                if 'prediction_upper_95ci' in sub_latest and pd.notna(sub_latest['prediction_upper_95ci']):
-                                    h_uppers[h_i] = float(sub_latest['prediction_upper_95ci'])
-                                if h_i == days and 'forecast_target_date' in sub_latest and pd.notna(sub_latest['forecast_target_date']):
-                                    target_date = str(sub_latest['forecast_target_date'])
+                                pred_price_h = round(base_price + sub_delta, 3)
+                                h_preds[h_i] = pred_price_h
+
+                                # Dynamically calculate calibrated intervals centered on current predicted price (Issue #462)
+                                r_std = compute_regional_residual_std(region_code, window_days=30, horizon_days=h_i)
+                                h_lowers[h_i] = round(pred_price_h - 1.96 * r_std, 3)
+                                h_uppers[h_i] = round(pred_price_h + 1.96 * r_std, 3)
+
+                                if h_i == days:
+                                    stored_target = str(sub_latest.get('forecast_target_date', ''))
+                                    if stored_target > today_str:
+                                        target_date = stored_target
+                                    else:
+                                        target_date = (today_dt + timedelta(days=days)).strftime("%Y-%m-%d")
 
                     if days in h_preds:
                         projected_delta = round(h_preds[days] - base_price, 3)
@@ -640,7 +650,8 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
         logger.debug(f"Notice reading prediction history for {region_code}: {e}")
 
     if projected_delta is None:
-        projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"] else 0.032)
+        projected_delta = 0.0
+
 
     predicted_price = round(base_price + projected_delta, 3)
     expected_pct = round((projected_delta / base_price) * 100, 2)

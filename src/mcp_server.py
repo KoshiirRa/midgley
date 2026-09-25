@@ -23,26 +23,29 @@ from src.api_server import (
     simulate_shock
 )
 
+import contextvars
+
 logger = logging.getLogger(__name__)
 
-# Active session context for MCP requests over HTTP transport (Issue #431)
-_active_mcp_context: Optional[Dict[str, Any]] = None
+# Active session context for MCP requests over HTTP transport (Issue #431, #458)
+_mcp_context_var: contextvars.ContextVar[Optional[Dict[str, Any]]] = contextvars.ContextVar(
+    "_mcp_context_var", default=None
+)
 
 
 def set_active_mcp_session_context(context: Optional[Dict[str, Any]]) -> None:
-    """Sets the authenticated user context for the active MCP session."""
-    global _active_mcp_context
-    _active_mcp_context = context
+    """Sets the authenticated user context for the active MCP session in the current context."""
+    _mcp_context_var.set(context)
 
 
 def get_active_mcp_session_context() -> Optional[Dict[str, Any]]:
-    """Retrieves the authenticated user context for the active MCP session."""
-    global _active_mcp_context
-    return _active_mcp_context
+    """Retrieves the authenticated user context for the active MCP session in the current context."""
+    return _mcp_context_var.get()
 
 
 # Initialize MCP Server instance
 app = Server("midgley-gas-prices")
+
 
 
 async def list_tools() -> list[types.Tool]:

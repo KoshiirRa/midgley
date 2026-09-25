@@ -54,10 +54,11 @@ def file_lock(path: Union[str, os.PathLike], timeout: float = 30.0):
                 except (ImportError, AttributeError):
                     locked = True
                     break
+
             except (BlockingIOError, OSError):
                 time.sleep(0.05)
         if not locked:
-            logger.warning(f"Advisory file lock timed out for {path} after {timeout}s.")
+            raise TimeoutError(f"Failed to acquire advisory file lock for {path} after {timeout}s.")
         yield
     finally:
         if lock_fd is not None:

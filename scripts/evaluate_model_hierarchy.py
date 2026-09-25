@@ -128,7 +128,8 @@ def run_full_hierarchy_audit(
 
         for h in horizons:
             used_real_data = False
-            if real_market_df is not None:
+            res_h = None
+            if real_market_df is not None and not use_synthetic_fallback:
                 try:
                     feat_df = create_feature_matrix(
                         real_market_df,
@@ -136,39 +137,52 @@ def run_full_hierarchy_audit(
                         forecast_horizon=h,
                         region=reg
                     )
-                    splits = prepare_chronological_splits(feat_df, train_ratio=0.75, forecast_horizon=h)
+                    splits = prepare_chronological_splits(feat_df, train_ratio=0.75, forecast_horizon=h, predict_returns=False)
                     X_train = splits['X_train_hybrid']
                     X_test = splits['X_test_hybrid']
                     
-                    y_tr_fut = splits['y_train_hybrid']
-                    y_te_fut = splits['y_test_hybrid']
-                    y_tr_curr = splits['train_df']['gasoline_rbob']
-                    y_te_curr = splits['test_df']['gasoline_rbob']
+                    y_tr_fut = splits['y_train_price']
+                    y_te_fut = splits['y_test_price']
+                    y_tr_curr = splits['X_train_quant']['gasoline_rbob'] if 'gasoline_rbob' in splits['X_train_quant'].columns else pd.Series(0.0, index=X_train.index)
+                    y_te_curr = splits['test_df']['gasoline_rbob'] if 'gasoline_rbob' in splits['test_df'].columns else pd.Series(0.0, index=X_test.index)
 
                     res_h = evaluator.evaluate_5tier_hierarchy(
                         X_train, y_tr_fut, y_tr_curr,
                         X_test, y_te_fut, y_te_curr,
                         horizon=h
                     )
+                    res_h["provenance"] = "AUTHENTIC_MARKET_DATA"
                     used_real_data = True
                 except Exception as e:
-                    logger.debug(f"Real data evaluation error for {reg} h={h}: {e}")
+                    logger.warning(f"Real data evaluation failed for {reg} h={h}: {e}")
 
             if not used_real_data:
-                X, y_fut, y_curr = generate_benchmark_feature_matrix(n_samples=180, seed=42 + idx + h * 7)
-                split_idx = int(len(X) * 0.7)
-                X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
-                y_tr_fut, y_te_fut = y_fut.iloc[:split_idx], y_fut.iloc[split_idx:]
-                y_tr_curr, y_te_curr = y_curr.iloc[:split_idx], y_curr.iloc[split_idx:]
+                if use_synthetic_fallback:
+                    X, y_fut, y_curr = generate_benchmark_feature_matrix(n_samples=180, seed=42 + idx + h * 7)
+                    split_idx = int(len(X) * 0.7)
+                    X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
+                    y_tr_fut, y_te_fut = y_fut.iloc[:split_idx], y_fut.iloc[split_idx:]
+                    y_tr_curr, y_te_curr = y_curr.iloc[:split_idx], y_curr.iloc[split_idx:]
 
-                res_h = evaluator.evaluate_5tier_hierarchy(
-                    X_train, y_tr_fut, y_tr_curr,
-                    X_test, y_te_fut, y_te_curr,
-                    horizon=h
-                )
+                    res_h = evaluator.evaluate_5tier_hierarchy(
+                        X_train, y_tr_fut, y_tr_curr,
+                        X_test, y_te_fut, y_te_curr,
+                        horizon=h
+                    )
+                    res_h["provenance"] = "SYNTHETIC_SIMULATION"
+                    # Synthetic simulations do NOT pass production promotion gates (Issue #455)
+                    res_h["promotion_gate_passed"] = False
+                else:
+                    res_h = {
+                        "status": "FAILED_UNAVAILABLE",
+                        "provenance": "UNAVAILABLE",
+                        "promotion_gate_passed": False,
+                        "error": f"Authentic data unavailable for {reg} at horizon {h}d",
+                        "tiers": {}
+                    }
 
             region_horizon_results[f"h_{h}d"] = res_h
-            if not res_h["promotion_gate_passed"]:
+            if not res_h.get("promotion_gate_passed", False):
                 reg_passed = False
 
         if reg_passed:
@@ -207,14 +221,19 @@ def run_full_hierarchy_audit(
 
     for reg, reg_data in all_region_results.items():
         for h_key, h_data in reg_data["horizons"].items():
-            t0 = h_data["tiers"]["Tier_0_Naive"]
-            t4 = h_data["tiers"]["Tier_4_Full_Hybrid"]
-            gate_badge = "🟢 **PASSED**" if h_data["promotion_gate_passed"] else "🔴 *REJECTED*"
-            md_lines.append(
-                f"| **`{reg}`** | `{h_key}` | `${t0['MAE']:.4f}/gal` | `${t4['MAE']:.4f}/gal` | "
-                f"**`{t4['persistence_uplift_pct']:+.2f}%`** | `{t4['dm_stat_vs_naive']:+.2f}` | "
-                f"`{t4['dm_p_value_vs_naive']:.4f}` | {gate_badge} |"
-            )
+            if "tiers" in h_data and "Tier_0_Naive" in h_data["tiers"] and "Tier_4_Full_Hybrid" in h_data["tiers"]:
+                t0 = h_data["tiers"]["Tier_0_Naive"]
+                t4 = h_data["tiers"]["Tier_4_Full_Hybrid"]
+                gate_badge = "🟢 **PASSED**" if h_data.get("promotion_gate_passed", False) else "🔴 *REJECTED*"
+                md_lines.append(
+                    f"| **`{reg}`** | `{h_key}` | `${t0['MAE']:.4f}/gal` | `${t4['MAE']:.4f}/gal` | "
+                    f"**`{t4['persistence_uplift_pct']:+.2f}%`** | `{t4['dm_stat_vs_naive']:+.2f}` | "
+                    f"`{t4['dm_p_value_vs_naive']:.4f}` | {gate_badge} |"
+                )
+            else:
+                md_lines.append(
+                    f"| **`{reg}`** | `{h_key}` | `N/A` | `N/A` | `N/A` | `N/A` | `N/A` | 🔴 *FAILED (UNAVAILABLE)* |"
+                )
 
     md_lines.extend([
         "",
@@ -225,7 +244,7 @@ def run_full_hierarchy_audit(
         "- **Tier 3:** Price + Qualitative Events (Decayed NLP news/social/geopolitical vectors)",
         "- **Tier 4:** Full Hybrid Estimator (Full feature matrix + ECM + Conformal inference)",
         "",
-        "*Generated by `scripts/evaluate_model_hierarchy.py` (Issue #362, #435).*"
+        "*Generated by `scripts/evaluate_model_hierarchy.py` (Issue #362, #435, #455).*"
     ])
 
     with open(md_path, "w", encoding="utf-8") as f:
@@ -239,8 +258,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="5-Tier Model Hierarchy Evaluator")
     parser.add_argument("--horizons", nargs="+", type=int, default=[1, 3, 5], help="Forecast horizons to evaluate")
     parser.add_argument("--output-dir", type=str, default=None, help="Directory to save audit output files")
-    parser.add_argument("--synthetic", action="store_true", help="Force synthetic benchmark generation")
+    parser.add_argument("--synthetic", "--simulation-mode", dest="synthetic", action="store_true", help="Force synthetic benchmark generation in simulation mode")
     args = parser.parse_args()
     
     summary = run_full_hierarchy_audit(horizons=args.horizons, output_dir=args.output_dir, use_synthetic_fallback=args.synthetic)
     print(f"\nAudit complete: {summary['passed_regions_count']}/{summary['total_regions_evaluated']} regions passed statistical promotion gate.")
+

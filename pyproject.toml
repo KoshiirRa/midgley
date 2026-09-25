@@ -100,4 +100,12 @@ ignore = [
     "F541",  # f-string without placeholders
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json", "*.sql", "*.csv", "*.txt"]
+
+
 

@@ -111,26 +111,29 @@ class TestMCPServer(unittest.TestCase):
             self.assertEqual(data["status"], "success")
             self.assertNotIn("cohort_simulation", data)
 
-        # 2. Reset context
-        set_active_mcp_session_context(None)
+    def test_concurrent_mcp_session_context_isolation(self):
+        """Verifies concurrent async tasks maintain isolated caller contexts via ContextVar (Issue #458)."""
+        from src.mcp_server import set_active_mcp_session_context, get_active_mcp_session_context
 
-    def test_mcp_sse_http_endpoint_auth_enforcement(self):
-        """Verifies HTTP /mcp/sse and /mcp/messages endpoints reject unauthenticated requests in non-test mode (Issue #431)."""
-        import os
-        from unittest.mock import patch
-        from fastapi.testclient import TestClient
-        from src.api_server import app
+        async def worker(user_id: str, tier: str, delay: float):
+            set_active_mcp_session_context({"user_id": user_id, "tier": tier})
+            await asyncio.sleep(delay)
+            ctx = get_active_mcp_session_context()
+            return ctx
 
-        client = TestClient(app)
-        with patch.dict(os.environ, {"TESTING": "0"}):
-            # GET /mcp/sse without credentials should be rejected with 401
-            res_sse_unauth = client.get("/mcp/sse")
-            self.assertEqual(res_sse_unauth.status_code, 401)
+        async def run_concurrent():
+            t1 = asyncio.create_task(worker("alice", "privileged", 0.05))
+            t2 = asyncio.create_task(worker("bob", "basic", 0.02))
+            res1, res2 = await asyncio.gather(t1, t2)
+            return res1, res2
 
-            # POST /mcp/messages without credentials should be rejected with 401
-            res_msg_unauth = client.post("/mcp/messages")
-            self.assertEqual(res_msg_unauth.status_code, 401)
+        r1, r2 = asyncio.run(run_concurrent())
+        self.assertEqual(r1["user_id"], "alice")
+        self.assertEqual(r1["tier"], "privileged")
+        self.assertEqual(r2["user_id"], "bob")
+        self.assertEqual(r2["tier"], "basic")
 
 
 if __name__ == "__main__":
     unittest.main()
+

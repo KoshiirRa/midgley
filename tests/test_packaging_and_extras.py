@@ -83,6 +83,19 @@ def test_version_discovery_and_semver():
     assert model_ver, "Model version string should not be empty"
 
 
+def test_pyproject_setuptools_package_discovery():
+    """Validates that setuptools is configured for proper src package discovery and asset packaging (Issue #460)."""
+    with open(PYPROJECT_PATH, "rb") as f:
+        data = tomllib.load(f)
+
+    assert "tool" in data and "setuptools" in data["tool"]
+    st = data["tool"]["setuptools"]
+    assert "packages" in st and "find" in st["packages"]
+    assert st["packages"]["find"].get("where") == ["."]
+    assert "src*" in st["packages"]["find"].get("include", [])
+    assert "package-data" in st
+
+
 def test_core_module_importability():
     """Smoke test validating that core advertised modules import cleanly."""
     import src.version
@@ -99,4 +112,6 @@ def test_core_module_importability():
     assert hasattr(src.event_analyzer, "extract_event_features_llm")
     assert hasattr(src.api_server, "app")
     assert hasattr(src.mcp_server, "app")
+
+
 

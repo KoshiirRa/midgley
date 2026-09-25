@@ -48,6 +48,11 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "SanFrancisco_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
     "SanJose_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
     "NorthBay_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
+    # On-Highway Diesel series (Issue #461)
+    "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Tulsa_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
 }
 
 # Baseline realistic fallback prices by series if offline
@@ -60,9 +65,14 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASREGWOH": 3.220,
     "GASREGWKY": 3.150,
     "GASREGWNC": 3.190,
-    "GASREGWFL": 3.280,
+    "GASREGWFL": 3.320,
     "GASREGWCA": 4.850,
+    "GASDESW": 3.850,
+    "GASDESWMW": 3.750,
+    "GASDESW01B": 3.920,
+    "GASDESWCA": 5.150
 }
+
 
 
 class EIARetailFeed:
@@ -149,10 +159,15 @@ class EIARetailFeed:
     def get_retail_price_for_date(self, region: str, target_date_str: str) -> Optional[float]:
         """
         Retrieves the observed weekly retail price for a given region as of target_date_str.
-        Issue #427: Strictly lookahead-safe. Never returns synthetic constants or future actuals.
+        Issue #427, #461: Strictly lookahead-safe and fuel/region mapped.
+        Never defaults diesel to gasoline or returns synthetic constants.
         If target_date is in the future or no observation exists, returns None.
         """
-        series_configs = REGION_TO_EIA_SERIES.get(region, [("GASREGW", "U.S. Regular Retail Price")])
+        series_configs = REGION_TO_EIA_SERIES.get(region)
+        if not series_configs:
+            # Fail closed: Do not fallback to national gasoline for unmapped or diesel keys (Issue #461)
+            logger.debug(f"No EIA retail series mapped for region: {region}")
+            return None
         
         try:
             target_dt = pd.to_datetime(target_date_str)
@@ -172,19 +187,20 @@ class EIARetailFeed:
             if target_date_str in history:
                 return float(history[target_date_str])
 
-            # Look for closest date in history within a 7-day past window (dt <= target_dt)
+            # Look for closest date in history within a 7-day past survey window (dt <= target_dt)
             dates = [pd.to_datetime(d) for d in history.keys()]
             if not dates:
                 continue
 
-            # Strictly prioritize lookahead-safe dates (dt <= target_dt and within 14 days)
-            past_dates = [d for d in dates if 0 <= (target_dt - d).days <= 14]
+            # Strictly prioritize lookahead-safe dates within 7-day weekly survey cycle
+            past_dates = [d for d in dates if 0 <= (target_dt - d).days <= 7]
             if past_dates:
                 closest_dt = max(past_dates)
                 return float(history[closest_dt.strftime("%Y-%m-%d")])
 
-        # Return None when no valid historical ground truth observation is found (Issue #427)
+        # Return None when no valid historical ground truth observation is found (Issue #427, #461)
         return None
+
 
     def fetch_all_retail_series(self) -> Dict[str, Any]:
         """Fetches the latest snapshot across all regional retail series."""

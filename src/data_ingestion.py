@@ -959,6 +959,8 @@ class EPARINDataConnector:
             "d4_volume_million": 38.2,
             "d3_volume_million": 12.1
         }
+        provenance = "SYNTHETIC_FALLBACK"
+        status_tag = "FALLBACK_SYNTHETIC"
 
         # Attempt dynamic fetch of EPA open RIN transaction data / FRED biofuel proxy
         try:
@@ -978,6 +980,8 @@ class EPARINDataConnector:
                                     rin_prices["d6_ethanol_per_rin"] = scaled_d6
                                     rin_prices["d4_biodiesel_per_rin"] = round(scaled_d6 * 1.51, 3)
                                     rin_prices["d3_cellulosic_per_rin"] = round(scaled_d6 * 2.73, 3)
+                                    provenance = "ESTIMATED_PROXY"
+                                    status_tag = "SUCCESS"
                                     break
                             except ValueError:
                                 continue
@@ -994,23 +998,26 @@ class EPARINDataConnector:
         )
 
         result = {
-            "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)",
+            "source": "U.S. EPA Moderated Transaction System (EMTS) (Zero-Cost)" if provenance != "SYNTHETIC_FALLBACK" else "Synthetic Baseline (Fallback)",
+            "provenance_type": provenance,
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
             "as_of": timestamp_str,
             "valid_date": valid_date_str,
-            "is_vintage_reconstructed": False,
+            "is_vintage_reconstructed": (provenance != "OBSERVED"),
             "rin_prices": rin_prices,
             "rin_weekly_volume": rin_volumes,
             "calculated_rvo_cost_per_gal": rvo_cost,
-            "status": "SUCCESS"
+            "status": status_tag
         }
 
-        try:
-            self.save_epa_rin_vintage_record(result)
-        except Exception:
-            pass
+        # Do not persist synthetic fallback records into official observation vintages (Issue #456)
+        if provenance in ["OBSERVED", "ESTIMATED_PROXY"]:
+            try:
+                self.save_epa_rin_vintage_record(result)
+            except Exception:
+                pass
 
         try:
             from src.lookup_cache import global_cache
@@ -1019,6 +1026,7 @@ class EPARINDataConnector:
             pass
 
         return result
+
 
     @staticmethod
     def save_epa_rin_vintage_record(record: dict, filepath: str = os.path.join("data", "epa_rin_vintages.json")) -> None:
@@ -1099,12 +1107,15 @@ class EIARegionalSpotConnector:
             "los_angeles_spot_per_gal": 2.890
         }
         ref_rbob = 2.420
+        provenance = "SYNTHETIC_FALLBACK"
+        status_tag = "FALLBACK_SYNTHETIC"
 
         # Attempt dynamic FRED daily spot series fetch
         series_map = {
             "DGASUSGULF": "gulf_coast_spot_per_gal",
             "DGASNYH": "ny_harbor_spot_per_gal"
         }
+        fetched_count = 0
         for sid, target_key in series_map.items():
             try:
                 url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
@@ -1119,11 +1130,19 @@ class EIARegionalSpotConnector:
                                     val = float(parts[1])
                                     if val > 0:
                                         spot_prices[target_key] = round(val, 3)
+                                        fetched_count += 1
                                         break
                                 except ValueError:
                                     continue
             except Exception:
                 pass
+
+        if fetched_count == len(series_map):
+            provenance = "OBSERVED"
+            status_tag = "SUCCESS"
+        elif fetched_count > 0:
+            provenance = "ESTIMATED_PROXY"
+            status_tag = "SUCCESS"
 
         # Compute spot basis spreads relative to reference wholesale RBOB
         spot_basis = {
@@ -1133,23 +1152,27 @@ class EIARegionalSpotConnector:
         }
 
         result = {
-            "source": "U.S. EIA Daily Petroleum Spot Prices (Zero-Cost)",
+            "source": "U.S. EIA Daily Petroleum Spot Prices (Zero-Cost)" if provenance != "SYNTHETIC_FALLBACK" else "Synthetic Baseline (Fallback)",
+            "provenance_type": provenance,
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
             "as_of": timestamp_str,
             "valid_date": valid_date_str,
             "publication_lag_days": 1,
-            "is_vintage_reconstructed": False,
+            "is_vintage_reconstructed": (provenance != "OBSERVED"),
             "spot_prices": spot_prices,
             "spot_basis": spot_basis,
-            "status": "SUCCESS"
+            "status": status_tag
         }
 
-        try:
-            self.save_eia_spot_vintage_record(result)
-        except Exception:
-            pass
+        # Do not persist synthetic fallback records into official observation vintages (Issue #456)
+        if provenance in ["OBSERVED", "ESTIMATED_PROXY"]:
+            try:
+                self.save_eia_spot_vintage_record(result)
+            except Exception:
+                pass
+
 
         try:
             from src.lookup_cache import global_cache
@@ -1394,6 +1417,8 @@ class CECWeeklyFuelsConnector:
             "statewide_refinery_utilization_pct": 87.3,
             "waterborne_blendstock_imports_thousand_barrels": 320.0
         }
+        provenance = "SYNTHETIC_FALLBACK"
+        status_tag = "FALLBACK_SYNTHETIC"
 
         # Attempt dynamic FRED California Gasoline Index / PADD 5 proxy fetch
         try:
@@ -1411,6 +1436,8 @@ class CECWeeklyFuelsConnector:
                                     metrics["statewide_refinery_utilization_pct"] = round(util_val, 1)
                                     metrics["norcal_refinery_utilization_pct"] = round(util_val - 0.8, 1)
                                     metrics["socal_refinery_utilization_pct"] = round(util_val + 0.9, 1)
+                                    provenance = "ESTIMATED_PROXY"
+                                    status_tag = "SUCCESS"
                                     break
                             except ValueError:
                                 continue
@@ -1418,22 +1445,26 @@ class CECWeeklyFuelsConnector:
             pass
 
         result = {
-            "source": "California Energy Commission (CEC) Weekly Fuels Watch (Zero-Cost)",
+            "source": "California Energy Commission (CEC) Weekly Fuels Watch (Zero-Cost)" if provenance != "SYNTHETIC_FALLBACK" else "Synthetic Baseline (Fallback)",
+            "provenance_type": provenance,
             "is_free_alternative": True,
             "cost_per_query": 0.0,
             "timestamp": timestamp_str,
             "as_of": timestamp_str,
             "valid_date": valid_date_str,
             "publication_day": "Thursday",
-            "is_vintage_reconstructed": False,
+            "is_vintage_reconstructed": (provenance != "OBSERVED"),
             "metrics": metrics,
-            "status": "SUCCESS"
+            "status": status_tag
         }
 
-        try:
-            self.save_cec_fuels_vintage_record(result)
-        except Exception:
-            pass
+        # Do not persist synthetic fallback records into official observation vintages (Issue #456)
+        if provenance in ["OBSERVED", "ESTIMATED_PROXY"]:
+            try:
+                self.save_cec_fuels_vintage_record(result)
+            except Exception:
+                pass
+
 
         try:
             from src.lookup_cache import global_cache
