@@ -518,5 +518,31 @@
       "cost_per_query": 0.0,
       "timestamp": "2026-09-24 12:49:57"
     }
+  },
+  {
+    "as_of": "2026-09-25 12:51:53",
+    "valid_date": "2026-09-25",
+    "hub_code": "Tulsa_OK",
+    "mean_temp_f": 77.4,
+    "heating_degree_days_hdd": 0.0,
+    "cooling_degree_days_cdd": 12.4,
+    "freeze_warning": false,
+    "extreme_heat_warning": false,
+    "source": "Open-Meteo Weather API (Zero-Cost)",
+    "data": {
+      "hub_code": "Tulsa_OK",
+      "name": "West Tulsa HF Sinclair & Cushing Hub",
+      "mean_temp_f": 77.4,
+      "max_temp_f": 89.3,
+      "min_temp_f": 65.5,
+      "heating_degree_days_hdd": 0.0,
+      "cooling_degree_days_cdd": 12.4,
+      "freeze_warning": false,
+      "extreme_heat_warning": false,
+      "source": "Open-Meteo Weather API (Zero-Cost)",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-09-25 12:51:53"
+    }
   }
 ]

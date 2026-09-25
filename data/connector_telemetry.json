@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-25 11:28:22",
-  "total_events": 886,
+  "last_updated": "2026-09-25 13:15:44",
+  "total_events": 891,
   "events": [
     {
       "timestamp": "2026-08-30 17:46:33",
@@ -8859,6 +8859,56 @@
       "target": "CL",
       "status": "ALREADY_SUBMITTED_TODAY",
       "latency_ms": 5537.97,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 09557c8f-5c2d-471f-b76a-d3e25b545c62 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-25 12:49:37",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 226.12,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-25 12:51:53",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-25 13:06:03",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 286.33,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-25 13:15:26",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "NETWORK_ERROR",
+      "latency_ms": 16499.09,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "The read operation timed out"
+    },
+    {
+      "timestamp": "2026-09-25 13:15:44",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 18191.47,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge 09557c8f-5c2d-471f-b76a-d3e25b545c62 already predicted (HTTP 500)"
