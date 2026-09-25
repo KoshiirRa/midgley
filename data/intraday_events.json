@@ -4228,5 +4228,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-25T04:12:57.613585",
+    "headline": "States Sue Over Latest Trump Tariff Attempt - energynow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]

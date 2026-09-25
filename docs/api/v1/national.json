@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T04:05:19.573667",
+  "timestamp": "2026-09-25T04:34:27.386055",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-25T04:04:36Z"
+      "timestamp": "2026-09-25T04:33:43Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -36,10 +36,10 @@
     "prediction_lower_95ci": 2.6513,
     "prediction_upper_95ci": 3.8491,
     "calibration_method": "conformal",
-    "calibration_sample_size": 10,
-    "directional_hit_rate_historical": 0.6,
-    "historical_mae_dollars": 0.3415,
-    "evaluation_sample_size": 10,
+    "calibration_sample_size": 12,
+    "directional_hit_rate_historical": 0.5833,
+    "historical_mae_dollars": 0.3323,
+    "evaluation_sample_size": 12,
     "day_1_price": 4.495,
     "day_2_price": 4.299,
     "day_3_price": 4.233,
