@@ -4348,5 +4348,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-25T17:29:57.766698",
+    "headline": "Title: 100% Tariff + Oil Shock: India\u2019s Double Economic Challenge? - YouTube",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5WTXIzTzRqZGNKeDF4UHF4b3YwRFJQSjdwZVhfcUpkbEJBcEpDU0VWTWIwUmlHMVp2eWJmakc5MWxtR0IzaW40Wjd4RjlGRXpKNlVCYXh5YnktY0x0?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5WTXIzTzRqZGNKeDF4UHF4b3YwRFJQSjdwZVhfcUpkbEJBcEpDU0VWTWIwUmlHMVp2eWJmakc5MWxtR0IzaW40Wjd4RjlGRXpKNlVCYXh5YnktY0x0?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiXEFVX3lxTE5WTXIzTzRqZGNKeDF4UHF4b3YwRFJQSjdwZVhfcUpkbEJBcEpDU0VWTWIwUmlHMVp2eWJmakc5MWxtR0IzaW40Wjd4RjlGRXpKNlVCYXh5YnktY0x0?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
