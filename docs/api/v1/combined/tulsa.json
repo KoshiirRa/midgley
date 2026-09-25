@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T17:53:08.672976",
+  "timestamp": "2026-09-25T19:11:11.880679",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-25T17:30:00Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-25T19:10:25Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,48 +27,48 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2025-10-15",
+    "target_date": "2026-10-02",
     "current_base_price": 4.114,
-    "predicted_price_per_gal": 4.118,
-    "expected_change_dollars": 0.004,
-    "expected_change_percent": 0.1,
-    "projected_direction": "UP",
-    "prediction_lower_95ci": 2.2463,
-    "prediction_upper_95ci": 2.8426,
+    "predicted_price_per_gal": 4.114,
+    "expected_change_dollars": 0.0,
+    "expected_change_percent": 0.0,
+    "projected_direction": "FLAT",
+    "prediction_lower_95ci": 3.994,
+    "prediction_upper_95ci": 4.234,
     "calibration_method": "gaussian_scaled",
-    "calibration_sample_size": 2,
+    "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
-    "historical_mae_dollars": 1.8966,
-    "evaluation_sample_size": 3,
-    "day_1_price": 4.131,
-    "day_2_price": 4.146,
-    "day_3_price": 4.158,
-    "day_4_price": 4.166,
-    "day_5_price": 4.118,
+    "historical_mae_dollars": 0.0,
+    "evaluation_sample_size": 0,
+    "day_1_price": 4.114,
+    "day_2_price": 4.114,
+    "day_3_price": 4.114,
+    "day_4_price": 4.114,
+    "day_5_price": 4.114,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 30.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 30.0,
-        "direction": "UP",
-        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
+        "direction": "FLAT",
+        "description": "Steady refinery utilization"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
-        "direction": "UP",
-        "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
+        "direction": "FLAT",
+        "description": "Stable energy commodity baseline"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
@@ -89,46 +89,38 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 2.0,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast +$0.004/gal (+0.10%): Driven primarily by Regional Logistics & Hub Delivery (+$0.001/gal), Refining Yield & Crack Spread (+$0.001/gal).",
+      "summary_text": "Tulsa OK forecast stable ($0.000/gal): Balanced supply/demand indicators.",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
-          "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "description": "Unrestricted terminal dispatch",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 30.0,
-          "direction": "UP"
+          "direction": "FLAT"
         },
         {
           "category": "Refining Yield & Crack Spread",
-          "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "description": "Steady refinery utilization",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 30.0,
-          "direction": "UP"
+          "direction": "FLAT"
         },
         {
           "category": "Futures & Commodity Benchmark",
-          "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "description": "Stable energy commodity baseline",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 25.0,
-          "direction": "UP"
-        },
-        {
-          "category": "Tax & Regulatory Overhead",
-          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
-          "share_pct": 2.0,
-          "direction": "UP"
+          "direction": "FLAT"
         },
         {
           "category": "Weather & Environmental Signals",
@@ -145,6 +137,14 @@
           "impact_pct": 0.0,
           "share_pct": 3.0,
           "direction": "FLAT"
+        },
+        {
+          "category": "Tax & Regulatory Overhead",
+          "description": "Fixed statutory tax overhead",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
+          "share_pct": 2.0,
+          "direction": "FLAT"
         }
       ]
     }
@@ -152,35 +152,27 @@
   "key_drivers": [
     {
       "category": "Regional Logistics & Hub Delivery",
-      "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "description": "Unrestricted terminal dispatch",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 30.0,
-      "direction": "UP"
+      "direction": "FLAT"
     },
     {
       "category": "Refining Yield & Crack Spread",
-      "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "description": "Steady refinery utilization",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 30.0,
-      "direction": "UP"
+      "direction": "FLAT"
     },
     {
       "category": "Futures & Commodity Benchmark",
-      "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "description": "Stable energy commodity baseline",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 25.0,
-      "direction": "UP"
-    },
-    {
-      "category": "Tax & Regulatory Overhead",
-      "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
-      "share_pct": 2.0,
-      "direction": "UP"
+      "direction": "FLAT"
     },
     {
       "category": "Weather & Environmental Signals",
@@ -197,34 +189,42 @@
       "impact_pct": 0.0,
       "share_pct": 3.0,
       "direction": "FLAT"
+    },
+    {
+      "category": "Tax & Regulatory Overhead",
+      "description": "Fixed statutory tax overhead",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
+      "share_pct": 2.0,
+      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast +$0.004/gal (+0.10%): Driven primarily by Regional Logistics & Hub Delivery (+$0.001/gal), Refining Yield & Crack Spread (+$0.001/gal).",
+    "summary_text": "Tulsa OK forecast stable ($0.000/gal): Balanced supply/demand indicators.",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 30.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 30.0,
-        "direction": "UP",
-        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
+        "direction": "FLAT",
+        "description": "Steady refinery utilization"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
-        "direction": "UP",
-        "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
+        "direction": "FLAT",
+        "description": "Stable energy commodity baseline"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 2.0,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     }
   }
