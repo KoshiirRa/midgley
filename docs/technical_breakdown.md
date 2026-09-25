@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-25 11:30:18`  
+**Log Timestamp:** `2026-09-25 11:59:32`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times  
+**Primary Event Trigger:** Could China get a waiver under the US-Russia sanctions law while India faces tariff risk? - Moneycontrol.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times
+- **Headline Trigger:** Could China get a waiver under the US-Russia sanctions law while India faces tariff risk? - Moneycontrol.com
 - **Active Ingested News Links:**
+- [Could China get a waiver under the US-Russia sanctions law while India faces tariff risk? - Moneycontrol.com](https://news.google.com/rss/articles/CBMi3gFBVV95cUxQaFBPbDlwMnN0T0h4UFpRZUt3eE54ZXZnRXJ0aUVNTlQ2QTFmb25mOV8yYUdJVzdiQTk4WDhCVGRwS2ljTTdMc1pvVHF3aUlQRkpnM0NnS0RocFBwVWpHa2FMUi1jZFVfaFhkZDk0ZU5nU3ZCQjRXU3lsRkdXdThFYjZJZGRmVlRwVGd0aGQwOWt1Y19vdEt1SllJSDM2Mk5RYldRYVlxa0U3eGxFVUpBUFlzUkFPdGtGRmV5ZEdnQklpeEx2M0ZLQWlPUGZCNWphZnBWU05GTHFNV29SZnfSAeMBQVVfeXFMUHBHajU3amhxNXVGMVd1QU1DRFIxRTJSRy1raEt4c0N3Qi1iY0tzTGFNa2V4Q1RCX2VZOW1kQVRYTDZfeEhZSFBlUDlqNG9uemNJeE1mRGlPcTBwU1o1NTdBZzd6d1lxa3pZUGJEcTVVNm9rcUFpLUdiVjZkSlk2SmQ4cnJ4OUdudi1QVXhHN1l4bC1ILXBwV1ktdTB2QkktX181d256cERmdmpxSERtNXFXdlpjbG12TDFUTDFhN2p4bXlLdUZORXZNS3p3WjktSXRvd3JWSWEtdDBxQUFqT0N3NDQ?oc=5) (Google News Energy Feed)
 - [India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times](https://news.google.com/rss/articles/CBMi9wFBVV95cUxQeERNS3dRYU1POEN2UElvXzFKZ0QySFRSNE1NSjVvSU5jYnhnQ29xbUdhRlA1V2NkV09sTFloQWo4ek1BMjZVaHptSkFRQ21GU3JRY2dzakkwSWVkZktXVXd6eVdJdk1JWGpzWU9IQnlDbk83b0xDZEdyejFMaC1uQTRtU1VhWS1DdExkRFRWWVF0empIdWZuUEd1X1JROE1JLTdRSHpSRUxuTE1wVlpuQUhQN3RyZm1TVUg1V1duYV9DcHdGdmdWMmo1eC1VXzk3VmtIZXBkaFM5OUphMmZmNm9EUkZCU3BRcjZvdEw3WDQwR2VhUlZ30gH8AUFVX3lxTFBsaHFlc1lMWHhEc19MOXhiMTU2cXVrWlo4SWRWaXBPU1hfTmNwWkhaaThLdmxWUkFBTDFPcldRSndhOWZ3cWZ3bDdMRGFKN1hiSG1BcDlCZUNLanFJczFtV0xaZ1BEeXdOYjExRlhYTlE1UVZEcmxyaUk3dFhHLWJud25jd2FFSjJmZThLMWFqbDFvQ0U3RFdlRGM0YWh4Wlh0elpQTXdfZW1kcENpQjBmTUJWT2JacldUSUh4bWxKSS1icURaT2ZoYThnVjdnYkd2emIzQzFTWVhDcFB6N2M1MG9MM25yS0YtMFhuYnd5cEhuQ21QNkdscTktSA?oc=5) (Google News Energy Feed)
 - [Turkey buys record diesel from India; US ally’s imports come amid Trump’s tariff threat on New Delhi over Russian oil - organiser.org](https://news.google.com/rss/articles/CBMi9AFBVV95cUxPc0stcDZaNXV6NjY1M3B4S1dsTGtWTVZyRnVwS19xZkx6bHdHMjRNQ0N1SG5XYmQ1eGdKN0EwTUNKb3JQbnNwa19EWlNIVlB5cnprQjZQUmQtR01ZT0V3UEJGTWtYb1l2ZWRlNTdWU19VOUU0a0k0LUgxWjY3RkJUQkxwNS1WVnpSX2JJVnJUWlZYSFFBUTROcGFmNE9rOUNzTHBOSWpYS2QySXAyS21nM01VaVNXSWFsQ3g0R1kzLTN6anZHSDV6WFJmS0s5WmVGbzBfTVl2YkxleVZPU0h2S3VQU1k4UjVTLUVCWDZpaGs4STd10gH6AUFVX3lxTFBNOWdEMzlXUXFXNmk1cWc0VzRJbTNiamxXdjBCdkxWZXlRRmVEd3JsWXpnT1BzZmh6cGNraEQ3cjZWVGV5WkVTRDZHZlIyRWh0TFpVMEc0U05hSU1yQkJIdXhpNU1VSG9aMWlXVGxickZUN0xibVFqME1XWmxYOGswd0JJLWJ2MXJBYWpEZ2YxZmVXbW1Fb2lYd19DbnNwWU11NWJmN2hSbHdzX0p0bm1nRjlmdVlLWlhCV2V0OUd1NGgwRWpma2xYWkZuZWtqOXBSby1IMFp2VVJIOVZMMVBhVUdMaGVUZklYWk5NSm1uSlI3R01PakJJZFE?oc=5) (Google News Energy Feed)
-- [States Sue Over Latest Trump Tariff Attempt - energynow.com](https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-25 11:30:18]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-25 11:59:32]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Could China get a waiver under the US-Russia sanctions law while India faces tariff risk? - Moneycontrol.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-25 11:30:18 (Mode: INTRADAY_REVISION), primary event trigger 'India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-25 11:59:32 (Mode: INTRADAY_REVISION), primary event trigger 'Could China get a waiver under the US-Russia sanctions law while India faces tariff risk? - Moneycontrol.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: Charlotte, NC Retail at $3.518/gal (+0.667/ga
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-25 11:30:18]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-25 11:59:32]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Could China get a waiver under the US-Russia sanctions law while India faces tariff risk? - Moneycontrol.com'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-25 11:30:18.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-25 11:59:32.*
