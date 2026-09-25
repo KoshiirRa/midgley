@@ -47,10 +47,12 @@ def fetch_tulsa_market_data(
         except Exception as e:
             logger.warning(f"Could not download ticker {ticker}: {e}")
             
-    if not dfs:
+    if not dfs or all(df.empty for df in dfs):
         return _generate_synthetic_tulsa_data(start_date, end_date, live_current_price)
         
     market_df = pd.concat(dfs, axis=1).sort_index().ffill().bfill().reset_index()
+    if market_df.empty or 'gasoline_rbob' not in market_df.columns or len(market_df) == 0:
+        return _generate_synthetic_tulsa_data(start_date, end_date, live_current_price)
     
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     dynamic_margin = live_current_price - latest_rbob

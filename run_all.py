@@ -185,12 +185,14 @@ if __name__ == "__main__":
         logger.debug(f"Notice during Headline Arena execution: {e}")
     
     if failed_locations:
+        allow_partial = "--allow-partial" in sys.argv
         print("\n" + "!" * 80)
-        print(f"  WARNING: {len(failed_locations)} location(s) encountered errors during execution:")
+        print(f"  ERROR: {len(failed_locations)} location(s) encountered errors during execution:")
         for loc_id, err in failed_locations:
             print(f"    - {loc_id}: {err}")
         print("!" * 80)
-        if len(failed_locations) == len(LOCATIONS):
+        if not allow_partial:
+            print("  [STRICT GATING] Halting with non-zero exit code due to failed location pipeline(s). Use --allow-partial to bypass.")
             sys.exit(1)
 
     print("\n" + "=" * 80)

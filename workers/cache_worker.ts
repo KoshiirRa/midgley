@@ -183,6 +183,8 @@ export default {
             // Ensure table exists
             await env.DB.prepare(`
               CREATE TABLE IF NOT EXISTS prediction_history (
+                forecast_id TEXT PRIMARY KEY,
+                issued_at_utc TEXT,
                 log_timestamp TEXT,
                 forecast_target_date TEXT,
                 forecast_horizon_days INTEGER,
@@ -205,7 +207,7 @@ export default {
                 prediction_upper_95ci REAL,
                 within_95ci_hit REAL,
                 data_source_provenance TEXT,
-                PRIMARY KEY (log_timestamp, forecast_target_date, region)
+                is_retroactive_backtest INTEGER
               )
             `).run();
 
@@ -213,14 +215,16 @@ export default {
             const statements = predictions.map((row: any) => {
               return env.DB.prepare(`
                 INSERT OR REPLACE INTO prediction_history (
-                  log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
+                  forecast_id, issued_at_utc, log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
                   headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
                   actual_5d_price, actual_direction, error_dollars, directional_hit,
                   llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
                   llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
-                  within_95ci_hit, data_source_provenance
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                  within_95ci_hit, data_source_provenance, is_retroactive_backtest
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
               `).bind(
+                String(row.forecast_id || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()))),
+                String(row.issued_at_utc || new Date().toISOString()),
                 String(row.log_timestamp || ""),
                 String(row.forecast_target_date || ""),
                 Number(row.forecast_horizon_days || 5),
@@ -242,7 +246,8 @@ export default {
                 Number(row.prediction_lower_95ci || 0.0),
                 Number(row.prediction_upper_95ci || 0.0),
                 row.within_95ci_hit !== undefined && row.within_95ci_hit !== null && !isNaN(row.within_95ci_hit) ? Number(row.within_95ci_hit) : null,
-                String(row.data_source_provenance || "yfinance")
+                String(row.data_source_provenance || "yfinance"),
+                row.is_retroactive_backtest ? 1 : 0
               );
             });
 

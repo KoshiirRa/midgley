@@ -89,8 +89,8 @@ class DynamicRegionRunner:
         # Step 1: Execute National RBOB Wholesale Baseline Forecast
         nat_res = run_national_pipeline(use_llm_api=use_llm_api, model_type=model_type)
 
-        nat_baseline_price = nat_res.get("predicted_5d_price", 3.200)
-        nat_current_base = nat_res.get("current_base_price", 3.100)
+        nat_baseline_price = float(nat_res.get("predicted_5d_price") or nat_res.get("baseline_forecast") or nat_res.get("live_pred_price", 3.200))
+        nat_current_base = float(nat_res.get("current_base_price") or nat_res.get("current_price") or nat_res.get("live_pump_price", 3.100))
         pct_change = (nat_baseline_price - nat_current_base) / nat_current_base if nat_current_base > 0 else 0.0
 
         # Step 2: Determine Live Local Base Pump Price
@@ -180,10 +180,14 @@ class DynamicRegionRunner:
 
         return {
             "region_id": self.region_id,
+            "region": self.logger_region_key,
             "display_name": self.display_name,
             "current_base_price": current_base,
+            "current_price": current_base,
+            "live_pump_price": current_base,
             "raw_predicted_5d_price": raw_predicted_5d_price,
             "predicted_5d_price": predicted_5d_price,
+            "baseline_forecast": predicted_5d_price,
             "projected_direction": "UP 📈" if predicted_5d_price >= current_base else "DOWN 📉",
             "prediction_lower_95ci": lower_95ci,
             "prediction_upper_95ci": upper_95ci,

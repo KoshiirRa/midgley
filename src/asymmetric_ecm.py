@@ -60,6 +60,8 @@ class AsymmetricECM:
         self.last_retail_price: float = 3.50
         self.last_wholesale_price: float = 2.85
         self.last_residual: float = 0.0
+        self.last_d_wholesale_lags: List[float] = [0.0] * self.n_lags_wholesale
+        self.last_d_retail_lags: List[float] = [0.0] * self.n_lags_retail
 
     def fit(
         self,
@@ -144,6 +146,20 @@ class AsymmetricECM:
         self.last_retail_price = float(df["retail"].iloc[-1])
         self.last_wholesale_price = float(df["wholesale"].iloc[-1])
         self.last_residual = float(df["z"].iloc[-1])
+
+        # Store historical differences for recursive warm start
+        d_whl_series = df["d_wholesale"].dropna()
+        if len(d_whl_series) >= self.n_lags_wholesale:
+            self.last_d_wholesale_lags = [float(d_whl_series.iloc[-k]) for k in range(1, self.n_lags_wholesale + 1)]
+        else:
+            self.last_d_wholesale_lags = [0.0] * self.n_lags_wholesale
+
+        d_ret_series = df["d_retail"].dropna()
+        if len(d_ret_series) >= self.n_lags_retail:
+            self.last_d_retail_lags = [float(d_ret_series.iloc[-k]) for k in range(1, self.n_lags_retail + 1)]
+        else:
+            self.last_d_retail_lags = [0.0] * self.n_lags_retail
+
         self.is_fitted = True
         
         logger.info(
@@ -168,12 +184,27 @@ class AsymmetricECM:
 
         total_steps = steps if steps is not None else steps_ahead
 
+        # Warm start historical difference buffers
+        d_ret_hist = list(self.last_d_retail_lags) if len(self.last_d_retail_lags) == self.n_lags_retail else [0.0] * self.n_lags_retail
+        d_whl_hist = [0.0] + (list(self.last_d_wholesale_lags) if len(self.last_d_wholesale_lags) == self.n_lags_wholesale else [0.0] * self.n_lags_wholesale)
+
         # Handle DataFrame input for current_retail
         if isinstance(current_retail, pd.DataFrame):
             last_ret = float(current_retail["retail_price"].iloc[-1]) if "retail_price" in current_retail.columns else float(current_retail.iloc[-1, 0])
             last_whl = float(current_retail["wholesale_price"].iloc[-1]) if "wholesale_price" in current_retail.columns else float(current_retail.iloc[-1, 1])
             ret_price = last_ret
             whl_price = last_whl
+
+            # Extract recent historical diffs if available in DataFrame
+            if len(current_retail) > 1:
+                ret_col_name = "retail_price" if "retail_price" in current_retail.columns else current_retail.columns[0]
+                whl_col_name = "wholesale_price" if "wholesale_price" in current_retail.columns else current_retail.columns[1]
+                d_r_avail = current_retail[ret_col_name].diff().dropna()
+                if len(d_r_avail) >= self.n_lags_retail:
+                    d_ret_hist = [float(d_r_avail.iloc[-k]) for k in range(1, self.n_lags_retail + 1)]
+                d_w_avail = current_retail[whl_col_name].diff().dropna()
+                if len(d_w_avail) >= self.n_lags_wholesale:
+                    d_whl_hist = [0.0] + [float(d_w_avail.iloc[-k]) for k in range(1, self.n_lags_wholesale + 1)]
             
             # If current_wholesale is a list/array of future wholesale levels
             if isinstance(current_wholesale, (list, np.ndarray, pd.Series)):
@@ -190,20 +221,17 @@ class AsymmetricECM:
             expected_wholesale_deltas.extend([0.0] * (total_steps - len(expected_wholesale_deltas)))
 
         forecasts = []
-        d_whl_hist = [0.0] * (self.n_lags_wholesale + 1)
-        d_ret_hist = [0.0] * self.n_lags_retail
 
         for step in range(total_steps):
             d_w = expected_wholesale_deltas[step]
-            whl_price += d_w
             d_whl_hist[0] = d_w
             
-            # Compute current cointegration disequilibrium
+            # Compute prior-period cointegration disequilibrium z_{t-1} before applying current step shocks
             z = ret_price - (self.beta * whl_price + self.equilibrium_margin_c)
             z_pos = max(0.0, z)
             z_neg = min(0.0, z)
             
-            # Predict expected retail delta
+            # Predict expected retail delta Delta retail_t
             d_retail_pred = (
                 self.intercept_dynamic +
                 (self.alpha_pos * z_pos) +
@@ -212,6 +240,8 @@ class AsymmetricECM:
                 sum(d * dr for d, dr in zip(self.delta_coefs, d_ret_hist))
             )
             
+            # Update state variables
+            whl_price += d_w
             ret_price += d_retail_pred
             forecasts.append(round(float(ret_price), 4))
             

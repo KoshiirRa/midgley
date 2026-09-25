@@ -214,6 +214,7 @@ def run_regional_pipeline(
             'forecast_horizon_days': h,
             'is_retroactive_backtest': False
         }])
+        # Process primary region
         try:
             log_predictions(
                 today_df,
@@ -224,10 +225,65 @@ def run_regional_pipeline(
                 is_retroactive_backtest=False
             )
         except Exception as e:
-            logger.debug(f"Live prediction logging skipped: {e}")
+            logger.debug(f"Live prediction logging skipped for {logger_region_key}: {e}")
+
+        # Process dual-anchor secondary sub-regions (Issue #464)
+        dual_anchor_map = {
+            "Oakland_CA": [("BayArea_CA", "bayarea_avg_retail_gasoline", 5.05)],
+            "Cincinnati_OH": [("Cincinnati_KY", "cincinnati_ky_retail_gasoline", 3.19)]
+        }
+        if logger_region_key in dual_anchor_map:
+            for sec_key, sec_col, sec_default in dual_anchor_map[logger_region_key]:
+                try:
+                    sec_live = fetch_live_metro_retail_price(sec_key).get("price")
+                    sec_base_price = float(sec_live) if sec_live and pd.notna(sec_live) else sec_default
+                except Exception:
+                    sec_base_price = sec_default
+
+                sec_hist_base = h_splits['test_df'].get(sec_col, h_splits['test_df']['gasoline_rbob'] + (sec_base_price - latest_rbob))
+                sec_hist_pred = sec_hist_base * (1.0 + pred_ret_hybrid)
+                sec_hist_quant = sec_hist_base * (1.0 + pred_ret_quant)
+
+                try:
+                    backfill_new_region_history(
+                        test_dates=h_test_dates,
+                        base_prices=sec_hist_base,
+                        predicted_prices=sec_hist_pred,
+                        region=sec_key,
+                        model_version=resolve_model_tag(region=sec_key, model_type=model_type),
+                        forecast_horizon_days=h,
+                        quant_baseline_prices=sec_hist_quant
+                    )
+                except Exception as e:
+                    logger.debug(f"Secondary regional backfill skipped for {sec_key}: {e}")
+
+                sec_forecast = sec_base_price * (1.0 + baseline_return_h)
+                sec_quant = sec_base_price * (1.0 + quant_return_h)
+                sec_today_df = pd.DataFrame([{
+                    'date': last_date,
+                    'current_price': sec_base_price,
+                    'predicted_5d_price': sec_forecast,
+                    'quant_baseline_5d_price': sec_quant,
+                    'forecast_horizon_days': h,
+                    'is_retroactive_backtest': False
+                }])
+                try:
+                    log_predictions(
+                        sec_today_df,
+                        region=sec_key,
+                        model_version=resolve_model_tag(region=sec_key, model_type=model_type),
+                        run_type="LIVE_PROSPECTIVE",
+                        forecast_horizon_days=h,
+                        is_retroactive_backtest=False
+                    )
+                except Exception as e:
+                    logger.debug(f"Secondary live prediction logging skipped for {sec_key}: {e}")
 
     try:
         backfill_actual_prices_and_evaluate(target_region=logger_region_key)
+        if logger_region_key in {"Oakland_CA", "Cincinnati_OH"}:
+            sec_target = "BayArea_CA" if logger_region_key == "Oakland_CA" else "Cincinnati_KY"
+            backfill_actual_prices_and_evaluate(target_region=sec_target)
     except Exception as e:
         logger.debug(f"Backfill actual prices skipped: {e}")
 

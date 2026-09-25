@@ -119,3 +119,33 @@ def test_fit_regional_asymmetric_ecm_helper(synthetic_pass_through_data):
     assert diag["region"] == "Tulsa_OK"
     assert "beta" in diag
     assert "rack_spread" in diag
+
+
+def test_asymmetric_ecm_lag_recurrence_and_warm_start(synthetic_pass_through_data):
+    """Verify that disequilibrium is evaluated on prior state and lag histories warm-start properly."""
+    ecm = AsymmetricECM(wholesale_lags=3, retail_lags=2)
+    ecm.fit(synthetic_pass_through_data, wholesale_col="wholesale_price", retail_col="retail_price")
+    
+    assert len(ecm.last_d_wholesale_lags) == 3
+    assert len(ecm.last_d_retail_lags) == 2
+    
+    # Test scalar predictions with zero expected wholesale changes
+    preds_flat = ecm.predict_step_ahead(
+        current_retail=synthetic_pass_through_data["retail_price"].iloc[-1],
+        current_wholesale=synthetic_pass_through_data["wholesale_price"].iloc[-1],
+        steps_ahead=5,
+        expected_wholesale_deltas=[0.0] * 5
+    )
+    assert len(preds_flat) == 5
+    assert all(isinstance(p, float) for p in preds_flat)
+    
+    # Test with sudden wholesale drop: rockets and feathers implies retail drops slowly (feathers)
+    preds_drop = ecm.predict_step_ahead(
+        current_retail=synthetic_pass_through_data["retail_price"].iloc[-1],
+        current_wholesale=synthetic_pass_through_data["wholesale_price"].iloc[-1],
+        steps_ahead=5,
+        expected_wholesale_deltas=[-0.20, 0.0, 0.0, 0.0, 0.0]
+    )
+    # Retail should decrease gradually
+    assert preds_drop[0] <= synthetic_pass_through_data["retail_price"].iloc[-1] + 0.05
+    assert preds_drop[-1] <= preds_drop[0]

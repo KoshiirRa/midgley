@@ -351,18 +351,29 @@ COMPONENT_DESCRIPTIONS = {
 def compute_locale_feature_attribution_breakdown(
     region_code: str,
     base_price: float,
-    predicted_price: float
+    predicted_price: float,
+    feature_attributions: Optional[Dict[str, float]] = None
 ) -> dict:
     """
     Computes component-level signed dollar and percentage feature attributions
-    and generates natural language driver breakdown per forecast (Issue #46).
+    and generates natural language driver breakdown per forecast (Issue #46, #470).
     
+    When empirical linear model feature attributions (feature_attributions) are provided,
+    they are normalized and scaled to the forecast delta. Otherwise, structural regional
+    cost-component shares (LOCALE_COMPONENT_WEIGHTS) are utilized.
     Guarantees sum(delta_dollars) == round(predicted_price - base_price, 3).
     """
     total_delta = round(float(predicted_price) - float(base_price), 3)
     total_pct = round((total_delta / base_price) * 100.0, 2) if base_price > 0 else 0.0
     
-    weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
+    if feature_attributions and len(feature_attributions) > 0:
+        total_feat_abs = sum(abs(v) for v in feature_attributions.values())
+        if total_feat_abs > 0:
+            weights = {k: abs(v) / total_feat_abs for k, v in feature_attributions.items()}
+        else:
+            weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
+    else:
+        weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
     
     components = {}
     key_drivers = []
@@ -492,8 +503,9 @@ def enforce_forecast_plausibility_gate(
     residual_std: Optional[float] = None
 ) -> Tuple[float, bool, str]:
     """
-    Enforces post-inference plausibility bounds between hybrid LLM forecast and quantitative baseline (Issue #428).
-    Clamps extreme runaway divergences back to statistically calibrated bounds.
+    Enforces post-inference plausibility bounds between hybrid LLM forecast and quantitative baseline (Issue #428, #467).
+    Applies a single convex projection onto the intersection of the maximum plausible return interval
+    and the quantitative baseline divergence interval.
     """
     if base_price <= 0:
         return float(hybrid_pred_price), False, "INVALID_BASE"
@@ -501,32 +513,35 @@ def enforce_forecast_plausibility_gate(
     # 1. Maximum plausible return over h business days: 
     # Scaled from +/- 8% (1d) to +/- 20% (5d), with absolute cap at +/- 25%
     max_return_bound = min(0.25, max(0.08, 0.05 + 0.03 * horizon_days))
+    low_ret = base_price * (1.0 - max_return_bound)
+    high_ret = base_price * (1.0 + max_return_bound)
     
     # 2. Maximum allowable absolute divergence from physical quantitative baseline
-    sigma = residual_std if residual_std and residual_std > 0 else 0.05
-    max_divergence_dollars = max(0.20, 2.5 * sigma * np.sqrt(max(1, horizon_days) / 5.0))
-    
-    # Compute hybrid return
-    raw_return = (hybrid_pred_price - base_price) / base_price
-    clamped_price = hybrid_pred_price
-    gated = False
-    reasons = []
-    
-    # Check return limit
-    if abs(raw_return) > max_return_bound:
-        clamped_return = float(np.clip(raw_return, -max_return_bound, max_return_bound))
-        clamped_price = base_price * (1.0 + clamped_return)
-        gated = True
-        reasons.append(f"RETURN_BOUND_CLAMP (raw={raw_return:+.1%}, max=+/-{max_return_bound:.1%})")
-    
-    # Check quant baseline divergence
     if quant_pred_price > 0:
-        delta = clamped_price - quant_pred_price
-        if abs(delta) > max_divergence_dollars:
-            clamped_delta = float(np.clip(delta, -max_divergence_dollars, max_divergence_dollars))
-            clamped_price = quant_pred_price + clamped_delta
-            gated = True
-            reasons.append(f"QUANT_DIVERGENCE_CLAMP (raw_delta=${delta:+.2f}, max=+/-${max_divergence_dollars:.2f})")
+        sigma = residual_std if residual_std and residual_std > 0 else 0.05
+        max_divergence_dollars = max(0.20, 2.5 * sigma * np.sqrt(max(1, horizon_days) / 5.0))
+        low_quant = quant_pred_price - max_divergence_dollars
+        high_quant = quant_pred_price + max_divergence_dollars
+    else:
+        low_quant = low_ret
+        high_quant = high_ret
+
+    # Convex interval intersection
+    low_bound = max(low_ret, low_quant)
+    high_bound = min(high_ret, high_quant)
+
+    # In rare cases where quant baseline is far outside return bounds, prioritize return bounds
+    if low_bound > high_bound:
+        low_bound = low_ret
+        high_bound = high_ret
+
+    clamped_price = float(np.clip(hybrid_pred_price, low_bound, high_bound))
+    gated = abs(clamped_price - hybrid_pred_price) > 1e-4
+    reasons = []
+
+    if hybrid_pred_price < low_bound or hybrid_pred_price > high_bound:
+        raw_return = (hybrid_pred_price - base_price) / base_price
+        reasons.append(f"CONVEX_BOUND_CLAMP (raw=${hybrid_pred_price:.4f}, ret={raw_return:+.1%}, bounds=[${low_bound:.4f}, ${high_bound:.4f}])")
             
     reason_str = "; ".join(reasons) if reasons else "PLAUSIBLE"
     if gated:
@@ -1286,12 +1301,14 @@ def compute_empirical_residual_ci(
 def compute_conformal_prediction_intervals(
     y_pred: Union[float, np.ndarray, List[float]],
     calibration_residuals: Union[np.ndarray, List[float]],
-    alpha: float = 0.05
+    alpha: float = 0.05,
+    min_calibration_samples: int = 50
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Computes Split Conformal Prediction Intervals with finite-sample (1 - alpha) coverage guarantee (Issue #358).
+    Computes Split Conformal Prediction Intervals with finite-sample (1 - alpha) coverage guarantee (Issue #358, #467).
     Given calibration nonconformity scores s_i = |y_i - \\hat{y}_i|, computes the empirical quantile:
       q = quantile(|residuals|, ceil((n+1)*(1-alpha))/n)
+    When n < min_calibration_samples (50), falls back to empirical sample standard deviation scaling to prevent degraded intervals.
     Returns (lower_bounds, upper_bounds) around point predictions y_pred.
     """
     residuals = np.abs(np.asarray(calibration_residuals, dtype=float))
@@ -1299,6 +1316,9 @@ def compute_conformal_prediction_intervals(
     if n == 0:
         # Fallback to standard 1.96 * 0.0612 heuristic if no calibration residuals
         q = 1.96 * 0.0612
+    elif n < min_calibration_samples:
+        std_est = float(np.std(residuals, ddof=1)) if n > 1 else float(np.mean(residuals))
+        q = max(float(np.quantile(residuals, 1.0 - alpha)), 1.96 * std_est)
     else:
         quantile_level = min(1.0, math.ceil((n + 1) * (1.0 - alpha)) / n)
         q = float(np.quantile(residuals, quantile_level))
@@ -1380,8 +1400,8 @@ def train_models_with_feast_point_in_time(
     )
     splits = prepare_chronological_splits(feature_matrix, forecast_horizon=forecast_horizon)
     
-    # Train Ridge Model
-    ridge = Ridge(alpha=10.0)
+    # Train Ridge Model with standard scaling pipeline
+    ridge = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
     ridge.fit(splits['X_train_hybrid'], splits['y_train'])
     y_pred_ridge = ridge.predict(splits['X_test_hybrid'])
     metrics_ridge = evaluate_predictions(splits['y_test'], y_pred_ridge, splits['test_df']['gasoline_rbob'])

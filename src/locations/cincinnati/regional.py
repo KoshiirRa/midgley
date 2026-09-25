@@ -58,10 +58,12 @@ def fetch_cincinnati_market_data(
         except Exception as e:
             logger.warning(f"Could not download ticker {ticker}: {e}")
             
-    if not dfs:
+    if not dfs or all(df.empty for df in dfs):
         return _generate_synthetic_cincinnati_data(start_date, end_date, live_oh_price, live_ky_price)
         
     market_df = pd.concat(dfs, axis=1).sort_index().ffill().bfill().reset_index()
+    if market_df.empty or 'gasoline_rbob' not in market_df.columns or len(market_df) == 0:
+        return _generate_synthetic_cincinnati_data(start_date, end_date, live_oh_price, live_ky_price)
     
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     margin_oh = live_oh_price - latest_rbob
