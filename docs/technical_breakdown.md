@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-24 23:45:17`  
+**Log Timestamp:** `2026-09-25 17:29:58`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** COMMENTARY: Here’s How to Attract Investment to Newfoundland Despite Trump’s Tariffs - Fraser Institute - EnergyNow  
+**Primary Event Trigger:** Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** COMMENTARY: Here’s How to Attract Investment to Newfoundland Despite Trump’s Tariffs - Fraser Institute - EnergyNow
+- **Headline Trigger:** Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube
 - **Active Ingested News Links:**
-- [COMMENTARY: Here’s How to Attract Investment to Newfoundland Despite Trump’s Tariffs - Fraser Institute - EnergyNow](https://truthsocial.com/post/7459017) (Executive Social Media)
-- [Given No Choice by Trump – Canada Embraces Asia to Save Auto Heartland Squeezed by U.S. Tariffs - EnergyNow.com](https://truthsocial.com/post/7218498) (Executive Social Media)
-- [US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com](https://truthsocial.com/post/6188839) (Executive Social Media)
+- [Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube](https://news.google.com/rss/articles/CBMiXEFVX3lxTE5WTXIzTzRqZGNKeDF4UHF4b3YwRFJQSjdwZVhfcUpkbEJBcEpDU0VWTWIwUmlHMVp2eWJmakc5MWxtR0IzaW40Wjd4RjlGRXpKNlVCYXh5YnktY0x0?oc=5) (Google News Energy Feed)
+- [EU Pressures UK to Match Its Tariffs on Chinese-Made Cars - Crude Oil Prices Today | OilPrice.com](https://news.google.com/rss/articles/CBMiswFBVV95cUxQMFRoNnBTYTBXaVlweFRyZVBkX19IMnE2QUZ0c3hpNUx2R0lIZTQtdWE1VkVaa1dnODZZUU16blRTbk40V3JvMmVmNm5lU2U3S01WMXJzaE5IYXBiSFg1UXh4SnNFdktKWVRuRllEWW5MSWNjR3lqQWFzV2pON2ZwY1ZvbFRtWXVJNFAzTnpmeVBmOTVxM2h5aDdJRVhSYzRYR2taMk0xTi1TTU9LUDVGTk9UQdIBuAFBVV95cUxOVThjeWctNll6RjJ4RkdhdUplVU02Y3kydk5NbXJxcVhOdVRCSm9fWDVLaHBvYnlNcW90T3IyWDFkSmpQY0RERWpxbUYyRm1OYWVna2E1bFdqMGowVW9LeUMxbnV0NUlpT0hEOVV0NTQ2Y0tfd3B3cXV1ZWdzRDZTTnJZSld5S3c2bUZGZU93MS05LVhsZU5vSEVyZUhPd2VEQnZyZFpMVkNQNkNncUJySTgybWFmWEJN?oc=5) (Google News Energy Feed)
+- [China Gets US Tariff Protection, India Major Target For Russian Oil Purchase - Deccan Chronicle](https://news.google.com/rss/articles/CBMixAFBVV95cUxPaDJEZGxoUVFEY3J2VDF4R0lobUJtVnp1MDZuRldBT2x5NkV2bnk2bmk2RlpHRHlaVENaQVhwVElaYkRndG9Da2tQUjdTZjkzS0tBdm9Zdk9sdUZDRkk0dXpnczdHUzU4YS12cWJWdWVwd1NwdTVfYkhjbV9HWklsX2dTNk5ic04tSXh5aVA3RHlFT0xqbjZoaDg3bUh5T0g0cXYyaEtKTWVfTGdOblhTaXVqV3c2MmhlcXBqZDdkYzRPMW560gHKAUFVX3lxTE1RSUp5WlkxekIxeEI3NGZHUnlfMEVBb2dMX0I5c25iYUtySzgzZ0JtZHUtRnhvTk5zdkhYUjRUV3lXTDFMVzg4a0owbmRESzA2MWZoUnF0cVFrTkJ2aGtKSTdyZjRXQXRVLXNsNlI0dDBNZXRod3VBZ05iZ0VBWm93elVfcTdfYkxVS0gwVmdPcGtIOEtjSWxGMWlpVUtHeGpmakp3akJTV1dKc3lleUJjR1FyT1BWQjAta2JWMm5zMXhEaVhPRXZCMXc?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-24 23:45:17]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'COMMENTARY: Here’s How to Attract Investment to Newfoundland Despite Trump’s Tariffs - Fraser Institute - EnergyNow' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-25 17:29:58]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-24 23:45:17 (Mode: INTRADAY_REVISION), primary event trigger 'COMMENTARY: Here’s How to Attract Investment to Newfoundland Despite Trump’s Tariffs - Fraser Institute - EnergyNow' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Executive Social Media). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-25 17:29:58 (Mode: INTRADAY_REVISION), primary event trigger 'Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: Charlotte, NC Retail at $3.518/gal (+0.667/ga
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-24 23:45:17]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'COMMENTARY: Here’s How to Attract Investment to Newfoundland Despite Trump’s Tariffs - Fraser Institute - EnergyNow'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-25 17:29:58]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-24 23:45:17.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-25 17:29:58.*
