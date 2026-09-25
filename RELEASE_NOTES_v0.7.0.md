@@ -748,7 +748,27 @@ Midgley **v0.7.0** is a major milestone release delivering significant reliabili
 ### 99. Authentic Data Model Hierarchy Evaluation & Statistical Promotion Gate (`scripts/evaluate_model_hierarchy.py`, `src/model_evaluation.py` & `tests/test_model_hierarchy.py` - Issue #435)
 - **Authentic Historical Market Evaluation:** Re-architected `scripts/evaluate_model_hierarchy.py` to evaluate the 5-tier nested model hierarchy (`Tier 0` Naive, `Tier 1` Autoregressive, `Tier 2` Physical Fundamentals, `Tier 3` Qualitative Events, `Tier 4` Full Hybrid) on authentic historical market data and real forward targets $P_{t+h}$.
 - **Strict Statistical Promotion Threshold:** Updated `evaluate_hierarchy_promotion_gate()` in `src/model_evaluation.py` to require $p < 0.05$ (Diebold-Mariano / Harvey-Leybourne-Newbold tests) for Tier promotion.
-- **Decoupled Test Artifacts:** Parameterized `output_dir` in `run_full_hierarchy_audit()` and isolated `tests/test_model_hierarchy.py` using `tmp_path` to guarantee test executions never overwrite committed production reports.
+
+---
+
+### 100. Discrete-Horizon Forecast Target Alignment & Conformal Prediction Intervals (`src/prediction_logger.py`, `src/api_server.py` & `src/models.py` - Issue #436)
+- **Business-Day Target Date Calibration:** Aligned `/api/v1/forecast` and `/api/v1/forecast/{region}` in `src/api_server.py` to respect the `days` parameter ($h \in [1..5]$) and calculate precise business-day settlement dates via `pd.offsets.BDay(days)`.
+- **Dynamic Split Conformal Prediction Intervals:** Added `get_regional_calibration_residuals()` to extract recent prospective evaluation residuals and wire distribution-free conformal prediction intervals (`compute_conformal_prediction_intervals()`) alongside discrete-horizon residual standard deviation scaling ($\sigma_h = \sigma_{\text{base}} \sqrt{h/5}$) directly into `log_predictions()`.
+- **Enriched API Metadata:** API forecast responses now expose `prediction_lower_95ci`, `prediction_upper_95ci`, `calibration_method`, `calibration_sample_size`, and `evaluation_sample_size`.
+
+---
+
+### 101. Dynamic Metric Computation & Synthetic Demonstration Labeling (`src/api_server.py`, `src/dashboard_generator.py` & `src/social_embed_generator.py` - Issue #440)
+- **Eliminated Hardcoded Accuracy Constants:** Replaced hardcoded constants (`0.6079` MAE, `0.1069` RMSE) in `src/api_server.py`, `src/dashboard_generator.py`, and `src/social_embed_generator.py` with dynamic metrics computed on-the-fly from the prospective prediction ledger via `compute_rolling_scoreboard_metrics()`.
+- **Synthetic Demonstration Gating:** Labeled `/api/v1/forecast/purged-cv` response payloads with `is_synthetic_demonstration: true` and added a prominent visual disclosure banner in `generate_quantstats_tearsheet_page()` to clearly differentiate synthetic historical backtests from live prospective production forecasts.
+
+---
+
+### 102. Repository Hygiene, Community Standards & Root Forwarding Shims (`.env.example`, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md` & `scripts/` - Issue #441)
+- **Purged Stale Root Files:** Removed one-off root JSON triage dumps and temporary analysis scripts (`assigned_model_issues_detail.json`, `evaluated_master_roadmap.json`, `master_roadmap_summary.json`, `model_milestone_audit_results.json`, `execute_inbox_triage.py`).
+- **Community Health Files:** Authored standardized `.env.example`, `SECURITY.md`, `CONTRIBUTING.md`, and `CHANGELOG.md`.
+- **Clean Root Forwarding Shims:** Replaced legacy monolithic root `dashboard_generator.py` and `live_fuel_feed.py` with clean forwarding shims redirecting to `src/dashboard_generator.py` and `src/live_fuel_feed.py`.
+
 
 
 
