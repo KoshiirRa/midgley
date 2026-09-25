@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T04:04:50.428707",
+  "timestamp": "2026-09-25T11:28:00.734268",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.335,
+    "current_price_per_gal": 4.331,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-25T04:04:18Z"
+      "timestamp": "2026-09-25T11:27:30Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,8 +28,8 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-30",
-    "current_base_price": 4.335,
-    "predicted_price_per_gal": 4.303,
+    "current_base_price": 4.331,
+    "predicted_price_per_gal": 4.299,
     "expected_change_dollars": -0.032,
     "expected_change_percent": -0.74,
     "projected_direction": "DOWN",

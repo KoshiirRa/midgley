@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T04:04:50.416879",
+  "timestamp": "2026-09-25T11:28:00.721606",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.288,
+    "current_price_per_gal": 6.354,
     "source": "AAA Web Scraper (Oakland, CA)",
     "provenance": {
       "source": "AAA Web Scraper (Oakland, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-25T04:04:20Z"
+      "timestamp": "2026-09-25T11:27:31Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,10 +28,10 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-30",
-    "current_base_price": 6.288,
-    "predicted_price_per_gal": 6.213,
+    "current_base_price": 6.354,
+    "predicted_price_per_gal": 6.279,
     "expected_change_dollars": -0.075,
-    "expected_change_percent": -1.19,
+    "expected_change_percent": -1.18,
     "projected_direction": "DOWN",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -91,7 +91,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Oakland CA forecast $-0.075/gal (-1.19%): Driven primarily by Tax & Regulatory Overhead ($-0.026/gal), Refining Yield & Crack Spread ($-0.019/gal).",
+      "summary_text": "Oakland CA forecast $-0.075/gal (-1.18%): Driven primarily by Tax & Regulatory Overhead ($-0.026/gal), Refining Yield & Crack Spread ($-0.019/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
@@ -195,7 +195,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Oakland CA forecast $-0.075/gal (-1.19%): Driven primarily by Tax & Regulatory Overhead ($-0.026/gal), Refining Yield & Crack Spread ($-0.019/gal).",
+    "summary_text": "Oakland CA forecast $-0.075/gal (-1.18%): Driven primarily by Tax & Regulatory Overhead ($-0.026/gal), Refining Yield & Crack Spread ($-0.019/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

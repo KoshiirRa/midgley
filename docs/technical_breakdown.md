@@ -1,27 +1,27 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-25 04:04:17`  
+**Log Timestamp:** `2026-09-25 11:27:29`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Trump's 50% tariffs on Canada take effect as Carney vows to retaliate - ABC News - Breaking News, Latest News and Videos  
+**Primary Event Trigger:** Policy Backgrounder: Possible Higher Tariffs Under Sanctions Bill - The Conference Board  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Trump's 50% tariffs on Canada take effect as Carney vows to retaliate - ABC News - Breaking News, Latest News and Videos
+- **Headline Trigger:** Policy Backgrounder: Possible Higher Tariffs Under Sanctions Bill - The Conference Board
 - **Active Ingested News Links:**
+- [Policy Backgrounder: Possible Higher Tariffs Under Sanctions Bill - The Conference Board](https://news.google.com/rss/articles/CBMiqwFBVV95cUxQbTZJVGFac1RpRGh6UUJ6b2JfbWUzMHBaUkRRUzRUSDhZLUkzT0xpRUliSklKcFZEU1AwV1dCVjhFckQza2lYZ1Byb2RsUWpjYUtKcVJ1NWIyTDFNWThQREs4QkFKbzJSdm96R2I5UzFmVU1xeGNZOWNYSUZjOTJRdDJoZWhVMXBoTElsYkpGOXh6OU1FVi1LdG9uOW9ldEpBRTZPcl9xc2VCYkE?oc=5) (Google News Energy Feed)
 - [Trump's 50% tariffs on Canada take effect as Carney vows to retaliate - ABC News - Breaking News, Latest News and Videos](https://news.google.com/rss/articles/CBMiqAFBVV95cUxNeDdPQV9hVEo4eEFTSlhrVkowRE9mVVlJQzJkZTJnOG1TTUl1ZWYtNG1CcWk2MWlmZG51eVd2S0NJT0pWeHphblVQWThQMTc2OVhDd3VQQXZRU0gteVYtQlkxa29fcVpVV3VKSkl6NVdRTWhvT0E5X3VfVVI0UlVVdnhoUERGMFpxWVR1YXFiSENWQ2lTUTFNLTBEcU1ObHlfTW9OZ01VcmLSAa4BQVVfeXFMT0NxQThhZzl5Q29YNEt0Nl9FV3NrYzRMa1JXX0Vmd2pROGhvVHM3TFJ5NGRrOWVnY0FCOS1LM25MdVdINW8tNjZSS2NDSmhZbUZ4cFdOMWU4N1RObVVpNG43YTJRelY2R21VRDVjcm51cVk0b0ZISVdmNWFFcTdVOFJRdEZLamtrZXg0eER4cW9RbEt2R0lONGxjSXpYZ3RZbXRxbk9iaWdmREw0YVZB?oc=5) (Google News Energy Feed)
 - [AAA: Gas Prices Remain High as Volatility in the Strait of Hormuz Continues - WGMD – The Talk of Delmarva](https://news.google.com/rss/articles/CBMinAFBVV95cUxQc2UxenRKc3FCcENUTy02cGZFdVBtTzhRdV9naDZCTzZfYldNRTMxQ19JTmFfM0NyQmhfR0lOMVNFYmU2Rk81Ml9UU3hkZ1JvU3FuZXB0a0FmdHh0YUxWU1NzbGVmNkFUNm5HLUZtVVNYNGZjYjB3YzNVUFRUOThqek92OVVIZFIzeE1zbm40bkNvel9qQ0tPRVcyVXo?oc=5) (Google News Energy Feed)
-- [Jaishankar Flags India’s Concerns Over Russia Oil Tariff Law To Rubio - IndiaWest](https://news.google.com/rss/articles/CBMilgFBVV95cUxNN2NwTGktOXBDcnRlSUpzVDBPcUhuOS1pTnlHdTIxUFFscDU5SFJ3RUx2Tk5Yall0Y0NJb2VKbF9WcXBIbEZucjFWQWpHWGxZVXhaUE1FbnZQc2VTRUV5Sl9XZW1CbW45SHJueHBZRzVNQXliVk1NRFhCQVl3NG01MWhTaC1PX1BzNW5vbTJHa05ERmlqdEE?oc=5) (Google News Energy Feed)
 
 
 ---
 
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
-- **Supply Disruption Score ($S$):** `0.10`
-- **Price Pressure Shock ($\Delta P$):** `-0.50`
-- **Geopolitical Risk Score ($G$):** `0.80`
+- **Supply Disruption Score ($S$):** `0.60`
+- **Price Pressure Shock ($\Delta P$):** `+0.70`
+- **Geopolitical Risk Score ($G$):** `0.90`
 - **Demand Sentiment Score ($D$):** `-0.70`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -39,19 +39,19 @@ Decay Parameter Substitutions:
 - Daily retention multiplier: $\gamma = e^{-0.13863} \approx 0.87055$
 
 
-Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
-- **Day 0 (Initial Shock Target)**: $M_0 = 0.1000$
-- **Day 1 Decayed Shock**: $M_1 = 0.1000 \times 0.87055 = 0.0871$
-- **Day 2 Decayed Shock**: $M_2 = 0.1000 \times (0.87055)^2 = 0.0758$
-- **Day 3 Decayed Shock**: $M_3 = 0.1000 \times (0.87055)^3 = 0.0660$
-- **Day 4 Decayed Shock**: $M_4 = 0.1000 \times (0.87055)^4 = 0.0574$
-- **Day 5 (Target Horizon)**: $M_5 = 0.1000 \times 0.50000 = 0.0500$ (50.0% residual event memory)
+Numeric Retention Schedule for This Run ($M_0 = 0.6000$):
+- **Day 0 (Initial Shock Target)**: $M_0 = 0.6000$
+- **Day 1 Decayed Shock**: $M_1 = 0.6000 \times 0.87055 = 0.5223$
+- **Day 2 Decayed Shock**: $M_2 = 0.6000 \times (0.87055)^2 = 0.4547$
+- **Day 3 Decayed Shock**: $M_3 = 0.6000 \times (0.87055)^3 = 0.3959$
+- **Day 4 Decayed Shock**: $M_4 = 0.6000 \times (0.87055)^4 = 0.3446$
+- **Day 5 (Target Horizon)**: $M_5 = 0.6000 \times 0.50000 = 0.3000$ (50.0% residual event memory)
 
 ---
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.172) = \$3.120\text{/gal}$ (Delta: -\$0.172/gal, -5.40\%)
+- **National Wholesale**: $P = \$3.184 + (-\$0.019) = \$3.273\text{/gal}$ (Delta: -\$0.019/gal, -0.60\%)
 - **Tulsa, OK Retail**: $P = \$3.995 + (+\$0.178) = \$4.610\text{/gal}$ (Delta: +\$0.178/gal, +4.45\%)
 - **Newark, DE Retail**: $P = \$4.335 + (+\$0.091) = \$4.303\text{/gal}$ (Delta: +\$0.091/gal, +2.11\%)
 - **Cincinnati, OH/KY**: $P = \$4.389 + (+\$0.063) = \$4.347\text{/gal}$ (Delta: +\$0.063/gal, +1.43\%)
@@ -68,20 +68,20 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-25 04:04:17]: Downward price pressure (-0.50/gal shock) detected following 'Trump's 50% tariffs on Canada take effect as Carney vows to retaliate - ABC News - Breaking News, Latest News and Videos'. Supply disruption score S=0.10 and geopolitical risk G=0.80 indicate easing market tightness. Residual event memory decays from initial M₀=0.1000 to Day-5 retention M₅=0.0500.
+SUMMARY FOR RUN [2026-09-25 11:27:29]: Elevated upward price shock (+$0.70/gal) observed across wholesale futures. Event trigger 'Policy Backgrounder: Possible Higher Tariffs Under Sanctions Bill - The Conference Board' drove supply disruption to S=0.60 and geopolitical risk to G=0.90. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.5223 and Day-5 horizon retention M₅=0.3000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-25 04:04:17 (Mode: INTRADAY_REVISION), primary event trigger 'Trump's 50% tariffs on Canada take effect as Carney vows to retaliate - ABC News - Breaking News, Latest News and Videos' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=-0.50, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
-  - Day 0: M₀ = 0.1000
-  - Day 1: M₁ = 0.0871
-  - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
+During execution 2026-09-25 11:27:29 (Mode: INTRADAY_REVISION), primary event trigger 'Policy Backgrounder: Possible Higher Tariffs Under Sanctions Bill - The Conference Board' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.60, Price Pressure ΔP=+0.70, Geopolitical Risk G=0.90. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+  - Day 0: M₀ = 0.6000
+  - Day 1: M₁ = 0.5223
+  - Day 5: M₅ = 0.3000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.120/gal ($-0.172/gal, -5.40%)
+  • National Wholesale: $3.273/gal ($-0.019/gal, -0.60%)
   • Tulsa, OK Retail: $4.610/gal (+$0.178/gal, +4.45%)
   • Newark, DE Retail: $4.303/gal (+$0.091/gal, +2.11%)
   • Cincinnati, OH/KY: $4.347/gal (+$0.063/gal, +1.43%)
@@ -91,15 +91,15 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.213/gal (+$0.694/gal, +11.03%)
   • SF Bay Area Region: $6.325/gal (+$0.705/gal, +11.02%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.325/gal (+0.705/gal). Largest downward shift for this run: National Wholesale at $3.120/gal (-0.172/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.325/gal (+0.705/gal). Largest downward shift for this run: National Wholesale at $3.273/gal (-0.019/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-25 04:04:17]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Trump's 50% tariffs on Canada take effect as Carney vows to retaliate - ABC News - Breaking News, Latest News and Videos'. Overall price pressure vector sits at ΔP=-0.50/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-25 11:27:29]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Policy Backgrounder: Possible Higher Tariffs Under Sanctions Bill - The Conference Board'. Overall price pressure vector sits at ΔP=+0.70/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.90. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-25 04:04:17.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-25 11:27:29.*

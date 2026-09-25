@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T04:04:50.405384",
+  "timestamp": "2026-09-25T11:28:00.709240",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.995,
+    "current_price_per_gal": 4.114,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-25T04:04:18Z"
+      "timestamp": "2026-09-25T11:27:30Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,10 +28,10 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-09-30",
-    "current_base_price": 3.995,
-    "predicted_price_per_gal": 4.61,
+    "current_base_price": 4.114,
+    "predicted_price_per_gal": 4.729,
     "expected_change_dollars": 0.615,
-    "expected_change_percent": 15.39,
+    "expected_change_percent": 14.95,
     "projected_direction": "UP",
     "directional_hit_rate_historical": 0.6079,
     "historical_mae_dollars": 0.1069,
@@ -91,13 +91,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast +$0.615/gal (+15.39%): Driven primarily by Regional Logistics & Hub Delivery (+$0.184/gal), Refining Yield & Crack Spread (+$0.184/gal).",
+      "summary_text": "Tulsa OK forecast +$0.615/gal (+14.95%): Driven primarily by Regional Logistics & Hub Delivery (+$0.184/gal), Refining Yield & Crack Spread (+$0.184/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.184,
-          "impact_pct": 4.61,
+          "impact_pct": 4.47,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -105,7 +105,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.184,
-          "impact_pct": 4.61,
+          "impact_pct": 4.47,
           "share_pct": 30.0,
           "direction": "UP"
         },
@@ -113,7 +113,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.154,
-          "impact_pct": 3.85,
+          "impact_pct": 3.74,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -121,7 +121,7 @@
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
           "impact_dollars": 0.061,
-          "impact_pct": 1.53,
+          "impact_pct": 1.48,
           "share_pct": 10.0,
           "direction": "UP"
         },
@@ -129,7 +129,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.018,
-          "impact_pct": 0.45,
+          "impact_pct": 0.44,
           "share_pct": 3.0,
           "direction": "UP"
         },
@@ -137,7 +137,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.014,
-          "impact_pct": 0.35,
+          "impact_pct": 0.34,
           "share_pct": 2.0,
           "direction": "UP"
         }
@@ -149,7 +149,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.184,
-      "impact_pct": 4.61,
+      "impact_pct": 4.47,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -157,7 +157,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.184,
-      "impact_pct": 4.61,
+      "impact_pct": 4.47,
       "share_pct": 30.0,
       "direction": "UP"
     },
@@ -165,7 +165,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.154,
-      "impact_pct": 3.85,
+      "impact_pct": 3.74,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -173,7 +173,7 @@
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
       "impact_dollars": 0.061,
-      "impact_pct": 1.53,
+      "impact_pct": 1.48,
       "share_pct": 10.0,
       "direction": "UP"
     },
@@ -181,7 +181,7 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.018,
-      "impact_pct": 0.45,
+      "impact_pct": 0.44,
       "share_pct": 3.0,
       "direction": "UP"
     },
@@ -189,13 +189,13 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.014,
-      "impact_pct": 0.35,
+      "impact_pct": 0.34,
       "share_pct": 2.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast +$0.615/gal (+15.39%): Driven primarily by Regional Logistics & Hub Delivery (+$0.184/gal), Refining Yield & Crack Spread (+$0.184/gal).",
+    "summary_text": "Tulsa OK forecast +$0.615/gal (+14.95%): Driven primarily by Regional Logistics & Hub Delivery (+$0.184/gal), Refining Yield & Crack Spread (+$0.184/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
