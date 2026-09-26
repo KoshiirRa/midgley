@@ -691,5 +691,26 @@
       "curve_backwardation_flag": 1.0
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-26 02:28:34",
+    "as_of": "2026-09-26 02:28:34",
+    "valid_date": "2026-09-26",
+    "forward_features": {
+      "rbob_m1_price": 3.1968,
+      "rbob_m2_price": 3.1968,
+      "wti_m1_price": 92.44,
+      "wti_m2_price": 92.44,
+      "ho_m1_price": 4.5799,
+      "rbob_calendar_spread_m1_m2": 0.0,
+      "wti_calendar_spread_m1_m2": 0.0,
+      "crack_spread_11": 0.9958,
+      "crack_spread_321": 1.4569,
+      "curve_backwardation_flag": 0.0
+    },
+    "status": "SUCCESS"
   }
 ]
