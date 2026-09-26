@@ -58,21 +58,24 @@ def test_load_live_regional_intraday_events(mock_intraday_events):
     """Test loading and filtering live regional events for specific metro areas."""
     events_tulsa = load_live_regional_intraday_events(region_name="Tulsa", events_path=mock_intraday_events)
     assert isinstance(events_tulsa, pd.DataFrame)
-    assert len(events_tulsa) == 2  # Tulsa-specific + National
+    assert len(events_tulsa) == 1  # Tulsa-specific
     headlines_tulsa = events_tulsa["headline"].tolist()
     assert any("West Tulsa Refinery" in h for h in headlines_tulsa)
-    assert any("Middle East chokepoint" in h for h in headlines_tulsa)
     
     events_cincinnati = load_live_regional_intraday_events(region_name="Cincinnati", events_path=mock_intraday_events)
     assert isinstance(events_cincinnati, pd.DataFrame)
-    assert len(events_cincinnati) == 2  # Cincinnati-specific + National
+    assert len(events_cincinnati) == 1  # Cincinnati-specific
     headlines_cincinnati = events_cincinnati["headline"].tolist()
     assert any("Ohio River" in h for h in headlines_cincinnati)
     
+    events_national = load_live_regional_intraday_events(region_name="National", events_path=mock_intraday_events)
+    assert isinstance(events_national, pd.DataFrame)
+    assert len(events_national) == 1  # National-specific
+    assert "Middle East chokepoint" in events_national.iloc[0]["headline"]
+
     events_oakland = load_live_regional_intraday_events(region_name="Oakland", events_path=mock_intraday_events)
     assert isinstance(events_oakland, pd.DataFrame)
-    assert len(events_oakland) == 1  # Only National matches
-    assert "Middle East chokepoint" in events_oakland.iloc[0]["headline"]
+    assert len(events_oakland) == 0  # No Oakland event in mock fixture
 
 
 def test_regional_event_getters_fusion():

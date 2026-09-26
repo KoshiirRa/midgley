@@ -6,7 +6,7 @@ pipeline and 6 regional metro calibration hubs for display in AGENTS.md and the 
 """
 
 import os
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 def generate_multi_agent_pipeline_svg() -> str:
     """

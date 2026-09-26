@@ -9,6 +9,7 @@ import json
 import hmac
 import hashlib
 import logging
+import pandas as pd
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta, timezone
 
@@ -39,11 +40,11 @@ from src.regional_metadata import list_all_regional_metadata
 from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
 from src.tokentab_accounting import token_tab_manager
 from src.key_manager import global_key_manager
-from src.version import get_model_version
+from src.version import get_version, get_model_version
 
 logger = logging.getLogger(__name__)
 
-MIDGLEY_ADMIN_SECRET = os.environ.get("MIDGLEY_ADMIN_SECRET", "midgley_dev_admin_secret_2026")
+MIDGLEY_ADMIN_SECRET = os.environ.get("MIDGLEY_ADMIN_SECRET")
 
 
 class CreateKeyRequest(BaseModel):
@@ -57,12 +58,12 @@ class CreateKeyRequest(BaseModel):
 async def verify_admin_secret(
     x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")
 ) -> str:
-    """Method B Admin Auth Dependency: Verifies X-Admin-Secret header against MIDGLEY_ADMIN_SECRET."""
-    expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET", MIDGLEY_ADMIN_SECRET)
-    if not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+    """Method B Admin Auth Dependency: Verifies X-Admin-Secret header against MIDGLEY_ADMIN_SECRET (fails closed if unconfigured)."""
+    expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
+    if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
         raise HTTPException(
             status_code=401,
-            detail="Unauthorized: Invalid or missing X-Admin-Secret header."
+            detail="Unauthorized: Invalid, missing, or unconfigured X-Admin-Secret header."
         )
     return x_admin_secret
 
@@ -103,14 +104,26 @@ async def get_api_key_user(
             detail="Unauthorized: Missing API key. Pass key via X-API-Key header, Authorization: Bearer <token>, or ?api_key=<token>."
         )
 
-    is_valid, key_info, err_msg = global_key_manager.verify_key(token)
+    expected_global = os.environ.get("MIDGLEY_API_KEY")
+    if expected_global and token == expected_global:
+        key_info = {
+            "key_prefix": "mg_global_master",
+            "user_id": "master_admin",
+            "tier": "privileged",
+            "rate_limit_rpm": 1000,
+            "environment": "prod"
+        }
+        request.state.key_info = key_info
+        return key_info
+
+    is_valid, key_info, err_msg = await global_key_manager.verify_key_async(token)
     if not is_valid or not key_info:
         raise HTTPException(
             status_code=401,
             detail=f"Unauthorized: {err_msg or 'Invalid API key token.'}"
         )
 
-    allowed, retry_after = global_key_manager.check_rate_limit(
+    allowed, retry_after = await global_key_manager.check_rate_limit_async(
         key_prefix=key_info["key_prefix"],
         rate_limit_rpm=key_info.get("rate_limit_rpm", 30)
     )
@@ -124,7 +137,23 @@ async def get_api_key_user(
     request.state.key_info = key_info
     return key_info
 
-from src.version import get_version, get_model_version
+
+async def require_privileged_tier(
+    request: Request,
+    key_info: Dict[str, Any] = Depends(get_api_key_user)
+) -> Dict[str, Any]:
+    """
+    Tier Gating Dependency (Issue #437):
+    Requires 'privileged' API key tier for compute-heavy simulations, mutating graph ingestions, and external submissions.
+    """
+    tier = key_info.get("tier", "basic").lower()
+    if tier != "privileged":
+        raise HTTPException(
+            status_code=403,
+            detail=f"Forbidden: Action requires 'privileged' API key tier (current tier: '{tier}'). Please upgrade your API key or supply administrative credentials."
+        )
+    return key_info
+
 
 app = FastAPI(
     title="Midgley Gas Price Forecasting API Gateway",
@@ -414,17 +443,51 @@ BatchCombinedRequest.model_rebuild()
 HeadlineArenaSubmitRequest.model_rebuild()
 
 
-# Rate Limiting & Auth Middleware helper
+# Rate Limiting & Unified Auth Middleware helper (Issue #437)
 @app.middleware("http")
 async def add_rate_limit_headers(request: Request, call_next):
     expected_token = os.environ.get("MIDGLEY_API_KEY")
-    if expected_token:
-        auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
-        if not auth_header or auth_header.replace("Bearer ", "") != expected_token:
-            if not request.url.path.startswith(("/docs", "/redoc", "/openapi.json", "/.well-known", "/health", "/")):
+    is_testing = os.environ.get("TESTING") == "1"
+
+    if expected_token and not is_testing:
+        path = request.url.path
+        is_public = (
+            path == "/"
+            or path.startswith((
+                "/docs", "/redoc", "/openapi.json", "/.well-known", "/health",
+                "/status", "/metrics", "/api/v1/metrics", "/robots.txt", "/favicon.ico",
+                "/static", "/api/v1/webhooks", "/api/v1/events/webhook",
+                "/api/v1/events/queue-consumer", "/api/v1/events/poll"
+            ))
+        )
+
+        # Check for administrative headers
+        admin_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
+        admin_header = request.headers.get("X-Admin-Secret")
+        is_admin_auth = bool(admin_secret and admin_header and hmac.compare_digest(admin_header, admin_secret))
+
+        if not is_public and not is_admin_auth:
+            auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
+            token = request.query_params.get("api_key")
+            if auth_header:
+                if auth_header.startswith("Bearer "):
+                    token = auth_header[7:].strip()
+                else:
+                    token = auth_header.strip()
+
+            valid = False
+            if token:
+                if token == expected_token:
+                    valid = True
+                else:
+                    is_valid, _, _ = await global_key_manager.verify_key_async(token)
+                    if is_valid:
+                        valid = True
+
+            if not valid:
                 return JSONResponse(
                     status_code=401,
-                    content={"error": "Unauthorized", "message": "Invalid or missing API key"}
+                    content={"error": "Unauthorized", "message": "Invalid, missing, or unauthenticated API key."}
                 )
 
     response = await call_next(request)
@@ -518,36 +581,81 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
 
     projected_delta = None
     h_preds = {}
+    h_lowers = {}
+    h_uppers = {}
+    target_date = (pd.Timestamp.now() + pd.offsets.BDay(days)).strftime("%Y-%m-%d")
+
     try:
-        from src.prediction_logger import HISTORY_CSV_PATH
-        import pandas as pd
+        from src.prediction_logger import (
+            HISTORY_CSV_PATH,
+            compute_rolling_scoreboard_metrics,
+            get_regional_calibration_residuals,
+            compute_regional_residual_std
+        )
         if os.path.exists(HISTORY_CSV_PATH):
             df_hist = pd.read_csv(HISTORY_CSV_PATH)
-            if not df_hist.empty:
+            if not df_hist.empty and 'region' in df_hist.columns:
                 reg_df = df_hist[df_hist['region'] == region_code]
                 if not reg_df.empty:
-                    # Check for discrete multi-horizon records (Issue #314)
-                    for h_i in range(1, 6):
-                        if 'forecast_horizon_days' in reg_df.columns:
-                            sub_h = reg_df[reg_df['forecast_horizon_days'] == h_i]
-                            if not sub_h.empty:
-                                h_preds[h_i] = round(float(sub_h.iloc[-1]['predicted_5d_price']), 3)
+                    # Segregate prospective predictions from retroactive backtests (Issues #357, #389)
+                    is_retro = reg_df.get('is_retroactive_backtest', pd.Series(False, index=reg_df.index)).fillna(False).astype(bool)
+                    is_backtest_run = reg_df.get('run_type', pd.Series('', index=reg_df.index)).astype(str).str.upper() == 'RETROSPECTIVE_BACKTEST'
+                    prospective_df = reg_df[~is_retro & ~is_backtest_run]
 
-                    latest = reg_df.iloc[-1]
-                    hist_base = float(latest['current_base_price'])
-                    hist_pred = float(latest['predicted_5d_price'])
-                    projected_delta = hist_pred - hist_base
+                    target_pool = prospective_df if not prospective_df.empty else reg_df
+
+                    # Sort chronologically by log_timestamp if available
+                    if 'log_timestamp' in target_pool.columns:
+                        target_pool = target_pool.sort_values(by='log_timestamp')
+
+                    today_str = datetime.now().strftime("%Y-%m-%d")
+                    today_dt = datetime.now()
+
+                    # Filter strictly to active, unexpired forecasts (Issues #462, #474)
+                    if 'forecast_target_date' in target_pool.columns:
+                        active_pool = target_pool[target_pool['forecast_target_date'] > today_str]
+                    else:
+                        active_pool = pd.DataFrame()
+
+                    # Extract discrete multi-horizon records
+                    for h_i in range(1, 6):
+                        if not active_pool.empty and 'forecast_horizon_days' in active_pool.columns:
+                            sub_h = active_pool[active_pool['forecast_horizon_days'] == h_i]
+                            if not sub_h.empty:
+                                sub_latest = sub_h.iloc[-1]
+                                sub_base = float(sub_latest.get('current_base_price', base_price))
+                                sub_pred = float(sub_latest.get('predicted_5d_price', base_price))
+                                sub_delta = sub_pred - sub_base
+                                sub_delta = max(-0.75, min(0.75, sub_delta))
+                                pred_price_h = round(base_price + sub_delta, 3)
+                                h_preds[h_i] = pred_price_h
+
+                                # Dynamically calculate calibrated intervals centered on current predicted price (Issue #462)
+                                r_std = compute_regional_residual_std(region_code, window_days=30, horizon_days=h_i)
+                                h_lowers[h_i] = round(pred_price_h - 1.96 * r_std, 3)
+                                h_uppers[h_i] = round(pred_price_h + 1.96 * r_std, 3)
+
+                                if h_i == days:
+                                    target_date = str(sub_latest.get('forecast_target_date', ''))
+
+                    if days in h_preds:
+                        projected_delta = round(h_preds[days] - base_price, 3)
+                    else:
+                        # Fail-safe: persistence baseline without fabricating future maturity from stale records (Issue #474)
+                        projected_delta = 0.0
+                        target_date = (today_dt + timedelta(days=days)).strftime("%Y-%m-%d")
+    except (FileNotFoundError, pd.errors.EmptyDataError, pd.errors.ParserError, OSError) as e:
+        logger.debug(f"Transient or missing prediction history for {region_code}: {e}")
     except Exception as e:
         logger.debug(f"Notice reading prediction history for {region_code}: {e}")
 
     if projected_delta is None:
-        projected_delta = 0.085 if region_code == "Oakland_CA" else (0.045 if region_code in ["Tulsa_OK", "Cincinnati_OH", "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"] else 0.032)
+        projected_delta = 0.0
+
 
     predicted_price = round(base_price + projected_delta, 3)
     expected_pct = round((projected_delta / base_price) * 100, 2)
     direction = "UP" if projected_delta > 0 else ("DOWN" if projected_delta < 0 else "FLAT")
-
-    target_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
 
     # Compute 5-day trajectory points from discrete multi-horizon estimators or smooth delta fallback
     day_step = projected_delta / 5.0
@@ -556,6 +664,41 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     day_3 = h_preds.get(3, round(base_price + day_step * 3, 3))
     day_4 = h_preds.get(4, round(base_price + day_step * 4, 3))
     day_5 = h_preds.get(5, round(predicted_price, 3))
+
+    # Compute dynamic rolling accuracy metrics from ledger (Issue #440)
+    score_metrics = compute_rolling_scoreboard_metrics(
+        window_days=30,
+        region=region_code,
+        horizon_days=days if days <= 5 else 5,
+        include_retroactive=False
+    )
+    if score_metrics.get("total_evaluations", 0) < 5:
+        score_metrics = compute_rolling_scoreboard_metrics(
+            window_days="all",
+            region=region_code,
+            horizon_days=days if days <= 5 else 5,
+            include_retroactive=False
+        )
+
+    hit_rate = round(score_metrics.get("directional_hit_rate_pct", 51.1) / 100.0, 4)
+    mae_val = round(score_metrics.get("mae_dollars", 0.149), 4)
+    total_evals = score_metrics.get("total_evaluations", 0)
+
+    # Compute discrete-horizon conformal / calibrated prediction intervals (Issue #358, #436)
+    resids = get_regional_calibration_residuals(region=region_code, horizon_days=days, window_days=60)
+    calibration_method = "conformal" if len(resids) >= 10 else "gaussian_scaled"
+    if days in h_lowers and days in h_uppers:
+        lower_95ci = h_lowers[days]
+        upper_95ci = h_uppers[days]
+    elif len(resids) >= 10:
+        from src.models import compute_conformal_prediction_intervals
+        low_b, high_b = compute_conformal_prediction_intervals(predicted_price, resids, alpha=0.05)
+        lower_95ci = float(low_b[0] if hasattr(low_b, '__len__') else low_b)
+        upper_95ci = float(high_b[0] if hasattr(high_b, '__len__') else high_b)
+    else:
+        h_std = compute_regional_residual_std(region=region_code, window_days=30, horizon_days=days)
+        lower_95ci = round(predicted_price - (1.96 * h_std), 4)
+        upper_95ci = round(predicted_price + (1.96 * h_std), 4)
 
     attr = compute_locale_feature_attribution_breakdown(
         region_code=region_code,
@@ -580,8 +723,13 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             "expected_change_dollars": round(projected_delta, 3),
             "expected_change_percent": expected_pct,
             "projected_direction": direction,
-            "directional_hit_rate_historical": 0.6079,
-            "historical_mae_dollars": 0.1069,
+            "prediction_lower_95ci": lower_95ci,
+            "prediction_upper_95ci": upper_95ci,
+            "calibration_method": calibration_method,
+            "calibration_sample_size": len(resids),
+            "directional_hit_rate_historical": hit_rate,
+            "historical_mae_dollars": mae_val,
+            "evaluation_sample_size": total_evals,
             "day_1_price": day_1,
             "day_2_price": day_2,
             "day_3_price": day_3,
@@ -600,19 +748,38 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
 def get_forecast_scoreboard(
     locale: Optional[str] = Query(None, description="Optional locale code or region (e.g., 'tulsa', 'oakland', 'national', 'all')"),
     window: Optional[str] = Query("30", description="Rolling evaluation window in days ('30', '60', '90', or 'all')"),
-    horizon: Optional[str] = Query(None, description="Optional forecast horizon in days ('1', '2', '3', '4', '5', or 'all')")
+    horizon: Optional[str] = Query(None, description="Optional forecast horizon in days ('1', '2', '3', '4', '5', or 'all')"),
+    include_retroactive: Optional[bool] = Query(False, description="Whether to include retroactive historical backtest records or restrict strictly to forward out-of-time predictions")
 ):
     """
     Returns rolling out-of-time forecast accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
     Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices.
-    Supports granular filtering by forecast horizon (1d through 5d).
+    Supports granular filtering by forecast horizon (1d through 5d) and retroactive backtest segregation (Issue #389).
     """
     region_code = _normalize_locale(locale) if (locale and str(locale).lower() not in ["all", "none", ""]) else None
 
-    summary_metrics = compute_rolling_scoreboard_metrics(window_days=window, region=region_code, horizon_days=horizon)
-    regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window, horizon_days=horizon)
-    horizon_breakdown = compute_horizon_scoreboard_breakdown(window_days=window, region=region_code)
-    recent_evals = get_recent_evaluated_records(region=region_code, limit=50, horizon_days=horizon)
+    summary_metrics = compute_rolling_scoreboard_metrics(
+        window_days=window, 
+        region=region_code, 
+        horizon_days=horizon,
+        include_retroactive=bool(include_retroactive)
+    )
+    regional_breakdown = compute_regional_scoreboard_breakdown(
+        window_days=window, 
+        horizon_days=horizon,
+        include_retroactive=bool(include_retroactive)
+    )
+    horizon_breakdown = compute_horizon_scoreboard_breakdown(
+        window_days=window, 
+        region=region_code,
+        include_retroactive=bool(include_retroactive)
+    )
+    recent_evals = get_recent_evaluated_records(
+        region=region_code, 
+        limit=50, 
+        horizon_days=horizon,
+        include_retroactive=bool(include_retroactive)
+    )
 
     return {
         "status": "success",
@@ -622,7 +789,8 @@ def get_forecast_scoreboard(
             "locale": locale or "all",
             "region_code": region_code or "ALL",
             "window_days": window,
-            "horizon": horizon or "all"
+            "horizon": horizon or "all",
+            "include_retroactive": bool(include_retroactive)
         },
         "summary": summary_metrics,
         "horizon_breakdown": horizon_breakdown,
@@ -728,6 +896,9 @@ def get_purged_cv_metrics(
     
     return {
         "status": "success",
+        "demonstration_type": "SYNTHETIC_ILLUSTRATIVE_DEMO",
+        "is_synthetic_demonstration": True,
+        "note": "Demonstration endpoint executing PurgedGroupTimeSeriesSplit and CPCV evaluation across synthetic feature matrices for algorithmic verification (Issue #440).",
         "timestamp": datetime.now().isoformat(),
         "purged_cv_evaluation": res
     }
@@ -820,14 +991,27 @@ def get_system_quota():
 
 @app.get("/api/v1/system/cache-status", summary="Get 3-Tier Cache Gateway Status & Edge Probes", tags=["System & Health"])
 def get_system_cache_status(
-    probe: bool = Query(False, description="Whether to execute active roundtrip write/read probe against edge databases")
+    probe: bool = Query(False, description="Whether to execute active roundtrip write/read probe against edge databases"),
+    x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")
 ):
     """
     Returns statistics and configuration for the 3-Tier caching gateway (Turso Edge, Cloudflare D1, Local SQLite),
-    along with optional live connectivity probe diagnostics (Issue #301).
+    along with optional live connectivity probe diagnostics (Issue #301, Issue #437).
+    Active connectivity write/read probes require administrative authentication (X-Admin-Secret).
     """
     stats = global_cache.get_stats()
-    probes = global_cache.test_edge_connectivity("all") if probe else None
+    probes = None
+    if probe:
+        expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
+        is_testing = os.environ.get("TESTING") == "1"
+        if not is_testing:
+            if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+                raise HTTPException(
+                    status_code=401,
+                    detail="Unauthorized: Active cache connectivity write/read probe requires a valid X-Admin-Secret header."
+                )
+        probes = global_cache.test_edge_connectivity("all")
+
     return {
         "status": "success",
         "timestamp": datetime.now().isoformat(),
@@ -1146,6 +1330,32 @@ def get_bts_freight_tsi_endpoint(
     }
 
 
+@app.get("/api/v1/macro/traffic-volume", summary="Get U.S. FHWA Monthly Traffic Volume Trends (TVT) & VMT Telemetry", tags=["Physical Data Feeds"])
+def get_fhwa_traffic_volume_endpoint(
+    start_date: Optional[str] = Query("2022-01-01", description="Historical start date (YYYY-MM-DD)"),
+    summary_only: bool = Query(False, description="Return only the latest demand momentum summary if true")
+):
+    """
+    Returns official Federal Highway Administration (FHWA) Monthly Traffic Volume Trends (TVT),
+    estimated vehicle-miles traveled (VMT), and macroeconomic passenger fuel demand momentum (Issue #369).
+    """
+    from src.bts_transportation import FHWATrafficVolumeConnector
+    connector = FHWATrafficVolumeConnector()
+    if summary_only:
+        return connector.get_fhwa_current_demand_summary()
+
+    df = connector.fetch_fhwa_vmt_dataset(start_date=start_date)
+    summary = connector.get_fhwa_current_demand_summary()
+    records = df.assign(date=df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records") if not df.empty else []
+    return {
+        "status": "SUCCESS",
+        "as_of": datetime.now(timezone.utc).isoformat(),
+        "demand_summary": summary,
+        "sample_count": len(records),
+        "history": records
+    }
+
+
 @app.post("/api/v1/forecast/batch", dependencies=[Depends(get_api_key_user)], summary="Get Batch 5-Day Forecasts for Multiple Locales")
 def get_batch_forecast(req: BatchForecastRequest):
     """
@@ -1258,11 +1468,22 @@ def get_forecast_scenarios(
 
 
 @app.post("/api/v1/forecast/simulate", dependencies=[Depends(get_api_key_user)], summary="Simulate Counterfactual Market Shocks")
-def simulate_shock(req: SimulateRequest):
+def simulate_shock(req: SimulateRequest, request: Request = None):
     """
     Evaluates counterfactual physical, refinery outage, weather disaster, or geopolitical shock scenarios
-    with seasonal and climatological plausibility gating (Issue #300).
+    with seasonal and climatological plausibility gating (Issue #300, Issue #437).
     """
+    # Tier Gating Check for LLM cohort simulation & custom headlines (Issue #437)
+    if req.enable_cohort_simulation or req.custom_headline:
+        key_info = getattr(request, "state", None) and getattr(request.state, "key_info", None)
+        tier = (key_info.get("tier") if key_info else "basic") or "basic"
+        is_testing = os.environ.get("TESTING") == "1"
+        if not is_testing and tier.lower() != "privileged":
+            raise HTTPException(
+                status_code=403,
+                detail=f"Forbidden: Multi-agent LLM cohort simulations and custom headlines require 'privileged' API key tier (current tier: '{tier}')."
+            )
+
     scenario_info = SCENARIOS_CATALOG.get(req.scenario_id)
     if not scenario_info:
         raise HTTPException(
@@ -1359,11 +1580,20 @@ def simulate_shock(req: SimulateRequest):
     return resp
 
 
-def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -> bool:
+def verify_webhook_signature(
+    raw_body: bytes,
+    signature_header: Optional[str],
+    timestamp_header: Optional[str] = None,
+    max_age_seconds: int = 300
+) -> bool:
+    """
+    Validates HMAC-SHA256 signature with replay-safe timestamp freshness window (Issue #437).
+    Supports 'X-Midgley-Signature: sha256=<hex>' and 't=<timestamp>,v1=<hex>' formatting.
+    """
     secret_key = os.environ.get("MIDGLEY_WEBHOOK_SECRET")
     env_name = os.environ.get("MIDGLEY_ENV", os.environ.get("ENVIRONMENT", "prod")).lower()
     is_testing = os.environ.get("TESTING") == "1"
-    
+
     if not secret_key:
         if is_testing or env_name in ("dev", "development", "test", "testing"):
             return True
@@ -1372,7 +1602,31 @@ def verify_webhook_signature(raw_body: bytes, signature_header: Optional[str]) -
     if not signature_header:
         return False
 
-    clean_sig = signature_header.replace("sha256=", "").strip()
+    clean_sig = signature_header.strip()
+    ts_val = timestamp_header
+
+    if "t=" in signature_header and ("v1=" in signature_header or "sha256=" in signature_header):
+        parts = dict(item.split("=", 1) for item in signature_header.split(",") if "=" in item)
+        ts_val = parts.get("t", ts_val)
+        clean_sig = parts.get("v1", parts.get("sha256", clean_sig)).strip()
+    else:
+        clean_sig = clean_sig.replace("sha256=", "").strip()
+
+    if ts_val:
+        try:
+            ts_float = float(ts_val)
+            now = datetime.now(timezone.utc).timestamp()
+            if abs(now - ts_float) > max_age_seconds:
+                logger.warning(f"Webhook rejected: Timestamp drift {abs(now - ts_float):.1f}s exceeds {max_age_seconds}s window.")
+                return False
+            ts_payload = f"{ts_val}.".encode("utf-8") + raw_body
+            expected_ts_sig = hmac.new(secret_key.encode("utf-8"), ts_payload, hashlib.sha256).hexdigest()
+            if hmac.compare_digest(expected_ts_sig, clean_sig):
+                return True
+        except (ValueError, TypeError):
+            logger.warning(f"Webhook rejected: Invalid timestamp format '{ts_val}'")
+            return False
+
     expected_sig = hmac.new(secret_key.encode("utf-8"), raw_body, hashlib.sha256).hexdigest()
     return hmac.compare_digest(expected_sig, clean_sig)
 
@@ -1418,7 +1672,8 @@ class WebhookRequest(BaseModel):
 async def ingest_event_webhook(
     request: Request,
     req: WebhookRequest,
-    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature")
+    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature"),
+    x_signature_timestamp: Optional[str] = Header(None, alias="X-Signature-Timestamp")
 ):
     """
     Strategy 4: Receives incoming breaking news headlines pushed by external webhooks
@@ -1427,10 +1682,10 @@ async def ingest_event_webhook(
     Fails closed in non-development environments when secret is unconfigured.
     """
     raw_body = await request.body()
-    if not verify_webhook_signature(raw_body, x_midgley_signature):
+    if not verify_webhook_signature(raw_body, x_midgley_signature, timestamp_header=x_signature_timestamp):
         raise HTTPException(
             status_code=401,
-            detail="Unauthorized webhook request: Invalid or missing X-Midgley-Signature HMAC-SHA256 header."
+            detail="Unauthorized webhook request: Invalid, expired, or missing X-Midgley-Signature HMAC-SHA256 header."
         )
 
     if not req.headline:
@@ -1478,17 +1733,18 @@ class QueueBatchRequest(BaseModel):
 async def ingest_queue_batch_events(
     request: Request,
     req: QueueBatchRequest,
-    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature")
+    x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature"),
+    x_signature_timestamp: Optional[str] = Header(None, alias="X-Signature-Timestamp")
 ):
     """
-    Issue #194: Receives batch queued event payloads pushed by Cloudflare Queue consumer or local queue worker.
+    Issue #194, Issue #437: Receives batch queued event payloads pushed by Cloudflare Queue consumer or local queue worker.
     Processes queued events asynchronously, running anomaly detection, deduplication, and regional metro updates.
     """
     raw_body = await request.body()
-    if not verify_webhook_signature(raw_body, x_midgley_signature):
+    if not verify_webhook_signature(raw_body, x_midgley_signature, timestamp_header=x_signature_timestamp):
         raise HTTPException(
             status_code=401,
-            detail="Unauthorized queue request: Invalid or missing X-Midgley-Signature HMAC-SHA256 header."
+            detail="Unauthorized queue request: Invalid, expired, or missing X-Midgley-Signature HMAC-SHA256 header."
         )
 
     from src.intraday_event_monitor import IntradayEventMonitor
@@ -1603,10 +1859,11 @@ def get_headline_arena_status():
     }
 
 
-@app.post("/api/v1/connectors/headline-arena/submit", dependencies=[Depends(get_api_key_user)], summary="Submit Forecast to Headline Arena", tags=["Connectors & Integrations"])
+@app.post("/api/v1/connectors/headline-arena/submit", dependencies=[Depends(require_privileged_tier)], summary="Submit Forecast to Headline Arena", tags=["Connectors & Integrations"])
 def submit_headline_arena_forecast(req: HeadlineArenaSubmitRequest):
     """
     Submits or dry-runs a forecast to Headline Arena.
+    Requires 'privileged' API key tier (Issue #437).
     In dev environments, executes dry-run by default unless live_in_dev is explicitly True.
     """
     from src.headline_arena_connector import HeadlineArenaConnector
@@ -1670,9 +1927,9 @@ class GraphIngestPayload(BaseModel):
     model_attribution: Optional[str] = "api_user"
 
 
-@app.post("/api/v1/graph/ingest", dependencies=[Depends(get_api_key_user)], summary="Ingest Event Shock Memory into Knowledge Graph", tags=["Knowledge Graph"])
+@app.post("/api/v1/graph/ingest", dependencies=[Depends(require_privileged_tier)], summary="Ingest Event Shock Memory into Knowledge Graph", tags=["Knowledge Graph"])
 def post_graph_ingest(payload: GraphIngestPayload):
-    """Ingests qualitative event into Knowledge Graph memory store."""
+    """Ingests qualitative event into Knowledge Graph memory store (requires privileged tier)."""
     from src.knowledge_graph import kg_engine
     scores = {
         "geopolitical_risk": payload.geopolitical_risk,
@@ -1711,21 +1968,59 @@ def get_ai_plugin_manifest():
     }
 
 
-# MCP SSE Transport endpoints
+# MCP SSE Transport endpoints (Issue #431)
 try:
     from mcp.server.sse import SseServerTransport
     sse_transport = SseServerTransport("/mcp/messages")
 
-    @app.get("/mcp/sse", summary="MCP Server SSE Connection Endpoint")
-    async def handle_mcp_sse(request: Request):
-        """HTTP SSE endpoint for MCP clients."""
-        from src.mcp_server import app as mcp_app
+    @app.get("/mcp/sse", summary="MCP Server SSE Connection Endpoint", dependencies=[Depends(get_api_key_user)])
+    async def handle_mcp_sse(request: Request, key_info: Dict[str, Any] = Depends(get_api_key_user)):
+        """
+        HTTP SSE endpoint for MCP clients (Issue #431).
+        Requires API key authentication. Binds active SSE connection to authenticated caller identity & tier.
+        """
+        from src.mcp_server import app as mcp_app, set_active_mcp_session_context
+        set_active_mcp_session_context(key_info)
         async with sse_transport.connect_sse(request.scope, request.receive, request._send) as (read_stream, write_stream):
             await mcp_app.run(read_stream, write_stream, mcp_app.create_initialization_options())
 
     @app.post("/mcp/messages", summary="MCP Server Post Messages Endpoint", include_in_schema=False)
-    async def handle_mcp_messages(request: Request):
-        """HTTP Post message endpoint for MCP clients."""
+    async def handle_mcp_messages(
+        request: Request,
+        x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
+        authorization: Optional[str] = Header(None),
+        api_key: Optional[str] = Query(None)
+    ):
+        """
+        HTTP Post message endpoint for MCP clients (Issue #431).
+        Verifies caller credentials and propagates authenticated context to MCP tool execution.
+        """
+        key_info = getattr(request.state, "key_info", None)
+        if not key_info:
+            token = x_api_key or api_key
+            if not token and authorization:
+                parts = authorization.split()
+                token = parts[1] if len(parts) == 2 and parts[0].lower() == "bearer" else authorization
+
+            is_testing = os.environ.get("TESTING") == "1"
+            if is_testing and not token:
+                key_info = {
+                    "key_prefix": "mg_test_bypass",
+                    "user_id": "test_suite_runner",
+                    "tier": "privileged",
+                    "rate_limit_rpm": 1000,
+                    "environment": "dev"
+                }
+            elif token:
+                key_info = await get_api_key_user(request, x_api_key=x_api_key, authorization=authorization, api_key=api_key)
+            else:
+                raise HTTPException(
+                    status_code=401,
+                    detail="Unauthorized: Missing API key. MCP message post requests require authentication."
+                )
+
+        from src.mcp_server import set_active_mcp_session_context
+        set_active_mcp_session_context(key_info)
         await sse_transport.handle_post_message(request.scope, request.receive, request._send)
 except Exception as e:
     logger.warning(f"Could not initialize MCP SSE transport: {e}")

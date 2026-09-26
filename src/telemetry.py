@@ -10,6 +10,7 @@ import json
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from src.storage_io import atomic_write_json, file_lock
 
 logger = logging.getLogger(__name__)
 
@@ -86,8 +87,8 @@ def _save_telemetry_ledger(ledger: dict) -> None:
             ledger["api_events"] = ledger["api_events"][-1000:]
         if len(ledger.get("memory_events", [])) > 1000:
             ledger["memory_events"] = ledger["memory_events"][-1000:]
-        with open(TELEMETRY_LEDGER_PATH, "w", encoding="utf-8") as f:
-            json.dump(ledger, f, indent=2)
+        with file_lock(TELEMETRY_LEDGER_PATH):
+            atomic_write_json(TELEMETRY_LEDGER_PATH, ledger, indent=2)
     except Exception as e:
         logger.debug(f"Error writing telemetry ledger: {e}")
 

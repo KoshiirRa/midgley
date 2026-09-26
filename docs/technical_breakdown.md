@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-26 00:26:53`  
+**Log Timestamp:** `2026-09-25 17:29:58`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Explosions hit plant and refinery in Ulyanovsk and Perm ᐉ News from Fakti.bg - World - fakti.bg  
+**Primary Event Trigger:** Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Explosions hit plant and refinery in Ulyanovsk and Perm ᐉ News from Fakti.bg - World - fakti.bg
+- **Headline Trigger:** Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube
 - **Active Ingested News Links:**
-- [Explosions hit plant and refinery in Ulyanovsk and Perm ᐉ News from Fakti.bg - World - fakti.bg](https://news.google.com/rss/articles/CBMimAFBVV95cUxNTjh5eEtWLUxLZDJrcnFRVmJCdFdtejFJWHl5LTBEOU43czBLX0pqU0ptTVY1OXhpNl91Skc3RWNrRDJuS3RFeWMxbkZMeW52a2JpOU9za1lKbV9TQ3lTeXpQT28tNFFNTy1nRVMwbFVpNnp5Q2g0U3dQOUR5ZTNjSUFja1NoRjhuN1A5VVA4RmFSMFJIOWUyUw?oc=5) (Google News Energy Feed)
-- [India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times](https://news.google.com/rss/articles/CBMi9wFBVV95cUxQeERNS3dRYU1POEN2UElvXzFKZ0QySFRSNE1NSjVvSU5jYnhnQ29xbUdhRlA1V2NkV09sTFloQWo4ek1BMjZVaHptSkFRQ21GU3JRY2dzakkwSWVkZktXVXd6eVdJdk1JWGpzWU9IQnlDbk83b0xDZEdyejFMaC1uQTRtU1VhWS1DdExkRFRWWVF0empIdWZuUEd1X1JROE1JLTdRSHpSRUxuTE1wVlpuQUhQN3RyZm1TVUg1V1duYV9DcHdGdmdWMmo1eC1VXzk3VmtIZXBkaFM5OUphMmZmNm9EUkZCU3BRcjZvdEw3WDQwR2VhUlZ30gH8AUFVX3lxTFBsaHFlc1lMWHhEc19MOXhiMTU2cXVrWlo4SWRWaXBPU1hfTmNwWkhaaThLdmxWUkFBTDFPcldRSndhOWZ3cWZ3bDdMRGFKN1hiSG1BcDlCZUNLanFJczFtV0xaZ1BEeXdOYjExRlhYTlE1UVZEcmxyaUk3dFhHLWJud25jd2FFSjJmZThLMWFqbDFvQ0U3RFdlRGM0YWh4Wlh0elpQTXdfZW1kcENpQjBmTUJWT2JacldUSUh4bWxKSS1icURaT2ZoYThnVjdnYkd2emIzQzFTWVhDcFB6N2M1MG9MM25yS0YtMFhuYnd5cEhuQ21QNkdscTktSA?oc=5) (Google News Energy Feed)
-- [States Sue Over Latest Trump Tariff Attempt - EnergyNow.com](https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5) (Google News Energy Feed)
+- [Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube](https://news.google.com/rss/articles/CBMiXEFVX3lxTE5WTXIzTzRqZGNKeDF4UHF4b3YwRFJQSjdwZVhfcUpkbEJBcEpDU0VWTWIwUmlHMVp2eWJmakc5MWxtR0IzaW40Wjd4RjlGRXpKNlVCYXh5YnktY0x0?oc=5) (Google News Energy Feed)
+- [EU Pressures UK to Match Its Tariffs on Chinese-Made Cars - Crude Oil Prices Today | OilPrice.com](https://news.google.com/rss/articles/CBMiswFBVV95cUxQMFRoNnBTYTBXaVlweFRyZVBkX19IMnE2QUZ0c3hpNUx2R0lIZTQtdWE1VkVaa1dnODZZUU16blRTbk40V3JvMmVmNm5lU2U3S01WMXJzaE5IYXBiSFg1UXh4SnNFdktKWVRuRllEWW5MSWNjR3lqQWFzV2pON2ZwY1ZvbFRtWXVJNFAzTnpmeVBmOTVxM2h5aDdJRVhSYzRYR2taMk0xTi1TTU9LUDVGTk9UQdIBuAFBVV95cUxOVThjeWctNll6RjJ4RkdhdUplVU02Y3kydk5NbXJxcVhOdVRCSm9fWDVLaHBvYnlNcW90T3IyWDFkSmpQY0RERWpxbUYyRm1OYWVna2E1bFdqMGowVW9LeUMxbnV0NUlpT0hEOVV0NTQ2Y0tfd3B3cXV1ZWdzRDZTTnJZSld5S3c2bUZGZU93MS05LVhsZU5vSEVyZUhPd2VEQnZyZFpMVkNQNkNncUJySTgybWFmWEJN?oc=5) (Google News Energy Feed)
+- [China Gets US Tariff Protection, India Major Target For Russian Oil Purchase - Deccan Chronicle](https://news.google.com/rss/articles/CBMixAFBVV95cUxPaDJEZGxoUVFEY3J2VDF4R0lobUJtVnp1MDZuRldBT2x5NkV2bnk2bmk2RlpHRHlaVENaQVhwVElaYkRndG9Da2tQUjdTZjkzS0tBdm9Zdk9sdUZDRkk0dXpnczdHUzU4YS12cWJWdWVwd1NwdTVfYkhjbV9HWklsX2dTNk5ic04tSXh5aVA3RHlFT0xqbjZoaDg3bUh5T0g0cXYyaEtKTWVfTGdOblhTaXVqV3c2MmhlcXBqZDdkYzRPMW560gHKAUFVX3lxTE1RSUp5WlkxekIxeEI3NGZHUnlfMEVBb2dMX0I5c25iYUtySzgzZ0JtZHUtRnhvTk5zdkhYUjRUV3lXTDFMVzg4a0owbmRESzA2MWZoUnF0cVFrTkJ2aGtKSTdyZjRXQXRVLXNsNlI0dDBNZXRod3VBZ05iZ0VBWm93elVfcTdfYkxVS0gwVmdPcGtIOEtjSWxGMWlpVUtHeGpmakp3akJTV1dKc3lleUJjR1FyT1BWQjAta2JWMm5zMXhEaVhPRXZCMXc?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -20,8 +20,8 @@
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
 - **Supply Disruption Score ($S$):** `0.80`
-- **Price Pressure Shock ($\Delta P$):** `+0.80`
-- **Geopolitical Risk Score ($G$):** `0.70`
+- **Price Pressure Shock ($\Delta P$):** `+0.52`
+- **Geopolitical Risk Score ($G$):** `0.80`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -51,15 +51,15 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (+\$0.013) = \$3.286\text{/gal}$ (Delta: +\$0.013/gal, +0.40\%)
-- **Tulsa, OK Retail**: $P = \$4.114 + (+\$0.042) = \$4.614\text{/gal}$ (Delta: +\$0.042/gal, +1.01\%)
-- **Newark, DE Retail**: $P = \$4.331 + (-\$0.021) = \$4.305\text{/gal}$ (Delta: -\$0.021/gal, -0.48\%)
-- **Cincinnati, OH/KY**: $P = \$4.359 + (-\$0.030) = \$4.328\text{/gal}$ (Delta: -\$0.030/gal, -0.70\%)
-- **Greenville, NC Retail**: $P = \$4.168 + (-\$0.018) = \$4.142\text{/gal}$ (Delta: -\$0.018/gal, -0.42\%)
-- **Charlotte, NC Retail**: $P = \$4.205 + (-\$0.001) = \$4.191\text{/gal}$ (Delta: -\$0.001/gal, -0.03\%)
-- **Port St. Lucie, FL Retail**: $P = \$4.470 + (+\$0.005) = \$4.455\text{/gal}$ (Delta: +\$0.005/gal, +0.11\%)
-- **Oakland, CA Retail**: $P = \$6.354 + (+\$0.744) = \$6.341\text{/gal}$ (Delta: +\$0.744/gal, +11.70\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
-- **SF Bay Area Region**: $P = \$6.477 + (+\$0.766) = \$6.464\text{/gal}$ (Delta: +\$0.766/gal, +11.83\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **National Wholesale**: $P = \$3.184 + (+\$0.000) = \$3.250\text{/gal}$ (Delta: +\$0.000/gal, 0.00\%)
+- **Tulsa, OK Retail**: $P = \$3.994 + (+\$0.081) = \$4.091\text{/gal}$ (Delta: +\$0.081/gal, +2.04\%)
+- **Newark, DE Retail**: $P = \$4.353 + (+\$0.033) = \$4.447\text{/gal}$ (Delta: +\$0.033/gal, +0.77\%)
+- **Cincinnati, OH/KY**: $P = \$4.441 + (+\$0.017) = \$4.517\text{/gal}$ (Delta: +\$0.017/gal, +0.39\%)
+- **Greenville, NC Retail**: $P = \$3.250 + (-\$0.249) = \$2.894\text{/gal}$ (Delta: -\$0.249/gal, -7.66\%)
+- **Charlotte, NC Retail**: $P = \$3.350 + (+\$0.667) = \$3.518\text{/gal}$ (Delta: +\$0.667/gal, +19.90\%)
+- **Port St. Lucie, FL Retail**: $P = \$4.286 + (+\$0.003) = \$4.350\text{/gal}$ (Delta: +\$0.003/gal, +0.07\%)
+- **Oakland, CA Retail**: $P = \$4.950 + (-\$0.438) = \$4.469\text{/gal}$ (Delta: -\$0.438/gal, -8.84\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **SF Bay Area Region**: $P = \$5.050 + (-\$0.449) = \$4.559\text{/gal}$ (Delta: -\$0.449/gal, -8.89\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 - **ULSD Distillate Crack Engine (WIP)**: $P_{\text{ULSD}} = \$2.850\text{/gal}$, Distillate Crack Spread = $\$0.742\text{/gal}$, 3-2-1 Crack Margin = $\$0.685\text{/gal}$ *(Experimental Work-In-Progress undergoing multi-week feedback loop empirical evaluation)*
 
 
@@ -68,38 +68,38 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-26 00:26:53]: Elevated upward price shock (+$0.80/gal) observed across wholesale futures. Event trigger 'Explosions hit plant and refinery in Ulyanovsk and Perm ᐉ News from Fakti.bg - World - fakti.bg' drove supply disruption to S=0.80 and geopolitical risk to G=0.70. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-25 17:29:58]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-26 00:26:53 (Mode: INTRADAY_REVISION), primary event trigger 'Explosions hit plant and refinery in Ulyanovsk and Perm ᐉ News from Fakti.bg - World - fakti.bg' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.80, Geopolitical Risk G=0.70. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-25 17:29:58 (Mode: INTRADAY_REVISION), primary event trigger 'Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.286/gal (+$0.013/gal, +0.40%)
-  • Tulsa, OK Retail: $4.614/gal (+$0.042/gal, +1.01%)
-  • Newark, DE Retail: $4.305/gal ($-0.021/gal, -0.48%)
-  • Cincinnati, OH/KY: $4.328/gal ($-0.030/gal, -0.70%)
-  • Greenville, NC Retail: $4.142/gal ($-0.018/gal, -0.42%)
-  • Charlotte, NC Retail: $4.191/gal ($-0.001/gal, -0.03%)
-  • Port St. Lucie, FL Retail: $4.455/gal (+$0.005/gal, +0.11%)
-  • Oakland, CA Retail: $6.341/gal (+$0.744/gal, +11.70%)
-  • SF Bay Area Region: $6.464/gal (+$0.766/gal, +11.83%)
+  • National Wholesale: $3.250/gal ($0.000/gal, 0.00%)
+  • Tulsa, OK Retail: $4.091/gal (+$0.081/gal, +2.04%)
+  • Newark, DE Retail: $4.447/gal (+$0.033/gal, +0.77%)
+  • Cincinnati, OH/KY: $4.517/gal (+$0.017/gal, +0.39%)
+  • Greenville, NC Retail: $2.894/gal ($-0.249/gal, -7.66%)
+  • Charlotte, NC Retail: $3.518/gal (+$0.667/gal, +19.90%)
+  • Port St. Lucie, FL Retail: $4.350/gal (+$0.003/gal, +0.07%)
+  • Oakland, CA Retail: $4.469/gal ($-0.438/gal, -8.84%)
+  • SF Bay Area Region: $4.559/gal ($-0.449/gal, -8.89%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.464/gal (+0.766/gal). Largest downward shift for this run: Cincinnati, OH/KY at $4.328/gal (-0.030/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: Charlotte, NC Retail at $3.518/gal (+0.667/gal). Largest downward shift for this run: SF Bay Area Region at $4.559/gal (-0.449/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-26 00:26:53]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Explosions hit plant and refinery in Ulyanovsk and Perm ᐉ News from Fakti.bg - World - fakti.bg'. Overall price pressure vector sits at ΔP=+0.80/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-25 17:29:58]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Title: 100% Tariff + Oil Shock: India’s Double Economic Challenge? - YouTube'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.70. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-26 00:26:53.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-25 17:29:58.*

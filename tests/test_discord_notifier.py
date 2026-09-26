@@ -48,6 +48,8 @@ class TestDiscordNotifier(unittest.TestCase):
         payload = format_intraday_discord_payload(self.sample_event, environment="dev")
         self.assertIn("embeds", payload)
         self.assertEqual(len(payload["embeds"]), 1)
+        # By default, top-level components are omitted to prevent HTTP 400 on standard webhooks
+        self.assertNotIn("components", payload)
         embed = payload["embeds"][0]
 
         self.assertIn("[DEVELOPMENT]", embed["title"])
@@ -64,6 +66,7 @@ class TestDiscordNotifier(unittest.TestCase):
         self.assertIn("🛢️ Supply Disruption (S)", field_names)
         self.assertIn("🌍 Geopolitical Risk (G)", field_names)
         self.assertIn("🔗 Intelligence Sources", field_names)
+        self.assertIn("🚩 Feedback & Review", field_names)
 
         # Check values
         env_field = next(f for f in embed["fields"] if f["name"] == "🌐 Environment")
@@ -75,6 +78,23 @@ class TestDiscordNotifier(unittest.TestCase):
         sources_field = next(f for f in embed["fields"] if f["name"] == "🔗 Intelligence Sources")
         self.assertIn("[Original Article](https://energy.example.com/refinery-explosion)", sources_field["value"])
         self.assertIn("[Wayback Machine Archive](https://web.archive.org/web/20260910/refinery-explosion)", sources_field["value"])
+
+        feedback_field = next(f for f in embed["fields"] if f["name"] == "🚩 Feedback & Review")
+        self.assertIn("[🚩 Flag False Positive]", feedback_field["value"])
+        self.assertIn("[📋 Tracking Thread #258]", feedback_field["value"])
+
+    def test_format_payload_with_bot_components(self):
+        # When include_components=True, top-level action buttons are attached
+        payload = format_intraday_discord_payload(self.sample_event, include_components=True)
+        self.assertIn("components", payload)
+        self.assertEqual(len(payload["components"]), 1)
+        self.assertEqual(payload["components"][0]["type"], 1)  # Action Row
+        self.assertEqual(len(payload["components"][0]["components"]), 2)  # 2 Buttons
+
+        # Also when DISCORD_INCLUDE_COMPONENTS env var is set
+        with patch.dict(os.environ, {"DISCORD_INCLUDE_COMPONENTS": "1"}):
+            p_env = format_intraday_discord_payload(self.sample_event)
+            self.assertIn("components", p_env)
 
     def test_format_payload_prod_structure(self):
         payload = format_intraday_discord_payload(self.sample_event, environment="prod")

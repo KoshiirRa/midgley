@@ -149,7 +149,7 @@ class KnowledgeGraphEngine:
     def _init_db(self):
         """Initializes SQLite tables for nodes, edges, and memory records."""
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
-        with sqlite3.connect(self.db_path) as conn:
+        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
             cursor = conn.cursor()
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS kg_nodes (
@@ -189,7 +189,7 @@ class KnowledgeGraphEngine:
     def _load_from_db(self):
         """Loads nodes and edges from SQLite into NetworkX graph."""
         self.graph.clear()
-        with sqlite3.connect(self.db_path) as conn:
+        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT node_id, name, entity_type, attributes, created_at FROM kg_nodes")
             for row in cursor.fetchall():
@@ -230,7 +230,7 @@ class KnowledgeGraphEngine:
         self.graph.add_node(node_id, name=name, entity_type=entity_type, created_at=created_at, **kwargs)
 
         # Update SQLite
-        with sqlite3.connect(self.db_path) as conn:
+        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
@@ -264,7 +264,7 @@ class KnowledgeGraphEngine:
 
         self.graph.add_edge(source_id, target_id, relation=relation, weight=weight, created_at=created_at, **kwargs)
 
-        with sqlite3.connect(self.db_path) as conn:
+        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
@@ -445,7 +445,7 @@ class KnowledgeGraphEngine:
                 self.add_edge(shock_id, ent_id, REL_AFFECTS_LOCALE)
 
         # 3. Store in SQLite memory table
-        with sqlite3.connect(self.db_path) as conn:
+        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
@@ -474,7 +474,7 @@ class KnowledgeGraphEngine:
         graph distance or sentence embeddings if available.
         """
         shocks = []
-        with sqlite3.connect(self.db_path) as conn:
+        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
             cursor = conn.cursor()
             cursor.execute(
                 "SELECT shock_id, headline, score_vector, model_attribution, council_variance, affected_entities, created_at FROM kg_memory_shocks"

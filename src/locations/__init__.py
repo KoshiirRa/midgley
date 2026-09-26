@@ -6,6 +6,7 @@ Provides a unified interface for all location models (National Wholesale & Regio
 from typing import Dict, Any, List
 import logging
 
+from src.locations.runner import run_regional_pipeline
 from src.locations.national import run_national_pipeline, build_national_notebook
 from src.locations.tulsa import run_tulsa_pipeline, build_tulsa_notebook
 from src.locations.newark import run_newark_pipeline, build_newark_notebook

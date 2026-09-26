@@ -13,90 +13,51 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-FALLBACK_PACKAGE_VERSION = "0.6.6"
+import functools
+import sys
+
+FALLBACK_PACKAGE_VERSION = "0.7.0"
 FALLBACK_MODEL_VERSION = "v1.6 Ipatieff"
 
 
-def get_version() -> str:
-    """
-    Dynamically resolves the current Midgley package version using a 5-tier fallback chain:
-    1. MIDGLEY_VERSION environment variable.
-    2. Latest git release tag (e.g. 'v0.5.5' -> '0.5.5') via git describe/tags.
-    3. Highest semver version from RELEASE_NOTES_v*.md files in repository root.
-    4. pyproject.toml package version.
-    5. Immutable fallback constant ('0.5.5').
-    """
-    # Tier 1: Explicit environment variable
-    env_ver = os.getenv("MIDGLEY_VERSION", "").strip()
-    if env_ver:
-        return env_ver.lstrip("v")
-
-    # Collect candidate versions across discovery tiers
-    candidates = []
-
-    # Tier 2: Git describe / tag resolution
-    try:
-        cmd_out = subprocess.check_output(
-            ["git", "describe", "--tags", "--abbrev=0"],
-            stderr=subprocess.DEVNULL,
-            text=True
-        ).strip()
-        if cmd_out:
-            clean_ver = cmd_out.lstrip("v").strip()
-            if re.match(r"^\d+\.\d+(\.\d+)?", clean_ver):
-                candidates.append(clean_ver)
-    except Exception:
-        pass
-
-    # Tier 2b: Git tag list sorting
-    try:
-        cmd_out = subprocess.check_output(
-            ["git", "tag", "-l", "v*"],
-            stderr=subprocess.DEVNULL,
-            text=True
-        ).strip()
-        if cmd_out:
-            tag_lines = [t.strip().lstrip("v") for t in cmd_out.splitlines() if t.strip()]
-            valid_tags = [t for t in tag_lines if re.match(r"^\d+\.\d+(\.\d+)?", t)]
-            if valid_tags:
-                candidates.extend(valid_tags)
-    except Exception:
-        pass
-
-    # Tier 3: Scan RELEASE_NOTES_v*.md files
-    try:
-        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        rel_files = glob.glob(os.path.join(repo_root, "RELEASE_NOTES_v*.md"))
-        for rf in rel_files:
-            fname = os.path.basename(rf)
-            m = re.search(r"RELEASE_NOTES_v(\d+\.\d+(\.\d+)?)\.md", fname)
-            if m:
-                candidates.append(m.group(1))
-    except Exception:
-        pass
-
-    # Tier 4: pyproject.toml
+@functools.lru_cache(maxsize=1)
+def _read_pyproject_version() -> Optional[str]:
+    """Reads the project version from pyproject.toml."""
     try:
         repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         pyproject_path = os.path.join(repo_root, "pyproject.toml")
         if os.path.exists(pyproject_path):
-            with open(pyproject_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    if line.strip().startswith("version"):
-                        m = re.search(r'version\s*=\s*"([^"]+)"', line)
-                        if m:
-                            candidates.append(m.group(1).lstrip("v"))
-    except Exception:
-        pass
+            if sys.version_info >= (3, 11):
+                import tomllib
+                with open(pyproject_path, "rb") as f:
+                    data = tomllib.load(f)
+                    return data.get("project", {}).get("version", "").lstrip("v")
+            else:
+                with open(pyproject_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        if line.strip().startswith("version"):
+                            m = re.search(r'version\s*=\s*"([^"]+)"', line)
+                            if m:
+                                return m.group(1).lstrip("v")
+    except Exception as e:
+        logger.debug(f"Failed reading pyproject.toml version: {e}")
+    return None
 
-    # Tier 5: Fallback constant
-    candidates.append(FALLBACK_PACKAGE_VERSION)
 
-    # Return highest semver candidate
-    clean_candidates = [c for c in candidates if re.match(r"^\d+\.\d+(\.\d+)?", c)]
-    if clean_candidates:
-        clean_candidates.sort(key=lambda s: [int(u) for u in s.split(".") if u.isdigit()])
-        return clean_candidates[-1]
+def get_version() -> str:
+    """
+    Resolves current Midgley package version from:
+    1. MIDGLEY_VERSION environment variable override.
+    2. pyproject.toml project.version (single source of truth).
+    3. Fallback package version ('0.7.0').
+    """
+    env_ver = os.getenv("MIDGLEY_VERSION", "").strip()
+    if env_ver:
+        return env_ver.lstrip("v")
+
+    pyproject_ver = _read_pyproject_version()
+    if pyproject_ver:
+        return pyproject_ver
 
     return FALLBACK_PACKAGE_VERSION
 

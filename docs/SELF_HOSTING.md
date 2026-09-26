@@ -9,12 +9,13 @@ This document provides a comprehensive guide for self-hosting custom instances o
 1. [System Requirements & Prerequisites](#1-system-requirements--prerequisites)
 2. [Environment Configuration & API Keys](#2-environment-configuration--api-keys)
 3. [Setting Up the 3-Tier Multi-Tier Edge Cache Gateway](#3-setting-up-the-3-tier-multi-tier-edge-cache-gateway)
-4. [Standalone Linux Server & VM Deployment](#4-standalone-linux-server--vm-deployment)
-5. [Systemd Services & Automated Timer Schedules](#5-systemd-services--automated-timer-schedules)
-6. [Cloud & GitHub Actions Self-Hosting (Fork Deployment)](#6-cloud--github-actions-self-hosting-fork-deployment)
-7. [LLM Guidance Prompts for Econometric & Logistics Discovery](#7-llm-guidance-prompts-for-econometric--logistics-discovery)
-8. [Step-by-Step Developer Guide: Adding New Metro Regions](#8-step-by-step-developer-guide-adding-new-metro-regions)
-9. [Verification, Health Checks & Diagnostics](#9-verification-health-checks--diagnostics)
+4. [Production Docker Container & Durable State Architecture](#4-production-docker-container--durable-state-architecture)
+5. [Standalone Linux Server & VM Deployment](#5-standalone-linux-server--vm-deployment)
+6. [Systemd Services & Automated Timer Schedules](#6-systemd-services--automated-timer-schedules)
+7. [Cloud & GitHub Actions Self-Hosting (Fork Deployment)](#7-cloud--github-actions-self-hosting-fork-deployment)
+8. [LLM Guidance Prompts for Econometric & Logistics Discovery](#8-llm-guidance-prompts-for-econometric--logistics-discovery)
+9. [Step-by-Step Developer Guide: Adding New Metro Regions](#9-step-by-step-developer-guide-adding-new-metro-regions)
+10. [Verification, Health Checks & Diagnostics](#10-verification-health-checks--diagnostics)
 
 ---
 
@@ -27,10 +28,14 @@ This document provides a comprehensive guide for self-hosting custom instances o
 - **Storage:** 10 GB SSD disk space.
 
 ### Software Prerequisites
-- **Python:** Python 3.11+ (Python 3.11 is recommended for optimal compatibility with `scikit-learn` and `xgboost`).
+- **Python:** Python 3.11, 3.12, 3.13 (Python >=3.11 required; Python 3.11, 3.12, and 3.13 tested in CI; Docker image uses `python:3.13-slim` with `uv`).
+- **Deterministic Lockfile:** Standard pinned dependencies are maintained in `requirements.lock` (generated via `pip-compile`).
+- **Node & Cloudflare Workers:** Node.js 20+, Wrangler CLI v3.x+ (for deploying Cloudflare edge cache and intraday RSS workers).
+- **Database & Storage:** SQLite 3.35+ (with JSON1 & FTS5 support), Turso libSQL (Hrana protocol v2), Cloudflare D1.
 - **Package Manager:** [`uv`](https://github.com/astral-sh/uv) (recommended for 10–100x faster package resolution) or standard `pip`.
-- **Git:** Version 2.34+.
-- **System Service Manager:** `systemd` (for background service and timer management on Linux).
+- **Feed Parser Security:** `defusedxml>=0.7.1` is bundled in dependencies to secure unauthenticated upstream XML feeds (arXiv, BSEE, EDGAR 8-K, NHC, RSS) against entity expansion (Billion Laughs) and DoS attacks (Issue #351).
+- **Static Analysis Gate:** `ruff>=0.9.0` is bundled to validate syntax and catch fatal scope errors across CI/CD and self-hosted instances (Issue #350).
+- **Line Ending Invariants:** Repository `.gitattributes` enforces LF line endings across POSIX and Windows checkouts (Issue #430).
 
 ---
 
@@ -75,11 +80,17 @@ SEMANTIC_SCHOLAR_API_KEY="semantic_scholar_api_key_here"
 OPENAI_API_KEY="sk-proj-..."
 ANTHROPIC_API_KEY="sk-ant-..."
 
-# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation)
+# Security Secret for Incoming Webhook Ingestion Gate (HMAC-SHA256 Validation with Timestamp Replay Defense)
 MIDGLEY_WEBHOOK_SECRET="super-secret-hmac-key-change-me"
 
+# REST & MCP API Gateway Master Key (Full Privileged Access)
+MIDGLEY_API_KEY="mg_prod_master_key_change_me"
+
+# Admin Secret for Key Provisioning & Edge Probe Diagnostics (Fail-Closed)
+MIDGLEY_ADMIN_SECRET="admin-secret-provisioning-token-change-me"
+
 # IPASIS API Gateway Security Key & Controls (ipasis.com - 100 req/day free)
-IPASIS_API_KEY="ipasis_c92c28445c93_d65965edd3bfc851770b9573f777e152"
+IPASIS_API_KEY="ipasis_live_key_here"
 IPASIS_BLOCK_HIGH_RISK="1"       # Set to 1 to block Tor/Abuse origins with HTTP 403
 MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 
@@ -197,18 +208,28 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 
 ### Option B: Setting Up Cloudflare D1 / Worker (Tier 2 Backup)
 1. Create a Cloudflare D1 database: `npx wrangler d1 create midgley-cache-d1`
-2. Initialize the database schema for `lookup_cache`, `seen_rss_headlines`, and `prediction_history` ([scripts/init_d1_schema.sql](file:///scripts/init_d1_schema.sql)):
+2. Initialize the database schema for `lookup_cache`, `seen_rss_headlines`, and `prediction_history` (`scripts/init_d1_schema.sql`):
    ```bash
    npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
    ```
-3. Deploy the `midgley-cache-worker` proxy ([workers/cache_worker.ts](file:///workers/cache_worker.ts)) which supports key-value storage, expiration purging, and batch prediction history sync (`POST /api/v1/sync/predictions`):
+   *For existing installations upgrading from previous schema versions lacking `forecast_id` (Issue #471):*
    ```bash
-   npx wrangler deploy --config wrangler.cache.toml
+   npx wrangler d1 execute midgley-cache-d1 --file=scripts/migrations/0002_add_forecast_id_and_retroactive_columns.sql
    ```
-4. Configure optional telemetry & auth secrets for Option A2 (Axiom & Sentry):
+3. Deploy the `midgley-cache-worker` proxy (`workers/cache_worker.ts` with `workers/wrangler.cache.toml`):
    ```bash
-   npx wrangler secret put SENTRY_DSN --config wrangler.cache.toml
-   npx wrangler secret put AXIOM_TOKEN --config wrangler.cache.toml
+   # Deploy staging or production environment
+   npx wrangler deploy --config workers/wrangler.cache.toml --env staging
+   # Or for production:
+   npx wrangler deploy --config workers/wrangler.cache.toml --env production
+   ```
+4. Configure required authentication token and optional telemetry secrets (Axiom & Sentry):
+   > [!IMPORTANT]
+   > **Fail-Closed Security (Issue #438)**: `midgley-cache-worker` strictly enforces Bearer token authentication against `CLOUDFLARE_AUTH_TOKEN`. If `CLOUDFLARE_AUTH_TOKEN` is unset or invalid, all cache write, read, and sync endpoints reject requests with `401 Unauthorized`.
+   ```bash
+   npx wrangler secret put CLOUDFLARE_AUTH_TOKEN --config workers/wrangler.cache.toml --env staging
+   npx wrangler secret put SENTRY_DSN --config workers/wrangler.cache.toml --env staging
+   npx wrangler secret put AXIOM_TOKEN --config workers/wrangler.cache.toml --env staging
    ```
 5. Set `CLOUDFLARE_CACHE_URL` and `CLOUDFLARE_AUTH_TOKEN` in `.env`. Test connectivity via CLI:
    ```bash
@@ -216,15 +237,23 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```
 
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
-1. Deploy the 15-minute intraday RSS monitor worker ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts)):
+1. Validate TypeScript types and run automated Worker test suite:
    ```bash
-   npx wrangler deploy
+   npm run typecheck
+   npm test
    ```
-2. Configure worker secrets:
+2. Deploy the 15-minute intraday RSS monitor worker (`workers/intraday_monitor_worker.ts` with `wrangler.toml`):
    ```bash
-   npx wrangler secret put GH_PAT
-   npx wrangler secret put SENTRY_DSN
-   npx wrangler secret put AXIOM_TOKEN
+   npx wrangler deploy --env staging
+   # Or for production:
+   npx wrangler deploy --env production
+   ```
+3. Configure worker secrets (including `CLOUDFLARE_AUTH_TOKEN` for authenticating `POST /flag`, `/run`, `/trigger` endpoints):
+   ```bash
+   npx wrangler secret put CLOUDFLARE_AUTH_TOKEN --env staging
+   npx wrangler secret put GH_PAT --env staging
+   npx wrangler secret put SENTRY_DSN --env staging
+   npx wrangler secret put AXIOM_TOKEN --env staging
    ```
 
 ### Option C: Standalone Local Fallback (Tier 3 Default)
@@ -246,35 +275,208 @@ Midgley integrates an episodic memory layer (**Retain-Recall-Reflect**) to perfo
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Option A: Cloud Run + Supabase pgvector Setup (Recommended)
-1. **Initialize Supabase PostgreSQL Schema:**
-   - Open your **Supabase Project Dashboard** $\rightarrow$ **SQL Editor**.
-   - Execute [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql) to enable the `vector` extension, create `hindsight_memories` and `hindsight_mental_models` tables, and construct HNSW vector indexes.
-2. **Deploy to Google Cloud Run (Scale-to-Zero):**
-   - Ensure `SUPABASE_DATABASE_URL`, `GCP_PROJECT_ID`, and `GEMINI_API_KEY` are configured in `.env`.
-   - Run the deployment script:
-     ```bash
-     bash scripts/deploy_hindsight_cloudrun.sh
-     ```
-   - Cloud Run deploys `ghcr.io/vectorize-io/hindsight:latest` with `--min-instances 0` ($0 idle cost) and `--port 8888`.
-3. **Configure Endpoint in Midgley:**
-   - Set `HINDSIGHT_API_URL` in `.env` and GitHub Repository Secrets:
-     ```bash
-     HINDSIGHT_API_URL="https://midgley-hindsight-66up5e6b4a-uc.a.run.app"
-     HINDSIGHT_TIMEOUT="60.0"
-     HINDSIGHT_WARMUP_TIMEOUT="75.0"
-     ```
-   - **Scale-to-Zero Proactive Warmup & Zero Data Loss:** When deployed with `--min-instances 0`, Cloud Run instances spin down during inactivity and require 20–35s to cold boot. Midgley automatically triggers a non-blocking proactive warmup (`warmup()`) in Step 0 of execution pipelines. If any memory retain requests occur during container cold-start, experiences are safely buffered in local SQLite with `cloud_synced = 0` and automatically reconciled (`sync_pending_memories()`) once the cloud container is fully online.
+### Option A: Vectorize Hindsight-Hosted SaaS (Recommended Cloud Option - Issue #421)
+For managed cloud deployment without managing containers or incurring serverless compute costs:
+1. **Create an API Key:** Generate an API key on [Vectorize Hindsight Cloud](https://hindsight.vectorize.io).
+2. **Configure Environment:** Set the following variables in `.env` and GitHub Repository Secrets:
+   ```bash
+   HINDSIGHT_API_URL="https://api.hindsight.vectorize.io"
+   HINDSIGHT_API_KEY="hsk_..."
+   HINDSIGHT_BANK_ID="Midgley"
+   ```
+3. **Migration & Zero Cold Starts:** Hindsight-Hosted is always warm ($0$ cold-start latency) and operates on a purely pay-per-token/call pricing model (**~$3.50/month** for daily + weekly forecasting workloads, with initial \$5.00 free credit balance). Historical SQLite memories can be bulk-uploaded using `python scripts/migrate_memory_to_hosted.py`.
 
-### Option B: Zero-Cost Local SQLite FTS5 Fallback ($0 / Standalone Default)
+> [!CAUTION]
+> **Cloud Run Scale-to-Zero Cost Overrun Warning (Issue #421):**
+> Deploying the `vectorize-io/hindsight` container to Google Cloud Run with `--min-instances 0` (scale-to-zero) was found in production to incur **~$17.14–$35.66/month** in GCP billing. Because the container was provisioned with 2 vCPU / 2GiB RAM and frequently woken up by daily forecast pipelines, weekly model reviews, and telemetry syncs, accumulated container boot/keep-alive seconds exceeded the cost of a dedicated VPS or hosted SaaS. Self-hosted Docker or Hindsight-Hosted SaaS is recommended.
+
+### Option B: Local Dev-VM / Linux Server Self-Hosting ($0 / Dedicated Host)
+To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
+1. **Initialize Supabase PostgreSQL Schema:**
+   - Execute [`scripts/init_supabase_hindsight.sql`](scripts/init_supabase_hindsight.sql) in your Supabase SQL editor.
+
+2. **Run Docker Container on Host:**
+   ```bash
+   docker run -d \
+     --name midgley-hindsight \
+     --restart unless-stopped \
+     -p 8888:8888 \
+     -e HINDSIGHT_API_PORT="8888" \
+     -e DATABASE_URL="$SUPABASE_DATABASE_URL" \
+     -e HINDSIGHT_API_LLM_PROVIDER="gemini" \
+     -e HINDSIGHT_API_LLM_MODEL="gemini-2.5-flash" \
+     -e HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY" \
+     ghcr.io/vectorize-io/hindsight:latest
+   ```
+3. **Configure Endpoint:** Point `HINDSIGHT_API_URL="http://10.42.42.54:8888"` in `.env`.
+
+### Option C: Zero-Cost Local SQLite FTS5 Fallback ($0 / Standalone Default)
 If no remote Hindsight or Supabase credentials are configured, Midgley automatically activates `SQLiteMemoryStore` at `data/agent_memory.sqlite`:
 * **Zero external services or cloud accounts required.**
 * Uses SQLite FTS5 with Porter stemming and BM25 ranking for analogy recall.
 * Generates structured post-mortems and parameter calibration recommendations via Gemini 2.5 Flash (or the Tier 3 Offline Rule-Based Lexicon).
+* **Region-Scoped Memory Retention (Issue #326):** Memory shock ingestion is scoped specifically to the regional hub being evaluated (`backfill_actual_prices_and_evaluate(target_region=...)`), eliminating redundant global tail re-evaluations and protecting cloud API quotas.
 
 ---
 
-## 4. Standalone Linux Server & VM Deployment
+## 4. Production Docker Container & Durable State Architecture
+
+Midgley provides a production-hardened multi-stage Docker container built on `python:3.13-slim` with `uv`, OpenMP acceleration for XGBoost, and FastAPI/MCP transport.
+
+```
+       ┌─────────────────────────────────────────────────────────────┐
+       │              HOST PERSISTENT VOLUME: ./data                 │
+       │  • security.db (PBKDF2 Keys & Rate Limits)                  │
+       │  • agent_memory.sqlite (Hindsight Episodic Memory)          │
+       │  • lookup_cache.sqlite (Geocoding & Edge Cache)             │
+       │  • prediction_history.csv (Out-of-Time Prediction Ledger)   │
+       │  • intraday_events.json & evaluated_headlines.json          │
+       │  • finlight_quota.json & firecrawl_quota.json               │
+       └──────────────────────────────┬──────────────────────────────┘
+                                      │  Mount: -v $(pwd)/data:/app/data
+                                      ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │             MIDGLEY CONTAINER (PORT 8000)                   │
+       │  • FastAPI REST Server & Model Inference Pipeline           │
+       │  • MCP Standard Model Context Protocol Server               │
+       │  • Automatic SQLite Schema Bootstrap on Fresh Mount         │
+       └─────────────────────────────────────────────────────────────┘
+```
+
+### Docker Quick Start with Persistent Host Volume
+
+```bash
+# 1. Pull the pinned release container image
+docker pull ghcr.io/koshiirra/midgley:v0.7.0
+
+# 2. Ensure host data directory exists
+mkdir -p data backups
+
+# 3. Run container with persistent volume mount (Issue #375, #434)
+docker run -d \
+  --name midgley \
+  --restart unless-stopped \
+  -p 8000:8000 \
+  -v $(pwd)/data:/app/data \
+  -e GEMINI_API_KEY="AIzaSy..." \
+  -e FINLIGHT_API_KEY="fl_live_..." \
+  -e MIDGLEY_ADMIN_SECRET="sec_admin_secret_here" \
+  ghcr.io/koshiirra/midgley:v0.7.0
+
+# 4. Verify unauthenticated API server health
+curl http://localhost:8000/health
+
+# 5. Verify authenticated functional prediction route
+curl -H "X-API-Key: $MIDGLEY_API_KEY" "http://localhost:8000/api/v1/forecast/predict?locale=national"
+```
+
+### Docker Compose Configuration (`docker-compose.yml`)
+
+```yaml
+version: '3.8'
+
+services:
+  midgley:
+    image: ghcr.io/koshiirra/midgley:v0.7.0
+    container_name: midgley
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FINLIGHT_API_KEY=${FINLIGHT_API_KEY}
+      - MIDGLEY_ADMIN_SECRET=${MIDGLEY_ADMIN_SECRET}
+      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+```
+
+### Durable Container State Inventory
+
+The container writes all persistent application state into `/app/data`. When mounted to the host via `-v $(pwd)/data:/app/data`, all records remain durable across container upgrades:
+
+| Path on Host / Container | Storage Engine | Purpose & Operator Impact |
+| :--- | :--- | :--- |
+| `data/security.db` | SQLite 3 | Stores PBKDF2 hashed API keys, roles, and rate limit counters. |
+| `data/agent_memory.sqlite` | SQLite 3 + FTS5 | Stores episodic memory vectors and qualitative root-cause reflections. |
+| `data/lookup_cache.sqlite` | SQLite 3 | Stores geocoding results, HTTP cache responses, and EIA vintages. |
+| `data/prediction_history.csv` | CSV Ledger | Continuous historical record of 5-day out-of-time forecasts and actuals. |
+| `data/intraday_events.json` | JSON Ledger | Deduplication ledger and audit log of evaluated breaking news shocks. |
+| `data/evaluated_headlines.json` | JSON Ledger | 24-hour headline hash deduplication ledger. |
+| `data/finlight_quota.json` | JSON Ledger | Monthly and daily API quota counter for `finlight.me` (150 call limit). |
+| `data/firecrawl_quota.json` | JSON Ledger | Monthly and daily API quota counter for `firecrawl.dev` (800 call limit). |
+| `data/telemetry_alerts.json` | JSON Ledger | Active MLOps model degradation threshold alerts. |
+| `data/fallback_telemetry.json` | JSON Ledger | Cumulative token and dollar savings from Tier 3 offline lexicon fallbacks. |
+
+### Empty Volume Bootstrap Lifecycle
+
+When launching a container with an empty host volume (e.g. fresh `./data` folder):
+1. **KeyManager Bootstrap:** Automatically executes schema migrations, creating `api_keys` and `rate_limits` tables in `data/security.db`.
+2. **Episodic Memory Bootstrap:** Initializes `memories` table with FTS5 virtual tables and Porter stemming tokenizer in `data/agent_memory.sqlite`.
+3. **Lookup Cache Bootstrap:** Initializes key-value HTTP cache tables in `data/lookup_cache.sqlite`.
+4. **Prediction History Bootstrap:** Generates standard CSV headers with full 8-dimensional MLOps attribution fields on first forecast run.
+5. **Quota Safety Valves:** Initializes zeroed JSON ledgers with statutory safety caps.
+6. **Regional Metadata:** Regional driver profiles reside within the versioned application image (`data/regional_metadata/`) and fall back cleanly if customized profiles are omitted.
+
+### Online Backup Runbook
+
+Execute atomic, zero-downtime backups of live SQLite databases and flat-file ledgers on the host:
+
+```bash
+# 1. Create timestamped backup destination
+BACKUP_DATE=$(date +%F_%H%M%S)
+mkdir -p backups/${BACKUP_DATE}
+
+# 2. Atomic online SQLite database snapshots
+sqlite3 data/security.db ".backup 'backups/${BACKUP_DATE}/security.db'"
+sqlite3 data/agent_memory.sqlite ".backup 'backups/${BACKUP_DATE}/agent_memory.sqlite'"
+if [ -f data/lookup_cache.sqlite ]; then
+  sqlite3 data/lookup_cache.sqlite ".backup 'backups/${BACKUP_DATE}/lookup_cache.sqlite'"
+fi
+
+# 3. Archive prediction logs and JSON deduplication ledgers
+tar -czf backups/${BACKUP_DATE}/midgley_ledgers.tar.gz data/*.csv data/*.json
+
+echo "Backup completed successfully at backups/${BACKUP_DATE}"
+```
+
+### Restore & Stateful Rollback Runbook
+
+If rolling back a deployment or restoring from disaster:
+
+```bash
+# 1. Stop and remove the active container
+docker stop midgley && docker rm midgley
+
+# 2. Restore databases and ledgers from backup snapshot
+RESTORE_DATE="2026-09-23_120000"
+sqlite3 data/security.db ".restore 'backups/${RESTORE_DATE}/security.db'"
+sqlite3 data/agent_memory.sqlite ".restore 'backups/${RESTORE_DATE}/agent_memory.sqlite'"
+tar -xzf backups/${RESTORE_DATE}/midgley_ledgers.tar.gz -C .
+
+# 3. Pin and run the target release image
+docker run -d \
+  --name midgley \
+  --restart unless-stopped \
+  -p 8000:8000 \
+  -v $(pwd)/data:/app/data \
+  --env-file .env \
+  ghcr.io/koshiirra/midgley:v0.7.0
+
+# 4. Verify API recovery
+curl http://localhost:8000/health
+curl http://localhost:8000/api/v1/system/quota
+```
+
+---
+
+## 5. Standalone Linux Server & VM Deployment
 
 Follow these steps to deploy Midgley on a dedicated Linux host (e.g. `dev-vm` / Ubuntu host):
 
@@ -303,10 +505,13 @@ curl http://localhost:8000/api/v1/system/quota
 ```
 
 ### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
-Execute the full multi-region prediction pipeline once:
+Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, regional diesel engines, and generates the public web dashboard):
 ```bash
-python3 -m src.locations.national.main --llm
+python3 run_all.py --use-llm-api
 ```
+
+> [!NOTE]
+> If you wish to run only the standalone National Wholesale RBOB model without calibrating regional metros, execute `python3 -m src.locations.national.main --use-llm-api`. Note that `--use-llm-api` is the canonical CLI flag (the `--llm` flag is deprecated and ignored). If `GEMINI_API_KEY` is omitted, `--use-llm-api` gracefully routes event scoring to the zero-cost Tier 3 offline lexicon.
 
 Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
 ```bash
@@ -325,9 +530,26 @@ curl -X GET "http://localhost:8000/api/v1/forecast/scoreboard?locale=tulsa&windo
 
 ---
 
-## 5. Systemd Services & Automated Timer Schedules
+## 6. Systemd Services & Automated Timer Schedules
 
 To run Midgley 24/7 on a Linux machine with automated background execution, set up `systemd` user services and timers.
+
+### Process Concurrency & Advisory Lock Barrier (Issue #425)
+
+Scheduled execution units (`midgley-daily-forecast`, `midgley-intraday-polling`, and `midgley-weekly-review`) serialize access to the `data/` directory using an advisory lock barrier (`flock` on file descriptor 9):
+```bash
+LOCK="${XDG_RUNTIME_DIR:-/tmp}/midgley-data.lock"
+exec 9>"$LOCK"
+if ! flock -w 900 9; then
+    echo "midgley: timed out waiting for data lock" >&2
+    exit 75   # EX_TEMPFAIL
+fi
+```
+* **Timeout & Queueing:** Run scripts queue behind active jobs for up to 900 seconds (15 minutes). If a lock acquisition times out, the runner exits with code `75` (`EX_TEMPFAIL`), signalling transient failure rather than terminal corruption.
+* **Timer Jitter (`RandomizedDelaySec=120`):** All timers include a 120-second randomized jitter window to prevent simultaneous execution spikes across overlapping cron events or following system cold boots.
+* **Intraday Timer Offset (`*:7/15`):** The intraday poller triggers on the 7th minute past each quarter hour (`:07`, `:22`, `:37`, `:52`), eliminating collisions with daily (07:00 UTC) and weekly (13:00 UTC) pipelines.
+
+---
 
 ### 1. API Server Service (`~/.config/systemd/user/midgley-api.service`)
 ```ini
@@ -375,24 +597,54 @@ After=network.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/marty/projects/midgley
-ExecStart=/home/marty/projects/midgley/.venv/bin/python -m src.locations.national.main --llm
+ExecStart=/home/marty/projects/midgley/scripts/run_local_daily_forecast.sh
 EnvironmentFile=/home/marty/projects/midgley/.env
 ```
 
 **`midgley-daily-forecast.timer`:**
 ```ini
 [Unit]
-Description=Run Midgley Daily Gas Price Forecast at 06:00 AM Central
+Description=Run Midgley Daily Gas Price Forecast at 02:00 AM Central / 07:00 UTC
 
 [Timer]
-OnCalendar=*-*-* 06:00:00 America/Chicago
+OnCalendar=*-*-* 07:00:00 UTC
+RandomizedDelaySec=120
 Persistent=true
 
 [Install]
 WantedBy=timers.target
 ```
 
-### 4. Weekly Model Review Timer (`~/.config/systemd/user/midgley-weekly-review.service` & `.timer`)
+### 4. Intraday Event Polling Timer (`~/.config/systemd/user/midgley-intraday-polling.service` & `.timer`)
+
+**`midgley-intraday-polling.service`:**
+```ini
+[Unit]
+Description=Midgley Intraday Event Polling & Anomaly Monitor
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/marty/projects/midgley
+ExecStart=/home/marty/projects/midgley/scripts/run_local_intraday_polling.sh
+EnvironmentFile=/home/marty/projects/midgley/.env
+```
+
+**`midgley-intraday-polling.timer`:**
+```ini
+[Unit]
+Description=Run Midgley Intraday Event Polling Every 15 Minutes (Offset :07/:22/:37/:52)
+
+[Timer]
+OnCalendar=*:7/15
+RandomizedDelaySec=120
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+### 5. Weekly Model Review Timer (`~/.config/systemd/user/midgley-weekly-review.service` & `.timer`)
 
 **`midgley-weekly-review.service`:**
 ```ini
@@ -403,17 +655,18 @@ After=network.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/marty/projects/midgley
-ExecStart=/home/marty/projects/midgley/.venv/bin/python -m src.weekly_issue_reporter
+ExecStart=/home/marty/projects/midgley/scripts/run_local_weekly_review.sh
 EnvironmentFile=/home/marty/projects/midgley/.env
 ```
 
 **`midgley-weekly-review.timer`:**
 ```ini
 [Unit]
-Description=Run Midgley Weekly Review Every Saturday at 08:00 AM Central
+Description=Run Midgley Weekly Review Every Saturday at 08:00 AM Central / 13:00 UTC
 
 [Timer]
-OnCalendar=Sat *-*-* 08:00:00 America/Chicago
+OnCalendar=Sat *-*-* 13:00:00 UTC
+RandomizedDelaySec=120
 Persistent=true
 
 [Install]
@@ -429,6 +682,7 @@ systemctl --user daemon-reload
 systemctl --user enable --now midgley-api.service
 systemctl --user enable --now midgley-dev.service
 systemctl --user enable --now midgley-daily-forecast.timer
+systemctl --user enable --now midgley-intraday-polling.timer
 systemctl --user enable --now midgley-weekly-review.timer
 
 # Check active status
@@ -437,7 +691,7 @@ systemctl --user list-timers
 
 ---
 
-## 6. Cloud & GitHub Actions Self-Hosting (Fork Deployment)
+## 7. Cloud & GitHub Actions Self-Hosting (Fork Deployment)
 
 If you prefer serverless execution via GitHub Actions:
 
@@ -451,15 +705,29 @@ If you prefer serverless execution via GitHub Actions:
    - `DISCORD_INTRADAY_WEBHOOK_URL` (or `DISCORD_WEBHOOK_URL`, optional for intraday revision alerts)
    - `TURSO_DATABASE_URL` (optional)
    - `TURSO_AUTH_TOKEN` (optional)
-3. **Configure GitHub Pages:**
+3. **Configure GitHub Pages (Issue #378):**
    - Navigate to **Settings -> Pages**.
-   - Under **Build and deployment**, set **Source** to `Deploy from a branch`.
-   - Select branch `main` (or `dev`) and folder `/docs`.
-4. **Automated Workflows:**
-   - `.github/workflows/gas_price_forecast.yml`: Runs daily forecasting & updates GitHub Pages.
-   - `.github/workflows/intraday_event_monitor.yml`: Runs 15-minute event monitoring & webhook gateways.
-   - `.github/workflows/weekly_model_review.yml`: Runs Saturday performance audits.
-   - `.github/workflows/nightly_dev_release.yml`: Builds nightly releases at 08:00 UTC.
+   - Under **Build and deployment**, set **Source** to `GitHub Actions`.
+   - The repository uses modern Pages Artifact deployment (`actions/configure-pages@v6`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`) in `.github/workflows/gas_price_forecast.yml`.
+   - *Do NOT select "Deploy from a branch", as that legacy mechanism conflicts with the artifact workflow.*
+
+### Dual-Tier Intraday Monitoring Architecture
+
+Midgley uses a resilient dual-tier architecture for intraday headline monitoring:
+- **Tier 1 (Primary — 15-minute Edge Polling):** Cloudflare Worker cron (`workers/intraday_monitor_worker.ts`) executing on a `*/15 * * * *` schedule. Ingests free RSS feeds, evaluates price impact, dispatches real-time Discord Embed alerts, and triggers a repository dispatch when thresholds are tripped.
+- **Tier 2 (Fallback — 2-hour Scheduled Runner):** GitHub Actions workflow (`.github/workflows/intraday_event_monitor.yml`) running on a `0 */2 * * *` schedule. Provides reliable scheduled execution and processes incoming webhook push dispatches.
+
+### Master Workflow Cron Schedule Matrix
+
+All workflow triggers in `.github/workflows/` evaluate strictly against UTC. The table below provides the exact schedule mappings:
+
+| Workflow Name | Workflow File | Cron Expression | UTC Time | US Central Time (CDT / CST) | US Eastern Time (EDT / EST) | Purpose |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Daily Gas Price Forecast** | `.github/workflows/gas_price_forecast.yml` | `17 7 * * *` | 07:17 UTC | 02:17 AM CDT / 01:17 AM CST | 03:17 AM EDT / 02:17 AM EST | Full multi-region forecasting & Pages deployment |
+| **Weekly Model Review** | `.github/workflows/weekly_model_review.yml` | `12 13 * * 6` | Sat 13:12 UTC | Sat 08:12 AM CDT / 07:12 AM CST | Sat 09:12 AM EDT / 08:12 AM EST | Saturday performance audit & Hindsight reflection |
+| **Intraday Fallback Monitor** | `.github/workflows/intraday_event_monitor.yml` | `0 */2 * * *` | Every 2 hours | Every 2 hours | Every 2 hours | 2-hour fallback RSS polling & webhook gateway |
+| **Nightly Dev Release** | `.github/workflows/nightly_dev_release.yml` | `0 8 * * *` | 08:00 UTC | 03:00 AM CDT / 02:00 AM CST | 04:00 AM EDT / 03:00 AM EST | Automated nightly development snapshot release |
+| **Edge Intraday Monitor** | `workers/intraday_monitor_worker.ts` | `*/15 * * * *` | Every 15 min | Every 15 min | Every 15 min | Primary edge headline evaluation & Discord alerts |
 
 ---
 
@@ -671,11 +939,15 @@ LOCATIONS["chicago"] = {
 }
 ```
 
-### Step 5: Register API Server Routes & Scenario Endpoints (`src/api_server.py`)
-Add `"chicago"` to `LOCALE_PRICE_KEYS` and `LOCALE_RUNNERS` in `src/api_server.py`:
+### Step 5: Register Locale Mapping & Metadata (`src/dynamic_region.py` & `src/api_server.py`)
+Add `"chicago"` to `LOCALE_MAP` and `PADD_METADATA` in `src/dynamic_region.py` and register the route handler in `src/api_server.py`:
 ```python
-LOCALE_PRICE_KEYS["chicago"] = "Chicago_IL"
-LOCALE_RUNNERS["chicago"] = run_chicago_pipeline
+# In src/dynamic_region.py:
+LOCALE_MAP["chicago"] = "Chicago_IL"
+LOCALE_MAP["Chicago_IL"] = "chicago"
+
+# In src/api_server.py:
+LOCALE_MAP["chicago"] = "Chicago_IL"
 ```
 
 ### Step 6: Register Webhook Locale Routing & Infrastructure Keywords (`src/intraday_event_monitor.py`)
@@ -786,6 +1058,31 @@ python3 -m src.lookup_cache --test-cloudflare
 curl -s "http://localhost:8000/api/v1/system/cache-status?probe=true" | jq .
 ```
 
+### 10. Verify PortWatch Shipping & CARB Compliance Connectors (Issues #384 & #383)
+Run diagnostic probes to verify IMF PortWatch maritime activity and CARB regulatory carbon compliance calculations:
+```bash
+# Verify IMF PortWatch maritime chokepoint transit telemetry
+python3 -c "from src.portwatch_connector import IMFPortWatchConnector; c = IMFPortWatchConnector(); print(c.get_global_chokepoint_risk_summary())"
+
+# Verify CARB LCFS and Cap-and-Trade dynamic compliance fee breakdown
+python3 -c "from src.carb_compliance import get_dynamic_carb_compliance_breakdown; print(get_dynamic_carb_compliance_breakdown())"
+```
+
+### 11. Verify Gulf Coast Refinery Outage Telemetry & Attribution (Issue #406)
+Verify unified TCEQ, LDEQ, and NRC emission and outage data ingestion and run attribution reports:
+```bash
+python3 -c "from src.tceq_emissions import get_unified_gulf_coast_outages; df = get_unified_gulf_coast_outages(); print(f'Total outages logged: {len(df)}')"
+python3 -c "from src.weekly_issue_reporter import format_refinery_outage_attribution_markdown; print(format_refinery_outage_attribution_markdown(30))"
+```
+
+### 12. Execute 5-Tier Nested Model Evaluation Hierarchy (Issue #362)
+Execute formal 5-tier nested baseline hierarchy evaluations with Diebold-Mariano and block bootstrap across all hubs and horizons:
+```bash
+python3 scripts/evaluate_model_hierarchy.py --all-locales --horizons 1,2,3,4,5 --format all --output data/model_hierarchy_evaluation.json
+```
+
 ---
 
-*Midgley Version: `v0.6.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+
+

@@ -68,6 +68,7 @@ def generate_release_manifest() -> Dict[str, Any]:
                 "weekend_gap_shock"
             ],
             "added_features": ["usgs_gauge_stage", "weekend_gap_shock"],
+            "retrain_action": "retrain_regional_models",
             "retrain_command": "python scripts/manage_regions.py retrain --all"
         },
         "database_migrations": [

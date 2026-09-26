@@ -44,6 +44,7 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         market_df, 
         events_df, 
         horizons=[1, 2, 3, 4, 5], 
+        region="National",
         model_type=model_type
     )
     
@@ -83,9 +84,9 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         }
     ]
     
-    base_row = splits['X_test_hybrid'].iloc[-1:].copy()
-    raw_pred_price = results['model_hybrid'].predict(base_row)[0]
-    current_market_price = splits['test_df']['gasoline_rbob'].iloc[-1]
+    base_row = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:]).copy()
+    raw_pred_price = results.get('live_pred_price', results['model_hybrid'].predict(base_row)[0])
+    current_market_price = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
     
     print(f"\n  LATEST WHOLESALE MARKET PRICE:   ${current_market_price:.3f}/gal")
     print(f"  BASELINE 5-DAY NATIONAL FORECAST: ${raw_pred_price:.3f}/gal")
@@ -124,27 +125,31 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         h_test_dates = h_splits['test_df']['date']
         h_test_current_prices = h_splits['test_df']['gasoline_rbob']
         h_preds_hybrid = h_res['predictions_hybrid']
+        h_preds_quant = h_res['predictions_quant']
         
         # Backfill historical test split
         h_log_df = pd.DataFrame({
             'date': h_test_dates.values,
             'current_price': h_test_current_prices.values,
             'predicted_5d_price': h_preds_hybrid,
+            'quant_baseline_5d_price': h_preds_quant,
             'forecast_horizon_days': h
         })
         
         # Append latest live real-time forecast row
         live_pred = float(h_res['live_pred_price'])
+        live_quant_pred = float(h_res.get('live_pred_quant_price', live_pred))
         h_today_df = pd.DataFrame([{
             'date': last_date,
             'current_price': current_live_price,
             'predicted_5d_price': live_pred,
+            'quant_baseline_5d_price': live_quant_pred,
             'forecast_horizon_days': h
         }])
         h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
         log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
 
-    backfill_actual_prices_and_evaluate()
+    backfill_actual_prices_and_evaluate(target_region="National")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions to store (data/prediction_history.csv)")
     
     perf_report = generate_performance_report()

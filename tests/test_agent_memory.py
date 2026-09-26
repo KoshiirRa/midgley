@@ -64,6 +64,37 @@ class TestSQLiteMemoryStore(unittest.TestCase):
         ok = self.store.save_reflection(reflection)
         self.assertTrue(ok)
 
+    def test_recall_with_special_punctuation_and_operators(self):
+        """Verifies that special FTS5 operators (+, -, *, :, ^, AND, OR, NOT) do not raise sqlite3 syntax errors (Issue #331)."""
+        # Retain test memories with complex terms
+        self.store.retain(
+            content="OPEC+ production quota cut caused prompt crude surge and crack-spread expansion in PADD-1B.",
+            region="Newark_DE",
+            anomaly_type="LARGE_UNDERESTIMATE",
+            error_dollars=0.4200,
+            predicted_price=2.80,
+            actual_price=3.22,
+            forecast_target_date="2026-09-18"
+        )
+
+        # 1. Query containing '+' operator
+        res_plus = self.store.recall(query="OPEC+ production quota", region="Newark_DE", top_k=3)
+        self.assertTrue(len(res_plus) >= 1)
+        self.assertEqual(res_plus[0]["region"], "Newark_DE")
+
+        # 2. Query containing hyphens and colon
+        res_hyphen = self.store.recall(query="crack-spread: expansion PADD-1B", region="Newark_DE", top_k=3)
+        self.assertTrue(len(res_hyphen) >= 1)
+
+        # 3. Query containing asterisks, carets, and boolean keywords
+        res_bool = self.store.recall(query="OPEC* AND NOT OR ^production", region="Newark_DE", top_k=3)
+        self.assertTrue(len(res_bool) >= 1)
+
+        # 4. Pure punctuation query (should fall back gracefully to recent records)
+        res_punct = self.store.recall(query="+++ --- *** ::: ^^^", region="Newark_DE", top_k=3)
+        self.assertTrue(len(res_punct) >= 1)
+
+
 
 class TestHindsightClient(unittest.TestCase):
     def test_unconfigured_behavior(self):
@@ -237,6 +268,42 @@ class TestHindsightWarmupAndSync(unittest.TestCase):
         # 3. Verify that zero unsynced records remain
         remaining = self.manager.sqlite_store.get_unretained_memories()
         self.assertEqual(len(remaining), 0)
+
+    @patch.dict(os.environ, {"TEST_HINDSIGHT_FORCE": "1"})
+    @patch("src.hindsight_client.urllib.request.urlopen")
+    def test_hindsight_bank_stats_and_inventory_metrics(self, mock_urlopen):
+        # 1. Mock remote bank stats response with durable observations
+        mock_resp = MagicMock()
+        mock_resp.status = 200
+        mock_resp.read.return_value = json.dumps({
+            "bank": {
+                "total_documents": 42,
+                "total_observations": 18,
+                "total_reflections": 7
+            }
+        }).encode("utf-8")
+        mock_urlopen.return_value.__enter__.return_value = mock_resp
+
+        client = HindsightClient(base_url="https://mock-hindsight.a.run.app")
+        stats = client.get_bank_stats()
+        self.assertIsNotNone(stats)
+        self.assertEqual(stats["memories"], 42)
+        self.assertEqual(stats["observations"], 18)
+        self.assertEqual(stats["reflections"], 7)
+
+        # 2. Seed an unsynced memory locally to check pending reconciliation queue
+        self.manager.sqlite_store.retain(
+            content="Local unsynced anomaly",
+            region="Greenville_NC",
+            cloud_synced=0
+        )
+
+        inventory = self.manager.get_bank_inventory()
+        self.assertEqual(inventory["source"], "remote_cloud")
+        self.assertEqual(inventory["memories_count"], 42)
+        self.assertEqual(inventory["observations_count"], 18)
+        self.assertEqual(inventory["reflections_count"], 7)
+        self.assertEqual(inventory["pending_reconciliation_count"], 1)
 
 
 if __name__ == "__main__":

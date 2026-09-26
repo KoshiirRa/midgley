@@ -16,5 +16,32 @@
     "value": 4.319,
     "source": "FRED API / St. Louis Fed (Zero-Cost)",
     "is_vintage_reconstructed": false
+  },
+  {
+    "series_id": "GASREGW",
+    "name": "U.S. Regular Gasoline Retail Price ($/gal)",
+    "as_of": "2026-09-22 00:23:20",
+    "valid_date": "2026-09-22",
+    "value": 3.184,
+    "source": "FRED Benchmark Anchor (Zero-Cost)",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "series_id": "GASREGW",
+    "name": "U.S. Regular Gasoline Retail Price ($/gal)",
+    "as_of": "2026-09-23 20:27:47",
+    "valid_date": "2026-09-23",
+    "value": 3.184,
+    "source": "FRED Benchmark Anchor (Zero-Cost)",
+    "is_vintage_reconstructed": false
+  },
+  {
+    "series_id": "GASREGW",
+    "name": "U.S. Regular Gasoline Retail Price ($/gal)",
+    "as_of": "2026-09-24 00:35:51",
+    "valid_date": "2026-09-21",
+    "value": 4.478,
+    "source": "FRED API / St. Louis Fed (Zero-Cost)",
+    "is_vintage_reconstructed": false
   }
 ]

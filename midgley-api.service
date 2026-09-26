@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/marty/projects/midgley
-ExecStart=/home/marty/.antigravity-env/bin/python3 -m src.api_server
+WorkingDirectory=%h/projects/midgley
+ExecStart=%h/.antigravity-env/bin/python3 -m src.api_server
 Restart=always
 RestartSec=5
 Environment=PORT=8000

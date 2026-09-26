@@ -21,11 +21,12 @@ import urllib.request
 import urllib.error
 from datetime import datetime, timezone
 from typing import Dict, Any, Tuple
+from src.storage_io import atomic_write_json, file_lock
 
 logger = logging.getLogger(__name__)
 
-# Default API Key from environment or fallback
-IPASIS_API_KEY = os.environ.get("IPASIS_API_KEY", "ipasis_c92c28445c93_d65965edd3bfc851770b9573f777e152")
+# Default API Key from environment (default: None)
+IPASIS_API_KEY = os.environ.get("IPASIS_API_KEY")
 TELEMETRY_FILE = os.path.join("data", "ipasis_telemetry.json")
 
 # In-memory TTL cache: {ip: (timestamp, result_dict)}
@@ -84,8 +85,20 @@ class IPASISSecurityVerifier:
                 res["cached"] = True
                 return res
 
-        # 3. Query external IPASIS API
+        # 3. Check if IPASIS API key is configured
         api_key = os.environ.get("IPASIS_API_KEY", IPASIS_API_KEY)
+        if not api_key:
+            self._update_telemetry_counters(unconfigured=True, allowed=True)
+            return {
+                "ip": clean_ip,
+                "is_blocked": False,
+                "reason": "Unconfigured IPASIS (Allowlisted)",
+                "privacy": {"Tor": False, "Proxy": False, "VPN": False, "Abuse": False},
+                "cached": False,
+                "provider": "IPASIS_Unconfigured"
+            }
+
+        # 4. Query external IPASIS API
         url = f"https://api.ipasis.com/v1/lookup?ip={clean_ip}"
         req = urllib.request.Request(url, headers={
             "User-Agent": "Midgley-GasPriceEngine/1.4",
@@ -135,7 +148,7 @@ class IPASISSecurityVerifier:
         self._update_telemetry_counters(allowed=True)
         return fallback_res
 
-    def _update_telemetry_counters(self, private_bypass: bool = False, cache_hit: bool = False, api_call: bool = False, allowed: bool = False, blocked: bool = False):
+    def _update_telemetry_counters(self, private_bypass: bool = False, cache_hit: bool = False, api_call: bool = False, unconfigured: bool = False, allowed: bool = False, blocked: bool = False):
         """Updates persistent telemetry ledger at data/ipasis_telemetry.json."""
         os.makedirs("data", exist_ok=True)
         today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -146,60 +159,66 @@ class IPASISSecurityVerifier:
             "daily_allowance": self.daily_allowance,
             "total_checks": 0,
             "private_bypasses": 0,
+            "unconfigured_checks": 0,
             "cache_hits": 0,
             "allowed_requests": 0,
             "blocked_requests": 0,
             "last_updated": datetime.now(timezone.utc).isoformat()
         }
 
-        if os.path.exists(TELEMETRY_FILE):
+        with file_lock(TELEMETRY_FILE):
+            if os.path.exists(TELEMETRY_FILE):
+                try:
+                    with open(TELEMETRY_FILE, "r", encoding="utf-8") as f:
+                        existing = json.load(f)
+                        if isinstance(existing, dict):
+                            # Reset daily counter if date changed
+                            if existing.get("date") == today_str:
+                                ledger["daily_requests_used"] = existing.get("daily_requests_used", 0)
+                            ledger["total_checks"] = existing.get("total_checks", 0)
+                            ledger["private_bypasses"] = existing.get("private_bypasses", 0)
+                            ledger["unconfigured_checks"] = existing.get("unconfigured_checks", 0)
+                            ledger["cache_hits"] = existing.get("cache_hits", 0)
+                            ledger["allowed_requests"] = existing.get("allowed_requests", 0)
+                            ledger["blocked_requests"] = existing.get("blocked_requests", 0)
+                except Exception as e:
+                    logger.debug(f"Could not load existing IPASIS telemetry ledger: {e}")
+
+            ledger["total_checks"] += 1
+            if private_bypass:
+                ledger["private_bypasses"] += 1
+            if unconfigured:
+                ledger["unconfigured_checks"] += 1
+            if cache_hit:
+                ledger["cache_hits"] += 1
+            if api_call:
+                ledger["daily_requests_used"] += 1
+            if allowed:
+                ledger["allowed_requests"] += 1
+            if blocked:
+                ledger["blocked_requests"] += 1
+
+            ledger["last_updated"] = datetime.now(timezone.utc).isoformat()
+
             try:
-                with open(TELEMETRY_FILE, "r", encoding="utf-8") as f:
-                    existing = json.load(f)
-                    if isinstance(existing, dict):
-                        # Reset daily counter if date changed
-                        if existing.get("date") == today_str:
-                            ledger["daily_requests_used"] = existing.get("daily_requests_used", 0)
-                        ledger["total_checks"] = existing.get("total_checks", 0)
-                        ledger["private_bypasses"] = existing.get("private_bypasses", 0)
-                        ledger["cache_hits"] = existing.get("cache_hits", 0)
-                        ledger["allowed_requests"] = existing.get("allowed_requests", 0)
-                        ledger["blocked_requests"] = existing.get("blocked_requests", 0)
+                atomic_write_json(TELEMETRY_FILE, ledger, indent=2)
             except Exception as e:
-                logger.debug(f"Could not load existing IPASIS telemetry ledger: {e}")
-
-        ledger["total_checks"] += 1
-        if private_bypass:
-            ledger["private_bypasses"] += 1
-        if cache_hit:
-            ledger["cache_hits"] += 1
-        if api_call:
-            ledger["daily_requests_used"] += 1
-        if allowed:
-            ledger["allowed_requests"] += 1
-        if blocked:
-            ledger["blocked_requests"] += 1
-
-        ledger["last_updated"] = datetime.now(timezone.utc).isoformat()
-
-        try:
-            with open(TELEMETRY_FILE, "w", encoding="utf-8") as f:
-                json.dump(ledger, f, indent=2)
-        except Exception as e:
-            logger.warning(f"Failed to save IPASIS telemetry ledger: {e}")
+                logger.warning(f"Failed to save IPASIS telemetry ledger: {e}")
 
 
 def get_ipasis_telemetry() -> Dict[str, Any]:
     """Returns current IPASIS security and request accounting telemetry summary."""
     today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    is_configured = bool(os.environ.get("IPASIS_API_KEY", IPASIS_API_KEY))
     default_summary = {
         "date": today_str,
         "daily_requests_used": 0,
         "daily_allowance": 100,
         "quota_remaining": 100,
-        "status": "OK",
+        "status": "OK" if is_configured else "UNCONFIGURED",
         "total_checks": 0,
         "private_bypasses": 0,
+        "unconfigured_checks": 0,
         "cache_hits": 0,
         "allowed_requests": 0,
         "blocked_requests": 0,
@@ -219,9 +238,10 @@ def get_ipasis_telemetry() -> Dict[str, Any]:
                         "daily_requests_used": used,
                         "daily_allowance": allowance,
                         "quota_remaining": max(0, allowance - used),
-                        "status": "CAP_EXCEEDED" if used >= allowance else "OK",
+                        "status": "CAP_EXCEEDED" if (is_configured and used >= allowance) else ("OK" if is_configured else "UNCONFIGURED"),
                         "total_checks": data.get("total_checks", 0),
                         "private_bypasses": data.get("private_bypasses", 0),
+                        "unconfigured_checks": data.get("unconfigured_checks", 0),
                         "cache_hits": data.get("cache_hits", 0),
                         "allowed_requests": data.get("allowed_requests", 0),
                         "blocked_requests": data.get("blocked_requests", 0)

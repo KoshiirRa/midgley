@@ -1,0 +1,285 @@
+#!/usr/bin/env python3
+"""
+Automated 5-Tier Model Hierarchy & Statistical Promotion Audit Runner (scripts/evaluate_model_hierarchy.py)
+Executes standardized 5-tier comparative evaluations across all 10 regional calibration hubs
+and multi-day forecast horizons (h in [1..5]) with Diebold-Mariano tests and scorecards. (Issue #362)
+"""
+
+from __future__ import annotations
+
+import os
+import sys
+import json
+import argparse
+import logging
+from typing import Dict, List, Any, Optional, Tuple
+import numpy as np
+import pandas as pd
+from datetime import datetime
+
+from src.model_evaluation import ModelHierarchyEvaluator, diebold_mariano_test
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger("evaluate_model_hierarchy")
+
+REGIONS = [
+    "National",
+    "Tulsa_OK",
+    "Newark_DE",
+    "Cincinnati_OH",
+    "Cincinnati_KY",
+    "Greenville_NC",
+    "Charlotte_NC",
+    "Port_St_Lucie_FL",
+    "Oakland_CA",
+    "BayArea_CA"
+]
+
+REPORTS_DIR = "reports"
+OUTPUT_JSON_FILE = os.path.join(REPORTS_DIR, "model_hierarchy_evaluation.json")
+OUTPUT_MD_FILE = os.path.join(REPORTS_DIR, "model_hierarchy_evaluation.md")
+
+
+def generate_benchmark_feature_matrix(n_samples: int = 150, seed: int = 42) -> Tuple[pd.DataFrame, pd.Series, pd.Series]:
+    """Generates synthetic multi-feature time series for regional hierarchy evaluation."""
+    np.random.seed(seed)
+    
+    # Tier 1 Price features
+    rbob_lag1 = 2.40 + np.cumsum(np.random.normal(0.001, 0.02, n_samples))
+    rsi_14 = np.clip(50.0 + np.random.normal(0, 10, n_samples), 20, 80)
+    macd_line = np.random.normal(0, 0.015, n_samples)
+    
+    # Tier 2 Physical features
+    eia_stocks = np.random.normal(220.0, 5.0, n_samples)
+    cdd_weather = np.clip(np.random.exponential(4.0, n_samples), 0, 25)
+    cot_spec = np.random.normal(45000, 5000, n_samples)
+    padd3_outage = np.clip(np.random.exponential(50000, n_samples), 0, 400000)
+    
+    # Tier 3 Event features
+    geo_risk_shock = np.clip(np.random.exponential(0.15, n_samples), 0, 1.0)
+    opec_action_shock = np.random.uniform(-0.5, 0.5, n_samples)
+    
+    X = pd.DataFrame({
+        "rbob_lag1": rbob_lag1,
+        "rsi_14": rsi_14,
+        "macd_line": macd_line,
+        "eia_gasoline_stocks": eia_stocks,
+        "cdd_weather": cdd_weather,
+        "cot_net_speculative": cot_spec,
+        "padd3_refinery_outage_bpd": padd3_outage,
+        "geopolitical_risk_decay": geo_risk_shock,
+        "opec_action_decay": opec_action_shock
+    })
+    
+    y_current = pd.Series(rbob_lag1)
+    # Ground truth future price with strong exogenous feature contributions
+    y_future = pd.Series(
+        rbob_lag1
+        + 1.20 * macd_line
+        + 0.000002 * padd3_outage
+        + 0.25 * geo_risk_shock
+        + 0.18 * opec_action_shock
+        + np.random.normal(0, 0.001, n_samples)
+    )
+    
+    return X, y_future, y_current
+
+
+def run_full_hierarchy_audit(
+    horizons: Optional[List[int]] = None,
+    output_dir: Optional[str] = None,
+    use_synthetic_fallback: bool = False
+) -> Dict[str, Any]:
+    """
+    Runs the 5-tier evaluation across all regional hubs and horizons (Issues #362, #435).
+    Evaluates on authentic historical market data and purged walking origins when available.
+    """
+    target_dir = output_dir or REPORTS_DIR
+    os.makedirs(target_dir, exist_ok=True)
+    json_path = os.path.join(target_dir, "model_hierarchy_evaluation.json")
+    md_path = os.path.join(target_dir, "model_hierarchy_evaluation.md")
+
+    horizons = horizons or [1, 3, 5]
+    all_region_results: Dict[str, Any] = {}
+    passed_hubs = 0
+
+    # Try loading real market data and historical events once
+    real_market_df = None
+    real_events_df = None
+    if not use_synthetic_fallback:
+        try:
+            from src.data_ingestion import fetch_market_data, get_historical_event_dataset
+            from src.event_analyzer import process_event_dataset
+            from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
+            
+            raw_market = fetch_market_data(start_date="2022-01-01", allow_synthetic=use_synthetic_fallback)
+            is_synth = getattr(raw_market, 'attrs', {}).get('is_synthetic', False) if raw_market is not None else True
+            if raw_market is not None and not is_synth and len(raw_market) >= 60:
+                real_market_df = raw_market
+                raw_events = get_historical_event_dataset()
+                real_events_df = process_event_dataset(raw_events, use_llm_api=False) if raw_events is not None else None
+            elif is_synth and not use_synthetic_fallback:
+                logger.error("Authentic market data download returned synthetic fallback; rejecting as authentic market data for promotion audit.")
+                real_market_df = None
+        except Exception as e:
+            logger.warning(f"Could not load authentic market dataset for hierarchy evaluation: {e}. Falling back to benchmark simulation.")
+
+    for idx, reg in enumerate(REGIONS):
+        logger.info(f"Evaluating 5-Tier Hierarchy for region: {reg}")
+        evaluator = ModelHierarchyEvaluator(region=reg)
+        region_horizon_results = {}
+        reg_passed = True
+
+        for h in horizons:
+            used_real_data = False
+            res_h = None
+            if real_market_df is not None and not use_synthetic_fallback:
+                try:
+                    feat_df = create_feature_matrix(
+                        real_market_df,
+                        real_events_df,
+                        forecast_horizon=h,
+                        region=reg
+                    )
+                    splits = prepare_chronological_splits(feat_df, train_ratio=0.75, forecast_horizon=h, predict_returns=False)
+                    X_train = splits['X_train_hybrid']
+                    X_test = splits['X_test_hybrid']
+                    
+                    y_tr_fut = splits['y_train_price']
+                    y_te_fut = splits['y_test_price']
+                    y_tr_curr = splits['X_train_quant']['gasoline_rbob'] if 'gasoline_rbob' in splits['X_train_quant'].columns else pd.Series(0.0, index=X_train.index)
+                    y_te_curr = splits['test_df']['gasoline_rbob'] if 'gasoline_rbob' in splits['test_df'].columns else pd.Series(0.0, index=X_test.index)
+
+                    res_h = evaluator.evaluate_5tier_hierarchy(
+                        X_train, y_tr_fut, y_tr_curr,
+                        X_test, y_te_fut, y_te_curr,
+                        horizon=h
+                    )
+                    res_h["provenance"] = "AUTHENTIC_MARKET_DATA"
+                    used_real_data = True
+                except Exception as e:
+                    logger.warning(f"Real data evaluation failed for {reg} h={h}: {e}")
+
+            if not used_real_data:
+                if use_synthetic_fallback:
+                    X, y_fut, y_curr = generate_benchmark_feature_matrix(n_samples=180, seed=42 + idx + h * 7)
+                    split_idx = int(len(X) * 0.7)
+                    X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
+                    y_tr_fut, y_te_fut = y_fut.iloc[:split_idx], y_fut.iloc[split_idx:]
+                    y_tr_curr, y_te_curr = y_curr.iloc[:split_idx], y_curr.iloc[split_idx:]
+
+                    res_h = evaluator.evaluate_5tier_hierarchy(
+                        X_train, y_tr_fut, y_tr_curr,
+                        X_test, y_te_fut, y_te_curr,
+                        horizon=h
+                    )
+                    res_h["provenance"] = "SYNTHETIC_SIMULATION"
+                    # Synthetic simulations do NOT pass production promotion gates (Issue #455)
+                    res_h["promotion_gate_passed"] = False
+                else:
+                    res_h = {
+                        "status": "FAILED_UNAVAILABLE",
+                        "provenance": "UNAVAILABLE",
+                        "promotion_gate_passed": False,
+                        "error": f"Authentic data unavailable for {reg} at horizon {h}d",
+                        "tiers": {}
+                    }
+
+            region_horizon_results[f"h_{h}d"] = res_h
+            if not res_h.get("promotion_gate_passed", False):
+                reg_passed = False
+
+        if reg_passed:
+            passed_hubs += 1
+
+        all_region_results[reg] = {
+            "region": reg,
+            "horizons": region_horizon_results,
+            "overall_promotion_passed": reg_passed
+        }
+
+    audit_summary = {
+        "timestamp": datetime.now().isoformat(),
+        "total_regions_evaluated": len(REGIONS),
+        "passed_regions_count": passed_hubs,
+        "evaluated_horizons": horizons,
+        "regions": all_region_results
+    }
+
+    # Save JSON report
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(audit_summary, f, indent=2)
+    logger.info(f"Exported JSON audit report to {json_path}")
+
+    # Generate Markdown Scorecard
+    md_lines = [
+        "# 📊 5-Tier Nested Model Hierarchy & Statistical Promotion Audit Report",
+        "",
+        f"**Audit Timestamp:** `{audit_summary['timestamp']}` | **Evaluated Regions:** {len(REGIONS)}",
+        "",
+        "## 🏛️ Regional Model Promotion Scorecards",
+        "",
+        "| Region | Horizon | Tier 0 Naive MAE | Tier 4 Hybrid MAE | Persistence Uplift | DM Stat vs Naive | DM p-value | Gate Status |",
+        "| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |"
+    ]
+
+    for reg, reg_data in all_region_results.items():
+        for h_key, h_data in reg_data["horizons"].items():
+            if "tiers" in h_data and "Tier_0_Naive" in h_data["tiers"] and "Tier_4_Full_Hybrid" in h_data["tiers"]:
+                t0 = h_data["tiers"]["Tier_0_Naive"]
+                t4 = h_data["tiers"]["Tier_4_Full_Hybrid"]
+                gate_badge = "🟢 **PASSED**" if h_data.get("promotion_gate_passed", False) else "🔴 *REJECTED*"
+                md_lines.append(
+                    f"| **`{reg}`** | `{h_key}` | `${t0['MAE']:.4f}/gal` | `${t4['MAE']:.4f}/gal` | "
+                    f"**`{t4['persistence_uplift_pct']:+.2f}%`** | `{t4['dm_stat_vs_naive']:+.2f}` | "
+                    f"`{t4['dm_p_value_vs_naive']:.4f}` | {gate_badge} |"
+                )
+            else:
+                md_lines.append(
+                    f"| **`{reg}`** | `{h_key}` | `N/A` | `N/A` | `N/A` | `N/A` | `N/A` | 🔴 *FAILED (UNAVAILABLE)* |"
+                )
+
+    md_lines.extend([
+        "",
+        "## 🔬 Tier Feature Hierarchy Breakdown",
+        "- **Tier 0:** Naive Persistence ($P_{t+h} = P_t$)",
+        "- **Tier 1:** Price-Only Autoregressive Technical Features (Lags, RSI, MACD, Volatility)",
+        "- **Tier 2:** Price + Physical Fundamentals (EIA balances, weather degree days, COT, pipeline tariffs, outages)",
+        "- **Tier 3:** Price + Qualitative Events (Decayed NLP news/social/geopolitical vectors)",
+        "- **Tier 4:** Full Hybrid Estimator (Full feature matrix + ECM + Conformal inference)",
+        "",
+        "*Generated by `scripts/evaluate_model_hierarchy.py` (Issue #362, #435, #455).*"
+    ])
+
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(md_lines))
+    logger.info(f"Exported Markdown audit scorecard to {md_path}")
+
+    return audit_summary
+
+
+if __name__ == "__main__":
+    import sys
+    parser = argparse.ArgumentParser(description="5-Tier Model Hierarchy Evaluator")
+    parser.add_argument("--horizons", nargs="+", type=int, default=[1, 3, 5], help="Forecast horizons to evaluate")
+    parser.add_argument("--output-dir", type=str, default=None, help="Directory to save audit output files")
+    parser.add_argument("--synthetic", "--simulation-mode", dest="synthetic", action="store_true", help="Force synthetic benchmark generation in simulation mode")
+    args = parser.parse_args()
+    
+    summary = run_full_hierarchy_audit(horizons=args.horizons, output_dir=args.output_dir, use_synthetic_fallback=args.synthetic)
+    passed = summary.get('passed_regions_count', 0)
+    total = summary.get('total_regions_evaluated', 0)
+    promo_status = summary.get('promotion_status', 'UNKNOWN')
+    print(f"\nAudit complete: {passed}/{total} regions passed statistical promotion gate. Status: {promo_status}")
+
+    if not args.synthetic:
+        if promo_status != "PROMOTED_TO_PRODUCTION" or passed < total or total == 0:
+            print("❌ Model hierarchy audit failed statistical promotion gate or used synthetic data. Exiting with code 1 (Fail-Closed).", file=sys.stderr)
+            sys.exit(1)
+        else:
+            print("✅ Model hierarchy audit passed all statistical gates on authentic market data.")
+            sys.exit(0)
+    else:
+        print("⚠️ Simulation mode executed with synthetic data (Promotion Rejected).")
+        sys.exit(0)
+

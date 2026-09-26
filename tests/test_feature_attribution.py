@@ -60,3 +60,39 @@ def test_feature_attribution_summary_text():
     
     flat = compute_locale_feature_attribution_breakdown("National", 3.184, 3.184)
     assert "National forecast stable ($0.000/gal)" in flat["summary_text"]
+
+
+def test_empirical_feature_attributions_arbitrary_keys_and_signs():
+    """Verify decompose_prediction_drivers handles arbitrary model feature keys without KeyError and preserves signs (Issue #476)."""
+    empirical_feats = {
+        "gasoline_rbob": 0.20,
+        "tceq_flaring": -0.10,
+        "baker_hughes_rigs": -0.05,
+        "arbitrary_custom_alpha": 0.05
+    }
+    
+    res = compute_locale_feature_attribution_breakdown(
+        region_code="National",
+        base_price=3.00,
+        predicted_price=3.10,
+        feature_attributions=empirical_feats
+    )
+    
+    assert res["methodology"] == "empirical_linear_features"
+    assert res["total_delta_dollars"] == 0.10
+    
+    # Check components exist for all keys
+    for k in empirical_feats:
+        assert k in res["components"]
+        assert "delta_dollars" in res["components"][k]
+        assert "description" in res["components"][k]
+    
+    # Verify signs are preserved (gasoline_rbob is UP, tceq_flaring is DOWN)
+    assert res["components"]["gasoline_rbob"]["direction"] == "UP"
+    assert res["components"]["gasoline_rbob"]["delta_dollars"] > 0
+    assert res["components"]["tceq_flaring"]["direction"] == "DOWN"
+    assert res["components"]["tceq_flaring"]["delta_dollars"] < 0
+    
+    # Verify dollar sum equals total_delta_dollars
+    comp_sum = round(sum(c["delta_dollars"] for c in res["components"].values()), 3)
+    assert comp_sum == 0.10

@@ -5,7 +5,7 @@ Fetches and filters recent research preprints from arXiv API for weekly review r
 
 import urllib.request
 import urllib.parse
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 import logging
 from typing import List, Dict, Any

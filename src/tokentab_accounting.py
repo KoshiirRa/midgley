@@ -10,6 +10,7 @@ import json
 import logging
 from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
+from src.storage_io import atomic_write_json, file_lock
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +47,9 @@ class TokenTabAccountingManager:
                 "records": []
             }
             try:
-                with open(self.ledger_path, "w", encoding="utf-8") as f:
-                    json.dump(initial_data, f, indent=2)
+                with file_lock(self.ledger_path):
+                    if not os.path.exists(self.ledger_path):
+                        atomic_write_json(self.ledger_path, initial_data, indent=2)
             except Exception as e:
                 logger.error(f"Failed to initialize token usage ledger at {self.ledger_path}: {e}")
 
@@ -90,19 +92,20 @@ class TokenTabAccountingManager:
         }
 
         try:
-            with open(self.ledger_path, "r+", encoding="utf-8") as f:
-                try:
-                    data = json.load(f)
-                except Exception:
-                    data = {"created_at": timestamp, "records": []}
+            with file_lock(self.ledger_path):
+                data = {"created_at": timestamp, "records": []}
+                if os.path.exists(self.ledger_path):
+                    try:
+                        with open(self.ledger_path, "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                    except Exception:
+                        data = {"created_at": timestamp, "records": []}
                 
-                if "records" not in data:
+                if "records" not in data or not isinstance(data["records"], list):
                     data["records"] = []
                 
                 data["records"].append(record)
-                f.seek(0)
-                json.dump(data, f, indent=2)
-                f.truncate()
+                atomic_write_json(self.ledger_path, data, indent=2)
         except Exception as e:
             logger.error(f"Failed to log token usage record to {self.ledger_path}: {e}")
 

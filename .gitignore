@@ -43,7 +43,16 @@ data/feast_parquet/
 data/data/
 *.pb
 
-# Node Modules
+# Node Modules & Cloudflare Wrangler Tooling
 node_modules/
+.wrangler/
+dist/
+
+# Temporary Atomic Write Files & Locks
+**/.tmp-*
+*.partial
+data/.tmp-*
+*.tmp
+
 
 

@@ -612,6 +612,510 @@
     }
   },
   {
+    "as_of": "2026-09-22 12:39:59",
+    "valid_date": "2026-09-22",
+    "corridor_key": "mid_atlantic",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-22 12:39:59",
+      "filtered_corridor": "mid_atlantic",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "mid_atlantic": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-22 12:40:52",
+    "valid_date": "2026-09-22",
+    "corridor_key": "cushing_ok",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-22 12:40:52",
+      "filtered_corridor": "cushing_ok",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "cushing_ok": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-22 12:41:10",
+    "valid_date": "2026-09-22",
+    "corridor_key": "all",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-22 12:41:10",
+      "filtered_corridor": "all",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "bay_area": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "cushing_ok": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "socal": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "mid_atlantic": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "new_madrid": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-22 23:25:03",
+    "valid_date": "2026-09-22",
+    "corridor_key": "bay_area",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-22 23:25:03",
+      "filtered_corridor": "bay_area",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "bay_area": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:38:48",
+    "valid_date": "2026-09-23",
+    "corridor_key": "cushing_ok",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-23 20:38:48",
+      "filtered_corridor": "cushing_ok",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "cushing_ok": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:38:49",
+    "valid_date": "2026-09-23",
+    "corridor_key": "mid_atlantic",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-23 20:38:49",
+      "filtered_corridor": "mid_atlantic",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "mid_atlantic": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:39:52",
+    "valid_date": "2026-09-23",
+    "corridor_key": "all",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-23 20:39:52",
+      "filtered_corridor": "all",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "bay_area": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "cushing_ok": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "socal": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "mid_atlantic": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "new_madrid": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:45:41",
+    "valid_date": "2026-09-23",
+    "corridor_key": "bay_area",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-23 20:45:41",
+      "filtered_corridor": "bay_area",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "bay_area": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-24 15:47:40",
+    "valid_date": "2026-09-24",
+    "corridor_key": "all",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-24 15:47:40",
+      "filtered_corridor": "all",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "bay_area": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "cushing_ok": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "socal": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "mid_atlantic": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        },
+        "new_madrid": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-24 17:26:40",
+    "valid_date": "2026-09-24",
+    "corridor_key": "bay_area",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-24 17:26:40",
+      "filtered_corridor": "bay_area",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "bay_area": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-24 17:26:45",
+    "valid_date": "2026-09-24",
+    "corridor_key": "cushing_ok",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-24 17:26:45",
+      "filtered_corridor": "cushing_ok",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "cushing_ok": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
+    "as_of": "2026-09-24 17:26:48",
+    "valid_date": "2026-09-24",
+    "corridor_key": "mid_atlantic",
+    "composite_seismic_risk_index": 0.0,
+    "max_magnitude": 0.0,
+    "total_significant_quakes": 0,
+    "data": {
+      "status": "SUCCESS",
+      "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
+      "timestamp": "2026-09-24 17:26:48",
+      "filtered_corridor": "mid_atlantic",
+      "temporal_window_days": 30,
+      "events": [],
+      "corridors": {
+        "mid_atlantic": {
+          "corridor_risk_index": 0.0,
+          "max_magnitude": 0.0,
+          "active_events_count": 0,
+          "highest_impact_event": null
+        }
+      },
+      "indices": {
+        "bay_area_seismic_risk_index": 0.0,
+        "cushing_storage_seismic_risk_index": 0.0,
+        "socal_refining_seismic_risk_index": 0.0,
+        "mid_atlantic_seismic_risk_index": 0.0,
+        "new_madrid_seismic_risk_index": 0.0,
+        "composite_seismic_risk_index": 0.0,
+        "is_pipeline_emergency_shutdown_risk": false,
+        "is_refinery_inspection_advisory": false,
+        "max_magnitude": 0.0,
+        "total_significant_quakes": 0
+      }
+    }
+  },
+  {
     "as_of": "2026-09-22 21:15:44",
     "valid_date": "2026-09-22",
     "corridor_key": "bay_area",

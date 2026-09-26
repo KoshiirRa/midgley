@@ -98,27 +98,36 @@ export default {
     const authHeader = request.headers.get("Authorization");
 
     try {
-      // Optional Bearer Authentication check
-      if (env.CLOUDFLARE_AUTH_TOKEN) {
-        const token = authHeader?.replace("Bearer ", "");
-        if (token !== env.CLOUDFLARE_AUTH_TOKEN) {
-          console.warn(`[Cache Auth Warning] Unauthorized request from ${request.headers.get("CF-Connecting-IP") || "unknown"}`);
-          await logToAxiom(env, ctx, { event: "cache_auth_unauthorized", ip: request.headers.get("CF-Connecting-IP") });
-          return new Response(JSON.stringify({ error: "Unauthorized" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" }
-          });
-        }
-      }
-
-      // Health check endpoint
+      // Public health check endpoint
       if (url.pathname === "/health" || url.pathname === "/status") {
         console.log(`[Cache Health Check] Status requested`);
         return new Response(
-          JSON.stringify({ status: "ok", service: "midgley-cache-worker", timestamp: new Date().toISOString() }),
+          JSON.stringify({ status: "healthy", service: "midgley-cache-worker", timestamp: new Date().toISOString() }),
           { headers: { "Content-Type": "application/json" } }
         );
       }
+
+      // Fail-Closed Bearer Authentication check (Issue #438)
+      const expectedToken = env.CLOUDFLARE_AUTH_TOKEN;
+      if (!expectedToken) {
+        console.warn(`[Cache Auth Error] CLOUDFLARE_AUTH_TOKEN is not configured on worker; rejecting request in fail-closed mode.`);
+        await logToAxiom(env, ctx, { event: "cache_auth_unconfigured", ip: request.headers.get("CF-Connecting-IP") });
+        return new Response(JSON.stringify({ error: "Unauthorized: Worker authentication is not configured" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      const token = authHeader?.replace("Bearer ", "").trim();
+      if (!token || token !== expectedToken) {
+        console.warn(`[Cache Auth Warning] Unauthorized request from ${request.headers.get("CF-Connecting-IP") || "unknown"}`);
+        await logToAxiom(env, ctx, { event: "cache_auth_unauthorized", ip: request.headers.get("CF-Connecting-IP") });
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
 
       // GET /api/v1/cache/:key
       if (request.method === "GET" && url.pathname.startsWith("/api/v1/cache/")) {
@@ -174,6 +183,8 @@ export default {
             // Ensure table exists
             await env.DB.prepare(`
               CREATE TABLE IF NOT EXISTS prediction_history (
+                forecast_id TEXT PRIMARY KEY,
+                issued_at_utc TEXT,
                 log_timestamp TEXT,
                 forecast_target_date TEXT,
                 forecast_horizon_days INTEGER,
@@ -196,22 +207,39 @@ export default {
                 prediction_upper_95ci REAL,
                 within_95ci_hit REAL,
                 data_source_provenance TEXT,
-                PRIMARY KEY (log_timestamp, forecast_target_date, region)
+                is_retroactive_backtest INTEGER
               )
             `).run();
+
+            // Run migration for existing installations lacking forecast_id (Issue #471)
+            try {
+              const tableInfo = await env.DB.prepare("PRAGMA table_info(prediction_history)").all();
+              const existingCols = new Set(((tableInfo && tableInfo.results) || []).map((c: any) => c.name));
+              if (existingCols.size > 0 && !existingCols.has("forecast_id")) {
+                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN forecast_id TEXT").run();
+                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN issued_at_utc TEXT").run();
+                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN is_retroactive_backtest INTEGER DEFAULT 0").run();
+                await env.DB.prepare("UPDATE prediction_history SET forecast_id = log_timestamp || '_' || region || '_' || COALESCE(forecast_horizon_days, 5) WHERE forecast_id IS NULL OR forecast_id = ''").run();
+                await env.DB.prepare("UPDATE prediction_history SET issued_at_utc = log_timestamp WHERE issued_at_utc IS NULL OR issued_at_utc = ''").run();
+              }
+            } catch (migErr) {
+              console.warn("Prediction history migration notice:", migErr);
+            }
 
             // Prepare batch statements
             const statements = predictions.map((row: any) => {
               return env.DB.prepare(`
                 INSERT OR REPLACE INTO prediction_history (
-                  log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
+                  forecast_id, issued_at_utc, log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
                   headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
                   actual_5d_price, actual_direction, error_dollars, directional_hit,
                   llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
                   llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
-                  within_95ci_hit, data_source_provenance
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                  within_95ci_hit, data_source_provenance, is_retroactive_backtest
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
               `).bind(
+                String(row.forecast_id || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()))),
+                String(row.issued_at_utc || new Date().toISOString()),
                 String(row.log_timestamp || ""),
                 String(row.forecast_target_date || ""),
                 Number(row.forecast_horizon_days || 5),
@@ -233,11 +261,17 @@ export default {
                 Number(row.prediction_lower_95ci || 0.0),
                 Number(row.prediction_upper_95ci || 0.0),
                 row.within_95ci_hit !== undefined && row.within_95ci_hit !== null && !isNaN(row.within_95ci_hit) ? Number(row.within_95ci_hit) : null,
-                String(row.data_source_provenance || "yfinance")
+                String(row.data_source_provenance || "yfinance"),
+                row.is_retroactive_backtest ? 1 : 0
               );
             });
 
-            await env.DB.batch(statements);
+            // Execute batch statements in chunks of 50 to respect Cloudflare D1's 100-statement limit (Issue #333)
+            const CHUNK_SIZE = 50;
+            for (let i = 0; i < statements.length; i += CHUNK_SIZE) {
+              const chunk = statements.slice(i, i + CHUNK_SIZE);
+              await env.DB.batch(chunk);
+            }
           }
 
           console.log(`[Cache Worker SYNC SUCCESS] Synced ${predictions.length} records`);

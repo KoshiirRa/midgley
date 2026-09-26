@@ -1,0 +1,26 @@
+[
+  {
+    "source": "U.S. EIA / FRED Weekly Retail Gasoline Prices",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-22 00:57:26",
+    "as_of": "2026-09-22 00:57:26",
+    "valid_date": "2026-09-22",
+    "regional_retail_prices": {
+      "National": "local-sqlite",
+      "Tulsa_OK": "local-sqlite",
+      "Newark_DE": "local-sqlite",
+      "Cincinnati_OH": "local-sqlite",
+      "Cincinnati_KY": 3.07,
+      "Greenville_NC": 3.11,
+      "Charlotte_NC": 3.11,
+      "Port_St_Lucie_FL": 3.2,
+      "Oakland_CA": 4.77,
+      "BayArea_CA": 4.77,
+      "SanFrancisco_CA": 4.77,
+      "SanJose_CA": 4.77,
+      "NorthBay_CA": 4.77
+    },
+    "status": "SUCCESS"
+  }
+]

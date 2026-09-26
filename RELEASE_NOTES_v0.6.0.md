@@ -9,7 +9,7 @@
 ## 🚀 Key Features, Architectural Enhancements & Algorithmic Upgrades
 
 ### 1. Headline Arena Energy Benchmark & Probabilistic Brier Calibration Connector (Issue #182)
-- **Independent Third-Party Verification Engine ([`src/headline_arena_connector.py`](file:///src/headline_arena_connector.py)):**
+- **Independent Third-Party Verification Engine ([`src/headline_arena_connector.py`](src/headline_arena_connector.py)):**
   - Integrated Midgley with **Headline Arena** (`headlinearena.com`), enabling independent continuous probability (Brier / CRPS) scoring of daily **RBOB Wholesale Gasoline (`RB`)** and **Cushing WTI Crude (`CL`)** directional market forecasts against frozen resolution criteria and mechanical price settlement.
   - Implemented **OAuth2 `client_credentials` Authentication Flow**:
     - Exchanges `HEADLINE_ARENA_CLIENT_ID` and `HEADLINE_ARENA_CLIENT_SECRET` (or `HEADLINE_ARENA_API_KEY`) for session bearer tokens via `POST /api/v1/auth/token` with in-memory TTL caching.
@@ -28,13 +28,13 @@
     - **Production (`MIDGLEY_ENV=prod` / GitHub Actions)**: Executes live headless submissions during scheduled daily runs when repository secrets are present.
     - **Test Suite (`TESTING=1`)**: Completely mocks and suppresses outgoing network calls.
   - **Connector Telemetry Integration**:
-    - Automatically records execution latencies and connection health to `data/connector_telemetry.json` via [`src/connector_telemetry.py`](file:///src/connector_telemetry.py).
-- **REST API Server Gateway Endpoints ([`src/api_server.py`](file:///src/api_server.py)):**
+    - Automatically records execution latencies and connection health to `data/connector_telemetry.json` via [`src/connector_telemetry.py`](src/connector_telemetry.py).
+- **REST API Server Gateway Endpoints ([`src/api_server.py`](src/api_server.py)):**
   - Exposed `GET /api/v1/connectors/headline-arena/status`: Connection status, environment, and settlement rules.
   - Exposed `POST /api/v1/connectors/headline-arena/submit`: Dry-run or live prediction submission endpoint.
-- **Master Execution Pipeline Integration ([`run_all.py`](file:///run_all.py)):**
+- **Master Execution Pipeline Integration ([`run_all.py`](run_all.py)):**
   - Integrated optional `--submit-headline-arena` CLI flag support and automatic production benchmark submission during master execution runs.
-- **Dedicated Test Suite ([`tests/test_headline_arena_connector.py`](file:///tests/test_headline_arena_connector.py)):**
+- **Dedicated Test Suite ([`tests/test_headline_arena_connector.py`](tests/test_headline_arena_connector.py)):**
   - 17/17 unit tests passing covering normal CDF probability math, dead-zone thresholds, OAuth2 caching, dry-run safety gates, explicit dev-test tagging, and REST API endpoints.
 
 ---

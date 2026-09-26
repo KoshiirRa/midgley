@@ -82,5 +82,607 @@
       "active_advisories": [],
       "status": "SUCCESS"
     }
+  },
+  {
+    "as_of": "2026-09-22 01:41:09",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-22 01:41:08",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY CONTINUES TO WEAKEN... As of 3:00 AM GMT Tue Sep 22 the center of Fay was located near 32.3, -33.1 with movement SW at 8 mph. The minimum central pressure was 1008 mb with maximum sustained win"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT31 KNHC 220233\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 20"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nWTNT21 KNHC 220233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  11\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC TUE SEP 22 2026\n "
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT41 KNHC 220233\nTCDAT1\n \nTropical Storm Fay Discussion Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 2026\n \nFa"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nFONT11 KNHC 220233\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  11       "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032251.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-22 01:50:30",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-22 01:50:30",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY CONTINUES TO WEAKEN... As of 3:00 AM GMT Tue Sep 22 the center of Fay was located near 32.3, -33.1 with movement SW at 8 mph. The minimum central pressure was 1008 mb with maximum sustained win"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT31 KNHC 220233\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 20"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nWTNT21 KNHC 220233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  11\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC TUE SEP 22 2026\n "
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT41 KNHC 220233\nTCDAT1\n \nTropical Storm Fay Discussion Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 2026\n \nFa"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nFONT11 KNHC 220233\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  11       "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032251.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-22 01:51:48",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-22 01:51:47",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY CONTINUES TO WEAKEN... As of 3:00 AM GMT Tue Sep 22 the center of Fay was located near 32.3, -33.1 with movement SW at 8 mph. The minimum central pressure was 1008 mb with maximum sustained win"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT31 KNHC 220233\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 20"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nWTNT21 KNHC 220233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  11\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC TUE SEP 22 2026\n "
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 11",
+          "description": "Issued at 300 AM GMT Tue Sep 22 2026 <pre>000\nWTNT41 KNHC 220233\nTCDAT1\n \nTropical Storm Fay Discussion Number  11\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Tue Sep 22 2026\n \nFa"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 11",
+          "description": "Issued at 0300 UTC TUE SEP 22 2026 <pre>000\nFONT11 KNHC 220233\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  11       "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032251.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-22 12:39:08",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-22 12:39:08",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...FAY WEAKENS TO A TROPICAL DEPRESSION... ...FORECAST TO BECOME A POST-TROPICAL CYCLONE LATER TODAY... As of 3:00 PM GMT Tue Sep 22 the center of Fay was located near 31.1, -34.6 with movement SW at "
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 13",
+          "description": "Issued at 300 PM GMT Tue Sep 22 2026 <pre>000\nWTNT31 KNHC 221446\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  13\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Tue Sep "
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 13",
+          "description": "Issued at 1500 UTC TUE SEP 22 2026 <pre>000\nWTNT21 KNHC 221446\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  13\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC TUE SEP 22 2"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 13",
+          "description": "Issued at 300 PM GMT Tue Sep 22 2026 <pre>662 \nWTNT41 KNHC 221447\nTCDAT1\n \nTropical Depression Fay Discussion Number  13\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Tue Sep 22 202"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 13",
+          "description": "Issued at 1500 UTC TUE SEP 22 2026 <pre>000\nFONT11 KNHC 221446\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  13  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152321.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-22 12:40:28",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-22 12:40:28",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...FAY WEAKENS TO A TROPICAL DEPRESSION... ...FORECAST TO BECOME A POST-TROPICAL CYCLONE LATER TODAY... As of 3:00 PM GMT Tue Sep 22 the center of Fay was located near 31.1, -34.6 with movement SW at "
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 13",
+          "description": "Issued at 300 PM GMT Tue Sep 22 2026 <pre>000\nWTNT31 KNHC 221446\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  13\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Tue Sep "
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 13",
+          "description": "Issued at 1500 UTC TUE SEP 22 2026 <pre>000\nWTNT21 KNHC 221446\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  13\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC TUE SEP 22 2"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 13",
+          "description": "Issued at 300 PM GMT Tue Sep 22 2026 <pre>662 \nWTNT41 KNHC 221447\nTCDAT1\n \nTropical Depression Fay Discussion Number  13\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Tue Sep 22 202"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 13",
+          "description": "Issued at 1500 UTC TUE SEP 22 2026 <pre>000\nFONT11 KNHC 221446\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  13  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152321.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:25:22",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-23 20:25:22",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:28:00",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-23 20:28:00",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:37:22",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-23 20:37:22",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...LOW PRESSURE SYSTEM RE-DEVELOPS INTO TROPICAL DEPRESSION FAY... As of 9:00 PM GMT Wed Sep 23 the center of Fay was located near 30.1, -39.2 with movement W at 8 mph. The minimum central pressure wa"
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 15",
+          "description": "Issued at 900 PM GMT Wed Sep 23 2026 <pre>392 \nWTNT31 KNHC 232034\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  15\nNWS National Hurricane Center Miami FL       AL062026\n900 PM GMT Wed Sep"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 15",
+          "description": "Issued at 2100 UTC WED SEP 23 2026 <pre>391 \nWTNT21 KNHC 232034\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  15\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n2100 UTC WED SEP 23 "
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 15",
+          "description": "Issued at 900 PM GMT Wed Sep 23 2026 <pre>000\nWTNT41 KNHC 232035\nTCDAT1\n \nTropical Depression Fay Discussion Number  15\nNWS National Hurricane Center Miami FL       AL062026\n900 PM GMT Wed Sep 23 2026"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 15",
+          "description": "Issued at 2100 UTC WED SEP 23 2026 <pre>000\nFONT11 KNHC 232035\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  15  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n\n\n      "
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-23 20:39:13",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-23 20:39:13",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...LOW PRESSURE SYSTEM RE-DEVELOPS INTO TROPICAL DEPRESSION FAY... As of 9:00 PM GMT Wed Sep 23 the center of Fay was located near 30.1, -39.2 with movement W at 8 mph. The minimum central pressure wa"
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 15",
+          "description": "Issued at 900 PM GMT Wed Sep 23 2026 <pre>392 \nWTNT31 KNHC 232034\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  15\nNWS National Hurricane Center Miami FL       AL062026\n900 PM GMT Wed Sep"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 15",
+          "description": "Issued at 2100 UTC WED SEP 23 2026 <pre>391 \nWTNT21 KNHC 232034\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  15\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n2100 UTC WED SEP 23 "
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 15",
+          "description": "Issued at 900 PM GMT Wed Sep 23 2026 <pre>000\nWTNT41 KNHC 232035\nTCDAT1\n \nTropical Depression Fay Discussion Number  15\nNWS National Hurricane Center Miami FL       AL062026\n900 PM GMT Wed Sep 23 2026"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 15",
+          "description": "Issued at 2100 UTC WED SEP 23 2026 <pre>000\nFONT11 KNHC 232035\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  15  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/203656.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:32:55",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 00:32:55",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY REGAINS TROPICAL STORM STATUS... As of 3:00 AM GMT Thu Sep 24 the center of Fay was located near 29.8, -40.0 with movement WSW at 9 mph. The minimum central pressure was 1010 mb with maximum su"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>921 \nWTNT31 KNHC 240234\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>835 \nWTNT21 KNHC 240233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  16\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC THU SEP 24 2026\n"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>402 \nWTNT41 KNHC 240238\nTCDAT1\n \nTropical Storm Fay Discussion Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2026\n\nDe"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>787 \nFONT11 KNHC 240234\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  16      "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032247.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:35:52",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 00:35:52",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:37:37",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 00:37:37",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY REGAINS TROPICAL STORM STATUS... As of 3:00 AM GMT Thu Sep 24 the center of Fay was located near 29.8, -40.0 with movement WSW at 9 mph. The minimum central pressure was 1010 mb with maximum su"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>921 \nWTNT31 KNHC 240234\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>835 \nWTNT21 KNHC 240233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  16\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC THU SEP 24 2026\n"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>402 \nWTNT41 KNHC 240238\nTCDAT1\n \nTropical Storm Fay Discussion Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2026\n\nDe"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>787 \nFONT11 KNHC 240234\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  16      "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032247.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:38:34",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 00:38:34",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY REGAINS TROPICAL STORM STATUS... As of 3:00 AM GMT Thu Sep 24 the center of Fay was located near 29.8, -40.0 with movement WSW at 9 mph. The minimum central pressure was 1010 mb with maximum su"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>921 \nWTNT31 KNHC 240234\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>835 \nWTNT21 KNHC 240233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  16\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC THU SEP 24 2026\n"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>402 \nWTNT41 KNHC 240238\nTCDAT1\n \nTropical Storm Fay Discussion Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2026\n\nDe"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>787 \nFONT11 KNHC 240234\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  16      "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032247.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 00:42:06",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 00:42:06",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY REGAINS TROPICAL STORM STATUS... As of 3:00 AM GMT Thu Sep 24 the center of Fay was located near 29.8, -40.0 with movement WSW at 9 mph. The minimum central pressure was 1010 mb with maximum su"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>921 \nWTNT31 KNHC 240234\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>835 \nWTNT21 KNHC 240233\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  16\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n0300 UTC THU SEP 24 2026\n"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 16",
+          "description": "Issued at 300 AM GMT Thu Sep 24 2026 <pre>402 \nWTNT41 KNHC 240238\nTCDAT1\n \nTropical Storm Fay Discussion Number  16\nNWS National Hurricane Center Miami FL       AL062026\n300 AM GMT Thu Sep 24 2026\n\nDe"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 16",
+          "description": "Issued at 0300 UTC THU SEP 24 2026 <pre>787 \nFONT11 KNHC 240234\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  16      "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/032247.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 15:27:07",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 15:27:07",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY STRENGTHENS WHILE MOVING WESTWARD OVER THE CENTRAL ATLANTIC... As of 3:00 PM GMT Thu Sep 24 the center of Fay was located near 29.8, -41.2 with movement W at 6 mph. The minimum central pressure"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 18",
+          "description": "Issued at 300 PM GMT Thu Sep 24 2026 <pre>000\nWTNT31 KNHC 241439\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  18\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Thu Sep 24 20"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 18",
+          "description": "Issued at 1500 UTC THU SEP 24 2026 <pre>000\nWTNT21 KNHC 241439\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  18\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC THU SEP 24 2026\n "
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 18",
+          "description": "Issued at 300 PM GMT Thu Sep 24 2026 <pre>000\nWTNT41 KNHC 241440\nTCDAT1\n \nTropical Storm Fay Discussion Number  18\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Thu Sep 24 2026\n \nRe"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 18",
+          "description": "Issued at 1500 UTC THU SEP 24 2026 <pre>000\nFONT11 KNHC 241439\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  18       "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152322.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 15:33:30",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 15:33:30",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 15:44:48",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 15:44:48",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY STRENGTHENS WHILE MOVING WESTWARD OVER THE CENTRAL ATLANTIC... As of 3:00 PM GMT Thu Sep 24 the center of Fay was located near 29.8, -41.2 with movement W at 6 mph. The minimum central pressure"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 18",
+          "description": "Issued at 300 PM GMT Thu Sep 24 2026 <pre>000\nWTNT31 KNHC 241439\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  18\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Thu Sep 24 20"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 18",
+          "description": "Issued at 1500 UTC THU SEP 24 2026 <pre>000\nWTNT21 KNHC 241439\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  18\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC THU SEP 24 2026\n "
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 18",
+          "description": "Issued at 300 PM GMT Thu Sep 24 2026 <pre>000\nWTNT41 KNHC 241440\nTCDAT1\n \nTropical Storm Fay Discussion Number  18\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Thu Sep 24 2026\n \nRe"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 18",
+          "description": "Issued at 1500 UTC THU SEP 24 2026 <pre>000\nFONT11 KNHC 241439\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  18       "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152322.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-24 15:47:13",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-24 15:47:13",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Fay (AT1/AL062026)",
+          "description": "...FAY STRENGTHENS WHILE MOVING WESTWARD OVER THE CENTRAL ATLANTIC... As of 3:00 PM GMT Thu Sep 24 the center of Fay was located near 29.8, -41.2 with movement W at 6 mph. The minimum central pressure"
+        },
+        {
+          "title": "Tropical Storm Fay Public Advisory Number 18",
+          "description": "Issued at 300 PM GMT Thu Sep 24 2026 <pre>000\nWTNT31 KNHC 241439\nTCPAT1\n \nBULLETIN\nTropical Storm Fay Advisory Number  18\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Thu Sep 24 20"
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Advisory Number 18",
+          "description": "Issued at 1500 UTC THU SEP 24 2026 <pre>000\nWTNT21 KNHC 241439\nTCMAT1\n \nTROPICAL STORM FAY FORECAST/ADVISORY NUMBER  18\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC THU SEP 24 2026\n "
+        },
+        {
+          "title": "Tropical Storm Fay Forecast Discussion Number 18",
+          "description": "Issued at 300 PM GMT Thu Sep 24 2026 <pre>000\nWTNT41 KNHC 241440\nTCDAT1\n \nTropical Storm Fay Discussion Number  18\nNWS National Hurricane Center Miami FL       AL062026\n300 PM GMT Thu Sep 24 2026\n \nRe"
+        },
+        {
+          "title": "Tropical Storm Fay Wind Speed Probabilities Number 18",
+          "description": "Issued at 1500 UTC THU SEP 24 2026 <pre>000\nFONT11 KNHC 241439\nPWSAT1\n                                                                    \nTROPICAL STORM FAY WIND SPEED PROBABILITIES NUMBER  18       "
+        },
+        {
+          "title": "Tropical Storm Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152322.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
   }
 ]

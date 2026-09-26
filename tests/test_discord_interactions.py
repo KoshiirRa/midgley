@@ -27,8 +27,15 @@ class TestDiscordInteractionsAndReviewer(unittest.TestCase):
         }
 
     def test_discord_payload_action_components(self):
-        """Verifies that format_intraday_discord_payload includes interactive button components."""
-        payload = format_intraday_discord_payload(self.sample_event, environment="prod")
+        """Verifies that format_intraday_discord_payload includes interactive button components when requested."""
+        # 1. Standard incoming webhook payload (omits top-level components to prevent HTTP 400)
+        std_payload = format_intraday_discord_payload(self.sample_event, environment="prod")
+        self.assertNotIn("components", std_payload)
+        feedback_field = next(f for f in std_payload["embeds"][0]["fields"] if f["name"] == "🚩 Feedback & Review")
+        self.assertIn("[🚩 Flag False Positive]", feedback_field["value"])
+
+        # 2. Bot application payload with explicit components
+        payload = format_intraday_discord_payload(self.sample_event, environment="prod", include_components=True)
         self.assertIn("components", payload)
         self.assertEqual(len(payload["components"]), 1)
         action_row = payload["components"][0]

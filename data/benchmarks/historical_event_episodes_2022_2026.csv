@@ -1,0 +1,10 @@
+event_id,event_date,category,event_title,shock_score,primary_region,realized_5d_return,realized_14d_return,summary
+EVT-2022-02-24,2022-02-24,geopolitical_risk,Russia-Ukraine Conflict Escalation & Energy Sanctions,1.0,National,0.084,0.182,Outbreak of conflict triggered global crude and European gas supply disruption risk.
+EVT-2022-06-08,2022-06-08,supply_disruption,Freeport LNG Terminal Explosion & Gulf Feedstock Curtailment,0.85,National,-0.042,-0.076,"Freeport explosion halted 2.0 Bcf/d of LNG feed, redirecting domestic natural gas."
+EVT-2022-10-05,2022-10-05,opec_action,OPEC+ 2.0 Million BPD Production Quota Reduction,0.9,National,0.052,0.038,OPEC+ ministers agreed to reduce headline crude production target by 2 mb/d.
+EVT-2022-12-23,2022-12-23,supply_disruption,Winter Storm Elliott Gulf Coast & Midwest Freeze-offs,0.95,National,0.061,0.044,Hard freeze crippled 1.5 mb/d of Gulf Coast refining capacity.
+EVT-2023-04-02,2023-04-02,opec_action,OPEC+ Surprise 1.16 Million BPD Voluntary Cut,0.88,National,0.063,0.041,Saudi Arabia and OPEC+ members announced unexpected voluntary production cuts.
+EVT-2023-08-25,2023-08-25,supply_disruption,Marathon Garyville Louisiana Refinery Fire & CDU Shutdown,0.78,National,0.045,0.032,Naphtha tank fire shut crude units at third-largest US refinery (596k bpd).
+EVT-2023-10-07,2023-10-07,geopolitical_risk,Middle East Conflict & Red Sea Maritime Shipping Disruptions,0.85,National,0.041,0.029,Regional geopolitical conflict disrupted Bab el-Mandeb tanker transit routes.
+EVT-2024-01-15,2024-01-15,weather_extremes,Winter Storm Gerri/Heather Polar Vortex Refining Freeze,0.8,National,0.048,0.035,Arctic blast forced operational shutdowns across Texas City and Port Arthur refineries.
+EVT-2024-07-08,2024-07-08,supply_disruption,Hurricane Beryl Landfall on Houston Energy Corridor,0.82,National,0.039,0.021,Category 1 hurricane knocked out power to 2.2M customers and halted port operations.

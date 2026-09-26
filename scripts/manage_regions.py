@@ -116,6 +116,26 @@ def test_region(args):
     print("=================================================================\n")
 
 
+def retrain_regions(args):
+    """Executes retraining/pipeline execution for one or all registered regions."""
+    if getattr(args, "all", False) or not getattr(args, "region_id", None):
+        logger.info("Executing full multi-region pipeline retraining (run_all.py)...")
+        import subprocess
+        run_all_script = os.path.join(PROJECT_ROOT, "run_all.py")
+        cmd = [sys.executable, run_all_script]
+        if getattr(args, "use_llm", False):
+            cmd.append("--use-llm-api")
+        res = subprocess.run(cmd, check=False)
+        return res.returncode
+    else:
+        region_id = args.region_id.lower().strip()
+        logger.info(f"Retraining regional model for: {region_id}")
+        runner = DynamicRegionRunner(region_id)
+        use_llm = getattr(args, "use_llm", False)
+        res = runner.run_pipeline(use_llm_api=use_llm, model_type="ridge")
+        print(f"✅ Successfully retrained model for '{res['display_name']}': 5D Price = ${res['predicted_5d_price']:.3f}/gal")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Midgley Regional Metro CLI Manager")
     subparsers = parser.add_subparsers(dest="command")
@@ -138,6 +158,12 @@ def main():
     parser_test = subparsers.add_parser("test", help="Test forecast pipeline for a regional profile")
     parser_test.add_argument("--region-id", required=True, help="Region ID (e.g. chicago_il)")
 
+    # Retrain command
+    parser_retrain = subparsers.add_parser("retrain", help="Retrain regional models or run full pipeline")
+    parser_retrain.add_argument("--all", action="store_true", help="Retrain all registered regions and national model")
+    parser_retrain.add_argument("--region-id", help="Region ID to retrain specifically (e.g. chicago_il)")
+    parser_retrain.add_argument("--use-llm", action="store_true", help="Enable LLM event extraction during retraining")
+
     args = parser.parse_args()
 
     if args.command == "list":
@@ -146,9 +172,12 @@ def main():
         create_region(args)
     elif args.command == "test":
         test_region(args)
+    elif args.command == "retrain":
+        retrain_regions(args)
     else:
         parser.print_help()
 
 
 if __name__ == "__main__":
     main()
+

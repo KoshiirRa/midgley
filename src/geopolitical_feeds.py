@@ -9,7 +9,7 @@ import re
 import json
 import urllib.request
 import urllib.parse
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import pandas as pd
 from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional

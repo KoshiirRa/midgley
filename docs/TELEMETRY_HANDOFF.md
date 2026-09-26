@@ -118,6 +118,6 @@ scrape_configs:
 ## 6. Grafana Dashboard Import Instructions
 
 1. Open **Grafana** $\rightarrow$ **Dashboards** $\rightarrow$ **Import**.
-2. Upload the JSON dashboard file located at [`grafana/dashboard_observability.json`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/grafana/dashboard_observability.json).
+2. Upload the JSON dashboard file located at [`grafana/dashboard_observability.json`](grafana/dashboard_observability.json).
 3. Select your Prometheus data source and click **Import**.
 4. Use the top **Environment** dropdown filter to switch between `prod` and `dev` telemetry feeds.

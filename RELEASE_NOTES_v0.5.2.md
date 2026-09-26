@@ -9,7 +9,7 @@
 ## 🚀 Key Features, Architectural Enhancements & Algorithmic Upgrades
 
 ### 1. CoSPOT Compositional Spectral & Wavelet Feature Prompting Engine (Issue #215, arXiv:2609.02093)
-- **Mathematical Frequency & Wavelet Decomposition ([`src/cospot_spectral_engine.py`](file:///src/cospot_spectral_engine.py)):**
+- **Mathematical Frequency & Wavelet Decomposition ([`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py)):**
   - Integrated theoretical concepts from *CoSPOT: Compositional Spectral Prompts for LLM-based Online Time Series Forecasting* ([arXiv:2609.02093v1](https://arxiv.org/abs/2609.02093v1), KAIST).
   - **Discrete Fourier Transform (DFT) Basis Decomposition:** Decomposes lookback sequences into orthogonal frequency bases:
     ```math
@@ -20,7 +20,7 @@
     H_{\text{spectral}} = -\frac{\sum P_k \ln(P_k + 10^{-12})}{\ln(K)}
     ```
   - **Discrete Wavelet Transform (DWT) Multi-Resolution Filtering:** Uses 2-level Haar wavelet filtering to isolate high-frequency intraday noise ($D_1$), localized 3-5 day shock fluctuations ($D_2$), and macro trend baselines ($A_2$), computing detail-to-approximation energy ratios ($R_{\text{wavelet}}$) and localized shock magnitudes ($|D_1[-1]| + |D_2[-1]|$).
-- **Gemini 2.5 Flash Prompt Context Enrichment ([`src/event_analyzer.py`](file:///src/event_analyzer.py)):**
+- **Gemini 2.5 Flash Prompt Context Enrichment ([`src/event_analyzer.py`](src/event_analyzer.py)):**
   - Injects structured `[MARKET FREQUENCY & SPECTRAL REGIME (CoSPOT arXiv:2609.02093)]` natural language context directly into Gemini 2.5 Flash single and batch prompt contracts (`LLM_SINGLE_PROMPT` & `LLM_BATCH_PROMPT`).
   - Addresses LLM "numerical blindness" by providing explicit frequency regime descriptors (e.g. *Coherent structural trend* vs *Turbulent non-stationary dispersion*) and localized wavelet noise states.
 - **Ultra-Low Compute Online Projection Head Adaptation:**
@@ -28,7 +28,7 @@
     ```math
     \mathcal{L}_{\text{online}} = \sum_{\tau=1}^T \delta^{T-\tau} \ell(f_\theta(X_\tau), \tilde{y}_\tau)
     ```
-- **Quantitative Feature Engineering & Chronological Splits ([`src/feature_engineering.py`](file:///src/feature_engineering.py)):**
+- **Quantitative Feature Engineering & Chronological Splits ([`src/feature_engineering.py`](src/feature_engineering.py)):**
   - Added 6 rolling spectral features to `create_feature_matrix()`:
     - `cospot_dft_dominant_period`
     - `cospot_dft_low_freq_energy_ratio`
@@ -37,31 +37,31 @@
     - `cospot_dwt_detail_shock_mag`
     - `cospot_dwt_approx_momentum`
   - Fully integrated into `quant_features` and `hybrid_features` in `prepare_chronological_splits()`.
-- **Intraday Anomaly Event Monitor Ingestion ([`src/intraday_event_monitor.py`](file:///src/intraday_event_monitor.py)):**
+- **Intraday Anomaly Event Monitor Ingestion ([`src/intraday_event_monitor.py`](src/intraday_event_monitor.py)):**
   - Updated `evaluate_headline_anomaly()` to generate and pass real-time spectral prompt context to `extract_event_features_llm()`, ensuring breaking news impact scoring is conditioned on current frequency-domain market dynamics.
-- **Spectral Benchmark Evaluator ([`src/models.py`](file:///src/models.py)):**
+- **Spectral Benchmark Evaluator ([`src/models.py`](src/models.py)):**
   - Added `evaluate_cospot_spectral_benchmarks()` comparing baseline Ridge estimators against spectral-augmented, hybrid-spectral, and online-adapted models on out-of-time test sets.
 
 ---
 
 ### 2. Vectorize Hindsight Episodic Agent Memory & Qualitative Anomaly Post-Mortems (Issue #230)
-- **Biomimetic Retain-Recall-Reflect Triad ([`src/agent_memory.py`](file:///src/agent_memory.py)):**
+- **Biomimetic Retain-Recall-Reflect Triad ([`src/agent_memory.py`](src/agent_memory.py)):**
   - Integrated episodic qualitative memory to transform Saturday weekly model reviews from pure numeric error calculation into automated root-cause post-mortems and historical analogy retrieval.
-  - **`Retain` (Experiential Memory Storage):** Automatically captures resolved prediction outcomes, qualitative event shock context, and anomaly classifications (`LARGE_OVERESTIMATE`, `LARGE_UNDERESTIMATE`, `DIRECTIONAL_FLIP`, `CI_BREACH`) when 5-day market prices are backfilled in [`src/prediction_logger.py`](file:///src/prediction_logger.py).
+  - **`Retain` (Experiential Memory Storage):** Automatically captures resolved prediction outcomes, qualitative event shock context, and anomaly classifications (`LARGE_OVERESTIMATE`, `LARGE_UNDERESTIMATE`, `DIRECTIONAL_FLIP`, `CI_BREACH`) when 5-day market prices are backfilled in [`src/prediction_logger.py`](src/prediction_logger.py).
   - **`Recall` (Dense & Semantic Analogy Search):** Enables zero-LLM search over historical forecast shocks using hybrid dense vector cosine similarity and Porter-stemmed BM25 keyword matching (e.g. querying past refinery flaring or hurricane detours in specific PADD regions).
   - **`Reflect` (Agentic Synthesis & Mental Models):** Synthesizes structured qualitative post-mortems for top forecast outliers, attributing discrepancies to event shock decay rates, localized crack margin expansions, or unmodeled physical bottlenecks, and outputs actionable parameter tuning recommendations (news decay $t_{1/2}$, Ridge $\alpha$, crack spread weights).
-- **Google Cloud Run (Scale-to-Zero) & Supabase PostgreSQL pgvector Integration ([`src/hindsight_client.py`](file:///src/hindsight_client.py), [`scripts/deploy_hindsight_cloudrun.sh`](file:///scripts/deploy_hindsight_cloudrun.sh), [`scripts/init_supabase_hindsight.sql`](file:///scripts/init_supabase_hindsight.sql)):**
+- **Google Cloud Run (Scale-to-Zero) & Supabase PostgreSQL pgvector Integration ([`src/hindsight_client.py`](src/hindsight_client.py), [`scripts/deploy_hindsight_cloudrun.sh`](scripts/deploy_hindsight_cloudrun.sh), [`scripts/init_supabase_hindsight.sql`](scripts/init_supabase_hindsight.sql)):**
   - Connects to an external Vectorize Hindsight container service hosted on **Google Cloud Run** with `--min-instances 0` ($0 idle cost), backed by **Supabase PostgreSQL** with native `pgvector` and HNSW index support.
   - Features 15-second cold-boot timeout safeguards and seamless automatic failover.
 - **Zero-Cost Deterministic Local SQLite FTS5 Fallback:**
   - Built-in `SQLiteMemoryStore` (`data/agent_memory.sqlite`) providing 100% offline reliability, $0 infrastructure cost, and 0 token overhead for basic keys and offline dev-vm evaluation.
-- **Weekly Review 2.0 Integration ([`src/weekly_issue_reporter.py`](file:///src/weekly_issue_reporter.py)):**
+- **Weekly Review 2.0 Integration ([`src/weekly_issue_reporter.py`](src/weekly_issue_reporter.py)):**
   - Injects the `## 🧠 Qualitative Anomaly Post-Mortems & Episodic Memory (Issue #230)` section into Saturday automated GitHub review issues, showcasing root-cause diagnoses and historical analogies alongside quantitative MAE metrics.
-- **Prometheus Observability & Grafana Exporters ([`src/telemetry.py`](file:///src/telemetry.py), [`docs/TELEMETRY_HANDOFF.md`](file:///docs/TELEMETRY_HANDOFF.md), [`grafana/dashboard_observability.json`](file:///grafana/dashboard_observability.json)):**
+- **Prometheus Observability & Grafana Exporters ([`src/telemetry.py`](src/telemetry.py), [`docs/TELEMETRY_HANDOFF.md`](docs/TELEMETRY_HANDOFF.md), [`grafana/dashboard_observability.json`](grafana/dashboard_observability.json)):**
   - Emits `agent_memory_operations_total`, `agent_memory_backend_calls_total`, `agent_memory_stored_experiences_total`, and `agent_memory_stored_reflections_total` metrics with dedicated Grafana panels and Axiom/Sentry telemetry monitors.
 
 ### 3. Real-Time Discord Webhook Notification Gateway for Intraday Revisions (Issue #234)
-- **Multi-Environment Anomaly Notification Engine ([`src/discord_notifier.py`](file:///src/discord_notifier.py)):**
+- **Multi-Environment Anomaly Notification Engine ([`src/discord_notifier.py`](src/discord_notifier.py)):**
   - Integrated real-time Discord webhook notifications triggered whenever breaking news headlines, refinery outages, or geopolitical supply shocks trip intraday anomaly thresholds.
   - **Environment Distinction (`[PRODUCTION]` vs `[DEVELOPMENT]`):** Dynamically inspects `MIDGLEY_ENV` and `GITHUB_ACTIONS` runtime state via `src/telemetry.py` to label alerts with clear badges (`Production (GitHub Actions / Cloud)` vs `Development (Local / dev-vm)`), preventing staging/dev testing confusion.
   - **Comprehensive Catalyst Telemetry:** Discord Embed payloads deliver rich real-time context:
@@ -74,12 +74,12 @@
     - 🔴 **Red (`#E74C3C`):** High supply disruption ($S \ge 0.50$) or severe upward price pressure ($\Delta P \ge +0.40$).
     - 🟢 **Green (`#2ECC71`):** Substantial downward price relief ($\Delta P \le -0.20$).
     - 🟠 **Orange (`#E67E22`):** General geopolitical volatility and moderate shocks.
-- **Intraday Pipeline Hook ([`src/intraday_event_monitor.py`](file:///src/intraday_event_monitor.py)):**
+- **Intraday Pipeline Hook ([`src/intraday_event_monitor.py`](src/intraday_event_monitor.py)):**
   - Integrated `send_intraday_discord_notification()` into `IntradayEventMonitor.process_incoming_headline()`, recording `discord_notified` status in `data/intraday_events.json`.
-- **Workflow & Environment Variables ([`.github/workflows/intraday_event_monitor.yml`](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/.github/workflows/intraday_event_monitor.yml)):**
+- **Workflow & Environment Variables ([`.github/workflows/intraday_event_monitor.yml`](.github/workflows/intraday_event_monitor.yml)):**
   - Injected `DISCORD_WEBHOOK_URL` secret and `MIDGLEY_ENV: "prod"` into the GitHub Actions intraday event dispatch workflow.
 ### 4. Mathematical Specification & Multi-Agent Pipeline Alignment (Issues #224, #225, #226, #227, #229)
-- **Chronological 15-Section Execution Order ([`src/dashboard_generator.py`](file:///src/dashboard_generator.py), [`docs/math.html`](file:///docs/math.html)) (Issue #229):**
+- **Chronological 15-Section Execution Order ([`src/dashboard_generator.py`](src/dashboard_generator.py), [`docs/math.html`](docs/math.html)) (Issue #229):**
   - Restructured the mathematical documentation to mirror the exact sequence of data flow through the multi-agent system:
     1. `01`: Quantitative Commodity Futures & 3-2-1 Crack Spread Modeling
     2. `02`: Alternative Physical Feeds, Macroeconomics & Market Positioning
@@ -112,7 +112,7 @@
     ```
     with category half-lives $t_{1/2} \in [2.5, 14.0]\text{ days}$ ($14.0\text{d}$ physical supply disruptions, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts) and Context Routing Diagnostic Fusion weighting $\omega_{\text{fusion}} \in [0.85, 1.25]$.
 
-### 5. Interactive Model Data Sources & Ingestion Governance Matrix ([`src/sources_generator.py`](file:///src/sources_generator.py), [`docs/sources.html`](file:///docs/sources.html), [`docs/sources/index.html`](file:///docs/sources/index.html))
+### 5. Interactive Model Data Sources & Ingestion Governance Matrix ([`src/sources_generator.py`](src/sources_generator.py), [`docs/sources.html`](docs/sources.html), [`docs/sources/index.html`](docs/sources/index.html))
 - **Dedicated Public Data Sources Catalog:**
   - Implemented modular `src/sources_generator.py` generating comprehensive standalone documentation pages (`docs/sources.html` and `docs/sources/index.html`) cataloging all 26 quantitative commodity futures, NOAA weather feeds, USGS hydrology gages, physical telemetry, state open data portals, and financial media streams feeding the Midgley forecasting engine.
 - **6 Comprehensive Domain Category Partitions:**
@@ -132,7 +132,7 @@
   - Corrected `KATEX_ONLOAD_SCRIPT` JavaScript escaping in `src/dashboard_generator.py` to prevent browser syntax errors on auto-rendered math equations.
 
 ### 6. Public Telemetry Page Expansion & Missing Observability Streams (Issue #237)
-- **Vectorize Hindsight Episodic Agent Memory Observability ([`src/dashboard_generator.py`](file:///src/dashboard_generator.py), [`docs/telemetry.html`](file:///docs/telemetry.html)):**
+- **Vectorize Hindsight Episodic Agent Memory Observability ([`src/dashboard_generator.py`](src/dashboard_generator.py), [`docs/telemetry.html`](docs/telemetry.html)):**
   - Surfaced real-time episodic memory statistics directly from `data/telemetry_ledger.json` and `data/agent_memory.sqlite`.
   - **Memory Triad Counters:** Explicitly displays lifetime counts for `Retain` operations (experience storage), `Recall` queries (analogy matching), and `Reflect` syntheses (qualitative post-mortems).
   - **Hybrid Routing Telemetry:** Displays request distribution between Google Cloud Run Vector DB (`midgley-hindsight` + Supabase `pgvector`) vs zero-cost local SQLite FTS5 fallbacks.
@@ -151,7 +151,7 @@
 
 ## 🧪 Benchmark & Verification Results
 
-- **Simulated 4-Week Reflection Cycle Benchmark ([`tests/test_hindsight_benchmark.py`](file:///tests/test_hindsight_benchmark.py)):**
+- **Simulated 4-Week Reflection Cycle Benchmark ([`tests/test_hindsight_benchmark.py`](tests/test_hindsight_benchmark.py)):**
   - Evaluated 28-day / 224-prediction lifecycle across 8 metro hubs with 6 injected shock anomalies:
     - **Average Retain Latency:** `15.65 ms / write`
     - **Analogy Recall Latency:** `2.02 ms / query`

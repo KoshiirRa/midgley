@@ -1,0 +1,84 @@
+{
+  "vintages": {
+    "GASREGW": [
+      {
+        "date": "2023-05-15",
+        "value": 3.536,
+        "vintage_date": "2023-05-16"
+      },
+      {
+        "date": "2023-05-22",
+        "value": 3.534,
+        "vintage_date": "2023-05-23"
+      },
+      {
+        "date": "2023-05-29",
+        "value": 3.571,
+        "vintage_date": "2023-05-31"
+      },
+      {
+        "date": "2023-06-05",
+        "value": 3.541,
+        "vintage_date": "2023-06-06"
+      },
+      {
+        "date": "2023-05-29",
+        "value": 3.574,
+        "vintage_date": "2023-06-13"
+      },
+      {
+        "date": "2023-06-12",
+        "value": 3.595,
+        "vintage_date": "2023-06-13"
+      },
+      {
+        "date": "2023-06-19",
+        "value": 3.577,
+        "vintage_date": "2023-06-20"
+      },
+      {
+        "date": "2024-05-06",
+        "value": 3.643,
+        "vintage_date": "2024-05-07"
+      },
+      {
+        "date": "2024-05-13",
+        "value": 3.596,
+        "vintage_date": "2024-05-14"
+      },
+      {
+        "date": "2024-05-20",
+        "value": 3.584,
+        "vintage_date": "2024-05-21"
+      }
+    ],
+    "WPULEUS3": [
+      {
+        "date": "2023-05-19",
+        "value": 94.2,
+        "vintage_date": "2023-05-24"
+      },
+      {
+        "date": "2023-05-26",
+        "value": 95.1,
+        "vintage_date": "2023-06-01"
+      },
+      {
+        "date": "2023-06-02",
+        "value": 96.0,
+        "vintage_date": "2023-06-07"
+      },
+      {
+        "date": "2023-05-26",
+        "value": 94.8,
+        "vintage_date": "2023-06-07"
+      },
+      {
+        "date": "2023-06-09",
+        "value": 93.7,
+        "vintage_date": "2023-06-14"
+      }
+    ]
+  },
+  "last_updated": null
+}

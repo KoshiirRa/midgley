@@ -15,7 +15,8 @@ import requests
 import json
 import hashlib
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from typing import Tuple, Dict, Any, List
 import logging
 from src.lookup_cache import global_cache
@@ -150,10 +151,17 @@ def get_finlight_quota_status() -> dict:
 def is_trading_hours(now_dt: datetime = None) -> bool:
     """
     Checks if current time is within US Energy Commodity Trading Hours
-    (08:00 AM - 05:00 PM EST, Monday through Friday).
+    (08:00 AM - 05:00 PM US Eastern Time, Monday through Friday).
+    Uses zoneinfo.ZoneInfo("America/New_York") for timezone-aware evaluation.
     """
+    eastern = ZoneInfo("America/New_York")
     if now_dt is None:
-        now_dt = datetime.now()
+        now_dt = datetime.now(timezone.utc).astimezone(eastern)
+    elif now_dt.tzinfo is None:
+        now_dt = now_dt.replace(tzinfo=eastern)
+    else:
+        now_dt = now_dt.astimezone(eastern)
+
     if now_dt.weekday() >= 5:  # Saturday/Sunday
         return False
     hour = now_dt.hour

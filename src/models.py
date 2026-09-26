@@ -4,12 +4,15 @@ Trains Quantitative Baseline vs. LLM-Augmented Hybrid Forecasting Models
 and computes rigorous error metrics & directional accuracy.
 """
 
+from __future__ import annotations
+
 import itertools
+import math
 import os
 from typing import Any, Optional, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import Ridge, RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 try:
     from xgboost import XGBRegressor
@@ -190,6 +193,102 @@ def compute_shap_feature_attributions(model, X_sample: pd.DataFrame, feature_nam
     return {name: round(float(val), 4) for name, val in sorted_pairs}
 
 
+def transform_target(
+    y_future: pd.Series,
+    y_current: pd.Series,
+    target_mode: str = "level"
+) -> np.ndarray:
+    """
+    Transforms forward target commodity price into difference, log-return, or persistence residual target (Issue #360).
+    Modes:
+    - 'level': y = P_{t+h}
+    - 'difference': y = P_{t+h} - P_t
+    - 'return': y = ln(P_{t+h} / P_t)
+    - 'persistence_residual': y = P_{t+h} - P_t
+    """
+    y_fut = np.array(y_future, dtype=float)
+    y_curr = np.array(y_current, dtype=float)
+    y_curr_safe = np.where(y_curr <= 0, 1.0, y_curr)
+
+    if target_mode == "difference":
+        return y_fut - y_curr
+    elif target_mode == "return":
+        return np.log(np.maximum(y_fut, 1e-4) / y_curr_safe)
+    elif target_mode == "persistence_residual":
+        return y_fut - y_curr
+    else:
+        return y_fut
+
+
+def reconstruct_price_forecasts(
+    y_pred: np.ndarray,
+    y_current: np.ndarray,
+    target_mode: str = "level"
+) -> np.ndarray:
+    """
+    Reconstructs level price forecast P_{t+h} from model predictions under difference,
+    return, or persistence-residual targets with stability bounds. (Issue #360)
+    """
+    y_p = np.array(y_pred, dtype=float)
+    y_c = np.array(y_current, dtype=float)
+
+    if target_mode == "difference" or target_mode == "persistence_residual":
+        reconstructed = y_c + y_p
+    elif target_mode == "return":
+        bounded_return = np.clip(y_p, -0.25, 0.25)
+        reconstructed = y_c * np.exp(bounded_return)
+    else:
+        reconstructed = y_p
+
+    return np.clip(reconstructed, 0.10, 20.0)
+
+
+def evaluate_target_formulations(
+    X_train: pd.DataFrame,
+    y_train_future: pd.Series,
+    y_train_current: pd.Series,
+    X_test: pd.DataFrame,
+    y_test_future: pd.Series,
+    y_test_current: pd.Series,
+    target_modes: Optional[List[str]] = None
+) -> Dict[str, Dict[str, Any]]:
+    """
+    Compares Level vs Difference vs Return vs Persistence-Residual target formulations (Issue #360).
+    Computes Out-of-Sample MAE, RMSE, Directional Accuracy, and Persistence Uplift.
+    """
+    modes = target_modes or ["level", "difference", "return", "persistence_residual"]
+    results = {}
+
+    y_test_arr = np.array(y_test_future, dtype=float)
+    y_test_curr_arr = np.array(y_test_current, dtype=float)
+
+    # Persistence baseline
+    err_pers = np.abs(y_test_curr_arr - y_test_arr)
+    mae_pers = float(np.mean(err_pers))
+
+    for mode in modes:
+        y_tr_trans = transform_target(y_train_future, y_train_current, target_mode=mode)
+        reg = Ridge(alpha=1.0)
+        reg.fit(X_train, y_tr_trans)
+
+        raw_preds = reg.predict(X_test)
+        reconstructed_preds = reconstruct_price_forecasts(raw_preds, y_test_curr_arr, target_mode=mode)
+
+        metrics = evaluate_predictions(y_test_future, reconstructed_preds, y_test_current)
+        mae = metrics["MAE"]
+        uplift = ((mae_pers - mae) / mae_pers) * 100.0 if mae_pers > 0 else 0.0
+
+        results[mode] = {
+            "target_mode": mode,
+            "metrics": metrics,
+            "persistence_uplift_pct": round(uplift, 2),
+            "reconstructed_predictions": reconstructed_preds
+        }
+
+    return results
+
+
+
 COMPONENT_NAMES = {
     "futures_commodity": "Futures & Commodity Benchmark",
     "refining_crack_margin": "Refining Yield & Crack Spread",
@@ -252,50 +351,77 @@ COMPONENT_DESCRIPTIONS = {
 def compute_locale_feature_attribution_breakdown(
     region_code: str,
     base_price: float,
-    predicted_price: float
+    predicted_price: float,
+    feature_attributions: Optional[Dict[str, float]] = None
 ) -> dict:
     """
     Computes component-level signed dollar and percentage feature attributions
-    and generates natural language driver breakdown per forecast (Issue #46).
+    and generates natural language driver breakdown per forecast (Issue #46, #470).
     
+    When empirical linear model feature attributions (feature_attributions) are provided,
+    they are normalized and scaled to the forecast delta. Otherwise, structural regional
+    cost-component shares (LOCALE_COMPONENT_WEIGHTS) are utilized.
     Guarantees sum(delta_dollars) == round(predicted_price - base_price, 3).
     """
     total_delta = round(float(predicted_price) - float(base_price), 3)
     total_pct = round((total_delta / base_price) * 100.0, 2) if base_price > 0 else 0.0
     
-    weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
-    
+    if feature_attributions and len(feature_attributions) > 0:
+        methodology = "empirical_linear_features"
+        raw_sum = sum(feature_attributions.values())
+        raw_deltas = {}
+        if abs(raw_sum) > 1e-6:
+            # Scale proportionally to exact total_delta while preserving signs
+            scale = total_delta / raw_sum
+            accumulated = 0.0
+            feat_items = list(feature_attributions.items())
+            for i, (k, v) in enumerate(feat_items):
+                if i == len(feat_items) - 1:
+                    raw_deltas[k] = round(total_delta - accumulated, 3)
+                else:
+                    d = round(v * scale, 3)
+                    raw_deltas[k] = d
+                    accumulated += d
+            weights = {k: abs(raw_deltas[k]) / max(1e-6, sum(abs(x) for x in raw_deltas.values())) for k in raw_deltas}
+        else:
+            weights = {k: 1.0 / len(feature_attributions) for k in feature_attributions}
+            raw_deltas = {k: round(total_delta / len(feature_attributions), 3) for k in feature_attributions}
+    else:
+        methodology = "structural_baseline_cost_shares"
+        weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
+        raw_deltas = {}
+        accumulated = 0.0
+        keys = list(weights.keys())
+        for i, comp_key in enumerate(keys):
+            w = weights[comp_key]
+            if i == len(keys) - 1:
+                comp_delta = round(total_delta - accumulated, 3)
+            else:
+                comp_delta = round(total_delta * w, 3)
+                accumulated += comp_delta
+            raw_deltas[comp_key] = comp_delta
+
     components = {}
     key_drivers = []
-    
-    # Calculate exact dollar deltas per component
-    raw_deltas = {}
-    accumulated = 0.0
-    keys = list(weights.keys())
-    
-    for i, comp_key in enumerate(keys):
-        w = weights[comp_key]
-        if i == len(keys) - 1:
-            comp_delta = round(total_delta - accumulated, 3)
-        else:
-            comp_delta = round(total_delta * w, 3)
-            accumulated += comp_delta
-        raw_deltas[comp_key] = comp_delta
 
     for comp_key, comp_delta in raw_deltas.items():
-        w = weights[comp_key]
-        comp_name = COMPONENT_NAMES.get(comp_key, comp_key)
+        w = weights.get(comp_key, 0.0)
+        comp_name = COMPONENT_NAMES.get(comp_key, comp_key.replace('_', ' ').title())
         comp_pct = round(w * 100.0, 1)
         
         if comp_delta > 0:
             direction = "UP"
-            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["up"]
         elif comp_delta < 0:
             direction = "DOWN"
-            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["down"]
         else:
             direction = "FLAT"
-            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["flat"]
+
+        desc_dict = COMPONENT_DESCRIPTIONS.get(comp_key, {
+            "up": f"{comp_name} exerting upward price pressure",
+            "down": f"{comp_name} exerting downward price pressure",
+            "flat": f"{comp_name} remaining steady and neutral"
+        })
+        desc_template = desc_dict.get(direction.lower(), f"{comp_name} effect")
             
         components[comp_key] = {
             "name": comp_name,
@@ -333,6 +459,7 @@ def compute_locale_feature_attribution_breakdown(
 
     return {
         "region_code": region_code,
+        "methodology": methodology,
         "base_price": base_price,
         "predicted_price": predicted_price,
         "total_delta_dollars": total_delta,
@@ -346,13 +473,15 @@ def compute_locale_feature_attribution_breakdown(
 
 
 from sklearn.ensemble import StackingRegressor
-from sklearn.linear_model import Ridge, ElasticNet, RidgeCV
+from sklearn.linear_model import ElasticNet
+from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
-def build_stacking_ensemble_pipeline():
+def build_stacking_ensemble_pipeline(cv: Optional[Any] = None):
     """
-    Builds a Stacking Ensemble Regressor combining Ridge, ElasticNet, RandomForest, and XGBoost base estimators (Issue #170).
+    Builds a Stacking Ensemble Regressor combining Ridge, ElasticNet, RandomForest, and XGBoost base estimators (Issue #170, #354).
+    Uses PurgedGroupTimeSeriesSplit(n_splits=5, label_horizon_steps=5, embargo_steps=5) by default to eliminate lookahead leakage in stacking cross-validation.
     """
     estimators = [
         ('ridge', make_pipeline(StandardScaler(), Ridge(alpha=10.0))),
@@ -363,7 +492,8 @@ def build_stacking_ensemble_pipeline():
         estimators.append(('xgb', XGBRegressor(n_estimators=50, max_depth=3, learning_rate=0.03, random_state=42)))
         
     final_estimator = RidgeCV()
-    return StackingRegressor(estimators=estimators, final_estimator=final_estimator, cv=5)
+    splitter = cv if cv is not None else PurgedGroupTimeSeriesSplit(n_splits=5, label_horizon_steps=5, embargo_steps=5)
+    return StackingRegressor(estimators=estimators, final_estimator=final_estimator, cv=splitter)
 
 
 def compute_quantile_uncertainty_bands(y_pred: np.ndarray, residual_std: float = 0.05) -> dict:
@@ -382,10 +512,67 @@ def compute_quantile_uncertainty_bands(y_pred: np.ndarray, residual_std: float =
     }
 
 
+def enforce_forecast_plausibility_gate(
+    hybrid_pred_price: float,
+    quant_pred_price: float,
+    base_price: float,
+    horizon_days: int = 5,
+    residual_std: Optional[float] = None
+) -> Tuple[float, bool, str]:
+    """
+    Enforces post-inference plausibility bounds between hybrid LLM forecast and quantitative baseline (Issue #428, #467).
+    Applies a single convex projection onto the intersection of the maximum plausible return interval
+    and the quantitative baseline divergence interval.
+    """
+    if base_price <= 0:
+        return float(hybrid_pred_price), False, "INVALID_BASE"
+    
+    # 1. Maximum plausible return over h business days: 
+    # Scaled from +/- 8% (1d) to +/- 20% (5d), with absolute cap at +/- 25%
+    max_return_bound = min(0.25, max(0.08, 0.05 + 0.03 * horizon_days))
+    low_ret = base_price * (1.0 - max_return_bound)
+    high_ret = base_price * (1.0 + max_return_bound)
+    
+    # 2. Maximum allowable absolute divergence from physical quantitative baseline
+    if quant_pred_price > 0:
+        sigma = residual_std if residual_std and residual_std > 0 else 0.05
+        max_divergence_dollars = max(0.20, 2.5 * sigma * np.sqrt(max(1, horizon_days) / 5.0))
+        low_quant = quant_pred_price - max_divergence_dollars
+        high_quant = quant_pred_price + max_divergence_dollars
+    else:
+        low_quant = low_ret
+        high_quant = high_ret
+
+    # Convex interval intersection
+    low_bound = max(low_ret, low_quant)
+    high_bound = min(high_ret, high_quant)
+
+    # In rare cases where quant baseline is far outside return bounds, prioritize return bounds
+    if low_bound > high_bound:
+        low_bound = low_ret
+        high_bound = high_ret
+
+    clamped_price = float(np.clip(hybrid_pred_price, low_bound, high_bound))
+    gated = abs(clamped_price - hybrid_pred_price) > 1e-4
+    reasons = []
+
+    if hybrid_pred_price < low_bound or hybrid_pred_price > high_bound:
+        raw_return = (hybrid_pred_price - base_price) / base_price
+        reasons.append(f"CONVEX_BOUND_CLAMP (raw=${hybrid_pred_price:.4f}, ret={raw_return:+.1%}, bounds=[${low_bound:.4f}, ${high_bound:.4f}])")
+            
+    reason_str = "; ".join(reasons) if reasons else "PLAUSIBLE"
+    if gated:
+        logger.warning(f"⚠️ Forecast Plausibility Gate Triggered (h={horizon_days}d): {reason_str}. Clamped price: ${hybrid_pred_price:.4f} -> ${clamped_price:.4f}")
+        
+    return round(float(clamped_price), 4), gated, reason_str
+
+
 def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wandb: bool = False, wandb_run: Any = None) -> dict:
+
     """
     Trains Baseline Quantitative Model and Hybrid LLM-Augmented Model.
     Performs ablation comparison on the out-of-time test set.
+    Supports return-based target formulation with price level reconstruction (Issues #396, #397).
     """
     X_train_quant = split_data['X_train_quant']
     X_train_hybrid = split_data['X_train_hybrid']
@@ -396,9 +583,16 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     y_test = split_data['y_test']
     
     test_df = split_data['test_df']
-    y_current = test_df['gasoline_rbob']
+    y_current = test_df['gasoline_rbob'] if 'gasoline_rbob' in test_df.columns else pd.Series(1.0, index=test_df.index)
+    forecast_horizon = split_data.get('forecast_horizon', 5)
+
+    predict_returns = split_data.get('predict_returns', None)
+    if predict_returns is None:
+        is_return_target = ('y_train_return' in split_data and split_data['y_train'] is split_data['y_train_return']) or (float(np.nanmax(np.abs(y_train))) < 1.0)
+    else:
+        is_return_target = bool(predict_returns)
     
-    logger.info(f"Training forecasting models using algorithm: {model_type}...")
+    logger.info(f"Training forecasting models using algorithm: {model_type} (is_return_target={is_return_target})...")
     
     if model_type == "stacking":
         model_quant = build_stacking_ensemble_pipeline()
@@ -419,27 +613,58 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         model_quant = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
         model_hybrid = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
     else:
-        # Standardized Ridge Pipeline
-        model_quant = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
-        model_hybrid = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+        # Standardized Ridge Pipeline with Purged CV Hyperparameter Tuning (Issues #396, #397)
+        n_cv_splits = min(5, max(2, len(X_train_quant) // max(1, forecast_horizon * 3)))
+        if n_cv_splits >= 2 and len(X_train_quant) >= (forecast_horizon * 6):
+            purged_cv = PurgedGroupTimeSeriesSplit(
+                n_splits=n_cv_splits,
+                label_horizon_steps=forecast_horizon,
+                embargo_steps=forecast_horizon,
+                chronological_only=True
+            )
+            model_quant = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0, 50.0, 100.0, 500.0], cv=purged_cv))
+            model_hybrid = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0, 50.0, 100.0, 500.0], cv=purged_cv))
+        else:
+            model_quant = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
+            model_hybrid = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
         
     # 1. Fit Baseline Model (Quantitative Features Only)
     model_quant.fit(X_train_quant, y_train)
-    pred_quant = model_quant.predict(X_test_quant)
-    metrics_quant = evaluate_predictions(y_test, pred_quant, y_current)
+    raw_pred_quant = model_quant.predict(X_test_quant)
     
     # 2. Fit Hybrid Model (Quantitative + LLM Unstructured Event Features)
     model_hybrid.fit(X_train_hybrid, y_train)
-    pred_hybrid = model_hybrid.predict(X_test_hybrid)
-    metrics_hybrid = evaluate_predictions(y_test, pred_hybrid, y_current)
+    raw_pred_hybrid = model_hybrid.predict(X_test_hybrid)
+    
+    # Reconstruct price levels if trained on percentage returns (Issue #397)
+    y_curr_arr = np.array(y_current)
+    if is_return_target:
+        pred_quant = y_curr_arr * (1.0 + np.array(raw_pred_quant))
+        pred_hybrid = y_curr_arr * (1.0 + np.array(raw_pred_hybrid))
+        y_test_eval = np.array(split_data.get('y_test_price', y_curr_arr * (1.0 + np.array(y_test))))
+        pred_quant_ret = np.array(raw_pred_quant)
+        pred_hybrid_ret = np.array(raw_pred_hybrid)
+        y_test_ret = np.array(split_data.get('y_test_return', y_test))
+    else:
+        pred_quant = np.array(raw_pred_quant)
+        pred_hybrid = np.array(raw_pred_hybrid)
+        y_test_eval = np.array(y_test)
+        pred_quant_ret = (pred_quant - y_curr_arr) / y_curr_arr
+        pred_hybrid_ret = (pred_hybrid - y_curr_arr) / y_curr_arr
+        y_test_ret = (y_test_eval - y_curr_arr) / y_curr_arr
+
+    metrics_quant = evaluate_predictions(pd.Series(y_test_eval), pred_quant, y_current)
+    metrics_hybrid = evaluate_predictions(pd.Series(y_test_eval), pred_hybrid, y_current)
+    metrics_quant_return = evaluate_predictions(pd.Series(y_test_ret), pred_quant_ret)
+    metrics_hybrid_return = evaluate_predictions(pd.Series(y_test_ret), pred_hybrid_ret)
     
     # 3. Calculate Improvement Metrics
-    mae_imp = ((metrics_quant['MAE'] - metrics_hybrid['MAE']) / metrics_quant['MAE']) * 100.0
-    rmse_imp = ((metrics_quant['RMSE'] - metrics_hybrid['RMSE']) / metrics_quant['RMSE']) * 100.0
+    mae_imp = ((metrics_quant['MAE'] - metrics_hybrid['MAE']) / metrics_quant['MAE']) * 100.0 if metrics_quant['MAE'] > 0 else 0.0
+    rmse_imp = ((metrics_quant['RMSE'] - metrics_hybrid['RMSE']) / metrics_quant['RMSE']) * 100.0 if metrics_quant['RMSE'] > 0 else 0.0
 
     # 4. Compute Benchmark Baseline Comparisons (Issue #43)
     ma_5d = test_df['gas_ma_7'] if 'gas_ma_7' in test_df.columns else None
-    baselines = evaluate_baseline_comparisons(y_test, y_current, ma_5d)
+    baselines = evaluate_baseline_comparisons(pd.Series(y_test_eval), y_current, ma_5d)
     metrics_persistence = baselines['metrics_persistence']
     metrics_moving_avg = baselines['metrics_moving_avg']
     
@@ -451,7 +676,7 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     quantiles = compute_quantile_uncertainty_bands(pred_hybrid, residual_std=metrics_hybrid.get('RMSE', 0.05))
 
     # 6. Compute QuantStats Risk & Performance Metrics (Issue #120)
-    hybrid_returns = (pred_hybrid - np.array(y_current)) / np.array(y_current)
+    hybrid_returns = (pred_hybrid - y_curr_arr) / y_curr_arr
     risk_metrics = compute_quantstats_risk_metrics(hybrid_returns)
 
     # 7. Compute SHAP Feature Attributions (Issue #114)
@@ -459,7 +684,10 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
 
     # Feature Importance for Hybrid Model
     feature_importance = {}
-    estimator = model_hybrid.named_steps['ridge'] if hasattr(model_hybrid, 'named_steps') and 'ridge' in model_hybrid.named_steps else model_hybrid
+    if hasattr(model_hybrid, 'named_steps'):
+        estimator = model_hybrid.named_steps.get('ridgecv', model_hybrid.named_steps.get('ridge', model_hybrid))
+    else:
+        estimator = model_hybrid
     
     if hasattr(estimator, 'feature_importances_'):
         importances = estimator.feature_importances_
@@ -495,11 +723,52 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         except Exception as e:
             logger.debug(f"Notice logging to W&B: {e}")
 
+    # Live inference evaluation using unlabelled contemporary features (t=0) (Issue #353)
+    X_live_hybrid = split_data.get('X_live_hybrid', X_test_hybrid.iloc[-1:] if len(X_test_hybrid) > 0 else pd.DataFrame())
+    X_live_quant = split_data.get('X_live_quant', X_test_quant.iloc[-1:] if len(X_test_quant) > 0 else pd.DataFrame())
+    live_base = float(split_data.get('live_current_price', y_current.iloc[-1] if len(y_current) > 0 else 1.0))
+    live_origin_date = split_data.get('live_feature_origin_date', str(test_df['date'].iloc[-1]) if 'date' in test_df.columns and len(test_df) > 0 else None)
+
+    if len(X_live_hybrid) > 0:
+        raw_live_pred = float(model_hybrid.predict(X_live_hybrid)[0])
+    else:
+        raw_live_pred = float(pred_hybrid[-1]) if len(pred_hybrid) > 0 else 0.0
+
+    if len(X_live_quant) > 0:
+        raw_live_pred_quant = float(model_quant.predict(X_live_quant)[0])
+    else:
+        raw_live_pred_quant = float(pred_quant[-1]) if len(pred_quant) > 0 else 0.0
+
+    if is_return_target:
+        bounded_live_pred = float(np.clip(raw_live_pred, -0.25, 0.25))
+        bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.25, 0.25))
+        raw_hybrid_price = float(live_base * (1.0 + bounded_live_pred))
+        raw_quant_price = float(live_base * (1.0 + bounded_live_pred_quant))
+    else:
+        raw_hybrid_price = raw_live_pred
+        raw_quant_price = raw_live_pred_quant
+
+    # Plausibility Gating (Issue #428)
+    h_eval = int(split_data.get('forecast_horizon', 5))
+    r_std = metrics_hybrid.get('RMSE', 0.05)
+    live_pred_price, is_gated, gate_reason = enforce_forecast_plausibility_gate(
+        hybrid_pred_price=raw_hybrid_price,
+        quant_pred_price=raw_quant_price,
+        base_price=live_base,
+        horizon_days=h_eval,
+        residual_std=r_std
+    )
+    live_pred_quant_price = raw_quant_price
+    live_pred_return = (live_pred_price - live_base) / live_base if live_base > 0 else 0.0
+    live_pred_quant_return = (live_pred_quant_price - live_base) / live_base if live_base > 0 else 0.0
+
     return {
         "model_quant": model_quant,
         "model_hybrid": model_hybrid,
         "metrics_quant": metrics_quant,
         "metrics_hybrid": metrics_hybrid,
+        "metrics_quant_return": metrics_quant_return,
+        "metrics_hybrid_return": metrics_hybrid_return,
         "metrics_persistence": metrics_persistence,
         "metrics_moving_avg": metrics_moving_avg,
         "mae_improvement_pct": round(mae_imp, 2),
@@ -510,14 +779,32 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "shap_feature_attributions": shap_attributions,
         "predictions_quant": pred_quant,
         "predictions_hybrid": pred_hybrid,
+        "predictions_quant_return": pred_quant_ret,
+        "predictions_hybrid_return": pred_hybrid_ret,
         "predictions_p10": quantiles["p10"],
         "predictions_p50": quantiles["p50"],
         "predictions_p90": quantiles["p90"],
         "predictions_persistence": baselines['predictions_persistence'],
-        "y_test": np.array(y_test),
+        "y_test": np.array(y_test_eval),
+        "y_test_return": np.array(y_test_ret),
         "test_dates": test_df['date'].values,
         "current_prices": np.array(y_current),
-        "wandb_run_url": wandb_run_url
+        "is_return_target": is_return_target,
+        "wandb_run_url": wandb_run_url,
+        "live_pred_price": live_pred_price,
+        "live_pred_quant_price": live_pred_quant_price,
+        "live_base_price": live_base,
+        "live_pred_return": live_pred_return,
+        "live_pred_quant_return": live_pred_quant_return,
+        "live_feature_origin_date": str(live_origin_date) if live_origin_date is not None else None,
+        "forecast_origin_date": str(live_origin_date) if live_origin_date is not None else None,
+        "feature_cutoff_date": str(live_origin_date) if live_origin_date is not None else None,
+        "plausibility_gated": is_gated,
+        "plausibility_reason": gate_reason,
+        "forecast_target_date": (
+            pd.bdate_range(start=pd.to_datetime(live_origin_date), periods=int(split_data.get('forecast_horizon', 5)) + 1)[-1].strftime('%Y-%m-%d')
+            if live_origin_date is not None else None
+        ),
     }
 
 
@@ -527,12 +814,15 @@ def train_multi_horizon_models(
     horizons: Optional[list[int]] = None,
     decay_half_life_days: float = 5.0,
     train_ratio: float = 0.8,
+    region: str = "Tulsa_OK",
     model_type: str = "ridge",
     log_wandb: bool = False
 ) -> dict[int, dict]:
     """
     Trains and compares discrete step-ahead forecasting models across multi-day horizons
-    (default: h in [1, 2, 3, 4, 5]) (Issue #314).
+    (default: h in [1, 2, 3, 4, 5]) (Issue #314, #433).
+    Preserves contemporary unlabelled inference features (t=0) across all forecast horizons (Issue #353).
+    Enforces post-inference plausibility gating (Issue #428).
     
     Returns a dictionary mapping horizon integer h -> ablation results dictionary:
     {
@@ -557,7 +847,8 @@ def train_multi_horizon_models(
             market_df, 
             events_df, 
             forecast_horizon=h, 
-            decay_half_life_days=decay_half_life_days
+            decay_half_life_days=decay_half_life_days,
+            region=region
         )
         splits = prepare_chronological_splits(
             feature_df, 
@@ -568,11 +859,55 @@ def train_multi_horizon_models(
         res['splits'] = splits
         res['forecast_horizon'] = h
         
-        # Latest live base and hybrid forecast price
-        last_row = splits['X_test_hybrid'].iloc[-1:]
-        res['live_pred_price'] = float(res['model_hybrid'].predict(last_row)[0])
-        res['live_base_price'] = float(splits['test_df']['gasoline_rbob'].iloc[-1])
+        # Ensure latest live base, hybrid, and pure quantitative forecast prices use t=0 features
+        last_row_hybrid = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:])
+        last_row_quant = splits.get('X_live_quant', splits['X_test_quant'].iloc[-1:])
+        live_base = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
+        live_origin_date = splits.get('live_feature_origin_date', str(splits['test_df']['date'].iloc[-1]) if 'date' in splits['test_df'].columns else None)
+
+        raw_live_pred = float(res['model_hybrid'].predict(last_row_hybrid)[0])
+        raw_live_pred_quant = float(res['model_quant'].predict(last_row_quant)[0])
         
+        if res.get('is_return_target', False) or splits.get('predict_returns', False):
+            bounded_live_pred = float(np.clip(raw_live_pred, -0.25, 0.25))
+            bounded_live_pred_quant = float(np.clip(raw_live_pred_quant, -0.25, 0.25))
+            raw_hybrid_price = float(live_base * (1.0 + bounded_live_pred))
+            raw_quant_price = float(live_base * (1.0 + bounded_live_pred_quant))
+        else:
+            raw_hybrid_price = raw_live_pred
+            raw_quant_price = raw_live_pred_quant
+
+        # Plausibility Gating (Issue #428)
+        r_std = res.get('metrics_hybrid', {}).get('RMSE', 0.05)
+        gated_price, is_gated, gate_reason = enforce_forecast_plausibility_gate(
+            hybrid_pred_price=raw_hybrid_price,
+            quant_pred_price=raw_quant_price,
+            base_price=live_base,
+            horizon_days=h,
+            residual_std=r_std
+        )
+        
+        res['live_pred_price'] = gated_price
+        res['live_pred_quant_price'] = raw_quant_price
+        res['live_base_price'] = live_base
+        res['live_pred_return'] = (gated_price - live_base) / live_base if live_base > 0 else 0.0
+        res['live_pred_quant_return'] = (raw_quant_price - live_base) / live_base if live_base > 0 else 0.0
+        res['plausibility_gated'] = is_gated
+        res['plausibility_reason'] = gate_reason
+        
+        res['live_feature_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
+        res['forecast_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
+        res['feature_cutoff_date'] = str(live_origin_date) if live_origin_date is not None else None
+        if live_origin_date is not None:
+            try:
+                origin_dt = pd.to_datetime(live_origin_date)
+                target_dt = pd.bdate_range(start=origin_dt, periods=h+1)[-1]
+                res['forecast_target_date'] = target_dt.strftime('%Y-%m-%d')
+            except Exception:
+                res['forecast_target_date'] = None
+        else:
+            res['forecast_target_date'] = None
+
         multi_results[h] = res
 
     return multi_results
@@ -604,15 +939,23 @@ def predict_with_cedar_residual_decomposition(
 
 class PurgedGroupTimeSeriesSplit:
     """
-    Purged Group Time Series Cross-Validation Splitter (Issue #117).
+    Purged Group Time Series Cross-Validation Splitter (Issue #117, #354, #396).
     Prevents lookahead data leakage in time series models with overlapping labels (e.g. 5-day step-ahead forecasts).
+    Supports both Purged K-Fold Cross-Validation and strict Chronological Purged Walk-Forward Splitting.
     
     Ref: Marcos López de Prado (2018), 'Advances in Financial Machine Learning', Chapter 7.
     """
-    def __init__(self, n_splits: int = 5, label_horizon_steps: int = 5, embargo_steps: int = 5):
+    def __init__(
+        self, 
+        n_splits: int = 5, 
+        label_horizon_steps: int = 5, 
+        embargo_steps: int = 5,
+        chronological_only: bool = False
+    ):
         self.n_splits = n_splits
         self.label_horizon_steps = label_horizon_steps
         self.embargo_steps = embargo_steps
+        self.chronological_only = chronological_only
 
     def split(self, X, y=None, groups=None):
         n_samples = len(X)
@@ -620,8 +963,9 @@ class PurgedGroupTimeSeriesSplit:
         
         # Divide indices into n_splits contiguous groups
         fold_bounds = np.linspace(0, n_samples, self.n_splits + 1, dtype=int)
+        start_k = 1 if self.chronological_only else 0
         
-        for k in range(self.n_splits):
+        for k in range(start_k, self.n_splits):
             test_start = fold_bounds[k]
             test_end = fold_bounds[k + 1]
             test_indices = indices[test_start:test_end]
@@ -642,6 +986,11 @@ class PurgedGroupTimeSeriesSplit:
                 obs_start = i
                 obs_end = i + self.label_horizon_steps
                 
+                # If chronological_only, training cannot use observations that occurred at or after test_eval_start
+                if self.chronological_only and obs_start >= test_eval_start:
+                    train_mask[i] = False
+                    continue
+
                 overlap = (obs_start <= test_eval_end) and (obs_end >= test_eval_start)
                 in_embargo = (test_eval_end <= obs_start < embargo_end)
                 
@@ -649,10 +998,12 @@ class PurgedGroupTimeSeriesSplit:
                     train_mask[i] = False
                     
             train_indices = indices[train_mask]
+            if len(train_indices) == 0:
+                continue
             yield train_indices, test_indices
 
     def get_n_splits(self, X=None, y=None, groups=None):
-        return self.n_splits
+        return self.n_splits - 1 if self.chronological_only else self.n_splits
 
 
 class CombinatorialPurgedCV:
@@ -928,22 +1279,121 @@ def apply_gated_persistence_blending(
     return round(float(gated_pred), 4)
 
 
+def compute_empirical_residual_prediction_interval(
+    predicted_price: float,
+    residual_std_30d: float = 0.0612,
+    confidence_level: float = 0.95,
+    horizon_days: Optional[int] = None
+) -> tuple[float, float]:
+    """
+    Computes dynamic Empirical Residual Prediction Interval bounds (Issues #214, #358, #394):
+    PI_{1-\\alpha} = predicted_price +/- z_score * residual_std
+    Distinct from a Confidence Interval for the conditional mean E[Y|X], this Prediction Interval
+    quantifies the uncertainty of the future price realization Y_{t+h}.
+    """
+    z_score = 1.96 if confidence_level >= 0.95 else 1.645
+    std_val = max(0.01, float(residual_std_30d))
+
+    lower_bound = round(predicted_price - (z_score * std_val), 4)
+    upper_bound = round(predicted_price + (z_score * std_val), 4)
+    return lower_bound, upper_bound
+
+
 def compute_empirical_residual_ci(
     predicted_price: float,
     residual_std_30d: float = 0.0612,
     confidence_level: float = 0.95
 ) -> tuple[float, float]:
     """
-    Computes dynamic Empirical Residual Confidence Interval bounds (Issue #214):
-    CI_95% = predicted_price +/- z_score * residual_std_30d
-    replaces static +/- 5% multipliers with empirical residual variance.
+    Legacy alias for compute_empirical_residual_prediction_interval (Issue #214, #358).
+    Computes 95% prediction interval bounds using empirical residual standard deviation.
     """
-    z_score = 1.96 if confidence_level >= 0.95 else 1.645
-    std_val = max(0.01, float(residual_std_30d))
+    return compute_empirical_residual_prediction_interval(
+        predicted_price=predicted_price,
+        residual_std_30d=residual_std_30d,
+        confidence_level=confidence_level
+    )
 
-    lower_ci = round(predicted_price - (z_score * std_val), 4)
-    upper_ci = round(predicted_price + (z_score * std_val), 4)
-    return lower_ci, upper_ci
+
+def compute_conformal_prediction_intervals(
+    y_pred: Union[float, np.ndarray, List[float]],
+    calibration_residuals: Union[np.ndarray, List[float]],
+    alpha: float = 0.05,
+    min_calibration_samples: int = 50
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Computes Split Conformal Prediction Intervals with finite-sample (1 - alpha) coverage guarantee (Issue #358, #467).
+    Given calibration nonconformity scores s_i = |y_i - \\hat{y}_i|, computes the empirical quantile:
+      q = quantile(|residuals|, ceil((n+1)*(1-alpha))/n)
+    When n < min_calibration_samples (50), falls back to empirical sample standard deviation scaling to prevent degraded intervals.
+    Returns (lower_bounds, upper_bounds) around point predictions y_pred.
+    """
+    residuals = np.abs(np.asarray(calibration_residuals, dtype=float))
+    n = len(residuals)
+    if n == 0:
+        # Fallback to standard 1.96 * 0.0612 heuristic if no calibration residuals
+        q = 1.96 * 0.0612
+    elif n < min_calibration_samples:
+        std_est = float(np.std(residuals, ddof=1)) if n > 1 else float(np.mean(residuals))
+        q = max(float(np.quantile(residuals, 1.0 - alpha)), 1.96 * std_est)
+    else:
+        quantile_level = min(1.0, math.ceil((n + 1) * (1.0 - alpha)) / n)
+        q = float(np.quantile(residuals, quantile_level))
+
+    preds = np.asarray(y_pred, dtype=float)
+    lower_bounds = np.round(preds - q, 4)
+    upper_bounds = np.round(preds + q, 4)
+    return lower_bounds, upper_bounds
+
+
+def evaluate_prediction_interval_quality(
+    actuals: Union[np.ndarray, List[float]],
+    lower_bounds: Union[np.ndarray, List[float]],
+    upper_bounds: Union[np.ndarray, List[float]],
+    nominal_confidence: float = 0.95
+) -> Dict[str, Any]:
+    """
+    Evaluates prediction interval performance (empirical coverage, mean interval width, pinball loss) (Issue #358).
+    """
+    y_true = np.asarray(actuals, dtype=float)
+    y_low = np.asarray(lower_bounds, dtype=float)
+    y_high = np.asarray(upper_bounds, dtype=float)
+
+    n = len(y_true)
+    if n == 0:
+        return {
+            "nominal_coverage": nominal_confidence,
+            "empirical_coverage_pct": 0.0,
+            "mean_interval_width": 0.0,
+            "sample_size": 0,
+            "status": "NO_DATA"
+        }
+
+    in_bounds = (y_true >= y_low) & (y_true <= y_high)
+    coverage_pct = round(float(np.mean(in_bounds) * 100.0), 2)
+    mean_width = round(float(np.mean(y_high - y_low)), 4)
+
+    # Pinball Quantile Loss for Lower (alpha/2) and Upper (1 - alpha/2)
+    alpha = 1.0 - nominal_confidence
+    tau_low = alpha / 2.0
+    tau_high = 1.0 - (alpha / 2.0)
+
+    err_low = y_true - y_low
+    loss_low = float(np.mean(np.maximum(tau_low * err_low, (tau_low - 1.0) * err_low)))
+
+    err_high = y_true - y_high
+    loss_high = float(np.mean(np.maximum(tau_high * err_high, (tau_high - 1.0) * err_high)))
+
+    return {
+        "nominal_coverage": nominal_confidence,
+        "empirical_coverage_pct": coverage_pct,
+        "mean_interval_width": mean_width,
+        "pinball_loss_lower": round(loss_low, 4),
+        "pinball_loss_upper": round(loss_high, 4),
+        "total_pinball_loss": round(loss_low + loss_high, 4),
+        "sample_size": n,
+        "status": "VALID"
+    }
 
 
 def train_models_with_feast_point_in_time(
@@ -967,8 +1417,8 @@ def train_models_with_feast_point_in_time(
     )
     splits = prepare_chronological_splits(feature_matrix, forecast_horizon=forecast_horizon)
     
-    # Train Ridge Model
-    ridge = Ridge(alpha=10.0)
+    # Train Ridge Model with standard scaling pipeline
+    ridge = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
     ridge.fit(splits['X_train_hybrid'], splits['y_train'])
     y_pred_ridge = ridge.predict(splits['X_test_hybrid'])
     metrics_ridge = evaluate_predictions(splits['y_test'], y_pred_ridge, splits['test_df']['gasoline_rbob'])

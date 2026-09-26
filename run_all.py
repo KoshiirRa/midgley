@@ -156,6 +156,11 @@ if __name__ == "__main__":
                 except Exception as e:
                     logger.debug(f"Notice reading latest run metadata for Headline Arena: {e}")
 
+                # Estimate EIA US Regular Retail Gasoline (wholesale + ~$1.05-1.15 national tax/distribution/marketing spread)
+                eia_retail_p50 = round(rb_p50 + 1.10, 3) if rb_p50 > 0 else None
+                eia_retail_p10 = round(rb_p10 + 1.10, 3) if rb_p10 is not None else None
+                eia_retail_p90 = round(rb_p90 + 1.10, 3) if rb_p90 is not None else None
+
                 ha_res = submit_midgley_energy_forecasts(
                     rb_open_price=rb_open,
                     rb_p50=rb_p50,
@@ -167,6 +172,9 @@ if __name__ == "__main__":
                     cl_p10=cl_p10,
                     cl_p90=cl_p90,
                     cl_residual_std=cl_res_std,
+                    eia_retail_p50=eia_retail_p50,
+                    eia_retail_p10=eia_retail_p10,
+                    eia_retail_p90=eia_retail_p90,
                     qualitative_catalysts=qualitative_catalysts,
                     technical_indicators=tech_indicators,
                     physical_feeds=phys_feeds,
@@ -177,12 +185,14 @@ if __name__ == "__main__":
         logger.debug(f"Notice during Headline Arena execution: {e}")
     
     if failed_locations:
+        allow_partial = "--allow-partial" in sys.argv
         print("\n" + "!" * 80)
-        print(f"  WARNING: {len(failed_locations)} location(s) encountered errors during execution:")
+        print(f"  ERROR: {len(failed_locations)} location(s) encountered errors during execution:")
         for loc_id, err in failed_locations:
             print(f"    - {loc_id}: {err}")
         print("!" * 80)
-        if len(failed_locations) == len(LOCATIONS):
+        if not allow_partial:
+            print("  [STRICT GATING] Halting with non-zero exit code due to failed location pipeline(s). Use --allow-partial to bypass.")
             sys.exit(1)
 
     print("\n" + "=" * 80)

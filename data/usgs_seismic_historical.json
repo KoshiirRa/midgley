@@ -10,6 +10,12 @@
     "temporal_window_days": 30,
     "events": [],
     "corridors": {
+      "mid_atlantic": {
+        "corridor_risk_index": 0.0,
+        "max_magnitude": 0.0,
+        "active_events_count": 0,
+        "highest_impact_event": null
+      },
       "bay_area": {
         "corridor_risk_index": 0.0,
         "max_magnitude": 0.0,
