@@ -35,12 +35,12 @@ def _load_vintage_timeseries(
     feature_mapping: Dict[str, str],
     as_of_cutoff: Optional[str] = None,
     nested_key: Optional[str] = None,
-    target_dates: Optional[pd.Series] = None
+    target_dates: Optional[Union[pd.Series, pd.DatetimeIndex, List[Any]]] = None
 ) -> pd.DataFrame:
     """
-    Loads historical observations from a bitemporal vintage JSON file up to as_of_cutoff,
+    Loads historical observations from a bitemporal vintage JSON file,
     extracting target features and aligning them by observation date without lookahead bias.
-    Enforces point-in-time publication filtering (Issues #354, #432, #457).
+    Enforces true point-in-time publication filtering (Issues #354, #432, #457, #473).
     """
     if not os.path.exists(vintage_file):
         return pd.DataFrame()
@@ -66,7 +66,7 @@ def _load_vintage_timeseries(
             if not isinstance(v, dict):
                 continue
             as_of_ts = v.get("as_of", v.get("timestamp", ""))
-            if as_of_cutoff and as_of_ts and str(as_of_ts) > str(as_of_cutoff):
+            if as_of_cutoff and as_of_ts and str(as_of_ts)[:10] > str(as_of_cutoff)[:10]:
                 continue
 
             obs_date = v.get("valid_date", v.get("report_date", v.get("date", as_of_ts[:10] if len(as_of_ts) >= 10 else None)))
@@ -77,9 +77,15 @@ def _load_vintage_timeseries(
             if not isinstance(payload, dict):
                 payload = v
 
+            parsed_obs = pd.to_datetime(obs_date)
+            parsed_obs = parsed_obs.tz_localize(None) if getattr(parsed_obs, 'tz', None) is not None else parsed_obs
+            
+            parsed_as_of = pd.to_datetime(as_of_ts) if as_of_ts else parsed_obs
+            parsed_as_of = parsed_as_of.tz_localize(None) if getattr(parsed_as_of, 'tz', None) is not None else parsed_as_of
+
             rec = {
-                "date": pd.to_datetime(obs_date),
-                "_as_of": str(as_of_ts) if as_of_ts else str(obs_date)
+                "date": parsed_obs,
+                "_as_of": parsed_as_of
             }
             has_val = False
             for src_k, target_col in feature_mapping.items():
@@ -98,11 +104,36 @@ def _load_vintage_timeseries(
         if not records:
             return pd.DataFrame()
 
-        v_df = pd.DataFrame(records)
-        v_df.sort_values(by=["date", "_as_of"], inplace=True)
-        v_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
-        v_df.drop(columns=["_as_of"], inplace=True)
-        return v_df
+        raw_v_df = pd.DataFrame(records)
+
+        if target_dates is not None:
+            # Point-in-time alignment for each discrete origin date
+            target_dts = pd.to_datetime(list(target_dates))
+            target_dts = [dt.tz_localize(None) if getattr(dt, 'tz', None) is not None else dt for dt in target_dts]
+            pit_rows = []
+            for t_origin in target_dts:
+                # Filter records published at or before t_origin
+                valid_published = raw_v_df[raw_v_df["_as_of"] <= t_origin]
+                if valid_published.empty:
+                    continue
+                # For this origin, take the latest revision for each observation date
+                latest_rev = valid_published.sort_values(by=["date", "_as_of"]).drop_duplicates(subset=["date"], keep="last")
+                # Filter to observations for this specific origin date if matching by date
+                matching = latest_rev[latest_rev["date"] == t_origin]
+                if not matching.empty:
+                    pit_rows.append(matching.iloc[-1].to_dict())
+            if not pit_rows:
+                return pd.DataFrame()
+            v_df = pd.DataFrame(pit_rows)
+            v_df.drop(columns=["_as_of"], inplace=True, errors="ignore")
+            v_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+            return v_df
+        else:
+            # Global cutoff mode
+            v_df = raw_v_df.sort_values(by=["date", "_as_of"])
+            v_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+            v_df.drop(columns=["_as_of"], inplace=True, errors="ignore")
+            return v_df
     except Exception as e:
         logger.debug(f"Could not load vintage timeseries from {vintage_file}: {e}")
         return pd.DataFrame()

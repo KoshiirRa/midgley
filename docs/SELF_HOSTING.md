@@ -212,6 +212,10 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```bash
    npx wrangler d1 execute midgley-cache-d1 --file=scripts/init_d1_schema.sql
    ```
+   *For existing installations upgrading from previous schema versions lacking `forecast_id` (Issue #471):*
+   ```bash
+   npx wrangler d1 execute midgley-cache-d1 --file=scripts/migrations/0002_add_forecast_id_and_retroactive_columns.sql
+   ```
 3. Deploy the `midgley-cache-worker` proxy (`workers/cache_worker.ts` with `workers/wrangler.cache.toml`):
    ```bash
    # Deploy staging or production environment

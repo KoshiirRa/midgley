@@ -211,6 +211,21 @@ export default {
               )
             `).run();
 
+            // Run migration for existing installations lacking forecast_id (Issue #471)
+            try {
+              const tableInfo = await env.DB.prepare("PRAGMA table_info(prediction_history)").all();
+              const existingCols = new Set(((tableInfo && tableInfo.results) || []).map((c: any) => c.name));
+              if (existingCols.size > 0 && !existingCols.has("forecast_id")) {
+                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN forecast_id TEXT").run();
+                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN issued_at_utc TEXT").run();
+                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN is_retroactive_backtest INTEGER DEFAULT 0").run();
+                await env.DB.prepare("UPDATE prediction_history SET forecast_id = log_timestamp || '_' || region || '_' || COALESCE(forecast_horizon_days, 5) WHERE forecast_id IS NULL OR forecast_id = ''").run();
+                await env.DB.prepare("UPDATE prediction_history SET issued_at_utc = log_timestamp WHERE issued_at_utc IS NULL OR issued_at_utc = ''").run();
+              }
+            } catch (migErr) {
+              console.warn("Prediction history migration notice:", migErr);
+            }
+
             // Prepare batch statements
             const statements = predictions.map((row: any) => {
               return env.DB.prepare(`

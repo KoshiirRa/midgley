@@ -112,11 +112,15 @@ def run_full_hierarchy_audit(
             from src.event_analyzer import process_event_dataset
             from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
             
-            raw_market = fetch_market_data(start_date="2022-01-01")
-            if raw_market is not None and len(raw_market) >= 60:
+            raw_market = fetch_market_data(start_date="2022-01-01", allow_synthetic=use_synthetic_fallback)
+            is_synth = getattr(raw_market, 'attrs', {}).get('is_synthetic', False) if raw_market is not None else True
+            if raw_market is not None and not is_synth and len(raw_market) >= 60:
                 real_market_df = raw_market
                 raw_events = get_historical_event_dataset()
                 real_events_df = process_event_dataset(raw_events, use_llm_api=False) if raw_events is not None else None
+            elif is_synth and not use_synthetic_fallback:
+                logger.error("Authentic market data download returned synthetic fallback; rejecting as authentic market data for promotion audit.")
+                real_market_df = None
         except Exception as e:
             logger.warning(f"Could not load authentic market dataset for hierarchy evaluation: {e}. Falling back to benchmark simulation.")
 
@@ -255,6 +259,7 @@ def run_full_hierarchy_audit(
 
 
 if __name__ == "__main__":
+    import sys
     parser = argparse.ArgumentParser(description="5-Tier Model Hierarchy Evaluator")
     parser.add_argument("--horizons", nargs="+", type=int, default=[1, 3, 5], help="Forecast horizons to evaluate")
     parser.add_argument("--output-dir", type=str, default=None, help="Directory to save audit output files")
@@ -262,5 +267,19 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     summary = run_full_hierarchy_audit(horizons=args.horizons, output_dir=args.output_dir, use_synthetic_fallback=args.synthetic)
-    print(f"\nAudit complete: {summary['passed_regions_count']}/{summary['total_regions_evaluated']} regions passed statistical promotion gate.")
+    passed = summary.get('passed_regions_count', 0)
+    total = summary.get('total_regions_evaluated', 0)
+    promo_status = summary.get('promotion_status', 'UNKNOWN')
+    print(f"\nAudit complete: {passed}/{total} regions passed statistical promotion gate. Status: {promo_status}")
+
+    if not args.synthetic:
+        if promo_status != "PROMOTED_TO_PRODUCTION" or passed < total or total == 0:
+            print("❌ Model hierarchy audit failed statistical promotion gate or used synthetic data. Exiting with code 1 (Fail-Closed).", file=sys.stderr)
+            sys.exit(1)
+        else:
+            print("✅ Model hierarchy audit passed all statistical gates on authentic market data.")
+            sys.exit(0)
+    else:
+        print("⚠️ Simulation mode executed with synthetic data (Promotion Rejected).")
+        sys.exit(0)
 

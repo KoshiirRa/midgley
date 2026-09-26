@@ -220,3 +220,14 @@ Whenever new features, regional models, data feeds, or API endpoints are added:
 5. Update **`SELF_HOSTING.md`** with deployment configurations and environment variables.
 6. Synchronize changes to the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git`).
 
+---
+
+## 🔒 11. Point-in-Time, MLOps Audit & Serving Invariants (Issues #471, #472, #473, #474, #475, #476, #477)
+
+1. **Point-in-Time Vintage Ingestion (Issue #473):** All bitemporal vintage lookups via `_load_vintage_timeseries()` in `src/feature_engineering.py` must enforce strict publication date filtering (`_as_of <= origin_date`). Future revisions must never leak into historical training origins.
+2. **Fail-Closed Promotion Audit Gate (Issue #472):** `scripts/evaluate_model_hierarchy.py` strictly validates authentic data provenance (`AUTHENTIC_MARKET_DATA`). Synthetic data fallbacks are prohibited during promotion evaluations and must exit with non-zero status (`sys.exit(1)`).
+3. **Database Schema Upgrade Path (Issue #471):** Database migrations must be idempotent across SQLite, D1, and Turso. Existing schemas lacking `forecast_id` must be migrated via `scripts/migrations/0002_add_forecast_id_and_retroactive_columns.sql` with stable legacy ID backfills.
+4. **Active API Forecast Serving (Issue #474):** The API server (`src/api_server.py`) must filter out expired forecast records (`forecast_target_date <= today`). Stale forecasts must never be assigned fabricated future target maturities without re-running model inference.
+5. **Signed Feature Attribution (Issue #476):** Feature decomposition in `src/models.py` must preserve signed impact deltas ($\Delta_i$) and provide safe fallback descriptions for arbitrary feature names to prevent `KeyError`.
+
+

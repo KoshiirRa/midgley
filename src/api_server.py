@@ -611,10 +611,16 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
                     today_str = datetime.now().strftime("%Y-%m-%d")
                     today_dt = datetime.now()
 
-                    # Extract discrete multi-horizon records (Issue #314, #436, #462)
+                    # Filter strictly to active, unexpired forecasts (Issues #462, #474)
+                    if 'forecast_target_date' in target_pool.columns:
+                        active_pool = target_pool[target_pool['forecast_target_date'] > today_str]
+                    else:
+                        active_pool = pd.DataFrame()
+
+                    # Extract discrete multi-horizon records
                     for h_i in range(1, 6):
-                        if 'forecast_horizon_days' in target_pool.columns:
-                            sub_h = target_pool[target_pool['forecast_horizon_days'] == h_i]
+                        if not active_pool.empty and 'forecast_horizon_days' in active_pool.columns:
+                            sub_h = active_pool[active_pool['forecast_horizon_days'] == h_i]
                             if not sub_h.empty:
                                 sub_latest = sub_h.iloc[-1]
                                 sub_base = float(sub_latest.get('current_base_price', base_price))
@@ -630,20 +636,14 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
                                 h_uppers[h_i] = round(pred_price_h + 1.96 * r_std, 3)
 
                                 if h_i == days:
-                                    stored_target = str(sub_latest.get('forecast_target_date', ''))
-                                    if stored_target > today_str:
-                                        target_date = stored_target
-                                    else:
-                                        target_date = (today_dt + timedelta(days=days)).strftime("%Y-%m-%d")
+                                    target_date = str(sub_latest.get('forecast_target_date', ''))
 
                     if days in h_preds:
                         projected_delta = round(h_preds[days] - base_price, 3)
                     else:
-                        latest = target_pool.iloc[-1]
-                        hist_base = float(latest['current_base_price'])
-                        hist_pred = float(latest['predicted_5d_price'])
-                        raw_delta = hist_pred - hist_base
-                        projected_delta = max(-0.75, min(0.75, raw_delta))
+                        # Fail-safe: persistence baseline without fabricating future maturity from stale records (Issue #474)
+                        projected_delta = 0.0
+                        target_date = (today_dt + timedelta(days=days)).strftime("%Y-%m-%d")
     except (FileNotFoundError, pd.errors.EmptyDataError, pd.errors.ParserError, OSError) as e:
         logger.debug(f"Transient or missing prediction history for {region_code}: {e}")
     except Exception as e:

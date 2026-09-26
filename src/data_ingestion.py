@@ -27,7 +27,7 @@ from src.lookup_cache import global_cache
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None) -> pd.DataFrame:
+def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None, allow_synthetic: bool = True) -> Optional[pd.DataFrame]:
     """
     Fetches daily commodity futures market data using yfinance:
     - RB=F: RBOB Gasoline Futures ($/gallon proxy for unleaded gas)
@@ -77,15 +77,23 @@ def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None) -> p
             logger.warning(f"Could not download ticker {ticker}: {e}")
             
     if not dfs or all(df.empty for df in dfs):
+        if not allow_synthetic:
+            logger.error("No valid market data downloaded and allow_synthetic=False. Returning None.")
+            return None
         logger.error("No valid market data downloaded. Creating synthetic benchmark data.")
         return _generate_synthetic_market_data(start_date, end_date)
         
     market_df = pd.concat(dfs, axis=1).sort_index()
     market_df = market_df.ffill().bfill().reset_index()
     if market_df.empty or len(market_df) == 0:
+        if not allow_synthetic:
+            logger.error("Combined market DataFrame is empty and allow_synthetic=False. Returning None.")
+            return None
         logger.error("Combined market DataFrame is empty. Creating synthetic benchmark data.")
         return _generate_synthetic_market_data(start_date, end_date)
 
+    market_df.attrs['is_synthetic'] = False
+    market_df.attrs['provenance'] = 'AUTHENTIC_MARKET_DATA'
     return market_df
 
 
@@ -99,13 +107,16 @@ def _generate_synthetic_market_data(start_date: str, end_date: str) -> pd.DataFr
     heating_oil = (wti / 42.0) * 1.40 + np.cumsum(np.random.normal(0, 0.03, n))
     brent = wti + 4.0 + np.random.normal(0, 0.5, n)
     
-    return pd.DataFrame({
+    df = pd.DataFrame({
         'date': dates,
         'gasoline_rbob': np.maximum(gasoline, 1.50),
         'wti_crude': np.maximum(wti, 40.0),
         'brent_crude': np.maximum(brent, 45.0),
         'heating_oil': np.maximum(heating_oil, 1.60)
     })
+    df.attrs['is_synthetic'] = True
+    df.attrs['provenance'] = 'SYNTHETIC_FALLBACK'
+    return df
 
 
 def get_historical_event_dataset() -> pd.DataFrame:

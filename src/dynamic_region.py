@@ -90,7 +90,7 @@ class DynamicRegionRunner:
         nat_res = run_national_pipeline(use_llm_api=use_llm_api, model_type=model_type)
 
         nat_baseline_price = float(nat_res.get("predicted_5d_price") or nat_res.get("baseline_forecast") or nat_res.get("live_pred_price", 3.200))
-        nat_current_base = float(nat_res.get("current_base_price") or nat_res.get("current_price") or nat_res.get("live_pump_price", 3.100))
+        nat_current_base = float(nat_res.get("live_base_price") or nat_res.get("current_base_price") or nat_res.get("current_price") or nat_res.get("live_pump_price", 3.100))
         pct_change = (nat_baseline_price - nat_current_base) / nat_current_base if nat_current_base > 0 else 0.0
 
         # Step 2: Determine Live Local Base Pump Price
@@ -179,6 +179,7 @@ class DynamicRegionRunner:
             logger.debug(f"Could not retrieve spatial refinery summary for {self.region_id}: {err}")
 
         return {
+            "date": datetime.now().strftime("%Y-%m-%d"),
             "region_id": self.region_id,
             "region": self.logger_region_key,
             "display_name": self.display_name,

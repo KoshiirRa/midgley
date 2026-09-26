@@ -367,45 +367,61 @@ def compute_locale_feature_attribution_breakdown(
     total_pct = round((total_delta / base_price) * 100.0, 2) if base_price > 0 else 0.0
     
     if feature_attributions and len(feature_attributions) > 0:
-        total_feat_abs = sum(abs(v) for v in feature_attributions.values())
-        if total_feat_abs > 0:
-            weights = {k: abs(v) / total_feat_abs for k, v in feature_attributions.items()}
+        methodology = "empirical_linear_features"
+        raw_sum = sum(feature_attributions.values())
+        raw_deltas = {}
+        if abs(raw_sum) > 1e-6:
+            # Scale proportionally to exact total_delta while preserving signs
+            scale = total_delta / raw_sum
+            accumulated = 0.0
+            feat_items = list(feature_attributions.items())
+            for i, (k, v) in enumerate(feat_items):
+                if i == len(feat_items) - 1:
+                    raw_deltas[k] = round(total_delta - accumulated, 3)
+                else:
+                    d = round(v * scale, 3)
+                    raw_deltas[k] = d
+                    accumulated += d
+            weights = {k: abs(raw_deltas[k]) / max(1e-6, sum(abs(x) for x in raw_deltas.values())) for k in raw_deltas}
         else:
-            weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
+            weights = {k: 1.0 / len(feature_attributions) for k in feature_attributions}
+            raw_deltas = {k: round(total_delta / len(feature_attributions), 3) for k in feature_attributions}
     else:
+        methodology = "structural_baseline_cost_shares"
         weights = LOCALE_COMPONENT_WEIGHTS.get(region_code, LOCALE_COMPONENT_WEIGHTS["National"])
-    
+        raw_deltas = {}
+        accumulated = 0.0
+        keys = list(weights.keys())
+        for i, comp_key in enumerate(keys):
+            w = weights[comp_key]
+            if i == len(keys) - 1:
+                comp_delta = round(total_delta - accumulated, 3)
+            else:
+                comp_delta = round(total_delta * w, 3)
+                accumulated += comp_delta
+            raw_deltas[comp_key] = comp_delta
+
     components = {}
     key_drivers = []
-    
-    # Calculate exact dollar deltas per component
-    raw_deltas = {}
-    accumulated = 0.0
-    keys = list(weights.keys())
-    
-    for i, comp_key in enumerate(keys):
-        w = weights[comp_key]
-        if i == len(keys) - 1:
-            comp_delta = round(total_delta - accumulated, 3)
-        else:
-            comp_delta = round(total_delta * w, 3)
-            accumulated += comp_delta
-        raw_deltas[comp_key] = comp_delta
 
     for comp_key, comp_delta in raw_deltas.items():
-        w = weights[comp_key]
-        comp_name = COMPONENT_NAMES.get(comp_key, comp_key)
+        w = weights.get(comp_key, 0.0)
+        comp_name = COMPONENT_NAMES.get(comp_key, comp_key.replace('_', ' ').title())
         comp_pct = round(w * 100.0, 1)
         
         if comp_delta > 0:
             direction = "UP"
-            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["up"]
         elif comp_delta < 0:
             direction = "DOWN"
-            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["down"]
         else:
             direction = "FLAT"
-            desc_template = COMPONENT_DESCRIPTIONS[comp_key]["flat"]
+
+        desc_dict = COMPONENT_DESCRIPTIONS.get(comp_key, {
+            "up": f"{comp_name} exerting upward price pressure",
+            "down": f"{comp_name} exerting downward price pressure",
+            "flat": f"{comp_name} remaining steady and neutral"
+        })
+        desc_template = desc_dict.get(direction.lower(), f"{comp_name} effect")
             
         components[comp_key] = {
             "name": comp_name,
@@ -443,6 +459,7 @@ def compute_locale_feature_attribution_breakdown(
 
     return {
         "region_code": region_code,
+        "methodology": methodology,
         "base_price": base_price,
         "predicted_price": predicted_price,
         "total_delta_dollars": total_delta,

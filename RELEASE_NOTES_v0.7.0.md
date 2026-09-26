@@ -840,7 +840,6 @@ Midgley **v0.7.0** is a major milestone release delivering significant reliabili
 
 ### 115. Conformal Interval Calibration Sample Size Gating & Convex Plausibility Projection (`src/models.py` - Issue #467)
 - **Calibration Sample Size Gating ($n \ge 50$):** Gated split conformal prediction intervals in `compute_conformal_prediction_intervals()` to require at least 50 calibration samples, falling back to empirical sample standard deviation scaling to prevent degraded intervals on tiny sample sets.
-- **In-Fold Feature Scaling:** Wrapped Ridge estimators in standard scaling pipelines (`make_pipeline(StandardScaler(), Ridge(alpha=10.0))`) across cross-validation and feature-store training.
 - **Convex Plausibility Projection:** Replaced sequential return and divergence clipping in `enforce_forecast_plausibility_gate()` with a single convex projection onto the intersection of the return interval and quantitative baseline divergence bounds.
 
 ---
@@ -851,15 +850,56 @@ Midgley **v0.7.0** is a major milestone release delivering significant reliabili
 
 ---
 
-### 117. Test Fixture Sandbox Isolation & Zero Git Working Tree Mutations (`tests/conftest.py` - Issue #469)
-- **Comprehensive Database & Cache Sandbox:** Expanded `tests/conftest.py` autouse fixture `isolate_test_environment` to redirect all SQLite datastores (`security.db`, `agent_memory.sqlite`, `lookup_cache.sqlite`), prediction history CSVs, and vintage ledgers into `tmp_path`.
-- **Zero Git Working Tree Pollution:** Guarantees running `pytest` leaves the repository working tree 100% untouched and mutation-free.
+### 117. Test Fixture Sandbox Isolation (`tests/conftest.py` - Issue #469)
+- **Database & Cache Sandbox Redirection:** Expanded `tests/conftest.py` autouse fixture `isolate_test_environment` to redirect SQLite datastores (`security.db`, `agent_memory.sqlite`, `lookup_cache.sqlite`), prediction history CSVs, and vintage ledgers into `tmp_path`.
 
 ---
 
 ### 118. Mathematical Attribution Clarification & Strict Production Pipeline Failure Handling (`src/models.py` & `run_all.py` - Issue #470)
 - **Attribution Methodology Transparency:** Updated `compute_locale_feature_attribution_breakdown()` in `src/models.py` to accept optional empirical feature attributions and transparently document structural cost-share allocations.
 - **Strict Production Pipeline Failure Gating:** Updated `run_all.py` to exit with code 1 if any enabled regional location pipeline fails during execution, providing an explicit `--allow-partial` flag for soft continuation in development environments.
+
+---
+
+### 119. Cloud Database Schema Migration for Existing Deployments (`scripts/migrations/0002_add_forecast_id_and_retroactive_columns.sql`, `src/prediction_logger.py`, `workers/cache_worker.ts` - Issue #471)
+- **Idempotent Column Migration:** Added versioned migration script `scripts/migrations/0002_add_forecast_id_and_retroactive_columns.sql` to upgrade existing SQLite, Cloudflare D1, and Turso datastores with `forecast_id TEXT`, `issued_at_utc TEXT`, and `is_retroactive_backtest INTEGER`.
+- **Legacy Row Backfill:** Automatically backfills legacy records with deterministic stable IDs (`log_timestamp_region_horizon`) and issuance timestamps, ensuring existing databases upgrade without insert failures or lost records.
+
+---
+
+### 120. Model Hierarchy Audit Fail-Closed Gate & Authentic Provenance Enforcement (`scripts/evaluate_model_hierarchy.py`, `src/data_ingestion.py` - Issue #472)
+- **Authentic Market Provenance Tagging:** Updated `fetch_market_data()` in `src/data_ingestion.py` to tag authentic downloads with `provenance: AUTHENTIC_MARKET_DATA` and synthetic fallbacks with `provenance: SYNTHETIC_FALLBACK`.
+- **Fail-Closed CI Exit Codes:** Enforced strict fail-closed exit behavior in `scripts/evaluate_model_hierarchy.py`: exits with non-zero status (`sys.exit(1)`) if required authentic market data is unavailable or if any regional estimator fails statistical promotion criteria.
+
+---
+
+### 121. Point-in-Time Bitemporal Vintage Alignment & Lookahead Elimination (`src/feature_engineering.py` - Issue #473)
+- **Point-in-Time Origin Filtering:** Connected the `target_dates` parameter in `_load_vintage_timeseries()` to evaluate vintage publications strictly against each discrete forecast origin ($t_{\text{origin}}$), ensuring historical training sets only incorporate revisions published on or before the origin date.
+- **Zero Revision Leakage:** Prohibits future revisions from leaking backward into past training folds.
+
+---
+
+### 122. Stale API Forecast Rejection & Immutable Maturity Invariants (`src/api_server.py` - Issue #474)
+- **Active Forecast Filtering:** Updated `src/api_server.py` to reject expired predictions (`forecast_target_date <= today`) from live serving pools.
+- **Zero Synthetic Maturity Fabrication:** Eliminates target date rewriting on stale forecast rows, returning explicit persistence fallback status rather than fabricating future target dates without fresh model inference.
+
+---
+
+### 123. Dynamic Region Baseline Price Alignment & Contract Parity (`src/dynamic_region.py` - Issue #475)
+- **Base Price Extraction Parity:** Updated `src/dynamic_region.py` to ingest `nat_res.get("live_base_price")` alongside `current_base_price` and `current_price`, preventing national wholesale return sign inversions in dynamic metro calculations.
+- **Logging Contract Alignment:** Added `date` and `current_price` fields to dynamic region return payloads to match `PredictionLogger` schema requirements.
+
+---
+
+### 124. Signed Feature Attribution & Generic Fallback Guardrails (`src/models.py` & `tests/test_feature_attribution.py` - Issue #476)
+- **Signed Driver Preservation:** Updated `decompose_prediction_drivers()` in `src/models.py` to allocate forecast deltas proportionally using signed feature contributions rather than absolute magnitudes, preserving correct directionality for positive and negative market shocks.
+- **Arbitrary Key Fallback:** Added safe fallback descriptions (`desc_dict = COMPONENT_DESCRIPTIONS.get(comp_key, ...)`) to prevent `KeyError` when callers pass arbitrary model features (e.g., `gasoline_rbob`, `tceq_flaring`).
+- **Methodology Transparency:** Added `"methodology"` metadata field ("empirical_linear_features" vs "structural_baseline_cost_shares").
+
+---
+
+### 125. Release Notes & Documentation Reality Reconciliation (`RELEASE_NOTES_v0.7.0.md` - Issue #477)
+- **Audit Reconciliation:** Reconciled all v0.7.0 release notes, self-hosting guides, and agent specifications against executable test realities, deferring post-rollout items (F6, F7, F8, F9, F11, F13) to milestone `v0.7.X`.
 
 
 
