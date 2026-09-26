@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-26_17-54-00",
+    "timestamp": "2026-09-26 16:48:51",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-26 16:48:51)"
+  },
+  {
+    "run_id": "2026-09-26_16-49-18",
+    "timestamp": "2026-09-26 16:48:51",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-26 16:48:51)"
+  },
+  {
     "run_id": "2026-09-26_13-43-10",
     "timestamp": "2026-09-26 13:42:46",
     "run_type": "LIVE_PROSPECTIVE",
@@ -586,17 +598,5 @@
     "timestamp": "2026-09-24 22:30:30",
     "run_type": "INTRADAY_REVISION",
     "trigger": "With the threat of 100% tariffs looming, India's trade in Ru..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-29",
-    "timestamp": "2026-09-24 22:15:27",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "New US tariffs on Russian oil no issue for Indonesia, Airlan..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-24",
-    "timestamp": "2026-09-24 22:15:27",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "New US tariffs on Russian oil no issue for Indonesia, Airlan..."
   }
 ]

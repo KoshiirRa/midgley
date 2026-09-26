@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-26T14:23:31.938708",
+  "timestamp": "2026-09-26T18:34:41.212180",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-26T14:02:54Z"
+      "timestamp": "2026-09-26T18:13:47Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-10-02",
     "current_base_price": 4.487,
-    "predicted_price_per_gal": 4.632,
-    "expected_change_dollars": 0.145,
-    "expected_change_percent": 3.23,
+    "predicted_price_per_gal": 4.64,
+    "expected_change_dollars": 0.153,
+    "expected_change_percent": 3.41,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.512,
-    "prediction_upper_95ci": 4.752,
+    "prediction_lower_95ci": 4.52,
+    "prediction_upper_95ci": 4.76,
     "calibration_method": "conformal",
-    "calibration_sample_size": 456,
+    "calibration_sample_size": 684,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.464,
-    "day_2_price": 4.483,
-    "day_3_price": 4.551,
-    "day_4_price": 4.566,
-    "day_5_price": 4.632,
+    "day_1_price": 4.467,
+    "day_2_price": 4.488,
+    "day_3_price": 4.557,
+    "day_4_price": 4.575,
+    "day_5_price": 4.64,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.065,
+        "delta_dollars": 0.069,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.036,
+        "delta_dollars": 0.038,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -65,7 +65,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.022,
+        "delta_dollars": 0.023,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -81,7 +81,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.007,
+        "delta_dollars": 0.008,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -96,29 +96,29 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.145/gal (+3.23%): Driven primarily by Futures & Commodity Benchmark (+$0.065/gal), Refining Yield & Crack Spread (+$0.036/gal).",
+      "summary_text": "National forecast +$0.153/gal (+3.41%): Driven primarily by Futures & Commodity Benchmark (+$0.069/gal), Refining Yield & Crack Spread (+$0.038/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.065,
-          "impact_pct": 1.45,
+          "impact_dollars": 0.069,
+          "impact_pct": 1.54,
           "share_pct": 45.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.036,
-          "impact_pct": 0.8,
+          "impact_dollars": 0.038,
+          "impact_pct": 0.85,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.022,
-          "impact_pct": 0.49,
+          "impact_dollars": 0.023,
+          "impact_pct": 0.51,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -133,8 +133,8 @@
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.007,
-          "impact_pct": 0.16,
+          "impact_dollars": 0.008,
+          "impact_pct": 0.18,
           "share_pct": 5.0,
           "direction": "UP"
         },
@@ -153,24 +153,24 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.065,
-      "impact_pct": 1.45,
+      "impact_dollars": 0.069,
+      "impact_pct": 1.54,
       "share_pct": 45.0,
       "direction": "UP"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.036,
-      "impact_pct": 0.8,
+      "impact_dollars": 0.038,
+      "impact_pct": 0.85,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.022,
-      "impact_pct": 0.49,
+      "impact_dollars": 0.023,
+      "impact_pct": 0.51,
       "share_pct": 15.0,
       "direction": "UP"
     },
@@ -185,8 +185,8 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.007,
-      "impact_pct": 0.16,
+      "impact_dollars": 0.008,
+      "impact_pct": 0.18,
       "share_pct": 5.0,
       "direction": "UP"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.145/gal (+3.23%): Driven primarily by Futures & Commodity Benchmark (+$0.065/gal), Refining Yield & Crack Spread (+$0.036/gal).",
+    "summary_text": "National forecast +$0.153/gal (+3.41%): Driven primarily by Futures & Commodity Benchmark (+$0.069/gal), Refining Yield & Crack Spread (+$0.038/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.065,
+        "delta_dollars": 0.069,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.036,
+        "delta_dollars": 0.038,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -221,7 +221,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.022,
+        "delta_dollars": 0.023,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -237,7 +237,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.007,
+        "delta_dollars": 0.008,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"

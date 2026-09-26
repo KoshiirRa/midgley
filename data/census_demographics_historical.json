@@ -1,6 +1,6 @@
 {
   "benchmark_key": "census_demographics",
-  "last_refreshed_utc": "2026-09-24 15:47:49",
+  "last_refreshed_utc": "2026-09-26 17:53:45",
   "records_count": 6,
   "data": {
     "connector": "U.S. Census Bureau ACS Demographics Connector",
@@ -12,7 +12,7 @@
         "region_id": "tulsa_ok",
         "display_name": "Tulsa, OK Metro",
         "window_lifecycle": {
-          "current_date": "2026-09-24",
+          "current_date": "2026-09-26",
           "is_in_release_window": true,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
           "expected_vintage": 2025,
@@ -44,7 +44,7 @@
         "region_id": "newark_de",
         "display_name": "Newark, DE / Philly Corridor",
         "window_lifecycle": {
-          "current_date": "2026-09-24",
+          "current_date": "2026-09-26",
           "is_in_release_window": true,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
           "expected_vintage": 2025,
@@ -76,7 +76,7 @@
         "region_id": "cincinnati_oh",
         "display_name": "Cincinnati, OH Tri-State",
         "window_lifecycle": {
-          "current_date": "2026-09-24",
+          "current_date": "2026-09-26",
           "is_in_release_window": true,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
           "expected_vintage": 2025,
@@ -108,7 +108,7 @@
         "region_id": "greenville_nc",
         "display_name": "Greenville, NC Metro",
         "window_lifecycle": {
-          "current_date": "2026-09-24",
+          "current_date": "2026-09-26",
           "is_in_release_window": true,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
           "expected_vintage": 2025,
@@ -140,7 +140,7 @@
         "region_id": "oakland_ca",
         "display_name": "Oakland / SF Bay Area, CA",
         "window_lifecycle": {
-          "current_date": "2026-09-24",
+          "current_date": "2026-09-26",
           "is_in_release_window": true,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
           "expected_vintage": 2025,
@@ -172,7 +172,7 @@
         "region_id": "charlotte_nc",
         "display_name": "Charlotte, NC Metro",
         "window_lifecycle": {
-          "current_date": "2026-09-24",
+          "current_date": "2026-09-26",
           "is_in_release_window": true,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
           "expected_vintage": 2025,
@@ -204,7 +204,7 @@
         "region_id": "port_st_lucie_fl",
         "display_name": "Port St. Lucie, FL Metro",
         "window_lifecycle": {
-          "current_date": "2026-09-24",
+          "current_date": "2026-09-26",
           "is_in_release_window": true,
           "release_window_name": "ACS 1-Year Annual Window (2026)",
           "expected_vintage": 2025,
