@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-25T21:17:18.205653",
+  "timestamp": "2026-09-26T00:27:22.273584",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-25T21:16:57Z"
+      "timestamp": "2026-09-26T00:26:55Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-09-30",
+    "target_date": "2026-10-01",
     "current_base_price": 6.477,
     "predicted_price_per_gal": 6.464,
     "expected_change_dollars": -0.013,

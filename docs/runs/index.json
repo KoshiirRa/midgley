@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-26_00-26-56",
+    "timestamp": "2026-09-26 00:26:53",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Explosions hit plant and refinery in Ulyanovsk and Perm \u1409 Ne..."
+  },
+  {
     "run_id": "2026-09-25_21-16-58",
     "timestamp": "2026-09-25 21:16:56",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-18 00:58 UTC",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-18 00:58 UTC)"
-  },
-  {
-    "run_id": "2026-09-18_00-58-25",
-    "timestamp": "2026-09-17 21:05:40",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India says new US tariffs over Russian oil could hit ties, v..."
   }
 ]
