@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-26 07:17:04`  
-**Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** Iran offers US deal to reopen Strait of Hormuz in seven days  
+**Log Timestamp:** `2026-09-26 13:42:46`  
+**Run Mode:** `LIVE_PROSPECTIVE`  
+**Primary Event Trigger:** Daily Forecast Batch Execution (2026-09-26 13:42:46)  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** Iran offers US deal to reopen Strait of Hormuz in seven days
+- **Headline Trigger:** Daily Forecast Batch Execution (2026-09-26 13:42:46)
 - **Active Ingested News Links:**
-- [Iran offers US deal to reopen Strait of Hormuz in seven days](https://news.google.com/rss/articles/CBMiW0FVX3lxTE45Z0pMeUNRaTNfWUlMQmJEWE1mcW04c09tZERDRTR0aFRicWJ0b1pLczlhQ2lYMGZDTFlBMXMya3ZrOHdwcmRqTk5PQzZiODFFNndGTm1iT1NBc1U?oc=5) (Google News Energy Feed)
-- [India May Cut Russian Oil Imports As US Tariff Risk Rises - BW Businessworld](https://news.google.com/rss/articles/CBMiowFBVV95cUxOdzRPMlY3ck9LVTNxWThrb3BBVHBvQVdrRVhabHBySVZPZENTWWQwVDBKbEQtSnpGZ1I1Z0RRdjJocFBNdUhTZXBwU1pvRERMRWdZOWlCZWZYbFg5YWpwM2FqeldnbVJ2QU1zanFlSGNQb1lVNjdKT1pxWnVNanBsRmtyS2VGTG0yTURJRU9lZ2Z1d0RkNWNoOUtPeEUwTm94TENj?oc=5) (Google News Energy Feed)
-- [Explosions hit plant and refinery in Ulyanovsk and Perm ᐉ News from Fakti.bg - World - fakti.bg](https://news.google.com/rss/articles/CBMimAFBVV95cUxNTjh5eEtWLUxLZDJrcnFRVmJCdFdtejFJWHl5LTBEOU43czBLX0pqU0ptTVY1OXhpNl91Skc3RWNrRDJuS3RFeWMxbkZMeW52a2JpOU9za1lKbV9TQ3lTeXpQT28tNFFNTy1nRVMwbFVpNnp5Q2g0U3dQOUR5ZTNjSUFja1NoRjhuN1A5VVA4RmFSMFJIOWUyUw?oc=5) (Google News Energy Feed)
+- [NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh](https://www.cmegroup.com/markets/energy/refined-products/rbob-gasoline.html) (CME Group / NYMEX)
+- [NOAA National Weather Service Multi-Basin Severe Weather & Freeze Warning Ingestion](https://www.weather.gov) (NOAA NWS Storm Alert)
+- [Executive Policy Feed & OPEC Weekend Open Price Gap Intelligence](https://www.bloomberg.com/energy) (Bloomberg Market Wire)
 
 
 ---
@@ -20,8 +20,8 @@
 ## 2. Ingested Factor Score Vector (Exact Run Values)
 
 - **Supply Disruption Score ($S$):** `0.10`
-- **Price Pressure Shock ($\Delta P$):** `-0.80`
-- **Geopolitical Risk Score ($G$):** `-0.70`
+- **Price Pressure Shock ($\Delta P$):** `+0.02`
+- **Geopolitical Risk Score ($G$):** `0.15`
 - **Demand Sentiment Score ($D$):** `0.00`
 - **OPEC Action Score ($O$):** `0.00`
 - **Decay Half-Life ($t_{1/2}$):** `5.0 days`
@@ -51,15 +51,15 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 
 ## 4. Regional Metro Calibration Equations (Substituted Run Values)
 
-- **National Wholesale**: $P = \$3.184 + (-\$0.168) = \$3.082\text{/gal}$ (Delta: -\$0.168/gal, -5.28\%)
-- **Tulsa, OK Retail**: $P = \$4.114 + (+\$0.473) = \$4.031\text{/gal}$ (Delta: +\$0.473/gal, +11.49\%)
-- **Newark, DE Retail**: $P = \$4.492 + (+\$0.687) = \$4.790\text{/gal}$ (Delta: +\$0.687/gal, +15.30\%)
-- **Cincinnati, OH/KY**: $P = \$4.359 + (+\$0.663) = \$4.604\text{/gal}$ (Delta: +\$0.663/gal, +15.21\%)
-- **Greenville, NC Retail**: $P = \$4.168 + (+\$0.469) = \$4.307\text{/gal}$ (Delta: +\$0.469/gal, +11.25\%)
-- **Charlotte, NC Retail**: $P = \$4.205 + (+\$0.353) = \$4.274\text{/gal}$ (Delta: +\$0.353/gal, +8.40\%)
-- **Port St. Lucie, FL Retail**: $P = \$4.470 + (+\$0.564) = \$4.585\text{/gal}$ (Delta: +\$0.564/gal, +12.62\%)
-- **Oakland, CA Retail**: $P = \$6.354 + (+\$0.969) = \$6.572\text{/gal}$ (Delta: +\$0.969/gal, +15.25\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
-- **SF Bay Area Region**: $P = \$6.477 + (+\$1.096) = \$6.699\text{/gal}$ (Delta: +\$1.096/gal, +16.92\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **National Wholesale**: $P = \$3.393 + (+\$0.515) = \$3.539\text{/gal}$ (Delta: +\$0.515/gal, +15.17\%)
+- **Tulsa, OK Retail**: $P = \$4.186 + (+\$0.608) = \$4.067\text{/gal}$ (Delta: +\$0.608/gal, +14.54\%)
+- **Newark, DE Retail**: $P = \$4.332 + (+\$0.730) = \$4.529\text{/gal}$ (Delta: +\$0.730/gal, +16.84\%)
+- **Cincinnati, OH/KY**: $P = \$4.326 + (+\$0.801) = \$4.549\text{/gal}$ (Delta: +\$0.801/gal, +18.52\%)
+- **Greenville, NC Retail**: $P = \$4.163 + (+\$0.610) = \$4.275\text{/gal}$ (Delta: +\$0.610/gal, +14.65\%)
+- **Charlotte, NC Retail**: $P = \$4.193 + (+\$0.494) = \$4.234\text{/gal}$ (Delta: +\$0.494/gal, +11.79\%)
+- **Port St. Lucie, FL Retail**: $P = \$4.437 + (+\$0.680) = \$4.508\text{/gal}$ (Delta: +\$0.680/gal, +15.32\%)
+- **Oakland, CA Retail**: $P = \$6.396 + (+\$1.100) = \$6.573\text{/gal}$ (Delta: +\$1.100/gal, +17.20\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
+- **SF Bay Area Region**: $P = \$6.526 + (+\$1.234) = \$6.707\text{/gal}$ (Delta: +\$1.234/gal, +18.90\%) *(includes CA statutory CARB excise, Cap-and-Trade & LCFS fee overhead of $0.953/gal)*
 - **ULSD Distillate Crack Engine (WIP)**: $P_{\text{ULSD}} = \$2.850\text{/gal}$, Distillate Crack Spread = $\$0.742\text{/gal}$, 3-2-1 Crack Margin = $\$0.685\text{/gal}$ *(Experimental Work-In-Progress undergoing multi-week feedback loop empirical evaluation)*
 
 
@@ -68,38 +68,38 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-26 07:17:04]: Downward price pressure (-0.80/gal shock) detected following 'Iran offers US deal to reopen Strait of Hormuz in seven days'. Supply disruption score S=0.10 and geopolitical risk G=-0.70 indicate easing market tightness. Residual event memory decays from initial M₀=0.1000 to Day-5 retention M₅=0.0500.
+SUMMARY FOR RUN [2026-09-26 13:42:46]: Baseline daily batch market conditions prevail with minimal exogenous shocks. Ingested supply disruption S=0.10 and geopolitical risk G=0.15 yield a price pressure vector of ΔP=+0.02/gal. Primary trigger: 'Daily Forecast Batch Execution (2026-09-26 13:42:46)'. The standardized Ridge model calculates stable wholesale futures re-anchoring, with Day-5 residual event memory decaying from M₀=0.1000 down to M₅=0.0500.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-26 07:17:04 (Mode: INTRADAY_REVISION), primary event trigger 'Iran offers US deal to reopen Strait of Hormuz in seven days' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=-0.80, Geopolitical Risk G=-0.70. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-26 13:42:46 (Mode: LIVE_PROSPECTIVE), primary event trigger 'Daily Forecast Batch Execution (2026-09-26 13:42:46)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (CME Group / NYMEX, Bloomberg Market Wire, NOAA NWS Storm Alert). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.1000
   - Day 1: M₁ = 0.0871
   - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
 
 2. Substituted Regional Metro Price Calibrations:
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
-  • National Wholesale: $3.082/gal ($-0.168/gal, -5.28%)
-  • Tulsa, OK Retail: $4.031/gal (+$0.473/gal, +11.49%)
-  • Newark, DE Retail: $4.790/gal (+$0.687/gal, +15.30%)
-  • Cincinnati, OH/KY: $4.604/gal (+$0.663/gal, +15.21%)
-  • Greenville, NC Retail: $4.307/gal (+$0.469/gal, +11.25%)
-  • Charlotte, NC Retail: $4.274/gal (+$0.353/gal, +8.40%)
-  • Port St. Lucie, FL Retail: $4.585/gal (+$0.564/gal, +12.62%)
-  • Oakland, CA Retail: $6.572/gal (+$0.969/gal, +15.25%)
-  • SF Bay Area Region: $6.699/gal (+$1.096/gal, +16.92%)
+  • National Wholesale: $3.539/gal (+$0.515/gal, +15.17%)
+  • Tulsa, OK Retail: $4.067/gal (+$0.608/gal, +14.54%)
+  • Newark, DE Retail: $4.529/gal (+$0.730/gal, +16.84%)
+  • Cincinnati, OH/KY: $4.549/gal (+$0.801/gal, +18.52%)
+  • Greenville, NC Retail: $4.275/gal (+$0.610/gal, +14.65%)
+  • Charlotte, NC Retail: $4.234/gal (+$0.494/gal, +11.79%)
+  • Port St. Lucie, FL Retail: $4.508/gal (+$0.680/gal, +15.32%)
+  • Oakland, CA Retail: $6.573/gal (+$1.100/gal, +17.20%)
+  • SF Bay Area Region: $6.707/gal (+$1.234/gal, +18.90%)
 
-Largest upward shift for this run: SF Bay Area Region at $6.699/gal (+1.096/gal). Largest downward shift for this run: National Wholesale at $3.082/gal (-0.168/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.707/gal (+1.234/gal). Largest downward shift for this run: Charlotte, NC Retail at $4.234/gal (+0.494/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-26 07:17:04]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Iran offers US deal to reopen Strait of Hormuz in seven days'. Overall price pressure vector sits at ΔP=-0.80/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-26 13:42:46]:
+• Execution Context: Run type 'LIVE_PROSPECTIVE' triggered by 'Daily Forecast Batch Execution (2026-09-26 13:42:46)'. Overall price pressure vector sits at ΔP=+0.02/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
-• Maritime & Geopolitical Exposure: Geopolitical risk score G=-0.70. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
+• Maritime & Geopolitical Exposure: Geopolitical risk score G=0.15. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
 • Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck
 
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-26 07:17:04.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-26 13:42:46.*
