@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-26T18:47:11.625106",
+  "timestamp": "2026-09-26T21:25:22.507027",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-26T18:26:19Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-26T21:23:10Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,

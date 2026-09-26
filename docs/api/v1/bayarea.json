@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-26T18:51:21.945091",
+  "timestamp": "2026-09-26T21:29:46.158358",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-26T18:30:30Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-26T21:27:34Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
