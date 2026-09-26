@@ -91,3 +91,25 @@ BEGIN
     LIMIT match_count;
 END;
 $$;
+
+-- 6. Enforce Row-Level Security (RLS) on all Hindsight memory tables (Issue #426)
+ALTER TABLE hindsight_memories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE hindsight_mental_models ENABLE ROW LEVEL SECURITY;
+
+-- Allow full access to service_role (used by Hindsight backend / migration scripts)
+DROP POLICY IF EXISTS "Allow service_role full access to hindsight_memories" ON hindsight_memories;
+CREATE POLICY "Allow service_role full access to hindsight_memories"
+ON hindsight_memories
+FOR ALL
+TO service_role
+USING (true)
+WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow service_role full access to hindsight_mental_models" ON hindsight_mental_models;
+CREATE POLICY "Allow service_role full access to hindsight_mental_models"
+ON hindsight_mental_models
+FOR ALL
+TO service_role
+USING (true)
+WITH CHECK (true);
+

@@ -1,0 +1,120 @@
+{
+  "run_id": "2026-09-26_00-26-56",
+  "log_timestamp": "2026-09-26 00:26:53",
+  "run_type": "INTRADAY_REVISION",
+  "primary_trigger": "Explosions hit plant and refinery in Ulyanovsk and Perm \u1409 News from Fakti.bg - World - fakti.bg",
+  "headline_items": [
+    {
+      "headline": "Explosions hit plant and refinery in Ulyanovsk and Perm \u1409 News from Fakti.bg - World - fakti.bg",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNTjh5eEtWLUxLZDJrcnFRVmJCdFdtejFJWHl5LTBEOU43czBLX0pqU0ptTVY1OXhpNl91Skc3RWNrRDJuS3RFeWMxbkZMeW52a2JpOU9za1lKbV9TQ3lTeXpQT28tNFFNTy1nRVMwbFVpNnp5Q2g0U3dQOUR5ZTNjSUFja1NoRjhuN1A5VVA4RmFSMFJIOWUyUw?oc=5",
+      "source": "Google News Energy Feed"
+    },
+    {
+      "headline": "India left more exposed to Trump's 100% oil threat as China gets tariff breather - The Economic Times",
+      "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxQeERNS3dRYU1POEN2UElvXzFKZ0QySFRSNE1NSjVvSU5jYnhnQ29xbUdhRlA1V2NkV09sTFloQWo4ek1BMjZVaHptSkFRQ21GU3JRY2dzakkwSWVkZktXVXd6eVdJdk1JWGpzWU9IQnlDbk83b0xDZEdyejFMaC1uQTRtU1VhWS1DdExkRFRWWVF0empIdWZuUEd1X1JROE1JLTdRSHpSRUxuTE1wVlpuQUhQN3RyZm1TVUg1V1duYV9DcHdGdmdWMmo1eC1VXzk3VmtIZXBkaFM5OUphMmZmNm9EUkZCU3BRcjZvdEw3WDQwR2VhUlZ30gH8AUFVX3lxTFBsaHFlc1lMWHhEc19MOXhiMTU2cXVrWlo4SWRWaXBPU1hfTmNwWkhaaThLdmxWUkFBTDFPcldRSndhOWZ3cWZ3bDdMRGFKN1hiSG1BcDlCZUNLanFJczFtV0xaZ1BEeXdOYjExRlhYTlE1UVZEcmxyaUk3dFhHLWJud25jd2FFSjJmZThLMWFqbDFvQ0U3RFdlRGM0YWh4Wlh0elpQTXdfZW1kcENpQjBmTUJWT2JacldUSUh4bWxKSS1icURaT2ZoYThnVjdnYkd2emIzQzFTWVhDcFB6N2M1MG9MM25yS0YtMFhuYnd5cEhuQ21QNkdscTktSA?oc=5",
+      "source": "Google News Energy Feed"
+    },
+    {
+      "headline": "States Sue Over Latest Trump Tariff Attempt - EnergyNow.com",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
+      "source": "Google News Energy Feed"
+    }
+  ],
+  "factor_scores": {
+    "supply_disruption": 0.8,
+    "overall_price_pressure": 0.8,
+    "geopolitical_risk": 0.7,
+    "demand_sentiment": 0.0,
+    "opec_action": 0.0,
+    "decay_half_life": 5.0
+  },
+  "decay_math": {
+    "decay_constant": 0.13863,
+    "retention_daily": 0.87055,
+    "m0": 0.8,
+    "m1": 0.6964,
+    "m2": 0.6063,
+    "m3": 0.5278,
+    "m4": 0.4595,
+    "m5": 0.4
+  },
+  "regional_calibrations": [
+    {
+      "key": "National",
+      "name": "National Wholesale",
+      "base_price": 3.184,
+      "predicted_price": 3.2859,
+      "delta": 0.012699999999999712,
+      "pct_change": 0.39886934673365926
+    },
+    {
+      "key": "Tulsa_OK",
+      "name": "Tulsa, OK Retail",
+      "base_price": 4.114,
+      "predicted_price": 4.6139,
+      "delta": 0.04159999999999986,
+      "pct_change": 1.0111813320369436
+    },
+    {
+      "key": "Newark_DE",
+      "name": "Newark, DE Retail",
+      "base_price": 4.331,
+      "predicted_price": 4.3047,
+      "delta": -0.020899999999999253,
+      "pct_change": -0.48256753636571803
+    },
+    {
+      "key": "Cincinnati_OH",
+      "name": "Cincinnati, OH/KY",
+      "base_price": 4.359,
+      "predicted_price": 4.3278,
+      "delta": -0.030300000000000438,
+      "pct_change": -0.6951135581555503
+    },
+    {
+      "key": "Greenville_NC",
+      "name": "Greenville, NC Retail",
+      "base_price": 4.168,
+      "predicted_price": 4.1421,
+      "delta": -0.01750000000000007,
+      "pct_change": -0.4198656429942435
+    },
+    {
+      "key": "Charlotte_NC",
+      "name": "Charlotte, NC Retail",
+      "base_price": 4.205,
+      "predicted_price": 4.1908,
+      "delta": -0.0013999999999994017,
+      "pct_change": -0.03329369797858268
+    },
+    {
+      "key": "Port_St_Lucie_FL",
+      "name": "Port St. Lucie, FL Retail",
+      "base_price": 4.47,
+      "predicted_price": 4.4549,
+      "delta": 0.0049000000000001265,
+      "pct_change": 0.1096196868008977
+    },
+    {
+      "key": "Oakland_CA",
+      "name": "Oakland, CA Retail",
+      "base_price": 6.354,
+      "predicted_price": 6.3409,
+      "delta": 0.7436000000000007,
+      "pct_change": 11.702864337425254
+    },
+    {
+      "key": "BayArea_CA",
+      "name": "SF Bay Area Region",
+      "base_price": 6.477,
+      "predicted_price": 6.4636,
+      "delta": 0.7662999999999993,
+      "pct_change": 11.831094642581432
+    }
+  ],
+  "spc_synopsis": {
+    "summary": "SUMMARY FOR RUN [2026-09-26 00:26:53]: Elevated upward price shock (+$0.80/gal) observed across wholesale futures. Event trigger 'Explosions hit plant and refinery in Ulyanovsk and Perm \u1409 News from Fakti.bg - World - fakti.bg' drove supply disruption to S=0.80 and geopolitical risk to G=0.70. Exponential decay (t\u00bd=5.0d) models Day-1 retained shock M\u2081=0.6964 and Day-5 horizon retention M\u2085=0.4000.",
+    "technical_discussion": "TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:\n\n1. Qualitative Shock Integration & Decay Dynamics:\nDuring execution 2026-09-26 00:26:53 (Mode: INTRADAY_REVISION), primary event trigger 'Explosions hit plant and refinery in Ulyanovsk and Perm \u1409 News from Fakti.bg - World - fakti.bg' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure \u0394P=+0.80, Geopolitical Risk G=0.70. Exponential decay constant \u03bb = ln(2)/5.0 = 0.13863 day\u207b\u00b9 dictates daily retention factor \u03b3 \u2248 0.87055. Initial shock retention schedule for this specific execution:\n  - Day 0: M\u2080 = 0.8000\n  - Day 1: M\u2081 = 0.6964\n  - Day 5: M\u2085 = 0.4000 (50.0% residual memory acting on Day-5 target horizon).\n\n2. Substituted Regional Metro Price Calibrations:\nThe base commodity forecast was calibrated across all 8 modeled metro locales for this run:\n  \u2022 National Wholesale: $3.286/gal (+$0.013/gal, +0.40%)\n  \u2022 Tulsa, OK Retail: $4.614/gal (+$0.042/gal, +1.01%)\n  \u2022 Newark, DE Retail: $4.305/gal ($-0.021/gal, -0.48%)\n  \u2022 Cincinnati, OH/KY: $4.328/gal ($-0.030/gal, -0.70%)\n  \u2022 Greenville, NC Retail: $4.142/gal ($-0.018/gal, -0.42%)\n  \u2022 Charlotte, NC Retail: $4.191/gal ($-0.001/gal, -0.03%)\n  \u2022 Port St. Lucie, FL Retail: $4.455/gal (+$0.005/gal, +0.11%)\n  \u2022 Oakland, CA Retail: $6.341/gal (+$0.744/gal, +11.70%)\n  \u2022 SF Bay Area Region: $6.464/gal (+$0.766/gal, +11.83%)\n\nLargest upward shift for this run: SF Bay Area Region at $6.464/gal (+0.766/gal). Largest downward shift for this run: Cincinnati, OH/KY at $4.328/gal (-0.030/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.",
+    "risks_scenarios": "FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:\n\nEvaluated tail-risk catalysts specific to execution [2026-09-26 00:26:53]:\n\u2022 Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Explosions hit plant and refinery in Ulyanovsk and Perm \u1409 News from Fakti.bg - World - fakti.bg'. Overall price pressure vector sits at \u0394P=+0.80/gal.\n\u2022 Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.\n\u2022 Maritime & Geopolitical Exposure: Geopolitical risk score G=0.70. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.\n\u2022 Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.\n\u2022 Climatological Plausibility Horizon: [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane Landfall & Tar River Flooding; [SEASONALLY_PLAUSIBLE] Category 3 Atlantic Hurricane & Port Everglades Marine Shutdown; [SEASONALLY_PLAUSIBLE] PG&E PSPS Red Flag Wildfire Power Shutoff & Refinery Blackout; [SEASONALLY_PLAUSIBLE] Lower Mississippi & Ohio River Low-Water Barge Bottleneck"
+  }
+}

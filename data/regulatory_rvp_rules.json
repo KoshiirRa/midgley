@@ -1,0 +1,113 @@
+{
+  "rules_version": "2026.1",
+  "citation": "EPA Title 40 CFR Part 1090 & CARB Phase 3 CaRFG",
+  "default_schedule": {
+    "spring_ramp_start": "03-01",
+    "refinery_terminal_deadline": "05-01",
+    "retail_compliance_start": "06-01",
+    "retail_compliance_end": "09-15",
+    "winter_transition_start": "09-16"
+  },
+  "regions": {
+    "National": {
+      "name": "National Conventional Baseline",
+      "program": "Conventional Gasoline (CG)",
+      "summer_rvp_psi": 9.0,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.08,
+      "is_rfg": false,
+      "is_carb": false
+    },
+    "Tulsa_OK": {
+      "name": "Tulsa Metro & Mid-Continent",
+      "program": "EPA Non-Attainment / 7.8 psi Region",
+      "summer_rvp_psi": 7.8,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.14,
+      "is_rfg": false,
+      "is_carb": false
+    },
+    "Cincinnati_OH": {
+      "name": "Cincinnati Tri-State (OH/KY/IN)",
+      "program": "EPA Non-Attainment / Low-RVP Control Area",
+      "summer_rvp_psi": 7.8,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.15,
+      "is_rfg": false,
+      "is_carb": false
+    },
+    "Dallas_TX": {
+      "name": "Dallas-Fort Worth Metroplex",
+      "program": "EPA Non-Attainment Control Area",
+      "summer_rvp_psi": 7.8,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.13,
+      "is_rfg": false,
+      "is_carb": false
+    },
+    "Houston_TX": {
+      "name": "Houston-Galveston-Brazoria",
+      "program": "EPA Non-Attainment / RFG Adjacent Area",
+      "summer_rvp_psi": 7.8,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.14,
+      "is_rfg": false,
+      "is_carb": false
+    },
+    "Newark_NJ": {
+      "name": "Newark & NY Harbor (PADD 1B)",
+      "program": "EPA Reformulated Gasoline (RFG)",
+      "summer_rvp_psi": 7.4,
+      "winter_rvp_psi": 12.0,
+      "summer_compliance_premium_per_gal": 0.18,
+      "is_rfg": true,
+      "is_carb": false
+    },
+    "Oakland_CA": {
+      "name": "Oakland & SF Bay Area (PADD 5)",
+      "program": "CARB Phase 3 CaRFG",
+      "summer_rvp_psi": 6.99,
+      "winter_rvp_psi": 9.0,
+      "summer_compliance_premium_per_gal": 0.28,
+      "is_rfg": false,
+      "is_carb": true
+    },
+    "BayArea_CA": {
+      "name": "San Francisco Bay Area Regional Hub",
+      "program": "CARB Phase 3 CaRFG",
+      "summer_rvp_psi": 6.99,
+      "winter_rvp_psi": 9.0,
+      "summer_compliance_premium_per_gal": 0.28,
+      "is_rfg": false,
+      "is_carb": true
+    },
+    "Greenville_NC": {
+      "name": "Greenville / Eastern NC (PADD 1C)",
+      "program": "Conventional Low-RVP Area",
+      "summer_rvp_psi": 7.8,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.12,
+      "is_rfg": false,
+      "is_carb": false
+    },
+    "Charlotte_NC": {
+      "name": "Charlotte Metro (PADD 1C)",
+      "program": "Conventional Low-RVP Area",
+      "summer_rvp_psi": 7.8,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.12,
+      "is_rfg": false,
+      "is_carb": false
+    },
+    "Port_St_Lucie_FL": {
+      "name": "Port St. Lucie & South Florida",
+      "program": "Conventional Gasoline (PADD 1C Waterborne)",
+      "summer_rvp_psi": 9.0,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.1,
+      "is_rfg": false,
+      "is_carb": false
+    }
+  },
+  "emergency_waivers": []
+}

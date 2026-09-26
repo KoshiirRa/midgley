@@ -39,12 +39,14 @@ def test_ulsd_forecasting_agent():
     agent = UltraLowSulfurDieselForecastingAgent(alpha=10.0)
     res = agent.forecast_ulsd(rbob_price=2.450, ulsd_price=2.850, wti_price=75.00)
 
-    assert res["status"] == "success"
+    assert res["status"] == "EXPERIMENTAL_SIMULATION"
+    assert res["is_simulation"] is True
     assert "wholesale_forecast" in res
     assert res["wholesale_forecast"]["predicted_5d_wholesale"] > 0.0
     assert "regional_retail_calibrations" in res
     assert "tulsa" in res["regional_retail_calibrations"]
     assert "oakland" in res["regional_retail_calibrations"]
+
 
 
 def test_simulate_diesel_shock():
@@ -68,13 +70,15 @@ def test_api_diesel_endpoints():
     resp_fc = client.get("/api/v1/diesel/forecast?rbob=2.450&ulsd=2.850&wti=75.00")
     assert resp_fc.status_code == 200
     data_fc = resp_fc.json()
-    assert data_fc["status"] == "success"
+    assert data_fc["status"] in ["EXPERIMENTAL_SIMULATION", "success"]
+    assert data_fc.get("is_simulation", False) is True
 
     # GET /api/v1/diesel/simulate
     resp_sim = client.get("/api/v1/diesel/simulate?scenario=colonial_line2_outage")
     assert resp_sim.status_code == 200
     data_sim = resp_sim.json()
     assert data_sim["status"] == "success"
+
 
 
 def test_get_live_or_anchor_diesel_prices():

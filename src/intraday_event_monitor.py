@@ -14,6 +14,7 @@ import os
 import sys
 import json
 import time
+import re
 import logging
 import pandas as pd
 from datetime import datetime
@@ -215,11 +216,12 @@ class IntradayEventMonitor:
         via Tiered LLM / Lexicon failover. Returns (is_anomaly, scores).
         """
         text_lower = headline.lower()
-        if any(ex in text_lower for ex in EXCLUDE_KEYWORDS):
+        if any(re.search(rf"\b{re.escape(ex)}\b", text_lower) for ex in EXCLUDE_KEYWORDS):
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
-        if any(ex in text_lower for ex in NON_ENERGY_TARIFF_EXCLUDE):
+        if any(re.search(rf"\b{re.escape(ex)}\b", text_lower) for ex in NON_ENERGY_TARIFF_EXCLUDE):
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+
 
         has_keyword = any(kw in text_lower for kw in TRIGGER_KEYWORDS)
 
@@ -232,16 +234,16 @@ class IntradayEventMonitor:
         if not has_keyword:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
-        # Generate CoSPOT Spectral Context if market data is available (Issue #215)
+        # Generate CoSPOT Spectral Context if market data is available (Issue #215, #327)
         spectral_ctx = ""
         try:
             from src.cospot_spectral_engine import generate_spectral_prompt_context
-            from src.data_ingestion import fetch_all_data
-            m_df = fetch_all_data()
-            if not m_df.empty and 'gasoline_rbob' in m_df.columns:
+            from src.data_ingestion import fetch_market_data
+            m_df = fetch_market_data()
+            if m_df is not None and not m_df.empty and 'gasoline_rbob' in m_df.columns:
                 spectral_ctx = generate_spectral_prompt_context(m_df['gasoline_rbob'].values)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"CoSPOT spectral context generation notice in intraday anomaly evaluator: {e}")
 
         # Keyword matched -> Trigger impact scoring
         scores = extract_event_features_llm(headline, spectral_context=spectral_ctx)
@@ -460,10 +462,16 @@ class IntradayEventMonitor:
 
                 # 3. Log Intraday Revision Record across target locales
                 for loc in target_locales:
+                    base_p = 3.184
+                    shocked_p = base_p * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
                     dummy_df = pd.DataFrame([{
                         "date": datetime.now().strftime("%Y-%m-%d"),
-                        "current_price": 3.184,
-                        "predicted_5d_price": 3.184 * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
+                        "current_price": base_p,
+                        "predicted_5d_price": shocked_p,
+                        "quant_baseline_5d_price": base_p,
+                        "llm_price_pressure": scores.get("overall_price_pressure", 0.0),
+                        "llm_supply_disruption": scores.get("supply_disruption", 0.0),
+                        "llm_augmentation_delta": round(shocked_p - base_p, 4)
                     }])
                     log_predictions(
                         dummy_df, 
@@ -611,7 +619,6 @@ class IntradayEventMonitor:
         Diagnostic Health Check across all intraday news and event ingestion feeds (Issue #267).
         Probes RSS feeds, Executive Social Media, Key Movers, and Geopolitical feeds with latency profiling.
         """
-        import time
         results = []
         overall_healthy = True
 

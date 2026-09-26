@@ -281,7 +281,9 @@ class UltraLowSulfurDieselForecastingAgent:
             }
 
         return {
-            "status": "success",
+            "status": "EXPERIMENTAL_SIMULATION",
+            "is_simulation": True,
+            "provenance": "SYNTHETIC_SIMULATION",
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "wholesale_inputs": {
                 "rbob_price": rbob_price,
@@ -299,6 +301,7 @@ class UltraLowSulfurDieselForecastingAgent:
             },
             "regional_retail_calibrations": regional_predictions
         }
+
 
     def save_diesel_vintage_record(self, record: dict, filepath: str = DIESEL_VINTAGE_FILE) -> None:
         """Persists a bitemporal point-in-time diesel observation (Issue #295)."""

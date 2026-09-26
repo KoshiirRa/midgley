@@ -1,9 +1,11 @@
 [Unit]
-Description=Midgley Local Dev Server Intraday Polling Timer (Every 15 Minutes)
+Description=Midgley Local Dev Server Intraday Polling Timer (Every 15 Minutes, Offset at :07/:22/:37/:52)
 
 [Timer]
-OnCalendar=*:0/15
+OnCalendar=*:7/15
+RandomizedDelaySec=120
 Persistent=true
 
 [Install]
 WantedBy=timers.target
+

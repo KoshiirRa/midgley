@@ -55,19 +55,244 @@ logger = logging.getLogger(__name__)
 # Default API endpoints
 DEFAULT_BASE_URL = "https://headlinearena.com/api/v1"
 
+# Pending forecasts cache and submitted challenge idempotency ledger
+PENDING_FORECASTS_FILE = os.path.join("data", "headline_arena_pending_forecasts.json")
+SUBMITTED_LEDGER_FILE = os.path.join("data", "headline_arena_submitted_ledger.json")
+
+
+def load_pending_forecasts(
+    active_only: bool = True,
+    filepath: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """
+    Loads cached pending forecasts from disk or memory (in test mode).
+    If active_only=True, filters out records older than their TTL expiration.
+    """
+    if os.environ.get("TESTING") == "1" and filepath is None:
+        forecasts = getattr(load_pending_forecasts, "_test_mock_pending", [])
+    else:
+        path = filepath or PENDING_FORECASTS_FILE
+        if not os.path.exists(path):
+            return []
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                forecasts = data if isinstance(data, list) else data.get("pending_forecasts", [])
+        except Exception as e:
+            logger.debug(f"Notice loading pending forecasts from {path}: {e}")
+            return []
+
+    if not active_only:
+        return forecasts
+
+    now_ts = time.time()
+    active = []
+    for fc in forecasts:
+        exp_ts = fc.get("expires_ts")
+        if exp_ts is None and "expires_at" in fc:
+            try:
+                exp_dt = datetime.fromisoformat(fc["expires_at"].replace("Z", "+00:00"))
+                exp_ts = exp_dt.timestamp()
+            except Exception:
+                exp_ts = None
+        if exp_ts is None or exp_ts > now_ts:
+            active.append(fc)
+    return active
+
+
+def save_pending_forecast(
+    asset: str,
+    payload: Dict[str, Any],
+    forecast_type: str = "direction",
+    ttl_hours: float = 24.0,
+    filepath: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Persists a generated forecast payload into the 24h pending forecast cache.
+    Replaces existing pending records for the same asset and forecast_type.
+    """
+    now_dt = datetime.now(timezone.utc)
+    now_ts = now_dt.timestamp()
+    exp_ts = now_ts + (ttl_hours * 3600.0)
+    exp_dt = datetime.fromtimestamp(exp_ts, tz=timezone.utc)
+
+    record = {
+        "asset": asset.upper().strip(),
+        "forecast_type": forecast_type,
+        "created_at": now_dt.isoformat(),
+        "expires_at": exp_dt.isoformat(),
+        "created_ts": now_ts,
+        "expires_ts": exp_ts,
+        "payload": payload
+    }
+
+    if os.environ.get("TESTING") == "1" and filepath is None:
+        if not hasattr(load_pending_forecasts, "_test_mock_pending"):
+            load_pending_forecasts._test_mock_pending = []
+        filtered = [
+            item for item in load_pending_forecasts._test_mock_pending
+            if not (
+                str(item.get("asset", "")).upper() == record["asset"]
+                and str(item.get("forecast_type", "")).lower() == record["forecast_type"].lower()
+            )
+        ]
+        filtered.append(record)
+        load_pending_forecasts._test_mock_pending = filtered
+        return record
+
+    path = filepath or PENDING_FORECASTS_FILE
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    except Exception:
+        pass
+
+    existing = load_pending_forecasts(active_only=True, filepath=path)
+    filtered = [
+        item for item in existing
+        if not (
+            str(item.get("asset", "")).upper() == record["asset"]
+            and str(item.get("forecast_type", "")).lower() == record["forecast_type"].lower()
+        )
+    ]
+    filtered.append(record)
+
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(filtered, f, indent=2)
+    except Exception as e:
+        logger.warning(f"Failed to write pending forecasts to {path}: {e}")
+
+    return record
+
+
+def clear_expired_pending_forecasts(filepath: Optional[str] = None) -> int:
+    """
+    Cleans up expired pending forecast records from disk cache.
+    Returns the count of purged records.
+    """
+    if os.environ.get("TESTING") == "1" and filepath is None:
+        all_records = load_pending_forecasts(active_only=False)
+        active_records = load_pending_forecasts(active_only=True)
+        load_pending_forecasts._test_mock_pending = active_records
+        return len(all_records) - len(active_records)
+
+    path = filepath or PENDING_FORECASTS_FILE
+    if not os.path.exists(path):
+        return 0
+    all_records = load_pending_forecasts(active_only=False, filepath=path)
+    active_records = load_pending_forecasts(active_only=True, filepath=path)
+    purged_count = len(all_records) - len(active_records)
+    if purged_count > 0:
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(active_records, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Failed to clean expired pending forecasts from {path}: {e}")
+    return purged_count
+
+
+def load_submitted_ledger(filepath: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Loads the persistent challenge submission idempotency ledger.
+    """
+    if os.environ.get("TESTING") == "1" and filepath is None:
+        return getattr(load_submitted_ledger, "_test_mock_ledger", {"submitted_challenges": {}})
+
+    path = filepath or SUBMITTED_LEDGER_FILE
+    if not os.path.exists(path):
+        return {"submitted_challenges": {}}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            if isinstance(data, dict):
+                if "submitted_challenges" not in data:
+                    data["submitted_challenges"] = {}
+                return data
+            return {"submitted_challenges": {}}
+    except Exception as e:
+        logger.debug(f"Notice loading submitted ledger from {path}: {e}")
+        return {"submitted_challenges": {}}
+
+
+def is_challenge_already_submitted(
+    challenge_id: str,
+    filepath: Optional[str] = None
+) -> bool:
+    """
+    Checks if a specific challenge ID has already received a prediction in the local ledger.
+    """
+    if not challenge_id:
+        return False
+    ledger = load_submitted_ledger(filepath=filepath)
+    return str(challenge_id) in ledger.get("submitted_challenges", {})
+
+
+def record_submitted_challenge(
+    challenge_id: str,
+    asset: str,
+    response: Dict[str, Any],
+    filepath: Optional[str] = None
+) -> None:
+    """
+    Records a completed or duplicate challenge prediction in the local ledger for idempotency.
+    """
+    if not challenge_id:
+        return
+
+    now_dt = datetime.now(timezone.utc)
+    entry = {
+        "asset": asset.upper().strip(),
+        "submitted_at": now_dt.isoformat(),
+        "submitted_ts": now_dt.timestamp(),
+        "response": response
+    }
+
+    if os.environ.get("TESTING") == "1" and filepath is None:
+        if not hasattr(load_submitted_ledger, "_test_mock_ledger"):
+            load_submitted_ledger._test_mock_ledger = {"submitted_challenges": {}}
+        load_submitted_ledger._test_mock_ledger["submitted_challenges"][str(challenge_id)] = entry
+        return
+
+    path = filepath or SUBMITTED_LEDGER_FILE
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    except Exception:
+        pass
+
+    ledger = load_submitted_ledger(filepath=path)
+    ledger["submitted_challenges"][str(challenge_id)] = entry
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(ledger, f, indent=2)
+    except Exception as e:
+        logger.warning(f"Failed to record submitted challenge in {path}: {e}")
+
+
 # Offline default settlement dead-zone rules if API is unreachable
 DEFAULT_SETTLEMENT_RULES: Dict[str, Dict[str, Any]] = {
     "RB": {
         "dead_zone": 0.0030,  # ±0.30% of open for RBOB Wholesale Gasoline
         "decimal_places": 4,
-        "name": "RBOB Gasoline Futures (RB=F)",
+        "name": "RBOB Wholesale Gasoline (RB=F)",
         "unit": "$/gal"
     },
     "CL": {
         "dead_zone": 0.0030,  # ±0.30% of open for WTI Crude Oil (Headline Arena official)
         "decimal_places": 2,
-        "name": "Crude Oil Futures (CL=F)",
+        "name": "Cushing WTI Crude Oil (CL=F)",
         "unit": "$/bbl"
+    },
+    "NG": {
+        "dead_zone": 0.0050,  # ±0.50% of open for Henry Hub Natural Gas Futures (NG=F)
+        "decimal_places": 3,
+        "name": "Henry Hub Natural Gas Futures (NG=F)",
+        "unit": "$/MMBtu"
+    },
+    "DXY": {
+        "dead_zone": 0.0020,  # ±0.20% of open for US Dollar Index (DXY)
+        "decimal_places": 3,
+        "name": "US Dollar Index (DXY)",
+        "unit": "pts"
     }
 }
 
@@ -191,11 +416,13 @@ def synthesize_forecasting_rationale(
     for Headline Arena commodity forecasting challenges.
     """
     asset_clean = asset.upper().strip()
-    unit = "$/gal" if asset_clean == "RB" else "$/bbl"
-    asset_name = "RBOB Wholesale Gasoline (RB=F)" if asset_clean == "RB" else "Cushing WTI Crude Oil (CL=F)"
+    rule = DEFAULT_SETTLEMENT_RULES.get(asset_clean, {})
+    unit = rule.get("unit", "$/gal" if asset_clean == "RB" else "$/bbl")
+    asset_name = rule.get("name", "RBOB Wholesale Gasoline (RB=F)" if asset_clean == "RB" else "Cushing WTI Crude Oil (CL=F)")
+    dec = int(rule.get("decimal_places", 4 if asset_clean == "RB" else 2))
     
-    p10_str = f"{unit}{p10:.4f}" if (p10 is not None and asset_clean == "RB") else (f"{unit}{p10:.2f}" if p10 is not None else "N/A")
-    p90_str = f"{unit}{p90:.4f}" if (p90 is not None and asset_clean == "RB") else (f"{unit}{p90:.2f}" if p90 is not None else "N/A")
+    p10_str = f"{unit}{p10:.{dec}f}" if p10 is not None else "N/A"
+    p90_str = f"{unit}{p90:.{dec}f}" if p90 is not None else "N/A"
     sigma_val = sigma if sigma is not None else (0.02 * open_price)
     
     p_bull = probabilities.get("bullish", 0.0) * 100.0
@@ -223,11 +450,17 @@ def synthesize_forecasting_rationale(
             margin_narrative = f"Underlying WTI crude feedstock (${float(wti_feed):.2f}/bbl) establishes an implied RBOB crack spread of ${implied_crack:.2f}/bbl."
         else:
             margin_narrative = "Refinery crack spread margins track seasonal equilibrium across PADD 1B and PADD 2 distribution hubs."
-    else:
+    elif asset_clean == "CL":
         if rb_feed is not None:
             margin_narrative = f"Downstream product demand from wholesale RBOB (${float(rb_feed):.4f}/gal) provides steady crack absorption for prompt physical crude."
         else:
             margin_narrative = "Prompt physical crude balances at Cushing reflect standard pipeline delivery flows and backwardation/contango structure."
+    elif asset_clean == "NG":
+        margin_narrative = "Henry Hub physical balances reflect regional heating/cooling degree day departures, underground storage injection/withdrawal momentum, and LNG feedgas export facility utilization."
+    elif asset_clean == "DXY":
+        margin_narrative = "US Dollar Index trajectory reflects Federal Reserve rate expectation differentials, transatlantic sovereign yield spreads, and global commodity trade liquidity flows."
+    else:
+        margin_narrative = f"Market structure and supply/demand fundamentals for {asset_name} remain anchored to baseline commodity fundamentals."
             
     # 3. Physical feeds & macro factors
     phys = physical_feeds or {}
@@ -461,6 +694,30 @@ class HeadlineArenaConnector:
                         "name": "Crude Oil",
                         "deadline": "2026-09-18T16:00:00Z"
                     }
+                },
+                {
+                    "challenge": {
+                        "id": "mock_rb_challenge_123",
+                        "asset": "RB",
+                        "name": "RBOB Gasoline",
+                        "deadline": "2026-09-18T16:00:00Z"
+                    }
+                },
+                {
+                    "challenge": {
+                        "id": "mock_ng_challenge_123",
+                        "asset": "NG",
+                        "name": "Natural Gas",
+                        "deadline": "2026-09-18T16:00:00Z"
+                    }
+                },
+                {
+                    "challenge": {
+                        "id": "mock_dxy_challenge_123",
+                        "asset": "DXY",
+                        "name": "US Dollar Index",
+                        "deadline": "2026-09-18T16:00:00Z"
+                    }
                 }
             ]
 
@@ -491,13 +748,46 @@ class HeadlineArenaConnector:
 
     def get_active_challenge_for_asset(self, asset: str) -> Optional[Dict[str, Any]]:
         """
-        Finds the active challenge matching the target asset (e.g. 'CL').
+        Finds the active challenge matching the target asset (e.g. 'CL' or 'RB').
         """
         challenges = self.get_active_challenges()
         asset_upper = asset.upper().strip()
         for ch in challenges:
             c_data = ch.get("challenge", ch)
             if c_data.get("asset", "").upper() == asset_upper:
+                return ch
+        return None
+
+    def get_active_civic_challenges(self, topic: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        Fetches active civic / macro forecasting challenges (e.g. EIA Retail Gasoline).
+        """
+        challenges = self.get_active_challenges()
+        civic_list = []
+        topic_filter = topic.upper().strip() if topic else None
+        for ch in challenges:
+            c_data = ch.get("challenge", ch)
+            category = str(c_data.get("category", "")).lower()
+            ch_topic = str(c_data.get("topic", c_data.get("asset", ""))).upper()
+            is_civic = "civic" in category or "macro" in category or "eia" in ch_topic.lower() or "gas" in ch_topic.lower()
+            if topic_filter:
+                if topic_filter in ch_topic or ch_topic in topic_filter:
+                    civic_list.append(ch)
+            elif is_civic:
+                civic_list.append(ch)
+        return civic_list
+
+    def get_active_challenge_by_topic(self, topic: str) -> Optional[Dict[str, Any]]:
+        """
+        Finds the active challenge matching a specific topic or asset keyword.
+        """
+        civics = self.get_active_civic_challenges(topic=topic)
+        if civics:
+            return civics[0]
+        topic_upper = topic.upper().strip()
+        for ch in self.get_active_challenges():
+            c_data = ch.get("challenge", ch)
+            if c_data.get("asset", "").upper() == topic_upper or c_data.get("topic", "").upper() == topic_upper:
                 return ch
         return None
 
@@ -630,25 +920,272 @@ class HeadlineArenaConnector:
         self,
         asset: str,
         p50: float,
-        p10: float,
-        p90: float,
+        p10: Optional[float] = None,
+        p90: Optional[float] = None,
+        residual_std: Optional[float] = None,
         reasoning: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Formats a numeric distribution payload (predicted_value, predicted_std)
         for Headline Arena macro-indicator CRPS closed-form challenges.
         """
-        sigma = (float(p90) - float(p10)) / 2.5631
+        if p10 is not None and p90 is not None and p90 > p10:
+            sigma = (float(p90) - float(p10)) / 2.5631
+        elif residual_std is not None and residual_std > 0:
+            sigma = float(residual_std)
+        else:
+            sigma = max(0.01, 0.02 * float(p50))
+
         reasoning_text = reasoning or f"Midgley multi-agent numeric distribution: mu={p50:.4f}, sigma={sigma:.4f}"
         if not self.is_prod:
             reasoning_text = f"[DEV-TEST] {reasoning_text}"
 
         return {
-            "asset": asset.upper(),
+            "asset": asset.upper().strip(),
             "predicted_value": round(float(p50), 4),
             "predicted_std": round(max(1e-4, sigma), 6),
             "reasoning": reasoning_text
         }
+
+    def format_eia_retail_civic_payload(
+        self,
+        predicted_value: float,
+        p10: Optional[float] = None,
+        p90: Optional[float] = None,
+        residual_std: Optional[float] = None,
+        custom_reasoning: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Formats a numeric distribution payload for the EIA Weekly Retail Gasoline Civic Challenge (Issue #408).
+        Computes Gaussian standard deviation sigma from P10/P90 quantile spread or empirical residual std.
+        """
+        mu = float(predicted_value)
+        if p10 is not None and p90 is not None and p90 > p10:
+            sigma = (float(p90) - float(p10)) / 2.5631
+        elif residual_std is not None and residual_std > 0:
+            sigma = float(residual_std)
+        else:
+            sigma = max(0.01, 0.015 * mu)
+        sigma = max(1e-4, sigma)
+
+        if custom_reasoning:
+            reasoning_text = custom_reasoning
+        else:
+            reasoning_lines = [
+                "[Midgley Multi-Agent Forecast | EIA US Regular Gasoline Retail Price]",
+                f"- Predicted Target (P50 Median): ${mu:.4f}/gal",
+                f"- Gaussian Uncertainty: sigma={sigma:.4f}/gal" + (f" (80% CI: [${p10:.4f} - ${p90:.4f}])" if (p10 is not None and p90 is not None) else ""),
+                "- Continuous Ranked Probability Score (CRPS): Closed-form normal distribution CDF evaluation.",
+                "- Multi-Agent Synthesis: Ingests PADD 1-5 refinery runs, spot RBOB crack spreads, EPA RVP compliance curves, and regional rack markups."
+            ]
+            reasoning_text = "\n".join(reasoning_lines)
+
+        if not self.is_prod:
+            reasoning_text = f"[DEV-TEST] [DEVELOPMENT]\n{reasoning_text}"
+
+        return {
+            "asset": "EIA_RETAIL_GASOLINE",
+            "topic": "EIA_RETAIL_GASOLINE",
+            "predicted_value": round(mu, 4),
+            "predicted_std": round(sigma, 6),
+            "reasoning": reasoning_text,
+            "metadata": {
+                "environment": self.environment,
+                "p50": mu,
+                "p10": p10,
+                "p90": p90,
+                "sigma": round(sigma, 6),
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        }
+
+    def submit_macro_forecast(
+        self,
+        challenge_id: str,
+        payload: Dict[str, Any],
+        live_in_dev: bool = False
+    ) -> Dict[str, Any]:
+        """
+        Submits a numeric macro / civic forecast payload to /eval/challenges/{challenge_id}/predict (Issue #408).
+        """
+        start_time = time.time()
+        asset = payload.get("asset", payload.get("topic", "MACRO"))
+
+        if not challenge_id:
+            return {"status": "ERROR", "message": "Missing challenge_id for macro forecast submission."}
+
+        # Check local submitted ledger for idempotency
+        if is_challenge_already_submitted(challenge_id):
+            msg = f"Challenge {challenge_id} ({asset}) has already been submitted in the local ledger."
+            logger.info(msg)
+            return {
+                "status": "ALREADY_SUBMITTED",
+                "mode": "SKIPPED_ALREADY_PREDICTED",
+                "asset": asset,
+                "challenge_id": challenge_id,
+                "message": msg
+            }
+
+        # 1. Test environment suppression
+        if os.environ.get("TESTING") == "1":
+            latency = (time.time() - start_time) * 1000.0
+            record_submitted_challenge(challenge_id, asset, {"status": "SUCCESS", "mode": "TEST_MOCKED"})
+            log_connector_event(
+                connector_name="HeadlineArena",
+                target=asset,
+                status="SUCCESS",
+                latency_ms=latency,
+                details=f"Test mode mock macro submission: predicted_value={payload.get('predicted_value')}"
+            )
+            return {
+                "status": "SUCCESS",
+                "mode": "TEST_MOCKED",
+                "asset": asset,
+                "challenge_id": challenge_id,
+                "predicted_value": payload.get("predicted_value"),
+                "predicted_std": payload.get("predicted_std"),
+                "submission_id": "test_sub_mock_macro_123"
+            }
+
+        # 2. Check credentials
+        if not self.is_configured:
+            logger.info(f"Headline Arena credentials not configured. Skipping macro submission for {asset}.")
+            log_connector_event(
+                connector_name="HeadlineArena",
+                target=asset,
+                status="SKIPPED_NO_CREDENTIALS",
+                latency_ms=0.0,
+                details="HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+            )
+            return {
+                "status": "SKIPPED_NO_CREDENTIALS",
+                "asset": asset,
+                "challenge_id": challenge_id,
+                "message": "Missing Headline Arena client credentials."
+            }
+
+        # 3. Dev environment dry-run gate
+        allow_dev_submit = live_in_dev or os.environ.get("HEADLINE_ARENA_DEV_SUBMIT") == "1"
+        if not self.is_prod and not allow_dev_submit:
+            logger.info(
+                f"[DEV DRY-RUN] Headline Arena macro submission for {asset} (challenge {challenge_id}) computed: "
+                f"predicted_value={payload.get('predicted_value')}, predicted_std={payload.get('predicted_std')}. "
+                f"Skipping live POST request in dev mode."
+            )
+            log_connector_event(
+                connector_name="HeadlineArena",
+                target=asset,
+                status="SUCCESS",
+                latency_ms=0.0,
+                details=f"Dev dry-run macro: val={payload.get('predicted_value')}, std={payload.get('predicted_std')}"
+            )
+            return {
+                "status": "DRY_RUN",
+                "mode": "DEVELOPMENT_DRY_RUN",
+                "asset": asset,
+                "challenge_id": challenge_id,
+                "predicted_value": payload.get("predicted_value"),
+                "predicted_std": payload.get("predicted_std"),
+                "reasoning": payload.get("reasoning"),
+                "message": "Dev dry-run completed successfully without external network POST."
+            }
+
+        # 4. Live submission (Production or Explicit Dev-Test)
+        bearer_token = self.get_bearer_token()
+        if not bearer_token:
+            log_connector_event(
+                connector_name="HeadlineArena",
+                target=asset,
+                status="AUTH_ERROR",
+                latency_ms=(time.time() - start_time) * 1000.0,
+                details="Failed to obtain OAuth2 bearer token"
+            )
+            return {
+                "status": "AUTH_ERROR",
+                "asset": asset,
+                "challenge_id": challenge_id,
+                "message": "Failed to authenticate with Headline Arena."
+            }
+
+        predict_url = f"{self.base_url}/eval/challenges/{challenge_id}/predict"
+        post_body = {
+            "predicted_value": float(payload.get("predicted_value", 0.0)),
+            "predicted_std": float(payload.get("predicted_std", 0.01)),
+            "reasoning": str(payload.get("reasoning", ""))
+        }
+        data_bytes = json.dumps(post_body).encode("utf-8")
+        req = urllib.request.Request(
+            predict_url,
+            data=data_bytes,
+            headers={
+                "Authorization": f"Bearer {bearer_token}",
+                "Content-Type": "application/json",
+                "User-Agent": "Midgley-Forecaster/1.0"
+            },
+            method="POST"
+        )
+
+        try:
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                resp_data = json.loads(resp.read().decode("utf-8"))
+                latency = (time.time() - start_time) * 1000.0
+                record_submitted_challenge(challenge_id, asset, resp_data)
+                log_connector_event(
+                    connector_name="HeadlineArena",
+                    target=asset,
+                    status="SUCCESS",
+                    latency_ms=latency,
+                    details=f"Submitted macro {asset} (challenge {challenge_id}): val={payload.get('predicted_value')}, std={payload.get('predicted_std')}"
+                )
+                return {
+                    "status": "SUCCESS",
+                    "mode": "LIVE_SUBMISSION",
+                    "asset": asset,
+                    "challenge_id": challenge_id,
+                    "response": resp_data
+                }
+        except urllib.error.HTTPError as e:
+            latency = (time.time() - start_time) * 1000.0
+            err_msg = e.read().decode("utf-8") if e.fp else str(e)
+            err_lower = err_msg.lower()
+            is_already_submitted = (
+                e.code in [409, 500]
+                or (e.code == 400 and any(k in err_lower for k in ["already", "duplicate", "unique", "exist", "conflict"]))
+            )
+            if is_already_submitted:
+                record_submitted_challenge(challenge_id, asset, {"status": "ALREADY_SUBMITTED", "code": e.code})
+                log_connector_event(
+                    connector_name="HeadlineArena",
+                    target=asset,
+                    status="ALREADY_SUBMITTED_TODAY",
+                    latency_ms=latency,
+                    details=f"Macro challenge {challenge_id} already predicted (HTTP {e.code})"
+                )
+                return {
+                    "status": "ALREADY_SUBMITTED",
+                    "mode": "SKIPPED_ALREADY_PREDICTED",
+                    "asset": asset,
+                    "challenge_id": challenge_id,
+                    "message": f"Challenge {challenge_id} for {asset} was already predicted today (HTTP {e.code})."
+                }
+            log_connector_event(
+                connector_name="HeadlineArena",
+                target=asset,
+                status="HTTP_ERROR",
+                latency_ms=latency,
+                details=f"HTTP {e.code}: {err_msg[:100]}"
+            )
+            return {"status": "HTTP_ERROR", "code": e.code, "error": err_msg, "asset": asset, "challenge_id": challenge_id}
+        except Exception as e:
+            latency = (time.time() - start_time) * 1000.0
+            log_connector_event(
+                connector_name="HeadlineArena",
+                target=asset,
+                status="NETWORK_ERROR",
+                latency_ms=latency,
+                details=str(e)[:100]
+            )
+            return {"status": "NETWORK_ERROR", "error": str(e), "asset": asset, "challenge_id": challenge_id}
 
     def submit_forecast(
         self,
@@ -740,6 +1277,7 @@ class HeadlineArenaConnector:
             return {
                 "status": "AUTH_ERROR",
                 "asset": asset,
+                "challenge_id": None,
                 "message": "Failed to authenticate with Headline Arena."
             }
 
@@ -777,6 +1315,18 @@ class HeadlineArenaConnector:
                 "message": msg
             }
 
+        # Check local submitted ledger for idempotency
+        if is_challenge_already_submitted(challenge_id):
+            msg = f"Challenge {challenge_id} ({asset}) was already predicted today."
+            logger.info(msg)
+            return {
+                "status": "ALREADY_SUBMITTED",
+                "mode": "SKIPPED_ALREADY_PREDICTED",
+                "asset": asset,
+                "challenge_id": challenge_id,
+                "message": msg
+            }
+
         # 7. Submit prediction to /eval/challenges/{challenge_id}/predict
         predict_url = f"{self.base_url}/eval/challenges/{challenge_id}/predict"
         post_body = {
@@ -801,6 +1351,7 @@ class HeadlineArenaConnector:
                 resp_data = json.loads(resp.read().decode("utf-8"))
                 latency = (time.time() - start_time) * 1000.0
                 counts_for_score = resp_data.get("counts_for_score", True)
+                record_submitted_challenge(challenge_id, asset, resp_data)
                 log_connector_event(
                     connector_name="HeadlineArena",
                     target=asset,
@@ -828,6 +1379,7 @@ class HeadlineArenaConnector:
             )
             
             if is_already_submitted:
+                record_submitted_challenge(challenge_id, asset, {"status": "ALREADY_SUBMITTED", "code": e.code})
                 logger.info(
                     f"Headline Arena challenge {challenge_id} ({asset}) has already received a prediction today (HTTP {e.code}). "
                     f"Skipping duplicate submission."
@@ -868,6 +1420,95 @@ class HeadlineArenaConnector:
             )
             return {"status": "NETWORK_ERROR", "error": str(e), "asset": asset, "challenge_id": challenge_id}
 
+    def dispatch_pending_forecasts(
+        self,
+        live_in_dev: bool = False,
+        pending_file: Optional[str] = None,
+        ledger_file: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Dispatches cached pending forecasts against active challenges on Headline Arena (Issue #418).
+        - Discards expired forecasts (>24h).
+        - Queries active challenges.
+        - Submits matching pending forecasts if not already submitted in the local ledger.
+        - Updates submitted ledger.
+        """
+        clear_expired_pending_forecasts(filepath=pending_file)
+        pending = load_pending_forecasts(active_only=True, filepath=pending_file)
+        if not pending:
+            return {
+                "status": "NO_PENDING_FORECASTS",
+                "dispatched": 0,
+                "results": {}
+            }
+
+        active_challenges = self.get_active_challenges()
+        if not active_challenges:
+            return {
+                "status": "NO_ACTIVE_CHALLENGES",
+                "pending_count": len(pending),
+                "dispatched": 0,
+                "results": {}
+            }
+
+        results = {}
+        dispatched_count = 0
+
+        for record in pending:
+            asset = record.get("asset", "").upper()
+            forecast_type = record.get("forecast_type", "direction")
+            payload = record.get("payload", {})
+
+            # Match against active challenges
+            matching_ch = None
+            for ch in active_challenges:
+                c_data = ch.get("challenge", ch)
+                ch_asset = str(c_data.get("asset", "")).upper()
+                ch_topic = str(c_data.get("topic", "")).upper()
+                if ch_asset == asset or ch_topic == asset or (
+                    asset in ["EIA_RETAIL_GASOLINE", "GAS_REGULAR", "EIA_GAS_REGULAR_US"]
+                    and any(k in ch_topic or k in ch_asset for k in ["EIA", "GAS", "RETAIL"])
+                ):
+                    matching_ch = ch
+                    break
+
+            if not matching_ch:
+                results[asset] = {"status": "NO_MATCHING_ACTIVE_CHALLENGE", "asset": asset}
+                continue
+
+            c_data = matching_ch.get("challenge", matching_ch)
+            challenge_id = c_data.get("id")
+            if not challenge_id:
+                results[asset] = {"status": "ERROR_MISSING_CHALLENGE_ID", "asset": asset}
+                continue
+
+            if is_challenge_already_submitted(challenge_id, filepath=ledger_file):
+                results[asset] = {
+                    "status": "ALREADY_SUBMITTED",
+                    "asset": asset,
+                    "challenge_id": challenge_id,
+                    "message": f"Challenge {challenge_id} for {asset} already in ledger."
+                }
+                continue
+
+            if forecast_type == "macro" or "predicted_value" in payload:
+                res = self.submit_macro_forecast(challenge_id, payload, live_in_dev=live_in_dev)
+            else:
+                res = self.submit_forecast(payload, live_in_dev=live_in_dev)
+
+            results[asset] = res
+            if res.get("status") in ["SUCCESS", "ALREADY_SUBMITTED", "DRY_RUN"]:
+                dispatched_count += 1
+                if res.get("status") in ["SUCCESS", "ALREADY_SUBMITTED"]:
+                    record_submitted_challenge(challenge_id, asset, res, filepath=ledger_file)
+
+        return {
+            "status": "COMPLETED",
+            "pending_count": len(pending),
+            "dispatched": dispatched_count,
+            "results": results
+        }
+
 
 def submit_midgley_energy_forecasts(
     rb_open_price: float,
@@ -880,14 +1521,30 @@ def submit_midgley_energy_forecasts(
     cl_p10: Optional[float] = None,
     cl_p90: Optional[float] = None,
     cl_residual_std: Optional[float] = None,
+    ng_open_price: Optional[float] = None,
+    ng_p50: Optional[float] = None,
+    ng_p10: Optional[float] = None,
+    ng_p90: Optional[float] = None,
+    ng_residual_std: Optional[float] = None,
+    dxy_open_price: Optional[float] = None,
+    dxy_p50: Optional[float] = None,
+    dxy_p10: Optional[float] = None,
+    dxy_p90: Optional[float] = None,
+    dxy_residual_std: Optional[float] = None,
+    eia_retail_p50: Optional[float] = None,
+    eia_retail_p10: Optional[float] = None,
+    eia_retail_p90: Optional[float] = None,
+    eia_retail_residual_std: Optional[float] = None,
     qualitative_catalysts: Optional[Dict[str, Any]] = None,
     technical_indicators: Optional[Dict[str, Any]] = None,
     physical_feeds: Optional[Dict[str, Any]] = None,
+    save_pending: bool = True,
     live_in_dev: bool = False
 ) -> Dict[str, Any]:
     """
-    Submits daily forecasts for both RBOB Gasoline (RB) and Cushing WTI Crude (CL)
-    to Headline Arena with rich multi-factor rationale synthesis.
+    Submits daily forecasts for RBOB Gasoline (RB), Cushing WTI Crude (CL), Henry Hub Natural Gas (NG),
+    US Dollar Index (DXY), and optional EIA US Regular Retail Gasoline (Issue #408 & #410) to Headline Arena.
+    Automatically persists generated forecasts into the 24h pending cache (Issue #418).
     """
     connector = HeadlineArenaConnector()
     results = {}
@@ -914,6 +1571,8 @@ def submit_midgley_energy_forecasts(
             technical_indicators=tech,
             physical_feeds=physical_feeds
         )
+        if save_pending:
+            save_pending_forecast(asset="RB", payload=rb_payload, forecast_type="direction")
         results["RB"] = connector.submit_forecast(rb_payload, live_in_dev=live_in_dev)
 
     # 2. WTI Crude Oil
@@ -929,19 +1588,83 @@ def submit_midgley_energy_forecasts(
             technical_indicators=tech,
             physical_feeds=physical_feeds
         )
+        if save_pending:
+            save_pending_forecast(asset="CL", payload=cl_payload, forecast_type="direction")
         results["CL"] = connector.submit_forecast(cl_payload, live_in_dev=live_in_dev)
+
+    # 3. Henry Hub Natural Gas (Issue #410)
+    if ng_open_price and ng_p50 and ng_open_price > 0 and ng_p50 > 0:
+        ng_payload = connector.format_direction_payload(
+            asset="NG",
+            open_price=ng_open_price,
+            p50=ng_p50,
+            p10=ng_p10,
+            p90=ng_p90,
+            residual_std=ng_residual_std,
+            qualitative_catalysts=qualitative_catalysts,
+            technical_indicators=tech,
+            physical_feeds=physical_feeds
+        )
+        if save_pending:
+            save_pending_forecast(asset="NG", payload=ng_payload, forecast_type="direction")
+        results["NG"] = connector.submit_forecast(ng_payload, live_in_dev=live_in_dev)
+
+    # 4. US Dollar Index (Issue #410)
+    if dxy_open_price and dxy_p50 and dxy_open_price > 0 and dxy_p50 > 0:
+        dxy_payload = connector.format_direction_payload(
+            asset="DXY",
+            open_price=dxy_open_price,
+            p50=dxy_p50,
+            p10=dxy_p10,
+            p90=dxy_p90,
+            residual_std=dxy_residual_std,
+            qualitative_catalysts=qualitative_catalysts,
+            technical_indicators=tech,
+            physical_feeds=physical_feeds
+        )
+        if save_pending:
+            save_pending_forecast(asset="DXY", payload=dxy_payload, forecast_type="direction")
+        results["DXY"] = connector.submit_forecast(dxy_payload, live_in_dev=live_in_dev)
+
+    # 5. EIA US Regular Retail Gasoline Civic / Macro Challenge (Issue #408)
+    if eia_retail_p50 and eia_retail_p50 > 0:
+        eia_payload = connector.format_eia_retail_civic_payload(
+            predicted_value=eia_retail_p50,
+            p10=eia_retail_p10,
+            p90=eia_retail_p90,
+            residual_std=eia_retail_residual_std
+        )
+        if save_pending:
+            save_pending_forecast(asset="EIA_RETAIL_GASOLINE", payload=eia_payload, forecast_type="macro")
+
+        # Discover active EIA civic challenge
+        eia_challenge = connector.get_active_challenge_by_topic("EIA_RETAIL_GASOLINE")
+        if eia_challenge:
+            ch_data = eia_challenge.get("challenge", eia_challenge)
+            ch_id = ch_data.get("id")
+            if ch_id:
+                results["EIA_RETAIL_GASOLINE"] = connector.submit_macro_forecast(
+                    challenge_id=ch_id,
+                    payload=eia_payload,
+                    live_in_dev=live_in_dev
+                )
+            else:
+                results["EIA_RETAIL_GASOLINE"] = {"status": "SKIPPED_NO_CHALLENGE_ID", "payload": eia_payload}
+        else:
+            results["EIA_RETAIL_GASOLINE"] = {"status": "CACHED_PENDING_CHALLENGE", "payload": eia_payload}
 
     return results
 
 
 def main():
-    """CLI Entrypoint for one-time agent registration and manual test submissions."""
+    """CLI Entrypoint for one-time agent registration, pending sync, and manual test submissions."""
     parser = argparse.ArgumentParser(description="Midgley Headline Arena Forecasting Connector CLI")
     parser.add_argument("--register", action="store_true", help="Register a new agent with Headline Arena")
     parser.add_argument("--name", type=str, default="Midgley-Energy-Agent", help="Agent name for registration")
     parser.add_argument("--description", type=str, default="Probabilistic multi-agent RBOB gasoline and WTI crude forecaster", help="Agent description")
     parser.add_argument("--model-provider", type=str, default="google", help="Underlying model provider (default: google)")
     parser.add_argument("--model-name", type=str, default="gemini-2.5-flash", help="Underlying model name (default: gemini-2.5-flash)")
+    parser.add_argument("--sync", action="store_true", help="Dispatch pending cached forecasts against active challenges")
     parser.add_argument("--submit-test", action="store_true", help="Perform a test prediction submission")
     parser.add_argument("--live", action="store_true", help="Enable live submission in dev environment (tags as [DEV-TEST])")
     parser.add_argument("--status", action="store_true", help="Check Headline Arena connection status and settlement rules")
@@ -973,6 +1696,14 @@ def main():
             print("=" * 70)
         return
 
+    if args.sync:
+        print("=" * 70)
+        print("  HEADLINE ARENA - DISPATCH PENDING FORECASTS")
+        print("=" * 70)
+        sync_res = connector.dispatch_pending_forecasts(live_in_dev=args.live)
+        print(json.dumps(sync_res, indent=2))
+        return
+
     if args.status or not (args.submit_test):
         print("=" * 70)
         print("  HEADLINE ARENA CONNECTOR STATUS")
@@ -983,12 +1714,15 @@ def main():
         rules = connector.get_settlement_rules()
         print("\nSettlement Rules:")
         print(json.dumps(rules, indent=2))
+        pending = load_pending_forecasts(active_only=True)
+        print(f"\nActive Pending Forecasts ({len(pending)}):")
+        print(json.dumps(pending, indent=2))
 
     if args.submit_test:
         print("\n" + "=" * 70)
         print("  TEST FORECAST SUBMISSION")
         print("=" * 70)
-        # Sample RBOB gasoline test forecast
+        # Sample RBOB, WTI, and EIA Retail test forecasts
         res = submit_midgley_energy_forecasts(
             rb_open_price=2.4500,
             rb_p50=2.5200,
@@ -998,6 +1732,9 @@ def main():
             cl_p50=77.20,
             cl_p10=74.80,
             cl_p90=79.60,
+            eia_retail_p50=3.215,
+            eia_retail_p10=3.120,
+            eia_retail_p90=3.310,
             live_in_dev=args.live
         )
         print(json.dumps(res, indent=2))
@@ -1005,3 +1742,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

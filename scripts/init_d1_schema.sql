@@ -26,6 +26,8 @@ CREATE INDEX IF NOT EXISTS idx_seen_rss_created_at ON seen_rss_headlines (create
 
 -- 3. Out-of-Time Prediction History & Evaluation Log
 CREATE TABLE IF NOT EXISTS prediction_history (
+    forecast_id TEXT PRIMARY KEY,
+    issued_at_utc TEXT,
     log_timestamp TEXT,
     forecast_target_date TEXT,
     forecast_horizon_days INTEGER DEFAULT 5,
@@ -48,8 +50,9 @@ CREATE TABLE IF NOT EXISTS prediction_history (
     prediction_upper_95ci REAL,
     within_95ci_hit REAL,
     data_source_provenance TEXT DEFAULT 'yfinance',
-    PRIMARY KEY (log_timestamp, forecast_target_date, region)
+    is_retroactive_backtest INTEGER DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_pred_history_target ON prediction_history (forecast_target_date, region);
 CREATE INDEX IF NOT EXISTS idx_pred_history_version ON prediction_history (model_version);
+CREATE INDEX IF NOT EXISTS idx_pred_history_log_ts ON prediction_history (log_timestamp, forecast_target_date, region);

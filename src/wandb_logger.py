@@ -230,6 +230,26 @@ def log_weekly_audit_run(
             )
             active_run.log({"audit/degraded_regions_table": alert_table})
 
+        # 3. Log unified multi-region performance summary table (Issue #372)
+        if regions and hasattr(wandb, "Table"):
+            perf_rows = []
+            for reg_name, reg_data in regions.items():
+                if isinstance(reg_data, dict):
+                    perf_rows.append([
+                        str(reg_data.get("display_name", reg_name)),
+                        str(reg_name),
+                        float(reg_data.get("mae", 0.0)),
+                        float(reg_data.get("rmse", 0.0)),
+                        float(reg_data.get("hit_rate_pct", 0.0)),
+                        int(reg_data.get("sample_count", 0))
+                    ])
+            if perf_rows:
+                perf_table = wandb.Table(
+                    columns=["Display Name", "Region Code", "MAE ($/gal)", "RMSE ($/gal)", "Directional Hit (%)", "Sample Count"],
+                    data=perf_rows
+                )
+                active_run.log({"audit/regional_performance_table": perf_table})
+
         run_url = getattr(active_run, "url", None)
         run_id = getattr(active_run, "id", None)
 

@@ -106,5 +106,302 @@
       }
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-22 01:46:40",
+    "as_of": "2026-09-22 01:46:40",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.4,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67324.9,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81204.4,
+        "stress_index": 0.25
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 94005.6,
+        "stress_index": 0.3
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31722.7,
+        "stress_index": 0.25
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-22 01:51:48",
+    "as_of": "2026-09-22 01:51:48",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.4,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67324.9,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81204.4,
+        "stress_index": 0.25
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 94005.6,
+        "stress_index": 0.3
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31722.7,
+        "stress_index": 0.25
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-22 12:35:13",
+    "as_of": "2026-09-22 12:35:13",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 3.53,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 80300.0,
+        "stress_index": 0.68
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 93000.0,
+        "stress_index": 0.72
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 108750.0,
+        "stress_index": 0.79
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 38800.0,
+        "stress_index": 0.72
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-22 12:40:28",
+    "as_of": "2026-09-22 12:40:28",
+    "valid_date": "2026-09-22",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 3.53,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 80300.0,
+        "stress_index": 0.68
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 93000.0,
+        "stress_index": 0.72
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 108750.0,
+        "stress_index": 0.79
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 38800.0,
+        "stress_index": 0.72
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-23 20:29:20",
+    "as_of": "2026-09-23 20:29:20",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 1.13,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 70400.0,
+        "stress_index": 0.35
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 84000.0,
+        "stress_index": 0.36
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 97500.0,
+        "stress_index": 0.42
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 33400.0,
+        "stress_index": 0.36
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-23 20:39:14",
+    "as_of": "2026-09-23 20:39:14",
+    "valid_date": "2026-09-23",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 1.13,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 70400.0,
+        "stress_index": 0.35
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 84000.0,
+        "stress_index": 0.36
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 97500.0,
+        "stress_index": 0.42
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 33400.0,
+        "stress_index": 0.36
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 00:36:15",
+    "as_of": "2026-09-24 00:36:15",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.33,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67100.0,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81000.0,
+        "stress_index": 0.24
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 93750.0,
+        "stress_index": 0.29
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31600.0,
+        "stress_index": 0.24
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 00:38:34",
+    "as_of": "2026-09-24 00:38:34",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.33,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67100.0,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81000.0,
+        "stress_index": 0.24
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 93750.0,
+        "stress_index": 0.29
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31600.0,
+        "stress_index": 0.24
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 00:42:06",
+    "as_of": "2026-09-24 00:42:06",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 0.33,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 67100.0,
+        "stress_index": 0.24
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 81000.0,
+        "stress_index": 0.24
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 93750.0,
+        "stress_index": 0.29
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 31600.0,
+        "stress_index": 0.24
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 15:35:27",
+    "as_of": "2026-09-24 15:35:27",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 3.07,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 78366.9,
+        "stress_index": 0.61
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 91242.6,
+        "stress_index": 0.65
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 106553.3,
+        "stress_index": 0.72
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 37745.6,
+        "stress_index": 0.65
+      }
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "U.S. EIA-930 Hourly Electric Grid Monitor (Zero-Cost)",
+    "timestamp": "2026-09-24 15:47:13",
+    "as_of": "2026-09-24 15:47:13",
+    "valid_date": "2026-09-24",
+    "is_vintage_reconstructed": false,
+    "grid_stress_load_anomaly_zscore": 3.07,
+    "rto_balancing_authorities": {
+      "ERCOT_Texas_Gulf": {
+        "load_mw": 78366.9,
+        "stress_index": 0.61
+      },
+      "MISO_Midwest_Tulsa": {
+        "load_mw": 91242.6,
+        "stress_index": 0.65
+      },
+      "PJM_MidAtlantic_Newark": {
+        "load_mw": 106553.3,
+        "stress_index": 0.72
+      },
+      "CAISO_WestCoast_Oakland": {
+        "load_mw": 37745.6,
+        "stress_index": 0.65
+      }
+    },
+    "status": "SUCCESS"
   }
 ]

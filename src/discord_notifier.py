@@ -35,7 +35,11 @@ def get_environment_label(environment: Optional[str] = None) -> str:
         return "dev"
 
 
-def format_intraday_discord_payload(event_record: Dict[str, Any], environment: Optional[str] = None) -> Dict[str, Any]:
+def format_intraday_discord_payload(
+    event_record: Dict[str, Any],
+    environment: Optional[str] = None,
+    include_components: Optional[bool] = None
+) -> Dict[str, Any]:
     """
     Constructs a rich Discord Embed payload representing an intraday forecast revision event.
     """
@@ -162,38 +166,46 @@ def format_intraday_discord_payload(event_record: Dict[str, Any], environment: O
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
-    # Action Row Components: Link Buttons (100% compatible across all Discord webhooks)
-    components = [
-        {
-            "type": 1,  # Action Row
-            "components": [
-                {
-                    "type": 2,  # Button
-                    "style": 5,  # Link button
-                    "label": "🚩 Flag False Positive",
-                    "url": flag_url
-                },
-                {
-                    "type": 2,  # Button
-                    "style": 5,  # Link button
-                    "label": "📋 Tracking Thread #258",
-                    "url": tracking_url
-                }
-            ]
-        }
-    ]
-
-    return {
+    payload = {
         "username": "Midgley Intraday Monitor",
-        "embeds": [embed],
-        "components": components
+        "embeds": [embed]
     }
+
+    # Top-level interactive Action Row buttons are only attached when explicitly requested
+    # (e.g. Discord Bot Applications). Standard incoming Discord webhooks reject top-level components with HTTP 400.
+    if include_components is None:
+        include_components = os.environ.get("DISCORD_INCLUDE_COMPONENTS", "0").lower() in ("1", "true")
+
+    if include_components:
+        components = [
+            {
+                "type": 1,  # Action Row
+                "components": [
+                    {
+                        "type": 2,  # Button
+                        "style": 5,  # Link button
+                        "label": "🚩 Flag False Positive",
+                        "url": flag_url
+                    },
+                    {
+                        "type": 2,  # Button
+                        "style": 5,  # Link button
+                        "label": "📋 Tracking Thread #258",
+                        "url": tracking_url
+                    }
+                ]
+            }
+        ]
+        payload["components"] = components
+
+    return payload
 
 
 def send_intraday_discord_notification(
     event_record: Dict[str, Any],
     webhook_url: Optional[str] = None,
-    environment: Optional[str] = None
+    environment: Optional[str] = None,
+    include_components: Optional[bool] = None
 ) -> bool:
     """
     Dispatches a Discord webhook notification for an intraday forecast revision.
@@ -202,6 +214,7 @@ def send_intraday_discord_notification(
         event_record: Dictionary containing headline, source, scores, target_locales, url, etc.
         webhook_url: Target Discord webhook URL (defaults to env vars DISCORD_INTRADAY_WEBHOOK_URL / DISCORD_WEBHOOK_URL).
         environment: Explicit environment override ('prod' or 'dev').
+        include_components: Whether to attach top-level action button components (default: False).
         
     Returns:
         bool: True if dispatched successfully or suppressed during test runs, False on error.
@@ -218,7 +231,11 @@ def send_intraday_discord_notification(
         logger.info("TESTING=1: Suppressed Discord webhook notification HTTP POST.")
         return True
 
-    payload = format_intraday_discord_payload(event_record, environment=environment)
+    payload = format_intraday_discord_payload(
+        event_record,
+        environment=environment,
+        include_components=include_components
+    )
 
     try:
         data_bytes = json.dumps(payload).encode("utf-8")

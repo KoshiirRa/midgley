@@ -613,6 +613,25 @@ class LookupCache:
                 except Exception as e:
                     results["turso"]["status"] = "error"
                     results["turso"]["error"] = str(e)
+                finally:
+                    # Clean up transient probe key (Issue #437)
+                    try:
+                        del_body = json.dumps({
+                            "requests": [
+                                {"type": "execute", "stmt": {"sql": "DELETE FROM lookup_cache WHERE key = ?", "args": [{"type": "text", "value": probe_key}]}},
+                                {"type": "close"}
+                            ]
+                        }).encode("utf-8")
+                        del_req = urllib.request.Request(
+                            turso_url,
+                            data=del_body,
+                            headers={"Authorization": f"Bearer {turso_token}", "Content-Type": "application/json"},
+                            method="POST"
+                        )
+                        with urllib.request.urlopen(del_req, timeout=HTTP_TIMEOUT_SECONDS):
+                            pass
+                    except Exception:
+                        pass
             else:
                 results["turso"]["status"] = "unconfigured"
 
@@ -635,8 +654,18 @@ class LookupCache:
                 except Exception as e:
                     results["cloudflare"]["status"] = "error"
                     results["cloudflare"]["error"] = str(e)
-            else:
-                results["cloudflare"]["status"] = "unconfigured"
+                finally:
+                    # Clean up transient probe key (Issue #437)
+                    try:
+                        del_headers = {"User-Agent": "MidgleyCacheGateway/1.0"}
+                        if cf_token:
+                            del_headers["Authorization"] = f"Bearer {cf_token}"
+                        del_endpoint = f"{cf_url.rstrip('/')}/api/v1/cache/{urllib.parse.quote(probe_key)}"
+                        del_req = urllib.request.Request(del_endpoint, headers=del_headers, method="DELETE")
+                        with urllib.request.urlopen(del_req, timeout=HTTP_TIMEOUT_SECONDS):
+                            pass
+                    except Exception:
+                        pass
 
         return results
 

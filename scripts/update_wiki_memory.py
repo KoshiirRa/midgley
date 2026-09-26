@@ -23,9 +23,13 @@ else:
         if "Weekly Review 2.0" not in agent_text and "Hindsight" not in agent_text:
             memory_section = """
 
-### Agent 7: Weekly Review 2.0 & Episodic Agent Memory (Issue #230)
-- **Retain-Recall-Reflect Triad**: Implements episodic memory (`src/agent_memory.py`) capturing resolved prediction experiences and residual outliers ($|error| \\ge \\$0.25/\\text{gal}$).
-- **Vectorize Hindsight on Google Cloud Run**: Scaled-to-zero container (`midgley-hindsight`) backed by Supabase PostgreSQL (`pgvector`) for dense cosine similarity search.
+### Agent 7: Weekly Review 2.0 & Episodic Agent Memory (Issues #230 & #421)
+- **Retain-Recall-Reflect Triad**: Implements episodic memory (`src/agent_memory.py`) capturing resolved prediction experiences and residual outliers ($|error| \\ge \\$0.25/\\text{gal}$ or directional flips).
+- **Vectorize Hindsight-Hosted SaaS Gateway**: Connects to `https://api.hindsight.vectorize.io` (bank `Midgley`) with Bearer auth, zero cold-start latency, and token-efficient cost structure (~$3.50/mo).
+- **Standardized Bank Mission & Reasoning Profiles (`Midgley`)**:
+  - **Retain Extraction**: Concise extraction of quantitative prediction deviations, physical supply catalysts (refinery outages, pipeline shut-ins, maritime navigation restrictions, EPA/CARB RVP deadlines), and calendar spreads.
+  - **Observations Consolidation**: Consolidates durable market dynamics, localized basis spreads (Tulsa, Newark, Cincinnati, Carolinas, Oakland, Port St. Lucie), regulatory blend transitions, and weekly model recalibration lessons into persistent economic beliefs.
+  - **Reflect Post-Mortems & Analogies**: Synthesizes qualitative root causes and parameter adjustments (shock decay half-lives $t_{1/2}$, seasonal transition buffers), parameterized with Skepticism 4/5, Literalism 4/5, and Empathy 1/5 (Detached).
 - **Zero-Cost SQLite FTS5 Fallback**: 100% offline local memory store (`data/agent_memory.sqlite`) with BM25 keyword matching for $0 cost execution.
 - **Qualitative Anomaly Post-Mortems**: Synthesizes root-cause diagnoses, historical shock analogies, and parameter calibration recommendations in Saturday review reports.
 """
@@ -42,11 +46,10 @@ else:
         if "Hindsight" not in sh_text:
             sh_section = """
 
-### Vectorize Hindsight Episodic Agent Memory Setup (Issue #230)
-- **Supabase PostgreSQL (`pgvector`)**: Run `scripts/init_supabase_hindsight.sql` in Supabase SQL editor to create `hindsight_memories` with HNSW vector index.
-- **Google Cloud Run Deployer**: Run `bash scripts/deploy_hindsight_cloudrun.sh` with `--min-instances 0` for scale-to-zero $0 idle hosting.
-- **Environment Variables**: Configure `HINDSIGHT_API_URL` and `SUPABASE_DATABASE_URL` in `.env`.
-- **Local Fallback**: Automatically falls back to zero-cost local SQLite (`data/agent_memory.sqlite`) if cloud credentials are absent.
+### Vectorize Hindsight Episodic Agent Memory Setup (Issues #230 & #421)
+- **Option A: Vectorize Hindsight-Hosted SaaS (Recommended)**: Set `HINDSIGHT_API_URL="https://api.hindsight.vectorize.io"`, `HINDSIGHT_API_KEY="hsk_..."`, and `HINDSIGHT_BANK_ID="Midgley"` in `.env` and configure Retain, Observations, and Reflect bank missions in control plane.
+- **Option B: Local Dev-VM Docker**: Run `ghcr.io/vectorize-io/hindsight:latest` on port 8888 with Supabase PostgreSQL pgvector.
+- **Option C: Zero-Cost SQLite FTS5 Fallback**: Automatically falls back to zero-cost local SQLite (`data/agent_memory.sqlite`) if cloud credentials are absent.
 """
             sh_text += sh_section
             with open(self_host_path, "w", encoding="utf-8") as f:

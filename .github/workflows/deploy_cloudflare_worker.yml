@@ -24,10 +24,26 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Worker Dependencies
+        run: npm install
+
+      - name: Run TypeScript Typecheck & Worker Tests
+        run: |
+          npm run typecheck
+          npm test
+
       - name: Deploy Worker to Cloudflare
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           preCommands: |
             npx wrangler queues create intraday-event-dlq || true
             npx wrangler queues create intraday-event-queue || true
+

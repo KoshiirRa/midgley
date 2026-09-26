@@ -1,0 +1,1311 @@
+{
+  "timestamp": "2026-09-24T15:44:28.144937",
+  "total_regions_evaluated": 10,
+  "passed_regions_count": 9,
+  "evaluated_horizons": [
+    1,
+    5
+  ],
+  "regions": {
+    "National": {
+      "region": "National",
+      "horizons": {
+        "h_1d": {
+          "region": "National",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1425,
+              "RMSE": 0.1666,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0712
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.0747,
+              "RMSE": 0.1009,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 47.57,
+              "dm_stat_vs_naive": 6.0513,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0374
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0665,
+              "RMSE": 0.0823,
+              "directional_hit_pct": 83.64,
+              "persistence_uplift_pct": 53.34,
+              "dm_stat_vs_naive": 6.6325,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0332
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0326,
+              "RMSE": 0.0417,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 77.14,
+              "dm_stat_vs_naive": 9.5945,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0163
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0326,
+              "RMSE": 0.0417,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 77.14,
+              "dm_stat_vs_naive": 9.5945,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0163
+            }
+          }
+        },
+        "h_5d": {
+          "region": "National",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1425,
+              "RMSE": 0.1666,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0712
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.0747,
+              "RMSE": 0.1009,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 47.57,
+              "dm_stat_vs_naive": 8.1072,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0374
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0665,
+              "RMSE": 0.0823,
+              "directional_hit_pct": 83.64,
+              "persistence_uplift_pct": 53.34,
+              "dm_stat_vs_naive": 8.1109,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0332
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0326,
+              "RMSE": 0.0417,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 77.14,
+              "dm_stat_vs_naive": 12.5334,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0163
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0326,
+              "RMSE": 0.0417,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 77.14,
+              "dm_stat_vs_naive": 12.5334,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0163
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "Tulsa_OK": {
+      "region": "Tulsa_OK",
+      "horizons": {
+        "h_1d": {
+          "region": "Tulsa_OK",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1568,
+              "RMSE": 0.195,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0784
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.093,
+              "RMSE": 0.1288,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 40.69,
+              "dm_stat_vs_naive": 4.745,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0465
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0695,
+              "RMSE": 0.0893,
+              "directional_hit_pct": 81.82,
+              "persistence_uplift_pct": 55.66,
+              "dm_stat_vs_naive": 5.1732,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0348
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0459,
+              "RMSE": 0.0623,
+              "directional_hit_pct": 78.18,
+              "persistence_uplift_pct": 70.7,
+              "dm_stat_vs_naive": 6.1836,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.023
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0459,
+              "RMSE": 0.0623,
+              "directional_hit_pct": 78.18,
+              "persistence_uplift_pct": 70.7,
+              "dm_stat_vs_naive": 6.1836,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.023
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Tulsa_OK",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1568,
+              "RMSE": 0.195,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0784
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.093,
+              "RMSE": 0.1288,
+              "directional_hit_pct": 92.73,
+              "persistence_uplift_pct": 40.69,
+              "dm_stat_vs_naive": 4.4127,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0465
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0695,
+              "RMSE": 0.0893,
+              "directional_hit_pct": 81.82,
+              "persistence_uplift_pct": 55.66,
+              "dm_stat_vs_naive": 3.3923,
+              "dm_p_value_vs_naive": 0.0013,
+              "pinball_loss_q50": 0.0348
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0459,
+              "RMSE": 0.0623,
+              "directional_hit_pct": 78.18,
+              "persistence_uplift_pct": 70.7,
+              "dm_stat_vs_naive": 3.8233,
+              "dm_p_value_vs_naive": 0.0003,
+              "pinball_loss_q50": 0.023
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0459,
+              "RMSE": 0.0623,
+              "directional_hit_pct": 78.18,
+              "persistence_uplift_pct": 70.7,
+              "dm_stat_vs_naive": 3.8233,
+              "dm_p_value_vs_naive": 0.0003,
+              "pinball_loss_q50": 0.023
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "Newark_DE": {
+      "region": "Newark_DE",
+      "horizons": {
+        "h_1d": {
+          "region": "Newark_DE",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1693,
+              "RMSE": 0.1989,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0847
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.0928,
+              "RMSE": 0.128,
+              "directional_hit_pct": 100.0,
+              "persistence_uplift_pct": 45.19,
+              "dm_stat_vs_naive": 10.235,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0464
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0549,
+              "RMSE": 0.0669,
+              "directional_hit_pct": 98.18,
+              "persistence_uplift_pct": 67.6,
+              "dm_stat_vs_naive": 7.912,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0274
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.032,
+              "RMSE": 0.0391,
+              "directional_hit_pct": 98.18,
+              "persistence_uplift_pct": 81.1,
+              "dm_stat_vs_naive": 9.3351,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.016
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.032,
+              "RMSE": 0.0391,
+              "directional_hit_pct": 98.18,
+              "persistence_uplift_pct": 81.1,
+              "dm_stat_vs_naive": 9.3351,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.016
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Newark_DE",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1693,
+              "RMSE": 0.1989,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0847
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.0928,
+              "RMSE": 0.128,
+              "directional_hit_pct": 100.0,
+              "persistence_uplift_pct": 45.19,
+              "dm_stat_vs_naive": 8.9923,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0464
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0549,
+              "RMSE": 0.0669,
+              "directional_hit_pct": 98.18,
+              "persistence_uplift_pct": 67.6,
+              "dm_stat_vs_naive": 7.4511,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0274
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.032,
+              "RMSE": 0.0391,
+              "directional_hit_pct": 98.18,
+              "persistence_uplift_pct": 81.1,
+              "dm_stat_vs_naive": 7.9599,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.016
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.032,
+              "RMSE": 0.0391,
+              "directional_hit_pct": 98.18,
+              "persistence_uplift_pct": 81.1,
+              "dm_stat_vs_naive": 7.9599,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.016
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "Cincinnati_OH": {
+      "region": "Cincinnati_OH",
+      "horizons": {
+        "h_1d": {
+          "region": "Cincinnati_OH",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1613,
+              "RMSE": 0.1976,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0806
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.135,
+              "RMSE": 0.1729,
+              "directional_hit_pct": 67.27,
+              "persistence_uplift_pct": 16.3,
+              "dm_stat_vs_naive": 2.4288,
+              "dm_p_value_vs_naive": 0.0185,
+              "pinball_loss_q50": 0.0675
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0976,
+              "RMSE": 0.1229,
+              "directional_hit_pct": 72.73,
+              "persistence_uplift_pct": 39.47,
+              "dm_stat_vs_naive": 3.6703,
+              "dm_p_value_vs_naive": 0.0006,
+              "pinball_loss_q50": 0.0488
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0841,
+              "RMSE": 0.102,
+              "directional_hit_pct": 83.64,
+              "persistence_uplift_pct": 47.85,
+              "dm_stat_vs_naive": 4.3406,
+              "dm_p_value_vs_naive": 0.0001,
+              "pinball_loss_q50": 0.042
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0841,
+              "RMSE": 0.102,
+              "directional_hit_pct": 83.64,
+              "persistence_uplift_pct": 47.85,
+              "dm_stat_vs_naive": 4.3406,
+              "dm_p_value_vs_naive": 0.0001,
+              "pinball_loss_q50": 0.042
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Cincinnati_OH",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1613,
+              "RMSE": 0.1976,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0806
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.135,
+              "RMSE": 0.1729,
+              "directional_hit_pct": 67.27,
+              "persistence_uplift_pct": 16.3,
+              "dm_stat_vs_naive": 1.8893,
+              "dm_p_value_vs_naive": 0.0642,
+              "pinball_loss_q50": 0.0675
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0976,
+              "RMSE": 0.1229,
+              "directional_hit_pct": 72.73,
+              "persistence_uplift_pct": 39.47,
+              "dm_stat_vs_naive": 3.2214,
+              "dm_p_value_vs_naive": 0.0022,
+              "pinball_loss_q50": 0.0488
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0841,
+              "RMSE": 0.102,
+              "directional_hit_pct": 83.64,
+              "persistence_uplift_pct": 47.85,
+              "dm_stat_vs_naive": 3.9644,
+              "dm_p_value_vs_naive": 0.0002,
+              "pinball_loss_q50": 0.042
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0841,
+              "RMSE": 0.102,
+              "directional_hit_pct": 83.64,
+              "persistence_uplift_pct": 47.85,
+              "dm_stat_vs_naive": 3.9644,
+              "dm_p_value_vs_naive": 0.0002,
+              "pinball_loss_q50": 0.042
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "Cincinnati_KY": {
+      "region": "Cincinnati_KY",
+      "horizons": {
+        "h_1d": {
+          "region": "Cincinnati_KY",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1611,
+              "RMSE": 0.1937,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0805
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1337,
+              "RMSE": 0.1742,
+              "directional_hit_pct": 69.09,
+              "persistence_uplift_pct": 16.97,
+              "dm_stat_vs_naive": 2.9514,
+              "dm_p_value_vs_naive": 0.0047,
+              "pinball_loss_q50": 0.0669
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.1264,
+              "RMSE": 0.1504,
+              "directional_hit_pct": 67.27,
+              "persistence_uplift_pct": 21.5,
+              "dm_stat_vs_naive": 2.4139,
+              "dm_p_value_vs_naive": 0.0192,
+              "pinball_loss_q50": 0.0632
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.1016,
+              "RMSE": 0.123,
+              "directional_hit_pct": 72.73,
+              "persistence_uplift_pct": 36.9,
+              "dm_stat_vs_naive": 3.6361,
+              "dm_p_value_vs_naive": 0.0006,
+              "pinball_loss_q50": 0.0508
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.1016,
+              "RMSE": 0.123,
+              "directional_hit_pct": 72.73,
+              "persistence_uplift_pct": 36.9,
+              "dm_stat_vs_naive": 3.6361,
+              "dm_p_value_vs_naive": 0.0006,
+              "pinball_loss_q50": 0.0508
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Cincinnati_KY",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1611,
+              "RMSE": 0.1937,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0805
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1337,
+              "RMSE": 0.1742,
+              "directional_hit_pct": 69.09,
+              "persistence_uplift_pct": 16.97,
+              "dm_stat_vs_naive": 1.579,
+              "dm_p_value_vs_naive": 0.1202,
+              "pinball_loss_q50": 0.0669
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.1264,
+              "RMSE": 0.1504,
+              "directional_hit_pct": 67.27,
+              "persistence_uplift_pct": 21.5,
+              "dm_stat_vs_naive": 1.6381,
+              "dm_p_value_vs_naive": 0.1072,
+              "pinball_loss_q50": 0.0632
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.1016,
+              "RMSE": 0.123,
+              "directional_hit_pct": 72.73,
+              "persistence_uplift_pct": 36.9,
+              "dm_stat_vs_naive": 2.4899,
+              "dm_p_value_vs_naive": 0.0159,
+              "pinball_loss_q50": 0.0508
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.1016,
+              "RMSE": 0.123,
+              "directional_hit_pct": 72.73,
+              "persistence_uplift_pct": 36.9,
+              "dm_stat_vs_naive": 2.4899,
+              "dm_p_value_vs_naive": 0.0159,
+              "pinball_loss_q50": 0.0508
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "Greenville_NC": {
+      "region": "Greenville_NC",
+      "horizons": {
+        "h_1d": {
+          "region": "Greenville_NC",
+          "horizon_days": 1,
+          "promotion_gate_passed": false,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1419,
+              "RMSE": 0.1822,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.071
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1337,
+              "RMSE": 0.1752,
+              "directional_hit_pct": 67.27,
+              "persistence_uplift_pct": 5.8,
+              "dm_stat_vs_naive": 1.8539,
+              "dm_p_value_vs_naive": 0.0692,
+              "pinball_loss_q50": 0.0668
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.1184,
+              "RMSE": 0.1372,
+              "directional_hit_pct": 52.73,
+              "persistence_uplift_pct": 16.56,
+              "dm_stat_vs_naive": 1.7573,
+              "dm_p_value_vs_naive": 0.0845,
+              "pinball_loss_q50": 0.0592
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.119,
+              "RMSE": 0.1241,
+              "directional_hit_pct": 56.36,
+              "persistence_uplift_pct": 16.12,
+              "dm_stat_vs_naive": 1.5173,
+              "dm_p_value_vs_naive": 0.135,
+              "pinball_loss_q50": 0.0595
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.119,
+              "RMSE": 0.1241,
+              "directional_hit_pct": 56.36,
+              "persistence_uplift_pct": 16.12,
+              "dm_stat_vs_naive": 1.5173,
+              "dm_p_value_vs_naive": 0.135,
+              "pinball_loss_q50": 0.0595
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Greenville_NC",
+          "horizon_days": 5,
+          "promotion_gate_passed": false,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1419,
+              "RMSE": 0.1822,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.071
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1337,
+              "RMSE": 0.1752,
+              "directional_hit_pct": 67.27,
+              "persistence_uplift_pct": 5.8,
+              "dm_stat_vs_naive": 1.0753,
+              "dm_p_value_vs_naive": 0.287,
+              "pinball_loss_q50": 0.0668
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.1184,
+              "RMSE": 0.1372,
+              "directional_hit_pct": 52.73,
+              "persistence_uplift_pct": 16.56,
+              "dm_stat_vs_naive": 1.4808,
+              "dm_p_value_vs_naive": 0.1445,
+              "pinball_loss_q50": 0.0592
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.119,
+              "RMSE": 0.1241,
+              "directional_hit_pct": 56.36,
+              "persistence_uplift_pct": 16.12,
+              "dm_stat_vs_naive": 1.4884,
+              "dm_p_value_vs_naive": 0.1425,
+              "pinball_loss_q50": 0.0595
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.119,
+              "RMSE": 0.1241,
+              "directional_hit_pct": 56.36,
+              "persistence_uplift_pct": 16.12,
+              "dm_stat_vs_naive": 1.4884,
+              "dm_p_value_vs_naive": 0.1425,
+              "pinball_loss_q50": 0.0595
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": false
+    },
+    "Charlotte_NC": {
+      "region": "Charlotte_NC",
+      "horizons": {
+        "h_1d": {
+          "region": "Charlotte_NC",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1336,
+              "RMSE": 0.1665,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0668
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1037,
+              "RMSE": 0.1345,
+              "directional_hit_pct": 85.45,
+              "persistence_uplift_pct": 22.36,
+              "dm_stat_vs_naive": 5.397,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0519
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.1105,
+              "RMSE": 0.1337,
+              "directional_hit_pct": 58.18,
+              "persistence_uplift_pct": 17.24,
+              "dm_stat_vs_naive": 1.9464,
+              "dm_p_value_vs_naive": 0.0568,
+              "pinball_loss_q50": 0.0553
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.105,
+              "RMSE": 0.1114,
+              "directional_hit_pct": 69.09,
+              "persistence_uplift_pct": 21.42,
+              "dm_stat_vs_naive": 2.1483,
+              "dm_p_value_vs_naive": 0.0362,
+              "pinball_loss_q50": 0.0525
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.105,
+              "RMSE": 0.1114,
+              "directional_hit_pct": 69.09,
+              "persistence_uplift_pct": 21.42,
+              "dm_stat_vs_naive": 2.1483,
+              "dm_p_value_vs_naive": 0.0362,
+              "pinball_loss_q50": 0.0525
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Charlotte_NC",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1336,
+              "RMSE": 0.1665,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0668
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1037,
+              "RMSE": 0.1345,
+              "directional_hit_pct": 85.45,
+              "persistence_uplift_pct": 22.36,
+              "dm_stat_vs_naive": 4.067,
+              "dm_p_value_vs_naive": 0.0002,
+              "pinball_loss_q50": 0.0519
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.1105,
+              "RMSE": 0.1337,
+              "directional_hit_pct": 58.18,
+              "persistence_uplift_pct": 17.24,
+              "dm_stat_vs_naive": 1.8678,
+              "dm_p_value_vs_naive": 0.0672,
+              "pinball_loss_q50": 0.0553
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.105,
+              "RMSE": 0.1114,
+              "directional_hit_pct": 69.09,
+              "persistence_uplift_pct": 21.42,
+              "dm_stat_vs_naive": 1.7159,
+              "dm_p_value_vs_naive": 0.0919,
+              "pinball_loss_q50": 0.0525
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.105,
+              "RMSE": 0.1114,
+              "directional_hit_pct": 69.09,
+              "persistence_uplift_pct": 21.42,
+              "dm_stat_vs_naive": 1.7159,
+              "dm_p_value_vs_naive": 0.0919,
+              "pinball_loss_q50": 0.0525
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "Port_St_Lucie_FL": {
+      "region": "Port_St_Lucie_FL",
+      "horizons": {
+        "h_1d": {
+          "region": "Port_St_Lucie_FL",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1276,
+              "RMSE": 0.1543,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0638
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.0786,
+              "RMSE": 0.1001,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 38.44,
+              "dm_stat_vs_naive": 3.4317,
+              "dm_p_value_vs_naive": 0.0012,
+              "pinball_loss_q50": 0.0393
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0522,
+              "RMSE": 0.0636,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 59.07,
+              "dm_stat_vs_naive": 5.5052,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0261
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0207,
+              "RMSE": 0.0262,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 83.77,
+              "dm_stat_vs_naive": 8.8606,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0104
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0207,
+              "RMSE": 0.0262,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 83.77,
+              "dm_stat_vs_naive": 8.8606,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0104
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Port_St_Lucie_FL",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1276,
+              "RMSE": 0.1543,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0638
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.0786,
+              "RMSE": 0.1001,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 38.44,
+              "dm_stat_vs_naive": 3.2188,
+              "dm_p_value_vs_naive": 0.0022,
+              "pinball_loss_q50": 0.0393
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0522,
+              "RMSE": 0.0636,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 59.07,
+              "dm_stat_vs_naive": 4.7152,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0261
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0207,
+              "RMSE": 0.0262,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 83.77,
+              "dm_stat_vs_naive": 7.7903,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0104
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0207,
+              "RMSE": 0.0262,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 83.77,
+              "dm_stat_vs_naive": 7.7903,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.0104
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "Oakland_CA": {
+      "region": "Oakland_CA",
+      "horizons": {
+        "h_1d": {
+          "region": "Oakland_CA",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1456,
+              "RMSE": 0.1884,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0728
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1177,
+              "RMSE": 0.1416,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 19.18,
+              "dm_stat_vs_naive": 1.4636,
+              "dm_p_value_vs_naive": 0.1491,
+              "pinball_loss_q50": 0.0588
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0815,
+              "RMSE": 0.0981,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 44.01,
+              "dm_stat_vs_naive": 3.4344,
+              "dm_p_value_vs_naive": 0.0011,
+              "pinball_loss_q50": 0.0408
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.054,
+              "RMSE": 0.0641,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 62.87,
+              "dm_stat_vs_naive": 5.3395,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.027
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.054,
+              "RMSE": 0.0641,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 62.87,
+              "dm_stat_vs_naive": 5.3395,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.027
+            }
+          }
+        },
+        "h_5d": {
+          "region": "Oakland_CA",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1456,
+              "RMSE": 0.1884,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0728
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1177,
+              "RMSE": 0.1416,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 19.18,
+              "dm_stat_vs_naive": 1.8122,
+              "dm_p_value_vs_naive": 0.0755,
+              "pinball_loss_q50": 0.0588
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0815,
+              "RMSE": 0.0981,
+              "directional_hit_pct": 90.91,
+              "persistence_uplift_pct": 44.01,
+              "dm_stat_vs_naive": 4.2058,
+              "dm_p_value_vs_naive": 0.0001,
+              "pinball_loss_q50": 0.0408
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.054,
+              "RMSE": 0.0641,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 62.87,
+              "dm_stat_vs_naive": 6.9055,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.027
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.054,
+              "RMSE": 0.0641,
+              "directional_hit_pct": 94.55,
+              "persistence_uplift_pct": 62.87,
+              "dm_stat_vs_naive": 6.9055,
+              "dm_p_value_vs_naive": 0.0,
+              "pinball_loss_q50": 0.027
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    },
+    "BayArea_CA": {
+      "region": "BayArea_CA",
+      "horizons": {
+        "h_1d": {
+          "region": "BayArea_CA",
+          "horizon_days": 1,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1337,
+              "RMSE": 0.1984,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0668
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1145,
+              "RMSE": 0.1687,
+              "directional_hit_pct": 89.09,
+              "persistence_uplift_pct": 14.3,
+              "dm_stat_vs_naive": 1.4836,
+              "dm_p_value_vs_naive": 0.1437,
+              "pinball_loss_q50": 0.0573
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0838,
+              "RMSE": 0.1059,
+              "directional_hit_pct": 74.55,
+              "persistence_uplift_pct": 37.3,
+              "dm_stat_vs_naive": 2.7791,
+              "dm_p_value_vs_naive": 0.0075,
+              "pinball_loss_q50": 0.0419
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0616,
+              "RMSE": 0.0716,
+              "directional_hit_pct": 81.82,
+              "persistence_uplift_pct": 53.9,
+              "dm_stat_vs_naive": 3.6718,
+              "dm_p_value_vs_naive": 0.0006,
+              "pinball_loss_q50": 0.0308
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0616,
+              "RMSE": 0.0716,
+              "directional_hit_pct": 81.82,
+              "persistence_uplift_pct": 53.9,
+              "dm_stat_vs_naive": 3.6718,
+              "dm_p_value_vs_naive": 0.0006,
+              "pinball_loss_q50": 0.0308
+            }
+          }
+        },
+        "h_5d": {
+          "region": "BayArea_CA",
+          "horizon_days": 5,
+          "promotion_gate_passed": true,
+          "tiers": {
+            "Tier_0_Naive": {
+              "tier_name": "Tier 0: Naive Persistence Baseline",
+              "features_count": 0,
+              "MAE": 0.1337,
+              "RMSE": 0.1984,
+              "directional_hit_pct": 0.0,
+              "persistence_uplift_pct": 0.0,
+              "dm_stat_vs_naive": 0.0,
+              "dm_p_value_vs_naive": 1.0,
+              "pinball_loss_q50": 0.0668
+            },
+            "Tier_1_Price_Only": {
+              "tier_name": "Tier 1: Price-Only Technical Baseline",
+              "features_count": 3,
+              "MAE": 0.1145,
+              "RMSE": 0.1687,
+              "directional_hit_pct": 89.09,
+              "persistence_uplift_pct": 14.3,
+              "dm_stat_vs_naive": 0.8776,
+              "dm_p_value_vs_naive": 0.3841,
+              "pinball_loss_q50": 0.0573
+            },
+            "Tier_2_Physical_Fundamentals": {
+              "tier_name": "Tier 2: Price + Physical Fundamentals",
+              "features_count": 7,
+              "MAE": 0.0838,
+              "RMSE": 0.1059,
+              "directional_hit_pct": 74.55,
+              "persistence_uplift_pct": 37.3,
+              "dm_stat_vs_naive": 2.2286,
+              "dm_p_value_vs_naive": 0.03,
+              "pinball_loss_q50": 0.0419
+            },
+            "Tier_3_Qualitative_Events": {
+              "tier_name": "Tier 3: Price + Qualitative Events",
+              "features_count": 9,
+              "MAE": 0.0616,
+              "RMSE": 0.0716,
+              "directional_hit_pct": 81.82,
+              "persistence_uplift_pct": 53.9,
+              "dm_stat_vs_naive": 3.3301,
+              "dm_p_value_vs_naive": 0.0016,
+              "pinball_loss_q50": 0.0308
+            },
+            "Tier_4_Full_Hybrid": {
+              "tier_name": "Tier 4: Full Hybrid Estimator",
+              "features_count": 9,
+              "MAE": 0.0616,
+              "RMSE": 0.0716,
+              "directional_hit_pct": 81.82,
+              "persistence_uplift_pct": 53.9,
+              "dm_stat_vs_naive": 3.3301,
+              "dm_p_value_vs_naive": 0.0016,
+              "pinball_loss_q50": 0.0308
+            }
+          }
+        }
+      },
+      "overall_promotion_passed": true
+    }
+  }
+}

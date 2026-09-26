@@ -20,6 +20,8 @@ export interface Env {
   DISCORD_PUBLIC_KEY?: string;
   DISCORD_APP_ID?: string;
   PROJECT_V2_ID?: string;
+  CLOUDFLARE_AUTH_TOKEN?: string;
+  ADMIN_TOKEN?: string;
   DB?: any;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
@@ -81,9 +83,14 @@ const RSS_FEEDS = [
 ];
 
 const EXCLUDE_KEYWORDS = [
-  "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage",
+  "wikipedia", "software outage", "airline outage", "it outage", "it system outage", "it systems outage", "cloud outage", "gaming outage", "network outage",
   "canola", "cooking oil", "palm oil", "olive oil", "soybean oil"
 ];
+
+const EXCLUDE_REGEX = new RegExp(
+  `\\b(${EXCLUDE_KEYWORDS.join("|")})\\b`,
+  "i"
+);
 
 const NON_ENERGY_TARIFF_EXCLUDES = [
   "house should not transfer", "tariff authority", "steel tariff", "aluminum tariff",
@@ -92,12 +99,30 @@ const NON_ENERGY_TARIFF_EXCLUDES = [
   "canola", "canola oil"
 ];
 
+const NON_ENERGY_TARIFF_REGEX = new RegExp(
+  `\\b(${NON_ENERGY_TARIFF_EXCLUDES.join("|")})\\b`,
+  "i"
+);
+
 const TRIGGER_KEYWORDS = [
+
   "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
   "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
   "explosion", "tornado", "blackout", "blockade", "sanction",
   "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
-  "strait of hormuz", "red sea attack", "spill"
+  "strait of hormuz", "red sea attack", "spill",
+  // Market Technicals & Volatility
+  "crack spread", "crack-spread", "ovx spike", "futures spike", "futures crash", "wti surge", "rbob surge", "barrel price",
+  // Executive Policy & Geopolitics
+  "executive order", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
+  // Logistics & Infrastructure Hubs
+  "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
+  "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
+  // Refinery Operator 8-K Signals (Issue #129 & #332)
+  "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+  "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
+  "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
+  "sweeny refinery", "bayway refinery"
 ];
 
 const TRIGGER_REGEX = new RegExp(
@@ -276,11 +301,10 @@ export function normalizeHeadline(title: string): string {
 }
 
 export function isAnomalyHeadline(title: string): boolean {
-  const lower = title.toLowerCase();
-  if (EXCLUDE_KEYWORDS.some(k => lower.includes(k))) {
+  if (EXCLUDE_REGEX.test(title)) {
     return false;
   }
-  if (NON_ENERGY_TARIFF_EXCLUDES.some(k => lower.includes(k))) {
+  if (NON_ENERGY_TARIFF_REGEX.test(title)) {
     return false;
   }
   if (TRIGGER_REGEX.test(title)) {
@@ -293,6 +317,7 @@ export function isAnomalyHeadline(title: string): boolean {
   }
   return false;
 }
+
 
 export async function isHeadlineDispatchedInCache(headline: string, env?: Env): Promise<boolean> {
   const cleanKey = normalizeHeadline(headline);
@@ -755,12 +780,12 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
 const DEFAULT_DISCORD_PUBLIC_KEY = "23fd56cafbd2e02e99e228ef545bb7a350719b086537410ba5ce092170e56e9b";
 const DEFAULT_PROJECT_V2_ID = "PVT_kwHOAVnZGM4BhxKn";
 
-function hexToUint8Array(hex: string): Uint8Array {
+export function hexToUint8Array(hex: string): Uint8Array {
   const match = hex.match(/.{1,2}/g);
   return new Uint8Array(match ? match.map(byte => parseInt(byte, 16)) : []);
 }
 
-function verifyDiscordSignature(
+export function verifyDiscordSignature(
   publicKeyHex: string,
   signatureHex: string,
   timestamp: string,
@@ -778,9 +803,10 @@ function verifyDiscordSignature(
   }
 }
 
-async function handleDiscordInteraction(request: Request, env: Env, ctx: any): Promise<Response> {
+export async function handleDiscordInteraction(request: Request, env: Env, ctx: any): Promise<Response> {
   const signature = request.headers.get("X-Signature-Ed25519");
   const timestamp = request.headers.get("X-Signature-Timestamp");
+
 
   if (!signature || !timestamp) {
     return new Response("Missing signature headers", { status: 401 });
@@ -1031,6 +1057,15 @@ async function handleDiscordInteraction(request: Request, env: Env, ctx: any): P
   });
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promise<Response> {
   const url = new URL(request.url);
 
@@ -1042,6 +1077,16 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     const s = url.searchParams.get("s") || "0.00";
     const g = url.searchParams.get("g") || "0.00";
     const sourceUrl = url.searchParams.get("url") || "";
+    const authToken = url.searchParams.get("token") || "";
+
+    const idEsc = escapeHtml(id);
+    const headlineEsc = escapeHtml(headline);
+    const sourceEsc = escapeHtml(source);
+    const pEsc = escapeHtml(p);
+    const sEsc = escapeHtml(s);
+    const gEsc = escapeHtml(g);
+    const sourceUrlEsc = escapeHtml(sourceUrl);
+    const authTokenEsc = escapeHtml(authToken);
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -1190,32 +1235,33 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     </div>
 
     <div class="headline-box">
-      "${headline}"
+      "${headlineEsc}"
     </div>
 
     <div class="meta-grid">
       <div class="meta-item">
         <div class="meta-label">Pressure (ΔP)</div>
-        <div class="meta-value" style="color: ${p.startsWith('+') ? '#e74c3c' : '#2ecc71'};">${p}/gal</div>
+        <div class="meta-value" style="color: ${pEsc.startsWith('+') ? '#e74c3c' : '#2ecc71'};">${pEsc}/gal</div>
       </div>
       <div class="meta-item">
         <div class="meta-label">Supply Shock</div>
-        <div class="meta-value">${s}</div>
+        <div class="meta-value">${sEsc}</div>
       </div>
       <div class="meta-item">
         <div class="meta-label">Source</div>
-        <div class="meta-value">${source}</div>
+        <div class="meta-value">${sourceEsc}</div>
       </div>
     </div>
 
     <form method="POST" action="/flag">
-      <input type="hidden" name="id" value="${id}">
+      <input type="hidden" name="id" value="${idEsc}">
       <input type="hidden" name="headline" value="${encodeURIComponent(headline)}">
-      <input type="hidden" name="source" value="${source}">
-      <input type="hidden" name="p" value="${p}">
-      <input type="hidden" name="s" value="${s}">
-      <input type="hidden" name="g" value="${g}">
+      <input type="hidden" name="source" value="${sourceEsc}">
+      <input type="hidden" name="p" value="${pEsc}">
+      <input type="hidden" name="s" value="${sEsc}">
+      <input type="hidden" name="g" value="${gEsc}">
       <input type="hidden" name="url" value="${encodeURIComponent(sourceUrl)}">
+      <input type="hidden" name="token" value="${authTokenEsc}">
 
       <div class="form-group">
         <label for="category">False Positive Category</label>
@@ -1266,6 +1312,17 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
 
     const category = formData.get("category")?.toString() || "Uncategorized False Positive";
     const notes = formData.get("notes")?.toString() || "";
+
+    const formToken = formData.get("token")?.toString() || request.headers.get("Authorization")?.replace("Bearer ", "").trim();
+    const requiredToken = env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT;
+
+    // Reject unauthenticated issue creation requests (Issue #438)
+    if (requiredToken && (!formToken || formToken !== requiredToken)) {
+      return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid authentication token for issue creation" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
 
     const owner = env.REPO_OWNER || "KoshiirRa";
     const repo = env.REPO_NAME || "midgley";
@@ -1443,7 +1500,20 @@ export default {
         return await handleDiscordInteraction(request, env, ctx);
       }
 
+      // Secure manual run & trigger endpoints (Issue #438)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
+        const authHeader = request.headers.get("Authorization");
+        const queryToken = url.searchParams.get("token");
+        const expectedToken = env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT;
+        if (expectedToken) {
+          const token = authHeader?.replace("Bearer ", "").trim() || queryToken?.trim();
+          if (!token || token !== expectedToken) {
+            return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid admin token" }), {
+              status: 401,
+              headers: { "Content-Type": "application/json" }
+            });
+          }
+        }
         const summary = await runMonitoringCycle(env, ctx);
         return new Response(JSON.stringify(summary, null, 2), {
           headers: { "Content-Type": "application/json" }

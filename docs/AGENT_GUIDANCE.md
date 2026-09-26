@@ -69,10 +69,20 @@ Midgley enforces a strict **$0 ongoing infrastructure cost** mandate. All agent 
 * **Workers:** `workers/cache_worker.ts` and `workers/intraday_monitor_worker.ts`.
 * **Database:** Cloudflare D1 (`midgley-cache-d1`).
 * **Queue:** `intraday-event-queue` with dead-letter queue `intraday-event-dlq`.
+* **Security & Staging Isolation (Issue #438):**
+  - `workers/cache_worker.ts` enforces fail-closed Bearer token verification against `CLOUDFLARE_AUTH_TOKEN`.
+  - `workers/intraday_monitor_worker.ts` enforces token authentication on `POST /flag`, `/run`, `/trigger` and HTML-escapes query reflections on `GET /flag`.
+  - Staging deployments (`--env staging`) run on `dev` branch; production deployments (`--env production`) run on `main`.
 * **Telemetry:** Axiom log streaming and Sentry cron heartbeat monitoring.
 
 ### Tier 3: Dynamic FastAPI & MCP Server
 * **Server Module:** `src/api_server.py` and `src/mcp_server.py` managed by `midgley-api.service` on `dev-vm:8000`.
+* **Authentication & Key Tiers (Issues #431, #437):**
+  - Unified master key `MIDGLEY_API_KEY` and SQLite provisioned keys verified via non-blocking `verify_key_async` threads.
+  - Remote MCP HTTP/SSE transport (`/mcp/sse`, `/mcp/messages`) requires API key authentication and 30 RPM rate limiting with active session tier context binding. Local CLI `stdio` MCP transport remains unauthenticated and unrestricted.
+  - Calling privileged endpoints (`/api/v1/forecast/simulate` with custom headlines/cohort sim, `/api/v1/connectors/headline-arena/submit`, `/api/v1/graph/ingest`) requires `privileged` tier keys; unprivileged callers receive HTTP 403.
+  - Webhook gateway enforces timestamp freshness ($\pm 300\text{s}$) via `X-Signature-Timestamp` to prevent replay attacks.
+  - Cache status probe `/api/v1/system/cache-status?probe=true` requires `X-Admin-Secret` and cleans transient probe keys across D1/Turso/SQLite.
 * **Use Cases:** Live counterfactual shock simulations (`POST /api/v1/forecast/simulate`), scenario discovery (`GET /api/v1/forecast/scenarios`), API key provisioning (`/api/v1/admin/keys`), incoming webhook ingestion, and interactive AI agent MCP tools (`simulate_fuel_market_shock`, `list_market_shock_scenarios`).
 * **Seasonal & Climatological Plausibility Engine (`src/scenario_engine.py` - Issue #300):**
   - **Dynamic Plausibility Gating:** Classifies scenarios into `ACTIVE_THREAT` (1.0), `SEASONALLY_PLAUSIBLE` (0.70–0.90), `SEASONALLY_DORMANT` (0.10), `EVERGREEN` (0.80), and `PROSPECTIVE_FORWARD` (0.85).
@@ -86,8 +96,8 @@ Midgley enforces a strict **$0 ongoing infrastructure cost** mandate. All agent 
   - **Dashboard Visibility:** Public dashboard headers dynamically render `Multi-Agent Cohort: ON` (purple) vs `Multi-Agent Cohort: OFF` (slate) based on build-time status.
   - **Offline Tier 3 Fallback:** 100% deterministic elasticity matrix ensures zero downtime and $0 cost when LLM API keys are absent.
 * **Alternative & Physical Data Standards:**
-  - **Dynamic Ingestion & Bitemporal Tracking:** Physical and qualitative feeds (U.S. BTS Freight Transportation Index & Truck Tonnage, Baker Hughes rig counts, Executive Social Media posts, Key Market Movers statements, EIA PADD balances, EIA-930 grid stress, USDA biofuel costs, EIA state/metro retail surveys, FERC Form 6 tariffs, USACE Lock delays, BSEE offshore shut-ins, Geopolitical/Maritime chokepoint feeds, State Energy Agency surveys, CFTC COT positioning, NOAA NHC hurricanes, Energy Equities, and Regional Intraday Event streams) MUST store observation snapshots with `as_of` publication timestamps in `data/*_vintages.json` (e.g., `data/bts_vintages.json`) to eliminate lookahead bias in historical backtests.
-  - **Lookup Caching:** Cache external lookups in `global_cache` (`src/lookup_cache.py`) with appropriate TTLs (15m for social/weather/key movers/geopolitical, 1h for NHC hurricanes, 4h-6h for grid/locks, 12h for BSEE shut-ins, 24h for daily equities/indices, 7d for weekly releases/CFTC/surveys/tariffs/BTS TSI).
+  - **Dynamic Ingestion & Bitemporal Tracking:** Physical and qualitative feeds (U.S. BTS Freight Transportation Index & Truck Tonnage, Baker Hughes rig counts, Executive Social Media posts, Key Market Movers statements, EIA PADD balances, EIA-930 grid stress, USDA biofuel costs, official U.S. EIA Daily Regional Spot Wholesale Prices, EPA Weekly EMTS RIN Credits, California Energy Commission (CEC) Weekly Fuels Watch, EPA & CARB Reid Vapor Pressure (RVP) Regulatory Standards, NOAA CO-OPS Marine Telemetry, EIA state/metro retail surveys, FERC Form 6 tariffs, USACE Lock delays, BSEE offshore shut-ins, Geopolitical/Maritime chokepoint feeds, State Energy Agency surveys, CFTC COT positioning, NOAA NHC hurricanes, Energy Equities, and Regional Intraday Event streams) MUST store observation snapshots with `as_of` publication timestamps in `data/*_vintages.json` (e.g., `data/bts_vintages.json`, `data/cec_fuels_vintages.json`, `data/noaa_coops_vintages.json`) to eliminate lookahead bias in historical backtests.
+  - **Lookup Caching:** Cache external lookups in `global_cache` (`src/lookup_cache.py`) with appropriate TTLs (15m for social/weather/key movers/geopolitical, 1h for NHC hurricanes, 2h for NOAA CO-OPS marine levels, 4h-6h for grid/locks, 12h for BSEE shut-ins, 24h for daily equities/indices, 7d for weekly releases/CFTC/surveys/tariffs/BTS TSI/CEC fuels).
 
 ---
 
@@ -107,11 +117,21 @@ When modifying or extending the Android companion application:
 
 ### Core Python Engine (`midgley`)
 ```bash
-# Run on dev-vm
-ssh marty@10.42.42.54 "cd /home/marty/projects/midgley && pytest tests/ -v"
+# Run on dev-vm with test isolation
+ssh marty@10.42.42.54 "cd /home/marty/projects/midgley && TESTING=1 pytest tests/ -v"
 ```
-* **Quota Safety:** Ensure tests set `TESTING=1` or mock network calls to avoid consuming Gemini LLM tokens or Finlight/Firecrawl API quotas.
-* **Test Isolation:** Verify that unit test runs do not pollute persistent stores (`data/intraday_events.json`, `data/evaluated_headlines.json`, or `docs/`).
+* **Test Isolation & Quota Safety (`TESTING=1`):** All automated test executions must set `TESTING=1`. This environment variable suppresses external network egress to Gemini LLM APIs, Finlight/Firecrawl scrapers, Discord webhooks, and W&B logging.
+* **Test Data Prefixing (`Test_*`):** When generating test fixtures or mocking headlines in unit tests, prefix sources with `Test_` (e.g. `source="Test_Fixture"`). The intraday event monitor and prediction logger automatically drop or segregate `Test_*` entities, preventing test fixture pollution in production ledgers (`data/intraday_events.json`, `data/evaluated_headlines.json`, `data/prediction_history.csv`, or `docs/`).
+* **Tiered Key Routing:** API requests provisioned with `basic` tier keys automatically route event scoring to zero-cost deterministic offline lexicons (`ZeroCostProviderHook` in `src/event_analyzer.py`), preserving paid Gemini LLM quota for `privileged` tier keys and administrative jobs.
+* **External Connector Mocks:** Unit tests for external physical and regulatory data connectors (NOAA, USGS, EIA, BTS, CEC, EPA, FERC) must mock HTTP responses and test both offline caching and bitemporal vintage persistence.
+
+### Cloudflare Edge Workers (`workers/`)
+```bash
+# Run TypeScript type-checking and worker tests on dev-vm
+ssh marty@10.42.42.54 "cd /home/marty/projects/midgley && npm run typecheck && npm test"
+```
+* **Type-Checking Mandate (`npm run typecheck`):** Executes `tsc --noEmit` under strict TypeScript compiler options (`tsconfig.json`) to catch type mismatches, missing properties, or incorrect Cloudflare Worker bindings prior to deployment.
+* **Vitest Worker Test Suite (`npm test`):** Executes automated unit tests (`tests/workers.test.ts`) covering Ed25519 Discord signature verification, Cloudflare Queues batch consumption & DLQ handling, D1 deduplication cache persistence, and Bearer token auth validation.
 
 ### Automotive Android App (`midgley-auto`)
 ```bash
@@ -121,11 +141,93 @@ ssh marty@10.42.42.54 "cd /home/marty/projects/midgley-auto && ./gradlew test as
 
 ---
 
-## 📝 6. Documentation Synchronization Mandate
+
+## 🛡️ 6. Security Guardrails & Hardening Directives
+
+AI agents and contributors must strictly enforce the following security protocols:
+1. **Zero Shell Command Interpolation (Issue #343):** Never execute dynamic shell commands or subprocess calls with `shell=True` using untrusted remote manifest data or unverified strings. All reconciler and CLI scripts must route operations through strictly allowlisted, parameterized argument vectors (`ALLOWLISTED_ACTIONS`) with HTTPS scheme enforcement.
+2. **Fail-Closed Administrative Authentication (Issue #341):** Admin endpoints (e.g. `/api/v1/admin/keys`) must fail closed with `HTTP 401 Unauthorized` if `MIDGLEY_ADMIN_SECRET` is unset, empty, or whitespace. Never provide a fallback or default development secret in production codebase.
+3. **Exact Middleware Route Matching (Issue #344):** API authentication and rate-limiting middleware must match root paths exactly (`request.url.path == "/"`) and never exempt subpaths via generic prefix matches like `"/"`. Only explicit public paths (`/docs`, `/redoc`, `/openapi.json`, `/.well-known`, `/health`) may bypass API key verification.
+
+---
+
+## 📈 7. Quantitative Modeling, Return Targets & Temporal Leakage Prevention (Issues #354, #396, #397, #401)
+
+To prevent lookahead bias, non-stationary target leakage, and synthetic inflation of out-of-time forecasting performance:
+1. **Stationary Return Target Formulation & Price Level Reconstruction (Issue #397):**
+   - Regressors are trained on forward percentage price returns ($\hat{r}_{t+h} = \frac{P_{t+h} - P_t}{P_t}$) rather than non-stationary raw price levels.
+   - Price levels are reconstructed out-of-sample via $\hat{P}_{t+h} = P_t \times (1 + \hat{r}_{t+h})$.
+   - Model tracking records both stationary return error metrics and level-denominated dollar error metrics (MAE/RMSE) for direct cross-regional benchmarking.
+2. **Refinery 3-2-1 Crack Spread Margin Standardization (Issue #401):**
+   - Feature pipelines compute standard 3-2-1 crack spreads ($\frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{HO}} - 3 \cdot (P_{\text{WTI}}/42)}{3}$) in both barrel-equivalent ($\$/\text{bbl}$) and gallon ($\$/\text{gal}$) units alongside prompt 1:1 crack spread proxies.
+3. **Chronological Boundary Purging & Embargo Gaps (Issues #354, #396):**
+   - When partitioning chronological datasets into train/test splits, enforce an explicit purge + embargo gap (`train_slice_end = max(1, split_idx - (forecast_horizon + max(0, embargo_steps)))`). This guarantees that multi-step forward-looking labels $y_t$ and overlapping post-split auto-correlations cannot leak future test set information.
+4. **Purged Walk-Forward Cross-Validation & RidgeCV (Issue #396):**
+   - All time-series cross-validation and hyperparameter tuning ($\alpha$ penalty optimization) MUST route through `PurgedGroupTimeSeriesSplit(chronological_only=True)` using `RidgeCV`.
+   - Prevents lookahead data leakage by ensuring every validation fold only trains on strictly preceding chronological windows with enforced purge and embargo gaps.
+5. **No Backward Filling (`bfill`):** Time-series feature pipelines must never use `bfill()` or backward imputation across time-ordered rows. Forward fill missing values using past observations (`ffill()`) and fill remaining leading initializations with neutral defaults (`fillna(0.0)`).
+6. **Train-Slice Context Routing Diagnostics:** When computing diagnostic metrics (such as target autocorrelation for dynamic routing), calculate statistics exclusively on the training slice rather than across the full dataset.
+
+---
+
+---
+
+## 🎯 8. Headline Arena Benchmarking & Civic Challenge Directives (Issues #182, #408, #418)
+
+When submitting probabilistic forecasts to [Headline Arena](https://headlinearena.com):
+1. **Decoupled 24-Hour Pending Cache (`data/headline_arena_pending_forecasts.json`):** Forecasts generated by daily runs are cached with a 24-hour TTL, decoupling pipeline run times from challenge availability windows.
+2. **Idempotency Submission Ledger (`data/headline_arena_submitted_ledger.json`):** Tracks challenge IDs that have received predictions, preventing redundant API calls during periodic cron cycles.
+3. **Periodic Dispatch (`scripts/sync_headline_arena.py` & `.github/workflows/headline_arena_sync.yml`):** Runs every 30 minutes to match active challenge windows against the 24h pending forecast cache.
+4. **EIA Weekly Retail Gasoline Civic Challenges:** Macro / civic challenges use continuous Gaussian probability density scoring (closed-form CRPS) formatted via `format_eia_retail_civic_payload()` with median target ($P_{50}$) and uncertainty standard deviation ($\sigma$).
+5. **Reconciled Statutory CARB Tax Breakdown (Issue #400):** California retail gasoline pricing incorporates $0.953/gal state environmental burden ($0.596 state excise + $0.234 Cap-and-Trade + $0.088 LCFS + $0.035 UST/env fees), totaling $1.407/gal all-in statutory tax including 18.4¢ Federal excise and ~27.0¢ local sales tax.
+
+---
+
+## 📊 9. Ground Truth Ingestion, Forward Curves & MLOps Evaluation Integrity (Issues #403, #404, #393, #391, #392, #399)
+
+1. **Official EIA/FRED Retail Ground Truth & Zero-Offset Mandate (Issues #403, #391, #392):**
+   - Use `EIARetailFeed` (`src/eia_retail_feed.py`) to query weekly retail price series across PADDs and states (`GASREGW`, `GASREGW01B`, `GASREGW01C`, `GASREGWMW`, `GASREGWOK`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`).
+   - In `prediction_logger.py`, regional metro ground truth is resolved strictly from `EIARetailFeed.get_retail_price_for_date()`.
+   - **Synthetic Offset Elimination:** Never use hardcoded offset ladders (e.g. `raw_actual + 0.55` or `raw_actual + 2.05`) or fallback identities (`margin_offset = base_price - raw_actual`) that force artificial `actual_direction = UP`. If ground truth is unavailable for an unmapped region or date, record `actual_5d_price = np.nan` and exclude from directional hit scoring.
+2. **Injectable MLOps Evaluation & Offline Testing Directives (Issue #395):**
+   - All evaluation routines in `src/prediction_logger.py` (`backfill_actual_prices_and_evaluate`) must accept optional dependency injection overrides (`actuals_map_override`, `eia_feed_override`, `csv_path`, `force_eval`).
+   - When overrides or `force_eval=True` are supplied, the evaluation loop must execute fully even when `TESTING=1`, enabling comprehensive automated testing of directional accuracy, actual assignments, error calculations, and CI bounds without querying external networks or paid APIs.
+3. **Calibrated 95% Confidence Interval Evaluation (Issue #394):**
+   - Strictly evaluate interval coverage against explicit bounds: `within_95ci_hit = 1 if (lower_ci <= actual_price <= upper_ci) else 0`.
+   - Never use arbitrary fixed fallback bands (e.g. `±$0.12`). When CI bounds are absent, dynamically reconstruct calibrated intervals using regional residual standard error scaled by forecast horizon ($\sigma_{\text{residual}} \times \sqrt{h/5}$ via `compute_regional_residual_std()`).
+   - Report `empirical_95ci_coverage_pct` in scoreboard metrics, regional breakdowns, horizon tables, and public dashboard KPI cards.
+4. **README Live Summary Automation & DST Workflow Drift (Issue #398):**
+   - Always keep `README.md` live forecast tables synchronized via `scripts/readme_updater.py` (`src/readme_updater.py`).
+   - Ensure all 10 active regional locales are rendered in the summary table.
+   - Note that GitHub Actions cron triggers evaluate on UTC (`17 7 * * *`); during DST transitions, local US Central Time drifts between 02:17 AM CDT (UTC-5) and 01:17 AM CST (UTC-6).
+   - Display a dashboard forecast staleness badge whenever the latest prediction timestamp is older than 36 hours.
+5. **Prediction History Sanitation & Plausibility Validation (Issue #399):**
+   - `cleanse_prediction_history()` purges test fixture artifacts (`Test_Region`, `Test_*`) from production history.
+   - `validate_price_plausibility()` validates price observations against realistic economic bounds ($[\$1.00, \$10.00]$ retail, $[\$0.50, \$7.00]$ wholesale) before logging or evaluating.
+   - `RBOB_ACTUALS_CACHE_FILE` caches national futures downloads to disk (`data/rbob_actuals_cache.json`) to prevent redundant full-series network calls.
+6. **NYMEX Forward Curve & Crack Futures (Issue #404):** Compute prompt ($M_1$) vs second month ($M_2$) calendar spreads for RBOB and WTI crude, theoretical 1:1 crack spread, and 3-2-1 crack futures margins via `NYMEXForwardCurveConnector` (`src/data_ingestion.py`), merging into feature engineering matrices and tracking backwardation regimes.
+7. **Dynamic Dashboard Metrics (Issue #393):** Never hardcode static metric strings or static rolling performance arrays in dashboard templates. All MAE, RMSE, MAPE, sample sizes $N$, and directional hit rates must be computed dynamically via `compute_dynamic_accuracy_stats()` and `calculate_rolling_metrics()` from the forward evaluated slice of `data/prediction_history.csv` with `Insufficient Data (N < 30)` gating.
+
+---
+
+## 📝 10. Documentation Synchronization Mandate
 
 Whenever new features, regional models, data feeds, or API endpoints are added:
 1. Update **`AGENTS.md`** to reflect modified or new agent roles.
 2. Update **`API.md`** with endpoint specifications, query parameters, and example JSON payloads.
 3. Update **`ARCHITECTURE.md`** with mathematical formulations, vector layouts, or data flow changes.
 4. Update **`README.md`** with current status badges, supported metros, and quick-start instructions.
-5. Synchronize changes to the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git`).
+5. Update **`SELF_HOSTING.md`** with deployment configurations and environment variables.
+6. Synchronize changes to the official GitHub Wiki (`https://github.com/KoshiirRa/midgley.wiki.git`).
+
+---
+
+## 🔒 11. Point-in-Time, MLOps Audit & Serving Invariants (Issues #471, #472, #473, #474, #475, #476, #477)
+
+1. **Point-in-Time Vintage Ingestion (Issue #473):** All bitemporal vintage lookups via `_load_vintage_timeseries()` in `src/feature_engineering.py` must enforce strict publication date filtering (`_as_of <= origin_date`). Future revisions must never leak into historical training origins.
+2. **Fail-Closed Promotion Audit Gate (Issue #472):** `scripts/evaluate_model_hierarchy.py` strictly validates authentic data provenance (`AUTHENTIC_MARKET_DATA`). Synthetic data fallbacks are prohibited during promotion evaluations and must exit with non-zero status (`sys.exit(1)`).
+3. **Database Schema Upgrade Path (Issue #471):** Database migrations must be idempotent across SQLite, D1, and Turso. Existing schemas lacking `forecast_id` must be migrated via `scripts/migrations/0002_add_forecast_id_and_retroactive_columns.sql` with stable legacy ID backfills.
+4. **Active API Forecast Serving (Issue #474):** The API server (`src/api_server.py`) must filter out expired forecast records (`forecast_target_date <= today`). Stale forecasts must never be assigned fabricated future target maturities without re-running model inference.
+5. **Signed Feature Attribution (Issue #476):** Feature decomposition in `src/models.py` must preserve signed impact deltas ($\Delta_i$) and provide safe fallback descriptions for arbitrary feature names to prevent `KeyError`.
+
+

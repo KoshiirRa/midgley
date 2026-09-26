@@ -1,5 +1,5 @@
 {
-  "version": "0.6.5",
+  "version": "0.7.0",
   "model_version": "v1.6 Ipatieff",
   "schema_version": 3,
   "release_date": "2026-09-18",
@@ -20,7 +20,19 @@
         "name": "HINDSIGHT_API_URL",
         "default": "",
         "required": false,
-        "description": "Remote Vectorize Hindsight / Supabase pgvector episodic memory endpoint."
+        "description": "Vectorize Hindsight Hosted SaaS or self-hosted episodic memory endpoint."
+      },
+      {
+        "name": "HINDSIGHT_API_KEY",
+        "default": "",
+        "required": false,
+        "description": "Bearer token for Vectorize Hindsight API authentication."
+      },
+      {
+        "name": "HINDSIGHT_BANK_ID",
+        "default": "Midgley",
+        "required": false,
+        "description": "Target memory bank identifier on Hindsight engine."
       }
     ],
     "deprecated": []

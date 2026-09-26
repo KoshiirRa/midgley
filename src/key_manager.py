@@ -10,6 +10,7 @@ import sqlite3
 import secrets
 import hashlib
 import time
+import asyncio
 import logging
 from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, Tuple, List, Optional
@@ -198,8 +199,9 @@ class KeyManager:
 
     def check_rate_limit(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int]:
         """
-        Enforces 1-minute sliding window rate limiting.
+        Enforces 1-minute sliding window rate limiting using atomic SQLite UPSERT.
         Returns (allowed, retry_after_seconds).
+        Eliminates UNIQUE constraint race conditions under concurrent async requests (Issue #329).
         """
         current_minute = int(time.time() // 60)
         current_second = int(time.time())
@@ -207,7 +209,7 @@ class KeyManager:
 
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            # Fetch request count for current minute
+            # Fast check: if rate limit was already exceeded in this minute, reject immediately
             cursor.execute(
                 """
                 SELECT request_count FROM rate_limits
@@ -216,32 +218,38 @@ class KeyManager:
                 (key_prefix, current_minute)
             )
             row = cursor.fetchone()
+            if row and row["request_count"] >= rate_limit_rpm:
+                return False, retry_after
 
-            if row:
-                count = row["request_count"]
-                if count >= rate_limit_rpm:
-                    return False, retry_after
-                
-                cursor.execute(
-                    """
-                    UPDATE rate_limits SET request_count = request_count + 1
-                    WHERE key_prefix = ? AND minute_timestamp = ?
-                    """,
-                    (key_prefix, current_minute)
-                )
-            else:
-                cursor.execute(
-                    """
-                    INSERT INTO rate_limits (key_prefix, minute_timestamp, request_count)
-                    VALUES (?, ?, 1)
-                    """,
-                    (key_prefix, current_minute)
-                )
+            # Atomic UPSERT: insert initial counter or increment existing counter atomically
+            cursor.execute(
+                """
+                INSERT INTO rate_limits (key_prefix, minute_timestamp, request_count)
+                VALUES (?, ?, 1)
+                ON CONFLICT(key_prefix, minute_timestamp)
+                DO UPDATE SET request_count = request_count + 1
+                """,
+                (key_prefix, current_minute)
+            )
+
+            # Retrieve updated request count after atomic upsert
+            cursor.execute(
+                """
+                SELECT request_count FROM rate_limits
+                WHERE key_prefix = ? AND minute_timestamp = ?
+                """,
+                (key_prefix, current_minute)
+            )
+            updated_row = cursor.fetchone()
+            count = updated_row["request_count"] if updated_row else 1
 
             # Cleanup older minute records (older than 10 minutes)
             old_cutoff = current_minute - 10
             cursor.execute("DELETE FROM rate_limits WHERE minute_timestamp < ?", (old_cutoff,))
             conn.commit()
+
+            if count > rate_limit_rpm:
+                return False, retry_after
 
         return True, 0
 
@@ -295,6 +303,14 @@ class KeyManager:
         if updated:
             logger.info(f"Revoked API key prefix [{key_prefix}]")
         return updated
+
+    async def verify_key_async(self, token: str) -> Tuple[bool, Optional[Dict[str, Any]], Optional[str]]:
+        """Non-blocking asynchronous wrapper for verify_key (offloads PBKDF2 to worker thread)."""
+        return await asyncio.to_thread(self.verify_key, token)
+
+    async def check_rate_limit_async(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int]:
+        """Non-blocking asynchronous wrapper for check_rate_limit (offloads SQLite I/O to worker thread)."""
+        return await asyncio.to_thread(self.check_rate_limit, key_prefix, rate_limit_rpm)
 
 
 # Default singleton instance

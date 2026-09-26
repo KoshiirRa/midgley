@@ -89,8 +89,8 @@ class DynamicRegionRunner:
         # Step 1: Execute National RBOB Wholesale Baseline Forecast
         nat_res = run_national_pipeline(use_llm_api=use_llm_api, model_type=model_type)
 
-        nat_baseline_price = nat_res.get("predicted_5d_price", 3.200)
-        nat_current_base = nat_res.get("current_base_price", 3.100)
+        nat_baseline_price = float(nat_res.get("predicted_5d_price") or nat_res.get("baseline_forecast") or nat_res.get("live_pred_price", 3.200))
+        nat_current_base = float(nat_res.get("live_base_price") or nat_res.get("current_base_price") or nat_res.get("current_price") or nat_res.get("live_pump_price", 3.100))
         pct_change = (nat_baseline_price - nat_current_base) / nat_current_base if nat_current_base > 0 else 0.0
 
         # Step 2: Determine Live Local Base Pump Price
@@ -145,6 +145,7 @@ class DynamicRegionRunner:
         try:
             today = datetime.now()
             target_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
+            quant_base = round(current_base * (1.0 + (nat_res.get("quant_baseline_price", nat_current_base) - nat_current_base)/nat_current_base), 3)
             log_df = pd.DataFrame([{
                 "log_timestamp": today.strftime("%Y-%m-%d %H:%M:%S"),
                 "forecast_target_date": target_date,
@@ -153,8 +154,8 @@ class DynamicRegionRunner:
                 "predicted_direction": "UP" if predicted_5d_price >= current_base else "DOWN",
                 "llm_price_pressure": nat_res.get("llm_price_pressure", 0.0),
                 "llm_supply_disruption": nat_res.get("llm_supply_disruption", 0.0),
-                "quant_baseline_5d_price": round(current_base * (1.0 + (nat_res.get("quant_baseline_price", nat_current_base) - nat_current_base)/nat_current_base), 3),
-                "llm_augmentation_delta": round(predicted_5d_price - current_base, 3),
+                "quant_baseline_5d_price": quant_base,
+                "llm_augmentation_delta": round(predicted_5d_price - quant_base, 3),
                 "prediction_lower_95ci": lower_95ci,
                 "prediction_upper_95ci": upper_95ci,
                 "data_source_provenance": f"DynamicRegionRunner_{self.region_id}"
@@ -178,11 +179,16 @@ class DynamicRegionRunner:
             logger.debug(f"Could not retrieve spatial refinery summary for {self.region_id}: {err}")
 
         return {
+            "date": datetime.now().strftime("%Y-%m-%d"),
             "region_id": self.region_id,
+            "region": self.logger_region_key,
             "display_name": self.display_name,
             "current_base_price": current_base,
+            "current_price": current_base,
+            "live_pump_price": current_base,
             "raw_predicted_5d_price": raw_predicted_5d_price,
             "predicted_5d_price": predicted_5d_price,
+            "baseline_forecast": predicted_5d_price,
             "projected_direction": "UP 📈" if predicted_5d_price >= current_base else "DOWN 📉",
             "prediction_lower_95ci": lower_95ci,
             "prediction_upper_95ci": upper_95ci,

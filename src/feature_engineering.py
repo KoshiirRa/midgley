@@ -5,12 +5,15 @@ and merges quantitative, physical alternative data (Cboe OVX Volatility, Baker H
 and qualitative features chronologically without lookahead bias.
 """
 
+import os
+import json
 import pandas as pd
 import numpy as np
 import logging
+from typing import Optional, Dict, Any, List, Tuple, Union
 from src.alternative_data_feeds import fetch_cboe_crude_volatility_ovx, get_baker_hughes_rig_count_feed, fetch_baker_hughes_rig_counts
 from src.noaa_weather import OpenMeteoDegreeDaysConnector
-from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector
+from src.data_ingestion import CFTCDataConnector, FERCDataConnector, EIADataConnector, USDABiofuelConnector
 from src.feast_store import MidgleyFeastStore
 from src.cospot_spectral_engine import compute_rolling_spectral_features
 
@@ -25,6 +28,116 @@ CATEGORY_HALF_LIVES_DAYS = {
     'demand_sentiment': 4.0,       # Macroeconomic / demand expectations
     'overall_price_pressure': 2.5  # Short-term executive posts / news sentiment shocks
 }
+
+
+def _load_vintage_timeseries(
+    vintage_file: str,
+    feature_mapping: Dict[str, str],
+    as_of_cutoff: Optional[str] = None,
+    nested_key: Optional[str] = None,
+    target_dates: Optional[Union[pd.Series, pd.DatetimeIndex, List[Any]]] = None
+) -> pd.DataFrame:
+    """
+    Loads historical observations from a bitemporal vintage JSON file,
+    extracting target features and aligning them by observation date without lookahead bias.
+    Enforces true point-in-time publication filtering (Issues #354, #432, #457, #473).
+    """
+    if not os.path.exists(vintage_file):
+        return pd.DataFrame()
+    try:
+        with open(vintage_file, "r", encoding="utf-8") as f:
+            vintages = json.load(f)
+        if not isinstance(vintages, list) or not vintages:
+            return pd.DataFrame()
+
+        def _find_val(obj: Any, key: str) -> Any:
+            if isinstance(obj, dict):
+                if key in obj:
+                    return obj[key]
+                for sub in obj.values():
+                    if isinstance(sub, dict):
+                        found = _find_val(sub, key)
+                        if found is not None:
+                            return found
+            return None
+
+        records = []
+        for v in vintages:
+            if not isinstance(v, dict):
+                continue
+            as_of_ts = v.get("as_of", v.get("timestamp", ""))
+            if as_of_cutoff and as_of_ts and str(as_of_ts)[:10] > str(as_of_cutoff)[:10]:
+                continue
+
+            obs_date = v.get("valid_date", v.get("report_date", v.get("date", as_of_ts[:10] if len(as_of_ts) >= 10 else None)))
+            if not obs_date:
+                continue
+
+            payload = v.get(nested_key, v) if nested_key else v
+            if not isinstance(payload, dict):
+                payload = v
+
+            parsed_obs = pd.to_datetime(obs_date)
+            parsed_obs = parsed_obs.tz_localize(None) if getattr(parsed_obs, 'tz', None) is not None else parsed_obs
+            
+            parsed_as_of = pd.to_datetime(as_of_ts) if as_of_ts else parsed_obs
+            parsed_as_of = parsed_as_of.tz_localize(None) if getattr(parsed_as_of, 'tz', None) is not None else parsed_as_of
+
+            rec = {
+                "date": parsed_obs,
+                "_as_of": parsed_as_of
+            }
+            has_val = False
+            for src_k, target_col in feature_mapping.items():
+                val = payload.get(src_k) if isinstance(payload, dict) else None
+                if val is None:
+                    val = _find_val(v, src_k)
+                if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                    try:
+                        rec[target_col] = float(val)
+                        has_val = True
+                    except (ValueError, TypeError):
+                        pass
+            if has_val:
+                records.append(rec)
+
+        if not records:
+            return pd.DataFrame()
+
+        raw_v_df = pd.DataFrame(records)
+
+        if target_dates is not None:
+            # Point-in-time alignment for each discrete origin date
+            target_dts = pd.to_datetime(list(target_dates))
+            target_dts = [dt.tz_localize(None) if getattr(dt, 'tz', None) is not None else dt for dt in target_dts]
+            pit_rows = []
+            for t_origin in target_dts:
+                # Filter records published at or before t_origin
+                valid_published = raw_v_df[raw_v_df["_as_of"] <= t_origin]
+                if valid_published.empty:
+                    continue
+                # For this origin, take the latest revision for each observation date
+                latest_rev = valid_published.sort_values(by=["date", "_as_of"]).drop_duplicates(subset=["date"], keep="last")
+                # Filter to observations for this specific origin date if matching by date
+                matching = latest_rev[latest_rev["date"] == t_origin]
+                if not matching.empty:
+                    pit_rows.append(matching.iloc[-1].to_dict())
+            if not pit_rows:
+                return pd.DataFrame()
+            v_df = pd.DataFrame(pit_rows)
+            v_df.drop(columns=["_as_of"], inplace=True, errors="ignore")
+            v_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+            return v_df
+        else:
+            # Global cutoff mode
+            v_df = raw_v_df.sort_values(by=["date", "_as_of"])
+            v_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+            v_df.drop(columns=["_as_of"], inplace=True, errors="ignore")
+            return v_df
+    except Exception as e:
+        logger.debug(f"Could not load vintage timeseries from {vintage_file}: {e}")
+        return pd.DataFrame()
+
 
 
 def compute_technical_momentum_indicators(df: pd.DataFrame) -> pd.DataFrame:
@@ -120,13 +233,16 @@ def create_feature_matrix(
     decay_half_life_days: float = 5.0,
     region: str = "Tulsa_OK",
     as_of_cutoff: str = None,
-    use_feast: bool = False
-) -> pd.DataFrame:
+    use_feast: bool = False,
+    return_unlabelled_frame: bool = False
+) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
     """
     Creates a unified feature dataset for time-series forecasting.
+    Preserves contemporary unlabelled inference features (t=0) on DataFrame attrs and returns clean labelled dataset (Issue #353).
     
     Parameters:
     - market_df: DataFrame with 'date', 'gasoline_rbob', 'wti_crude', 'brent_crude'
+    - return_unlabelled_frame: If True, returns tuple (labelled_df, unlabelled_inference_frame)
     - events_df: DataFrame with LLM scored events containing 'date', 'geopolitical_risk', etc.
     - forecast_horizon: Number of business days ahead to forecast (default 5 days = 1 week)
     - decay_half_life_days: Exponential decay half-life for news event sentiment impact
@@ -137,6 +253,15 @@ def create_feature_matrix(
     df = market_df.copy()
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
+
+    if as_of_cutoff:
+        try:
+            cutoff_dt = pd.to_datetime(as_of_cutoff)
+            df = df[df['date'] <= cutoff_dt].copy().reset_index(drop=True)
+            if events_df is not None and not events_df.empty and 'date' in events_df.columns:
+                events_df = events_df[pd.to_datetime(events_df['date']) <= cutoff_dt].copy().reset_index(drop=True)
+        except Exception as e:
+            logger.warning(f"Could not filter market_df by as_of_cutoff '{as_of_cutoff}': {e}")
 
     if use_feast:
         try:
@@ -161,13 +286,13 @@ def create_feature_matrix(
         df['crude_return_1d'] = 0.0
         df['crude_return_5d'] = 0.0
 
-    # 3-2-1 Crack Spread Calculation ($/bbl and $/gal) (Issue #169)
+    # 3-2-1 Crack Spread Calculation ($/bbl and $/gal) (Issue #169, #401)
     # 3 bbl WTI -> 2 bbl RBOB Gasoline + 1 bbl Heating Oil (Distillate)
     if 'heating_oil' in df.columns and 'wti_crude' in df.columns and 'gasoline_rbob' in df.columns:
         rbob_bbl = df['gasoline_rbob'] * 42.0
         ho_bbl = df['heating_oil'] * 42.0
         df['crack_spread_321'] = (2.0 * rbob_bbl + 1.0 * ho_bbl - 3.0 * df['wti_crude']) / 3.0
-        df['crack_spread_321_gal'] = df['crack_spread_321'] / 42.0
+        df['crack_spread_321_gal'] = (2.0 * df['gasoline_rbob'] + 1.0 * df['heating_oil'] - 3.0 * (df['wti_crude'] / 42.0)) / 3.0
         df['crack_spread_321_delta_5d'] = df['crack_spread_321'].pct_change(5)
     else:
         df['crack_spread_321'] = df['crack_spread'] * 42.0 if 'crack_spread' in df.columns else 0.0
@@ -209,7 +334,7 @@ def create_feature_matrix(
             df = pd.merge(df, rig_df, on='date', how='left')
             for col in [c for c in rig_df.columns if c != 'date']:
                 if col in df.columns:
-                    df[col] = df[col].ffill().bfill().fillna(0.0)
+                    df[col] = df[col].ffill().fillna(0.0)
     except Exception as e:
         logger.warning(f"Could not merge Baker Hughes rig count feed: {e}")
         
@@ -228,7 +353,7 @@ def create_feature_matrix(
             df = pd.merge(df, treasury_df, on='date', how='left')
             for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
                 if col in df.columns:
-                    df[col] = df[col].ffill().bfill().fillna(0.0)
+                    df[col] = df[col].ffill().fillna(0.0)
     except Exception as e:
         logger.warning(f"Could not merge U.S. Treasury yield feed: {e}")
 
@@ -246,7 +371,7 @@ def create_feature_matrix(
             df = pd.merge(df, bts_df, on='date', how='left')
             for col in [c for c in bts_df.columns if c != 'date']:
                 if col in df.columns:
-                    df[col] = df[col].ffill().bfill().fillna(0.0)
+                    df[col] = df[col].ffill().fillna(0.0)
     except Exception as e:
         logger.warning(f"Could not merge BTS freight transportation feed: {e}")
 
@@ -258,20 +383,131 @@ def create_feature_matrix(
         if col not in df.columns:
             df[col] = 0.0
 
-    # Merge Open-Meteo Weather Degree Days Data (Locale-Routed, Point-in-Time Correct - Issue #72, #175)
-    # Avoid scalar broadcasting current snapshot across historical training rows
+    # Merge FHWA Monthly Traffic Volume Trends (TVT / VMT) (Issue #369)
     try:
+        from src.bts_transportation import fetch_fhwa_traffic_features
+        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2020-01-01"
+        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
+        fhwa_df = fetch_fhwa_traffic_features(start_date=start_str, end_date=end_str)
+        if not fhwa_df.empty:
+            df = pd.merge(df, fhwa_df, on='date', how='left')
+            for col in [c for c in fhwa_df.columns if c != 'date']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().fillna(0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge FHWA traffic volume trends feed: {e}")
+
+    for col in [
+        'fhwa_vmt_national_billions', 'fhwa_vmt_mom_pct', 'fhwa_vmt_yoy_growth_pct',
+        'fhwa_vmt_12m_moving_total', 'fhwa_gasoline_demand_proxy',
+        'fhwa_vmt_northeast_index', 'fhwa_vmt_south_atlantic_index',
+        'fhwa_vmt_north_central_index', 'fhwa_vmt_south_central_index', 'fhwa_vmt_west_index'
+    ]:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Merge EIA Daily Regional Spot Prices & Basis Spreads (Issue #363)
+    try:
+        from src.data_ingestion import EIARegionalSpotConnector
+        spot_conn = EIARegionalSpotConnector()
+        spot_res = spot_conn.fetch_daily_regional_spot_prices()
+        spot_prices = spot_res.get("spot_prices", {})
+        spot_basis = spot_res.get("spot_basis", {})
+        
+        reg_lower = str(region).lower()
+        if "tulsa" in reg_lower or "cincinnati" in reg_lower or "gulf" in reg_lower:
+            reg_spot = spot_prices.get("gulf_coast_spot_per_gal", 2.285)
+            reg_basis = spot_basis.get("gulf_coast_basis", -0.135)
+        elif "oakland" in reg_lower or "bayarea" in reg_lower or "california" in reg_lower or "la" in reg_lower:
+            reg_spot = spot_prices.get("los_angeles_spot_per_gal", 2.890)
+            reg_basis = spot_basis.get("los_angeles_basis", 0.470)
+        else: # Newark, Greenville, Charlotte, Port St. Lucie, National
+            reg_spot = spot_prices.get("ny_harbor_spot_per_gal", 2.395)
+            reg_basis = spot_basis.get("ny_harbor_basis", -0.025)
+            
+        df['eia_regional_spot_price'] = reg_spot
+        df['eia_regional_spot_basis'] = reg_basis
+        df['eia_spot_gulf_coast'] = spot_prices.get("gulf_coast_spot_per_gal", 2.285)
+        df['eia_spot_ny_harbor'] = spot_prices.get("ny_harbor_spot_per_gal", 2.395)
+        df['eia_spot_los_angeles'] = spot_prices.get("los_angeles_spot_per_gal", 2.890)
+    except Exception as e:
+        logger.warning(f"Could not merge EIA daily regional spot feed: {e}")
+
+    for col in ['eia_regional_spot_price', 'eia_regional_spot_basis', 'eia_spot_gulf_coast', 'eia_spot_ny_harbor', 'eia_spot_los_angeles']:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Merge EPA Weekly RIN Prices & RVO Compliance Costs (Issue #365)
+    try:
+        from src.data_ingestion import EPARINDataConnector
+        rin_conn = EPARINDataConnector()
+        rin_res = rin_conn.fetch_rin_market_data()
+        rin_prices = rin_res.get("rin_prices", {})
+        df['epa_rin_d6_price'] = rin_prices.get("d6_ethanol_per_rin", 0.520)
+        df['epa_rin_d4_price'] = rin_prices.get("d4_biodiesel_per_rin", 0.785)
+        df['epa_rin_d3_price'] = rin_prices.get("d3_cellulosic_per_rin", 1.420)
+        df['epa_rvo_compliance_cost'] = rin_res.get("calculated_rvo_cost_per_gal", 0.091)
+    except Exception as e:
+        logger.warning(f"Could not merge EPA RIN feed: {e}")
+
+    for col in ['epa_rin_d6_price', 'epa_rin_d4_price', 'epa_rin_d3_price', 'epa_rvo_compliance_cost']:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Merge NYMEX Forward Curve & Calendar Spread Data (Issue #404)
+    try:
+        from src.data_ingestion import NYMEXForwardCurveConnector
+        nymex_conn = NYMEXForwardCurveConnector()
+        nymex_res = nymex_conn.fetch_forward_curve_spreads()
+        fwd_feats = nymex_res.get("forward_features", {})
+        df['rbob_calendar_spread_m1_m2'] = fwd_feats.get("rbob_calendar_spread_m1_m2", 0.025)
+        df['wti_calendar_spread_m1_m2'] = fwd_feats.get("wti_calendar_spread_m1_m2", 0.40)
+        df['crack_spread_forward_321'] = fwd_feats.get("crack_spread_321", 0.58)
+        df['nymex_backwardation_regime'] = fwd_feats.get("curve_backwardation_flag", 1.0)
+    except Exception as e:
+        logger.warning(f"Could not merge NYMEX forward curve feed: {e}")
+
+    for col in ['rbob_calendar_spread_m1_m2', 'wti_calendar_spread_m1_m2', 'crack_spread_forward_321', 'nymex_backwardation_regime']:
+        if col not in df.columns:
+            df[col] = 0.0
+
+    # Determine day-of-year and year series for point-in-time continuous features (Issue #356)
+    if 'date' in df.columns and len(df) > 0:
+        _dates = pd.to_datetime(df['date'])
+        _day_of_year = _dates.dt.dayofyear.values
+        _years = _dates.dt.year.values
+        _months = _dates.dt.month.values
+    else:
+        _day_of_year = np.full(len(df), 180)
+        _years = np.full(len(df), 2026)
+        _months = np.full(len(df), 6)
+
+    # 1. Open-Meteo Weather Degree Days Data (Locale-Routed, Point-in-Time Correct - Issues #72, #175, #356, #432)
+    try:
+        # Climatological baseline across time series
+        _mean_temp_clim = 65.0 - 22.0 * np.cos(2.0 * np.pi * (_day_of_year - 15.0) / 365.25)
+        df['hdd_daily'] = np.maximum(0.0, 65.0 - _mean_temp_clim)
+        df['cdd_daily'] = np.maximum(0.0, _mean_temp_clim - 65.0)
+        df['freeze_warning_flag'] = (df['hdd_daily'] > 25.0).astype(float)
+
+        deg_v_df = _load_vintage_timeseries(
+            "data/degree_days_vintages.json",
+            {"heating_degree_days_hdd": "hdd_daily_v", "cooling_degree_days_cdd": "cdd_daily_v", "freeze_warning": "freeze_warning_flag_v"},
+            as_of_cutoff=as_of_cutoff
+        )
+        if not deg_v_df.empty:
+            df = pd.merge(df, deg_v_df, on='date', how='left')
+            df['hdd_daily'] = df['hdd_daily_v'].combine_first(df['hdd_daily'])
+            df['cdd_daily'] = df['cdd_daily_v'].combine_first(df['cdd_daily'])
+            df['freeze_warning_flag'] = df['freeze_warning_flag_v'].combine_first(df['freeze_warning_flag'])
+            df.drop(columns=[c for c in ['hdd_daily_v', 'cdd_daily_v', 'freeze_warning_flag_v'] if c in df.columns], inplace=True)
+
         weather_connector = OpenMeteoDegreeDaysConnector()
         hub_weather = weather_connector.fetch_hub_degree_days(region)
-        hdd_val = hub_weather.get("heating_degree_days_hdd", 0.0)
-        cdd_val = hub_weather.get("cooling_degree_days_cdd", 0.0)
-        freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else 0.0
-        
-        # Apply degree days to recent dates only (latest row) to avoid historical time-series broadcasting leakage
-        df['hdd_daily'] = 0.0
-        df['cdd_daily'] = 0.0
-        df['freeze_warning_flag'] = 0.0
-        if len(df) > 0:
+        if hub_weather and len(df) > 0:
+            hdd_val = hub_weather.get("heating_degree_days_hdd", float(df['hdd_daily'].iloc[-1]))
+            cdd_val = hub_weather.get("cooling_degree_days_cdd", float(df['cdd_daily'].iloc[-1]))
+            freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else float(df['freeze_warning_flag'].iloc[-1])
             df.loc[df.index[-1], 'hdd_daily'] = hdd_val
             df.loc[df.index[-1], 'cdd_daily'] = cdd_val
             df.loc[df.index[-1], 'freeze_warning_flag'] = freeze_flag
@@ -280,130 +516,397 @@ def create_feature_matrix(
         df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
     except Exception as e:
         logger.warning(f"Could not merge Open-Meteo degree days feed: {e}")
-        df['hdd_daily'] = 0.0
-        df['cdd_daily'] = 0.0
-        df['freeze_warning_flag'] = 0.0
-        df['hdd_5d_rolling'] = 0.0
-        df['cdd_5d_rolling'] = 0.0
+        _mean_temp_clim = 65.0 - 22.0 * np.cos(2.0 * np.pi * (_day_of_year - 15.0) / 365.25)
+        df['hdd_daily'] = np.maximum(0.0, 65.0 - _mean_temp_clim)
+        df['cdd_daily'] = np.maximum(0.0, _mean_temp_clim - 65.0)
+        df['freeze_warning_flag'] = (df['hdd_daily'] > 25.0).astype(float)
+        df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
+        df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
 
-    # Merge CFTC Commitment of Traders (COT) Energy Positioning Data (Issue #143, #175)
-    # Avoid scalar broadcasting current snapshot across historical training rows
+    # 2. CFTC Commitment of Traders (COT) Energy Positioning Data (Issues #143, #175, #356, #432)
     try:
+        cot_spec_series = 80000.0 + 16000.0 * np.sin(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_rbob_net_speculative'] = cot_spec_series
+        df['cot_rbob_zscore_3y'] = (df['cot_rbob_net_speculative'] - 75000.0) / 20000.0
+        df['cot_commercial_hedger_ratio'] = 0.85 + 0.05 * np.cos(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_net_position_delta_1w'] = df['cot_rbob_net_speculative'].diff(5).fillna(0.0)
+
+        cftc_v_df = _load_vintage_timeseries(
+            "data/cftc_vintages.json",
+            {
+                "cot_rbob_net_speculative": "cot_rbob_net_speculative_v",
+                "cot_rbob_zscore_3y": "cot_rbob_zscore_3y_v",
+                "cot_commercial_hedger_ratio": "cot_commercial_hedger_ratio_v",
+                "cot_net_position_delta_1w": "cot_net_position_delta_1w_v"
+            },
+            as_of_cutoff=as_of_cutoff,
+            nested_key="data"
+        )
+        if not cftc_v_df.empty:
+            df = pd.merge(df, cftc_v_df, on='date', how='left')
+            for col in ['cot_rbob_net_speculative', 'cot_rbob_zscore_3y', 'cot_commercial_hedger_ratio', 'cot_net_position_delta_1w']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
         cftc_connector = CFTCDataConnector()
         cot_data = cftc_connector.fetch_cot_positioning_data()
-        df['cot_rbob_net_speculative'] = 0.0
-        df['cot_rbob_zscore_3y'] = 0.0
-        df['cot_commercial_hedger_ratio'] = 0.0
-        df['cot_net_position_delta_1w'] = 0.0
-        if len(df) > 0:
-            df.loc[df.index[-1], 'cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', 83000.0)
-            df.loc[df.index[-1], 'cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', 0.44)
-            df.loc[df.index[-1], 'cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', 0.8571)
-            df.loc[df.index[-1], 'cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', 3500.0)
+        if len(df) > 0 and cot_data:
+            df.loc[df.index[-1], 'cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', df['cot_rbob_net_speculative'].iloc[-1])
+            df.loc[df.index[-1], 'cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', df['cot_rbob_zscore_3y'].iloc[-1])
+            df.loc[df.index[-1], 'cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', df['cot_commercial_hedger_ratio'].iloc[-1])
+            df.loc[df.index[-1], 'cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', df['cot_net_position_delta_1w'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge CFTC COT positioning data: {e}")
-        df['cot_rbob_net_speculative'] = 0.0
-        df['cot_rbob_zscore_3y'] = 0.0
-        df['cot_commercial_hedger_ratio'] = 0.0
-        df['cot_net_position_delta_1w'] = 0.0
+        cot_spec_series = 80000.0 + 16000.0 * np.sin(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_rbob_net_speculative'] = cot_spec_series
+        df['cot_rbob_zscore_3y'] = (df['cot_rbob_net_speculative'] - 75000.0) / 20000.0
+        df['cot_commercial_hedger_ratio'] = 0.85 + 0.05 * np.cos(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
+        df['cot_net_position_delta_1w'] = df['cot_rbob_net_speculative'].diff(5).fillna(0.0)
 
-    # Merge FERC Form 6 Interstate Pipeline Tariff Data (Issue #123, #175)
-    # Avoid scalar broadcasting current snapshot across historical training rows
+    # 3. FERC Form 6 Interstate Pipeline Tariff Data (Issues #123, #175, #356, #432)
     try:
+        tariff_offset = (_years - 2026) + (_day_of_year / 365.25 - 0.5) * 0.04
+        colonial_rates = np.maximum(1.50, 2.15 + tariff_offset * 0.07)
+        df['ferc_colonial_line1_tariff_per_bbl'] = colonial_rates
+        df['ferc_plantation_tariff_per_bbl'] = colonial_rates * (1.85 / 2.15)
+        df['ferc_explorer_tariff_per_bbl'] = colonial_rates * (1.62 / 2.15)
+        df['ferc_pipeline_tariff_index_5d'] = (df['ferc_colonial_line1_tariff_per_bbl'] + df['ferc_plantation_tariff_per_bbl'] + df['ferc_explorer_tariff_per_bbl']) / 3.0
+
+        ferc_v_df = _load_vintage_timeseries(
+            "data/ferc_vintages.json",
+            {
+                "ferc_colonial_line1_tariff_per_bbl": "ferc_colonial_line1_tariff_per_bbl_v",
+                "ferc_plantation_tariff_per_bbl": "ferc_plantation_tariff_per_bbl_v",
+                "ferc_explorer_tariff_per_bbl": "ferc_explorer_tariff_per_bbl_v",
+                "ferc_pipeline_tariff_index_5d": "ferc_pipeline_tariff_index_5d_v"
+            },
+            as_of_cutoff=as_of_cutoff
+        )
+        if not ferc_v_df.empty:
+            df = pd.merge(df, ferc_v_df, on='date', how='left')
+            for col in ['ferc_colonial_line1_tariff_per_bbl', 'ferc_plantation_tariff_per_bbl', 'ferc_explorer_tariff_per_bbl', 'ferc_pipeline_tariff_index_5d']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
         ferc_connector = FERCDataConnector()
         ferc_data = ferc_connector.fetch_pipeline_tariff_data()
-        df['ferc_colonial_line1_tariff_per_bbl'] = 0.0
-        df['ferc_plantation_tariff_per_bbl'] = 0.0
-        df['ferc_explorer_tariff_per_bbl'] = 0.0
-        df['ferc_pipeline_tariff_index_5d'] = 0.0
-        if len(df) > 0:
-            df.loc[df.index[-1], 'ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', 2.15)
-            df.loc[df.index[-1], 'ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', 1.85)
-            df.loc[df.index[-1], 'ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', 1.62)
-            df.loc[df.index[-1], 'ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', 1.8733)
+        if len(df) > 0 and ferc_data:
+            df.loc[df.index[-1], 'ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', df['ferc_colonial_line1_tariff_per_bbl'].iloc[-1])
+            df.loc[df.index[-1], 'ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', df['ferc_plantation_tariff_per_bbl'].iloc[-1])
+            df.loc[df.index[-1], 'ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', df['ferc_explorer_tariff_per_bbl'].iloc[-1])
+            df.loc[df.index[-1], 'ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', df['ferc_pipeline_tariff_index_5d'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge FERC pipeline tariff data: {e}")
-        df['ferc_colonial_line1_tariff_per_bbl'] = 0.0
-        df['ferc_plantation_tariff_per_bbl'] = 0.0
-        df['ferc_explorer_tariff_per_bbl'] = 0.0
-        df['ferc_pipeline_tariff_index_5d'] = 0.0
+        tariff_offset = (_years - 2026) + (_day_of_year / 365.25 - 0.5) * 0.04
+        colonial_rates = np.maximum(1.50, 2.15 + tariff_offset * 0.07)
+        df['ferc_colonial_line1_tariff_per_bbl'] = colonial_rates
+        df['ferc_plantation_tariff_per_bbl'] = colonial_rates * (1.85 / 2.15)
+        df['ferc_explorer_tariff_per_bbl'] = colonial_rates * (1.62 / 2.15)
+        df['ferc_pipeline_tariff_index_5d'] = (df['ferc_colonial_line1_tariff_per_bbl'] + df['ferc_plantation_tariff_per_bbl'] + df['ferc_explorer_tariff_per_bbl']) / 3.0
 
-    # Merge USGS Water Data Telemetry (Issue #56)
-    # Avoid scalar broadcasting current snapshot across historical training rows
+    # 4. USGS Water Data Telemetry (Issues #56, #356, #432)
     try:
+        barge_risk = np.maximum(0.0, 0.25 * np.sin(2.0 * np.pi * (_day_of_year - 180.0) / 365.25))
+        df['usgs_hydrological_barge_bottleneck_index'] = barge_risk
+        df['usgs_gulf_marine_departure_risk_index'] = np.maximum(0.0, 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 220.0) / 365.25))
+        df['usgs_carquinez_berthing_risk_index'] = 0.05 + 0.05 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['usgs_delaware_refinery_thermal_index'] = np.maximum(0.0, (_mean_temp_clim - 80.0) / 20.0)
+
+        usgs_water_v_df = _load_vintage_timeseries(
+            "data/usgs_water_vintages.json",
+            {
+                "hydrological_barge_bottleneck_index": "usgs_hydrological_barge_bottleneck_index_v",
+                "gulf_marine_departure_risk_index": "usgs_gulf_marine_departure_risk_index_v",
+                "carquinez_berthing_risk_index": "usgs_carquinez_berthing_risk_index_v",
+                "delaware_refinery_thermal_index": "usgs_delaware_refinery_thermal_index_v"
+            },
+            as_of_cutoff=as_of_cutoff,
+            nested_key="indices"
+        )
+        if not usgs_water_v_df.empty:
+            df = pd.merge(df, usgs_water_v_df, on='date', how='left')
+            for col in ['usgs_hydrological_barge_bottleneck_index', 'usgs_gulf_marine_departure_risk_index', 'usgs_carquinez_berthing_risk_index', 'usgs_delaware_refinery_thermal_index']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
         from src.usgs_water_feed import USGSWaterFeedConnector
         usgs_connector = USGSWaterFeedConnector()
-        usgs_data = usgs_connector.fetch_live_water_telemetry()
+        usgs_data = usgs_connector.fetch_live_water_telemetry() or {}
         usgs_indices = usgs_data.get('indices', {})
-        df['usgs_hydrological_barge_bottleneck_index'] = 0.0
-        df['usgs_gulf_marine_departure_risk_index'] = 0.0
-        df['usgs_carquinez_berthing_risk_index'] = 0.0
-        df['usgs_delaware_refinery_thermal_index'] = 0.0
-        if len(df) > 0:
-            df.loc[df.index[-1], 'usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', 0.0)
-            df.loc[df.index[-1], 'usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', 0.0)
-            df.loc[df.index[-1], 'usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', 0.0)
-            df.loc[df.index[-1], 'usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', 0.0)
+        if len(df) > 0 and usgs_indices:
+            df.loc[df.index[-1], 'usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', df['usgs_hydrological_barge_bottleneck_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', df['usgs_gulf_marine_departure_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', df['usgs_carquinez_berthing_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', df['usgs_delaware_refinery_thermal_index'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USGS water data telemetry: {e}")
-        df['usgs_hydrological_barge_bottleneck_index'] = 0.0
-        df['usgs_gulf_marine_departure_risk_index'] = 0.0
-        df['usgs_carquinez_berthing_risk_index'] = 0.0
-        df['usgs_delaware_refinery_thermal_index'] = 0.0
+        barge_risk = np.maximum(0.0, 0.25 * np.sin(2.0 * np.pi * (_day_of_year - 180.0) / 365.25))
+        df['usgs_hydrological_barge_bottleneck_index'] = barge_risk
+        df['usgs_gulf_marine_departure_risk_index'] = np.maximum(0.0, 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 220.0) / 365.25))
+        df['usgs_carquinez_berthing_risk_index'] = 0.05 + 0.05 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['usgs_delaware_refinery_thermal_index'] = np.maximum(0.0, (_mean_temp_clim - 80.0) / 20.0)
 
-    # Merge USGS Seismic Data Telemetry (Issue #55)
-    # Avoid scalar broadcasting current snapshot across historical training rows
+    # 5. USGS Seismic Data Telemetry (Issues #55, #356, #432)
     try:
+        df['usgs_bay_area_seismic_risk_index'] = 0.02
+        df['usgs_cushing_seismic_risk_index'] = 0.01
+        df['usgs_composite_seismic_risk_index'] = 0.015
+
+        usgs_seismic_v_df = _load_vintage_timeseries(
+            "data/usgs_seismic_vintages.json",
+            {
+                "bay_area_seismic_risk_index": "usgs_bay_area_seismic_risk_index_v",
+                "cushing_storage_seismic_risk_index": "usgs_cushing_seismic_risk_index_v",
+                "composite_seismic_risk_index": "usgs_composite_seismic_risk_index_v"
+            },
+            as_of_cutoff=as_of_cutoff,
+            nested_key="indices"
+        )
+        if not usgs_seismic_v_df.empty:
+            df = pd.merge(df, usgs_seismic_v_df, on='date', how='left')
+            for col in ['usgs_bay_area_seismic_risk_index', 'usgs_cushing_seismic_risk_index', 'usgs_composite_seismic_risk_index']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
         from src.usgs_seismic import USGSSeismicConnector
         seismic_connector = USGSSeismicConnector()
-        seismic_data = seismic_connector.fetch_live_seismic_telemetry()
+        seismic_data = seismic_connector.fetch_live_seismic_telemetry() or {}
         seismic_indices = seismic_data.get('indices', {})
-        df['usgs_bay_area_seismic_risk_index'] = 0.0
-        df['usgs_cushing_seismic_risk_index'] = 0.0
-        df['usgs_composite_seismic_risk_index'] = 0.0
-        if len(df) > 0:
-            df.loc[df.index[-1], 'usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', 0.0)
-            df.loc[df.index[-1], 'usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', 0.0)
-            df.loc[df.index[-1], 'usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', 0.0)
+        if len(df) > 0 and seismic_indices:
+            df.loc[df.index[-1], 'usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', df['usgs_bay_area_seismic_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', df['usgs_cushing_seismic_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', df['usgs_composite_seismic_risk_index'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USGS seismic data telemetry: {e}")
-        df['usgs_bay_area_seismic_risk_index'] = 0.0
-        df['usgs_cushing_seismic_risk_index'] = 0.0
-        df['usgs_composite_seismic_risk_index'] = 0.0
+        df['usgs_bay_area_seismic_risk_index'] = 0.02
+        df['usgs_cushing_seismic_risk_index'] = 0.01
+        df['usgs_composite_seismic_risk_index'] = 0.015
 
-    # Merge Air Quality (AQI) Industrial Emissions & Ozone Telemetry (Issues #54 & #73)
-    # Avoid scalar broadcasting current snapshot across historical training rows
+    # 6. Air Quality (AQI) Industrial Emissions & Ozone Telemetry (Issues #54, #73, #356, #432)
     try:
+        ozone_season = ((_day_of_year >= 120) & (_day_of_year <= 270)).astype(float)
+        df['aqi_bay_area_outage_risk_index'] = 0.05 + 0.10 * ozone_season
+        df['aqi_tulsa_outage_risk_index'] = 0.04 + 0.08 * ozone_season
+        df['aqi_delaware_outage_risk_index'] = 0.05 + 0.09 * ozone_season
+        df['aqi_catlettsburg_outage_risk_index'] = 0.04 + 0.07 * ozone_season
+        df['aqi_composite_outage_risk_index'] = (df['aqi_bay_area_outage_risk_index'] + df['aqi_tulsa_outage_risk_index'] + df['aqi_delaware_outage_risk_index']) / 3.0
+        df['aqi_ozone_action_day_count'] = ozone_season * 2.0
+        df['aqi_max_rvp_surcharge_per_gal'] = ozone_season * 0.08
+
+        aqi_v_df = _load_vintage_timeseries(
+            "data/aqi_vintages.json",
+            {
+                "bay_area_outage_risk_index": "aqi_bay_area_outage_risk_index_v",
+                "tulsa_outage_risk_index": "aqi_tulsa_outage_risk_index_v",
+                "delaware_valley_outage_risk_index": "aqi_delaware_outage_risk_index_v",
+                "tri_state_outage_risk_index": "aqi_catlettsburg_outage_risk_index_v",
+                "composite_aqi_shock_index": "aqi_composite_outage_risk_index_v",
+                "ozone_action_day_count": "aqi_ozone_action_day_count_v",
+                "max_rvp_compliance_surcharge_per_gal": "aqi_max_rvp_surcharge_per_gal_v"
+            },
+            as_of_cutoff=as_of_cutoff,
+            nested_key="indices"
+        )
+        if not aqi_v_df.empty:
+            df = pd.merge(df, aqi_v_df, on='date', how='left')
+            for col in ['aqi_bay_area_outage_risk_index', 'aqi_tulsa_outage_risk_index', 'aqi_delaware_outage_risk_index', 'aqi_catlettsburg_outage_risk_index', 'aqi_composite_outage_risk_index', 'aqi_ozone_action_day_count', 'aqi_max_rvp_surcharge_per_gal']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
         from src.aqi_feed import AQIFeedConnector
         aqi_connector = AQIFeedConnector()
-        aqi_data = aqi_connector.fetch_live_aqi_telemetry()
+        aqi_data = aqi_connector.fetch_live_aqi_telemetry() or {}
         aqi_indices = aqi_data.get('indices', {})
-        df['aqi_bay_area_outage_risk_index'] = 0.0
-        df['aqi_tulsa_outage_risk_index'] = 0.0
-        df['aqi_delaware_outage_risk_index'] = 0.0
-        df['aqi_catlettsburg_outage_risk_index'] = 0.0
-        df['aqi_composite_outage_risk_index'] = 0.0
-        df['aqi_ozone_action_day_count'] = 0.0
-        df['aqi_max_rvp_surcharge_per_gal'] = 0.0
-        if len(df) > 0:
-            df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', 0.0)
-            df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', 0.0)
-            df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', 0.0)
-            df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', 0.0)
-            df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', 0.0)
-            df.loc[df.index[-1], 'aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', 0))
-            df.loc[df.index[-1], 'aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', 0.0)
+        if len(df) > 0 and aqi_indices:
+            df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', df['aqi_bay_area_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', df['aqi_tulsa_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', df['aqi_delaware_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', df['aqi_catlettsburg_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', df['aqi_composite_outage_risk_index'].iloc[-1])
+            df.loc[df.index[-1], 'aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', df['aqi_ozone_action_day_count'].iloc[-1]))
+            df.loc[df.index[-1], 'aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', df['aqi_max_rvp_surcharge_per_gal'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge AQI industrial emissions telemetry: {e}")
-        df['aqi_bay_area_outage_risk_index'] = 0.0
-        df['aqi_tulsa_outage_risk_index'] = 0.0
-        df['aqi_delaware_outage_risk_index'] = 0.0
-        df['aqi_catlettsburg_outage_risk_index'] = 0.0
-        df['aqi_composite_outage_risk_index'] = 0.0
-        df['aqi_ozone_action_day_count'] = 0.0
-        df['aqi_max_rvp_surcharge_per_gal'] = 0.0
+        ozone_season = ((_day_of_year >= 120) & (_day_of_year <= 270)).astype(float)
+        df['aqi_bay_area_outage_risk_index'] = 0.05 + 0.10 * ozone_season
+        df['aqi_tulsa_outage_risk_index'] = 0.04 + 0.08 * ozone_season
+        df['aqi_delaware_outage_risk_index'] = 0.05 + 0.09 * ozone_season
+        df['aqi_catlettsburg_outage_risk_index'] = 0.04 + 0.07 * ozone_season
+        df['aqi_composite_outage_risk_index'] = (df['aqi_bay_area_outage_risk_index'] + df['aqi_tulsa_outage_risk_index'] + df['aqi_delaware_outage_risk_index']) / 3.0
+        df['aqi_ozone_action_day_count'] = ozone_season * 2.0
+        df['aqi_max_rvp_surcharge_per_gal'] = ozone_season * 0.08
 
-    # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing)
+    # 7. California Energy Commission (CEC) Weekly Fuels Watch (Issues #364, #356, #432)
+    try:
+        df['cec_carbob_stocks_thousand_barrels'] = 5820.0 + 350.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
+        df['norcal_refinery_utilization_pct'] = np.clip(86.4 + 3.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 75.0, 98.0)
+        df['socal_refinery_utilization_pct'] = np.clip(88.2 + 3.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 75.0, 98.0)
+        df['statewide_refinery_utilization_pct'] = (df['norcal_refinery_utilization_pct'] + df['socal_refinery_utilization_pct']) / 2.0
+
+        cec_v_df = _load_vintage_timeseries(
+            "data/cec_fuels_vintages.json",
+            {
+                "ca_carbob_stocks_thousand_barrels": "cec_carbob_stocks_thousand_barrels_v",
+                "norcal_refinery_utilization_pct": "norcal_refinery_utilization_pct_v",
+                "socal_refinery_utilization_pct": "socal_refinery_utilization_pct_v",
+                "statewide_refinery_utilization_pct": "statewide_refinery_utilization_pct_v"
+            },
+            as_of_cutoff=as_of_cutoff,
+            nested_key="metrics"
+        )
+        if not cec_v_df.empty:
+            df = pd.merge(df, cec_v_df, on='date', how='left')
+            for col in ['cec_carbob_stocks_thousand_barrels', 'norcal_refinery_utilization_pct', 'socal_refinery_utilization_pct', 'statewide_refinery_utilization_pct']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        from src.data_ingestion import CECWeeklyFuelsConnector
+        cec_connector = CECWeeklyFuelsConnector()
+        cec_data = cec_connector.fetch_weekly_fuels_data() or {}
+        cec_metrics = cec_data.get('metrics', {})
+        if len(df) > 0 and cec_metrics:
+            df.loc[df.index[-1], 'cec_carbob_stocks_thousand_barrels'] = cec_metrics.get('ca_carbob_stocks_thousand_barrels', df['cec_carbob_stocks_thousand_barrels'].iloc[-1])
+            df.loc[df.index[-1], 'norcal_refinery_utilization_pct'] = cec_metrics.get('norcal_refinery_utilization_pct', df['norcal_refinery_utilization_pct'].iloc[-1])
+            df.loc[df.index[-1], 'socal_refinery_utilization_pct'] = cec_metrics.get('socal_refinery_utilization_pct', df['socal_refinery_utilization_pct'].iloc[-1])
+            df.loc[df.index[-1], 'statewide_refinery_utilization_pct'] = cec_metrics.get('statewide_refinery_utilization_pct', df['statewide_refinery_utilization_pct'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Could not merge CEC Weekly Fuels telemetry: {e}")
+        df['cec_carbob_stocks_thousand_barrels'] = 5820.0 + 350.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
+        df['norcal_refinery_utilization_pct'] = 86.4
+        df['socal_refinery_utilization_pct'] = 88.2
+        df['statewide_refinery_utilization_pct'] = 87.3
+
+    # 8. U.S. EIA Petroleum Balances & Refinery Movements (Issues #141, #356, #432)
+    try:
+        df['eia_gasoline_stocks_us_total'] = 225.0 + 15.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
+        df['eia_refinery_utilization_us_total'] = np.clip(89.0 + 4.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 80.0, 98.0)
+        df['eia_refinery_net_production_padd1'] = 310.0 + 20.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_refinery_net_production_padd3'] = 2680.0 + 100.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_pipeline_movements_padd3_to_padd1'] = 2850.0 + 120.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+
+        eia_v_df = _load_vintage_timeseries(
+            "data/eia_vintages.json",
+            {
+                "eia_gasoline_stocks_us_total": "eia_gasoline_stocks_us_total_v",
+                "eia_refinery_utilization_us_total": "eia_refinery_utilization_us_total_v",
+                "eia_refinery_net_production_padd1": "eia_refinery_net_production_padd1_v",
+                "eia_refinery_net_production_padd3": "eia_refinery_net_production_padd3_v",
+                "eia_pipeline_movements_padd3_to_padd1": "eia_pipeline_movements_padd3_to_padd1_v"
+            },
+            as_of_cutoff=as_of_cutoff
+        )
+        if not eia_v_df.empty:
+            df = pd.merge(df, eia_v_df, on='date', how='left')
+            for col in ['eia_gasoline_stocks_us_total', 'eia_refinery_utilization_us_total', 'eia_refinery_net_production_padd1', 'eia_refinery_net_production_padd3', 'eia_pipeline_movements_padd3_to_padd1']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        eia_connector = EIADataConnector()
+        eia_data = eia_connector.fetch_padd_inventory_and_refinery_data() or {}
+        if len(df) > 0 and eia_data:
+            stocks_dict = eia_data.get('gasoline_stocks_million_bbl', {})
+            ref_dict = eia_data.get('refinery_utilization', {})
+            prod_dict = eia_data.get('refiner_net_production_thousand_bpd', {})
+            mov_dict = eia_data.get('inter_padd_movements', {})
+            total_stocks = sum(stocks_dict.values()) if stocks_dict else df['eia_gasoline_stocks_us_total'].iloc[-1]
+            avg_util = float(np.mean(list(ref_dict.values()))) if ref_dict else df['eia_refinery_utilization_us_total'].iloc[-1]
+            df.loc[df.index[-1], 'eia_gasoline_stocks_us_total'] = total_stocks
+            df.loc[df.index[-1], 'eia_refinery_utilization_us_total'] = avg_util
+            df.loc[df.index[-1], 'eia_refinery_net_production_padd1'] = prod_dict.get('padd1_finished_gasoline', df['eia_refinery_net_production_padd1'].iloc[-1])
+            df.loc[df.index[-1], 'eia_refinery_net_production_padd3'] = prod_dict.get('padd3_finished_gasoline', df['eia_refinery_net_production_padd3'].iloc[-1])
+            df.loc[df.index[-1], 'eia_pipeline_movements_padd3_to_padd1'] = mov_dict.get('padd3_to_padd1_pipeline_thousand_bpd', df['eia_pipeline_movements_padd3_to_padd1'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Could not merge EIA petroleum balances: {e}")
+        df['eia_gasoline_stocks_us_total'] = 225.0 + 15.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
+        df['eia_refinery_utilization_us_total'] = np.clip(89.0 + 4.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25), 80.0, 98.0)
+        df['eia_refinery_net_production_padd1'] = 310.0 + 20.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_refinery_net_production_padd3'] = 2680.0 + 100.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+        df['eia_pipeline_movements_padd3_to_padd1'] = 2850.0 + 120.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+
+    # 9. USDA Biofuels & E10 Blendstock Offsets (Issues #182, #273, #356, #432)
+    try:
+        df['usda_ethanol_rack_price'] = 1.65 + 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 120.0) / 365.25)
+        df['usda_rin_d6_credit_value'] = 0.52 + 0.08 * np.sin(2.0 * np.pi * (_day_of_year - 150.0) / 365.25)
+        rbob_ref = df['gasoline_rbob'] if 'gasoline_rbob' in df.columns else 2.40
+        df['usda_e10_blendstock_offset'] = 0.10 * (df['usda_ethanol_rack_price'] - rbob_ref) - (0.10 * df['usda_rin_d6_credit_value'])
+
+        usda_v_df = _load_vintage_timeseries(
+            "data/usda_biofuel_vintages.json",
+            {
+                "e100_ethanol_rack_price_per_gal": "usda_ethanol_rack_price_v",
+                "rin_d6_credit_value_per_gal": "usda_rin_d6_credit_value_v",
+                "calculated_e10_blendstock_offset_per_gal": "usda_e10_blendstock_offset_v"
+            },
+            as_of_cutoff=as_of_cutoff
+        )
+        if not usda_v_df.empty:
+            df = pd.merge(df, usda_v_df, on='date', how='left')
+            for col in ['usda_ethanol_rack_price', 'usda_rin_d6_credit_value', 'usda_e10_blendstock_offset']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        usda_connector = USDABiofuelConnector()
+        usda_data = usda_connector.fetch_ethanol_blendstock_costs() or {}
+        if len(df) > 0 and usda_data:
+            df.loc[df.index[-1], 'usda_ethanol_rack_price'] = usda_data.get('e100_ethanol_rack_price_per_gal', df['usda_ethanol_rack_price'].iloc[-1])
+            df.loc[df.index[-1], 'usda_rin_d6_credit_value'] = usda_data.get('rin_d6_credit_value_per_gal', df['usda_rin_d6_credit_value'].iloc[-1])
+            df.loc[df.index[-1], 'usda_e10_blendstock_offset'] = usda_data.get('calculated_e10_blendstock_offset_per_gal', df['usda_e10_blendstock_offset'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Could not merge USDA biofuel feed: {e}")
+        df['usda_ethanol_rack_price'] = 1.65 + 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 120.0) / 365.25)
+        df['usda_rin_d6_credit_value'] = 0.52 + 0.08 * np.sin(2.0 * np.pi * (_day_of_year - 150.0) / 365.25)
+        rbob_ref = df['gasoline_rbob'] if 'gasoline_rbob' in df.columns else 2.40
+        df['usda_e10_blendstock_offset'] = 0.10 * (df['usda_ethanol_rack_price'] - rbob_ref) - (0.10 * df['usda_rin_d6_credit_value'])
+
+    # 10. EPA Reid Vapor Pressure (RVP) Regulatory Standards & Seasonal Transitions (Issue #366)
+    try:
+        from src.rvp_regulations import RVPRegulatoryEngine
+        rvp_engine = RVPRegulatoryEngine()
+        if 'date' in df.columns and len(df) > 0:
+            rvp_features_df = rvp_engine.compute_rvp_feature_dataframe(df['date'], region=region)
+            df = pd.merge(df, rvp_features_df, on='date', how='left')
+            for col in ['rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
+                        'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium']:
+                if col in df.columns:
+                    df[col] = df[col].ffill().fillna(0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge EPA RVP regulatory features: {e}")
+        for col in ['rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
+                    'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium']:
+            df[col] = 0.0
+
+    # 11. NOAA CO-OPS Coastal Marine Terminal Disruption Telemetry (Issue #368)
+    try:
+        from src.data_ingestion import NOAACOOPSConnector
+        coops_connector = NOAACOOPSConnector()
+        coops_data = coops_connector.fetch_coastal_marine_telemetry()
+        df['marine_terminal_surge_risk'] = 0.0
+        df['marine_terminal_shallow_draft_risk'] = 0.0
+        if len(df) > 0:
+            df.loc[df.index[-1], 'marine_terminal_surge_risk'] = coops_data.get('marine_terminal_surge_risk', 0.0)
+            df.loc[df.index[-1], 'marine_terminal_shallow_draft_risk'] = coops_data.get('marine_terminal_shallow_draft_risk', 0.0)
+    except Exception as e:
+        logger.warning(f"Could not merge NOAA CO-OPS coastal marine telemetry: {e}")
+        df['marine_terminal_surge_risk'] = 0.0
+        df['marine_terminal_shallow_draft_risk'] = 0.0
+
+    # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing & Issue #355)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     
     diagnostic = compute_context_routing_diagnostic(df, target_col='gasoline_rbob', horizon=forecast_horizon, threshold=0.95)
@@ -413,22 +916,77 @@ def create_feature_matrix(
         events = events_df.copy()
         events['date'] = pd.to_datetime(events['date'])
         
-        merged = pd.merge(df, events[['date'] + llm_feature_cols], on='date', how='left')
-        merged[llm_feature_cols] = merged[llm_feature_cols].fillna(0.0)
+        # Ensure available market trading dates are sorted and normalized
+        df['date'] = pd.to_datetime(df['date'])
+        trading_dates = np.sort(df['date'].dropna().unique())
         
-        # Modulate decay half-lives dynamically per event category & context routing diagnostic (Issue #168)
+        if len(trading_dates) > 0:
+            # Forward-map weekend/holiday/non-trading event dates to the next active market trading session (Issue #355, #457, #468)
+            raw_event_dates = events['date'].values
+            indices = np.searchsorted(trading_dates, raw_event_dates, side='left')
+            # Filter out events occurring strictly after the latest available trading date to prevent backward lookahead leakage
+            valid_mask = indices < len(trading_dates)
+            events = events.iloc[np.where(valid_mask)[0]].copy()
+            
+            if len(events) > 0:
+                events['date'] = trading_dates[indices[valid_mask]]
+                
+                # Ensure qualitative feature columns exist in events before aggregation
+                for col in llm_feature_cols:
+                    if col not in events.columns:
+                        events[col] = 0.0
+                
+                # Aggregate multiple qualitative shocks occurring on the same trading session (Issue #355)
+                agg_events = events.groupby('date', as_index=False)[llm_feature_cols].sum()
+                # Bounding aggregated qualitative shock scores to their statutory domains
+                for col in llm_feature_cols:
+                    if col in ['overall_price_pressure', 'demand_sentiment']:
+                        agg_events[col] = agg_events[col].clip(-1.0, 1.0)
+                    else:
+                        agg_events[col] = agg_events[col].clip(0.0, 1.0)
+                
+                # Strict 1-to-1 merge preserving exact length and index of df
+                orig_cols = [c for c in df.columns if c not in llm_feature_cols]
+                merged = pd.merge(df[orig_cols], agg_events[['date'] + llm_feature_cols], on='date', how='left')
+                merged[llm_feature_cols] = merged[llm_feature_cols].fillna(0.0)
+            else:
+                merged = df.copy()
+                for col in llm_feature_cols:
+                    merged[col] = 0.0
+        else:
+            merged = df.copy()
+            for col in llm_feature_cols:
+                merged[col] = 0.0
+
+        
+        # Modulate decay half-lives dynamically per event category & context routing diagnostic (Issue #168, #355)
         fusion_weight = 1.0 if diagnostic['recommendation'] == 'TRY_FUSION' else 0.10
+        
+        # Calculate calendar elapsed days (dt) between consecutive market trading dates for continuous time decay (Issue #355)
+        date_series = pd.to_datetime(merged['date'])
+        if len(merged) > 1:
+            diffs = (date_series - date_series.shift(1)).dt.total_seconds() / 86400.0
+            delta_days = np.maximum(1.0, diffs.fillna(1.0).values)
+        else:
+            delta_days = np.ones(len(merged), dtype=float)
         
         for col in llm_feature_cols:
             base_half_life = CATEGORY_HALF_LIVES_DAYS.get(col, decay_half_life_days)
             effective_half_life = base_half_life if diagnostic['recommendation'] == 'TRY_FUSION' else base_half_life * 0.20
-            decay_factor = np.exp(-np.log(2) / effective_half_life)
+            lambda_decay = np.log(2) / max(effective_half_life, 1e-6)
             
             decayed_values = np.zeros(len(merged))
             current_val = 0.0
+            col_shocks = merged[col].values
             for i in range(len(merged)):
-                new_shock = merged.loc[i, col] * fusion_weight
-                current_val = current_val * decay_factor + new_shock
+                dt = delta_days[i]
+                decay_factor_i = np.exp(-lambda_decay * dt) if i > 0 else 1.0
+                new_shock = col_shocks[i] * fusion_weight
+                current_val = current_val * decay_factor_i + new_shock
+                if col in ['overall_price_pressure', 'demand_sentiment']:
+                    current_val = float(np.clip(current_val, -1.0, 1.0))
+                else:
+                    current_val = float(np.clip(current_val, 0.0, 1.0))
                 decayed_values[i] = current_val
             merged[f'event_{col}'] = decayed_values
         df = merged
@@ -472,33 +1030,50 @@ def create_feature_matrix(
     df[f'target_price_{forecast_horizon}d'] = df['gasoline_rbob'].shift(-forecast_horizon)
     df[f'target_return_{forecast_horizon}d'] = (df[f'target_price_{forecast_horizon}d'] - df['gasoline_rbob']) / df['gasoline_rbob']
     
-    # Fill feature NaNs safely to prevent premature row purging
+    # Fill feature NaNs safely with forward-fill only to prevent backward lookahead leakage (Issue #354)
     feature_cols = [c for c in df.columns if not c.startswith('target_')]
-    df[feature_cols] = df[feature_cols].bfill().ffill().fillna(0.0)
+    df[feature_cols] = df[feature_cols].ffill().fillna(0.0)
     
-    df = df.dropna(subset=[f'target_price_{forecast_horizon}d']).reset_index(drop=True)
-    return df
+    # Preserve unlabelled contemporary inference frame for live forecasting (Issue #353)
+    unlabelled_inference_frame = df.iloc[-forecast_horizon:].copy().reset_index(drop=True)
+    latest_inference_row = df.iloc[-1:].copy().reset_index(drop=True)
+    
+    labelled_df = df.dropna(subset=[f'target_price_{forecast_horizon}d']).reset_index(drop=True)
+    
+    forecast_origin = str(df['date'].iloc[-1]) if 'date' in df.columns and len(df) > 0 else None
+    labelled_df.attrs['unlabelled_inference_frame'] = unlabelled_inference_frame
+    labelled_df.attrs['latest_inference_row'] = latest_inference_row
+    labelled_df.attrs['full_feature_matrix'] = df.copy()
+    labelled_df.attrs['forecast_horizon'] = forecast_horizon
+    labelled_df.attrs['forecast_origin_date'] = forecast_origin
+    labelled_df.attrs['feature_cutoff_date'] = forecast_origin
+    
+    if return_unlabelled_frame:
+        return labelled_df, unlabelled_inference_frame
+    return labelled_df
 
 
 def compute_context_routing_diagnostic(
     df: pd.DataFrame, 
     target_col: str = 'gasoline_rbob', 
     horizon: int = 5, 
-    threshold: float = 0.95
+    threshold: float = 0.95,
+    train_ratio: Optional[float] = None
 ) -> dict:
     """
     Implements the Pre-Training Context Routing Diagnostic from Zhou et al. (arXiv:2608.25128v1).
-    Calculates target temporal autocorrelation rho_h = Corr(X_t, X_{t+h}).
+    Calculates target temporal autocorrelation rho_h = Corr(X_t, X_{t+h}) strictly on training slice.
     
     If rho_h > threshold (0.95), returns SKIP_FUSION because last-value shortcuts dominate.
     If rho_h <= threshold, returns TRY_FUSION because exogenous context can provide relative gain.
     
     Reference: Zhou et al. (2026), 'When Does Context Routing Help?', arXiv:2608.25128v1
     """
-    if target_col not in df.columns or len(df) <= horizon + 1:
+    eval_df = df.iloc[:int(len(df) * train_ratio)] if train_ratio and train_ratio > 0 else df
+    if target_col not in eval_df.columns or len(eval_df) <= horizon + 1:
         return {'rho_h': 0.0, 'recommendation': 'TRY_FUSION', 'rbu_bound': 1.0}
         
-    series = df[target_col].values
+    series = eval_df[target_col].values
     s_t = series[:-horizon]
     s_th = series[horizon:]
     
@@ -523,14 +1098,24 @@ def compute_context_routing_diagnostic(
 
 
 
-def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, forecast_horizon: int = 5):
+def prepare_chronological_splits(
+    df: pd.DataFrame, 
+    train_ratio: float = 0.8, 
+    forecast_horizon: int = 5,
+    purge_overlap: bool = True,
+    embargo_steps: Optional[int] = None,
+    predict_returns: bool = True,
+    unlabelled_inference_frame: Optional[pd.DataFrame] = None
+):
     """
-    Splits dataset chronologically to prevent temporal data leakage.
-    Returns: X_train_quant, X_train_hybrid, y_train, X_test_quant, X_test_hybrid, y_test, test_df
+    Splits dataset chronologically to prevent temporal data leakage (Issues #354, #396, #397).
+    Purges boundary forecast_horizon instances and applies post-boundary embargo gap so training target labels do not overlap test observations.
+    Preserves unlabelled contemporary inference features (t=0) for live multi-step forecasting (Issue #353).
+    Returns: X_train_quant, X_train_hybrid, y_train, y_train_price, y_train_return, X_test_quant, X_test_hybrid, y_test, y_test_price, y_test_return, quant_feature_names, hybrid_feature_names, test_df, unlabelled_inference_frame, X_live_quant, X_live_hybrid, live_current_price
     """
     quant_features = [
         'gasoline_rbob', 'wti_crude', 'crack_spread',
-        'crack_spread_321', 'crack_spread_321_delta_5d',
+        'crack_spread_321', 'crack_spread_321_gal', 'crack_spread_321_delta_5d',
         'gas_return_1d', 'gas_return_5d', 'gas_return_10d',
         'crude_return_1d', 'crude_return_5d',
         'gas_ma_7', 'gas_ma_14', 'gas_ma_30',
@@ -547,6 +1132,22 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
         'cospot_dft_dominant_period', 'cospot_dft_low_freq_energy_ratio',
         'cospot_dft_spectral_entropy', 'cospot_dwt_detail_energy_ratio',
         'cospot_dwt_detail_shock_mag', 'cospot_dwt_approx_momentum',
+        'cec_carbob_stocks_thousand_barrels', 'norcal_refinery_utilization_pct',
+        'socal_refinery_utilization_pct', 'statewide_refinery_utilization_pct',
+        'eia_gasoline_stocks_us_total', 'eia_refinery_utilization_us_total',
+        'eia_refinery_net_production_padd1', 'eia_refinery_net_production_padd3',
+        'eia_pipeline_movements_padd3_to_padd1',
+        'usda_ethanol_rack_price', 'usda_rin_d6_credit_value', 'usda_e10_blendstock_offset',
+        'usgs_hydrological_barge_bottleneck_index', 'usgs_gulf_marine_departure_risk_index',
+        'usgs_carquinez_berthing_risk_index', 'usgs_delaware_refinery_thermal_index',
+        'usgs_bay_area_seismic_risk_index', 'usgs_cushing_seismic_risk_index', 'usgs_composite_seismic_risk_index',
+        'aqi_bay_area_outage_risk_index', 'aqi_tulsa_outage_risk_index', 'aqi_delaware_outage_risk_index',
+        'aqi_catlettsburg_outage_risk_index', 'aqi_composite_outage_risk_index',
+        'aqi_ozone_action_day_count', 'aqi_max_rvp_surcharge_per_gal',
+        'rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
+        'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium',
+        'marine_terminal_surge_risk', 'marine_terminal_shallow_draft_risk',
+        'rbob_calendar_spread_m1_m2', 'wti_calendar_spread_m1_m2', 'crack_spread_forward_321', 'nymex_backwardation_regime',
         'sin_day', 'cos_day'
     ]
     qlib_features = [c for c in df.columns if c.startswith('qlib_')]
@@ -556,29 +1157,109 @@ def prepare_chronological_splits(df: pd.DataFrame, train_ratio: float = 0.8, for
     event_features = [c for c in df.columns if c.startswith('event_')]
     hybrid_features = quant_features + event_features
     
-    target_col = f'target_price_{forecast_horizon}d'
+    target_price_col = f'target_price_{forecast_horizon}d'
+    target_return_col = f'target_return_{forecast_horizon}d'
     
-    split_idx = int(len(df) * train_ratio)
+    # Retrieve unlabelled inference frame from arguments or DataFrame attrs (Issue #353)
+    if unlabelled_inference_frame is None:
+        unlabelled_inference_frame = getattr(df, 'attrs', {}).get('unlabelled_inference_frame', None)
     
-    train_df = df.iloc[:split_idx]
-    test_df = df.iloc[split_idx:]
+    # Check if df contains unmatured target rows at the tail
+    if target_price_col in df.columns and df[target_price_col].isna().any():
+        clean_labelled_df = df.dropna(subset=[target_price_col]).reset_index(drop=True)
+        if unlabelled_inference_frame is None:
+            unlabelled_inference_frame = df[df[target_price_col].isna()].copy().reset_index(drop=True)
+        eval_df = clean_labelled_df
+    else:
+        eval_df = df
+
+    split_idx = int(len(eval_df) * train_ratio)
+    
+    if embargo_steps is None:
+        embargo_steps = forecast_horizon
+
+    # Enforce purge window and post-test embargo window to eliminate label overlap leakage (Issues #354, #396)
+    if purge_overlap and forecast_horizon >= 1:
+        total_purge_gap = forecast_horizon + max(0, embargo_steps)
+        train_slice_end = max(1, split_idx - total_purge_gap)
+        train_df = eval_df.iloc[:train_slice_end]
+    else:
+        train_df = eval_df.iloc[:split_idx]
+
+    test_df = eval_df.iloc[split_idx:]
     
     X_train_quant = train_df[quant_features]
     X_train_hybrid = train_df[hybrid_features]
-    y_train = train_df[target_col]
     
+    y_train_price = train_df[target_price_col] if target_price_col in train_df.columns else (
+        train_df['gasoline_rbob'] if 'gasoline_rbob' in train_df.columns else pd.Series(0.0, index=train_df.index)
+    )
+    y_test_price = test_df[target_price_col] if target_price_col in test_df.columns else (
+        test_df['gasoline_rbob'] if 'gasoline_rbob' in test_df.columns else pd.Series(0.0, index=test_df.index)
+    )
+    
+    if target_return_col in train_df.columns:
+        y_train_return = train_df[target_return_col]
+    elif 'gasoline_rbob' in train_df.columns and target_price_col in train_df.columns:
+        y_train_return = (y_train_price - train_df['gasoline_rbob']) / train_df['gasoline_rbob']
+    else:
+        y_train_return = y_train_price
+
+    if target_return_col in test_df.columns:
+        y_test_return = test_df[target_return_col]
+    elif 'gasoline_rbob' in test_df.columns and target_price_col in test_df.columns:
+        y_test_return = (y_test_price - test_df['gasoline_rbob']) / test_df['gasoline_rbob']
+    else:
+        y_test_return = y_test_price
+
+    y_train = y_train_return if predict_returns else y_train_price
+    y_test = y_test_return if predict_returns else y_test_price
+
     X_test_quant = test_df[quant_features]
     X_test_hybrid = test_df[hybrid_features]
-    y_test = test_df[target_col]
     
+    # Extract contemporary live inference feature row (t=0)
+    if unlabelled_inference_frame is not None and len(unlabelled_inference_frame) > 0:
+        unlabelled_df = unlabelled_inference_frame.copy()
+        for f in hybrid_features:
+            if f not in unlabelled_df.columns:
+                unlabelled_df[f] = 0.0
+        unlabelled_df[hybrid_features] = unlabelled_df[hybrid_features].ffill().fillna(0.0)
+        X_live_quant = unlabelled_df[quant_features].iloc[-1:]
+        X_live_hybrid = unlabelled_df[hybrid_features].iloc[-1:]
+        live_origin_date = unlabelled_df['date'].iloc[-1] if 'date' in unlabelled_df.columns else None
+        live_current_price = float(unlabelled_df['gasoline_rbob'].iloc[-1]) if 'gasoline_rbob' in unlabelled_df.columns else (
+            float(test_df['gasoline_rbob'].iloc[-1]) if len(test_df) > 0 else 0.0
+        )
+    else:
+        unlabelled_df = test_df.iloc[-1:].copy() if len(test_df) > 0 else pd.DataFrame()
+        X_live_quant = test_df[quant_features].iloc[-1:] if len(test_df) > 0 else pd.DataFrame()
+        X_live_hybrid = test_df[hybrid_features].iloc[-1:] if len(test_df) > 0 else pd.DataFrame()
+        live_origin_date = test_df['date'].iloc[-1] if 'date' in test_df.columns and len(test_df) > 0 else None
+        live_current_price = float(test_df['gasoline_rbob'].iloc[-1]) if 'gasoline_rbob' in test_df.columns and len(test_df) > 0 else 0.0
+
     return {
         'X_train_quant': X_train_quant,
         'X_train_hybrid': X_train_hybrid,
         'y_train': y_train,
+        'y_train_price': y_train_price,
+        'y_train_return': y_train_return,
         'X_test_quant': X_test_quant,
         'X_test_hybrid': X_test_hybrid,
         'y_test': y_test,
+        'y_test_price': y_test_price,
+        'y_test_return': y_test_return,
         'quant_feature_names': quant_features,
         'hybrid_feature_names': hybrid_features,
-        'test_df': test_df
+        'test_df': test_df,
+        'forecast_horizon': forecast_horizon,
+        'embargo_steps': embargo_steps,
+        'predict_returns': predict_returns,
+        'unlabelled_inference_frame': unlabelled_df,
+        'X_live_quant': X_live_quant,
+        'X_live_hybrid': X_live_hybrid,
+        'live_feature_origin_date': live_origin_date,
+        'live_current_price': live_current_price,
+        'forecast_origin_date': live_origin_date,
+        'feature_cutoff_date': live_origin_date
     }

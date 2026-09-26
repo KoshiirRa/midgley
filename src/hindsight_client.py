@@ -18,6 +18,8 @@ import urllib.error
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
 
+from src.connector_telemetry import log_connector_event
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_TIMEOUT = float(os.environ.get("HINDSIGHT_TIMEOUT", "60.0"))  # 60-second timeout for Cloud Run scale-to-zero cold-start resilience
@@ -85,12 +87,29 @@ class HindsightClient:
             return False
         if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
             return False
+        start_time = time.time()
         try:
             url = f"{self.base_url}/health"
             req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                return resp.status in (200, 204)
+                ok = resp.status in (200, 204)
+                latency = (time.time() - start_time) * 1000.0
+                log_connector_event(
+                    connector_name="HindsightHosted",
+                    target="health",
+                    status="SUCCESS" if ok else f"HTTP_{resp.status}",
+                    latency_ms=latency
+                )
+                return ok
         except Exception as e:
+            latency = (time.time() - start_time) * 1000.0
+            log_connector_event(
+                connector_name="HindsightHosted",
+                target="health",
+                status="ERROR",
+                latency_ms=latency,
+                details=str(e)
+            )
             logger.debug(f"Hindsight health ping failed: {e}")
             return False
 
@@ -118,12 +137,27 @@ class HindsightClient:
                     if resp.status in (200, 204):
                         elapsed = time.time() - start_time
                         logger.info(f"Hindsight service responsive after {elapsed:.2f}s (attempt {attempt}).")
+                        log_connector_event(
+                            connector_name="HindsightHosted",
+                            target="warmup",
+                            status="SUCCESS",
+                            latency_ms=elapsed * 1000.0,
+                            details=f"Warmup successful in attempt {attempt}"
+                        )
                         return True
             except Exception as e:
                 logger.debug(f"Hindsight warmup attempt {attempt} waiting: {e}")
             attempt += 1
             time.sleep(retry_interval)
 
+        elapsed = time.time() - start_time
+        log_connector_event(
+            connector_name="HindsightHosted",
+            target="warmup",
+            status="TIMEOUT",
+            latency_ms=elapsed * 1000.0,
+            details=f"Warmup timed out after {wait_seconds}s"
+        )
         logger.warning(f"Hindsight warmup timed out after {wait_seconds}s; downstream calls will use fallback.")
         return False
 
@@ -289,10 +323,10 @@ class HindsightClient:
 
     def get_bank_stats(self, bank_id: Optional[str] = None) -> Optional[Dict[str, int]]:
         """
-        Retrieves live memory and reflection counts from the remote Vectorize Hindsight service
+        Retrieves live memory, observation, and reflection counts from the remote Vectorize Hindsight service
         or Supabase pgvector backend.
         Returns:
-            {"memories": int, "reflections": int} or None if unavailable/unconfigured.
+            {"memories": int, "observations": int, "reflections": int} or None if unavailable/unconfigured.
         """
         if not self.is_configured:
             return None
@@ -307,6 +341,7 @@ class HindsightClient:
             f"{self.base_url}/banks/{target_bank}/stats"
         ]
 
+        start_time = time.time()
         for url in urls_to_try:
             try:
                 req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
@@ -315,13 +350,18 @@ class HindsightClient:
                         data = json.loads(resp.read().decode("utf-8"))
                         stats = data.get("stats", data.get("bank", data))
                         mem_count = (
+                            stats.get("total_documents") or
                             stats.get("memories_count") or
                             stats.get("memories") or
                             stats.get("memory_count") or
                             stats.get("total_memories") or
-                            stats.get("total_documents") or
-                            stats.get("total_nodes") or
+                            stats.get("total_nodes") or 0
+                        )
+                        obs_count = (
                             stats.get("total_observations") or
+                            stats.get("observations_count") or
+                            stats.get("observations") or
+                            stats.get("observation_count") or
                             stats.get("fact_count") or 0
                         )
                         ref_count = (
@@ -330,13 +370,34 @@ class HindsightClient:
                             stats.get("reflection_count") or
                             stats.get("total_reflections") or 0
                         )
+                        # If mem_count is 0 but generic count exists without separate observations
+                        if mem_count == 0 and obs_count == 0 and ("memories" in stats or "total_memories" in stats):
+                            mem_count = stats.get("memories", stats.get("total_memories", 0))
+
+                        latency = (time.time() - start_time) * 1000.0
+                        log_connector_event(
+                            connector_name="HindsightHosted",
+                            target=target_bank,
+                            status="SUCCESS",
+                            latency_ms=latency,
+                            details=f"Stats: {mem_count} docs, {obs_count} obs, {ref_count} refs"
+                        )
                         return {
                             "memories": int(mem_count),
+                            "observations": int(obs_count),
                             "reflections": int(ref_count)
                         }
             except Exception as e:
                 logger.debug(f"Hindsight bank stats query failed on {url}: {e}")
                 continue
 
+        latency = (time.time() - start_time) * 1000.0
+        log_connector_event(
+            connector_name="HindsightHosted",
+            target=target_bank,
+            status="ERROR",
+            latency_ms=latency,
+            details="Failed to query bank stats across endpoints"
+        )
         return None
 

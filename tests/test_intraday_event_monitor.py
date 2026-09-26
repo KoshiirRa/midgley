@@ -278,6 +278,87 @@ class TestIntradayEventMonitor(unittest.TestCase):
                 self.assertIn("status", feed)
                 self.assertIn("latency_ms", feed)
 
+    @patch("src.intraday_event_monitor.feedparser", None)
+    @patch("urllib.request.urlopen")
+    def test_check_feed_health_rss_fallback_without_feedparser(self, mock_urlopen):
+        """Verifies check_feed_health regex counting of <item> elements without feedparser (Issue #347)."""
+        rss_content = b"""<?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+        <channel>
+            <title>Energy News</title>
+            <item><title>Item 1</title></item>
+            <item><title>Item 2</title></item>
+            <item><title>Item 3</title></item>
+        </channel>
+        </rss>"""
+        mock_resp = MagicMock()
+        mock_resp.getcode.return_value = 200
+        mock_resp.read.return_value = rss_content
+        mock_resp.__enter__.return_value = mock_resp
+        mock_urlopen.return_value = mock_resp
+
+        with patch.object(self.monitor, "fetch_executive_social_headlines", return_value=[{"headline": "Test"}]), \
+             patch.object(self.monitor, "fetch_key_movers_headlines", return_value=[{"headline": "Mover"}]), \
+             patch.object(self.monitor, "fetch_geopolitical_headlines", return_value=[{"headline": "Maritime"}]):
+            health = self.monitor.check_feed_health()
+            self.assertTrue(health["overall_healthy"])
+            rss_feeds = [f for f in health["feed_details"] if f["source"] == "RSS"]
+            for f in rss_feeds:
+                self.assertEqual(f["status"], "HEALTHY")
+                self.assertEqual(f["item_count"], 3)
+
+    @patch("src.intraday_event_monitor.feedparser", None)
+    @patch("urllib.request.urlopen")
+    def test_check_feed_health_atom_fallback_without_feedparser(self, mock_urlopen):
+        """Verifies check_feed_health regex counting of <entry> elements without feedparser (Issue #347)."""
+        atom_content = b"""<?xml version="1.0" encoding="utf-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>Atom Feed</title>
+            <entry><title>Entry 1</title></entry>
+            <entry><title>Entry 2</title></entry>
+        </feed>"""
+        mock_resp = MagicMock()
+        mock_resp.getcode.return_value = 200
+        mock_resp.read.return_value = atom_content
+        mock_resp.__enter__.return_value = mock_resp
+        mock_urlopen.return_value = mock_resp
+
+        with patch.object(self.monitor, "fetch_executive_social_headlines", return_value=[{"headline": "Test"}]), \
+             patch.object(self.monitor, "fetch_key_movers_headlines", return_value=[{"headline": "Mover"}]), \
+             patch.object(self.monitor, "fetch_geopolitical_headlines", return_value=[{"headline": "Maritime"}]):
+            health = self.monitor.check_feed_health()
+            self.assertTrue(health["overall_healthy"])
+            rss_feeds = [f for f in health["feed_details"] if f["source"] == "RSS"]
+            for f in rss_feeds:
+                self.assertEqual(f["status"], "HEALTHY")
+                self.assertEqual(f["item_count"], 2)
+
+
+
+    @patch("src.intraday_event_monitor.extract_event_features_llm")
+    @patch("src.data_ingestion.fetch_market_data")
+    def test_evaluate_headline_spectral_context_generation(self, mock_fetch_market_data, mock_extract):
+        """Verifies fetch_market_data is invoked and spectral_context is passed to LLM extractor (Issue #327)."""
+        import pandas as pd
+        import numpy as np
+        # Mock market dataframe with gasoline_rbob series
+        mock_df = pd.DataFrame({
+            "gasoline_rbob": np.linspace(2.20, 2.65, 30)
+        })
+        mock_fetch_market_data.return_value = mock_df
+        mock_extract.return_value = {"overall_price_pressure": 0.50, "supply_disruption": 0.60}
+
+        headline = "OPEC Emergency Meeting Called as Middle East Pipeline Halts"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(headline)
+
+        self.assertTrue(is_anomaly)
+        mock_fetch_market_data.assert_called_once()
+        mock_extract.assert_called_once()
+        _, kwargs = mock_extract.call_args
+        self.assertIn("spectral_context", kwargs)
+        self.assertTrue(len(kwargs["spectral_context"]) > 0)
+        self.assertIn("Spectral Regime:", kwargs["spectral_context"])
+
 
 if __name__ == "__main__":
     unittest.main()

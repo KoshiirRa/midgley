@@ -1,6 +1,6 @@
 # Axiom & Sentry Observability Dashboards & Alerting Guide
 
-This guide provides ready-to-use **APL (Axiom Processing Language)** queries, dashboard widget templates, and **Sentry Alert Rules** for Midgley's Cloudflare Workers ([workers/intraday_monitor_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/intraday_monitor_worker.ts) and [workers/cache_worker.ts](file:///c:/Users/concentus/Documents/Random%20Ideas%20-%20LLM%20Unleaded%20Gas%20Price%20Prediction%20Modelling/workers/cache_worker.ts)).
+This guide provides ready-to-use **APL (Axiom Processing Language)** queries, dashboard widget templates, and **Sentry Alert Rules** for Midgley's Cloudflare Workers ([workers/intraday_monitor_worker.ts](workers/intraday_monitor_worker.ts) and [workers/cache_worker.ts](workers/cache_worker.ts)).
 
 ---
 

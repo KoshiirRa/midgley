@@ -1,0 +1,11 @@
+incident_id,source_agency,facility_id,facility_name,state,event_date,duration_hours,affected_unit,event_category,so2_emitted_lbs,voc_emitted_lbs,disruption_severity,unplanned_shutdown
+TCEQ-STEERS-389142,TCEQ,RN102579307,ExxonMobil Baytown Refinery,TX,2022-07-18,32.5,Fluid Catalytic Cracker 3 (FCCU 3),unplanned_upset,14200.0,3800.0,High,True
+NRC-1358912,USCG_NRC,Colonial_PADD1_Mainline,Colonial Pipeline Line 1,US_GULF,2022-11-04,36.0,Pipeline Rupture / Leak,unplanned_upset,0.0,6500.0,High,True
+LDEQ-EDMS-204112,LDEQ,AI_2638,ExxonMobil Baton Rouge Refinery,LA,2022-12-23,60.0,Crude Unit Pipestill & Steam Boiler Header,unplanned_upset,31000.0,9200.0,High,True
+TCEQ-STEERS-394510,TCEQ,RN100209451,Motiva Port Arthur Refinery,TX,2022-12-24,72.0,Crude Distillation Unit (CDU-4) & Hydrocracker,unplanned_upset,38500.0,12400.0,High,True
+NRC-1372401,USCG_NRC,Corpus_Christi_PADD3,Valero Corpus Christi East Refinery,US_GULF,2023-04-12,12.0,Refinery Equipment Flare Vent,unplanned_upset,0.0,0.0,Medium,True
+TCEQ-STEERS-401298,TCEQ,RN102535077,Marathon Galveston Bay Refinery,TX,2023-05-15,14.0,Alkylation Unit & Flare Gas Recovery,unplanned_upset,5800.0,1900.0,Medium,True
+LDEQ-EDMS-218940,LDEQ,AI_3154,Marathon Garyville Refinery,LA,2023-08-25,96.0,Naphtha Storage Tank 80-8 & Crude Distillation Units,unplanned_upset,42000.0,18500.0,High,True
+NRC-1389025,USCG_NRC,Houston_Ship_Channel,Marathon Galveston Bay Refinery,US_GULF,2023-11-20,24.0,Refinery Unit Release,unplanned_upset,0.0,1200.0,High,True
+LDEQ-EDMS-225019,LDEQ,AI_2639,Citgo Lake Charles Refinery,LA,2024-01-16,36.0,Residual Fluid Catalytic Cracking Unit (RFCCU),unplanned_upset,16800.0,5400.0,Medium,True
+TCEQ-STEERS-416045,TCEQ,RN100219310,Valero Houston Refinery,TX,2024-05-16,48.0,Power Substation & Coking Unit,unplanned_upset,22400.0,7100.0,High,True

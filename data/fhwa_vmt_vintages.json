@@ -1,0 +1,24 @@
+[
+  {
+    "source": "Federal Highway Administration (FHWA TVT)",
+    "as_of": "2026-09-24 17:26:35",
+    "valid_date": "2026-07-01",
+    "vmt_billions": 0.0,
+    "yoy_growth_pct": 11.702127659574458,
+    "mom_growth_pct": 1.0956175298804771,
+    "is_vintage_reconstructed": false,
+    "data": {
+      "date": "2026-07-01",
+      "fhwa_vmt_national_billions": 304.5,
+      "fhwa_vmt_northeast_index": 42.9,
+      "fhwa_vmt_south_atlantic_index": 62.1,
+      "fhwa_vmt_north_central_index": 65.9,
+      "fhwa_vmt_south_central_index": 57.3,
+      "fhwa_vmt_west_index": 76.3,
+      "fhwa_vmt_mom_pct": 1.0956175298804771,
+      "fhwa_vmt_yoy_growth_pct": 11.702127659574458,
+      "fhwa_vmt_12m_moving_total": 3401.1,
+      "fhwa_gasoline_demand_proxy": 0.8428571428571429
+    }
+  }
+]

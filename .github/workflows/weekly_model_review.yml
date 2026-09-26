@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "weekly-review-${{ github.ref }}"
+  group: "production-data-deployment"
   cancel-in-progress: false
 
 jobs:
@@ -39,6 +39,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Run Ruff Static Analysis Gate (Fatal & Syntax Errors)
+        run: |
+          ruff check src/ scripts/ tests/
 
       - name: Cache Lookup Datastore & Quota Ledger
         uses: actions/cache@v4
@@ -92,7 +96,6 @@ jobs:
         with:
           commit_message: "chrono: Weekly Saturday model performance review & rolling accuracy update"
           file_pattern: "README.md docs/ data/"
-          push_options: '--force'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

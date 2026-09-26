@@ -790,3 +790,57 @@ def test_model_iteration_table_lineage():
     assert "CoSPOT Spectral & Wavelet Prompting" in index_content
     assert "Real-Time Finlight.me Stream, Firecrawl Extraction & Anomaly Gating" in index_content
     assert "3-Tier Edge Cache, SWR Revalidation, USGS Water/Seismic & Multi-Feed AQI Flaring" in index_content
+
+
+def test_dashboard_generator_html_escaping_and_csp(tmp_path):
+    """Verifies that malicious payloads in headlines are strictly HTML escaped and CSP meta tags are present (Issue #438)."""
+    import json
+    import pandas as pd
+    from src.dashboard_generator import (
+        parse_last_run_intelligence,
+        build_last_run_audit_card_html,
+        get_head_meta_tags
+    )
+
+    # 1. Test CSP Meta Tag
+    head_html = get_head_meta_tags("Test Title", "Test Desc")
+    assert "Content-Security-Policy" in head_html
+    assert "default-src 'self'" in head_html
+
+    # 2. Test HTML escaping in anomaly audit card
+    hist_file = tmp_path / "prediction_history.csv"
+    malicious_headline = "<script>alert('XSS Attack!')</script>"
+    df = pd.DataFrame([{
+        "log_timestamp": "2026-09-01 12:00:00",
+        "forecast_target_date": "2026-09-06",
+        "region": "National",
+        "model_version": "v1.5",
+        "run_type": "INTRADAY_REVISION",
+        "headline_trigger": malicious_headline,
+        "current_base_price": 3.15,
+        "predicted_5d_price": 3.20,
+        "predicted_direction": "UP",
+        "actual_5d_price": None,
+        "actual_direction": "",
+        "error_dollars": None,
+        "directional_hit": None
+    }])
+    df.to_csv(hist_file, index=False)
+
+    intraday_file = tmp_path / "intraday_events.json"
+    with open(intraday_file, "w", encoding="utf-8") as f:
+        json.dump([{
+            "timestamp": "2026-09-01T12:00:00",
+            "headline": malicious_headline,
+            "source": "<img src=x onerror=alert(1)>",
+            "url": "https://news.google.com/test",
+            "is_anomaly": True,
+            "scores": {"supply_disruption": 0.5, "overall_price_pressure": 0.1, "geopolitical_risk": 0.2}
+        }], f)
+
+    audit_data = parse_last_run_intelligence(history_path=str(hist_file), intraday_path=str(intraday_file))
+    card_html = build_last_run_audit_card_html(audit_data)
+
+    assert "<script>alert('XSS Attack!')</script>" not in card_html
+    assert "&lt;script&gt;alert(&#x27;XSS Attack!&#x27;)&lt;/script&gt;" in card_html or "&lt;script&gt;alert(&#039;XSS Attack!&#039;)&lt;/script&gt;" in card_html
+    assert "<img src=x onerror=alert(1)>" not in card_html
