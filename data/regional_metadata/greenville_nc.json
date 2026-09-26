@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "greenville_nc",
+  "logger_region_key": "Greenville_NC",
   "display_name": "Greenville, NC Metro Retail",
   "padd_region": "PADD 1C Lower Atlantic",
   "primary_city": "Greenville, NC",

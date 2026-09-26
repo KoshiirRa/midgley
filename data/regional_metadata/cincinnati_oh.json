@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "cincinnati_oh",
+  "logger_region_key": "Cincinnati_OH",
   "display_name": "Cincinnati, OH & KY Tri-State",
   "padd_region": "PADD 2 Mid-Continent / Ohio Valley",
   "primary_city": "Cincinnati, OH",

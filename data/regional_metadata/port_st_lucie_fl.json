@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "port_st_lucie_fl",
+  "logger_region_key": "Port_St_Lucie_FL",
   "display_name": "Port St. Lucie, FL Metro Retail",
   "padd_region": "PADD 1C Lower Atlantic",
   "primary_city": "Port St. Lucie, FL",

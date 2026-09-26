@@ -31,8 +31,8 @@ logger = logging.getLogger(__name__)
 REGION_MODULE_MAP = {
     "tulsa": ("src.locations.tulsa.regional", "fetch_tulsa_market_data", "get_tulsa_regional_events", "Tulsa_OK"),
     "tulsa_ok": ("src.locations.tulsa.regional", "fetch_tulsa_market_data", "get_tulsa_regional_events", "Tulsa_OK"),
-    "newark": ("src.locations.newark.regional", "fetch_newark_market_data", "get_newark_regional_events", "Newark_NJ"),
-    "newark_de": ("src.locations.newark.regional", "fetch_newark_market_data", "get_newark_regional_events", "Newark_NJ"),
+    "newark": ("src.locations.newark.regional", "fetch_newark_market_data", "get_newark_regional_events", "Newark_DE"),
+    "newark_de": ("src.locations.newark.regional", "fetch_newark_market_data", "get_newark_regional_events", "Newark_DE"),
     "cincinnati": ("src.locations.cincinnati.regional", "fetch_cincinnati_market_data", "get_cincinnati_regional_events", "Cincinnati_OH"),
     "cincinnati_oh": ("src.locations.cincinnati.regional", "fetch_cincinnati_market_data", "get_cincinnati_regional_events", "Cincinnati_OH"),
     "greenville": ("src.locations.greenville.regional", "fetch_greenville_market_data", "get_greenville_regional_events", "Greenville_NC"),
