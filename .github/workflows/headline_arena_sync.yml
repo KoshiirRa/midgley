@@ -18,12 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.13
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
           cache: 'pip'
@@ -43,7 +43,7 @@ jobs:
           python scripts/sync_headline_arena.py
 
       - name: Commit and Push Updated Pending Cache and Ledger
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore(headline-arena): Update pending forecasts cache and submission ledger [skip ci]"
           file_pattern: "data/headline_arena_pending_forecasts.json data/headline_arena_submitted_ledger.json"
