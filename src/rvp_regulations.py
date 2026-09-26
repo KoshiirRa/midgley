@@ -82,6 +82,15 @@ DEFAULT_RVP_RULES = {
             "is_rfg": True,
             "is_carb": False
         },
+        "Newark_DE": {
+            "name": "Newark & Delaware Valley (PADD 1B)",
+            "program": "EPA Reformulated Gasoline (RFG)",
+            "summer_rvp_psi": 7.4,
+            "winter_rvp_psi": 12.0,
+            "summer_compliance_premium_per_gal": 0.18,
+            "is_rfg": True,
+            "is_carb": False
+        },
         "Oakland_CA": {
             "name": "Oakland & SF Bay Area (PADD 5)",
             "program": "CARB Phase 3 CaRFG",
@@ -180,7 +189,9 @@ class RVPRegulatoryEngine:
                 "Cincinnati": "Cincinnati_OH",
                 "Dallas": "Dallas_TX",
                 "Houston": "Houston_TX",
-                "Newark": "Newark_NJ",
+                "Newark": "Newark_DE",
+                "Newark_DE": "Newark_DE",
+                "Newark_NJ": "Newark_NJ",
                 "Oakland": "Oakland_CA",
                 "Greenville": "Greenville_NC",
                 "Charlotte": "Charlotte_NC",

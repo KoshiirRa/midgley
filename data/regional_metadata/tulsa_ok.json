@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "tulsa_ok",
+  "logger_region_key": "Tulsa_OK",
   "display_name": "Tulsa, OK Metro Retail",
   "padd_region": "PADD 2 Mid-Continent",
   "primary_city": "Tulsa, OK",

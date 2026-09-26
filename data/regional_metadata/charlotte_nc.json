@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "charlotte_nc",
+  "logger_region_key": "Charlotte_NC",
   "display_name": "Charlotte, NC Metro Retail",
   "padd_region": "PADD 1C Lower Atlantic",
   "primary_city": "Charlotte, NC",

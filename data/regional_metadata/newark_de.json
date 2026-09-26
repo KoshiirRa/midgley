@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "newark_de",
+  "logger_region_key": "Newark_DE",
   "display_name": "Newark, DE Metro Retail",
   "padd_region": "PADD 1B Central Atlantic",
   "primary_city": "Newark, DE",

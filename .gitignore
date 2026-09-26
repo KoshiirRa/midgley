@@ -53,6 +53,8 @@ dist/
 *.partial
 data/.tmp-*
 *.tmp
+*.lock
+data/*.lock
 
 
 

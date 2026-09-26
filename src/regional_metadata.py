@@ -21,29 +21,45 @@ REGIONAL_METADATA_DIR = os.path.join(PROJECT_ROOT, "data", "regional_metadata")
 _METADATA_CACHE: Dict[str, Dict[str, Any]] = {}
 
 
+# Region ID aliases for resilient metadata discovery
+REGION_ALIASES: Dict[str, str] = {
+    "newark": "newark_de",
+    "tulsa": "tulsa_ok",
+    "cincinnati": "cincinnati_oh",
+    "greenville": "greenville_nc",
+    "charlotte": "charlotte_nc",
+    "oakland": "oakland_ca",
+    "bayarea": "bayarea_ca",
+    "port_st_lucie": "port_st_lucie_fl",
+    "portstlucie": "port_st_lucie_fl",
+}
+
+
 def get_regional_metadata(region_id: str) -> Dict[str, Any]:
     """
     Loads and returns the metadata profile dictionary for a given region_id
     (e.g., 'tulsa_ok', 'newark_de', 'cincinnati_oh', 'greenville_nc', 'charlotte_nc',
     'oakland_ca', 'bayarea_ca').
     """
-    region_id = region_id.lower()
-    if region_id in _METADATA_CACHE:
-        return _METADATA_CACHE[region_id]
+    reg_clean = region_id.lower().strip().replace(" ", "_")
+    target_id = REGION_ALIASES.get(reg_clean, reg_clean)
 
-    json_path = os.path.join(REGIONAL_METADATA_DIR, f"{region_id}.json")
+    if target_id in _METADATA_CACHE:
+        return _METADATA_CACHE[target_id]
+
+    json_path = os.path.join(REGIONAL_METADATA_DIR, f"{target_id}.json")
     if not os.path.exists(json_path):
         logger.warning(f"Regional metadata file not found at {json_path}. Returning fallback dict.")
-        return _generate_fallback_metadata(region_id)
+        return _generate_fallback_metadata(target_id)
 
     try:
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
-            _METADATA_CACHE[region_id] = data
+            _METADATA_CACHE[target_id] = data
             return data
     except Exception as e:
         logger.error(f"Error reading regional metadata file {json_path}: {e}")
-        return _generate_fallback_metadata(region_id)
+        return _generate_fallback_metadata(target_id)
 
 
 def list_all_regional_metadata() -> Dict[str, Dict[str, Any]]:
