@@ -53,7 +53,7 @@ Numeric Retention Schedule for This Run ($M_0 = 0.1000$):
 
 - **National Wholesale**: $P = \$3.197 + (+\$0.338) = \$3.362\text{/gal}$ (Delta: +\$0.338/gal, +10.58\%)
 - **Tulsa, OK Retail**: $P = \$4.114 + (+\$0.473) = \$4.031\text{/gal}$ (Delta: +\$0.473/gal, +11.49\%)
-- **Newark, DE Retail**: $P = \$nan + (+\$nan) = \$nan\text{/gal}$ (Delta: +\$nan/gal, nan\%)
+- **Newark, DE Retail**: $P = \$4.492 + (+\$0.687) = \$4.790\text{/gal}$ (Delta: +\$0.687/gal, +15.30\%)
 - **Cincinnati, OH/KY**: $P = \$4.359 + (+\$0.663) = \$4.604\text{/gal}$ (Delta: +\$0.663/gal, +15.21\%)
 - **Greenville, NC Retail**: $P = \$4.168 + (+\$0.469) = \$4.307\text{/gal}$ (Delta: +\$0.469/gal, +11.25\%)
 - **Charlotte, NC Retail**: $P = \$4.205 + (+\$0.353) = \$4.274\text{/gal}$ (Delta: +\$0.353/gal, +8.40\%)
@@ -74,7 +74,7 @@ SUMMARY FOR RUN [2026-09-26 03:04:09]: Baseline daily batch market conditions pr
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-26 03:04:09 (Mode: LIVE_PROSPECTIVE), primary event trigger 'Daily Forecast Batch Execution (2026-09-26 03:04:09)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (NOAA NWS Storm Alert, Bloomberg Market Wire, CME Group / NYMEX). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-26 03:04:09 (Mode: LIVE_PROSPECTIVE), primary event trigger 'Daily Forecast Batch Execution (2026-09-26 03:04:09)' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (CME Group / NYMEX, Bloomberg Market Wire, NOAA NWS Storm Alert). Ingested factor vector: Supply Disruption S=0.10, Price Pressure ΔP=+0.02, Geopolitical Risk G=0.15. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.1000
   - Day 1: M₁ = 0.0871
   - Day 5: M₅ = 0.0500 (50.0% residual memory acting on Day-5 target horizon).
@@ -83,7 +83,7 @@ During execution 2026-09-26 03:04:09 (Mode: LIVE_PROSPECTIVE), primary event tri
 The base commodity forecast was calibrated across all 8 modeled metro locales for this run:
   • National Wholesale: $3.362/gal (+$0.338/gal, +10.58%)
   • Tulsa, OK Retail: $4.031/gal (+$0.473/gal, +11.49%)
-  • Newark, DE Retail: $nan/gal ($nan/gal, nan%)
+  • Newark, DE Retail: $4.790/gal (+$0.687/gal, +15.30%)
   • Cincinnati, OH/KY: $4.604/gal (+$0.663/gal, +15.21%)
   • Greenville, NC Retail: $4.307/gal (+$0.469/gal, +11.25%)
   • Charlotte, NC Retail: $4.274/gal (+$0.353/gal, +8.40%)
@@ -91,7 +91,7 @@ The base commodity forecast was calibrated across all 8 modeled metro locales fo
   • Oakland, CA Retail: $6.572/gal (+$0.969/gal, +15.25%)
   • SF Bay Area Region: $6.699/gal (+$1.096/gal, +16.92%)
 
-Largest upward shift for this run: Newark, DE Retail at $nan/gal (+nan/gal). Largest downward shift for this run: National Wholesale at $3.362/gal (+0.338/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
+Largest upward shift for this run: SF Bay Area Region at $6.699/gal (+1.096/gal). Largest downward shift for this run: National Wholesale at $3.362/gal (+0.338/gal). California locations (Oakland & SF Bay Area) incorporate statutory $0.953/gal CARB excise, Cap-and-Trade, and LCFS fee overhead on top of the base commodity calibration.
 
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
