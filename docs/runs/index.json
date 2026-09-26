@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-26_07-17-09",
+    "timestamp": "2026-09-26 07:17:04",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Iran offers US deal to reopen Strait of Hormuz in seven days"
+  },
+  {
     "run_id": "2026-09-26_05-49-07",
     "timestamp": "2026-09-26 05:42:39",
     "run_type": "INTRADAY_REVISION",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-24 22:30 UTC",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-24 22:30 UTC)"
-  },
-  {
-    "run_id": "2026-09-24_22-30-16",
-    "timestamp": "2026-09-24 22:15:27",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "New US tariffs on Russian oil no issue for Indonesia, Airlan..."
   }
 ]

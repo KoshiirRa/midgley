@@ -3413,5 +3413,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-26T07:17:04.559597",
+    "headline": "Iran offers US deal to reopen Strait of Hormuz in seven days",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE45Z0pMeUNRaTNfWUlMQmJEWE1mcW04c09tZERDRTR0aFRicWJ0b1pLczlhQ2lYMGZDTFlBMXMya3ZrOHdwcmRqTk5PQzZiODFFNndGTm1iT1NBc1U?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE45Z0pMeUNRaTNfWUlMQmJEWE1mcW04c09tZERDRTR0aFRicWJ0b1pLczlhQ2lYMGZDTFlBMXMya3ZrOHdwcmRqTk5PQzZiODFFNndGTm1iT1NBc1U?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiW0FVX3lxTE45Z0pMeUNRaTNfWUlMQmJEWE1mcW04c09tZERDRTR0aFRicWJ0b1pLczlhQ2lYMGZDTFlBMXMya3ZrOHdwcmRqTk5PQzZiODFFNndGTm1iT1NBc1U?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": -0.7,
+      "supply_disruption": 0.1,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.8
+    },
+    "discord_notified": true
   }
 ]
