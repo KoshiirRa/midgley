@@ -1,205 +1,5 @@
 [
   {
-    "timestamp": "2026-09-22T23:12:55.911210",
-    "headline": "Test Suite Unsigned Queue Event",
-    "norm_headline": "test suite unsigned queue event",
-    "url": "https://example.com/1",
-    "is_anomaly": false,
-    "source": "Webhook_Push"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:05.007313",
-    "headline": "Gas prices for 09/23/26: Trump backs plan to ban diesel exports with price up 75% over last year - al.com",
-    "norm_headline": "gas prices for 09/23/26: trump backs plan to ban diesel exports with price up 75% over last year",
-    "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOblRlRHJ5Q3l6bV9FNVFIdGN2R2FKTzFiOFNPUVk5SFlHUUd5R0p2ajFGZWVsWUl3bENmLTctaHg0LTBYcU93X3FZUE9ySXNQXzVSWnF0OWt0OXBOaFVLclRMeWdtcFptY1VtYl9FS2daN2lKQmNYbi1WU09jVHdwQWhrc1pMZHp0MmlWelhJWTJ6cjlvb1pvZEt3Q2o2UU1BdF9ZXy15N2xjQ19naVVGSTd2bFFJdmFaT096RVNGYTBrb0JqR1NXbdIB3AFBVV95cUxQODhJcm5aTGFEZmFueUlOMUpfMDZWQnlmRXV6TmVBbU1VRlBZaVphYnpDc0VrV09ucjI5aDQ4bVJMdDFFbWhaOW9xamVsTjB3UUg5SHBLYXpkcDRJdmk1XzRTUHd3VFVEWjhEVi10ekNESUNmMG8wOTdoUXl3bGpjeU1HY3cxZXQ4VngzaTA2ckdrTG5FZDJSbnMzeGEyTkJpUTBWaHZjMTBWZG5ya0xEeVJ6OTFxWno0cTJPbEtGS2t5NmQ1MmdDV0E4SENfamZQd09VVzBPZTlYdHE5?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:10.535314",
-    "headline": "CHEAP EATS | OPINION: Why Casey\u2019s gas-station pizza is surprisingly good - The Arkansas Democrat-Gazette",
-    "norm_headline": "cheap eats | opinion: why casey\u2019s gas-station pizza is surprisingly good - the arkansas democrat-gazette",
-    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNQmUtMFhIZHBWODFyTUlFTm5zYkNUVG04YTF3QzhaUVpXSTVwVDJoVEJSRGNJb0ZMYXk3d0VXR2M3VVdDNERTOHk3dHJDWWpKNGZVbkl4Y3A2V0t2dVJ4TVZ0emM3cU1Gdjk0V05fWWVJRGU2NllYN29ZQ3NwejIzUWk0QXZCTHQ0akV3NWd4Uk4teGVNcDdzNFh3WGo?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:10.961122",
-    "headline": "Today\u2019s Gas Prices By State: Average Price Of A Gallon Exceeds $4 - Forbes",
-    "norm_headline": "today\u2019s gas prices by state: average price of a gallon exceeds $4",
-    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:12.089873",
-    "headline": "San Antonio gas prices near $4 as Texas tracks toward most expensive September on record - KABB",
-    "norm_headline": "san antonio gas prices near $4 as texas tracks toward most expensive september on record",
-    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPbWcxWUJieWxRRWVLMmZ4dTdTZlZaNEF1MklkX2d1S2h0WmVsOTNlSWtYcm9KSVQ2aWlqemYzZFpUUFhyQURISENKa241cVpMRFJENlBETWxLN0M3bE5xcWFrSmU3TDRUMWtkTk1haWtueWNhY1lXeUxhWWZLWDBldTNuTUowRFZGNHZ2eHNQY19sNWVvdzQ4aXF3NzhVemRqVnRZVl9IcGlVZWZqejlXM3U5M0ktVnQxbEd5S3d1N1VDNTRwSWxvenh3?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:17.639795",
-    "headline": "September record looms as gas prices keep climbing - Weatherford Democrat",
-    "norm_headline": "september record looms as gas prices keep climbing",
-    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxOV1RHdlduQ2hZTkI2RVl3WEFPX1BWMUoxd1NIM01BS24xU2lIUy1XRXhydUlpXy15WktiTzFobE5NcDlGQ01aN2IxZHliQ3lNdm9PVXE2Q2RNcFFtX3lmVG1BbWFlaEM0Z19hZmxRa29rMGRPcXNnNWYzaFg5RnV5MGJSaHFGaGFZOFlfLXlIUURJY1pLbmtXS0JYYU1DMzFBaVJGOHJfYmNST3gxdzFxeVl2TTlMODVZVnN5WjdNX09OSHdhN3VSdjFYczl0bGpWWDN3Qm9IR3kxdkpFMTlWc19XVnQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:23.304055",
-    "headline": "Skyrocketing diesel prices affect Kansas farmers and could affect grocery prices - WIBW",
-    "norm_headline": "skyrocketing diesel prices affect kansas farmers and could affect grocery prices",
-    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNa2JjcHgxSFlhNEE5dEhyT3ZucGVZMTd5eHl2RDlPVmhuZF8wdUtnUEVmeFNHMDc0bk1YQmZOclhxSEZRSzJGSHgwWWthUk9ZbDYwT1l0d2RnRERoUTNIdDR5MVdQVFgwUkxGMmpQS3Y4YkdTWUo2Qm5RSnA0dWppcXkwQ0ctUW1iWEpCZkRsaFhmTzYzOUNfc2Y0N0Q2cm92UTJfN0JwdkxUSlJtMGfSAcIBQVVfeXFMTV83bXV2a1hoZFpSQTNOQmxpYk1Lam5hQUNNVjM3aW43V2xIZVR5czV1QnpfX3NvbXl2b1ZXamJrTUhhcElfOXBITE9jTWY5NjV6TDdJcTlSZ0VmQjVLTDcyTFNnNHE3djA5TDJUeDBRdjNWUjBMQjBlQ2tzNkdwQjNYVWJ1WWlRQnd5eDhnbHZxdmVRczJOanRSMDlhTFJSSjhqR25qLUtjX3hNMnFDYkg0UnByY0N4a0J5RnRJbGpXMEE?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:23.962246",
-    "headline": "Rising fuel prices impact Louisiana truckers as diesel tops $6 a gallon - KALB | News Channel 5",
-    "norm_headline": "rising fuel prices impact louisiana truckers as diesel tops $6 a gallon - kalb",
-    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOSjVXdTB5bEdRZjZEbkxEblhBS3RTVUpBUGR5OEswZ3BUSWVseEs5Y2xmdndNUDJJVVRhOHNpTUtWN3lWSGV4a2RLMVJaWTV4aVdlUnF1UWZ0Z2RvQ0lpSFZBT3JKMFNjQjBNNnUxUmNRSFVwVlFPQ2FlUWR5c2hHWjNhclJ6ZS1fbEhKWWkwWHZIbHZZQXlxWUlLMlJwbzQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:24.764897",
-    "headline": "Rockland County Unleaded Regular Prices Break $5.00 Per Gallon Threshold; Diesel Near $7.00 At Many Stations - Rockland County Business Journal",
-    "norm_headline": "rockland county unleaded regular prices break $5.00 per gallon threshold; diesel near $7.00 at many stations",
-    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQNG91ZkRGNHFHdUlWUG9wSHhINGRiNnlRc1VQZDFYWGVydVg5c0NRb0x5bXJUOU5OSXNiVkpXZ2IyRy1rc0hXT1EtRXJqajVQeFNKU09ROFBuVTJiaGNVbE9iQ1RlNTFWMm52al9oVUM1ckdaOEw3UmlWZW9JR0IzcFZwdjlHUFNC?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:25.591509",
-    "headline": "Gas prices still rising in Atlanta. Here's where it's most expensive - Savannah Morning News",
-    "norm_headline": "gas prices still rising in atlanta. here's where it's most expensive",
-    "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxNWHpPdGg5ZDNNNkd4OV9HUUlnSFBRdTAwVTdMREpoOWRMTEQ2VEM5bHZ4LUJLUXlleFZxcGlHU2lYbExOdy12ZXZ1RE8yWE1LclV2aTRMcVNseWpUemwyMnVTUFR6bmFfLU5raU96YWhmS0ltZW9nTjRzSVBURTEwbzBVRHNpYjZCZDViTVliVVNNVTA2SVBWeWlrOENScVBXUkxKdEdFcmt5c3c1bDA3SlZSWjBXdHNaUW1kSk43OEt3dnhuaXJBdU5TTG9iRXNMOHV3dGM1TkJXNXR4S3RzMjlpTGttUQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:26.316043",
-    "headline": "Manitowoc County Among the Highest Gas Prices in Wisconsin - Seehafer News",
-    "norm_headline": "manitowoc county among the highest gas prices in wisconsin",
-    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPNDhfY1BwRFV5TjRuUVYyekhneE1iejJncFpfaXFXS1NPQThkQWFJNm9fTTltQjIxRGhuZjg5MjdfSWEydFNKNHlkS2w0NE1KLUdUY3kxYVFlQUs5THliWTFZWnd4M2ZPOXJnUVcyR3VmVTI3Z2RRbFBSQklfWEQwQVQwdU42NmljYkt6LVYtM2ttd2hPSDROTlk2cnJPMTJf?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:26.960364",
-    "headline": "E15 Expansion and Strong Export Demand Drive US Ethanol Growth - czapp.com",
-    "norm_headline": "e15 expansion and strong export demand drive us ethanol growth",
-    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxObHAyclluOWo4NWpuZzBJUzJTc29XTHRoNjVIM05mV2dnTUpBQ1JjLUJrYlhDMjA5ZEl5c01FRHdYVW9UTG1qVzF5LTcwLURmQkVuOG1HcUxvTERRMnRtZTdIN2UtcmhRV3Nkc0JyZ09CMko4a1NYVWNFWlpySmc1blhvOS1RSUdTWFBJR3BvcEtwYmY0VGQ3WXhiMkhBMjB2b29ndg?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:27.635006",
-    "headline": "How much would a gas tax pause help your wallet? The Wake Up for Wednesday, Sept. 23, 2026 - Cleveland.com",
-    "norm_headline": "how much would a gas tax pause help your wallet? the wake up for wednesday, sept. 23, 2026",
-    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQMmtjZGZYX3gzUmlaaFVSaW1sd1Zub1FQMzZnRHd3dHZXemVwV3dNd3FMRzBaUm5SQVJGQXdNdmVnMGVpNXV6Tjh6TzROdTQwWGxydWVJREFHVjJhbVYtZUxGaEpaT2lMYl9FOHpZdDNpQW1tX3ZnbEg3QWs3V3I5aG1nYW91UVYyT3VfaU1PeFYxZFE1ZUtFUmlra0JxM2dBSXJJdW5Vakg2SXFXT0tUTU9TZU1IZGJSVDk1a1d3ZlpUdlZZTEd3V1VDYw?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:28.256710",
-    "headline": "Healey proposing temporary suspension of gas tax - Franklin County Now",
-    "norm_headline": "healey proposing temporary suspension of gas tax",
-    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNRm9QRnpqRnpjQ2diQThHOHUxQWJqSndfWVF3dkpkMlU0ZE9VQldCWThuREppTEpMWm5zWUIxZWEtaFo1Skc3WTAxOWtPR0VieFJSeDVJM2YzYzNtMmxmUF9NQU94MHVWVUcwMTNTeEVaLU1UczROQzdYblZwOUlvamttSHl1M3J0Q21sZjJaZGpRcHJCY2c?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:28.937683",
-    "headline": "Michigan leads nation in year-over-year gas price increase of 56.6% - AOL.com",
-    "norm_headline": "michigan leads nation in year-over-year gas price increase of 56.6%",
-    "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5sT0cyYzJfc1Y5c2d3RVJZejI3RWk4TUVQTWF4dmlBeGd2VWpUdFNZNzJOMk9zZVViSVdhdXhLYUVOVjZNR2lfYkRreFhGcndPWm8zR0Y5d2g0UVVpZTVyZGtGdlEyb1hMVTBrMG1hT0x5bVN6cGc5aTRRSGRvYmM?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:29.726051",
-    "headline": "How one local non-profit is pushing through the high gas prices - Yahoo",
-    "norm_headline": "how one local non-profit is pushing through the high gas prices",
-    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOS01DbVFsUXpOTjdFajNsd2E1OWVfenRMQ2o4Sks1VWZsS2xBZWJFWWpqaWhEZnpjVWhiXzNoUi1ZblVKYjV5RVI5Nl84cEZocU5zOUEwblhQZV9IQS03NGl2V3NGV0c2TGVPUE05dGdNXzhsNmpOUThjLUJzZWtyNDdaTTVOR1IwRVE?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:30.157740",
-    "headline": "Power Outage Forces Venezuela\u2019s Largest Refinery to Shut Down, Sources Say - EnergyNow.com",
-    "norm_headline": "power outage forces venezuela\u2019s largest refinery to shut down, sources say",
-    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:30:37.502728",
-    "headline": "Discount on Western Canada Select Widens with Joliet Refinery Outage - EnergyNow",
-    "norm_headline": "discount on western canada select widens with joliet refinery outage",
-    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOTS00VjJiZWtoNHlMSEhTQU03RDZvdjdUd00xZFIwLUZteE1DQVhPbTJRdEpaSDFLZUo3TlpZaE9ZOWVoWG8tMkFQcnltOWFBWFE0SWVidkxvcGdYR01INXhHS2hnc3NGc3JyN1ZOVlZtZXg3aXJtR2x3bDMxRTBuYm1KLWJ5bDdOMnFROVplTFpjUXNhM3lodUpwRy1oVXM?oc=5",
-    "is_anomaly": true,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:45:10.281514",
-    "headline": "A diesel export ban could disrupt US supply chains - Atlantic Council",
-    "norm_headline": "a diesel export ban could disrupt us supply chains",
-    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOYlcxa1JQYks3Tm11VG9XMVZmeXJjZjM2d0d4QVdlb0JGSWV1Q2VnNzZpYV9DMEQzZmU1a19aNGF5Y3NuMnlKdHdHYnlTemx2bjlETEh5dzBsZ3R5b2dJWmNERnlzYmh5U0dTLVUwUHptZWdLQTFSOE5RUGF3RWc0LUduRXlQalNfZ3JnYVJTRENoVk1HVUpOc3ZR?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:45:15.839049",
-    "headline": "Alberta drivers get relief at the pump, while producers squeezed by lower prices - Edmonton Journal",
-    "norm_headline": "alberta drivers get relief at the pump, while producers squeezed by lower prices",
-    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPU1dEU3VKUkROSEx6TlItSkFmakhKMEdWUmZQTDNuMGY0YlNKSzVtZnZfSlBQdE96SlU2Tkd6dmF4Y1VzN3EyUUpZelMzbHBPRm51WTE4dC1OVnl6UWphSEdzamluRlRqMUJwQjY3d1UwRVl0Yy1BR2FjTk9BQ29OT2M2MHZ2ME9BYjBMRVZfTWU?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:45:16.250965",
-    "headline": "US Crude Refiners Are Pushing Run Rates to Maximum Levels - EnergyNow.com",
-    "norm_headline": "us crude refiners are pushing run rates to maximum levels",
-    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:45:21.795087",
-    "headline": "Trump says administration is weighing diesel export restrictions - Roll Call",
-    "norm_headline": "trump says administration is weighing diesel export restrictions",
-    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOSlM4b255X204dVNydE55VktybFBhTFFlaUJJR25TU0xKcTgyTDJRYzY0UmRLWFNralY0YkVTekU1NS1Rak1VNThrVkVDeDJVYkNqUEdBNXA4MEV3V0EwYnZyLUlvYnJDN2ZtUThEaG5Za2FwR0YxUUxKYTNacUZ1eDNuclFBSjdmYTlMWXJKYkdrQVhlaFdlT1h6ZjBQdw?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:45:22.511819",
-    "headline": "The water challenge inside every turnaround - BIC Magazine",
-    "norm_headline": "the water challenge inside every turnaround",
-    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPWTRqMHpscDladEVLU05OSk9MUEVxYmtLU3hWcXFXYUNUTl9NQXotdkt4SnVoVXVuSUYwVnh4UTM2ZU1CRnBnNmloZlQzY1FHNTNiSGFqRzJuOWRTSlJiNmtuRmpxNHBzMDRTMXh6RjA0VTlPX1pLV1JOdlFya0ttbVpJWFJtUmMwaHQ5emlvZHB6bVZQRW1sZGZPT0dVQkE0QXc?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:45:22.941006",
-    "headline": "US Gasoline Prices Top $4.50 a Gallon as Summer Driving Season Nears - EnergyNow.com",
-    "norm_headline": "us gasoline prices top $4.50 a gallon as summer driving season nears",
-    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOV1NHRU1QMEtWWjVZTmUtZER3WEVRcTZ3X21XWGpCV0F5S250QTJiaGZMSnNiM0VncFRaQVJaUE0xTm5OZmloTnVqQjFUZ1NvVHk1eVFIV2hzWEdOYW5nb0FSYk9IV0F5djVzNlZZanV6SWtYajdsWTF4cWVfcW5UNjlTUFpjUHd2b2stVklzR0dnVHRCR2p6WS03VF9FdXM?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-23T20:45:31.150707",
-    "headline": "Jaishankar Raises India\u2019s Concerns Over Russian Oil Tariff Law With Rubio - INDIA New England News",
-    "norm_headline": "jaishankar raises india\u2019s concerns over russian oil tariff law with rubio",
-    "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPQ1lBdDVpWk80R01ULTk2NFY0WHFCOWt2cGpoNXZoUGY0Rmlzam9QVXd4UHI0ZzNwXzM2WWY0bUlCZzFSM1ZfcEZ5dUo2RVRqOEE0QURLNTZZdEpwdE1xaWFFcXVwMnlWTDRpWUlld3R4aDM0TDF6ZlpHb0FZa2YtZ2N0X2gxVmpfV0NBQkQ3V0Q2QWUxaURFNElHX0Z2dXJZNEJZ?oc=5",
-    "is_anomaly": true,
-    "source": "RSS_Feed"
-  },
-  {
     "timestamp": "2026-09-24T15:00:12.888891",
     "headline": "WEEKLY FUEL REPORT - KBOE",
     "norm_headline": "weekly fuel report",
@@ -340,22 +140,6 @@
     "headline": "New US Sanctions Law Takes Effect, India's Russian Oil Purchases Face Up to 100% Tariff Pressure - finance.biggo.com",
     "norm_headline": "new us sanctions law takes effect, india's russian oil purchases face up to 100% tariff pressure",
     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE14VTlhazMwWEw3REFGT0VpVGVDS2JwOEd3NWZYUmc3RzRCUW9EdklDYk1QSjFqOEpob2tIdEpoWG5jbU9Ub1cwYXpvajY1UllvcWFySjdTVi1CVE9FQW5ocmh2VzhCOEh5NmtmcEl3T013a2RXdEE?oc=5",
-    "is_anomaly": true,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-24T03:48:53.098238",
-    "headline": "Three Things To Expect From The Trump-Xi Summit - Investopedia",
-    "norm_headline": "three things to expect from the trump-xi summit",
-    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUTlJYXBwUkdRakhOalV3MGRyQUR1cWpVVWtUbi1xRVh6T1ByNlFCa0JUdmpUN3l0WmdvWUZDS3oyLXlIeGxremtkbjNnaHQ0RmtCS3J2ak9oTlN5cmthbl9kZGREVVJGMkkwSTREWjRBTGJWSGZpVzlnOEpJMkIxMTFSb1VmUW1wd0dOclFB?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-09-24T03:49:06.828264",
-    "headline": "In Meeting With Rubio, Jaishankar Raises USs \u2018100% Tariff\u2019 Law Against Russian Oil Customers - TheWire.in",
-    "norm_headline": "in meeting with rubio, jaishankar raises uss \u2018100% tariff\u2019 law against russian oil customers",
-    "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5ib3RKWVJ5MVFDYWhqT1Q1djQ4TEs0WUJ2ZHlvV0pJLTBmbmYwQmJ6anJqQjdVYkFmcERHMHgycm1lVTdHTmg0SFhvblFwQ1JLS3phQTJqVjhPZ3RWTXFwZ2lrbFU2bkRwQTIzTDVTSWtNck9IdWJmYjd3NjdjUdIBkAFBVV95cUxNNTF5VkV5N1lnal9JQV9saTFDRWVLMnMyNEdJSm45WHVpbEdRbXMtcVlVRlU0dEFqc2o5aXBMSWFYWTZYY2d6eXlwMjBSQklKeDBfbEFQZmlyZVU3ZHFYazluTFZJRUpQVFNWXzNMZ0FBZmtJV2U2RFlvSUNLT2FTd29PWFU5S3Z2aTZqMndMMVY?oc=5",
     "is_anomaly": true,
     "source": "RSS_Feed"
   },
@@ -828,6 +612,110 @@
     "headline": "Explosions hit plant and refinery in Ulyanovsk and Perm \u1409 News from Fakti.bg - World - fakti.bg",
     "norm_headline": "explosions hit plant and refinery in ulyanovsk and perm \u1409 news from fakti.bg - world",
     "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNTjh5eEtWLUxLZDJrcnFRVmJCdFdtejFJWHl5LTBEOU43czBLX0pqU0ptTVY1OXhpNl91Skc3RWNrRDJuS3RFeWMxbkZMeW52a2JpOU9za1lKbV9TQ3lTeXpQT28tNFFNTy1nRVMwbFVpNnp5Q2g0U3dQOUR5ZTNjSUFja1NoRjhuN1A5VVA4RmFSMFJIOWUyUw?oc=5",
+    "is_anomaly": true,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:03.307320",
+    "headline": "Petrol price expected to increase by R3 in October - eNCA",
+    "norm_headline": "petrol price expected to increase by r3 in october",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPdU9tbjZZS1RkdGRzVUNYMS0wTDd4dG1fYjhiZXBfbkI0WUExcHFPWU5WOVpGekwyZjhOdnVLUUNRMEVDQ25Mek0zeEI2ckRlWUdXUElVejBudEZBSXFzXzNSb0kxdGhxV1BPaGQxbXJ3TjhEMUk1YS1HVTRkNWs4WDNtNVBGcTA5SjUydVB6Ylh4QQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:08.884922",
+    "headline": "Where\u2019s the cheapest petrol and diesel near YOU? Use our tool to find prices now - thesun.co.uk",
+    "norm_headline": "where\u2019s the cheapest petrol and diesel near you? use our tool to find prices now",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxONWVKR04za2lMV3M0emdYRmdibEFGYl9WTVRJOUJycmZTRTlpb3JNbXF6RmJldUMxQkV6eV95VTJZQXc5X1NfbE5UVUh0YUFjMkdzV21ESW9YQV9KV3ctYTJaREcyOVlmQlpRNl9SUjltUTZwNlItdjI3TTRZU05YamNHbw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:09.313768",
+    "headline": "Today\u2019s Gas Prices By State: Average Price Of A Gallon Exceeds $4 - Forbes",
+    "norm_headline": "today\u2019s gas prices by state: average price of a gallon exceeds $4",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:14.820459",
+    "headline": "AAA Hawai\u02bbi: Gas prices rise 9 cents over past week - mauinow.com",
+    "norm_headline": "aaa hawai\u02bbi: gas prices rise 9 cents over past week",
+    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPaHVNSlF0Z2NkdFZFSk1HbXR3bzk2SVVEU09vQ1lDNXJzRzhvMThnWHdYNjRRMXlvZG5Td1VhTlVUTkVUQ1FBQV94UHVIMHVTVHRSWkk3R1pEeGwtTEFqb1FNTVhwY0dkSWpPckk3cWFGeVVwc2N4bkpLbS10cGItQi1hS0Q0dXMwT2JKVXE1VHQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:16.311165",
+    "headline": "Could Las Vegas set new gas price records in the coming weeks? - Las Vegas Review-Journal",
+    "norm_headline": "could las vegas set new gas price records in the coming weeks? - las vegas review-journal",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxORnhEb2dVR1dFU3FwYjNNN3h2c0RJUktEdVNmT3VjTVdIanFoenpidHdPbUo1SkRQdEN4QVdqc2JQUkNYbElRem5iXzdBMWZndlowWmZvMFBQcERnai1ZZDBQeEptd1VTd3F4OUhkQmR1Rk5POEVYV2N5N21SMlNHSXBiazJUNWFmMmItZ1E0RUVUTHNzaDlwTFQteTJOQUIzMm9jaWJiV19LbVc0TGhJcDZ5R0NUVWs?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:21.905118",
+    "headline": "Where to find the cheapest fuel in Blacktown - dailytelegraph.com.au",
+    "norm_headline": "where to find the cheapest fuel in blacktown",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPWHoxeENUSDZHWUsxd1gwa3NEY29uOGdVSm1VcnlpdTliR1hMd3NULXJjRHd0dmE1dy1wSWVSTzhLMDllb3h6Zm1LQnNaV2kyWjdaVWNCeEFnREVFNTAwTnc5UnZnWmxPWmtMNkNJSmg2eElJRXJkTU5SeTdCREk0TEZWcUhOWEtTUG8tM050c0tFSnpmdmV4NWJ2T0RsWmRZeS1Da2swSGJ1YUNEbC1FbzR2aS0tMXBYaUwxMVdpckxDckxITHNCZTQtakljU1VEcUJsWGgtNEhTbTIxWU1PSExoX3FTc2MzdkoyUktPWDZNUEg1?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:22.305992",
+    "headline": "US Crude Refiners Are Pushing Run Rates to Maximum Levels - EnergyNow.com",
+    "norm_headline": "us crude refiners are pushing run rates to maximum levels",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:22.717172",
+    "headline": "US Gasoline Prices Top $4.50 a Gallon as Summer Driving Season Nears - EnergyNow.com",
+    "norm_headline": "us gasoline prices top $4.50 a gallon as summer driving season nears",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOV1NHRU1QMEtWWjVZTmUtZER3WEVRcTZ3X21XWGpCV0F5S250QTJiaGZMSnNiM0VncFRaQVJaUE0xTm5OZmloTnVqQjFUZ1NvVHk1eVFIV2hzWEdOYW5nb0FSYk9IV0F5djVzNlZZanV6SWtYajdsWTF4cWVfcW5UNjlTUFpjUHd2b2stVklzR0dnVHRCR2p6WS03VF9FdXM?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:29.402410",
+    "headline": "India's Russian Crude Imports Decline 16.5% in August as U.S. Sanctions Law Looms - News and Statistics - IndexBox",
+    "norm_headline": "india's russian crude imports decline 16.5% in august as u.s. sanctions law looms - news and statistics",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPd0hRbUV1d1NUaVU2VHVnYm9HeC1YOThPX3ZoTEE5Q2stcVBEUExBcDVxRjBaSE4xUnhoNU80UnJlYndObi03b0hGZEhXR1EzRXlFOHA0TE5zNEExV01SQlMyZGFfN1piV09fQWdsSVpXUHU4Mk1xSWtkbmJIY180bThFZzY2R1JMcVlsRzV2aXo0aWYwX3pmcnZDYXBSVVJLeDN3cnVR?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:30.195111",
+    "headline": "Costco CFO doubles down on tariff strategy, winks at churro comeback - CFO Dive",
+    "norm_headline": "costco cfo doubles down on tariff strategy, winks at churro comeback",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOOUpOUUhVUmhsaS1YcE1JWWVoaEVpSUQwU0I3cGUyY2JGZHl4VVJjZEN2QWF5X19BTUZPUl9EUW9KempmMkZKc041ZUE4bjlJRHg0SEpBZTBVUHJTZGFhOW84SXA4aVViT181cUlPM2ZWbFdoNld3Umdual96Sm80NjZDVWlraW54TF9NZjEtRFpzamZHa3U2VUd2RmVVaW8?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:30.942332",
+    "headline": "Jamie Dimon just took India\u2019s side in the Russian oil fight - thestreet.com",
+    "norm_headline": "jamie dimon just took india\u2019s side in the russian oil fight",
+    "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQTV90Q2JzbTgxR3ZURHdIRFV5bUpFTExyWG9GcVJqbm5ob01vVVhZZjRDLVRRWThySEVuMGk4Ull6LWNZdkJjSm9tTVEwV1BXUGZkaXhIQS0zTTZEWTJPQ3Z3bjNUNHZiYVUwUmU3SUR4RUg3d0RRczlsMkhzYXpqTWZBeXp2eUk?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:31.718021",
+    "headline": "Tariff-exposed cities see steeper rent declines, report finds - mpamag.com",
+    "norm_headline": "tariff-exposed cities see steeper rent declines, report finds",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPTEdYdVJHYTlkd2luZ1dzdVJuOE9YYng2UkFubHYzTmFMbVpkSUFiVmFfYzluRGppdWxsUmNjT01ELVkzTmJxbHFIcWg1V1JGbGw1elRXT0Z5ZFUtd1BDSUNLQUhkRFgzWWZBR2ZCbGszSU40VGlnTlYtTkFkcXB6MVYwbzc0SkJ0TllpUU5fcDQxcDRkczVMelFXWVMtUE82R0cxWHRlLVdHY2VJOUJCS3hndmhZNDU4dDFlcXBJdXJtRmdG?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-09-26T05:42:38.995845",
+    "headline": "India May Cut Russian Oil Imports As US Tariff Risk Rises - BW Businessworld",
+    "norm_headline": "india may cut russian oil imports as us tariff risk rises",
+    "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOdzRPMlY3ck9LVTNxWThrb3BBVHBvQVdrRVhabHBySVZPZENTWWQwVDBKbEQtSnpGZ1I1Z0RRdjJocFBNdUhTZXBwU1pvRERMRWdZOWlCZWZYbFg5YWpwM2FqeldnbVJ2QU1zanFlSGNQb1lVNjdKT1pxWnVNanBsRmtyS2VGTG0yTURJRU9lZ2Z1d0RkNWNoOUtPeEUwTm94TENj?oc=5",
     "is_anomaly": true,
     "source": "RSS_Feed"
   }

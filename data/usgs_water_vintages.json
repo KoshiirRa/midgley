@@ -1826,7 +1826,7 @@
     }
   },
   {
-    "as_of": "2026-09-26 00:10:28",
+    "as_of": "2026-09-26 05:48:04",
     "valid_date": "2026-09-26",
     "cluster_key": "all",
     "stations_monitored": 13,
@@ -1843,7 +1843,7 @@
     },
     "data": {
       "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-      "timestamp": "2026-09-26 00:10:28",
+      "timestamp": "2026-09-26 05:48:04",
       "status": "SUCCESS",
       "stations_monitored": 13,
       "stations": {
