@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-26_05-16-58",
+    "timestamp": "2026-09-26 03:04:09",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-26 03:04:09)"
+  },
+  {
     "run_id": "2026-09-26_05-10-28",
     "timestamp": "2026-09-26 03:04:09",
     "run_type": "LIVE_PROSPECTIVE",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-24 22:06 UTC",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-24 22:06 UTC)"
-  },
-  {
-    "run_id": "2026-09-24_22-05-58",
-    "timestamp": "2026-09-24 22:00:18",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "Sanctions by Statute: The Graham Act and Tariffs on Russia\u2019s..."
   }
 ]

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-26T03:37:15.611317",
+  "timestamp": "2026-09-26T05:39:24.595446",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-26T03:22:48Z"
+      "timestamp": "2026-09-26T05:16:53Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,124 +27,124 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-01",
+    "target_date": "2026-10-02",
     "current_base_price": 4.331,
-    "predicted_price_per_gal": 4.331,
-    "expected_change_dollars": 0.0,
-    "expected_change_percent": 0.0,
-    "projected_direction": "FLAT",
-    "prediction_lower_95ci": 4.211,
-    "prediction_upper_95ci": 4.451,
+    "predicted_price_per_gal": 4.629,
+    "expected_change_dollars": 0.298,
+    "expected_change_percent": 6.88,
+    "projected_direction": "UP",
+    "prediction_lower_95ci": 4.509,
+    "prediction_upper_95ci": 4.749,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.331,
-    "day_2_price": 4.331,
-    "day_3_price": 4.331,
-    "day_4_price": 4.331,
-    "day_5_price": 4.331,
+    "day_1_price": 4.308,
+    "day_2_price": 4.359,
+    "day_3_price": 4.497,
+    "day_4_price": 4.516,
+    "day_5_price": 4.629,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.104,
         "share_pct": 35.0,
-        "direction": "FLAT",
-        "description": "Steady refinery utilization"
+        "direction": "UP",
+        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
       },
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.074,
         "share_pct": 25.0,
-        "direction": "FLAT",
-        "description": "Unrestricted terminal dispatch"
+        "direction": "UP",
+        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.06,
         "share_pct": 20.0,
-        "direction": "FLAT",
-        "description": "Stable energy commodity baseline"
+        "direction": "UP",
+        "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.03,
         "share_pct": 10.0,
-        "direction": "FLAT",
-        "description": "Neutral news sentiment"
+        "direction": "UP",
+        "description": "Geopolitical supply risk news & executive social media hawkish posts"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.015,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.015,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast stable ($0.000/gal): Balanced supply/demand indicators.",
+      "summary_text": "Newark DE forecast +$0.298/gal (+6.88%): Driven primarily by Refining Yield & Crack Spread (+$0.104/gal), Regional Logistics & Hub Delivery (+$0.074/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
-          "description": "Steady refinery utilization",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
+          "impact_dollars": 0.104,
+          "impact_pct": 2.4,
           "share_pct": 35.0,
-          "direction": "FLAT"
+          "direction": "UP"
         },
         {
           "category": "Regional Logistics & Hub Delivery",
-          "description": "Unrestricted terminal dispatch",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
+          "impact_dollars": 0.074,
+          "impact_pct": 1.71,
           "share_pct": 25.0,
-          "direction": "FLAT"
+          "direction": "UP"
         },
         {
           "category": "Futures & Commodity Benchmark",
-          "description": "Stable energy commodity baseline",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
+          "impact_dollars": 0.06,
+          "impact_pct": 1.39,
           "share_pct": 20.0,
-          "direction": "FLAT"
+          "direction": "UP"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
-          "description": "Neutral news sentiment",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "Geopolitical supply risk news & executive social media hawkish posts",
+          "impact_dollars": 0.03,
+          "impact_pct": 0.69,
           "share_pct": 10.0,
-          "direction": "FLAT"
+          "direction": "UP"
         },
         {
           "category": "Tax & Regulatory Overhead",
-          "description": "Fixed statutory tax overhead",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+          "impact_dollars": 0.015,
+          "impact_pct": 0.35,
           "share_pct": 5.0,
-          "direction": "FLAT"
+          "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
-          "description": "Neutral weather impact",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "NOAA severe weather risks, convective alerts & freeze warnings",
+          "impact_dollars": 0.015,
+          "impact_pct": 0.35,
           "share_pct": 5.0,
-          "direction": "FLAT"
+          "direction": "UP"
         }
       ]
     }
@@ -152,103 +152,103 @@
   "key_drivers": [
     {
       "category": "Refining Yield & Crack Spread",
-      "description": "Steady refinery utilization",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
+      "impact_dollars": 0.104,
+      "impact_pct": 2.4,
       "share_pct": 35.0,
-      "direction": "FLAT"
+      "direction": "UP"
     },
     {
       "category": "Regional Logistics & Hub Delivery",
-      "description": "Unrestricted terminal dispatch",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
+      "impact_dollars": 0.074,
+      "impact_pct": 1.71,
       "share_pct": 25.0,
-      "direction": "FLAT"
+      "direction": "UP"
     },
     {
       "category": "Futures & Commodity Benchmark",
-      "description": "Stable energy commodity baseline",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
+      "impact_dollars": 0.06,
+      "impact_pct": 1.39,
       "share_pct": 20.0,
-      "direction": "FLAT"
+      "direction": "UP"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
-      "description": "Neutral news sentiment",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "Geopolitical supply risk news & executive social media hawkish posts",
+      "impact_dollars": 0.03,
+      "impact_pct": 0.69,
       "share_pct": 10.0,
-      "direction": "FLAT"
+      "direction": "UP"
     },
     {
       "category": "Tax & Regulatory Overhead",
-      "description": "Fixed statutory tax overhead",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+      "impact_dollars": 0.015,
+      "impact_pct": 0.35,
       "share_pct": 5.0,
-      "direction": "FLAT"
+      "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
-      "description": "Neutral weather impact",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "NOAA severe weather risks, convective alerts & freeze warnings",
+      "impact_dollars": 0.015,
+      "impact_pct": 0.35,
       "share_pct": 5.0,
-      "direction": "FLAT"
+      "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast stable ($0.000/gal): Balanced supply/demand indicators.",
+    "summary_text": "Newark DE forecast +$0.298/gal (+6.88%): Driven primarily by Refining Yield & Crack Spread (+$0.104/gal), Regional Logistics & Hub Delivery (+$0.074/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.104,
         "share_pct": 35.0,
-        "direction": "FLAT",
-        "description": "Steady refinery utilization"
+        "direction": "UP",
+        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
       },
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.074,
         "share_pct": 25.0,
-        "direction": "FLAT",
-        "description": "Unrestricted terminal dispatch"
+        "direction": "UP",
+        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.06,
         "share_pct": 20.0,
-        "direction": "FLAT",
-        "description": "Stable energy commodity baseline"
+        "direction": "UP",
+        "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.03,
         "share_pct": 10.0,
-        "direction": "FLAT",
-        "description": "Neutral news sentiment"
+        "direction": "UP",
+        "description": "Geopolitical supply risk news & executive social media hawkish posts"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.015,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.015,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       }
     }
   }
