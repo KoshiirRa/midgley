@@ -1,11 +1,11 @@
 {
   "created_at": "2026-09-02 00:19:23",
   "llm_totals": {
-    "prompt_tokens": 27580,
-    "completion_tokens": 15640,
-    "total_tokens": 43220,
-    "estimated_cost_usd": 0.006752,
-    "fallback_activations": 198
+    "prompt_tokens": 37704,
+    "completion_tokens": 21740,
+    "total_tokens": 59444,
+    "estimated_cost_usd": 0.009336,
+    "fallback_activations": 237
   },
   "llm_events": [
     {
@@ -238,17 +238,6 @@
       "total_tokens": 0,
       "estimated_cost_usd": 0.0,
       "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-02 23:01:25",
-      "environment": "dev",
-      "vendor": "google",
-      "model": "gemini-2.5-flash",
-      "prompt_tokens": 150,
-      "completion_tokens": 50,
-      "total_tokens": 200,
-      "estimated_cost_usd": 2.6e-05,
-      "is_fallback": false
     },
     {
       "timestamp": "2026-09-02 23:01:25",
@@ -559,28 +548,6 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-03 07:00:45",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:00:46",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-03 07:00:46",
       "environment": "dev",
       "vendor": "offline_lexicon",
@@ -615,28 +582,6 @@
     },
     {
       "timestamp": "2026-09-03 07:00:59",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:00:59",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:01:00",
       "environment": "dev",
       "vendor": "offline_lexicon",
       "model": "rule_based_fallback",
@@ -691,40 +636,7 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-03 07:01:14",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-03 07:01:15",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:01:15",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:01:28",
       "environment": "dev",
       "vendor": "offline_lexicon",
       "model": "rule_based_fallback",
@@ -757,40 +669,7 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-03 07:01:29",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-03 07:01:41",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:01:41",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:01:42",
       "environment": "dev",
       "vendor": "offline_lexicon",
       "model": "rule_based_fallback",
@@ -823,28 +702,6 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-03 07:01:56",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:01:57",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-03 07:01:57",
       "environment": "dev",
       "vendor": "offline_lexicon",
@@ -867,40 +724,7 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-03 07:01:58",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-03 07:02:08",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:02:08",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 07:02:09",
       "environment": "dev",
       "vendor": "offline_lexicon",
       "model": "rule_based_fallback",
@@ -1109,17 +933,6 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-03 17:45:04",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-03 18:00:07",
       "environment": "dev",
       "vendor": "offline_lexicon",
@@ -1164,17 +977,6 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-03 18:45:05",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-03 18:45:06",
       "environment": "dev",
       "vendor": "offline_lexicon",
@@ -1187,28 +989,6 @@
     },
     {
       "timestamp": "2026-09-03 19:00:05",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 19:00:05",
-      "environment": "dev",
-      "vendor": "offline_lexicon",
-      "model": "rule_based_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-03 19:15:05",
       "environment": "dev",
       "vendor": "offline_lexicon",
       "model": "rule_based_fallback",
@@ -1547,17 +1327,6 @@
       "total_tokens": 200,
       "estimated_cost_usd": 2.6e-05,
       "is_fallback": false
-    },
-    {
-      "timestamp": "2026-09-04 14:30:21",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
     },
     {
       "timestamp": "2026-09-04 14:30:21",
@@ -3793,28 +3562,6 @@
       "is_fallback": true
     },
     {
-      "timestamp": "2026-09-07 17:25:43",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-07 17:25:44",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
       "timestamp": "2026-09-07 17:25:44",
       "environment": "dev",
       "vendor": "zero_cost_hook",
@@ -3838,28 +3585,6 @@
     },
     {
       "timestamp": "2026-09-07 17:25:52",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-07 17:25:52",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-07 17:25:53",
       "environment": "dev",
       "vendor": "zero_cost_hook",
       "model": "zero_cost_fallback",
@@ -3915,28 +3640,6 @@
     },
     {
       "timestamp": "2026-09-07 17:26:02",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-07 17:26:02",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-07 17:26:03",
       "environment": "dev",
       "vendor": "zero_cost_hook",
       "model": "zero_cost_fallback",
@@ -4047,28 +3750,6 @@
     },
     {
       "timestamp": "2026-09-07 17:26:36",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-07 17:26:37",
-      "environment": "dev",
-      "vendor": "zero_cost_hook",
-      "model": "zero_cost_fallback",
-      "prompt_tokens": 0,
-      "completion_tokens": 0,
-      "total_tokens": 0,
-      "estimated_cost_usd": 0.0,
-      "is_fallback": true
-    },
-    {
-      "timestamp": "2026-09-07 17:26:37",
       "environment": "dev",
       "vendor": "zero_cost_hook",
       "model": "zero_cost_fallback",
@@ -4451,15 +4132,1016 @@
       "total_tokens": 0,
       "estimated_cost_usd": 0.0,
       "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-13 23:57:51",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 126,
+      "completion_tokens": 80,
+      "total_tokens": 206,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-14 04:29:56",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-14 12:11:57",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 122,
+      "completion_tokens": 80,
+      "total_tokens": 202,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-14 15:02:50",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-14 19:07:02",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-14 23:51:18",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 126,
+      "completion_tokens": 80,
+      "total_tokens": 206,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-15 14:43:46",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 126,
+      "completion_tokens": 80,
+      "total_tokens": 206,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-15 14:44:03",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 118,
+      "completion_tokens": 80,
+      "total_tokens": 198,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-15 14:44:19",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-15 19:35:30",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 138,
+      "completion_tokens": 80,
+      "total_tokens": 218,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-15 20:02:56",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-15 22:48:27",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-16 03:58:28",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 142,
+      "completion_tokens": 80,
+      "total_tokens": 222,
+      "estimated_cost_usd": 3.5e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-16 07:16:45",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 128,
+      "completion_tokens": 80,
+      "total_tokens": 208,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-16 22:47:05",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-16 22:49:51",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-16 22:50:46",
+      "environment": "dev",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 150,
+      "completion_tokens": 50,
+      "total_tokens": 200,
+      "estimated_cost_usd": 2.6e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-16 23:33:32",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-17 19:28:02",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-17 19:49:48",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 128,
+      "completion_tokens": 80,
+      "total_tokens": 208,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-17 21:05:34",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-18 04:31:37",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 114,
+      "completion_tokens": 80,
+      "total_tokens": 194,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-18 04:36:43",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 120,
+      "completion_tokens": 80,
+      "total_tokens": 200,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-18 10:48:50",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-18 16:04:48",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-18 20:37:31",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-18 21:36:01",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 122,
+      "completion_tokens": 80,
+      "total_tokens": 202,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-18 17:05:38",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:05:41",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:05:47",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:05:48",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:05:55",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:06:07",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:06:08",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:06:14",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:06:20",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:06:29",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:13:44",
+      "environment": "dev",
+      "vendor": "zero_cost_hook",
+      "model": "zero_cost_fallback",
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "is_fallback": true
+    },
+    {
+      "timestamp": "2026-09-18 17:14:50",
+      "environment": "dev",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 150,
+      "completion_tokens": 50,
+      "total_tokens": 200,
+      "estimated_cost_usd": 2.6e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 04:27:22",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 10:32:48",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 142,
+      "completion_tokens": 80,
+      "total_tokens": 222,
+      "estimated_cost_usd": 3.5e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 10:33:00",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:19:01",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:19:10",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 128,
+      "completion_tokens": 80,
+      "total_tokens": 208,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:19:16",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:19:28",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:34:08",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:34:22",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:34:29",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 12:34:36",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 126,
+      "completion_tokens": 80,
+      "total_tokens": 206,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 15:37:41",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 18:30:13",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 142,
+      "completion_tokens": 80,
+      "total_tokens": 222,
+      "estimated_cost_usd": 3.5e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-19 22:14:47",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-20 04:03:29",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-20 10:56:21",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-20 15:43:16",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 120,
+      "completion_tokens": 80,
+      "total_tokens": 200,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-20 18:34:33",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-20 18:34:53",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-20 22:17:29",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 120,
+      "completion_tokens": 80,
+      "total_tokens": 200,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-21 04:01:02",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 126,
+      "completion_tokens": 80,
+      "total_tokens": 206,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-21 09:53:01",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-21 09:53:43",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-21 16:21:05",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-21 16:21:26",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-21 21:50:36",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 154,
+      "completion_tokens": 80,
+      "total_tokens": 234,
+      "estimated_cost_usd": 3.6e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-21 21:50:57",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-22 00:40:12",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-22 07:29:39",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-22 18:01:10",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-22 21:15:29",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 00:08:32",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 07:32:33",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 13:28:38",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 18:19:53",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 22:49:48",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 22:49:59",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-23 22:50:11",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-24 03:49:01",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-24 09:08:03",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-24 14:43:33",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 126,
+      "completion_tokens": 80,
+      "total_tokens": 206,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-24 14:43:44",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 132,
+      "completion_tokens": 80,
+      "total_tokens": 212,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-24 14:44:01",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-24 19:53:56",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 126,
+      "completion_tokens": 80,
+      "total_tokens": 206,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-24 23:06:31",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-25 04:04:16",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 144,
+      "completion_tokens": 80,
+      "total_tokens": 224,
+      "estimated_cost_usd": 3.5e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-25 11:27:24",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-25 16:51:46",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 130,
+      "completion_tokens": 80,
+      "total_tokens": 210,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-25 16:51:56",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-25 16:52:15",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 118,
+      "completion_tokens": 80,
+      "total_tokens": 198,
+      "estimated_cost_usd": 3.3e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-25 21:16:50",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-09-26 00:26:48",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 134,
+      "completion_tokens": 80,
+      "total_tokens": 214,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
     }
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 1249,
-    "recall_count": 3,
-    "reflect_count": 2,
-    "cloud_calls": 1199,
-    "local_fallback_calls": 55
+    "retain_count": 18741,
+    "recall_count": 5,
+    "reflect_count": 6,
+    "cloud_calls": 9787,
+    "local_fallback_calls": 8965
   },
   "memory_events": [
     {
@@ -8199,14 +8881,6 @@
       "latency_ms": 15.4
     },
     {
-      "timestamp": "2026-09-11 13:22:53",
-      "environment": "dev",
-      "operation": "recall",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 2.1
-    },
-    {
       "timestamp": "2026-09-11 13:32:14",
       "environment": "dev",
       "operation": "retain",
@@ -10295,14 +10969,6 @@
       "latency_ms": 0.0
     },
     {
-      "timestamp": "2026-09-11 16:44:01",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
       "timestamp": "2026-09-11 16:44:04",
       "environment": "dev",
       "operation": "retain",
@@ -11149,14 +11815,6 @@
       "backend": "hindsight_cloud",
       "status": "success",
       "latency_ms": 15.4
-    },
-    {
-      "timestamp": "2026-09-12 00:56:27",
-      "environment": "dev",
-      "operation": "recall",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 2.1
     },
     {
       "timestamp": "2026-09-13 11:56:34",
@@ -12431,33 +13089,3697 @@
       "latency_ms": 0.0
     },
     {
-      "timestamp": "2026-09-13 16:02:52",
-      "environment": "dev",
+      "timestamp": "2026-09-25 12:58:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:58:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:58:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:58:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:58:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:58:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:58:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:58:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:03",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:07",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:11",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:29",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:34",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:36",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 12:59:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:03",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:06",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:21",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:29",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:00:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:03",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:32",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:36",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:01:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:06",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:21",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:32",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:38",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:02:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:07",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:57",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:03:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:11",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:37",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:39",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:57",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:04:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:05",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:29",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:32",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:34",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:39",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:57",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:05:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:21",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:26",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:32",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:57",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:06:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:03",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:06",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:26",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:29",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:34",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:36",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:07:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:03",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:21",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:35",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:08:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:00",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:03",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:05",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:07",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:32",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:34",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:38",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:09:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:21",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:26",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:29",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:32",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:34",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:57",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:10:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:00",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:07",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:26",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:29",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:38",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:39",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:57",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:11:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:00",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:21",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:26",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:38",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:55",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:12:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:03",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:21",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:24",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:26",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:28",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:30",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:57",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:13:59",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:05",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:20",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:25",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:26",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:27",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:29",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:31",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:33",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:35",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:36",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:51",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:53",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:54",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:56",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:14:58",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:15:00",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 13:15:01",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:33",
+      "environment": "prod",
       "operation": "retain",
       "backend": "sqlite_fts5",
       "status": "success",
       "latency_ms": 0.0
     },
     {
-      "timestamp": "2026-09-13 16:02:52",
-      "environment": "dev",
-      "operation": "recall",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-13 16:02:52",
-      "environment": "dev",
+      "timestamp": "2026-09-25 16:52:34",
+      "environment": "prod",
       "operation": "retain",
       "backend": "sqlite_fts5",
       "status": "success",
       "latency_ms": 0.0
     },
     {
-      "timestamp": "2026-09-13 16:02:52",
-      "environment": "dev",
-      "operation": "reflect",
+      "timestamp": "2026-09-25 16:52:35",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:36",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:37",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:38",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:39",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:40",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:41",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:42",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:43",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:44",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:46",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:47",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:48",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 16:52:49",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:07",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:09",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:10",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:11",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-25 21:17:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:04",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:05",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:06",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:07",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:08",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:09",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:10",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:11",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:12",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:18",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "sqlite_fts5",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-26 00:27:20",
+      "environment": "prod",
+      "operation": "retain",
       "backend": "sqlite_fts5",
       "status": "success",
       "latency_ms": 0.0

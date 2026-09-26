@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-09-23 20:31:12",
-  "last_updated": "2026-09-24 15:43:45",
-  "total_events": 65,
+  "created_at": "2026-08-30 17:46:33",
+  "last_updated": "2026-09-26 00:27:26",
+  "total_events": 902,
   "events": [
     {
       "timestamp": "2026-09-23 20:31:12",
@@ -9,26 +9,6 @@
       "target": "health",
       "status": "ERROR",
       "latency_ms": 140.59,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-23 20:31:12",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 105.56,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-23 20:31:12",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 99.92,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "HTTP Error 503: Service Unavailable"
@@ -54,36 +34,6 @@
       "details": "Dev dry-run: direction=bullish, confidence=0.85"
     },
     {
-      "timestamp": "2026-09-23 20:35:12",
-      "connector_name": "HeadlineArena",
-      "target": "CL",
-      "status": "SUCCESS",
-      "latency_ms": 0.22,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Submitted CL (challenge chal_cl_456): direction=bullish, confidence=0.85, scored=True"
-    },
-    {
-      "timestamp": "2026-09-23 20:35:12",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_CREDENTIALS",
-      "latency_ms": 0.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
-    },
-    {
-      "timestamp": "2026-09-23 20:35:12",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 0.04,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for RB on Headline Arena."
-    },
-    {
       "timestamp": "2026-09-23 20:36:47",
       "connector_name": "HindsightHosted",
       "target": "midgley-gas-forecasting",
@@ -104,71 +54,11 @@
       "details": "HTTP Error 503: Service Unavailable"
     },
     {
-      "timestamp": "2026-09-23 20:46:06",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 95.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-23 20:46:06",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 91.72,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-23 20:46:06",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 103.63,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
       "timestamp": "2026-09-23 20:46:07",
       "connector_name": "HindsightHosted",
       "target": "health",
       "status": "ERROR",
       "latency_ms": 104.27,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-23 20:46:07",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 108.02,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-23 20:46:07",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 92.13,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-23 20:46:07",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 100.39,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "HTTP Error 503: Service Unavailable"
@@ -204,16 +94,6 @@
       "details": "Fallback CFTC COT data"
     },
     {
-      "timestamp": "2026-09-24 00:32:07",
-      "connector_name": "FERC_Form6",
-      "target": "FERC.gov",
-      "status": "SUCCESS",
-      "latency_ms": 0.48,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "FERC pipeline tariff data processed"
-    },
-    {
       "timestamp": "2026-09-24 00:36:56",
       "connector_name": "HeadlineArena",
       "target": "RB",
@@ -222,36 +102,6 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Dev dry-run: direction=bullish, confidence=0.85"
-    },
-    {
-      "timestamp": "2026-09-24 00:36:56",
-      "connector_name": "HeadlineArena",
-      "target": "CL",
-      "status": "SUCCESS",
-      "latency_ms": 0.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Submitted CL (challenge chal_cl_456): direction=bullish, confidence=0.85, scored=True"
-    },
-    {
-      "timestamp": "2026-09-24 00:36:56",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_CREDENTIALS",
-      "latency_ms": 0.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
-    },
-    {
-      "timestamp": "2026-09-24 00:36:56",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 0.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for RB on Headline Arena."
     },
     {
       "timestamp": "2026-09-24 00:37:28",
@@ -384,16 +234,6 @@
       "details": ""
     },
     {
-      "timestamp": "2026-09-24 00:40:42",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 153.7,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
       "timestamp": "2026-09-24 00:40:43",
       "connector_name": "HindsightHosted",
       "target": "health",
@@ -404,41 +244,11 @@
       "details": ""
     },
     {
-      "timestamp": "2026-09-24 00:40:43",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 134.7,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
       "timestamp": "2026-09-24 00:40:44",
       "connector_name": "HindsightHosted",
       "target": "health",
       "status": "SUCCESS",
       "latency_ms": 137.49,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-24 00:40:44",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 137.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-24 00:40:44",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 141.74,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": ""
@@ -464,16 +274,6 @@
       "details": "Fallback CFTC COT data"
     },
     {
-      "timestamp": "2026-09-24 00:42:10",
-      "connector_name": "FERC_Form6",
-      "target": "FERC.gov",
-      "status": "SUCCESS",
-      "latency_ms": 0.12,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "FERC pipeline tariff data processed"
-    },
-    {
       "timestamp": "2026-09-24 14:45:55",
       "connector_name": "HindsightHosted",
       "target": "health",
@@ -494,61 +294,11 @@
       "details": "HTTP Error 503: Service Unavailable"
     },
     {
-      "timestamp": "2026-09-24 14:45:56",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 99.04,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-24 14:45:56",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 93.88,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-24 14:45:56",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 97.34,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
       "timestamp": "2026-09-24 14:45:57",
       "connector_name": "HindsightHosted",
       "target": "health",
       "status": "ERROR",
       "latency_ms": 99.77,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-24 14:45:57",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 107.94,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-09-24 14:45:57",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 89.31,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "HTTP Error 503: Service Unavailable"
@@ -614,16 +364,6 @@
       "details": "Dev dry-run: direction=bullish, confidence=0.85"
     },
     {
-      "timestamp": "2026-09-24 15:42:01",
-      "connector_name": "HeadlineArena",
-      "target": "CL",
-      "status": "SUCCESS",
-      "latency_ms": 0.24,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Submitted CL (challenge chal_cl_456): direction=bullish, confidence=0.85, scored=True"
-    },
-    {
       "timestamp": "2026-09-24 15:42:02",
       "connector_name": "HeadlineArena",
       "target": "RB",
@@ -634,16 +374,6 @@
       "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
     },
     {
-      "timestamp": "2026-09-24 15:42:02",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 0.05,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for RB on Headline Arena."
-    },
-    {
       "timestamp": "2026-09-24 15:43:45",
       "connector_name": "HindsightHosted",
       "target": "midgley-gas-forecasting",
@@ -652,6 +382,5506 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Stats: 1065 docs, 0 obs, 66 refs"
+    },
+    {
+      "timestamp": "2026-08-30 17:46:33",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 17:46:34",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 17:46:35",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 17:46:36",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 17:46:37",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 19:31:31",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 19:31:32",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 19:31:33",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-08-30 19:31:34",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-01 23:53:48",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:53:54",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:53:55",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:53:56",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:53:57",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:54:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:54:31",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:54:32",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:54:33",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:54:35",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:54:39",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-01 23:54:40",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:00:45",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:00:46",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:00:48",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:00:53",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:01:17",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:01:18",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:01:19",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:01:21",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:01:25",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:01:26",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:21",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:22",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:28",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:29",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:30",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:31",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:33",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:37",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:07:38",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:08:00",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:08:01",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:08:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:08:03",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:08:05",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:08:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:08:10",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:31",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:36",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:37",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:38",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:39",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:40",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:42",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:09:46",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:10:06",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:10:07",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:10:08",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:10:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:10:12",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:14:41",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:14:42",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:14:43",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:14:44",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:14:46",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:15:07",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:15:08",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:15:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:15:10",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:15:12",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:18:45",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:18:50",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:18:51",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:18:52",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:18:53",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:18:54",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:18:56",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:19:17",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:19:18",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:19:19",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:19:20",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 00:19:21",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-02 00:19:23",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-02 10:08:15",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:17",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:18",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:19",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:23",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:24",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:26",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:27",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:28",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:30",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 10:08:31",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:11",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:12",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:13",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:15",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:16",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:17",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:19",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 16:45:20",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:13",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:14",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:15",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:16",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:17",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:18",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:20",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:21",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 17:00:22",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:11",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:12",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:13",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:15",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:16",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:17",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:19",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 18:00:20",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:12",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:13",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:14",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:15",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:21",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:22",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:23",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:24",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:25",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:15:26",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:11",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:12",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:13",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:15",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:16",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:17",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:20",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 19:30:21",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:12",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:13",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:14",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:16",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:17",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:20",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 20:45:21",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:13",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:14",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:15",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:17",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:18",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:19",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:20",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:21",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:00:22",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:14",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:15",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:16",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:17",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:18",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:19",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:20",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:21",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:22",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 21:30:23",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:03",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:04",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:05",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:06",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:07",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:08",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:09",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:10",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:00:11",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:10",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:11",
+      "connector_name": "AAA Web Scraper (Wilmington, DE)",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:12",
+      "connector_name": "AAA Web Scraper (Cincinnati, OH)",
+      "target": "Cincinnati_OH",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:13",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:14",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:16",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:17",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:18",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:19",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-02 23:30:20",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-03 07:00:34",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-03 07:00:44",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-03 07:00:58",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-03 07:01:13",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-03 07:01:27",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-03 07:01:40",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-03 07:01:55",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-03 07:02:07",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.01,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-04 15:33:58",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-04 15:34:11",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-04 14:31:41",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:31:45",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:33:26",
+      "connector_name": "GasBuddy GraphQL (Zip 74103)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:33:29",
+      "connector_name": "AAA Web Scraper (OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:33:31",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:33:33",
+      "connector_name": "prediction_history.csv History",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:33:36",
+      "connector_name": "Static Anchor (Tulsa_OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:34:03",
+      "connector_name": "GasBuddy GraphQL (Zip 74103)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:34:05",
+      "connector_name": "AAA Web Scraper (OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:34:07",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:34:10",
+      "connector_name": "prediction_history.csv History",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:34:12",
+      "connector_name": "Static Anchor (Tulsa_OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:50",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "National",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:51",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:52",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:53",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:54",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "SanFrancisco_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:55",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:56",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:41:57",
+      "connector_name": "AAA Web Scraper (Port St. Lucie, FL)",
+      "target": "Port_St_Lucie_FL",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:28",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:29",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:30",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:31",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:32",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:37",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:38",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:39",
+      "connector_name": "AAA Web Scraper (Charlotte, NC)",
+      "target": "Charlotte_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:40",
+      "connector_name": "AAA Web Scraper (San Francisco, CA)",
+      "target": "BayArea_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:41",
+      "connector_name": "AAA Web Scraper (Vallejo, CA)",
+      "target": "NorthBay_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:55",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:56",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:57",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:58",
+      "connector_name": "AAA Web Scraper (Port St. Lucie, FL)",
+      "target": "Port_St_Lucie_FL",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:42:59",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:43:14",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:43:15",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:43:16",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:43:17",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:43:18",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:24",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:25",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:26",
+      "connector_name": "AAA Web Scraper (Covington, KY)",
+      "target": "Cincinnati_KY",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:27",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:28",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:33",
+      "connector_name": "AAA Web Scraper (Tulsa, OK)",
+      "target": "Tulsa_OK",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:34",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Newark_DE",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:35",
+      "connector_name": "EIA/yfinance RBOB Benchmark",
+      "target": "Greenville_NC",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:36",
+      "connector_name": "AAA Web Scraper (Oakland, CA)",
+      "target": "Oakland_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-04 14:44:37",
+      "connector_name": "AAA Web Scraper (San Jose, CA)",
+      "target": "SanJose_CA",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-05 07:01:38",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 07:02:36",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 07:04:28",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 07:06:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 07:07:48",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 07:09:01",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 07:10:24",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 07:11:17",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:03:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:03:51",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:05:34",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:07:05",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.01,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:08:48",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:10:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:11:20",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-05 13:12:59",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 04:54:42",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:00:38",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:00:57",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:01:24",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:01:50",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:02:22",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:02:39",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:03:04",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-06 07:03:32",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 03:48:17",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 03:59:33",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:25:31",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:25:42",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:25:52",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:26:01",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:26:11",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:26:20",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:26:31",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-07 17:26:36",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-10 15:09:49",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-10 15:09:53",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-10 19:44:24",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_Cache",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Cached radar models retrieved"
+    },
+    {
+      "timestamp": "2026-09-11 22:38:48",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-11 22:40:54",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-11 22:42:22",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-11 22:42:23",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 1.46,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-11 22:44:38",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-11 22:47:24",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-11 22:47:25",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-11 22:48:55",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-11 22:50:25",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-11 22:55:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 11:40:25",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.01,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 11:43:47",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 11:46:45",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 11:49:48",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 11:55:00",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 11:57:18",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 11:59:36",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 12:04:15",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:19:03",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:21:19",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:22:37",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:25:44",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:31:04",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:33:30",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:35:57",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 16:40:47",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-12 17:12:28",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_API",
+      "status": "FALLBACK",
+      "latency_ms": 0.31,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Retrieved 6 radar models"
+    },
+    {
+      "timestamp": "2026-09-13 12:47:21",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 12:49:24",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 12:52:54",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.01,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 12:56:34",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 13:01:39",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 13:03:26",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 13:05:24",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 13:08:39",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:16:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:17:40",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:17:55",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:18:17",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:18:58",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:19:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:19:19",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 20:19:59",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:01:12",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:03:03",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:03:04",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-13 23:04:53",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:08:00",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:11:37",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:12:59",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:14:20",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:14:21",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback FERC Form 6 data"
+    },
+    {
+      "timestamp": "2026-09-13 23:15:20",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:28:03",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:28:22",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:29:10",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:31:40",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:34:14",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:34:45",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:35:16",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:36:08",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-13 23:48:00",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_API",
+      "status": "FALLBACK",
+      "latency_ms": 0.17,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Retrieved 6 radar models"
+    },
+    {
+      "timestamp": "2026-09-14 14:11:36",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:13:11",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:14:49",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:17:23",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:21:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:22:25",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:23:41",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-14 14:26:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.01,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 12:45:55",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 12:48:14",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 12:50:18",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 12:52:29",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 12:55:29",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 12:56:53",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 12:58:01",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-15 13:00:01",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-16 12:42:43",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-16 12:42:47",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 3.31,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "FERC pipeline tariff data processed"
+    },
+    {
+      "timestamp": "2026-09-17 12:40:20",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-17 19:50:18",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "HTTP_ERROR",
+      "latency_ms": 840.55,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 404: {\"detail\":\"Not Found\"}"
+    },
+    {
+      "timestamp": "2026-09-17 19:50:19",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "HTTP_ERROR",
+      "latency_ms": 794.55,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 404: {\"detail\":\"Not Found\"}"
+    },
+    {
+      "timestamp": "2026-09-17 21:06:03",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "HTTP_ERROR",
+      "latency_ms": 1762.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 404: {\"detail\":\"Not Found\"}"
+    },
+    {
+      "timestamp": "2026-09-17 22:10:43",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "HTTP_ERROR",
+      "latency_ms": 890.74,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 404: {\"detail\":\"Not Found\"}"
+    },
+    {
+      "timestamp": "2026-09-18 00:00:34",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "HTTP_ERROR",
+      "latency_ms": 889.78,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 404: {\"detail\":\"Not Found\"}"
+    },
+    {
+      "timestamp": "2026-09-18 04:04:52",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "HTTP_ERROR",
+      "latency_ms": 1684.86,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 500: Internal Server Error"
+    },
+    {
+      "timestamp": "2026-09-18 04:04:53",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "HTTP_ERROR",
+      "latency_ms": 985.65,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HTTP 500: Internal Server Error"
+    },
+    {
+      "timestamp": "2026-09-18 04:32:02",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1587.3,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 51ba616b-de9a-4064-b101-e15d04e1c20d already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-18 04:32:03",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 958.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge e1421fba-53a5-4179-9792-ff1c39eb8b22 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-18 10:49:24",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3914.24,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 51ba616b-de9a-4064-b101-e15d04e1c20d already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-18 10:49:26",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1900.46,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge e1421fba-53a5-4179-9792-ff1c39eb8b22 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-18 12:48:32",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 4045.76,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 51ba616b-de9a-4064-b101-e15d04e1c20d already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-18 12:48:34",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1889.87,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge e1421fba-53a5-4179-9792-ff1c39eb8b22 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-18 16:05:18",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 2069.14,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-18 20:37:59",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1961.28,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-18 20:38:00",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 694.49,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-18 21:35:34",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 344.81,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-18 21:36:40",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 3850.82,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-18 21:36:42",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1562.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-18 17:05:35",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 385.65,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-18 17:13:37",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Dev dry-run: direction=bullish, confidence=0.85"
+    },
+    {
+      "timestamp": "2026-09-19 04:26:53",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 286.45,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 04:27:54",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 2780.87,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 10:32:17",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 239.65,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 10:33:40",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 2529.12,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 10:33:42",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1414.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 11:57:53",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 316.1,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 12:04:49",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-19 12:14:44",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 325.44,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 12:33:31",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 328.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 12:54:42",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1210.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 13:35:05",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 357.1,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 13:51:03",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 322.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 14:11:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 356.44,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 14:32:28",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 389.17,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 14:32:39",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "WTI_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-19 14:32:40",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "NG_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-19 14:32:46",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_Cache",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Cached radar models retrieved"
+    },
+    {
+      "timestamp": "2026-09-19 15:36:48",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 283.9,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 15:38:17",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1080.12,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 16:27:50",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 248.92,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 16:43:49",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 273.92,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 16:59:19",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 255.75,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:35",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 286.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 17:31:54",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "WTI_USD",
+      "status": "SUCCESS",
+      "latency_ms": 0.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Served from off-hours cache"
+    },
+    {
+      "timestamp": "2026-09-19 17:32:00",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_API",
+      "status": "FALLBACK",
+      "latency_ms": 0.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Retrieved 6 radar models"
+    },
+    {
+      "timestamp": "2026-09-19 18:29:38",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 367.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 18:30:52",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1104.53,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 22:14:23",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 282.85,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-19 22:15:20",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 2574.74,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-19 22:15:21",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 977.27,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 04:03:04",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 298.3,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 04:04:08",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 2670.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 04:04:09",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 549.92,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:18",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 5024.58,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:44",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5013.78,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:49",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5014.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 10:55:54",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5017.57,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-20 12:27:46",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 383.88,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 12:30:02",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-20 12:43:54",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 343.08,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 12:59:31",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 413.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 13:24:41",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 314.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 13:59:15",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1821.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 13:59:16",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1221.08,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 15:42:25",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 341.33,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 15:43:58",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1872.61,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 15:43:59",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 606.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 18:34:01",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 326.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 18:35:30",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1213.38,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 18:35:31",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 581.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 22:16:56",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 385.34,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-20 22:18:01",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1213.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-20 22:18:02",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1307.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-21 04:00:29",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 343.32,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 04:02:02",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10057.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-21 04:02:12",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10059.85,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-21 09:52:18",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 377.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 09:54:36",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 13458.16,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge 4c2caae1-f4eb-4f14-b8cf-e191fa249fc5): direction=bullish, confidence=0.8531, scored=True"
+    },
+    {
+      "timestamp": "2026-09-21 09:54:56",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 20089.13,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-21 14:16:31",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 293.28,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 14:19:09",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-21 14:37:21",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 294.15,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 15:00:32",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 407.6,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 15:27:28",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 306.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 16:14:42",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10040.67,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-21 16:14:52",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10039.65,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-21 16:20:18",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 386.95,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 16:22:30",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 11154.75,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-21 16:22:41",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 10404.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-21 16:55:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 332.36,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 17:10:31",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 313.45,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 17:30:50",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 327.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 17:47:01",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 332.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 18:05:35",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 275.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 19:12:47",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 329.55,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 19:12:58",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "WTI_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-21 19:13:12",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_API",
+      "status": "FALLBACK",
+      "latency_ms": 0.38,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Retrieved 6 radar models"
+    },
+    {
+      "timestamp": "2026-09-21 21:49:31",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 286.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-21 21:51:32",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 2827.11,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge fa3bd5e9-e7cd-498d-97a9-0805dd1d877d): direction=bullish, confidence=0.8531, scored=True"
+    },
+    {
+      "timestamp": "2026-09-21 21:51:33",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 1017.26,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge 932b4b4a-0133-41b8-98ac-4b60ae1d0852): direction=bullish, confidence=0.8159, scored=True"
+    },
+    {
+      "timestamp": "2026-09-22 00:39:42",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 255.97,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 00:40:54",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3230.29,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge fa3bd5e9-e7cd-498d-97a9-0805dd1d877d already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-22 00:40:55",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 782.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 932b4b4a-0133-41b8-98ac-4b60ae1d0852 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-22 07:29:11",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 285.91,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 07:30:33",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 6509.8,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge fa3bd5e9-e7cd-498d-97a9-0805dd1d877d already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-22 07:30:37",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 4356.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 932b4b4a-0133-41b8-98ac-4b60ae1d0852 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-22 12:40:13",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 407.1,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 12:43:15",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-22 13:02:24",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 379.82,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 13:29:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 458.88,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 13:49:00",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 334.95,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 14:06:38",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 450.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 14:46:06",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10058.34,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-22 14:46:16",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10054.91,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-22 18:00:21",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 416.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 18:01:50",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 2632.21,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-22 18:01:52",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1318.69,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-22 21:13:44",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 367.9,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-22 21:16:07",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 2879.63,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge 1ede9d79-db5d-4451-9010-efaba7033c65): direction=bullish, confidence=0.9265, scored=True"
+    },
+    {
+      "timestamp": "2026-09-22 21:16:08",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 1110.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge 5722a71d-0c5a-4cf8-84ed-be91cfb60261): direction=bullish, confidence=0.8944, scored=True"
+    },
+    {
+      "timestamp": "2026-09-23 00:08:05",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 306.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 00:09:18",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3495.96,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 1ede9d79-db5d-4451-9010-efaba7033c65 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-23 00:09:19",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1028.69,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 5722a71d-0c5a-4cf8-84ed-be91cfb60261 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-23 07:32:06",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 223.56,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 07:33:25",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10024.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-23 07:33:47",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 21199.75,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-23 12:48:27",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 353.54,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 12:51:07",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-23 12:51:11",
+      "connector_name": "FERC_Form6",
+      "target": "FERC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 3.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "FERC pipeline tariff data processed"
+    },
+    {
+      "timestamp": "2026-09-23 13:03:51",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 369.49,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 13:12:39",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10062.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-23 13:12:49",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10056.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-23 13:27:51",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 277.77,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 13:29:30",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 4831.5,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 1ede9d79-db5d-4451-9010-efaba7033c65 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-23 13:29:33",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 2642.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 5722a71d-0c5a-4cf8-84ed-be91cfb60261 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-23 18:19:18",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 320.15,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 18:20:32",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1293.56,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-23 18:20:33",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 703.84,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-23 22:49:16",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 249.79,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-23 22:50:45",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 1886.76,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge 98545ccf-3b4d-483e-961b-c6d4c5a1da61): direction=bullish, confidence=0.9115, scored=True"
+    },
+    {
+      "timestamp": "2026-09-23 22:50:46",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 1485.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge 7de0cfff-1cce-4c81-8bfb-68a6cc842f42): direction=bullish, confidence=0.8775, scored=True"
+    },
+    {
+      "timestamp": "2026-09-24 03:48:34",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 239.73,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 03:49:38",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 2799.86,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 98545ccf-3b4d-483e-961b-c6d4c5a1da61 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-24 03:49:39",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1056.29,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 7de0cfff-1cce-4c81-8bfb-68a6cc842f42 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-24 09:07:49",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 335.1,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 09:08:50",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10032.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-24 09:09:00",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10031.63,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-24 12:46:30",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 250.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 12:49:59",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-24 13:02:12",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 232.8,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 13:14:22",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10017.27,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-24 13:14:32",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10021.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-24 14:43:03",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 297.19,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 14:44:53",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 10975.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-24 19:53:23",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 289.7,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 19:54:33",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1347.84,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-24 19:54:34",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 681.89,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-24 23:06:06",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 275.7,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-24 23:07:03",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 1656.15,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge 41b28a28-bb82-4a55-b332-48118fda805c): direction=bullish, confidence=0.9394, scored=True"
+    },
+    {
+      "timestamp": "2026-09-24 23:07:04",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 972.53,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge 09557c8f-5c2d-471f-b76a-d3e25b545c62): direction=bullish, confidence=0.9095, scored=True"
+    },
+    {
+      "timestamp": "2026-09-25 04:03:39",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 287.94,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-25 04:05:16",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 20153.42,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 41b28a28-bb82-4a55-b332-48118fda805c already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-25 04:05:17",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1688.21,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 09557c8f-5c2d-471f-b76a-d3e25b545c62 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-25 11:26:44",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 320.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-25 11:28:16",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "AUTH_ERROR",
+      "latency_ms": 10021.26,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to obtain OAuth2 bearer token"
+    },
+    {
+      "timestamp": "2026-09-25 11:28:22",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 5537.97,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 09557c8f-5c2d-471f-b76a-d3e25b545c62 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-25 12:49:37",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 226.12,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-25 12:51:53",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-09-25 13:06:03",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 286.33,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-25 13:15:26",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "NETWORK_ERROR",
+      "latency_ms": 16499.09,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "The read operation timed out"
+    },
+    {
+      "timestamp": "2026-09-25 13:15:44",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 18191.47,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 09557c8f-5c2d-471f-b76a-d3e25b545c62 already predicted (HTTP 500)"
+    },
+    {
+      "timestamp": "2026-09-25 16:50:56",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 286.22,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-25 16:53:07",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 13037.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-25 16:53:09",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 2308.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-25 21:15:49",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 4089.84,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-25 21:15:50",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 40.09,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-09-25 21:17:21",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1912.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-25 21:17:22",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 625.45,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-26 00:26:20",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 283.91,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-26 00:27:24",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1208.16,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-26 00:27:26",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1412.28,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
     }
   ]
 }

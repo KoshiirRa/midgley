@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-09-24 17:26:49",
-  "records_count": 24,
+  "last_refreshed_utc": "2026-09-25 13:06:03",
+  "records_count": 69,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -104,46 +104,6 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 15:45:33",
-      "platform": "Google News RSS",
-      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - energynow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-09-24 15:45:33",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-09-24 15:45:33",
-      "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - energynow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-09-24 15:45:33",
-      "platform": "Google News RSS",
-      "post_text": "BRICS+ and the fallout from Trump's energy shocks - The Economic Times",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
       "date": "2026-09-24 17:26:47",
       "platform": "Google News RSS",
       "post_text": "Trump and Xi vie for energy supremacy as the Gulf\u2019s oil cartel crumbles - Yahoo",
@@ -154,9 +114,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-21 19:12:47",
       "platform": "Google News RSS",
-      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - energynow.com",
+      "post_text": "COMMENTARY: Trump Broke OPEC. He May Regret It: Bousso - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -164,9 +124,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-22 12:40:13",
       "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -174,9 +134,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-22 13:02:24",
       "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - energynow.com",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -184,9 +144,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-22 13:29:14",
       "platform": "Google News RSS",
-      "post_text": "China Isn\u2019t Importing Any US LNG, But It\u2019s Still in the Game: Bousso - energynow.com",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -194,9 +154,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-22 13:49:00",
       "platform": "Google News RSS",
-      "post_text": "Trump and Xi vie for energy supremacy as the Gulf\u2019s oil cartel crumbles - Yahoo",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -204,9 +164,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-22 14:06:38",
       "platform": "Google News RSS",
-      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - energynow.com",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -214,9 +174,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-23 12:48:27",
       "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -224,9 +184,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-23 13:03:51",
       "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - energynow.com",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -234,9 +194,39 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-09-24 17:26:47",
+      "date": "2026-09-24 12:46:30",
       "platform": "Google News RSS",
-      "post_text": "China Isn\u2019t Importing Any US LNG, But It\u2019s Still in the Game: Bousso - energynow.com",
+      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-24 13:02:12",
+      "platform": "Google News RSS",
+      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-25 12:49:37",
+      "platform": "Google News RSS",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-09-25 13:06:03",
+      "platform": "Google News RSS",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
