@@ -1,8 +1,8 @@
 {
   "version": "1.0",
-  "last_updated": "2026-09-21T19:13:12.524791",
-  "total_hypotheses_tested": 6,
-  "accepted_hypotheses": 0,
+  "last_updated": "2026-09-26T17:53:48.793156",
+  "total_hypotheses_tested": 7,
+  "accepted_hypotheses": 1,
   "experiments": [
     {
       "hypothesis_name": "Weekly_Exogenous_Decay_Validation",
@@ -135,6 +135,29 @@
       "information_ratio": -0.109,
       "status": "REJECTED",
       "verifiable_checksum": "praxist_c9375f90"
+    },
+    {
+      "hypothesis_name": "Weekly_Exogenous_Decay_Validation",
+      "evaluated_at": "2026-09-26T17:53:48.792996",
+      "candidate_params": {
+        "half_life_days": 4.8,
+        "geopolitical_weight": 0.36,
+        "supply_disruption_weight": 0.39,
+        "opec_action_weight": 0.25,
+        "weekend_gap_multiplier": 1.45
+      },
+      "baseline_mae": 0.139,
+      "candidate_mae": 0.1379,
+      "mae_delta": -0.0011,
+      "baseline_directional_hit": 0.8889,
+      "candidate_directional_hit": 0.8889,
+      "hit_delta": 0.0,
+      "directional_accuracy_delta": 0.0,
+      "t_statistic": 2.843,
+      "p_value": 0.0217,
+      "information_ratio": 1.005,
+      "status": "ACCEPTED",
+      "verifiable_checksum": "praxist_07ca7264"
     }
   ]
 }

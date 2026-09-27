@@ -1,5 +1,47 @@
 [
   {
+    "run_id": "2026-09-27_07-47-49",
+    "timestamp": "2026-09-27 07:47:43",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Zelensky Asks Trump to Act on Lindsey Graham's Sanctions Aft..."
+  },
+  {
+    "run_id": "2026-09-27_00-21-52",
+    "timestamp": "2026-09-27 00:21:47",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Tariffs, Russian oil and the uneasy India-US relationship - ..."
+  },
+  {
+    "run_id": "2026-09-26_20-49-00",
+    "timestamp": "2026-09-26 20:48:55",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "States Sue Over Latest Trump Tariff Attempt - EnergyNow.com"
+  },
+  {
+    "run_id": "2026-09-26_17-54-00",
+    "timestamp": "2026-09-26 16:48:51",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-26 16:48:51)"
+  },
+  {
+    "run_id": "2026-09-26_16-49-18",
+    "timestamp": "2026-09-26 16:48:51",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-26 16:48:51)"
+  },
+  {
+    "run_id": "2026-09-26_13-43-10",
+    "timestamp": "2026-09-26 13:42:46",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-26 13:42:46)"
+  },
+  {
+    "run_id": "2026-09-26_07-17-09",
+    "timestamp": "2026-09-26 07:17:04",
+    "run_type": "INTRADAY_REVISION",
+    "trigger": "Iran offers US deal to reopen Strait of Hormuz in seven days"
+  },
+  {
     "run_id": "2026-09-26_05-49-07",
     "timestamp": "2026-09-26 05:42:39",
     "run_type": "INTRADAY_REVISION",
@@ -556,47 +598,5 @@
     "timestamp": "2026-09-24 22:45:28",
     "run_type": "INTRADAY_REVISION",
     "trigger": "US, India Discuss Trump-Signed Russia Sanctions Bill and Tar..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-49",
-    "timestamp": "2026-09-24 22:30:30",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "With the threat of 100% tariffs looming, India's trade in Ru..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-39",
-    "timestamp": "2026-09-24 22:30:30",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "With the threat of 100% tariffs looming, India's trade in Ru..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-35",
-    "timestamp": "2026-09-24 22:30:30",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "With the threat of 100% tariffs looming, India's trade in Ru..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-29",
-    "timestamp": "2026-09-24 22:15:27",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "New US tariffs on Russian oil no issue for Indonesia, Airlan..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-24",
-    "timestamp": "2026-09-24 22:15:27",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "New US tariffs on Russian oil no issue for Indonesia, Airlan..."
-  },
-  {
-    "run_id": "2026-09-24_22-30-20",
-    "timestamp": "2026-09-24 22:30 UTC",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-24 22:30 UTC)"
-  },
-  {
-    "run_id": "2026-09-24_22-30-16",
-    "timestamp": "2026-09-24 22:15:27",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "New US tariffs on Russian oil no issue for Indonesia, Airlan..."
   }
 ]
