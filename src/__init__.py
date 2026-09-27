@@ -1,6 +1,6 @@
 """
 Gas Price LLM Prediction Package (midgley)
-Package Version: 0.6.1
+Package Version: 0.7.2
 Model Engine Version: v1.6 Ipatieff
 """
 
