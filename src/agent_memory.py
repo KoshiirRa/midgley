@@ -25,7 +25,9 @@ from src.telemetry import log_agent_memory_op
 logger = logging.getLogger(__name__)
 
 DEFAULT_SQLITE_PATH = os.path.join("data", "agent_memory.sqlite")
+DEFAULT_VINTAGES_PATH = os.path.join("data", "agent_memory_vintages.json")
 HISTORY_CSV = os.path.join("data", "prediction_history.csv")
+TELEMETRY_LEDGER_PATH = os.path.join("data", "telemetry_ledger.json")
 
 
 class SQLiteMemoryStore:
@@ -326,10 +328,42 @@ class AgentMemoryManager:
         self,
         hindsight_url: Optional[str] = None,
         hindsight_key: Optional[str] = None,
-        sqlite_path: str = DEFAULT_SQLITE_PATH
+        sqlite_path: str = DEFAULT_SQLITE_PATH,
+        vintages_path: str = DEFAULT_VINTAGES_PATH,
+        ledger_path: str = TELEMETRY_LEDGER_PATH
     ):
         self.sqlite_store = SQLiteMemoryStore(db_path=sqlite_path)
         self.hindsight_client = HindsightClient(base_url=hindsight_url, api_key=hindsight_key)
+        self.vintages_path = vintages_path
+        self.ledger_path = ledger_path
+
+    def _persist_bank_vintages(self, inventory: Dict[str, Any]) -> bool:
+        """
+        Persists authoritative memory bank counts to data/agent_memory_vintages.json
+        for resilient fallback in ephemeral CI environments and offline runs.
+        """
+        if not inventory or (inventory.get("memories_count", 0) == 0 and inventory.get("reflections_count", 0) == 0):
+            return False
+        try:
+            os.makedirs(os.path.dirname(self.vintages_path), exist_ok=True)
+            snapshot = {
+                "bank_id": inventory.get("bank_id", self.hindsight_client.bank_id),
+                "source": inventory.get("source", "local_sqlite"),
+                "backend": inventory.get("backend", "Local SQLite FTS5"),
+                "memories_count": int(inventory.get("memories_count", 0)),
+                "observations_count": int(inventory.get("observations_count", 0)),
+                "reflections_count": int(inventory.get("reflections_count", 0)),
+                "pending_reconciliation_count": int(inventory.get("pending_reconciliation_count", 0)),
+                "last_synced_at": datetime.now(timezone.utc).isoformat()
+            }
+            tmp_path = f"{self.vintages_path}.tmp-{os.getpid()}"
+            with open(tmp_path, "w", encoding="utf-8") as f:
+                json.dump(snapshot, f, indent=2)
+            os.replace(tmp_path, self.vintages_path)
+            return True
+        except Exception as e:
+            logger.debug(f"Failed to persist agent memory vintages snapshot: {e}")
+            return False
 
     @property
     def is_cloud_engine_active(self) -> bool:
@@ -519,7 +553,11 @@ class AgentMemoryManager:
         """
         Retrieves authoritative memory bank inventory (experience, observation, and reflection counts,
         plus local-to-cloud pending reconciliation queue depth).
-        Checks remote Hindsight / Supabase cluster first; falls back to local SQLite FTS5 database.
+        Cascading 4-Tier Fallback Strategy:
+          - Tier 1: Remote Hindsight / Supabase pgvector API
+          - Tier 2: Populated Local SQLite FTS5 database (data/agent_memory.sqlite)
+          - Tier 3: Committed Vintage Snapshot (data/agent_memory_vintages.json)
+          - Tier 4: Cumulative Telemetry Ledger (data/telemetry_ledger.json)
         """
         # Count un-synced experiences in local SQLite
         pending_sync_count = 0
@@ -534,11 +572,11 @@ class AgentMemoryManager:
         except Exception as e:
             logger.debug(f"Failed to query pending reconciliation queue count: {e}")
 
-        # 1. Attempt remote cloud retrieval if client is configured
+        # Tier 1: Attempt remote cloud retrieval if client is configured
         if self.hindsight_client.is_configured:
             remote_stats = self.hindsight_client.get_bank_stats()
-            if remote_stats is not None:
-                return {
+            if remote_stats is not None and (remote_stats.get("memories", 0) > 0 or remote_stats.get("reflections", 0) > 0):
+                inv = {
                     "source": "remote_cloud",
                     "backend": "Vectorize Hindsight (Supabase pgvector)",
                     "bank_id": self.hindsight_client.bank_id,
@@ -547,8 +585,10 @@ class AgentMemoryManager:
                     "reflections_count": remote_stats.get("reflections", 0),
                     "pending_reconciliation_count": pending_sync_count
                 }
+                self._persist_bank_vintages(inv)
+                return inv
 
-        # 2. Fallback to local SQLite database
+        # Tier 2: Check local SQLite database if populated
         local_memories = 0
         local_reflections = 0
         try:
@@ -566,13 +606,67 @@ class AgentMemoryManager:
         except Exception as e:
             logger.debug(f"Failed to query local SQLite memory inventory: {e}")
 
+        if local_memories > 0 or local_reflections > 0:
+            inv = {
+                "source": "local_sqlite",
+                "backend": "Local SQLite FTS5",
+                "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "Midgley",
+                "memories_count": local_memories,
+                "observations_count": 0,
+                "reflections_count": local_reflections,
+                "pending_reconciliation_count": pending_sync_count
+            }
+            self._persist_bank_vintages(inv)
+            return inv
+
+        # Tier 3: Committed Vintage Snapshot (data/agent_memory_vintages.json)
+        if os.path.exists(self.vintages_path):
+            try:
+                with open(self.vintages_path, "r", encoding="utf-8") as f:
+                    vintage_data = json.load(f)
+                v_mems = int(vintage_data.get("memories_count", 0))
+                v_refs = int(vintage_data.get("reflections_count", 0))
+                if v_mems > 0 or v_refs > 0:
+                    return {
+                        "source": vintage_data.get("source", "local_sqlite"),
+                        "backend": vintage_data.get("backend", "Local SQLite FTS5 (Snapshot)"),
+                        "bank_id": vintage_data.get("bank_id", self.hindsight_client.bank_id if self.hindsight_client else "Midgley"),
+                        "memories_count": v_mems,
+                        "observations_count": int(vintage_data.get("observations_count", 0)),
+                        "reflections_count": v_refs,
+                        "pending_reconciliation_count": int(vintage_data.get("pending_reconciliation_count", pending_sync_count))
+                    }
+            except Exception as e:
+                logger.debug(f"Failed to read agent memory vintages snapshot: {e}")
+
+        # Tier 4: Cumulative Telemetry Ledger (data/telemetry_ledger.json)
+        if os.path.exists(self.ledger_path):
+            try:
+                with open(self.ledger_path, "r", encoding="utf-8") as f:
+                    ledger_data = json.load(f)
+                mem_totals = ledger_data.get("memory_totals", {})
+                t_retain = int(mem_totals.get("retain_count", 0))
+                t_reflect = int(mem_totals.get("reflect_count", 0))
+                if t_retain > 0 or t_reflect > 0:
+                    return {
+                        "source": "telemetry_ledger",
+                        "backend": "Cumulative Telemetry Ledger",
+                        "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "Midgley",
+                        "memories_count": t_retain,
+                        "observations_count": 0,
+                        "reflections_count": t_reflect,
+                        "pending_reconciliation_count": 0
+                    }
+            except Exception as e:
+                logger.debug(f"Failed to read telemetry ledger memory totals: {e}")
+
         return {
             "source": "local_sqlite",
             "backend": "Local SQLite FTS5",
-            "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "midgley-gas-forecasting",
-            "memories_count": local_memories,
+            "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "Midgley",
+            "memories_count": 0,
             "observations_count": 0,
-            "reflections_count": local_reflections,
+            "reflections_count": 0,
             "pending_reconciliation_count": pending_sync_count
         }
 
@@ -668,7 +762,8 @@ def extract_top_prediction_anomalies(
         return []
 
     try:
-        df = pd.read_csv(history_csv)
+        from src.prediction_logger import read_prediction_history
+        df = read_prediction_history(history_csv)
         eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
         if eval_df.empty:
             return []

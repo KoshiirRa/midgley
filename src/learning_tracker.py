@@ -38,7 +38,8 @@ def load_prediction_dataset(csv_path: Optional[str] = None) -> pd.DataFrame:
     if not os.path.exists(path):
         return pd.DataFrame()
     try:
-        df = pd.read_csv(path)
+        from src.prediction_logger import read_prediction_history
+        df = read_prediction_history(path)
         if 'actual_5d_price' in df.columns:
             df = df.dropna(subset=['actual_5d_price']).copy()
         if not df.empty:

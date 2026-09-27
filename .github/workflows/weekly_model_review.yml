@@ -88,6 +88,10 @@ jobs:
           python -m src.weekly_issue_reporter
 
       - name: Regenerate Public Dashboard with Updated Reflections
+        env:
+          HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
+          HINDSIGHT_BANK_ID: "Midgley"
         run: |
           python run_all.py --dashboard-only
 

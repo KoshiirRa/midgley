@@ -24,6 +24,31 @@ logger = logging.getLogger(__name__)
 
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 
+PREDICTION_HISTORY_DTYPES = {
+    "forecast_id": str,
+    "issued_at_utc": str,
+    "log_timestamp": str,
+    "forecast_target_date": str,
+    "region": str,
+    "model_version": str,
+    "run_type": str,
+    "headline_trigger": str,
+    "predicted_direction": str,
+    "actual_direction": str,
+    "data_source_provenance": str,
+}
+
+
+def read_prediction_history(path: str = HISTORY_CSV_PATH) -> pd.DataFrame:
+    """
+    Safely reads prediction_history.csv with standardized column dtypes and low_memory=False
+    to prevent DtypeWarning on mixed-type categorical / text columns (Issue #468).
+    """
+    if not os.path.exists(path) or os.path.getsize(path) == 0:
+        return pd.DataFrame()
+    return pd.read_csv(path, dtype=PREDICTION_HISTORY_DTYPES, low_memory=False)
+
+
 def ensure_history_store():
     """Ensures data directory and prediction_history.csv file exist with standard and extended MLOps schema."""
     os.makedirs("data", exist_ok=True)
@@ -62,7 +87,7 @@ def ensure_history_store():
         else:
             # Migrate existing CSV if missing extended columns (Issue #389, #434)
             try:
-                df = pd.read_csv(HISTORY_CSV_PATH)
+                df = read_prediction_history(HISTORY_CSV_PATH)
                 updated = False
                 for col in columns:
                     if col not in df.columns:
@@ -111,7 +136,7 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
     if df is None:
         ensure_history_store()
         try:
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
         except Exception as e:
             logger.warning(f"Could not read prediction history CSV for cloud sync: {e}")
             return {"status": "offline_fallback", "synced_rows": 0, "provider": "local_csv", "reason": str(e)}
@@ -288,7 +313,7 @@ def get_cloud_sync_status() -> dict:
     total_local_rows = 0
     if os.path.exists(HISTORY_CSV_PATH):
         try:
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
             total_local_rows = len(df)
         except Exception:
             pass
@@ -318,7 +343,7 @@ def compute_regional_residual_std(
     base_std = default_std
     try:
         if os.path.exists(HISTORY_CSV_PATH):
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
             filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region, horizon_days=horizon_days)
             if not filtered.empty and 'actual_5d_price' in filtered.columns:
                 actuals = filtered['actual_5d_price'].astype(float).values
@@ -358,7 +383,7 @@ def get_regional_calibration_residuals(
     """
     try:
         if os.path.exists(HISTORY_CSV_PATH):
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
             filtered = filter_evaluated_history_by_window(
                 df,
                 window_days=window_days,
@@ -429,7 +454,7 @@ def log_predictions(
         model_version = resolve_model_tag(region=region, model_type="Ridge")
     ensure_history_store()
     try:
-        history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
+        history_df = read_prediction_history(HISTORY_CSV_PATH)
     except Exception:
         history_df = pd.DataFrame()
     
@@ -535,7 +560,7 @@ def log_predictions(
     new_df = pd.DataFrame(new_records)
     with file_lock(HISTORY_CSV_PATH):
         try:
-            history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
+            history_df = read_prediction_history(HISTORY_CSV_PATH)
         except Exception:
             history_df = pd.DataFrame()
 
@@ -601,7 +626,7 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
     if not os.path.exists(path):
         return 0
     try:
-        df = pd.read_csv(path)
+        df = read_prediction_history(path)
         initial_len = len(df)
         if initial_len == 0:
             return 0
@@ -664,7 +689,7 @@ def backfill_actual_prices_and_evaluate(
     
     with file_lock(target_csv):
         try:
-            history_df = pd.read_csv(target_csv)
+            history_df = read_prediction_history(target_csv)
         except Exception as e:
             logger.warning(f"Could not read prediction history log ({e}). Returning empty DataFrame.")
             return pd.DataFrame()
@@ -813,7 +838,7 @@ def backfill_actual_prices_and_evaluate(
     if updated:
         with file_lock(target_csv):
             try:
-                disk_df = pd.read_csv(target_csv, dtype={"actual_direction": str, "predicted_direction": str, "data_source_provenance": str})
+                disk_df = read_prediction_history(target_csv)
             except Exception:
                 disk_df = history_df.copy()
 

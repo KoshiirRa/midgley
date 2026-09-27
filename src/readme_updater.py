@@ -100,7 +100,8 @@ def update_readme_forecasts(
 
     if os.path.exists(history_csv_path):
         try:
-            df = pd.read_csv(history_csv_path)
+            from src.prediction_logger import read_prediction_history
+            df = read_prediction_history(history_csv_path)
             if not df.empty:
                 latest_nat = get_latest_valid_region_forecast(df, 'National')
                 latest_tulsa = get_latest_valid_region_forecast(df, 'Tulsa_OK')

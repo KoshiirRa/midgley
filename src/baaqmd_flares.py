@@ -163,7 +163,7 @@ class BAAQMDFlareConnector:
         if not os.path.exists(self.storage_file) or force_refresh:
             self._initialize_benchmark_data()
 
-        df = pd.read_csv(self.storage_file)
+        df = pd.read_csv(self.storage_file, low_memory=False)
         df["event_date"] = pd.to_datetime(df["event_date"])
         df = df.sort_values("event_date")
 

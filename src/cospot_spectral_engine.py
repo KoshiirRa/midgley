@@ -250,7 +250,7 @@ def compute_rolling_spectral_features(
     df_out['cospot_dwt_detail_shock_mag'] = shock_mags
     df_out['cospot_dwt_approx_momentum'] = momentums
     
-    return df_out
+    return df_out.copy()
 
 
 class CoSPOTOnlineAdapter:

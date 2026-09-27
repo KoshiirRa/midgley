@@ -18,6 +18,7 @@ import numpy as np
 from datetime import datetime, timezone
 import logging
 from src.regional_metadata import render_regional_driver_cards_html
+from src.prediction_logger import read_prediction_history
 
 logger = logging.getLogger(__name__)
 
@@ -203,7 +204,7 @@ def calculate_rolling_metrics(history_csv_path: str = HISTORY_CSV_PATH):
         return [datetime.now().strftime("%Y-%m-%d")], [0.0], [0.0]
         
     try:
-        df = pd.read_csv(history_csv_path)
+        df = read_prediction_history(history_csv_path)
         eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
         eval_df = eval_df[~eval_df['region'].str.startswith('Test_', na=False)]
         
@@ -268,7 +269,7 @@ def compute_dynamic_accuracy_stats(history_csv_path: str = HISTORY_CSV_PATH) -> 
         return default_stats
         
     try:
-        df = pd.read_csv(history_csv_path)
+        df = read_prediction_history(history_csv_path)
         eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
         
         # Exclude synthetic/test regions
@@ -630,7 +631,7 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
 
     if os.path.exists(history_csv):
         try:
-            df = pd.read_csv(history_csv)
+            df = read_prediction_history(history_csv)
             if not df.empty:
                 latest_row = df.iloc[-1]
                 if 'run_type' in df.columns and pd.notna(latest_row['run_type']):
@@ -2163,7 +2164,7 @@ def generate_public_dashboard():
     logged_regions = set()
     if os.path.exists(HISTORY_CSV_PATH):
         try:
-            df_hist = pd.read_csv(HISTORY_CSV_PATH)
+            df_hist = read_prediction_history(HISTORY_CSV_PATH)
             if not df_hist.empty:
                 for reg in prices_map:
                     reg_df = df_hist[df_hist['region'] == reg]
@@ -2228,7 +2229,7 @@ def generate_public_dashboard():
     try:
         hist_csv = os.path.join(PROJECT_ROOT, "data", "prediction_history.csv")
         if os.path.exists(hist_csv):
-            _hist_df = pd.read_csv(hist_csv)
+            _hist_df = read_prediction_history(hist_csv)
             if not _hist_df.empty and 'log_timestamp' in _hist_df.columns:
                 _latest_ts = pd.to_datetime(_hist_df['log_timestamp'], errors='coerce').dropna().max()
                 if pd.notna(_latest_ts):
@@ -5803,7 +5804,7 @@ def generate_quantstats_tearsheet_page(output_dir: str = "docs"):
             <div>
                 <span class="text-xs font-bold font-mono text-amber-300 uppercase tracking-wider block">Synthetic Verification Demonstration</span>
                 <p class="text-xs text-slate-300 mt-0.5 leading-relaxed">
-                    This QuantStats tear sheet executes statistical risk and drawdown calculations across an illustrative synthetic portfolio return sample (\(N=100\)) to benchmark mathematical estimator pipelines under controlled conditions.
+                    This QuantStats tear sheet executes statistical risk and drawdown calculations across an illustrative synthetic portfolio return sample (\\(N=100\\)) to benchmark mathematical estimator pipelines under controlled conditions.
                 </p>
             </div>
         </div>
@@ -6053,7 +6054,6 @@ def generate_telemetry_page():
     cloud_calls = mem_totals.get('cloud_calls', 0)
     local_fallback_calls = mem_totals.get('local_fallback_calls', 0)
 
-    sqlite_mem_path = os.path.join(PROJECT_ROOT, "data", "agent_memory.sqlite")
     mem_inventory = {}
     try:
         from src.agent_memory import AgentMemoryManager
@@ -6068,20 +6068,6 @@ def generate_telemetry_page():
     pending_reconciliation = mem_inventory.get('pending_reconciliation_count', 0)
     mem_backend_badge = mem_inventory.get('backend', 'Local SQLite FTS5')
     mem_source_type = mem_inventory.get('source', 'local_sqlite')
-    if stored_memories == 0 and stored_reflections == 0 and os.path.exists(sqlite_mem_path):
-        try:
-            import sqlite3
-            conn = sqlite3.connect(sqlite_mem_path, timeout=2.0)
-            c = conn.cursor()
-            c.execute("SELECT COUNT(*) FROM memories")
-            stored_memories = c.fetchone()[0]
-            c.execute("SELECT COUNT(*) FROM reflections")
-            stored_reflections = c.fetchone()[0]
-            c.execute("SELECT COUNT(*) FROM memories WHERE cloud_synced = 0")
-            pending_reconciliation = c.fetchone()[0]
-            conn.close()
-        except Exception:
-            pass
 
     # Connector audit rows
     connectors_dict = conn_summary.get('connectors', {})
@@ -6284,14 +6270,14 @@ def generate_telemetry_page():
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
                         </h4>
-                        <span class="text-[10px] px-2 py-0.5 rounded-full {'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' if mem_source_type == 'remote_cloud' else 'bg-slate-800 text-slate-400 border border-slate-700'} font-mono">
-                            {'☁️ Remote Cluster' if mem_source_type == 'remote_cloud' else '💾 Local SQLite'}
+                        <span class="text-[10px] px-2 py-0.5 rounded-full {'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' if mem_source_type == 'remote_cloud' else ('bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' if 'Snapshot' in mem_backend_badge or mem_source_type == 'telemetry_ledger' else 'bg-slate-800 text-slate-400 border border-slate-700')} font-mono">
+                            {'☁️ Remote Cluster' if mem_source_type == 'remote_cloud' else ('📦 Verified Snapshot' if 'Snapshot' in mem_backend_badge or mem_source_type == 'telemetry_ledger' else '💾 Local SQLite')}
                         </span>
                     </div>
                     <div class="space-y-3 font-mono text-xs">
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <div class="text-[10px] text-slate-500 uppercase tracking-wider">Bank Identifier</div>
-                            <div class="text-slate-200 font-bold text-sm">{mem_inventory.get('bank_id', 'midgley-gas-forecasting')}</div>
+                            <div class="text-slate-200 font-bold text-sm">{mem_inventory.get('bank_id', 'Midgley')}</div>
                             <div class="text-[10px] text-slate-500 font-sans mt-0.5">{mem_backend_badge}</div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">

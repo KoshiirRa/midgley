@@ -438,7 +438,8 @@ def fetch_history_last_known_price(region_code: str) -> dict:
     history_path = os.path.join("data", "prediction_history.csv")
     if os.path.exists(history_path):
         try:
-            df = pd.read_csv(history_path)
+            from src.prediction_logger import read_prediction_history
+            df = read_prediction_history(history_path)
             reg_df = df[df['region'] == region_code]
             if not reg_df.empty:
                 if region_code in ["Oakland_CA", "BayArea_CA"]:

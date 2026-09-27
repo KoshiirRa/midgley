@@ -119,7 +119,7 @@ class CARBComplianceConnector:
 
         try:
             if os.path.exists(self.history_csv):
-                df = pd.read_csv(self.history_csv)
+                df = pd.read_csv(self.history_csv, low_memory=False)
                 df["date"] = pd.to_datetime(df["date"])
                 df = df.sort_values("date")
 

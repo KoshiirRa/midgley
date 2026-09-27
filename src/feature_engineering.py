@@ -313,6 +313,7 @@ def create_feature_matrix(
     df['day_of_year'] = df['date'].dt.dayofyear
     df['sin_day'] = np.sin(2 * np.pi * df['day_of_year'] / 365.25)
     df['cos_day'] = np.cos(2 * np.pi * df['day_of_year'] / 365.25)
+    df = df.copy()
     
     # 2. Merge Alternative Physical Data (Cboe OVX Volatility & Baker Hughes Rig Count)
     try:
@@ -341,6 +342,7 @@ def create_feature_matrix(
     for col in ['baker_hughes_us_rig_count', 'baker_hughes_oil_rigs', 'baker_hughes_gas_rigs', 'baker_hughes_rig_delta_1w']:
         if col not in df.columns:
             df[col] = 0.0
+    df = df.copy()
 
     # Merge U.S. Treasury Yield Curve & TIPS Inflation Metrics (Issue #66)
     try:
@@ -470,6 +472,7 @@ def create_feature_matrix(
     for col in ['rbob_calendar_spread_m1_m2', 'wti_calendar_spread_m1_m2', 'crack_spread_forward_321', 'nymex_backwardation_regime']:
         if col not in df.columns:
             df[col] = 0.0
+    df = df.copy()
 
     # Determine day-of-year and year series for point-in-time continuous features (Issue #356)
     if 'date' in df.columns and len(df) > 0:
@@ -522,6 +525,7 @@ def create_feature_matrix(
         df['freeze_warning_flag'] = (df['hdd_daily'] > 25.0).astype(float)
         df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
         df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
+    df = df.copy()
 
     # 2. CFTC Commitment of Traders (COT) Energy Positioning Data (Issues #143, #175, #356, #432)
     try:
@@ -564,6 +568,7 @@ def create_feature_matrix(
         df['cot_rbob_zscore_3y'] = (df['cot_rbob_net_speculative'] - 75000.0) / 20000.0
         df['cot_commercial_hedger_ratio'] = 0.85 + 0.05 * np.cos(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
         df['cot_net_position_delta_1w'] = df['cot_rbob_net_speculative'].diff(5).fillna(0.0)
+    df = df.copy()
 
     # 3. FERC Form 6 Interstate Pipeline Tariff Data (Issues #123, #175, #356, #432)
     try:
@@ -607,6 +612,7 @@ def create_feature_matrix(
         df['ferc_plantation_tariff_per_bbl'] = colonial_rates * (1.85 / 2.15)
         df['ferc_explorer_tariff_per_bbl'] = colonial_rates * (1.62 / 2.15)
         df['ferc_pipeline_tariff_index_5d'] = (df['ferc_colonial_line1_tariff_per_bbl'] + df['ferc_plantation_tariff_per_bbl'] + df['ferc_explorer_tariff_per_bbl']) / 3.0
+    df = df.copy()
 
     # 4. USGS Water Data Telemetry (Issues #56, #356, #432)
     try:
@@ -651,6 +657,7 @@ def create_feature_matrix(
         df['usgs_gulf_marine_departure_risk_index'] = np.maximum(0.0, 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 220.0) / 365.25))
         df['usgs_carquinez_berthing_risk_index'] = 0.05 + 0.05 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
         df['usgs_delaware_refinery_thermal_index'] = np.maximum(0.0, (_mean_temp_clim - 80.0) / 20.0)
+    df = df.copy()
 
     # 5. USGS Seismic Data Telemetry (Issues #55, #356, #432)
     try:
@@ -689,6 +696,7 @@ def create_feature_matrix(
         df['usgs_bay_area_seismic_risk_index'] = 0.02
         df['usgs_cushing_seismic_risk_index'] = 0.01
         df['usgs_composite_seismic_risk_index'] = 0.015
+    df = df.copy()
 
     # 6. Air Quality (AQI) Industrial Emissions & Ozone Telemetry (Issues #54, #73, #356, #432)
     try:
@@ -745,6 +753,7 @@ def create_feature_matrix(
         df['aqi_composite_outage_risk_index'] = (df['aqi_bay_area_outage_risk_index'] + df['aqi_tulsa_outage_risk_index'] + df['aqi_delaware_outage_risk_index']) / 3.0
         df['aqi_ozone_action_day_count'] = ozone_season * 2.0
         df['aqi_max_rvp_surcharge_per_gal'] = ozone_season * 0.08
+    df = df.copy()
 
     # 7. California Energy Commission (CEC) Weekly Fuels Watch (Issues #364, #356, #432)
     try:
@@ -787,6 +796,7 @@ def create_feature_matrix(
         df['norcal_refinery_utilization_pct'] = 86.4
         df['socal_refinery_utilization_pct'] = 88.2
         df['statewide_refinery_utilization_pct'] = 87.3
+    df = df.copy()
 
     # 8. U.S. EIA Petroleum Balances & Refinery Movements (Issues #141, #356, #432)
     try:
@@ -836,6 +846,7 @@ def create_feature_matrix(
         df['eia_refinery_net_production_padd1'] = 310.0 + 20.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
         df['eia_refinery_net_production_padd3'] = 2680.0 + 100.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
         df['eia_pipeline_movements_padd3_to_padd1'] = 2850.0 + 120.0 * np.sin(2.0 * np.pi * (_day_of_year - 90.0) / 365.25)
+    df = df.copy()
 
     # 9. USDA Biofuels & E10 Blendstock Offsets (Issues #182, #273, #356, #432)
     try:
@@ -873,6 +884,7 @@ def create_feature_matrix(
         df['usda_rin_d6_credit_value'] = 0.52 + 0.08 * np.sin(2.0 * np.pi * (_day_of_year - 150.0) / 365.25)
         rbob_ref = df['gasoline_rbob'] if 'gasoline_rbob' in df.columns else 2.40
         df['usda_e10_blendstock_offset'] = 0.10 * (df['usda_ethanol_rack_price'] - rbob_ref) - (0.10 * df['usda_rin_d6_credit_value'])
+    df = df.copy()
 
     # 10. EPA Reid Vapor Pressure (RVP) Regulatory Standards & Seasonal Transitions (Issue #366)
     try:
@@ -890,6 +902,7 @@ def create_feature_matrix(
         for col in ['rvp_max_allowable_psi', 'rvp_is_summer_active', 'rvp_summer_transition_days_remaining',
                     'rvp_terminal_deadline_days_remaining', 'rvp_spring_ramp_factor', 'rvp_seasonal_compliance_premium']:
             df[col] = 0.0
+    df = df.copy()
 
     # 11. NOAA CO-OPS Coastal Marine Terminal Disruption Telemetry (Issue #368)
     try:
@@ -905,6 +918,7 @@ def create_feature_matrix(
         logger.warning(f"Could not merge NOAA CO-OPS coastal marine telemetry: {e}")
         df['marine_terminal_surge_risk'] = 0.0
         df['marine_terminal_shallow_draft_risk'] = 0.0
+    df = df.copy()
 
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing & Issue #355)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
@@ -993,6 +1007,7 @@ def create_feature_matrix(
     else:
         for col in llm_feature_cols:
             df[f'event_{col}'] = 0.0
+    df = df.copy()
 
     # 4. Qlib Symbolic Alpha Factors Evaluation (Issue #127)
     try:
@@ -1012,6 +1027,7 @@ def create_feature_matrix(
                         df[f"qlib_{name}"] = engine.evaluate_expression(expr, df)
     except Exception as e:
         logger.warning(f"Could not evaluate Qlib symbolic alpha factors: {e}")
+    df = df.copy()
 
     # 5. CoSPOT Compositional Spectral & Wavelet Features (Issue #215, arXiv:2609.02093)
     try:
@@ -1025,6 +1041,7 @@ def create_feature_matrix(
         ]:
             if c not in df.columns:
                 df[c] = 0.0
+    df = df.copy()
 
     # 6. Forecast Target Construction
     df[f'target_price_{forecast_horizon}d'] = df['gasoline_rbob'].shift(-forecast_horizon)
@@ -1033,6 +1050,7 @@ def create_feature_matrix(
     # Fill feature NaNs safely with forward-fill only to prevent backward lookahead leakage (Issue #354)
     feature_cols = [c for c in df.columns if not c.startswith('target_')]
     df[feature_cols] = df[feature_cols].ffill().fillna(0.0)
+    df = df.copy()
     
     # Preserve unlabelled contemporary inference frame for live forecasting (Issue #353)
     unlabelled_inference_frame = df.iloc[-forecast_horizon:].copy().reset_index(drop=True)

@@ -148,7 +148,7 @@ class EventEconometricCalibrator:
         """Loads timestamped historical energy event episodes."""
         if not os.path.exists(self.benchmark_file):
             self._ensure_storage()
-        df = pd.read_csv(self.benchmark_file)
+        df = pd.read_csv(self.benchmark_file, low_memory=False)
         df["event_date"] = pd.to_datetime(df["event_date"])
         return df.sort_values("event_date")
 

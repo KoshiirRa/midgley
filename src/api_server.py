@@ -590,10 +590,11 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             HISTORY_CSV_PATH,
             compute_rolling_scoreboard_metrics,
             get_regional_calibration_residuals,
-            compute_regional_residual_std
+            compute_regional_residual_std,
+            read_prediction_history
         )
         if os.path.exists(HISTORY_CSV_PATH):
-            df_hist = pd.read_csv(HISTORY_CSV_PATH)
+            df_hist = read_prediction_history(HISTORY_CSV_PATH)
             if not df_hist.empty and 'region' in df_hist.columns:
                 reg_df = df_hist[df_hist['region'] == region_code]
                 if not reg_df.empty:
