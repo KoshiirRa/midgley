@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-27T08:13:36.649820",
+  "timestamp": "2026-09-27T19:30:25.752441",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-27T07:47:46Z"
+      "timestamp": "2026-09-27T19:02:06Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -35,8 +35,8 @@
     "projected_direction": "UP",
     "prediction_lower_95ci": 4.474,
     "prediction_upper_95ci": 4.714,
-    "calibration_method": "gaussian_scaled",
-    "calibration_sample_size": 0,
+    "calibration_method": "conformal",
+    "calibration_sample_size": 237,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
