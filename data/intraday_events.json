@@ -3473,5 +3473,25 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": false
+  },
+  {
+    "timestamp": "2026-09-27T07:47:42.769661",
+    "headline": "Zelensky Asks Trump to Act on Lindsey Graham's Sanctions After Another Deadly Russian Attack - Kyiv Post",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5GalJGdE0wcTJTSko5RjVKR3VUYVVCRXBCOFN4Q24tclNhX3J2YjZwc0xXczIzc0kzUURfaTFvX1E0bEVVd0ViR0g3SQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5GalJGdE0wcTJTSko5RjVKR3VUYVVCRXBCOFN4Q24tclNhX3J2YjZwc0xXczIzc0kzUURfaTFvX1E0bEVVd0ViR0g3SQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiS0FVX3lxTE5GalJGdE0wcTJTSko5RjVKR3VUYVVCRXBCOFN4Q24tclNhX3J2YjZwc0xXczIzc0kzUURfaTFvX1E0bEVVd0ViR0g3SQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.4,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]

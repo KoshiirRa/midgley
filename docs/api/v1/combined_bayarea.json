@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-27T00:53:19.578046",
+  "timestamp": "2026-09-27T08:23:08.747115",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.526,
+    "current_price_per_gal": 6.551,
     "source": "AAA Web Scraper (San Francisco, CA)",
     "provenance": {
       "source": "AAA Web Scraper (San Francisco, CA)",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-27T00:21:51Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-27T08:21:14Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-02",
-    "current_base_price": 6.526,
-    "predicted_price_per_gal": 6.883,
+    "current_base_price": 6.551,
+    "predicted_price_per_gal": 6.908,
     "expected_change_dollars": 0.357,
-    "expected_change_percent": 5.47,
+    "expected_change_percent": 5.45,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 6.763,
-    "prediction_upper_95ci": 7.003,
+    "prediction_lower_95ci": 6.788,
+    "prediction_upper_95ci": 7.028,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.462,
-    "day_2_price": 6.543,
-    "day_3_price": 6.743,
-    "day_4_price": 6.777,
-    "day_5_price": 6.883,
+    "day_1_price": 6.487,
+    "day_2_price": 6.568,
+    "day_3_price": 6.768,
+    "day_4_price": 6.802,
+    "day_5_price": 6.908,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "BayArea CA forecast +$0.357/gal (+5.47%): Driven primarily by Tax & Regulatory Overhead (+$0.125/gal), Refining Yield & Crack Spread (+$0.089/gal).",
+      "summary_text": "BayArea CA forecast +$0.357/gal (+5.45%): Driven primarily by Tax & Regulatory Overhead (+$0.125/gal), Refining Yield & Crack Spread (+$0.089/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.125,
-          "impact_pct": 1.92,
+          "impact_pct": 1.91,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.071,
-          "impact_pct": 1.09,
+          "impact_pct": 1.08,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -134,7 +134,7 @@
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
           "impact_dollars": 0.018,
-          "impact_pct": 0.28,
+          "impact_pct": 0.27,
           "share_pct": 5.0,
           "direction": "UP"
         },
@@ -142,7 +142,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.018,
-          "impact_pct": 0.28,
+          "impact_pct": 0.27,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -154,7 +154,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.125,
-      "impact_pct": 1.92,
+      "impact_pct": 1.91,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.071,
-      "impact_pct": 1.09,
+      "impact_pct": 1.08,
       "share_pct": 20.0,
       "direction": "UP"
     },
@@ -186,7 +186,7 @@
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
       "impact_dollars": 0.018,
-      "impact_pct": 0.28,
+      "impact_pct": 0.27,
       "share_pct": 5.0,
       "direction": "UP"
     },
@@ -194,13 +194,13 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.018,
-      "impact_pct": 0.28,
+      "impact_pct": 0.27,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "BayArea CA forecast +$0.357/gal (+5.47%): Driven primarily by Tax & Regulatory Overhead (+$0.125/gal), Refining Yield & Crack Spread (+$0.089/gal).",
+    "summary_text": "BayArea CA forecast +$0.357/gal (+5.45%): Driven primarily by Tax & Regulatory Overhead (+$0.125/gal), Refining Yield & Crack Spread (+$0.089/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

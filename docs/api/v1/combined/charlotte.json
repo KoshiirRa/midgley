@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-27T00:49:56.613382",
+  "timestamp": "2026-09-27T08:19:19.429030",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.193,
+    "current_price_per_gal": 4.185,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-27T00:21:50Z"
+      "timestamp": "2026-09-27T07:47:47Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-02",
-    "current_base_price": 4.193,
-    "predicted_price_per_gal": 4.338,
+    "current_base_price": 4.185,
+    "predicted_price_per_gal": 4.33,
     "expected_change_dollars": 0.145,
     "expected_change_percent": 3.46,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.218,
-    "prediction_upper_95ci": 4.458,
+    "prediction_lower_95ci": 4.21,
+    "prediction_upper_95ci": 4.45,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.148,
-    "day_2_price": 4.189,
-    "day_3_price": 4.3,
-    "day_4_price": 4.282,
-    "day_5_price": 4.338,
+    "day_1_price": 4.14,
+    "day_2_price": 4.181,
+    "day_3_price": 4.292,
+    "day_4_price": 4.274,
+    "day_5_price": 4.33,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -102,7 +102,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.058,
-          "impact_pct": 1.38,
+          "impact_pct": 1.39,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.022,
-          "impact_pct": 0.52,
+          "impact_pct": 0.53,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.058,
-      "impact_pct": 1.38,
+      "impact_pct": 1.39,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.022,
-      "impact_pct": 0.52,
+      "impact_pct": 0.53,
       "share_pct": 15.0,
       "direction": "UP"
     },
