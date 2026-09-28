@@ -110,6 +110,30 @@
           "stake_bin": null
         }
       }
+    },
+    "bf44e352-b1f5-4e7a-90d2-0d122e7915b4": {
+      "asset": "RB",
+      "submitted_at": "2026-09-28T22:33:35.353082+00:00",
+      "submitted_ts": 1790634815.353082,
+      "response": {
+        "status": "ALREADY_SUBMITTED",
+        "mode": "SKIPPED_ALREADY_PREDICTED",
+        "asset": "RB",
+        "challenge_id": "bf44e352-b1f5-4e7a-90d2-0d122e7915b4",
+        "message": "Active challenge bf44e352-b1f5-4e7a-90d2-0d122e7915b4 for RB was already predicted today."
+      }
+    },
+    "30483103-2673-4047-b19a-a9a29b42010b": {
+      "asset": "CL",
+      "submitted_at": "2026-09-28T22:33:37.798217+00:00",
+      "submitted_ts": 1790634817.798217,
+      "response": {
+        "status": "ALREADY_SUBMITTED",
+        "mode": "SKIPPED_ALREADY_PREDICTED",
+        "asset": "CL",
+        "challenge_id": "30483103-2673-4047-b19a-a9a29b42010b",
+        "message": "Active challenge 30483103-2673-4047-b19a-a9a29b42010b for CL was already predicted today."
+      }
     }
   }
 }
