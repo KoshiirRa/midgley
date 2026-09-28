@@ -42,6 +42,10 @@ jobs:
         run: |
           python scripts/sync_headline_arena.py
 
+      - name: Rebase On Latest Remote Changes
+        run: |
+          git pull --rebase --autostash origin main || true
+
       - name: Commit and Push Updated Pending Cache and Ledger
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

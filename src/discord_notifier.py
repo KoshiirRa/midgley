@@ -134,16 +134,18 @@ def format_intraday_discord_payload(
         import hashlib
         event_hash = hashlib.sha256(headline.encode("utf-8", errors="ignore")).hexdigest()[:16]
 
-    # Flag URL for Discord Webhook Action Button & Embed Fallback
+    # Flag URL for Discord Webhook Action Button & Embed Fallback (clamped to avoid exceeding limits)
     import urllib.parse
+    safe_headline_param = (headline[:120] + "...") if len(headline) > 120 else headline
+    safe_url_param = (url[:200] + "...") if len(url) > 200 else url
     flag_params = urllib.parse.urlencode({
         "id": event_hash,
-        "headline": headline,
+        "headline": safe_headline_param,
         "source": source,
         "p": f"{price_pressure:+.2f}",
         "s": f"{supply_disruption:.2f}",
         "g": f"{geopolitical_risk:.2f}",
-        "url": url
+        "url": safe_url_param
     })
     flag_url = f"https://midgley-intraday-monitor.m-cubed-3.workers.dev/flag?{flag_params}"
     tracking_url = "https://github.com/KoshiirRa/midgley/issues/258"
@@ -154,12 +156,35 @@ def format_intraday_discord_payload(
         "inline": False
     })
 
+    # Strict Discord embed character limit sanitization (max 256 for title/field names, 1024 for field values)
+    sanitized_fields = []
+    for f in fields:
+        fname = str(f.get("name", ""))
+        fval = str(f.get("value", ""))
+        if len(fname) > 256:
+            fname = fname[:253] + "..."
+        if len(fval) > 1024:
+            fval = fval[:1020] + "..."
+        sanitized_fields.append({
+            "name": fname,
+            "value": fval,
+            "inline": bool(f.get("inline", True))
+        })
+
+    safe_title = f"🚨 {env_badge} Intraday Gas Price Forecast Revision"
+    if len(safe_title) > 256:
+        safe_title = safe_title[:253] + "..."
+
+    safe_desc = f"**Trigger Catalyst:**\n> *\"{headline}\"*"
+    if len(safe_desc) > 4096:
+        safe_desc = safe_desc[:4090] + "...\"*"
+
     embed = {
-        "title": f"🚨 {env_badge} Intraday Gas Price Forecast Revision",
-        "description": f"**Trigger Catalyst:**\n> *\"{headline}\"*",
+        "title": safe_title,
+        "description": safe_desc,
         "url": "https://koshiirRa.github.io/midgley/",
         "color": color,
-        "fields": fields,
+        "fields": sanitized_fields,
         "footer": {
             "text": f"Midgley Energy Complex Forecasting • Anomaly ID: {event_hash}"
         },

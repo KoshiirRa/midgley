@@ -79,10 +79,14 @@ jobs:
             python -m src.intraday_event_monitor
           fi
 
+      - name: Rebase On Latest Remote Changes
+        run: |
+          git pull --rebase --autostash origin main || true
+
       - name: Commit Updated README, Dashboard & Prediction Logs
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update [skip ci]"
+          commit_message: "chore: Intraday event anomaly dispatch & public dashboard update [skip ci]"
           file_pattern: "README.md docs/ data/"
 
       - name: Setup GitHub Pages

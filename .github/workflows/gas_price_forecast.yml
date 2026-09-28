@@ -95,6 +95,10 @@ jobs:
           path: run_all_output.log
           if-no-files-found: ignore
 
+      - name: Rebase On Latest Remote Changes
+        run: |
+          git pull --rebase --autostash origin main || true
+
       - name: Commit Updated README, Dashboard & Prediction Logs
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
