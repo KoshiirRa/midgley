@@ -1,7 +1,7 @@
 {
   "benchmark_key": "geopolitical",
-  "last_refreshed_utc": "2026-09-26 16:37:35",
-  "records_count": 461,
+  "last_refreshed_utc": "2026-09-28 15:53:48",
+  "records_count": 566,
   "data": [
     {
       "date": "2023-04-27 00:00:00",
@@ -3229,6 +3229,741 @@
       "category": "Geopolitical_Venezuela_Orinoco",
       "chokepoint": "Venezuela_Orinoco",
       "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOaDF4MHIyRUItNjNIb0ROX3Vad3R6eHZ2TUJiaFJ6TkFSRDAzVVVFdFY1R2QtNldBbF9iekh6VXp4N3lLMjVGNFhKQ0xvT0VmUDBNaGl0aldqNnNfQS00VkFhb2V1bG1SUzg5em9xeWpCQmt1R2l5LUFHbF9ONENWNDl3aW80NHNtVzkyYVk0MENjVlU5LXBPMUs4TVVwWnJEOWFWbg?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "After nixing Iran proposal, Trump tells Axios he expects talks this week",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdHM4R3NjWURXNmwzUk9wVVEtMmptc2xnRGNKbm9pVlowMGxHMWRzaU15d0ZhUmFNNnpuMUZwbjRSLXl6V2tSY2RyTjNQR1pBc1NhdjFYSzhvamxGRmlKU2pSdEhjSklFQzhDVnMxT3dlSHhxSGlRNUVuT1FNejVrOE9n?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Trump rejects Iran\u2019s ceasefire deal to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUkpUQTNyelA1S05DaHZWUXJHTXF1UnN3T1ZUN002UTZ4cFE2VElPMnM3VDlYb0RWQlBYc29oRVItUjFXZVNrdGdWV21ETkpyZFlBVnplQ3VCUDVEejhGTUphY2xsV1FNNWZ3NXJrQlQ5MWNUdU9KVVNGeDBTT1B1MFFZbTYwMlliY0VwUVhB0gGTAUFVX3lxTE1adzBxOHczbGlSZHY0WEc4ZGxqVG9wZTltdmVMNTRYR0pzb0UyN01MdWhoWF9XdzZHNGNhM2QyQVBEbS1fMy1xT2w3X3R4cmJZTGVOc1FkWnlhbEk0VE9LdlNSS1pNWUdVOEY4VGFoM3NmQVM1aURfbzJoS1pudUlaYXVVVzNjSllRR285Wkphdmk0VQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "8 US Marines injured in Iranian missile attack in Strait of Hormuz: Report",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOd2FueFRqdlF5RkVVdmVlbGNMLTJia1BhZG16N2xxalo1WFFWRTgwd0REaU96dHNTVTZxZzJnQV9hSlVXb3BEOU1FU09lZXJLMXpVM2otNXNTazhFUEdPZGNlRXBvTG9wS3JrOWtYODlDR3MyejNfekV4X1FnczdKaWVvQ3BMck4ydmhKVjJjbnUzbWEyTGtzcUJieWltRTNsQmRRSUo0d1haNVBKM00zTA?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "U.S. Marines injured in recent Iranian attack",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbUc1RHFEY1d2aXlOMElSX2tyVU4taDZNdmdMdUdQckN5aWw3MVhQQnU4NUlQWTBfV1prX2RnZGFRdHI4VjFJdHpOdWUwSTQ4XzgwbW14cjl5V04yWlNLd0NkRUdLX190cURfRUw0dWN2WmlYeFlkOGhEQy1zdFZ6S2VGZ3ZiRHpfSExyd2dySS1BUGtFdXRzelhkLVVoMk1IT2duWQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Oil prices surge 4% as Trump rejects Iran's Hormuz deal",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBGUDRYZFRkS0I1c2xHQkI1ajhUcG9QMEUxdEhxc0Fhdm5XdGgzNkhleGxOajJOVE9mT21RSVlYbTRQNk5HbXhQa0o0ZUpqYTMtSi1vNGZFcm9qZTBnb3kwQV9XdW9TMkp4Yk9MZmw1UlJtMlNhUnFNd0pRNzF6QQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNNm4xcEVDa201dEJsd2R6VFdHRWhIVU9TOWlIZFVWQWtZaHJmdmIzRTgzTFhSV0RuM0RHdXE0ekpQYk96dlMtUnZvdWVqdFRVODBWajAtcE4tV2pBQVUxUHdjWm50dE1Hb0FibWF2aTNsVEdOR3VTUm03Q3o2NDRGc295d1l6eUNpLVFhMHl5SHBHNjdMT1hNbzNINXdmOW84ZnA3Wm5UdmdfUEg0MlVTUQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "EU wants to reinforce Operation Aspides in Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5odFVfMXFKR2Fza0JydndSRnF3bTYxaTVXd2RXc2s2aEkyUUtRQkQ2cEM3VTN2SktRYVVWZzkwZkxKb2piNmwxWUZRRmZMSWZ1RmpwWGRYQXVmaGRNdG1B?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Will Egypt Strike Yemen's Houthis?, by Daily Editorials",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWktEdWFuX2ozX25PTzZGSi1KVG9iODRGQ2w1OXRTMWlCQ2lPZ1A1cExOQjhBUXh5U3lSUGVnTUZ3NlpIX2MySHZCRnFKNjNQeml1OXdoTDFES3ZwTGZOb0JfakxGMWpsdHhESkE5MUFoM3h0VWNUNWpzTVhyMzVkYlU4aUx4MnBLckxFT1VwQjhPc2pmQ3c?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "\u201cIran War Spreads to the Red Sea\u201d: U.S. Faces Dilemma Over Ending or Widening Conflict as Burdens Mount on Neighboring Countries",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEM0lGanpMb3cwS3dqVHNmUzQxblVscTdKWGhnWnUzVmFRdV9wODBiWjg5VXRXSzlXXzhidUctSHFDcVJRRG5fdWVxQzRtaWNKMGNiVXdRSQ?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "How a Houthi Blockade in the Red Sea Tightens Iran\u2019s Grip on Global Energy Supplies",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNcEJndXMtbHRQb1Q1YnhKMk1vdGtSUG5GWGdDZHRMOUFwbVVDM3V0OHVCTzVhemt2clNmZFFTUjRKa05kdFNLYUNrTU9fQ1dHQnpCLWJ5YzFqazJESlhBOGtCU1F0MlVaVHBzbG5Bcmx3b1ZNS0E3X2pkNTF5TXVIUC1KMVJqNUNHZThmNF83T05jUHN5QzFlMmU1SzBpMkJQVWdUSFJlbGNXUVgxdGJ3cFN1dw?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela\u2019s Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela\u2019s Oil Reopening Moves Faster Than Democratic Reform \u2013 OpEd",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOa2kyWWpQenFDb1VGSXE3Szl1SGxnam5GQW5IclU5NkFjc0Z0TzNZNVVfeVhEdzBmS3ZHQXVZT0I4RTQxbDlKT3hFUHlkc2xyNzRsUG8tbU9kWTRSSUJ3WVl2b1F0QlQza0VEZll5aWhEeE9mZ0JSaUdYdUh3SDFhMGJsNnZ1WmVSVnpfMEp5TnVEZ0t1clZkZHBBRG40UjNlN1NWYUhMV2k?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "US Coercion and Structural Constraints: Taking Stock of the Venezuelan Economy",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNT0tyNG16NHdtVXNjUnNRMFFsa1lqVERGbHlkcUhWdl9pRFVMOHNHQWdlazJjSG84aW5nVmpZb09VV0xmZjNTQlFsTEtIVG1ENE9TclNIUkJBQ1lSVmZQb0tKNW5FdzBHQ09YRENBZ0dnMlZxaWtqNXdFWGNkY01mX2NBSlFOZ25qTElaRF8yeVBxSDFXOVpud1FldzhlazZEa3JoNG1fdG9aWTYydy1Nd3BvUC1qdFFfOEVldw?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Chevron, Shell Closing in on First Big Oil Production Deals in Venezuela Since US Captured Maduro",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQdVJYLTVsYzNudVh6UzN2TUNKcTNrWlpDSHZCanMxLXFXTTY3aHQ5enBwZVF4WGk0WFFOLVc2bUd4eGk3ZEVBWHlndC16WUhmLVVpeHRwTTNjdTE1cUFkMlp4a0RjcTVPM2dUYW8xTlJnVHZKMWNNU05qTzA1R0EtTzBCY2JlS2pzSHEzdUxIVEJ6VXc3aVdwd1NlMS1VNUVJUTRaTTA3ZGxuTGM5ZEJHNklJVnhuLWNTSjhzanFBTkVubmhfRlZuSVdvaEc0WHJ0aFBmUmRR?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Continental Resources signs MoU with PDVSA to develop Venezuela's Ayacucho 2 Block, a 30-billion-barrel Orinoco Oil Belt asset",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TWnp6WHpBejRCcXBsOS1uZFBLZHgwRUJmRjFSSHd1OWpyVUNxbnE1cFZFNU1xRVlFYlF0cGhtZUxxM1luNTQxM1RHN19GZ1ZQdWxhb0l1dXBtVFhFY0FULTNZc0sxNnRYOVRibzdzbTZ6SEM5VWc?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "U.S. Marines injured in recent Iranian attack",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbUc1RHFEY1d2aXlOMElSX2tyVU4taDZNdmdMdUdQckN5aWw3MVhQQnU4NUlQWTBfV1prX2RnZGFRdHI4VjFJdHpOdWUwSTQ4XzgwbW14cjl5V04yWlNLd0NkRUdLX190cURfRUw0dWN2WmlYeFlkOGhEQy1zdFZ6S2VGZ3ZiRHpfSExyd2dySS1BUGtFdXRzelhkLVVoMk1IT2duWQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "After nixing Iran proposal, Trump tells Axios he expects talks this week",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdHM4R3NjWURXNmwzUk9wVVEtMmptc2xnRGNKbm9pVlowMGxHMWRzaU15d0ZhUmFNNnpuMUZwbjRSLXl6V2tSY2RyTjNQR1pBc1NhdjFYSzhvamxGRmlKU2pSdEhjSklFQzhDVnMxT3dlSHhxSGlRNUVuT1FNejVrOE9n?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Trump rejects Iran\u2019s ceasefire deal to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUkpUQTNyelA1S05DaHZWUXJHTXF1UnN3T1ZUN002UTZ4cFE2VElPMnM3VDlYb0RWQlBYc29oRVItUjFXZVNrdGdWV21ETkpyZFlBVnplQ3VCUDVEejhGTUphY2xsV1FNNWZ3NXJrQlQ5MWNUdU9KVVNGeDBTT1B1MFFZbTYwMlliY0VwUVhB0gGTAUFVX3lxTE1adzBxOHczbGlSZHY0WEc4ZGxqVG9wZTltdmVMNTRYR0pzb0UyN01MdWhoWF9XdzZHNGNhM2QyQVBEbS1fMy1xT2w3X3R4cmJZTGVOc1FkWnlhbEk0VE9LdlNSS1pNWUdVOEY4VGFoM3NmQVM1aURfbzJoS1pudUlaYXVVVzNjSllRR285Wkphdmk0VQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "8 US Marines injured in Iranian missile attack in Strait of Hormuz: Report",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOd2FueFRqdlF5RkVVdmVlbGNMLTJia1BhZG16N2xxalo1WFFWRTgwd0REaU96dHNTVTZxZzJnQV9hSlVXb3BEOU1FU09lZXJLMXpVM2otNXNTazhFUEdPZGNlRXBvTG9wS3JrOWtYODlDR3MyejNfekV4X1FnczdKaWVvQ3BMck4ydmhKVjJjbnUzbWEyTGtzcUJieWltRTNsQmRRSUo0d1haNVBKM00zTA?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Oil Rises as Iran Says It Won\u2019t Soften Strait of Hormuz Demands",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOcElYRUlDZHRpYWNJcDFodXAtUVJfNTJmbDJId3RYLVY3Y2VyWEVHNUdTTVo2djMwajhURi11S2N2M3FFVjBNX1dEVFd1Z3dqc2taTlVrZWN5OW54MzdHQW9GZ1lucTBmMGczOGJuREFDY2JxdDlQUDZDaFkxZU9SNVFlVU9IUko2d0QwQzdQbWUydm9QYUl1LWJUeVIwODQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNNm4xcEVDa201dEJsd2R6VFdHRWhIVU9TOWlIZFVWQWtZaHJmdmIzRTgzTFhSV0RuM0RHdXE0ekpQYk96dlMtUnZvdWVqdFRVODBWajAtcE4tV2pBQVUxUHdjWm50dE1Hb0FibWF2aTNsVEdOR3VTUm03Q3o2NDRGc295d1l6eUNpLVFhMHl5SHBHNjdMT1hNbzNINXdmOW84ZnA3Wm5UdmdfUEg0MlVTUQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "EU wants to reinforce Operation Aspides in Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5odFVfMXFKR2Fza0JydndSRnF3bTYxaTVXd2RXc2s2aEkyUUtRQkQ2cEM3VTN2SktRYVVWZzkwZkxKb2piNmwxWUZRRmZMSWZ1RmpwWGRYQXVmaGRNdG1B?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Will Egypt Strike Yemen's Houthis?, by Daily Editorials",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWktEdWFuX2ozX25PTzZGSi1KVG9iODRGQ2w1OXRTMWlCQ2lPZ1A1cExOQjhBUXh5U3lSUGVnTUZ3NlpIX2MySHZCRnFKNjNQeml1OXdoTDFES3ZwTGZOb0JfakxGMWpsdHhESkE5MUFoM3h0VWNUNWpzTVhyMzVkYlU4aUx4MnBLckxFT1VwQjhPc2pmQ3c?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "\u201cIran War Spreads to the Red Sea\u201d: U.S. Faces Dilemma Over Ending or Widening Conflict as Burdens Mount on Neighboring Countries",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEM0lGanpMb3cwS3dqVHNmUzQxblVscTdKWGhnWnUzVmFRdV9wODBiWjg5VXRXSzlXXzhidUctSHFDcVJRRG5fdWVxQzRtaWNKMGNiVXdRSQ?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "How a Houthi Blockade in the Red Sea Tightens Iran\u2019s Grip on Global Energy Supplies",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNcEJndXMtbHRQb1Q1YnhKMk1vdGtSUG5GWGdDZHRMOUFwbVVDM3V0OHVCTzVhemt2clNmZFFTUjRKa05kdFNLYUNrTU9fQ1dHQnpCLWJ5YzFqazJESlhBOGtCU1F0MlVaVHBzbG5Bcmx3b1ZNS0E3X2pkNTF5TXVIUC1KMVJqNUNHZThmNF83T05jUHN5QzFlMmU1SzBpMkJQVWdUSFJlbGNXUVgxdGJ3cFN1dw?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela\u2019s Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela\u2019s Oil Reopening Moves Faster Than Democratic Reform \u2013 OpEd",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOa2kyWWpQenFDb1VGSXE3Szl1SGxnam5GQW5IclU5NkFjc0Z0TzNZNVVfeVhEdzBmS3ZHQXVZT0I4RTQxbDlKT3hFUHlkc2xyNzRsUG8tbU9kWTRSSUJ3WVl2b1F0QlQza0VEZll5aWhEeE9mZ0JSaUdYdUh3SDFhMGJsNnZ1WmVSVnpfMEp5TnVEZ0t1clZkZHBBRG40UjNlN1NWYUhMV2k?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "US Coercion and Structural Constraints: Taking Stock of the Venezuelan Economy",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNT0tyNG16NHdtVXNjUnNRMFFsa1lqVERGbHlkcUhWdl9pRFVMOHNHQWdlazJjSG84aW5nVmpZb09VV0xmZjNTQlFsTEtIVG1ENE9TclNIUkJBQ1lSVmZQb0tKNW5FdzBHQ09YRENBZ0dnMlZxaWtqNXdFWGNkY01mX2NBSlFOZ25qTElaRF8yeVBxSDFXOVpud1FldzhlazZEa3JoNG1fdG9aWTYydy1Nd3BvUC1qdFFfOEVldw?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela Resumes Exports of Diluted Crude Oil After 15-Month Pause -Document",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVzB4NHBWMHJWd3JkeGtncFFvUnNQUUlydENIOVRwNUF1QjFicWRXbnBmUUw3czBDRWRVQlJFR0VUMXVqUlRvSnBlLXpLX1NaeC1VOFB3WWQ3T3RlMzAtc2tJMGxYcnE5OGVETVNRRWNhLUdYcDdxOFItY2s3UjZWZmNITzhjbnhnZk1xMUhQNHRQTEZPZmY1b1hZVEs1V1Q2S2lvMm5wX3ptTDQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Continental Resources signs MoU with PDVSA to develop Venezuela's Ayacucho 2 Block, a 30-billion-barrel Orinoco Oil Belt asset",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TWnp6WHpBejRCcXBsOS1uZFBLZHgwRUJmRjFSSHd1OWpyVUNxbnE1cFZFNU1xRVlFYlF0cGhtZUxxM1luNTQxM1RHN19GZ1ZQdWxhb0l1dXBtVFhFY0FULTNZc0sxNnRYOVRibzdzbTZ6SEM5VWc?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "U.S. Marines injured in recent Iranian attack",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbUc1RHFEY1d2aXlOMElSX2tyVU4taDZNdmdMdUdQckN5aWw3MVhQQnU4NUlQWTBfV1prX2RnZGFRdHI4VjFJdHpOdWUwSTQ4XzgwbW14cjl5V04yWlNLd0NkRUdLX190cURfRUw0dWN2WmlYeFlkOGhEQy1zdFZ6S2VGZ3ZiRHpfSExyd2dySS1BUGtFdXRzelhkLVVoMk1IT2duWQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "After nixing Iran proposal, Trump tells Axios he expects talks this week",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdHM4R3NjWURXNmwzUk9wVVEtMmptc2xnRGNKbm9pVlowMGxHMWRzaU15d0ZhUmFNNnpuMUZwbjRSLXl6V2tSY2RyTjNQR1pBc1NhdjFYSzhvamxGRmlKU2pSdEhjSklFQzhDVnMxT3dlSHhxSGlRNUVuT1FNejVrOE9n?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Trump rejects Iran\u2019s ceasefire deal to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUkpUQTNyelA1S05DaHZWUXJHTXF1UnN3T1ZUN002UTZ4cFE2VElPMnM3VDlYb0RWQlBYc29oRVItUjFXZVNrdGdWV21ETkpyZFlBVnplQ3VCUDVEejhGTUphY2xsV1FNNWZ3NXJrQlQ5MWNUdU9KVVNGeDBTT1B1MFFZbTYwMlliY0VwUVhB0gGTAUFVX3lxTE1adzBxOHczbGlSZHY0WEc4ZGxqVG9wZTltdmVMNTRYR0pzb0UyN01MdWhoWF9XdzZHNGNhM2QyQVBEbS1fMy1xT2w3X3R4cmJZTGVOc1FkWnlhbEk0VE9LdlNSS1pNWUdVOEY4VGFoM3NmQVM1aURfbzJoS1pudUlaYXVVVzNjSllRR285Wkphdmk0VQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "8 US Marines injured in Iranian missile attack in Strait of Hormuz: Report",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOd2FueFRqdlF5RkVVdmVlbGNMLTJia1BhZG16N2xxalo1WFFWRTgwd0REaU96dHNTVTZxZzJnQV9hSlVXb3BEOU1FU09lZXJLMXpVM2otNXNTazhFUEdPZGNlRXBvTG9wS3JrOWtYODlDR3MyejNfekV4X1FnczdKaWVvQ3BMck4ydmhKVjJjbnUzbWEyTGtzcUJieWltRTNsQmRRSUo0d1haNVBKM00zTA?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Oil Rises as Iran Says It Won\u2019t Soften Strait of Hormuz Demands",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOcElYRUlDZHRpYWNJcDFodXAtUVJfNTJmbDJId3RYLVY3Y2VyWEVHNUdTTVo2djMwajhURi11S2N2M3FFVjBNX1dEVFd1Z3dqc2taTlVrZWN5OW54MzdHQW9GZ1lucTBmMGczOGJuREFDY2JxdDlQUDZDaFkxZU9SNVFlVU9IUko2d0QwQzdQbWUydm9QYUl1LWJUeVIwODQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNNm4xcEVDa201dEJsd2R6VFdHRWhIVU9TOWlIZFVWQWtZaHJmdmIzRTgzTFhSV0RuM0RHdXE0ekpQYk96dlMtUnZvdWVqdFRVODBWajAtcE4tV2pBQVUxUHdjWm50dE1Hb0FibWF2aTNsVEdOR3VTUm03Q3o2NDRGc295d1l6eUNpLVFhMHl5SHBHNjdMT1hNbzNINXdmOW84ZnA3Wm5UdmdfUEg0MlVTUQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "EU wants to reinforce Operation Aspides in Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5odFVfMXFKR2Fza0JydndSRnF3bTYxaTVXd2RXc2s2aEkyUUtRQkQ2cEM3VTN2SktRYVVWZzkwZkxKb2piNmwxWUZRRmZMSWZ1RmpwWGRYQXVmaGRNdG1B?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Will Egypt Strike Yemen's Houthis?, by Daily Editorials",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWktEdWFuX2ozX25PTzZGSi1KVG9iODRGQ2w1OXRTMWlCQ2lPZ1A1cExOQjhBUXh5U3lSUGVnTUZ3NlpIX2MySHZCRnFKNjNQeml1OXdoTDFES3ZwTGZOb0JfakxGMWpsdHhESkE5MUFoM3h0VWNUNWpzTVhyMzVkYlU4aUx4MnBLckxFT1VwQjhPc2pmQ3c?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "\u201cIran War Spreads to the Red Sea\u201d: U.S. Faces Dilemma Over Ending or Widening Conflict as Burdens Mount on Neighboring Countries",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEM0lGanpMb3cwS3dqVHNmUzQxblVscTdKWGhnWnUzVmFRdV9wODBiWjg5VXRXSzlXXzhidUctSHFDcVJRRG5fdWVxQzRtaWNKMGNiVXdRSQ?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "How a Houthi Blockade in the Red Sea Tightens Iran\u2019s Grip on Global Energy Supplies",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNcEJndXMtbHRQb1Q1YnhKMk1vdGtSUG5GWGdDZHRMOUFwbVVDM3V0OHVCTzVhemt2clNmZFFTUjRKa05kdFNLYUNrTU9fQ1dHQnpCLWJ5YzFqazJESlhBOGtCU1F0MlVaVHBzbG5Bcmx3b1ZNS0E3X2pkNTF5TXVIUC1KMVJqNUNHZThmNF83T05jUHN5QzFlMmU1SzBpMkJQVWdUSFJlbGNXUVgxdGJ3cFN1dw?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela\u2019s Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela\u2019s Oil Reopening Moves Faster Than Democratic Reform \u2013 OpEd",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOa2kyWWpQenFDb1VGSXE3Szl1SGxnam5GQW5IclU5NkFjc0Z0TzNZNVVfeVhEdzBmS3ZHQXVZT0I4RTQxbDlKT3hFUHlkc2xyNzRsUG8tbU9kWTRSSUJ3WVl2b1F0QlQza0VEZll5aWhEeE9mZ0JSaUdYdUh3SDFhMGJsNnZ1WmVSVnpfMEp5TnVEZ0t1clZkZHBBRG40UjNlN1NWYUhMV2k?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "US Coercion and Structural Constraints: Taking Stock of the Venezuelan Economy",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNT0tyNG16NHdtVXNjUnNRMFFsa1lqVERGbHlkcUhWdl9pRFVMOHNHQWdlazJjSG84aW5nVmpZb09VV0xmZjNTQlFsTEtIVG1ENE9TclNIUkJBQ1lSVmZQb0tKNW5FdzBHQ09YRENBZ0dnMlZxaWtqNXdFWGNkY01mX2NBSlFOZ25qTElaRF8yeVBxSDFXOVpud1FldzhlazZEa3JoNG1fdG9aWTYydy1Nd3BvUC1qdFFfOEVldw?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela Resumes Exports of Diluted Crude Oil After 15-Month Pause -Document",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVzB4NHBWMHJWd3JkeGtncFFvUnNQUUlydENIOVRwNUF1QjFicWRXbnBmUUw3czBDRWRVQlJFR0VUMXVqUlRvSnBlLXpLX1NaeC1VOFB3WWQ3T3RlMzAtc2tJMGxYcnE5OGVETVNRRWNhLUdYcDdxOFItY2s3UjZWZmNITzhjbnhnZk1xMUhQNHRQTEZPZmY1b1hZVEs1V1Q2S2lvMm5wX3ptTDQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Continental Resources signs MoU with PDVSA to develop Venezuela's Ayacucho 2 Block, a 30-billion-barrel Orinoco Oil Belt asset",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TWnp6WHpBejRCcXBsOS1uZFBLZHgwRUJmRjFSSHd1OWpyVUNxbnE1cFZFNU1xRVlFYlF0cGhtZUxxM1luNTQxM1RHN19GZ1ZQdWxhb0l1dXBtVFhFY0FULTNZc0sxNnRYOVRibzdzbTZ6SEM5VWc?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "After nixing Iran proposal, Trump tells Axios he expects talks this week",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdHM4R3NjWURXNmwzUk9wVVEtMmptc2xnRGNKbm9pVlowMGxHMWRzaU15d0ZhUmFNNnpuMUZwbjRSLXl6V2tSY2RyTjNQR1pBc1NhdjFYSzhvamxGRmlKU2pSdEhjSklFQzhDVnMxT3dlSHhxSGlRNUVuT1FNejVrOE9n?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "U.S. Marines injured in recent Iranian attack",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbUc1RHFEY1d2aXlOMElSX2tyVU4taDZNdmdMdUdQckN5aWw3MVhQQnU4NUlQWTBfV1prX2RnZGFRdHI4VjFJdHpOdWUwSTQ4XzgwbW14cjl5V04yWlNLd0NkRUdLX190cURfRUw0dWN2WmlYeFlkOGhEQy1zdFZ6S2VGZ3ZiRHpfSExyd2dySS1BUGtFdXRzelhkLVVoMk1IT2duWQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Trump rejects Iran\u2019s ceasefire deal to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUkpUQTNyelA1S05DaHZWUXJHTXF1UnN3T1ZUN002UTZ4cFE2VElPMnM3VDlYb0RWQlBYc29oRVItUjFXZVNrdGdWV21ETkpyZFlBVnplQ3VCUDVEejhGTUphY2xsV1FNNWZ3NXJrQlQ5MWNUdU9KVVNGeDBTT1B1MFFZbTYwMlliY0VwUVhB0gGTAUFVX3lxTE1adzBxOHczbGlSZHY0WEc4ZGxqVG9wZTltdmVMNTRYR0pzb0UyN01MdWhoWF9XdzZHNGNhM2QyQVBEbS1fMy1xT2w3X3R4cmJZTGVOc1FkWnlhbEk0VE9LdlNSS1pNWUdVOEY4VGFoM3NmQVM1aURfbzJoS1pudUlaYXVVVzNjSllRR285Wkphdmk0VQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "8 US Marines injured in Iranian missile attack in Strait of Hormuz: Report",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOd2FueFRqdlF5RkVVdmVlbGNMLTJia1BhZG16N2xxalo1WFFWRTgwd0REaU96dHNTVTZxZzJnQV9hSlVXb3BEOU1FU09lZXJLMXpVM2otNXNTazhFUEdPZGNlRXBvTG9wS3JrOWtYODlDR3MyejNfekV4X1FnczdKaWVvQ3BMck4ydmhKVjJjbnUzbWEyTGtzcUJieWltRTNsQmRRSUo0d1haNVBKM00zTA?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Oil Rises as Iran Says It Won\u2019t Soften Strait of Hormuz Demands",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOcElYRUlDZHRpYWNJcDFodXAtUVJfNTJmbDJId3RYLVY3Y2VyWEVHNUdTTVo2djMwajhURi11S2N2M3FFVjBNX1dEVFd1Z3dqc2taTlVrZWN5OW54MzdHQW9GZ1lucTBmMGczOGJuREFDY2JxdDlQUDZDaFkxZU9SNVFlVU9IUko2d0QwQzdQbWUydm9QYUl1LWJUeVIwODQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "\u201cIran War Spreads to the Red Sea\u201d: U.S. Faces Dilemma Over Ending or Widening Conflict as Burdens Mount on Neighboring Countries",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEM0lGanpMb3cwS3dqVHNmUzQxblVscTdKWGhnWnUzVmFRdV9wODBiWjg5VXRXSzlXXzhidUctSHFDcVJRRG5fdWVxQzRtaWNKMGNiVXdRSQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNNm4xcEVDa201dEJsd2R6VFdHRWhIVU9TOWlIZFVWQWtZaHJmdmIzRTgzTFhSV0RuM0RHdXE0ekpQYk96dlMtUnZvdWVqdFRVODBWajAtcE4tV2pBQVUxUHdjWm50dE1Hb0FibWF2aTNsVEdOR3VTUm03Q3o2NDRGc295d1l6eUNpLVFhMHl5SHBHNjdMT1hNbzNINXdmOW84ZnA3Wm5UdmdfUEg0MlVTUQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "EU wants to reinforce Operation Aspides in Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5odFVfMXFKR2Fza0JydndSRnF3bTYxaTVXd2RXc2s2aEkyUUtRQkQ2cEM3VTN2SktRYVVWZzkwZkxKb2piNmwxWUZRRmZMSWZ1RmpwWGRYQXVmaGRNdG1B?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Will Egypt Strike Yemen's Houthis?, by Daily Editorials",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWktEdWFuX2ozX25PTzZGSi1KVG9iODRGQ2w1OXRTMWlCQ2lPZ1A1cExOQjhBUXh5U3lSUGVnTUZ3NlpIX2MySHZCRnFKNjNQeml1OXdoTDFES3ZwTGZOb0JfakxGMWpsdHhESkE5MUFoM3h0VWNUNWpzTVhyMzVkYlU4aUx4MnBLckxFT1VwQjhPc2pmQ3c?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "A new flash point in the Iran war: The narrow strait called the \u2018Gate of Tears\u2019",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPTkVLcFV6d3pfcmhaT3ZFanJxSTdtTHJtQWFVb1hVUV9iSElTUlpqOE9vZU5IRjJ4R2VGTnNLckZFQldTdl9sT3JmZmhvX1lSbVN0OXlLQ0dZUE1tcTFnNFpWb2lkUEs2ejJ4SGduaERNbjZCS0NEc0cyZXFWdmUzYThFZDVTd2VQZW9fOWE0STY0TGloNHJfcnJSMWFWazcxZGtoZThETnJ2MzdXUHNPcFdubUppcTQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela\u2019s Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela\u2019s Oil Reopening Moves Faster Than Democratic Reform \u2013 OpEd",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOa2kyWWpQenFDb1VGSXE3Szl1SGxnam5GQW5IclU5NkFjc0Z0TzNZNVVfeVhEdzBmS3ZHQXVZT0I4RTQxbDlKT3hFUHlkc2xyNzRsUG8tbU9kWTRSSUJ3WVl2b1F0QlQza0VEZll5aWhEeE9mZ0JSaUdYdUh3SDFhMGJsNnZ1WmVSVnpfMEp5TnVEZ0t1clZkZHBBRG40UjNlN1NWYUhMV2k?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "US Coercion and Structural Constraints: Taking Stock of the Venezuelan Economy",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNT0tyNG16NHdtVXNjUnNRMFFsa1lqVERGbHlkcUhWdl9pRFVMOHNHQWdlazJjSG84aW5nVmpZb09VV0xmZjNTQlFsTEtIVG1ENE9TclNIUkJBQ1lSVmZQb0tKNW5FdzBHQ09YRENBZ0dnMlZxaWtqNXdFWGNkY01mX2NBSlFOZ25qTElaRF8yeVBxSDFXOVpud1FldzhlazZEa3JoNG1fdG9aWTYydy1Nd3BvUC1qdFFfOEVldw?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela Resumes Exports of Diluted Crude Oil After 15-Month Pause -Document",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVzB4NHBWMHJWd3JkeGtncFFvUnNQUUlydENIOVRwNUF1QjFicWRXbnBmUUw3czBDRWRVQlJFR0VUMXVqUlRvSnBlLXpLX1NaeC1VOFB3WWQ3T3RlMzAtc2tJMGxYcnE5OGVETVNRRWNhLUdYcDdxOFItY2s3UjZWZmNITzhjbnhnZk1xMUhQNHRQTEZPZmY1b1hZVEs1V1Q2S2lvMm5wX3ptTDQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Continental Resources signs MoU with PDVSA to develop Venezuela's Ayacucho 2 Block, a 30-billion-barrel Orinoco Oil Belt asset",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TWnp6WHpBejRCcXBsOS1uZFBLZHgwRUJmRjFSSHd1OWpyVUNxbnE1cFZFNU1xRVlFYlF0cGhtZUxxM1luNTQxM1RHN19GZ1ZQdWxhb0l1dXBtVFhFY0FULTNZc0sxNnRYOVRibzdzbTZ6SEM5VWc?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "After nixing Iran proposal, Trump tells Axios he expects talks this week",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdHM4R3NjWURXNmwzUk9wVVEtMmptc2xnRGNKbm9pVlowMGxHMWRzaU15d0ZhUmFNNnpuMUZwbjRSLXl6V2tSY2RyTjNQR1pBc1NhdjFYSzhvamxGRmlKU2pSdEhjSklFQzhDVnMxT3dlSHhxSGlRNUVuT1FNejVrOE9n?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "U.S. Marines injured in recent Iranian attack",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbUc1RHFEY1d2aXlOMElSX2tyVU4taDZNdmdMdUdQckN5aWw3MVhQQnU4NUlQWTBfV1prX2RnZGFRdHI4VjFJdHpOdWUwSTQ4XzgwbW14cjl5V04yWlNLd0NkRUdLX190cURfRUw0dWN2WmlYeFlkOGhEQy1zdFZ6S2VGZ3ZiRHpfSExyd2dySS1BUGtFdXRzelhkLVVoMk1IT2duWQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Trump rejects Iran\u2019s ceasefire deal to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUkpUQTNyelA1S05DaHZWUXJHTXF1UnN3T1ZUN002UTZ4cFE2VElPMnM3VDlYb0RWQlBYc29oRVItUjFXZVNrdGdWV21ETkpyZFlBVnplQ3VCUDVEejhGTUphY2xsV1FNNWZ3NXJrQlQ5MWNUdU9KVVNGeDBTT1B1MFFZbTYwMlliY0VwUVhB0gGTAUFVX3lxTE1adzBxOHczbGlSZHY0WEc4ZGxqVG9wZTltdmVMNTRYR0pzb0UyN01MdWhoWF9XdzZHNGNhM2QyQVBEbS1fMy1xT2w3X3R4cmJZTGVOc1FkWnlhbEk0VE9LdlNSS1pNWUdVOEY4VGFoM3NmQVM1aURfbzJoS1pudUlaYXVVVzNjSllRR285Wkphdmk0VQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "8 US Marines injured in Iranian missile attack in Strait of Hormuz: Report",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOd2FueFRqdlF5RkVVdmVlbGNMLTJia1BhZG16N2xxalo1WFFWRTgwd0REaU96dHNTVTZxZzJnQV9hSlVXb3BEOU1FU09lZXJLMXpVM2otNXNTazhFUEdPZGNlRXBvTG9wS3JrOWtYODlDR3MyejNfekV4X1FnczdKaWVvQ3BMck4ydmhKVjJjbnUzbWEyTGtzcUJieWltRTNsQmRRSUo0d1haNVBKM00zTA?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Oil Rises as Iran Says It Won\u2019t Soften Strait of Hormuz Demands",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOcElYRUlDZHRpYWNJcDFodXAtUVJfNTJmbDJId3RYLVY3Y2VyWEVHNUdTTVo2djMwajhURi11S2N2M3FFVjBNX1dEVFd1Z3dqc2taTlVrZWN5OW54MzdHQW9GZ1lucTBmMGczOGJuREFDY2JxdDlQUDZDaFkxZU9SNVFlVU9IUko2d0QwQzdQbWUydm9QYUl1LWJUeVIwODQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "\u201cIran War Spreads to the Red Sea\u201d: U.S. Faces Dilemma Over Ending or Widening Conflict as Burdens Mount on Neighboring Countries",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEM0lGanpMb3cwS3dqVHNmUzQxblVscTdKWGhnWnUzVmFRdV9wODBiWjg5VXRXSzlXXzhidUctSHFDcVJRRG5fdWVxQzRtaWNKMGNiVXdRSQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNNm4xcEVDa201dEJsd2R6VFdHRWhIVU9TOWlIZFVWQWtZaHJmdmIzRTgzTFhSV0RuM0RHdXE0ekpQYk96dlMtUnZvdWVqdFRVODBWajAtcE4tV2pBQVUxUHdjWm50dE1Hb0FibWF2aTNsVEdOR3VTUm03Q3o2NDRGc295d1l6eUNpLVFhMHl5SHBHNjdMT1hNbzNINXdmOW84ZnA3Wm5UdmdfUEg0MlVTUQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "EU wants to reinforce Operation Aspides in Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5odFVfMXFKR2Fza0JydndSRnF3bTYxaTVXd2RXc2s2aEkyUUtRQkQ2cEM3VTN2SktRYVVWZzkwZkxKb2piNmwxWUZRRmZMSWZ1RmpwWGRYQXVmaGRNdG1B?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Will Egypt Strike Yemen's Houthis?, by Daily Editorials",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWktEdWFuX2ozX25PTzZGSi1KVG9iODRGQ2w1OXRTMWlCQ2lPZ1A1cExOQjhBUXh5U3lSUGVnTUZ3NlpIX2MySHZCRnFKNjNQeml1OXdoTDFES3ZwTGZOb0JfakxGMWpsdHhESkE5MUFoM3h0VWNUNWpzTVhyMzVkYlU4aUx4MnBLckxFT1VwQjhPc2pmQ3c?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "A new flash point in the Iran war: The narrow strait called the \u2018Gate of Tears\u2019",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPTkVLcFV6d3pfcmhaT3ZFanJxSTdtTHJtQWFVb1hVUV9iSElTUlpqOE9vZU5IRjJ4R2VGTnNLckZFQldTdl9sT3JmZmhvX1lSbVN0OXlLQ0dZUE1tcTFnNFpWb2lkUEs2ejJ4SGduaERNbjZCS0NEc0cyZXFWdmUzYThFZDVTd2VQZW9fOWE0STY0TGloNHJfcnJSMWFWazcxZGtoZThETnJ2MzdXUHNPcFdubUppcTQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela\u2019s Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela\u2019s Oil Reopening Moves Faster Than Democratic Reform \u2013 OpEd",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOa2kyWWpQenFDb1VGSXE3Szl1SGxnam5GQW5IclU5NkFjc0Z0TzNZNVVfeVhEdzBmS3ZHQXVZT0I4RTQxbDlKT3hFUHlkc2xyNzRsUG8tbU9kWTRSSUJ3WVl2b1F0QlQza0VEZll5aWhEeE9mZ0JSaUdYdUh3SDFhMGJsNnZ1WmVSVnpfMEp5TnVEZ0t1clZkZHBBRG40UjNlN1NWYUhMV2k?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "US Coercion and Structural Constraints: Taking Stock of the Venezuelan Economy",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNT0tyNG16NHdtVXNjUnNRMFFsa1lqVERGbHlkcUhWdl9pRFVMOHNHQWdlazJjSG84aW5nVmpZb09VV0xmZjNTQlFsTEtIVG1ENE9TclNIUkJBQ1lSVmZQb0tKNW5FdzBHQ09YRENBZ0dnMlZxaWtqNXdFWGNkY01mX2NBSlFOZ25qTElaRF8yeVBxSDFXOVpud1FldzhlazZEa3JoNG1fdG9aWTYydy1Nd3BvUC1qdFFfOEVldw?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela Resumes Exports of Diluted Crude Oil After 15-Month Pause -Document",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVzB4NHBWMHJWd3JkeGtncFFvUnNQUUlydENIOVRwNUF1QjFicWRXbnBmUUw3czBDRWRVQlJFR0VUMXVqUlRvSnBlLXpLX1NaeC1VOFB3WWQ3T3RlMzAtc2tJMGxYcnE5OGVETVNRRWNhLUdYcDdxOFItY2s3UjZWZmNITzhjbnhnZk1xMUhQNHRQTEZPZmY1b1hZVEs1V1Q2S2lvMm5wX3ptTDQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Continental Resources signs MoU with PDVSA to develop Venezuela's Ayacucho 2 Block, a 30-billion-barrel Orinoco Oil Belt asset",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TWnp6WHpBejRCcXBsOS1uZFBLZHgwRUJmRjFSSHd1OWpyVUNxbnE1cFZFNU1xRVlFYlF0cGhtZUxxM1luNTQxM1RHN19GZ1ZQdWxhb0l1dXBtVFhFY0FULTNZc0sxNnRYOVRibzdzbTZ6SEM5VWc?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "After nixing Iran proposal, Trump tells Axios he expects talks this week",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdHM4R3NjWURXNmwzUk9wVVEtMmptc2xnRGNKbm9pVlowMGxHMWRzaU15d0ZhUmFNNnpuMUZwbjRSLXl6V2tSY2RyTjNQR1pBc1NhdjFYSzhvamxGRmlKU2pSdEhjSklFQzhDVnMxT3dlSHhxSGlRNUVuT1FNejVrOE9n?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Trump rejects Iran\u2019s ceasefire deal to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUkpUQTNyelA1S05DaHZWUXJHTXF1UnN3T1ZUN002UTZ4cFE2VElPMnM3VDlYb0RWQlBYc29oRVItUjFXZVNrdGdWV21ETkpyZFlBVnplQ3VCUDVEejhGTUphY2xsV1FNNWZ3NXJrQlQ5MWNUdU9KVVNGeDBTT1B1MFFZbTYwMlliY0VwUVhB0gGTAUFVX3lxTE1adzBxOHczbGlSZHY0WEc4ZGxqVG9wZTltdmVMNTRYR0pzb0UyN01MdWhoWF9XdzZHNGNhM2QyQVBEbS1fMy1xT2w3X3R4cmJZTGVOc1FkWnlhbEk0VE9LdlNSS1pNWUdVOEY4VGFoM3NmQVM1aURfbzJoS1pudUlaYXVVVzNjSllRR285Wkphdmk0VQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "U.S. Marines injured in recent Iranian attack",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbUc1RHFEY1d2aXlOMElSX2tyVU4taDZNdmdMdUdQckN5aWw3MVhQQnU4NUlQWTBfV1prX2RnZGFRdHI4VjFJdHpOdWUwSTQ4XzgwbW14cjl5V04yWlNLd0NkRUdLX190cURfRUw0dWN2WmlYeFlkOGhEQy1zdFZ6S2VGZ3ZiRHpfSExyd2dySS1BUGtFdXRzelhkLVVoMk1IT2duWQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "8 US Marines injured in Iranian missile attack in Strait of Hormuz: Report",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOd2FueFRqdlF5RkVVdmVlbGNMLTJia1BhZG16N2xxalo1WFFWRTgwd0REaU96dHNTVTZxZzJnQV9hSlVXb3BEOU1FU09lZXJLMXpVM2otNXNTazhFUEdPZGNlRXBvTG9wS3JrOWtYODlDR3MyejNfekV4X1FnczdKaWVvQ3BMck4ydmhKVjJjbnUzbWEyTGtzcUJieWltRTNsQmRRSUo0d1haNVBKM00zTA?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Hormuz on the Table: Iran Offers to Reopen Strait in Exchange for U.S. Concessions",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNYkF0bVBYQkg4eWRSZXlaMkU4TnZudWMySVBURmVYMTlOUHNPWTZtR21PajNDc2ZMcTJJdmNoVExIUkhXcWN0cUZYanUyUXpLZzd5OG8wSng2TlpjSmstc2dmWUZMY3lsMDEwUUJnWGxJMUZNTUxnSnBOVTE5ZjRiNEJZaUtWOW83RTZHeVE1VWs0SDAxUDhnLUF0NGxXSWNzQ0hfUVllc1pPYVJ5b0RZZi0yNmMzemM?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "\u201cIran War Spreads to the Red Sea\u201d: U.S. Faces Dilemma Over Ending or Widening Conflict as Burdens Mount on Neighboring Countries",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEM0lGanpMb3cwS3dqVHNmUzQxblVscTdKWGhnWnUzVmFRdV9wODBiWjg5VXRXSzlXXzhidUctSHFDcVJRRG5fdWVxQzRtaWNKMGNiVXdRSQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNNm4xcEVDa201dEJsd2R6VFdHRWhIVU9TOWlIZFVWQWtZaHJmdmIzRTgzTFhSV0RuM0RHdXE0ekpQYk96dlMtUnZvdWVqdFRVODBWajAtcE4tV2pBQVUxUHdjWm50dE1Hb0FibWF2aTNsVEdOR3VTUm03Q3o2NDRGc295d1l6eUNpLVFhMHl5SHBHNjdMT1hNbzNINXdmOW84ZnA3Wm5UdmdfUEg0MlVTUQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "EU wants to reinforce Operation Aspides in Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5odFVfMXFKR2Fza0JydndSRnF3bTYxaTVXd2RXc2s2aEkyUUtRQkQ2cEM3VTN2SktRYVVWZzkwZkxKb2piNmwxWUZRRmZMSWZ1RmpwWGRYQXVmaGRNdG1B?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Will Egypt Strike Yemen's Houthis?, by Daily Editorials",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWktEdWFuX2ozX25PTzZGSi1KVG9iODRGQ2w1OXRTMWlCQ2lPZ1A1cExOQjhBUXh5U3lSUGVnTUZ3NlpIX2MySHZCRnFKNjNQeml1OXdoTDFES3ZwTGZOb0JfakxGMWpsdHhESkE5MUFoM3h0VWNUNWpzTVhyMzVkYlU4aUx4MnBLckxFT1VwQjhPc2pmQ3c?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "A new flash point in the Iran war: The narrow strait called the \u2018Gate of Tears\u2019",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPTkVLcFV6d3pfcmhaT3ZFanJxSTdtTHJtQWFVb1hVUV9iSElTUlpqOE9vZU5IRjJ4R2VGTnNLckZFQldTdl9sT3JmZmhvX1lSbVN0OXlLQ0dZUE1tcTFnNFpWb2lkUEs2ejJ4SGduaERNbjZCS0NEc0cyZXFWdmUzYThFZDVTd2VQZW9fOWE0STY0TGloNHJfcnJSMWFWazcxZGtoZThETnJ2MzdXUHNPcFdubUppcTQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela\u2019s Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela\u2019s Oil Reopening Moves Faster Than Democratic Reform \u2013 OpEd",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOa2kyWWpQenFDb1VGSXE3Szl1SGxnam5GQW5IclU5NkFjc0Z0TzNZNVVfeVhEdzBmS3ZHQXVZT0I4RTQxbDlKT3hFUHlkc2xyNzRsUG8tbU9kWTRSSUJ3WVl2b1F0QlQza0VEZll5aWhEeE9mZ0JSaUdYdUh3SDFhMGJsNnZ1WmVSVnpfMEp5TnVEZ0t1clZkZHBBRG40UjNlN1NWYUhMV2k?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "US Coercion and Structural Constraints: Taking Stock of the Venezuelan Economy",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNT0tyNG16NHdtVXNjUnNRMFFsa1lqVERGbHlkcUhWdl9pRFVMOHNHQWdlazJjSG84aW5nVmpZb09VV0xmZjNTQlFsTEtIVG1ENE9TclNIUkJBQ1lSVmZQb0tKNW5FdzBHQ09YRENBZ0dnMlZxaWtqNXdFWGNkY01mX2NBSlFOZ25qTElaRF8yeVBxSDFXOVpud1FldzhlazZEa3JoNG1fdG9aWTYydy1Nd3BvUC1qdFFfOEVldw?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Continental Resources signs MoU with PDVSA to develop Venezuela's Ayacucho 2 Block, a 30-billion-barrel Orinoco Oil Belt asset",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TWnp6WHpBejRCcXBsOS1uZFBLZHgwRUJmRjFSSHd1OWpyVUNxbnE1cFZFNU1xRVlFYlF0cGhtZUxxM1luNTQxM1RHN19GZ1ZQdWxhb0l1dXBtVFhFY0FULTNZc0sxNnRYOVRibzdzbTZ6SEM5VWc?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela Resumes Exports of Diluted Crude Oil After 15-Month Pause -Document",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVzB4NHBWMHJWd3JkeGtncFFvUnNQUUlydENIOVRwNUF1QjFicWRXbnBmUUw3czBDRWRVQlJFR0VUMXVqUlRvSnBlLXpLX1NaeC1VOFB3WWQ3T3RlMzAtc2tJMGxYcnE5OGVETVNRRWNhLUdYcDdxOFItY2s3UjZWZmNITzhjbnhnZk1xMUhQNHRQTEZPZmY1b1hZVEs1V1Q2S2lvMm5wX3ptTDQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "After nixing Iran proposal, Trump tells Axios he expects talks this week",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdHM4R3NjWURXNmwzUk9wVVEtMmptc2xnRGNKbm9pVlowMGxHMWRzaU15d0ZhUmFNNnpuMUZwbjRSLXl6V2tSY2RyTjNQR1pBc1NhdjFYSzhvamxGRmlKU2pSdEhjSklFQzhDVnMxT3dlSHhxSGlRNUVuT1FNejVrOE9n?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Trump rejects Iran\u2019s ceasefire deal to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQUkpUQTNyelA1S05DaHZWUXJHTXF1UnN3T1ZUN002UTZ4cFE2VElPMnM3VDlYb0RWQlBYc29oRVItUjFXZVNrdGdWV21ETkpyZFlBVnplQ3VCUDVEejhGTUphY2xsV1FNNWZ3NXJrQlQ5MWNUdU9KVVNGeDBTT1B1MFFZbTYwMlliY0VwUVhB0gGTAUFVX3lxTE1adzBxOHczbGlSZHY0WEc4ZGxqVG9wZTltdmVMNTRYR0pzb0UyN01MdWhoWF9XdzZHNGNhM2QyQVBEbS1fMy1xT2w3X3R4cmJZTGVOc1FkWnlhbEk0VE9LdlNSS1pNWUdVOEY4VGFoM3NmQVM1aURfbzJoS1pudUlaYXVVVzNjSllRR285Wkphdmk0VQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "U.S. Marines injured in recent Iranian attack",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbUc1RHFEY1d2aXlOMElSX2tyVU4taDZNdmdMdUdQckN5aWw3MVhQQnU4NUlQWTBfV1prX2RnZGFRdHI4VjFJdHpOdWUwSTQ4XzgwbW14cjl5V04yWlNLd0NkRUdLX190cURfRUw0dWN2WmlYeFlkOGhEQy1zdFZ6S2VGZ3ZiRHpfSExyd2dySS1BUGtFdXRzelhkLVVoMk1IT2duWQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "8 US Marines injured in Iranian missile attack in Strait of Hormuz: Report",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOd2FueFRqdlF5RkVVdmVlbGNMLTJia1BhZG16N2xxalo1WFFWRTgwd0REaU96dHNTVTZxZzJnQV9hSlVXb3BEOU1FU09lZXJLMXpVM2otNXNTazhFUEdPZGNlRXBvTG9wS3JrOWtYODlDR3MyejNfekV4X1FnczdKaWVvQ3BMck4ydmhKVjJjbnUzbWEyTGtzcUJieWltRTNsQmRRSUo0d1haNVBKM00zTA?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Hormuz on the Table: Iran Offers to Reopen Strait in Exchange for U.S. Concessions",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNYkF0bVBYQkg4eWRSZXlaMkU4TnZudWMySVBURmVYMTlOUHNPWTZtR21PajNDc2ZMcTJJdmNoVExIUkhXcWN0cUZYanUyUXpLZzd5OG8wSng2TlpjSmstc2dmWUZMY3lsMDEwUUJnWGxJMUZNTUxnSnBOVTE5ZjRiNEJZaUtWOW83RTZHeVE1VWs0SDAxUDhnLUF0NGxXSWNzQ0hfUVllc1pPYVJ5b0RZZi0yNmMzemM?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "\u201cIran War Spreads to the Red Sea\u201d: U.S. Faces Dilemma Over Ending or Widening Conflict as Burdens Mount on Neighboring Countries",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEM0lGanpMb3cwS3dqVHNmUzQxblVscTdKWGhnWnUzVmFRdV9wODBiWjg5VXRXSzlXXzhidUctSHFDcVJRRG5fdWVxQzRtaWNKMGNiVXdRSQ?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNNm4xcEVDa201dEJsd2R6VFdHRWhIVU9TOWlIZFVWQWtZaHJmdmIzRTgzTFhSV0RuM0RHdXE0ekpQYk96dlMtUnZvdWVqdFRVODBWajAtcE4tV2pBQVUxUHdjWm50dE1Hb0FibWF2aTNsVEdOR3VTUm03Q3o2NDRGc295d1l6eUNpLVFhMHl5SHBHNjdMT1hNbzNINXdmOW84ZnA3Wm5UdmdfUEg0MlVTUQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Will Egypt Strike Yemen's Houthis?, by Daily Editorials",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWktEdWFuX2ozX25PTzZGSi1KVG9iODRGQ2w1OXRTMWlCQ2lPZ1A1cExOQjhBUXh5U3lSUGVnTUZ3NlpIX2MySHZCRnFKNjNQeml1OXdoTDFES3ZwTGZOb0JfakxGMWpsdHhESkE5MUFoM3h0VWNUNWpzTVhyMzVkYlU4aUx4MnBLckxFT1VwQjhPc2pmQ3c?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "EU wants to reinforce Operation Aspides in Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5odFVfMXFKR2Fza0JydndSRnF3bTYxaTVXd2RXc2s2aEkyUUtRQkQ2cEM3VTN2SktRYVVWZzkwZkxKb2piNmwxWUZRRmZMSWZ1RmpwWGRYQXVmaGRNdG1B?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "A new flash point in the Iran war: The narrow strait called the \u2018Gate of Tears\u2019",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPTkVLcFV6d3pfcmhaT3ZFanJxSTdtTHJtQWFVb1hVUV9iSElTUlpqOE9vZU5IRjJ4R2VGTnNLckZFQldTdl9sT3JmZmhvX1lSbVN0OXlLQ0dZUE1tcTFnNFpWb2lkUEs2ejJ4SGduaERNbjZCS0NEc0cyZXFWdmUzYThFZDVTd2VQZW9fOWE0STY0TGloNHJfcnJSMWFWazcxZGtoZThETnJ2MzdXUHNPcFdubUppcTQ?oc=5"
+    },
+    {
+      "date": "2026-09-28 00:00:00",
+      "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela\u2019s Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Venezuela\u2019s Oil Reopening Moves Faster Than Democratic Reform \u2013 OpEd",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOa2kyWWpQenFDb1VGSXE3Szl1SGxnam5GQW5IclU5NkFjc0Z0TzNZNVVfeVhEdzBmS3ZHQXVZT0I4RTQxbDlKT3hFUHlkc2xyNzRsUG8tbU9kWTRSSUJ3WVl2b1F0QlQza0VEZll5aWhEeE9mZ0JSaUdYdUh3SDFhMGJsNnZ1WmVSVnpfMEp5TnVEZ0t1clZkZHBBRG40UjNlN1NWYUhMV2k?oc=5"
+    },
+    {
+      "date": "2026-09-26 00:00:00",
+      "headline": "US Coercion and Structural Constraints: Taking Stock of the Venezuelan Economy",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNT0tyNG16NHdtVXNjUnNRMFFsa1lqVERGbHlkcUhWdl9pRFVMOHNHQWdlazJjSG84aW5nVmpZb09VV0xmZjNTQlFsTEtIVG1ENE9TclNIUkJBQ1lSVmZQb0tKNW5FdzBHQ09YRENBZ0dnMlZxaWtqNXdFWGNkY01mX2NBSlFOZ25qTElaRF8yeVBxSDFXOVpud1FldzhlazZEa3JoNG1fdG9aWTYydy1Nd3BvUC1qdFFfOEVldw?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Continental Resources signs MoU with PDVSA to develop Venezuela's Ayacucho 2 Block, a 30-billion-barrel Orinoco Oil Belt asset",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TWnp6WHpBejRCcXBsOS1uZFBLZHgwRUJmRjFSSHd1OWpyVUNxbnE1cFZFNU1xRVlFYlF0cGhtZUxxM1luNTQxM1RHN19GZ1ZQdWxhb0l1dXBtVFhFY0FULTNZc0sxNnRYOVRibzdzbTZ6SEM5VWc?oc=5"
+    },
+    {
+      "date": "2026-09-27 00:00:00",
+      "headline": "Chevron, Shell Closing in on First Big Oil Production Deals in Venezuela Since US Captured Maduro",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQdVJYLTVsYzNudVh6UzN2TUNKcTNrWlpDSHZCanMxLXFXTTY3aHQ5enBwZVF4WGk0WFFOLVc2bUd4eGk3ZEVBWHlndC16WUhmLVVpeHRwTTNjdTE1cUFkMlp4a0RjcTVPM2dUYW8xTlJnVHZKMWNNU05qTzA1R0EtTzBCY2JlS2pzSHEzdUxIVEJ6VXc3aVdwd1NlMS1VNUVJUTRaTTA3ZGxuTGM5ZEJHNklJVnhuLWNTSjhzanFBTkVubmhfRlZuSVdvaEc0WHJ0aFBmUmRR?oc=5"
     }
   ]
 }
