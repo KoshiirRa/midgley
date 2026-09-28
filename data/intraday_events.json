@@ -3553,5 +3553,25 @@
       "overall_price_pressure": 0.9
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-28T13:17:47.860408",
+    "headline": "New U.S. Law Revives Tariff Threat Over India\u2019s Russian Oil as Trade Talks Continue - IndraStra Global",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPQlJCWWQtT3JaYjN2cjZTbjF2Vjhjd3dVQ2FkQ1d2RkZYX2VfcjNmVFgwc2w0UGJqbFRGYlNvS3F0aWFFd0toalNORWZCNkdnc1NnMlVIZWZDT1gtV2dGMldGOHdNYlN6MGpEUGk4TUFNekJ3UWxFeld1U042YWtobV9R?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPQlJCWWQtT3JaYjN2cjZTbjF2Vjhjd3dVQ2FkQ1d2RkZYX2VfcjNmVFgwc2w0UGJqbFRGYlNvS3F0aWFFd0toalNORWZCNkdnc1NnMlVIZWZDT1gtV2dGMldGOHdNYlN6MGpEUGk4TUFNekJ3UWxFeld1U042YWtobV9R?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiggFBVV95cUxPQlJCWWQtT3JaYjN2cjZTbjF2Vjhjd3dVQ2FkQ1d2RkZYX2VfcjNmVFgwc2w0UGJqbFRGYlNvS3F0aWFFd0toalNORWZCNkdnc1NnMlVIZWZDT1gtV2dGMldGOHdNYlN6MGpEUGk4TUFNekJ3UWxFeld1U042YWtobV9R?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]

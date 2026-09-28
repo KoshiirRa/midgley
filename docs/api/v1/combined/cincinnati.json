@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-28T04:55:41.799742",
+  "timestamp": "2026-09-28T13:48:18.121760",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.301,
+    "current_price_per_gal": 4.285,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-28T04:25:07Z"
+      "timestamp": "2026-09-28T13:17:51Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-02",
-    "current_base_price": 4.301,
-    "predicted_price_per_gal": 4.598,
+    "current_base_price": 4.285,
+    "predicted_price_per_gal": 4.582,
     "expected_change_dollars": 0.297,
-    "expected_change_percent": 6.91,
+    "expected_change_percent": 6.93,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.478,
-    "prediction_upper_95ci": 4.718,
+    "prediction_lower_95ci": 4.462,
+    "prediction_upper_95ci": 4.702,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.36,
-    "day_2_price": 4.28,
-    "day_3_price": 4.426,
-    "day_4_price": 4.507,
-    "day_5_price": 4.598,
+    "day_1_price": 4.344,
+    "day_2_price": 4.264,
+    "day_3_price": 4.41,
+    "day_4_price": 4.491,
+    "day_5_price": 4.582,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast +$0.297/gal (+6.91%): Driven primarily by Regional Logistics & Hub Delivery (+$0.104/gal), Refining Yield & Crack Spread (+$0.074/gal).",
+      "summary_text": "Cincinnati OH forecast +$0.297/gal (+6.93%): Driven primarily by Regional Logistics & Hub Delivery (+$0.104/gal), Refining Yield & Crack Spread (+$0.074/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.104,
-          "impact_pct": 2.42,
+          "impact_pct": 2.43,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.074,
-          "impact_pct": 1.72,
+          "impact_pct": 1.73,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.059,
-          "impact_pct": 1.37,
+          "impact_pct": 1.38,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.104,
-      "impact_pct": 2.42,
+      "impact_pct": 2.43,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.074,
-      "impact_pct": 1.72,
+      "impact_pct": 1.73,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.059,
-      "impact_pct": 1.37,
+      "impact_pct": 1.38,
       "share_pct": 20.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast +$0.297/gal (+6.91%): Driven primarily by Regional Logistics & Hub Delivery (+$0.104/gal), Refining Yield & Crack Spread (+$0.074/gal).",
+    "summary_text": "Cincinnati OH forecast +$0.297/gal (+6.93%): Driven primarily by Regional Logistics & Hub Delivery (+$0.104/gal), Refining Yield & Crack Spread (+$0.074/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

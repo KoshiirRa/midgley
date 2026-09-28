@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-28T04:57:41.746763",
+  "timestamp": "2026-09-28T13:50:19.067550",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.152,
+    "current_price_per_gal": 4.141,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-28T04:55:42Z"
+      "timestamp": "2026-09-28T13:48:18Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-02",
-    "current_base_price": 4.152,
-    "predicted_price_per_gal": 4.377,
-    "expected_change_dollars": 0.225,
-    "expected_change_percent": 5.42,
+    "current_base_price": 4.141,
+    "predicted_price_per_gal": 4.365,
+    "expected_change_dollars": 0.224,
+    "expected_change_percent": 5.41,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.257,
-    "prediction_upper_95ci": 4.497,
+    "prediction_lower_95ci": 4.245,
+    "prediction_upper_95ci": 4.485,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.197,
-    "day_2_price": 4.175,
-    "day_3_price": 4.31,
-    "day_4_price": 4.319,
-    "day_5_price": 4.377,
+    "day_1_price": 4.186,
+    "day_2_price": 4.164,
+    "day_3_price": 4.299,
+    "day_4_price": 4.308,
+    "day_5_price": 4.365,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.023,
+        "delta_dollars": 0.022,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast +$0.225/gal (+5.42%): Driven primarily by Regional Logistics & Hub Delivery (+$0.090/gal), Futures & Commodity Benchmark (+$0.056/gal).",
+      "summary_text": "Greenville NC forecast +$0.224/gal (+5.41%): Driven primarily by Regional Logistics & Hub Delivery (+$0.090/gal), Futures & Commodity Benchmark (+$0.056/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -125,8 +125,8 @@
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.023,
-          "impact_pct": 0.55,
+          "impact_dollars": 0.022,
+          "impact_pct": 0.53,
           "share_pct": 10.0,
           "direction": "UP"
         },
@@ -134,7 +134,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.011,
-          "impact_pct": 0.26,
+          "impact_pct": 0.27,
           "share_pct": 5.0,
           "direction": "UP"
         },
@@ -142,7 +142,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.011,
-          "impact_pct": 0.26,
+          "impact_pct": 0.27,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -177,8 +177,8 @@
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.023,
-      "impact_pct": 0.55,
+      "impact_dollars": 0.022,
+      "impact_pct": 0.53,
       "share_pct": 10.0,
       "direction": "UP"
     },
@@ -186,7 +186,7 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.011,
-      "impact_pct": 0.26,
+      "impact_pct": 0.27,
       "share_pct": 5.0,
       "direction": "UP"
     },
@@ -194,13 +194,13 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.011,
-      "impact_pct": 0.26,
+      "impact_pct": 0.27,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast +$0.225/gal (+5.42%): Driven primarily by Regional Logistics & Hub Delivery (+$0.090/gal), Futures & Commodity Benchmark (+$0.056/gal).",
+    "summary_text": "Greenville NC forecast +$0.224/gal (+5.41%): Driven primarily by Regional Logistics & Hub Delivery (+$0.090/gal), Futures & Commodity Benchmark (+$0.056/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.023,
+        "delta_dollars": 0.022,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
