@@ -5830,93 +5830,13 @@
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 18785,
+    "retain_count": 18794,
     "recall_count": 5,
-    "reflect_count": 7,
-    "cloud_calls": 9831,
-    "local_fallback_calls": 8966
+    "reflect_count": 8,
+    "cloud_calls": 9840,
+    "local_fallback_calls": 8967
   },
   "memory_events": [
-    {
-      "timestamp": "2026-09-11 13:34:15",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:19",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:24",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:27",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:32",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:35",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:38",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:41",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:44",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-11 13:34:48",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
     {
       "timestamp": "2026-09-11 13:34:52",
       "environment": "dev",
@@ -13834,6 +13754,86 @@
       "environment": "prod",
       "operation": "retain",
       "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:14",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:15",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:16",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 18:20:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-09-28 20:43:25",
+      "environment": "prod",
+      "operation": "reflect",
+      "backend": "sqlite_fts5",
       "status": "success",
       "latency_ms": 0.0
     }

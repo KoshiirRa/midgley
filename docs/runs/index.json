@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-09-28_20-43-30",
+    "timestamp": "2026-09-28 19:41:28",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-28 19:41:28)"
+  },
+  {
+    "run_id": "2026-09-28_19-41-50",
+    "timestamp": "2026-09-28 19:41:28",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-28 19:41:28)"
+  },
+  {
     "run_id": "2026-09-28_16-06-45",
     "timestamp": "2026-09-28 16:06:16",
     "run_type": "LIVE_PROSPECTIVE",
@@ -583,18 +595,6 @@
   },
   {
     "run_id": "2026-09-24_22-56-57",
-    "timestamp": "2026-09-24 22:45:28",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US, India Discuss Trump-Signed Russia Sanctions Bill and Tar..."
-  },
-  {
-    "run_id": "2026-09-24_22-56-52",
-    "timestamp": "2026-09-24 22:45:28",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "US, India Discuss Trump-Signed Russia Sanctions Bill and Tar..."
-  },
-  {
-    "run_id": "2026-09-24_22-56-48",
     "timestamp": "2026-09-24 22:45:28",
     "run_type": "INTRADAY_REVISION",
     "trigger": "US, India Discuss Trump-Signed Russia Sanctions Bill and Tar..."

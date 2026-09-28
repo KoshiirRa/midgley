@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-28 17:14:22",
-  "total_events": 699,
+  "last_updated": "2026-09-28 21:02:41",
+  "total_events": 727,
   "events": [
     {
       "timestamp": "2026-09-23 20:31:12",
@@ -6992,6 +6992,286 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-28 18:13:58",
+      "connector_name": "HindsightHosted",
+      "target": "warmup",
+      "status": "SUCCESS",
+      "latency_ms": 308.8,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Warmup successful in attempt 1"
+    },
+    {
+      "timestamp": "2026-09-28 18:14:08",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 331.44,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-28 18:20:13",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 152.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:14",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 155.19,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:14",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 161.4,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:15",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 157.63,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:15",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 123.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:16",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 112.89,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:16",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 102.76,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:17",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 108.27,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:20:17",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 107.59,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 18:30:36",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 313.08,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-28 18:56:06",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 279.18,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-28 19:15:15",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 341.51,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-28 19:30:53",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 348.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-28 20:02:50",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 269.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 183 docs, 112 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:07",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 319.62,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:16",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "WTI_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:16",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "BRENT_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:16",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "RBOB_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:16",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "NG_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:17",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "HO_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:17",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "RAL_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:17",
+      "connector_name": "OilPriceAPIConnector",
+      "target": "COAL_USD",
+      "status": "FALLBACK",
+      "latency_ms": 1.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "API offline or unconfigured, served benchmark anchor"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:21",
+      "connector_name": "OpenSourceAIRadar",
+      "target": "AI_Radar_API",
+      "status": "FALLBACK",
+      "latency_ms": 0.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Retrieved 6 radar models"
+    },
+    {
+      "timestamp": "2026-09-28 20:43:23",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 295.89,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-09-28 20:43:29",
+      "connector_name": "HindsightHosted",
+      "target": "warmup",
+      "status": "SUCCESS",
+      "latency_ms": 141.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Warmup successful in attempt 1"
+    },
+    {
+      "timestamp": "2026-09-28 21:02:41",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 482.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 183 docs, 112 obs, 0 refs"
     }
   ]
 }
