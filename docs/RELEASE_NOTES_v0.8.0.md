@@ -55,16 +55,50 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 
 ### 12. Unified Direct Cloud Database & Deduplication Engine (Issues #559, #423, #424, #479)
 - **Direct Edge & Cloud Database Architecture (`src/db/client.py`)**: Unified direct cloud database connectivity hitting Turso libSQL REST pipeline v2 and Cloudflare D1 directly over wire without local SQLite synchronization divergence, backed by standard local SQLite WAL-mode fallback.
-- **Relational Normalized Schema (`src/db/schema.sql`)**: Structured schema with foreign keys and unique constraints across `forecasts`, `intraday_revisions`, `intraday_events`, `evaluated_headlines`, `data_vintages`, `ground_truth`, and `evaluations`.
+- **Relational Normalized Schema (`src/db/schema.sql`)**: Structured schema with foreign keys and unique constraints across `forecasts`, `intraday_revisions`, `intraday_events`, `evaluated_headlines`, `data_vintages`, `ground_truth`, `evaluations`, and `hindsight_telemetry`.
 - **Deduplication & Legacy CSV Migration (`scripts/migrate_csv_to_turso.py`)**: Migrated legacy monolithic `data/prediction_history.csv` with deterministic SHA-256 primary keys (`forecast_id`), collapsing 59,717 raw backtest rows down to exactly 11,943 unique forecasts (**eliminating 47,774 redundant duplicate entries / 80% deduplication**).
 - **Bitemporal Vintage Store (`src/vintage_store.py`)**: Centralized point-in-time querying (`query_as_of`) with data quality classification (`LIVE`, `CACHED`, `BENCHMARK`, `STALE`, `SYNTHETIC`) and publication lag enforcement, eliminating lookahead leakage across all 21 external feeds.
 - **Parent-Linked Intraday Revisions (`src/intraday_event_monitor.py`)**: Structured parent-child lineage tracking linking intraday shock adjustments back to parent base forecasts (`parent_forecast_id`).
+
+### 13. Closed-Loop Hindsight Episodic Context & Feedback Loop Engine (Issue #559 Phase 3)
+- **Precedent Injection & Prompt Grounding (`src/hindsight_context.py`)**: Intercepts physical disruption catalyst terms across breaking headlines (refineries, flaring, pipelines, storms, river navigation, RVP transition waivers) and injects empirical historical episode analogs (`[HISTORICAL EPISODIC MEMORY PRECEDENT]`) into LLM scoring prompts and counterfactual scenario simulations.
+- **Realized Bounds Calibration**: Replaces uncalibrated qualitative shock estimates with historical analog duration, empirical pass-through lag, and price shock distributions.
+- **Post-Settlement Causal Reflection**: Evaluates settled forecast errors against realized ground truth, classifying severe prediction misses ($>2\sigma$ or directional flips) into structured failure modes (`OVERESTIMATED_SHOCK`, `UNDERESTIMATED_SHOCK`, `DIRECTIONAL_FLIP`, `BASIS_DIVERGENCE`) and recording durable post-mortems back into Hindsight episodic memory.
+- **Relational Telemetry Auditing**: Logs all episodic memory operations (`RECALL`, `REFLECT`, `RETAIN`) with query terms, summaries, and latency benchmarks directly to `hindsight_telemetry`.
+
+### 14. Model & Evaluation Hardening: Full-Sample Refit, Stationary Transforms, and Ground Truth Integrity (Issue #559 Phase 4)
+- **Full-Sample Prospective Refit (`fit_prospective_model`)**: Refits estimator pipelines on 100% of historical training data (combining train and validation splits) prior to generating live prospective forecasts ($t+1 \dots t+5$), eliminating model staleness while preserving pure out-of-time evaluation metrics.
+- **Stationary Target Transformations**: Enforces stationary log-returns, differences, and persistence residuals with roll-adjusted RBOB returns and bounded exponential price level reconstruction.
+- **Authentic Fundamental Ingestion & Missingness Flags**: Connects fundamentals to bitemporal `VintageStore` query records, eliminating synthetic sine-wave baselines and emitting explicit binary missingness flags (`_is_missing`).
+- **Discrete Ground Truth Mappings & Maturity Gating**: Direct 1-to-1 mapping of regional EIA/FRED retail series with strict future maturity gating (`target_date <= today`) and zero cross-regional fallbacks.
+
+### 15. Security Hardening, Git State Decoupling & Dynamic Presentation (Issue #559 Phase 5)
+- **Constant-Time Cryptographic Equality**: Implemented universal `timingSafeEqual()` across Cloudflare Workers (`workers/cache_worker.ts`, `workers/intraday_monitor_worker.ts`) and enforced `hmac.compare_digest()` in `src/api_server.py` master API key validation, eliminating timing side-channel vulnerabilities.
+- **Git State Decoupling**: Updated `.gitignore` to strictly exclude local and runtime SQLite database artifacts (`data/*.db*`, `data/*.sqlite*`, `data/*.db-wal`, `data/*.db-shm`), preventing dirty git working trees and binary database merge conflicts.
+- **Dynamic Savings Advisor (`docs/savings.html`)**: Refactored `generate_savings_advisor_page()` in `src/dashboard_generator.py` with `get_savings_regional_trajectories()`, embedding live 5-day quantitative model trajectories directly from `prediction_history.csv` into the interactive tank savings calculator.
+
+### 16. Code Review Hardening, Link-Level Worker Signing, Model Architecture Cloning & CI Resilience (Phase 6 / Issues #573–#580)
+- **CI Commit-First Rebase Order (Issue #573)**: Fixed automated GitHub Actions pipelines (`gas_price_forecast.yml`, `intraday_event_monitor.yml`, `weekly_model_review.yml`) by staging and committing generated artifacts before executing `git pull --rebase origin "$BRANCH"` with a 3-attempt exponential backoff retry loop, preventing race condition rollbacks.
+- **Link-Level Signed Discord Flag URLs (Issue #574)**: Replaced static administrative token exposure in Discord alert buttons with expiring HMAC-SHA256 link tokens (`id|exp|sig` signed via `FLAG_SIGNING_KEY`), eliminated GET token generation, and enforced fail-closed `ADMIN_TOKEN` headers on worker `/run` and `/trigger` endpoints.
+- **Model Pipeline Architecture Cloning (Issue #575)**: Refactored `fit_prospective_model()` to clone evaluated `RidgeCV` / ensemble pipeline hyperparameters via `sklearn.base.clone()`, ensuring live forward forecasts inherit the exact cross-validated structure and regularization parameters of the evaluated model.
+- **Fail-Closed Episodic Prompt Injection & Point-in-Time Filtering (Issues #576, #580)**: Gated Hindsight context injection behind `MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION=0` (default disabled), stripped synthetic fallback strings to prevent hallucinations, and enforced strict `as_of` point-in-time filtering on precedent retrieval.
+- **Database Test Isolation & Connection PRAGMAs (Issue #577)**: Enforced strict SQLite sandboxing during test execution (`TESTING=1`), stripping remote Turso environment variables, applying persistent `PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;` on all connections, and sandboxing test databases.
+- **Historical Prediction Ledger Deduplication (Issue #578)**: Cleaned and deduplicated `data/prediction_history.csv` from ~59.7k down to ~11.95k unique primary records, removing redundant backtest runs while preserving genuine live prospective and intraday revision history.
+- **Constant-Time Secret Byte Comparison (Issue #580)**: Standardized `hmac.compare_digest()` across all API server authentication routines by strictly encoding tokens to UTF-8 byte arrays before comparison.
 
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
-  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1 & 2)
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2, 3, 4, 5 & 6)
+  - Issue #573 - `fix(ci): fix workflow rebase order, commit first, and pass branch via env`
+  - Issue #574 - `fix(workers): link-level signed flag URLs and fail-closed admin token validation`
+  - Issue #575 - `fix(models): prospective refit clones evaluated pipeline architecture`
+  - Issue #576 - `fix(hindsight): gate prompt injection behind env flag and eliminate synthetic fallbacks`
+  - Issue #577 - `fix(db): test isolation, persistent PRAGMAs, and lazy store initialization`
+  - Issue #578 - `fix(data): deduplicate prediction_history.csv and clean redundant records`
+  - Issue #579 - `docs: synchronize release notes, AGENTS.md, and SELF_HOSTING.md`
+  - Issue #580 - `fix(security): master key byte encoding and robust directional hit classification`
   - Issue #423 - `feat(storage): Migrate flat CSV and JSON storage to a structured datastore`
   - Issue #424 - `fix(storage): Replace unsafe raw file writes with atomic write routines to prevent 0-byte file truncation`
   - Issue #479 - `feat(storage): Implement cursor-based cloud sync for predictions and evaluations`
@@ -76,4 +110,4 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
   - Issue #450 - `feat(hierarchical): Partial pooling and MinT hierarchical reconciliation across metro, state, and national forecasts`
   - Issue #498 - `perf(pipeline): eliminate redundant yfinance downloads, batch commodity feeds, and accelerate CI runtimes`
   - Issue #557 - `fix(memory): dynamic anomaly retention & hindsight reconciliation engine`
-* **Milestone**: v0.8 "Storage Modernization, Math Rigor & Performance"
+* **Milestone**: v0.8.0 "Unified Database, Episodic Memory & Cloud Architecture"

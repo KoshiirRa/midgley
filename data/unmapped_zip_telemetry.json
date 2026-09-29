@@ -4,44 +4,44 @@
     "state": "CA",
     "padd_region": "PADD 5",
     "calibrated_model_used": "Oakland_CA (PADD 5 CARB)",
-    "hit_count": 36,
+    "hit_count": 38,
     "first_searched_at": "2026-09-03T23:00:45.433276",
-    "last_searched_at": "2026-09-29T17:53:33.085930"
+    "last_searched_at": "2026-09-29T15:49:07.986350"
   },
   "77002": {
     "zip_code": "77002",
     "state": "TX",
     "padd_region": "PADD 3",
     "calibrated_model_used": "National Wholesale (PADD 3)",
-    "hit_count": 18,
+    "hit_count": 19,
     "first_searched_at": "2026-09-03T23:00:45.433443",
-    "last_searched_at": "2026-09-29T17:53:33.062832"
+    "last_searched_at": "2026-09-29T15:49:07.873680"
   },
   "10001": {
     "zip_code": "10001",
     "state": "NY",
     "padd_region": "PADD 1B",
     "calibrated_model_used": "Newark_DE (PADD 1B)",
-    "hit_count": 72,
+    "hit_count": 76,
     "first_searched_at": "2026-09-03T23:00:45.433602",
-    "last_searched_at": "2026-09-29T17:53:33.288998"
+    "last_searched_at": "2026-09-29T15:49:08.266202"
   },
   "07001": {
     "zip_code": "07001",
     "state": "NJ",
     "padd_region": "PADD 1B",
     "calibrated_model_used": "Newark_DE (PADD 1B)",
-    "hit_count": 12,
+    "hit_count": 15,
     "first_searched_at": "2026-09-23T20:40:49.972589",
-    "last_searched_at": "2026-09-29T17:53:33.341956"
+    "last_searched_at": "2026-09-29T15:49:08.362973"
   },
   "02138": {
     "zip_code": "02138",
     "state": "MA",
     "padd_region": "PADD 2",
     "calibrated_model_used": "National Wholesale",
-    "hit_count": 4,
+    "hit_count": 5,
     "first_searched_at": "2026-09-23T20:40:50.023780",
-    "last_searched_at": "2026-09-29T17:53:33.331821"
+    "last_searched_at": "2026-09-29T15:49:08.357473"
   }
 }

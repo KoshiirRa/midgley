@@ -21,7 +21,7 @@ def test_deterministic_forecast_id():
     assert len(id1) == 32
 
 
-def test_migration_deduplication():
+def test_migration_deduplication(tmp_path):
     """Verifies that duplicate CSV rows are collapsed into unique forecast records."""
     sample_rows = []
     # 5 identical duplicate backtest runs for the same forecast
@@ -43,29 +43,20 @@ def test_migration_deduplication():
         })
 
     df = pd.DataFrame(sample_rows)
-    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as f_csv:
-        csv_path = f_csv.name
-    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f_db:
-        db_path = f_db.name
+    csv_path = str(tmp_path / "test_dedup.csv")
+    db_path = str(tmp_path / "test_dedup.db")
 
     df.to_csv(csv_path, index=False)
     db = DatabaseClient(sqlite_path=db_path)
 
-    try:
-        res = migrate_csv_to_database(csv_path, db=db)
-        assert res["status"] == "SUCCESS"
-        assert res["raw_csv_rows"] == 5
-        assert res["unique_forecasts"] == 1
-        assert res["duplicates_removed"] == 4
+    res = migrate_csv_to_database(csv_path, db=db)
+    assert res["status"] == "SUCCESS"
+    assert res["raw_csv_rows"] == 5
+    assert res["unique_forecasts"] == 1
+    assert res["duplicates_removed"] == 4
 
-        # Check DB rows
-        forecasts = db.execute("SELECT * FROM forecasts;")
-        assert len(forecasts) == 1
-        evals = db.execute("SELECT * FROM evaluations;")
-        assert len(evals) == 1
-    finally:
-        db.close()
-        if os.path.exists(csv_path):
-            os.remove(csv_path)
-        if os.path.exists(db_path):
-            os.remove(db_path)
+    # Check DB rows
+    forecasts = db.execute("SELECT * FROM forecasts;")
+    assert len(forecasts) == 1
+    evals = db.execute("SELECT * FROM evaluations;")
+    assert len(evals) == 1

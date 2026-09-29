@@ -964,5 +964,97 @@
       ],
       "status": "SUCCESS"
     }
+  },
+  {
+    "as_of": "2026-09-29 15:42:29",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 15:42:29",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-29 15:46:08",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 15:46:07",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Hanna (AT3/AL082026)",
+          "description": "...HANNA STILL MOVING SOUTHEASTWARD WITH LITTLE CHANGE IN STRENGTH... As of 9:00 PM GMT Tue Sep 29 the center of Hanna was located near 34.0, -44.5 with movement SE at 12 mph. The minimum central pres"
+        },
+        {
+          "title": "Tropical Storm Hanna Public Advisory Number 6",
+          "description": "Issued at 900 PM GMT Tue Sep 29 2026 <pre>000\nWTNT33 KNHC 292034\nTCPAT3\n \nBULLETIN\nTropical Storm Hanna Advisory Number   6\nNWS National Hurricane Center Miami FL       AL082026\n900 PM GMT Tue Sep 29 "
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Advisory Number 6",
+          "description": "Issued at 2100 UTC TUE SEP 29 2026 <pre>000\nWTNT23 KNHC 292031\nTCMAT3\n \nTROPICAL STORM HANNA FORECAST/ADVISORY NUMBER   6\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL082026\n2100 UTC TUE SEP 29 2026"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Discussion Number 6",
+          "description": "Issued at 900 PM GMT Tue Sep 29 2026 <pre>916 \nWTNT43 KNHC 292032\nTCDAT3\n \nTropical Storm Hanna Discussion Number   6\nNWS National Hurricane Center Miami FL       AL082026\n900 PM GMT Tue Sep 29 2026\n "
+        },
+        {
+          "title": "Tropical Storm Hanna Wind Speed Probabilities Number 6",
+          "description": "Issued at 2100 UTC TUE SEP 29 2026 <pre>000\nFONT13 KNHC 292032\nPWSAT3\n                                                                    \nTROPICAL STORM HANNA WIND SPEED PROBABILITIES NUMBER   6     "
+        },
+        {
+          "title": "Tropical Storm Hanna Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at3+shtml/203444.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT08/AL082026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-29 15:48:07",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 15:48:07",
+      "active_storms_count": 6,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Storm Hanna (AT3/AL082026)",
+          "description": "...HANNA STILL MOVING SOUTHEASTWARD WITH LITTLE CHANGE IN STRENGTH... As of 9:00 PM GMT Tue Sep 29 the center of Hanna was located near 34.0, -44.5 with movement SE at 12 mph. The minimum central pres"
+        },
+        {
+          "title": "Tropical Storm Hanna Public Advisory Number 6",
+          "description": "Issued at 900 PM GMT Tue Sep 29 2026 <pre>000\nWTNT33 KNHC 292034\nTCPAT3\n \nBULLETIN\nTropical Storm Hanna Advisory Number   6\nNWS National Hurricane Center Miami FL       AL082026\n900 PM GMT Tue Sep 29 "
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Advisory Number 6",
+          "description": "Issued at 2100 UTC TUE SEP 29 2026 <pre>000\nWTNT23 KNHC 292031\nTCMAT3\n \nTROPICAL STORM HANNA FORECAST/ADVISORY NUMBER   6\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL082026\n2100 UTC TUE SEP 29 2026"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Discussion Number 6",
+          "description": "Issued at 900 PM GMT Tue Sep 29 2026 <pre>916 \nWTNT43 KNHC 292032\nTCDAT3\n \nTropical Storm Hanna Discussion Number   6\nNWS National Hurricane Center Miami FL       AL082026\n900 PM GMT Tue Sep 29 2026\n "
+        },
+        {
+          "title": "Tropical Storm Hanna Wind Speed Probabilities Number 6",
+          "description": "Issued at 2100 UTC TUE SEP 29 2026 <pre>000\nFONT13 KNHC 292032\nPWSAT3\n                                                                    \nTROPICAL STORM HANNA WIND SPEED PROBABILITIES NUMBER   6     "
+        },
+        {
+          "title": "Tropical Storm Hanna Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at3+shtml/203444.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT08/AL082026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
   }
 ]

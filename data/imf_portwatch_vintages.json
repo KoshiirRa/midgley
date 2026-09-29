@@ -2,7 +2,7 @@
   "vintages": {
     "Strait_of_Hormuz": {
       "latest_observation_date": "2026-09-29",
-      "recorded_at": "2026-09-29T17:51:32.187934",
+      "recorded_at": "2026-09-29T20:47:23.880311",
       "metrics": {
         "daily_vessel_count": 108.9,
         "daily_tanker_count": 38.9,
@@ -13,7 +13,7 @@
     },
     "Suez_Canal": {
       "latest_observation_date": "2026-02-01",
-      "recorded_at": "2026-09-29T17:51:32.567758",
+      "recorded_at": "2026-09-29T20:47:24.013885",
       "metrics": {
         "daily_vessel_count": 48.2,
         "daily_tanker_count": 17.2,
@@ -24,7 +24,7 @@
     },
     "Bab_el_Mandeb": {
       "latest_observation_date": "2026-09-29",
-      "recorded_at": "2026-09-29T17:51:32.382874",
+      "recorded_at": "2026-09-29T20:47:23.934113",
       "metrics": {
         "daily_vessel_count": 36.4,
         "daily_tanker_count": 13.0,
@@ -35,7 +35,7 @@
     },
     "Panama_Canal": {
       "latest_observation_date": "2026-09-29",
-      "recorded_at": "2026-09-29T17:51:32.475135",
+      "recorded_at": "2026-09-29T20:47:23.960593",
       "metrics": {
         "daily_vessel_count": 20.7,
         "daily_tanker_count": 7.4,
@@ -45,5 +45,5 @@
       }
     }
   },
-  "last_updated": "2026-09-29T17:51:32.567778"
+  "last_updated": "2026-09-29T20:47:24.013885"
 }

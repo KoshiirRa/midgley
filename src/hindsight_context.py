@@ -83,15 +83,22 @@ def extract_catalyst_tokens(headline: str) -> str:
     return " ".join(clean_words[:6])
 
 
+def is_hindsight_prompt_injection_enabled() -> bool:
+    """Checks if Hindsight episodic prompt injection into LLM prompts is enabled (Issue #576 N-4). Defaults to False."""
+    val = os.getenv("MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION", "0").strip().lower()
+    return val in ("1", "true", "yes", "on")
+
+
 def query_episodic_precedents(
     query_text: str,
     region: Optional[str] = None,
     top_k: int = 2,
+    as_of: Optional[str] = None,
     memory_manager: Optional[AgentMemoryManager] = None
 ) -> List[Dict[str, Any]]:
     """
     Queries Hindsight memory bank for matching historical shock episodes.
-    Returns normalized structured precedent entries.
+    Returns normalized structured precedent entries, applying point-in-time as_of filtering (Issue #576 N-4/N-5, Issue #580 N-9).
     """
     if not query_text:
         return []
@@ -101,7 +108,7 @@ def query_episodic_precedents(
     raw_memories = []
 
     try:
-        raw_memories = mgr.recall(query=query_text, region=region, top_k=top_k)
+        raw_memories = mgr.recall(query=query_text, region=region, top_k=top_k * 2 if as_of else top_k)
     except Exception as e:
         logger.debug(f"Hindsight precedent recall notice: {e}")
 
@@ -123,11 +130,21 @@ def query_episodic_precedents(
         reg = item.get("region") or region or "National"
         target_d = item.get("forecast_target_date") or metadata.get("target_date")
 
-        # Derive estimated duration and pass-through lag
-        duration = metadata.get("outage_duration_days") or metadata.get("duration", "3-7 trading days")
-        lag = metadata.get("pass_through_lag_days") or metadata.get("lag", "2-5 days")
-        price_shock = metadata.get("price_shock_dollars") or (f"${abs(err):.3f}/gal" if err else "+$0.08 to +$0.18/gal")
-        lesson = metadata.get("lesson") or metadata.get("calibration_suggestion") or content[:160]
+        # Point-in-time as_of filtering (Issue #580 N-9)
+        if as_of and target_d:
+            try:
+                if str(target_d)[:10] > str(as_of)[:10]:
+                    continue
+            except Exception:
+                pass
+
+        # Derive duration, lag, and price reaction without synthetic default hallucination (Issue #576 N-5)
+        duration = metadata.get("outage_duration_days") or metadata.get("duration") or ""
+        lag = metadata.get("pass_through_lag_days") or metadata.get("lag") or ""
+        price_shock = metadata.get("price_shock_dollars") or (f"${abs(err):.3f}/gal" if err is not None else "")
+        lesson = metadata.get("lesson") or metadata.get("calibration_suggestion") or ""
+        if not lesson and len(content) > 10:
+            lesson = content[:160]
 
         precedents.append({
             "memory_id": item.get("memory_id", ""),
@@ -138,9 +155,11 @@ def query_episodic_precedents(
             "duration": str(duration),
             "pass_through_lag": str(lag),
             "price_shock": str(price_shock),
-            "lesson": lesson.strip(),
+            "lesson": lesson.strip() if isinstance(lesson, str) else "",
             "score": float(item.get("score", 1.0))
         })
+        if len(precedents) >= top_k:
+            break
 
     # Log telemetry to relational database
     try:
@@ -161,6 +180,7 @@ def query_episodic_precedents(
 def format_hindsight_precedent_prompt_block(precedents: List[Dict[str, Any]]) -> str:
     """
     Formats structured episodic precedents into a Markdown context block for LLM prompts.
+    Omits missing or empty fields without inserting synthetic place-holders (Issue #576 N-5).
     """
     if not precedents:
         return ""
@@ -170,9 +190,12 @@ def format_hindsight_precedent_prompt_block(precedents: List[Dict[str, Any]]) ->
         reg_info = f" ({p['region']})" if p.get("region") else ""
         date_info = f" [{p['target_date']}]" if p.get("target_date") else ""
         lines.append(f"• Precedent {i}: {p['catalyst']}{reg_info}{date_info}")
-        lines.append(f"   - Historical Outage Duration: {p['duration']}")
-        lines.append(f"   - Empirical Pass-Through Lag: {p['pass_through_lag']}")
-        lines.append(f"   - Realized Price Reaction: {p['price_shock']}")
+        if p.get("duration"):
+            lines.append(f"   - Historical Outage Duration: {p['duration']}")
+        if p.get("pass_through_lag"):
+            lines.append(f"   - Empirical Pass-Through Lag: {p['pass_through_lag']}")
+        if p.get("price_shock"):
+            lines.append(f"   - Realized Price Reaction: {p['price_shock']}")
         if p.get("lesson"):
             lines.append(f"   - Key Econometric Takeaway: {p['lesson']}")
 
@@ -183,17 +206,22 @@ def format_hindsight_precedent_prompt_block(precedents: List[Dict[str, Any]]) ->
 def inject_hindsight_context(
     headline: str,
     region: Optional[str] = None,
-    top_k: int = 2
+    top_k: int = 2,
+    as_of: Optional[str] = None
 ) -> Tuple[str, List[Dict[str, Any]]]:
     """
     Inspects headline for energy catalysts, retrieves relevant Hindsight memory precedents,
     and returns the formatted prompt block and structured precedent list.
+    Gated behind MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION (Issue #576 N-4).
     """
+    if not is_hindsight_prompt_injection_enabled():
+        return "", []
+
     if not is_catalyst_headline(headline):
         return "", []
 
     query_tokens = extract_catalyst_tokens(headline)
-    precedents = query_episodic_precedents(query_tokens, region=region, top_k=top_k)
+    precedents = query_episodic_precedents(query_tokens, region=region, top_k=top_k, as_of=as_of)
     prompt_block = format_hindsight_precedent_prompt_block(precedents)
     return prompt_block, precedents
 
@@ -202,14 +230,25 @@ def classify_causal_anomaly(
     predicted_price: float,
     actual_price: float,
     error_dollars: float,
-    directional_hit: Optional[float] = None,
+    directional_hit: Optional[float | bool] = None,
     active_events_count: int = 0
 ) -> str:
     """
     Classifies root cause of out-of-sample forecast anomaly.
+    Robustly handles directional misses for float 0.0 or boolean False (Issue #580 N-10).
     """
     diff = predicted_price - actual_price
     
+    d_miss = False
+    if directional_hit is not None:
+        if isinstance(directional_hit, bool):
+            d_miss = not directional_hit
+        else:
+            try:
+                d_miss = (float(directional_hit) == 0.0)
+            except Exception:
+                d_miss = False
+
     if diff >= 0.20:
         if active_events_count > 0:
             return "OVERESTIMATED_SHOCK"
@@ -218,7 +257,7 @@ def classify_causal_anomaly(
         if active_events_count > 0:
             return "UNDERESTIMATED_SHOCK"
         return "LARGE_UNDERESTIMATE"
-    elif directional_hit == 0.0 and abs(diff) >= 0.05:
+    elif d_miss and abs(diff) >= 0.05:
         return "DIRECTIONAL_FLIP"
     elif abs(diff) >= 0.15:
         return "BASIS_DIVERGENCE"

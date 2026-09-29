@@ -22,6 +22,7 @@ export interface Env {
   PROJECT_V2_ID?: string;
   CLOUDFLARE_AUTH_TOKEN?: string;
   ADMIN_TOKEN?: string;
+  FLAG_SIGNING_KEY?: string;
   DB?: any;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
@@ -1057,13 +1058,14 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
   });
 }
 
-export function getWorkerSigningSecret(env: Env): string {
-  return env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT || "midgley-fp-signing-key";
+export function getWorkerSigningSecret(env: Env): string | null {
+  return env.FLAG_SIGNING_KEY || env.ADMIN_TOKEN || null;
 }
 
-export async function generateEventToken(eventId: string, secret: string): Promise<string> {
+export async function generateEventToken(eventId: string, exp: number, secret: string): Promise<string> {
+  if (!secret) return "";
   const enc = new TextEncoder();
-  const keyData = enc.encode(secret || "midgley-fp-signing-key");
+  const keyData = enc.encode(secret);
   const key = await crypto.subtle.importKey(
     "raw",
     keyData,
@@ -1071,7 +1073,7 @@ export async function generateEventToken(eventId: string, secret: string): Promi
     false,
     ["sign"]
   );
-  const data = enc.encode(`flag_fp:${eventId}`);
+  const data = enc.encode(`flag_fp:${eventId}:${exp}`);
   const signature = await crypto.subtle.sign("HMAC", key, data);
   return Array.from(new Uint8Array(signature))
     .map(b => b.toString(16).padStart(2, "0"))
@@ -1092,10 +1094,12 @@ export function timingSafeEqual(a: string, b: string): boolean {
   return mismatch === 0;
 }
 
-export async function verifyEventToken(eventId: string, token: string, secret: string): Promise<boolean> {
-  if (!token || !eventId) return false;
-  const expectedToken = await generateEventToken(eventId, secret);
-  return timingSafeEqual(token, expectedToken);
+export async function verifyEventToken(eventId: string, exp: number, sig: string, secret: string): Promise<boolean> {
+  if (!sig || !eventId || !secret || !exp) return false;
+  const now = Math.floor(Date.now() / 1000);
+  if (exp < now) return false;
+  const expectedSig = await generateEventToken(eventId, exp, secret);
+  return timingSafeEqual(sig, expectedSig);
 }
 
 function escapeHtml(str: string): string {
@@ -1112,6 +1116,9 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
 
   if (request.method === "GET") {
     const id = url.searchParams.get("id") || "";
+    const expStr = url.searchParams.get("exp") || "0";
+    const sig = url.searchParams.get("sig") || url.searchParams.get("token") || "";
+    const exp = parseInt(expStr, 10) || 0;
     const headline = url.searchParams.get("headline") || "Intraday Anomaly Trigger";
     const source = url.searchParams.get("source") || "Intraday_Monitor";
     const p = url.searchParams.get("p") || "+0.00";
@@ -1121,9 +1128,13 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
 
     const eventId = id || normalizeHeadline(headline) || "default_event";
     const signingSecret = getWorkerSigningSecret(env);
-    let authToken = url.searchParams.get("token") || "";
-    if (!authToken) {
-      authToken = await generateEventToken(eventId, signingSecret);
+
+    // Fail closed: GET must verify link signature; never generate tokens for unauthenticated visitors (Issue #574)
+    if (!signingSecret || !sig || !exp || !(await verifyEventToken(eventId, exp, sig, signingSecret))) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden: Missing, invalid, or expired signed flag link" }),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     const idEsc = escapeHtml(id || eventId);
@@ -1133,7 +1144,8 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     const sEsc = escapeHtml(s);
     const gEsc = escapeHtml(g);
     const sourceUrlEsc = escapeHtml(sourceUrl);
-    const authTokenEsc = escapeHtml(authToken);
+    const sigEsc = escapeHtml(sig);
+    const expEsc = escapeHtml(expStr);
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -1302,13 +1314,14 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
 
     <form method="POST" action="/flag">
       <input type="hidden" name="id" value="${idEsc}">
+      <input type="hidden" name="exp" value="${expEsc}">
+      <input type="hidden" name="sig" value="${sigEsc}">
       <input type="hidden" name="headline" value="${encodeURIComponent(headline)}">
       <input type="hidden" name="source" value="${sourceEsc}">
       <input type="hidden" name="p" value="${pEsc}">
       <input type="hidden" name="s" value="${sEsc}">
       <input type="hidden" name="g" value="${gEsc}">
       <input type="hidden" name="url" value="${encodeURIComponent(sourceUrl)}">
-      <input type="hidden" name="token" value="${authTokenEsc}">
 
       <div class="form-group">
         <label for="category">False Positive Category</label>
@@ -1341,6 +1354,9 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
   if (request.method === "POST") {
     const formData = await request.formData();
     const eventHash = formData.get("id")?.toString() || "";
+    const expStr = formData.get("exp")?.toString() || "0";
+    const sig = formData.get("sig")?.toString() || formData.get("token")?.toString() || "";
+    const exp = parseInt(expStr, 10) || 0;
     const rawHeadline = formData.get("headline")?.toString() || "Intraday Anomaly";
     let headline = rawHeadline;
     try {
@@ -1360,21 +1376,18 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     const category = formData.get("category")?.toString() || "Uncategorized False Positive";
     const notes = formData.get("notes")?.toString() || "";
 
-    const formToken = formData.get("token")?.toString() || request.headers.get("Authorization")?.replace("Bearer ", "").trim();
+    const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
     const signingSecret = getWorkerSigningSecret(env);
 
-    // Direct Admin / Worker Auth (e.g. API clients, admin CLI, test suites)
-    const isDirectAdminAuth =
-      Boolean(env.ADMIN_TOKEN && formToken && timingSafeEqual(formToken, env.ADMIN_TOKEN)) ||
-      Boolean(env.CLOUDFLARE_AUTH_TOKEN && formToken && timingSafeEqual(formToken, env.CLOUDFLARE_AUTH_TOKEN)) ||
-      Boolean(env.GH_PAT && formToken && timingSafeEqual(formToken, env.GH_PAT));
+    // 1. Direct Admin Auth (via Authorization: Bearer <ADMIN_TOKEN> header only)
+    const isDirectAdminAuth = Boolean(env.ADMIN_TOKEN && authHeader && timingSafeEqual(authHeader, env.ADMIN_TOKEN));
 
-    // Cryptographic Event Token Auth (e.g. one-click web browser form submissions from Discord)
-    const isSignedEventAuth = eventHash
-      ? await verifyEventToken(eventHash, formToken || "", signingSecret)
+    // 2. Cryptographic Signed Event Link Auth (via valid id + exp + sig from Discord embed)
+    const isSignedEventAuth = (Boolean(eventHash && sig && exp && signingSecret))
+      ? await verifyEventToken(eventHash, exp, sig, signingSecret!)
       : false;
 
-    // Reject unauthenticated issue creation requests (Issue #438)
+    // Reject unauthenticated issue creation requests (Fail-Closed, Issues #438, #574)
     if (!isDirectAdminAuth && !isSignedEventAuth) {
       return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid authentication token for issue creation" }), {
         status: 401,
@@ -1558,19 +1571,15 @@ export default {
         return await handleDiscordInteraction(request, env, ctx);
       }
 
-      // Secure manual run & trigger endpoints (Issue #438, #559 Phase 5)
+      // Secure manual run & trigger endpoints (Fail-Closed, Issues #438, #574)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
-        const authHeader = request.headers.get("Authorization");
-        const queryToken = url.searchParams.get("token");
-        const expectedToken = env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT;
-        if (expectedToken) {
-          const token = authHeader?.replace("Bearer ", "").trim() || queryToken?.trim();
-          if (!token || !timingSafeEqual(token, expectedToken)) {
-            return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid admin token" }), {
-              status: 401,
-              headers: { "Content-Type": "application/json" }
-            });
-          }
+        const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
+        const expectedToken = env.ADMIN_TOKEN;
+        if (!expectedToken || !authHeader || !timingSafeEqual(authHeader, expectedToken)) {
+          return new Response(JSON.stringify({ error: "Unauthorized: Valid ADMIN_TOKEN Authorization header required" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          });
         }
         const summary = await runMonitoringCycle(env, ctx);
         return new Response(JSON.stringify(summary, null, 2), {

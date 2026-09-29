@@ -1848,7 +1848,7 @@
     }
   },
   {
-    "as_of": "2026-09-29 17:50:09",
+    "as_of": "2026-09-29 15:46:11",
     "valid_date": "2026-09-29",
     "corridor_key": "bay_area",
     "composite_seismic_risk_index": 0.0,
@@ -1857,7 +1857,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-29 17:50:09",
+      "timestamp": "2026-09-29 15:46:11",
       "filtered_corridor": "bay_area",
       "temporal_window_days": 30,
       "events": [],
@@ -1884,7 +1884,7 @@
     }
   },
   {
-    "as_of": "2026-09-29 17:51:36",
+    "as_of": "2026-09-29 15:47:30",
     "valid_date": "2026-09-29",
     "corridor_key": "cushing_ok",
     "composite_seismic_risk_index": 0.0,
@@ -1893,7 +1893,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-29 17:51:36",
+      "timestamp": "2026-09-29 15:47:30",
       "filtered_corridor": "cushing_ok",
       "temporal_window_days": 30,
       "events": [],
@@ -1920,7 +1920,7 @@
     }
   },
   {
-    "as_of": "2026-09-29 17:51:36",
+    "as_of": "2026-09-29 15:47:31",
     "valid_date": "2026-09-29",
     "corridor_key": "mid_atlantic",
     "composite_seismic_risk_index": 0.0,
@@ -1929,7 +1929,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-29 17:51:36",
+      "timestamp": "2026-09-29 15:47:31",
       "filtered_corridor": "mid_atlantic",
       "temporal_window_days": 30,
       "events": [],
@@ -1956,7 +1956,7 @@
     }
   },
   {
-    "as_of": "2026-09-29 17:52:49",
+    "as_of": "2026-09-29 15:48:38",
     "valid_date": "2026-09-29",
     "corridor_key": "all",
     "composite_seismic_risk_index": 0.0,
@@ -1965,7 +1965,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-09-29 17:52:49",
+      "timestamp": "2026-09-29 15:48:38",
       "filtered_corridor": "all",
       "temporal_window_days": 30,
       "events": [],

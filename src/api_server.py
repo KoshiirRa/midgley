@@ -60,7 +60,7 @@ async def verify_admin_secret(
 ) -> str:
     """Method B Admin Auth Dependency: Verifies X-Admin-Secret header against MIDGLEY_ADMIN_SECRET (fails closed if unconfigured)."""
     expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
-    if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+    if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret.encode("utf-8"), expected_secret.encode("utf-8")):
         raise HTTPException(
             status_code=401,
             detail="Unauthorized: Invalid, missing, or unconfigured X-Admin-Secret header."
@@ -105,7 +105,7 @@ async def get_api_key_user(
         )
 
     expected_global = os.environ.get("MIDGLEY_API_KEY")
-    if expected_global and hmac.compare_digest(token, expected_global):
+    if expected_global and hmac.compare_digest(token.encode("utf-8"), expected_global.encode("utf-8")):
         key_info = {
             "key_prefix": "mg_global_master",
             "user_id": "master_admin",
@@ -464,7 +464,7 @@ async def add_rate_limit_headers(request: Request, call_next):
         # Check for administrative headers
         admin_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
         admin_header = request.headers.get("X-Admin-Secret")
-        is_admin_auth = bool(admin_secret and admin_header and hmac.compare_digest(admin_header, admin_secret))
+        is_admin_auth = bool(admin_secret and admin_header and hmac.compare_digest(admin_header.encode("utf-8"), admin_secret.encode("utf-8")))
 
         if not is_public and not is_admin_auth:
             auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
@@ -1008,7 +1008,7 @@ def get_system_cache_status(
         expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
         is_testing = os.environ.get("TESTING") == "1"
         if not is_testing:
-            if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+            if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret.encode("utf-8"), expected_secret.encode("utf-8")):
                 raise HTTPException(
                     status_code=401,
                     detail="Unauthorized: Active cache connectivity write/read probe requires a valid X-Admin-Secret header."

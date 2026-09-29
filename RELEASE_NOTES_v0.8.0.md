@@ -77,11 +77,28 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Git State Decoupling**: Updated `.gitignore` to strictly exclude local and runtime SQLite database artifacts (`data/*.db*`, `data/*.sqlite*`, `data/*.db-wal`, `data/*.db-shm`), preventing dirty git working trees and binary database merge conflicts.
 - **Dynamic Savings Advisor (`docs/savings.html`)**: Refactored `generate_savings_advisor_page()` in `src/dashboard_generator.py` with `get_savings_regional_trajectories()`, embedding live 5-day quantitative model trajectories directly from `prediction_history.csv` into the interactive tank savings calculator.
 
+### 16. Code Review Hardening, Link-Level Worker Signing, Model Architecture Cloning & CI Resilience (Phase 6 / Issues #573–#580)
+- **CI Commit-First Rebase Order (Issue #573)**: Fixed automated GitHub Actions pipelines (`gas_price_forecast.yml`, `intraday_event_monitor.yml`, `weekly_model_review.yml`) by staging and committing generated artifacts before executing `git pull --rebase origin "$BRANCH"` with a 3-attempt exponential backoff retry loop, preventing race condition rollbacks.
+- **Link-Level Signed Discord Flag URLs (Issue #574)**: Replaced static administrative token exposure in Discord alert buttons with expiring HMAC-SHA256 link tokens (`id|exp|sig` signed via `FLAG_SIGNING_KEY`), eliminated GET token generation, and enforced fail-closed `ADMIN_TOKEN` headers on worker `/run` and `/trigger` endpoints.
+- **Model Pipeline Architecture Cloning (Issue #575)**: Refactored `fit_prospective_model()` to clone evaluated `RidgeCV` / ensemble pipeline hyperparameters via `sklearn.base.clone()`, ensuring live forward forecasts inherit the exact cross-validated structure and regularization parameters of the evaluated model.
+- **Fail-Closed Episodic Prompt Injection & Point-in-Time Filtering (Issues #576, #580)**: Gated Hindsight context injection behind `MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION=0` (default disabled), stripped synthetic fallback strings to prevent hallucinations, and enforced strict `as_of` point-in-time filtering on precedent retrieval.
+- **Database Test Isolation & Connection PRAGMAs (Issue #577)**: Enforced strict SQLite sandboxing during test execution (`TESTING=1`), stripping remote Turso environment variables, applying persistent `PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;` on all connections, and sandboxing test databases.
+- **Historical Prediction Ledger Deduplication (Issue #578)**: Cleaned and deduplicated `data/prediction_history.csv` from ~59.7k down to ~11.95k unique primary records, removing redundant backtest runs while preserving genuine live prospective and intraday revision history.
+- **Constant-Time Secret Byte Comparison (Issue #580)**: Standardized `hmac.compare_digest()` across all API server authentication routines by strictly encoding tokens to UTF-8 byte arrays before comparison.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
-  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2, 3, 4 & 5)
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2, 3, 4, 5 & 6)
+  - Issue #573 - `fix(ci): fix workflow rebase order, commit first, and pass branch via env`
+  - Issue #574 - `fix(workers): link-level signed flag URLs and fail-closed admin token validation`
+  - Issue #575 - `fix(models): prospective refit clones evaluated pipeline architecture`
+  - Issue #576 - `fix(hindsight): gate prompt injection behind env flag and eliminate synthetic fallbacks`
+  - Issue #577 - `fix(db): test isolation, persistent PRAGMAs, and lazy store initialization`
+  - Issue #578 - `fix(data): deduplicate prediction_history.csv and clean redundant records`
+  - Issue #579 - `docs: synchronize release notes, AGENTS.md, and SELF_HOSTING.md`
+  - Issue #580 - `fix(security): master key byte encoding and robust directional hit classification`
   - Issue #423 - `feat(storage): Migrate flat CSV and JSON storage to a structured datastore`
   - Issue #424 - `fix(storage): Replace unsafe raw file writes with atomic write routines to prevent 0-byte file truncation`
   - Issue #479 - `feat(storage): Implement cursor-based cloud sync for predictions and evaluations`
@@ -93,4 +110,4 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
   - Issue #450 - `feat(hierarchical): Partial pooling and MinT hierarchical reconciliation across metro, state, and national forecasts`
   - Issue #498 - `perf(pipeline): eliminate redundant yfinance downloads, batch commodity feeds, and accelerate CI runtimes`
   - Issue #557 - `fix(memory): dynamic anomaly retention & hindsight reconciliation engine`
-* **Milestone**: v0.8 "Storage Modernization, Math Rigor & Performance"
+* **Milestone**: v0.8.0 "Unified Database, Episodic Memory & Cloud Architecture"

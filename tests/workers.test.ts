@@ -307,12 +307,15 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
   it("escapes malicious HTML query parameters on GET /flag", async () => {
     const maliciousHeadline = "<script>alert('XSS')</script>";
     const maliciousSource = "<b onmouseover=alert(1)>Source</b>";
+    const env: IntradayEnv = { GH_PAT: "test_token", FLAG_SIGNING_KEY: "test_flag_secret" };
+    const exp = Math.floor(Date.now() / 1000) + 3600;
+    const sig = await generateEventToken("123", exp, "test_flag_secret");
+
     const req = new Request(
-      `https://worker.local/flag?id=123&headline=${encodeURIComponent(maliciousHeadline)}&source=${encodeURIComponent(maliciousSource)}`,
+      `https://worker.local/flag?id=123&exp=${exp}&sig=${sig}&headline=${encodeURIComponent(maliciousHeadline)}&source=${encodeURIComponent(maliciousSource)}`,
       { method: "GET" }
     );
 
-    const env: IntradayEnv = { GH_PAT: "test_token" };
     const res = await intradayWorker.fetch(req, env, {});
     expect(res.status).toBe(200);
     const html = await res.text();
@@ -322,7 +325,22 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     expect(html).toContain("&lt;b onmouseover=alert(1)&gt;Source&lt;/b&gt;");
   });
 
-  it("generates valid event token on GET /flag and accepts signed POST /flag submission", async () => {
+  it("rejects unsigned GET /flag requests with HTTP 403", async () => {
+    const env: IntradayEnv = {
+      ADMIN_TOKEN: "admin_secret_token"
+    };
+
+    const req = new Request("https://worker.local/flag?id=evt_unsigned", {
+      method: "GET"
+    });
+
+    const res = await intradayWorker.fetch(req, env, {});
+    expect(res.status).toBe(403);
+    const data = (await res.json()) as { error: string };
+    expect(data.error).toContain("Forbidden: Missing, invalid, or expired signed flag link");
+  });
+
+  it("renders form for valid signed GET /flag requests and accepts signed POST /flag submission", async () => {
     const env: IntradayEnv = {
       GH_PAT: "real_gh_pat_token",
       ADMIN_TOKEN: "admin_secret_token",
@@ -330,18 +348,19 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
       REPO_NAME: "midgley"
     };
 
-    // 1. GET /flag embeds generated token
+    const exp = Math.floor(Date.now() / 1000) + 3600;
+    const sig = await generateEventToken("evt_98765", exp, "admin_secret_token");
+
+    // 1. GET /flag with valid exp & sig renders form
     const getReq = new Request(
-      "https://worker.local/flag?id=evt_98765&headline=Non-Energy+Tariff+Trigger&source=RSS_GoogleNews",
+      `https://worker.local/flag?id=evt_98765&exp=${exp}&sig=${sig}&headline=Non-Energy+Tariff+Trigger&source=RSS_GoogleNews`,
       { method: "GET" }
     );
     const getRes = await intradayWorker.fetch(getReq, env, {});
     expect(getRes.status).toBe(200);
     const html = await getRes.text();
-    const tokenMatch = html.match(/name="token" value="([a-f0-9]+)"/);
-    expect(tokenMatch).not.toBeNull();
-    const generatedToken = tokenMatch![1];
-    expect(generatedToken.length).toBeGreaterThanOrEqual(16);
+    expect(html).toContain(`name="sig" value="${sig}"`);
+    expect(html).toContain(`name="exp" value="${exp}"`);
 
     // Mock GitHub issue creation response
     const originalFetch = globalThis.fetch;
@@ -356,14 +375,15 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     });
 
     try {
-      // 2. Submit POST /flag with the signed token
+      // 2. Submit POST /flag with the signed parameters
       const formData = new FormData();
       formData.append("id", "evt_98765");
+      formData.append("exp", exp.toString());
+      formData.append("sig", sig);
       formData.append("headline", "Non-Energy Tariff Trigger");
       formData.append("source", "RSS_GoogleNews");
       formData.append("category", "Non-Energy Macro Tariff");
       formData.append("notes", "Valid false positive report from Discord user");
-      formData.append("token", generatedToken);
 
       const postReq = new Request("https://worker.local/flag", {
         method: "POST",
@@ -402,7 +422,7 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     expect(data.error).toContain("Unauthorized: Missing or invalid authentication token for issue creation");
   });
 
-  it("accepts direct admin token on POST /flag submissions", async () => {
+  it("accepts direct admin token in Authorization header on POST /flag submissions", async () => {
     const env: IntradayEnv = {
       GH_PAT: "real_gh_pat_token",
       ADMIN_TOKEN: "admin_secret_token",
@@ -425,10 +445,12 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
       const formData = new FormData();
       formData.append("id", "admin_flagged_id");
       formData.append("headline", "Admin Flagged Event");
-      formData.append("token", "admin_secret_token");
 
       const req = new Request("https://worker.local/flag", {
         method: "POST",
+        headers: {
+          "Authorization": "Bearer admin_secret_token"
+        },
         body: formData
       });
 
@@ -439,17 +461,22 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     }
   });
 
-  it("rejects unauthenticated requests to /run and /trigger when admin token is set", async () => {
+  it("rejects unauthenticated requests to /run and /trigger when admin token is set or unset (Fail-Closed)", async () => {
     const req = new Request("https://worker.local/run", {
       method: "GET"
     });
 
-    const env: IntradayEnv = {
+    // Case 1: Unset ADMIN_TOKEN fails closed
+    const envUnset: IntradayEnv = {};
+    const resUnset = await intradayWorker.fetch(req, envUnset, {});
+    expect(resUnset.status).toBe(401);
+
+    // Case 2: Configured ADMIN_TOKEN but missing header fails closed
+    const envSet: IntradayEnv = {
       ADMIN_TOKEN: "admin_secret_token"
     };
-
-    const res = await intradayWorker.fetch(req, env, {});
-    expect(res.status).toBe(401);
+    const resSet = await intradayWorker.fetch(req, envSet, {});
+    expect(resSet.status).toBe(401);
   });
 
   describe("Constant-Time String Comparison (timingSafeEqual)", () => {

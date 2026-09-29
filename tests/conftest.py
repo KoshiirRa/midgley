@@ -23,10 +23,23 @@ def isolate_test_environment(tmp_path, monkeypatch):
     except (ImportError, AttributeError):
         pass
 
-    # 2. Isolate SQLite databases
+    # 2. Isolate SQLite databases and Turso cloud env
     test_sec_db = str(tmp_path / "security.db")
     test_mem_db = str(tmp_path / "agent_memory.sqlite")
     test_cache_db = str(tmp_path / "lookup_cache.sqlite")
+    test_midgley_db = str(tmp_path / "midgley.db")
+
+    monkeypatch.setenv("MIDGLEY_DB_PATH", test_midgley_db)
+    monkeypatch.delenv("TURSO_DATABASE_URL", raising=False)
+    monkeypatch.delenv("TURSO_AUTH_TOKEN", raising=False)
+
+    try:
+        import src.db.client as db_client
+        monkeypatch.setattr(db_client, "DEFAULT_SQLITE_PATH", test_midgley_db)
+        if hasattr(db_client, "_global_db_client"):
+            monkeypatch.setattr(db_client, "_global_db_client", None)
+    except (ImportError, AttributeError):
+        pass
 
     try:
         import src.key_manager as km

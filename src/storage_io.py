@@ -122,7 +122,7 @@ def atomic_write(
             os.fsync(handle.fileno())
 
         # Attempt atomic replace with brief backoff for OS file lock contention (e.g. Windows)
-        max_retries = 15
+        max_retries = 50
         for attempt in range(max_retries):
             try:
                 os.replace(tmp_path, target_path)
@@ -131,7 +131,7 @@ def atomic_write(
                 if attempt == max_retries - 1:
                     raise
                 import time
-                time.sleep(0.005 * (attempt + 1))
+                time.sleep(0.01 * (attempt + 1))
     except BaseException:
         if os.path.exists(tmp_path):
             try:

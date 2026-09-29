@@ -32,12 +32,17 @@ class DatabaseClient:
         auth_token: Optional[str] = None,
         sqlite_path: Optional[str] = None
     ):
-        self.db_url = (db_url or os.environ.get("TURSO_DATABASE_URL", "")).strip()
-        self.auth_token = (auth_token or os.environ.get("TURSO_AUTH_TOKEN", "")).strip()
+        is_testing = os.environ.get("TESTING") == "1"
+        if sqlite_path is not None or is_testing:
+            self.db_url = ""
+            self.auth_token = ""
+            self.is_turso = False
+        else:
+            self.db_url = (db_url or os.environ.get("TURSO_DATABASE_URL", "")).strip()
+            self.auth_token = (auth_token or os.environ.get("TURSO_AUTH_TOKEN", "")).strip()
+            self.is_turso = bool(self.db_url and self.auth_token)
+
         self.sqlite_path = sqlite_path or os.environ.get("MIDGLEY_DB_PATH", DEFAULT_SQLITE_PATH)
-        
-        # Check if Turso cloud connection is configured
-        self.is_turso = bool(self.db_url and self.auth_token)
         
         if self.is_turso:
             # Normalize HTTP endpoint for Turso REST API v2
@@ -58,6 +63,13 @@ class DatabaseClient:
             self._init_sqlite_pragmas()
 
         self.init_schema()
+
+    def _get_sqlite_conn(self) -> sqlite3.Connection:
+        """Creates SQLite connection with foreign keys and busy timeout enabled (Issue #577 N-6)."""
+        conn = sqlite3.connect(self.sqlite_path, timeout=5.0)
+        conn.execute("PRAGMA foreign_keys = ON;")
+        conn.execute("PRAGMA busy_timeout = 5000;")
+        return conn
 
     def _init_sqlite_pragmas(self):
         """Applies high-concurrency WAL pragmas to local SQLite datastore."""
@@ -108,7 +120,7 @@ class DatabaseClient:
 
     def _execute_sqlite(self, sql: str, params: Union[Tuple, List, Dict]) -> List[Dict[str, Any]]:
         """Executes query on local SQLite."""
-        with sqlite3.connect(self.sqlite_path) as conn:
+        with self._get_sqlite_conn() as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             cursor.execute(sql, params)
@@ -120,7 +132,7 @@ class DatabaseClient:
 
     def _execute_batch_sqlite(self, statements: List[Tuple[str, Union[Tuple, List]]]) -> None:
         """Executes batch statements within a single SQLite transaction."""
-        with sqlite3.connect(self.sqlite_path) as conn:
+        with self._get_sqlite_conn() as conn:
             cursor = conn.cursor()
             for sql, params in statements:
                 cursor.execute(sql, params)

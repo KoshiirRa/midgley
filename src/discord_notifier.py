@@ -135,11 +135,24 @@ def format_intraday_discord_payload(
         event_hash = hashlib.sha256(headline.encode("utf-8", errors="ignore")).hexdigest()[:16]
 
     # Flag URL for Discord Webhook Action Button & Embed Fallback (clamped to avoid exceeding limits)
+    import time
+    import hmac
+    import hashlib
     import urllib.parse
+
+    signing_secret = os.getenv("FLAG_SIGNING_KEY") or os.getenv("ADMIN_TOKEN") or ""
+    exp_time = int(time.time()) + (72 * 3600)  # 72 hours validity
+    sig_param = ""
+    if signing_secret:
+        msg = f"flag_fp:{event_hash}:{exp_time}".encode("utf-8")
+        sig_param = hmac.new(signing_secret.encode("utf-8"), msg, hashlib.sha256).hexdigest()[:32]
+
     safe_headline_param = (headline[:120] + "...") if len(headline) > 120 else headline
     safe_url_param = (url[:200] + "...") if len(url) > 200 else url
     flag_params = urllib.parse.urlencode({
         "id": event_hash,
+        "exp": str(exp_time),
+        "sig": sig_param,
         "headline": safe_headline_param,
         "source": source,
         "p": f"{price_pressure:+.2f}",

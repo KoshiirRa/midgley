@@ -75,7 +75,7 @@ def test_query_episodic_precedents_formatting():
 
 
 def test_inject_hindsight_context():
-    """Verify prompt block is generated for catalyst headlines and omitted for normal news."""
+    """Verify prompt block is gated by MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION and generated when enabled (Issue #576 N-4)."""
     with patch("src.hindsight_context.query_episodic_precedents") as mock_query:
         mock_query.return_value = [
             {
@@ -90,24 +90,34 @@ def test_inject_hindsight_context():
             }
         ]
 
-        # Catalyst headline
-        block, precs = inject_hindsight_context("Colonial Pipeline main line shut down for emergency inspection")
-        assert len(precs) == 1
-        assert "[HISTORICAL EPISODIC MEMORY PRECEDENT" in block
+        # By default, prompt injection is disabled (fail-closed)
+        with patch.dict(os.environ, {"MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION": "0"}):
+            block, precs = inject_hindsight_context("Colonial Pipeline main line shut down for emergency inspection")
+            assert len(precs) == 0
+            assert block == ""
 
-        # Non-catalyst headline
-        block_empty, precs_empty = inject_hindsight_context("Stock index closes flat on quiet trading day")
-        assert len(precs_empty) == 0
-        assert block_empty == ""
+        # Enabled via environment variable
+        with patch.dict(os.environ, {"MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION": "1"}):
+            # Catalyst headline
+            block, precs = inject_hindsight_context("Colonial Pipeline main line shut down for emergency inspection")
+            assert len(precs) == 1
+            assert "[HISTORICAL EPISODIC MEMORY PRECEDENT" in block
+
+            # Non-catalyst headline
+            block_empty, precs_empty = inject_hindsight_context("Stock index closes flat on quiet trading day")
+            assert len(precs_empty) == 0
+            assert block_empty == ""
 
 
 def test_classify_causal_anomaly():
-    """Verify anomaly classification thresholds and categories."""
+    """Verify anomaly classification thresholds, categories, and robust directional hit handling (Issue #580 N-10)."""
     assert classify_causal_anomaly(predicted_price=3.50, actual_price=3.10, error_dollars=0.40, active_events_count=1) == "OVERESTIMATED_SHOCK"
     assert classify_causal_anomaly(predicted_price=3.00, actual_price=3.40, error_dollars=-0.40, active_events_count=1) == "UNDERESTIMATED_SHOCK"
     assert classify_causal_anomaly(predicted_price=3.50, actual_price=3.10, error_dollars=0.40, active_events_count=0) == "LARGE_OVERESTIMATE"
     assert classify_causal_anomaly(predicted_price=3.20, actual_price=3.10, error_dollars=0.10, directional_hit=0.0) == "DIRECTIONAL_FLIP"
+    assert classify_causal_anomaly(predicted_price=3.20, actual_price=3.10, error_dollars=0.10, directional_hit=False) == "DIRECTIONAL_FLIP"
     assert classify_causal_anomaly(predicted_price=3.15, actual_price=3.13, error_dollars=0.02, directional_hit=1.0) == "NORMAL"
+    assert classify_causal_anomaly(predicted_price=3.15, actual_price=3.13, error_dollars=0.02, directional_hit=True) == "NORMAL"
 
 
 def test_evaluate_and_reflect_settled_anomalies():
@@ -155,3 +165,49 @@ def test_enrich_scenario_with_episodic_memory():
         res = enrich_scenario_with_episodic_memory("greenville_hurricane")
         assert res["precedent_count"] == 1
         assert "Hurricane Ida" in res["prompt_context"]
+
+
+def test_query_episodic_precedents_as_of_and_clean_metadata():
+    """Verify query_episodic_precedents enforces as_of point-in-time filtering and removes synthetic defaults (Issue #576 N-5, #580 N-9)."""
+    from src.hindsight_context import query_episodic_precedents, format_hindsight_precedent_prompt_block
+
+    mock_mgr = MagicMock()
+    mock_mgr.recall.return_value = [
+        {
+            "memory_id": "mem_past",
+            "content": "Delaware City refinery FCC unit trip",
+            "metadata": {
+                "target_date": "2024-06-01",
+                "duration": "4 days",
+                "price_shock_dollars": "+$0.12/gal"
+            }
+        },
+        {
+            "memory_id": "mem_future",
+            "content": "Future planned turnaround",
+            "metadata": {
+                "target_date": "2026-08-01",
+                "duration": "10 days"
+            }
+        },
+        {
+            "memory_id": "mem_sparse",
+            "content": "Unspecified flaring event",
+            "metadata": {}
+        }
+    ]
+
+    # as_of set to 2025-01-01 should filter out mem_future (2026-08-01)
+    precs = query_episodic_precedents("refinery trip", as_of="2025-01-01", memory_manager=mock_mgr)
+    assert len(precs) == 2
+    assert precs[0]["memory_id"] == "mem_past"
+    assert precs[1]["memory_id"] == "mem_sparse"
+    # mem_sparse should not have synthetic hallucinated defaults
+    assert precs[1]["duration"] == ""
+    assert precs[1]["price_shock"] == ""
+
+    block = format_hindsight_precedent_prompt_block(precs)
+    assert "Delaware City refinery FCC unit trip" in block
+    assert "Unspecified flaring event" in block
+    assert "3-7 trading days" not in block
+    assert "+$0.08 to +$0.18/gal" not in block

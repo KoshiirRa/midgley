@@ -96,16 +96,25 @@ jobs:
           path: run_all_output.log
           if-no-files-found: ignore
 
-      - name: Rebase On Latest Remote Changes
+      - name: Commit and Push Updated README, Dashboard & Data
+        env:
+          BRANCH: ${{ github.ref_name }}
         run: |
-          git fetch origin ${{ github.ref_name }}
-          git rebase origin/${{ github.ref_name }}
-
-      - name: Commit Updated README, Dashboard & Prediction Logs
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: Daily automated gas price prediction & public dashboard update [skip ci]"
-          file_pattern: "README.md docs/ data/"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md docs data
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: Daily automated gas price prediction & public dashboard update [skip ci]"
+            for i in 1 2 3; do
+              if git pull --rebase origin "$BRANCH"; then
+                git push origin "HEAD:$BRANCH" && exit 0
+              else
+                git rebase --abort
+              fi
+              sleep $((i * 15))
+            done
+            echo "::error::Could not rebase and push after 3 attempts"; exit 1
+          fi
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v6

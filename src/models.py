@@ -574,12 +574,13 @@ def fit_prospective_model(
     X_test: Optional[pd.DataFrame] = None,
     y_test: Optional[pd.Series] = None,
     model_type: str = "ridge",
+    base_model: Optional[Any] = None,
     alpha: float = 10.0
 ) -> Any:
     """
     Fits the prospective forecasting model on 100% of historical data
-    (combining train and validation/test splits) prior to generating live forward projections (Issue #559 Phase 4 / A-1).
-    Ensures live predictions use the most recent information without data staleness.
+    (combining train and validation/test splits) prior to generating live forward projections (Issue #559 Phase 4 / A-1, Issue #575 N-3).
+    Ensures live predictions use the most recent information without data staleness, cloning the evaluated pipeline architecture.
     """
     if X_test is not None and y_test is not None and not X_test.empty and not y_test.empty:
         X_tr = pd.DataFrame(X_train.values, columns=X_train.columns)
@@ -592,15 +593,26 @@ def fit_prospective_model(
 
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import StandardScaler
+    from sklearn.base import clone
 
-    if model_type == "stacking":
-        model = build_stacking_ensemble_pipeline()
-    elif model_type == "xgboost" and HAS_XGBOOST:
-        model = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
-    elif model_type == "rf":
-        model = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
+    if base_model is not None:
+        try:
+            model = clone(base_model)
+        except Exception as e:
+            logger.warning(f"Could not clone base_model ({e}), falling back to pipeline creation for {model_type}")
+            model = None
     else:
-        model = make_pipeline(StandardScaler(), Ridge(alpha=alpha))
+        model = None
+
+    if model is None:
+        if model_type == "stacking":
+            model = build_stacking_ensemble_pipeline()
+        elif model_type == "xgboost" and HAS_XGBOOST:
+            model = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
+        elif model_type == "rf":
+            model = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
+        else:
+            model = make_pipeline(StandardScaler(), Ridge(alpha=alpha))
 
     model.fit(X_full, y_full)
     return model
@@ -675,20 +687,22 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     model_hybrid.fit(X_train_hybrid, y_train)
     raw_pred_hybrid = model_hybrid.predict(X_test_hybrid)
 
-    # 3. Fit Prospective Models on 100% History for Live Forecasts (Issue #559 Phase 4 / A-1)
+    # 3. Fit Prospective Models on 100% History for Live Forecasts (Issue #559 Phase 4 / A-1, Issue #575 N-3)
     prospective_model_quant = fit_prospective_model(
         X_train=X_train_quant,
         y_train=y_train,
         X_test=X_test_quant,
         y_test=y_test,
-        model_type=model_type
+        model_type=model_type,
+        base_model=model_quant
     )
     prospective_model_hybrid = fit_prospective_model(
         X_train=X_train_hybrid,
         y_train=y_train,
         X_test=X_test_hybrid,
         y_test=y_test,
-        model_type=model_type
+        model_type=model_type,
+        base_model=model_hybrid
     )
     
     # Reconstruct price levels if trained on percentage returns (Issue #397)

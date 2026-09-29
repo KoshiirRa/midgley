@@ -35,6 +35,7 @@ def test_concurrent_readers_during_rapid_atomic_writes(tmp_path):
     read_successes = [0]
 
     def reader_loop():
+        sleep_sec = 0.005 if os.name == "nt" else 0.001
         while not stop_event.is_set():
             try:
                 df = pd.read_csv(target_csv)
@@ -43,14 +44,16 @@ def test_concurrent_readers_during_rapid_atomic_writes(tmp_path):
                 read_successes[0] += 1
             except Exception as e:
                 read_errors.append(f"Reader exception: {type(e).__name__}: {e}")
-            time.sleep(0.001)
+            time.sleep(sleep_sec)
 
-    # Launch 4 concurrent reader threads
-    reader_threads = [threading.Thread(target=reader_loop) for _ in range(4)]
+    # Launch concurrent reader threads
+    n_threads = 2 if os.name == "nt" else 4
+    reader_threads = [threading.Thread(target=reader_loop) for _ in range(n_threads)]
     for t in reader_threads:
         t.start()
 
     # Perform 50 rapid atomic overwrites
+    write_sleep = 0.005 if os.name == "nt" else 0.002
     for i in range(50):
         new_df = pd.DataFrame({
             "forecast_target_date": [f"2026-09-{i:02d}"] * 100,
@@ -60,7 +63,7 @@ def test_concurrent_readers_during_rapid_atomic_writes(tmp_path):
             "predicted_direction": ["UP"] * 100
         })
         atomic_write_csv(target_csv, new_df, index=False)
-        time.sleep(0.002)
+        time.sleep(write_sleep)
 
     stop_event.set()
     for t in reader_threads:

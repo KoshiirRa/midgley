@@ -58,6 +58,35 @@ def test_fit_prospective_model_combined_history():
     assert not np.isnan(preds).any()
 
 
+def test_fit_prospective_model_clones_base_pipeline():
+    """Verify fit_prospective_model clones evaluated RidgeCV pipeline architecture (Issue #575 N-3)."""
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import RidgeCV
+
+    np.random.seed(42)
+    X_train = pd.DataFrame({"feat1": np.random.randn(80), "feat2": np.random.randn(80)})
+    y_train = pd.Series(np.random.randn(80))
+    X_test = pd.DataFrame({"feat1": np.random.randn(20), "feat2": np.random.randn(20)})
+    y_test = pd.Series(np.random.randn(20))
+
+    base_pipe = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.1, 1.0, 10.0]))
+    base_pipe.fit(X_train, y_train)
+
+    refit_model = fit_prospective_model(
+        X_train=X_train,
+        y_train=y_train,
+        X_test=X_test,
+        y_test=y_test,
+        base_model=base_pipe
+    )
+
+    assert isinstance(refit_model, type(base_pipe))
+    assert isinstance(refit_model.named_steps['ridgecv'], RidgeCV)
+    preds = refit_model.predict(X_test)
+    assert len(preds) == 20
+
+
 def test_train_and_compare_models_includes_prospective_models():
     """Verify train_and_compare_models attaches prospective refit models."""
     from src.feature_engineering import create_feature_matrix, prepare_chronological_splits
