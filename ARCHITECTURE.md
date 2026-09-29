@@ -167,6 +167,12 @@ The empirical 95% CI coverage rate is tracked and exposed in rolling scoreboard 
 * **UTC vs Central DST Schedule Alignment:** GitHub Actions cron schedules (`17 22 * * *`) evaluate strictly on UTC (22:17 UTC); during Daylight Saving Time (March to November), US Central Time is CDT (05:17 PM CDT / UTC-5), and during standard time (November to March), Central Time is CST (04:17 PM CST / UTC-6).
 * **Forecast Freshness Gating:** The public dashboard (`src/dashboard_generator.py`) evaluates the timestamp of the latest prediction record; if data age exceeds 36 hours, a warning badge (`Forecast Stale (>36h)`) is rendered to alert operators.
 
+### 4.4. Pipeline Runtime Optimization & Consolidated Cloud Synchronization (Issue #498)
+* **Decoupled Cloud Synchronization:** `sync_predictions_to_cloud()` is decoupled from inner multi-horizon logging loops (`log_predictions`) and per-region evaluation loops (`backfill_actual_prices_and_evaluate`). Instead, a single consolidated bulk synchronization executes post-pipeline in `run_all.py`, slashing over 75 minutes of synchronous HTTP network stalls against edge databases (Turso / Cloudflare D1).
+* **Non-Trading Day Filter & Incremental Actuals Lookback:** `backfill_actual_prices_and_evaluate()` explicitly filters candidate target dates to valid business days (`dayofweek < 5`), eliminating perpetual cache invalidation on weekends/holidays and caching confirmed empty observations in `data/rbob_actuals_cache.json`.
+* **Multi-Ticker Commodity Batching:** `fetch_market_data()` batches `["RB=F", "CL=F", "BZ=F", "HO=F"]` into a single yfinance query and leverages an in-process session cache (`_MARKET_DATA_SESSION_CACHE`) across all 8 regional calibration hubs.
+* **In-Memory DataFrame Propagation:** Pre-loaded prediction history dataframes (`df_hist`) are passed into `compute_rolling_scoreboard_metrics()`, `_get_forecast_impl`, `render_single_embed_card`, and `build_scoreboard_section_html`, eliminating repetitive disk I/O and re-evaluations across static API exports and social card generations.
+
 ---
 
 ## 5. Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`)

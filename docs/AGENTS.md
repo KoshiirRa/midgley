@@ -449,11 +449,12 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Retroactive Backtest Validation & Track Record Segregation (Issue #389):**
   - **Write-Time Date Validation:** When logging predictions, automatically compares logging timestamp against target date (`pd.to_datetime(log_timestamp).date() >= pd.to_datetime(forecast_target_date).date()`) or respects explicit backfill flags, setting `is_retroactive_backtest = True` for historical backtests and `False` for genuine forward forecasts.
   - **Scoreboard Metric Segregation:** `compute_rolling_scoreboard_metrics()`, `compute_regional_scoreboard_breakdown()`, `compute_horizon_scoreboard_breakdown()`, and `/api/v1/forecast/scoreboard` enforce `include_retroactive = False` by default to report true out-of-time live forward prediction accuracy, while supporting `include_retroactive = True` for full-corpus auditing.
-* **Automated Cloud Relational Database Synchronization (`sync_predictions_to_cloud()`, Issue #82 & #302):**
+* **Automated Cloud Relational Database Synchronization & Consolidated Pipeline Sync (`sync_predictions_to_cloud()`, Issues #82, #302, #498):**
   - Synchronizes out-of-time prediction history logs and backfilled actual outcomes to remote relational databases:
-    - **Turso Edge SQLite:** via `/v2/pipeline` REST JSON payloads with scheme normalization (`turso://`, `libsql://`, `https://`).
+    - **Turso Edge SQLite:** via `/v2/pipeline` REST JSON bulk payloads with scheme normalization (`turso://`, `libsql://`, `https://`).
     - **Cloudflare D1 Edge Workers:** via `POST /api/v1/sync/predictions` endpoint on `midgley-cache-worker` (`workers/cache_worker.ts`) using batch prepared statements (`env.DB.batch()`) and database migration schemas (`scripts/init_d1_schema.sql`).
     - **Neon Postgres / Local SQLite:** zero-downtime local CSV fallback (`data/prediction_history.csv`) if cloud endpoints are offline or credentials absent.
+  - **Decoupled Post-Pipeline Sync Invariant (Issue #498):** Cloud synchronization is decoupled from per-horizon logging and inner evaluation loops, running once as a single consolidated bulk payload at pipeline termination in `run_all.py` to eliminate sequential network I/O stalls in CI/CD.
   - Enhanced error diagnostics extract and log HTTP error response bodies upon `urllib.error.HTTPError` exceptions to surface exact execution issues.
   - Exposed publicly via REST API endpoints `POST /api/v1/forecast/cloud-sync`, `GET /api/v1/forecast/cloud-status`, and `GET /api/v1/system/cache-status` (Issue #301).
 * **Atomic Storage Engine & Zero-Truncation I/O (`src/storage_io.py`, Issue #424):**
