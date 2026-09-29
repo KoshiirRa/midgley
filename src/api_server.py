@@ -105,7 +105,7 @@ async def get_api_key_user(
         )
 
     expected_global = os.environ.get("MIDGLEY_API_KEY")
-    if expected_global and token == expected_global:
+    if expected_global and hmac.compare_digest(token, expected_global):
         key_info = {
             "key_prefix": "mg_global_master",
             "user_id": "master_admin",

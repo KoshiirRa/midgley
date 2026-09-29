@@ -5447,6 +5447,69 @@ def generate_public_dashboard():
     logger.info(f"Successfully generated public dashboard web app at {INDEX_PATH}, {NATIONAL_PATH}, {TULSA_PATH}, {SAVINGS_PATH}, and math guide at {MATH_PATH}")
 
 
+def get_savings_regional_trajectories() -> dict:
+    """Computes or extracts the latest 5-day regional price trajectories for the Savings Advisor."""
+    # Default base configurations
+    defaults = {
+        "Cincinnati_OH": {"name": "Cincinnati, OH/KY Retail", "base": 3.450, "delta": -0.045},
+        "National": {"name": "National Wholesale RBOB", "base": 3.184, "delta": -0.038},
+        "Tulsa_OK": {"name": "Tulsa, OK Retail", "base": 3.890, "delta": -0.052},
+        "Newark_DE": {"name": "Newark, DE Retail", "base": 3.350, "delta": -0.032},
+        "Greenville_NC": {"name": "Greenville, NC Retail", "base": 3.250, "delta": -0.028},
+        "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.280, "delta": -0.030},
+        "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 3.380, "delta": -0.025},
+        "Oakland_CA": {"name": "Oakland, CA Retail", "base": 4.850, "delta": -0.060},
+        "BayArea_CA": {"name": "SF Bay Area Region", "base": 4.950, "delta": -0.058},
+    }
+
+    trajectories = {}
+    try:
+        if os.path.exists(HISTORY_CSV_PATH):
+            df_hist = read_prediction_history(HISTORY_CSV_PATH)
+            if not df_hist.empty:
+                for reg_key, info in defaults.items():
+                    reg_df = df_hist[df_hist["region"] == reg_key]
+                    if not reg_df.empty:
+                        latest = reg_df.iloc[-1]
+                        base = float(latest.get("current_base_price", info["base"]))
+                        pred_5d = float(latest.get("predicted_5d_price", base + info["delta"]))
+                        
+                        # Check for discrete horizon columns if available
+                        traj = [round(base, 3)]
+                        has_multi = all(f"predicted_{h}d_price" in latest for h in range(1, 6))
+                        if has_multi:
+                            for h in range(1, 6):
+                                traj.append(round(float(latest[f"predicted_{h}d_price"]), 3))
+                        else:
+                            # Generate smooth decayed trajectory curve to Day 5 target
+                            delta_5d = pred_5d - base
+                            # Characteristic mid-week trough shape before partial recovery
+                            step_fractions = [0.0, 0.45, 0.85, 1.05, 0.95, 1.00]
+                            traj = [round(base + (delta_5d * frac), 3) for frac in step_fractions]
+                        
+                        trajectories[reg_key] = {
+                            "name": info["name"],
+                            "base": round(base, 3),
+                            "trajectory": traj,
+                        }
+    except Exception as e:
+        logger.warning(f"Could not extract dynamic trajectories from prediction history: {e}")
+
+    # Fallback to default modeled curves if empty
+    if not trajectories:
+        for reg_key, info in defaults.items():
+            base = info["base"]
+            delta = info["delta"]
+            step_fractions = [0.0, 0.45, 0.85, 1.05, 0.95, 1.00]
+            traj = [round(base + (delta * frac), 3) for frac in step_fractions]
+            trajectories[reg_key] = {
+                "name": info["name"],
+                "base": round(base, 3),
+                "trajectory": traj,
+            }
+    return trajectories
+
+
 def generate_savings_advisor_page():
     """Generates the interactive Fill-Up Timing & Estimated Savings Advisor page (docs/savings.html & docs/savings/index.html) (Issue #91)."""
     os.makedirs(DOCS_DIR, exist_ok=True)
@@ -5454,6 +5517,17 @@ def generate_savings_advisor_page():
 
     header_html = get_nav_header("savings", rel_prefix="")
     sub_header_html = get_nav_header("savings", rel_prefix="../")
+
+    regional_trajectories = get_savings_regional_trajectories()
+    regional_trajectories_json = json.dumps(regional_trajectories)
+
+    # Build options HTML
+    region_options_html = []
+    for k, v in regional_trajectories.items():
+        selected = ' selected' if k == "Cincinnati_OH" else ''
+        region_options_html.append(f'                        <option value="{k}"{selected}>{v["name"]} (${v["base"]:.3f}/gal)</option>')
+    region_options_html.append('                        <option value="custom">Custom Local Pump Price...</option>')
+    region_options_str = "\n".join(region_options_html)
 
     def build_savings_html(hdr):
         return f"""<!DOCTYPE html>
@@ -5541,16 +5615,7 @@ def generate_savings_advisor_page():
                 <div class="space-y-2">
                     <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
                     <select id="regionPreset" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
-                        <option value="3.450" selected>Cincinnati, OH/KY Retail ($3.450/gal)</option>
-                        <option value="3.184">National Wholesale RBOB ($3.184/gal)</option>
-                        <option value="3.890">Tulsa, OK Retail ($3.890/gal)</option>
-                        <option value="3.350">Newark, DE Retail ($3.350/gal)</option>
-                        <option value="3.250">Greenville, NC Retail ($3.250/gal)</option>
-                        <option value="3.280">Charlotte, NC Retail ($3.280/gal)</option>
-                        <option value="3.380">Port St. Lucie, FL Retail ($3.380/gal)</option>
-                        <option value="4.850">Oakland, CA Retail ($4.850/gal)</option>
-                        <option value="4.950">SF Bay Area Region ($4.950/gal)</option>
-                        <option value="custom">Custom Local Pump Price...</option>
+{region_options_str}
                     </select>
                 </div>
 
@@ -5625,7 +5690,7 @@ def generate_savings_advisor_page():
             <!-- LubeLogger Integration (Issue #22) -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
                 <div class="flex items-center gap-3">
-                    <span class="p-2 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-xl"><i class="fa-solid fa-[#3B82F6] fa-car"></i></span>
+                    <span class="p-2 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-xl"><i class="fa-solid fa-car text-[#3B82F6]"></i></span>
                     <h4 class="text-base font-bold text-white">LubeLogger Predictive Fuel Sync</h4>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
@@ -5636,7 +5701,7 @@ def generate_savings_advisor_page():
             <!-- Android Auto Assistant (Issue #21) -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
                 <div class="flex items-center gap-3">
-                    <span class="p-2 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-xl"><i class="fa-solid fa-[#A855F7] fa-mobile-screen"></i></span>
+                    <span class="p-2 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-xl"><i class="fa-solid fa-mobile-screen text-[#A855F7]"></i></span>
                     <h4 class="text-base font-bold text-white">Android Auto In-Dash Fuel Assistant</h4>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
@@ -5655,6 +5720,8 @@ def generate_savings_advisor_page():
 
     <!-- Interactive Calculation Script -->
     <script>
+        const REGIONAL_TRAJECTORIES = {regional_trajectories_json};
+
         function applyVehiclePreset() {{
             const val = document.getElementById('vehiclePreset').value;
             if (val !== 'custom') {{
@@ -5664,9 +5731,9 @@ def generate_savings_advisor_page():
         }}
 
         function applyRegionPreset() {{
-            const val = document.getElementById('regionPreset').value;
-            if (val !== 'custom') {{
-                document.getElementById('currentPrice').value = val;
+            const sel = document.getElementById('regionPreset').value;
+            if (sel !== 'custom' && REGIONAL_TRAJECTORIES[sel]) {{
+                document.getElementById('currentPrice').value = REGIONAL_TRAJECTORIES[sel].base.toFixed(3);
             }}
             calculateSavings();
         }}
@@ -5676,9 +5743,20 @@ def generate_savings_advisor_page():
             const level = parseFloat(document.getElementById('fuelLevel').value) || 0.25;
             const currentPrice = parseFloat(document.getElementById('currentPrice').value) || 3.45;
             const gallonsNeeded = capacity * (1.0 - level);
+            const sel = document.getElementById('regionPreset').value;
 
-            // Synthetic 5-day trajectory offsets based on current price (-$0.02, -$0.05, -$0.04, +$0.01, +$0.03)
-            const offsets = [0.0, -0.025, -0.055, -0.035, 0.012, 0.038];
+            let traj = [];
+            if (sel !== 'custom' && REGIONAL_TRAJECTORIES[sel]) {{
+                const ref = REGIONAL_TRAJECTORIES[sel].trajectory;
+                const refBase = ref[0] || currentPrice;
+                // If user changed the base pump price, preserve the model's relative forecast offsets
+                traj = ref.map(p => Math.max(0.10, currentPrice + (p - refBase)));
+            }} else {{
+                // Default synthetic trajectory offsets if fully custom
+                const offsets = [0.0, -0.025, -0.055, -0.035, 0.012, 0.038];
+                traj = offsets.map(off => Math.max(0.10, currentPrice + off));
+            }}
+
             let optimalDay = 0;
             let minPrice = currentPrice;
 
@@ -5686,7 +5764,7 @@ def generate_savings_advisor_page():
             tbody.innerHTML = '';
 
             for (let day = 0; day <= 5; day++) {{
-                const price = currentPrice + offsets[day];
+                const price = traj[day] !== undefined ? traj[day] : currentPrice;
                 const cost = price * gallonsNeeded;
                 const savings = (currentPrice - price) * gallonsNeeded;
 
@@ -5698,9 +5776,9 @@ def generate_savings_advisor_page():
                 const row = document.createElement('tr');
                 row.className = day === 0 ? 'bg-slate-950/80 font-bold' : '';
                 
-                const savingsFormatted = savings >= 0 ? 
+                const savingsFormatted = savings >= 0.005 ? 
                     `<span class="text-emerald-400">+$${{savings.toFixed(2)}}</span>` : 
-                    `<span class="text-red-400">-$${{Math.abs(savings).toFixed(2)}}</span>`;
+                    (savings <= -0.005 ? `<span class="text-red-400">-$${{Math.abs(savings).toFixed(2)}}</span>` : '<span class="text-slate-500">$0.00</span>');
 
                 row.innerHTML = `
                     <td class="p-3">${{day === 0 ? 'Day 0 (Today)' : 'Day ' + day}}</td>
@@ -5738,6 +5816,8 @@ def generate_savings_advisor_page():
             }}
         }}
 
+        // Initialize on load
+        calculateSavings();
     </script>
 </body>
 </html>"""

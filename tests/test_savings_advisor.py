@@ -30,6 +30,7 @@ class TestSavingsAdvisor(unittest.TestCase):
         self.assertIn("trajectoryTableBody", html)
         self.assertIn("LubeLogger Predictive Fuel Sync", html)
         self.assertIn("Android Auto In-Dash Fuel Assistant", html)
+        self.assertIn("REGIONAL_TRAJECTORIES", html)
 
 if __name__ == '__main__':
     unittest.main()

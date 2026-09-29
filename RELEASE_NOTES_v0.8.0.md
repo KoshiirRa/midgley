@@ -72,11 +72,16 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Authentic Fundamental Ingestion & Missingness Flags**: Connects fundamentals to bitemporal `VintageStore` query records, eliminating synthetic sine-wave baselines and emitting explicit binary missingness flags (`_is_missing`).
 - **Discrete Ground Truth Mappings & Maturity Gating**: Direct 1-to-1 mapping of regional EIA/FRED retail series with strict future maturity gating (`target_date <= today`) and zero cross-regional fallbacks.
 
+### 15. Security Hardening, Git State Decoupling & Dynamic Presentation (Issue #559 Phase 5)
+- **Constant-Time Cryptographic Equality**: Implemented universal `timingSafeEqual()` across Cloudflare Workers (`workers/cache_worker.ts`, `workers/intraday_monitor_worker.ts`) and enforced `hmac.compare_digest()` in `src/api_server.py` master API key validation, eliminating timing side-channel vulnerabilities.
+- **Git State Decoupling**: Updated `.gitignore` to strictly exclude local and runtime SQLite database artifacts (`data/*.db*`, `data/*.sqlite*`, `data/*.db-wal`, `data/*.db-shm`), preventing dirty git working trees and binary database merge conflicts.
+- **Dynamic Savings Advisor (`docs/savings.html`)**: Refactored `generate_savings_advisor_page()` in `src/dashboard_generator.py` with `get_savings_regional_trajectories()`, embedding live 5-day quantitative model trajectories directly from `prediction_history.csv` into the interactive tank savings calculator.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
-  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2, 3 & 4)
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2, 3, 4 & 5)
   - Issue #423 - `feat(storage): Migrate flat CSV and JSON storage to a structured datastore`
   - Issue #424 - `fix(storage): Replace unsafe raw file writes with atomic write routines to prevent 0-byte file truncation`
   - Issue #479 - `feat(storage): Implement cursor-based cloud sync for predictions and evaluations`

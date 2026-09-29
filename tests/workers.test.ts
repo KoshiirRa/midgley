@@ -11,10 +11,11 @@ import intradayWorker, {
   markHeadlineDispatchedInCache,
   generateEventToken,
   getWorkerSigningSecret,
+  timingSafeEqual as intradayTimingSafeEqual,
   Env as IntradayEnv,
   QueueMessageBatch
 } from "../workers/intraday_monitor_worker";
-import cacheWorker, { Env as CacheEnv } from "../workers/cache_worker";
+import cacheWorker, { timingSafeEqual as cacheTimingSafeEqual, Env as CacheEnv } from "../workers/cache_worker";
 
 function uint8ArrayToHex(arr: Uint8Array): string {
   return Array.from(arr)
@@ -449,6 +450,23 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
 
     const res = await intradayWorker.fetch(req, env, {});
     expect(res.status).toBe(401);
+  });
+
+  describe("Constant-Time String Comparison (timingSafeEqual)", () => {
+    it("validates equal strings correctly for cache worker", () => {
+      expect(cacheTimingSafeEqual("secret123", "secret123")).toBe(true);
+      expect(cacheTimingSafeEqual("secret123", "secret124")).toBe(false);
+      expect(cacheTimingSafeEqual("secret123", "secret1234")).toBe(false);
+      expect(cacheTimingSafeEqual("", "")).toBe(true);
+      expect(cacheTimingSafeEqual("a", "")).toBe(false);
+    });
+
+    it("validates equal strings correctly for intraday monitor worker", () => {
+      expect(intradayTimingSafeEqual("token_abc_xyz", "token_abc_xyz")).toBe(true);
+      expect(intradayTimingSafeEqual("token_abc_xyz", "token_abc_xyw")).toBe(false);
+      expect(intradayTimingSafeEqual("token_abc_xyz", "token_abc")).toBe(false);
+      expect(intradayTimingSafeEqual("", "")).toBe(true);
+    });
   });
 });
 

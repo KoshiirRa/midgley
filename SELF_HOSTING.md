@@ -221,7 +221,7 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```
 4. Configure required authentication token and optional telemetry secrets (Axiom & Sentry):
    > [!IMPORTANT]
-   > **Fail-Closed Security (Issue #438)**: `midgley-cache-worker` strictly enforces Bearer token authentication against `CLOUDFLARE_AUTH_TOKEN`. If `CLOUDFLARE_AUTH_TOKEN` is unset or invalid, all cache write, read, and sync endpoints reject requests with `401 Unauthorized`.
+   > **Fail-Closed & Constant-Time Security (Issues #438, #559)**: `midgley-cache-worker` and `midgley-intraday-monitor` strictly enforce constant-time `timingSafeEqual()` Bearer token authentication against `CLOUDFLARE_AUTH_TOKEN`. If `CLOUDFLARE_AUTH_TOKEN` is unset or invalid, all cache write, read, sync, and admin trigger endpoints reject requests with `401 Unauthorized` without timing side-channels.
    ```bash
    npx wrangler secret put CLOUDFLARE_AUTH_TOKEN --config workers/wrangler.cache.toml --env staging
    npx wrangler secret put SENTRY_DSN --config workers/wrangler.cache.toml --env staging

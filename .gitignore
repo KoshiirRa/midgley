@@ -24,6 +24,8 @@ secrets/
 # Databases & Local Caches
 *.sqlite
 *.db
+*.db-shm
+*.db-wal
 data/*_cache.json
 data/alpha_vantage_*.json
 data/oilpriceapi_*.json

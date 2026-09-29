@@ -1079,10 +1079,23 @@ export async function generateEventToken(eventId: string, secret: string): Promi
     .slice(0, 32);
 }
 
+export function timingSafeEqual(a: string, b: string): boolean {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  const enc = new TextEncoder();
+  const aBuf = enc.encode(a);
+  const bBuf = enc.encode(b);
+  if (aBuf.byteLength !== bBuf.byteLength) return false;
+  let mismatch = 0;
+  for (let i = 0; i < aBuf.byteLength; i++) {
+    mismatch |= aBuf[i] ^ bBuf[i];
+  }
+  return mismatch === 0;
+}
+
 export async function verifyEventToken(eventId: string, token: string, secret: string): Promise<boolean> {
   if (!token || !eventId) return false;
   const expectedToken = await generateEventToken(eventId, secret);
-  return token === expectedToken;
+  return timingSafeEqual(token, expectedToken);
 }
 
 function escapeHtml(str: string): string {
@@ -1352,9 +1365,9 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
 
     // Direct Admin / Worker Auth (e.g. API clients, admin CLI, test suites)
     const isDirectAdminAuth =
-      Boolean(env.ADMIN_TOKEN && formToken === env.ADMIN_TOKEN) ||
-      Boolean(env.CLOUDFLARE_AUTH_TOKEN && formToken === env.CLOUDFLARE_AUTH_TOKEN) ||
-      Boolean(env.GH_PAT && formToken === env.GH_PAT);
+      Boolean(env.ADMIN_TOKEN && formToken && timingSafeEqual(formToken, env.ADMIN_TOKEN)) ||
+      Boolean(env.CLOUDFLARE_AUTH_TOKEN && formToken && timingSafeEqual(formToken, env.CLOUDFLARE_AUTH_TOKEN)) ||
+      Boolean(env.GH_PAT && formToken && timingSafeEqual(formToken, env.GH_PAT));
 
     // Cryptographic Event Token Auth (e.g. one-click web browser form submissions from Discord)
     const isSignedEventAuth = eventHash
@@ -1545,14 +1558,14 @@ export default {
         return await handleDiscordInteraction(request, env, ctx);
       }
 
-      // Secure manual run & trigger endpoints (Issue #438)
+      // Secure manual run & trigger endpoints (Issue #438, #559 Phase 5)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
         const authHeader = request.headers.get("Authorization");
         const queryToken = url.searchParams.get("token");
         const expectedToken = env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT;
         if (expectedToken) {
           const token = authHeader?.replace("Bearer ", "").trim() || queryToken?.trim();
-          if (!token || token !== expectedToken) {
+          if (!token || !timingSafeEqual(token, expectedToken)) {
             return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid admin token" }), {
               status: 401,
               headers: { "Content-Type": "application/json" }
