@@ -5,6 +5,8 @@ Supports ultra-fast Single-Batch LLM invocation (Google Gemini 2.5 Flash) with i
 and a robust deterministic rule-based fallback.
 """
 
+from __future__ import annotations
+
 import os
 import re
 import time
@@ -13,6 +15,7 @@ import hashlib
 import pandas as pd
 import numpy as np
 import logging
+from typing import Any, Dict, List, Optional, Tuple, Union
 from src.lookup_cache import global_cache
 from src.telemetry import log_llm_usage
 from src.tokentab_accounting import token_tab_manager

@@ -6,7 +6,7 @@ Directs all API execution, ASGI workers, and MCP server transports
 to the maintained source module at src/api_server.py.
 """
 
-from src.api_server import app, create_app  # noqa: F401
+from src.api_server import app  # noqa: F401
 
 if __name__ == "__main__":
     import uvicorn

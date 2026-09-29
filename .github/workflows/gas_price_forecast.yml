@@ -98,7 +98,8 @@ jobs:
 
       - name: Rebase On Latest Remote Changes
         run: |
-          git pull --rebase --autostash origin main || true
+          git fetch origin ${{ github.ref_name }}
+          git rebase origin/${{ github.ref_name }}
 
       - name: Commit Updated README, Dashboard & Prediction Logs
         uses: stefanzweifel/git-auto-commit-action@v5

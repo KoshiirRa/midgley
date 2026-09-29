@@ -95,8 +95,9 @@ if __name__ == "__main__":
             print("=" * 80)
             m_df = fetch_market_data(start_date="2024-01-01")
             if not m_df.empty:
+                cl_col = 'wti_crude' if 'wti_crude' in m_df.columns else ('crude_wti' if 'crude_wti' in m_df.columns else None)
                 rb_open = float(m_df['gasoline_rbob'].iloc[-1])
-                cl_open = float(m_df['crude_wti'].iloc[-1]) if 'crude_wti' in m_df.columns else 75.0
+                cl_open = float(m_df[cl_col].iloc[-1]) if cl_col else 75.0
                 rb_p50 = rb_open
                 rb_p10 = None
                 rb_p90 = None
@@ -118,10 +119,12 @@ if __name__ == "__main__":
                         if not nat_rows.empty:
                             latest_nat = nat_rows.iloc[-1]
                             rb_p50 = float(latest_nat['predicted_5d_price'])
-                            if pd.notna(latest_nat.get('prediction_lower_95ci')):
-                                rb_p10 = float(latest_nat['prediction_lower_95ci'])
-                            if pd.notna(latest_nat.get('prediction_upper_95ci')):
-                                rb_p90 = float(latest_nat['prediction_upper_95ci'])
+                            low_95 = float(latest_nat['prediction_lower_95ci']) if pd.notna(latest_nat.get('prediction_lower_95ci')) else None
+                            high_95 = float(latest_nat['prediction_upper_95ci']) if pd.notna(latest_nat.get('prediction_upper_95ci')) else None
+                            if low_95 is not None and high_95 is not None and high_95 > low_95:
+                                rb_res_std = (high_95 - low_95) / 3.92
+                                rb_p10 = round(rb_p50 - (1.28155 * rb_res_std), 4)
+                                rb_p90 = round(rb_p50 + (1.28155 * rb_res_std), 4)
                             qualitative_catalysts["overall_price_pressure"] = float(latest_nat.get('llm_price_pressure', 0.0))
                             qualitative_catalysts["supply_disruption"] = float(latest_nat.get('llm_supply_disruption', 0.0))
                 except Exception as e:
@@ -129,8 +132,8 @@ if __name__ == "__main__":
 
                 # 2. Derive multi-factor Crude Oil WTI forecast from market momentum & crack spreads
                 try:
-                    if len(m_df) >= 6 and 'crude_wti' in m_df.columns:
-                        wti_series = m_df['crude_wti'].dropna()
+                    if cl_col and len(m_df) >= 6:
+                        wti_series = m_df[cl_col].dropna()
                         if len(wti_series) >= 6:
                             cl_return_5d = (wti_series.iloc[-1] - wti_series.iloc[-6]) / wti_series.iloc[-6]
                             rb_expected_return = (rb_p50 - rb_open) / rb_open if rb_open > 0 else 0.0
@@ -138,8 +141,8 @@ if __name__ == "__main__":
                             wti_expected_return = (0.40 * cl_return_5d) + (0.60 * rb_expected_return)
                             cl_p50 = round(cl_open * (1.0 + wti_expected_return), 2)
                             cl_res_std = round(0.02 * cl_open, 2)
-                            cl_p10 = round(cl_p50 - (1.28 * cl_res_std), 2)
-                            cl_p90 = round(cl_p50 + (1.28 * cl_res_std), 2)
+                            cl_p10 = round(cl_p50 - (1.28155 * cl_res_std), 2)
+                            cl_p90 = round(cl_p50 + (1.28155 * cl_res_std), 2)
                 except Exception as e:
                     logger.debug(f"Notice deriving WTI Crude forecast for Headline Arena: {e}")
 

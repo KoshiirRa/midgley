@@ -62,15 +62,23 @@ def diebold_mariano_test(
 
     mean_d = float(np.mean(d))
     
-    # Autocovariance estimation up to lag h - 1 (Bartlett kernel)
+    # Autocovariance estimation up to lag h - 1 (Unweighted rectangular sum for HLN correction)
     gamma0 = float(np.var(d, ddof=0))
     sum_cov = 0.0
     for k in range(1, max(1, horizon)):
         cov_k = float(np.mean((d[k:] - mean_d) * (d[:-k] - mean_d)))
-        weight = 1.0 - (k / max(1, horizon))
-        sum_cov += 2.0 * weight * cov_k
+        sum_cov += 2.0 * cov_k
 
-    long_run_var = max(1e-8, gamma0 + sum_cov)
+    long_run_var = gamma0 + sum_cov
+    if long_run_var <= 0:
+        # Fallback to Bartlett weights if rectangular long-run variance estimate is non-positive
+        sum_cov_bartlett = 0.0
+        for k in range(1, max(1, horizon)):
+            cov_k = float(np.mean((d[k:] - mean_d) * (d[:-k] - mean_d)))
+            weight = 1.0 - (k / max(1, horizon))
+            sum_cov_bartlett += 2.0 * weight * cov_k
+        long_run_var = max(1e-8, gamma0 + sum_cov_bartlett)
+
     dm_stat = mean_d / np.sqrt(long_run_var / T)
 
     # Harvey-Leybourne-Newbold (HLN) small-sample correction factor
@@ -324,11 +332,14 @@ def pesaran_timmermann_test(
     # Expected hit rate under independence
     p_star = p_y * p_x + (1.0 - p_y) * (1.0 - p_x)
 
-    # Pesaran-Timmermann variance estimator
-    term1 = p_star * (1.0 - p_star)
-    term2 = (2.0 * p_y - 1.0) ** 2 * p_x * (1.0 - p_x)
-    term3 = (2.0 * p_x - 1.0) ** 2 * p_y * (1.0 - p_y)
-    v_hat = (term1 + term2 + term3) / T
+    # Pesaran-Timmermann (1992) variance estimator: V_hat(P_hat - P_star) = V_hat(P_hat) - V_hat(P_star)
+    var_p_hat = (p_star * (1.0 - p_star)) / T
+    var_p_star = (
+        ((2.0 * p_y - 1.0) ** 2 * p_x * (1.0 - p_x)) / T
+        + ((2.0 * p_x - 1.0) ** 2 * p_y * (1.0 - p_y)) / T
+        + (4.0 / (T ** 2)) * p_y * p_x * (1.0 - p_y) * (1.0 - p_x)
+    )
+    v_hat = max(1e-12, var_p_hat - var_p_star)
 
     if v_hat <= 1e-12:
         pt_stat = 0.0
@@ -518,12 +529,15 @@ def benjamini_hochberg_fdr_control(
         prev_adj = cur_adj
         adj_p[key] = round(cur_adj, 4)
 
-    # Determine discovery cut-off: largest k where p_{(k)} <= (k/m) * q
-    discoveries = []
+    # Determine discovery cut-off: find largest k* where p_{(k*)} <= (k*/m) * q
+    k_star = 0
     for rank_1b, (key, p_val) in enumerate(sorted_items, start=1):
         crit_val = (rank_1b / m) * q_threshold
         if p_val <= crit_val:
-            discoveries.append(key)
+            k_star = rank_1b
+
+    # All hypotheses with rank <= k_star are declared discoveries
+    discoveries = [key for rank_1b, (key, p_val) in enumerate(sorted_items, start=1) if rank_1b <= k_star]
 
     return {
         "discoveries": discoveries,

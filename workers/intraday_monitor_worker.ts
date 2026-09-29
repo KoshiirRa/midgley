@@ -1057,6 +1057,34 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
   });
 }
 
+export function getWorkerSigningSecret(env: Env): string {
+  return env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT || "midgley-fp-signing-key";
+}
+
+export async function generateEventToken(eventId: string, secret: string): Promise<string> {
+  const enc = new TextEncoder();
+  const keyData = enc.encode(secret || "midgley-fp-signing-key");
+  const key = await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const data = enc.encode(`flag_fp:${eventId}`);
+  const signature = await crypto.subtle.sign("HMAC", key, data);
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 32);
+}
+
+export async function verifyEventToken(eventId: string, token: string, secret: string): Promise<boolean> {
+  if (!token || !eventId) return false;
+  const expectedToken = await generateEventToken(eventId, secret);
+  return token === expectedToken;
+}
+
 function escapeHtml(str: string): string {
   return str
     .replace(/&/g, "&amp;")
@@ -1077,9 +1105,15 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     const s = url.searchParams.get("s") || "0.00";
     const g = url.searchParams.get("g") || "0.00";
     const sourceUrl = url.searchParams.get("url") || "";
-    const authToken = url.searchParams.get("token") || "";
 
-    const idEsc = escapeHtml(id);
+    const eventId = id || normalizeHeadline(headline) || "default_event";
+    const signingSecret = getWorkerSigningSecret(env);
+    let authToken = url.searchParams.get("token") || "";
+    if (!authToken) {
+      authToken = await generateEventToken(eventId, signingSecret);
+    }
+
+    const idEsc = escapeHtml(id || eventId);
     const headlineEsc = escapeHtml(headline);
     const sourceEsc = escapeHtml(source);
     const pEsc = escapeHtml(p);
@@ -1314,10 +1348,21 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     const notes = formData.get("notes")?.toString() || "";
 
     const formToken = formData.get("token")?.toString() || request.headers.get("Authorization")?.replace("Bearer ", "").trim();
-    const requiredToken = env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || env.GH_PAT;
+    const signingSecret = getWorkerSigningSecret(env);
+
+    // Direct Admin / Worker Auth (e.g. API clients, admin CLI, test suites)
+    const isDirectAdminAuth =
+      Boolean(env.ADMIN_TOKEN && formToken === env.ADMIN_TOKEN) ||
+      Boolean(env.CLOUDFLARE_AUTH_TOKEN && formToken === env.CLOUDFLARE_AUTH_TOKEN) ||
+      Boolean(env.GH_PAT && formToken === env.GH_PAT);
+
+    // Cryptographic Event Token Auth (e.g. one-click web browser form submissions from Discord)
+    const isSignedEventAuth = eventHash
+      ? await verifyEventToken(eventHash, formToken || "", signingSecret)
+      : false;
 
     // Reject unauthenticated issue creation requests (Issue #438)
-    if (requiredToken && (!formToken || formToken !== requiredToken)) {
+    if (!isDirectAdminAuth && !isSignedEventAuth) {
       return new Response(JSON.stringify({ error: "Unauthorized: Missing or invalid authentication token for issue creation" }), {
         status: 401,
         headers: { "Content-Type": "application/json" }

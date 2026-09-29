@@ -9,6 +9,8 @@ import intradayWorker, {
   handleQueueBatch,
   isHeadlineDispatchedInCache,
   markHeadlineDispatchedInCache,
+  generateEventToken,
+  getWorkerSigningSecret,
   Env as IntradayEnv,
   QueueMessageBatch
 } from "../workers/intraday_monitor_worker";
@@ -319,7 +321,65 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     expect(html).toContain("&lt;b onmouseover=alert(1)&gt;Source&lt;/b&gt;");
   });
 
-  it("rejects unauthenticated POST /flag submissions", async () => {
+  it("generates valid event token on GET /flag and accepts signed POST /flag submission", async () => {
+    const env: IntradayEnv = {
+      GH_PAT: "real_gh_pat_token",
+      ADMIN_TOKEN: "admin_secret_token",
+      REPO_OWNER: "KoshiirRa",
+      REPO_NAME: "midgley"
+    };
+
+    // 1. GET /flag embeds generated token
+    const getReq = new Request(
+      "https://worker.local/flag?id=evt_98765&headline=Non-Energy+Tariff+Trigger&source=RSS_GoogleNews",
+      { method: "GET" }
+    );
+    const getRes = await intradayWorker.fetch(getReq, env, {});
+    expect(getRes.status).toBe(200);
+    const html = await getRes.text();
+    const tokenMatch = html.match(/name="token" value="([a-f0-9]+)"/);
+    expect(tokenMatch).not.toBeNull();
+    const generatedToken = tokenMatch![1];
+    expect(generatedToken.length).toBeGreaterThanOrEqual(16);
+
+    // Mock GitHub issue creation response
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 201,
+      json: async () => ({
+        number: 499,
+        html_url: "https://github.com/KoshiirRa/midgley/issues/499",
+        node_id: "I_kwDOtest499"
+      })
+    });
+
+    try {
+      // 2. Submit POST /flag with the signed token
+      const formData = new FormData();
+      formData.append("id", "evt_98765");
+      formData.append("headline", "Non-Energy Tariff Trigger");
+      formData.append("source", "RSS_GoogleNews");
+      formData.append("category", "Non-Energy Macro Tariff");
+      formData.append("notes", "Valid false positive report from Discord user");
+      formData.append("token", generatedToken);
+
+      const postReq = new Request("https://worker.local/flag", {
+        method: "POST",
+        body: formData
+      });
+
+      const postRes = await intradayWorker.fetch(postReq, env, {});
+      expect(postRes.status).toBe(200);
+      const postHtml = await postRes.text();
+      expect(postHtml).toContain("False Positive Issue Logged!");
+      expect(postHtml).toContain("Issue <strong>#499</strong>");
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it("rejects unauthenticated POST /flag submissions with invalid token", async () => {
     const formData = new FormData();
     formData.append("id", "test_id");
     formData.append("headline", "Test Headline");
@@ -337,6 +397,45 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
 
     const res = await intradayWorker.fetch(req, env, {});
     expect(res.status).toBe(401);
+    const data = (await res.json()) as { error: string };
+    expect(data.error).toContain("Unauthorized: Missing or invalid authentication token for issue creation");
+  });
+
+  it("accepts direct admin token on POST /flag submissions", async () => {
+    const env: IntradayEnv = {
+      GH_PAT: "real_gh_pat_token",
+      ADMIN_TOKEN: "admin_secret_token",
+      REPO_OWNER: "KoshiirRa",
+      REPO_NAME: "midgley"
+    };
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 201,
+      json: async () => ({
+        number: 500,
+        html_url: "https://github.com/KoshiirRa/midgley/issues/500",
+        node_id: "I_kwDOtest500"
+      })
+    });
+
+    try {
+      const formData = new FormData();
+      formData.append("id", "admin_flagged_id");
+      formData.append("headline", "Admin Flagged Event");
+      formData.append("token", "admin_secret_token");
+
+      const req = new Request("https://worker.local/flag", {
+        method: "POST",
+        body: formData
+      });
+
+      const res = await intradayWorker.fetch(req, env, {});
+      expect(res.status).toBe(200);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 
   it("rejects unauthenticated requests to /run and /trigger when admin token is set", async () => {
@@ -352,3 +451,4 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     expect(res.status).toBe(401);
   });
 });
+

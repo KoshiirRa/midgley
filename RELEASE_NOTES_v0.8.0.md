@@ -53,14 +53,20 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Rolling Shock Normalization**: Added `normalize_event_shocks()` for logarithmic and rolling 90-day z-score shock scaling.
 - **Jordà (2005) Local Projections**: Added `estimate_local_projections_impulse_responses()` in `src/feature_engineering.py` estimating non-parametric multi-horizon impulse response curves with Newey-West HAC standard errors.
 
-### 10. MinT Hierarchical Reconciliation Engine (Issue #450)
-- **Minimum Trace Optimal Combination**: Implemented `MinTHierarchicalEngine` and `reconcile_mint()` in `src/hierarchical_engine.py` (Wickramasuriya et al. 2019), enforcing exact mathematical summation consistency across National $\to$ PADD $\to$ Metro levels.
-- **Empirical Bayes Parameter Shrinkage**: Added `empirical_bayes_shrinkage_regression()`, shrinking data-sparse regional coefficients toward regional cluster priors.
+### 11. Statistical Hypothesis & Prediction Interval Mathematical Corrections (Issue #559)
+- **Diebold-Mariano Unweighted Rectangular Sum**: Corrected `diebold_mariano_test()` in `src/model_evaluation.py` to use unweighted rectangular lag autocovariances for lags $1 \dots (h-1)$, eliminating variance double-damping under the Harvey-Leybourne-Newbold (HLN) small-sample correction and restoring nominal 5% size.
+- **Pesaran-Timmermann Directional Variance**: Corrected variance estimator in `pesaran_timmermann_test()` to compute $\widehat{V}(\hat{P}) - \widehat{V}(P_*)$ with $n^2$ cross-term scaling.
+- **Benjamini-Hochberg Step-Up Discovery**: Fixed `benjamini_hochberg_fdr_control()` to declare all hypotheses $k \le k^*$ discoveries where $k^* = \max \{ k : p_{(k)} \le \frac{k}{m} q \}$.
+- **Finite-Sample Split Conformal Intervals**: Refactored `compute_conformal_prediction_intervals()` in `src/models.py` to use exact order statistic $k = \lceil(n+1)(1-\alpha)\rceil$, eliminating small-sample heuristic distortions.
+- **Python 3.11–3.13 Import & CI Smoke Gate**: Resolved missing typing imports in `src/event_analyzer.py` and added multi-version import smoke check in `.github/workflows/ci.yml`.
+- **Headline Arena Ticker Alignment**: Fixed live WTI Crude prompt price column mapping (`wti_crude`) and 95% CI to 80% P10/P90 interval standard deviation scaling ($\sigma = \frac{\text{upper} - \text{lower}}{3.92}$).
+- **Data Wipe & Rebase Hardening**: Replaced `--autostash` rebase swallows in GitHub Action workflows with deterministic branch ref rebases and quarantined corrupt JSON decode handling.
 
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phase 1)
   - Issue #444 - `fix(data-ingestion): Implement roll-adjusted RBOB futures returns and map metros to regional wholesale supply hubs`
   - Issue #449 - `feat(uncertainty): Calibrated prediction intervals and proper quantile generation via Adaptive Conformal Inference`
   - Issue #452 - `feat(evaluation): Build unified statistical evaluation harness, Model Confidence Set & feature admission gate`

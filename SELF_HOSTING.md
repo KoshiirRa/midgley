@@ -155,7 +155,7 @@ HEADLINE_ARENA_CLIENT_SECRET="ha_sec_..."  # Or HEADLINE_ARENA_API_KEY
 HEADLINE_ARENA_DEV_SUBMIT="0"              # Set to 1 in dev to execute live test submissions (tagged [DEV-TEST])
 
 # Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
-HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
+HEALTHCHECKS_PING_URL="https://hc-ping.com/<your-healthchecks-uuid-here>"
 # Or separate daily/weekly endpoints:
 # HEALTHCHECKS_DAILY_PING_URL="https://hc-ping.com/<uuid>"
 # HEALTHCHECKS_WEEKLY_PING_URL="https://hc-ping.com/<uuid>"

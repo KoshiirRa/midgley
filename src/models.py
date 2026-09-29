@@ -1330,16 +1330,19 @@ def compute_conformal_prediction_intervals(
     Returns (lower_bounds, upper_bounds) around point predictions y_pred.
     """
     residuals = np.abs(np.asarray(calibration_residuals, dtype=float))
+    residuals = residuals[np.isfinite(residuals)]
     n = len(residuals)
     if n == 0:
-        # Fallback to standard 1.96 * 0.0612 heuristic if no calibration residuals
+        # Fallback to standard baseline heuristic if no calibration residuals
         q = 1.96 * 0.0612
-    elif n < min_calibration_samples:
-        std_est = float(np.std(residuals, ddof=1)) if n > 1 else float(np.mean(residuals))
-        q = max(float(np.quantile(residuals, 1.0 - alpha)), 1.96 * std_est)
     else:
-        quantile_level = min(1.0, math.ceil((n + 1) * (1.0 - alpha)) / n)
-        q = float(np.quantile(residuals, quantile_level))
+        # Exact finite-sample conformal order statistic: ceil((n + 1) * (1 - alpha))
+        k = math.ceil((n + 1) * (1.0 - alpha))
+        sorted_residuals = np.sort(residuals)
+        if k <= n:
+            q = float(sorted_residuals[k - 1])
+        else:
+            q = float(sorted_residuals[-1])
 
     preds = np.asarray(y_pred, dtype=float)
     lower_bounds = np.round(preds - q, 4)
