@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-27T19:26:15.602795",
+  "timestamp": "2026-09-29T02:07:05.155139",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.161,
+    "current_price_per_gal": 4.15,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-27T19:02:06Z"
+      "timestamp": "2026-09-29T01:37:07Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-02",
-    "current_base_price": 4.161,
-    "predicted_price_per_gal": 4.073,
+    "current_base_price": 4.15,
+    "predicted_price_per_gal": 4.062,
     "expected_change_dollars": -0.088,
-    "expected_change_percent": -2.11,
+    "expected_change_percent": -2.12,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.953,
-    "prediction_upper_95ci": 4.193,
+    "prediction_lower_95ci": 3.942,
+    "prediction_upper_95ci": 4.182,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.134,
+    "day_1_price": 4.132,
     "day_2_price": 4.115,
-    "day_3_price": 4.093,
-    "day_4_price": 4.075,
-    "day_5_price": 4.073,
+    "day_3_price": 4.083,
+    "day_4_price": 4.065,
+    "day_5_price": 4.062,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast $-0.088/gal (-2.11%): Driven primarily by Regional Logistics & Hub Delivery ($-0.026/gal), Refining Yield & Crack Spread ($-0.026/gal).",
+      "summary_text": "Tulsa OK forecast $-0.088/gal (-2.12%): Driven primarily by Regional Logistics & Hub Delivery ($-0.026/gal), Refining Yield & Crack Spread ($-0.026/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.026,
-          "impact_pct": -0.62,
+          "impact_pct": -0.63,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.026,
-          "impact_pct": -0.62,
+          "impact_pct": -0.63,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.026,
-      "impact_pct": -0.62,
+      "impact_pct": -0.63,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.026,
-      "impact_pct": -0.62,
+      "impact_pct": -0.63,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast $-0.088/gal (-2.11%): Driven primarily by Regional Logistics & Hub Delivery ($-0.026/gal), Refining Yield & Crack Spread ($-0.026/gal).",
+    "summary_text": "Tulsa OK forecast $-0.088/gal (-2.12%): Driven primarily by Regional Logistics & Hub Delivery ($-0.026/gal), Refining Yield & Crack Spread ($-0.026/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
