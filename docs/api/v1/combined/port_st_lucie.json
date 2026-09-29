@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-29T02:22:02.666927",
+  "timestamp": "2026-09-29T08:09:28.516678",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.364,
+    "current_price_per_gal": 4.301,
     "source": "AAA Web Scraper (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Web Scraper (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-29T02:19:33Z"
+      "timestamp": "2026-09-29T08:06:51Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-02",
-    "current_base_price": 4.364,
-    "predicted_price_per_gal": 4.528,
+    "current_base_price": 4.301,
+    "predicted_price_per_gal": 4.465,
     "expected_change_dollars": 0.164,
-    "expected_change_percent": 3.76,
+    "expected_change_percent": 3.81,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.408,
-    "prediction_upper_95ci": 4.648,
+    "prediction_lower_95ci": 4.345,
+    "prediction_upper_95ci": 4.585,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.397,
-    "day_2_price": 4.43,
-    "day_3_price": 4.447,
-    "day_4_price": 4.462,
-    "day_5_price": 4.528,
+    "day_1_price": 4.334,
+    "day_2_price": 4.367,
+    "day_3_price": 4.384,
+    "day_4_price": 4.399,
+    "day_5_price": 4.465,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast +$0.164/gal (+3.76%): Driven primarily by Regional Logistics & Hub Delivery (+$0.057/gal), Futures & Commodity Benchmark (+$0.041/gal).",
+      "summary_text": "Port St Lucie FL forecast +$0.164/gal (+3.81%): Driven primarily by Regional Logistics & Hub Delivery (+$0.057/gal), Futures & Commodity Benchmark (+$0.041/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.057,
-          "impact_pct": 1.31,
+          "impact_pct": 1.33,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.041,
-          "impact_pct": 0.94,
+          "impact_pct": 0.95,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
           "impact_dollars": 0.025,
-          "impact_pct": 0.57,
+          "impact_pct": 0.58,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -126,7 +126,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.02,
-          "impact_pct": 0.46,
+          "impact_pct": 0.47,
           "share_pct": 12.0,
           "direction": "UP"
         },
@@ -142,7 +142,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.008,
-          "impact_pct": 0.18,
+          "impact_pct": 0.19,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.057,
-      "impact_pct": 1.31,
+      "impact_pct": 1.33,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.041,
-      "impact_pct": 0.94,
+      "impact_pct": 0.95,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
       "impact_dollars": 0.025,
-      "impact_pct": 0.57,
+      "impact_pct": 0.58,
       "share_pct": 15.0,
       "direction": "UP"
     },
@@ -178,7 +178,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.02,
-      "impact_pct": 0.46,
+      "impact_pct": 0.47,
       "share_pct": 12.0,
       "direction": "UP"
     },
@@ -194,13 +194,13 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.008,
-      "impact_pct": 0.18,
+      "impact_pct": 0.19,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast +$0.164/gal (+3.76%): Driven primarily by Regional Logistics & Hub Delivery (+$0.057/gal), Futures & Commodity Benchmark (+$0.041/gal).",
+    "summary_text": "Port St Lucie FL forecast +$0.164/gal (+3.81%): Driven primarily by Regional Logistics & Hub Delivery (+$0.057/gal), Futures & Commodity Benchmark (+$0.041/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
