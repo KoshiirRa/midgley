@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-28T21:29:25.567374",
+  "timestamp": "2026-09-29T02:14:31.843245",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-28T21:10:18Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-29T02:12:03Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -41,7 +41,7 @@
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 4.341,
-    "day_2_price": 4.259,
+    "day_2_price": 4.396,
     "day_3_price": 4.397,
     "day_4_price": 4.473,
     "day_5_price": 4.563,

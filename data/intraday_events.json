@@ -3573,5 +3573,25 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-29T01:37:02.710788",
+    "headline": "China, US agree to tariff cuts on $60 billion of goods including agriculture, household items - Oil & Gas 360",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQWmdaSmhva2w5RmtSRzNJZFlLSkUzcGJmVXFWdmRUb2hqdEYwODFmbXRaVm5tMURGcGs3b2tleFRVTi1penV2Qm9BVVRJdDZOYV9UeU9hSFhYbnMzNzZiYlM0SkJpVVBjOTB2d0pTUFdESW5zQWtTLXNBeWhhc1BpeXlCeHRWWjBDc21WY0ZVeG1qVk9NRlhYdjZlQ3NYZ0tLMks4RTVESTRROVZyaTZidUFzdEdvZnN2TU9HWQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQWmdaSmhva2w5RmtSRzNJZFlLSkUzcGJmVXFWdmRUb2hqdEYwODFmbXRaVm5tMURGcGs3b2tleFRVTi1penV2Qm9BVVRJdDZOYV9UeU9hSFhYbnMzNzZiYlM0SkJpVVBjOTB2d0pTUFdESW5zQWtTLXNBeWhhc1BpeXlCeHRWWjBDc21WY0ZVeG1qVk9NRlhYdjZlQ3NYZ0tLMks4RTVESTRROVZyaTZidUFzdEdvZnN2TU9HWQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivAFBVV95cUxQWmdaSmhva2w5RmtSRzNJZFlLSkUzcGJmVXFWdmRUb2hqdEYwODFmbXRaVm5tMURGcGs3b2tleFRVTi1penV2Qm9BVVRJdDZOYV9UeU9hSFhYbnMzNzZiYlM0SkJpVVBjOTB2d0pTUFdESW5zQWtTLXNBeWhhc1BpeXlCeHRWWjBDc21WY0ZVeG1qVk9NRlhYdjZlQ3NYZ0tLMks4RTVESTRROVZyaTZidUFzdEdvZnN2TU9HWQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": -0.7,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    },
+    "discord_notified": true
   }
 ]
