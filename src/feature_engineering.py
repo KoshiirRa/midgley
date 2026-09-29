@@ -1276,6 +1276,7 @@ def prepare_chronological_splits(
         'unlabelled_inference_frame': unlabelled_df,
         'X_live_quant': X_live_quant,
         'X_live_hybrid': X_live_hybrid,
+        'live_current_price': live_current_price,
         'live_feature_origin_date': live_origin_date,
         'forecast_origin_date': live_origin_date,
         'feature_cutoff_date': live_origin_date
