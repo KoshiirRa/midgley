@@ -245,4 +245,18 @@ Whenever new features, regional models, data feeds, or API endpoints are added:
 3. **Relational Telemetry Auditing:**
    - All recall, reflect, and retain interactions must log telemetry records to the `hindsight_telemetry` table in the configured database (`src/db/schema.sql`).
 
+---
+
+## 📈 13. Model Refit, Stationary Transforms & Ground Truth Invariants (Issue #559 Phase 4)
+
+1. **Full-Sample Prospective Model Refit (`fit_prospective_model` in `src/models.py`):**
+   - Prior to generating live out-of-time prospective projections ($t+1 \dots t+5$), refit the chosen model architecture on 100% of historical observations (combining train and validation splits).
+   - This ensures live prospective forecasts incorporate the most recent information without data staleness.
+2. **Stationary Targets & Price Reconstruction Bounds:**
+   - Ensure all price models use stationary transformations (log-returns $r_{t+h} = \ln(P_{t+h}/P_t)$, differences $\Delta P_{t+h}$, or persistence residuals).
+   - Exponential price level reconstruction must enforce physical bounds ($\hat{P} \ge \$0.20/\text{gal}$) and plausibility gating.
+3. **Authentic Ground Truth & Zero Cross-Regional Fallbacks:**
+   - Regional evaluation ground truth must be resolved strictly from the matching EIA/FRED series (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWCA`, `GASREGWFL`).
+   - If ground truth is absent for an unmapped region or unmatured target date (`target_date > today`), record `actual_price = NaN` and exclude from evaluation scoring rather than falling back to the National average.
+
 

@@ -66,11 +66,17 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Post-Settlement Causal Reflection**: Evaluates settled forecast errors against realized ground truth, classifying severe prediction misses ($>2\sigma$ or directional flips) into structured failure modes (`OVERESTIMATED_SHOCK`, `UNDERESTIMATED_SHOCK`, `DIRECTIONAL_FLIP`, `BASIS_DIVERGENCE`) and recording durable post-mortems back into Hindsight episodic memory.
 - **Relational Telemetry Auditing**: Logs all episodic memory operations (`RECALL`, `REFLECT`, `RETAIN`) with query terms, summaries, and latency benchmarks directly to `hindsight_telemetry`.
 
+### 14. Model & Evaluation Hardening: Full-Sample Refit, Stationary Transforms, and Ground Truth Integrity (Issue #559 Phase 4)
+- **Full-Sample Prospective Refit (`fit_prospective_model`)**: Refits estimator pipelines on 100% of historical training data (combining train and validation splits) prior to generating live prospective forecasts ($t+1 \dots t+5$), eliminating model staleness while preserving pure out-of-time evaluation metrics.
+- **Stationary Target Transformations**: Enforces stationary log-returns, differences, and persistence residuals with roll-adjusted RBOB returns and bounded exponential price level reconstruction.
+- **Authentic Fundamental Ingestion & Missingness Flags**: Connects fundamentals to bitemporal `VintageStore` query records, eliminating synthetic sine-wave baselines and emitting explicit binary missingness flags (`_is_missing`).
+- **Discrete Ground Truth Mappings & Maturity Gating**: Direct 1-to-1 mapping of regional EIA/FRED retail series with strict future maturity gating (`target_date <= today`) and zero cross-regional fallbacks.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
-  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2 & 3)
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2, 3 & 4)
   - Issue #423 - `feat(storage): Migrate flat CSV and JSON storage to a structured datastore`
   - Issue #424 - `fix(storage): Replace unsafe raw file writes with atomic write routines to prevent 0-byte file truncation`
   - Issue #479 - `feat(storage): Implement cursor-based cloud sync for predictions and evaluations`

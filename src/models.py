@@ -568,6 +568,44 @@ def enforce_forecast_plausibility_gate(
     return round(float(clamped_price), 4), gated, reason_str
 
 
+def fit_prospective_model(
+    X_train: pd.DataFrame,
+    y_train: pd.Series,
+    X_test: Optional[pd.DataFrame] = None,
+    y_test: Optional[pd.Series] = None,
+    model_type: str = "ridge",
+    alpha: float = 10.0
+) -> Any:
+    """
+    Fits the prospective forecasting model on 100% of historical data
+    (combining train and validation/test splits) prior to generating live forward projections (Issue #559 Phase 4 / A-1).
+    Ensures live predictions use the most recent information without data staleness.
+    """
+    if X_test is not None and y_test is not None and not X_test.empty and not y_test.empty:
+        X_tr = pd.DataFrame(X_train.values, columns=X_train.columns)
+        X_te = pd.DataFrame(X_test.values, columns=X_test.columns)
+        X_full = pd.concat([X_tr, X_te], axis=0, ignore_index=True)
+        y_full = pd.concat([pd.Series(y_train.values), pd.Series(y_test.values)], axis=0, ignore_index=True)
+    else:
+        X_full = X_train
+        y_full = y_train
+
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    if model_type == "stacking":
+        model = build_stacking_ensemble_pipeline()
+    elif model_type == "xgboost" and HAS_XGBOOST:
+        model = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
+    elif model_type == "rf":
+        model = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
+    else:
+        model = make_pipeline(StandardScaler(), Ridge(alpha=alpha))
+
+    model.fit(X_full, y_full)
+    return model
+
+
 def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wandb: bool = False, wandb_run: Any = None) -> dict:
 
     """
@@ -636,6 +674,22 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     # 2. Fit Hybrid Model (Quantitative + LLM Unstructured Event Features)
     model_hybrid.fit(X_train_hybrid, y_train)
     raw_pred_hybrid = model_hybrid.predict(X_test_hybrid)
+
+    # 3. Fit Prospective Models on 100% History for Live Forecasts (Issue #559 Phase 4 / A-1)
+    prospective_model_quant = fit_prospective_model(
+        X_train=X_train_quant,
+        y_train=y_train,
+        X_test=X_test_quant,
+        y_test=y_test,
+        model_type=model_type
+    )
+    prospective_model_hybrid = fit_prospective_model(
+        X_train=X_train_hybrid,
+        y_train=y_train,
+        X_test=X_test_hybrid,
+        y_test=y_test,
+        model_type=model_type
+    )
     
     # Reconstruct price levels if trained on percentage returns (Issue #397)
     y_curr_arr = np.array(y_current)
@@ -724,19 +778,19 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         except Exception as e:
             logger.debug(f"Notice logging to W&B: {e}")
 
-    # Live inference evaluation using unlabelled contemporary features (t=0) (Issue #353)
+    # Live inference evaluation using prospective models fit on 100% historical data (Issue #559 Phase 4 / A-1)
     X_live_hybrid = split_data.get('X_live_hybrid', X_test_hybrid.iloc[-1:] if len(X_test_hybrid) > 0 else pd.DataFrame())
     X_live_quant = split_data.get('X_live_quant', X_test_quant.iloc[-1:] if len(X_test_quant) > 0 else pd.DataFrame())
     live_base = float(split_data.get('live_current_price', y_current.iloc[-1] if len(y_current) > 0 else 1.0))
     live_origin_date = split_data.get('live_feature_origin_date', str(test_df['date'].iloc[-1]) if 'date' in test_df.columns and len(test_df) > 0 else None)
 
     if len(X_live_hybrid) > 0:
-        raw_live_pred = float(model_hybrid.predict(X_live_hybrid)[0])
+        raw_live_pred = float(prospective_model_hybrid.predict(X_live_hybrid)[0])
     else:
         raw_live_pred = float(pred_hybrid[-1]) if len(pred_hybrid) > 0 else 0.0
 
     if len(X_live_quant) > 0:
-        raw_live_pred_quant = float(model_quant.predict(X_live_quant)[0])
+        raw_live_pred_quant = float(prospective_model_quant.predict(X_live_quant)[0])
     else:
         raw_live_pred_quant = float(pred_quant[-1]) if len(pred_quant) > 0 else 0.0
 
@@ -766,6 +820,8 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     return {
         "model_quant": model_quant,
         "model_hybrid": model_hybrid,
+        "prospective_model_quant": prospective_model_quant,
+        "prospective_model_hybrid": prospective_model_hybrid,
         "metrics_quant": metrics_quant,
         "metrics_hybrid": metrics_hybrid,
         "metrics_quant_return": metrics_quant_return,
@@ -860,14 +916,16 @@ def train_multi_horizon_models(
         res['splits'] = splits
         res['forecast_horizon'] = h
         
-        # Ensure latest live base, hybrid, and pure quantitative forecast prices use t=0 features
+        # Ensure latest live base, hybrid, and pure quantitative forecast prices use t=0 features and prospective models (A-1)
         last_row_hybrid = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:])
         last_row_quant = splits.get('X_live_quant', splits['X_test_quant'].iloc[-1:])
         live_base = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
         live_origin_date = splits.get('live_feature_origin_date', str(splits['test_df']['date'].iloc[-1]) if 'date' in splits['test_df'].columns else None)
 
-        raw_live_pred = float(res['model_hybrid'].predict(last_row_hybrid)[0])
-        raw_live_pred_quant = float(res['model_quant'].predict(last_row_quant)[0])
+        p_hybrid = res.get('prospective_model_hybrid', res['model_hybrid'])
+        p_quant = res.get('prospective_model_quant', res['model_quant'])
+        raw_live_pred = float(p_hybrid.predict(last_row_hybrid)[0])
+        raw_live_pred_quant = float(p_quant.predict(last_row_quant)[0])
         
         if res.get('is_return_target', False) or splits.get('predict_returns', False):
             bounded_live_pred = float(np.clip(raw_live_pred, -0.25, 0.25))
