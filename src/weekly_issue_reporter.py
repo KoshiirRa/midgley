@@ -1162,7 +1162,8 @@ def generate_weekly_markdown_report() -> str:
     if not os.path.exists(HISTORY_CSV):
         return f"# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report\n\nNo prediction history found."
         
-    df = pd.read_csv(HISTORY_CSV)
+    from src.prediction_logger import read_prediction_history
+    df = read_prediction_history(HISTORY_CSV)
     df = df.dropna(subset=['region']).copy()
     eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
     

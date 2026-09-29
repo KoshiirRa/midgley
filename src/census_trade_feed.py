@@ -120,7 +120,7 @@ class CensusTradeConnector:
         if not os.path.exists(self.storage_file) or force_refresh:
             self._initialize_benchmark_data()
 
-        df = pd.read_csv(self.storage_file)
+        df = pd.read_csv(self.storage_file, low_memory=False)
         df["period_date"] = pd.to_datetime(df["period"] + "-01")
         df["release_date"] = df["period_date"] + pd.DateOffset(days=self.publication_lag_days)
 

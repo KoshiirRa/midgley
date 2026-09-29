@@ -69,6 +69,9 @@ jobs:
           HEADLINE_ARENA_CLIENT_SECRET: ${{ secrets.HEADLINE_ARENA_CLIENT_SECRET }}
           MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION: ${{ vars.MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION || secrets.MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION }}
           MIDGLEY_ENV: "prod"
+          HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
+          HINDSIGHT_BANK_ID: "Midgley"
         run: |
           if [ -n "$HEADLINE" ]; then
             python -m src.intraday_event_monitor --headline "$HEADLINE" --source "$SOURCE" --url "$URL"
@@ -76,10 +79,14 @@ jobs:
             python -m src.intraday_event_monitor
           fi
 
+      - name: Rebase On Latest Remote Changes
+        run: |
+          git pull --rebase --autostash origin main || true
+
       - name: Commit Updated README, Dashboard & Prediction Logs
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chmod: Intraday event anomaly dispatch & public dashboard update [skip ci]"
+          commit_message: "chore: Intraday event anomaly dispatch & public dashboard update [skip ci]"
           file_pattern: "README.md docs/ data/"
 
       - name: Setup GitHub Pages

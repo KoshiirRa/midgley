@@ -88,13 +88,21 @@ jobs:
           python -m src.weekly_issue_reporter
 
       - name: Regenerate Public Dashboard with Updated Reflections
+        env:
+          HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
+          HINDSIGHT_BANK_ID: "Midgley"
         run: |
           python run_all.py --dashboard-only
+
+      - name: Rebase On Latest Remote Changes
+        run: |
+          git pull --rebase --autostash origin main || true
 
       - name: Commit Updated Performance Metrics & Prediction History
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chrono: Weekly Saturday model performance review & rolling accuracy update"
+          commit_message: "chore: Weekly Saturday model performance review & rolling accuracy update"
           file_pattern: "README.md docs/ data/"
 
       - name: Setup GitHub Pages

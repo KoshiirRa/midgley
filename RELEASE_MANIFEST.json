@@ -1,8 +1,8 @@
 {
-  "version": "0.7.1",
+  "version": "0.7.2",
   "model_version": "v1.6 Ipatieff",
   "schema_version": 3,
-  "release_date": "2026-09-26",
+  "release_date": "2026-09-27",
   "compatibility": {
     "minimum_compatible_client": "0.5.0",
     "breaking_changes": false,
@@ -20,19 +20,7 @@
         "name": "HINDSIGHT_API_URL",
         "default": "",
         "required": false,
-        "description": "Vectorize Hindsight Hosted SaaS or self-hosted episodic memory endpoint."
-      },
-      {
-        "name": "HINDSIGHT_API_KEY",
-        "default": "",
-        "required": false,
-        "description": "Bearer token for Vectorize Hindsight API authentication."
-      },
-      {
-        "name": "HINDSIGHT_BANK_ID",
-        "default": "Midgley",
-        "required": false,
-        "description": "Target memory bank identifier on Hindsight engine."
+        "description": "Remote Vectorize Hindsight / Supabase pgvector episodic memory endpoint."
       }
     ],
     "deprecated": []
@@ -51,6 +39,7 @@
       "usgs_gauge_stage",
       "weekend_gap_shock"
     ],
+    "retrain_action": "retrain_regional_models",
     "retrain_command": "python scripts/manage_regions.py retrain --all"
   },
   "database_migrations": [

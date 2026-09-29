@@ -176,7 +176,8 @@ def get_historical_sparkline_data(region_key: str, fallback_base: float, fallbac
     hist_prices = []
     if os.path.exists(HISTORY_CSV_PATH):
         try:
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            from src.prediction_logger import read_prediction_history
+            df = read_prediction_history(HISTORY_CSV_PATH)
             if 'region' in df.columns and region_key != 'Overview' and region_key != 'Math':
                 reg_df = df[df['region'] == region_key].copy()
                 if not reg_df.empty and 'current_base_price' in reg_df.columns:

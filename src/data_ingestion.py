@@ -27,15 +27,26 @@ from src.lookup_cache import global_cache
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+_MARKET_DATA_SESSION_CACHE: Dict[Tuple[str, str], pd.DataFrame] = {}
+
+
 def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None, allow_synthetic: bool = True) -> Optional[pd.DataFrame]:
     """
     Fetches daily commodity futures market data using yfinance:
     - RB=F: RBOB Gasoline Futures ($/gallon proxy for unleaded gas)
     - CL=F: WTI Crude Oil Futures ($/barrel)
     - BZ=F: Brent Crude Oil Futures ($/barrel)
+    - HO=F: Heating Oil Futures ($/gallon)
+    Utilizes process-level in-memory session caching to avoid redundant network roundtrips across regional pipelines (Issue #498).
     """
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
+
+    cache_key = (str(start_date), str(end_date))
+    if cache_key in _MARKET_DATA_SESSION_CACHE:
+        logger.debug(f"Returning in-memory session cached market data for {cache_key}.")
+        cached_df = _MARKET_DATA_SESSION_CACHE[cache_key].copy()
+        return cached_df
 
     logger.info(f"Fetching market data from {start_date} to {end_date}...")
     
@@ -47,34 +58,53 @@ def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None, allo
     }
     
     dfs = []
-    for name, ticker in tickers.items():
-        try:
-            data = yf.download(ticker, start=start_date, end=end_date, progress=False)
-            if data is None or data.empty:
-                logger.warning(f"Empty market download for ticker {ticker}.")
-                continue
-            if isinstance(data.columns, pd.MultiIndex):
-                if 'Close' in data.columns.levels[0] and ticker in data['Close'].columns:
-                    close_series = data['Close'][ticker]
-                else:
-                    logger.warning(f"Ticker {ticker} missing Close column in MultiIndex.")
-                    continue
-            else:
-                if 'Close' in data.columns:
-                    close_series = data['Close']
-                else:
-                    logger.warning(f"Ticker {ticker} missing Close column.")
-                    continue
-            
-            if close_series.dropna().empty:
-                logger.warning(f"Ticker {ticker} Close series has no non-null observations.")
-                continue
+    # Attempt high-efficiency batched download in a single network roundtrip (Issue #498)
+    try:
+        batch_data = yf.download(list(tickers.values()), start=start_date, end=end_date, progress=False)
+        if batch_data is not None and not batch_data.empty and isinstance(batch_data.columns, pd.MultiIndex):
+            if 'Close' in batch_data.columns.levels[0]:
+                close_df = batch_data['Close']
+                for name, ticker in tickers.items():
+                    if ticker in close_df.columns:
+                        series = close_df[ticker].dropna()
+                        if not series.empty:
+                            df_item = pd.DataFrame({'date': pd.to_datetime(series.index).tz_localize(None), name: series.values})
+                            dfs.append(df_item.set_index('date'))
+    except Exception as e:
+        logger.debug(f"Batched market data download failed, falling back to individual loop: {e}")
+        dfs = []
 
-            df_item = pd.DataFrame({'date': close_series.index, name: close_series.values})
-            df_item['date'] = pd.to_datetime(df_item['date']).dt.tz_localize(None)
-            dfs.append(df_item.set_index('date'))
-        except Exception as e:
-            logger.warning(f"Could not download ticker {ticker}: {e}")
+    # Fallback to individual ticker download if batch was incomplete
+    if len(dfs) < len(tickers):
+        dfs = []
+        for name, ticker in tickers.items():
+            try:
+                data = yf.download(ticker, start=start_date, end=end_date, progress=False)
+                if data is None or data.empty:
+                    logger.warning(f"Empty market download for ticker {ticker}.")
+                    continue
+                if isinstance(data.columns, pd.MultiIndex):
+                    if 'Close' in data.columns.levels[0] and ticker in data['Close'].columns:
+                        close_series = data['Close'][ticker]
+                    else:
+                        logger.warning(f"Ticker {ticker} missing Close column in MultiIndex.")
+                        continue
+                else:
+                    if 'Close' in data.columns:
+                        close_series = data['Close']
+                    else:
+                        logger.warning(f"Ticker {ticker} missing Close column.")
+                        continue
+                
+                if close_series.dropna().empty:
+                    logger.warning(f"Ticker {ticker} Close series has no non-null observations.")
+                    continue
+
+                df_item = pd.DataFrame({'date': close_series.index, name: close_series.values})
+                df_item['date'] = pd.to_datetime(df_item['date']).dt.tz_localize(None)
+                dfs.append(df_item.set_index('date'))
+            except Exception as e:
+                logger.warning(f"Could not download ticker {ticker}: {e}")
             
     if not dfs or all(df.empty for df in dfs):
         if not allow_synthetic:
@@ -94,6 +124,7 @@ def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None, allo
 
     market_df.attrs['is_synthetic'] = False
     market_df.attrs['provenance'] = 'AUTHENTIC_MARKET_DATA'
+    _MARKET_DATA_SESSION_CACHE[cache_key] = market_df.copy()
     return market_df
 
 

@@ -161,6 +161,28 @@ class TestDiscordNotifier(unittest.TestCase):
             self.assertEqual(req_arg.get_method(), "POST")
             self.assertEqual(req_arg.headers.get("Content-type"), "application/json")
 
+    def test_format_payload_extreme_lengths(self):
+        long_event = {
+            "headline": "A" * 5000,
+            "source": "B" * 500,
+            "url": "https://example.com/" + "C" * 2000,
+            "archive_url": "https://web.archive.org/" + "D" * 2000,
+            "target_locales": ["National", "Tulsa", "Cincinnati", "Oakland", "BayArea", "Greenville", "Charlotte", "Newark", "Port_St_Lucie"],
+            "scores": {
+                "overall_price_pressure": 0.45,
+                "supply_disruption": 0.80,
+                "geopolitical_risk": 0.10,
+                "opec_action": 0.0
+            }
+        }
+        payload = format_intraday_discord_payload(long_event, environment="prod")
+        embed = payload["embeds"][0]
+        self.assertLessEqual(len(embed["title"]), 256)
+        self.assertLessEqual(len(embed["description"]), 4096)
+        for field in embed["fields"]:
+            self.assertLessEqual(len(field["name"]), 256)
+            self.assertLessEqual(len(field["value"]), 1024)
+
     @patch("urllib.request.urlopen")
     def test_send_notification_http_error(self, mock_urlopen):
         mock_urlopen.side_effect = urllib.error.URLError("Connection refused")

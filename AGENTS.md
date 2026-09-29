@@ -891,7 +891,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 * **Directives:**
   1. **Container State Durability & Volume Mounting (Issue #375):** All containerized deployments MUST mount `-v $(pwd)/data:/app/data` (or named volume `midgley-data:/app/data`). Application lifecycle components (`KeyManager`, `AgentMemory`, `LookupCache`, `PredictionLogger`) MUST support empty volume bootstrap migrations on container initialization without requiring manual database seeding scripts.
   2. **Workflow Cron Schedule Alignment (Issue #378):** Documentation, systemd unit templates, and wiki pages MUST reflect exact UTC cron expressions from `.github/workflows/`:
-     - Daily Forecast: `17 7 * * *` (07:17 UTC / 02:17 AM CDT / 01:17 AM CST)
+     - Daily Forecast: `17 22 * * *` (22:17 UTC / 05:17 PM CDT / 04:17 PM CST)
      - Weekly Model Review: `12 13 * * 6` (Saturday 13:12 UTC / 08:12 AM CDT / 07:12 AM CST)
      - Fallback Intraday Anomaly Monitor: `0 */2 * * *` (Every 2 hours UTC)
      - Primary Edge Intraday Monitor (Cloudflare): `*/15 * * * *` (Every 15 minutes)
