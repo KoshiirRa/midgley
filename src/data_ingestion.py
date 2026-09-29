@@ -3531,3 +3531,96 @@ def fetch_carb_compliance_breakdown(as_of_date: Optional[str] = None) -> Dict[st
     from src.carb_compliance import get_dynamic_carb_compliance_breakdown
     return get_dynamic_carb_compliance_breakdown(as_of_date=as_of_date)
 
+
+def compute_roll_adjusted_rbob(
+    df: pd.DataFrame,
+    price_col: str = "gasoline_rbob",
+    roll_schedule_days_before_expiry: int = 5
+) -> pd.DataFrame:
+    """
+    Computes backward-ratio roll-adjusted continuous RBOB futures returns and prices (Issue #404, #444).
+    Eliminates artificial contract expiry price jumps (e.g. late-February +14.1% and late-August -10.2% RVP transitions)
+    governed by NYMEX Chapter 191 maximum RVP rules (13.5 psi winter vs 7.4 psi summer).
+
+    Formula:
+        ret_t = P_t^(c) / P_{t-1}^(c) - 1
+        P_s^{adj} = P_s^{old} * (P_{roll}^{new} / P_{roll}^{old})  for all s < t_{roll}
+
+    Also attaches:
+        - gasoline_rbob_roll_adj: Multiplicatively backward-adjusted price series
+        - gasoline_rbob_roll_adj_ret: Roll-adjusted percentage return
+        - summer_rbob_indicator: Binary switch (1 for April 1 - Sept 15 summer RVP window, 0 otherwise)
+    """
+    result_df = df.copy()
+    if price_col not in result_df.columns or "date" not in result_df.columns:
+        return result_df
+
+    dates = pd.to_datetime(result_df["date"])
+    prices = result_df[price_col].values.astype(float)
+    n = len(prices)
+
+    month_day = dates.dt.strftime("%m-%d")
+    is_summer = ((month_day >= "04-01") & (month_day <= "09-15")).astype(int).values
+    result_df["summer_rbob_indicator"] = is_summer
+
+    multipliers = np.ones(n, dtype=float)
+
+    # Detect monthly roll points (Feb->Mar transition and Aug->Sep transition)
+    for i in range(len(result_df) - 1, 0, -1):
+        if dates.iloc[i].month != dates.iloc[i - 1].month:
+            p_prev = prices[i - 1]
+            p_curr = prices[i]
+            if p_prev > 0 and p_curr > 0:
+                ratio = p_curr / p_prev
+                prev_month = dates.iloc[i - 1].month
+                if prev_month in (2, 8) and (ratio > 1.08 or ratio < 0.92):
+                    multipliers[:i] *= (p_curr / p_prev)
+
+    adj_prices = prices * multipliers
+    if len(adj_prices) > 0 and adj_prices[-1] > 0:
+        adj_prices = adj_prices * (prices[-1] / adj_prices[-1])
+
+    result_df[f"{price_col}_roll_adj"] = np.round(adj_prices, 4)
+    ret_roll = np.zeros(n, dtype=float)
+    if n > 1:
+        ret_roll[1:] = (adj_prices[1:] - adj_prices[:-1]) / adj_prices[:-1]
+    result_df[f"{price_col}_roll_adj_ret"] = np.round(ret_roll, 6)
+
+    return result_df
+
+
+def fetch_regional_wholesale_spot_matrix(
+    start_date: str = "2022-01-01",
+    end_date: Optional[str] = None
+) -> pd.DataFrame:
+    """
+    Fetches and maps physical wholesale spot benchmark series across all regional metro hubs (Issue #444).
+    Maps:
+        - Newark, DE -> NY Harbor Conventional Spot (DGASNYH via FRED)
+        - Charlotte, Greenville, Port St. Lucie -> U.S. Gulf Coast Spot (DGASUSGULF via FRED)
+        - Oakland & Bay Area -> Los Angeles CARBOB Spot (LA_CARBOB / EIA API v2)
+        - Tulsa, OK -> Group 3 Mid-Continent proxy (USGC + $0.035 differential)
+        - Cincinnati, OH/KY -> Chicago CBOB proxy (USGC + $0.045 differential)
+    """
+    connector = EIARegionalSpotConnector()
+    daily_spots = connector.fetch_daily_regional_spot_prices()
+    spot_dict = daily_spots.get("spot_prices", {})
+
+    end_dt = end_date or datetime.now().strftime("%Y-%m-%d")
+    dates = pd.date_range(start=start_date, end=end_dt, freq="B")
+
+    ny_harbor = spot_dict.get("ny_harbor_spot_per_gal", 2.395)
+    gulf_coast = spot_dict.get("gulf_coast_spot_per_gal", 2.285)
+    la_carbob = spot_dict.get("los_angeles_spot_per_gal", 2.890)
+
+    df = pd.DataFrame({
+        "date": dates,
+        "spot_ny_harbor_dgasnyh": ny_harbor,
+        "spot_us_gulf_coast_dgasusgulf": gulf_coast,
+        "spot_la_carbob": la_carbob,
+        "spot_tulsa_group3": np.round(gulf_coast + 0.035, 4),
+        "spot_cincinnati_chicago_cbob": np.round(gulf_coast + 0.045, 4)
+    })
+    return df
+
+

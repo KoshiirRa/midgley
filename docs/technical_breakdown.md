@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-29 14:30:36`  
+**Log Timestamp:** `2026-09-29 14:15:12`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** India unlikely to abandon Russian oil despite threat of US tariffs of up to 100% — OilPrice - UA.NEWS  
+**Primary Event Trigger:** Lindsey O. Graham sanctioning Russia and Iran Act 2026: restrictive U.S. tariff measures targeting all imports from major buyers of Russian energy - stephensonharwood.com  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** India unlikely to abandon Russian oil despite threat of US tariffs of up to 100% — OilPrice - UA.NEWS
+- **Headline Trigger:** Lindsey O. Graham sanctioning Russia and Iran Act 2026: restrictive U.S. tariff measures targeting all imports from major buyers of Russian energy - stephensonharwood.com
 - **Active Ingested News Links:**
-- [India unlikely to abandon Russian oil despite threat of US tariffs of up to 100% — OilPrice - UA.NEWS](https://news.google.com/rss/articles/CBMiqwFBVV95cUxPeHZrUmhUT3psdklXTERCWEwwVGJHaVZNc2puYkVaNy1FR2FVbTJWS0o4OG00RV9yTmt3VHBFbE56X2FmSnBfMTJYTXZONm5MejhvNWZBT053ekl3NkpRR0RSQUdGX3FPNWx4cnVRUTQxYUZ3ek5tLWFDTl82am5CR1lLVGxUSDZ6UU9wQ0xaaTFXeXFyRUZjVURYQkpLcXZfZ21LTTJ1aUg3dXc?oc=5) (Google News Energy Feed)
 - [Lindsey O. Graham sanctioning Russia and Iran Act 2026: restrictive U.S. tariff measures targeting all imports from major buyers of Russian energy - stephensonharwood.com](https://news.google.com/rss/articles/CBMilAJBVV95cUxQWXg1WExONkNocmh0WUx2aldNdy1pU2FYYzh0RFI4VVcwbk82WnNfUVB3UUFZMEk0MGVuTE1CUExidFRNbWNPZThzeHlPRHlqRHJDclEzNVlLMTUxMWtmYnNxWG1UZGNPSjl4MlNKRXlqVVZpd0xaeHZvVDlJNTdhVThSYXM0cFBSN3lweWdsRUxrWEJmUXRQSVYwWkgyczlzbkt1bUwybl9Lc18yQmlaQjNPZkNaWHZGQThrX21ncWtjVXBMVHJfME50V0lLcW9ocnd1ZG9iLTh0TzNNZjVBR2hzQU9pM1hEdzRmWHhmMWJVVkFhN0c5Sm5qQTFsRnRmcnRFWWhBMnBOWHdhckV5ZndvY0w?oc=5) (Google News Energy Feed)
 - [India Unlikely to Ditch Russian Oil Despite Trump's 100% Tariff Threat - Crude Oil Prices Today | OilPrice.com](https://news.google.com/rss/articles/CBMiwgFBVV95cUxPUkQtQlZpNHU0bU1GeFlkRi1xQnJVYzNsN3VFYzl4OGhONU1jLUQ3elFkR2ZLNmREOVducVZ1SEJmU2hiRnpEZFdSVzY5TzV5OE5XRzN0akVFMnBuMkh2QWcxTjVvc1g3SmpJU3NJSEVfSGlLRG91Zlk1VkExN0hMVmlDWnFyNGhKSHcxdVlUVUZMYkRfOFNWU3pXYktxR29RcWFzdExwR1Z0M3BwVTBQYkpJTTJoSllOR1pxcTdpNGkxQdIBxwFBVV95cUxOY0pVV3lDaWRKLVBrNXA1Sk9CNmNpQTJfWktEdWRNQ2JnZUZaM1c0TFR0WDZ2OTlab1pSVVRnaWZGa2tzVXhnRDdLT2hiVXRPcGlTVExsUGprclNSdVM4LXlhNnRsN0NFd2oySU1VejNsSUx6UE5iamxDbWZ2QjI4OGhxdDY2VDZkOVUwTFY4UzlPM3VRMzJscXZfSmFDaDNrWmljY2g3OWI3dElLR1ZPOXV2ZmR2ci1OYUdoQ2NSMDFBdkQyYzhv?oc=5) (Google News Energy Feed)
+- [China, US agree to tariff cuts on $60 billion of goods including agriculture, household items - Oil & Gas 360](https://news.google.com/rss/articles/CBMivAFBVV95cUxQWmdaSmhva2w5RmtSRzNJZFlLSkUzcGJmVXFWdmRUb2hqdEYwODFmbXRaVm5tMURGcGs3b2tleFRVTi1penV2Qm9BVVRJdDZOYV9UeU9hSFhYbnMzNzZiYlM0SkJpVVBjOTB2d0pTUFdESW5zQWtTLXNBeWhhc1BpeXlCeHRWWjBDc21WY0ZVeG1qVk9NRlhYdjZlQ3NYZ0tLMks4RTVESTRROVZyaTZidUFzdEdvZnN2TU9HWQ?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-29 14:30:36]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'India unlikely to abandon Russian oil despite threat of US tariffs of up to 100% — OilPrice - UA.NEWS' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-29 14:15:12]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Lindsey O. Graham sanctioning Russia and Iran Act 2026: restrictive U.S. tariff measures targeting all imports from major buyers of Russian energy - stephensonharwood.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-29 14:30:36 (Mode: INTRADAY_REVISION), primary event trigger 'India unlikely to abandon Russian oil despite threat of US tariffs of up to 100% — OilPrice - UA.NEWS' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-29 14:15:12 (Mode: INTRADAY_REVISION), primary event trigger 'Lindsey O. Graham sanctioning Russia and Iran Act 2026: restrictive U.S. tariff measures targeting all imports from major buyers of Russian energy - stephensonharwood.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: SF Bay Area Region at $6.889/gal (+1.395/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-29 14:30:36]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'India unlikely to abandon Russian oil despite threat of US tariffs of up to 100% — OilPrice - UA.NEWS'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-29 14:15:12]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Lindsey O. Graham sanctioning Russia and Iran Act 2026: restrictive U.S. tariff measures targeting all imports from major buyers of Russian energy - stephensonharwood.com'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-29 14:30:36.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-29 14:15:12.*

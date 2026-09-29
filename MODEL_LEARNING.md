@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-09-26 05:47 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-09-29 14:31 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,18 +10,18 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 30 | `$0.2210/gal` | `$0.1108/gal` | `-99.43%` | **`33.33%`** | `73.3%` | ⚠️ Calibration Active |
-| **14-Day Window** | 53 | `$0.2042/gal` | `$0.1143/gal` | `-78.67%` | **`24.53%`** | `77.4%` | ⚠️ Calibration Active |
-| **30-Day Window** | 105 | `$0.1946/gal` | `$0.1315/gal` | `-47.94%` | **`32.38%`** | `71.4%` | ⚠️ Calibration Active |
-| **90-Day Window** | 305 | `$0.1788/gal` | `$0.1257/gal` | `-42.26%` | **`37.38%`** | `74.4%` | ⚠️ Calibration Active |
-| **All-Time Window** | 1140 | `$0.1204/gal` | `$0.1010/gal` | `-19.17%` | **`49.39%`** | `55.4%` | ⚠️ Calibration Active |
+| **7-Day Window** | 170 | `$0.6043/gal` | `$0.6134/gal` | **`+1.48%`** | **`58.24%`** | `55.9%` | 🟢 Optimal |
+| **14-Day Window** | 370 | `$0.6305/gal` | `$0.6395/gal` | **`+1.42%`** | **`51.08%`** | `57.8%` | 🟢 Optimal |
+| **30-Day Window** | 745 | `$0.6518/gal` | `$0.7013/gal` | **`+7.06%`** | **`60.81%`** | `55.0%` | 🟢 Optimal |
+| **90-Day Window** | 2400 | `$0.6854/gal` | `$0.7231/gal` | **`+5.21%`** | **`61.33%`** | `51.9%` | 🟢 Optimal |
+| **All-Time Window** | 9277 | `$0.6484/gal` | `$0.6705/gal` | **`+3.29%`** | **`60.62%`** | `54.9%` | 🟢 Optimal |
 
 ---
 
 ## 🔬 Sapient PRAXIST Parameter Evolution & Hypothesis Ledger
 
-- **Total Hypotheses Evaluated:** `6`
-- **Accepted Hypotheses in Production:** `0`
+- **Total Hypotheses Evaluated:** `8`
+- **Accepted Hypotheses in Production:** `2`
 - **Active Calibrated Baseline Parameters:**
   - Exogenous Shock Half-Life ($t_{1/2}$): **`4.5 days`**
   - Geopolitical Shock Weight: **`0.35`**
@@ -39,12 +39,14 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 | `2026-09-19` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.0331` | `$0.0332` | `+0.0001` | $t=-1.19$ ($p=0.2371$) | ⚪ `REJECTED` |
 | `2026-09-19` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.0331` | `$0.0332` | `+0.0001` | $t=-1.19$ ($p=0.2371$) | ⚪ `REJECTED` |
 | `2026-09-21` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.0331` | `$0.0332` | `+0.0001` | $t=-1.19$ ($p=0.2371$) | ⚪ `REJECTED` |
+| `2026-09-26` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
+| `2026-09-28` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
 
 ---
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`2098`** | Total synthesized reflections: **`149`**
+Total indexed episodic memories in local store: **`582`** | Total synthesized reflections: **`27`**
 
 ### 📂 Categorized Anomaly Case Studies
 
@@ -61,17 +63,17 @@ _No anomalies logged in this category._
 _No anomalies logged in this category._
 
 #### 🏷️ Price Discrepancy & General Outliers (12 case studies)
-- **Tulsa_OK Price Discrepancy ($+3.1693/gal)** (`Tulsa_OK` | `2026-09-25`)
-  - **Root Cause:** Model overestimated 5-day price by +$3.1693/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-09-24 (Tulsa_OK)'.
-  - **Historical Analogy:** Similar to historical Tulsa_OK turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
-
-- **Tulsa_OK Price Discrepancy ($+3.4722/gal)** (`Tulsa_OK` | `2026-09-25`)
+- **Tulsa_OK Price Discrepancy ($+3.4722/gal)** (`Tulsa_OK` | `2026-09-24`)
   - **Root Cause:** Model overestimated 5-day price by +$3.4722/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-09-23 (Tulsa_OK)'.
   - **Historical Analogy:** Similar to historical Tulsa_OK turnaround shocks where market pricing normalized post-event.
   - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
 
-- **Tulsa_OK Price Discrepancy ($+3.8952/gal)** (`Tulsa_OK` | `2026-09-25`)
+- **Tulsa_OK Price Discrepancy ($+3.5213/gal)** (`Tulsa_OK` | `2026-09-24`)
+  - **Root Cause:** Model overestimated 5-day price by +$3.5213/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-09-28 (Tulsa_OK)'.
+  - **Historical Analogy:** Similar to historical Tulsa_OK turnaround shocks where market pricing normalized post-event.
+  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
+
+- **Tulsa_OK Price Discrepancy ($+3.8952/gal)** (`Tulsa_OK` | `2026-09-24`)
   - **Root Cause:** Model overestimated 5-day price by +$3.8952/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-09-24 (Tulsa_OK)'.
   - **Historical Analogy:** Similar to historical Tulsa_OK turnaround shocks where market pricing normalized post-event.
   - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`

@@ -594,3 +594,105 @@ def investigate_event_with_pasa(
         }
 
 
+def compute_text_jaccard_similarity(text1: str, text2: str) -> float:
+    """
+    Computes semantic text similarity combining token Jaccard, containment index,
+    and character 3-gram Dice coefficient for robust news wire deduplication (Issue #446).
+    """
+    tokens1 = set(re.findall(r"\b\w{2,}\b", text1.lower()))
+    tokens2 = set(re.findall(r"\b\w{2,}\b", text2.lower()))
+    if not tokens1 or not tokens2:
+        return 0.0
+
+    intersection = len(tokens1.intersection(tokens2))
+    union = len(tokens1.union(tokens2))
+    jaccard = float(intersection / union) if union > 0 else 0.0
+    containment = float(intersection / min(len(tokens1), len(tokens2)))
+
+    # Character 3-gram overlap
+    t1_clean = re.sub(r"\s+", " ", text1.lower().strip())
+    t2_clean = re.sub(r"\s+", " ", text2.lower().strip())
+    ng1 = set(t1_clean[i:i+3] for i in range(len(t1_clean) - 2)) if len(t1_clean) >= 3 else set()
+    ng2 = set(t2_clean[i:i+3] for i in range(len(t2_clean) - 2)) if len(t2_clean) >= 3 else set()
+    ng_dice = float(2.0 * len(ng1.intersection(ng2)) / (len(ng1) + len(ng2))) if (ng1 and ng2) else 0.0
+
+    return float(max(jaccard, containment, ng_dice))
+
+
+
+def cluster_and_deduplicate_headlines(
+    events: List[Dict[str, Any]],
+    rolling_window_hours: int = 48,
+    similarity_threshold: float = 0.60
+) -> List[Dict[str, Any]]:
+    """
+    Performs semantic rolling-window deduplication and clustering on news wire headlines (Issue #446).
+    Groups near-identical syndicated stories, aggregates story velocity, and preserves primary unique events.
+    """
+    if not events:
+        return []
+
+    deduped = []
+    for ev in events:
+        headline = ev.get("headline", "") or ev.get("title", "")
+        if not headline:
+            continue
+
+        matched_cluster = None
+        for item in reversed(deduped):
+            prev_headline = item.get("headline", "")
+            sim = compute_text_jaccard_similarity(headline, prev_headline)
+            if sim >= similarity_threshold:
+                matched_cluster = item
+                break
+
+        if matched_cluster is not None:
+            matched_cluster["cluster_story_count"] = matched_cluster.get("cluster_story_count", 1) + 1
+            if "duplicates" not in matched_cluster:
+                matched_cluster["duplicates"] = []
+            matched_cluster["duplicates"].append(headline)
+        else:
+            entry = dict(ev)
+            entry["cluster_story_count"] = 1
+            entry["duplicates"] = []
+            deduped.append(entry)
+
+    return deduped
+
+
+def normalize_event_shocks(
+    events_df: pd.DataFrame,
+    window_days: int = 90,
+    categories: Optional[List[str]] = None
+) -> pd.DataFrame:
+    """
+    Applies rolling baseline z-score & logarithmic shock normalization (Issue #446).
+    Prevents shock saturation/clipping during high-velocity news periods.
+    """
+    if events_df is None or events_df.empty:
+        return events_df
+
+    df = events_df.copy()
+    cat_cols = categories or [
+        "geopolitical_risk",
+        "supply_disruption",
+        "demand_sentiment",
+        "opec_action",
+        "overall_price_pressure"
+    ]
+
+    for col in cat_cols:
+        if col in df.columns:
+            s = df[col].astype(float)
+            log_compressed = np.sign(s) * np.log1p(np.abs(s))
+            df[f"{col}_log"] = np.round(log_compressed, 4)
+
+            rolling_mean = s.rolling(window=window_days, min_periods=5).mean()
+            rolling_std = s.rolling(window=window_days, min_periods=5).std().replace(0, 1.0)
+            z_score = (s - rolling_mean) / rolling_std
+            df[f"{col}_zscore"] = np.round(z_score.fillna(0.0), 4)
+
+    return df
+
+
+

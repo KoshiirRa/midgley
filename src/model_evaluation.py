@@ -9,7 +9,7 @@ from __future__ import annotations
 import os
 import json
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -272,3 +272,312 @@ class ModelHierarchyEvaluator:
             "promotion_gate_passed": promotion_gate_passed,
             "tiers": tier_results
         }
+
+
+def pesaran_timmermann_test(
+    y_true: Union[np.ndarray, List[float], pd.Series],
+    y_pred: Union[np.ndarray, List[float], pd.Series],
+    y_base: Optional[Union[np.ndarray, List[float], pd.Series]] = None
+) -> Dict[str, Any]:
+    """
+    Performs the Pesaran & Timmermann (1992) Non-Parametric Directional Accuracy Test (Issue #452).
+    Evaluates whether the directional hit rate is statistically significantly superior to chance
+    under independent realizations.
+
+    H0: Directional predictions and actual price movements are distributed independently.
+    H1: Forecasts possess genuine directional market timing ability.
+
+    Returns:
+        Dict with pt_stat, p_value, hit_rate_pct, expected_hit_rate_pct, is_significant_at_05
+    """
+    yt = np.asarray(y_true, dtype=float)
+    yp = np.asarray(y_pred, dtype=float)
+
+    if y_base is not None:
+        yb = np.asarray(y_base, dtype=float)
+        dy_true = yt - yb
+        dy_pred = yp - yb
+    else:
+        # If returns or differentials were passed directly
+        dy_true = yt
+        dy_pred = yp
+
+    T = len(dy_true)
+    if T < 5:
+        return {
+            "pt_stat": 0.0,
+            "p_value": 1.0,
+            "hit_rate_pct": 50.0,
+            "expected_hit_rate_pct": 50.0,
+            "sample_size": T,
+            "is_significant_at_05": False
+        }
+
+    # Binary directional indicators (1 for positive / up, 0 for negative / down)
+    z_true = (dy_true > 0).astype(int)
+    z_pred = (dy_pred > 0).astype(int)
+
+    p_hat = float(np.mean(z_true == z_pred))
+    p_y = float(np.mean(z_true))
+    p_x = float(np.mean(z_pred))
+
+    # Expected hit rate under independence
+    p_star = p_y * p_x + (1.0 - p_y) * (1.0 - p_x)
+
+    # Pesaran-Timmermann variance estimator
+    term1 = p_star * (1.0 - p_star)
+    term2 = (2.0 * p_y - 1.0) ** 2 * p_x * (1.0 - p_x)
+    term3 = (2.0 * p_x - 1.0) ** 2 * p_y * (1.0 - p_y)
+    v_hat = (term1 + term2 + term3) / T
+
+    if v_hat <= 1e-12:
+        pt_stat = 0.0
+        p_val = 1.0
+    else:
+        pt_stat = float((p_hat - p_star) / np.sqrt(v_hat))
+        # One-sided p-value for superior directional timing (right tail)
+        p_val = float(1.0 - stats.norm.cdf(pt_stat))
+
+    return {
+        "pt_stat": round(pt_stat, 4),
+        "p_value": round(p_val, 4),
+        "hit_rate_pct": round(p_hat * 100.0, 2),
+        "expected_hit_rate_pct": round(p_star * 100.0, 2),
+        "sample_size": T,
+        "is_significant_at_05": bool(p_val < 0.05 and pt_stat > 0)
+    }
+
+
+def compute_newey_west_hac_standard_error(
+    residuals: Union[np.ndarray, List[float], pd.Series],
+    horizon: int = 1
+) -> float:
+    """
+    Computes Newey-West Heteroskedasticity and Autocorrelation Consistent (HAC) standard error
+    for multi-step horizon forecast errors with Bartlett kernel bandwidth J = horizon - 1 (Issue #452).
+    """
+    res = np.asarray(residuals, dtype=float)
+    T = len(res)
+    if T < 2:
+        return float(np.std(res)) if T > 0 else 0.0
+
+    mean_res = float(np.mean(res))
+    e = res - mean_res
+    gamma0 = float(np.mean(e ** 2))
+
+    bandwidth = max(0, horizon - 1)
+    sum_cov = 0.0
+    for j in range(1, bandwidth + 1):
+        gamma_j = float(np.mean(e[j:] * e[:-j]))
+        weight = 1.0 - (j / (bandwidth + 1.0))
+        sum_cov += 2.0 * weight * gamma_j
+
+    omega = max(1e-8, gamma0 + sum_cov)
+    se = float(np.sqrt(omega / T))
+    return round(se, 6)
+
+
+def model_confidence_set(
+    loss_matrix: np.ndarray,
+    model_names: List[str],
+    alpha: float = 0.10,
+    n_bootstraps: int = 500,
+    block_length: Optional[int] = None
+) -> Dict[str, Any]:
+    """
+    Computes Hansen, Lunde & Nason (2011) Model Confidence Set (MCS) at confidence level (1 - alpha) (Issue #452).
+    Iteratively eliminates inferior predictive models until the remaining set of models cannot be rejected
+    as having equal expected loss.
+
+    Args:
+        loss_matrix: (T, M) array of loss observations for M models across T time periods.
+        model_names: List of M model identifier strings.
+        alpha: Significance level for exclusion (default: 0.10 for 90% MCS).
+        n_bootstraps: Number of block bootstrap resamples.
+
+    Returns:
+        Dict with included_models, eliminated_models, p_values, mcs_alpha.
+    """
+    losses = np.asarray(loss_matrix, dtype=float)
+    T, M = losses.shape
+    if M != len(model_names):
+        raise ValueError(f"Shape mismatch: {M} models in loss_matrix but {len(model_names)} model_names")
+
+    if M <= 1 or T < 5:
+        return {
+            "included_models": list(model_names),
+            "eliminated_models": [],
+            "mcs_pvalues": {name: 1.0 for name in model_names},
+            "mcs_alpha": alpha
+        }
+
+    active_indices = list(range(M))
+    pvalues = {}
+    eliminated = []
+    L = block_length or int(np.ceil(T ** (1.0 / 3.0)))
+    p_geom = 1.0 / max(1, L)
+
+    # Pre-generate bootstrap resample indices
+    np.random.seed(42)
+    boot_indices_list = []
+    for _ in range(n_bootstraps):
+        idxs = []
+        while len(idxs) < T:
+            start = np.random.randint(0, T)
+            blen = np.random.geometric(p_geom)
+            for step in range(blen):
+                idxs.append((start + step) % T)
+                if len(idxs) >= T:
+                    break
+        boot_indices_list.append(np.array(idxs[:T]))
+
+    iteration_p = 0.0
+    while len(active_indices) > 1:
+        cur_M = len(active_indices)
+        sub_losses = losses[:, active_indices]  # (T, cur_M)
+        
+        # d_{ij, t} = L_{i, t} - L_{j, t}
+        # d_{i., t} = L_{i, t} - mean_j L_{j, t}
+        mean_loss_per_t = np.mean(sub_losses, axis=1, keepdims=True)
+        d_bar_it = sub_losses - mean_loss_per_t  # (T, cur_M)
+        d_bar_i = np.mean(d_bar_it, axis=0)      # (cur_M,)
+
+        # Compute bootstrap variance for each model in active set
+        boot_d_bars = np.zeros((n_bootstraps, cur_M))
+        for b, b_idx in enumerate(boot_indices_list):
+            b_sample = d_bar_it[b_idx, :]
+            boot_d_bars[b, :] = np.mean(b_sample, axis=0)
+
+        var_d_bar = np.var(boot_d_bars, axis=0, ddof=1)
+        var_d_bar = np.maximum(var_d_bar, 1e-10)
+
+        # t_i = d_bar_i / sqrt(var(d_bar_i))
+        t_stats = d_bar_i / np.sqrt(var_d_bar)
+        T_max = np.max(t_stats)
+        worst_model_sub_idx = int(np.argmax(t_stats))
+        worst_model_idx = active_indices[worst_model_sub_idx]
+        worst_model_name = model_names[worst_model_idx]
+
+        # Centered bootstrap test statistics
+        boot_t_stats = (boot_d_bars - d_bar_i) / np.sqrt(var_d_bar)
+        boot_T_max = np.max(boot_t_stats, axis=1)
+
+        # p-value for hypothesis of equal predictive ability
+        p_val_step = float(np.mean(boot_T_max >= T_max))
+        iteration_p = max(iteration_p, p_val_step)
+        pvalues[worst_model_name] = round(float(iteration_p), 4)
+
+        if iteration_p < alpha:
+            eliminated.append(worst_model_name)
+            active_indices.pop(worst_model_sub_idx)
+        else:
+            # Cannot reject null: all remaining models are in MCS
+            break
+
+    for idx in active_indices:
+        pvalues[model_names[idx]] = 1.0
+
+    included = [model_names[idx] for idx in active_indices]
+
+    return {
+        "included_models": included,
+        "eliminated_models": eliminated,
+        "mcs_pvalues": pvalues,
+        "mcs_alpha": alpha
+    }
+
+
+def benjamini_hochberg_fdr_control(
+    p_values: Dict[str, float],
+    q_threshold: float = 0.05
+) -> Dict[str, Any]:
+    """
+    Applies the Benjamini-Hochberg (1995) False Discovery Rate (FDR) control procedure (Issue #452)
+    for simultaneous testing across multiple regional metro models or candidate feature families.
+
+    Args:
+        p_values: Mapping of identifier to raw p-value.
+        q_threshold: Target False Discovery Rate (default: 0.05).
+
+    Returns:
+        Dict with discoveries, adjusted_p_values, rejected_nulls, q_threshold.
+    """
+    if not p_values:
+        return {"discoveries": [], "adjusted_p_values": {}, "q_threshold": q_threshold}
+
+    sorted_items = sorted(p_values.items(), key=lambda x: x[1])
+    m = len(sorted_items)
+    
+    # Calculate adjusted p-values (q-values)
+    adj_p = {}
+    prev_adj = 1.0
+    for rank_idx, (key, p_val) in enumerate(reversed(sorted_items)):
+        k = m - rank_idx
+        cur_adj = min(1.0, (p_val * m) / k)
+        cur_adj = min(cur_adj, prev_adj)
+        prev_adj = cur_adj
+        adj_p[key] = round(cur_adj, 4)
+
+    # Determine discovery cut-off: largest k where p_{(k)} <= (k/m) * q
+    discoveries = []
+    for rank_1b, (key, p_val) in enumerate(sorted_items, start=1):
+        crit_val = (rank_1b / m) * q_threshold
+        if p_val <= crit_val:
+            discoveries.append(key)
+
+    return {
+        "discoveries": discoveries,
+        "adjusted_p_values": {k: adj_p[k] for k in p_values},
+        "q_threshold": q_threshold,
+        "total_hypotheses": m,
+        "significant_discoveries_count": len(discoveries)
+    }
+
+
+class FeatureAdmissionGate:
+    """
+    Formal Feature Admission Gate (Issue #452).
+    Evaluates whether a candidate feature family earns admission into production by:
+    1. Reducing out-of-sample forecast loss (MAE / Pinball loss).
+    2. Surviving Hansen's Model Confidence Set (MCS) at alpha = 0.10.
+    3. Passing Benjamini-Hochberg FDR control across evaluated metro regions.
+    """
+
+    def __init__(self, mcs_alpha: float = 0.10, fdr_q: float = 0.05):
+        self.mcs_alpha = mcs_alpha
+        self.fdr_q = fdr_q
+
+    def evaluate_candidate_feature_family(
+        self,
+        baseline_losses: np.ndarray,
+        candidate_losses: np.ndarray,
+        feature_family_name: str = "candidate_feature",
+        horizon: int = 5
+    ) -> Dict[str, Any]:
+        """
+        Evaluates a candidate feature family vs baseline across rolling validation origins.
+        """
+        loss_mat = np.column_stack([baseline_losses, candidate_losses])
+        model_names = ["Baseline_Model", f"Model_with_{feature_family_name}"]
+
+        mcs_res = model_confidence_set(loss_mat, model_names, alpha=self.mcs_alpha)
+        dm_stat, dm_pval = diebold_mariano_test(baseline_losses, candidate_losses, horizon=horizon)
+        
+        admitted = bool(
+            f"Model_with_{feature_family_name}" in mcs_res["included_models"]
+            and np.mean(candidate_losses) < np.mean(baseline_losses)
+            and dm_pval < 0.10
+        )
+
+        return {
+            "feature_family": feature_family_name,
+            "admitted_to_production": admitted,
+            "baseline_mae": round(float(np.mean(baseline_losses)), 4),
+            "candidate_mae": round(float(np.mean(candidate_losses)), 4),
+            "mae_reduction_pct": round(float((np.mean(baseline_losses) - np.mean(candidate_losses)) / np.mean(baseline_losses) * 100.0), 2),
+            "diebold_mariano_stat": dm_stat,
+            "diebold_mariano_p_value": dm_pval,
+            "mcs_included": f"Model_with_{feature_family_name}" in mcs_res["included_models"],
+            "decision": "ADMITTED" if admitted else "REJECTED"
+        }
+

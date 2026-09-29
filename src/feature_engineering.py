@@ -1277,7 +1277,74 @@ def prepare_chronological_splits(
         'X_live_quant': X_live_quant,
         'X_live_hybrid': X_live_hybrid,
         'live_feature_origin_date': live_origin_date,
-        'live_current_price': live_current_price,
         'forecast_origin_date': live_origin_date,
         'feature_cutoff_date': live_origin_date
     }
+
+
+def estimate_local_projections_impulse_responses(
+    events_df: pd.DataFrame,
+    price_series: pd.Series,
+    max_horizon: int = 10,
+    categories: Optional[List[str]] = None
+) -> Dict[str, Any]:
+    """
+    Estimates non-parametric multi-horizon impulse response functions using Jordà (2005) Local Projections (Issue #446).
+    Formula:
+        y_{t+h} - y_t = a_h + b_{h,c} * I_{c,t} + e_{t+h},  h = 1..max_horizon
+    with Newey-West HAC standard errors (lag bandwidth h - 1).
+    """
+    from src.model_evaluation import compute_newey_west_hac_standard_error
+
+    cats = categories or [
+        "geopolitical_risk",
+        "supply_disruption",
+        "demand_sentiment",
+        "opec_action",
+        "overall_price_pressure"
+    ]
+
+    results = {}
+    p = np.asarray(price_series, dtype=float)
+    T = len(p)
+
+    for cat in cats:
+        if cat not in events_df.columns:
+            continue
+        shock = np.asarray(events_df[cat], dtype=float)
+        T_shock = len(shock)
+        valid_T = min(T, T_shock)
+        if valid_T < max_horizon + 10:
+            continue
+
+        p_sub = p[:valid_T]
+        shock_sub = shock[:valid_T]
+
+        irf_beta = []
+        irf_se = []
+
+        for h in range(1, max_horizon + 1):
+            dy_h = p_sub[h:] - p_sub[:-h]
+            s_h = shock_sub[:-h]
+
+            var_s = np.var(s_h)
+            if var_s < 1e-8:
+                beta = 0.0
+                se = 0.0
+            else:
+                cov_sy = np.cov(s_h, dy_h)[0, 1]
+                beta = float(cov_sy / var_s)
+                resids = dy_h - (np.mean(dy_h) + beta * (s_h - np.mean(s_h)))
+                se = compute_newey_west_hac_standard_error(resids, horizon=h)
+
+            irf_beta.append(round(beta, 6))
+            irf_se.append(round(se, 6))
+
+        results[cat] = {
+            "horizons": list(range(1, max_horizon + 1)),
+            "impulse_response_beta": irf_beta,
+            "newey_west_hac_se": irf_se
+        }
+
+    return results
+

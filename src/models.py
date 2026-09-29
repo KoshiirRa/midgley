@@ -12,6 +12,7 @@ import os
 from typing import Any, Optional, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
+from scipy import stats
 from sklearn.linear_model import Ridge, RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 try:
@@ -1394,6 +1395,86 @@ def evaluate_prediction_interval_quality(
         "sample_size": n,
         "status": "VALID"
     }
+
+
+class AdaptiveConformalInference:
+    """
+    Adaptive Conformal Inference (ACI) Engine (Gibbs & Candès 2021) (Issue #449).
+    Dynamically tracks prediction interval coverage under distribution shift / non-stationary regimes.
+
+    Formula:
+        alpha_{t+1} = alpha_t + gamma * (alpha^* - miss_t)
+        where miss_t = 1 if y_t not in [y_low_t, y_high_t] else 0
+        and alpha^* is target nominal miscoverage level (e.g. 0.05 for 95% CI).
+    """
+
+    def __init__(
+        self,
+        target_alpha: float = 0.05,
+        gamma: float = 0.01,
+        initial_alpha: Optional[float] = None
+    ):
+        self.target_alpha = target_alpha
+        self.gamma = gamma
+        self.current_alpha = initial_alpha if initial_alpha is not None else target_alpha
+        self.history = []
+
+    def update(
+        self,
+        y_true: float,
+        lower_bound: float,
+        upper_bound: float
+    ) -> float:
+        """Updates effective alpha based on realization miss/hit."""
+        miss = 1.0 if (y_true < lower_bound or y_true > upper_bound) else 0.0
+        self.current_alpha = float(np.clip(
+            self.current_alpha + self.gamma * (self.target_alpha - miss),
+            0.001,
+            0.50
+        ))
+        self.history.append({
+            "target_alpha": self.target_alpha,
+            "miss": miss,
+            "new_alpha": self.current_alpha
+        })
+        return self.current_alpha
+
+    def compute_interval(
+        self,
+        y_pred: Union[float, np.ndarray, List[float]],
+        calibration_residuals: Union[np.ndarray, List[float]]
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """Computes prediction interval using current adapted alpha."""
+        return compute_conformal_prediction_intervals(
+            y_pred=y_pred,
+            calibration_residuals=calibration_residuals,
+            alpha=self.current_alpha
+        )
+
+
+def compute_calibrated_quantiles(
+    y_pred: Union[float, np.ndarray, List[float]],
+    residuals: Union[np.ndarray, List[float]],
+    quantiles: List[float] = [0.10, 0.50, 0.90],
+    nu: float = 5.0
+) -> Dict[float, np.ndarray]:
+    """
+    Computes exact calibrated distribution quantiles (P10, P50, P90, P2.5, P97.5) for probabilistic forecasting (Issue #449).
+    Uses Student-t predictive distribution with nu degrees-of-freedom for tail calibration.
+    """
+    preds = np.asarray(y_pred, dtype=float)
+    res = np.abs(np.asarray(residuals, dtype=float))
+
+    scale_est = float(np.std(res, ddof=1)) if len(res) > 1 else (float(np.mean(res)) if len(res) == 1 else 0.0612)
+    scale_est = max(0.01, scale_est)
+
+    result_quantiles = {}
+    for q in quantiles:
+        t_offset = float(stats.t.ppf(q, df=nu)) * scale_est
+        result_quantiles[q] = np.round(preds + t_offset, 4)
+
+    return result_quantiles
+
 
 
 def train_models_with_feast_point_in_time(

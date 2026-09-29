@@ -1085,8 +1085,26 @@ Execute formal 5-tier nested baseline hierarchy evaluations with Diebold-Mariano
 python3 scripts/evaluate_model_hierarchy.py --all-locales --horizons 1,2,3,4,5 --format all --output data/model_hierarchy_evaluation.json
 ```
 
+### 13. Execute Statistical Rigor & Feature Admission Evaluation (Issue #452)
+Run the rigorous statistical evaluation suite (Pesaran-Timmermann directional test, Newey-West HAC standard errors, Hansen Model Confidence Set bootstrap, and Benjamini-Hochberg FDR control):
+```bash
+python3 scripts/evaluate_forecast_rigor.py --region Tulsa_OK --horizons 1,3,5 --output data/statistical_rigor_report.json
+```
+
+### 14. Verify Hierarchical MinT Spatial Reconciliation & Empirical Bayes Shrinkage (Issue #450)
+Verify spatial hierarchy consistency (Metros -> PADDs -> National) and test MinT optimal projection:
+```bash
+python3 -c "from src.hierarchical_engine import build_aggregation_matrix, reconcile_mint; S, n, b = build_aggregation_matrix(); print(f'Aggregation Matrix shape: {S.shape}, Bottom nodes: {b}, Total nodes: {n}')"
+```
+
+### 15. Verify Adaptive Conformal Inference (ACI) & Calibrated Quantiles (Issue #449)
+Verify dynamic non-stationary step updating and calibrated asymmetric quantile bounds ($P_{10}, P_{50}, P_{90}$):
+```bash
+python3 -c "from src.models import AdaptiveConformalInference, compute_calibrated_quantiles; aci = AdaptiveConformalInference(alpha=0.10, gamma=0.05); print(f'ACI initialized, target alpha: {aci.alpha_target}')"
+```
+
 ---
 
-*Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.8.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
 
 

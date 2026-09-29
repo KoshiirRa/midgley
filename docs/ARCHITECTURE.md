@@ -70,7 +70,43 @@ Real-world event news persistence is modeled via exponential memory decay ($t_{1
 \text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda} + \text{Shock}_t
 \]
 
-### D. Official EIA Retail Evaluation Ground Truth (Issue #403)
+### D. Backward-Ratio Roll-Adjusted Futures Formulation (Issue #444)
+NYMEX Chapter 191 maximum RVP specifications enforce contract roll transitions (13.5 psi winter vs 7.4 psi summer). Continuous unadjusted contracts are backward-adjusted via cumulative roll multipliers:
+\[
+\text{ret}_t = \frac{P^{(c)}_t}{P^{(c)}_{t-1}} - 1, \qquad P_s^{\text{adj}} = P_s^{\text{old}} \times \frac{P_{\text{roll}}^{\text{new}}}{P_{\text{roll}}^{\text{old}}} \quad \forall s < t_{\text{roll}}
+\]
+
+### E. Adaptive Conformal Inference & Calibrated Quantile Formulations (Issue #449)
+Online interval threshold tracking under distribution shift (Gibbs & Candès 2021):
+\[
+\alpha_{t+1} = \alpha_t + \gamma (\alpha^* - \text{miss}_t), \qquad \text{miss}_t = \mathbb{I}(y_t \notin [\hat{y}_{t}^{\text{low}}, \hat{y}_{t}^{\text{high}}])
+\]
+Student-$t$ parametric predictive quantiles ($P_{10}, P_{50}, P_{90}$):
+\[
+\hat{Q}_{q}(y_{t+h}) = \hat{y}_{t+h} + t_{\nu}^{-1}(q) \cdot \hat{\sigma}_{\text{res}}
+\]
+
+### F. Minimum Trace (MinT) Hierarchical Reconciliation (Issue #450)
+Reconciles incoherent multi-tier forecasts across National, PADD, and Metro levels via summing matrix $S$ ($n \times m$) and error covariance $W$ (Wickramasuriya et al. 2019):
+\[
+\tilde{\mathbf{y}} = S\left(S^\top W^{-1} S\right)^{-1} S^\top W^{-1} \hat{\mathbf{y}}
+\]
+Empirical Bayes shrinkage for thin-data metros:
+\[
+\hat{\theta}_r^{\text{EB}} = \left(X_r^\top X_r + \lambda I\right)^{-1} \left(X_r^\top y_r + \lambda \theta_0\right)
+\]
+
+### G. Statistical Hypothesis Testing & Model Confidence Set (Issue #452)
+- **Pesaran-Timmermann Directional Market Timing Test:**
+  \[
+  PT = \frac{\hat{p} - p^*}{\sqrt{\widehat{\text{Var}}(\hat{p})}} \sim \mathcal{N}(0, 1), \qquad p^* = p_y p_x + (1 - p_y)(1 - p_x)
+  \]
+- **Newey-West Multi-Horizon HAC Standard Error:**
+  \[
+  \hat{\Omega} = \hat{\gamma}_0 + 2 \sum_{j=1}^{h-1} \left(1 - \frac{j}{h}\right) \hat{\gamma}_j, \qquad SE = \sqrt{\frac{\hat{\Omega}}{T}}
+  \]
+
+### H. Official EIA Retail Evaluation Ground Truth (Issue #403)
 Point-in-time model evaluation uses official EIA/FRED weekly retail pump prices across PADDs and states as objective evaluation ground truth ($y_{t+h}$ in `prediction_history.csv`).
 
 ---

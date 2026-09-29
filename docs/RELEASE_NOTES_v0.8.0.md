@@ -1,6 +1,6 @@
 # Release Notes - v0.8.0
 
-Midgley **v0.8.0** is a milestone release delivering major pipeline execution acceleration, decoupled edge cloud database synchronization, resilient knowledge graph self-healing, atomic file storage invariants, and append-only prediction ledger revisions.
+Midgley **v0.8.0** is a milestone release delivering major pipeline execution acceleration, decoupled edge cloud database synchronization, resilient knowledge graph self-healing, atomic file storage invariants, append-only prediction ledger revisions, roll-adjusted continuous commodity returns, adaptive conformal uncertainty bounds, unified statistical hypothesis validation, semantic news deduplication, and MinT hierarchical multi-metro reconciliation.
 
 ---
 
@@ -33,12 +33,39 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Temporal Sorting for Fallback Candidate Sweeps**: Enforced deterministic temporal sorting (`forecast_target_date DESC`, `log_timestamp DESC`) across historical prediction ledgers to prevent stale historical records from shadowing recent trading days.
 - **Automated Historical Catch-Up CLI**: Added `scripts/reconcile_hindsight_memory.py` and `AgentMemoryManager.reconcile_unretained_prediction_anomalies()`, automatically reconciling and dual-dispatching missing historical prediction anomalies from September 25, 2026 onward to Vectorize Hindsight Hosted SaaS and SQLite FTS5.
 
+### 6. Roll-Adjusted RBOB Futures & Regional Wholesale Supply Hubs (Issue #444)
+- **Backward Ratio Roll Adjustment**: Implemented `compute_roll_adjusted_rbob()` in `src/data_ingestion.py`, eliminating artificial contract roll returns (+14.1% late-Feb and -10.2% late-Aug) caused by NYMEX Chapter 191 seasonal RVP delivery specifications (13.5 psi winter vs 7.4 psi summer).
+- **Physical Spot Hub Matrix**: Added `fetch_regional_wholesale_spot_matrix()` mapping each modeled metro locale to its authentic physical wholesale benchmark (`DGASNYH`, `DGASUSGULF`, `LA_CARBOB`, Group 3 Mid-Continent, Chicago CBOB).
+
+### 7. Adaptive Conformal Inference & Quantile Generation (Issue #449)
+- **Gibbs & Candès Adaptive Conformal Inference**: Added `AdaptiveConformalInference` in `src/models.py`, dynamically adjusting interval coverage threshold $\alpha_{t+1} = \alpha_t + \gamma(\alpha^* - \text{miss}_t)$ under non-stationary market distribution shift.
+- **Parametric Student-$t$ Predictive Quantiles**: Added `compute_calibrated_quantiles()`, generating valid $P_{10}, P_{50}, P_{90}$ predictive quantiles and directional probabilities for Headline Arena competitive scoring.
+
+### 8. Unified Statistical Evaluation Harness & Model Confidence Set (Issue #452)
+- **Pesaran-Timmermann Directional Test**: Added `pesaran_timmermann_test()` in `src/model_evaluation.py` to test whether directional hit rates statistically exceed random market chance.
+- **Newey-West Multi-Horizon HAC Standard Errors**: Added `compute_newey_west_hac_standard_error()` with Bartlett kernel lag bandwidth $J = h - 1$ for overlapping forecast horizon errors.
+- **Hansen's Model Confidence Set (MCS)**: Added `model_confidence_set()` executing iterative loss trimming at $\alpha = 0.10$ via stationary block bootstrap.
+- **Benjamini-Hochberg FDR Control & Feature Admission Gate**: Added `benjamini_hochberg_fdr_control()` and `FeatureAdmissionGate` to prevent feature bloat and data snooping.
+- **Automated Verification CLI**: Added `scripts/evaluate_forecast_rigor.py`.
+
+### 9. Semantic News Deduplication & Local Projections (Issue #446)
+- **Rolling-Window News Clustering**: Added `cluster_and_deduplicate_headlines()` in `src/event_analyzer.py` combining Jaccard similarity, containment indexing, and character 3-gram Dice coefficients over rolling 48-hour windows, grouping syndicated news wires and cutting extraction compute by 40–70%.
+- **Rolling Shock Normalization**: Added `normalize_event_shocks()` for logarithmic and rolling 90-day z-score shock scaling.
+- **Jordà (2005) Local Projections**: Added `estimate_local_projections_impulse_responses()` in `src/feature_engineering.py` estimating non-parametric multi-horizon impulse response curves with Newey-West HAC standard errors.
+
+### 10. MinT Hierarchical Reconciliation Engine (Issue #450)
+- **Minimum Trace Optimal Combination**: Implemented `MinTHierarchicalEngine` and `reconcile_mint()` in `src/hierarchical_engine.py` (Wickramasuriya et al. 2019), enforcing exact mathematical summation consistency across National $\to$ PADD $\to$ Metro levels.
+- **Empirical Bayes Parameter Shrinkage**: Added `empirical_bayes_shrinkage_regression()`, shrinking data-sparse regional coefficients toward regional cluster priors.
+
 ---
 
 ## 📦 Commits & Attribution
-* **Key Commits**:
-  - `45772152` - `perf(pipeline): decouple cloud sync from inner loops and optimize dataframe re-use (#498)`
-  - `dbfe714e` - `perf(pipeline): eliminate redundant yfinance downloads, batch commodity feeds, and accelerate CI runtimes (#498)`
-  - `Issue #557` - `fix(memory): dynamic anomaly retention & hindsight reconciliation engine (#557)`
-* **Milestone**: v0.8 "Storage Modernization & Performance"
-
+* **Key Issues Completed**:
+  - Issue #444 - `fix(data-ingestion): Implement roll-adjusted RBOB futures returns and map metros to regional wholesale supply hubs`
+  - Issue #449 - `feat(uncertainty): Calibrated prediction intervals and proper quantile generation via Adaptive Conformal Inference`
+  - Issue #452 - `feat(evaluation): Build unified statistical evaluation harness, Model Confidence Set & feature admission gate`
+  - Issue #446 - `feat(nlp): Rework news-event features with semantic deduplication, rolling scaling, and local projections`
+  - Issue #450 - `feat(hierarchical): Partial pooling and MinT hierarchical reconciliation across metro, state, and national forecasts`
+  - Issue #498 - `perf(pipeline): eliminate redundant yfinance downloads, batch commodity feeds, and accelerate CI runtimes`
+  - Issue #557 - `fix(memory): dynamic anomaly retention & hindsight reconciliation engine`
+* **Milestone**: v0.8 "Storage Modernization, Math Rigor & Performance"

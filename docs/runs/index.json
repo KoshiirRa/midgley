@@ -1,11 +1,5 @@
 [
   {
-    "run_id": "2026-09-29_14-30-44",
-    "timestamp": "2026-09-29 14:30:36",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India unlikely to abandon Russian oil despite threat of US t..."
-  },
-  {
     "run_id": "2026-09-29_14-15-21",
     "timestamp": "2026-09-29 14:15:12",
     "run_type": "INTRADAY_REVISION",
@@ -598,5 +592,11 @@
     "timestamp": "2026-09-24 22:45:28",
     "run_type": "INTRADAY_REVISION",
     "trigger": "US, India Discuss Trump-Signed Russia Sanctions Bill and Tar..."
+  },
+  {
+    "run_id": "2026-09-24_22-57-14",
+    "timestamp": "2026-09-24 22:57 UTC",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-09-24 22:57 UTC)"
   }
 ]
