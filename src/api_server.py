@@ -666,19 +666,21 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     day_4 = h_preds.get(4, round(base_price + day_step * 4, 3))
     day_5 = h_preds.get(5, round(predicted_price, 3))
 
-    # Compute dynamic rolling accuracy metrics from ledger (Issue #440)
+    # Compute dynamic rolling accuracy metrics from ledger (Issue #440, #498)
     score_metrics = compute_rolling_scoreboard_metrics(
         window_days=30,
         region=region_code,
         horizon_days=days if days <= 5 else 5,
-        include_retroactive=False
+        include_retroactive=False,
+        df=df_hist if 'df_hist' in locals() and df_hist is not None else None
     )
     if score_metrics.get("total_evaluations", 0) < 5:
         score_metrics = compute_rolling_scoreboard_metrics(
             window_days="all",
             region=region_code,
             horizon_days=days if days <= 5 else 5,
-            include_retroactive=False
+            include_retroactive=False,
+            df=df_hist if 'df_hist' in locals() and df_hist is not None else None
         )
 
     hit_rate = round(score_metrics.get("directional_hit_rate_pct", 51.1) / 100.0, 4)

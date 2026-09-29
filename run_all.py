@@ -72,11 +72,15 @@ if __name__ == "__main__":
         generate_public_dashboard()
     except Exception as e:
         logger.error(f"Error generating public dashboard: {e}", exc_info=True)
+
+    # Final Pipeline Cloud Database Sync (Turso / Cloudflare D1 - Issue #498)
     try:
-        from src.static_api_exporter import export_all_static_api_endpoints
-        export_all_static_api_endpoints()
+        from src.prediction_logger import sync_predictions_to_cloud
+        print("\n  [CLOUD SYNC] Synchronizing finalized prediction ledger to Cloud DB...")
+        sync_res = sync_predictions_to_cloud()
+        print(f"  -> Cloud Sync Result: {sync_res}")
     except Exception as e:
-        logger.error(f"Error exporting static API endpoints: {e}", exc_info=True)
+        logger.debug(f"Notice during final cloud database sync: {e}")
 
     # Optional Headline Arena Independent CRPS/Brier Benchmark Submission (Issue #182)
     submit_ha = "--submit-headline-arena" in sys.argv

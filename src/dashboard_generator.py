@@ -866,13 +866,22 @@ def build_scoreboard_section_html() -> str:
         compute_rolling_scoreboard_metrics,
         compute_regional_scoreboard_breakdown,
         compute_horizon_scoreboard_breakdown,
-        get_recent_evaluated_records
+        get_recent_evaluated_records,
+        read_prediction_history,
+        HISTORY_CSV_PATH
     )
 
-    metrics = compute_rolling_scoreboard_metrics(window_days=30)
-    records = get_recent_evaluated_records(limit=15)
-    regional = compute_regional_scoreboard_breakdown(window_days=30)
-    horizon_breakdown = compute_horizon_scoreboard_breakdown(window_days=30)
+    df_hist = None
+    if os.path.exists(HISTORY_CSV_PATH):
+        try:
+            df_hist = read_prediction_history(HISTORY_CSV_PATH)
+        except Exception:
+            df_hist = None
+
+    metrics = compute_rolling_scoreboard_metrics(window_days=30, df=df_hist)
+    records = get_recent_evaluated_records(limit=15, df=df_hist)
+    regional = compute_regional_scoreboard_breakdown(window_days=30, df=df_hist)
+    horizon_breakdown = compute_horizon_scoreboard_breakdown(window_days=30, df=df_hist)
 
     mae_str = f"${metrics['mae_dollars']:.4f}"
     hit_str = f"{metrics['directional_hit_rate_pct']:.1f}%"

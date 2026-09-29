@@ -189,34 +189,45 @@ class KnowledgeGraphEngine:
     def _load_from_db(self):
         """Loads nodes and edges from SQLite into NetworkX graph."""
         self.graph.clear()
-        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT node_id, name, entity_type, attributes, created_at FROM kg_nodes")
-            for row in cursor.fetchall():
-                node_id, name, entity_type, attrs_str, created_at = row
-                attrs = json.loads(attrs_str) if attrs_str else {}
-                self.graph.add_node(
-                    node_id,
-                    name=name,
-                    entity_type=entity_type,
-                    created_at=created_at,
-                    **attrs
-                )
-
-            cursor.execute("SELECT source_id, target_id, relation, weight, attributes, created_at FROM kg_edges")
-            for row in cursor.fetchall():
-                source_id, target_id, relation, weight, attrs_str, created_at = row
-                attrs = json.loads(attrs_str) if attrs_str else {}
-                if self.graph.has_node(source_id) and self.graph.has_node(target_id):
-                    self.graph.add_edge(
-                        source_id,
-                        target_id,
-                        relation=relation,
-                        weight=weight,
+        try:
+            with sqlite3.connect(self.db_path, timeout=15.0) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT node_id, name, entity_type, attributes, created_at FROM kg_nodes")
+                for row in cursor.fetchall():
+                    node_id, name, entity_type, attrs_str, created_at = row
+                    attrs = json.loads(attrs_str) if attrs_str else {}
+                    self.graph.add_node(
+                        node_id,
+                        name=name,
+                        entity_type=entity_type,
                         created_at=created_at,
                         **attrs
                     )
-        logger.debug(f"Loaded Knowledge Graph: {self.graph.number_of_nodes()} nodes, {self.graph.number_of_edges()} edges.")
+
+                cursor.execute("SELECT source_id, target_id, relation, weight, attributes, created_at FROM kg_edges")
+                for row in cursor.fetchall():
+                    source_id, target_id, relation, weight, attrs_str, created_at = row
+                    attrs = json.loads(attrs_str) if attrs_str else {}
+                    if self.graph.has_node(source_id) and self.graph.has_node(target_id):
+                        self.graph.add_edge(
+                            source_id,
+                            target_id,
+                            relation=relation,
+                            weight=weight,
+                            created_at=created_at,
+                            **attrs
+                        )
+            logger.debug(f"Loaded Knowledge Graph: {self.graph.number_of_nodes()} nodes, {self.graph.number_of_edges()} edges.")
+        except sqlite3.DatabaseError as e:
+            logger.warning(f"Knowledge Graph SQLite database corrupt or malformed ({e}). Resetting database file {self.db_path}...")
+            try:
+                if os.path.exists(self.db_path):
+                    corrupt_backup = f"{self.db_path}.corrupt_{int(datetime.now(timezone.utc).timestamp())}"
+                    os.rename(self.db_path, corrupt_backup)
+            except Exception as rename_err:
+                logger.error(f"Failed to quarantine corrupt db: {rename_err}")
+            self._init_db()
+            self.seed_initial_petroleum_topology()
 
     def add_node(self, node_id: str, name: str, entity_type: str, **kwargs) -> NodeRecord:
         """Adds or updates an entity node in graph and SQLite."""

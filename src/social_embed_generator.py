@@ -10,6 +10,7 @@ Consequently, embed card images will only render in production (GitHub Pages) wh
 import os
 import json
 import logging
+from typing import Optional
 import pandas as pd
 import numpy as np
 
@@ -209,7 +210,7 @@ def get_historical_sparkline_data(region_key: str, fallback_base: float, fallbac
     return hist_prices, forecast_curve
 
 
-def render_single_embed_card(spec: dict, run_payload: dict, output_path: str):
+def render_single_embed_card(spec: dict, run_payload: dict, output_path: str, df: Optional[pd.DataFrame] = None):
     """Renders a 1200x630 px dark-mode social preview card PNG using Matplotlib."""
     key = spec["key"]
     title = spec["title"]
@@ -296,7 +297,13 @@ def render_single_embed_card(spec: dict, run_payload: dict, output_path: str):
     acc_val = spec["accuracy"]
     try:
         from src.prediction_logger import compute_rolling_scoreboard_metrics
-        m = compute_rolling_scoreboard_metrics(window_days=30, region=key if key not in ["Overview", "Math"] else None, horizon_days=5, include_retroactive=False)
+        m = compute_rolling_scoreboard_metrics(
+            window_days=30, 
+            region=key if key not in ["Overview", "Math"] else None, 
+            horizon_days=5, 
+            include_retroactive=False,
+            df=df
+        )
         if m.get("total_evaluations", 0) >= 5:
             acc_val = f"{m['directional_hit_rate_pct']:.1f}%"
     except Exception:
@@ -384,12 +391,20 @@ def generate_social_embed_images(runs_json_path: str = LATEST_RUN_PATH, output_d
     os.makedirs(output_dir, exist_ok=True)
     run_payload = load_latest_run_payload(runs_json_path)
 
+    df_hist = None
+    if os.path.exists(HISTORY_CSV_PATH):
+        try:
+            from src.prediction_logger import read_prediction_history
+            df_hist = read_prediction_history(HISTORY_CSV_PATH)
+        except Exception:
+            df_hist = None
+
     generated_paths = {}
     for locale_key, spec in LOCALE_SPECS.items():
         out_filename = spec["filename"]
         out_path = os.path.join(output_dir, out_filename)
         try:
-            render_single_embed_card(spec, run_payload, out_path)
+            render_single_embed_card(spec, run_payload, out_path, df=df_hist)
             generated_paths[locale_key] = out_path
         except Exception as e:
             logger.error(f"Failed to generate social embed image for {locale_key}: {e}", exc_info=True)
