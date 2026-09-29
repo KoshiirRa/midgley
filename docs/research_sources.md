@@ -144,7 +144,60 @@ In addition to developer catalogs and academic preprint servers, the system inge
 
 ---
 
-## 5. Maintenance & Reference Files
+---
+
+## 5. Candidate Tool Ingestion & Energy Domain Knowledge Index (Ticket #499 Ingestion)
+
+The following candidate toolkits, econometric libraries, data feeds, and energy sector API specifications were ingested, categorized, and evaluated from **Ticket #499 (`[Possible New Tools] - 9/28/26`)** for potential integration into the Midgley forecasting pipeline:
+
+### 5.1 Cloudflare Edge & Serverless Architecture Suite
+| Resource | Documentation / URL | Target Architecture | Evaluation & Integration Value |
+| :--- | :--- | :--- | :--- |
+| **Cloudflare Browser Rendering** | [`browser-run`](https://developers.cloudflare.com/browser-run/) | `src/firecrawl_scraper.py` / Scrapers | Zero-cost headless browser execution at the edge for scraping dynamic JS energy news and regulatory portals without browser server overhead. |
+| **Cloudflare Workers AI** | [`workers-ai`](https://developers.cloudflare.com/workers-ai/) | `src/event_analyzer.py` / Edge Fallbacks | Edge-hosted SLMs (Llama 3.3, Mistral, BGE embeddings) for sub-millisecond qualitative sentiment and zero-cost offline parsing fallbacks. |
+| **Cloudflare Workflows** | [`workflows`](https://developers.cloudflare.com/workflows/) | `.github/workflows/` / Edge Schedulers | Durable execution engine for long-running multi-step data pipelines, automatic retries, and multi-hub synchronization. |
+| **Cloudflare AI Search** | [`ai-search`](https://developers.cloudflare.com/ai-search/) | `src/knowledge_graph.py` | Auto-retrieval and vector indexing for historical outage incident retrieval and regulatory precedent lookup. |
+| **Cloudflare R2 Object Storage** | [`r2`](https://developers.cloudflare.com/r2/) | `data/` Persistence & Archive Sync | Zero-egress S3-compatible storage for persistent model weights, large historical bitemporal ledgers, and Parquet snapshots. |
+| **Cloudflare Workers KV** | [`kv`](https://developers.cloudflare.com/kv/) | `src/lookup_cache.sqlite` & Edge APIs | Ultra-low latency global key-value store for edge rate limiters, token quotas, and active forecast cache distribution. |
+
+### 5.2 Econometric, Time-Series & Disruption Modeling Implementations
+| Repository / Tool | Focus Area | Architectural Target | Impact Score & Relevance |
+| :--- | :--- | :--- | :--- |
+| [`ElKuksi/gasoline-rockets-and-feathers`](https://github.com/ElKuksi/gasoline-rockets-and-feathers) | Asymmetric price transmission & ECM | `src/asymmetric_ecm.py` | **9.5/10.0** — Directly validates threshold cointegration and asymmetric speed of adjustment ($\alpha^+ \neq \alpha^-$) for retail pump price stickiness (Issues #402 & #443). |
+| [`marijachek/rerouted-barrels`](https://github.com/marijachek/rerouted-barrels) | Tanker rerouting & maritime chokepoints | `src/portwatch_connector.py` / `src/geopolitical_feeds.py` | **9.2/10.0** — Provides maritime transit delay and ton-mile multiplier factors for chokepoint bypasses (Cape of Good Hope vs. Suez, Delmarva detour). |
+| [`younis-y/crack-spread-econometrics`](https://github.com/younis-y/crack-spread-econometrics) | Refinery crack spread econometrics | `src/data_ingestion.py` / `src/locations/*/regional.py` | **9.0/10.0** — Econometric modeling of 3:2:1 and 1:1 refinery margins, cointegration between NYMEX RBOB, Heating Oil (ULSD), and WTI. |
+| [`SejalKhade/Power-Outage-Risk-Pipeline`](https://github.com/SejalKhade/Power-Outage-Risk-Pipeline) | Power grid outage risk from weather | `src/noaa_weather.py` / `src/tceq_emissions.py` | **8.8/10.0** — Severe weather impact modeling on grid infrastructure, providing early warning for refinery electrical trip hazards and unplanned flaring. |
+| [`arturbagmanov/ercot-daily`](https://github.com/arturbagmanov/ercot-daily) | ERCOT daily Texas power grid telemetry | `src/alternative_data_feeds.py` | **8.5/10.0** — Telemetry for Texas Gulf Coast refining complexes (Baytown, Galveston Bay, Houston Ship Channel) grid stress during freeze/heat waves. |
+| [`WFord26/FuelRipple`](https://github.com/WFord26/FuelRipple) | Geographic price ripple propagation | `src/spatial_refinery.py` / Metro Hubs | **8.6/10.0** — Multi-hop spatial price transmission and pipeline supply shock diffusion across connected metro consumption hubs. |
+| [`richieb1/gas-price-forecast`](https://github.com/richieb1/gas-price-forecast) | Retail gas price forecasting | `src/models.py` / Evaluation Baseline | **8.0/10.0** — Comparative ML and time-series benchmark baseline for retail gasoline forecasting. |
+| [`ashasif/crude-oil-market-analytics`](https://github.com/ashasif/crude-oil-market-analytics) | Crude market trend & volatility analytics | `src/alternative_data_feeds.py` | **7.8/10.0** — Macro crude supply/demand indicators and technical regime indicators. |
+
+### 5.3 Energy Sector API Specifications & Data Connectors (`api-evangelist/*`)
+| Organization / API Spec | Domain / Commodity Focus | Operational Utility |
+| :--- | :--- | :--- |
+| **Global Partners LP** (`api-evangelist/global-partners`) | Northeast wholesale fuel distribution & terminals | Critical terminal logistics and wholesale rack pricing schemas for PADD 1A/1B (Newark, Mid-Atlantic). |
+| **Targa Resources & Adams Resources** (`targa-energy`, `adams-resources-and-energy`) | Midstream NGL/crude trucking & pipeline injection | Midstream gathering, injection tariffs, and pipeline interconnect logistics schemas. |
+| **Validere** (`api-evangelist/validere`) | Fuel quality & statutory RVP tracking | Physical product quality verification, crude assay blending, and Reid Vapor Pressure regulatory tracking. |
+| **BSEE** (`bureau-of-safety-and-environmental-enforcement`) | Offshore Gulf of Mexico regulations & shut-ins | Offshore hurricane shut-in reports and platform production evacuation statistics. |
+| **Baker Hughes, Corva AI, Drillinginfo** (`baker-hughes`, `corva-ai`, `drillinginfo`) | Drilling rig telemetry & completion analytics | Physical production capacity, basin completion velocities, and upstream supply lead times. |
+| **Major E&P Specs** (`shell`, `conocophillips`, `continental-resources`, `coterra-energy`, `apa`, etc.) | Upstream crude production & corporate disclosures | Standardized schemas for corporate 8-K disclosures, upstream hedging reports, and capital expenditure guidance. |
+
+### 5.4 Research Synthesis & Petroleum Engineering Toolkits
+| Toolkit / Library | Focus Area | Pipeline Value |
+| :--- | :--- | :--- |
+| [`dwzhu-pku/PaperBanana`](https://github.com/dwzhu-pku/PaperBanana) | Automated literature analysis agent | Augments `src/arxiv_monitor.py` and `src/core_monitor.py` for automated extraction of econometric methodologies from preprints. |
+| [`trailhq/Graft`](https://github.com/trailhq/Graft) | DAG orchestration & reverse ETL | High-performance DAG pipeline execution and cross-database sync patterns. |
+| [`nourhanemadenan/digger`](https://github.com/nourhanemadenan/digger) | Web scraping & data extraction | Extraction patterns for regulatory filings and unstructured energy news portals. |
+| [`combocurve`](https://github.com/api-evangelist/combocurve) / [ComboCurve](https://combocurve.com/) | Petroleum economics & decline curves | Production forecasting and cash flow modeling for upstream supply constraint estimations. |
+| [`stewardBasin/StewardBasin`](https://github.com/stewardBasin/StewardBasin) & [`oil-gas-production-calculator`](https://github.com/adnan03146584/oil-gas-production-calculator) | Basin-level production & decline calculators | Analytical decline curve analysis (DCA) and basin-level wellhead production estimations. |
+| [`zainab-iyiola/PetroPulse`](https://github.com/zainab-iyiola/PetroPulse) & [`Python-for-oil-and-gas`](https://github.com/kwakye02/Python-for-oil-and-gas) | Petroleum engineering data analysis | Python analytics modules for oilfield metrics, reservoir properties, and crude yield calculations. |
+| [`mattcone/depletion-ledger`](https://github.com/mattcone/depletion-ledger) | Hydrocarbon reserve depletion ledger | Depletion accounting models and reserve lifetime estimations. |
+| [`yagizyagli/mega_engineering_library`](https://github.com/yagizyagli/mega_engineering_library) | Engineering equations & fluid mechanics | Pipeline hydraulics, friction losses, and temperature-dependent viscosity calculations for product pipelines. |
+| [`oilpriceapi.com`](https://www.oilpriceapi.com/) | Real-time energy commodity spot API | Supplementary live spot commodity data feed (integrated in `tests/test_oilpriceapi_ingestion.py`). |
+
+---
+
+## 6. Maintenance & Reference Files
 
 * **Catalog Monitor Source Code:** [`src/catalog_monitor.py`](src/catalog_monitor.py)
 * **arXiv Monitor Source Code:** [`src/arxiv_monitor.py`](src/arxiv_monitor.py)
@@ -154,4 +207,5 @@ In addition to developer catalogs and academic preprint servers, the system inge
 * **Research Citations Ledger:** [`RESEARCH_CITATIONS.md`](RESEARCH_CITATIONS.md)
 * **System Architecture Document:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 * **Agent Architecture Specification:** [`AGENTS.md`](AGENTS.md)
+
 

@@ -164,7 +164,7 @@ The empirical 95% CI coverage rate is tracked and exposed in rolling scoreboard 
 
 ### 4.3. Live Forecast README Automation & Workflow Freshness Gating (Issue #398)
 * **README Table Injector (`scripts/readme_updater.py` / `src/readme_updater.py`):** Automatically compiles multi-horizon projections across all 10 active regional hubs into the Markdown live summary table between `<!-- START_LIVE_FORECAST -->` and `<!-- END_LIVE_FORECAST -->` tags.
-* **UTC vs Central DST Schedule Alignment:** GitHub Actions cron schedules (`17 7 * * *`) evaluate strictly on UTC (07:17 UTC); during Daylight Saving Time (March to November), US Central Time is CDT (02:17 AM CDT / UTC-5), and during standard time (November to March), Central Time is CST (01:17 AM CST / UTC-6).
+* **UTC vs Central DST Schedule Alignment:** GitHub Actions cron schedules (`17 22 * * *`) evaluate strictly on UTC (22:17 UTC); during Daylight Saving Time (March to November), US Central Time is CDT (05:17 PM CDT / UTC-5), and during standard time (November to March), Central Time is CST (04:17 PM CST / UTC-6).
 * **Forecast Freshness Gating:** The public dashboard (`src/dashboard_generator.py`) evaluates the timestamp of the latest prediction record; if data age exceeds 36 hours, a warning badge (`Forecast Stale (>36h)`) is rendered to alert operators.
 
 ---

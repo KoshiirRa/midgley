@@ -2,11 +2,12 @@ name: Daily Gas Price LLM Forecasting & Public Dashboard
 
 on:
   schedule:
-    # Run every day at 07:17 UTC (02:17 AM CDT / 01:17 AM CST) - off-peak minute to prevent runner queue delays.
+    # Run daily at 22:17 UTC (05:17 PM CDT / 04:17 PM CST) - post-NYMEX settlement & post-EIA publication window.
     # Note: GitHub Actions cron triggers evaluate strictly against UTC. During US Daylight Saving Time (DST)
-    # transitions (March to November), local US Central Time is UTC-5 (CDT, 02:17 AM); during standard time
-    # (November to March), local US Central Time is UTC-6 (CST, 01:17 AM).
-    - cron: '17 7 * * *'
+    # transitions (March to November), local US Central Time is UTC-5 (CDT, 05:17 PM); during standard time
+    # (November to March), local US Central Time is UTC-6 (CST, 04:17 PM).
+    # Paired with intraday_event_monitor.yml (recurring 2h cycle) to ingest any overnight geopolitical/weather shocks.
+    - cron: '17 22 * * *'
   workflow_dispatch:
 
 permissions:

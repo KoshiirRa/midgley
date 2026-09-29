@@ -593,6 +593,7 @@ def log_predictions(
 
 RBOB_ACTUALS_CACHE_FILE = "data/rbob_actuals_cache.json"
 _GLOBAL_RBOB_ACTUALS_CACHE: Dict[str, float] = {}
+_GLOBAL_ACTUALS_FETCHED_THIS_PROCESS: bool = False
 
 
 def validate_price_plausibility(price: Optional[float], region: str = "National", is_retail: bool = True) -> bool:
@@ -682,7 +683,7 @@ def backfill_actual_prices_and_evaluate(
     Issue #427: Enforces strict maturity gating (forecast_target_date <= today).
     Strictly separates wholesale NYMEX RBOB (RB=F) and retail ground truth.
     """
-    global _GLOBAL_RBOB_ACTUALS_CACHE
+    global _GLOBAL_RBOB_ACTUALS_CACHE, _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS
     target_csv = csv_path or HISTORY_CSV_PATH
     if not csv_path:
         ensure_history_store()
@@ -707,8 +708,6 @@ def backfill_actual_prices_and_evaluate(
         history_df['actual_direction'] = history_df['actual_direction'].astype(object)
         history_df['predicted_direction'] = history_df['predicted_direction'].astype(object)
         
-        logger.info("Fetching actual historical market prices to backfill prediction log...")
-        
         today_str = datetime.now().strftime("%Y-%m-%d")
         unevaluated_mask = history_df['actual_5d_price'].isna()
         target_dates = history_df['forecast_target_date'].astype(str)
@@ -729,33 +728,60 @@ def backfill_actual_prices_and_evaluate(
                 except Exception:
                     actuals_map = {}
 
-            # Refresh RBOB actuals cache if empty, force_eval, or if unevaluated matured dates are missing (Issue #432)
-            needs_refresh = (not actuals_map) or force_eval
-            if not needs_refresh and not matured_national.empty:
-                missing_dates = [d for d in matured_national['forecast_target_date'].unique() if str(d) not in actuals_map]
-                if missing_dates:
+            # Refresh RBOB actuals cache if empty, force_eval, or if unevaluated matured dates are missing (Issue #432, #498)
+            needs_refresh = False
+            if force_eval:
+                needs_refresh = True
+            elif not _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS:
+                if not actuals_map:
                     needs_refresh = True
+                elif not matured_national.empty:
+                    # Filter candidate missing dates to valid business days (Mon-Fri) to avoid weekend traps
+                    nat_dates = matured_national['forecast_target_date'].astype(str).unique()
+                    b_dates = [d for d in nat_dates if pd.to_datetime(d, errors='coerce').dayofweek < 5]
+                    missing_dates = [d for d in b_dates if str(d) not in actuals_map]
+                    if missing_dates:
+                        needs_refresh = True
 
             if needs_refresh and (not is_injected or force_eval):
+                logger.info("Fetching actual historical market prices to backfill prediction log...")
                 try:
-                    data = yf.download("RB=F", start="2022-01-01", progress=False)
-                    close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
-                    dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
-                    actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
-                    fresh_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
-                    if not actuals_map:
-                        actuals_map = fresh_map
+                    # Determine start date for download: full range if empty, incremental lookback if cached
+                    start_dl = "2022-01-01"
+                    if actuals_map:
+                        valid_keys = [k for k in actuals_map.keys() if k and k != "null"]
+                        if valid_keys:
+                            latest_k = max(valid_keys)
+                            start_dt = pd.to_datetime(latest_k) - pd.Timedelta(days=30)
+                            start_dl = start_dt.strftime("%Y-%m-%d")
+
+                    data = yf.download("RB=F", start=start_dl, progress=False)
+                    if data is not None and not data.empty:
+                        close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) and 'RB=F' in data['Close'].columns else data['Close']
+                        if isinstance(close_series, pd.DataFrame):
+                            close_series = close_series.iloc[:, 0]
+                        dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
+                        actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
+                        fresh_map = actuals_df.dropna().set_index('date_str')['actual_rbob'].to_dict()
+                        if not actuals_map:
+                            actuals_map = fresh_map
+                        else:
+                            actuals_map.update(fresh_map)
+                        _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+                        _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
+                        try:
+                            atomic_write_json(RBOB_ACTUALS_CACHE_FILE, actuals_map, indent=2)
+                        except Exception:
+                            pass
                     else:
-                        actuals_map.update(fresh_map)
-                    _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
-                    try:
-                        atomic_write_json(RBOB_ACTUALS_CACHE_FILE, actuals_map, indent=2)
-                    except Exception:
-                        pass
+                        _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
                 except Exception as e:
                     logger.warning(f"Could not download actuals from yfinance: {e}")
+                    _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
                     if actuals_map is None:
                         actuals_map = {}
+            elif not needs_refresh:
+                _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
             
         if eia_feed_override is not None:
             eia_feed = eia_feed_override
@@ -1090,13 +1116,15 @@ def compute_rolling_scoreboard_metrics(
     window_days: int | str = 30, 
     region: str = None,
     horizon_days: Optional[int | str] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> dict:
     """
     Computes rolling performance metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
     Naive Persistence Baseline MAE, and Model MAE Uplift %) over a given rolling day window and horizon.
     """
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     filtered_df = filter_evaluated_history_by_window(
         df, 
         window_days=window_days, 
@@ -1182,10 +1210,12 @@ def compute_rolling_scoreboard_metrics(
 def compute_regional_scoreboard_breakdown(
     window_days: int | str = 30,
     horizon_days: Optional[int | str] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> list[dict]:
     """Computes rolling performance metrics for each active region under optional horizon filter."""
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     if df.empty or 'actual_5d_price' not in df.columns:
         return []
 
@@ -1208,7 +1238,8 @@ def compute_regional_scoreboard_breakdown(
             window_days=window_days, 
             region=reg, 
             horizon_days=horizon_days,
-            include_retroactive=include_retroactive
+            include_retroactive=include_retroactive,
+            df=eval_df
         )
         if metrics["total_evaluations"] > 0:
             breakdown.append({
@@ -1232,13 +1263,17 @@ def compute_horizon_scoreboard_breakdown(
     window_days: int | str = 30, 
     region: str = None,
     horizons: Optional[list[int]] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> list[dict]:
     """
     Computes rolling performance metrics broken down across discrete forecast horizons (1d through 5d).
     """
     if horizons is None:
         horizons = [1, 2, 3, 4, 5]
+
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
 
     breakdown = []
     horizon_labels = {
@@ -1254,7 +1289,8 @@ def compute_horizon_scoreboard_breakdown(
             window_days=window_days, 
             region=region, 
             horizon_days=h,
-            include_retroactive=include_retroactive
+            include_retroactive=include_retroactive,
+            df=df
         )
         label = horizon_labels.get(h, f"{h}-Day Forward")
         breakdown.append({
@@ -1279,10 +1315,12 @@ def get_recent_evaluated_records(
     region: str = None, 
     limit: int = 50,
     horizon_days: Optional[int | str] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> list[dict]:
     """Returns chronologically sorted evaluated forecast records."""
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     filtered_df = filter_evaluated_history_by_window(
         df, 
         window_days="all", 
@@ -1320,7 +1358,8 @@ def get_recent_evaluated_records(
 
 def compute_mlops_observability_summary(
     window_days: int | str = 30,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> dict:
     """
     Computes MLOps observability statistics over evaluated predictions:
@@ -1329,10 +1368,11 @@ def compute_mlops_observability_summary(
     - Average LLM Price Pressure & Supply Disruption
     - Performance Breakdown by Data Source Provenance
     """
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     filtered_df = filter_evaluated_history_by_window(
         df, 
-        window_days=window_days,
+        window_days=window_days, 
         include_retroactive=include_retroactive
     )
 

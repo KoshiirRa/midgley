@@ -719,7 +719,7 @@ All workflow triggers in `.github/workflows/` evaluate strictly against UTC. The
 
 | Workflow Name | Workflow File | Cron Expression | UTC Time | US Central Time (CDT / CST) | US Eastern Time (EDT / EST) | Purpose |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Daily Gas Price Forecast** | `.github/workflows/gas_price_forecast.yml` | `17 7 * * *` | 07:17 UTC | 02:17 AM CDT / 01:17 AM CST | 03:17 AM EDT / 02:17 AM EST | Full multi-region forecasting & Pages deployment |
+| **Daily Gas Price Forecast** | .github/workflows/gas_price_forecast.yml | 17 22 * * * | 22:17 UTC | 05:17 PM CDT / 04:17 PM CST | 06:17 PM EDT / 05:17 PM EST | Full multi-region forecasting & Pages deployment |
 | **Weekly Model Review** | `.github/workflows/weekly_model_review.yml` | `12 13 * * 6` | Sat 13:12 UTC | Sat 08:12 AM CDT / 07:12 AM CST | Sat 09:12 AM EDT / 08:12 AM EST | Saturday performance audit & Hindsight reflection |
 | **Intraday Fallback Monitor** | `.github/workflows/intraday_event_monitor.yml` | `0 */2 * * *` | Every 2 hours | Every 2 hours | Every 2 hours | 2-hour fallback RSS polling & webhook gateway |
 | **Nightly Dev Release** | `.github/workflows/nightly_dev_release.yml` | `0 8 * * *` | 08:00 UTC | 03:00 AM CDT / 02:00 AM CST | 04:00 AM EDT / 03:00 AM EST | Automated nightly development snapshot release |
