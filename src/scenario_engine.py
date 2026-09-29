@@ -608,3 +608,31 @@ def get_all_scenarios_with_plausibility(
         "target_date": target_date if isinstance(target_date, str) else (target_date.isoformat() if target_date else datetime.now(timezone.utc).date().isoformat()),
         "scenarios": results
     }
+
+
+def enrich_scenario_with_episodic_memory(
+    scenario_id_or_headline: str,
+    region: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Queries Hindsight episodic memory to retrieve empirical historical analog precedents
+    for a given scenario specification or custom shock headline.
+    """
+    headline = scenario_id_or_headline
+    if scenario_id_or_headline in SCENARIO_CLIMATOLOGY_REGISTRY:
+        headline = SCENARIO_CLIMATOLOGY_REGISTRY[scenario_id_or_headline].get("name", scenario_id_or_headline)
+
+    precedents = []
+    prompt_block = ""
+    try:
+        from src.hindsight_context import inject_hindsight_context
+        prompt_block, precedents = inject_hindsight_context(headline, region=region)
+    except Exception as e:
+        logger.debug(f"Hindsight scenario enrichment notice: {e}")
+
+    return {
+        "scenario_input": scenario_id_or_headline,
+        "precedent_count": len(precedents),
+        "precedents": precedents,
+        "prompt_context": prompt_block
+    }

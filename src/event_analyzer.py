@@ -76,7 +76,7 @@ _LLM_SCORE_CACHE = {}
 
 from src.knowledge_graph import kg_engine
 
-# Single-Headline Prompt Contract (Fallback / Scenario Testing / CoSPOT arXiv:2609.02093)
+# Single-Headline Prompt Contract (Fallback / Scenario Testing / CoSPOT arXiv:2609.02093 / Hindsight Episodic Memory)
 LLM_SINGLE_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following energy news headline/event description and extract structured numerical impact scores regarding unleaded gasoline and crude oil prices.
@@ -84,6 +84,7 @@ Analyze the following energy news headline/event description and extract structu
 Headline/Event: "{headline}"
 {graph_context}
 {spectral_context}
+{hindsight_context}
 Return ONLY a raw JSON object with the following fields:
 - "geopolitical_risk": float between -1.0 (de-escalation/peace) and +1.0 (war/sanctions/conflict)
 - "supply_disruption": float between 0.0 (no disruption) and +1.0 (major refinery/pipeline/shipping shutdown)
@@ -99,6 +100,7 @@ LLM_BATCH_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following JSON list of energy news headlines/event descriptions and extract structured numerical impact scores for each item.
 {spectral_context}
+{hindsight_context}
 Input Headlines:
 {headlines_json}
 
@@ -112,7 +114,7 @@ Return ONLY a raw JSON array of objects in the EXACT SAME ORDER, where each obje
 JSON Array Output:
 """
 
-def _try_openai_single(headline: str, graph_context: str = "", spectral_context: str = "") -> dict:
+def _try_openai_single(headline: str, graph_context: str = "", spectral_context: str = "", hindsight_context: str = "") -> dict:
     openai_key = os.environ.get("OPENAI_API_KEY")
     if not openai_key:
         return None
@@ -121,7 +123,12 @@ def _try_openai_single(headline: str, graph_context: str = "", spectral_context:
         client = openai.OpenAI(api_key=openai_key)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context, spectral_context=spectral_context)}],
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(
+                headline=headline,
+                graph_context=graph_context,
+                spectral_context=spectral_context,
+                hindsight_context=hindsight_context
+            )}],
             temperature=0.1,
             response_format={"type": "json_object"}
         )
@@ -140,7 +147,7 @@ def _try_openai_single(headline: str, graph_context: str = "", spectral_context:
         return None
 
 
-def _try_anthropic_single(headline: str, graph_context: str = "", spectral_context: str = "") -> dict:
+def _try_anthropic_single(headline: str, graph_context: str = "", spectral_context: str = "", hindsight_context: str = "") -> dict:
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     if not anthropic_key:
         return None
@@ -150,7 +157,12 @@ def _try_anthropic_single(headline: str, graph_context: str = "", spectral_conte
         response = client.messages.create(
             model="claude-3-5-haiku-20241022",
             max_tokens=300,
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context, spectral_context=spectral_context)}]
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(
+                headline=headline,
+                graph_context=graph_context,
+                spectral_context=spectral_context,
+                hindsight_context=hindsight_context
+            )}]
         )
         text = response.content[0].text.strip()
         if "```json" in text:
@@ -202,6 +214,14 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     graph_md = kg_schema.to_markdown()
     graph_context_str = f"\n{graph_md}\n" if graph_md else ""
 
+    # Build Hindsight Episodic Memory Precedent Context
+    hindsight_context_str = ""
+    try:
+        from src.hindsight_context import inject_hindsight_context
+        hindsight_context_str, _ = inject_hindsight_context(headline)
+    except Exception as e:
+        logger.debug(f"Hindsight context injection notice: {e}")
+
     # Enforce Basic Tier Zero-Cost Provider Routing
     if tier == "basic":
         scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=True)
@@ -222,7 +242,12 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     # Tier 1: Gemini 2.5 Flash
     if api_key:
         try:
-            prompt_str = LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context_str, spectral_context=spectral_context)
+            prompt_str = LLM_SINGLE_PROMPT.format(
+                headline=headline,
+                graph_context=graph_context_str,
+                spectral_context=spectral_context,
+                hindsight_context=hindsight_context_str
+            )
             try:
                 from google import genai
                 from google.genai import types
@@ -262,7 +287,17 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
 
     # Tier 2: Secondary OpenAI / Anthropic Soft Failover
     if not scores:
-        sec_scores = _try_openai_single(headline, graph_context=graph_context_str, spectral_context=spectral_context) or _try_anthropic_single(headline, graph_context=graph_context_str, spectral_context=spectral_context)
+        sec_scores = _try_openai_single(
+            headline,
+            graph_context=graph_context_str,
+            spectral_context=spectral_context,
+            hindsight_context=hindsight_context_str
+        ) or _try_anthropic_single(
+            headline,
+            graph_context=graph_context_str,
+            spectral_context=spectral_context,
+            hindsight_context=hindsight_context_str
+        )
         if sec_scores:
             scores = sec_scores
             provider_used = "secondary_llm"
@@ -319,7 +354,23 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
             try:
                 logger.info(f"⚡ Launching Single-Batch Gemini 2.5 Flash LLM call for {len(uncached)} headlines...")
                 input_json_str = json.dumps([{"id": i, "headline": h} for i, h in enumerate(uncached)], indent=2)
-                prompt = LLM_BATCH_PROMPT.format(headlines_json=input_json_str, spectral_context=spectral_context)
+                
+                # Retrieve collective hindsight context for catalyst headlines in batch
+                hindsight_batch_context_str = ""
+                try:
+                    from src.hindsight_context import is_catalyst_headline, query_episodic_precedents, format_hindsight_precedent_prompt_block
+                    batch_catalysts = [h for h in uncached if is_catalyst_headline(h)]
+                    if batch_catalysts:
+                        precedents = query_episodic_precedents(" ".join(batch_catalysts[:3]), top_k=2)
+                        hindsight_batch_context_str = format_hindsight_precedent_prompt_block(precedents)
+                except Exception:
+                    hindsight_batch_context_str = ""
+
+                prompt = LLM_BATCH_PROMPT.format(
+                    headlines_json=input_json_str,
+                    spectral_context=spectral_context,
+                    hindsight_context=hindsight_batch_context_str
+                )
                 
                 try:
                     from google import genai

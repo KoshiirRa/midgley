@@ -108,3 +108,17 @@ CREATE TABLE IF NOT EXISTS sync_watermarks (
     records_synced INTEGER DEFAULT 0,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS hindsight_telemetry (
+    log_id TEXT PRIMARY KEY,
+    operation TEXT NOT NULL,
+    context_key TEXT NOT NULL,
+    query_or_doc TEXT NOT NULL,
+    result_summary TEXT,
+    latency_ms REAL,
+    status TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_hindsight_telemetry_op ON hindsight_telemetry (operation, created_at);
+

@@ -55,16 +55,22 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 
 ### 12. Unified Direct Cloud Database & Deduplication Engine (Issues #559, #423, #424, #479)
 - **Direct Edge & Cloud Database Architecture (`src/db/client.py`)**: Unified direct cloud database connectivity hitting Turso libSQL REST pipeline v2 and Cloudflare D1 directly over wire without local SQLite synchronization divergence, backed by standard local SQLite WAL-mode fallback.
-- **Relational Normalized Schema (`src/db/schema.sql`)**: Structured schema with foreign keys and unique constraints across `forecasts`, `intraday_revisions`, `intraday_events`, `evaluated_headlines`, `data_vintages`, `ground_truth`, and `evaluations`.
+- **Relational Normalized Schema (`src/db/schema.sql`)**: Structured schema with foreign keys and unique constraints across `forecasts`, `intraday_revisions`, `intraday_events`, `evaluated_headlines`, `data_vintages`, `ground_truth`, `evaluations`, and `hindsight_telemetry`.
 - **Deduplication & Legacy CSV Migration (`scripts/migrate_csv_to_turso.py`)**: Migrated legacy monolithic `data/prediction_history.csv` with deterministic SHA-256 primary keys (`forecast_id`), collapsing 59,717 raw backtest rows down to exactly 11,943 unique forecasts (**eliminating 47,774 redundant duplicate entries / 80% deduplication**).
 - **Bitemporal Vintage Store (`src/vintage_store.py`)**: Centralized point-in-time querying (`query_as_of`) with data quality classification (`LIVE`, `CACHED`, `BENCHMARK`, `STALE`, `SYNTHETIC`) and publication lag enforcement, eliminating lookahead leakage across all 21 external feeds.
 - **Parent-Linked Intraday Revisions (`src/intraday_event_monitor.py`)**: Structured parent-child lineage tracking linking intraday shock adjustments back to parent base forecasts (`parent_forecast_id`).
+
+### 13. Closed-Loop Hindsight Episodic Context & Feedback Loop Engine (Issue #559 Phase 3)
+- **Precedent Injection & Prompt Grounding (`src/hindsight_context.py`)**: Intercepts physical disruption catalyst terms across breaking headlines (refineries, flaring, pipelines, storms, river navigation, RVP transition waivers) and injects empirical historical episode analogs (`[HISTORICAL EPISODIC MEMORY PRECEDENT]`) into LLM scoring prompts and counterfactual scenario simulations.
+- **Realized Bounds Calibration**: Replaces uncalibrated qualitative shock estimates with historical analog duration, empirical pass-through lag, and price shock distributions.
+- **Post-Settlement Causal Reflection**: Evaluates settled forecast errors against realized ground truth, classifying severe prediction misses ($>2\sigma$ or directional flips) into structured failure modes (`OVERESTIMATED_SHOCK`, `UNDERESTIMATED_SHOCK`, `DIRECTIONAL_FLIP`, `BASIS_DIVERGENCE`) and recording durable post-mortems back into Hindsight episodic memory.
+- **Relational Telemetry Auditing**: Logs all episodic memory operations (`RECALL`, `REFLECT`, `RETAIN`) with query terms, summaries, and latency benchmarks directly to `hindsight_telemetry`.
 
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
-  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1 & 2)
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2 & 3)
   - Issue #423 - `feat(storage): Migrate flat CSV and JSON storage to a structured datastore`
   - Issue #424 - `fix(storage): Replace unsafe raw file writes with atomic write routines to prevent 0-byte file truncation`
   - Issue #479 - `feat(storage): Implement cursor-based cloud sync for predictions and evaluations`
