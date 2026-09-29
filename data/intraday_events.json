@@ -3693,5 +3693,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-29T15:15:28.252415",
+    "headline": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance - Keystone XL Back in Spotlight - EnergyNow",
+    "source": "Executive_Social_Media",
+    "url": "https://truthsocial.com/post/3701275",
+    "raw_url": "https://truthsocial.com/post/3701275",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/3701275",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]

@@ -1,18 +1,18 @@
 # Midgley LLM Energy Price Forecasting Engine — Technical Breakdown & Math Audit
 
-**Log Timestamp:** `2026-09-29 15:00:27`  
+**Log Timestamp:** `2026-09-29 15:15:29`  
 **Run Mode:** `INTRADAY_REVISION`  
-**Primary Event Trigger:** OPINION | Russia oil tariff and India’s leverage gap - Moneycontrol.com  
+**Primary Event Trigger:** Trump Pauses 50% Tariffs on Canada as Trade Talks Advance - Keystone XL Back in Spotlight - EnergyNow  
 
 ---
 
 ## 1. Execution Audit & Trigger Headline Context
 
-- **Headline Trigger:** OPINION | Russia oil tariff and India’s leverage gap - Moneycontrol.com
+- **Headline Trigger:** Trump Pauses 50% Tariffs on Canada as Trade Talks Advance - Keystone XL Back in Spotlight - EnergyNow
 - **Active Ingested News Links:**
+- [Trump Pauses 50% Tariffs on Canada as Trade Talks Advance - Keystone XL Back in Spotlight - EnergyNow](https://truthsocial.com/post/3701275) (Executive Social Media)
 - [OPINION | Russia oil tariff and India’s leverage gap - Moneycontrol.com](https://news.google.com/rss/articles/CBMinwFBVV95cUxNS2o1azNKdVM1OU5KZ0J0RlFpWEt4cnlCY3JoenRqX3BVQjhjdnFzN21tR1c5MHdTV3ZOVXVTVm5sNnhFU1k4MnNfdWpNeVhvRUdSRmNIbnZXY2J1S3NkTUNQWGpCdkhFRUZyUVdrRHByNU1fWVlTbXRlek9tbjcyRFg0VTJpQUJQOVRyc2VMTS1KTmVpdzBJMjFTa0N0MFXSAaQBQVVfeXFMTWR1ZnRJaEYxalRfWm1fbzdTRUN0cUl0eVF6aGFCR1h4bDMzcGY2azJfclc5dlc3a0FTR1RpYU5GU0gtVjMxU3N6STBLblBIZlQ1a1V6LUs5VGZzbmNGSmNWZ19uc2lTdzFmMlFrMzF3RFpTcWpacGg1SmxyVFNKV1hZTkhJVVYtXzNBQUM3cHBodHNia21xaWY0NklBY3kxUHBWdkQ?oc=5) (Google News Energy Feed)
 - [India Faces U.S. Tariff Risk Despite Reliance on Russian Crude - tokenpost.com](https://news.google.com/rss/articles/CBMiW0FVX3lxTE9JU2ZfemQ3MmNFamg4MnhiOWdkWnVCOXlzUTBueElPYTViVFBLX3NmbktmVlNEcjdUQkdrQjQyeEtwWFB5c2RBbS1FUmNnMlVoN0I2WlNvRzlSODA?oc=5) (Google News Energy Feed)
-- [India unlikely to abandon Russian oil despite threat of US tariffs of up to 100% — OilPrice - UA.NEWS](https://news.google.com/rss/articles/CBMiqwFBVV95cUxPeHZrUmhUT3psdklXTERCWEwwVGJHaVZNc2puYkVaNy1FR2FVbTJWS0o4OG00RV9yTmt3VHBFbE56X2FmSnBfMTJYTXZONm5MejhvNWZBT053ekl3NkpRR0RSQUdGX3FPNWx4cnVRUTQxYUZ3ek5tLWFDTl82am5CR1lLVGxUSDZ6UU9wQ0xaaTFXeXFyRUZjVURYQkpLcXZfZ21LTTJ1aUg3dXc?oc=5) (Google News Energy Feed)
 
 
 ---
@@ -68,13 +68,13 @@ Numeric Retention Schedule for This Run ($M_0 = 0.8000$):
 ## 5. NOAA SPC-Style Technical Discussion & Narrative Synopsis
 
 ### Executive Forecast Summary
-SUMMARY FOR RUN [2026-09-29 15:00:27]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'OPINION | Russia oil tariff and India’s leverage gap - Moneycontrol.com' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
+SUMMARY FOR RUN [2026-09-29 15:15:29]: Elevated upward price shock (+$0.52/gal) observed across wholesale futures. Event trigger 'Trump Pauses 50% Tariffs on Canada as Trade Talks Advance - Keystone XL Back in Spotlight - EnergyNow' drove supply disruption to S=0.80 and geopolitical risk to G=0.80. Exponential decay (t½=5.0d) models Day-1 retained shock M₁=0.6964 and Day-5 horizon retention M₅=0.4000.
 
 ### Technical Discussion & Market Dynamics
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-29 15:00:27 (Mode: INTRADAY_REVISION), primary event trigger 'OPINION | Russia oil tariff and India’s leverage gap - Moneycontrol.com' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-29 15:15:29 (Mode: INTRADAY_REVISION), primary event trigger 'Trump Pauses 50% Tariffs on Canada as Trade Talks Advance - Keystone XL Back in Spotlight - EnergyNow' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed, Executive Social Media). Ingested factor vector: Supply Disruption S=0.80, Price Pressure ΔP=+0.52, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.8000
   - Day 1: M₁ = 0.6964
   - Day 5: M₅ = 0.4000 (50.0% residual memory acting on Day-5 target horizon).
@@ -96,8 +96,8 @@ Largest upward shift for this run: SF Bay Area Region at $6.889/gal (+1.395/gal)
 ### Forecast Uncertainty & Counterfactual Catalysts
 FORECAST UNCERTAINTY & CATALYST SCENARIOS FOR THIS RUN:
 
-Evaluated tail-risk catalysts specific to execution [2026-09-29 15:00:27]:
-• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'OPINION | Russia oil tariff and India’s leverage gap - Moneycontrol.com'. Overall price pressure vector sits at ΔP=+0.52/gal.
+Evaluated tail-risk catalysts specific to execution [2026-09-29 15:15:29]:
+• Execution Context: Run type 'INTRADAY_REVISION' triggered by 'Trump Pauses 50% Tariffs on Canada as Trade Talks Advance - Keystone XL Back in Spotlight - EnergyNow'. Overall price pressure vector sits at ΔP=+0.52/gal.
 • Weather & Convective Risk: SPC convective outlook and NOAA zip-code alerts for Tulsa (74101), Newark (19711), Cincinnati (45202), Carolinas (27834/28202), and Oakland (94612) map zero active severe tornado trips for this forecast run.
 • Maritime & Geopolitical Exposure: Geopolitical risk score G=0.80. Counterfactual Strait of Hormuz blockade would inject +$0.109/gal (+2.88%) to current baseline.
 • Executive Social Media Gap Analysis: If weekend executive social media posts emerge while commodity exchanges are closed, Monday morning open price gap volatility is projected at 1.42x normal intraday range.
@@ -146,4 +146,4 @@ $$\text{MAE}_H = \frac{1}{N_H} \sum_{i=1}^{N_H} |\hat{y}_{i, H} - y_{i, H}|, \qu
 
 
 ---
-*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-29 15:00:27.*
+*Report generated automatically by Midgley Dashboard Generator Engine at 2026-09-29 15:15:29.*
