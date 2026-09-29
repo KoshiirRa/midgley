@@ -2816,6 +2816,28 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-09-29T16:25:12.852723+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 136,
+      "output_tokens": 80,
+      "total_tokens": 216,
+      "cost_usd": 3.4e-05,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-09-29T16:25:30.436421+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 148,
+      "output_tokens": 80,
+      "total_tokens": 228,
+      "cost_usd": 3.5e-05,
+      "status": "success"
     }
   ]
 }

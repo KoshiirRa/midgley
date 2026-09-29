@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-29T09:02:48.028753",
+  "timestamp": "2026-09-29T17:05:28.832608",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-29T08:31:58Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-29T17:02:31Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,

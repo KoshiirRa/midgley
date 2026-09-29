@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-29T09:08:57.912320",
+  "timestamp": "2026-09-29T17:11:24.324127",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-29T08:38:10Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-29T17:08:27Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,

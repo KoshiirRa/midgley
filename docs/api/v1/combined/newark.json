@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-29T08:56:38.617516",
+  "timestamp": "2026-09-29T16:59:34.492243",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-29T08:25:45Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-29T16:56:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,

@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-09-29T09:12:03.142107",
+  "timestamp": "2026-09-29T17:14:21.337750",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-09-29T08:47:25.967650",
+      "timestamp": "2026-09-29T16:50:41.049151",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -21,8 +21,8 @@
           "requested_granularity": "NATIONAL",
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:16:30Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-29T16:47:43Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -31,14 +31,14 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-10-05",
+        "target_date": "2026-10-06",
         "current_base_price": 4.456,
-        "predicted_price_per_gal": 4.512,
-        "expected_change_dollars": 0.056,
-        "expected_change_percent": 1.26,
+        "predicted_price_per_gal": 4.513,
+        "expected_change_dollars": 0.057,
+        "expected_change_percent": 1.28,
         "projected_direction": "UP",
-        "prediction_lower_95ci": 4.303,
-        "prediction_upper_95ci": 4.721,
+        "prediction_lower_95ci": 4.304,
+        "prediction_upper_95ci": 4.722,
         "calibration_method": "conformal",
         "calibration_sample_size": 1369,
         "directional_hit_rate_historical": 0.0,
@@ -48,12 +48,12 @@
         "day_2_price": 4.429,
         "day_3_price": 4.454,
         "day_4_price": 4.491,
-        "day_5_price": 4.512,
+        "day_5_price": 4.513,
         "feature_attributions": {
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
             "category": "futures_commodity",
-            "delta_dollars": 0.025,
+            "delta_dollars": 0.026,
             "share_pct": 45.0,
             "direction": "UP",
             "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -69,7 +69,7 @@
           "unstructured_sentiment": {
             "name": "Unstructured Intelligence & Sentiment",
             "category": "unstructured_sentiment",
-            "delta_dollars": 0.008,
+            "delta_dollars": 0.009,
             "share_pct": 15.0,
             "direction": "UP",
             "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -93,20 +93,20 @@
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
             "category": "tax_regulatory",
-            "delta_dollars": 0.002,
+            "delta_dollars": 0.001,
             "share_pct": 2.5,
             "direction": "UP",
             "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
           }
         },
         "driver_breakdown": {
-          "summary_text": "National forecast +$0.056/gal (+1.26%): Driven primarily by Futures & Commodity Benchmark (+$0.025/gal), Refining Yield & Crack Spread (+$0.014/gal).",
+          "summary_text": "National forecast +$0.057/gal (+1.28%): Driven primarily by Futures & Commodity Benchmark (+$0.026/gal), Refining Yield & Crack Spread (+$0.014/gal).",
           "key_drivers": [
             {
               "category": "Futures & Commodity Benchmark",
               "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-              "impact_dollars": 0.025,
-              "impact_pct": 0.56,
+              "impact_dollars": 0.026,
+              "impact_pct": 0.58,
               "share_pct": 45.0,
               "direction": "UP"
             },
@@ -121,8 +121,8 @@
             {
               "category": "Unstructured Intelligence & Sentiment",
               "description": "Geopolitical supply risk news & executive social media hawkish posts",
-              "impact_dollars": 0.008,
-              "impact_pct": 0.18,
+              "impact_dollars": 0.009,
+              "impact_pct": 0.2,
               "share_pct": 15.0,
               "direction": "UP"
             },
@@ -145,8 +145,8 @@
             {
               "category": "Tax & Regulatory Overhead",
               "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-              "impact_dollars": 0.002,
-              "impact_pct": 0.04,
+              "impact_dollars": 0.001,
+              "impact_pct": 0.02,
               "share_pct": 2.5,
               "direction": "UP"
             }
@@ -157,8 +157,8 @@
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.025,
-          "impact_pct": 0.56,
+          "impact_dollars": 0.026,
+          "impact_pct": 0.58,
           "share_pct": 45.0,
           "direction": "UP"
         },
@@ -173,8 +173,8 @@
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.008,
-          "impact_pct": 0.18,
+          "impact_dollars": 0.009,
+          "impact_pct": 0.2,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -197,19 +197,19 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.04,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.02,
           "share_pct": 2.5,
           "direction": "UP"
         }
       ],
       "driver_breakdown": {
-        "summary_text": "National forecast +$0.056/gal (+1.26%): Driven primarily by Futures & Commodity Benchmark (+$0.025/gal), Refining Yield & Crack Spread (+$0.014/gal).",
+        "summary_text": "National forecast +$0.057/gal (+1.28%): Driven primarily by Futures & Commodity Benchmark (+$0.026/gal), Refining Yield & Crack Spread (+$0.014/gal).",
         "components": {
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
             "category": "futures_commodity",
-            "delta_dollars": 0.025,
+            "delta_dollars": 0.026,
             "share_pct": 45.0,
             "direction": "UP",
             "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -225,7 +225,7 @@
           "unstructured_sentiment": {
             "name": "Unstructured Intelligence & Sentiment",
             "category": "unstructured_sentiment",
-            "delta_dollars": 0.008,
+            "delta_dollars": 0.009,
             "share_pct": 15.0,
             "direction": "UP",
             "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -249,7 +249,7 @@
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
             "category": "tax_regulatory",
-            "delta_dollars": 0.002,
+            "delta_dollars": 0.001,
             "share_pct": 2.5,
             "direction": "UP",
             "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -259,7 +259,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-09-29T08:50:30.008493",
+      "timestamp": "2026-09-29T16:53:38.516873",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -277,7 +277,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:19:35Z"
+          "timestamp": "2026-09-29T16:25:40Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -514,7 +514,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-09-29T08:53:34.604625",
+      "timestamp": "2026-09-29T16:56:36.494379",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -532,7 +532,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:22:40Z"
+          "timestamp": "2026-09-29T16:25:41Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -769,7 +769,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-09-29T08:56:38.617516",
+      "timestamp": "2026-09-29T16:59:34.492243",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -786,8 +786,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:25:45Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-29T16:56:36Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1024,7 +1024,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-09-29T08:59:43.085045",
+      "timestamp": "2026-09-29T17:02:31.675416",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1041,8 +1041,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:28:52Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-29T16:59:34Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1279,7 +1279,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-09-29T09:02:48.028753",
+      "timestamp": "2026-09-29T17:05:28.832608",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1296,8 +1296,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:31:58Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-29T17:02:31Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1534,7 +1534,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-09-29T09:05:52.862184",
+      "timestamp": "2026-09-29T17:08:26.956795",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1551,8 +1551,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:35:04Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-29T17:05:29Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1789,7 +1789,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-09-29T09:08:57.912320",
+      "timestamp": "2026-09-29T17:11:24.324127",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1806,8 +1806,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:38:10Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-29T17:08:27Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2044,7 +2044,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-09-29T09:12:03.140353",
+      "timestamp": "2026-09-29T17:14:21.335477",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2061,8 +2061,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-09-29T08:41:16Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-09-29T17:11:24Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
