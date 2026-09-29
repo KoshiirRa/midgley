@@ -3753,5 +3753,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-29T21:30:19.545551",
+    "headline": "PHILLIPS 66 TEAMSTERS OVERWHELMINGLY AUTHORIZE STRIKE - Yahoo Finance",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRDZ2OU93V0lhOGZzQnJoV05SczFLOTd3Ylowb1YydjVWaFNHQmZ6NWFJRWZKUzFVVjBMSVg3QWtxWEM4VXhrQjh4M3hVbmdZUjVKdktNYlZ6aXNUSVJsbTVzU2JDYjlmWklTLTlHdFhrU0xZWGpKOHBGUDBHUzRCTmhxeDhlUS1NVzlySGpnOGQ1LU9sUzhDc2tYNDVXdjZMUVVueE1n?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRDZ2OU93V0lhOGZzQnJoV05SczFLOTd3Ylowb1YydjVWaFNHQmZ6NWFJRWZKUzFVVjBMSVg3QWtxWEM4VXhrQjh4M3hVbmdZUjVKdktNYlZ6aXNUSVJsbTVzU2JDYjlmWklTLTlHdFhrU0xZWGpKOHBGUDBHUzRCTmhxeDhlUS1NVzlySGpnOGQ1LU9sUzhDc2tYNDVXdjZMUVVueE1n?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxNRDZ2OU93V0lhOGZzQnJoV05SczFLOTd3Ylowb1YydjVWaFNHQmZ6NWFJRWZKUzFVVjBMSVg3QWtxWEM4VXhrQjh4M3hVbmdZUjVKdktNYlZ6aXNUSVJsbTVzU2JDYjlmWklTLTlHdFhrU0xZWGpKOHBGUDBHUzRCTmhxeDhlUS1NVzlySGpnOGQ1LU9sUzhDc2tYNDVXdjZMUVVueE1n?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    },
+    "discord_notified": true
   }
 ]
