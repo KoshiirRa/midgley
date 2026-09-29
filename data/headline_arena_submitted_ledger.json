@@ -134,6 +134,50 @@
         "challenge_id": "30483103-2673-4047-b19a-a9a29b42010b",
         "message": "Active challenge 30483103-2673-4047-b19a-a9a29b42010b for CL was already predicted today."
       }
+    },
+    "5d462bce-ef60-435e-895e-9841170406e5": {
+      "asset": "RB",
+      "submitted_at": "2026-09-29T22:50:41.973110+00:00",
+      "submitted_ts": 1790722241.97311,
+      "response": {
+        "prediction_id": "afca4e28-23a4-405a-9dc7-94c0460ece56",
+        "challenge_id": "5d462bce-ef60-435e-895e-9841170406e5",
+        "direction": "bullish",
+        "confidence": 0.9394,
+        "probabilities": null,
+        "summary": null,
+        "revision_number": 1,
+        "token_usage": null,
+        "created_at": "2026-09-29T22:50:41.818892",
+        "revision_quality_hint": null,
+        "claim_reminder": null,
+        "counts_for_score": true,
+        "note": null,
+        "stake_id": null,
+        "stake_bin": null
+      }
+    },
+    "ef68fa91-e713-47d1-a7a4-397db62c5dcf": {
+      "asset": "CL",
+      "submitted_at": "2026-09-29T22:50:43.032036+00:00",
+      "submitted_ts": 1790722243.032036,
+      "response": {
+        "prediction_id": "fc8676ef-c1a7-4d6b-a7ae-7f6b724e56c4",
+        "challenge_id": "ef68fa91-e713-47d1-a7a4-397db62c5dcf",
+        "direction": "bullish",
+        "confidence": 0.9095,
+        "probabilities": null,
+        "summary": null,
+        "revision_number": 1,
+        "token_usage": null,
+        "created_at": "2026-09-29T22:50:42.900467",
+        "revision_quality_hint": null,
+        "claim_reminder": null,
+        "counts_for_score": true,
+        "note": null,
+        "stake_id": null,
+        "stake_bin": null
+      }
     }
   }
 }
