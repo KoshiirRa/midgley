@@ -232,4 +232,17 @@ Whenever new features, regional models, data feeds, or API endpoints are added:
 4. **Active API Forecast Serving (Issue #474):** The API server (`src/api_server.py`) must filter out expired forecast records (`forecast_target_date <= today`). Stale forecasts must never be assigned fabricated future target maturities without re-running model inference.
 5. **Signed Feature Attribution (Issue #476):** Feature decomposition in `src/models.py` must preserve signed impact deltas ($\Delta_i$) and provide safe fallback descriptions for arbitrary feature names to prevent `KeyError`.
 
+---
+
+## 🧠 12. Hindsight Episodic Context, Prompt Grounding & Anomaly Reflection (Issue #559 Phase 3)
+
+1. **Episodic Precedent Injection (`src/hindsight_context.py`):**
+   - Whenever qualitative news headlines or counterfactual scenario prompts contain physical disruption keywords (refinery outages, FCC trips, flaring, pipeline halts, river navigation closures, hurricane threats, RVP compliance transitions), invoke `inject_hindsight_context()` or `enrich_scenario_with_episodic_memory()`.
+   - The formatted prompt block `[HISTORICAL EPISODIC MEMORY PRECEDENT & REALIZED ANALOGS]` anchors qualitative impact scores to empirical historical outage durations, pass-through lags, and realized price reaction bounds, preventing LLM hallucination and uncalibrated shock estimates.
+2. **Post-Settlement Causal Reflection:**
+   - In weekly review and post-settlement evaluation passes, scan resolved forecast records using `evaluate_and_reflect_settled_anomalies()`.
+   - Forecast errors exceeding $2\sigma$ ($|\Delta| \ge \$0.20/\text{gal}$) or exhibiting directional flips on significant price swings are classified (`OVERESTIMATED_SHOCK`, `UNDERESTIMATED_SHOCK`, `DIRECTIONAL_FLIP`, `BASIS_DIVERGENCE`) and recorded back into the Vectorize Hindsight memory bank (`Midgley`) and local SQLite FTS5 store.
+3. **Relational Telemetry Auditing:**
+   - All recall, reflect, and retain interactions must log telemetry records to the `hindsight_telemetry` table in the configured database (`src/db/schema.sql`).
+
 

@@ -337,6 +337,12 @@ python scripts/reconcile_hindsight_memory.py --start-date 2026-09-25
 ```
 This CLI tool automatically detects whether Vectorize Hindsight Hosted SaaS (`HINDSIGHT_API_KEY`) or local SQLite FTS5 is active and dual-dispatches any unretained prediction shocks ($|\text{error}| \ge \$0.25/\text{gal}$ or directional flips), ensuring zero loss of episodic memory context.
 
+### 3.5.2. Closed-Loop Episodic Grounding & Relational Telemetry (`src/hindsight_context.py`, Issue #559)
+Midgley v0.8.0 closes the loop between qualitative LLM forecasting and historical market experience:
+* **Pre-Forecast Precedent Injection:** When news or scenario prompts contain disruption catalyst terms (refinery unit outages, pipeline closures, river draft constraints, hurricane threats, RVP compliance deadlines), `src/hindsight_context.py` injects empirical precedents (`[HISTORICAL EPISODIC MEMORY PRECEDENT]`) into LLM scoring prompts, grounding qualitative forecasts with historical outage durations, pass-through lags, and realized price reaction bounds.
+* **Post-Settlement Causal Reflection:** `evaluate_and_reflect_settled_anomalies()` classifies large deviations ($>2\sigma$ or directional flips) into structured failure modes (`OVERESTIMATED_SHOCK`, `UNDERESTIMATED_SHOCK`, `DIRECTIONAL_FLIP`, `BASIS_DIVERGENCE`), recording durable reflections into Hindsight memory.
+* **Relational Telemetry Table (`hindsight_telemetry`):** All `RECALL`, `REFLECT`, and `RETAIN` operations log audit records (query, result summary, latency, status) directly into the unified database schema (`src/db/schema.sql`).
+
 ---
 
 ## 4. Production Docker Container & Durable State Architecture
