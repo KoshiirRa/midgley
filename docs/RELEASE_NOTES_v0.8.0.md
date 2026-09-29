@@ -53,14 +53,22 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Rolling Shock Normalization**: Added `normalize_event_shocks()` for logarithmic and rolling 90-day z-score shock scaling.
 - **Jordà (2005) Local Projections**: Added `estimate_local_projections_impulse_responses()` in `src/feature_engineering.py` estimating non-parametric multi-horizon impulse response curves with Newey-West HAC standard errors.
 
-### 10. MinT Hierarchical Reconciliation Engine (Issue #450)
-- **Minimum Trace Optimal Combination**: Implemented `MinTHierarchicalEngine` and `reconcile_mint()` in `src/hierarchical_engine.py` (Wickramasuriya et al. 2019), enforcing exact mathematical summation consistency across National $\to$ PADD $\to$ Metro levels.
-- **Empirical Bayes Parameter Shrinkage**: Added `empirical_bayes_shrinkage_regression()`, shrinking data-sparse regional coefficients toward regional cluster priors.
+### 12. Unified Direct Cloud Database & Deduplication Engine (Issues #559, #423, #424, #479)
+- **Direct Edge & Cloud Database Architecture (`src/db/client.py`)**: Unified direct cloud database connectivity hitting Turso libSQL REST pipeline v2 and Cloudflare D1 directly over wire without local SQLite synchronization divergence, backed by standard local SQLite WAL-mode fallback.
+- **Relational Normalized Schema (`src/db/schema.sql`)**: Structured schema with foreign keys and unique constraints across `forecasts`, `intraday_revisions`, `intraday_events`, `evaluated_headlines`, `data_vintages`, `ground_truth`, and `evaluations`.
+- **Deduplication & Legacy CSV Migration (`scripts/migrate_csv_to_turso.py`)**: Migrated legacy monolithic `data/prediction_history.csv` with deterministic SHA-256 primary keys (`forecast_id`), collapsing 59,717 raw backtest rows down to exactly 11,943 unique forecasts (**eliminating 47,774 redundant duplicate entries / 80% deduplication**).
+- **Bitemporal Vintage Store (`src/vintage_store.py`)**: Centralized point-in-time querying (`query_as_of`) with data quality classification (`LIVE`, `CACHED`, `BENCHMARK`, `STALE`, `SYNTHETIC`) and publication lag enforcement, eliminating lookahead leakage across all 21 external feeds.
+- **Parent-Linked Intraday Revisions (`src/intraday_event_monitor.py`)**: Structured parent-child lineage tracking linking intraday shock adjustments back to parent base forecasts (`parent_forecast_id`).
 
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1 & 2)
+  - Issue #423 - `feat(storage): Migrate flat CSV and JSON storage to a structured datastore`
+  - Issue #424 - `fix(storage): Replace unsafe raw file writes with atomic write routines to prevent 0-byte file truncation`
+  - Issue #479 - `feat(storage): Implement cursor-based cloud sync for predictions and evaluations`
+  - Issue #481 - `fix(models): Conformal inference small-sample fallback coverage calibration`
   - Issue #444 - `fix(data-ingestion): Implement roll-adjusted RBOB futures returns and map metros to regional wholesale supply hubs`
   - Issue #449 - `feat(uncertainty): Calibrated prediction intervals and proper quantile generation via Adaptive Conformal Inference`
   - Issue #452 - `feat(evaluation): Build unified statistical evaluation harness, Model Confidence Set & feature admission gate`

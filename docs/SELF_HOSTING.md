@@ -255,6 +255,22 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 ### Option C: Standalone Local Fallback (Tier 3 Default)
 If no edge credentials are supplied, Midgley defaults to local SQLite persistence at `data/lookup_cache.sqlite` with an in-memory fast dict lookup ($0 cloud infrastructure cost, zero external setup required).
 
+### Direct Cloud Database Engine & Legacy Migration (`scripts/migrate_csv_to_turso.py`)
+Midgley v0.8.0 introduces the direct `DatabaseClient` (`src/db/client.py`) connecting directly to Turso libSQL REST pipeline v2 or Cloudflare D1, or local SQLite (`data/midgley.db`).
+
+1. **Initialize Relational Schema:**
+   Midgley automatically executes `src/db/schema.sql` upon initial startup. To initialize or inspect manually:
+   ```bash
+   python3 -c "from src.db.client import get_db; db = get_db(); db.init_schema(); print('Schema initialized successfully.')"
+   ```
+
+2. **Deduplicate & Migrate Legacy CSV Prediction Ledgers:**
+   If upgrading from a prior version with a large `data/prediction_history.csv`, execute the migration script to deduplicate redundant backtest runs (collapsing identical runs by 80% with deterministic SHA-256 primary keys):
+   ```bash
+   python3 scripts/migrate_csv_to_turso.py
+   ```
+   The migration populates normalized relational tables (`forecasts`, `ground_truth`, and `evaluations`) in the configured database.
+
 ---
 
 ## 3.5. Setting Up Vectorize Hindsight Episodic Agent Memory (Issue #230)

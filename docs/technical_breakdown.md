@@ -74,7 +74,7 @@ SUMMARY FOR RUN [2026-09-29 15:30:26]: Elevated upward price shock (+$0.42/gal) 
 TECHNICAL DISCUSSION & MARKET DYNAMICS FOR THIS RUN:
 
 1. Qualitative Shock Integration & Decay Dynamics:
-During execution 2026-09-29 15:30:26 (Mode: INTRADAY_REVISION), primary event trigger 'VLCC ‘ablaze’ after new Strait of Hormuz ship strike as Iran-US talks fizzle out' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Executive Social Media, Google News Energy Feed). Ingested factor vector: Supply Disruption S=0.50, Price Pressure ΔP=+0.42, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
+During execution 2026-09-29 15:30:26 (Mode: INTRADAY_REVISION), primary event trigger 'VLCC ‘ablaze’ after new Strait of Hormuz ship strike as Iran-US talks fizzle out' was processed by the extraction engine. Inspiration stream ingested 3 headline bulletins from sources (Google News Energy Feed, Executive Social Media). Ingested factor vector: Supply Disruption S=0.50, Price Pressure ΔP=+0.42, Geopolitical Risk G=0.80. Exponential decay constant λ = ln(2)/5.0 = 0.13863 day⁻¹ dictates daily retention factor γ ≈ 0.87055. Initial shock retention schedule for this specific execution:
   - Day 0: M₀ = 0.5000
   - Day 1: M₁ = 0.4353
   - Day 5: M₅ = 0.2500 (50.0% residual memory acting on Day-5 target horizon).

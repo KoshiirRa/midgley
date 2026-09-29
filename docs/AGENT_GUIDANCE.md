@@ -65,9 +65,11 @@ Midgley enforces a strict **$0 ongoing infrastructure cost** mandate. All agent 
   - `/api/v1/{locale}.json` & `/api/v1/combined/{locale}.json` — Compatibility route aliases.
 * **Characteristics:** 100% SLA uptime, 0 maintenance, served directly by GitHub Pages CDN cache. Ideal for mobile and in-dash head units.
 
-### Tier 2: Cloudflare Edge Cache & Queue Gateway
+### Tier 2: Cloudflare Edge Cache & Cloud Database Gateway
 * **Workers:** `workers/cache_worker.ts` and `workers/intraday_monitor_worker.ts`.
-* **Database:** Cloudflare D1 (`midgley-cache-d1`).
+* **Database & Direct Cloud Engine (`src/db/client.py`):** Direct HTTP REST connectivity to Turso libSQL (pipeline v2) and Cloudflare D1 (`midgley-cache-d1`) over wire without local synchronization drift.
+* **Bitemporal Vintage Store (`src/vintage_store.py`):** Unified `data_vintages` table tracking observation dates, publication timestamps, and data quality tiers (`LIVE`, `CACHED`, `BENCHMARK`, `STALE`, `SYNTHETIC`) for point-in-time querying.
+* **Deduplicated Predictions Ledger:** Collapses redundant backtest runs using deterministic SHA-256 primary keys (`forecast_id`) to maintain optimal database performance and prevent ledger bloat.
 * **Queue:** `intraday-event-queue` with dead-letter queue `intraday-event-dlq`.
 * **Security & Staging Isolation (Issue #438):**
   - `workers/cache_worker.ts` enforces fail-closed Bearer token verification against `CLOUDFLARE_AUTH_TOKEN`.
