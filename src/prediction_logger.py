@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 import json
 import uuid
+import hashlib
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -514,8 +515,9 @@ def log_predictions(
         if record_run_type in ["DAILY_BATCH", "DAILY_FORECAST", None] or not record_run_type:
             record_run_type = "RETROSPECTIVE_BACKTEST" if is_retro else "LIVE_PROSPECTIVE"
 
-        # Unique forecast identifier and UTC issuance timestamp (Issue #434)
-        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else str(uuid.uuid4())
+        # Deterministic unique forecast identifier (Issue #559, Item E-1)
+        raw_key = f"{region.strip().lower()}_{model_version.strip().lower()}_{str(target_date)[:10]}_{int(h_days)}_{record_run_type.strip().lower()}"
+        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:32]
         issued_utc = str(row.get('issued_at_utc')) if ('issued_at_utc' in row and pd.notna(row['issued_at_utc'])) else now_utc_str
 
         new_records.append({
@@ -555,14 +557,39 @@ def log_predictions(
 
         combined = pd.concat([history_df, new_df], ignore_index=True)
         
-        # Ledger Immutability & Concurrency Safety (Issue #434):
-        # Prior issued forecasts are never overwritten. Revisions are recorded as distinct ledger rows.
-        # Only deduplicate if identical unique forecast_id is encountered.
+        # Ledger Immutability & Concurrency Safety (Issue #434, #559):
+        # Enforce deterministic deduplication on forecast_id.
         if not combined.empty and "forecast_id" in combined.columns:
             combined.drop_duplicates(subset=["forecast_id"], keep="last", inplace=True)
             combined.reset_index(drop=True, inplace=True)
 
         atomic_write_csv(HISTORY_CSV_PATH, combined, index=False)
+
+    # Direct database batch logging (Turso libSQL / D1 / SQLite)
+    try:
+        from src.db.client import get_db
+        db = get_db()
+        db_stmts = []
+        for rec in new_records:
+            sql = """
+            INSERT INTO forecasts (
+                forecast_id, region, model_version, origin_date, horizon, target_date,
+                predicted_price, ci_lower_95, ci_upper_95, llm_price_pressure, llm_supply_disruption, run_type
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(forecast_id) DO UPDATE SET
+                predicted_price = excluded.predicted_price,
+                ci_lower_95 = excluded.ci_lower_95,
+                ci_upper_95 = excluded.ci_upper_95;
+            """
+            db_stmts.append((sql, (
+                rec["forecast_id"], rec["region"], rec["model_version"], rec["log_timestamp"][:10],
+                rec["forecast_horizon_days"], rec["forecast_target_date"], rec["predicted_5d_price"],
+                rec["prediction_lower_95ci"], rec["prediction_upper_95ci"], rec["llm_price_pressure"],
+                rec["llm_supply_disruption"], rec["run_type"]
+            )))
+        db.execute_batch(db_stmts)
+    except Exception as db_err:
+        logger.debug(f"Notice logging predictions to database: {db_err}")
     
     logger.info(f"Logged {len(new_records)} predictions ({forecast_horizon_days}d horizon) for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
     try:

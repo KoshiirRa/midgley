@@ -1465,7 +1465,7 @@
     }
   },
   {
-    "as_of": "2026-09-29T14:43:59.775151+00:00",
+    "as_of": "2026-09-29T17:50:09.604842+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "94612",
     "zip_code": "94612",
@@ -1485,11 +1485,11 @@
       "pm25_aqi": 45,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-29T14:43:59.775151+00:00"
+      "as_of": "2026-09-29T17:50:09.604842+00:00"
     }
   },
   {
-    "as_of": "2026-09-29T14:43:59.836643+00:00",
+    "as_of": "2026-09-29T17:50:09.690141+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "74101",
     "zip_code": "74101",
@@ -1509,11 +1509,11 @@
       "pm25_aqi": 40,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-29T14:43:59.836643+00:00"
+      "as_of": "2026-09-29T17:50:09.690141+00:00"
     }
   },
   {
-    "as_of": "2026-09-29T14:43:59.909444+00:00",
+    "as_of": "2026-09-29T17:50:09.782310+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "19711",
     "zip_code": "19711",
@@ -1533,11 +1533,11 @@
       "pm25_aqi": 42,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-29T14:43:59.909444+00:00"
+      "as_of": "2026-09-29T17:50:09.782310+00:00"
     }
   },
   {
-    "as_of": "2026-09-29T14:43:59.980363+00:00",
+    "as_of": "2026-09-29T17:50:09.854281+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "45202",
     "zip_code": "45202",
@@ -1557,11 +1557,11 @@
       "pm25_aqi": 48,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-29T14:43:59.980363+00:00"
+      "as_of": "2026-09-29T17:50:09.854281+00:00"
     }
   },
   {
-    "as_of": "2026-09-29T14:44:00.052278+00:00",
+    "as_of": "2026-09-29T17:50:09.926125+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "27834",
     "zip_code": "27834",
@@ -1581,11 +1581,11 @@
       "pm25_aqi": 35,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-29T14:44:00.052278+00:00"
+      "as_of": "2026-09-29T17:50:09.926125+00:00"
     }
   },
   {
-    "as_of": "2026-09-29T14:44:00.124015+00:00",
+    "as_of": "2026-09-29T17:50:09.990866+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "28202",
     "zip_code": "28202",
@@ -1605,11 +1605,11 @@
       "pm25_aqi": 38,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-29T14:44:00.124015+00:00"
+      "as_of": "2026-09-29T17:50:09.990866+00:00"
     }
   },
   {
-    "as_of": "2026-09-29T14:44:00.216531+00:00",
+    "as_of": "2026-09-29T17:50:10.061974+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "34984",
     "zip_code": "34984",
@@ -1629,11 +1629,11 @@
       "pm25_aqi": 30,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-09-29T14:44:00.216531+00:00"
+      "as_of": "2026-09-29T17:50:10.061974+00:00"
     }
   },
   {
-    "as_of": "2026-09-29T14:44:00.277858+00:00",
+    "as_of": "2026-09-29T17:51:37.086372+00:00",
     "valid_date": "2026-09-29",
     "entity_key": "macro_composite",
     "zip_code": null,
@@ -1643,7 +1643,7 @@
     "is_unplanned_outage": false,
     "data": {
       "status": "SUCCESS",
-      "as_of": "2026-09-29T14:44:00.277858+00:00",
+      "as_of": "2026-09-29T17:51:37.086372+00:00",
       "indices": {
         "bay_area_outage_risk_index": 0.0,
         "tulsa_outage_risk_index": 0.0,
@@ -1656,78 +1656,9 @@
         "is_unplanned_refinery_outage_detected": false,
         "active_outage_count": 0,
         "ozone_action_day_count": 0,
-        "max_rvp_compliance_surcharge_per_gal": 0.054
+        "max_rvp_compliance_surcharge_per_gal": 0.0255
       },
       "corridors": {
-        "bay_area": {
-          "corridor": "bay_area",
-          "name": "SF Bay Area Refining Corridor (PADD 5)",
-          "monitored_assets": 3,
-          "primary_zip": "94612",
-          "observed_pm25": 9.83,
-          "observed_so2": 1.93,
-          "observed_ozone_aqi": 58,
-          "baseline_pm25": 9.83,
-          "baseline_so2": 1.93,
-          "z_score_pm25": 0.0,
-          "z_score_so2": 0.0,
-          "is_unplanned_outage": false,
-          "is_wildfire_smoke": false,
-          "is_ozone_action_day": false,
-          "ozone_category": "Moderate",
-          "statutory_rvp_psi": 7.0,
-          "seasonal_blend_state": "FALL_SHOULDER",
-          "rvp_compliance_surcharge_per_gal": 0.054,
-          "outage_risk_index": 0.0,
-          "flaring_rack_shock_per_gal": 0.0,
-          "estimated_rack_shock_per_gal": 0.054
-        },
-        "tulsa": {
-          "corridor": "tulsa",
-          "name": "Tulsa & Mid-Continent Refining Corridor (PADD 2)",
-          "monitored_assets": 2,
-          "primary_zip": "74101",
-          "observed_pm25": 11.0,
-          "observed_so2": 2.5,
-          "observed_ozone_aqi": 52,
-          "baseline_pm25": 11.0,
-          "baseline_so2": 2.5,
-          "z_score_pm25": 0.0,
-          "z_score_so2": 0.0,
-          "is_unplanned_outage": false,
-          "is_wildfire_smoke": false,
-          "is_ozone_action_day": false,
-          "ozone_category": "Moderate",
-          "statutory_rvp_psi": 9.0,
-          "seasonal_blend_state": "FALL_SHOULDER",
-          "rvp_compliance_surcharge_per_gal": 0.015,
-          "outage_risk_index": 0.0,
-          "flaring_rack_shock_per_gal": 0.0,
-          "estimated_rack_shock_per_gal": 0.015
-        },
-        "delaware_valley": {
-          "corridor": "delaware_valley",
-          "name": "Delaware Valley & Mid-Atlantic Refining Hub (PADD 1B)",
-          "monitored_assets": 2,
-          "primary_zip": "19711",
-          "observed_pm25": 10.75,
-          "observed_so2": 2.35,
-          "observed_ozone_aqi": 55,
-          "baseline_pm25": 10.75,
-          "baseline_so2": 2.35,
-          "z_score_pm25": 0.0,
-          "z_score_so2": 0.0,
-          "is_unplanned_outage": false,
-          "is_wildfire_smoke": false,
-          "is_ozone_action_day": false,
-          "ozone_category": "Moderate",
-          "statutory_rvp_psi": 9.0,
-          "seasonal_blend_state": "FALL_SHOULDER",
-          "rvp_compliance_surcharge_per_gal": 0.018,
-          "outage_risk_index": 0.0,
-          "flaring_rack_shock_per_gal": 0.0,
-          "estimated_rack_shock_per_gal": 0.018
-        },
         "tri_state": {
           "corridor": "tri_state",
           "name": "Ohio River Valley / Tri-State Refining Hub (PADD 2)",
@@ -1750,75 +1681,6 @@
           "outage_risk_index": 0.0,
           "flaring_rack_shock_per_gal": 0.0,
           "estimated_rack_shock_per_gal": 0.0255
-        },
-        "carolinas_coastal": {
-          "corridor": "carolinas_coastal",
-          "name": "Carolinas Coastal Plain / Selma Terminal Corridor (PADD 1C)",
-          "monitored_assets": 1,
-          "primary_zip": "27834",
-          "observed_pm25": 8.5,
-          "observed_so2": 1.2,
-          "observed_ozone_aqi": 45,
-          "baseline_pm25": 8.5,
-          "baseline_so2": 1.2,
-          "z_score_pm25": 0.0,
-          "z_score_so2": 0.0,
-          "is_unplanned_outage": false,
-          "is_wildfire_smoke": false,
-          "is_ozone_action_day": false,
-          "ozone_category": "Good",
-          "statutory_rvp_psi": 9.0,
-          "seasonal_blend_state": "FALL_SHOULDER",
-          "rvp_compliance_surcharge_per_gal": 0.0135,
-          "outage_risk_index": 0.0,
-          "flaring_rack_shock_per_gal": 0.0,
-          "estimated_rack_shock_per_gal": 0.0135
-        },
-        "carolinas_piedmont": {
-          "corridor": "carolinas_piedmont",
-          "name": "Carolinas Piedmont / Charlotte Metro Corridor (PADD 1C)",
-          "monitored_assets": 1,
-          "primary_zip": "28202",
-          "observed_pm25": 9.5,
-          "observed_so2": 1.4,
-          "observed_ozone_aqi": 52,
-          "baseline_pm25": 9.5,
-          "baseline_so2": 1.4,
-          "z_score_pm25": 0.0,
-          "z_score_so2": 0.0,
-          "is_unplanned_outage": false,
-          "is_wildfire_smoke": false,
-          "is_ozone_action_day": false,
-          "ozone_category": "Moderate",
-          "statutory_rvp_psi": 9.0,
-          "seasonal_blend_state": "FALL_SHOULDER",
-          "rvp_compliance_surcharge_per_gal": 0.0144,
-          "outage_risk_index": 0.0,
-          "flaring_rack_shock_per_gal": 0.0,
-          "estimated_rack_shock_per_gal": 0.0144
-        },
-        "south_florida": {
-          "corridor": "south_florida",
-          "name": "South Florida & Port St. Lucie Corridor (PADD 1C)",
-          "monitored_assets": 1,
-          "primary_zip": "34984",
-          "observed_pm25": 8.0,
-          "observed_so2": 1.5,
-          "observed_ozone_aqi": 42,
-          "baseline_pm25": 8.0,
-          "baseline_so2": 1.5,
-          "z_score_pm25": 0.0,
-          "z_score_so2": 0.0,
-          "is_unplanned_outage": false,
-          "is_wildfire_smoke": false,
-          "is_ozone_action_day": false,
-          "ozone_category": "Good",
-          "statutory_rvp_psi": 9.0,
-          "seasonal_blend_state": "FALL_SHOULDER",
-          "rvp_compliance_surcharge_per_gal": 0.0165,
-          "outage_risk_index": 0.0,
-          "flaring_rack_shock_per_gal": 0.0,
-          "estimated_rack_shock_per_gal": 0.0165
         }
       },
       "active_outages": [],

@@ -460,26 +460,60 @@ class IntradayEventMonitor:
                 logger.info("  -> Cleared SQLite response cache for API gateway.")
 
 
-                # 3. Log Intraday Revision Record across target locales
-                for loc in target_locales:
-                    base_p = 3.184
-                    shocked_p = base_p * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
-                    dummy_df = pd.DataFrame([{
-                        "date": datetime.now().strftime("%Y-%m-%d"),
-                        "current_price": base_p,
-                        "predicted_5d_price": shocked_p,
-                        "quant_baseline_5d_price": base_p,
-                        "llm_price_pressure": scores.get("overall_price_pressure", 0.0),
-                        "llm_supply_disruption": scores.get("supply_disruption", 0.0),
-                        "llm_augmentation_delta": round(shocked_p - base_p, 4)
-                    }])
-                    log_predictions(
-                        dummy_df, 
-                        region=loc, 
-                        model_version=resolve_model_tag(region=loc, model_type="Intraday"),
-                        run_type="INTRADAY_REVISION",
-                        headline_trigger=headline
-                    )
+                # 3. Log Intraday Revision Record across target locales (Issue #559, Item E-3)
+                try:
+                    from src.db.client import get_db
+                    import hashlib
+                    db = get_db()
+                    
+                    # Record the anomaly event in intraday_events table
+                    evt_id = hashlib.sha256(f"{headline}_{source}_{datetime.utcnow().isoformat()}".encode("utf-8")).hexdigest()[:32]
+                    evt_sql = """
+                    INSERT INTO intraday_events (
+                        event_id, headline, source, url, published_at,
+                        geopolitical_risk, supply_disruption, demand_sentiment, opec_action, is_anomaly
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+                    ON CONFLICT(event_id) DO NOTHING;
+                    """
+                    db.execute(evt_sql, (
+                        evt_id, headline, source, url or "", datetime.utcnow().isoformat() + "Z",
+                        scores.get("geopolitical_risk", 0.0), scores.get("supply_disruption", 0.0),
+                        scores.get("demand_sentiment", 0.0), scores.get("opec_action", 0.0)
+                    ))
+
+                    for loc in target_locales:
+                        # Find the parent forecast for this locale
+                        parent_rows = db.execute(
+                            "SELECT forecast_id, predicted_price, horizon FROM forecasts WHERE region = ? AND run_type = 'LIVE_PROSPECTIVE' ORDER BY created_at DESC LIMIT 1;",
+                            (loc,)
+                        )
+                        if parent_rows:
+                            parent_f_id = parent_rows[0]["forecast_id"]
+                            base_p = float(parent_rows[0]["predicted_price"])
+                            h_step = int(parent_rows[0].get("horizon", 5))
+                        else:
+                            parent_f_id = f"baseline_{loc.lower()}"
+                            base_p = 3.184
+                            h_step = 5
+
+                        pressure = scores.get("overall_price_pressure", 0.0)
+                        delta_p = round(base_p * pressure * 0.04, 4)
+                        revised_p = round(base_p + delta_p, 4)
+                        rev_id = hashlib.sha256(f"{parent_f_id}_{evt_id}_{datetime.utcnow().isoformat()}".encode("utf-8")).hexdigest()[:32]
+
+                        rev_sql = """
+                        INSERT INTO intraday_revisions (
+                            revision_id, parent_forecast_id, region, horizon,
+                            delta_price, revised_predicted_price, event_id, rationale
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(revision_id) DO NOTHING;
+                        """
+                        db.execute(rev_sql, (
+                            rev_id, parent_f_id, loc, h_step, delta_p, revised_p, evt_id,
+                            f"Shock alert: {headline[:80]}"
+                        ))
+                except Exception as rev_err:
+                    logger.debug(f"Notice recording intraday revision to database: {rev_err}")
 
                 # 4. Regenerate Public Web Dashboard
                 try:

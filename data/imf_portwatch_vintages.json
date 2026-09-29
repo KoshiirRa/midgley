@@ -1,19 +1,19 @@
 {
   "vintages": {
     "Strait_of_Hormuz": {
-      "latest_observation_date": "2026-09-24",
-      "recorded_at": "2026-09-24T15:46:38.072481",
+      "latest_observation_date": "2026-09-29",
+      "recorded_at": "2026-09-29T17:51:32.187934",
       "metrics": {
-        "daily_vessel_count": 118.7,
-        "daily_tanker_count": 42.4,
-        "daily_transit_tonnage_mt": 46263675.0,
-        "daily_tanker_tonnage_mt": 18505470.0,
-        "transit_anomaly_7d_28d": 0.1275
+        "daily_vessel_count": 108.9,
+        "daily_tanker_count": 38.9,
+        "daily_transit_tonnage_mt": 44285408.0,
+        "daily_tanker_tonnage_mt": 17714163.0,
+        "transit_anomaly_7d_28d": 0.1539
       }
     },
     "Suez_Canal": {
       "latest_observation_date": "2026-02-01",
-      "recorded_at": "2026-09-24T15:46:38.462817",
+      "recorded_at": "2026-09-29T17:51:32.567758",
       "metrics": {
         "daily_vessel_count": 48.2,
         "daily_tanker_count": 17.2,
@@ -23,27 +23,27 @@
       }
     },
     "Bab_el_Mandeb": {
-      "latest_observation_date": "2026-09-24",
-      "recorded_at": "2026-09-24T15:46:38.277683",
+      "latest_observation_date": "2026-09-29",
+      "recorded_at": "2026-09-29T17:51:32.382874",
       "metrics": {
-        "daily_vessel_count": 39.5,
-        "daily_tanker_count": 14.1,
-        "daily_transit_tonnage_mt": 9752882.0,
-        "daily_tanker_tonnage_mt": 3901153.0,
-        "transit_anomaly_7d_28d": 0.1275
+        "daily_vessel_count": 36.4,
+        "daily_tanker_count": 13.0,
+        "daily_transit_tonnage_mt": 9335842.0,
+        "daily_tanker_tonnage_mt": 3734337.0,
+        "transit_anomaly_7d_28d": 0.1539
       }
     },
     "Panama_Canal": {
-      "latest_observation_date": "2026-09-24",
-      "recorded_at": "2026-09-24T15:46:38.370123",
+      "latest_observation_date": "2026-09-29",
+      "recorded_at": "2026-09-29T17:51:32.475135",
       "metrics": {
-        "daily_vessel_count": 22.7,
-        "daily_tanker_count": 8.1,
-        "daily_transit_tonnage_mt": 5251552.0,
-        "daily_tanker_tonnage_mt": 2100621.0,
-        "transit_anomaly_7d_28d": 0.1275
+        "daily_vessel_count": 20.7,
+        "daily_tanker_count": 7.4,
+        "daily_transit_tonnage_mt": 5026992.0,
+        "daily_tanker_tonnage_mt": 2010797.0,
+        "transit_anomaly_7d_28d": 0.1539
       }
     }
   },
-  "last_updated": "2026-09-24T15:46:38.462838"
+  "last_updated": "2026-09-29T17:51:32.567778"
 }

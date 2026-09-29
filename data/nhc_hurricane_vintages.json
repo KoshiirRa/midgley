@@ -684,5 +684,285 @@
       ],
       "status": "SUCCESS"
     }
+  },
+  {
+    "as_of": "2026-09-29 17:31:08",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 17:31:08",
+      "active_storms_count": 12,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...FAY WEAKENS INTO A DEPRESSION... As of 11:00 AM AST Tue Sep 29 the center of Fay was located near 24.2, -47.3 with movement SW at 12 mph. The minimum central pressure was 1010 mb with maximum susta"
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT31 KNHC 291448\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Se"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT21 KNHC 291448\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  38\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC TUE SEP 29 2"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT41 KNHC 291449\nTCDAT1\n \nTropical Depression Fay Discussion Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Sep 29 20"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT11 KNHC 291449\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  38  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152320.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        },
+        {
+          "title": "Summary for Tropical Storm Hanna (AT3/AL082026)",
+          "description": "...HANNA MOVING SOUTHEASTWARD AND SLIGHTLY WEAKER... As of 11:00 AM AST Tue Sep 29 the center of Hanna was located near 34.6, -45.5 with movement SE at 12 mph. The minimum central pressure was 1004 mb"
+        },
+        {
+          "title": "Tropical Storm Hanna Public Advisory Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT33 KNHC 291449\nTCPAT3\n \nBULLETIN\nTropical Storm Hanna Advisory Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 2"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Advisory Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT23 KNHC 291500 CCA\nTCMAT3\n \nTROPICAL STORM HANNA FORECAST/ADVISORY NUMBER   5...CORRECTED\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL082026\n1500 UTC"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Discussion Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT43 KNHC 291449\nTCDAT3\n \nTropical Storm Hanna Discussion Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 29 2026\n"
+        },
+        {
+          "title": "Tropical Storm Hanna Wind Speed Probabilities Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT13 KNHC 291449\nPWSAT3\n                                                                    \nTROPICAL STORM HANNA WIND SPEED PROBABILITIES NUMBER   5     "
+        },
+        {
+          "title": "Tropical Storm Hanna Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at3+shtml/152935.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT08/AL082026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-29 17:35:15",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 17:35:15",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-29 17:39:21",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 17:39:21",
+      "active_storms_count": 12,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...FAY WEAKENS INTO A DEPRESSION... As of 11:00 AM AST Tue Sep 29 the center of Fay was located near 24.2, -47.3 with movement SW at 12 mph. The minimum central pressure was 1010 mb with maximum susta"
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT31 KNHC 291448\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Se"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT21 KNHC 291448\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  38\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC TUE SEP 29 2"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT41 KNHC 291449\nTCDAT1\n \nTropical Depression Fay Discussion Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Sep 29 20"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT11 KNHC 291449\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  38  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152320.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        },
+        {
+          "title": "Summary for Tropical Storm Hanna (AT3/AL082026)",
+          "description": "...HANNA MOVING SOUTHEASTWARD AND SLIGHTLY WEAKER... As of 11:00 AM AST Tue Sep 29 the center of Hanna was located near 34.6, -45.5 with movement SE at 12 mph. The minimum central pressure was 1004 mb"
+        },
+        {
+          "title": "Tropical Storm Hanna Public Advisory Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT33 KNHC 291449\nTCPAT3\n \nBULLETIN\nTropical Storm Hanna Advisory Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 2"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Advisory Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT23 KNHC 291500 CCA\nTCMAT3\n \nTROPICAL STORM HANNA FORECAST/ADVISORY NUMBER   5...CORRECTED\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL082026\n1500 UTC"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Discussion Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT43 KNHC 291449\nTCDAT3\n \nTropical Storm Hanna Discussion Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 29 2026\n"
+        },
+        {
+          "title": "Tropical Storm Hanna Wind Speed Probabilities Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT13 KNHC 291449\nPWSAT3\n                                                                    \nTROPICAL STORM HANNA WIND SPEED PROBABILITIES NUMBER   5     "
+        },
+        {
+          "title": "Tropical Storm Hanna Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at3+shtml/152935.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT08/AL082026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-29 17:43:14",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 17:43:14",
+      "active_storms_count": 0,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 0.0,
+      "nhc_gulf_refinery_exposure_score": 0.0,
+      "nhc_colonial_pipeline_risk_score": 0.0,
+      "active_advisories": [],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-29 17:49:49",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 17:49:49",
+      "active_storms_count": 12,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...FAY WEAKENS INTO A DEPRESSION... As of 11:00 AM AST Tue Sep 29 the center of Fay was located near 24.2, -47.3 with movement SW at 12 mph. The minimum central pressure was 1010 mb with maximum susta"
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT31 KNHC 291448\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Se"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT21 KNHC 291448\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  38\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC TUE SEP 29 2"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT41 KNHC 291449\nTCDAT1\n \nTropical Depression Fay Discussion Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Sep 29 20"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT11 KNHC 291449\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  38  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152320.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        },
+        {
+          "title": "Summary for Tropical Storm Hanna (AT3/AL082026)",
+          "description": "...HANNA MOVING SOUTHEASTWARD AND SLIGHTLY WEAKER... As of 11:00 AM AST Tue Sep 29 the center of Hanna was located near 34.6, -45.5 with movement SE at 12 mph. The minimum central pressure was 1004 mb"
+        },
+        {
+          "title": "Tropical Storm Hanna Public Advisory Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT33 KNHC 291449\nTCPAT3\n \nBULLETIN\nTropical Storm Hanna Advisory Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 2"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Advisory Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT23 KNHC 291500 CCA\nTCMAT3\n \nTROPICAL STORM HANNA FORECAST/ADVISORY NUMBER   5...CORRECTED\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL082026\n1500 UTC"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Discussion Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT43 KNHC 291449\nTCDAT3\n \nTropical Storm Hanna Discussion Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 29 2026\n"
+        },
+        {
+          "title": "Tropical Storm Hanna Wind Speed Probabilities Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT13 KNHC 291449\nPWSAT3\n                                                                    \nTROPICAL STORM HANNA WIND SPEED PROBABILITIES NUMBER   5     "
+        },
+        {
+          "title": "Tropical Storm Hanna Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at3+shtml/152935.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT08/AL082026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "as_of": "2026-09-29 17:52:15",
+    "data": {
+      "source": "NOAA National Hurricane Center (Zero-Cost Public Feed)",
+      "timestamp": "2026-09-29 17:52:15",
+      "active_storms_count": 12,
+      "gulf_hurricane_active": false,
+      "nhc_hurricane_threat_index": 1.0,
+      "nhc_gulf_refinery_exposure_score": 1.0,
+      "nhc_colonial_pipeline_risk_score": 0.8,
+      "active_advisories": [
+        {
+          "title": "Summary for Tropical Depression Fay (AT1/AL062026)",
+          "description": "...FAY WEAKENS INTO A DEPRESSION... As of 11:00 AM AST Tue Sep 29 the center of Fay was located near 24.2, -47.3 with movement SW at 12 mph. The minimum central pressure was 1010 mb with maximum susta"
+        },
+        {
+          "title": "Tropical Depression Fay Public Advisory Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT31 KNHC 291448\nTCPAT1\n \nBULLETIN\nTropical Depression Fay Advisory Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Se"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Advisory Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT21 KNHC 291448\nTCMAT1\n \nTROPICAL DEPRESSION FAY FORECAST/ADVISORY NUMBER  38\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL062026\n1500 UTC TUE SEP 29 2"
+        },
+        {
+          "title": "Tropical Depression Fay Forecast Discussion Number 38",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT41 KNHC 291449\nTCDAT1\n \nTropical Depression Fay Discussion Number  38\nNWS National Hurricane Center Miami FL       AL062026\n1100 AM AST Tue Sep 29 20"
+        },
+        {
+          "title": "Tropical Depression Fay Wind Speed Probabilities Number 38",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT11 KNHC 291449\nPWSAT1\n                                                                    \nTROPICAL DEPRESSION FAY WIND SPEED PROBABILITIES NUMBER  38  "
+        },
+        {
+          "title": "Tropical Depression Fay Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at1+shtml/152320.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT06/AL062026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        },
+        {
+          "title": "Summary for Tropical Storm Hanna (AT3/AL082026)",
+          "description": "...HANNA MOVING SOUTHEASTWARD AND SLIGHTLY WEAKER... As of 11:00 AM AST Tue Sep 29 the center of Hanna was located near 34.6, -45.5 with movement SE at 12 mph. The minimum central pressure was 1004 mb"
+        },
+        {
+          "title": "Tropical Storm Hanna Public Advisory Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT33 KNHC 291449\nTCPAT3\n \nBULLETIN\nTropical Storm Hanna Advisory Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 2"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Advisory Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nWTNT23 KNHC 291500 CCA\nTCMAT3\n \nTROPICAL STORM HANNA FORECAST/ADVISORY NUMBER   5...CORRECTED\nNWS NATIONAL HURRICANE CENTER MIAMI FL       AL082026\n1500 UTC"
+        },
+        {
+          "title": "Tropical Storm Hanna Forecast Discussion Number 5",
+          "description": "Issued at 1100 AM AST Tue Sep 29 2026 <pre>000\nWTNT43 KNHC 291449\nTCDAT3\n \nTropical Storm Hanna Discussion Number   5\nNWS National Hurricane Center Miami FL       AL082026\n1100 AM AST Tue Sep 29 2026\n"
+        },
+        {
+          "title": "Tropical Storm Hanna Wind Speed Probabilities Number 5",
+          "description": "Issued at 1500 UTC TUE SEP 29 2026 <pre>000\nFONT13 KNHC 291449\nPWSAT3\n                                                                    \nTROPICAL STORM HANNA WIND SPEED PROBABILITIES NUMBER   5     "
+        },
+        {
+          "title": "Tropical Storm Hanna Graphics",
+          "description": "\n\n\n<br />\n<br /><a href=\"https://www.nhc.noaa.gov/refresh/graphics_at3+shtml/152935.shtml?tswind120\">\n<img src=\"https://www.nhc.noaa.gov/storm_graphics/AT08/AL082026_wind_probs_34_F120_sm2.png\"\nalt=\"T"
+        }
+      ],
+      "status": "SUCCESS"
+    }
   }
 ]

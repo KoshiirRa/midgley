@@ -1,7 +1,7 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-09-29 14:30:57",
-  "total_events": 731,
+  "last_updated": "2026-09-29 17:48:51",
+  "total_events": 763,
   "events": [
     {
       "timestamp": "2026-09-23 20:31:12",
@@ -7312,6 +7312,326 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Failed to query bank stats across endpoints"
+    },
+    {
+      "timestamp": "2026-09-29 14:45:45",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "ERROR",
+      "latency_ms": 326.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to query bank stats across endpoints"
+    },
+    {
+      "timestamp": "2026-09-29 15:00:04",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 343.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 15:00:50",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "ERROR",
+      "latency_ms": 322.85,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to query bank stats across endpoints"
+    },
+    {
+      "timestamp": "2026-09-29 15:15:05",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 301.36,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 15:15:54",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "ERROR",
+      "latency_ms": 360.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to query bank stats across endpoints"
+    },
+    {
+      "timestamp": "2026-09-29 15:30:03",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 366.84,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 15:30:47",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "ERROR",
+      "latency_ms": 325.4,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Failed to query bank stats across endpoints"
+    },
+    {
+      "timestamp": "2026-09-29 15:45:06",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 467.99,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 16:15:04",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 334.59,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 16:40:22",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Dev dry-run: direction=bullish, confidence=0.85"
+    },
+    {
+      "timestamp": "2026-09-29 16:40:22",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 0.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge chal_cl_456): direction=bullish, confidence=0.85, scored=True"
+    },
+    {
+      "timestamp": "2026-09-29 16:40:22",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_CREDENTIALS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+    },
+    {
+      "timestamp": "2026-09-29 16:40:22",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-29 16:40:38",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_CREDENTIALS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+    },
+    {
+      "timestamp": "2026-09-29 16:43:48",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Dev dry-run: direction=bullish, confidence=0.85"
+    },
+    {
+      "timestamp": "2026-09-29 16:43:48",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 0.22,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge chal_cl_456): direction=bullish, confidence=0.85, scored=True"
+    },
+    {
+      "timestamp": "2026-09-29 16:43:48",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_CREDENTIALS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+    },
+    {
+      "timestamp": "2026-09-29 16:43:48",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-29 16:45:04",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 480.56,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 16:47:30",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Dev dry-run: direction=bullish, confidence=0.85"
+    },
+    {
+      "timestamp": "2026-09-29 16:47:31",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 0.24,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge chal_cl_456): direction=bullish, confidence=0.85, scored=True"
+    },
+    {
+      "timestamp": "2026-09-29 16:47:31",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_CREDENTIALS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+    },
+    {
+      "timestamp": "2026-09-29 16:47:31",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-29 17:00:03",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 308.53,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 17:15:06",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 511.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-09-29 17:30:50",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_CREDENTIALS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+    },
+    {
+      "timestamp": "2026-09-29 17:39:03",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_CREDENTIALS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+    },
+    {
+      "timestamp": "2026-09-29 17:48:39",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Dev dry-run: direction=bullish, confidence=0.85"
+    },
+    {
+      "timestamp": "2026-09-29 17:48:39",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 0.23,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge chal_cl_456): direction=bullish, confidence=0.85, scored=True"
+    },
+    {
+      "timestamp": "2026-09-29 17:48:39",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_CREDENTIALS",
+      "latency_ms": 0.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "HEADLINE_ARENA_CLIENT_ID / HEADLINE_ARENA_CLIENT_SECRET missing"
+    },
+    {
+      "timestamp": "2026-09-29 17:48:39",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 0.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-09-29 17:48:51",
+      "connector_name": "HindsightHosted",
+      "target": "midgley-gas-forecasting",
+      "status": "SUCCESS",
+      "latency_ms": 0.18,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 1065 docs, 0 obs, 66 refs"
     }
   ]
 }
