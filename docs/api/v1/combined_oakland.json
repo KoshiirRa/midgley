@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-29T07:56:24.277996",
+  "timestamp": "2026-09-29T14:01:00.670801",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-29T07:28:17Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-29T14:00:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
