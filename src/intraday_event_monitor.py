@@ -496,6 +496,7 @@ class IntradayEventMonitor:
                     ha_conn = HeadlineArenaConnector()
                     live_dev = os.environ.get("HEADLINE_ARENA_DEV_SUBMIT") == "1"
                     if ha_conn.is_configured and (ha_conn.is_prod or live_dev):
+                        m_df = fetch_market_data(start_date="2024-01-01")
                         if not m_df.empty:
                             cl_col = 'wti_crude' if 'wti_crude' in m_df.columns else ('crude_wti' if 'crude_wti' in m_df.columns else None)
                             rb_open = float(m_df['gasoline_rbob'].iloc[-1])
