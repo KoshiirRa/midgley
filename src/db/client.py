@@ -43,6 +43,8 @@ class DatabaseClient:
             # Normalize HTTP endpoint for Turso REST API v2
             if self.db_url.startswith("libsql://"):
                 self.http_url = self.db_url.replace("libsql://", "https://")
+            elif self.db_url.startswith("turso://"):
+                self.http_url = self.db_url.replace("turso://", "https://")
             else:
                 self.http_url = self.db_url.rstrip("/")
             if not self.http_url.endswith("/v2/pipeline"):
