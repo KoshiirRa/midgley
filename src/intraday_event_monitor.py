@@ -487,14 +487,13 @@ class IntradayEventMonitor:
                             "SELECT forecast_id, predicted_price, horizon FROM forecasts WHERE region = ? AND run_type = 'LIVE_PROSPECTIVE' ORDER BY created_at DESC LIMIT 1;",
                             (loc,)
                         )
-                        if parent_rows:
-                            parent_f_id = parent_rows[0]["forecast_id"]
-                            base_p = float(parent_rows[0]["predicted_price"])
-                            h_step = int(parent_rows[0].get("horizon", 5))
-                        else:
-                            parent_f_id = f"baseline_{loc.lower()}"
-                            base_p = 3.184
-                            h_step = 5
+                        if not parent_rows:
+                            logger.warning(f"No active LIVE_PROSPECTIVE parent forecast found in db for region '{loc}'; skipping intraday revision insert.")
+                            continue
+
+                        parent_f_id = parent_rows[0]["forecast_id"]
+                        base_p = float(parent_rows[0]["predicted_price"])
+                        h_step = int(parent_rows[0].get("horizon", 5))
 
                         pressure = scores.get("overall_price_pressure", 0.0)
                         delta_p = round(base_p * pressure * 0.04, 4)

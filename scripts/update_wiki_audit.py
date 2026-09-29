@@ -148,7 +148,7 @@ def update_wiki(wiki_dir: str):
         if "HEALTHCHECKS_PING_URL" not in sh_text:
             sh_env_addition = """
 # Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
-HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
+HEALTHCHECKS_PING_URL="https://hc-ping.com/<your-healthchecks-uuid-here>"
 
 # Self-Hosted ArchiveBox Historical Preservation Server (github.com/ArchiveBox/ArchiveBox, Issue #97)
 ARCHIVEBOX_URL="http://10.42.42.54:8000"

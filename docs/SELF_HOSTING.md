@@ -373,7 +373,7 @@ Midgley provides a production-hardened multi-stage Docker container built on `py
 
 ```bash
 # 1. Pull the pinned release container image
-docker pull ghcr.io/koshiirra/midgley:v0.7.0
+docker pull ghcr.io/koshiirra/midgley:v0.8.0
 
 # 2. Ensure host data directory exists
 mkdir -p data backups
@@ -387,7 +387,7 @@ docker run -d \
   -e GEMINI_API_KEY="AIzaSy..." \
   -e FINLIGHT_API_KEY="fl_live_..." \
   -e MIDGLEY_ADMIN_SECRET="sec_admin_secret_here" \
-  ghcr.io/koshiirra/midgley:v0.7.0
+  ghcr.io/koshiirra/midgley:v0.8.0
 
 # 4. Verify unauthenticated API server health
 curl http://localhost:8000/health
@@ -403,7 +403,7 @@ version: '3.8'
 
 services:
   midgley:
-    image: ghcr.io/koshiirra/midgley:v0.7.0
+    image: ghcr.io/koshiirra/midgley:v0.8.0
     container_name: midgley
     restart: unless-stopped
     ports:
@@ -493,7 +493,7 @@ docker run -d \
   -p 8000:8000 \
   -v $(pwd)/data:/app/data \
   --env-file .env \
-  ghcr.io/koshiirra/midgley:v0.7.0
+  ghcr.io/koshiirra/midgley:v0.8.0
 
 # 4. Verify API recovery
 curl http://localhost:8000/health

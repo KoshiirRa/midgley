@@ -808,9 +808,14 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
   const signature = request.headers.get("X-Signature-Ed25519");
   const timestamp = request.headers.get("X-Signature-Timestamp");
 
-
   if (!signature || !timestamp) {
     return new Response("Missing signature headers", { status: 401 });
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+  const reqTime = parseInt(timestamp, 10);
+  if (isNaN(reqTime) || Math.abs(now - reqTime) > 300) {
+    return new Response("Expired or invalid timestamp", { status: 401 });
   }
 
   const bodyText = await request.text();
@@ -1062,7 +1067,16 @@ export function getWorkerSigningSecret(env: Env): string | null {
   return env.FLAG_SIGNING_KEY || env.ADMIN_TOKEN || null;
 }
 
-export async function generateEventToken(eventId: string, exp: number, secret: string): Promise<string> {
+export async function computeSha256Hex(str: string): Promise<string> {
+  const enc = new TextEncoder();
+  const data = enc.encode(str);
+  const hashBuf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuf))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export async function generateEventToken(eventId: string, exp: number, secret: string, headline?: string): Promise<string> {
   if (!secret) return "";
   const enc = new TextEncoder();
   const keyData = enc.encode(secret);
@@ -1073,7 +1087,8 @@ export async function generateEventToken(eventId: string, exp: number, secret: s
     false,
     ["sign"]
   );
-  const data = enc.encode(`flag_fp:${eventId}:${exp}`);
+  const headlineHash = headline ? (await computeSha256Hex(headline)).slice(0, 16) : "";
+  const data = enc.encode(headlineHash ? `flag_fp:${eventId}:${headlineHash}:${exp}` : `flag_fp:${eventId}:${exp}`);
   const signature = await crypto.subtle.sign("HMAC", key, data);
   return Array.from(new Uint8Array(signature))
     .map(b => b.toString(16).padStart(2, "0"))
@@ -1094,12 +1109,43 @@ export function timingSafeEqual(a: string, b: string): boolean {
   return mismatch === 0;
 }
 
-export async function verifyEventToken(eventId: string, exp: number, sig: string, secret: string): Promise<boolean> {
+export async function verifyEventToken(eventId: string, exp: number, sig: string, secret: string, headline?: string): Promise<boolean> {
   if (!sig || !eventId || !secret || !exp) return false;
   const now = Math.floor(Date.now() / 1000);
   if (exp < now) return false;
-  const expectedSig = await generateEventToken(eventId, exp, secret);
-  return timingSafeEqual(sig, expectedSig);
+  
+  if (headline) {
+    const expectedSigBound = await generateEventToken(eventId, exp, secret, headline);
+    if (timingSafeEqual(sig, expectedSigBound)) return true;
+  }
+  const expectedSigLegacy = await generateEventToken(eventId, exp, secret);
+  return timingSafeEqual(sig, expectedSigLegacy);
+}
+
+const USED_TOKENS_CACHE = new Set<string>();
+
+export async function isTokenUsed(tokenKey: string, env: Env): Promise<boolean> {
+  if (USED_TOKENS_CACHE.has(tokenKey)) return true;
+  if (env.DB) {
+    try {
+      const row = await env.DB.prepare("SELECT clean_key FROM flag_replay_tokens WHERE clean_key = ?").bind(tokenKey).first();
+      if (row) return true;
+    } catch {
+      // D1 schema table may not exist, fallback to in-memory cache
+    }
+  }
+  return false;
+}
+
+export async function markTokenUsed(tokenKey: string, env: Env): Promise<void> {
+  USED_TOKENS_CACHE.add(tokenKey);
+  if (env.DB) {
+    try {
+      await env.DB.prepare("INSERT OR REPLACE INTO flag_replay_tokens (clean_key, used_at) VALUES (?, datetime('now'))").bind(tokenKey).run();
+    } catch {
+      // D1 schema table may not exist
+    }
+  }
 }
 
 function escapeHtml(str: string): string {
@@ -1129,8 +1175,8 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
     const eventId = id || normalizeHeadline(headline) || "default_event";
     const signingSecret = getWorkerSigningSecret(env);
 
-    // Fail closed: GET must verify link signature; never generate tokens for unauthenticated visitors (Issue #574)
-    if (!signingSecret || !sig || !exp || !(await verifyEventToken(eventId, exp, sig, signingSecret))) {
+    // Fail closed: GET must verify link signature; never generate tokens for unauthenticated visitors (Issues #574, #581)
+    if (!signingSecret || !sig || !exp || !(await verifyEventToken(eventId, exp, sig, signingSecret, headline))) {
       return new Response(
         JSON.stringify({ error: "Forbidden: Missing, invalid, or expired signed flag link" }),
         { status: 403, headers: { "Content-Type": "application/json" } }
@@ -1384,7 +1430,7 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
 
     // 2. Cryptographic Signed Event Link Auth (via valid id + exp + sig from Discord embed)
     const isSignedEventAuth = (Boolean(eventHash && sig && exp && signingSecret))
-      ? await verifyEventToken(eventHash, exp, sig, signingSecret!)
+      ? await verifyEventToken(eventHash, exp, sig, signingSecret!, headline)
       : false;
 
     // Reject unauthenticated issue creation requests (Fail-Closed, Issues #438, #574)
@@ -1393,6 +1439,18 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
         status: 401,
         headers: { "Content-Type": "application/json" }
       });
+    }
+
+    // Replay attack prevention: ensure signed token can only be used once (Issue #581)
+    if (isSignedEventAuth && !isDirectAdminAuth) {
+      const replayKey = `flag_replay:${eventHash}:${sig}`;
+      if (await isTokenUsed(replayKey, env)) {
+        return new Response(JSON.stringify({ error: "Conflict: This signed flag link has already been used" }), {
+          status: 409,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+      await markTokenUsed(replayKey, env);
     }
 
     const owner = env.REPO_OWNER || "KoshiirRa";

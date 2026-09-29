@@ -461,6 +461,75 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     }
   });
 
+  it("rejects replayed signed POST /flag submissions with HTTP 409 Conflict", async () => {
+    const env: IntradayEnv = {
+      GH_PAT: "real_gh_pat_token",
+      FLAG_SIGNING_KEY: "secret_signing_key",
+      REPO_OWNER: "KoshiirRa",
+      REPO_NAME: "midgley"
+    };
+
+    const exp = Math.floor(Date.now() / 1000) + 3600;
+    const headline = "Replay Attack Headline";
+    const sig = await generateEventToken("evt_replay", exp, "secret_signing_key", headline);
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 201,
+      json: async () => ({ number: 501, html_url: "https://github.com/KoshiirRa/midgley/issues/501", node_id: "I_kwDOtest501" })
+    });
+
+    try {
+      const createReq = () => {
+        const formData = new FormData();
+        formData.append("id", "evt_replay");
+        formData.append("exp", exp.toString());
+        formData.append("sig", sig);
+        formData.append("headline", headline);
+        return new Request("https://worker.local/flag", { method: "POST", body: formData });
+      };
+
+      // First submission succeeds
+      const res1 = await intradayWorker.fetch(createReq(), env, {});
+      expect(res1.status).toBe(200);
+
+      // Second submission (replay) is rejected with 409
+      const res2 = await intradayWorker.fetch(createReq(), env, {});
+      expect(res2.status).toBe(409);
+      const data = (await res2.json()) as { error: string };
+      expect(data.error).toContain("already been used");
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it("rejects Discord interactions with expired timestamps (>300s)", async () => {
+    const keyPair = nacl.sign.keyPair();
+    const publicKeyHex = uint8ArrayToHex(keyPair.publicKey);
+    const secretKey = keyPair.secretKey;
+
+    const oldTimestamp = String(Math.floor(Date.now() / 1000) - 600); // 10 minutes ago
+    const body = JSON.stringify({ type: 1 });
+    const message = new TextEncoder().encode(oldTimestamp + body);
+    const signature = nacl.sign.detached(message, secretKey);
+    const signatureHex = uint8ArrayToHex(signature);
+
+    const req = new Request("https://worker.local/discord/interactions", {
+      method: "POST",
+      headers: {
+        "X-Signature-Ed25519": signatureHex,
+        "X-Signature-Timestamp": oldTimestamp,
+        "Content-Type": "application/json"
+      },
+      body
+    });
+
+    const env: IntradayEnv = { DISCORD_PUBLIC_KEY: publicKeyHex };
+    const res = await handleDiscordInteraction(req, env, {});
+    expect(res.status).toBe(401);
+  });
+
   it("rejects unauthenticated requests to /run and /trigger when admin token is set or unset (Fail-Closed)", async () => {
     const req = new Request("https://worker.local/run", {
       method: "GET"

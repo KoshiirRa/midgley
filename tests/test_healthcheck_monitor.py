@@ -19,12 +19,12 @@ from src.healthcheck_monitor import (
 
 class TestHealthcheckMonitor(unittest.TestCase):
     def test_resolve_healthcheck_url_from_explicit_arg(self):
-        url = resolve_healthcheck_url("https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b")
-        self.assertEqual(url, "https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b")
+        url = resolve_healthcheck_url("https://hc-ping.com/mock-test-uuid-12345")
+        self.assertEqual(url, "https://hc-ping.com/mock-test-uuid-12345")
 
     def test_resolve_healthcheck_url_from_bare_uuid(self):
-        url = resolve_healthcheck_url("12ab7587-e0ed-40ac-83ad-822f9eb56a3b")
-        self.assertEqual(url, "https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b")
+        url = resolve_healthcheck_url("mock-test-uuid-12345")
+        self.assertEqual(url, "https://hc-ping.com/mock-test-uuid-12345")
 
     def test_resolve_healthcheck_url_from_env(self):
         with patch.dict(os.environ, {"HEALTHCHECKS_PING_URL": "https://hc-ping.com/custom-uuid"}):

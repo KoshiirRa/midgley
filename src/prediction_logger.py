@@ -515,10 +515,13 @@ def log_predictions(
         if record_run_type in ["DAILY_BATCH", "DAILY_FORECAST", None] or not record_run_type:
             record_run_type = "RETROSPECTIVE_BACKTEST" if is_retro else "LIVE_PROSPECTIVE"
 
-        # Deterministic unique forecast identifier (Issue #559, Item E-1)
-        raw_key = f"{region.strip().lower()}_{model_version.strip().lower()}_{str(target_date)[:10]}_{int(h_days)}_{record_run_type.strip().lower()}"
-        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:32]
+        # Deterministic unique forecast identifier (Issue #559, #585)
         issued_utc = str(row.get('issued_at_utc')) if ('issued_at_utc' in row and pd.notna(row['issued_at_utc'])) else now_utc_str
+        if record_run_type == "LIVE_PROSPECTIVE":
+            raw_key = f"{region.strip()}|{model_version.strip()}|{issued_utc.strip()}|{str(target_date)[:10]}|{int(h_days)}|{record_run_type.strip()}"
+        else:
+            raw_key = f"{region.strip()}|{model_version.strip()}|{str(target_date)[:10]}|{int(h_days)}|{record_run_type.strip()}"
+        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:32]
 
         new_records.append({
             "forecast_id": f_id,

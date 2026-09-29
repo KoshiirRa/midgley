@@ -86,11 +86,27 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Historical Prediction Ledger Deduplication (Issue #578)**: Cleaned and deduplicated `data/prediction_history.csv` from ~59.7k down to ~11.95k unique primary records, removing redundant backtest runs while preserving genuine live prospective and intraday revision history.
 - **Constant-Time Secret Byte Comparison (Issue #580)**: Standardized `hmac.compare_digest()` across all API server authentication routines by strictly encoding tokens to UTF-8 byte arrays before comparison.
 
+### 17. Code Review Revision 3 Hardening, Live Forecast Recovery & Release Calibration (Phase 7 / Issues #581–#587)
+- **CI Workflows Staging & Rebase Abort Safety (Issue #584)**: Updated `gas_price_forecast.yml`, `intraday_event_monitor.yml`, and `weekly_model_review.yml` to stage `MODEL_LEARNING.md`, added a porcelain dirty-tree guard, and replaced bare `git rebase --abort` with safe `git rebase --abort || true`.
+- **Historical Live Forecast Restoration & Deterministic Ledger Re-Keying (Issue #585)**: Restored all 248 `LIVE_PROSPECTIVE` historical forecast issuances from git history, quarantined 17 fake intraday revision rows, collapsed backtests to 11,891 unique records (12,139 clean total records), and established deterministic SHA-256 primary key generation for future live and backtest records.
+- **Batch Headline Hindsight Gating & Strict Point-in-Time Sanitization (Issue #586)**: Gated batch news analysis behind `MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION`, enforced strict `as_of` date filtering dropping undated or future memories in historical backtests, and sanitized price shock extraction.
+- **HMAC Headline-Bound Flag Signing & Replay Protection (Issue #581)**: Bound headline SHA-256 hashes into HMAC tokens (`flag_fp:{event_hash}:{headline_hash}:{exp_time}`), added 300-second timestamp freshness checks on Discord interactions, and enforced single-use token tracking on POST `/flag` submissions.
+- **Intraday Parent Forecast Graceful Handling (Issue #587)**: Verified parent forecast existence prior to inserting child `intraday_revisions` records, omitting orphan inserts and preventing foreign key violations.
+- **Windows Advisory Locking, Constant-Time Auth & Directional Hit Extraction (Issue #582)**: Added `msvcrt.locking` on Windows in `src/storage_io.py`, restored 4-thread concurrency test, enforced constant-time `hmac.compare_digest` in `src/api_server.py`, fixed falsy `0.0`/`False` extraction in `directional_hit`, and parameterized healthchecks ping URLs.
+- **Lazy Vintage Store & Release Version Calibration (Issue #583)**: Replaced eager module-level `VintageStore` instantiation with lazy `get_vintage_store()` proxy, created `data/release_manifest.json` (`0.8.0`), and synchronized version `0.8.0` across all documentation and guides.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Key Issues Completed**:
-  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1, 2, 3, 4, 5 & 6)
+  - Issue #559 - `[Epic] Unified Database, Episodic Memory (Hindsight), and v0.8.0 Forecasting & Storage Hardening` (Phases 1–7)
+  - Issue #581 - `fix(security): bind headline payload to flag token HMAC, add replay protection and interaction timestamp check`
+  - Issue #582 - `fix(storage): add Windows msvcrt locking, complete constant-time auth, and fix directional hit extraction`
+  - Issue #583 - `docs(release): lazy-load vintage store, synchronize v0.8.0 versioning, and update release manifest`
+  - Issue #584 - `fix(ci): stage MODEL_LEARNING.md, add dirty tree guard, and handle rebase abort`
+  - Issue #585 - `fix(data): restore dropped live prospective forecasts, quarantine fake intraday records, and re-key ledger deterministically`
+  - Issue #586 - `fix(hindsight): gate batch news memory recall and enforce strict as_of date filtering`
+  - Issue #587 - `fix(db): pass Turso credentials to intraday workflow and handle missing parent forecast gracefully`
   - Issue #573 - `fix(ci): fix workflow rebase order, commit first, and pass branch via env`
   - Issue #574 - `fix(workers): link-level signed flag URLs and fail-closed admin token validation`
   - Issue #575 - `fix(models): prospective refit clones evaluated pipeline architecture`
@@ -111,3 +127,4 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
   - Issue #498 - `perf(pipeline): eliminate redundant yfinance downloads, batch commodity feeds, and accelerate CI runtimes`
   - Issue #557 - `fix(memory): dynamic anomaly retention & hindsight reconciliation engine`
 * **Milestone**: v0.8.0 "Unified Database, Episodic Memory & Cloud Architecture"
+

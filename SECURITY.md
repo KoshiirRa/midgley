@@ -4,8 +4,9 @@
 
 | Version | Supported | Security Maintenance |
 | :--- | :---: | :--- |
-| `0.7.x` | :white_check_mark: | Active production & vulnerability patches |
-| `< 0.7.0` | :x: | End of life. Please upgrade to v0.7.0+ |
+| `0.8.x` | :white_check_mark: | Active production & vulnerability patches |
+| `0.7.x` | :white_check_mark: | Maintenance & vulnerability patches |
+| `< 0.7.0` | :x: | End of life. Please upgrade to v0.8.0+ |
 
 ## Reporting a Vulnerability
 

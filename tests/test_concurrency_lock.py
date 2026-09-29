@@ -35,19 +35,27 @@ def test_concurrent_readers_during_rapid_atomic_writes(tmp_path):
     read_successes = [0]
 
     def reader_loop():
-        sleep_sec = 0.005 if os.name == "nt" else 0.001
+        sleep_sec = 0.01 if os.name == "nt" else 0.001
         while not stop_event.is_set():
             try:
-                df = pd.read_csv(target_csv)
-                if len(df) == 0:
-                    read_errors.append("Empty DataFrame read!")
-                read_successes[0] += 1
+                for attempt in range(10):
+                    try:
+                        df = pd.read_csv(target_csv)
+                        if len(df) == 0:
+                            read_errors.append("Empty DataFrame read!")
+                        read_successes[0] += 1
+                        break
+                    except PermissionError:
+                        if os.name == "nt" and attempt < 9:
+                            time.sleep(0.005)
+                            continue
+                        raise
             except Exception as e:
                 read_errors.append(f"Reader exception: {type(e).__name__}: {e}")
             time.sleep(sleep_sec)
 
     # Launch concurrent reader threads
-    n_threads = 2 if os.name == "nt" else 4
+    n_threads = 4
     reader_threads = [threading.Thread(target=reader_loop) for _ in range(n_threads)]
     for t in reader_threads:
         t.start()

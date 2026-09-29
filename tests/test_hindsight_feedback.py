@@ -197,17 +197,32 @@ def test_query_episodic_precedents_as_of_and_clean_metadata():
         }
     ]
 
-    # as_of set to 2025-01-01 should filter out mem_future (2026-08-01)
+    # as_of set to 2025-01-01 should filter out mem_future (2026-08-01) and undated mem_sparse
     precs = query_episodic_precedents("refinery trip", as_of="2025-01-01", memory_manager=mock_mgr)
-    assert len(precs) == 2
+    assert len(precs) == 1
     assert precs[0]["memory_id"] == "mem_past"
-    assert precs[1]["memory_id"] == "mem_sparse"
-    # mem_sparse should not have synthetic hallucinated defaults
-    assert precs[1]["duration"] == ""
-    assert precs[1]["price_shock"] == ""
 
-    block = format_hindsight_precedent_prompt_block(precs)
+    # Query without as_of should include mem_sparse without synthetic hallucinated defaults
+    precs_all = query_episodic_precedents("refinery trip", top_k=3, memory_manager=mock_mgr)
+    assert len(precs_all) == 3
+    sparse_item = [p for p in precs_all if p["memory_id"] == "mem_sparse"][0]
+    assert sparse_item["duration"] == ""
+    assert sparse_item["price_shock"] == ""
+
+    block = format_hindsight_precedent_prompt_block(precs_all)
     assert "Delaware City refinery FCC unit trip" in block
     assert "Unspecified flaring event" in block
     assert "3-7 trading days" not in block
     assert "+$0.08 to +$0.18/gal" not in block
+
+
+def test_batch_scoring_hindsight_gating():
+    """Verify batch headline scoring in event_analyzer skips memory recall when feature flag is disabled (Issue #586 N-4)."""
+    from src.hindsight_context import is_hindsight_prompt_injection_enabled
+
+    with patch.dict(os.environ, {"MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION": "0"}):
+        assert not is_hindsight_prompt_injection_enabled()
+
+    with patch.dict(os.environ, {"MIDGLEY_ENABLE_HINDSIGHT_PROMPT_INJECTION": "1"}):
+        assert is_hindsight_prompt_injection_enabled()
+

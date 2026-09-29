@@ -125,23 +125,24 @@ def query_episodic_precedents(
                 metadata = {}
 
         # Parse structured fields from reflection or memory content
-        err = item.get("error_dollars") or metadata.get("error_dollars")
         anom = item.get("anomaly_type") or metadata.get("anomaly_type") or "HISTORICAL_SHOCK"
         reg = item.get("region") or region or "National"
         target_d = item.get("forecast_target_date") or metadata.get("target_date")
 
-        # Point-in-time as_of filtering (Issue #580 N-9)
-        if as_of and target_d:
+        # Point-in-time as_of filtering (Issue #580 N-9, Issue #586 N-4/N-5)
+        if as_of:
+            if not target_d:
+                continue
             try:
                 if str(target_d)[:10] > str(as_of)[:10]:
                     continue
             except Exception:
-                pass
+                continue
 
-        # Derive duration, lag, and price reaction without synthetic default hallucination (Issue #576 N-5)
+        # Derive duration, lag, and price reaction without synthetic default hallucination (Issue #576 N-5, #586)
         duration = metadata.get("outage_duration_days") or metadata.get("duration") or ""
         lag = metadata.get("pass_through_lag_days") or metadata.get("lag") or ""
-        price_shock = metadata.get("price_shock_dollars") or (f"${abs(err):.3f}/gal" if err is not None else "")
+        price_shock = metadata.get("price_shock_dollars") or metadata.get("realized_price_reaction") or ""
         lesson = metadata.get("lesson") or metadata.get("calibration_suggestion") or ""
         if not lesson and len(content) > 10:
             lesson = content[:160]
@@ -284,16 +285,23 @@ def evaluate_and_reflect_settled_anomalies(
         err = float(row.get("error_dollars") or (pred - act))
         reg = str(row.get("region", "National"))
         target_d = str(row.get("forecast_target_date") or row.get("target_date", ""))
-        d_hit = row.get("directional_hit") or row.get("directional_correct")
+        d_hit = row.get("directional_hit") if ("directional_hit" in row and pd.notna(row.get("directional_hit"))) else row.get("directional_correct")
 
         if pred <= 0 or act <= 0:
             continue
+
+        directional_val = None
+        if pd.notna(d_hit):
+            try:
+                directional_val = float(d_hit)
+            except Exception:
+                directional_val = bool(d_hit)
 
         anom_type = classify_causal_anomaly(
             predicted_price=pred,
             actual_price=act,
             error_dollars=err,
-            directional_hit=float(d_hit) if pd.notna(d_hit) else None
+            directional_hit=directional_val
         )
 
         if anom_type != "NORMAL":

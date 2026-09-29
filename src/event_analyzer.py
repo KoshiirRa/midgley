@@ -355,14 +355,20 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
                 logger.info(f"⚡ Launching Single-Batch Gemini 2.5 Flash LLM call for {len(uncached)} headlines...")
                 input_json_str = json.dumps([{"id": i, "headline": h} for i, h in enumerate(uncached)], indent=2)
                 
-                # Retrieve collective hindsight context for catalyst headlines in batch
+                # Retrieve collective hindsight context for catalyst headlines in batch (Issue #586 N-4)
                 hindsight_batch_context_str = ""
                 try:
-                    from src.hindsight_context import is_catalyst_headline, query_episodic_precedents, format_hindsight_precedent_prompt_block
-                    batch_catalysts = [h for h in uncached if is_catalyst_headline(h)]
-                    if batch_catalysts:
-                        precedents = query_episodic_precedents(" ".join(batch_catalysts[:3]), top_k=2)
-                        hindsight_batch_context_str = format_hindsight_precedent_prompt_block(precedents)
+                    from src.hindsight_context import (
+                        is_catalyst_headline,
+                        query_episodic_precedents,
+                        format_hindsight_precedent_prompt_block,
+                        is_hindsight_prompt_injection_enabled
+                    )
+                    if is_hindsight_prompt_injection_enabled():
+                        batch_catalysts = [h for h in uncached if is_catalyst_headline(h)]
+                        if batch_catalysts:
+                            precedents = query_episodic_precedents(" ".join(batch_catalysts[:3]), top_k=2)
+                            hindsight_batch_context_str = format_hindsight_precedent_prompt_block(precedents)
                 except Exception:
                     hindsight_batch_context_str = ""
 

@@ -33,41 +33,53 @@ logger = logging.getLogger(__name__)
 def file_lock(path: Union[str, os.PathLike], timeout: float = 30.0):
     """
     Cross-process advisory file lock context manager using fcntl.flock on POSIX
-    with non-blocking retry loops.
+    and msvcrt.locking on Windows with non-blocking retry loops.
     """
     lock_file_path = f"{str(path)}.lock"
     lock_dir = os.path.dirname(os.path.abspath(lock_file_path))
     os.makedirs(lock_dir, exist_ok=True)
 
     lock_fd = None
+    locked = False
     try:
         lock_fd = os.open(lock_file_path, os.O_CREAT | os.O_RDWR)
         start_time = time.time()
-        locked = False
         while time.time() - start_time < timeout:
             try:
-                try:
-                    import fcntl
-                    fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                if os.name == "nt":
+                    import msvcrt
+                    os.lseek(lock_fd, 0, os.SEEK_SET)
+                    msvcrt.locking(lock_fd, msvcrt.LK_NBLCK, 1)
                     locked = True
                     break
-                except (ImportError, AttributeError):
-                    locked = True
-                    break
-
-            except (BlockingIOError, OSError):
+                else:
+                    try:
+                        import fcntl
+                        fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        locked = True
+                        break
+                    except (ImportError, AttributeError):
+                        locked = True
+                        break
+            except (BlockingIOError, OSError, PermissionError):
                 time.sleep(0.05)
         if not locked:
             raise TimeoutError(f"Failed to acquire advisory file lock for {path} after {timeout}s.")
         yield
     finally:
         if lock_fd is not None:
-            try:
+            if locked:
                 try:
-                    import fcntl
-                    fcntl.flock(lock_fd, fcntl.LOCK_UN)
+                    if os.name == "nt":
+                        import msvcrt
+                        os.lseek(lock_fd, 0, os.SEEK_SET)
+                        msvcrt.locking(lock_fd, msvcrt.LK_UNLCK, 1)
+                    else:
+                        import fcntl
+                        fcntl.flock(lock_fd, fcntl.LOCK_UN)
                 except Exception:
                     pass
+            try:
                 os.close(lock_fd)
             except Exception:
                 pass

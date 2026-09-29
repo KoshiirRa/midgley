@@ -72,6 +72,9 @@ jobs:
           HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
           HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
           HINDSIGHT_BANK_ID: "Midgley"
+          FLAG_SIGNING_KEY: ${{ secrets.FLAG_SIGNING_KEY || secrets.ADMIN_TOKEN }}
+          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
         run: |
           if [ -n "$HEADLINE" ]; then
             python -m src.intraday_event_monitor --headline "$HEADLINE" --source "$SOURCE" --url "$URL"
@@ -85,14 +88,19 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md docs data
+          git add README.md MODEL_LEARNING.md docs data
+          if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+            git status --short
+            echo "::warning::Unstaged tracked modifications detected prior to commit"
+            git add -u
+          fi
           if ! git diff --cached --quiet; then
             git commit -m "chore: Intraday event anomaly dispatch & public dashboard update [skip ci]"
             for i in 1 2 3; do
               if git pull --rebase origin "$BRANCH"; then
                 git push origin "HEAD:$BRANCH" && exit 0
               else
-                git rebase --abort
+                git rebase --abort || true
               fi
               sleep $((i * 15))
             done

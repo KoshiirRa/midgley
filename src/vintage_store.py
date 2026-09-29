@@ -136,5 +136,24 @@ class VintageStore:
         return self.db.execute(sql, (feed,))
 
 
-# Global VintageStore Singleton
-vintage_store = VintageStore()
+_DEFAULT_STORE: Optional[VintageStore] = None
+
+
+def get_vintage_store(db=None) -> VintageStore:
+    """Returns or lazily initializes the default VintageStore singleton."""
+    global _DEFAULT_STORE
+    if db is not None:
+        return VintageStore(db=db)
+    if _DEFAULT_STORE is None:
+        _DEFAULT_STORE = VintageStore()
+    return _DEFAULT_STORE
+
+
+class _LazyVintageStoreProxy:
+    """Transparent proxy that defers VintageStore initialization until first attribute access."""
+    def __getattr__(self, name: str):
+        return getattr(get_vintage_store(), name)
+
+
+# Backward-compatible lazy singleton
+vintage_store: VintageStore = _LazyVintageStoreProxy()  # type: ignore

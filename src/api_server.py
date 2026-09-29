@@ -477,7 +477,7 @@ async def add_rate_limit_headers(request: Request, call_next):
 
             valid = False
             if token:
-                if token == expected_token:
+                if expected_token and hmac.compare_digest(token.encode("utf-8"), expected_token.encode("utf-8")):
                     valid = True
                 else:
                     is_valid, _, _ = await global_key_manager.verify_key_async(token)
@@ -1815,7 +1815,8 @@ def trigger_event_polling(
 
     if secret_key:
         auth_valid = False
-        if authorization and authorization == f"Bearer {secret_key}":
+        bearer_expected = f"Bearer {secret_key}"
+        if authorization and hmac.compare_digest(authorization.encode("utf-8"), bearer_expected.encode("utf-8")):
             auth_valid = True
         elif x_midgley_signature:
             expected_sig = hmac.new(secret_key.encode("utf-8"), b"poll", hashlib.sha256).hexdigest()

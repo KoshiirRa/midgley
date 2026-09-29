@@ -1,0 +1,18 @@
+{
+  "name": "midgley",
+  "version": "0.8.0",
+  "release_date": "2026-09-29",
+  "release_name": "Unified Database, Episodic Memory & Cloud Architecture",
+  "milestone": "v0.8.0",
+  "schema_version": "1.0.0",
+  "python_requires": ">=3.11",
+  "supported_python": ["3.11", "3.12", "3.13"],
+  "docker_image": "ghcr.io/koshiirra/midgley:v0.8.0",
+  "components": {
+    "db_engine": "libsql-rest-v2 / cloudflare-d1 / sqlite3",
+    "episodic_memory": "vectorize-hindsight-hosted / sqlite3-fts5",
+    "model_refit": "full-sample prospective clone (RidgeCV)",
+    "vintage_store": "bitemporal with point-in-time querying",
+    "advisory_locking": "posix-fcntl / windows-msvcrt"
+  }
+}

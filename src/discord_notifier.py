@@ -142,9 +142,10 @@ def format_intraday_discord_payload(
 
     signing_secret = os.getenv("FLAG_SIGNING_KEY") or os.getenv("ADMIN_TOKEN") or ""
     exp_time = int(time.time()) + (72 * 3600)  # 72 hours validity
+    headline_hash = hashlib.sha256(headline.encode("utf-8", errors="ignore")).hexdigest()[:16]
     sig_param = ""
     if signing_secret:
-        msg = f"flag_fp:{event_hash}:{exp_time}".encode("utf-8")
+        msg = f"flag_fp:{event_hash}:{headline_hash}:{exp_time}".encode("utf-8")
         sig_param = hmac.new(signing_secret.encode("utf-8"), msg, hashlib.sha256).hexdigest()[:32]
 
     safe_headline_param = (headline[:120] + "...") if len(headline) > 120 else headline
