@@ -28,10 +28,17 @@ Midgley **v0.8.0** is a milestone release delivering major pipeline execution ac
 - **Immutable UUIDv4 `forecast_id`**: Every forecast issuance is uniquely tracked with an immutable UUIDv4 identifier and UTC timestamp (`issued_at_utc`).
 - **Cross-Platform Advisory Locking**: Wrapped prediction history, token accounting, telemetry, and retail feed ledgers with file locks (`file_lock`) to prevent concurrent process race conditions.
 
+### 5. Dynamic Anomaly Retention & Hindsight Reconciliation Engine (Issue #557)
+- **Direct Evaluation-Batch Retention**: Refactored `backfill_actual_prices_and_evaluate()` in `src/prediction_logger.py` to directly evaluate and retain newly backfilled rows (`evaluated_rows_indices`) in the active pass, eliminating static DataFrame `tail(10)` sampling biases.
+- **Temporal Sorting for Fallback Candidate Sweeps**: Enforced deterministic temporal sorting (`forecast_target_date DESC`, `log_timestamp DESC`) across historical prediction ledgers to prevent stale historical records from shadowing recent trading days.
+- **Automated Historical Catch-Up CLI**: Added `scripts/reconcile_hindsight_memory.py` and `AgentMemoryManager.reconcile_unretained_prediction_anomalies()`, automatically reconciling and dual-dispatching missing historical prediction anomalies from September 25, 2026 onward to Vectorize Hindsight Hosted SaaS and SQLite FTS5.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Key Commits**:
   - `45772152` - `perf(pipeline): decouple cloud sync from inner loops and optimize dataframe re-use (#498)`
   - `dbfe714e` - `perf(pipeline): eliminate redundant yfinance downloads, batch commodity feeds, and accelerate CI runtimes (#498)`
+  - `Issue #557` - `fix(memory): dynamic anomaly retention & hindsight reconciliation engine (#557)`
 * **Milestone**: v0.8 "Storage Modernization & Performance"
+

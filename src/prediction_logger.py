@@ -791,6 +791,7 @@ def backfill_actual_prices_and_evaluate(
         return history_df
 
     updated = False
+    evaluated_rows_indices = []
     for idx in target_indices:
         row = history_df.loc[idx]
         target_date_str = str(row['forecast_target_date'])
@@ -844,6 +845,7 @@ def backfill_actual_prices_and_evaluate(
             history_df.at[idx, 'within_95ci_hit'] = ci_hit
             if source_prov:
                 history_df.at[idx, 'data_source_provenance'] = source_prov
+            evaluated_rows_indices.append(idx)
             updated = True
             
     if updated:
@@ -894,21 +896,39 @@ def backfill_actual_prices_and_evaluate(
 
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
-        # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issue #230, #326)
+        # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issues #230, #326, #557)
         if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
             try:
                 from src.agent_memory import AgentMemoryManager
                 mem_mgr = AgentMemoryManager()
-                eval_candidates = history_df[history_df['actual_5d_price'].notna()]
-                if target_region:
-                    eval_candidates = eval_candidates[eval_candidates['region'] == target_region]
-                for _, row in eval_candidates.tail(10).iterrows():
+                
+                # Priority 1: Retain records newly evaluated in this exact pass (Issue #557)
+                if evaluated_rows_indices:
+                    valid_eval_indices = [i for i in evaluated_rows_indices if i in history_df.index]
+                    candidate_df = history_df.loc[valid_eval_indices]
+                else:
+                    # Priority 2: Fallback to temporally sorted recent evaluated records (Issue #557)
+                    eval_df = history_df[history_df['actual_5d_price'].notna()]
+                    if target_region:
+                        eval_df = eval_df[eval_df['region'] == target_region]
+                    candidate_df = eval_df.sort_values(
+                        by=['forecast_target_date', 'log_timestamp'],
+                        ascending=[False, False]
+                    ).head(10)
+                
+                for _, row in candidate_df.iterrows():
                     err = float(row.get('error_dollars', 0.0))
                     reg = str(row.get('region', target_region or 'National'))
                     pred = float(row.get('predicted_5d_price', 0.0))
                     act = float(row.get('actual_5d_price', 0.0))
                     target_d = str(row.get('forecast_target_date', ''))
-                    anom_type = "LARGE_OVERESTIMATE" if (pred - act) >= 0.25 else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25 else ("DIRECTIONAL_FLIP" if row.get('directional_hit') == 0.0 and abs(pred - act) >= 0.05 else "NORMAL"))
+                    d_hit = row.get('directional_hit')
+                    anom_type = (
+                        "LARGE_OVERESTIMATE" if (pred - act) >= 0.25
+                        else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25
+                        else ("DIRECTIONAL_FLIP" if d_hit == 0.0 and abs(pred - act) >= 0.05
+                        else "NORMAL"))
+                    )
                     if anom_type != "NORMAL":
                         mem_mgr.retain(
                             content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
@@ -919,7 +939,7 @@ def backfill_actual_prices_and_evaluate(
                             predicted_price=pred,
                             actual_price=act,
                             forecast_target_date=target_d,
-                            metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
+                            metadata={"provenance_source": str(row.get("data_source_provenance", row.get("provenance_source", "yfinance")))}
                         )
             except Exception as e:
                 logger.debug(f"Agent memory retention notice: {e}")

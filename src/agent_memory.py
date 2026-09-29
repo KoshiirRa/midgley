@@ -471,6 +471,86 @@ class AgentMemoryManager:
             "active_backend": active_backend
         }
 
+    def reconcile_unretained_prediction_anomalies(
+        self,
+        start_date: str = "2026-09-25",
+        history_csv: str = HISTORY_CSV
+    ) -> Dict[str, Any]:
+        """
+        Scans prediction_history.csv for evaluated prediction anomalies since start_date
+        and reconciles them into SQLite and Hindsight Hosted memory bank (Issue #557).
+        """
+        if not os.path.exists(history_csv):
+            return {"status": "SKIPPED", "synced": 0, "reason": "History CSV not found"}
+        
+        try:
+            from src.prediction_logger import read_prediction_history
+            df = read_prediction_history(history_csv)
+            if df.empty or 'actual_5d_price' not in df.columns:
+                return {"status": "SKIPPED", "synced": 0, "reason": "No evaluated predictions"}
+            
+            eval_df = df[df['actual_5d_price'].notna()].copy()
+            if 'forecast_target_date' in eval_df.columns:
+                eval_df = eval_df[eval_df['forecast_target_date'].astype(str) >= str(start_date)]
+            
+            if eval_df.empty:
+                return {"status": "SUCCESS", "synced": 0, "message": "No evaluated records in window"}
+            
+            # Sort chronologically
+            eval_df = eval_df.sort_values(by=['forecast_target_date', 'log_timestamp'], ascending=[True, True])
+            
+            synced_count = 0
+            retained_anomalies = []
+            for _, row in eval_df.iterrows():
+                err = float(row.get('error_dollars', 0.0))
+                reg = str(row.get('region', 'National'))
+                pred = float(row.get('predicted_5d_price', 0.0))
+                act = float(row.get('actual_5d_price', 0.0))
+                target_d = str(row.get('forecast_target_date', ''))
+                d_hit = row.get('directional_hit')
+                
+                anom_type = (
+                    "LARGE_OVERESTIMATE" if (pred - act) >= 0.25
+                    else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25
+                    else ("DIRECTIONAL_FLIP" if d_hit == 0.0 and abs(pred - act) >= 0.05
+                    else "NORMAL"))
+                )
+                if anom_type != "NORMAL":
+                    res = self.retain(
+                        content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
+                        region=reg,
+                        memory_type="anomaly_shock",
+                        anomaly_type=anom_type,
+                        error_dollars=err,
+                        predicted_price=pred,
+                        actual_price=act,
+                        forecast_target_date=target_d,
+                        metadata={"provenance_source": str(row.get("data_source_provenance", row.get("provenance_source", "yfinance")))}
+                    )
+                    synced_count += 1
+                    retained_anomalies.append({
+                        "region": reg,
+                        "target_date": target_d,
+                        "anomaly_type": anom_type,
+                        "error_dollars": err,
+                        "cloud_status": res.get("cloud_status")
+                    })
+            
+            # Snapshot latest inventory
+            try:
+                self._persist_bank_vintages(self.get_bank_inventory())
+            except Exception:
+                pass
+            logger.info(f"Reconciled {synced_count} historical prediction anomalies since {start_date} into episodic memory.")
+            return {
+                "status": "SUCCESS",
+                "synced_count": synced_count,
+                "retained_anomalies": retained_anomalies
+            }
+        except Exception as e:
+            logger.error(f"Error during historical anomaly reconciliation: {e}", exc_info=True)
+            return {"status": "ERROR", "error": str(e), "synced_count": 0}
+
     def recall(
         self,
         query: str,

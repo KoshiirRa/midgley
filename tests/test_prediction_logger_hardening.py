@@ -156,3 +156,76 @@ class TestPredictionLoggerHardening:
         finally:
             if os.path.exists(temp_path):
                 os.remove(temp_path)
+
+    def test_backfill_anomaly_retention_non_tail_and_temporal_sorting(self):
+        """Validates that backfilling non-tail rows triggers retention in AgentMemoryManager (Issue #557)."""
+        with tempfile.NamedTemporaryFile(suffix='.csv', delete=False) as f:
+            temp_path = f.name
+
+        try:
+            # Construct a dataframe where an unevaluated row is at index 0 (non-tail), followed by evaluated rows
+            rows = [
+                {
+                    'log_timestamp': '2026-09-28T12:00:00',
+                    'forecast_target_date': '2026-09-29',
+                    'region': 'National',
+                    'model_version': 'v0.7.0',
+                    'run_type': 'automated_cron',
+                    'current_base_price': 3.10,
+                    'predicted_5d_price': 3.50,
+                    'predicted_direction': 'UP',
+                    'actual_5d_price': np.nan,
+                    'actual_direction': np.nan,
+                    'error_dollars': np.nan,
+                    'directional_hit': np.nan,
+                    'within_95ci_hit': np.nan,
+                    'data_source_provenance': 'yfinance'
+                }
+            ]
+            # Add 15 older, already-evaluated rows so index 0 is definitely not in the tail
+            for i in range(15):
+                rows.append({
+                    'log_timestamp': f'2026-09-0{i+1}T12:00:00' if i < 9 else f'2026-09-{i+1}T12:00:00',
+                    'forecast_target_date': f'2026-09-0{i+5}' if i < 5 else f'2026-09-{i+5}',
+                    'region': 'National',
+                    'model_version': 'v0.7.0',
+                    'run_type': 'automated_cron',
+                    'current_base_price': 3.10,
+                    'predicted_5d_price': 3.15,
+                    'predicted_direction': 'UP',
+                    'actual_5d_price': 3.15,
+                    'actual_direction': 'UP',
+                    'error_dollars': 0.0,
+                    'directional_hit': 1.0,
+                    'within_95ci_hit': 1.0,
+                    'data_source_provenance': 'yfinance'
+                })
+
+            df = pd.DataFrame(rows)
+            df.to_csv(temp_path, index=False)
+
+            with patch('src.prediction_logger.HISTORY_CSV_PATH', temp_path), \
+                 patch.dict(os.environ, {'TESTING': '0', 'TEST_YFINANCE_FORCE': '1'}), \
+                 patch('src.prediction_logger._GLOBAL_RBOB_ACTUALS_CACHE', {'2026-09-29': 3.10}), \
+                 patch('src.agent_memory.AgentMemoryManager') as mock_mem_mgr_cls:
+                
+                mock_mem_mgr = MagicMock()
+                mock_mem_mgr_cls.return_value = mock_mem_mgr
+
+                res_df = backfill_actual_prices_and_evaluate()
+                
+                # Check that row 0 was evaluated
+                assert res_df.loc[0, 'actual_5d_price'] == 3.10
+                assert res_df.loc[0, 'error_dollars'] == 0.40  # |3.50 - 3.10| = 0.40 >= 0.25 (LARGE_OVERESTIMATE)
+
+                # Verify that AgentMemoryManager.retain was called for row 0 even though it is at index 0 (not tail)
+                assert mock_mem_mgr.retain.called
+                call_kwargs = mock_mem_mgr.retain.call_args[1]
+                assert call_kwargs['region'] == 'National'
+                assert call_kwargs['forecast_target_date'] == '2026-09-29'
+                assert call_kwargs['anomaly_type'] == 'LARGE_OVERESTIMATE'
+                assert abs(call_kwargs['error_dollars'] - 0.40) < 1e-4
+        finally:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+

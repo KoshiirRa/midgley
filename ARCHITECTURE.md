@@ -460,6 +460,7 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
     - **Reflect Post-Mortems & Analogies:** Synthesizes qualitative root causes and parameter adjustments (shock decay half-lives $t_{1/2}$, seasonal transition buffers), parameterized with **Skepticism: 4/5**, **Literalism: 4/5**, and **Empathy: 1/5** (Detached).
   - **Socket Read Timeout Retries:** Configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
   - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once the remote bank is reachable.
+  - **Dynamic Anomaly Retention & Historical Catch-up (Issue #557):** Directly evaluates and retains newly backfilled rows (`evaluated_rows_indices`) in `src/prediction_logger.py`, preventing static DataFrame tail sampling biases. `scripts/reconcile_hindsight_memory.py` provides automated and manual historical reconciliation for unretained forecasting anomalies.
 
 ---
 

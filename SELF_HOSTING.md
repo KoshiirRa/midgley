@@ -313,6 +313,14 @@ If no remote Hindsight or Supabase credentials are configured, Midgley automatic
 * Generates structured post-mortems and parameter calibration recommendations via Gemini 2.5 Flash (or the Tier 3 Offline Rule-Based Lexicon).
 * **Region-Scoped Memory Retention (Issue #326):** Memory shock ingestion is scoped specifically to the regional hub being evaluated (`backfill_actual_prices_and_evaluate(target_region=...)`), eliminating redundant global tail re-evaluations and protecting cloud API quotas.
 
+### 3.5.1. Historical Memory Reconciliation & Catch-Up Engine (Issue #557)
+To reconcile and backfill any historical forecasting anomalies from `data/prediction_history.csv` into local SQLite or Vectorize Hindsight memory banks:
+```bash
+# Reconcile all forecasting anomalies evaluated since a specific target date
+python scripts/reconcile_hindsight_memory.py --start-date 2026-09-25
+```
+This CLI tool automatically detects whether Vectorize Hindsight Hosted SaaS (`HINDSIGHT_API_KEY`) or local SQLite FTS5 is active and dual-dispatches any unretained prediction shocks ($|\text{error}| \ge \$0.25/\text{gal}$ or directional flips), ensuring zero loss of episodic memory context.
+
 ---
 
 ## 4. Production Docker Container & Durable State Architecture

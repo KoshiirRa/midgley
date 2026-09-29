@@ -865,14 +865,15 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 ---
 
-### 25. Remote Hindsight / Supabase Cluster Memory Inventory Directives (`src/hindsight_client.py`, `src/agent_memory.py`) (Issues #310 & #422)
+### 25. Remote Hindsight / Supabase Cluster Memory Inventory Directives (`src/hindsight_client.py`, `src/agent_memory.py`, `scripts/reconcile_hindsight_memory.py`) (Issues #310, #422, #557)
 
-* **Role:** Synchronizes authoritative episodic memory bank inventory metrics (raw experiences, durable observations, and qualitative reflections) and local-to-cloud reconciliation queue depths between ephemeral CI/CD environments and the persistent central Vectorize Hindsight / Supabase pgvector cluster (`midgley-gas-forecasting`).
+* **Role:** Synchronizes authoritative episodic memory bank inventory metrics (raw experiences, durable observations, and qualitative reflections) and local-to-cloud reconciliation queue depths between ephemeral CI/CD environments and the persistent central Vectorize Hindsight / Supabase pgvector cluster (`midgley-gas-forecasting` / `Midgley`).
 * **Directives:**
   1. `AgentMemoryManager.get_bank_inventory()` MUST probe `HindsightClient.get_bank_stats()` to retrieve `memories_count`, `observations_count` (`total_observations`), and `reflections_count` before falling back to local SQLite on disk (`data/agent_memory.sqlite`).
   2. The local database MUST report pending un-synced experiences queue depth (`SELECT COUNT(*) FROM memories WHERE cloud_synced = 0`) to guarantee zero data loss during scale-to-zero boots.
   3. The public Telemetry Dashboard (`src/dashboard_generator.py`) MUST render separate counts for Raw Experiences, Durable Observations, and Qualitative Reflections, along with a live Cloud Sync Queue status badge and 7-day connector latency auditing for Hindsight Hosted SaaS.
   4. All network queries MUST enforce fail-safe timeouts ($\le 5.0\text{s}$) and zero-cost fallback continuity.
+  5. **Dynamic Anomaly Retention & Historical Reconciliation (Issue #557):** In `src/prediction_logger.py` (`backfill_actual_prices_and_evaluate()`), memory retention MUST directly evaluate and retain newly backfilled rows (`evaluated_rows_indices`) rather than relying on static DataFrame tail sampling. Candidate sweeps across historical logs MUST sort by `forecast_target_date DESC` and `log_timestamp DESC`. Historical un-retained anomalies MUST be catch-up reconciled via `AgentMemoryManager.reconcile_unretained_prediction_anomalies()` and `scripts/reconcile_hindsight_memory.py`.
 
 ---
 

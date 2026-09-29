@@ -305,6 +305,67 @@ class TestHindsightWarmupAndSync(unittest.TestCase):
         self.assertEqual(inventory["reflections_count"], 7)
         self.assertEqual(inventory["pending_reconciliation_count"], 1)
 
+    def test_reconcile_unretained_prediction_anomalies(self):
+        """Tests that reconcile_unretained_prediction_anomalies identifies and syncs missing anomalies."""
+        with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as f:
+            temp_csv = f.name
+
+        try:
+            df = pd.DataFrame([
+                {
+                    "forecast_target_date": "2026-09-24",
+                    "log_timestamp": "2026-09-19T12:00:00",
+                    "region": "National",
+                    "predicted_5d_price": 3.40,
+                    "actual_5d_price": 3.42,
+                    "error_dollars": 0.02,
+                    "directional_hit": 1.0,
+                    "current_base_price": 3.35,
+                    "data_source_provenance": "yfinance"
+                },
+                {
+                    "forecast_target_date": "2026-09-26",
+                    "log_timestamp": "2026-09-21T12:00:00",
+                    "region": "National",
+                    "predicted_5d_price": 3.10,
+                    "actual_5d_price": 3.45,
+                    "error_dollars": 0.35,
+                    "directional_hit": 0.0,
+                    "current_base_price": 3.35,
+                    "data_source_provenance": "yfinance"
+                },
+                {
+                    "forecast_target_date": "2026-09-28",
+                    "log_timestamp": "2026-09-23T12:00:00",
+                    "region": "Tulsa_OK",
+                    "predicted_5d_price": 3.60,
+                    "actual_5d_price": 3.20,
+                    "error_dollars": 0.40,
+                    "directional_hit": 0.0,
+                    "current_base_price": 3.35,
+                    "data_source_provenance": "eia_retail_feed:Tulsa_OK"
+                }
+            ])
+            df.to_csv(temp_csv, index=False)
+
+            res = self.manager.reconcile_unretained_prediction_anomalies(
+                start_date="2026-09-25",
+                history_csv=temp_csv
+            )
+
+            self.assertEqual(res["status"], "SUCCESS")
+            # 2 anomalies from 2026-09-26 and 2026-09-28 (2026-09-24 is before start_date)
+            self.assertEqual(res["synced_count"], 2)
+            self.assertEqual(len(res["retained_anomalies"]), 2)
+            self.assertEqual(res["retained_anomalies"][0]["target_date"], "2026-09-26")
+            self.assertEqual(res["retained_anomalies"][0]["anomaly_type"], "LARGE_UNDERESTIMATE")
+            self.assertEqual(res["retained_anomalies"][1]["target_date"], "2026-09-28")
+            self.assertEqual(res["retained_anomalies"][1]["anomaly_type"], "LARGE_OVERESTIMATE")
+        finally:
+            if os.path.exists(temp_csv):
+                os.remove(temp_csv)
+
 
 if __name__ == "__main__":
     unittest.main()
+

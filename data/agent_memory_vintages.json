@@ -1,10 +1,10 @@
 {
   "bank_id": "Midgley",
-  "source": "remote_cloud",
-  "backend": "Vectorize Hindsight (Supabase pgvector)",
-  "memories_count": 183,
-  "observations_count": 112,
+  "source": "local_sqlite",
+  "backend": "Local SQLite FTS5",
+  "memories_count": 2,
+  "observations_count": 0,
   "reflections_count": 0,
-  "pending_reconciliation_count": 0,
-  "last_synced_at": "2026-09-29T02:02:05.874037+00:00"
+  "pending_reconciliation_count": 2,
+  "last_synced_at": "2026-09-29T14:17:20.048905+00:00"
 }
