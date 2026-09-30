@@ -175,15 +175,16 @@ class GeopoliticalFeedConnector:
         self.is_free_alternative = True
         self.cost_per_query = 0.0
 
-    def fetch_geopolitical_headlines(self) -> List[Dict[str, Any]]:
+    def fetch_geopolitical_headlines(self, force_refresh: bool = False) -> List[Dict[str, Any]]:
         """
         Fetches live breaking maritime and geopolitical headlines with 15-minute lookup caching.
         """
         minute_bucket = datetime.now().strftime("%Y-%m-%d-%H")
         cache_key = f"geopolitical_headlines:{minute_bucket}"
-        cached = global_cache.get(cache_key)
-        if cached and isinstance(cached, dict) and "headlines" in cached:
-            return cached["headlines"]
+        if not force_refresh:
+            cached = global_cache.get(cache_key)
+            if cached and isinstance(cached, dict) and "headlines" in cached:
+                return cached["headlines"]
 
         queries = [
             ("Strait_of_Hormuz", "Iran+tanker+OR+Strait+of+Hormuz+when:2d"),
