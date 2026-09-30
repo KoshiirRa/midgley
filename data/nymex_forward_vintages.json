@@ -943,5 +943,68 @@
       "curve_backwardation_flag": 0.0
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-30 01:21:14",
+    "as_of": "2026-09-30 01:21:14",
+    "valid_date": "2026-09-30",
+    "forward_features": {
+      "rbob_m1_price": 3.123,
+      "rbob_m2_price": 3.123,
+      "wti_m1_price": 89.5,
+      "wti_m2_price": 89.5,
+      "ho_m1_price": 4.5566,
+      "rbob_calendar_spread_m1_m2": 0.0,
+      "wti_calendar_spread_m1_m2": 0.0,
+      "crack_spread_11": 0.992,
+      "crack_spread_321": 1.4699,
+      "curve_backwardation_flag": 0.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-30 02:38:34",
+    "as_of": "2026-09-30 02:38:34",
+    "valid_date": "2026-09-30",
+    "forward_features": {
+      "rbob_m1_price": 3.1147,
+      "rbob_m2_price": 3.1147,
+      "wti_m1_price": 89.29,
+      "wti_m2_price": 89.29,
+      "ho_m1_price": 4.5438,
+      "rbob_calendar_spread_m1_m2": 0.0,
+      "wti_calendar_spread_m1_m2": 0.0,
+      "crack_spread_11": 0.9887,
+      "crack_spread_321": 1.4651,
+      "curve_backwardation_flag": 0.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-09-30 03:45:52",
+    "as_of": "2026-09-30 03:45:52",
+    "valid_date": "2026-09-30",
+    "forward_features": {
+      "rbob_m1_price": 3.121,
+      "rbob_m2_price": 3.121,
+      "wti_m1_price": 89.62,
+      "wti_m2_price": 89.62,
+      "ho_m1_price": 4.5614,
+      "rbob_calendar_spread_m1_m2": 0.0,
+      "wti_calendar_spread_m1_m2": 0.0,
+      "crack_spread_11": 0.9872,
+      "crack_spread_321": 1.4673,
+      "curve_backwardation_flag": 0.0
+    },
+    "status": "SUCCESS"
   }
 ]
