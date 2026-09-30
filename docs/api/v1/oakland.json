@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T05:09:47.488768",
+  "timestamp": "2026-09-30T12:45:07.891134",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.434,
+    "current_price_per_gal": 6.448,
     "source": "AAA Web Scraper (Oakland, CA)",
     "provenance": {
       "source": "AAA Web Scraper (Oakland, CA)",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-30T04:36:51Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-30T12:41:55Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-06",
-    "current_base_price": 6.434,
-    "predicted_price_per_gal": 6.514,
+    "current_base_price": 6.448,
+    "predicted_price_per_gal": 6.528,
     "expected_change_dollars": 0.08,
     "expected_change_percent": 1.24,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 6.394,
-    "prediction_upper_95ci": 6.634,
+    "prediction_lower_95ci": 6.408,
+    "prediction_upper_95ci": 6.648,
     "calibration_method": "conformal",
     "calibration_sample_size": 237,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.45,
-    "day_2_price": 6.395,
-    "day_3_price": 6.454,
-    "day_4_price": 6.499,
-    "day_5_price": 6.514,
+    "day_1_price": 6.464,
+    "day_2_price": 6.409,
+    "day_3_price": 6.468,
+    "day_4_price": 6.513,
+    "day_5_price": 6.528,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -102,7 +102,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.028,
-          "impact_pct": 0.44,
+          "impact_pct": 0.43,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.028,
-      "impact_pct": 0.44,
+      "impact_pct": 0.43,
       "share_pct": 35.0,
       "direction": "UP"
     },

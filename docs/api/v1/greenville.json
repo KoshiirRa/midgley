@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T05:19:41.444384",
+  "timestamp": "2026-09-30T12:54:46.093781",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.12,
+    "current_price_per_gal": 4.096,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-30T04:46:45Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-30T12:51:33Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-06",
-    "current_base_price": 4.12,
-    "predicted_price_per_gal": 4.221,
+    "current_base_price": 4.096,
+    "predicted_price_per_gal": 4.197,
     "expected_change_dollars": 0.101,
-    "expected_change_percent": 2.45,
+    "expected_change_percent": 2.47,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.101,
-    "prediction_upper_95ci": 4.341,
+    "prediction_lower_95ci": 4.077,
+    "prediction_upper_95ci": 4.317,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.14,
-    "day_2_price": 4.072,
-    "day_3_price": 4.108,
-    "day_4_price": 4.166,
-    "day_5_price": 4.221,
+    "day_1_price": 4.116,
+    "day_2_price": 4.048,
+    "day_3_price": 4.084,
+    "day_4_price": 4.142,
+    "day_5_price": 4.197,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast +$0.101/gal (+2.45%): Driven primarily by Regional Logistics & Hub Delivery (+$0.040/gal), Futures & Commodity Benchmark (+$0.025/gal).",
+      "summary_text": "Greenville NC forecast +$0.101/gal (+2.47%): Driven primarily by Regional Logistics & Hub Delivery (+$0.040/gal), Futures & Commodity Benchmark (+$0.025/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.04,
-          "impact_pct": 0.97,
+          "impact_pct": 0.98,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.015,
-          "impact_pct": 0.36,
+          "impact_pct": 0.37,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.04,
-      "impact_pct": 0.97,
+      "impact_pct": 0.98,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.015,
-      "impact_pct": 0.36,
+      "impact_pct": 0.37,
       "share_pct": 15.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast +$0.101/gal (+2.45%): Driven primarily by Regional Logistics & Hub Delivery (+$0.040/gal), Futures & Commodity Benchmark (+$0.025/gal).",
+    "summary_text": "Greenville NC forecast +$0.101/gal (+2.47%): Driven primarily by Regional Logistics & Hub Delivery (+$0.040/gal), Futures & Commodity Benchmark (+$0.025/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

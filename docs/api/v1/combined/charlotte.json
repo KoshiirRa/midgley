@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T05:22:58.504806",
+  "timestamp": "2026-09-30T12:57:57.968199",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.16,
+    "current_price_per_gal": 4.135,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-09-30T04:50:03Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-09-30T12:54:46Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-06",
-    "current_base_price": 4.16,
-    "predicted_price_per_gal": 4.35,
+    "current_base_price": 4.135,
+    "predicted_price_per_gal": 4.325,
     "expected_change_dollars": 0.19,
-    "expected_change_percent": 4.57,
+    "expected_change_percent": 4.59,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.23,
-    "prediction_upper_95ci": 4.47,
+    "prediction_lower_95ci": 4.205,
+    "prediction_upper_95ci": 4.445,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.198,
-    "day_2_price": 4.148,
-    "day_3_price": 4.196,
-    "day_4_price": 4.288,
-    "day_5_price": 4.35,
+    "day_1_price": 4.173,
+    "day_2_price": 4.123,
+    "day_3_price": 4.171,
+    "day_4_price": 4.263,
+    "day_5_price": 4.325,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast +$0.190/gal (+4.57%): Driven primarily by Regional Logistics & Hub Delivery (+$0.076/gal), Futures & Commodity Benchmark (+$0.048/gal).",
+      "summary_text": "Charlotte NC forecast +$0.190/gal (+4.59%): Driven primarily by Regional Logistics & Hub Delivery (+$0.076/gal), Futures & Commodity Benchmark (+$0.048/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.076,
-          "impact_pct": 1.83,
+          "impact_pct": 1.84,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.048,
-          "impact_pct": 1.15,
+          "impact_pct": 1.16,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.028,
-          "impact_pct": 0.67,
+          "impact_pct": 0.68,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.076,
-      "impact_pct": 1.83,
+      "impact_pct": 1.84,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.048,
-      "impact_pct": 1.15,
+      "impact_pct": 1.16,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.028,
-      "impact_pct": 0.67,
+      "impact_pct": 0.68,
       "share_pct": 15.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast +$0.190/gal (+4.57%): Driven primarily by Regional Logistics & Hub Delivery (+$0.076/gal), Futures & Commodity Benchmark (+$0.048/gal).",
+    "summary_text": "Charlotte NC forecast +$0.190/gal (+4.59%): Driven primarily by Regional Logistics & Hub Delivery (+$0.076/gal), Futures & Commodity Benchmark (+$0.048/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
