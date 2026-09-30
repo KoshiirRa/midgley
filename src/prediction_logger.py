@@ -239,7 +239,7 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
             requests.append({"type": "close"})
             body = json.dumps({"requests": requests}).encode("utf-8")
             req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=4.0) as resp:
+            with urllib.request.urlopen(req, timeout=15.0) as resp:
                 if resp.status == 200:
                     total_synced = len(records_to_sync)
 
@@ -269,7 +269,7 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
             all_records = clean_df.to_dict(orient="records")
             body = json.dumps({"predictions": all_records}).encode("utf-8")
             req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=4.0) as resp:
+            with urllib.request.urlopen(req, timeout=15.0) as resp:
                 if resp.status in (200, 201):
                     logger.info(f"Successfully synced {len(all_records)} prediction records to Cloudflare D1 Edge Worker.")
                     return {"status": "synced", "synced_rows": len(all_records), "provider": "cloudflare_d1"}
