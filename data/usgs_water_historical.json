@@ -1,10 +1,10 @@
 {
   "benchmark_key": "usgs_water",
-  "last_refreshed_utc": "2026-09-30 17:50:48",
-  "records_count": 9,
+  "last_refreshed_utc": "2026-09-30 19:03:37",
+  "records_count": 6,
   "data": {
     "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-    "timestamp": "2026-09-30 17:50:00",
+    "timestamp": "2026-09-30 19:03:28",
     "status": "SUCCESS",
     "stations_monitored": 13,
     "stations": {
@@ -142,16 +142,13 @@
     "indices": {
       "hydrological_barge_bottleneck_index": 0.0,
       "gulf_marine_departure_risk_index": 0.0,
-      "carquinez_berthing_risk_index": 0.438,
+      "carquinez_berthing_risk_index": 0.0,
       "delaware_refinery_thermal_index": 0.0,
       "tulsa_refinery_flood_risk_index": 0.0,
       "florida_canal_flood_risk_index": 0.0,
       "is_barge_draft_restricted": false,
       "is_thermal_curtailment_risk": false,
       "is_gulf_departure_halted": false
-    },
-    "_cache_hit": true,
-    "_cache_tier": "in-memory",
-    "_cache_age_seconds": 47.2
+    }
   }
 }
