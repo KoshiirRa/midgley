@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T16:31:11.365838",
+  "timestamp": "2026-09-30T16:47:15.501722",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-30T16:30:51Z"
+      "timestamp": "2026-09-30T16:46:45Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -33,10 +33,10 @@
     "expected_change_dollars": 0.328,
     "expected_change_percent": 5.09,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 6.656,
-    "prediction_upper_95ci": 6.896,
-    "calibration_method": "gaussian_scaled",
-    "calibration_sample_size": 0,
+    "prediction_lower_95ci": 6.583,
+    "prediction_upper_95ci": 6.969,
+    "calibration_method": "conformal",
+    "calibration_sample_size": 475,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
