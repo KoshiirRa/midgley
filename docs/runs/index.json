@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-30_17-15-37",
+    "timestamp": "2026-09-30 14:49:57",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-30 14:49:57)"
+  },
+  {
     "run_id": "2026-09-30_17-00-37",
     "timestamp": "2026-09-30 14:49:57",
     "run_type": "LIVE_PROSPECTIVE",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-26 05:48 UTC",
     "run_type": "DAILY_BATCH",
     "trigger": "Daily Forecast Batch Execution (2026-09-26 05:48 UTC)"
-  },
-  {
-    "run_id": "2026-09-26_05-48-46",
-    "timestamp": "2026-09-26 05:42:39",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "India May Cut Russian Oil Imports As US Tariff Risk Rises - ..."
   }
 ]
