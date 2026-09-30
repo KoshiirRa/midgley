@@ -143,3 +143,53 @@ def test_generate_weekly_markdown_report_includes_self_review(sample_issues):
         assert "## ⚠️ Model Degradation & Baseline Underperformance Alerts" in report
         assert "## 📚 Relevant Recent arXiv Research Papers" in report
         assert "## 🔬 Relevant CORE Open-Access Research Papers" in report
+
+
+def test_load_prediction_records_db_and_csv(tmp_path):
+    from src.weekly_issue_reporter import load_prediction_records
+    import pandas as pd
+
+    # Test 1: DB query succeeds
+    mock_db = MagicMock()
+    mock_db.execute.return_value = [
+        {
+            "forecast_id": "f123",
+            "region": "National",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": "2026-09-30",
+            "forecast_target_date": "2026-10-05",
+            "forecast_horizon_days": 5,
+            "predicted_5d_price": 3.12,
+            "prediction_lower_95ci": 2.95,
+            "prediction_upper_95ci": 3.30,
+            "llm_price_pressure": 0.05,
+            "llm_supply_disruption": 0.02,
+            "run_type": "LIVE_PROSPECTIVE",
+            "actual_5d_price": 3.14,
+            "error_dollars": 0.02,
+            "directional_hit": 1,
+            "within_95ci_hit": 1
+        }
+    ]
+    with patch("src.db.client.get_db", return_value=mock_db):
+        df = load_prediction_records("nonexistent.csv")
+        assert len(df) == 1
+        assert df.iloc[0]["forecast_id"] == "f123"
+        assert df.iloc[0]["predicted_5d_price"] == 3.12
+
+    # Test 2: DB fails -> fallback to CSV
+    csv_file = tmp_path / "test_history.csv"
+    sample_df = pd.DataFrame([{
+        "forecast_id": "f456",
+        "region": "Tulsa_OK",
+        "predicted_5d_price": 2.85,
+        "actual_5d_price": 2.88,
+        "error_dollars": 0.03
+    }])
+    sample_df.to_csv(csv_file, index=False)
+
+    with patch("src.db.client.get_db", side_effect=RuntimeError("DB down")):
+        df_csv = load_prediction_records(str(csv_file))
+        assert len(df_csv) == 1
+        assert df_csv.iloc[0]["forecast_id"] == "f456"
+

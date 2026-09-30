@@ -936,6 +936,64 @@ def backfill_actual_prices_and_evaluate(
 
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
+        # Direct database batch update (Turso libSQL / SQLite)
+        try:
+            from src.db.client import get_db
+            import hashlib
+            db = get_db()
+            db_gt_stmts = []
+            db_eval_stmts = []
+            seen_gt = set()
+            seen_ev = set()
+            for _, row in history_df[history_df['actual_5d_price'].notna()].iterrows():
+                reg = str(row.get('region', 'National'))
+                target_d = str(row.get('forecast_target_date', ''))[:10]
+                act_p = float(row.get('actual_5d_price', 0.0))
+                if act_p > 0 and target_d:
+                    series_id = f"ACTUAL_{reg.upper()}"
+                    gt_key = (series_id, target_d)
+                    if gt_key not in seen_gt:
+                        seen_gt.add(gt_key)
+                        gt_sql = """
+                        INSERT INTO ground_truth (series_id, obs_date, actual_price, settled_at, source)
+                        VALUES (?, ?, ?, ?, ?)
+                        ON CONFLICT(series_id, obs_date) DO UPDATE SET actual_price = excluded.actual_price;
+                        """
+                        src_prov = str(row.get('data_source_provenance', 'live_feed'))
+                        db_gt_stmts.append((gt_sql, (series_id, target_d, act_p, target_d, src_prov)))
+
+                f_id = row.get('forecast_id')
+                if f_id and pd.notna(f_id) and str(f_id).strip():
+                    eval_id = hashlib.sha256(f"{f_id}_{target_d}".encode("utf-8")).hexdigest()[:32]
+                    if eval_id not in seen_ev:
+                        seen_ev.add(eval_id)
+                        pred_p = float(row.get('predicted_5d_price', 0.0))
+                        err_d = float(row.get('error_dollars', abs(pred_p - act_p)))
+                        pct_e = (err_d / act_p * 100.0) if act_p > 0 else 0.0
+                        d_hit = int(row.get('directional_hit', 1)) if pd.notna(row.get('directional_hit')) else 1
+                        w_95 = int(row.get('within_95ci_hit', 1)) if pd.notna(row.get('within_95ci_hit')) else 1
+                        eval_sql = """
+                        INSERT INTO evaluations (
+                            evaluation_id, forecast_id, series_id, actual_price, absolute_error,
+                            percentage_error, directional_correct, within_95ci
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(evaluation_id) DO UPDATE SET
+                            actual_price = excluded.actual_price,
+                            absolute_error = excluded.absolute_error,
+                            percentage_error = excluded.percentage_error,
+                            directional_correct = excluded.directional_correct,
+                            within_95ci = excluded.within_95ci;
+                        """
+                        db_eval_stmts.append((eval_sql, (
+                            eval_id, str(f_id), f"ACTUAL_{reg.upper()}", act_p, err_d, pct_e, d_hit, w_95
+                        )))
+            if db_gt_stmts:
+                db.execute_batch(db_gt_stmts)
+            if db_eval_stmts:
+                db.execute_batch(db_eval_stmts)
+        except Exception as db_err:
+            logger.debug(f"Notice updating evaluations to database: {db_err}")
+
         # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issues #230, #326, #557)
         if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
             try:
