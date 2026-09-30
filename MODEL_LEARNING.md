@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-09-30 21:35 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-09-30 23:35 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -47,7 +47,7 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`1786`** | Total synthesized reflections: **`7`**
+Total indexed episodic memories in local store: **`0`** | Total synthesized reflections: **`0`**
 
 ### 📂 Categorized Anomaly Case Studies
 
@@ -63,21 +63,8 @@ _No anomalies logged in this category._
 #### 🏷️ Geopolitical & OPEC Shock (0 case studies)
 _No anomalies logged in this category._
 
-#### 🏷️ Price Discrepancy & General Outliers (7 case studies)
-- **Oakland_CA Price Discrepancy ($+2.7083/gal)** (`Oakland_CA` | `2026-09-28`)
-  - **Root Cause:** Model overestimated 5-day price by +$2.7083/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-05-01 (Oakland_CA)'.
-  - **Historical Analogy:** Similar to historical Oakland_CA turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
-
-- **BayArea_CA Price Discrepancy ($+2.7791/gal)** (`BayArea_CA` | `2026-09-28`)
-  - **Root Cause:** Model overestimated 5-day price by +$2.7791/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-03-06 (BayArea_CA)'.
-  - **Historical Analogy:** Similar to historical BayArea_CA turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
-
-- **Oakland_CA Price Discrepancy ($+2.7791/gal)** (`Oakland_CA` | `2026-09-28`)
-  - **Root Cause:** Model overestimated 5-day price by +$2.7791/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-03-06 (Oakland_CA)'.
-  - **Historical Analogy:** Similar to historical Oakland_CA turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
+#### 🏷️ Price Discrepancy & General Outliers (0 case studies)
+_No anomalies logged in this category._
 
 ---
 

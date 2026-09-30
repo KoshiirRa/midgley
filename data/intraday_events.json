@@ -4033,5 +4033,25 @@
       "overall_price_pressure": 0.9
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-30T23:35:09.488108",
+    "headline": "Valero restarts CDU at Port Arthur, Texas refinery after two week outage - Quantum Commodity Intelligence",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNRG1Fa2dLMmk3MnBweFlOV3FLT2g2NHZWTUFtYVdDT2JVZFB5NDNVNVpfLUJ4ek4yQ2doNms4bVVXRW5qbHNUMUJGcEo5NmdEbmFhNWRpa1A4MG1DUFcyVlJ4eEFSZkNtWjVSUnhEVm9IR2VZdXVPdFVZRmRuUnFLalk5cVM3YThGWU1UaEpwSmV3T1hfWXRzdXFJZ2dvQUJjTHQtZUdpemg4dm1ZQ1JVTnJLOHg?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNRG1Fa2dLMmk3MnBweFlOV3FLT2g2NHZWTUFtYVdDT2JVZFB5NDNVNVpfLUJ4ek4yQ2doNms4bVVXRW5qbHNUMUJGcEo5NmdEbmFhNWRpa1A4MG1DUFcyVlJ4eEFSZkNtWjVSUnhEVm9IR2VZdXVPdFVZRmRuUnFLalk5cVM3YThGWU1UaEpwSmV3T1hfWXRzdXFJZ2dvQUJjTHQtZUdpemg4dm1ZQ1JVTnJLOHg?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitAFBVV95cUxNRG1Fa2dLMmk3MnBweFlOV3FLT2g2NHZWTUFtYVdDT2JVZFB5NDNVNVpfLUJ4ek4yQ2doNms4bVVXRW5qbHNUMUJGcEo5NmdEbmFhNWRpa1A4MG1DUFcyVlJ4eEFSZkNtWjVSUnhEVm9IR2VZdXVPdFVZRmRuUnFLalk5cVM3YThGWU1UaEpwSmV3T1hfWXRzdXFJZ2dvQUJjTHQtZUdpemg4dm1ZQ1JVTnJLOHg?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    },
+    "discord_notified": true
   }
 ]
