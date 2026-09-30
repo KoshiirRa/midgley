@@ -1,8 +1,12 @@
 {
   "created_at": "2026-09-05 04:38:50",
-  "last_updated": "2026-09-28 20:43:01",
-  "total_alerts_logged": 15,
-  "active_degraded_regions": [],
+  "last_updated": "2026-09-30 17:31:00",
+  "total_alerts_logged": 16,
+  "active_degraded_regions": [
+    "BayArea_CA",
+    "National",
+    "Oakland_CA"
+  ],
   "history": [
     {
       "timestamp": "2026-09-05 04:38:50",
@@ -678,6 +682,38 @@
           "model_mae": 0.6242,
           "naive_mae": 0.173,
           "model_uplift_mae_pct": -260.84,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-09-30 17:31:00",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "BayArea_CA",
+          "evaluations": 16,
+          "model_mae": 2.1005,
+          "naive_mae": 2.0706,
+          "model_uplift_mae_pct": -1.45,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "National",
+          "evaluations": 13,
+          "model_mae": 0.17,
+          "naive_mae": 0.1496,
+          "model_uplift_mae_pct": -13.64,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Oakland_CA",
+          "evaluations": 16,
+          "model_mae": 1.9647,
+          "naive_mae": 1.9354,
+          "model_uplift_mae_pct": -1.51,
           "status": "DEGRADED"
         }
       ],
