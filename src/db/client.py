@@ -193,37 +193,40 @@ class DatabaseClient:
             return self._execute_sqlite(sql, params)
 
     def _execute_batch_turso(self, statements: List[Tuple[str, Union[Tuple, List]]]) -> None:
-        """Executes batched requests to Turso via HTTP REST pipeline."""
-        requests = []
-        for sql, params in statements:
-            requests.append({
-                "type": "execute",
-                "stmt": {
-                    "sql": sql,
-                    "args": self._format_turso_params(params)
-                }
-            })
-        requests.append({"type": "close"})
+        """Executes batched requests to Turso via HTTP REST pipeline in chunks of 50 statements."""
+        chunk_size = 50
+        for i in range(0, len(statements), chunk_size):
+            chunk = statements[i:i + chunk_size]
+            requests = []
+            for sql, params in chunk:
+                requests.append({
+                    "type": "execute",
+                    "stmt": {
+                        "sql": sql,
+                        "args": self._format_turso_params(params)
+                    }
+                })
+            requests.append({"type": "close"})
 
-        payload = {"requests": requests}
-        try:
-            req = urllib.request.Request(
-                self.pipeline_url,
-                data=json.dumps(payload).encode("utf-8"),
-                headers={
-                    "Authorization": f"Bearer {self.auth_token}",
-                    "Content-Type": "application/json"
-                },
-                method="POST"
-            )
-            with urllib.request.urlopen(req, timeout=10.0) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-            for res in data.get("results", []):
-                if res.get("type") == "error":
-                    raise RuntimeError(f"Turso batch error: {res.get('error', {}).get('message')}")
-        except Exception as e:
-            logger.error(f"Turso batch execution failed: {e}. Falling back to SQLite.")
-            self._execute_batch_sqlite(statements)
+            payload = {"requests": requests}
+            try:
+                req = urllib.request.Request(
+                    self.pipeline_url,
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers={
+                        "Authorization": f"Bearer {self.auth_token}",
+                        "Content-Type": "application/json"
+                    },
+                    method="POST"
+                )
+                with urllib.request.urlopen(req, timeout=15.0) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                for res in data.get("results", []):
+                    if res.get("type") == "error":
+                        raise RuntimeError(f"Turso batch error: {res.get('error', {}).get('message')}")
+            except Exception as e:
+                logger.error(f"Turso batch execution failed: {e}. Falling back to SQLite.")
+                self._execute_batch_sqlite(chunk)
 
     def _format_turso_params(self, params: Union[Tuple, List, Dict]) -> List[Dict[str, Any]]:
         """Converts Python parameters to Turso parameter objects."""
