@@ -190,58 +190,68 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 }
             }
             total_synced = 0
-            records_to_sync = df if len(df) <= 200 else df.tail(200)
-            requests = [create_stmt]
-            for _, row in records_to_sync.iterrows():
-                f_id = str(row.get("forecast_id")) if pd.notna(row.get("forecast_id")) and str(row.get("forecast_id")).strip() else str(uuid.uuid4())
-                issued_utc = str(row.get("issued_at_utc")) if pd.notna(row.get("issued_at_utc")) and str(row.get("issued_at_utc")).strip() else datetime.now(timezone.utc).isoformat()
-                is_retro = 1 if bool(row.get("is_retroactive_backtest", False)) else 0
-                requests.append({
-                    "type": "execute",
-                    "stmt": {
-                        "sql": """INSERT OR REPLACE INTO prediction_history (
-                            forecast_id, issued_at_utc, log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
-                            headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
-                            actual_5d_price, actual_direction, error_dollars, directional_hit,
-                            llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
-                            llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
-                            within_95ci_hit, data_source_provenance, is_retroactive_backtest
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                        "args": [
-                            {"type": "text", "value": f_id},
-                            {"type": "text", "value": issued_utc},
-                            {"type": "text", "value": str(row.get("log_timestamp", ""))},
-                            {"type": "text", "value": str(row.get("forecast_target_date", ""))},
-                            {"type": "integer", "value": str(int(float(row.get("forecast_horizon_days", 5)))) if pd.notna(row.get("forecast_horizon_days")) else "5"},
-                            {"type": "text", "value": str(row.get("region", ""))},
-                            {"type": "text", "value": str(row.get("model_version", ""))},
-                            {"type": "text", "value": str(row.get("run_type", ""))},
-                            {"type": "text", "value": str(row.get("headline_trigger", ""))},
-                            {"type": "float", "value": float(row.get("current_base_price", 0.0)) if pd.notna(row.get("current_base_price")) else 0.0},
-                            {"type": "float", "value": float(row.get("predicted_5d_price", 0.0)) if pd.notna(row.get("predicted_5d_price")) else 0.0},
-                            {"type": "text", "value": str(row.get("predicted_direction", ""))},
-                            {"type": "float", "value": float(row.get("actual_5d_price", 0.0)) if pd.notna(row.get("actual_5d_price")) else 0.0},
-                            {"type": "text", "value": str(row.get("actual_direction", ""))},
-                            {"type": "float", "value": float(row.get("error_dollars", 0.0)) if pd.notna(row.get("error_dollars")) else 0.0},
-                            {"type": "float", "value": float(row.get("directional_hit", 0.0)) if pd.notna(row.get("directional_hit")) else 0.0},
-                            {"type": "float", "value": float(row.get("llm_price_pressure", 0.0)) if pd.notna(row.get("llm_price_pressure")) else 0.0},
-                            {"type": "float", "value": float(row.get("llm_supply_disruption", 0.0)) if pd.notna(row.get("llm_supply_disruption")) else 0.0},
-                            {"type": "float", "value": float(row.get("quant_baseline_5d_price", 0.0)) if pd.notna(row.get("quant_baseline_5d_price")) else 0.0},
-                            {"type": "float", "value": float(row.get("llm_augmentation_delta", 0.0)) if pd.notna(row.get("llm_augmentation_delta")) else 0.0},
-                            {"type": "float", "value": float(row.get("prediction_lower_95ci", 0.0)) if pd.notna(row.get("prediction_lower_95ci")) else 0.0},
-                            {"type": "float", "value": float(row.get("prediction_upper_95ci", 0.0)) if pd.notna(row.get("prediction_upper_95ci")) else 0.0},
-                            {"type": "float", "value": float(row.get("within_95ci_hit", 0.0)) if pd.notna(row.get("within_95ci_hit")) else 0.0},
-                            {"type": "text", "value": str(row.get("data_source_provenance", "yfinance"))},
-                            {"type": "integer", "value": str(is_retro)}
-                        ]
-                    }
-                })
-            requests.append({"type": "close"})
-            body = json.dumps({"requests": requests}).encode("utf-8")
-            req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=15.0) as resp:
-                if resp.status == 200:
-                    total_synced = len(records_to_sync)
+            records_to_sync = df if len(df) <= 50 else df.tail(50)
+            chunk_size = 25
+
+            # Ensure table exists
+            init_payload = json.dumps({"requests": [create_stmt, {"type": "close"}]}).encode("utf-8")
+            init_req = urllib.request.Request(endpoint, data=init_payload, headers=headers, method="POST")
+            with urllib.request.urlopen(init_req, timeout=10.0) as resp:
+                pass
+
+            for i in range(0, len(records_to_sync), chunk_size):
+                chunk = records_to_sync.iloc[i:i+chunk_size]
+                requests = []
+                for _, row in chunk.iterrows():
+                    f_id = str(row.get("forecast_id")) if pd.notna(row.get("forecast_id")) and str(row.get("forecast_id")).strip() else str(uuid.uuid4())
+                    issued_utc = str(row.get("issued_at_utc")) if pd.notna(row.get("issued_at_utc")) and str(row.get("issued_at_utc")).strip() else datetime.now(timezone.utc).isoformat()
+                    is_retro = 1 if bool(row.get("is_retroactive_backtest", False)) else 0
+                    requests.append({
+                        "type": "execute",
+                        "stmt": {
+                            "sql": """INSERT OR REPLACE INTO prediction_history (
+                                forecast_id, issued_at_utc, log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
+                                headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
+                                actual_5d_price, actual_direction, error_dollars, directional_hit,
+                                llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
+                                llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
+                                within_95ci_hit, data_source_provenance, is_retroactive_backtest
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                            "args": [
+                                {"type": "text", "value": f_id},
+                                {"type": "text", "value": issued_utc},
+                                {"type": "text", "value": str(row.get("log_timestamp", ""))},
+                                {"type": "text", "value": str(row.get("forecast_target_date", ""))},
+                                {"type": "integer", "value": str(int(float(row.get("forecast_horizon_days", 5)))) if pd.notna(row.get("forecast_horizon_days")) else "5"},
+                                {"type": "text", "value": str(row.get("region", ""))},
+                                {"type": "text", "value": str(row.get("model_version", ""))},
+                                {"type": "text", "value": str(row.get("run_type", ""))},
+                                {"type": "text", "value": str(row.get("headline_trigger", ""))},
+                                {"type": "float", "value": float(row.get("current_base_price", 0.0)) if pd.notna(row.get("current_base_price")) else 0.0},
+                                {"type": "float", "value": float(row.get("predicted_5d_price", 0.0)) if pd.notna(row.get("predicted_5d_price")) else 0.0},
+                                {"type": "text", "value": str(row.get("predicted_direction", ""))},
+                                {"type": "float", "value": float(row.get("actual_5d_price", 0.0)) if pd.notna(row.get("actual_5d_price")) else 0.0},
+                                {"type": "text", "value": str(row.get("actual_direction", ""))},
+                                {"type": "float", "value": float(row.get("error_dollars", 0.0)) if pd.notna(row.get("error_dollars")) else 0.0},
+                                {"type": "float", "value": float(row.get("directional_hit", 0.0)) if pd.notna(row.get("directional_hit")) else 0.0},
+                                {"type": "float", "value": float(row.get("llm_price_pressure", 0.0)) if pd.notna(row.get("llm_price_pressure")) else 0.0},
+                                {"type": "float", "value": float(row.get("llm_supply_disruption", 0.0)) if pd.notna(row.get("llm_supply_disruption")) else 0.0},
+                                {"type": "float", "value": float(row.get("quant_baseline_5d_price", 0.0)) if pd.notna(row.get("quant_baseline_5d_price")) else 0.0},
+                                {"type": "float", "value": float(row.get("llm_augmentation_delta", 0.0)) if pd.notna(row.get("llm_augmentation_delta")) else 0.0},
+                                {"type": "float", "value": float(row.get("prediction_lower_95ci", 0.0)) if pd.notna(row.get("prediction_lower_95ci")) else 0.0},
+                                {"type": "float", "value": float(row.get("prediction_upper_95ci", 0.0)) if pd.notna(row.get("prediction_upper_95ci")) else 0.0},
+                                {"type": "float", "value": float(row.get("within_95ci_hit", 0.0)) if pd.notna(row.get("within_95ci_hit")) else 0.0},
+                                {"type": "text", "value": str(row.get("data_source_provenance", "yfinance"))},
+                                {"type": "integer", "value": str(is_retro)}
+                            ]
+                        }
+                    })
+                requests.append({"type": "close"})
+                body = json.dumps({"requests": requests}).encode("utf-8")
+                req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
+                with urllib.request.urlopen(req, timeout=15.0) as resp:
+                    if resp.status in (200, 201):
+                        total_synced += len(chunk)
 
             if total_synced > 0:
                 logger.info(f"Successfully synced {total_synced} prediction records to Turso Edge database.")
