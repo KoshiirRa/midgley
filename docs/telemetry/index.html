@@ -128,7 +128,7 @@
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Connector Success Rate</span>
-                    <div class="text-2xl font-bold text-emerald-400 font-mono">0.6%</div>
+                    <div class="text-2xl font-bold text-emerald-400 font-mono">50.6%</div>
                     <span class="text-[10px] text-emerald-400 font-mono">1,000 Total Calls (7-Day)</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
@@ -138,8 +138,8 @@
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Hindsight Stored Memories</span>
-                    <div class="text-2xl font-bold text-purple-300 font-mono">297</div>
-                    <span class="text-[10px] text-purple-300 font-mono">25,093 Retain / 9,843 Cloud Calls</span>
+                    <div class="text-2xl font-bold text-purple-300 font-mono">533</div>
+                    <span class="text-[10px] text-purple-300 font-mono">25,586 Retain / 10,336 Cloud Calls</span>
                 </div>
             </div>
         </div>
@@ -162,7 +162,7 @@
                     <div class="space-y-3 font-mono text-xs">
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
-                            <span class="text-emerald-400 font-bold">25,093 ops</span>
+                            <span class="text-emerald-400 font-bold">25,586 ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
                             <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
@@ -184,7 +184,7 @@
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-300">Cloud Run + Supabase pgvector</span>
-                                <span class="text-cyan-400 font-bold">9,843 calls</span>
+                                <span class="text-cyan-400 font-bold">10,336 calls</span>
                             </div>
                             <p class="text-[10px] text-slate-500 font-sans">Scale-to-zero container (midgley-hindsight) with HNSW vector index</p>
                         </div>
@@ -216,11 +216,11 @@
                         </div>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                                <div class="text-base font-bold text-purple-300">184</div>
+                                <div class="text-base font-bold text-purple-300">327</div>
                                 <div class="text-[9px] text-slate-400 font-sans">Experiences</div>
                             </div>
                             <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                                <div class="text-base font-bold text-cyan-300">113</div>
+                                <div class="text-base font-bold text-cyan-300">206</div>
                                 <div class="text-[9px] text-slate-400 font-sans">Observations</div>
                             </div>
                             <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
@@ -253,11 +253,11 @@
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Success Rate</span>
-                        <div class="text-xl font-bold text-emerald-400 font-mono">0.6%</div>
+                        <div class="text-xl font-bold text-emerald-400 font-mono">50.6%</div>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Avg Latency</span>
-                        <div class="text-xl font-bold text-cyan-400 font-mono">110.28 ms</div>
+                        <div class="text-xl font-bold text-cyan-400 font-mono">137.25 ms</div>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Stale Payloads (>24h)</span>
@@ -281,10 +281,18 @@
                             
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
                 <td class="py-2.5 px-3 font-semibold text-slate-200">HindsightHosted</td>
-                <td class="py-2.5 px-3 text-center text-slate-300">985</td>
-                <td class="py-2.5 px-3 text-center text-red-400 font-bold">0.1%</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">977</td>
+                <td class="py-2.5 px-3 text-center text-red-400 font-bold">50.8%</td>
                 <td class="py-2.5 px-3 text-center text-slate-400">0</td>
-                <td class="py-2.5 px-3 text-center text-cyan-300">111.27 ms</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">134.85 ms</td>
+                <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
+                <td class="py-2.5 px-3 font-semibold text-slate-200">Reachability_EXECUTIVE_SOCIAL</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">7</td>
+                <td class="py-2.5 px-3 text-center text-emerald-400 font-bold">100.0%</td>
+                <td class="py-2.5 px-3 text-center text-slate-400">0</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">294.21 ms</td>
                 <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
             </tr>
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
@@ -297,18 +305,10 @@
             </tr>
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
                 <td class="py-2.5 px-3 font-semibold text-slate-200">HeadlineArena</td>
-                <td class="py-2.5 px-3 text-center text-slate-300">5</td>
-                <td class="py-2.5 px-3 text-center text-red-400 font-bold">40.0%</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">7</td>
+                <td class="py-2.5 px-3 text-center text-red-400 font-bold">28.6%</td>
                 <td class="py-2.5 px-3 text-center text-slate-400">0</td>
-                <td class="py-2.5 px-3 text-center text-cyan-300">0.06 ms</td>
-                <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
-            </tr>
-            <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
-                <td class="py-2.5 px-3 font-semibold text-slate-200">Reachability_EXECUTIVE_SOCIAL</td>
-                <td class="py-2.5 px-3 text-center text-slate-300">2</td>
-                <td class="py-2.5 px-3 text-center text-emerald-400 font-bold">100.0%</td>
-                <td class="py-2.5 px-3 text-center text-slate-400">0</td>
-                <td class="py-2.5 px-3 text-center text-cyan-300">335.64 ms</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">490.16 ms</td>
                 <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
             </tr>
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
@@ -317,6 +317,14 @@
                 <td class="py-2.5 px-3 text-center text-emerald-400 font-bold">100.0%</td>
                 <td class="py-2.5 px-3 text-center text-slate-400">0</td>
                 <td class="py-2.5 px-3 text-center text-cyan-300">0.00 ms</td>
+                <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
+                <td class="py-2.5 px-3 font-semibold text-slate-200">FERC_Form6</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">1</td>
+                <td class="py-2.5 px-3 text-center text-red-400 font-bold">0.0%</td>
+                <td class="py-2.5 px-3 text-center text-slate-400">0</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">3.52 ms</td>
                 <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
             </tr>
                         </tbody>
@@ -476,7 +484,7 @@
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-xs text-slate-400 font-mono">Total API Executions</span>
-                        <div class="text-2xl font-bold text-blue-400 font-mono">352</div>
+                        <div class="text-2xl font-bold text-blue-400 font-mono">356</div>
                         <span class="text-[10px] text-blue-400 font-mono">Recorded Sessions</span>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
@@ -523,7 +531,7 @@
                                 </tr>
                                 <tr class="hover:bg-slate-800/40">
                                     <td class="py-2 px-3 font-semibold text-cyan-300">Finlight.me REST API</td>
-                                    <td class="py-2 px-3 text-center">30</td>
+                                    <td class="py-2 px-3 text-center">34</td>
                                     <td class="py-2 px-3 text-center">0</td>
                                     <td class="py-2 px-3 text-center">0</td>
                                     <td class="py-2 px-3 text-right text-slate-400 font-bold">$0.000000</td>
@@ -684,25 +692,25 @@
                         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">7-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">223</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$1.1277</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$1.1078</td>
-            <td class="py-3 px-4 font-mono text-amber-400">-1.79%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">40.8%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">34.1%</td>
+            <td class="py-3 px-4 text-slate-400">148</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.8995</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.9141</td>
+            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+1.59%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">54.7%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">43.2%</td>
             <td class="py-3 px-4">
-                <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">⚠️ Calibration Active</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">🟢 Optimal</span>
             </td>
         </tr>
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">14-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">423</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$1.0945</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$1.1085</td>
-            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+1.26%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">51.3%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">40.4%</td>
+            <td class="py-3 px-4 text-slate-400">273</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.8701</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.8966</td>
+            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+2.96%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">54.6%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">49.8%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">🟢 Optimal</span>
             </td>
@@ -710,12 +718,12 @@
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">30-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">853</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$1.1048</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$1.1612</td>
-            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+4.86%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">62.0%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">39.7%</td>
+            <td class="py-3 px-4 text-slate-400">538</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.8758</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.9374</td>
+            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+6.58%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">63.0%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">51.1%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">🟢 Optimal</span>
             </td>
@@ -723,12 +731,12 @@
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">90-Day Window</td>
-            <td class="py-3 px-4 text-slate-400">2483</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$1.1180</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$1.2077</td>
-            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+7.43%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">74.9%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">35.7%</td>
+            <td class="py-3 px-4 text-slate-400">1553</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.8985</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.9641</td>
+            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+6.81%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">69.3%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">48.3%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">🟢 Optimal</span>
             </td>
@@ -736,12 +744,12 @@
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition text-xs">
             <td class="py-3 px-4 font-semibold text-slate-200">All-Time Window</td>
-            <td class="py-3 px-4 text-slate-400">9485</td>
-            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$1.0971</td>
-            <td class="py-3 px-4 font-mono text-slate-400">$1.1438</td>
-            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+4.08%</td>
-            <td class="py-3 px-4 font-mono text-slate-200">65.8%</td>
-            <td class="py-3 px-4 font-mono text-indigo-400">46.3%</td>
+            <td class="py-3 px-4 text-slate-400">5912</td>
+            <td class="py-3 px-4 font-mono font-semibold text-sky-400">$0.8793</td>
+            <td class="py-3 px-4 font-mono text-slate-400">$0.9129</td>
+            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">+3.69%</td>
+            <td class="py-3 px-4 font-mono text-slate-200">62.9%</td>
+            <td class="py-3 px-4 font-mono text-indigo-400">53.1%</td>
             <td class="py-3 px-4">
                 <span class="px-2 py-0.5 rounded text-[10px] font-semibold border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">🟢 Optimal</span>
             </td>
@@ -874,11 +882,67 @@
                         <p class="text-xs text-slate-400 mt-0.5">Retain-Recall-Reflect root cause post-mortems for major prediction errors.</p>
                     </div>
                     <span class="px-2 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-xs border border-amber-500/30">
-                        0 Reflections
+                        7 Reflections
                     </span>
                 </div>
                 <div class="space-y-3">
-                    <p class="text-xs text-slate-500 italic">No episodic reflections indexed yet.</p>
+                    
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+                <span class="font-semibold text-slate-200 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    Oakland_CA Price Discrepancy ($+2.7083/gal)
+                </span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Oakland_CA</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model overestimated 5-day price by +$2.7083/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-05-01 (Oakland_CA)'.</p>
+            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
+                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.
+            </div>
+        </div>
+        
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+                <span class="font-semibold text-slate-200 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    BayArea_CA Price Discrepancy ($+2.7791/gal)
+                </span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">BayArea_CA</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model overestimated 5-day price by +$2.7791/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-03-06 (BayArea_CA)'.</p>
+            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
+                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.
+            </div>
+        </div>
+        
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+                <span class="font-semibold text-slate-200 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    Oakland_CA Price Discrepancy ($+2.7791/gal)
+                </span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Oakland_CA</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model overestimated 5-day price by +$2.7791/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-03-06 (Oakland_CA)'.</p>
+            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
+                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.
+            </div>
+        </div>
+        
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+                <span class="font-semibold text-slate-200 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    National Price Discrepancy ($+0.6586/gal)
+                </span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">National</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model underestimated price surge by -$0.6586/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.</p>
+            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
+                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.
+            </div>
+        </div>
+        
                 </div>
             </div>
         </div>
@@ -888,10 +952,10 @@
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const learningDates = ["2025-11-14", "2025-11-19", "2025-11-24", "2025-11-29", "2025-12-04", "2025-12-09", "2025-12-14", "2025-12-19", "2025-12-24", "2025-12-29", "2026-01-03", "2026-01-08", "2026-01-13", "2026-01-18", "2026-01-23", "2026-01-28", "2026-02-02", "2026-02-07", "2026-02-12", "2026-02-17", "2026-02-22", "2026-02-27", "2026-03-04", "2026-03-09", "2026-03-14", "2026-03-19", "2026-03-24", "2026-03-29", "2026-04-03", "2026-04-08", "2026-04-13", "2026-04-18", "2026-04-23", "2026-04-28", "2026-05-03", "2026-05-08", "2026-05-13", "2026-05-18", "2026-05-23", "2026-05-28", "2026-06-02", "2026-06-07", "2026-06-12", "2026-06-17", "2026-06-22", "2026-06-27", "2026-07-02", "2026-07-07", "2026-07-12", "2026-07-17", "2026-07-22", "2026-07-27", "2026-08-01", "2026-08-06", "2026-08-11", "2026-08-16", "2026-08-21", "2026-08-26", "2026-08-31", "2026-09-05", "2026-09-10", "2026-09-15", "2026-09-20", "2026-09-25", "2026-09-30"];
-        const modelMAE = [1.0146, 1.0184, 1.0205, 1.0306, 1.0317, 1.0342, 1.0356, 1.0362, 1.038, 1.0457, 1.0567, 1.0588, 1.0657, 1.0732, 1.0911, 1.082, 1.0805, 1.0864, 1.0948, 1.1135, 1.1066, 1.1114, 1.1286, 1.1624, 1.1677, 1.1619, 1.1721, 1.1785, 1.1947, 1.1665, 1.1619, 1.1432, 1.1338, 1.1443, 1.1541, 1.1236, 1.1192, 1.1308, 1.1253, 1.1131, 1.0742, 1.0673, 1.0593, 1.053, 1.0516, 1.0433, 1.0601, 1.0876, 1.1104, 1.1383, 1.1468, 1.1688, 1.1652, 1.1498, 1.1369, 1.1227, 1.1054, 1.0877, 1.0861, 1.0821, 1.0982, 1.1, 1.1013, 1.0941, 1.1048];
-        const naiveMAE = [1.0318, 1.0366, 1.0422, 1.0521, 1.0502, 1.0479, 1.0474, 1.0437, 1.041, 1.0442, 1.0538, 1.0543, 1.0599, 1.0687, 1.0892, 1.0798, 1.078, 1.0853, 1.091, 1.1069, 1.0965, 1.0999, 1.1178, 1.1554, 1.1826, 1.1943, 1.2193, 1.2392, 1.2625, 1.2423, 1.233, 1.2005, 1.178, 1.1869, 1.2118, 1.2032, 1.1951, 1.2176, 1.2296, 1.2239, 1.1699, 1.1333, 1.1128, 1.1076, 1.0884, 1.0717, 1.095, 1.1345, 1.165, 1.2034, 1.2241, 1.2682, 1.285, 1.2725, 1.2542, 1.2361, 1.2149, 1.1959, 1.182, 1.1901, 1.2033, 1.2071, 1.203, 1.1762, 1.1612];
-        const upliftData = [1.66, 1.76, 2.09, 2.05, 1.76, 1.31, 1.12, 0.72, 0.29, -0.14, -0.28, -0.42, -0.54, -0.42, -0.18, -0.2, -0.23, -0.11, -0.35, -0.6, -0.92, -1.04, -0.97, -0.61, 1.27, 2.72, 3.87, 4.89, 5.37, 6.1, 5.77, 4.78, 3.76, 3.59, 4.77, 6.62, 6.34, 7.12, 8.48, 9.05, 8.18, 5.82, 4.81, 4.94, 3.38, 2.65, 3.19, 4.14, 4.68, 5.41, 6.31, 7.84, 9.32, 9.64, 9.35, 9.18, 9.01, 9.05, 8.11, 9.07, 8.73, 8.87, 8.45, 6.98, 4.86];
-        const llmWinData = [55.91, 55.98, 57.74, 59.74, 62.18, 63.73, 67.09, 69.31, 66.67, 67.65, 67.25, 66.55, 63.55, 63.21, 64.74, 61.01, 54.75, 53.28, 49.08, 40.39, 36.7, 40.11, 44.94, 44.43, 45.42, 51.02, 52.06, 51.43, 49.01, 47.29, 48.1, 49.76, 49.89, 49.16, 47.59, 45.31, 45.98, 41.9, 37.16, 34.31, 33.86, 34.18, 36.09, 34.02, 37.82, 38.83, 37.13, 34.7, 29.32, 29.51, 28.55, 26.2, 25.78, 25.11, 28.64, 31.31, 35.0, 38.04, 41.43, 44.2, 43.68, 42.77, 42.91, 41.84, 39.74];
+        const modelMAE = [0.8137, 0.8059, 0.8077, 0.8199, 0.8198, 0.8219, 0.8228, 0.8232, 0.824, 0.831, 0.8439, 0.8451, 0.8518, 0.8564, 0.8759, 0.8611, 0.8544, 0.8578, 0.8608, 0.8806, 0.8683, 0.8697, 0.8913, 0.928, 0.9412, 0.9373, 0.9491, 0.959, 0.9731, 0.9464, 0.9375, 0.9172, 0.9102, 0.9229, 0.9353, 0.9048, 0.9022, 0.9132, 0.908, 0.9014, 0.8651, 0.8581, 0.8486, 0.8438, 0.8485, 0.8332, 0.8439, 0.871, 0.8901, 0.9183, 0.9219, 0.9424, 0.9385, 0.9262, 0.9203, 0.9062, 0.8924, 0.8776, 0.8843, 0.8733, 0.8843, 0.8822, 0.8797, 0.8661, 0.8758];
+        const naiveMAE = [0.8251, 0.8181, 0.8232, 0.8361, 0.8339, 0.8322, 0.832, 0.8291, 0.8261, 0.829, 0.8407, 0.8407, 0.8465, 0.8521, 0.8732, 0.8589, 0.8527, 0.8569, 0.8586, 0.8767, 0.8629, 0.8635, 0.8856, 0.9254, 0.951, 0.9564, 0.9779, 0.9975, 1.017, 0.9954, 0.9873, 0.9599, 0.9438, 0.9538, 0.9753, 0.9628, 0.9547, 0.9713, 0.9811, 0.9827, 0.9386, 0.909, 0.8907, 0.8885, 0.879, 0.8545, 0.8692, 0.9049, 0.9291, 0.9605, 0.9689, 1.0044, 1.0178, 1.0103, 1.0005, 0.9851, 0.9657, 0.9497, 0.9408, 0.9435, 0.9575, 0.9603, 0.9596, 0.9387, 0.9374];
+        const upliftData = [1.38, 1.49, 1.89, 1.93, 1.7, 1.23, 1.11, 0.72, 0.25, -0.23, -0.38, -0.53, -0.63, -0.51, -0.3, -0.26, -0.2, -0.1, -0.25, -0.45, -0.63, -0.72, -0.64, -0.29, 1.04, 2.0, 2.95, 3.86, 4.31, 4.92, 5.04, 4.45, 3.55, 3.23, 4.1, 6.03, 5.5, 5.98, 7.45, 8.27, 7.83, 5.6, 4.73, 5.03, 3.46, 2.49, 2.91, 3.74, 4.21, 4.39, 4.85, 6.17, 7.79, 8.33, 8.02, 8.0, 7.59, 7.59, 6.01, 7.44, 7.65, 8.13, 8.33, 7.73, 6.58];
+        const llmWinData = [49.29, 49.04, 52.19, 55.14, 59.07, 61.17, 66.12, 69.63, 65.56, 67.22, 66.6, 65.29, 59.96, 56.24, 55.14, 50.1, 40.64, 39.02, 38.33, 33.2, 35.88, 43.15, 50.56, 52.86, 53.01, 58.91, 59.27, 60.95, 63.72, 64.18, 69.59, 73.4, 74.26, 73.4, 70.82, 65.89, 66.09, 61.52, 53.45, 47.27, 43.5, 42.24, 43.33, 39.07, 42.32, 45.6, 46.11, 45.66, 40.66, 42.97, 43.69, 41.02, 40.78, 38.2, 40.55, 41.71, 46.43, 49.74, 52.76, 57.09, 57.45, 57.67, 56.94, 54.63, 51.12];
 
         if (learningDates.length > 0 && document.getElementById('learningCurveChart')) {
             const ctx1 = document.getElementById('learningCurveChart').getContext('2d');

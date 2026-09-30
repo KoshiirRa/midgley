@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T19:03:50.294132",
+  "timestamp": "2026-09-30T21:35:52.415893",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-30T19:03:49Z"
+      "timestamp": "2026-09-30T21:35:51Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-10-06",
     "current_base_price": 4.434,
-    "predicted_price_per_gal": 4.601,
-    "expected_change_dollars": 0.167,
-    "expected_change_percent": 3.77,
+    "predicted_price_per_gal": 4.594,
+    "expected_change_dollars": 0.16,
+    "expected_change_percent": 3.61,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.399,
-    "prediction_upper_95ci": 4.803,
+    "prediction_lower_95ci": 4.392,
+    "prediction_upper_95ci": 4.796,
     "calibration_method": "conformal",
     "calibration_sample_size": 457,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.467,
-    "day_2_price": 4.449,
-    "day_3_price": 4.47,
-    "day_4_price": 4.51,
-    "day_5_price": 4.601,
+    "day_1_price": 4.466,
+    "day_2_price": 4.459,
+    "day_3_price": 4.488,
+    "day_4_price": 4.554,
+    "day_5_price": 4.594,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.075,
+        "delta_dollars": 0.072,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.042,
+        "delta_dollars": 0.04,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -65,7 +65,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.025,
+        "delta_dollars": 0.024,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.013,
+        "delta_dollars": 0.012,
         "share_pct": 7.5,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -96,37 +96,37 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.167/gal (+3.77%): Driven primarily by Futures & Commodity Benchmark (+$0.075/gal), Refining Yield & Crack Spread (+$0.042/gal).",
+      "summary_text": "National forecast +$0.160/gal (+3.61%): Driven primarily by Futures & Commodity Benchmark (+$0.072/gal), Refining Yield & Crack Spread (+$0.040/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.075,
-          "impact_pct": 1.69,
+          "impact_dollars": 0.072,
+          "impact_pct": 1.62,
           "share_pct": 45.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.042,
-          "impact_pct": 0.95,
+          "impact_dollars": 0.04,
+          "impact_pct": 0.9,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.025,
-          "impact_pct": 0.56,
+          "impact_dollars": 0.024,
+          "impact_pct": 0.54,
           "share_pct": 15.0,
           "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.013,
-          "impact_pct": 0.29,
+          "impact_dollars": 0.012,
+          "impact_pct": 0.27,
           "share_pct": 7.5,
           "direction": "UP"
         },
@@ -153,32 +153,32 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.075,
-      "impact_pct": 1.69,
+      "impact_dollars": 0.072,
+      "impact_pct": 1.62,
       "share_pct": 45.0,
       "direction": "UP"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.042,
-      "impact_pct": 0.95,
+      "impact_dollars": 0.04,
+      "impact_pct": 0.9,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.025,
-      "impact_pct": 0.56,
+      "impact_dollars": 0.024,
+      "impact_pct": 0.54,
       "share_pct": 15.0,
       "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.013,
-      "impact_pct": 0.29,
+      "impact_dollars": 0.012,
+      "impact_pct": 0.27,
       "share_pct": 7.5,
       "direction": "UP"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.167/gal (+3.77%): Driven primarily by Futures & Commodity Benchmark (+$0.075/gal), Refining Yield & Crack Spread (+$0.042/gal).",
+    "summary_text": "National forecast +$0.160/gal (+3.61%): Driven primarily by Futures & Commodity Benchmark (+$0.072/gal), Refining Yield & Crack Spread (+$0.040/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.075,
+        "delta_dollars": 0.072,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.042,
+        "delta_dollars": 0.04,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -221,7 +221,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.025,
+        "delta_dollars": 0.024,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.013,
+        "delta_dollars": 0.012,
         "share_pct": 7.5,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T19:03:54.685561",
+  "timestamp": "2026-09-30T21:35:55.549544",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-30T19:03:24Z"
+      "timestamp": "2026-09-30T21:35:33Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-10-06",
     "current_base_price": 4.248,
-    "predicted_price_per_gal": 4.444,
-    "expected_change_dollars": 0.196,
-    "expected_change_percent": 4.61,
+    "predicted_price_per_gal": 4.448,
+    "expected_change_dollars": 0.2,
+    "expected_change_percent": 4.71,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.324,
-    "prediction_upper_95ci": 4.564,
+    "prediction_lower_95ci": 4.328,
+    "prediction_upper_95ci": 4.568,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.287,
-    "day_2_price": 4.218,
-    "day_3_price": 4.211,
-    "day_4_price": 4.247,
-    "day_5_price": 4.444,
+    "day_1_price": 4.288,
+    "day_2_price": 4.276,
+    "day_3_price": 4.312,
+    "day_4_price": 4.396,
+    "day_5_price": 4.448,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.069,
+        "delta_dollars": 0.07,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -57,7 +57,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.049,
+        "delta_dollars": 0.05,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -65,7 +65,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.029,
+        "delta_dollars": 0.03,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -89,36 +89,36 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.009,
+        "delta_dollars": 0.01,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast +$0.196/gal (+4.61%): Driven primarily by Regional Logistics & Hub Delivery (+$0.069/gal), Futures & Commodity Benchmark (+$0.049/gal).",
+      "summary_text": "Port St Lucie FL forecast +$0.200/gal (+4.71%): Driven primarily by Regional Logistics & Hub Delivery (+$0.070/gal), Futures & Commodity Benchmark (+$0.050/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.069,
-          "impact_pct": 1.62,
+          "impact_dollars": 0.07,
+          "impact_pct": 1.65,
           "share_pct": 35.0,
           "direction": "UP"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.049,
-          "impact_pct": 1.15,
+          "impact_dollars": 0.05,
+          "impact_pct": 1.18,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.029,
-          "impact_pct": 0.68,
+          "impact_dollars": 0.03,
+          "impact_pct": 0.71,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -141,8 +141,8 @@
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.009,
-          "impact_pct": 0.21,
+          "impact_dollars": 0.01,
+          "impact_pct": 0.24,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -153,24 +153,24 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.069,
-      "impact_pct": 1.62,
+      "impact_dollars": 0.07,
+      "impact_pct": 1.65,
       "share_pct": 35.0,
       "direction": "UP"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.049,
-      "impact_pct": 1.15,
+      "impact_dollars": 0.05,
+      "impact_pct": 1.18,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.029,
-      "impact_pct": 0.68,
+      "impact_dollars": 0.03,
+      "impact_pct": 0.71,
       "share_pct": 15.0,
       "direction": "UP"
     },
@@ -193,19 +193,19 @@
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.009,
-      "impact_pct": 0.21,
+      "impact_dollars": 0.01,
+      "impact_pct": 0.24,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast +$0.196/gal (+4.61%): Driven primarily by Regional Logistics & Hub Delivery (+$0.069/gal), Futures & Commodity Benchmark (+$0.049/gal).",
+    "summary_text": "Port St Lucie FL forecast +$0.200/gal (+4.71%): Driven primarily by Regional Logistics & Hub Delivery (+$0.070/gal), Futures & Commodity Benchmark (+$0.050/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.069,
+        "delta_dollars": 0.07,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -213,7 +213,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.049,
+        "delta_dollars": 0.05,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -221,7 +221,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.029,
+        "delta_dollars": 0.03,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -245,7 +245,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.009,
+        "delta_dollars": 0.01,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
