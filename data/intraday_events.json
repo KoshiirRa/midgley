@@ -3913,5 +3913,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-30T16:15:50.152586",
+    "headline": "Several ships attacked in Strait of Hormuz as Iran launches fresh strikes",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNY1N3bGJZcmZKdVdrak1oSmF5dENlMHAyN2YxZWNmSEE1VDdxMy1mOWN6Wi1Ia3VzRzVUZWJyRzJrQTMxM3JMSEs5NEFKVDNtVi0zNWFFUnFJZHBFV2N6VU5JUXJzWEtoWHhyZmIySUVteG96NlhzcnE2RmtsT25UaWVlZ01TUk1kMnE0U3EwT01uQjY4UHRneEtEMTZrd0lWczEtd3lma1FZazBMbFdYQ2VlQjdCYVRVWTVSV3oyOTU5OXdvZXc?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNY1N3bGJZcmZKdVdrak1oSmF5dENlMHAyN2YxZWNmSEE1VDdxMy1mOWN6Wi1Ia3VzRzVUZWJyRzJrQTMxM3JMSEs5NEFKVDNtVi0zNWFFUnFJZHBFV2N6VU5JUXJzWEtoWHhyZmIySUVteG96NlhzcnE2RmtsT25UaWVlZ01TUk1kMnE0U3EwT01uQjY4UHRneEtEMTZrd0lWczEtd3lma1FZazBMbFdYQ2VlQjdCYVRVWTVSV3oyOTU5OXdvZXc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMixgFBVV95cUxNY1N3bGJZcmZKdVdrak1oSmF5dENlMHAyN2YxZWNmSEE1VDdxMy1mOWN6Wi1Ia3VzRzVUZWJyRzJrQTMxM3JMSEs5NEFKVDNtVi0zNWFFUnFJZHBFV2N6VU5JUXJzWEtoWHhyZmIySUVteG96NlhzcnE2RmtsT25UaWVlZ01TUk1kMnE0U3EwT01uQjY4UHRneEtEMTZrd0lWczEtd3lma1FZazBMbFdYQ2VlQjdCYVRVWTVSV3oyOTU5OXdvZXc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.42
+    },
+    "discord_notified": true
   }
 ]
