@@ -3833,5 +3833,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-09-30T15:15:30.117475",
+    "headline": "Emergency Heat Tariff may be needed as gas prices soar - End Fuel Poverty Coalition",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOS21tcUUwcGRlNEdZQTVmSWdDejV2c0RDRzMzN1dfaTA2cnNieWs4RUZjMjRGOHVwVHkwc081a0ZCMS1iejVLMXUyd01aSmNTdzJRVDM0VXFiMUt3OFg0LXZOc2lJWVNEa0xzcE5obGJpR0MzWWxsaTBVU1dPUldmWEZ1ZE1zMm5aQnNrWkZjZmM5OTA?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOS21tcUUwcGRlNEdZQTVmSWdDejV2c0RDRzMzN1dfaTA2cnNieWs4RUZjMjRGOHVwVHkwc081a0ZCMS1iejVLMXUyd01aSmNTdzJRVDM0VXFiMUt3OFg0LXZOc2lJWVNEa0xzcE5obGJpR0MzWWxsaTBVU1dPUldmWEZ1ZE1zMm5aQnNrWkZjZmM5OTA?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikwFBVV95cUxOS21tcUUwcGRlNEdZQTVmSWdDejV2c0RDRzMzN1dfaTA2cnNieWs4RUZjMjRGOHVwVHkwc081a0ZCMS1iejVLMXUyd01aSmNTdzJRVDM0VXFiMUt3OFg0LXZOc2lJWVNEa0xzcE5obGJpR0MzWWxsaTBVU1dPUldmWEZ1ZE1zMm5aQnNrWkZjZmM5OTA?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
