@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-09-30_21-00-35",
+    "timestamp": "2026-09-30 14:49:57",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-09-30 14:49:57)"
+  },
+  {
     "run_id": "2026-09-30_17-50-12",
     "timestamp": "2026-09-30 14:49:57",
     "run_type": "LIVE_PROSPECTIVE",
@@ -592,11 +598,5 @@
     "timestamp": "2026-09-28 16:06:16",
     "run_type": "LIVE_PROSPECTIVE",
     "trigger": "Daily Forecast Batch Execution (2026-09-28 16:06:16)"
-  },
-  {
-    "run_id": "2026-09-28_13-17-54",
-    "timestamp": "2026-09-28 13:17:48",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "New U.S. Law Revives Tariff Threat Over India\u2019s Russian Oil ..."
   }
 ]
