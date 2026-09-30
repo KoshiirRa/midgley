@@ -28,21 +28,6 @@ if __name__ == "__main__":
     print("      MIDGLEY MASTER FORECASTING ENGINE - ALL LOCATIONS PIPELINE")
     print("=" * 80)
 
-    # Step 0: Non-blocking proactive warmup for Hindsight scale-to-zero memory service
-    try:
-        hindsight = HindsightClient()
-        if hindsight.is_configured:
-            warmup_timeout = float(os.environ.get("HINDSIGHT_WARMUP_TIMEOUT", "75.0"))
-            print(f"  [STEP 0] Triggering proactive Hindsight Cloud Run memory service warmup (max_wait={warmup_timeout:.0f}s)...")
-            warmup_thread = threading.Thread(
-                target=lambda: hindsight.warmup(max_wait_seconds=warmup_timeout, retry_interval=2.0),
-                name="hindsight-warmup",
-                daemon=True
-            )
-            warmup_thread.start()
-    except Exception as e:
-        logger.debug(f"Notice initiating Hindsight warmup: {e}")
-    
     step_num = 1
     total_steps = len(LOCATIONS) + 1
     

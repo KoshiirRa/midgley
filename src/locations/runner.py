@@ -160,6 +160,20 @@ def run_regional_pipeline(
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     dynamic_margin = live_pump_price - latest_rbob
 
+    # Pre-fetch secondary dual-anchor retail prices once per regional run (Issue #591)
+    dual_anchor_map = {
+        "Oakland_CA": [("BayArea_CA", "bayarea_avg_retail_gasoline", 5.05)],
+        "Cincinnati_OH": [("Cincinnati_KY", "cincinnati_ky_retail_gasoline", 3.19)]
+    }
+    sec_cached_prices: Dict[str, float] = {}
+    if logger_region_key in dual_anchor_map:
+        for sec_key, _, sec_default in dual_anchor_map[logger_region_key]:
+            try:
+                sec_live = fetch_live_metro_retail_price(sec_key).get("price")
+                sec_cached_prices[sec_key] = float(sec_live) if sec_live and pd.notna(sec_live) else sec_default
+            except Exception:
+                sec_cached_prices[sec_key] = sec_default
+
     for h in [1, 2, 3, 4, 5]:
         h_res = multi_horizon_results.get(h)
         if not h_res:
@@ -228,17 +242,9 @@ def run_regional_pipeline(
             logger.debug(f"Live prediction logging skipped for {logger_region_key}: {e}")
 
         # Process dual-anchor secondary sub-regions (Issue #464)
-        dual_anchor_map = {
-            "Oakland_CA": [("BayArea_CA", "bayarea_avg_retail_gasoline", 5.05)],
-            "Cincinnati_OH": [("Cincinnati_KY", "cincinnati_ky_retail_gasoline", 3.19)]
-        }
         if logger_region_key in dual_anchor_map:
             for sec_key, sec_col, sec_default in dual_anchor_map[logger_region_key]:
-                try:
-                    sec_live = fetch_live_metro_retail_price(sec_key).get("price")
-                    sec_base_price = float(sec_live) if sec_live and pd.notna(sec_live) else sec_default
-                except Exception:
-                    sec_base_price = sec_default
+                sec_base_price = sec_cached_prices.get(sec_key, sec_default)
 
                 sec_hist_base = h_splits['test_df'].get(sec_col, h_splits['test_df']['gasoline_rbob'] + (sec_base_price - latest_rbob))
                 sec_hist_pred = sec_hist_base * (1.0 + pred_ret_hybrid)

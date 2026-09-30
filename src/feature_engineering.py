@@ -328,6 +328,7 @@ def create_feature_matrix(
     for col in ['ovx_volatility_index', 'ovx_return_1d']:
         if col not in df.columns:
             df[col] = 0.0
+    df['cboe_ovx'] = df['ovx_volatility_index']
 
     try:
         rig_df = fetch_baker_hughes_rig_counts(start_date=df['date'].min().strftime("%Y-%m-%d"))
@@ -342,6 +343,7 @@ def create_feature_matrix(
     for col in ['baker_hughes_us_rig_count', 'baker_hughes_oil_rigs', 'baker_hughes_gas_rigs', 'baker_hughes_rig_delta_1w']:
         if col not in df.columns:
             df[col] = 0.0
+    df['baker_hughes_rigs'] = df['baker_hughes_us_rig_count']
     df = df.copy()
 
     # Merge U.S. Treasury Yield Curve & TIPS Inflation Metrics (Issue #66)

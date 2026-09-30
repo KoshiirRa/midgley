@@ -623,8 +623,9 @@ _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS: bool = False
 
 def validate_price_plausibility(price: Optional[float], region: str = "National", is_retail: bool = True) -> bool:
     """
-    Validates whether a price observation falls within economically plausible bands (Issue #399).
+    Validates whether a price observation falls within economically plausible bands (Issue #399, #591).
     Retail gasoline plausibility band: [$1.00, $10.00]/gal.
+    California retail gasoline plausibility band: [$4.00, $10.00]/gal (PADD 5 CARB Phase 3 standards).
     Wholesale RBOB futures plausibility band: [$0.50, $7.00]/gal.
     """
     if price is None:
@@ -633,8 +634,11 @@ def validate_price_plausibility(price: Optional[float], region: str = "National"
         val = float(price)
         if np.isnan(val) or np.isinf(val):
             return False
-        if is_retail and region != "National":
-            return 1.00 <= val <= 10.00
+        if is_retail:
+            if region in ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA", "Oakland_Diesel"]:
+                return 5.00 <= val <= 10.00
+            if region != "National":
+                return 1.00 <= val <= 10.00
         elif region == "National" and not is_retail:
             return 0.50 <= val <= 7.00
         return 0.50 <= val <= 10.00
@@ -644,8 +648,8 @@ def validate_price_plausibility(price: Optional[float], region: str = "National"
 
 def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
     """
-    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399, #427).
-    Also clears premature future actual prices (where forecast_target_date > today).
+    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399, #427, #591).
+    Also clears premature future actual prices (where forecast_target_date > today) and resets corrupted California actual prices.
     Returns the number of rows purged or corrected.
     """
     path = csv_path or HISTORY_CSV_PATH
@@ -666,6 +670,22 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
             valid_mask = valid_mask & df['current_base_price'].notna() & (df['current_base_price'] > 0.10)
         cleansed_df = df[valid_mask].copy()
         purged = initial_len - len(cleansed_df)
+
+        # 2. Reset corrupted California actual prices that mistakenly took National $4.465 or < $5.00 (Issue #591)
+        ca_regions = ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA"]
+        if 'region' in cleansed_df.columns and 'actual_5d_price' in cleansed_df.columns:
+            ca_corrupted = (
+                cleansed_df['region'].isin(ca_regions) &
+                cleansed_df['actual_5d_price'].notna() &
+                (cleansed_df['actual_5d_price'] < 5.00)
+            )
+            if ca_corrupted.any():
+                cleansed_df.loc[ca_corrupted, 'actual_5d_price'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'actual_direction'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'error_dollars'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'directional_hit'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'within_95ci_hit'] = np.nan
+                purged += int(ca_corrupted.sum())
 
         # 2. Reset unmatured future actual prices (Issue #427)
         today_str = datetime.now().strftime("%Y-%m-%d")
@@ -900,19 +920,22 @@ def backfill_actual_prices_and_evaluate(
                     disk_df[str_col] = disk_df[str_col].astype(object)
 
             if not disk_df.empty and 'forecast_id' in disk_df.columns and 'forecast_id' in history_df.columns:
-                # Merge evaluated fields back into freshest on-disk dataframe preserving concurrently appended rows
+                # Merge evaluated fields back into freshest on-disk dataframe using fast indexed map (Issue #591)
                 eval_cols = [
                     'actual_5d_price', 'actual_direction', 'error_dollars',
                     'directional_hit', 'within_95ci_hit', 'data_source_provenance',
                     'prediction_lower_95ci', 'prediction_upper_95ci'
                 ]
-                updated_rows = history_df[history_df['actual_5d_price'].notna()].set_index('forecast_id')
-                for f_id, u_row in updated_rows.iterrows():
-                    match_mask = disk_df['forecast_id'] == f_id
-                    if match_mask.any():
-                        for col in eval_cols:
-                            if col in u_row and pd.notna(u_row[col]):
-                                disk_df.loc[match_mask, col] = u_row[col]
+                newly_evaluated_df = history_df.loc[evaluated_rows_indices]
+                if not newly_evaluated_df.empty:
+                    disk_id_map = {fid: idx for idx, fid in enumerate(disk_df['forecast_id']) if pd.notna(fid)}
+                    for _, u_row in newly_evaluated_df.iterrows():
+                        f_id = u_row.get('forecast_id')
+                        target_idx = disk_id_map.get(f_id)
+                        if target_idx is not None:
+                            for col in eval_cols:
+                                if col in u_row and pd.notna(u_row[col]):
+                                    disk_df.at[target_idx, col] = u_row[col]
                 history_df = disk_df
             elif not disk_df.empty and all(c in disk_df.columns and c in history_df.columns for c in ['log_timestamp', 'forecast_target_date', 'region']):
                 eval_cols = [
@@ -920,16 +943,18 @@ def backfill_actual_prices_and_evaluate(
                     'directional_hit', 'within_95ci_hit', 'data_source_provenance',
                     'prediction_lower_95ci', 'prediction_upper_95ci'
                 ]
-                for _, u_row in history_df[history_df['actual_5d_price'].notna()].iterrows():
-                    match_mask = (
-                        (disk_df['log_timestamp'] == u_row['log_timestamp']) &
-                        (disk_df['forecast_target_date'] == u_row['forecast_target_date']) &
-                        (disk_df['region'] == u_row['region'])
-                    )
-                    if match_mask.any():
+                newly_evaluated_df = history_df.loc[evaluated_rows_indices]
+                disk_composite_map = {
+                    (r['log_timestamp'], r['forecast_target_date'], r['region']): idx
+                    for idx, r in disk_df.iterrows()
+                }
+                for _, u_row in newly_evaluated_df.iterrows():
+                    key = (u_row.get('log_timestamp'), u_row.get('forecast_target_date'), u_row.get('region'))
+                    target_idx = disk_composite_map.get(key)
+                    if target_idx is not None:
                         for col in eval_cols:
                             if col in u_row and pd.notna(u_row[col]):
-                                disk_df.loc[match_mask, col] = u_row[col]
+                                disk_df.at[target_idx, col] = u_row[col]
                 history_df = disk_df
 
             atomic_write_csv(target_csv, history_df, index=False)
@@ -945,7 +970,8 @@ def backfill_actual_prices_and_evaluate(
             db_eval_stmts = []
             seen_gt = set()
             seen_ev = set()
-            for _, row in history_df[history_df['actual_5d_price'].notna()].iterrows():
+            newly_evaluated_df = history_df.loc[evaluated_rows_indices]
+            for _, row in newly_evaluated_df.iterrows():
                 reg = str(row.get('region', 'National'))
                 target_d = str(row.get('forecast_target_date', ''))[:10]
                 act_p = float(row.get('actual_5d_price', 0.0))

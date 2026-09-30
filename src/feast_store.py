@@ -27,7 +27,7 @@ try:
     HAS_FEAST = True
 except ImportError:
     HAS_FEAST = False
-    logger.warning("Feast library not installed. Falling back to offline point-in-time simulation engine.")
+    logger.info("Feast library not installed. Operating with native point-in-time simulation engine.")
 
 
 class MidgleyFeastStore:

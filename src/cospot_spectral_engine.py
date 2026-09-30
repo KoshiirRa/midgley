@@ -269,33 +269,40 @@ class CoSPOTOnlineAdapter:
     def fit_online_step(self, x_vec: np.ndarray, y_true: float, y_pred_base: float):
         """
         Updates residual projection weights on a single new observation step
-        using geometrically discounted error gradient.
+        using geometrically discounted error gradient with gradient clipping.
         """
         x = np.array(x_vec, dtype=float).flatten()
         if self.weights is None:
             self.weights = np.zeros(len(x))
             
-        residual = y_true - (y_pred_base + float(np.dot(self.weights, x)) + self.bias)
+        pred_delta = float(np.dot(self.weights, x) + self.bias) if len(x) == len(self.weights) else 0.0
+        if np.isnan(pred_delta) or np.isinf(pred_delta):
+            pred_delta = 0.0
+        residual = y_true - (y_pred_base + pred_delta)
+        residual = float(np.clip(residual, -10.0, 10.0))
         self.history_errors.append(residual)
         
-        # Gradient descent step with geometric loss decay weighting
-        grad_w = -residual * x + self.l2_reg * self.weights
-        grad_b = -residual
+        # Gradient descent step with geometric loss decay weighting and clipping
+        grad_w = np.clip(-residual * x + self.l2_reg * self.weights, -1.0, 1.0)
+        grad_b = float(np.clip(-residual, -1.0, 1.0))
         
         self.weights -= self.learning_rate * grad_w
         self.bias -= self.learning_rate * grad_b
         
-        # Apply geometric decay to projection head weights
-        self.weights *= self.delta
-        self.bias *= self.delta
+        # Apply geometric decay and weight bounds
+        self.weights = np.clip(self.weights * self.delta, -2.0, 2.0)
+        self.bias = float(np.clip(self.bias * self.delta, -2.0, 2.0))
 
     def predict_residual(self, x_vec: np.ndarray) -> float:
         """
-        Predicts online residual adjustment for a feature vector.
+        Predicts online residual adjustment for a feature vector with finite bounds.
         """
         if self.weights is None:
             return 0.0
         x = np.array(x_vec, dtype=float).flatten()
         if len(x) != len(self.weights):
             return 0.0
-        return float(np.dot(self.weights, x) + self.bias)
+        val = float(np.dot(self.weights, x) + self.bias)
+        if np.isnan(val) or np.isinf(val):
+            return 0.0
+        return float(np.clip(val, -1.0, 1.0))
