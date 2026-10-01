@@ -6358,21 +6358,13 @@
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 26082,
+    "retain_count": 26083,
     "recall_count": 9,
     "reflect_count": 9,
-    "cloud_calls": 10832,
+    "cloud_calls": 10833,
     "local_fallback_calls": 15268
   },
   "memory_events": [
-    {
-      "timestamp": "2026-09-30 17:30:42",
-      "environment": "dev",
-      "operation": "retain",
-      "backend": "sqlite_fts5",
-      "status": "success",
-      "latency_ms": 0.0
-    },
     {
       "timestamp": "2026-09-30 17:30:42",
       "environment": "dev",
@@ -14359,6 +14351,14 @@
     },
     {
       "timestamp": "2026-10-01 01:49:23",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-10-01 17:29:02",
       "environment": "prod",
       "operation": "retain",
       "backend": "hindsight_cloud",
