@@ -45,7 +45,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
 {{HDR}}
 
     <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
         
         <!-- Hero Section -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-cyan-900/40 border border-blue-500/30 space-y-6">
@@ -53,17 +53,17 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                 <div class="space-y-3 max-w-3xl">
                     <div class="flex items-center gap-2.5 flex-wrap">
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                            <i class="fa-solid fa-server mr-1.5 text-cyan-400"></i> Open Intelligence Suite
+                            <i class="fa-solid fa-server mr-1.5 text-cyan-400" aria-hidden="true"></i> Open Intelligence Suite
                         </span>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                            <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400"></i> $0 Cost &bull; Open Access
+                            <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400" aria-hidden="true"></i> $0 Cost &bull; Open Access
                         </span>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                            <i class="fa-solid fa-layer-group mr-1.5 text-purple-400"></i> Multi-Modal Feature Space
+                            <i class="fa-solid fa-layer-group mr-1.5 text-purple-400" aria-hidden="true"></i> Multi-Modal Feature Space
                         </span>
                     </div>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                        <i class="fa-solid fa-database text-cyan-400"></i> Model Data Sources &amp; Intelligence Feeds
+                        <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Model Data Sources &amp; Intelligence Feeds
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
                         The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>27 monitored feeds</strong>.
@@ -72,13 +72,13 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
 
                 <div class="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0">
                     <a href="math.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
-                        <i class="fa-solid fa-graduation-cap"></i> View Math Guide
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> View Math Guide
                     </a>
                     <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations Portal
+                        <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations Portal
                     </a>
                     <a href="telemetry.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Live Telemetry &amp; Quotas
+                        <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Live Telemetry &amp; Quotas
                     </a>
                 </div>
             </div>
@@ -108,33 +108,33 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-900/70 p-4 rounded-2xl border border-slate-800 sticky top-20 z-40 backdrop-blur">
             <!-- Filter Chips -->
             <div class="flex items-center gap-2 flex-wrap text-xs" id="category-filter-bar">
-                <button onclick="filterCategory('all')" class="cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-cat="all">
+                <button type="button" aria-pressed="true" aria-label="Filter all 26 data feeds" onclick="filterCategory('all')" class="cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-cat="all">
                     All Feeds (26)
                 </button>
-                <button onclick="filterCategory('commodity')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="commodity">
+                <button type="button" aria-pressed="false" aria-label="Filter commodity and futures feeds" onclick="filterCategory('commodity')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="commodity">
                     Commodity &amp; Futures (7)
                 </button>
-                <button onclick="filterCategory('physical')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="physical">
+                <button type="button" aria-pressed="false" aria-label="Filter physical and macro telemetry feeds" onclick="filterCategory('physical')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="physical">
                     Physical &amp; Macro (6)
                 </button>
-                <button onclick="filterCategory('news')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="news">
+                <button type="button" aria-pressed="false" aria-label="Filter news and financial intelligence feeds" onclick="filterCategory('news')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="news">
                     News &amp; Intelligence (6)
                 </button>
-                <button onclick="filterCategory('hazard')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="hazard">
+                <button type="button" aria-pressed="false" aria-label="Filter atmospheric hazard and hydrology feeds" onclick="filterCategory('hazard')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="hazard">
                     Atmospheric &amp; Hydrology (8)
                 </button>
-                <button onclick="filterCategory('state')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="state">
+                <button type="button" aria-pressed="false" aria-label="Filter state open data and retail fuel feeds" onclick="filterCategory('state')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="state">
                     State Open Data &amp; Retail (3)
                 </button>
-                <button onclick="filterCategory('research')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="research">
+                <button type="button" aria-pressed="false" aria-label="Filter academic research and data catalogs" onclick="filterCategory('research')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="research">
                     Academic &amp; Catalogs (3)
                 </button>
             </div>
 
             <!-- Search Input -->
             <div class="relative w-full md:w-80">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input type="text" id="feed-search-input" onkeyup="searchFeeds()" placeholder="Search feeds, endpoints, tickers, APIs..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs" aria-hidden="true"></i>
+                <input type="text" id="feed-search-input" aria-label="Search data feeds by name, ticker, or API provider" onkeyup="searchFeeds()" placeholder="Search feeds, endpoints, tickers, APIs..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
             </div>
         </div>
 
@@ -1243,17 +1243,18 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
             </div>
 
             <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60 shadow-xl">
-                <table class="w-full text-left text-xs text-slate-300 border-collapse min-w-[800px]" id="master-feed-table">
+                <table class="w-full text-left text-xs text-slate-300 border-collapse min-w-[800px]" id="master-feed-table" aria-label="Data Ingestion and Governance Ledger Matrix">
+                    <caption class="sr-only">Data Ingestion &amp; Governance Ledger Matrix</caption>
                     <thead>
                         <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400">
-                            <th class="py-3 px-4">Feed / Identifier</th>
-                            <th class="py-3 px-3">Domain Category</th>
-                            <th class="py-3 px-3">Provider / Endpoint</th>
-                            <th class="py-3 px-3">Protocol / Auth</th>
-                            <th class="py-3 px-3">Cache TTL</th>
-                            <th class="py-3 px-3">Update Cadence</th>
-                            <th class="py-3 px-3">Cost / Safeguard</th>
-                            <th class="py-3 px-3">Consumer Module</th>
+                            <th scope="col" class="py-3 px-4">Feed / Identifier</th>
+                            <th scope="col" class="py-3 px-3">Domain Category</th>
+                            <th scope="col" class="py-3 px-3">Provider / Endpoint</th>
+                            <th scope="col" class="py-3 px-3">Protocol / Auth</th>
+                            <th scope="col" class="py-3 px-3">Cache TTL</th>
+                            <th scope="col" class="py-3 px-3">Update Cadence</th>
+                            <th scope="col" class="py-3 px-3">Cost / Safeguard</th>
+                            <th scope="col" class="py-3 px-3">Consumer Module</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">

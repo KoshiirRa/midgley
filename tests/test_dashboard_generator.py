@@ -844,3 +844,88 @@ def test_dashboard_generator_html_escaping_and_csp(tmp_path):
     assert "<script>alert('XSS Attack!')</script>" not in card_html
     assert "&lt;script&gt;alert(&#x27;XSS Attack!&#x27;)&lt;/script&gt;" in card_html or "&lt;script&gt;alert(&#039;XSS Attack!&#039;)&lt;/script&gt;" in card_html
     assert "<img src=x onerror=alert(1)>" not in card_html
+
+
+def test_dashboard_aria_accessibility_and_landmarks():
+    """Verify WCAG 2.1 AA ARIA accessibility landmarks, table captions, chart descriptions,
+    and lack of double-dollar formatting bugs across all generated pages (Issue #569).
+    """
+    from src.dashboard_generator import (
+        SAVINGS_PATH,
+        DIESEL_PATH,
+        TELEMETRY_PATH,
+        generate_telemetry_page,
+    )
+
+    generate_public_dashboard()
+    generate_telemetry_page()
+
+    all_pages = [
+        INDEX_PATH,
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        CINCINNATI_PATH,
+        GREENVILLE_PATH,
+        CHARLOTTE_PATH,
+        OAKLAND_PATH,
+        BAYAREA_PATH,
+        MATH_PATH,
+        SOURCES_PATH,
+        SOURCES_SUB_PATH,
+        SAVINGS_PATH,
+        DIESEL_PATH,
+        TELEMETRY_PATH,
+    ]
+
+    for page_path in all_pages:
+        assert os.path.exists(page_path), f"Page {page_path} was not generated"
+        with open(page_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # 1. Verify skip link target exists
+        assert '<main' in content and 'id="main-content"' in content and 'role="main"' in content, f"Missing main content landmark in {page_path}"
+        assert 'href="#main-content"' in content, f"Missing skip to content link in {page_path}"
+
+        # 2. Verify navigation landmark and dropdown accessibility
+        assert '<header' in content and 'role="banner"' in content, f"Missing banner role in {page_path}"
+        assert 'aria-label="Main Navigation"' in content, f"Missing Main Navigation aria-label in {page_path}"
+        assert 'id="metro-menu-btn"' in content, f"Missing metro menu button ID in {page_path}"
+        assert 'aria-haspopup="true"' in content, f"Missing aria-haspopup in {page_path}"
+
+        # 3. Check for double dollar artefacts (except math.html KaTeX)
+        if "math.html" not in page_path:
+            assert "$$0." not in content, f"Found double dollar formatting artefact ($$0.) in {page_path}"
+            assert "$${{" not in content, f"Found template double dollar artefact in {page_path}"
+
+    # Specific tests for chart canvases and tables
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index_content = f.read()
+    assert 'canvas id="maeTrendChart" role="img" aria-label=' in index_content
+    assert 'canvas id="hitRateTrendChart" role="img" aria-label=' in index_content
+    assert '<caption class="sr-only">' in index_content
+    assert 'scope="col"' in index_content
+
+    with open(TULSA_PATH, "r", encoding="utf-8") as f:
+        tulsa_content = f.read()
+    assert 'canvas id="tulsaChart" role="img" aria-label=' in tulsa_content
+
+    with open(NEWARK_PATH, "r", encoding="utf-8") as f:
+        newark_content = f.read()
+    assert 'canvas id="newarkChart" role="img" aria-label=' in newark_content
+
+    with open(SAVINGS_PATH, "r", encoding="utf-8") as f:
+        savings_content = f.read()
+    assert '<label for="vehiclePreset"' in savings_content
+    assert '<label for="tankCapacity"' in savings_content
+    assert '<label for="fuelLevel"' in savings_content
+
+    with open(TELEMETRY_PATH, "r", encoding="utf-8") as f:
+        telemetry_content = f.read()
+    assert 'id="zipMap"' in telemetry_content
+    assert 'role="region"' in telemetry_content
+    assert 'aria-label="Geographic Out-of-Metro ZIP Code Demand Heatmap"' in telemetry_content
+    assert '<caption class="sr-only">' in telemetry_content
+
+
+

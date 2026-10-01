@@ -4125,6 +4125,171 @@
       "total_tokens": 200,
       "cost_usd": 3.3e-05,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-10-01T19:00:35.779068+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:00:45.526611+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:15:11.885957+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:30:19.726702+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:20.402253+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:36.408133+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:37.625497+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:38.665239+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:41.625229+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:43.215886+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:44.854512+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T19:45:48.542182+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T20:30:10.813645+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T22:00:09.568990+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-01T22:45:11.502975+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
     }
   ]
 }
