@@ -4153,5 +4153,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-01T16:15:15.350622",
+    "headline": "India Unlikely to Ditch Russian Oil Despite Trump's 100% Tariff Threat - Crude Oil Prices Today | OilPrice.com",
+    "source": "Executive_Social_Media",
+    "url": "https://truthsocial.com/post/9260150",
+    "raw_url": "https://truthsocial.com/post/9260150",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/9260150",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
