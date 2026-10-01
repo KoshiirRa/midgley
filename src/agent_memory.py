@@ -455,8 +455,6 @@ class AgentMemoryManager:
             )
             if cloud_res.get("status") == "SUCCESS" and local_res.get("memory_id"):
                 self.sqlite_store.mark_as_synced(local_res["memory_id"])
-                # Backfill any older pending memories that may have failed earlier
-                self.sync_pending_memories(limit=10)
 
         active_backend = "hindsight_cloud" if (cloud_res and cloud_res.get("status") == "SUCCESS") else "sqlite_fts5"
         log_agent_memory_op(
@@ -490,6 +488,10 @@ class AgentMemoryManager:
                 return {"status": "SKIPPED", "synced": 0, "reason": "No evaluated predictions"}
             
             eval_df = df[df['actual_5d_price'].notna()].copy()
+            if 'is_retroactive_backtest' in eval_df.columns:
+                eval_df = eval_df[eval_df['is_retroactive_backtest'].fillna(False).astype(bool) == False]
+            if 'run_type' in eval_df.columns:
+                eval_df = eval_df[~eval_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)]
             if 'forecast_target_date' in eval_df.columns:
                 eval_df = eval_df[eval_df['forecast_target_date'].astype(str) >= str(start_date)]
             
@@ -562,8 +564,6 @@ class AgentMemoryManager:
         Recalls historical shock analogies. Prefers Cloud Run Hindsight; falls back to SQLite FTS5.
         """
         if self.is_cloud_engine_active:
-            # Sync any pending memories before performing recall
-            self.sync_pending_memories(limit=20)
             cloud_memories = self.hindsight_client.recall(
                 query=query,
                 region=region,

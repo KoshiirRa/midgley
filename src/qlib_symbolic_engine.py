@@ -133,6 +133,15 @@ SYMBOLIC_OPERATORS: Dict[str, Any] = {
 }
 
 
+COLUMN_ALIASES: Dict[str, List[str]] = {
+    "baker_hughes_rigs": ["baker_hughes_us_rig_count", "baker_hughes_oil_rigs", "us_active_oil_rigs"],
+    "cboe_ovx": ["ovx_volatility_index", "ovx_crude_volatility"],
+    "wti_crude": ["crude_oil_wti", "wti_crude_price", "wti"],
+    "gasoline_rbob": ["rbob_gasoline", "gasoline_rbob_price", "rbob"],
+    "geopolitical_risk": ["event_geopolitical_risk", "llm_geopolitical_risk"],
+}
+
+
 class ASTEvaluator(ast.NodeVisitor):
     """
     AST-based safe evaluator for Qlib symbolic expressions.
@@ -157,6 +166,11 @@ class ASTEvaluator(ast.NodeVisitor):
     def visit_Name(self, node: ast.Name):
         if node.id in self.df.columns:
             return self.df[node.id].astype(float)
+        elif node.id in COLUMN_ALIASES:
+            for cand in COLUMN_ALIASES[node.id]:
+                if cand in self.df.columns:
+                    return self.df[cand].astype(float)
+            raise NameError(f"Unknown column or operator in expression: '{node.id}' (candidates {COLUMN_ALIASES[node.id]} not in dataframe)")
         elif node.id in SYMBOLIC_OPERATORS:
             return SYMBOLIC_OPERATORS[node.id]
         else:

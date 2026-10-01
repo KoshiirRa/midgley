@@ -4015,27 +4015,7 @@
     "discord_notified": true
   },
   {
-    "timestamp": "2026-09-30T19:03:14.832123",
-    "headline": "Three Vessels Struck in Strait of Hormuz as Iran\u2019s Grip Loosens",
-    "source": "Geopolitical_Strait_of_Hormuz",
-    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNM2JtZVdvWWNSZlFZemRsZDRjazJNemVXNUVud0tLN0ZONkdnMnlwa056ZjZpRkZWSXVuMHFKR0xMc0tDQ3ZBa3lSWVc0OElyLVJLc1NRT2E3eUcwNXhCeTZRNXViNG9zMnpWZ1ZpaU9RT09Va0JtTmEzcU1pRVdXb252U1J2dEhOMmZ4eTNoRlNKbmNBa0NSVzl1QWl6SjlmMlpPdg?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNM2JtZVdvWWNSZlFZemRsZDRjazJNemVXNUVud0tLN0ZONkdnMnlwa056ZjZpRkZWSXVuMHFKR0xMc0tDQ3ZBa3lSWVc0OElyLVJLc1NRT2E3eUcwNXhCeTZRNXViNG9zMnpWZ1ZpaU9RT09Va0JtTmEzcU1pRVdXb252U1J2dEhOMmZ4eTNoRlNKbmNBa0NSVzl1QWl6SjlmMlpPdg?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipAFBVV95cUxNM2JtZVdvWWNSZlFZemRsZDRjazJNemVXNUVud0tLN0ZONkdnMnlwa056ZjZpRkZWSXVuMHFKR0xMc0tDQ3ZBa3lSWVc0OElyLVJLc1NRT2E3eUcwNXhCeTZRNXViNG9zMnpWZ1ZpaU9RT09Va0JtTmEzcU1pRVdXb252U1J2dEhOMmZ4eTNoRlNKbmNBa0NSVzl1QWl6SjlmMlpPdg?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "scores": {
-      "geopolitical_risk": 0.9,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.9
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-09-30T23:35:09.488108",
+    "timestamp": "2026-09-30T21:00:21.414894",
     "headline": "Valero restarts CDU at Port Arthur, Texas refinery after two week outage - Quantum Commodity Intelligence",
     "source": "RSS_Feed",
     "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNRG1Fa2dLMmk3MnBweFlOV3FLT2g2NHZWTUFtYVdDT2JVZFB5NDNVNVpfLUJ4ek4yQ2doNms4bVVXRW5qbHNUMUJGcEo5NmdEbmFhNWRpa1A4MG1DUFcyVlJ4eEFSZkNtWjVSUnhEVm9IR2VZdXVPdFVZRmRuUnFLalk5cVM3YThGWU1UaEpwSmV3T1hfWXRzdXFJZ2dvQUJjTHQtZUdpemg4dm1ZQ1JVTnJLOHg?oc=5",
@@ -4047,30 +4027,90 @@
     ],
     "scores": {
       "geopolitical_risk": 0.0,
-      "supply_disruption": 0.0,
+      "supply_disruption": 0.5,
       "demand_sentiment": 0.0,
       "opec_action": 0.0,
-      "overall_price_pressure": -0.4
+      "overall_price_pressure": 0.18
     },
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-01T12:43:50.074165",
-    "headline": "Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - energynow.com",
+    "timestamp": "2026-10-01T00:15:15.289814",
+    "headline": "India Unlikely to Ditch Russian Oil Despite Trump's 100% Tariff Threat - oilprice.com",
+    "source": "Executive_Social_Media",
+    "url": "https://truthsocial.com/post/8036004",
+    "raw_url": "https://truthsocial.com/post/8036004",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/8036004",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-01T01:30:23.860447",
+    "headline": "PM Modi, Trump discuss trade, energy ties amid tariff concerns over Russian oil purchase | India News - Hindustan Times",
     "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNSUNtNlZJMExobHVCQ0pKZVU0ZlZVTy1CcVZ0NWlhNjh2N0l0U3k2eEpxYTIwcENGWWZYZXJWZHpyeUl5VE53bDh6T0ZZdi1obUozNW9xSG9tSlgxeTZabUx2SjYwTm1CMGxZLXB2VElmUThJWjNINGdLS2ozcnQ5WG0xMEVqT2R6ZGt0M3dfTU9sYlN2dFdrYmV2WTRnYUZpeHJKUlZfOUxXV1JIOFVCTE5oVkN0NldlSUNMaDZyanU3c0hNQVVwOEp6MGg4X0NLWkQzc3pEMDFlVUJ2bVVDQ1R3T2tobHpkUXJlSVp4amTSAfYBQVVfeXFMT0c5ZFA3Y3VaLTlLaG94cFFEQVlfU0xTWkVhaDFYRE9rTnk2LWk4Wk9PVExUNXg4Y090ZDAzaUktZlYtbF9ORmhvelVXaEt1dDNTTXdjX3dZMWhIU2xIOGpCN0FNVE9QTG1NNFVWU09uVnU0c21kc2E1VFpoampLSElnMFloQ2w2ZFdyYm4xWHB2UG14OXVYMkdVWE9VOTBnMzFId3JfLVJJNU1SS3pUeGJQSmI3WUdseFVobzFGRXl6X25oYUtoTkxQM2VWbnI0RmJYOXQxc1pZOHpUcUViek9fVkNQZmR0WFJlSlRiMVNhM0FqcTBB?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNSUNtNlZJMExobHVCQ0pKZVU0ZlZVTy1CcVZ0NWlhNjh2N0l0U3k2eEpxYTIwcENGWWZYZXJWZHpyeUl5VE53bDh6T0ZZdi1obUozNW9xSG9tSlgxeTZabUx2SjYwTm1CMGxZLXB2VElmUThJWjNINGdLS2ozcnQ5WG0xMEVqT2R6ZGt0M3dfTU9sYlN2dFdrYmV2WTRnYUZpeHJKUlZfOUxXV1JIOFVCTE5oVkN0NldlSUNMaDZyanU3c0hNQVVwOEp6MGg4X0NLWkQzc3pEMDFlVUJ2bVVDQ1R3T2tobHpkUXJlSVp4amTSAfYBQVVfeXFMT0c5ZFA3Y3VaLTlLaG94cFFEQVlfU0xTWkVhaDFYRE9rTnk2LWk4Wk9PVExUNXg4Y090ZDAzaUktZlYtbF9ORmhvelVXaEt1dDNTTXdjX3dZMWhIU2xIOGpCN0FNVE9QTG1NNFVWU09uVnU0c21kc2E1VFpoampLSElnMFloQ2w2ZFdyYm4xWHB2UG14OXVYMkdVWE9VOTBnMzFId3JfLVJJNU1SS3pUeGJQSmI3WUdseFVobzFGRXl6X25oYUtoTkxQM2VWbnI0RmJYOXQxc1pZOHpUcUViek9fVkNQZmR0WFJlSlRiMVNhM0FqcTBB?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi8AFBVV95cUxNSUNtNlZJMExobHVCQ0pKZVU0ZlZVTy1CcVZ0NWlhNjh2N0l0U3k2eEpxYTIwcENGWWZYZXJWZHpyeUl5VE53bDh6T0ZZdi1obUozNW9xSG9tSlgxeTZabUx2SjYwTm1CMGxZLXB2VElmUThJWjNINGdLS2ozcnQ5WG0xMEVqT2R6ZGt0M3dfTU9sYlN2dFdrYmV2WTRnYUZpeHJKUlZfOUxXV1JIOFVCTE5oVkN0NldlSUNMaDZyanU3c0hNQVVwOEp6MGg4X0NLWkQzc3pEMDFlVUJ2bVVDQ1R3T2tobHpkUXJlSVp4amTSAfYBQVVfeXFMT0c5ZFA3Y3VaLTlLaG94cFFEQVlfU0xTWkVhaDFYRE9rTnk2LWk4Wk9PVExUNXg4Y090ZDAzaUktZlYtbF9ORmhvelVXaEt1dDNTTXdjX3dZMWhIU2xIOGpCN0FNVE9QTG1NNFVWU09uVnU0c21kc2E1VFpoampLSElnMFloQ2w2ZFdyYm4xWHB2UG14OXVYMkdVWE9VOTBnMzFId3JfLVJJNU1SS3pUeGJQSmI3WUdseFVobzFGRXl6X25oYUtoTkxQM2VWbnI0RmJYOXQxc1pZOHpUcUViek9fVkNQZmR0WFJlSlRiMVNhM0FqcTBB?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-01T09:00:16.003947",
+    "headline": "Modi, Trump talk trade, tech, and energy in first phone call since US tariff law on Russia - theweek.in",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxQZy1YX3NCRFY2aHRlU2F3MzdfMnk1UWV0UDJsVnRuNWswSF92eG16ZjBZRk5HVWx0WURhNnJBdTdBTlExZDF6QlFVVjVFT0VES3ktUVVBLUlmVTZXc29LblRMN3NIdUVwUE5MeXBiNm9LWF9BZ1RlZ0NNU0RDVzV1YkthNk5BX2U1eHBTUnNpcTNCWnZPS29MTkozUDZrVkxReS0xMjgwd0ZKTWMzYi04bmtYdHZUUHVBMTdfblZtQk9vVTJHSWQyWXFQZnlnN2ZWQlc00gHYAUFVX3lxTE1WSTVMRWhVaTl1TU5xaEVYZ3JVaDF5MkxsbHByY0hmTTZNVENabFZNeEJjdlVYZC1ocG9udDBuV2RRRVA4QXBwTmV2QWV2MjhYRVh4bkFhMXlrNnRXTmRFLU5Pcnpfc2tKU1VseTRuUlNPMDFBSFlickZBQWZPLW15R0gtdm5LR2h4Q2RmbWFYRU5xV0JuRWwyQXpVWDFzcmhib2NMVTlDSzd4VmVGbWlYV195SVRGNlc5MGdRRnpOaTJXMVBmQWNKd19BdTNpM0hGbGg1QWZLTw?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxQZy1YX3NCRFY2aHRlU2F3MzdfMnk1UWV0UDJsVnRuNWswSF92eG16ZjBZRk5HVWx0WURhNnJBdTdBTlExZDF6QlFVVjVFT0VES3ktUVVBLUlmVTZXc29LblRMN3NIdUVwUE5MeXBiNm9LWF9BZ1RlZ0NNU0RDVzV1YkthNk5BX2U1eHBTUnNpcTNCWnZPS29MTkozUDZrVkxReS0xMjgwd0ZKTWMzYi04bmtYdHZUUHVBMTdfblZtQk9vVTJHSWQyWXFQZnlnN2ZWQlc00gHYAUFVX3lxTE1WSTVMRWhVaTl1TU5xaEVYZ3JVaDF5MkxsbHByY0hmTTZNVENabFZNeEJjdlVYZC1ocG9udDBuV2RRRVA4QXBwTmV2QWV2MjhYRVh4bkFhMXlrNnRXTmRFLU5Pcnpfc2tKU1VseTRuUlNPMDFBSFlickZBQWZPLW15R0gtdm5LR2h4Q2RmbWFYRU5xV0JuRWwyQXpVWDFzcmhib2NMVTlDSzd4VmVGbWlYV195SVRGNlc5MGdRRnpOaTJXMVBmQWNKd19BdTNpM0hGbGg1QWZLTw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi0wFBVV95cUxQZy1YX3NCRFY2aHRlU2F3MzdfMnk1UWV0UDJsVnRuNWswSF92eG16ZjBZRk5HVWx0WURhNnJBdTdBTlExZDF6QlFVVjVFT0VES3ktUVVBLUlmVTZXc29LblRMN3NIdUVwUE5MeXBiNm9LWF9BZ1RlZ0NNU0RDVzV1YkthNk5BX2U1eHBTUnNpcTNCWnZPS29MTkozUDZrVkxReS0xMjgwd0ZKTWMzYi04bmtYdHZUUHVBMTdfblZtQk9vVTJHSWQyWXFQZnlnN2ZWQlc00gHYAUFVX3lxTE1WSTVMRWhVaTl1TU5xaEVYZ3JVaDF5MkxsbHByY0hmTTZNVENabFZNeEJjdlVYZC1ocG9udDBuV2RRRVA4QXBwTmV2QWV2MjhYRVh4bkFhMXlrNnRXTmRFLU5Pcnpfc2tKU1VseTRuUlNPMDFBSFlickZBQWZPLW15R0gtdm5LR2h4Q2RmbWFYRU5xV0JuRWwyQXpVWDFzcmhib2NMVTlDSzd4VmVGbWlYV195SVRGNlc5MGdRRnpOaTJXMVBmQWNKd19BdTNpM0hGbGg1QWZLTw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-01T10:15:13.862734",
+    "headline": "The Blackout Behind the Blackout: What Sarnia\u2019s 2003 Outages Reveal About Restart Risk - POWER Magazine",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNTUxOckZ1VU0tYy1pNEdyVy1CQ2NIQ2F3Z2FIcjR3MXpxVmlCYVZNbjh1N05mU1JiSldGakphMXpmdlVIR3N5U2lzcnFqU0JGdTFyMV9qZFdlTXFENm1BNi1FYVBQSHNJbGg4YmVHNU00LTc0b3NEYUdJOVdQT2o2MmZoeHJuejU1cVJhajhXNVdmLWNxajZLS0ZIVUFQeVpzdDN4Sll1SVBka3dYTUhr?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNTUxOckZ1VU0tYy1pNEdyVy1CQ2NIQ2F3Z2FIcjR3MXpxVmlCYVZNbjh1N05mU1JiSldGakphMXpmdlVIR3N5U2lzcnFqU0JGdTFyMV9qZFdlTXFENm1BNi1FYVBQSHNJbGg4YmVHNU00LTc0b3NEYUdJOVdQT2o2MmZoeHJuejU1cVJhajhXNVdmLWNxajZLS0ZIVUFQeVpzdDN4Sll1SVBka3dYTUhr?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirwFBVV95cUxNTUxOckZ1VU0tYy1pNEdyVy1CQ2NIQ2F3Z2FIcjR3MXpxVmlCYVZNbjh1N05mU1JiSldGakphMXpmdlVIR3N5U2lzcnFqU0JGdTFyMV9qZFdlTXFENm1BNi1FYVBQSHNJbGg4YmVHNU00LTc0b3NEYUdJOVdQT2o2MmZoeHJuejU1cVJhajhXNVdmLWNxajZLS0ZIVUFQeVpzdDN4Sll1SVBka3dYTUhr?oc=5",
     "is_anomaly": true,
     "target_locales": [
       "National"
     ],
     "scores": {
       "geopolitical_risk": 0.0,
-      "supply_disruption": 0.2,
+      "supply_disruption": 0.5,
       "demand_sentiment": 0.0,
       "opec_action": 0.0,
-      "overall_price_pressure": -0.7
+      "overall_price_pressure": 0.18
     },
     "discord_notified": true
   }

@@ -189,7 +189,8 @@ class DatabaseClient:
                 out_rows.append(row_dict)
             return out_rows
         except Exception as e:
-            logger.error(f"Turso execution failed: {e}. Falling back to local SQLite.")
+            self.is_turso = False
+            logger.warning(f"Turso execution failed: {e}. Tripping circuit breaker and falling back to local SQLite for this session.")
             return self._execute_sqlite(sql, params)
 
     def _execute_batch_turso(self, statements: List[Tuple[str, Union[Tuple, List]]]) -> None:
@@ -219,14 +220,17 @@ class DatabaseClient:
                     },
                     method="POST"
                 )
-                with urllib.request.urlopen(req, timeout=15.0) as resp:
+                with urllib.request.urlopen(req, timeout=5.0) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
                 for res in data.get("results", []):
                     if res.get("type") == "error":
                         raise RuntimeError(f"Turso batch error: {res.get('error', {}).get('message')}")
             except Exception as e:
-                logger.error(f"Turso batch execution failed: {e}. Falling back to SQLite.")
-                self._execute_batch_sqlite(chunk)
+                self.is_turso = False
+                logger.warning(f"Turso batch execution failed: {e}. Tripping circuit breaker and falling back to local SQLite for remaining {len(statements) - i} statements.")
+                remaining_statements = statements[i:]
+                self._execute_batch_sqlite(remaining_statements)
+                return
 
     def _format_turso_params(self, params: Union[Tuple, List, Dict]) -> List[Dict[str, Any]]:
         """Converts Python parameters to Turso parameter objects."""

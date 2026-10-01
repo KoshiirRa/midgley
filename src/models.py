@@ -913,14 +913,41 @@ def train_multi_horizon_models(
         from feature_engineering import create_feature_matrix, prepare_chronological_splits
 
     multi_results = {}
+    base_full_matrix = None
+    base_attrs = {}
+
     for h in horizons:
-        feature_df = create_feature_matrix(
-            market_df, 
-            events_df, 
-            forecast_horizon=h, 
-            decay_half_life_days=decay_half_life_days,
-            region=region
-        )
+        if base_full_matrix is None:
+            feature_df = create_feature_matrix(
+                market_df, 
+                events_df, 
+                forecast_horizon=h, 
+                decay_half_life_days=decay_half_life_days,
+                region=region
+            )
+            if hasattr(feature_df, 'attrs') and 'full_feature_matrix' in feature_df.attrs:
+                base_full_matrix = feature_df.attrs['full_feature_matrix'].copy()
+                base_attrs = feature_df.attrs.copy()
+        elif base_full_matrix is not None:
+            # Efficiently reuse the pre-engineered exogenous feature matrix (Issue #591)
+            full_df = base_full_matrix.copy()
+            full_df[f'target_price_{h}d'] = full_df['gasoline_rbob'].shift(-h)
+            full_df[f'target_return_{h}d'] = (full_df[f'target_price_{h}d'] - full_df['gasoline_rbob']) / full_df['gasoline_rbob']
+            feature_df = full_df.dropna(subset=[f'target_price_{h}d']).reset_index(drop=True)
+            feature_df.attrs = base_attrs.copy()
+            feature_df.attrs['forecast_horizon'] = h
+            feature_df.attrs['unlabelled_inference_frame'] = full_df.iloc[-h:].copy().reset_index(drop=True)
+            feature_df.attrs['latest_inference_row'] = full_df.iloc[-1:].copy().reset_index(drop=True)
+            feature_df.attrs['full_feature_matrix'] = full_df.copy()
+        else:
+            feature_df = create_feature_matrix(
+                market_df, 
+                events_df, 
+                forecast_horizon=h, 
+                decay_half_life_days=decay_half_life_days,
+                region=region
+            )
+
         splits = prepare_chronological_splits(
             feature_df, 
             train_ratio=train_ratio, 

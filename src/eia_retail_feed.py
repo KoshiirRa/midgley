@@ -43,15 +43,15 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Greenville_NC": [("GASREGWNC", "North Carolina Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
     "Charlotte_NC": [("GASREGWNC", "North Carolina Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
     "Port_St_Lucie_FL": [("GASREGWFL", "Florida Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
-    "Oakland_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "BayArea_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "SanFrancisco_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "SanJose_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "NorthBay_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
+    "Oakland_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "BayArea_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "SanFrancisco_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "SanJose_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "NorthBay_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
     # On-Highway Diesel series (Issue #461)
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "Tulsa_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
     "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
 }
 

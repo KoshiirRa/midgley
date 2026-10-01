@@ -66,6 +66,10 @@ class LookupCache:
             "writes": 0,
             "errors": 0,
         }
+        self._turso_circuit_broken = False
+        self._turso_error_count = 0
+        self._cf_circuit_broken = False
+        self._cf_error_count = 0
         self._init_db()
 
     def _init_db(self):
@@ -103,7 +107,7 @@ class LookupCache:
 
     def _turso_ensure_table(self, turso_url: str, turso_token: str):
         """Ensures the lookup_cache table exists on remote Turso Edge SQLite."""
-        if getattr(self, "_turso_table_initialized", False):
+        if getattr(self, "_turso_table_initialized", False) or getattr(self, "_turso_circuit_broken", False):
             return
         try:
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
@@ -127,12 +131,21 @@ class LookupCache:
                 if resp.status == 200:
                     self._turso_table_initialized = True
         except Exception as e:
-            logger.warning(f"Turso table initialization notice: {e}")
+            self._turso_error_count += 1
+            if self._turso_error_count >= 2:
+                self._turso_circuit_broken = True
+                logger.warning(f"Turso Edge circuit breaker TRIPPED ({e}). Bypassing remote Turso for the remainder of this session.")
+            else:
+                logger.warning(f"Turso table initialization notice: {e}")
 
     def _turso_get(self, key: str, turso_url: str, turso_token: str) -> Optional[Tuple[str, float, float]]:
         """Queries Tier 1 Turso Edge SQLite via HTTPS REST API."""
+        if getattr(self, "_turso_circuit_broken", False):
+            return None
         try:
             self._turso_ensure_table(turso_url, turso_token)
+            if getattr(self, "_turso_circuit_broken", False):
+                return None
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
             headers = {
                 "Authorization": f"Bearer {turso_token}",
@@ -165,14 +178,23 @@ class LookupCache:
                             expires_at = float(row[2].get("value", 0))
                             return val_str, created_at, expires_at
         except Exception as e:
-            logger.warning(f"Turso Edge cache fetch notice: {e}")
+            self._turso_error_count += 1
+            if self._turso_error_count >= 2:
+                self._turso_circuit_broken = True
+                logger.warning(f"Turso Edge circuit breaker TRIPPED on fetch ({e}). Bypassing remote Turso for this session.")
+            else:
+                logger.warning(f"Turso Edge cache fetch notice: {e}")
             self.stats["errors"] += 1
         return None
 
     def _turso_set(self, key: str, val_str: str, created_at: float, expires_at: float, turso_url: str, turso_token: str):
         """Writes entry to Tier 1 Turso Edge SQLite via HTTPS REST API."""
+        if getattr(self, "_turso_circuit_broken", False):
+            return
         try:
             self._turso_ensure_table(turso_url, turso_token)
+            if getattr(self, "_turso_circuit_broken", False):
+                return
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
             headers = {
                 "Authorization": f"Bearer {turso_token}",
@@ -200,7 +222,12 @@ class LookupCache:
             with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as resp:
                 pass
         except Exception as e:
-            logger.warning(f"Turso Edge cache write notice: {e}")
+            self._turso_error_count += 1
+            if self._turso_error_count >= 2:
+                self._turso_circuit_broken = True
+                logger.warning(f"Turso Edge circuit breaker TRIPPED on write ({e}). Bypassing remote Turso for this session.")
+            else:
+                logger.warning(f"Turso Edge cache write notice: {e}")
             self.stats["errors"] += 1
 
     def _cloudflare_get(self, key: str, cf_url: str, cf_token: str = None) -> Optional[Tuple[str, float, float]]:
