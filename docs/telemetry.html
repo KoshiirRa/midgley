@@ -26,10 +26,11 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
 
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-blue-600 focus:text-white focus:rounded-xl focus:shadow-xl focus:top-2 focus:left-2 font-medium text-sm">Skip to main content</a>
+    <header role="banner" class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
+                <a href="index.html" aria-label="Midgley AI Homepage" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
                     <img src="assets/logo.png" alt="Midgley Logo" class="w-full h-full object-cover">
                 </a>
                 <div>
@@ -40,78 +41,78 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+            <nav aria-label="Main Navigation" class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
                 <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-house"></i> Overview
+                    <i class="fa-solid fa-house" aria-hidden="true"></i> Overview
                 </a>
                 <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-globe"></i> National Wholesale
+                    <i class="fa-solid fa-globe" aria-hidden="true"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
                 <div class="relative group">
-                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    <button type="button" id="metro-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="metro-dropdown-menu" aria-label="Metro Areas Selection Menu" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform" aria-hidden="true"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
-                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                    <div id="metro-dropdown-menu" role="menu" aria-labelledby="metro-menu-btn" class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a role="menuitem" href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Tulsa, OK Retail
                         </a>
-                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        <a role="menuitem" href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400" aria-hidden="true"></i> Newark, DE Retail
                         </a>
-                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        <a role="menuitem" href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        <a role="menuitem" href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
                         </a>
-                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        <a role="menuitem" href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
                         </a>
-                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        <a role="menuitem" href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
                         </a>
-                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        <a role="menuitem" href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400" aria-hidden="true"></i> Oakland, CA Retail
                         </a>
-                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        <a role="menuitem" href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area Region
                         </a>
                     </div>
                 </div>
 
                 <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                    <i class="fa-solid fa-truck-front text-purple-400" aria-hidden="true"></i> Diesel ULSD
                 </a>
                 <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                    <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Fill-Up Advisor
                 </a>
                 <a href="telemetry.html" class="px-3 py-1.5 rounded-lg bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 font-semibold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                    <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Telemetry & Map
                 </a>
                 <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Math Guide
                 </a>
                 <a href="sources.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                    <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Data Sources
                 </a>
                 <a href="citations.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                    <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations
                 </a>
-                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
-                    <i class="fa-brands fa-github"></i> GitHub
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
                 </a>
-            </div>
+            </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
         <!-- Hero Banner -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-cyan-900/40 via-slate-900 to-blue-900/40 border border-cyan-500/30 space-y-4">
             <div class="flex items-center gap-3">
                 <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20">
-                    <i class="fa-solid fa-chart-line text-3xl"></i>
+                    <i class="fa-solid fa-chart-line text-3xl" aria-hidden="true"></i>
                 </div>
                 <div>
                     <h2 class="text-3xl font-extrabold text-white tracking-tight">System Observability & Operational Telemetry</h2>
@@ -128,7 +129,7 @@
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
                     <span class="text-xs text-slate-400 font-mono">Connector Success Rate</span>
-                    <div class="text-2xl font-bold text-emerald-400 font-mono">89.4%</div>
+                    <div class="text-2xl font-bold text-emerald-400 font-mono">89.3%</div>
                     <span class="text-[10px] text-emerald-400 font-mono">1,000 Total Calls (7-Day)</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
@@ -148,7 +149,7 @@
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-brain text-purple-400"></i> Vectorize Hindsight Episodic Memory & Reflection Observability
+                    <i class="fa-solid fa-brain text-purple-400" aria-hidden="true"></i> Vectorize Hindsight Episodic Memory & Reflection Observability
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">Issue #230 & #422</span>
             </div>
@@ -157,19 +158,19 @@
                 <!-- Lifecycle Triad -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                     <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-arrows-spin text-purple-400"></i> Operation Triad Throughput
+                        <i class="fa-solid fa-arrows-spin text-purple-400" aria-hidden="true"></i> Operation Triad Throughput
                     </h4>
                     <div class="space-y-3 font-mono text-xs">
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400" aria-hidden="true"></i> Retain (Experience Store)</span>
                             <span class="text-emerald-400 font-bold">26,084 ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400" aria-hidden="true"></i> Recall (Analogue Search)</span>
                             <span class="text-blue-400 font-bold">9 ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Reflect (Anomaly Synthesis)</span>
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400" aria-hidden="true"></i> Reflect (Anomaly Synthesis)</span>
                             <span class="text-amber-400 font-bold">10 ops</span>
                         </div>
                     </div>
@@ -178,7 +179,7 @@
                 <!-- Backend Routing Split -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                     <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-network-wired text-cyan-400"></i> Backend Routing Split
+                        <i class="fa-solid fa-network-wired text-cyan-400" aria-hidden="true"></i> Backend Routing Split
                     </h4>
                     <div class="space-y-3 font-mono text-xs">
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
@@ -202,7 +203,7 @@
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                     <div class="flex justify-between items-center">
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
+                            <i class="fa-solid fa-database text-blue-400" aria-hidden="true"></i> Active Memory Bank
                         </h4>
                         <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-mono">
                             💾 Local SQLite
@@ -229,7 +230,7 @@
                             </div>
                         </div>
                         <div class="pt-1">
-                            <div class='p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-cloud-arrow-up text-amber-400'></i> Cloud Sync Queue</span><span class='font-bold'>6,634 Queued for Sync</span></div>
+                            <div class='p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-cloud-arrow-up text-amber-400' aria-hidden='true'></i> Cloud Sync Queue</span><span class='font-bold'>6,634 Queued for Sync</span></div>
                         </div>
                     </div>
                 </div>
@@ -240,7 +241,7 @@
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-satellite-dish text-emerald-400"></i> Data Connector Performance & Freshness Audit (7-Day Window)
+                    <i class="fa-solid fa-satellite-dish text-emerald-400" aria-hidden="true"></i> Data Connector Performance & Freshness Audit (7-Day Window)
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">src/connector_telemetry.py</span>
             </div>
@@ -253,11 +254,11 @@
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Success Rate</span>
-                        <div class="text-xl font-bold text-emerald-400 font-mono">89.4%</div>
+                        <div class="text-xl font-bold text-emerald-400 font-mono">89.3%</div>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Avg Latency</span>
-                        <div class="text-xl font-bold text-cyan-400 font-mono">250.40 ms</div>
+                        <div class="text-xl font-bold text-cyan-400 font-mono">250.96 ms</div>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                         <span class="text-[10px] text-slate-400 font-mono">Stale Payloads (>24h)</span>
@@ -266,33 +267,34 @@
                 </div>
 
                 <div class="overflow-x-auto pt-2">
-                    <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                    <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse" aria-label="Data Connector Performance and Freshness Audit Table">
+                        <caption class="sr-only">Data Connector Performance &amp; Freshness Audit (7-Day Window)</caption>
                         <thead>
                             <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                <th class="py-2.5 px-3">Data Connector / Ingestion Feed</th>
-                                <th class="py-2.5 px-3 text-center">Calls</th>
-                                <th class="py-2.5 px-3 text-center">Success Rate</th>
-                                <th class="py-2.5 px-3 text-center">Stale (>24h)</th>
-                                <th class="py-2.5 px-3 text-center">Avg Latency</th>
-                                <th class="py-2.5 px-3 text-right">Avg Data Age</th>
+                                <th scope="col" class="py-2.5 px-3">Data Connector / Ingestion Feed</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Calls</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Success Rate</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Stale (>24h)</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Avg Latency</th>
+                                <th scope="col" class="py-2.5 px-3 text-right">Avg Data Age</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/50">
                             
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
                 <td class="py-2.5 px-3 font-semibold text-slate-200">HindsightHosted</td>
-                <td class="py-2.5 px-3 text-center text-slate-300">877</td>
-                <td class="py-2.5 px-3 text-center text-emerald-400 font-bold">99.7%</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">876</td>
+                <td class="py-2.5 px-3 text-center text-emerald-400 font-bold">99.5%</td>
                 <td class="py-2.5 px-3 text-center text-slate-400">0</td>
-                <td class="py-2.5 px-3 text-center text-cyan-300">89.31 ms</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">89.57 ms</td>
                 <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
             </tr>
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
                 <td class="py-2.5 px-3 font-semibold text-slate-200">Reachability_EXECUTIVE_SOCIAL</td>
-                <td class="py-2.5 px-3 text-center text-slate-300">36</td>
-                <td class="py-2.5 px-3 text-center text-red-400 font-bold">50.0%</td>
+                <td class="py-2.5 px-3 text-center text-slate-300">37</td>
+                <td class="py-2.5 px-3 text-center text-red-400 font-bold">51.4%</td>
                 <td class="py-2.5 px-3 text-center text-slate-400">0</td>
-                <td class="py-2.5 px-3 text-center text-cyan-300">1006.57 ms</td>
+                <td class="py-2.5 px-3 text-center text-cyan-300">990.70 ms</td>
                 <td class="py-2.5 px-3 text-right text-slate-300">0.00 h</td>
             </tr>
             <tr class="hover:bg-slate-800/40 border-b border-slate-800/50 font-mono text-xs">
@@ -361,7 +363,7 @@
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-piggy-bank text-emerald-400"></i> Zero-Cost Fallback & Cumulative Token Savings Ledger
+                    <i class="fa-solid fa-piggy-bank text-emerald-400" aria-hidden="true"></i> Zero-Cost Fallback & Cumulative Token Savings Ledger
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">Issue #196</span>
             </div>
@@ -393,13 +395,14 @@
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Zero-Cost Provider Breakdown</h4>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse" aria-label="Zero-Cost Provider Breakdown Table">
+                            <caption class="sr-only">Zero-Cost Provider Breakdown</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                    <th class="py-2 px-3">Zero-Cost Provider / Engine</th>
-                                    <th class="py-2 px-3 text-center">Invocations</th>
-                                    <th class="py-2 px-3 text-center">Cost Rate</th>
-                                    <th class="py-2 px-3 text-right">Status</th>
+                                    <th scope="col" class="py-2 px-3">Zero-Cost Provider / Engine</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Invocations</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Cost Rate</th>
+                                    <th scope="col" class="py-2 px-3 text-right">Status</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800/50">
@@ -438,7 +441,7 @@
         <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
             <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> API Provider Quota Ledgers
+                    <i class="fa-solid fa-gauge-high text-emerald-400" aria-hidden="true"></i> API Provider Quota Ledgers
                 </h3>
                 <div class="space-y-3 font-mono text-xs">
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
@@ -466,7 +469,7 @@
 
             <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-server text-cyan-400"></i> 3-Tier Cascading Cache Observability
+                    <i class="fa-solid fa-server text-cyan-400" aria-hidden="true"></i> 3-Tier Cascading Cache Observability
                 </h3>
                 <div class="space-y-3 font-mono text-xs">
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
@@ -489,7 +492,7 @@
         <section class="space-y-4 pt-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                    <i class="fa-solid fa-coins text-amber-400" aria-hidden="true"></i> TokenTab Local LLM Token Accounting & Cost Ledger
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
             </div>
@@ -521,14 +524,15 @@
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse" aria-label="Multi-Provider Cost Breakdown Table">
+                            <caption class="sr-only">Multi-Provider Cost Breakdown</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                    <th class="py-2 px-3">Provider / Tier</th>
-                                    <th class="py-2 px-3 text-center">Calls</th>
-                                    <th class="py-2 px-3 text-center">Input Tokens</th>
-                                    <th class="py-2 px-3 text-center">Output Tokens</th>
-                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                    <th scope="col" class="py-2 px-3">Provider / Tier</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Calls</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Input Tokens</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Output Tokens</th>
+                                    <th scope="col" class="py-2 px-3 text-right">Est. Cost (USD)</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800/50">
@@ -578,7 +582,7 @@
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-map-location-dot text-cyan-400"></i> Out-of-Metro ZIP Code Query Heatmap
+                    <i class="fa-solid fa-map-location-dot text-cyan-400" aria-hidden="true"></i> Out-of-Metro ZIP Code Query Heatmap
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">Issue #50 & #195</span>
             </div>
@@ -590,17 +594,16 @@
                         <span>Geographic Query Density Map</span>
                         <span>Layer: OpenStreetMap CartoDB Dark</span>
                     </div>
-                    <div id="zipMap" class="h-96 rounded-2xl border border-slate-800 z-10"></div>
+                    <div id="zipMap" class="h-96 rounded-2xl border border-slate-800 z-10" role="region" aria-label="Geographic Out-of-Metro ZIP Code Demand Heatmap"></div>
                 </div>
 
                 <!-- Recommended Expansion Metro Hubs (Right 1 Col) -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4 flex flex-col justify-between">
                     <div>
                         <h4 class="text-lg font-bold text-white flex items-center gap-2 mb-1">
-                            <i class="fa-solid fa-bullseye text-emerald-400"></i> Candidate Expansion Hubs
+                            <i class="fa-solid fa-bullseye text-emerald-400" aria-hidden="true"></i> Candidate Expansion Hubs
                         </h4>
                         <p class="text-xs text-slate-400 mb-4">Recommended regional metro calibration hubs based on search volume:</p>
-
                         <div class="space-y-3">
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                                 <div class="flex justify-between items-center text-sm font-bold text-white">
@@ -906,67 +909,11 @@
                         <p class="text-xs text-slate-400 mt-0.5">Retain-Recall-Reflect root cause post-mortems for major prediction errors.</p>
                     </div>
                     <span class="px-2 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-xs border border-amber-500/30">
-                        57 Reflections
+                        0 Reflections
                     </span>
                 </div>
                 <div class="space-y-3">
-                    
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
-            <div class="flex items-center justify-between">
-                <span class="font-semibold text-slate-200 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                    National Price Discrepancy ($+0.6620/gal)
-                </span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">National</span>
-            </div>
-            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model underestimated price surge by -$0.6620/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.</p>
-            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
-                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.
-            </div>
-        </div>
-        
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
-            <div class="flex items-center justify-between">
-                <span class="font-semibold text-slate-200 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                    Newark_DE Price Discrepancy ($+0.6802/gal)
-                </span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Newark_DE</span>
-            </div>
-            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.</p>
-            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
-                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.
-            </div>
-        </div>
-        
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
-            <div class="flex items-center justify-between">
-                <span class="font-semibold text-slate-200 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                    Newark_DE Price Discrepancy ($+0.7166/gal)
-                </span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Newark_DE</span>
-            </div>
-            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model underestimated price surge by -$0.7166/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-23 (Newark_DE)'.</p>
-            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
-                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.
-            </div>
-        </div>
-        
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
-            <div class="flex items-center justify-between">
-                <span class="font-semibold text-slate-200 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                    National Price Discrepancy ($+0.6617/gal)
-                </span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">National</span>
-            </div>
-            <p class="text-slate-400 leading-relaxed"><strong class="text-slate-300">Root Cause:</strong> Model underestimated price surge by -$0.6617/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.</p>
-            <div class="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-[11px] text-slate-300">
-                <span class="text-emerald-400 font-semibold">💡 Calibration Suggestion:</span> Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.
-            </div>
-        </div>
-        
+                    <p class="text-xs text-slate-500 italic">No episodic reflections indexed yet.</p>
                 </div>
             </div>
         </div>

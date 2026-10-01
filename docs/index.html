@@ -76,10 +76,11 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
 
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-blue-600 focus:text-white focus:rounded-xl focus:shadow-xl focus:top-2 focus:left-2 font-medium text-sm">Skip to main content</a>
+    <header role="banner" class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
+                <a href="index.html" aria-label="Midgley AI Homepage" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
                     <img src="assets/logo.png" alt="Midgley Logo" class="w-full h-full object-cover">
                 </a>
                 <div>
@@ -90,74 +91,74 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+            <nav aria-label="Main Navigation" class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
                 <a href="index.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-house"></i> Overview
+                    <i class="fa-solid fa-house" aria-hidden="true"></i> Overview
                 </a>
                 <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-globe"></i> National Wholesale
+                    <i class="fa-solid fa-globe" aria-hidden="true"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
                 <div class="relative group">
-                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    <button type="button" id="metro-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="metro-dropdown-menu" aria-label="Metro Areas Selection Menu" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform" aria-hidden="true"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
-                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                    <div id="metro-dropdown-menu" role="menu" aria-labelledby="metro-menu-btn" class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a role="menuitem" href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Tulsa, OK Retail
                         </a>
-                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        <a role="menuitem" href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400" aria-hidden="true"></i> Newark, DE Retail
                         </a>
-                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        <a role="menuitem" href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        <a role="menuitem" href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
                         </a>
-                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        <a role="menuitem" href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
                         </a>
-                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        <a role="menuitem" href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
                         </a>
-                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        <a role="menuitem" href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400" aria-hidden="true"></i> Oakland, CA Retail
                         </a>
-                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        <a role="menuitem" href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area Region
                         </a>
                     </div>
                 </div>
 
                 <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                    <i class="fa-solid fa-truck-front text-purple-400" aria-hidden="true"></i> Diesel ULSD
                 </a>
                 <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                    <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Fill-Up Advisor
                 </a>
                 <a href="telemetry.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                    <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Telemetry & Map
                 </a>
                 <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Math Guide
                 </a>
                 <a href="sources.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                    <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Data Sources
                 </a>
                 <a href="citations.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                    <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations
                 </a>
-                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
-                    <i class="fa-brands fa-github"></i> GitHub
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
                 </a>
-            </div>
+            </nav>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Headline Hero Banner -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-emerald-900/30 border border-blue-500/20 card-glow space-y-4">
@@ -166,7 +167,7 @@
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
                 <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"><i class="fa-solid fa-circle-check mr-1"></i>Forecast Fresh (&lt;36h)</span>
-                <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: 2026-10-01 20:30 UTC</a></span>
+                <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: 2026-10-01 20:45 UTC</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
@@ -824,27 +825,27 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
                     <span class="text-xs text-slate-400">30-Day Mean Absolute Error (MAE)</span>
-                    <p class="text-2xl font-extrabold text-white">$0.1322<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                    <p class="text-2xl font-extrabold text-white">$0.0000<span class="text-xs text-slate-400 font-normal">/gal</span></p>
                     <p class="text-[11px] text-slate-500">Out-of-Time Error Magnitude</p>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
                     <span class="text-xs text-slate-400">30-Day Directional Hit Rate</span>
-                    <p class="text-2xl font-extrabold text-emerald-400">46.0%</p>
+                    <p class="text-2xl font-extrabold text-emerald-400">0.0%</p>
                     <p class="text-[11px] text-slate-500">Correct Trend Direction Calls</p>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
                     <span class="text-xs text-slate-400">95% CI Coverage</span>
-                    <p class="text-2xl font-extrabold text-amber-400">81.1%</p>
+                    <p class="text-2xl font-extrabold text-amber-400">0.0%</p>
                     <p class="text-[11px] text-slate-500">Empirical Interval Reliability</p>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
                     <span class="text-xs text-slate-400">Model MAE Uplift vs Naive</span>
-                    <p class="text-2xl font-extrabold text-cyan-400">-9.2%</p>
+                    <p class="text-2xl font-extrabold text-cyan-400">+0.0%</p>
                     <p class="text-[11px] text-slate-500">Error Reduction vs Persistence</p>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
                     <span class="text-xs text-slate-400">Total Evaluated Forecasts</span>
-                    <p class="text-2xl font-extrabold text-purple-400">37</p>
+                    <p class="text-2xl font-extrabold text-purple-400">0</p>
                     <p class="text-[11px] text-slate-500">Mature Out-of-Time Sample</p>
                 </div>
             </div>
@@ -854,19 +855,20 @@
                 <!-- Forecast Horizon Breakdown Matrix Table -->
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Forecast Horizon Accuracy Breakdown
+                        <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Forecast Horizon Accuracy Breakdown
                     </h4>
                     <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                        <table class="w-full text-left text-xs border-collapse">
+                        <table aria-label="Forecast horizon accuracy breakdown matrix" class="w-full text-left text-xs border-collapse">
+                            <caption class="sr-only">Table displaying mean absolute error, root mean square error, directional hit rate, confidence interval coverage, and uplift by forecast horizon</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                    <th class="p-2.5">Horizon</th>
-                                    <th class="p-2.5">N</th>
-                                    <th class="p-2.5">MAE</th>
-                                    <th class="p-2.5">RMSE</th>
-                                    <th class="p-2.5">Hit %</th>
-                                    <th class="p-2.5">95% CI</th>
-                                    <th class="p-2.5">Uplift</th>
+                                    <th scope="col" class="p-2.5">Horizon</th>
+                                    <th scope="col" class="p-2.5">N</th>
+                                    <th scope="col" class="p-2.5">MAE</th>
+                                    <th scope="col" class="p-2.5">RMSE</th>
+                                    <th scope="col" class="p-2.5">Hit %</th>
+                                    <th scope="col" class="p-2.5">95% CI</th>
+                                    <th scope="col" class="p-2.5">Uplift</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -876,12 +878,12 @@
                 <span class="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono text-[10px] font-semibold">1D</span>
                 <span>1-Day (24h Ahead)</span>
             </td>
-            <td class="p-2.5 text-slate-400 text-xs">11</td>
-            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.1231</td>
-            <td class="p-2.5 text-slate-300 text-xs">$0.1338</td>
-            <td class="p-2.5 font-semibold text-cyan-400 text-xs">36.4%</td>
-            <td class="p-2.5 text-amber-300 font-semibold text-xs">63.6%</td>
-            <td class="p-2.5 font-bold text-slate-400 text-xs">-13.6%</td>
+            <td class="p-2.5 text-slate-400 text-xs">0</td>
+            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.0000</td>
+            <td class="p-2.5 text-slate-300 text-xs">$0.0000</td>
+            <td class="p-2.5 font-semibold text-cyan-400 text-xs">0.0%</td>
+            <td class="p-2.5 text-amber-300 font-semibold text-xs">0.0%</td>
+            <td class="p-2.5 font-bold text-slate-400 text-xs">+0.0%</td>
         </tr>
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
@@ -889,12 +891,12 @@
                 <span class="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono text-[10px] font-semibold">2D</span>
                 <span>2-Day (48h Ahead)</span>
             </td>
-            <td class="p-2.5 text-slate-400 text-xs">11</td>
-            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.1271</td>
-            <td class="p-2.5 text-slate-300 text-xs">$0.1492</td>
-            <td class="p-2.5 font-semibold text-cyan-400 text-xs">63.6%</td>
-            <td class="p-2.5 text-amber-300 font-semibold text-xs">81.8%</td>
-            <td class="p-2.5 font-bold text-emerald-400 text-xs">+6.8%</td>
+            <td class="p-2.5 text-slate-400 text-xs">0</td>
+            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.0000</td>
+            <td class="p-2.5 text-slate-300 text-xs">$0.0000</td>
+            <td class="p-2.5 font-semibold text-cyan-400 text-xs">0.0%</td>
+            <td class="p-2.5 text-amber-300 font-semibold text-xs">0.0%</td>
+            <td class="p-2.5 font-bold text-slate-400 text-xs">+0.0%</td>
         </tr>
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
@@ -902,12 +904,12 @@
                 <span class="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono text-[10px] font-semibold">3D</span>
                 <span>3-Day (72h Ahead)</span>
             </td>
-            <td class="p-2.5 text-slate-400 text-xs">10</td>
-            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.1198</td>
-            <td class="p-2.5 text-slate-300 text-xs">$0.1591</td>
-            <td class="p-2.5 font-semibold text-cyan-400 text-xs">50.0%</td>
-            <td class="p-2.5 text-amber-300 font-semibold text-xs">90.0%</td>
-            <td class="p-2.5 font-bold text-emerald-400 text-xs">+1.0%</td>
+            <td class="p-2.5 text-slate-400 text-xs">0</td>
+            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.0000</td>
+            <td class="p-2.5 text-slate-300 text-xs">$0.0000</td>
+            <td class="p-2.5 font-semibold text-cyan-400 text-xs">0.0%</td>
+            <td class="p-2.5 text-amber-300 font-semibold text-xs">0.0%</td>
+            <td class="p-2.5 font-bold text-slate-400 text-xs">+0.0%</td>
         </tr>
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
@@ -915,12 +917,12 @@
                 <span class="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono text-[10px] font-semibold">4D</span>
                 <span>4-Day (96h Ahead)</span>
             </td>
-            <td class="p-2.5 text-slate-400 text-xs">5</td>
-            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.1881</td>
-            <td class="p-2.5 text-slate-300 text-xs">$0.2067</td>
-            <td class="p-2.5 font-semibold text-cyan-400 text-xs">20.0%</td>
-            <td class="p-2.5 text-amber-300 font-semibold text-xs">100.0%</td>
-            <td class="p-2.5 font-bold text-slate-400 text-xs">-63.5%</td>
+            <td class="p-2.5 text-slate-400 text-xs">0</td>
+            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.0000</td>
+            <td class="p-2.5 text-slate-300 text-xs">$0.0000</td>
+            <td class="p-2.5 font-semibold text-cyan-400 text-xs">0.0%</td>
+            <td class="p-2.5 text-amber-300 font-semibold text-xs">0.0%</td>
+            <td class="p-2.5 font-bold text-slate-400 text-xs">+0.0%</td>
         </tr>
         
         <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
@@ -944,43 +946,24 @@
                 <!-- Regional Scoreboard Matrix Table -->
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-emerald-400"></i> Regional Accuracy Matrix
+                        <i class="fa-solid fa-layer-group text-emerald-400" aria-hidden="true"></i> Regional Accuracy Matrix
                     </h4>
                     <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                        <table class="w-full text-left text-xs border-collapse">
+                        <table aria-label="Regional prediction accuracy matrix" class="w-full text-left text-xs border-collapse">
+                            <caption class="sr-only">Table displaying regional model accuracy metrics across metro locations</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                    <th class="p-2.5">Region</th>
-                                    <th class="p-2.5">N</th>
-                                    <th class="p-2.5">MAE</th>
-                                    <th class="p-2.5">RMSE</th>
-                                    <th class="p-2.5">Hit %</th>
-                                    <th class="p-2.5">95% CI</th>
-                                    <th class="p-2.5">Uplift</th>
+                                    <th scope="col" class="p-2.5">Region</th>
+                                    <th scope="col" class="p-2.5">N</th>
+                                    <th scope="col" class="p-2.5">MAE</th>
+                                    <th scope="col" class="p-2.5">RMSE</th>
+                                    <th scope="col" class="p-2.5">Hit %</th>
+                                    <th scope="col" class="p-2.5">95% CI</th>
+                                    <th scope="col" class="p-2.5">Uplift</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-2.5 font-bold text-slate-200 text-xs">National</td>
-            <td class="p-2.5 text-slate-400 text-xs">21</td>
-            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.1603</td>
-            <td class="p-2.5 text-slate-300 text-xs">$0.1820</td>
-            <td class="p-2.5 font-semibold text-cyan-400 text-xs">33.3%</td>
-            <td class="p-2.5 text-amber-300 font-semibold text-xs">95.2%</td>
-            <td class="p-2.5 font-bold text-slate-400 text-xs">-28.2%</td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-2.5 font-bold text-slate-200 text-xs">Newark_DE</td>
-            <td class="p-2.5 text-slate-400 text-xs">16</td>
-            <td class="p-2.5 font-semibold text-emerald-400 text-xs">$0.0953</td>
-            <td class="p-2.5 text-slate-300 text-xs">$0.1155</td>
-            <td class="p-2.5 font-semibold text-cyan-400 text-xs">62.5%</td>
-            <td class="p-2.5 text-amber-300 font-semibold text-xs">62.5%</td>
-            <td class="p-2.5 font-bold text-emerald-400 text-xs">+17.7%</td>
-        </tr>
-        
                             </tbody>
                         </table>
                     </div>
@@ -990,134 +973,25 @@
             <!-- Recent Realized-vs-Predicted Evaluation Ledger -->
             <div class="space-y-3">
                 <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                    <i class="fa-solid fa-list-check text-emerald-400"></i> Recent Completed Forecast Evaluations
+                    <i class="fa-solid fa-list-check text-emerald-400" aria-hidden="true"></i> Recent Completed Forecast Evaluations
                 </h4>
                 <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                    <table class="w-full text-left text-xs border-collapse">
+                    <table aria-label="Recent completed forecast evaluations ledger" class="w-full text-left text-xs border-collapse">
+                        <caption class="sr-only">Table displaying recent out-of-time forecast target dates, base prices, predictions, actual realized prices, and errors</caption>
                         <thead>
                             <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                <th class="p-3">Target Date</th>
-                                <th class="p-3">Horizon</th>
-                                <th class="p-3">Region</th>
-                                <th class="p-3">Base</th>
-                                <th class="p-3">Forecast</th>
-                                <th class="p-3">Actual</th>
-                                <th class="p-3">Error</th>
-                                <th class="p-3">Outcome</th>
+                                <th scope="col" class="p-3">Target Date</th>
+                                <th scope="col" class="p-3">Horizon</th>
+                                <th scope="col" class="p-3">Region</th>
+                                <th scope="col" class="p-3">Base</th>
+                                <th scope="col" class="p-3">Forecast</th>
+                                <th scope="col" class="p-3">Actual</th>
+                                <th scope="col" class="p-3">Error</th>
+                                <th scope="col" class="p-3">Outcome</th>
                             </tr>
                         </thead>
                         <tbody>
                             
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-09-30</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">3D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">National</td>
-            <td class="p-3 text-slate-400 text-xs">$3.393</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$3.496</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$3.243</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.2531</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-09-30</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">3D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">National</td>
-            <td class="p-3 text-slate-400 text-xs">$3.197</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$3.260</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$3.243</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.0170</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-09-30</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">3D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">Newark_DE</td>
-            <td class="p-3 text-slate-400 text-xs">$4.330</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$4.463</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$4.465</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.0022</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-09-30</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">3D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">National</td>
-            <td class="p-3 text-slate-400 text-xs">$3.393</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$3.480</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$3.243</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.2371</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-09-30</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">3D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">Newark_DE</td>
-            <td class="p-3 text-slate-400 text-xs">$4.492</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$4.658</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$4.465</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.1927</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-09-30</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">3D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">Newark_DE</td>
-            <td class="p-3 text-slate-400 text-xs">$4.332</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$4.491</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$4.465</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.0263</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-09-30</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">3D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">Newark_DE</td>
-            <td class="p-3 text-slate-400 text-xs">$4.332</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$4.451</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$4.465</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.0140</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-10-01</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">4D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">National</td>
-            <td class="p-3 text-slate-400 text-xs">$3.197</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$3.288</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$3.267</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.0213</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">HIT</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-10-01</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">4D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">National</td>
-            <td class="p-3 text-slate-400 text-xs">$3.393</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$3.472</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$3.267</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.2052</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span></td>
-        </tr>
-        
-        <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
-            <td class="p-3 text-slate-300 font-mono text-xs">2026-10-01</td>
-            <td class="p-3 font-mono text-cyan-400 text-xs font-semibold"><span class="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[10px]">4D</span></td>
-            <td class="p-3 font-semibold text-white text-xs">National</td>
-            <td class="p-3 text-slate-400 text-xs">$3.393</td>
-            <td class="p-3 text-cyan-400 font-semibold text-xs">$3.529</td>
-            <td class="p-3 text-emerald-400 font-semibold text-xs">$3.267</td>
-            <td class="p-3 text-slate-300 font-mono text-xs">$0.2615</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold text-[10px]">MISS</span></td>
-        </tr>
-        
                         </tbody>
                     </table>
                 </div>
@@ -1148,7 +1022,7 @@
                         <span class="text-emerald-400 font-semibold">&darr; Dropping Error Rate</span>
                     </div>
                     <div class="h-64 w-full">
-                        <canvas id="maeTrendChart"></canvas>
+                        <canvas id="maeTrendChart" role="img" aria-label="30-day rolling Mean Absolute Error trend line chart"></canvas>
                     </div>
                 </div>
 
@@ -1159,7 +1033,7 @@
                         <span class="text-blue-400 font-semibold">&uarr; Rising Accuracy</span>
                     </div>
                     <div class="h-64 w-full">
-                        <canvas id="hitRateTrendChart"></canvas>
+                        <canvas id="hitRateTrendChart" role="img" aria-label="30-day rolling Directional Hit Rate trend line chart"></canvas>
                     </div>
                 </div>
 
@@ -1167,14 +1041,15 @@
 
             <!-- Model Version Timeline Table -->
             <div class="overflow-x-auto pt-2">
-                <table class="w-full text-left text-xs text-slate-300">
+                <table aria-label="Model version evolution timeline and historical accuracy metrics" class="w-full text-left text-xs text-slate-300">
+                    <caption class="sr-only">Historical timeline of model architecture iterations, feature sets, error rates, and directional accuracy</caption>
                     <thead class="bg-slate-950 uppercase text-slate-400 border-b border-slate-800">
                         <tr>
-                            <th class="py-2.5 px-4">Model Iteration</th>
-                            <th class="py-2.5 px-4">Core Feature Architecture</th>
-                            <th class="py-2.5 px-4">MAE Error ($/gal)</th>
-                            <th class="py-2.5 px-4">Directional Hit Rate</th>
-                            <th class="py-2.5 px-4">Status</th>
+                            <th scope="col" class="py-2.5 px-4">Model Iteration</th>
+                            <th scope="col" class="py-2.5 px-4">Core Feature Architecture</th>
+                            <th scope="col" class="py-2.5 px-4">MAE Error ($/gal)</th>
+                            <th scope="col" class="py-2.5 px-4">Directional Hit Rate</th>
+                            <th scope="col" class="py-2.5 px-4">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800">

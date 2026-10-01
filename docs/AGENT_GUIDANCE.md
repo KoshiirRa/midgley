@@ -259,4 +259,28 @@ Whenever new features, regional models, data feeds, or API endpoints are added:
    - Regional evaluation ground truth must be resolved strictly from the matching EIA/FRED series (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWCA`, `GASREGWFL`).
    - If ground truth is absent for an unmapped region or unmatured target date (`target_date > today`), record `actual_price = NaN` and exclude from evaluation scoring rather than falling back to the National average.
 
+---
+
+## ♿ 14. Zero Hardcoded Presentation Fallbacks & WCAG 2.1 AA ARIA Accessibility Standards (Issue #569)
+
+1. **Zero Synthetic Presentation Fallbacks:**
+   - Dashboard generators (`src/dashboard_generator.py`, `src/sources_generator.py`) must never inject mock/synthetic records, hardcoded performance arrays, or fake geographic points when live/database telemetry is absent.
+   - When database records or telemetry points are empty, generators must render honest empty state representations (`map_points = []`) or display explicit `"Insufficient Data (N < 30)"` / `"N/A"` indicators rather than synthetic fixtures.
+2. **WCAG 2.1 AA Landmark Structure:**
+   - Every generated HTML dashboard view must structure content using standard HTML5 and ARIA landmark roles: `<header role="banner">`, `<nav aria-label="Main Navigation">`, and `<main id="main-content" role="main">`.
+   - The top header must include a keyboard-accessible skip-to-content link targeting the primary main landmark: `<a href="#main-content" class="sr-only focus:not-sr-only ...">Skip to main content</a>`.
+3. **Interactive & Menu Accessibility:**
+   - Navigation dropdown buttons must define `id="metro-menu-btn"`, `aria-haspopup="true"`, `aria-expanded="false"`, `aria-controls="metro-dropdown-menu"`, and descriptive `aria-label="Metro Areas Selection Menu"`.
+   - Dropdown containers must specify `role="menu"`, with interactive child links tagged as `role="menuitem"`.
+   - Category filter buttons must specify `type="button"`, `aria-label="..."`, and `aria-pressed="true|false"` toggle state.
+4. **Data Visualizations & Interactive Maps:**
+   - All `<canvas>` elements hosting Chart.js charts must specify `role="img"` and descriptive `aria-label` attributes summarizing the series and metrics presented.
+   - Interactive map containers (e.g. `#zipMap`) must specify `role="region"` and descriptive `aria-label="Geographic Out-of-Metro ZIP Code Demand Heatmap"`.
+5. **Tabular Data Semantics:**
+   - All data tables must include an accessible screen-reader caption `<caption class="sr-only">...</caption>` and column header scope attributes (`<th scope="col">...</th>`).
+6. **Form Controls & Formatting Hygiene:**
+   - All form inputs, selects, and range controls (such as the Fill-Up Timing & Estimated Savings Advisor in `docs/savings.html`) must define explicit `<label for="...">` associations and descriptive `aria-label` attributes.
+   - Template variable substitutions must avoid redundant symbol prefixing (e.g., preventing double dollar artefacts like `$$0.1100`).
+
+
 
