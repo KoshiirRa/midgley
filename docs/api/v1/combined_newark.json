@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-01T17:33:37.399351",
+  "timestamp": "2026-10-01T18:18:18.756625",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-01T17:30:28Z"
+      "timestamp": "2026-10-01T18:18:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -42,7 +42,7 @@
     "evaluation_sample_size": 0,
     "day_1_price": 4.333,
     "day_2_price": 4.386,
-    "day_3_price": 4.401,
+    "day_3_price": 4.402,
     "day_4_price": 4.464,
     "day_5_price": 4.511,
     "feature_attributions": {

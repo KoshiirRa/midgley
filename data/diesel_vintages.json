@@ -478,5 +478,85 @@
       "locale": "port_st_lucie",
       "price": 6.007
     }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "national",
+    "price": 6.389,
+    "data": {
+      "locale": "national",
+      "price": 6.389
+    }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "tulsa",
+    "price": 5.871,
+    "data": {
+      "locale": "tulsa",
+      "price": 5.871
+    }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "newark",
+    "price": 6.428,
+    "data": {
+      "locale": "newark",
+      "price": 6.428
+    }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "cincinnati",
+    "price": 6.655,
+    "data": {
+      "locale": "cincinnati",
+      "price": 6.655
+    }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "greenville",
+    "price": 6.077,
+    "data": {
+      "locale": "greenville",
+      "price": 6.077
+    }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "charlotte",
+    "price": 6.077,
+    "data": {
+      "locale": "charlotte",
+      "price": 6.077
+    }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "oakland",
+    "price": 8.383,
+    "data": {
+      "locale": "oakland",
+      "price": 8.383
+    }
+  },
+  {
+    "as_of": "2026-10-01 18:17:57",
+    "valid_date": "2026-10-01",
+    "locale": "port_st_lucie",
+    "price": 5.954,
+    "data": {
+      "locale": "port_st_lucie",
+      "price": 5.954
+    }
   }
 ]

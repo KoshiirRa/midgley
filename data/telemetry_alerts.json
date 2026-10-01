@@ -1,11 +1,9 @@
 {
   "created_at": "2026-09-05 04:38:50",
-  "last_updated": "2026-09-30 17:31:00",
-  "total_alerts_logged": 16,
+  "last_updated": "2026-10-01 18:17:54",
+  "total_alerts_logged": 17,
   "active_degraded_regions": [
-    "BayArea_CA",
-    "National",
-    "Oakland_CA"
+    "National"
   ],
   "history": [
     {
@@ -714,6 +712,22 @@
           "model_mae": 1.9647,
           "naive_mae": 1.9354,
           "model_uplift_mae_pct": -1.51,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-10-01 18:17:54",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "National",
+          "evaluations": 21,
+          "model_mae": 0.1603,
+          "naive_mae": 0.1251,
+          "model_uplift_mae_pct": -28.16,
           "status": "DEGRADED"
         }
       ],
