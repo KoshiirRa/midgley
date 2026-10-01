@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T23:35:41.180278",
+  "timestamp": "2026-10-01T03:24:13.691035",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-30T23:35:18Z"
+      "timestamp": "2026-10-01T03:23:48Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-06",
+    "target_date": "2026-10-07",
     "current_base_price": 4.209,
-    "predicted_price_per_gal": 4.406,
-    "expected_change_dollars": 0.197,
-    "expected_change_percent": 4.68,
+    "predicted_price_per_gal": 4.306,
+    "expected_change_dollars": 0.097,
+    "expected_change_percent": 2.3,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.286,
-    "prediction_upper_95ci": 4.526,
+    "prediction_lower_95ci": 4.186,
+    "prediction_upper_95ci": 4.426,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.248,
-    "day_2_price": 4.18,
-    "day_3_price": 4.17,
-    "day_4_price": 4.234,
-    "day_5_price": 4.406,
+    "day_1_price": 4.228,
+    "day_2_price": 4.206,
+    "day_3_price": 4.208,
+    "day_4_price": 4.204,
+    "day_5_price": 4.306,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.069,
+        "delta_dollars": 0.034,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.049,
+        "delta_dollars": 0.024,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.039,
+        "delta_dollars": 0.019,
         "share_pct": 20.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -73,7 +73,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.02,
+        "delta_dollars": 0.01,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -81,7 +81,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.01,
+        "delta_dollars": 0.005,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -89,60 +89,60 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.01,
+        "delta_dollars": 0.005,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast +$0.197/gal (+4.68%): Driven primarily by Regional Logistics & Hub Delivery (+$0.069/gal), Refining Yield & Crack Spread (+$0.049/gal).",
+      "summary_text": "Cincinnati OH forecast +$0.097/gal (+2.30%): Driven primarily by Regional Logistics & Hub Delivery (+$0.034/gal), Refining Yield & Crack Spread (+$0.024/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.069,
-          "impact_pct": 1.64,
+          "impact_dollars": 0.034,
+          "impact_pct": 0.81,
           "share_pct": 35.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.049,
-          "impact_pct": 1.16,
+          "impact_dollars": 0.024,
+          "impact_pct": 0.57,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.039,
-          "impact_pct": 0.93,
+          "impact_dollars": 0.019,
+          "impact_pct": 0.45,
           "share_pct": 20.0,
           "direction": "UP"
         },
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.02,
-          "impact_pct": 0.48,
+          "impact_dollars": 0.01,
+          "impact_pct": 0.24,
           "share_pct": 10.0,
           "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.01,
-          "impact_pct": 0.24,
+          "impact_dollars": 0.005,
+          "impact_pct": 0.12,
           "share_pct": 5.0,
           "direction": "UP"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.01,
-          "impact_pct": 0.24,
+          "impact_dollars": 0.005,
+          "impact_pct": 0.12,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -153,59 +153,59 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.069,
-      "impact_pct": 1.64,
+      "impact_dollars": 0.034,
+      "impact_pct": 0.81,
       "share_pct": 35.0,
       "direction": "UP"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.049,
-      "impact_pct": 1.16,
+      "impact_dollars": 0.024,
+      "impact_pct": 0.57,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.039,
-      "impact_pct": 0.93,
+      "impact_dollars": 0.019,
+      "impact_pct": 0.45,
       "share_pct": 20.0,
       "direction": "UP"
     },
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.02,
-      "impact_pct": 0.48,
+      "impact_dollars": 0.01,
+      "impact_pct": 0.24,
       "share_pct": 10.0,
       "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.01,
-      "impact_pct": 0.24,
+      "impact_dollars": 0.005,
+      "impact_pct": 0.12,
       "share_pct": 5.0,
       "direction": "UP"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.01,
-      "impact_pct": 0.24,
+      "impact_dollars": 0.005,
+      "impact_pct": 0.12,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast +$0.197/gal (+4.68%): Driven primarily by Regional Logistics & Hub Delivery (+$0.069/gal), Refining Yield & Crack Spread (+$0.049/gal).",
+    "summary_text": "Cincinnati OH forecast +$0.097/gal (+2.30%): Driven primarily by Regional Logistics & Hub Delivery (+$0.034/gal), Refining Yield & Crack Spread (+$0.024/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.069,
+        "delta_dollars": 0.034,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.049,
+        "delta_dollars": 0.024,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.039,
+        "delta_dollars": 0.019,
         "share_pct": 20.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -229,7 +229,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.02,
+        "delta_dollars": 0.01,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -237,7 +237,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.01,
+        "delta_dollars": 0.005,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -245,7 +245,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.01,
+        "delta_dollars": 0.005,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"

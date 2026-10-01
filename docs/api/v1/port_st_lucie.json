@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-09-30T23:35:42.418329",
+  "timestamp": "2026-10-01T03:24:14.979149",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-09-30T23:35:21Z"
+      "timestamp": "2026-10-01T03:23:50Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-06",
+    "target_date": "2026-10-07",
     "current_base_price": 4.248,
-    "predicted_price_per_gal": 4.448,
-    "expected_change_dollars": 0.2,
-    "expected_change_percent": 4.71,
+    "predicted_price_per_gal": 4.434,
+    "expected_change_dollars": 0.186,
+    "expected_change_percent": 4.38,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.328,
-    "prediction_upper_95ci": 4.568,
+    "prediction_lower_95ci": 4.314,
+    "prediction_upper_95ci": 4.554,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.288,
-    "day_2_price": 4.276,
-    "day_3_price": 4.312,
-    "day_4_price": 4.396,
-    "day_5_price": 4.448,
+    "day_1_price": 4.285,
+    "day_2_price": 4.31,
+    "day_3_price": 4.351,
+    "day_4_price": 4.397,
+    "day_5_price": 4.434,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.07,
+        "delta_dollars": 0.065,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -57,7 +57,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.05,
+        "delta_dollars": 0.046,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -65,7 +65,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.03,
+        "delta_dollars": 0.028,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -73,7 +73,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.024,
+        "delta_dollars": 0.022,
         "share_pct": 12.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -81,7 +81,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.016,
+        "delta_dollars": 0.015,
         "share_pct": 8.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -96,45 +96,45 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast +$0.200/gal (+4.71%): Driven primarily by Regional Logistics & Hub Delivery (+$0.070/gal), Futures & Commodity Benchmark (+$0.050/gal).",
+      "summary_text": "Port St Lucie FL forecast +$0.186/gal (+4.38%): Driven primarily by Regional Logistics & Hub Delivery (+$0.065/gal), Futures & Commodity Benchmark (+$0.046/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.07,
-          "impact_pct": 1.65,
+          "impact_dollars": 0.065,
+          "impact_pct": 1.53,
           "share_pct": 35.0,
           "direction": "UP"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.05,
-          "impact_pct": 1.18,
+          "impact_dollars": 0.046,
+          "impact_pct": 1.08,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.03,
-          "impact_pct": 0.71,
+          "impact_dollars": 0.028,
+          "impact_pct": 0.66,
           "share_pct": 15.0,
           "direction": "UP"
         },
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.024,
-          "impact_pct": 0.56,
+          "impact_dollars": 0.022,
+          "impact_pct": 0.52,
           "share_pct": 12.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.016,
-          "impact_pct": 0.38,
+          "impact_dollars": 0.015,
+          "impact_pct": 0.35,
           "share_pct": 8.0,
           "direction": "UP"
         },
@@ -153,40 +153,40 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.07,
-      "impact_pct": 1.65,
+      "impact_dollars": 0.065,
+      "impact_pct": 1.53,
       "share_pct": 35.0,
       "direction": "UP"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.05,
-      "impact_pct": 1.18,
+      "impact_dollars": 0.046,
+      "impact_pct": 1.08,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.03,
-      "impact_pct": 0.71,
+      "impact_dollars": 0.028,
+      "impact_pct": 0.66,
       "share_pct": 15.0,
       "direction": "UP"
     },
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.024,
-      "impact_pct": 0.56,
+      "impact_dollars": 0.022,
+      "impact_pct": 0.52,
       "share_pct": 12.0,
       "direction": "UP"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.016,
-      "impact_pct": 0.38,
+      "impact_dollars": 0.015,
+      "impact_pct": 0.35,
       "share_pct": 8.0,
       "direction": "UP"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast +$0.200/gal (+4.71%): Driven primarily by Regional Logistics & Hub Delivery (+$0.070/gal), Futures & Commodity Benchmark (+$0.050/gal).",
+    "summary_text": "Port St Lucie FL forecast +$0.186/gal (+4.38%): Driven primarily by Regional Logistics & Hub Delivery (+$0.065/gal), Futures & Commodity Benchmark (+$0.046/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.07,
+        "delta_dollars": 0.065,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -213,7 +213,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.05,
+        "delta_dollars": 0.046,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -221,7 +221,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.03,
+        "delta_dollars": 0.028,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -229,7 +229,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.024,
+        "delta_dollars": 0.022,
         "share_pct": 12.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -237,7 +237,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.016,
+        "delta_dollars": 0.015,
         "share_pct": 8.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"

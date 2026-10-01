@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-09-30 23:35 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-10-01 03:24 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,11 +10,11 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 148 | `$0.8995/gal` | `$0.9141/gal` | **`+1.59%`** | **`54.73%`** | `43.2%` | 🟢 Optimal |
-| **14-Day Window** | 273 | `$0.8701/gal` | `$0.8966/gal` | **`+2.96%`** | **`54.58%`** | `49.8%` | 🟢 Optimal |
-| **30-Day Window** | 538 | `$0.8758/gal` | `$0.9374/gal` | **`+6.58%`** | **`63.01%`** | `51.1%` | 🟢 Optimal |
-| **90-Day Window** | 1553 | `$0.8985/gal` | `$0.9641/gal` | **`+6.81%`** | **`69.35%`** | `48.3%` | 🟢 Optimal |
-| **All-Time Window** | 5912 | `$0.8793/gal` | `$0.9129/gal` | **`+3.69%`** | **`62.87%`** | `53.1%` | 🟢 Optimal |
+| **7-Day Window** | 152 | `$0.8837/gal` | `$0.8953/gal` | **`+1.30%`** | **`54.61%`** | `42.1%` | 🟢 Optimal |
+| **14-Day Window** | 277 | `$0.8619/gal` | `$0.8866/gal` | **`+2.79%`** | **`54.51%`** | `49.1%` | 🟢 Optimal |
+| **30-Day Window** | 542 | `$0.8715/gal` | `$0.9320/gal` | **`+6.49%`** | **`62.92%`** | `50.7%` | 🟢 Optimal |
+| **90-Day Window** | 1557 | `$0.8970/gal` | `$0.9621/gal` | **`+6.77%`** | **`69.30%`** | `48.2%` | 🟢 Optimal |
+| **All-Time Window** | 5916 | `$0.8789/gal` | `$0.9125/gal` | **`+3.68%`** | **`62.86%`** | `53.1%` | 🟢 Optimal |
 
 ---
 
@@ -47,7 +47,7 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`0`** | Total synthesized reflections: **`0`**
+Total indexed episodic memories in local store: **`1967`** | Total synthesized reflections: **`7`**
 
 ### 📂 Categorized Anomaly Case Studies
 
@@ -63,8 +63,21 @@ _No anomalies logged in this category._
 #### 🏷️ Geopolitical & OPEC Shock (0 case studies)
 _No anomalies logged in this category._
 
-#### 🏷️ Price Discrepancy & General Outliers (0 case studies)
-_No anomalies logged in this category._
+#### 🏷️ Price Discrepancy & General Outliers (7 case studies)
+- **Oakland_CA Price Discrepancy ($+2.7083/gal)** (`Oakland_CA` | `2026-09-28`)
+  - **Root Cause:** Model overestimated 5-day price by +$2.7083/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-05-01 (Oakland_CA)'.
+  - **Historical Analogy:** Similar to historical Oakland_CA turnaround shocks where market pricing normalized post-event.
+  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
+
+- **BayArea_CA Price Discrepancy ($+2.7791/gal)** (`BayArea_CA` | `2026-09-28`)
+  - **Root Cause:** Model overestimated 5-day price by +$2.7791/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-03-06 (BayArea_CA)'.
+  - **Historical Analogy:** Similar to historical BayArea_CA turnaround shocks where market pricing normalized post-event.
+  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
+
+- **Oakland_CA Price Discrepancy ($+2.7791/gal)** (`Oakland_CA` | `2026-09-28`)
+  - **Root Cause:** Model overestimated 5-day price by +$2.7791/gal. Qualitative news shock or supply disruption premium decayed slower than physical market clearing capacity. Associated context: 'Historical shock record on 2026-03-06 (Oakland_CA)'.
+  - **Historical Analogy:** Similar to historical Oakland_CA turnaround shocks where market pricing normalized post-event.
+  - **Calibration Suggestion:** `Recommend shortening news decay half-life from t1/2 = 4.5d to 3.0d for transient outages.`
 
 ---
 
