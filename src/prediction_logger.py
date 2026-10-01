@@ -1038,7 +1038,15 @@ def backfill_actual_prices_and_evaluate(
                     candidate_df = eval_df.sort_values(
                         by=['forecast_target_date', 'log_timestamp'],
                         ascending=[False, False]
-                    ).head(10)
+                    )
+
+                # Strictly gate memory retention to live prospective predictions (Issue #591)
+                if not candidate_df.empty:
+                    if 'is_retroactive_backtest' in candidate_df.columns:
+                        candidate_df = candidate_df[candidate_df['is_retroactive_backtest'] == False]
+                    if 'run_type' in candidate_df.columns:
+                        candidate_df = candidate_df[candidate_df['run_type'] == 'LIVE_PROSPECTIVE']
+                    candidate_df = candidate_df.head(5)
                 
                 for _, row in candidate_df.iterrows():
                     err = float(row.get('error_dollars', 0.0))
