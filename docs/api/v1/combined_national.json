@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-01T20:45:15.819100",
+  "timestamp": "2026-10-01T20:56:35.902148",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -17,8 +17,8 @@
       "requested_granularity": "NATIONAL",
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-10-01T20:40:12Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-10-01T20:53:22Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
