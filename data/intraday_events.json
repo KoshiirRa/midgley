@@ -4113,5 +4113,25 @@
       "overall_price_pressure": 0.18
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-01T14:30:46.709738",
+    "headline": "Modi, Trump discuss trade, defence and energy amid India-US tensions over Russian oil tariffs - Pioneer Daily",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPOFo4dmlIZ29aZ1JZbmtid0lIdWNKdXl6Z19YaVNlTjRsOGdEb3FoWFI2U2NSLWlKVW1oN2dtc0trUWFSRkNiTHR1NmFnNThRc2VFeHlpQ2RrVXh1bDNLeHBzTEVreGtxTEpyVTllMmlSbV9MUy1hTjZVWXg0WUZvdmxyWGJfanBzTEpqYUZrOFVlQQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPOFo4dmlIZ29aZ1JZbmtid0lIdWNKdXl6Z19YaVNlTjRsOGdEb3FoWFI2U2NSLWlKVW1oN2dtc0trUWFSRkNiTHR1NmFnNThRc2VFeHlpQ2RrVXh1bDNLeHBzTEVreGtxTEpyVTllMmlSbV9MUy1hTjZVWXg0WUZvdmxyWGJfanBzTEpqYUZrOFVlQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxPOFo4dmlIZ29aZ1JZbmtid0lIdWNKdXl6Z19YaVNlTjRsOGdEb3FoWFI2U2NSLWlKVW1oN2dtc0trUWFSRkNiTHR1NmFnNThRc2VFeHlpQ2RrVXh1bDNLeHBzTEVreGtxTEpyVTllMmlSbV9MUy1hTjZVWXg0WUZvdmxyWGJfanBzTEpqYUZrOFVlQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
