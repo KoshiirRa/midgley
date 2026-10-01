@@ -944,6 +944,29 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   3. **Pull Request CI Test Gating (Issue #439):** All pull requests and pushes to `main` and `dev` MUST trigger `.github/workflows/ci.yml` running static lint analysis (`ruff check .`) and regression test suites (`pytest -v tests/`) across Python 3.11, 3.12, and 3.13.
   4. **Data Concurrency & Non-Destructive Git Push (Issue #439):** All scheduled workflows that persist data or build artifacts (`gas_price_forecast.yml`, `intraday_event_monitor.yml`, `weekly_model_review.yml`) MUST execute within the shared concurrency group `production-data-deployment` without `--force` push flags, using rebase and retry mechanisms to prevent lost updates.
 
+---
+
+### 29. Core Performance & Execution Efficiency Invariants (Zero-Regression Protocol)
+
+* **Role:** Enforces strict execution time budgets, memory bounds, and computational invariants across all data connectors, feature engineering pipelines, model training algorithms, and prediction logging routines to guarantee that daily and weekly pipeline runs complete well within target execution windows ($\le 5\text{–}10$ minutes in CI/CD).
+* **Mandatory Architectural Invariants:**
+  1. **Multi-Horizon Feature Extraction Invariant (Single-Pass Ingestion & Feature Engineering):**
+     - Base market time-series, qualitative news/event extractions, NOAA weather outlooks, and alternative physical data feeds MUST be scraped, ingested, and transformed into the feature matrix **exactly once per region per run** at the top level of the regional execution runner.
+     - Multi-horizon model training routines (e.g. `train_multi_horizon_models()` across discrete horizons $h \in [1..5]$ in `src/models.py`) MUST NEVER re-scrape external data, re-query APIs, or re-compute rolling feature sets inside inner horizon iteration loops. All horizons must consume the pre-computed base feature DataFrame (`features_df`) and construct horizon targets strictly via index shifting.
+  2. **Backfill vs. Prospective Logging Segregation Invariant (Single-Row Live Logging & Instant Skip):**
+     - Historical backfill generation (`backfill_new_region_history()` in `src/prediction_logger.py`) MUST ONLY execute when initializing a brand-new region or deploying a new model version tag where historical out-of-sample backtests do not already exist.
+     - `backfill_new_region_history()` MUST enforce an instant fast-path check ($< 0.001\text{s}$) querying existing `(region, model_version, forecast_horizon_days)` tuples in the prediction ledger, immediately skipping execution if historical records are present.
+     - Scheduled daily and weekly production pipelines MUST strictly log only today's prospective 1-row forecast (`h_today_df` via `log_predictions()`), NEVER re-logging the full historical test split (`h_test_df`) during standard forecast passes.
+     - Model metrics evaluations (`evaluate_and_log_metrics()`) MUST execute exactly once per region at pipeline conclusion rather than repeating inside discrete horizon iterations.
+  3. **Episodic Memory Retention & Sync Isolation Invariant (Decoupled Memory Operations):**
+     - In-line episodic memory retention (`AgentMemoryManager.retain()`) and precedent retrieval (`recall()`) during live forecasting or backfilling MUST NEVER invoke bulk remote synchronization routines (`sync_pending_memories()`). Remote syncs are strictly isolated to dedicated background cron tasks or asynchronous exit handlers.
+     - Anomaly detection and memory retention in `src/prediction_logger.py` MUST strictly filter out historical and retroactive backtest entries (`is_retroactive_backtest == False` and `~run_type.str.contains("BACKTEST")`), preventing synthetic backtest records from flooding episodic memory banks.
+     - Memory retention sweeps MUST be strictly throttled to a maximum batch budget ($\le 5$ anomaly candidates per run) sorted by descending maturity freshness.
+  4. **Fail-Fast Database & API Circuit Breaking Invariant (Hard Timeouts & Safe Fallbacks):**
+     - All external data connectors (EIA, FRED, NOAA, USGS, Finlight, Firecrawl, Headline Arena) and distributed database connections (Cloudflare D1, Turso libSQL, Supabase pgvector) MUST enforce hard connection and read timeouts ($\le 2.0\text{s}$ to $5.0\text{s}$).
+     - Upon timeout or failure, connectors MUST immediately trip circuit breakers and transition to deterministic local caches or offline fallback lexicons without retrying in tight synchronous loops, blocking CI/CD runners, or propagating cascading latency delays.
+
+
 
 
 
