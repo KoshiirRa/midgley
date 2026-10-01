@@ -1100,6 +1100,21 @@ def backfill_new_region_history(
             model_version = get_model_version().replace(" ", "-")
         except Exception:
             model_version = "v1.6-Ipatieff"
+
+    # Fast skip if history has already been backfilled in ledger (Issue #591)
+    if os.path.exists(HISTORY_CSV_PATH):
+        try:
+            hist_df = read_prediction_history(HISTORY_CSV_PATH)
+            if not hist_df.empty and 'region' in hist_df.columns and 'model_version' in hist_df.columns:
+                mask = (hist_df['region'] == region) & (hist_df['model_version'] == model_version)
+                if 'forecast_horizon_days' in hist_df.columns:
+                    mask = mask & (hist_df['forecast_horizon_days'].fillna(5).astype(int) == forecast_horizon_days)
+                if mask.sum() >= 30:
+                    logger.debug(f"History already backfilled for {region} ({model_version}, {forecast_horizon_days}d). Skipping redundant backfill.")
+                    return 0
+        except Exception as e:
+            logger.debug(f"Notice checking existing history in backfill_new_region_history: {e}")
+
     dates_arr = getattr(test_dates, 'values', test_dates)
     base_arr = getattr(base_prices, 'values', base_prices)
     pred_arr = getattr(predicted_prices, 'values', predicted_prices)

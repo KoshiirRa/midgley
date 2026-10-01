@@ -136,18 +136,33 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
             'forecast_horizon_days': h
         })
         
-        # Append latest live real-time forecast row
-        live_pred = float(h_res['live_pred_price'])
-        live_quant_pred = float(h_res.get('live_pred_quant_price', live_pred))
-        h_today_df = pd.DataFrame([{
-            'date': last_date,
-            'current_price': current_live_price,
-            'predicted_5d_price': live_pred,
-            'quant_baseline_5d_price': live_quant_pred,
-            'forecast_horizon_days': h
-        }])
-        h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
-        log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
+        # Check if historical backtest is already recorded in history
+        need_backfill = True
+        if os.path.exists("data/prediction_history.csv"):
+            try:
+                from src.prediction_logger import read_prediction_history
+                ph = read_prediction_history("data/prediction_history.csv")
+                if not ph.empty and 'region' in ph.columns and 'model_version' in ph.columns:
+                    m = (ph['region'] == "National") & (ph['model_version'] == national_version)
+                    if 'forecast_horizon_days' in ph.columns:
+                        m = m & (ph['forecast_horizon_days'].fillna(5).astype(int) == h)
+                    if m.sum() >= 30:
+                        need_backfill = False
+            except Exception:
+                pass
+
+        if need_backfill:
+            h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
+            log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
+        else:
+            log_predictions(
+                h_today_df,
+                region="National",
+                model_version=national_version,
+                forecast_horizon_days=h,
+                run_type="LIVE_PROSPECTIVE",
+                is_retroactive_backtest=False
+            )
 
     backfill_actual_prices_and_evaluate(target_region="National")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions to store (data/prediction_history.csv)")
