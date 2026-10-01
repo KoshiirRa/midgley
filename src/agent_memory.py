@@ -489,9 +489,9 @@ class AgentMemoryManager:
             
             eval_df = df[df['actual_5d_price'].notna()].copy()
             if 'is_retroactive_backtest' in eval_df.columns:
-                eval_df = eval_df[eval_df['is_retroactive_backtest'] == False]
+                eval_df = eval_df[eval_df['is_retroactive_backtest'].fillna(False).astype(bool) == False]
             if 'run_type' in eval_df.columns:
-                eval_df = eval_df[eval_df['run_type'] == 'LIVE_PROSPECTIVE']
+                eval_df = eval_df[~eval_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)]
             if 'forecast_target_date' in eval_df.columns:
                 eval_df = eval_df[eval_df['forecast_target_date'].astype(str) >= str(start_date)]
             

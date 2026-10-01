@@ -1040,12 +1040,12 @@ def backfill_actual_prices_and_evaluate(
                         ascending=[False, False]
                     )
 
-                # Strictly gate memory retention to live prospective predictions (Issue #591)
+                # Exclude retrospective backtest rows from live episodic memory retention (Issue #591)
                 if not candidate_df.empty:
                     if 'is_retroactive_backtest' in candidate_df.columns:
-                        candidate_df = candidate_df[candidate_df['is_retroactive_backtest'] == False]
+                        candidate_df = candidate_df[candidate_df['is_retroactive_backtest'].fillna(False).astype(bool) == False]
                     if 'run_type' in candidate_df.columns:
-                        candidate_df = candidate_df[candidate_df['run_type'] == 'LIVE_PROSPECTIVE']
+                        candidate_df = candidate_df[~candidate_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)]
                     candidate_df = candidate_df.head(5)
                 
                 for _, row in candidate_df.iterrows():
