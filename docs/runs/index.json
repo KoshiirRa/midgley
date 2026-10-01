@@ -1,5 +1,89 @@
 [
   {
+    "run_id": "2026-10-01_20-07-04",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-59",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-53",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-47",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-41",
+    "timestamp": "2026-10-01 20:06 UTC",
+    "run_type": "DAILY_BATCH",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 20:06 UTC)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-36",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-30",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-25",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-18",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-13",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-07",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-06-01",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-05-56",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
+    "run_id": "2026-10-01_20-05-38",
+    "timestamp": "2026-10-01 18:15:20",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 18:15:20)"
+  },
+  {
     "run_id": "2026-10-01_19-30-34",
     "timestamp": "2026-10-01 18:15:20",
     "run_type": "LIVE_PROSPECTIVE",
@@ -511,90 +595,6 @@
   },
   {
     "run_id": "2026-09-29_20-41-03",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-40-47",
-    "timestamp": "2026-09-29 20:40 UTC",
-    "run_type": "DAILY_BATCH",
-    "trigger": "Daily Forecast Batch Execution (2026-09-29 20:40 UTC)"
-  },
-  {
-    "run_id": "2026-09-29_20-40-32",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-40-15",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-39-59",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-39-42",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-39-26",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-39-10",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-38-53",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-38-37",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_20-38-18",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_18-29-12",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_18-29-02",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_18-28-52",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_18-28-43",
     "timestamp": "2026-09-29 15:30:26",
     "run_type": "INTRADAY_REVISION",
     "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
