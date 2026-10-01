@@ -57,7 +57,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.024,
+        "delta_dollars": 0.04,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.01,
+        "delta_dollars": 0.016,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -81,7 +81,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.005,
+        "delta_dollars": 0.008,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -89,7 +89,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.007,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -109,8 +109,8 @@
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.024,
-          "impact_pct": 0.59,
+          "impact_dollars": 0.04,
+          "impact_pct": 0.98,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -125,24 +125,24 @@
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.01,
-          "impact_pct": 0.25,
+          "impact_dollars": 0.016,
+          "impact_pct": 0.39,
           "share_pct": 10.0,
           "direction": "UP"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.005,
-          "impact_pct": 0.12,
+          "impact_dollars": 0.008,
+          "impact_pct": 0.2,
           "share_pct": 5.0,
           "direction": "UP"
         },
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.004,
-          "impact_pct": 0.1,
+          "impact_dollars": 0.007,
+          "impact_pct": 0.17,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -161,8 +161,8 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.024,
-      "impact_pct": 0.59,
+      "impact_dollars": 0.04,
+      "impact_pct": 0.98,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -177,24 +177,24 @@
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.01,
-      "impact_pct": 0.25,
+      "impact_dollars": 0.016,
+      "impact_pct": 0.39,
       "share_pct": 10.0,
       "direction": "UP"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.005,
-      "impact_pct": 0.12,
+      "impact_dollars": 0.008,
+      "impact_pct": 0.2,
       "share_pct": 5.0,
       "direction": "UP"
     },
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.004,
-      "impact_pct": 0.1,
+      "impact_dollars": 0.007,
+      "impact_pct": 0.17,
       "share_pct": 5.0,
       "direction": "UP"
     }
@@ -213,7 +213,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.024,
+        "delta_dollars": 0.04,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.01,
+        "delta_dollars": 0.016,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -237,7 +237,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.005,
+        "delta_dollars": 0.008,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.007,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"

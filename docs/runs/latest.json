@@ -2,7 +2,7 @@
   "run_id": "2026-10-01_16-15-25",
   "log_timestamp": "2026-10-01 08:31:50",
   "run_type": "LIVE_PROSPECTIVE",
-  "primary_trigger": "Daily Forecast Batch Execution (2026-10-01 08:31:50)",
+  "primary_trigger": "Daily Forecast Batch Execution (2026-10-01 16:13:46)",
   "headline_items": [
     {
       "headline": "NYMEX RBOB Futures & WTI Crude Spot Energy Commodity Benchmark Refresh",
@@ -43,73 +43,73 @@
       "key": "National",
       "name": "National Wholesale",
       "base_price": 3.4378,
-      "predicted_price": 3.5216,
-      "delta": -0.3852000000000002,
-      "pct_change": -11.204840304846128
+      "predicted_price": 3.5669,
+      "delta": -0.19989999999999997,
+      "pct_change": -5.81476525685031
     },
     {
       "key": "Tulsa_OK",
       "name": "Tulsa, OK Retail",
-      "base_price": 4.09,
-      "predicted_price": 4.1451,
-      "delta": 0.08410000000000029,
-      "pct_change": 2.056234718826413
+      "base_price": 4.042,
+      "predicted_price": 4.1046,
+      "delta": 0.07299999999999951,
+      "pct_change": 1.8060366155368508
     },
     {
       "key": "Newark_DE",
       "name": "Newark, DE Retail",
-      "base_price": 4.303,
-      "predicted_price": 4.4069,
-      "delta": -0.3412999999999995,
-      "pct_change": -7.931675575180096
+      "base_price": 4.288,
+      "predicted_price": 4.4442,
+      "delta": -0.18179999999999996,
+      "pct_change": -4.239738805970148
     },
     {
       "key": "Cincinnati_OH",
       "name": "Cincinnati, OH/KY",
-      "base_price": 4.209,
-      "predicted_price": 4.3104,
-      "delta": -0.33860000000000046,
-      "pct_change": -8.044666191494429
+      "base_price": 4.173,
+      "predicted_price": 4.332,
+      "delta": -0.1391,
+      "pct_change": -3.3333333333333335
     },
     {
       "key": "Greenville_NC",
       "name": "Greenville, NC Retail",
       "base_price": 4.071,
-      "predicted_price": 4.1657,
-      "delta": -0.27309999999999945,
-      "pct_change": -6.7084254482927905
+      "predicted_price": 4.2302,
+      "delta": -0.1719999999999997,
+      "pct_change": -4.225006140997291
     },
     {
       "key": "Charlotte_NC",
       "name": "Charlotte, NC Retail",
       "base_price": 4.105,
-      "predicted_price": 4.2022,
-      "delta": -0.3102999999999998,
-      "pct_change": -7.559074299634587
+      "predicted_price": 4.2311,
+      "delta": -0.22750000000000004,
+      "pct_change": -5.542021924482339
     },
     {
       "key": "Port_St_Lucie_FL",
       "name": "Port St. Lucie, FL Retail",
       "base_price": 4.199,
-      "predicted_price": 4.2889,
-      "delta": -0.13030000000000008,
-      "pct_change": -3.103119790426294
+      "predicted_price": 4.3448,
+      "delta": -0.14069999999999983,
+      "pct_change": -3.3507978090021395
     },
     {
       "key": "Oakland_CA",
       "name": "Oakland, CA Retail",
       "base_price": 6.464,
-      "predicted_price": 6.6199,
-      "delta": -0.4308999999999994,
-      "pct_change": -6.666150990099
+      "predicted_price": 6.7135,
+      "delta": -0.13640000000000008,
+      "pct_change": -2.1101485148514865
     },
     {
       "key": "BayArea_CA",
       "name": "SF Bay Area Region",
       "base_price": 6.599,
-      "predicted_price": 6.7581,
-      "delta": -0.29269999999999996,
-      "pct_change": -4.435520533414153
+      "predicted_price": 6.8537,
+      "delta": 0.0038000000000000256,
+      "pct_change": 0.05758448249734847
     }
   ],
   "spc_synopsis": {

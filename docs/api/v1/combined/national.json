@@ -89,7 +89,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.004,
         "share_pct": 2.5,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -141,8 +141,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.05,
+          "impact_dollars": 0.004,
+          "impact_pct": 0.09,
           "share_pct": 2.5,
           "direction": "UP"
         }
@@ -193,8 +193,8 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.002,
-      "impact_pct": 0.05,
+      "impact_dollars": 0.004,
+      "impact_pct": 0.09,
       "share_pct": 2.5,
       "direction": "UP"
     }
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.004,
         "share_pct": 2.5,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"

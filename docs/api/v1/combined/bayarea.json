@@ -81,7 +81,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.008,
+        "delta_dollars": 0.013,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -89,7 +89,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.007,
+        "delta_dollars": 0.012,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -133,16 +133,16 @@
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.008,
-          "impact_pct": 0.12,
+          "impact_dollars": 0.013,
+          "impact_pct": 0.2,
           "share_pct": 5.0,
           "direction": "UP"
         },
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.007,
-          "impact_pct": 0.11,
+          "impact_dollars": 0.012,
+          "impact_pct": 0.18,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -185,16 +185,16 @@
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.008,
-      "impact_pct": 0.12,
+      "impact_dollars": 0.013,
+      "impact_pct": 0.2,
       "share_pct": 5.0,
       "direction": "UP"
     },
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.007,
-      "impact_pct": 0.11,
+      "impact_dollars": 0.012,
+      "impact_pct": 0.18,
       "share_pct": 5.0,
       "direction": "UP"
     }
@@ -237,7 +237,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.008,
+        "delta_dollars": 0.013,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -245,7 +245,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.007,
+        "delta_dollars": 0.012,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
