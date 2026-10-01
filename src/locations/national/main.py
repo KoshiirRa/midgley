@@ -151,6 +151,18 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
             except Exception:
                 pass
 
+        # Construct today's live prediction row
+        live_pred = float(h_res['live_pred_price'])
+        live_quant_pred = float(h_res.get('live_pred_quant_price', live_pred))
+        h_today_df = pd.DataFrame([{
+            'date': last_date,
+            'current_price': current_live_price,
+            'predicted_5d_price': live_pred,
+            'quant_baseline_5d_price': live_quant_pred,
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
+        }])
+
         if need_backfill:
             h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
             log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
