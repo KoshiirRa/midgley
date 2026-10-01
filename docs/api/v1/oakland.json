@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-01T03:24:12.794694",
+  "timestamp": "2026-10-01T12:44:12.943530",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.448,
+    "current_price_per_gal": 6.464,
     "source": "AAA Web Scraper (Oakland, CA)",
     "provenance": {
       "source": "AAA Web Scraper (Oakland, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-01T03:23:50Z"
+      "timestamp": "2026-10-01T12:43:56Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-07",
-    "current_base_price": 6.448,
-    "predicted_price_per_gal": 6.598,
+    "current_base_price": 6.464,
+    "predicted_price_per_gal": 6.614,
     "expected_change_dollars": 0.15,
-    "expected_change_percent": 2.33,
+    "expected_change_percent": 2.32,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 6.405,
-    "prediction_upper_95ci": 6.791,
+    "prediction_lower_95ci": 6.421,
+    "prediction_upper_95ci": 6.807,
     "calibration_method": "conformal",
     "calibration_sample_size": 237,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.478,
-    "day_2_price": 6.448,
-    "day_3_price": 6.457,
-    "day_4_price": 6.433,
-    "day_5_price": 6.598,
+    "day_1_price": 6.494,
+    "day_2_price": 6.464,
+    "day_3_price": 6.473,
+    "day_4_price": 6.449,
+    "day_5_price": 6.614,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Oakland CA forecast +$0.150/gal (+2.33%): Driven primarily by Tax & Regulatory Overhead (+$0.052/gal), Refining Yield & Crack Spread (+$0.037/gal).",
+      "summary_text": "Oakland CA forecast +$0.150/gal (+2.32%): Driven primarily by Tax & Regulatory Overhead (+$0.052/gal), Refining Yield & Crack Spread (+$0.037/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.052,
-          "impact_pct": 0.81,
+          "impact_pct": 0.8,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.03,
-          "impact_pct": 0.47,
+          "impact_pct": 0.46,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.052,
-      "impact_pct": 0.81,
+      "impact_pct": 0.8,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.03,
-      "impact_pct": 0.47,
+      "impact_pct": 0.46,
       "share_pct": 20.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Oakland CA forecast +$0.150/gal (+2.33%): Driven primarily by Tax & Regulatory Overhead (+$0.052/gal), Refining Yield & Crack Spread (+$0.037/gal).",
+    "summary_text": "Oakland CA forecast +$0.150/gal (+2.32%): Driven primarily by Tax & Regulatory Overhead (+$0.052/gal), Refining Yield & Crack Spread (+$0.037/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

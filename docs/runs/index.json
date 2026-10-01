@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-10-01_12-43-58",
+    "timestamp": "2026-10-01 03:23:34",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-01 03:23:34)"
+  },
+  {
     "run_id": "2026-10-01_03-23-52",
     "timestamp": "2026-10-01 03:23:34",
     "run_type": "LIVE_PROSPECTIVE",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-29_13-54-00",
-    "timestamp": "2026-09-29 01:37:03",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "China, US agree to tariff cuts on $60 billion of goods inclu..."
-  },
-  {
-    "run_id": "2026-09-29_01-37-12",
     "timestamp": "2026-09-29 01:37:03",
     "run_type": "INTRADAY_REVISION",
     "trigger": "China, US agree to tariff cuts on $60 billion of goods inclu..."
