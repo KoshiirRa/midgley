@@ -10,6 +10,7 @@ with open(log_file, "r", encoding="utf-8", errors="ignore") as f:
 prev_dt = None
 first_dt = None
 last_dt = None
+step_name = "Init"
 
 for line in lines:
     m = re.search(r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})\.(\d+)Z", line)
@@ -21,18 +22,15 @@ for line in lines:
         first_dt = dt
     last_dt = dt
 
-    if (
-        "##[group]Run " in line
-        or "STEP " in line
-        or "EXECUTION COMPLETE" in line
-        or "Running pytest" in line
-        or "Starting " in line
-        or "Finished " in line
-        or "Job duration" in line
-    ):
-        delta = (dt - prev_dt).total_seconds() if prev_dt else 0
-        prev_dt = dt
-        print(f"[{dt_str}] (+{delta:6.1f}s) {line.strip()[:120]}")
+    if "STEP " in line:
+        step_name = line.strip()[:80]
+        print(f"\n>>> [{dt_str}] {step_name}")
+
+    if prev_dt:
+        delta = (dt - prev_dt).total_seconds()
+        if delta >= 10.0:
+            print(f"  [GAP {delta:6.1f}s] [{dt_str}] ({step_name}) {line.strip()[:140]}")
+    prev_dt = dt
 
 if first_dt and last_dt:
     dur_min = (last_dt - first_dt).total_seconds() / 60.0
