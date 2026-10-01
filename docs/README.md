@@ -15,11 +15,11 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-01 17:33 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-01 18:18 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.438`/gal | **`$3.595`/gal** | **UP 📈** | `2026-10-07` | `v1.6-Ipatieff-National-Ridge` |
+| **National Wholesale (RBOB)** | `$3.438`/gal | **`$3.622`/gal** | **UP 📈** | `2026-10-07` | `v1.6-Ipatieff-National-Ridge` |
 | **Tulsa, OK Metro Retail** | `$4.042`/gal | **`$4.156`/gal** | **UP 📈** | `2026-10-07` | `v1.6-Ipatieff-Tulsa-Ridge` |
 | **Newark, DE Metro Retail** | `$4.288`/gal | **`$4.511`/gal** | **UP 📈** | `2026-10-07` | `v1.6-Ipatieff-Newark-Ridge` |
 | **Cincinnati, OH Retail** | `$4.173`/gal | **`$4.386`/gal** | **UP 📈** | `2026-10-07` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
