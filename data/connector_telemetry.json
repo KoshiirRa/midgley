@@ -1,818 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-10-01 12:44:09",
+  "last_updated": "2026-10-01 16:14:29",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-09-30 19:44:34",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.04,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:36",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 121.41,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:38",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 315.9,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:40",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 109.73,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:42",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 271.14,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:44",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.83,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:46",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 366.15,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:48",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 123.64,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:50",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.21,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:52",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.37,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:54",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 110.89,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:55",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 270.64,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:57",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 252.3,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:44:59",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 110.92,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:01",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 111.47,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:02",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 111.05,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:04",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 174.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:06",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.42,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:07",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 115.68,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:09",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.66,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:11",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 115.25,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:13",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 294.96,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:16",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 109.57,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:18",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.45,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:20",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 110.93,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:22",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 303.68,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:24",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 119.33,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:26",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 108.44,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:28",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 300.74,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:30",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 114.08,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:31",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 114.18,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:33",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 114.94,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:34",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 115.77,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:36",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 118.09,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:38",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 311.06,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:40",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 117.03,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:42",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 109.15,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:44",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 120.4,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:46",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 115.52,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:48",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.77,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:50",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 125.19,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:52",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 115.13,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:54",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 117.87,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:56",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 301.3,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:45:58",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 305.4,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:00",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 118.28,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:01",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 114.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:03",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.06,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:05",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 118.41,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:07",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 121.42,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:10",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 114.7,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:11",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 114.35,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:13",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 121.1,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:15",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 119.47,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:17",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 117.46,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:19",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 298.81,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:22",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.74,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:24",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 297.94,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:26",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.52,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:27",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 109.9,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:29",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 295.53,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:31",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 116.91,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:33",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 115.89,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:34",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.72,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:36",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 303.64,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:38",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 306.7,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:40",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 594.62,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:42",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.18,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:43",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 126.78,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:45",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.6,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:47",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 118.94,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:48",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 116.22,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:50",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 298.79,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:52",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 302.27,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:54",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 108.8,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:55",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 116.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:57",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 107.76,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:46:59",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.47,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:47:00",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 117.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:47:02",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 118.35,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:47:04",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 111.71,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-09-30 19:47:06",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9192,816 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Stats: 328 docs, 203 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-10-01 14:44:45",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5025.8,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:45",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 23.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:46",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 161.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:51",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5026.69,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:51",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 15.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:51",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 129.34,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:56",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5025.08,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:56",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 8.51,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:44:57",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 128.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:45:05",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 5025.73,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:45:05",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 16.46,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 14:45:06",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 127.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:19",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5024.67,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:19",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 38.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:20",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 244.67,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:25",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5023.53,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:25",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 15.34,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:25",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 124.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:31",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5021.78,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:31",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 10.81,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:31",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 128.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:37",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 5025.45,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:37",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 12.32,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:02:37",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 127.61,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:12",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5023.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:12",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 18.64,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:12",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 158.8,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:17",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5030.65,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:17",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 17.73,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:17",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 136.38,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:23",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5024.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:23",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 11.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:11:23",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 192.23,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:21",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5039.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:21",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 21.18,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:21",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 157.58,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:26",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5037.38,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:26",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 20.37,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:26",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 132.91,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:32",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5036.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:32",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 27.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:32",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 127.26,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:40",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 5037.38,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:40",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 16.45,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:28:40",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 124.75,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:19",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5024.15,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:19",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 20.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:19",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 136.55,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:25",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5024.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:25",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 28.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:25",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 133.6,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:30",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5030.97,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:30",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 11.26,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:38:30",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 135.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:40",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5025.17,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:40",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 17.12,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:40",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 137.36,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:45",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5023.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:45",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 28.21,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:46",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 153.18,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:51",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5025.08,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:51",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 17.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:51",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 151.94,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:57",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 5023.25,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:57",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 14.12,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 15:47:57",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 124.69,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:04:54",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5021.16,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:04:54",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 22.97,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:04:55",
+      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
+      "target": "Iran tanker OR Strait of Hormuz when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 144.92,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:00",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5025.03,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:00",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 14.71,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:00",
+      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
+      "target": "Red Sea tanker OR Houthi Suez when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 131.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:06",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 5021.14,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:06",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 20.89,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:06",
+      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
+      "target": "Venezuela oil sanction OR PDVSA when:2d",
+      "status": "FAILOVER",
+      "latency_ms": 127.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 5023.97,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier rss_syndication yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 22.06,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier public_proxy yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:05:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "FAILOVER",
+      "latency_ms": 126.32,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Tier search_fallback yielded 0 items; cascading..."
+    },
+    {
+      "timestamp": "2026-10-01 16:14:19",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 342.17,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 328 docs, 203 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-10-01 16:14:28",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1580.16,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-10-01 16:14:29",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 437.82,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
     }
   ]
 }
