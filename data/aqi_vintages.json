@@ -2217,7 +2217,7 @@
     }
   },
   {
-    "as_of": "2026-10-01T17:32:26.466068+00:00",
+    "as_of": "2026-10-01T18:14:35.896353+00:00",
     "valid_date": "2026-10-01",
     "entity_key": "macro_composite",
     "zip_code": null,
@@ -2227,7 +2227,7 @@
     "is_unplanned_outage": false,
     "data": {
       "status": "SUCCESS",
-      "as_of": "2026-10-01T17:32:26.466068+00:00",
+      "as_of": "2026-10-01T18:14:35.896353+00:00",
       "indices": {
         "bay_area_outage_risk_index": 0.0,
         "tulsa_outage_risk_index": 0.0,
