@@ -154,41 +154,37 @@ class ExecutiveSocialFeedConnector:
         if cached and "posts" in cached:
             return cached["posts"]
 
-        if feed_urls is None:
-            feed_urls = [
-                "https://truthsocial.com/users/realDonaldTrump/rss",
-                "https://nitter.net/realDonaldTrump/rss"
-            ]
-
         live_posts = []
-        try:
-            import feedparser
-        except ImportError:
-            feedparser = None
 
-        if feedparser:
-            for url in feed_urls:
-                try:
-                    feed = feedparser.parse(url)
-                    for entry in feed.entries[:10]:
-                        raw_text = entry.get("summary", "") or entry.get("title", "")
-                        # Basic HTML tag strip
-                        clean_text = raw_text.replace("<p>", "").replace("</p>", "").strip()
+        # Tier 1: Truth Social Public Mastodon-Compatible REST API
+        try:
+            import urllib.request
+            import re
+            ts_url = "https://truthsocial.com/api/v1/accounts/107780257626128497/statuses?exclude_replies=true&limit=20"
+            req = urllib.request.Request(
+                ts_url,
+                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 (MidgleyBot/2.0)"}
+            )
+            with urllib.request.urlopen(req, timeout=5.0) as resp:
+                if resp.status == 200:
+                    raw_data = json.loads(resp.read().decode("utf-8"))
+                    for status in raw_data:
+                        raw_content = status.get("content", "")
+                        clean_text = re.sub(r"<[^>]+>", " ", raw_content).strip()
+                        clean_text = re.sub(r"\s+", " ", clean_text)
                         text_lower = clean_text.lower()
-                        
-                        # Filter for energy relevance
                         if any(kw in text_lower for kw in self.energy_keywords):
+                            created_at = status.get("created_at")
                             pub_dt = datetime.now()
-                            if hasattr(entry, "published_parsed") and entry.published_parsed:
+                            if created_at:
                                 try:
-                                    pub_dt = datetime(*entry.published_parsed[:6])
+                                    pub_dt = datetime.fromisoformat(created_at.replace("Z", "+00:00")).astimezone().replace(tzinfo=None)
                                 except Exception:
                                     pass
-
                             is_wknd = is_timestamp_weekend(pub_dt)
                             post_obj = {
                                 "date": pub_dt.strftime("%Y-%m-%d %H:%M:%S"),
-                                "platform": "Truth Social" if "truthsocial" in url else "Twitter/X",
+                                "platform": "Truth Social",
                                 "post_text": clean_text,
                                 "target": "Energy_Market",
                                 "sentiment_type": "Live_Executive_Commentary",
@@ -197,12 +193,49 @@ class ExecutiveSocialFeedConnector:
                                 "actual_1d_rbob_return_pct": 0.0
                             }
                             live_posts.append(post_obj)
-                            # Persist bitemporal record
                             self.save_executive_social_vintage_record(post_obj)
-                except Exception as e:
-                    logger.debug(f"Could not poll live social feed '{url}': {e}")
+        except Exception as e:
+            logger.debug(f"Direct Truth Social REST API polling skipped: {e}")
 
-        # If direct RSS parsing yields 0 items, leverage Agent-Reach Reachability Cascade Router (Issue #308)
+        # Optional supplemental feed URLs if provided
+        if feed_urls:
+            try:
+                import feedparser
+            except ImportError:
+                feedparser = None
+
+            if feedparser:
+                for url in feed_urls:
+                    try:
+                        feed = feedparser.parse(url)
+                        for entry in feed.entries[:10]:
+                            raw_text = entry.get("summary", "") or entry.get("title", "")
+                            clean_text = raw_text.replace("<p>", "").replace("</p>", "").strip()
+                            text_lower = clean_text.lower()
+                            if any(kw in text_lower for kw in self.energy_keywords):
+                                pub_dt = datetime.now()
+                                if hasattr(entry, "published_parsed") and entry.published_parsed:
+                                    try:
+                                        pub_dt = datetime(*entry.published_parsed[:6])
+                                    except Exception:
+                                        pass
+                                is_wknd = is_timestamp_weekend(pub_dt)
+                                post_obj = {
+                                    "date": pub_dt.strftime("%Y-%m-%d %H:%M:%S"),
+                                    "platform": "Truth Social" if "truthsocial" in url else "Twitter/X",
+                                    "post_text": clean_text,
+                                    "target": "Energy_Market",
+                                    "sentiment_type": "Live_Executive_Commentary",
+                                    "is_weekend": is_wknd,
+                                    "actual_1d_crude_return_pct": 0.0,
+                                    "actual_1d_rbob_return_pct": 0.0
+                                }
+                                live_posts.append(post_obj)
+                                self.save_executive_social_vintage_record(post_obj)
+                    except Exception as e:
+                        logger.debug(f"Could not poll supplemental feed '{url}': {e}")
+
+        # If direct parsing yields 0 items, leverage Agent-Reach Reachability Cascade Router (Issue #308)
         if not live_posts:
             try:
                 from src.reachability_adapters import ReachabilityCascadeRouter
