@@ -2929,6 +2929,7 @@ def generate_public_dashboard():
                         <p class="text-xs text-slate-300 leading-relaxed">
                             Cboe OVX options tail-risk volatility &amp; Baker Hughes drilling rig counts tracking 3-6 month supply pipelines.
                         </p>
+                    </div>
                 </div>
 
                 <!-- Documentation & Data Sources CTA Ribbon -->

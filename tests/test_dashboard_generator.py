@@ -928,4 +928,38 @@ def test_dashboard_aria_accessibility_and_landmarks():
     assert '<caption class="sr-only">' in telemetry_content
 
 
+def test_dashboard_pillars_grid_structure():
+    """Verify that all 6 Feature Ingestion Pillars are properly closed and that
+    the Documentation & Data Sources CTA Ribbon is placed outside the 3-column grid,
+    spanning the full container width (Issue #592).
+    """
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index_content = f.read()
+
+    # Verify that Pillar 6 contains both its own closing tag and the grid's closing tag
+    pillar_6_marker = "6. Alternative Physical Feeds"
+    cta_marker = "Deep Dive into Model Architecture &amp; Data Streams"
+    
+    assert pillar_6_marker in index_content, "Pillar 6 not found in index.html"
+    assert cta_marker in index_content, "CTA Ribbon not found in index.html"
+
+    # Slice the content between Pillar 6 and the CTA ribbon
+    p6_pos = index_content.find(pillar_6_marker)
+    cta_pos = index_content.find(cta_marker)
+    assert p6_pos < cta_pos, "Pillar 6 must appear before CTA Ribbon"
+
+    between_p6_and_cta = index_content[p6_pos:cta_pos]
+    
+    # Must have at least two closing </div> tags between Pillar 6 title and CTA ribbon
+    # (one to close Pillar 6 card, and one to close the grid container)
+    div_close_count = between_p6_and_cta.count("</div>")
+    assert div_close_count >= 2, (
+        f"Expected at least 2 closing </div> tags between Pillar 6 and CTA ribbon (card + grid), "
+        f"found {div_close_count}. The CTA ribbon must not be nested inside the 3-column grid (Issue #592)."
+    )
+
+
+
 
