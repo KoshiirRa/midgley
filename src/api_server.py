@@ -123,15 +123,25 @@ async def get_api_key_user(
             detail=f"Unauthorized: {err_msg or 'Invalid API key token.'}"
         )
 
-    allowed, retry_after = await global_key_manager.check_rate_limit_async(
+    allowed, retry_after, remaining, reset_seconds = await global_key_manager.check_rate_limit_async(
         key_prefix=key_info["key_prefix"],
         rate_limit_rpm=key_info.get("rate_limit_rpm", 30)
     )
+    request.state.rate_limit = {
+        "limit": key_info.get("rate_limit_rpm", 30),
+        "remaining": remaining,
+        "reset": reset_seconds
+    }
     if not allowed:
         raise HTTPException(
             status_code=429,
             detail=f"Too Many Requests: Rate limit of {key_info.get('rate_limit_rpm', 30)} requests per minute exceeded for key '{key_info['key_prefix']}'.",
-            headers={"Retry-After": str(retry_after)}
+            headers={
+                "Retry-After": str(retry_after),
+                "X-RateLimit-Limit": str(key_info.get("rate_limit_rpm", 30)),
+                "X-RateLimit-Remaining": "0",
+                "X-RateLimit-Reset": str(reset_seconds)
+            }
         )
 
     request.state.key_info = key_info
@@ -443,9 +453,9 @@ BatchCombinedRequest.model_rebuild()
 HeadlineArenaSubmitRequest.model_rebuild()
 
 
-# Rate Limiting & Unified Auth Middleware helper (Issue #437)
+# Dynamic sliding-window rate limit & unified auth middleware (Issues #437, #571)
 @app.middleware("http")
-async def add_rate_limit_headers(request: Request, call_next):
+async def unified_auth_and_rate_limit_middleware(request: Request, call_next):
     expected_token = os.environ.get("MIDGLEY_API_KEY")
     is_testing = os.environ.get("TESTING") == "1"
 
@@ -491,9 +501,11 @@ async def add_rate_limit_headers(request: Request, call_next):
                 )
 
     response = await call_next(request)
-    response.headers["X-RateLimit-Limit"] = "60"
-    response.headers["X-RateLimit-Remaining"] = "59"
-    response.headers["X-RateLimit-Reset"] = str(int(datetime.now().timestamp() + 60))
+    rate_limit = getattr(request.state, "rate_limit", None)
+    if rate_limit:
+        response.headers["X-RateLimit-Limit"] = str(rate_limit.get("limit", 30))
+        response.headers["X-RateLimit-Remaining"] = str(rate_limit.get("remaining", 0))
+        response.headers["X-RateLimit-Reset"] = str(rate_limit.get("reset", 0))
     return response
 
 

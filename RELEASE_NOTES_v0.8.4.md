@@ -95,9 +95,32 @@ Midgley **v0.8.4** is an econometric modeling and state-space estimation release
 - **Advisory File Locking Barrier**: Serialized self-hosted runners (`scripts/run_local_daily_forecast.sh`, `scripts/run_local_intraday_polling.sh`, and `scripts/run_local_weekly_review.sh`) via `flock -w 900 /tmp/midgley-data.lock` barriers, eliminating multi-process lost-update collisions on `data/`.
 - **API Reader Fault Tolerance**: Hardened `src/api_server.py` against empty/missing history files with graceful structured fallback handling and designated root `api_server.py` as an entrypoint proxy.
 
+### 18. Declarative RegionSpec Registry & Universal Runner (Issue #561)
+- **Strongly-Typed RegionSpec Dataclass**: Added [`src/locations/specs.py`](src/locations/specs.py) defining a unified dataclass capturing all regional metadata, EIA ground truth series mappings, wholesale spot benchmark columns, baseline tax burdens, and microstructure flags (`has_edgeworth_cycles`, `has_carb_compliance`) across all 8 metro hubs.
+- **Universal Regional Dispatcher**: Enhanced [`src/locations/runner.py`](src/locations/runner.py) to resolve regional execution dynamically from declarative specs while preserving 100% backward compatibility for per-metro entrypoints.
+
+### 19. Dynamic Sliding-Window Rate Limiting & Bounded Query Validation (Issue #571)
+- **Dynamic Rate Limit Middleware**: Injected HTTP middleware in [`src/api_server.py`](src/api_server.py) dynamically returning `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` response headers on authenticated calls.
+- **Strict Query Bounds**: Enforced bounded query validation (`days` 1..30, `window` 1..365, `locales` $\le 10$, `hops` 1..5) with HTTP 422 Unprocessable Entity error handling.
+
+### 20. Subresource Integrity (SRI), Strict CSP & Secret Redaction (Issue #570)
+- **Subresource Integrity Hashes**: Added cryptographic SRI hashes (`integrity="sha384-..."`, `crossorigin="anonymous"`) across KaTeX math rendering, Leaflet maps, and FontAwesome icons in [`src/dashboard_generator.py`](src/dashboard_generator.py) and [`src/sources_generator.py`](src/sources_generator.py).
+- **Strict Content-Security-Policy**: Enforced standardized `<meta http-equiv="Content-Security-Policy">` protection across public dashboard pages.
+- **Automated Secret Redaction**: Added `redact_secrets()` in [`src/key_manager.py`](src/key_manager.py) to prevent unintentional credential leakage in logs and telemetry.
+
+### 21. Automated 5-Tier Nested Model Evaluation & Clark-West Tests (Issue #567)
+- **Clark-West (2007) Hypothesis Testing**: Implemented `clark_west_test()` in [`src/model_evaluation.py`](src/model_evaluation.py) adjusting for parameter noise in nested model comparisons.
+- **Multiplicity Control**: Added step-down Holm-Bonferroni Family-Wise Error Rate (FWER) and step-up Benjamini-Hochberg False Discovery Rate (FDR) multiplicity adjustments across hierarchical tiers.
+- **Automated Promotion Gates**: Integrated sequential Clark-West test statistics and multiplicity-adjusted p-values into `ModelHierarchyEvaluator.evaluate_5tier_hierarchy()`.
+
+### 22. Fundamental External Connector Wiring into Feature Matrix (Issue #565)
+- **USACE Lock Delays**: Ingested Ohio River lock delay hours and queue vessels from [`src/usace_locks.py`](src/usace_locks.py) into `create_feature_matrix()`.
+- **PHMSA Pipeline Incident Benchmarks**: Ingested midstream pipeline outage and disruption severity benchmarks from [`src/phmsa_pipeline.py`](src/phmsa_pipeline.py).
+- **BSEE Offshore Shut-Ins**: Ingested Gulf of Mexico production shut-in percentages and platform evacuation metrics.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Tag**: `v0.8.4`
-* **Resolved Issues**: #443, #445, #451, #480, #478, #448, #447, #442, #453, #483, #491, #493, #564, #566, #555, #568, #425
+* **Resolved Issues**: #443, #445, #451, #480, #478, #448, #447, #442, #453, #483, #491, #493, #564, #566, #555, #568, #425, #561, #571, #570, #567, #565
 

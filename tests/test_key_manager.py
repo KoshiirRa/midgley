@@ -106,12 +106,12 @@ class TestKeyManager(unittest.TestCase):
 
         # Make 5 allowed requests
         for _ in range(5):
-            allowed, retry_after = self.km.check_rate_limit(prefix, rate_limit_rpm=5)
+            allowed, retry_after, remaining, reset_ts = self.km.check_rate_limit(prefix, rate_limit_rpm=5)
             self.assertTrue(allowed)
             self.assertEqual(retry_after, 0)
 
         # 6th request should be rate-limited (allowed=False)
-        allowed, retry_after = self.km.check_rate_limit(prefix, rate_limit_rpm=5)
+        allowed, retry_after, remaining, reset_ts = self.km.check_rate_limit(prefix, rate_limit_rpm=5)
         self.assertFalse(allowed)
         self.assertGreater(retry_after, 0)
 
@@ -144,7 +144,7 @@ class TestKeyManager(unittest.TestCase):
             results = list(executor.map(send_req, range(25)))
 
         # All 25 should succeed without sqlite3.IntegrityError
-        for allowed, retry_after in results:
+        for allowed, retry_after, remaining, reset_ts in results:
             self.assertTrue(allowed)
             self.assertEqual(retry_after, 0)
 

@@ -6,6 +6,7 @@ and revocation management for Midgley REST API Gateway & MCP Server.
 """
 
 import os
+import re
 import sqlite3
 import secrets
 import hashlib
@@ -16,6 +17,25 @@ from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, Tuple, List, Optional
 
 logger = logging.getLogger(__name__)
+
+# Secret Redaction Patterns (Issue #570)
+SECRET_PATTERNS = [
+    re.compile(r"gh[opusr]_[A-Za-z0-9_]{20,}", re.IGNORECASE),
+    re.compile(r"github_pat_[A-Za-z0-9_]{20,}", re.IGNORECASE),
+    re.compile(r"mg_(?:prod|dev)_[A-Za-z0-9_]{16,}", re.IGNORECASE),
+    re.compile(r"sk-[A-Za-z0-9_-]{20,}", re.IGNORECASE),
+]
+
+
+def redact_secrets(text: Optional[str]) -> str:
+    """Masks secret tokens and sensitive API keys with [REDACTED] (Issue #570)."""
+    if not text:
+        return ""
+    redacted = str(text)
+    for pattern in SECRET_PATTERNS:
+        redacted = pattern.sub("[REDACTED]", redacted)
+    return redacted
+
 
 # Default Database Path
 DEFAULT_DB_PATH = os.path.join("data", "security.db")
@@ -197,15 +217,16 @@ class KeyManager:
 
         return True, key_info, None
 
-    def check_rate_limit(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int]:
+    def check_rate_limit(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int, int, int]:
         """
         Enforces 1-minute sliding window rate limiting using atomic SQLite UPSERT.
-        Returns (allowed, retry_after_seconds).
-        Eliminates UNIQUE constraint race conditions under concurrent async requests (Issue #329).
+        Returns (allowed, retry_after_seconds, remaining_requests, reset_seconds).
+        Eliminates UNIQUE constraint race conditions under concurrent async requests (Issue #329, #571).
         """
         current_minute = int(time.time() // 60)
         current_second = int(time.time())
         retry_after = 60 - (current_second % 60)
+        reset_seconds = retry_after
 
         with self._get_connection() as conn:
             cursor = conn.cursor()
@@ -219,7 +240,7 @@ class KeyManager:
             )
             row = cursor.fetchone()
             if row and row["request_count"] >= rate_limit_rpm:
-                return False, retry_after
+                return False, retry_after, 0, reset_seconds
 
             # Atomic UPSERT: insert initial counter or increment existing counter atomically
             cursor.execute(
@@ -248,10 +269,11 @@ class KeyManager:
             cursor.execute("DELETE FROM rate_limits WHERE minute_timestamp < ?", (old_cutoff,))
             conn.commit()
 
+            remaining = max(0, rate_limit_rpm - count)
             if count > rate_limit_rpm:
-                return False, retry_after
+                return False, retry_after, 0, reset_seconds
 
-        return True, 0
+        return True, 0, remaining, reset_seconds
 
     def list_keys(self, environment: Optional[str] = None) -> List[Dict[str, Any]]:
         """Lists metadata for registered API keys (excluding secret hashes/salts)."""
@@ -308,7 +330,7 @@ class KeyManager:
         """Non-blocking asynchronous wrapper for verify_key (offloads PBKDF2 to worker thread)."""
         return await asyncio.to_thread(self.verify_key, token)
 
-    async def check_rate_limit_async(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int]:
+    async def check_rate_limit_async(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int, int, int]:
         """Non-blocking asynchronous wrapper for check_rate_limit (offloads SQLite I/O to worker thread)."""
         return await asyncio.to_thread(self.check_rate_limit, key_prefix, rate_limit_rpm)
 

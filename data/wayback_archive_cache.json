@@ -1761,7 +1761,7 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://example.com/routine_news_1": {
-    "timestamp": "2026-10-02T16:17:36.046947+00:00",
+    "timestamp": "2026-10-02T20:33:37.283931+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://example.com/routine_news_1",
     "canonical_url": "https://example.com/routine_news_1",
@@ -9400,40 +9400,40 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://www.nytimes.com/2026/10/01/climate/david-hearn-reflecting-pool-charges-dropped.html": {
-    "timestamp": "2026-10-01T19:45:34.380707",
+    "timestamp": "2026-10-02T20:00:21.947831+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://www.nytimes.com/2026/10/01/climate/david-hearn-reflecting-pool-charges-dropped.html",
     "canonical_url": "https://www.nytimes.com/2026/10/01/climate/david-hearn-reflecting-pool-charges-dropped.html",
     "headline": "Prosecutors Cannot Revive Reflecting Pool Case Against Ex-Olympian, Judge Rules",
     "archive_url": "https://web.archive.org/web/*/https://www.nytimes.com/2026/10/01/climate/david-hearn-reflecting-pool-charges-dropped.html",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://www.nytimes.com/2026/10/01/climate/states-sue-epa-power-plant-trump.html": {
-    "timestamp": "2026-10-01T19:45:34.705993",
-    "status": "FALLBACK_PENDING",
+    "timestamp": "2026-10-02T20:00:22.027949+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
     "url": "https://www.nytimes.com/2026/10/01/climate/states-sue-epa-power-plant-trump.html",
     "canonical_url": "https://www.nytimes.com/2026/10/01/climate/states-sue-epa-power-plant-trump.html",
     "headline": "States Sue Over Trump’s Repeal of Climate Rules for Power Plants",
-    "archive_url": "https://web.archive.org/web/*/https://www.nytimes.com/2026/10/01/climate/states-sue-epa-power-plant-trump.html",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "archive_url": "http://web.archive.org/web/20261001171911/https://www.nytimes.com/2026/10/01/climate/states-sue-epa-power-plant-trump.html"
   },
   "https://www.nytimes.com/2026/10/01/business/energy-environment/oil-prices-iran-war-trump.html": {
-    "timestamp": "2026-10-01T19:45:34.973717",
+    "timestamp": "2026-10-02T20:00:29.296818+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://www.nytimes.com/2026/10/01/business/energy-environment/oil-prices-iran-war-trump.html",
     "canonical_url": "https://www.nytimes.com/2026/10/01/business/energy-environment/oil-prices-iran-war-trump.html",
     "headline": "Oil Is Flowing From the Persian Gulf, but Prices Remain High. Why?",
     "archive_url": "https://web.archive.org/web/*/https://www.nytimes.com/2026/10/01/business/energy-environment/oil-prices-iran-war-trump.html",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://www.nytimes.com/2026/10/01/climate/data-center-pollution-study-pennsylvania.html": {
-    "timestamp": "2026-10-01T19:45:35.234040",
+    "timestamp": "2026-10-02T20:00:35.871180+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://www.nytimes.com/2026/10/01/climate/data-center-pollution-study-pennsylvania.html",
     "canonical_url": "https://www.nytimes.com/2026/10/01/climate/data-center-pollution-study-pennsylvania.html",
     "headline": "When Data Centers Cluster Together, How Dirty Are They? One County Wants Answers.",
     "archive_url": "https://web.archive.org/web/*/https://www.nytimes.com/2026/10/01/climate/data-center-pollution-study-pennsylvania.html",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://www.nytimes.com/2026/09/28/climate/trump-gas-cars-mileage-standards.html": {
     "timestamp": "2026-10-01T19:45:35.538169",
@@ -10407,5 +10407,42 @@
     "headline": "G7 nations agree to release 100 million barrels of oil, including diesel, a boost for Trump - spectrumlocalnews.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisAFBVV95cUxQNTlmUk53WTJHVTlDdFhRdUdBblhHY0pZRER1VnFMOGpUR25JN0lxNFIyanJNWXNNVWJUdnJBVWFNbGMzaTg4R0RVdTlDem5BdXpMTXlFVGR6ejEtbzhIRGVOU1ZrSmNDd1F2R3B3MTdZUEdqQlYwUjBKU0QxZm16bHRsWHZnMnUyUU50UDBpZ3RkeUdCNlpSMmNGOXgwWlNnQTlvNEVWZXFEdWRHc3YtTQ?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMimAFBVV95cUxOVjBkbFN3a0h2MG1GSkFuOWNHYzQydmtXY2NIR2huV0xfVXdkRkI4OEpGakx1UVNPbGU1RkdiZzVWLWZBM21qcEtHb2FJb09nb0JqUUk1a1hvbHpTczdIQWxEdlB3ekVWWjlrNlFLdmZ1Mzh2clJRSFJJWmVFT2lleXpXTFhUUFl0MzN0bFpzYnNOYl9vQWExag?oc=5": {
+    "timestamp": "2026-10-02T19:45:20.898509+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOVjBkbFN3a0h2MG1GSkFuOWNHYzQydmtXY2NIR2huV0xfVXdkRkI4OEpGakx1UVNPbGU1RkdiZzVWLWZBM21qcEtHb2FJb09nb0JqUUk1a1hvbHpTczdIQWxEdlB3ekVWWjlrNlFLdmZ1Mzh2clJRSFJJWmVFT2lleXpXTFhUUFl0MzN0bFpzYnNOYl9vQWExag?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOVjBkbFN3a0h2MG1GSkFuOWNHYzQydmtXY2NIR2huV0xfVXdkRkI4OEpGakx1UVNPbGU1RkdiZzVWLWZBM21qcEtHb2FJb09nb0JqUUk1a1hvbHpTczdIQWxEdlB3ekVWWjlrNlFLdmZ1Mzh2clJRSFJJWmVFT2lleXpXTFhUUFl0MzN0bFpzYnNOYl9vQWExag?oc=5",
+    "headline": "Gasoline prices expected to remain high as global supply shortages continue - The Globe and Mail",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimAFBVV95cUxOVjBkbFN3a0h2MG1GSkFuOWNHYzQydmtXY2NIR2huV0xfVXdkRkI4OEpGakx1UVNPbGU1RkdiZzVWLWZBM21qcEtHb2FJb09nb0JqUUk1a1hvbHpTczdIQWxEdlB3ekVWWjlrNlFLdmZ1Mzh2clJRSFJJWmVFT2lleXpXTFhUUFl0MzN0bFpzYnNOYl9vQWExag?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://truthsocial.com/post/6831008": {
+    "timestamp": "2026-10-02T20:00:36.582989+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://truthsocial.com/post/6831008",
+    "canonical_url": "https://truthsocial.com/post/6831008",
+    "headline": "The true cost of Trump's fuel economy rollbacks - DW.com",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/6831008",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMitAFBVV95cUxOQ254M0pKNC1ERktjRTNMd1phUmtHRjBpSWQwcGZMaDNlN2t4S2k2TjFLUFh1XzdGRmtzMGVaQWhNT2NPaWQzV1M2Y1ZmdVo2dlZ2SWtWQzFBMGFVX2V5ckxPQ1VKNVJWMXR6aUlMYzRXSnBxTWtpR3oxeFNwMklZaFRITXRYeWE3Qk1hVGJpVTFZRGhhd2IyMzJ4VnQ3ZGVyUndYdlZJd3Vmek44ZUVsZFNZMTc?oc=5": {
+    "timestamp": "2026-10-02T20:30:12.421996+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOQ254M0pKNC1ERktjRTNMd1phUmtHRjBpSWQwcGZMaDNlN2t4S2k2TjFLUFh1XzdGRmtzMGVaQWhNT2NPaWQzV1M2Y1ZmdVo2dlZ2SWtWQzFBMGFVX2V5ckxPQ1VKNVJWMXR6aUlMYzRXSnBxTWtpR3oxeFNwMklZaFRITXRYeWE3Qk1hVGJpVTFZRGhhd2IyMzJ4VnQ3ZGVyUndYdlZJd3Vmek44ZUVsZFNZMTc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOQ254M0pKNC1ERktjRTNMd1phUmtHRjBpSWQwcGZMaDNlN2t4S2k2TjFLUFh1XzdGRmtzMGVaQWhNT2NPaWQzV1M2Y1ZmdVo2dlZ2SWtWQzFBMGFVX2V5ckxPQ1VKNVJWMXR6aUlMYzRXSnBxTWtpR3oxeFNwMklZaFRITXRYeWE3Qk1hVGJpVTFZRGhhd2IyMzJ4VnQ3ZGVyUndYdlZJd3Vmek44ZUVsZFNZMTc?oc=5",
+    "headline": "Oil Might Be Flowing Through the Strait of Hormuz, but for All the Wrong Reasons",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitAFBVV95cUxOQ254M0pKNC1ERktjRTNMd1phUmtHRjBpSWQwcGZMaDNlN2t4S2k2TjFLUFh1XzdGRmtzMGVaQWhNT2NPaWQzV1M2Y1ZmdVo2dlZ2SWtWQzFBMGFVX2V5ckxPQ1VKNVJWMXR6aUlMYzRXSnBxTWtpR3oxeFNwMklZaFRITXRYeWE3Qk1hVGJpVTFZRGhhd2IyMzJ4VnQ3ZGVyUndYdlZJd3Vmek44ZUVsZFNZMTc?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiigFBVV95cUxPR1BHU1ViaHpuRUlFTVJpeUllSXJwTG5XMW5rd3ZlTUJpdmZINnJ3VDB6WkExZVM4Zk5KV2kzWVR1S1huSVNZZ2VNVDdaQmtzN3FXMGZPTDdkR3RGckVCTUxobVM5M2swS3FpT0J2cWhJMkdjQzhjcjg4RXZMQUh1NmpJRW5iaVJtRmc?oc=5": {
+    "timestamp": "2026-10-02T20:30:21.529896+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPR1BHU1ViaHpuRUlFTVJpeUllSXJwTG5XMW5rd3ZlTUJpdmZINnJ3VDB6WkExZVM4Zk5KV2kzWVR1S1huSVNZZ2VNVDdaQmtzN3FXMGZPTDdkR3RGckVCTUxobVM5M2swS3FpT0J2cWhJMkdjQzhjcjg4RXZMQUh1NmpJRW5iaVJtRmc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPR1BHU1ViaHpuRUlFTVJpeUllSXJwTG5XMW5rd3ZlTUJpdmZINnJ3VDB6WkExZVM4Zk5KV2kzWVR1S1huSVNZZ2VNVDdaQmtzN3FXMGZPTDdkR3RGckVCTUxobVM5M2swS3FpT0J2cWhJMkdjQzhjcjg4RXZMQUh1NmpJRW5iaVJtRmc?oc=5",
+    "headline": "Who gets Venezuela's next barrel?",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxPR1BHU1ViaHpuRUlFTVJpeUllSXJwTG5XMW5rd3ZlTUJpdmZINnJ3VDB6WkExZVM4Zk5KV2kzWVR1S1huSVNZZ2VNVDdaQmtzN3FXMGZPTDdkR3RGckVCTUxobVM5M2swS3FpT0J2cWhJMkdjQzhjcjg4RXZMQUh1NmpJRW5iaVJtRmc?oc=5",
+    "error": "The read operation timed out"
   }
 }

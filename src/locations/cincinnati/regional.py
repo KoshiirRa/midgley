@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
+from typing import Dict, Any, Optional, List, Tuple, Union
 import logging
 
 from src.noaa_weather import get_cincinnati_weather_dataset

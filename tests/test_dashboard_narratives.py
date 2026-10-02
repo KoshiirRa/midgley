@@ -115,7 +115,6 @@ def test_render_narrative_card_html_macro():
 
 def test_dashboard_generator_includes_narratives(monkeypatch, tmp_path):
     from src.dashboard_generator import generate_public_dashboard, DOCS_DIR
-    import os
 
     # Generate the dashboard pages
     generate_public_dashboard()

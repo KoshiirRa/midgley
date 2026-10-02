@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
+from typing import Dict, Any, List, Optional, Tuple, Union
 import logging
 from src.lookup_cache import global_cache
 
@@ -238,8 +239,16 @@ class BakerHughesDataConnector:
         cache_key = f"altdata:baker_hughes:{start_date or 'all'}"
         cached = global_cache.get(cache_key)
         if cached and "records" in cached:
-            df = pd.DataFrame(cached["records"])
-            df['date'] = pd.to_datetime(df['date'])
+            cached_records = cached["records"]
+            if len(cached_records) <= 1:
+                hist_df = pd.DataFrame(HISTORICAL_BAKER_HUGHES_RIGS)
+                latest_df = pd.DataFrame(cached_records)
+                df = pd.concat([hist_df, latest_df], ignore_index=True)
+                df['date'] = pd.to_datetime(df['date'])
+                df = df.drop_duplicates(subset=['date'], keep='last').sort_values('date').reset_index(drop=True)
+            else:
+                df = pd.DataFrame(cached_records)
+                df['date'] = pd.to_datetime(df['date'])
             if start_date:
                 df = df[df['date'] >= pd.to_datetime(start_date)]
             return df
@@ -259,11 +268,18 @@ class BakerHughesDataConnector:
             records = self.fetch_barchart_cmdty_rig_counts()
 
         if records:
-            df = pd.DataFrame(records)
-            df['date'] = pd.to_datetime(df['date'])
+            if len(records) <= 1:
+                hist_df = pd.DataFrame(HISTORICAL_BAKER_HUGHES_RIGS)
+                latest_df = pd.DataFrame(records)
+                df = pd.concat([hist_df, latest_df], ignore_index=True)
+                df['date'] = pd.to_datetime(df['date'])
+                df = df.drop_duplicates(subset=['date'], keep='last').sort_values('date').reset_index(drop=True)
+            else:
+                df = pd.DataFrame(records)
+                df['date'] = pd.to_datetime(df['date'])
             try:
                 from src.benchmark_updater import save_historical_benchmark
-                save_historical_benchmark("baker_hughes", records)
+                save_historical_benchmark("baker_hughes", df.assign(date=df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records"))
             except Exception:
                 pass
 
@@ -273,8 +289,15 @@ class BakerHughesDataConnector:
                 from src.benchmark_updater import load_historical_benchmark
                 bench_records = load_historical_benchmark("baker_hughes")
                 if bench_records and isinstance(bench_records, list):
-                    df = pd.DataFrame(bench_records)
-                    df['date'] = pd.to_datetime(df['date'])
+                    if len(bench_records) <= 1:
+                        hist_df = pd.DataFrame(HISTORICAL_BAKER_HUGHES_RIGS)
+                        latest_df = pd.DataFrame(bench_records)
+                        df = pd.concat([hist_df, latest_df], ignore_index=True)
+                        df['date'] = pd.to_datetime(df['date'])
+                        df = df.drop_duplicates(subset=['date'], keep='last').sort_values('date').reset_index(drop=True)
+                    else:
+                        df = pd.DataFrame(bench_records)
+                        df['date'] = pd.to_datetime(df['date'])
             except Exception:
                 df = None
 

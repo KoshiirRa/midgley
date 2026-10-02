@@ -166,5 +166,152 @@
       "source": "Pirate Weather Climatological Anchor Fallback",
       "is_reanalysis": false
     }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T20:37:01.451762",
+    "data": {
+      "lat": 36.154,
+      "lon": -95.992,
+      "timestamp": 1673740800,
+      "date": "2023-01-15",
+      "temperature": 45.9,
+      "apparent_temperature": 43.9,
+      "dew_point": 30.9,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T20:37:01.682430",
+    "data": {
+      "lat": 39.103,
+      "lon": -84.512,
+      "timestamp": 1704844800,
+      "date": "2024-01-10",
+      "temperature": 40.6,
+      "apparent_temperature": 38.6,
+      "dew_point": 25.6,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T20:37:01.969852",
+    "data": {
+      "lat": 39.103,
+      "lon": -84.512,
+      "timestamp": 1704931200,
+      "date": "2024-01-11",
+      "temperature": 40.6,
+      "apparent_temperature": 38.6,
+      "dew_point": 25.6,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T20:37:02.175075",
+    "data": {
+      "lat": 39.103,
+      "lon": -84.512,
+      "timestamp": 1705017600,
+      "date": "2024-01-12",
+      "temperature": 40.6,
+      "apparent_temperature": 38.6,
+      "dew_point": 25.6,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T20:37:02.390627",
+    "data": {
+      "lat": 39.103,
+      "lon": -84.512,
+      "timestamp": 1705104000,
+      "date": "2024-01-13",
+      "temperature": 40.6,
+      "apparent_temperature": 38.6,
+      "dew_point": 25.6,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T20:37:02.585531",
+    "data": {
+      "lat": 39.103,
+      "lon": -84.512,
+      "timestamp": 1705190400,
+      "date": "2024-01-14",
+      "temperature": 40.6,
+      "apparent_temperature": 38.6,
+      "dew_point": 25.6,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T20:37:02.790903",
+    "data": {
+      "lat": 39.103,
+      "lon": -84.512,
+      "timestamp": 1705276800,
+      "date": "2024-01-15",
+      "temperature": 40.6,
+      "apparent_temperature": 38.6,
+      "dew_point": 25.6,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
   }
 ]

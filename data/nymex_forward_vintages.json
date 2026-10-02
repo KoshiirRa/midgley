@@ -1741,5 +1741,173 @@
       "curve_backwardation_flag": 1.0
     },
     "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:23:39",
+    "as_of": "2026-10-02 20:23:39",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:24:46",
+    "as_of": "2026-10-02 20:24:46",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:26:06",
+    "as_of": "2026-10-02 20:26:06",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:28:49",
+    "as_of": "2026-10-02 20:28:49",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:31:13",
+    "as_of": "2026-10-02 20:31:13",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:32:30",
+    "as_of": "2026-10-02 20:32:30",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:34:03",
+    "as_of": "2026-10-02 20:34:03",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
+  },
+  {
+    "source": "NYMEX Forward Curve & Calendar Spread Feed (Zero-Cost)",
+    "is_free_alternative": true,
+    "cost_per_query": 0.0,
+    "timestamp": "2026-10-02 20:35:36",
+    "as_of": "2026-10-02 20:35:36",
+    "valid_date": "2026-10-02",
+    "forward_features": {
+      "rbob_m1_price": 2.42,
+      "rbob_m2_price": 2.395,
+      "wti_m1_price": 78.5,
+      "wti_m2_price": 78.1,
+      "ho_m1_price": 2.55,
+      "rbob_calendar_spread_m1_m2": 0.025,
+      "wti_calendar_spread_m1_m2": 0.4,
+      "crack_spread_11": 0.551,
+      "crack_spread_321": 0.5943,
+      "curve_backwardation_flag": 1.0
+    },
+    "status": "SUCCESS"
   }
 ]

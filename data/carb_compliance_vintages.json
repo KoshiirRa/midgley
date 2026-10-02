@@ -1,7 +1,7 @@
 {
   "vintages": {
     "2024-03-01": {
-      "recorded_at": "2026-10-02T16:09:00.387756",
+      "recorded_at": "2026-10-02T20:25:43.709213",
       "as_of_date": "2024-03-01",
       "lcfs_credit_price_mt": 62.0,
       "cap_trade_allowance_price_mt": 38.73,
@@ -97,7 +97,7 @@
       "provenance": "CARB_OFFICIAL_ARCHIVE"
     },
     "2026-10-02": {
-      "recorded_at": "2026-10-02T14:04:41.863240",
+      "recorded_at": "2026-10-02T20:25:24.006811",
       "as_of_date": "2026-10-02",
       "lcfs_credit_price_mt": 72.5,
       "cap_trade_allowance_price_mt": 38.2,
@@ -109,5 +109,5 @@
       "provenance": "CARB_OFFICIAL_ARCHIVE"
     }
   },
-  "last_updated": "2026-10-02T16:09:00.387764"
+  "last_updated": "2026-10-02T20:25:43.709222"
 }
