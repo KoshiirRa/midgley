@@ -238,6 +238,24 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
     - **Stationary Target Transformations & Bounded Inversion:** Standardizes stationary targets ($\Delta P_{t+h}$, $r_{t+h} = \ln(P_{t+h}/P_t)$, persistence residuals) and stable bounded exponential price level reconstruction ($\hat{P}_{t+h} = P_t \exp(\hat{r}_{t+h})$), eliminating unit-root drift and negative return leverage.
     - **Authentic Fundamental Ingestion & Missingness Indicators:** Connects physical fundamentals to authentic bitemporal `VintageStore` query records, eliminating synthetic sine-wave baselines and emitting explicit boolean `_is_missing` flags.
     - **Discrete Regional Ground Truth & Maturity Gating:** Enforces 1-to-1 EIA/FRED retail price ground truth mappings (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWCA`, `GASREGWFL`), strict future maturity gating (`target_date <= today`), and zero fallback pollution.
+* **Declarative RegionSpec Registry & Universal Dispatcher (`src/locations/specs.py` & `src/locations/runner.py` - Issue #561):**
+  - **Strongly-Typed RegionSpec Dataclass:** Unifies all regional metadata, EIA ground truth series mappings, wholesale spot benchmark columns, baseline tax burdens, and microstructure flags (`has_edgeworth_cycles`, `has_carb_compliance`) into a single declarative dataclass across all 8 metro hubs (`Tulsa_OK`, `Newark_DE`, `Cincinnati_OH`, `Greenville_NC`, `Charlotte_NC`, `Oakland_CA`, `Port_St_Lucie_FL`).
+  - **Dynamic Regional Dispatching:** Parameterizes `run_regional_pipeline()` to resolve regional execution dynamically from declarative specs while maintaining 100% backward compatibility for per-metro CLI modules (`python3 -m src.locations.tulsa.main`).
+* **Dynamic Sliding-Window Rate Limiting & Parameter Validation Bounds (`src/key_manager.py` & `src/api_server.py` - Issue #571):**
+  - **Dynamic Rate Limit Response Headers:** Injects HTTP middleware returning standard `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` headers on every authenticated API request based on atomic SQLite sliding-window accounting.
+  - **Bounded Query Parameter Validation:** Enforces strict parameter bounds across all REST endpoints (`days` 1..30, `window` 1..365, `locales` $\le 10$, `hops` 1..5) with HTTP 422 Unprocessable Entity error handling.
+* **Subresource Integrity (SRI), Strict CSP & Automated Secret Redaction (`src/dashboard_generator.py`, `src/sources_generator.py` & `src/key_manager.py` - Issue #570):**
+  - **Cryptographic SRI Verification:** Enforces Subresource Integrity (`integrity="sha384-..."` / `integrity="sha256-..."`, `crossorigin="anonymous"`) across all third-party CDN assets (KaTeX math rendering, Leaflet maps, FontAwesome icons).
+  - **Strict Content-Security-Policy (CSP):** Standardizes `<meta http-equiv="Content-Security-Policy">` protection across public web dashboard templates.
+  - **Automated Secret Redaction:** Employs `redact_secrets()` in `src/key_manager.py` to mask sensitive credentials (`ghp_...`, `mg_prod_...`, `sk-...`) with `[REDACTED]` prior to diagnostics or logging output.
+* **Automated 5-Tier Nested Model Evaluation & Clark-West Tests (`src/model_evaluation.py` - Issue #567):**
+  - **Clark-West (2007) Nested Hypothesis Testing:** Implements `clark_west_test()` adjusting for parameter noise variance in nested model comparisons ($H_0: \text{MSPE}_{\text{nested}} = \text{MSPE}_{\text{full}}$).
+  - **Multiplicity Control:** Implements step-down Holm-Bonferroni FWER and step-up Benjamini-Hochberg FDR adjustments across hierarchical tiers.
+  - **Automated Promotion Decisions:** Integrates sequential Clark-West test statistics and multiplicity-adjusted p-values into `ModelHierarchyEvaluator.evaluate_5tier_hierarchy()`.
+* **Fundamental External Connector Wiring into Feature Matrix (`src/feature_engineering.py` - Issue #565):**
+  - **USACE Lock Delay Telemetry:** Merges Ohio River lock delay hours (`usace_ohio_river_lock_delay_hours`) and lock queues (`usace_lock_queue_vessels`) from `src/usace_locks.py`.
+  - **PHMSA Midstream Incident Benchmarks:** Ingests pipeline disruption indices and historical failure severity benchmarks from `src/phmsa_pipeline.py`.
+  - **BSEE Offshore Shut-Ins:** Ingests Gulf of Mexico crude production shut-in percentages and platform evacuation counts.
 * **Security Hardening, Postgres RLS on Hindsight & Secret Manager (`scripts/deploy_hindsight_cloudrun.sh` & `scripts/init_supabase_hindsight.sql` - Issue #426):**
   - **Zero Plaintext Credentials:** Removed hardcoded fallback database connection strings from deployment scripts, requiring explicit environment or Google Cloud Secret Manager (`--set-secrets`) bindings.
   - **Postgres Row-Level Security (RLS):** Enforced `ENABLE ROW LEVEL SECURITY` across all Hindsight memory tables (`hindsight_memories`, `hindsight_mental_models`) with `service_role` authorization policies.
