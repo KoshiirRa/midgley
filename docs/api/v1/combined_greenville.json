@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-02T04:44:29.512679",
+  "timestamp": "2026-10-02T12:07:53.764030",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.071,
+    "current_price_per_gal": 4.051,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-02T04:44:06Z"
+      "timestamp": "2026-10-02T12:07:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-08",
-    "current_base_price": 4.071,
-    "predicted_price_per_gal": 4.095,
+    "current_base_price": 4.051,
+    "predicted_price_per_gal": 4.075,
     "expected_change_dollars": 0.024,
     "expected_change_percent": 0.59,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.975,
-    "prediction_upper_95ci": 4.215,
+    "prediction_lower_95ci": 3.955,
+    "prediction_upper_95ci": 4.195,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.076,
-    "day_2_price": 4.037,
-    "day_3_price": 4.059,
-    "day_4_price": 4.074,
-    "day_5_price": 4.095,
+    "day_1_price": 4.056,
+    "day_2_price": 4.017,
+    "day_3_price": 4.039,
+    "day_4_price": 4.054,
+    "day_5_price": 4.075,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
