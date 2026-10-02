@@ -4598,6 +4598,61 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-02T17:30:20.614451+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-02T19:28:23.509059+00:00",
+      "provider": "firecrawl",
+      "model_name": "firecrawl",
+      "call_type": "web_to_markdown",
+      "input_tokens": 45,
+      "output_tokens": 301,
+      "total_tokens": 346,
+      "cost_usd": 0.000125,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-02T19:30:27.541743+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-02T19:30:30.030109+00:00",
+      "provider": "firecrawl",
+      "model_name": "firecrawl",
+      "call_type": "web_to_markdown",
+      "input_tokens": 58,
+      "output_tokens": 269,
+      "total_tokens": 327,
+      "cost_usd": 0.000113,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-02T19:30:44.799054+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
     }
   ]
 }

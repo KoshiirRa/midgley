@@ -158,6 +158,26 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
   - **Availability API Pre-Flight:** Queries the Wayback Availability endpoint (`archive.org/wayback/available?url=...`) before attempting write captures, bypassing redundant snapshot generation for already-preserved URLs.
   - **Save Page Now 2 (SPN2) S3 Auth:** Connects via authenticated S3 headers (`WAYBACK_ACCESS_KEY` & `WAYBACK_SECRET_KEY`) to unlock priority ingestion queues and elevated rate limits.
   - **15-Minute Adaptive Circuit Breaker:** Implements adaptive backoff and a 15-minute circuit breaker on HTTP 429 rate limit errors, with a 1-hour self-healing cache TTL for failed captures.
+* **Unified HTTP Client & Resilient Session Factory (`src/http_client.py` - Issue #564):**
+  - **Connection Pooling & Exponential Retry Backoff:** Standardizes all external data connectors on a unified `requests.Session` factory with `urllib3.util.Retry` exponential backoff across HTTP 429, 500, 502, 503, and 504 responses.
+  - **Retry-After & Timeout Enforcement:** Respects upstream `Retry-After` headers and enforces default connection (3.05s) and read (20.0s) timeouts via `TimeoutHTTPAdapter` with unified User-Agent headers.
+* **Syndicated Headline Deduplication & Idempotent Archiving (`src/geopolitical_feeds.py` & `src/event_analyzer.py` - Issue #566):**
+  - **Canonical URL & Headline Normalization:** Strips query tracking parameters (`utm_*`, `gclid`, `fbclid`, session tokens) and publisher attribution suffixes (`- Reuters`, `| AP News`).
+  - **Token Jaccard Deduplication:** Implements token-level Jaccard similarity filtering ($\ge 0.85$) to discard redundant syndicated wire stories across news streams.
+  - **Idempotent Historical Benchmark Persistence:** Prevents self-appending duplicate growth in `data/geopolitical_historical.json` and social feed stores on sequential pipeline runs.
+* **Multi-Tiered Baker Hughes Rig Count Connector & Centralized DB Persistence (`src/alternative_data_feeds.py` - Issue #555):**
+  - **Multi-Tiered Ingestion Pipeline:** Integrates:
+    1. *Tier 1 (Official Primary):* Direct weekly table scraping from `https://rigcount.bakerhughes.com/` and `/na-rig-count` via `FirecrawlConnector`.
+    2. *Tier 2 (Secondary Web):* Barchart cmdty fundamental overview extraction from `https://www.barchart.com/cmdty/data/fundamental/explore/BH` via `FirecrawlConnector`.
+    3. *Tier 3 (Open Machine-Readable):* Active St. Louis Fed FRED rotary rig series (`OGUSROTRIG` - Total US Rotary Rigs, `OILRIGS` - Oil Rigs) for zero-cost, API-key-free CSV ingestion.
+  - **Centralized Database Storage (`data_vintages` table):** Records all observations to SQLite/Turso via `VintageStore.record_observation(feed="baker_hughes", entity="us_rotary_rigs", ...)` with quality classification (`LIVE`, `CACHED`, `BENCHMARK`) and bitemporal file mirroring.
+  - **Feature Momentum:** Generates rolling 1-week and 4-week rig deltas ($\Delta_{1\text{w}}, \Delta_{4\text{w}}$) and Permian basin concentration metrics.
+* **Point-in-Time Truncation-Invariance Regression Test Harness (`tests/test_truncation_invariance.py` - Issue #568):**
+  - **Leakage-Free Feature Verification:** Mathematically verifies that feature engineering across all technical indicators, exponential event decays, Kalman nowcasts, and regulatory countdowns produces bitwise-identical feature vectors on truncated ($t \le T_0$) vs full datasets ($t \le T_0 + k$):
+    $$\mathbf{X}_{\text{truncated}}[t] \equiv \mathbf{X}_{\text{full}}[t] \quad \forall t \in \text{Obs}(\mathbf{X}_{\text{truncated}})$$
+* **Self-Hosted Deployment Concurrency Locking & API Reader Hardening (`scripts/run_local_*.sh` & `src/api_server.py` - Issue #425):**
+  - **Advisory File Lock Manager:** Wraps `scripts/run_local_daily_forecast.sh`, `scripts/run_local_intraday_polling.sh`, and `scripts/run_local_weekly_review.sh` in exclusive `flock -w 900 /tmp/midgley-data.lock` barriers, serializing multi-unit writer access to `data/` and eliminating lost-update race conditions.
+  - **API Reader Fault Tolerance:** Guards `src/api_server.py` against transient file read collisions and empty file states with structured fallback responses, and routes root `api_server.py` cleanly as an entrypoint proxy.
 * **Empirical Event Econometric Calibration & Decoupled PRAXIST Benchmark (`src/event_calibration.py` & `src/praxist_engine.py` - Issue #361):**
   - **Abnormal Return Residual Matching:** Quantifies realized price innovations $\epsilon_{t, t+k} = R_{t+k} - \mathbb{E}[R_{t+k} | \mathcal{F}_t^{\text{quant}}]$ over verified historical energy event episodes (2022–2026) in `data/benchmarks/historical_event_episodes_2022_2026.csv`.
   - **Empirical Decay Estimation:** Solves for optimal category exponential decay half-lives $t_{1/2}$ and impact weights $\beta_{\text{event}}$ by minimizing out-of-sample forecast error, replacing heuristic parameters.

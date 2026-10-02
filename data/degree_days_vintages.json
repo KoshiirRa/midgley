@@ -1846,32 +1846,6 @@
     }
   },
   {
-    "as_of": "2026-10-02 16:15:55",
-    "valid_date": "2026-10-02",
-    "hub_code": "National",
-    "mean_temp_f": 65.9,
-    "heating_degree_days_hdd": 0.0,
-    "cooling_degree_days_cdd": 0.9,
-    "freeze_warning": false,
-    "extreme_heat_warning": false,
-    "source": "Open-Meteo Weather API (Zero-Cost)",
-    "data": {
-      "hub_code": "National",
-      "name": "West Tulsa HF Sinclair & Cushing Hub",
-      "mean_temp_f": 65.9,
-      "max_temp_f": 70.0,
-      "min_temp_f": 61.8,
-      "heating_degree_days_hdd": 0.0,
-      "cooling_degree_days_cdd": 0.9,
-      "freeze_warning": false,
-      "extreme_heat_warning": false,
-      "source": "Open-Meteo Weather API (Zero-Cost)",
-      "is_free_alternative": true,
-      "cost_per_query": 0.0,
-      "timestamp": "2026-10-02 16:15:54"
-    }
-  },
-  {
     "as_of": "2026-10-02 16:16:30",
     "valid_date": "2026-10-02",
     "hub_code": "Greenville_NC",
@@ -1895,6 +1869,32 @@
       "is_free_alternative": true,
       "cost_per_query": 0.0,
       "timestamp": "2026-10-02 16:16:29"
+    }
+  },
+  {
+    "as_of": "2026-10-02 19:30:41",
+    "valid_date": "2026-10-02",
+    "hub_code": "National",
+    "mean_temp_f": 65.9,
+    "heating_degree_days_hdd": 0.0,
+    "cooling_degree_days_cdd": 0.9,
+    "freeze_warning": false,
+    "extreme_heat_warning": false,
+    "source": "Open-Meteo Weather API (Zero-Cost)",
+    "data": {
+      "hub_code": "National",
+      "name": "West Tulsa HF Sinclair & Cushing Hub",
+      "mean_temp_f": 65.9,
+      "max_temp_f": 70.0,
+      "min_temp_f": 61.8,
+      "heating_degree_days_hdd": 0.0,
+      "cooling_degree_days_cdd": 0.9,
+      "freeze_warning": false,
+      "extreme_heat_warning": false,
+      "source": "Open-Meteo Weather API (Zero-Cost)",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-10-02 19:30:40"
     }
   }
 ]

@@ -8,6 +8,7 @@ Ingests advanced physical, macroeconomic, and alternative data feeds:
 """
 
 import os
+import re
 import json
 import pandas as pd
 import numpy as np
@@ -115,17 +116,125 @@ class BakerHughesDataConnector:
     """
     Zero-Cost Baker Hughes & Rotary Drilling Rig Count Connector.
     Ingests weekly active drilling rig counts, provides bitemporal vintage tracking,
-    7-day lookup caching, and resilient offline fallback (Issue #269).
+    7-day lookup caching, database persistence, and resilient offline fallback (Issue #269, #555).
     """
     def __init__(self):
         self.is_free_alternative = True
         self.cost_per_query = 0.0
 
+    def fetch_official_site_rig_counts(self) -> Optional[List[Dict[str, Any]]]:
+        """
+        Tier 1: Scrapes latest weekly North America rig counts directly from official
+        https://rigcount.bakerhughes.com/na-rig-count using FirecrawlScraper.
+        """
+        try:
+            from src.firecrawl_scraper import FirecrawlConnector
+            scraper = FirecrawlConnector()
+            res = scraper.scrape_url("https://rigcount.bakerhughes.com/na-rig-count")
+            if res.get("success") and res.get("markdown"):
+                md = res["markdown"]
+                # Parse total, oil, gas numbers via regex
+                m_total = re.search(r"(?:U\.?S\.?\s*(?:Total\s*)?Rig\s*Count|Total\s*Rigs?|U\.?S\.?\s*Total)[:\s]*\*?\*?(\d{3,4})", md, re.IGNORECASE)
+                m_oil = re.search(r"(?:Oil\s*Rigs?|Active\s*Oil)[:\s]*\*?\*?(\d{3,4})", md, re.IGNORECASE)
+                m_gas = re.search(r"(?:Gas\s*Rigs?|Active\s*Gas)[:\s]*\*?\*?(\d{2,4})", md, re.IGNORECASE)
+                m_permian = re.search(r"Permian(?:\s*Basin)?[:\s]*\*?\*?(\d{2,4})", md, re.IGNORECASE)
+
+                if m_total or m_oil:
+                    total_rigs = int(m_total.group(1)) if m_total else None
+                    oil_rigs = int(m_oil.group(1)) if m_oil else int(total_rigs * 0.80)
+                    total_rigs = total_rigs or int(oil_rigs / 0.80)
+                    gas_rigs = int(m_gas.group(1)) if m_gas else int(total_rigs - oil_rigs)
+                    permian_rigs = int(m_permian.group(1)) if m_permian else int(oil_rigs * 0.62)
+
+                    today_str = datetime.now().strftime("%Y-%m-%d")
+                    return [{
+                        "date": today_str,
+                        "us_active_oil_rigs": oil_rigs,
+                        "baker_hughes_oil_rigs": oil_rigs,
+                        "baker_hughes_us_rig_count": total_rigs,
+                        "baker_hughes_gas_rigs": gas_rigs,
+                        "permian_rigs": permian_rigs,
+                        "source_tier": "OFFICIAL_WEB"
+                    }]
+        except Exception as e:
+            logger.debug(f"Official Baker Hughes site scrape skipped: {e}")
+        return None
+
+    def fetch_barchart_cmdty_rig_counts(self) -> Optional[List[Dict[str, Any]]]:
+        """
+        Tier 2: Scrapes Baker Hughes commodity fundamental page from Barchart cmdty
+        https://www.barchart.com/cmdty/data/fundamental/explore/BH using FirecrawlScraper.
+        """
+        try:
+            from src.firecrawl_scraper import FirecrawlConnector
+            scraper = FirecrawlConnector()
+            res = scraper.scrape_url("https://www.barchart.com/cmdty/data/fundamental/explore/BH")
+            if res.get("success") and res.get("markdown"):
+                md = res["markdown"]
+                m_rigs = re.search(r"(?:Total\s*Rigs|Rig\s*Count)[:\s]*\*?\*?(\d{3,4})", md, re.IGNORECASE)
+                if m_rigs:
+                    total_rigs = int(m_rigs.group(1))
+                    oil_rigs = int(total_rigs * 0.80)
+                    gas_rigs = int(total_rigs * 0.20)
+                    permian_est = int(oil_rigs * 0.62)
+                    today_str = datetime.now().strftime("%Y-%m-%d")
+                    return [{
+                        "date": today_str,
+                        "us_active_oil_rigs": oil_rigs,
+                        "baker_hughes_oil_rigs": oil_rigs,
+                        "baker_hughes_us_rig_count": total_rigs,
+                        "baker_hughes_gas_rigs": gas_rigs,
+                        "permian_rigs": permian_est,
+                        "source_tier": "BARCHART_WEB"
+                    }]
+        except Exception as e:
+            logger.debug(f"Barchart cmdty rig scrape skipped: {e}")
+        return None
+
+    def fetch_fred_rotary_rigs(self) -> Optional[List[Dict[str, Any]]]:
+        """
+        Tier 3: Fetches open weekly rotary rig counts from St. Louis Fed FRED
+        using active series OGUSROTRIG (US Total Rotary Rigs).
+        """
+        try:
+            from src.http_client import http_get
+            url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=OGUSROTRIG"
+            resp = http_get(url, timeout=5)
+            if resp.status_code == 200:
+                raw_lines = resp.text.strip().split('\n')
+                if len(raw_lines) > 2:
+                    records = []
+                    for line in raw_lines[1:]:
+                        parts = line.split(',')
+                        if len(parts) == 2 and parts[1].strip() not in ('.', ''):
+                            try:
+                                dt = parts[0].strip()
+                                total_rigs = int(float(parts[1]))
+                                oil_rigs = int(total_rigs * 0.80)
+                                gas_rigs = int(total_rigs - oil_rigs)
+                                permian_est = int(oil_rigs * 0.62)
+                                records.append({
+                                    "date": dt,
+                                    "us_active_oil_rigs": oil_rigs,
+                                    "baker_hughes_oil_rigs": oil_rigs,
+                                    "baker_hughes_us_rig_count": total_rigs,
+                                    "baker_hughes_gas_rigs": gas_rigs,
+                                    "permian_rigs": permian_est,
+                                    "source_tier": "FRED_OGUSROTRIG"
+                                })
+                            except ValueError:
+                                continue
+                    if records:
+                        return records
+        except Exception as e:
+            logger.debug(f"FRED rotary rig fetch skipped: {e}")
+        return None
+
     def fetch_rig_counts(self, start_date: str = None) -> pd.DataFrame:
         """
-        Fetches Baker Hughes rig count data dynamically with 7-day cache and offline fallback.
+        Fetches Baker Hughes rig count data dynamically with 7-day cache,
+        multi-tiered live extraction, database persistence, and offline fallback.
         """
-        import urllib.request
         cache_key = f"altdata:baker_hughes:{start_date or 'all'}"
         cached = global_cache.get(cache_key)
         if cached and "records" in cached:
@@ -136,39 +245,27 @@ class BakerHughesDataConnector:
             return df
 
         df = None
-        # Attempt 1: Fetch via public open FRED rotary rig series (OILRESUS / free CSV download)
-        try:
-            url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=OILRESUS"
-            req = urllib.request.Request(url, headers={"User-Agent": "Midgley-BakerHughesConnector/1.0"})
-            with urllib.request.urlopen(req, timeout=5) as response:
-                if response.status == 200:
-                    raw_lines = response.read().decode('utf-8').strip().split('\n')
-                    if len(raw_lines) > 2:
-                        records = []
-                        for line in raw_lines[1:]:
-                            parts = line.split(',')
-                            if len(parts) == 2 and parts[1] != '.':
-                                try:
-                                    dt = parts[0].strip()
-                                    oil_rigs = int(float(parts[1]))
-                                    permian_est = int(oil_rigs * 0.62)
-                                    records.append({
-                                        "date": dt,
-                                        "us_active_oil_rigs": oil_rigs,
-                                        "permian_rigs": permian_est
-                                    })
-                                except ValueError:
-                                    continue
-                        if records:
-                            df = pd.DataFrame(records)
-                            df['date'] = pd.to_datetime(df['date'])
-                            try:
-                                from src.benchmark_updater import save_historical_benchmark
-                                save_historical_benchmark("baker_hughes", records)
-                            except Exception:
-                                pass
-        except Exception as e:
-            logger.debug(f"Dynamic online rig count fetch skipped/failed: {e}")
+        records = None
+
+        # Attempt 1: FRED Active Series (Zero-cost machine-readable)
+        records = self.fetch_fred_rotary_rigs()
+
+        # Attempt 2: Official Web Scrape via Firecrawl
+        if not records:
+            records = self.fetch_official_site_rig_counts()
+
+        # Attempt 3: Barchart cmdty Web Scrape via Firecrawl
+        if not records:
+            records = self.fetch_barchart_cmdty_rig_counts()
+
+        if records:
+            df = pd.DataFrame(records)
+            df['date'] = pd.to_datetime(df['date'])
+            try:
+                from src.benchmark_updater import save_historical_benchmark
+                save_historical_benchmark("baker_hughes", records)
+            except Exception:
+                pass
 
         # Fallback to persistent historical benchmark file before hardcoded constant
         if df is None or df.empty:
@@ -196,25 +293,53 @@ class BakerHughesDataConnector:
             df['baker_hughes_gas_rigs'] = (df['baker_hughes_us_rig_count'] * 0.20).astype(int)
         if "baker_hughes_rig_delta_1w" not in df.columns:
             df['baker_hughes_rig_delta_1w'] = df['baker_hughes_us_rig_count'].diff().fillna(0.0)
+        if "baker_hughes_rig_delta_4w" not in df.columns:
+            df['baker_hughes_rig_delta_4w'] = df['baker_hughes_us_rig_count'].diff(4).fillna(0.0)
+        if "permian_rigs" not in df.columns:
+            df['permian_rigs'] = (df['baker_hughes_oil_rigs'] * 0.62).astype(int)
 
-        # Persist bitemporal vintage snapshot
+        # Persist to Centralized SQL Database (data_vintages table) via VintageStore
+        try:
+            from src.vintage_store import get_vintage_store, QUALITY_LIVE, QUALITY_BENCHMARK
+            vstore = get_vintage_store()
+            latest_row = df.iloc[-1].to_dict()
+            obs_dt = pd.to_datetime(latest_row["date"]).strftime("%Y-%m-%d")
+            vstore.record_observation(
+                feed="baker_hughes",
+                entity="us_rotary_rigs",
+                obs_date=obs_dt,
+                values={
+                    "total_rigs": int(latest_row.get("baker_hughes_us_rig_count", 0)),
+                    "oil_rigs": int(latest_row.get("baker_hughes_oil_rigs", 0)),
+                    "gas_rigs": int(latest_row.get("baker_hughes_gas_rigs", 0)),
+                    "permian_rigs": int(latest_row.get("permian_rigs", 0)),
+                    "delta_1w": float(latest_row.get("baker_hughes_rig_delta_1w", 0.0)),
+                    "delta_4w": float(latest_row.get("baker_hughes_rig_delta_4w", 0.0))
+                },
+                quality=QUALITY_LIVE if records else QUALITY_BENCHMARK
+            )
+        except Exception as e:
+            logger.debug(f"Could not persist Baker Hughes observation to database: {e}")
+
+        # Persist bitemporal vintage file snapshot
         try:
             latest_row = df.iloc[-1].to_dict()
             self.save_baker_hughes_vintage_record({
-                "source": "Baker Hughes Rig Count (Zero-Cost)",
+                "source": "Baker Hughes Rig Count (Zero-Cost / FRED / Web)",
                 "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "valid_date": pd.to_datetime(latest_row["date"]).strftime("%Y-%m-%d"),
                 "latest_us_active_oil_rigs": int(latest_row.get("baker_hughes_oil_rigs", 0)),
                 "latest_us_total_rigs": int(latest_row.get("baker_hughes_us_rig_count", 0)),
+                "permian_rigs": int(latest_row.get("permian_rigs", 0)),
                 "is_vintage_reconstructed": False
             })
         except Exception as e:
-            logger.debug(f"Could not persist Baker Hughes vintage snapshot: {e}")
+            logger.debug(f"Could not persist Baker Hughes vintage file snapshot: {e}")
 
         # Cache in global_cache (7 days TTL)
         try:
-            records = df.assign(date=df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records")
-            global_cache.set(cache_key, {"records": records}, ttl_seconds=604800)
+            cache_records = df.assign(date=df['date'].dt.strftime("%Y-%m-%d")).to_dict(orient="records")
+            global_cache.set(cache_key, {"records": cache_records}, ttl_seconds=604800)
         except Exception:
             pass
 
@@ -249,9 +374,9 @@ class BakerHughesDataConnector:
             vintages.append(rec_copy)
 
             with open(filepath, "w", encoding="utf-8") as f:
-                f.write(json.dumps(vintages, indent=2))
+                json.dump(vintages, f, indent=2)
         except Exception as e:
-            logger.warning(f"Could not persist Baker Hughes vintage record: {e}")
+            logger.debug(f"Failed to persist Baker Hughes vintage snapshot: {e}")
 
     @staticmethod
     def get_baker_hughes_vintages_as_of(target_as_of: str = None, filepath: str = os.path.join("data", "baker_hughes_vintages.json")) -> list:

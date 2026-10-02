@@ -72,8 +72,32 @@ Midgley **v0.8.4** is an econometric modeling and state-space estimation release
 - **Save Page Now 2 (SPN2) S3 Auth**: Added support for authenticated SPN2 requests via `WAYBACK_ACCESS_KEY` and `WAYBACK_SECRET_KEY` headers, unlocking higher rate limits and priority archiving queues.
 - **15-Minute Adaptive Circuit Breaker & Retry Cooldown**: Enforces strict 3.0s minimum spacing between writes, trips a 15-minute circuit breaker on HTTP 429 rate limit responses, and enforces a 1-hour self-healing cache TTL on failed attempts.
 
+### 13. Unified HTTP Client & Resilient Session Factory (Issue #564)
+- **Standardized Session Factory**: Implemented [`src/http_client.py`](src/http_client.py) configuring `requests.Session` with `urllib3.util.Retry` exponential backoff across HTTP 429, 500, 502, 503, and 504 status codes.
+- **Connection Pooling & Timeout Enforcement**: Enforces default connection (3.05s) and read (20.0s) timeouts via `TimeoutHTTPAdapter` and standardized User-Agent (`Midgley-Energy-Analytics/0.8.4`).
+
+### 14. Syndicated Headline Deduplication & Idempotent Archiving (Issue #566)
+- **Canonical Normalization & Token Jaccard Filter**: Added URL tracking parameter stripping (`normalize_url`) and headline token Jaccard similarity filtering ($\ge 0.85$) in [`src/geopolitical_feeds.py`](src/geopolitical_feeds.py).
+- **Idempotent Historical Persistence**: Prevents duplicate syndicated wire stories from saturating event memory and stops self-appending growth in `data/geopolitical_historical.json`.
+
+### 15. Multi-Tiered Baker Hughes Rig Count Connector & Centralized DB Storage (Issue #555)
+- **Multi-Tiered Ingestion**: Refactored `BakerHughesDataConnector` in [`src/alternative_data_feeds.py`](src/alternative_data_feeds.py) supporting:
+  1. *Tier 1 (Official Primary):* Direct weekly table scraping from `https://rigcount.bakerhughes.com/` and `/na-rig-count` via `FirecrawlConnector`.
+  2. *Tier 2 (Secondary Web):* Barchart cmdty fundamental overview extraction from `https://www.barchart.com/cmdty/data/fundamental/explore/BH` via `FirecrawlConnector`.
+  3. *Tier 3 (Open Machine-Readable):* Active St. Louis Fed FRED rotary rig series (`OGUSROTRIG` - Total US Rotary Rigs, `OILRIGS` - Oil Rigs) for zero-cost, API-key-free CSV ingestion.
+- **Centralized Database Storage (`data_vintages` table)**: Persists all observations to SQLite/Turso via `VintageStore.record_observation(feed="baker_hughes", entity="us_rotary_rigs", ...)` with quality classification (`LIVE`, `CACHED`, `BENCHMARK`) and bitemporal file mirroring.
+- **Feature Momentum**: Computes rolling 1-week and 4-week rig deltas ($\Delta_{1\text{w}}, \Delta_{4\text{w}}$) and Permian basin concentration metrics.
+
+### 16. Point-in-Time Truncation-Invariance Regression Test Harness (Issue #568)
+- **Zero-Lookahead Leakage Verification**: Implemented [`tests/test_truncation_invariance.py`](tests/test_truncation_invariance.py) proving mathematically that feature matrices computed on truncated historical timelines ($t \le T_0$) vs full timelines ($t \le T_0 + k$) are byte-identical for all common observation dates across technical, physical, and qualitative event channels.
+
+### 17. Self-Hosted Deployment Concurrency Locking & API Reader Hardening (Issue #425)
+- **Advisory File Locking Barrier**: Serialized self-hosted runners (`scripts/run_local_daily_forecast.sh`, `scripts/run_local_intraday_polling.sh`, and `scripts/run_local_weekly_review.sh`) via `flock -w 900 /tmp/midgley-data.lock` barriers, eliminating multi-process lost-update collisions on `data/`.
+- **API Reader Fault Tolerance**: Hardened `src/api_server.py` against empty/missing history files with graceful structured fallback handling and designated root `api_server.py` as an entrypoint proxy.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Tag**: `v0.8.4`
-* **Resolved Issues**: #443, #445, #451, #480, #478, #448, #447, #442, #453, #483, #491, #493
+* **Resolved Issues**: #443, #445, #451, #480, #478, #448, #447, #442, #453, #483, #491, #493, #564, #566, #555, #568, #425
+

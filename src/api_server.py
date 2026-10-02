@@ -594,7 +594,11 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             read_prediction_history
         )
         if os.path.exists(HISTORY_CSV_PATH):
-            df_hist = read_prediction_history(HISTORY_CSV_PATH)
+            try:
+                df_hist = read_prediction_history(HISTORY_CSV_PATH)
+            except Exception as e:
+                logger.warning(f"Notice reading prediction history in api_server: {e}")
+                df_hist = pd.DataFrame()
             if not df_hist.empty and 'region' in df_hist.columns:
                 reg_df = df_hist[df_hist['region'] == region_code]
                 if not reg_df.empty:
