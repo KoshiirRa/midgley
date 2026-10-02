@@ -637,6 +637,23 @@ class PirateWeatherConnector:
     """
 
     def __init__(self, api_key: Optional[str] = None):
+        if not api_key:
+            try:
+                from dotenv import load_dotenv
+                load_dotenv()
+            except ImportError:
+                pass
+            if not os.getenv("PIRATE_WEATHER_API_KEY") and not os.getenv("PIRATEWEATHER_API_KEY"):
+                env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+                if os.path.exists(env_path):
+                    try:
+                        with open(env_path, "r", encoding="utf-8") as f:
+                            for line in f:
+                                if "=" in line and not line.strip().startswith("#"):
+                                    k, v = line.strip().split("=", 1)
+                                    os.environ.setdefault(k.strip(), v.strip("\"'"))
+                    except Exception:
+                        pass
         self.api_key = api_key or os.getenv("PIRATE_WEATHER_API_KEY") or os.getenv("PIRATEWEATHER_API_KEY")
         self.base_url = "https://api.pirateweather.net/forecast"
         self.hubs = PIRATE_WEATHER_REFINING_HUBS

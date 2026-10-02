@@ -145,5 +145,26 @@
       "source": "Pirate Weather Climatological Anchor Fallback",
       "is_reanalysis": false
     }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-02T15:08:36.468920",
+    "data": {
+      "lat": 36.154,
+      "lon": -95.992,
+      "timestamp": 1705276800,
+      "date": "2024-01-15",
+      "temperature": 45.9,
+      "apparent_temperature": 43.9,
+      "dew_point": 30.9,
+      "humidity": 0.55,
+      "wind_speed": 7.5,
+      "wind_gust": 11.0,
+      "pressure": 1015.0,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather Climatological Anchor Fallback",
+      "is_reanalysis": false
+    }
   }
 ]
