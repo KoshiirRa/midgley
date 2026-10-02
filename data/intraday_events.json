@@ -4313,5 +4313,25 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-02T03:15:19.635777",
+    "headline": "Trump, Modi Discuss Trade, Energy Ties as New Tariffs Loom - EnergyNow.com",
+    "source": "Executive_Social_Media",
+    "url": "https://truthsocial.com/post/9599011",
+    "raw_url": "https://truthsocial.com/post/9599011",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/9599011",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
