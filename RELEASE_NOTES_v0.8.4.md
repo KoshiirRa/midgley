@@ -49,8 +49,31 @@ Midgley **v0.8.4** is an econometric modeling and state-space estimation release
 - **Canonical Diesel Series Registry**: Added dual-key mappings for `_ULSD` and `_Diesel` aliases in [`src/eia_retail_feed.py`](src/eia_retail_feed.py) across all 8 regional diesel markets (`National`, `Tulsa`, `Newark`, `Cincinnati`, `Greenville`, `Charlotte`, `Oakland`, `Port_St_Lucie`).
 - **Automated Actuals Backfill**: Aligned Monday survey observation dates to eliminate unmapped series and ensure seamless point-in-time actuals matching in [`src/prediction_logger.py`](src/prediction_logger.py).
 
+### 9. Automated Narrative Synthesis & Dynamic Model Explanation (Issue #493)
+- **Plain-English Multi-Market Prose**: Created [`src/narrative_generator.py`](src/narrative_generator.py) synthesizing natural language market explanations across Main (`index.html`), National (`national.html`), and all 8 regional metro pages (`tulsa.html`, `newark.html`, `cincinnati.html`, `greenville.html`, `charlotte.html`, `port_st_lucie.html`, `oakland.html`, `bayarea.html`).
+- **Tri-Factor Decomposition**: Deconstructs 5-day price projections into:
+  1. *Quantitative Baseline Mechanics* (AR momentum, crack margin mean-reversion, calendar spreads).
+  2. *Qualitative & Midstream Logistics* (river barge tow drafts, pipeline batch allocations, waterborne freight).
+  3. *Regional Regulatory & Infrastructure Context* (CARB LCFS/Cap-Trade, RVP summer blend countdowns, Edgeworth restoration hazard).
+- **Responsive Dark-Themed UI Cards**: Rendered standardized Tailwind CSS visual summary cards with direction badges, catalyst tags, and key attribution breakdowns embedded across public dashboard templates.
+
+### 10. NASA FIRMS Active Fire Satellite Telemetry & Topological Outage Exposure (Issue #453)
+- **NASA FIRMS Active Fire Satellite Connector**: Created [`src/firms_satellite_feed.py`](src/firms_satellite_feed.py) querying the NASA Fire Information for Resource Management System (FIRMS) API across MODIS (`MODIS_NRT`) and VIIRS (`VIIRS_NOAA20_NRT`, `VIIRS_SNPP_NRT`) thermal anomaly products over major refining clusters (Gulf Coast, Bay Area, Philadelphia/Delaware, Mid-Continent, Midwest).
+- **Thermal Anomaly Rolling Z-Score**: Computes normalized 7-day vs 30-day thermal brightness anomalies ($\Delta_{\text{thermal}} = (F_{7\text{d}} - \mu_{30\text{d}}) / \sigma_{30\text{d}}$) with bitemporal persistence in `data/firms_satellite_vintages.json`.
+- **Topological Supply Network Outage Exposure**: Added `compute_metro_outage_exposure_index()` to `KnowledgeGraphEngine` in [`src/knowledge_graph.py`](src/knowledge_graph.py) computing exact topological supply exposure $X_{r,t} = \sum_{k \in \mathcal{K}} s_{r,k} \cdot \frac{\text{offline\_cap}_{k,t}}{\text{nameplate\_cap}_k}$, routing multi-source pipeline and waterborne outage shocks into localized retail estimators.
+
+### 11. Pipeline Failure Gating & Non-Zero Exit Code Propagation (Issue #483)
+- **Strict Pre-Artifact Failure Gate**: Refactored [`run_all.py`](run_all.py) to halt pipeline execution *before* updating `README.md` or generating public GitHub Pages dashboard artifacts if any location forecast model fails, preventing corrupted or stale artifacts from being published.
+- **Fail-Fast CLI Override**: Added `--allow-partial` flag for localized debugging and testing, while enforcing strict fail-fast non-zero exit code (`sys.exit(1)`) in production CI/CD workflows.
+- **Exporter Error Propagation**: Wrapped README updating, dashboard compilation, Cloud DB sync, and Headline Arena export in try/except blocks to record and propagate downstream non-zero exit codes.
+
+### 12. Wayback Machine SPN2 Auth & HTTP 429 Pre-Flight Circuit Breaker (Issue #491)
+- **Availability Pre-Flight Check**: Refactored [`src/wayback_archiver.py`](src/wayback_archiver.py) to query the Wayback Availability API (`archive.org/wayback/available?url=...`) before attempting snapshot writes, eliminating unnecessary SPN write requests for already-archived URLs.
+- **Save Page Now 2 (SPN2) S3 Auth**: Added support for authenticated SPN2 requests via `WAYBACK_ACCESS_KEY` and `WAYBACK_SECRET_KEY` headers, unlocking higher rate limits and priority archiving queues.
+- **15-Minute Adaptive Circuit Breaker & Retry Cooldown**: Enforces strict 3.0s minimum spacing between writes, trips a 15-minute circuit breaker on HTTP 429 rate limit responses, and enforces a 1-hour self-healing cache TTL on failed attempts.
+
 ---
 
 ## 📦 Commits & Attribution
 * **Tag**: `v0.8.4`
-* **Resolved Issues**: #443, #445, #451, #480, #478, #448, #447, #442
+* **Resolved Issues**: #443, #445, #451, #480, #478, #448, #447, #442, #453, #483, #491, #493

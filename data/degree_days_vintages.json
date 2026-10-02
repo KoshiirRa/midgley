@@ -1690,32 +1690,6 @@
     }
   },
   {
-    "as_of": "2026-10-02 07:03:14",
-    "valid_date": "2026-10-02",
-    "hub_code": "National",
-    "mean_temp_f": 64.9,
-    "heating_degree_days_hdd": 0.1,
-    "cooling_degree_days_cdd": 0.0,
-    "freeze_warning": false,
-    "extreme_heat_warning": false,
-    "source": "Open-Meteo Weather API (Zero-Cost)",
-    "data": {
-      "hub_code": "National",
-      "name": "West Tulsa HF Sinclair & Cushing Hub",
-      "mean_temp_f": 64.9,
-      "max_temp_f": 69.9,
-      "min_temp_f": 59.9,
-      "heating_degree_days_hdd": 0.1,
-      "cooling_degree_days_cdd": 0.0,
-      "freeze_warning": false,
-      "extreme_heat_warning": false,
-      "source": "Open-Meteo Weather API (Zero-Cost)",
-      "is_free_alternative": true,
-      "cost_per_query": 0.0,
-      "timestamp": "2026-10-02 07:03:13"
-    }
-  },
-  {
     "as_of": "2026-10-02 07:06:05",
     "valid_date": "2026-10-02",
     "hub_code": "Newark_DE",
@@ -1794,32 +1768,6 @@
     }
   },
   {
-    "as_of": "2026-10-02 14:04:14",
-    "valid_date": "2026-10-02",
-    "hub_code": "Tulsa_OK",
-    "mean_temp_f": 65.2,
-    "heating_degree_days_hdd": 0.0,
-    "cooling_degree_days_cdd": 0.2,
-    "freeze_warning": false,
-    "extreme_heat_warning": false,
-    "source": "Open-Meteo Weather API (Zero-Cost)",
-    "data": {
-      "hub_code": "Tulsa_OK",
-      "name": "West Tulsa HF Sinclair & Cushing Hub",
-      "mean_temp_f": 65.2,
-      "max_temp_f": 70.0,
-      "min_temp_f": 60.5,
-      "heating_degree_days_hdd": 0.0,
-      "cooling_degree_days_cdd": 0.2,
-      "freeze_warning": false,
-      "extreme_heat_warning": false,
-      "source": "Open-Meteo Weather API (Zero-Cost)",
-      "is_free_alternative": true,
-      "cost_per_query": 0.0,
-      "timestamp": "2026-10-02 14:04:13"
-    }
-  },
-  {
     "as_of": "2026-10-02 14:04:55",
     "valid_date": "2026-10-02",
     "hub_code": "Oakland_CA",
@@ -1872,29 +1820,81 @@
     }
   },
   {
-    "as_of": "2026-10-02 14:05:58",
+    "as_of": "2026-10-02 16:14:48",
+    "valid_date": "2026-10-02",
+    "hub_code": "Tulsa_OK",
+    "mean_temp_f": 65.9,
+    "heating_degree_days_hdd": 0.0,
+    "cooling_degree_days_cdd": 0.9,
+    "freeze_warning": false,
+    "extreme_heat_warning": false,
+    "source": "Open-Meteo Weather API (Zero-Cost)",
+    "data": {
+      "hub_code": "Tulsa_OK",
+      "name": "West Tulsa HF Sinclair & Cushing Hub",
+      "mean_temp_f": 65.9,
+      "max_temp_f": 70.0,
+      "min_temp_f": 61.8,
+      "heating_degree_days_hdd": 0.0,
+      "cooling_degree_days_cdd": 0.9,
+      "freeze_warning": false,
+      "extreme_heat_warning": false,
+      "source": "Open-Meteo Weather API (Zero-Cost)",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-10-02 16:14:47"
+    }
+  },
+  {
+    "as_of": "2026-10-02 16:15:55",
+    "valid_date": "2026-10-02",
+    "hub_code": "National",
+    "mean_temp_f": 65.9,
+    "heating_degree_days_hdd": 0.0,
+    "cooling_degree_days_cdd": 0.9,
+    "freeze_warning": false,
+    "extreme_heat_warning": false,
+    "source": "Open-Meteo Weather API (Zero-Cost)",
+    "data": {
+      "hub_code": "National",
+      "name": "West Tulsa HF Sinclair & Cushing Hub",
+      "mean_temp_f": 65.9,
+      "max_temp_f": 70.0,
+      "min_temp_f": 61.8,
+      "heating_degree_days_hdd": 0.0,
+      "cooling_degree_days_cdd": 0.9,
+      "freeze_warning": false,
+      "extreme_heat_warning": false,
+      "source": "Open-Meteo Weather API (Zero-Cost)",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-10-02 16:15:54"
+    }
+  },
+  {
+    "as_of": "2026-10-02 16:16:30",
     "valid_date": "2026-10-02",
     "hub_code": "Greenville_NC",
-    "mean_temp_f": 80.2,
+    "mean_temp_f": 79.8,
     "heating_degree_days_hdd": 0.0,
-    "cooling_degree_days_cdd": 15.2,
+    "cooling_degree_days_cdd": 14.8,
     "freeze_warning": false,
     "extreme_heat_warning": false,
     "source": "Open-Meteo Weather API (Zero-Cost)",
     "data": {
       "hub_code": "Greenville_NC",
       "name": "Colonial Pipeline Selma NC Breakout Hub",
-      "mean_temp_f": 80.2,
-      "max_temp_f": 89.7,
+      "mean_temp_f": 79.8,
+      "max_temp_f": 88.8,
       "min_temp_f": 70.8,
       "heating_degree_days_hdd": 0.0,
-      "cooling_degree_days_cdd": 15.2,
+      "cooling_degree_days_cdd": 14.8,
       "freeze_warning": false,
       "extreme_heat_warning": false,
       "source": "Open-Meteo Weather API (Zero-Cost)",
       "is_free_alternative": true,
       "cost_per_query": 0.0,
-      "timestamp": "2026-10-02 14:05:58"
+      "timestamp": "2026-10-02 16:16:29"
     }
   }
 ]

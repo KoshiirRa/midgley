@@ -548,6 +548,124 @@ class KnowledgeGraphEngine:
             "edges": edges
         }
 
+    def compute_metro_outage_exposure_index(
+        self,
+        metro_id: str,
+        outage_capacities: Optional[Dict[str, float]] = None,
+        firms_anomalies: Optional[Dict[str, float]] = None
+    ) -> Dict[str, Any]:
+        """
+        Computes the topological supply network outage exposure index X_{r,t} for metro r (Issue #453):
+        X_{r,t} = sum_{k in S_r} s_{r,k} * (offline_capacity_{k,t} / total_capacity_k)
+        incorporating NASA FIRMS satellite thermal flaring anomaly scores.
+        """
+        metro_key = metro_id.lower().replace("_ok", "").replace("_de", "").replace("_oh", "").replace("_ky", "").replace("_nc", "").replace("_ca", "").replace("_fl", "")
+
+        # Canonical supply topology share mappings (s_{r,k} where sum(s_{r,k}) = 1.0)
+        METRO_SUPPLY_SHARES: Dict[str, List[Dict[str, Any]]] = {
+            "tulsa": [
+                {"node": "refinery_west_tulsa", "name": "HF Sinclair West Tulsa", "capacity": 85000, "share": 0.70, "firms_hub": "west_tulsa_cushing"},
+                {"node": "refinery_ponca_city", "name": "Phillips 66 Ponca City", "capacity": 210000, "share": 0.30, "firms_hub": "west_tulsa_cushing"}
+            ],
+            "newark": [
+                {"node": "refinery_delaware_city", "name": "PBF Delaware City", "capacity": 190000, "share": 0.55, "firms_hub": "delaware_city_delmarva"},
+                {"node": "refinery_bayway", "name": "Phillips 66 Bayway", "capacity": 258000, "share": 0.30, "firms_hub": "delaware_city_delmarva"},
+                {"node": "terminal_delaware_river", "name": "Delaware River Marine Terminal", "capacity": 100000, "share": 0.15, "firms_hub": "delaware_city_delmarva"}
+            ],
+            "cincinnati": [
+                {"node": "refinery_catlettsburg", "name": "Marathon Catlettsburg", "capacity": 291000, "share": 0.65, "firms_hub": "catlettsburg_ohio_valley"},
+                {"node": "refinery_lima", "name": "Cenovus Lima", "capacity": 180000, "share": 0.20, "firms_hub": "catlettsburg_ohio_valley"},
+                {"node": "pipeline_buckeye", "name": "Buckeye Ohio System", "capacity": 120000, "share": 0.15, "firms_hub": "catlettsburg_ohio_valley"}
+            ],
+            "greenville": [
+                {"node": "pipeline_colonial_line1", "name": "Colonial Pipeline Line 1", "capacity": 1400000, "share": 0.75, "firms_hub": "baytown_houston"},
+                {"node": "pipeline_plantation", "name": "Plantation Pipeline", "capacity": 720000, "share": 0.25, "firms_hub": "baytown_houston"}
+            ],
+            "charlotte": [
+                {"node": "pipeline_colonial_line1", "name": "Colonial Pipeline Line 1", "capacity": 1400000, "share": 0.80, "firms_hub": "baytown_houston"},
+                {"node": "pipeline_plantation", "name": "Plantation Pipeline", "capacity": 720000, "share": 0.20, "firms_hub": "baytown_houston"}
+            ],
+            "oakland": [
+                {"node": "refinery_richmond", "name": "Chevron Richmond", "capacity": 250000, "share": 0.50, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_martinez", "name": "PBF Martinez", "capacity": 157000, "share": 0.30, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_benicia", "name": "Valero Benicia", "capacity": 170000, "share": 0.20, "firms_hub": "richmond_martinez_bay_area"}
+            ],
+            "bayarea": [
+                {"node": "refinery_richmond", "name": "Chevron Richmond", "capacity": 250000, "share": 0.50, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_martinez", "name": "PBF Martinez", "capacity": 157000, "share": 0.30, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_benicia", "name": "Valero Benicia", "capacity": 170000, "share": 0.20, "firms_hub": "richmond_martinez_bay_area"}
+            ],
+            "port_st_lucie": [
+                {"node": "terminal_port_everglades", "name": "Port Everglades Marine Terminal", "capacity": 300000, "share": 0.65, "firms_hub": "baytown_houston"},
+                {"node": "terminal_port_canaveral", "name": "Port Canaveral Marine Terminal", "capacity": 150000, "share": 0.35, "firms_hub": "baytown_houston"}
+            ]
+        }
+
+        supply_nodes = METRO_SUPPLY_SHARES.get(metro_key, [])
+        if not supply_nodes:
+            return {
+                "metro_id": metro_id,
+                "outage_exposure_index": 0.0,
+                "exposure_severity": "NOMINAL",
+                "contributing_nodes": []
+            }
+
+        total_exposure = 0.0
+        contributions = []
+
+        for item in supply_nodes:
+            node_id = item["node"]
+            cap = item["capacity"]
+            share = item["share"]
+            hub_code = item.get("firms_hub", "")
+
+            # Offline capacity from explicit filings or incident logs
+            offline = 0.0
+            if outage_capacities and node_id in outage_capacities:
+                offline = outage_capacities[node_id]
+
+            # Satellite FIRMS thermal anomaly boost (Z >= 2.5 indicates flaring trip)
+            firms_z = 0.0
+            if firms_anomalies and hub_code in firms_anomalies:
+                firms_z = firms_anomalies[hub_code]
+            elif firms_anomalies and node_id in firms_anomalies:
+                firms_z = firms_anomalies[node_id]
+
+            if firms_z >= 2.5:
+                # Flaring trip proxy: assume 35% capacity throttle during severe thermal upsets
+                offline = max(offline, cap * 0.35)
+
+            outage_fraction = min(offline / max(cap, 1.0), 1.0)
+            node_exposure = share * outage_fraction
+            total_exposure += node_exposure
+
+            contributions.append({
+                "node": node_id,
+                "name": item["name"],
+                "supply_share": share,
+                "offline_capacity_bpd": offline,
+                "total_capacity_bpd": cap,
+                "outage_fraction": round(outage_fraction, 3),
+                "firms_anomaly_z": round(firms_z, 2),
+                "exposure_contribution": round(node_exposure, 4)
+            })
+
+        severity = "NOMINAL"
+        if total_exposure >= 0.40:
+            severity = "CRITICAL"
+        elif total_exposure >= 0.20:
+            severity = "ELEVATED"
+        elif total_exposure >= 0.05:
+            severity = "MODERATE"
+
+        return {
+            "metro_id": metro_id,
+            "outage_exposure_index": round(total_exposure, 4),
+            "exposure_severity": severity,
+            "contributing_nodes": contributions
+        }
+
 
 # Global Singleton Instance for Zero-Cost In-Memory Re-Use
 kg_engine = KnowledgeGraphEngine()
+

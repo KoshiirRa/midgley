@@ -101,6 +101,15 @@ OILPRICEAPI_KEY="op_live_..."
 # Free tier allows 10,000 requests/month. Optional: Climatological / cached physics fallback runs out-of-the-box if unset.
 PIRATE_WEATHER_API_KEY=""
 
+# Optional NASA FIRMS Map Key (firms.modaps.eosdis.nasa.gov - Active fire thermal anomaly satellite telemetry, Issue #453)
+# Free key from NASA FIRMS API. Optional: historical thermal baseline & cached observations run if unset.
+NASA_FIRMS_MAP_KEY=""
+
+# Optional Wayback Machine Save Page Now 2 (SPN2) S3 Credentials (archive.org, Issue #491)
+# Free access keys from Internet Archive user account settings. Enables authenticated priority snapshot queues.
+WAYBACK_ACCESS_KEY=""
+WAYBACK_SECRET_KEY=""
+
 # Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
 # Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
 WANDB_API_KEY="wandb_v1_..."

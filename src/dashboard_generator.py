@@ -19,6 +19,12 @@ from datetime import datetime, timezone
 import logging
 from src.regional_metadata import render_regional_driver_cards_html
 from src.prediction_logger import read_prediction_history
+from src.narrative_generator import (
+    generate_macro_synthesis_narrative,
+    generate_national_wholesale_narrative,
+    generate_metro_narrative,
+    render_narrative_card_html,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -859,6 +865,51 @@ def build_component_attribution_card_html(region_id: str, base_price: float, pre
             </div>
         </div>"""
     return card_html
+ 
+ 
+def build_metro_narrative_card_html(
+    metro_key: str,
+    current_price: float,
+    forecast_price: float,
+    logistics_hub: str = None,
+    crack_spread: float = None,
+    outage_exposure: float = None,
+) -> str:
+    """Renders dynamic plain-English automated narrative synthesis card for a regional metro (Issue #493)."""
+    narrative_data = generate_metro_narrative(
+        metro_key=metro_key,
+        current_price=current_price,
+        forecast_price=forecast_price,
+        horizon_days=5,
+        logistics_hub=logistics_hub,
+        crack_spread=crack_spread,
+        outage_exposure=outage_exposure,
+    )
+    return render_narrative_card_html(narrative_data, variant="metro")
+
+
+def build_national_narrative_card_html(
+    current_price: float,
+    forecast_price: float,
+) -> str:
+    """Renders dynamic plain-English automated narrative synthesis card for National Wholesale RBOB (Issue #493)."""
+    narrative_data = generate_national_wholesale_narrative(
+        current_price=current_price,
+        forecast_price=forecast_price,
+        horizon_days=5,
+    )
+    return render_narrative_card_html(narrative_data, variant="national")
+
+
+def build_macro_narrative_card_html(
+    prices_map: dict,
+) -> str:
+    """Renders dynamic plain-English automated macro synthesis narrative card for the main index dashboard (Issue #493)."""
+    narrative_data = generate_macro_synthesis_narrative(
+        prices_map=prices_map,
+        horizon_days=5,
+    )
+    return render_narrative_card_html(narrative_data, variant="macro")
 
 
 def build_scoreboard_section_html() -> str:
@@ -2309,6 +2360,8 @@ def generate_public_dashboard():
             </p>
         </div>
 
+        {build_macro_narrative_card_html(prices_map)}
+
         <!-- ACTIVE FORECAST LOCALES SECTION -->
         <section class="space-y-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -3163,6 +3216,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
 
         <!-- Quantitative Model Pipeline Detail -->
@@ -3230,7 +3284,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{NAT_MAE}}", f"{accuracy_stats['overall_mae_dollars']:.4f}").replace("{{NAT_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NAT_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NAT_HIT_RATE}}", get_hit_rate_display('National')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{NAT_MAE}}", f"{accuracy_stats['overall_mae_dollars']:.4f}").replace("{{NAT_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NAT_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NAT_HIT_RATE}}", get_hit_rate_display('National')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{NARRATIVE_CARD}}", build_national_narrative_card_html(nat_base, nat_pred)).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -3367,6 +3421,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3418,7 +3473,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{TULSA_MAE}}", get_mae_display('Tulsa_OK')).replace("{{TULSA_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{TULSA_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{TULSA_HIT_RATE}}", get_hit_rate_display('Tulsa_OK')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{TULSA_MAE}}", get_mae_display('Tulsa_OK')).replace("{{TULSA_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{TULSA_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{TULSA_HIT_RATE}}", get_hit_rate_display('Tulsa_OK')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'], logistics_hub="Cushing WTI Storage & West Tulsa HF Sinclair")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -3555,6 +3610,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3606,7 +3662,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{NEWARK_MAE}}", get_mae_display('Newark_DE')).replace("{{NEWARK_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NEWARK_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NEWARK_HIT_RATE}}", get_hit_rate_display('Newark_DE')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{NEWARK_MAE}}", get_mae_display('Newark_DE')).replace("{{NEWARK_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NEWARK_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NEWARK_HIT_RATE}}", get_hit_rate_display('Newark_DE')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'], logistics_hub="Delaware City Refinery & PADD 1B Harbor")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -3778,6 +3834,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3836,7 +3893,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'], logistics_hub="Catlettsburg Refinery & Ohio River Tow Navigation")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -3932,6 +3989,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3967,7 +4025,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'], logistics_hub="Colonial Pipeline Selma Junction & NC 40.4¢ State Tax")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -4063,6 +4121,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4098,7 +4157,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{CHARLOTTE_MAE}}", get_mae_display('charlotte_nc')).replace("{{CHARLOTTE_HIT_RATE}}", get_hit_rate_display('charlotte_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{CHARLOTTE_MAE}}", get_mae_display('charlotte_nc')).replace("{{CHARLOTTE_HIT_RATE}}", get_hit_rate_display('charlotte_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'], logistics_hub="Colonial & Plantation Pipeline Paw Creek Terminal")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -4194,6 +4253,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4229,7 +4289,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{PORT_ST_LUCIE_MAE}}", get_mae_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_HIT_RATE}}", get_hit_rate_display('port_st_lucie_fl')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
+""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{PORT_ST_LUCIE_MAE}}", get_mae_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_HIT_RATE}}", get_hit_rate_display('port_st_lucie_fl')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'], logistics_hub="Port Everglades Marine Offloading & Waterborne Freight")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
 
     os.makedirs(PORT_ST_LUCIE_SUB_DIR, exist_ok=True)
     with open(PORT_ST_LUCIE_PATH, "w", encoding="utf-8") as f:
@@ -4411,6 +4471,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4500,7 +4561,7 @@ def generate_public_dashboard():
         else:
             seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_HIT_RATE}}", get_hit_rate_display('oakland_ca')).replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_HIT_RATE}}", get_hit_rate_display('oakland_ca')).replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Oakland_CA', oak_base, oak_pred, logistics_hub="Chevron Richmond Refinery & CARB LCFS/Cap-and-Trade Standard")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -4696,6 +4757,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4841,6 +4903,7 @@ def generate_public_dashboard():
             .replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
             .replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
             .replace("{{HEAD_META}}", head_meta_bayarea)
+            .replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('BayArea_CA', bay_base, bay_pred, logistics_hub="SF Bay 9-County Refining Complex & Carquinez Strait Marine Terminals"))
             .replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('BayArea_CA', bay_base, bay_pred))
             .replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('bayarea_ca'))
         )
