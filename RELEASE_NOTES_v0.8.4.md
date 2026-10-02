@@ -116,7 +116,9 @@ Midgley **v0.8.4** is an econometric modeling and state-space estimation release
 ### 22. Fundamental External Connector Wiring into Feature Matrix (Issue #565)
 - **USACE Lock Delays**: Ingested Ohio River lock delay hours and queue vessels from [`src/usace_locks.py`](src/usace_locks.py) into `create_feature_matrix()`.
 - **PHMSA Pipeline Incident Benchmarks**: Ingested midstream pipeline outage and disruption severity benchmarks from [`src/phmsa_pipeline.py`](src/phmsa_pipeline.py).
-- **BSEE Offshore Shut-Ins**: Ingested Gulf of Mexico production shut-in percentages and platform evacuation metrics.
+### 23. Executive Social Feed Modernization & Native Mastodon REST Ingestion
+- **Native Mastodon REST API**: Upgraded `ExecutiveSocialFeedConnector` in [`src/executive_social_feed.py`](src/executive_social_feed.py) to query Truth Social's public Mastodon-compatible REST API (`/api/v1/accounts/107780257626128497/statuses`), extracting live unauthenticated status feeds, stripping HTML tags, and filtering for energy policy keywords with 15-minute caching.
+- **Pruned Defunct Scrapers**: Decommissioned obsolete `nitter.net` endpoints in favor of the resilient 3-tier cascade (Tier 1 Direct Mastodon REST API $\rightarrow$ Tier 2 `ReachabilityCascadeRouter` $\rightarrow$ Tier 3 Econometric Benchmark Ground Truth).
 
 ---
 
