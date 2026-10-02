@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-10-02_23-38-29",
+    "timestamp": "2026-10-02 01:47:53",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-02 01:47:53)"
+  },
+  {
     "run_id": "2026-10-02_19-04-10",
     "timestamp": "2026-10-02 01:47:53",
     "run_type": "LIVE_PROSPECTIVE",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-09-29_20-38-18",
-    "timestamp": "2026-09-29 15:30:26",
-    "run_type": "INTRADAY_REVISION",
-    "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
-  },
-  {
-    "run_id": "2026-09-29_18-29-12",
     "timestamp": "2026-09-29 15:30:26",
     "run_type": "INTRADAY_REVISION",
     "trigger": "VLCC \u2018ablaze\u2019 after new Strait of Hormuz ship strike as Iran..."
