@@ -31,8 +31,26 @@ Midgley **v0.8.4** is an econometric modeling and state-space estimation release
 - **Granular Data Provenance**: Enhanced `fetch_regional_wholesale_spot_matrix()` in [`src/data_ingestion.py`](src/data_ingestion.py) to tag every physical spot benchmark column with explicit field-level provenance metadata (`OBSERVED`, `ESTIMATED_PROXY`, `SYNTHETIC_FALLBACK`).
 - **Lookahead & Leakage Safety**: Preserved strict publication lag enforcement ($T+1$ business days) across bitemporal vintage querying.
 
+### 5. Wholesale RBOB Volatility Distribution & Predictive Density Engine (Issue #448)
+- **GARCH(1,1) & GJR-GARCH Leverage Modeling**: Added [`src/volatility_engine.py`](src/volatility_engine.py) to forecast conditional variance paths and multi-step cumulative horizon volatility $\sigma_{t,h} = \sqrt{\sum_{k=1}^h \sigma^2_{t+k|t}}$ for wholesale RBOB futures.
+- **HAR-RV Multi-Scale Realized Volatility**: Implemented Heterogeneous Autoregressive Realized Volatility model fusing Daily (1d), Weekly (5d), and Monthly (22d) variance components.
+- **Fat-Tailed Student-$t_\nu$ Predictive Density**: Quantifies parametric return quantiles ($q_{0.01} \dots q_{0.99}$) with calibrated degrees of freedom $\nu$, Probability Integral Transform (PIT) uniformity validation, and Continuous Ranked Probability Score (CRPS) evaluation.
+
+### 6. Edgeworth Price Cycle Diagnostics & Restoration-Hazard Model (Issue #447)
+- **Microstructure Asymmetry Diagnostics**: Added [`src/edgeworth_cycle.py`](src/edgeworth_cycle.py) detecting Midwestern cycling regimes using negative price change fractions ($\rho_{\text{neg}} > 0.60$), strong positive skewness ($\gamma_1 > 1.0$), and consecutive undercutting run lengths.
+- **Logistic Restoration Hazard Modeling**: Computes cumulative spike probability $P_{t,h} = \operatorname{logit}^{-1}(a + b\, m_t + c\, d_t)$ driven by margin compression $m_t$ and elapsed days $d_t$.
+- **Cincinnati Regional Integration**: Integrated restoration-hazard forecasting into [`src/locations/cincinnati/regional.py`](src/locations/cincinnati/regional.py) to model sharp coordinated price jumps and daily undercutting trajectories.
+
+### 7. Pirate Weather API Historical Reanalysis Connector (Issue #442)
+- **Point-in-Time NOAA HRRR / ERA5 Reanalysis**: Implemented `PirateWeatherConnector` in [`src/noaa_weather.py`](src/noaa_weather.py) querying Dark Sky-compatible hourly/daily reanalysis across exact refinery and pipeline logistics hub coordinates.
+- **Multi-Year Weather Shock Calibration**: Computes freeze-off duration hours ($T \le 32^\circ\text{F}$) and extreme heat stress hours ($T \ge 95^\circ\text{F}$) for retrospective econometric backtesting, with bitemporal persistence in `data/pirateweather_vintages.json` and 3-tier lookup caching.
+
+### 8. Unified EIA Retail Diesel Series Key Mappings (Issue #478)
+- **Canonical Diesel Series Registry**: Added dual-key mappings for `_ULSD` and `_Diesel` aliases in [`src/eia_retail_feed.py`](src/eia_retail_feed.py) across all 8 regional diesel markets (`National`, `Tulsa`, `Newark`, `Cincinnati`, `Greenville`, `Charlotte`, `Oakland`, `Port_St_Lucie`).
+- **Automated Actuals Backfill**: Aligned Monday survey observation dates to eliminate unmapped series and ensure seamless point-in-time actuals matching in [`src/prediction_logger.py`](src/prediction_logger.py).
+
 ---
 
 ## 📦 Commits & Attribution
 * **Tag**: `v0.8.4`
-* **Resolved Issues**: #443, #445, #451, #480
+* **Resolved Issues**: #443, #445, #451, #480, #478, #448, #447, #442

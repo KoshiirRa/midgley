@@ -48,11 +48,24 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "SanFrancisco_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
     "SanJose_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
     "NorthBay_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
-    # On-Highway Diesel series (Issue #461)
+    # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478)
+    "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "Tulsa_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Tulsa_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Newark_ULSD": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Cincinnati_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Cincinnati_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Greenville_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Greenville_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Charlotte_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Charlotte_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Oakland_ULSD": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Oakland_CARB_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Port_St_Lucie_ULSD": [("GASDESWFL", "Florida No 2 Diesel Retail Price"), ("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price")],
+    "Port_St_Lucie_Diesel": [("GASDESWFL", "Florida No 2 Diesel Retail Price"), ("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price")],
 }
 
 # Baseline realistic fallback prices by series if offline
@@ -70,6 +83,8 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASDESW": 3.850,
     "GASDESWMW": 3.750,
     "GASDESW01B": 3.920,
+    "GASDESW01C": 3.790,
+    "GASDESWFL": 3.820,
     "GASDESWCA": 5.150
 }
 

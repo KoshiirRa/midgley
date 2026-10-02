@@ -97,6 +97,10 @@ MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
+# Optional Pirate Weather API Key (pirateweather.net - Point-in-time HRRR / ERA5 historical reanalysis, Issue #442)
+# Free tier allows 10,000 requests/month. Optional: Climatological / cached physics fallback runs out-of-the-box if unset.
+PIRATE_WEATHER_API_KEY=""
+
 # Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
 # Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
 WANDB_API_KEY="wandb_v1_..."
