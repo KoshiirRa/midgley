@@ -1,38 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-10-01 23:47:33",
+  "last_updated": "2026-10-02 01:48:14",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-09-30 19:47:56",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:47:58",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 111.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:48:00",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 111.88,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-09-30 19:48:02",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9972,36 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Submitted CL (challenge d53a91d6-825d-4efc-b21e-805f5f058e04): direction=bullish, confidence=0.9095, scored=True"
+    },
+    {
+      "timestamp": "2026-10-02 01:42:26",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 311.36,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-10-02 01:43:40",
+      "connector_name": "CFTC_COT",
+      "target": "CFTC.gov",
+      "status": "FALLBACK",
+      "latency_ms": 0.05,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Fallback CFTC COT data"
+    },
+    {
+      "timestamp": "2026-10-02 01:48:14",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 418.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 329 docs, 204 obs, 0 refs"
     }
   ]
 }
