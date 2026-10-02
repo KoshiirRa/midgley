@@ -24,6 +24,8 @@ from src.prediction_logger import (
     backfill_actual_prices_and_evaluate
 )
 from src.live_fuel_feed import fetch_live_metro_retail_price
+from src.asymmetric_ecm import AsymmetricECM
+from src.rvp_regulations import get_known_future_tax_deltas
 
 logger = logging.getLogger(__name__)
 
@@ -160,6 +162,17 @@ def run_regional_pipeline(
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     dynamic_margin = live_pump_price - latest_rbob
 
+    # Fit Asymmetric Pass-Through ECM for region (Issue #443)
+    ecm_model = None
+    try:
+        reg_col = f"{reg_clean}_retail_gasoline"
+        retail_series = market_df[reg_col] if reg_col in market_df.columns else (market_df['gasoline_rbob'] + dynamic_margin)
+        wholesale_series = market_df['gasoline_rbob']
+        ecm_model = AsymmetricECM(wholesale_lags=3, retail_lags=2)
+        ecm_model.fit(retail_data=retail_series, wholesale_series=wholesale_series)
+    except Exception as e:
+        logger.debug(f"AsymmetricECM fitting skipped for {logger_region_key}: {e}")
+
     # Pre-fetch secondary dual-anchor retail prices once per regional run (Issue #591)
     dual_anchor_map = {
         "Oakland_CA": [("BayArea_CA", "bayarea_avg_retail_gasoline", 5.05)],
@@ -219,6 +232,34 @@ def run_regional_pipeline(
         quant_return_h = (raw_quant_h - last_hist_price_h) / last_hist_price_h if last_hist_price_h > 0 else 0.0
         h_forecast = live_pump_price * (1.0 + baseline_return_h)
         h_quant = live_pump_price * (1.0 + quant_return_h)
+
+        # Forward regulatory/tax deltas (Issue #451)
+        tax_delta_h = get_known_future_tax_deltas(region=logger_region_key, as_of_date=str(last_date), horizon_days=h)
+        is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean)
+
+        # Calibrate with Asymmetric ECM pass-through (Issue #443)
+        if ecm_model and ecm_model.is_fitted:
+            ecm_forecast_h = ecm_model.forecast_horizon(
+                current_retail=live_pump_price,
+                current_wholesale=latest_rbob,
+                future_wholesale_deltas=[raw_pred_h - latest_rbob],
+                horizon_days=h,
+                forward_tax_delta=tax_delta_h,
+                is_california=is_ca
+            )
+            h_forecast = round(ecm_forecast_h, 4)
+            ecm_quant_h = ecm_model.forecast_horizon(
+                current_retail=live_pump_price,
+                current_wholesale=latest_rbob,
+                future_wholesale_deltas=[raw_quant_h - latest_rbob],
+                horizon_days=h,
+                forward_tax_delta=tax_delta_h,
+                is_california=is_ca
+            )
+            h_quant = round(ecm_quant_h, 4)
+        else:
+            h_forecast = round(h_forecast + tax_delta_h, 4)
+            h_quant = round(h_quant + tax_delta_h, 4)
 
         today_df = pd.DataFrame([{
             'date': last_date,

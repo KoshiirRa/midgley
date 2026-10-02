@@ -14,9 +14,9 @@
       "transit_alternative_index": 0.038,
       "inelastic_demand_score": 0.885
     },
-    "last_checked": "2026-09-30 17:50:51",
-    "target_vintage": 2025,
-    "status_mode": "WINDOW_ACTIVE_CHECKING"
+    "last_checked": "2026-10-02 14:00:38",
+    "target_vintage": 2024,
+    "status_mode": "LOCKED_ANNUAL_CACHE"
   },
   "census_demographics_cincinnati_oh": {
     "demographics": {
@@ -33,7 +33,7 @@
       "transit_alternative_index": 0.08,
       "inelastic_demand_score": 0.82
     },
-    "last_checked": "2026-09-30 17:36:37",
+    "last_checked": "2026-10-02 14:00:38",
     "target_vintage": 2025,
     "status_mode": "WINDOW_ACTIVE_CHECKING"
   },

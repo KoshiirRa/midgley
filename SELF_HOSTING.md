@@ -539,6 +539,26 @@ python3 run_all.py --use-llm-api
 > [!NOTE]
 > If you wish to run only the standalone National Wholesale RBOB model without calibrating regional metros, execute `python3 -m src.locations.national.main --use-llm-api`. Note that `--use-llm-api` is the canonical CLI flag (the `--llm` flag is deprecated and ignored). If `GEMINI_API_KEY` is omitted, `--use-llm-api` gracefully routes event scoring to the zero-cost Tier 3 offline lexicon.
 
+#### Forward Regulatory & Tax Calendar Customization (`data/known_future_events.json`)
+Midgley models deterministic forward shifts (e.g., annual California SB 1 excise tax rate updates on July 1, EPA summer RVP terminal deadlines on May 1, and winter transition on Sept 16) via `data/known_future_events.json`. To register custom state fuel tax adjustments or municipal fee changes:
+```json
+[
+  {
+    "effective_date": "2027-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.022,
+    "description": "California annual statutory fuel excise tax inflation reset"
+  }
+]
+```
+
+#### Mixed-Frequency Kalman Filter Metro Nowcasting (`src/metro_nowcast.py`)
+To generate point-in-time filtered nowcasts fusing daily AAA station prices, crowdsourced GasBuddy metrics, and weekly EIA surveys:
+```bash
+python3 -c "from src.metro_nowcast import nowcast_metro_price; print(nowcast_metro_price('Tulsa_OK'))"
+```
+
 Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
 ```bash
 python3 -m scripts.benchmark_qlib_rd_agent

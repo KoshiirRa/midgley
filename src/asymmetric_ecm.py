@@ -253,6 +253,39 @@ class AsymmetricECM:
             return pd.Series(forecasts)
         return forecasts
 
+    def forecast_horizon(
+        self,
+        current_retail: float,
+        current_wholesale: float,
+        future_wholesale_deltas: List[float],
+        horizon_days: int = 5,
+        forward_tax_delta: float = 0.0,
+        is_california: bool = False,
+        sales_tax_rate: float = 0.0725
+    ) -> float:
+        """
+        Generates a direct h-step ahead retail price forecast with known forward tax adjustments
+        and optional California multiplicative sales tax scaling (Issue #443, #451).
+        """
+        step_preds = self.predict_step_ahead(
+            current_retail=current_retail,
+            current_wholesale=current_wholesale,
+            steps_ahead=horizon_days,
+            expected_wholesale_deltas=future_wholesale_deltas
+        )
+        base_h_pred = float(step_preds[-1]) if step_preds else current_retail
+
+        # Inject known forward statutory tax delta Delta tau_{t -> t+h}
+        base_h_pred += forward_tax_delta
+
+        # California Multiplicative Sales Tax Scaling: (Base + Excise) * (1 + sales_tax)
+        if is_california and sales_tax_rate > 0.0:
+            # Sales tax applies to the incremental price adjustment
+            delta_price = base_h_pred - current_retail
+            base_h_pred = current_retail + delta_price * (1.0 + sales_tax_rate)
+
+        return round(float(base_h_pred), 4)
+
     def get_asymmetry_diagnostics(self) -> Dict[str, Any]:
         """Returns structured econometric parameters and asymmetry verification."""
         if not self.is_fitted:
@@ -297,3 +330,4 @@ def fit_regional_asymmetric_ecm(
     diagnostics = model.get_asymmetry_diagnostics()
     diagnostics["region"] = region_name
     return model, diagnostics
+
