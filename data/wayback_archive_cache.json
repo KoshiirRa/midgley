@@ -8896,8 +8896,9 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5": {
-    "timestamp": "2026-09-30T17:30:42.644106",
+    "timestamp": "2026-10-02T21:00:37.825389+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTHRUbkFrUVRGamxCSWJsTWlQckRVOTYyd0RURTR2X2lJSkotWWRobXFIT1Z1Yy1qdnVsbUxUZUE2bVRocU5wQUx4U0d3WUZGeHQ3Y1Z2Nktrb1loSkt0Q2tGa3lZdUVKa1Nic1NBY00wMXFKTkR1dVhCYXFnOURzT0RfQ08tcnhkTGNONVRIdHVYNVQ0LWk1N0Rn?oc=5",
     "headline": "Refiners Elbow Traders to Take a Larger Slice of Venezuela’s Oil",
@@ -9652,7 +9653,7 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiigFBVV95cUxNWk5FQllGWm9TdU1sRG5aaUQzQXNsdVhwMWxva3ZyejhMNDNUbFd1YnNVVXhJc05aZUVVakM2RzI2YTBNTWpCYmt0Zld5VmEyaDIzQkJNYkdpVzJqN0tGeU1YZU12WFJCY0tmSVpMNGk2aVp2ZDlKWmZBNVEyMVloRHpHSVhvMW11Nmc?oc=5": {
-    "timestamp": "2026-10-01T21:30:27.370755",
+    "timestamp": "2026-10-02T21:45:39.893004+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNWk5FQllGWm9TdU1sRG5aaUQzQXNsdVhwMWxva3ZyejhMNDNUbFd1YnNVVXhJc05aZUVVakM2RzI2YTBNTWpCYmt0Zld5VmEyaDIzQkJNYkdpVzJqN0tGeU1YZU12WFJCY0tmSVpMNGk2aVp2ZDlKWmZBNVEyMVloRHpHSVhvMW11Nmc?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNWk5FQllGWm9TdU1sRG5aaUQzQXNsdVhwMWxva3ZyejhMNDNUbFd1YnNVVXhJc05aZUVVakM2RzI2YTBNTWpCYmt0Zld5VmEyaDIzQkJNYkdpVzJqN0tGeU1YZU12WFJCY0tmSVpMNGk2aVp2ZDlKWmZBNVEyMVloRHpHSVhvMW11Nmc?oc=5",
@@ -10443,6 +10444,96 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPR1BHU1ViaHpuRUlFTVJpeUllSXJwTG5XMW5rd3ZlTUJpdmZINnJ3VDB6WkExZVM4Zk5KV2kzWVR1S1huSVNZZ2VNVDdaQmtzN3FXMGZPTDdkR3RGckVCTUxobVM5M2swS3FpT0J2cWhJMkdjQzhjcjg4RXZMQUh1NmpJRW5iaVJtRmc?oc=5",
     "headline": "Who gets Venezuela's next barrel?",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxPR1BHU1ViaHpuRUlFTVJpeUllSXJwTG5XMW5rd3ZlTUJpdmZINnJ3VDB6WkExZVM4Zk5KV2kzWVR1S1huSVNZZ2VNVDdaQmtzN3FXMGZPTDdkR3RGckVCTUxobVM5M2swS3FpT0J2cWhJMkdjQzhjcjg4RXZMQUh1NmpJRW5iaVJtRmc?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://truthsocial.com/post/7916093": {
+    "timestamp": "2026-10-02T21:00:16.029273+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/7916093",
+    "canonical_url": "https://truthsocial.com/post/7916093",
+    "headline": "Europe has just agreed to release a massive amount of their heavily stocked Diesel Oil. The process will begin immediately. Thank you for your attention to this matter! President DJT",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/7916093",
+    "error": "The read operation timed out"
+  },
+  "https://truthsocial.com/post/8876897": {
+    "timestamp": "2026-10-02T21:00:24.064291+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/8876897",
+    "canonical_url": "https://truthsocial.com/post/8876897",
+    "headline": "I am thrilled to announce the Republic of Korea Deal keeps getting BETTER! 8.4 Billion Dollars for an enhanced Oil Recovery Project. Producing more Oil and Gas means American Energy Dominance and Energy Security in the World for the Future! President DONALD J. TRUMP",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/8876897",
+    "error": "The read operation timed out"
+  },
+  "https://truthsocial.com/post/6635909": {
+    "timestamp": "2026-10-02T21:00:32.830608+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/6635909",
+    "canonical_url": "https://truthsocial.com/post/6635909",
+    "headline": "Republicans in the Senate have to get moving on what I call the “No More Changing of Clocks Act,” officially known as The Sunshine Protection Act, a ridiculous Clock changing process that takes place twice a year, costs our Country a fortune, is bad for Crime, stress on people, Sports, and just about everything else you can imagine. Even the highly respected PGA Commissioner, Brian Rolapp, needs it for the completion of Golf Tournaments in the Winter, when they just plain run out of sunlight. People don’t want to go around changing their Clocks anymore and, besides, far and away, most people like having an hour of extra sunlight in the evening, rather than in the morning. The House has passed this Bill, 308-117, on July 14, 2026, with Great Bipartisan support. Both Democrats and Republicans want it to happen. It’s now up to the U.S. Senate where it would be another Great Bipartisan Victory. Unfortunately, it’s being held up by Senator Tom Cotton, of Arkansas, for reasons unknown. People are sick and tired of having to change their Clocks twice a year. Even most farmers would rather have additional time in the evening to harvest their crops. It is foolish, inconvenient and, in some cases, very costly. For Cities and States with Watchtowers, and hard to reach places, it costs Millions of Dollars. A recent case was made that it is also bad for your health in the anxiety it creates. Leading Medical, Crime, and Economic Studies have shown, conclusively, that ceasing the biannual time change, giving us one extra hour of natural sunlight in the evenings, will help Decrease Robbery and Murder Rates, Reduce Car Accidents (especially those involving Pedestrians!), Lower Risk for Cardiac Issues, Stroke, and Seasonal Depression, Make It Safer for Children to Walk Home from School, Increase Time with your Family, Strongly Support Extracurricular Activities, Boost the Sports, Fitness, Tourism, Retail, and Restaurant Industries (and more!), and Save Money on Energy Bills, because everyone will be enjoying an EXTRA HOUR OF DAYLIGHT. In other words, leave it as it is now, and never change it again. But importantly, with a 100% approval rating, is that NOBODY wants to change their Clocks twice a year. This is an issue that Republicans, Democrats, and Independents can unite behind! President DONALD J. TRUMP",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/6635909",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMijgFBVV95cUxPOFAyNldMX0VOU01CUkN5S1pERjVNR051cUJnZl9VaUZvckFTSjhXZ2J2MFZnc0JlZFp5UHFYSHZEdUt1MEp0QnFPR0FUdnhYblpBall3UnBJRlBWcjFNNzBtQzBkN0dfWXdXU3dncGlrUTJ1TEthcjkwTFcwS1AwX3VRTXpnN3BGQ1BVLTR3?oc=5": {
+    "timestamp": "2026-10-02T21:15:20.271322+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPOFAyNldMX0VOU01CUkN5S1pERjVNR051cUJnZl9VaUZvckFTSjhXZ2J2MFZnc0JlZFp5UHFYSHZEdUt1MEp0QnFPR0FUdnhYblpBall3UnBJRlBWcjFNNzBtQzBkN0dfWXdXU3dncGlrUTJ1TEthcjkwTFcwS1AwX3VRTXpnN3BGQ1BVLTR3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPOFAyNldMX0VOU01CUkN5S1pERjVNR051cUJnZl9VaUZvckFTSjhXZ2J2MFZnc0JlZFp5UHFYSHZEdUt1MEp0QnFPR0FUdnhYblpBall3UnBJRlBWcjFNNzBtQzBkN0dfWXdXU3dncGlrUTJ1TEthcjkwTFcwS1AwX3VRTXpnN3BGQ1BVLTR3?oc=5",
+    "headline": "Brazil seeks ‘full tariff reduction’ in US trade pact - DatamarNews",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxPOFAyNldMX0VOU01CUkN5S1pERjVNR051cUJnZl9VaUZvckFTSjhXZ2J2MFZnc0JlZFp5UHFYSHZEdUt1MEp0QnFPR0FUdnhYblpBall3UnBJRlBWcjFNNzBtQzBkN0dfWXdXU3dncGlrUTJ1TEthcjkwTFcwS1AwX3VRTXpnN3BGQ1BVLTR3?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMikwFBVV95cUxQenBvelgxV3RuRlUxVE0yd2xFSGxHSnBaNUxEM0N5Mi00WjV3V2JiM2VLZGRBMTV0bUtBYW55VlktRnZTR09vNXRzakRMalRfR0t6VkpjV29qR3I3STBqX2hOWGpqaUlFRGRWYUgtaW9nZVhGcTE4bnNEUkdOWW9SSUQ0UVQ4dC05Nlh1ZTJuV0F4UzA?oc=5": {
+    "timestamp": "2026-10-02T21:45:19.402710+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQenBvelgxV3RuRlUxVE0yd2xFSGxHSnBaNUxEM0N5Mi00WjV3V2JiM2VLZGRBMTV0bUtBYW55VlktRnZTR09vNXRzakRMalRfR0t6VkpjV29qR3I3STBqX2hOWGpqaUlFRGRWYUgtaW9nZVhGcTE4bnNEUkdOWW9SSUQ0UVQ4dC05Nlh1ZTJuV0F4UzA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQenBvelgxV3RuRlUxVE0yd2xFSGxHSnBaNUxEM0N5Mi00WjV3V2JiM2VLZGRBMTV0bUtBYW55VlktRnZTR09vNXRzakRMalRfR0t6VkpjV29qR3I3STBqX2hOWGpqaUlFRGRWYUgtaW9nZVhGcTE4bnNEUkdOWW9SSUQ0UVQ4dC05Nlh1ZTJuV0F4UzA?oc=5",
+    "headline": "Here's How The U.S.-Canada Trade War Could Impact Your Investments - Forbes",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikwFBVV95cUxQenBvelgxV3RuRlUxVE0yd2xFSGxHSnBaNUxEM0N5Mi00WjV3V2JiM2VLZGRBMTV0bUtBYW55VlktRnZTR09vNXRzakRMalRfR0t6VkpjV29qR3I3STBqX2hOWGpqaUlFRGRWYUgtaW9nZVhGcTE4bnNEUkdOWW9SSUQ0UVQ4dC05Nlh1ZTJuV0F4UzA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMisgFBVV95cUxNdDdpWVIxQVR3YUwwU2VJelFEeExoTHJwb0pwRWhRa0NEVnBPeGtTZHhacUVTVTVROGQ3WlNGOURmUW1SeU1YZ0NoSzBEcW5iaGJPeFIwSWxpd0oxMWk1MkJtY2VvYWVZcm1USFBWR2oyR2NTZzk3cjNRbmRvc1Bac0MxRU5yZGdxcVJQMGladUdydk9Lck1HTFg2aHI0WUtpNVFsVHllVjNVYVpzci0wNmd3?oc=5": {
+    "timestamp": "2026-10-02T21:45:29.139976+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNdDdpWVIxQVR3YUwwU2VJelFEeExoTHJwb0pwRWhRa0NEVnBPeGtTZHhacUVTVTVROGQ3WlNGOURmUW1SeU1YZ0NoSzBEcW5iaGJPeFIwSWxpd0oxMWk1MkJtY2VvYWVZcm1USFBWR2oyR2NTZzk3cjNRbmRvc1Bac0MxRU5yZGdxcVJQMGladUdydk9Lck1HTFg2aHI0WUtpNVFsVHllVjNVYVpzci0wNmd3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNdDdpWVIxQVR3YUwwU2VJelFEeExoTHJwb0pwRWhRa0NEVnBPeGtTZHhacUVTVTVROGQ3WlNGOURmUW1SeU1YZ0NoSzBEcW5iaGJPeFIwSWxpd0oxMWk1MkJtY2VvYWVZcm1USFBWR2oyR2NTZzk3cjNRbmRvc1Bac0MxRU5yZGdxcVJQMGladUdydk9Lck1HTFg2aHI0WUtpNVFsVHllVjNVYVpzci0wNmd3?oc=5",
+    "headline": "Two More Tankers in Hormuz Report Strikes, Bringing Total to Six in a Week",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisgFBVV95cUxNdDdpWVIxQVR3YUwwU2VJelFEeExoTHJwb0pwRWhRa0NEVnBPeGtTZHhacUVTVTVROGQ3WlNGOURmUW1SeU1YZ0NoSzBEcW5iaGJPeFIwSWxpd0oxMWk1MkJtY2VvYWVZcm1USFBWR2oyR2NTZzk3cjNRbmRvc1Bac0MxRU5yZGdxcVJQMGladUdydk9Lck1HTFg2aHI0WUtpNVFsVHllVjNVYVpzci0wNmd3?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMihAFBVV95cUxNVVkzR1ZlR0tTMzRsMlBkQnN4YUNnb2FwQ21FYjFYNUY0MVFKYTFKcDgtRk94elBOVF9CNWt6R2t1TDk5NktmeGk5SVNSTzliR2lEbkVGLWsxeDRTbEVuaWFWWmh2aFNqSTNtdTk4Zl92Um1Jel9qSUR6MHp2YzNCV21aU0k?oc=5": {
+    "timestamp": "2026-10-02T22:00:20.395766+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNVVkzR1ZlR0tTMzRsMlBkQnN4YUNnb2FwQ21FYjFYNUY0MVFKYTFKcDgtRk94elBOVF9CNWt6R2t1TDk5NktmeGk5SVNSTzliR2lEbkVGLWsxeDRTbEVuaWFWWmh2aFNqSTNtdTk4Zl92Um1Jel9qSUR6MHp2YzNCV21aU0k?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNVVkzR1ZlR0tTMzRsMlBkQnN4YUNnb2FwQ21FYjFYNUY0MVFKYTFKcDgtRk94elBOVF9CNWt6R2t1TDk5NktmeGk5SVNSTzliR2lEbkVGLWsxeDRTbEVuaWFWWmh2aFNqSTNtdTk4Zl92Um1Jel9qSUR6MHp2YzNCV21aU0k?oc=5",
+    "headline": "Iowa Farmers Suffer as Trump Tariffs Backfire Ahead of Midterms - 조선일보",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihAFBVV95cUxNVVkzR1ZlR0tTMzRsMlBkQnN4YUNnb2FwQ21FYjFYNUY0MVFKYTFKcDgtRk94elBOVF9CNWt6R2t1TDk5NktmeGk5SVNSTzliR2lEbkVGLWsxeDRTbEVuaWFWWmh2aFNqSTNtdTk4Zl92Um1Jel9qSUR6MHp2YzNCV21aU0k?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMigwFBVV95cUxOaXVEcS1BQ18xVW5hUkVRWHY1SF9lcllVUVl4RVo1djVjZHIyeF9Fem1QXzF0VzZ0ZE1nSVNXQ0xmeE5mTlFqekRheXg3SENtZ29la1RmTHlaSUhQNEZ6WnM4MF9GcFJQMUN6THJvaDl1ZkdqMUo2M25acThrbF9JS3I3OA?oc=5": {
+    "timestamp": "2026-10-02T22:15:22.422496+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOaXVEcS1BQ18xVW5hUkVRWHY1SF9lcllVUVl4RVo1djVjZHIyeF9Fem1QXzF0VzZ0ZE1nSVNXQ0xmeE5mTlFqekRheXg3SENtZ29la1RmTHlaSUhQNEZ6WnM4MF9GcFJQMUN6THJvaDl1ZkdqMUo2M25acThrbF9JS3I3OA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOaXVEcS1BQ18xVW5hUkVRWHY1SF9lcllVUVl4RVo1djVjZHIyeF9Fem1QXzF0VzZ0ZE1nSVNXQ0xmeE5mTlFqekRheXg3SENtZ29la1RmTHlaSUhQNEZ6WnM4MF9GcFJQMUN6THJvaDl1ZkdqMUo2M25acThrbF9JS3I3OA?oc=5",
+    "headline": "News of the day: Redrawing the border, G7 oil and diesel release, disinheritance law, hoarding condos, mortgage rates pause and more - Yahoo! Finance Canada",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigwFBVV95cUxOaXVEcS1BQ18xVW5hUkVRWHY1SF9lcllVUVl4RVo1djVjZHIyeF9Fem1QXzF0VzZ0ZE1nSVNXQ0xmeE5mTlFqekRheXg3SENtZ29la1RmTHlaSUhQNEZ6WnM4MF9GcFJQMUN6THJvaDl1ZkdqMUo2M25acThrbF9JS3I3OA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMioAFBVV95cUxQVmNRNHllY0JGalBiY3ljSEdSSEFTU3dhRzNJSzNfYTFRMmhwN3QzdUthMlB1YlQtY3BwVjJIMnZvbDV2LUVPR19MSjZ3bVNXaU9mQ3NkTFpaeDlHVWktUE5zYWl0UHdDbWxwOEZPakRMM0NXN3BTWERYanlxM3FKSmpaaDZnSkNPN0p6NHh1ZU1UT0paRGpXN0lsRnBHSUE4?oc=5": {
+    "timestamp": "2026-10-02T22:30:19.599156+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQVmNRNHllY0JGalBiY3ljSEdSSEFTU3dhRzNJSzNfYTFRMmhwN3QzdUthMlB1YlQtY3BwVjJIMnZvbDV2LUVPR19MSjZ3bVNXaU9mQ3NkTFpaeDlHVWktUE5zYWl0UHdDbWxwOEZPakRMM0NXN3BTWERYanlxM3FKSmpaaDZnSkNPN0p6NHh1ZU1UT0paRGpXN0lsRnBHSUE4?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQVmNRNHllY0JGalBiY3ljSEdSSEFTU3dhRzNJSzNfYTFRMmhwN3QzdUthMlB1YlQtY3BwVjJIMnZvbDV2LUVPR19MSjZ3bVNXaU9mQ3NkTFpaeDlHVWktUE5zYWl0UHdDbWxwOEZPakRMM0NXN3BTWERYanlxM3FKSmpaaDZnSkNPN0p6NHh1ZU1UT0paRGpXN0lsRnBHSUE4?oc=5",
+    "headline": "How local bus systems are responding to higher fuel costs - Benzie County Record Patriot",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMioAFBVV95cUxQVmNRNHllY0JGalBiY3ljSEdSSEFTU3dhRzNJSzNfYTFRMmhwN3QzdUthMlB1YlQtY3BwVjJIMnZvbDV2LUVPR19MSjZ3bVNXaU9mQ3NkTFpaeDlHVWktUE5zYWl0UHdDbWxwOEZPakRMM0NXN3BTWERYanlxM3FKSmpaaDZnSkNPN0p6NHh1ZU1UT0paRGpXN0lsRnBHSUE4?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMikwFBVV95cUxOQU1KVUhkandvbFd3SVYzdmNtYkQ5T1d0YVJGVDRleEZhazlEZFBLWVA0OEJVczdpVjc2SmpnTkVmSzR5MnBvVlpjbXVQV1ZMT1JhTG96dHpmREFic0d1WFJ3SThwbmo1MjNHQWNOS28zNEFLcGl3YWx3TzBhZkdPNmhaVFpxMUxjSEctbjdBXzhONFk?oc=5": {
+    "timestamp": "2026-10-02T22:45:19.963986+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOQU1KVUhkandvbFd3SVYzdmNtYkQ5T1d0YVJGVDRleEZhazlEZFBLWVA0OEJVczdpVjc2SmpnTkVmSzR5MnBvVlpjbXVQV1ZMT1JhTG96dHpmREFic0d1WFJ3SThwbmo1MjNHQWNOS28zNEFLcGl3YWx3TzBhZkdPNmhaVFpxMUxjSEctbjdBXzhONFk?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOQU1KVUhkandvbFd3SVYzdmNtYkQ5T1d0YVJGVDRleEZhazlEZFBLWVA0OEJVczdpVjc2SmpnTkVmSzR5MnBvVlpjbXVQV1ZMT1JhTG96dHpmREFic0d1WFJ3SThwbmo1MjNHQWNOS28zNEFLcGl3YWx3TzBhZkdPNmhaVFpxMUxjSEctbjdBXzhONFk?oc=5",
+    "headline": "India Faces Up To 100% Trump Tariff Over Russian Oil - Austin South Asian",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikwFBVV95cUxOQU1KVUhkandvbFd3SVYzdmNtYkQ5T1d0YVJGVDRleEZhazlEZFBLWVA0OEJVczdpVjc2SmpnTkVmSzR5MnBvVlpjbXVQV1ZMT1JhTG96dHpmREFic0d1WFJ3SThwbmo1MjNHQWNOS28zNEFLcGl3YWx3TzBhZkdPNmhaVFpxMUxjSEctbjdBXzhONFk?oc=5",
     "error": "The read operation timed out"
   }
 }
