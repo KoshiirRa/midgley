@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-03T07:10:42.957169",
+  "timestamp": "2026-10-03T07:45:46.944788",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.463,
+    "current_price_per_gal": 6.457,
     "source": "AAA Web Scraper (Oakland, CA)",
     "provenance": {
       "source": "AAA Web Scraper (Oakland, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-03T07:08:32Z"
+      "timestamp": "2026-10-03T07:45:27Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 6.463,
-    "predicted_price_per_gal": 6.454,
-    "expected_change_dollars": -0.009,
-    "expected_change_percent": -0.14,
+    "current_base_price": 6.457,
+    "predicted_price_per_gal": 6.447,
+    "expected_change_dollars": -0.01,
+    "expected_change_percent": -0.15,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 6.334,
-    "prediction_upper_95ci": 6.574,
+    "prediction_lower_95ci": 6.327,
+    "prediction_upper_95ci": 6.567,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.452,
-    "day_2_price": 6.438,
-    "day_3_price": 6.502,
-    "day_4_price": 6.486,
-    "day_5_price": 6.454,
+    "day_1_price": 6.446,
+    "day_2_price": 6.432,
+    "day_3_price": 6.496,
+    "day_4_price": 6.48,
+    "day_5_price": 6.447,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.003,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -81,22 +81,22 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "DOWN",
+        "description": "Favorable multi-basin weather conditions"
       },
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "DOWN",
-        "description": "Ecodeveloped pipeline loading flows"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Oakland CA forecast $-0.009/gal (-0.14%): Driven primarily by Tax & Regulatory Overhead ($-0.003/gal), Refining Yield & Crack Spread ($-0.002/gal).",
+      "summary_text": "Oakland CA forecast $-0.010/gal (-0.15%): Driven primarily by Tax & Regulatory Overhead ($-0.003/gal), Refining Yield & Crack Spread ($-0.003/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
@@ -109,8 +109,8 @@
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.03,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.05,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -131,18 +131,18 @@
           "direction": "DOWN"
         },
         {
-          "category": "Regional Logistics & Hub Delivery",
-          "description": "Ecodeveloped pipeline loading flows",
+          "category": "Weather & Environmental Signals",
+          "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.001,
           "impact_pct": -0.02,
           "share_pct": 5.0,
           "direction": "DOWN"
         },
         {
-          "category": "Weather & Environmental Signals",
-          "description": "Neutral weather impact",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "category": "Regional Logistics & Hub Delivery",
+          "description": "Unrestricted terminal dispatch",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 5.0,
           "direction": "FLAT"
         }
@@ -161,8 +161,8 @@
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.002,
-      "impact_pct": -0.03,
+      "impact_dollars": -0.003,
+      "impact_pct": -0.05,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -183,24 +183,24 @@
       "direction": "DOWN"
     },
     {
-      "category": "Regional Logistics & Hub Delivery",
-      "description": "Ecodeveloped pipeline loading flows",
+      "category": "Weather & Environmental Signals",
+      "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.001,
       "impact_pct": -0.02,
       "share_pct": 5.0,
       "direction": "DOWN"
     },
     {
-      "category": "Weather & Environmental Signals",
-      "description": "Neutral weather impact",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "category": "Regional Logistics & Hub Delivery",
+      "description": "Unrestricted terminal dispatch",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 5.0,
       "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Oakland CA forecast $-0.009/gal (-0.14%): Driven primarily by Tax & Regulatory Overhead ($-0.003/gal), Refining Yield & Crack Spread ($-0.002/gal).",
+    "summary_text": "Oakland CA forecast $-0.010/gal (-0.15%): Driven primarily by Tax & Regulatory Overhead ($-0.003/gal), Refining Yield & Crack Spread ($-0.003/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.003,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -237,18 +237,18 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "DOWN",
+        "description": "Favorable multi-basin weather conditions"
       },
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "DOWN",
-        "description": "Ecodeveloped pipeline loading flows"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       }
     }
   }
