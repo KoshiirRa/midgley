@@ -4553,5 +4553,25 @@
       "overall_price_pressure": 0.7
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-03T22:46:58.813282",
+    "headline": "From crude to rice: The long tail of US sanctions - tbsnews.net",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBtbnptVXJ5N1lEaEJXeW9RdmJJNGpYejFiRzlKZzhDeUVYRDgwSFJDWHBxRUZIMmlUajJVdUZaY0lGejBUaWhCSVFZaUJYS0wzY3V4YzZjQ2lsck9uSXBWd1hBSTlSdndjMnVGNG9uZDVsWlJqWW1XZ2RHbk1VTkE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBtbnptVXJ5N1lEaEJXeW9RdmJJNGpYejFiRzlKZzhDeUVYRDgwSFJDWHBxRUZIMmlUajJVdUZaY0lGejBUaWhCSVFZaUJYS0wzY3V4YzZjQ2lsck9uSXBWd1hBSTlSdndjMnVGNG9uZDVsWlJqWW1XZ2RHbk1VTkE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMif0FVX3lxTFBtbnptVXJ5N1lEaEJXeW9RdmJJNGpYejFiRzlKZzhDeUVYRDgwSFJDWHBxRUZIMmlUajJVdUZaY0lGejBUaWhCSVFZaUJYS0wzY3V4YzZjQ2lsck9uSXBWd1hBSTlSdndjMnVGNG9uZDVsWlJqWW1XZ2RHbk1VTkE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.6,
+      "demand_sentiment": -0.3,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.55
+    },
+    "discord_notified": true
   }
 ]
