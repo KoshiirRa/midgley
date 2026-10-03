@@ -15,20 +15,20 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-03 07:09 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-03 13:10 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.312`/gal | **`$3.305`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-National-Ridge` |
-| **Tulsa, OK Metro Retail** | `$4.035`/gal | **`$4.013`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-Tulsa-Ridge` |
-| **Newark, DE Metro Retail** | `$4.265`/gal | **`$4.255`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-Newark-Ridge` |
-| **Cincinnati, OH Retail** | `$4.132`/gal | **`$4.125`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
-| **Northern Kentucky Retail** | `$4.263`/gal | **`$4.254`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
-| **Greenville, NC Metro Retail** | `$4.051`/gal | **`$4.041`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-Greenville-Ridge` |
-| **Charlotte, NC Metro Retail** | `$4.084`/gal | **`$4.075`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-Charlotte-Ridge` |
-| **Port St. Lucie, FL Waterborne** | `$4.155`/gal | **`$4.144`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-PortStLucie-Ridge` |
-| **Oakland, CA Metro Retail** | `$6.463`/gal | **`$6.454`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-Oakland-Ridge` |
-| **SF Bay Area 9-County Avg** | `$6.596`/gal | **`$6.578`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-BayArea-Ridge` |
+| **National Wholesale (RBOB)** | `$3.312`/gal | **`$3.323`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-National-Ridge` |
+| **Tulsa, OK Metro Retail** | `$4.029`/gal | **`$4.019`/gal** | **DOWN 📉** | `2026-10-09` | `v1.6-Ipatieff-Tulsa-Ridge` |
+| **Newark, DE Metro Retail** | `$4.230`/gal | **`$4.238`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Newark-Ridge` |
+| **Cincinnati, OH Retail** | `$4.049`/gal | **`$4.059`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
+| **Northern Kentucky Retail** | `$4.249`/gal | **`$4.263`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
+| **Greenville, NC Metro Retail** | `$4.038`/gal | **`$4.046`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Greenville-Ridge` |
+| **Charlotte, NC Metro Retail** | `$4.073`/gal | **`$4.082`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Charlotte-Ridge` |
+| **Port St. Lucie, FL Waterborne** | `$4.102`/gal | **`$4.107`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-PortStLucie-Ridge` |
+| **Oakland, CA Metro Retail** | `$6.457`/gal | **`$6.466`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Oakland-Ridge` |
+| **SF Bay Area 9-County Avg** | `$6.586`/gal | **`$6.604`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-BayArea-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-03T12:00:51.566881",
+  "timestamp": "2026-10-03T13:13:37.977939",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-03T12:00:25Z"
+      "timestamp": "2026-10-03T13:10:28Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
     "current_base_price": 4.029,
-    "predicted_price_per_gal": 4.007,
-    "expected_change_dollars": -0.022,
-    "expected_change_percent": -0.55,
+    "predicted_price_per_gal": 4.019,
+    "expected_change_dollars": -0.01,
+    "expected_change_percent": -0.25,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.887,
-    "prediction_upper_95ci": 4.127,
+    "prediction_lower_95ci": 3.899,
+    "prediction_upper_95ci": 4.139,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.014,
-    "day_2_price": 3.995,
-    "day_3_price": 4.049,
-    "day_4_price": 4.026,
-    "day_5_price": 4.007,
+    "day_1_price": 4.018,
+    "day_2_price": 4.012,
+    "day_3_price": 4.061,
+    "day_4_price": 4.04,
+    "day_5_price": 4.019,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.003,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.003,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.003,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.001,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -81,10 +81,10 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.001,
+        "delta_dollars": -0.0,
         "share_pct": 3.0,
-        "direction": "DOWN",
-        "description": "OPEC price pressure talkdown & dovish geopolitical news"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -96,47 +96,47 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast $-0.022/gal (-0.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
+      "summary_text": "Tulsa OK forecast $-0.010/gal (-0.25%): Driven primarily by Regional Logistics & Hub Delivery ($-0.003/gal), Refining Yield & Crack Spread ($-0.003/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.007,
-          "impact_pct": -0.17,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.07,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.007,
-          "impact_pct": -0.17,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.07,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.005,
-          "impact_pct": -0.12,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.07,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.05,
+          "impact_dollars": -0.001,
+          "impact_pct": -0.02,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
-          "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.001,
-          "impact_pct": -0.02,
+          "description": "Neutral news sentiment",
+          "impact_dollars": -0.0,
+          "impact_pct": -0.0,
           "share_pct": 3.0,
-          "direction": "DOWN"
+          "direction": "FLAT"
         },
         {
           "category": "Tax & Regulatory Overhead",
@@ -153,42 +153,42 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.007,
-      "impact_pct": -0.17,
+      "impact_dollars": -0.003,
+      "impact_pct": -0.07,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.007,
-      "impact_pct": -0.17,
+      "impact_dollars": -0.003,
+      "impact_pct": -0.07,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.005,
-      "impact_pct": -0.12,
+      "impact_dollars": -0.003,
+      "impact_pct": -0.07,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
-      "impact_dollars": -0.002,
-      "impact_pct": -0.05,
+      "impact_dollars": -0.001,
+      "impact_pct": -0.02,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
-      "description": "OPEC price pressure talkdown & dovish geopolitical news",
-      "impact_dollars": -0.001,
-      "impact_pct": -0.02,
+      "description": "Neutral news sentiment",
+      "impact_dollars": -0.0,
+      "impact_pct": -0.0,
       "share_pct": 3.0,
-      "direction": "DOWN"
+      "direction": "FLAT"
     },
     {
       "category": "Tax & Regulatory Overhead",
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast $-0.022/gal (-0.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
+    "summary_text": "Tulsa OK forecast $-0.010/gal (-0.25%): Driven primarily by Regional Logistics & Hub Delivery ($-0.003/gal), Refining Yield & Crack Spread ($-0.003/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.003,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.003,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.003,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.001,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -237,10 +237,10 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.001,
+        "delta_dollars": -0.0,
         "share_pct": 3.0,
-        "direction": "DOWN",
-        "description": "OPEC price pressure talkdown & dovish geopolitical news"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

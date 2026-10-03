@@ -1,7 +1,7 @@
 {
   "created_at": "2026-09-05 04:38:50",
-  "last_updated": "2026-10-01 18:17:54",
-  "total_alerts_logged": 17,
+  "last_updated": "2026-10-03 13:13:05",
+  "total_alerts_logged": 18,
   "active_degraded_regions": [
     "National"
   ],
@@ -728,6 +728,22 @@
           "model_mae": 0.1603,
           "naive_mae": 0.1251,
           "model_uplift_mae_pct": -28.16,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-10-03 13:13:05",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "National",
+          "evaluations": 32,
+          "model_mae": 0.1463,
+          "naive_mae": 0.1046,
+          "model_uplift_mae_pct": -39.88,
           "status": "DEGRADED"
         }
       ],

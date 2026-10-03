@@ -1298,5 +1298,31 @@
     "ferc_pipeline_tariff_index_5d": 1.8733,
     "is_free_alternative": true,
     "cost_per_query": 0.0
+  },
+  {
+    "status": "FALLBACK",
+    "timestamp": "2026-10-03 07:03:10",
+    "as_of": "2026-10-03 07:03:10",
+    "valid_date": "2026-10-03",
+    "is_vintage_reconstructed": false,
+    "ferc_colonial_line1_tariff_per_bbl": 2.15,
+    "ferc_plantation_tariff_per_bbl": 1.85,
+    "ferc_explorer_tariff_per_bbl": 1.62,
+    "ferc_pipeline_tariff_index_5d": 1.8733,
+    "is_free_alternative": true,
+    "cost_per_query": 0.0
+  },
+  {
+    "status": "FALLBACK",
+    "timestamp": "2026-10-03 13:03:22",
+    "as_of": "2026-10-03 13:03:22",
+    "valid_date": "2026-10-03",
+    "is_vintage_reconstructed": false,
+    "ferc_colonial_line1_tariff_per_bbl": 2.15,
+    "ferc_plantation_tariff_per_bbl": 1.85,
+    "ferc_explorer_tariff_per_bbl": 1.62,
+    "ferc_pipeline_tariff_index_5d": 1.8733,
+    "is_free_alternative": true,
+    "cost_per_query": 0.0
   }
 ]
