@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-02T22:45:42.919778",
+  "timestamp": "2026-10-03T07:10:42.098562",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-02T22:45:25Z"
+      "timestamp": "2026-10-03T07:10:15Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-08",
+    "target_date": "2026-10-09",
     "current_base_price": 4.035,
-    "predicted_price_per_gal": 4.017,
-    "expected_change_dollars": -0.018,
-    "expected_change_percent": -0.45,
+    "predicted_price_per_gal": 4.013,
+    "expected_change_dollars": -0.022,
+    "expected_change_percent": -0.55,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.897,
-    "prediction_upper_95ci": 4.137,
+    "prediction_lower_95ci": 3.893,
+    "prediction_upper_95ci": 4.133,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.031,
-    "day_2_price": 3.99,
-    "day_3_price": 4.0,
-    "day_4_price": 4.011,
-    "day_5_price": 4.017,
+    "day_1_price": 4.02,
+    "day_2_price": 4.001,
+    "day_3_price": 4.055,
+    "day_4_price": 4.032,
+    "day_5_price": 4.013,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.007,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.007,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.004,
+        "delta_dollars": -0.005,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -89,36 +89,36 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 2.0,
-        "direction": "DOWN",
-        "description": "Tax relief or off-peak RVP specification"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast $-0.018/gal (-0.45%): Driven primarily by Regional Logistics & Hub Delivery ($-0.005/gal), Refining Yield & Crack Spread ($-0.005/gal).",
+      "summary_text": "Tulsa OK forecast $-0.022/gal (-0.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.005,
-          "impact_pct": -0.12,
+          "impact_dollars": -0.007,
+          "impact_pct": -0.17,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.005,
-          "impact_pct": -0.12,
+          "impact_dollars": -0.007,
+          "impact_pct": -0.17,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.004,
-          "impact_pct": -0.1,
+          "impact_dollars": -0.005,
+          "impact_pct": -0.12,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -140,11 +140,11 @@
         },
         {
           "category": "Tax & Regulatory Overhead",
-          "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.001,
-          "impact_pct": -0.02,
+          "description": "Fixed statutory tax overhead",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 2.0,
-          "direction": "DOWN"
+          "direction": "FLAT"
         }
       ]
     }
@@ -153,24 +153,24 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.005,
-      "impact_pct": -0.12,
+      "impact_dollars": -0.007,
+      "impact_pct": -0.17,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.005,
-      "impact_pct": -0.12,
+      "impact_dollars": -0.007,
+      "impact_pct": -0.17,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.004,
-      "impact_pct": -0.1,
+      "impact_dollars": -0.005,
+      "impact_pct": -0.12,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -192,20 +192,20 @@
     },
     {
       "category": "Tax & Regulatory Overhead",
-      "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.001,
-      "impact_pct": -0.02,
+      "description": "Fixed statutory tax overhead",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 2.0,
-      "direction": "DOWN"
+      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast $-0.018/gal (-0.45%): Driven primarily by Regional Logistics & Hub Delivery ($-0.005/gal), Refining Yield & Crack Spread ($-0.005/gal).",
+    "summary_text": "Tulsa OK forecast $-0.022/gal (-0.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.007,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.007,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.004,
+        "delta_dollars": -0.005,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 2.0,
-        "direction": "DOWN",
-        "description": "Tax relief or off-peak RVP specification"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     }
   }
