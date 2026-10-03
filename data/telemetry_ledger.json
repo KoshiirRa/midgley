@@ -1,10 +1,10 @@
 {
   "created_at": "2026-09-02 00:19:23",
   "llm_totals": {
-    "prompt_tokens": 49184,
-    "completion_tokens": 27940,
-    "total_tokens": 77124,
-    "estimated_cost_usd": 0.012054,
+    "prompt_tokens": 49312,
+    "completion_tokens": 28020,
+    "total_tokens": 77332,
+    "estimated_cost_usd": 0.012088,
     "fallback_activations": 311
   },
   "llm_events": [
@@ -6816,6 +6816,17 @@
       "total_tokens": 0,
       "estimated_cost_usd": 0.0,
       "is_fallback": true
+    },
+    {
+      "timestamp": "2026-10-03 15:57:00",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "prompt_tokens": 128,
+      "completion_tokens": 80,
+      "total_tokens": 208,
+      "estimated_cost_usd": 3.4e-05,
+      "is_fallback": false
     }
   ],
   "api_events": [],
