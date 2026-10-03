@@ -32,7 +32,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.8.4</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-normal" title="MiroFish Multi-Agent Simulation Cohort Active"><i class="fa-solid fa-users-gear text-[10px] mr-1"></i>Multi-Agent Cohort: ON</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.8.4</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 font-normal" title="Standard Linear Scenario Engine Active"><i class="fa-solid fa-users-slash text-[10px] mr-1"></i>Multi-Agent Cohort: OFF</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -162,15 +162,15 @@
                 <div class="space-y-2">
                     <label for="regionPreset" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
                     <select id="regionPreset" aria-label="Target Market or Metro Region" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
-                        <option value="Cincinnati_OH" selected>Cincinnati, OH/KY Retail ($4.132/gal)</option>
+                        <option value="Cincinnati_OH" selected>Cincinnati, OH/KY Retail ($4.049/gal)</option>
                         <option value="National">National Wholesale RBOB ($3.312/gal)</option>
-                        <option value="Tulsa_OK">Tulsa, OK Retail ($4.035/gal)</option>
-                        <option value="Newark_DE">Newark, DE Retail ($4.265/gal)</option>
-                        <option value="Greenville_NC">Greenville, NC Retail ($4.051/gal)</option>
-                        <option value="Charlotte_NC">Charlotte, NC Retail ($4.084/gal)</option>
-                        <option value="Port_St_Lucie_FL">Port St. Lucie, FL Retail ($4.155/gal)</option>
-                        <option value="Oakland_CA">Oakland, CA Retail ($6.463/gal)</option>
-                        <option value="BayArea_CA">SF Bay Area Region ($6.596/gal)</option>
+                        <option value="Tulsa_OK">Tulsa, OK Retail ($4.029/gal)</option>
+                        <option value="Newark_DE">Newark, DE Retail ($4.230/gal)</option>
+                        <option value="Greenville_NC">Greenville, NC Retail ($4.038/gal)</option>
+                        <option value="Charlotte_NC">Charlotte, NC Retail ($4.073/gal)</option>
+                        <option value="Port_St_Lucie_FL">Port St. Lucie, FL Retail ($4.102/gal)</option>
+                        <option value="Oakland_CA">Oakland, CA Retail ($6.457/gal)</option>
+                        <option value="BayArea_CA">SF Bay Area Region ($6.586/gal)</option>
                         <option value="custom">Custom Local Pump Price...</option>
                     </select>
                 </div>
@@ -277,7 +277,7 @@
 
     <!-- Interactive Calculation Script -->
     <script>
-        const REGIONAL_TRAJECTORIES = {"Cincinnati_OH": {"name": "Cincinnati, OH/KY Retail", "base": 4.132, "trajectory": [4.132, 4.162, 4.188, 4.201, 4.195, 4.198]}, "National": {"name": "National Wholesale RBOB", "base": 3.312, "trajectory": [3.312, 3.359, 3.401, 3.422, 3.412, 3.417]}, "Tulsa_OK": {"name": "Tulsa, OK Retail", "base": 4.035, "trajectory": [4.035, 4.045, 4.054, 4.059, 4.056, 4.057]}, "Newark_DE": {"name": "Newark, DE Retail", "base": 4.265, "trajectory": [4.265, 4.296, 4.323, 4.337, 4.33, 4.333]}, "Greenville_NC": {"name": "Greenville, NC Retail", "base": 4.051, "trajectory": [4.051, 4.082, 4.11, 4.123, 4.116, 4.12]}, "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 4.084, "trajectory": [4.084, 4.122, 4.155, 4.172, 4.164, 4.168]}, "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 4.155, "trajectory": [4.155, 4.186, 4.213, 4.227, 4.22, 4.224]}, "Oakland_CA": {"name": "Oakland, CA Retail", "base": 6.463, "trajectory": [6.463, 6.495, 6.523, 6.537, 6.53, 6.534]}, "BayArea_CA": {"name": "SF Bay Area Region", "base": 6.596, "trajectory": [6.596, 6.655, 6.708, 6.734, 6.721, 6.727]}};
+        const REGIONAL_TRAJECTORIES = {"Cincinnati_OH": {"name": "Cincinnati, OH/KY Retail", "base": 4.049, "trajectory": [4.049, 4.068, 4.085, 4.093, 4.089, 4.091]}, "National": {"name": "National Wholesale RBOB", "base": 3.312, "trajectory": [3.312, 3.333, 3.352, 3.362, 3.357, 3.359]}, "Tulsa_OK": {"name": "Tulsa, OK Retail", "base": 4.029, "trajectory": [4.029, 4.033, 4.036, 4.037, 4.036, 4.037]}, "Newark_DE": {"name": "Newark, DE Retail", "base": 4.23, "trajectory": [4.23, 4.251, 4.269, 4.278, 4.274, 4.276]}, "Greenville_NC": {"name": "Greenville, NC Retail", "base": 4.038, "trajectory": [4.038, 4.059, 4.078, 4.087, 4.082, 4.085]}, "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 4.073, "trajectory": [4.073, 4.1, 4.124, 4.137, 4.13, 4.133]}, "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 4.102, "trajectory": [4.102, 4.122, 4.14, 4.149, 4.145, 4.147]}, "Oakland_CA": {"name": "Oakland, CA Retail", "base": 6.457, "trajectory": [6.457, 6.478, 6.496, 6.505, 6.501, 6.503]}, "BayArea_CA": {"name": "SF Bay Area Region", "base": 6.586, "trajectory": [6.586, 6.624, 6.659, 6.676, 6.667, 6.671]}};
 
         function applyVehiclePreset() {
             const val = document.getElementById('vehiclePreset').value;
