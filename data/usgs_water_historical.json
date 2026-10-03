@@ -1,10 +1,10 @@
 {
   "benchmark_key": "usgs_water",
-  "last_refreshed_utc": "2026-10-03 17:23:38",
-  "records_count": 9,
+  "last_refreshed_utc": "2026-10-03 19:09:48",
+  "records_count": 6,
   "data": {
     "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-    "timestamp": "2026-10-03 17:20:05",
+    "timestamp": "2026-10-03 19:09:46",
     "status": "SUCCESS",
     "stations_monitored": 13,
     "stations": {
@@ -149,9 +149,6 @@
       "is_barge_draft_restricted": false,
       "is_thermal_curtailment_risk": false,
       "is_gulf_departure_halted": false
-    },
-    "_cache_hit": true,
-    "_cache_tier": "in-memory",
-    "_cache_age_seconds": 212.1
+    }
   }
 }
