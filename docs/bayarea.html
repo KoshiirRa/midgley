@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1ae2ce4322b14229bad5f1c4bf222a01"}'></script>
+
     <!-- Open Graph / Discord Social Embed Metadata -->
     <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="SF Bay Area 9-County Gas Price Forecast ($6.596 → $6.628 | +0.49%) - Midgley AI">
-    <meta property="og:description" content="5-day retail gas price forecast for 9-County San Francisco Bay Area. Baseline $6.596/gal, projected target $6.628/gal. PADD 5 West Coast refining island model.">
+    <meta property="og:title" content="SF Bay Area 9-County Gas Price Forecast ($6.596 → $6.639 | +0.65%) - Midgley AI">
+    <meta property="og:description" content="5-day retail gas price forecast for 9-County San Francisco Bay Area. Baseline $6.596/gal, projected target $6.639/gal. PADD 5 West Coast refining island model.">
     <meta property="og:url" content="https://koshiirra.github.io/midgley/bayarea.html">
     <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/embeds/bayarea.png">
     <meta property="og:image:width" content="1200">
@@ -16,8 +15,8 @@
 
     <!-- Twitter Card Metadata -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SF Bay Area 9-County Gas Price Forecast ($6.596 → $6.628 | +0.49%) - Midgley AI">
-    <meta name="twitter:description" content="5-day retail gas price forecast for 9-County San Francisco Bay Area. Baseline $6.596/gal, projected target $6.628/gal. PADD 5 West Coast refining island model.">
+    <meta name="twitter:title" content="SF Bay Area 9-County Gas Price Forecast ($6.596 → $6.639 | +0.65%) - Midgley AI">
+    <meta name="twitter:description" content="5-day retail gas price forecast for 9-County San Francisco Bay Area. Baseline $6.596/gal, projected target $6.639/gal. PADD 5 West Coast refining island model.">
     <meta name="twitter:image" content="https://koshiirra.github.io/midgley/assets/embeds/bayarea.png">
 
     <!-- Discord Theme Accent Color -->
@@ -76,87 +75,88 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
 
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-blue-600 focus:text-white focus:rounded-xl focus:shadow-xl focus:top-2 focus:left-2 font-medium text-sm">Skip to main content</a>
+    <header role="banner" class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
+                <a href="index.html" aria-label="Midgley AI Homepage" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
                     <img src="assets/logo.png" alt="Midgley Logo" class="w-full h-full object-cover">
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.8.2</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-normal" title="MiroFish Multi-Agent Simulation Cohort Active"><i class="fa-solid fa-users-gear text-[10px] mr-1"></i>Multi-Agent Cohort: ON</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.8.4-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 font-normal" title="Standard Linear Scenario Engine Active"><i class="fa-solid fa-users-slash text-[10px] mr-1"></i>Multi-Agent Cohort: OFF</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
             </div>
             
-            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+            <nav aria-label="Main Navigation" class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
                 <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-house"></i> Overview
+                    <i class="fa-solid fa-house" aria-hidden="true"></i> Overview
                 </a>
                 <a href="national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-globe"></i> National Wholesale
+                    <i class="fa-solid fa-globe" aria-hidden="true"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
                 <div class="relative group">
-                    <button class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    <button type="button" id="metro-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="metro-dropdown-menu" aria-label="Metro Areas Selection Menu" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform" aria-hidden="true"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
-                        <a href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                    <div id="metro-dropdown-menu" role="menu" aria-labelledby="metro-menu-btn" class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a role="menuitem" href="tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Tulsa, OK Retail
                         </a>
-                        <a href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        <a role="menuitem" href="newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400" aria-hidden="true"></i> Newark, DE Retail
                         </a>
-                        <a href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        <a role="menuitem" href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        <a role="menuitem" href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
                         </a>
-                        <a href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        <a role="menuitem" href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
                         </a>
-                        <a href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        <a role="menuitem" href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
                         </a>
-                        <a href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        <a role="menuitem" href="oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400" aria-hidden="true"></i> Oakland, CA Retail
                         </a>
-                        <a href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        <a role="menuitem" href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area Region
                         </a>
                     </div>
                 </div>
 
                 <a href="diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                    <i class="fa-solid fa-truck-front text-purple-400" aria-hidden="true"></i> Diesel ULSD
                 </a>
                 <a href="savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                    <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Fill-Up Advisor
                 </a>
                 <a href="telemetry.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                    <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Telemetry & Map
                 </a>
                 <a href="math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Math Guide
                 </a>
                 <a href="sources.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                    <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Data Sources
                 </a>
                 <a href="citations.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                    <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations
                 </a>
-                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
-                    <i class="fa-brands fa-github"></i> GitHub
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
                 </a>
-            </div>
+            </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -198,7 +198,7 @@
                         <span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-semibold">Municipal Tax Overhead</span>
                     </div>
                     <p class="text-2xl font-extrabold text-white mt-1">$6.633<span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-purple-300">$6.665/gal</strong> (+0.5%)</p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-purple-300">$6.676/gal</strong> (+0.6%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-blue-500/30 space-y-2">
@@ -207,7 +207,7 @@
                         <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20 font-semibold">Tech Commute Corridor</span>
                     </div>
                     <p class="text-2xl font-extrabold text-white mt-1">$6.493<span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-blue-300">$6.525/gal</strong> (+0.5%)</p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-blue-300">$6.536/gal</strong> (+0.7%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
@@ -216,7 +216,7 @@
                         <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-semibold">Richmond Proximity</span>
                     </div>
                     <p class="text-2xl font-extrabold text-white mt-1">$6.463<span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">$6.495/gal</strong> (+0.5%)</p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-amber-300">$6.506/gal</strong> (+0.7%)</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2">
@@ -225,7 +225,7 @@
                         <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-semibold">Benicia Fence-Line</span>
                     </div>
                     <p class="text-2xl font-extrabold text-white mt-1">$6.363<span class="text-xs font-normal text-slate-400">/gal base</span></p>
-                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-emerald-300">$6.395/gal</strong> (+0.5%)</p>
+                    <p class="text-xs text-slate-400">5-Day Target: <strong class="text-emerald-300">$6.406/gal</strong> (+0.7%)</p>
                 </div>
 
             </div>
@@ -246,15 +246,16 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                <table class="w-full text-left text-xs text-slate-300 border-collapse" aria-label="NorCal Sub-Locale Quantitative Model Forecasts Matrix">
+                    <caption class="sr-only">NorCal Sub-Locale Quantitative Model Forecasts (5-Day Target Horizon)</caption>
                     <thead>
                         <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider bg-slate-950">
-                            <th class="p-3">Sub-Locale / Region</th>
-                            <th class="p-3">Current Base Price</th>
-                            <th class="p-3">5-Day Model Target</th>
-                            <th class="p-3">Projected Change</th>
-                            <th class="p-3">Primary Logistics & Tax Overhead Driver</th>
-                            <th class="p-3">Model Hit Rate</th>
+                            <th scope="col" class="p-3">Sub-Locale / Region</th>
+                            <th scope="col" class="p-3">Current Base Price</th>
+                            <th scope="col" class="p-3">5-Day Model Target</th>
+                            <th scope="col" class="p-3">Projected Change</th>
+                            <th scope="col" class="p-3">Primary Logistics & Tax Overhead Driver</th>
+                            <th scope="col" class="p-3">Model Hit Rate</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/60">
@@ -263,56 +264,77 @@
                                 <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area 9-County Avg
                             </td>
                             <td class="p-3 font-bold text-white">$6.596/gal</td>
-                            <td class="p-3 font-bold text-cyan-400">$6.628/gal</td>
-                            <td class="p-3 font-semibold text-emerald-400">+0.5%</td>
+                            <td class="p-3 font-bold text-cyan-400">$6.639/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">+0.7%</td>
                             <td class="p-3 text-slate-400">9-County Weighted Average & Statutory CARB Environmental Burden ($0.953/gal)</td>
-                            <td class="p-3 font-semibold text-slate-200">51.78%</td>
+                            <td class="p-3 font-semibold text-slate-200">51.73%</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40">
                             <td class="p-3 font-semibold text-emerald-300 flex items-center gap-2">
                                 <i class="fa-solid fa-industry text-emerald-400"></i> North Bay / Solano
                             </td>
                             <td class="p-3 font-bold text-white">$6.363/gal</td>
-                            <td class="p-3 font-bold text-emerald-400">$6.395/gal</td>
-                            <td class="p-3 font-semibold text-emerald-400">+0.5%</td>
+                            <td class="p-3 font-bold text-emerald-400">$6.406/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">+0.7%</td>
                             <td class="p-3 text-slate-400">Valero Benicia Refinery Fence-Line Proximity & Direct Marine Discharge Access</td>
-                            <td class="p-3 font-semibold text-slate-200">51.78%</td>
+                            <td class="p-3 font-semibold text-slate-200">51.73%</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40">
                             <td class="p-3 font-semibold text-amber-300 flex items-center gap-2">
                                 <i class="fa-solid fa-fire text-amber-400"></i> Oakland / East Bay
                             </td>
                             <td class="p-3 font-bold text-white">$6.463/gal</td>
-                            <td class="p-3 font-bold text-amber-400">$6.495/gal</td>
-                            <td class="p-3 font-semibold text-emerald-400">+0.5%</td>
+                            <td class="p-3 font-bold text-amber-400">$6.506/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">+0.7%</td>
                             <td class="p-3 text-slate-400">Chevron Richmond Refinery (245k bpd) Pipeline Corridor & Port Terminals</td>
-                            <td class="p-3 font-semibold text-slate-200">51.78%</td>
+                            <td class="p-3 font-semibold text-slate-200">51.73%</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40">
                             <td class="p-3 font-semibold text-purple-300 flex items-center gap-2">
                                 <i class="fa-solid fa-building text-purple-400"></i> San Francisco Metro
                             </td>
                             <td class="p-3 font-bold text-white">$6.633/gal</td>
-                            <td class="p-3 font-bold text-purple-400">$6.665/gal</td>
-                            <td class="p-3 font-semibold text-emerald-400">+0.5%</td>
+                            <td class="p-3 font-bold text-purple-400">$6.676/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">+0.6%</td>
                             <td class="p-3 text-slate-400">8.625% Municipal Sales Tax, Commercial Rent Overhead & Zero In-City Refineries</td>
-                            <td class="p-3 font-semibold text-slate-200">51.78%</td>
+                            <td class="p-3 font-semibold text-slate-200">51.73%</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40">
                             <td class="p-3 font-semibold text-blue-300 flex items-center gap-2">
                                 <i class="fa-solid fa-microchip text-blue-400"></i> San Jose / Silicon Valley
                             </td>
                             <td class="p-3 font-bold text-white">$6.493/gal</td>
-                            <td class="p-3 font-bold text-blue-400">$6.525/gal</td>
-                            <td class="p-3 font-semibold text-emerald-400">+0.5%</td>
+                            <td class="p-3 font-bold text-blue-400">$6.536/gal</td>
+                            <td class="p-3 font-semibold text-emerald-400">+0.7%</td>
                             <td class="p-3 text-slate-400">Santa Clara Tech Commute Corridor & Kinder Morgan SFPP South Bay Pipeline</td>
-                            <td class="p-3 font-semibold text-slate-200">51.78%</td>
+                            <td class="p-3 font-semibold text-slate-200">51.73%</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
+        
+    <!-- Automated Narrative Synthesis Card (Issue #493) -->
+    <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-blue-950/40 border border-blue-500/20 shadow-xl space-y-4">
+        <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                <i class="fa-solid fa-brain mr-1.5"></i> Model Narrative & Catalyst Breakdown
+            </span>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">CARB CaRFG Compliance Step</span> <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">LCFS / Cap-and-Trade Burden</span> <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">PADD 5 Refining Utilization</span> 
+        </div>
+        <div>
+            <h4 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Oakland & San Francisco Bay Area prices are projected to increase +$0.043/gal (+0.7%).</h4>
+            <p class="text-sm text-slate-300 leading-relaxed mt-2">Oakland and Northern California retail prices are shaped by CARB Phase 3 CaRFG summer blend volatility restrictions (SF Bay 9-County Refining Complex & Carquinez Strait Marine Terminals), combined with dynamic LCFS credit transfer costs and WCI Cap-and-Trade joint auction settlement allowances. Regional refinery utilization across Richmond, Martinez, and Benicia remains isolated from Gulf Coast supply.</p>
+        </div>
+        
+        <div class="mt-4 pt-3 border-t border-slate-800">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Key Attribution Drivers</h5>
+            <div class="space-y-1"><div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-800/80">  <span class="text-slate-300"><i class="fa-solid fa-angle-right text-cyan-400 mr-2"></i>CARB Phase 3 CaRFG RVP Compliance Premium</span>  <span class="font-mono font-bold text-cyan-300">+$0.065/gal</span></div><div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-800/80">  <span class="text-slate-300"><i class="fa-solid fa-angle-right text-cyan-400 mr-2"></i>CARB LCFS & Cap-and-Trade Carbon Burden</span>  <span class="font-mono font-bold text-cyan-300">+$0.048/gal</span></div><div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-800/80">  <span class="text-slate-300"><i class="fa-solid fa-angle-right text-cyan-400 mr-2"></i>PADD 5 Island Refining & Waterborne Freight Spread</span>  <span class="font-mono font-bold text-cyan-300">+$0.032/gal</span></div></div>
+        </div>
+        
+    </div>
+    
                 <!-- Component-Level Feature Attribution & Driver Breakdown Card (Issue #46) -->
         <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <div class="flex items-center justify-between flex-wrap gap-2">
@@ -324,14 +346,14 @@
                 </span>
             </div>
             <p class="text-xs text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800/90 leading-relaxed">
-                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> BayArea CA forecast +$0.032/gal (+0.49%): Driven primarily by Tax & Regulatory Overhead (+$0.011/gal), Refining Yield & Crack Spread (+$0.008/gal).
+                <strong class="text-blue-400 font-semibold">Executive Model Attribution Summary:</strong> BayArea CA forecast +$0.043/gal (+0.65%): Driven primarily by Tax & Regulatory Overhead (+$0.015/gal), Refining Yield & Crack Spread (+$0.011/gal).
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
                 
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Tax & Regulatory Overhead</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.011/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.015/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Statutory motor fuel tax fees & CARB summer-blend compliance overhead</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -342,7 +364,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Refining Yield & Crack Spread</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.008/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.011/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">3-2-1 refining crack margin expansion & regional plant utilization tightness</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -353,7 +375,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Futures & Commodity Benchmark</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.006/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.009/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -364,7 +386,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-col justify-between space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <span class="font-semibold text-slate-200 text-xs">Unstructured Intelligence & Sentiment</span>
-                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.003/gal</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+$0.004/gal</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-snug">Geopolitical supply risk news & executive social media hawkish posts</p>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-500">
@@ -426,7 +448,7 @@
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white">9-County SF Bay Area Regional Gas Price Trends & Sub-Locale Forecasts</h3>
             <div class="h-80 w-full">
-                <canvas id="bayAreaChart"></canvas>
+                <canvas id="bayAreaChart" role="img" aria-label="9-County SF Bay Area Regional Gas Price Trends & Sub-Locale Forecasts time series chart"></canvas>
             </div>
         </div>
 

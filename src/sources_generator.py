@@ -26,12 +26,12 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model Data Sources &amp; Intelligence Feeds &bull; Midgley Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     
-    <!-- KaTeX for Math Equations -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" {{KATEX_ONLOAD_SCRIPT}}></script>
+    <!-- KaTeX for Math Equations (Issue #570 SRI) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3qTQ4VJJ0f5K" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+NWtTlCXxCIB6beaVQ6PG6C3P05JE3fZK+16hxegKUAQPC" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" {{KATEX_ONLOAD_SCRIPT}}></script>
 
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
@@ -45,7 +45,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
 {{HDR}}
 
     <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
         
         <!-- Hero Section -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-cyan-900/40 border border-blue-500/30 space-y-6">
@@ -53,32 +53,32 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                 <div class="space-y-3 max-w-3xl">
                     <div class="flex items-center gap-2.5 flex-wrap">
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                            <i class="fa-solid fa-server mr-1.5 text-cyan-400"></i> Open Intelligence Suite
+                            <i class="fa-solid fa-server mr-1.5 text-cyan-400" aria-hidden="true"></i> Open Intelligence Suite
                         </span>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                            <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400"></i> $0 Cost &bull; Open Access
+                            <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400" aria-hidden="true"></i> $0 Cost &bull; Open Access
                         </span>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                            <i class="fa-solid fa-layer-group mr-1.5 text-purple-400"></i> Multi-Modal Feature Space
+                            <i class="fa-solid fa-layer-group mr-1.5 text-purple-400" aria-hidden="true"></i> Multi-Modal Feature Space
                         </span>
                     </div>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                        <i class="fa-solid fa-database text-cyan-400"></i> Model Data Sources &amp; Intelligence Feeds
+                        <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Model Data Sources &amp; Intelligence Feeds
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>27 monitored feeds</strong>.
+                        The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>28 monitored feeds</strong>.
                     </p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0">
                     <a href="math.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
-                        <i class="fa-solid fa-graduation-cap"></i> View Math Guide
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> View Math Guide
                     </a>
                     <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations Portal
+                        <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations Portal
                     </a>
                     <a href="telemetry.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Live Telemetry &amp; Quotas
+                        <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Live Telemetry &amp; Quotas
                     </a>
                 </div>
             </div>
@@ -86,7 +86,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
             <!-- Stats Ribbon -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-800/80">
                 <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
-                    <span class="text-2xl font-black text-blue-400 font-mono">27</span>
+                    <span class="text-2xl font-black text-blue-400 font-mono">28</span>
                     <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Ingestion Feeds</p>
                 </div>
                 <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
@@ -108,33 +108,33 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-900/70 p-4 rounded-2xl border border-slate-800 sticky top-20 z-40 backdrop-blur">
             <!-- Filter Chips -->
             <div class="flex items-center gap-2 flex-wrap text-xs" id="category-filter-bar">
-                <button onclick="filterCategory('all')" class="cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-cat="all">
+                <button type="button" aria-pressed="true" aria-label="Filter all 26 data feeds" onclick="filterCategory('all')" class="cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-cat="all">
                     All Feeds (26)
                 </button>
-                <button onclick="filterCategory('commodity')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="commodity">
+                <button type="button" aria-pressed="false" aria-label="Filter commodity and futures feeds" onclick="filterCategory('commodity')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="commodity">
                     Commodity &amp; Futures (7)
                 </button>
-                <button onclick="filterCategory('physical')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="physical">
+                <button type="button" aria-pressed="false" aria-label="Filter physical and macro telemetry feeds" onclick="filterCategory('physical')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="physical">
                     Physical &amp; Macro (6)
                 </button>
-                <button onclick="filterCategory('news')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="news">
+                <button type="button" aria-pressed="false" aria-label="Filter news and financial intelligence feeds" onclick="filterCategory('news')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="news">
                     News &amp; Intelligence (6)
                 </button>
-                <button onclick="filterCategory('hazard')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="hazard">
+                <button type="button" aria-pressed="false" aria-label="Filter atmospheric hazard and hydrology feeds" onclick="filterCategory('hazard')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="hazard">
                     Atmospheric &amp; Hydrology (8)
                 </button>
-                <button onclick="filterCategory('state')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="state">
+                <button type="button" aria-pressed="false" aria-label="Filter state open data and retail fuel feeds" onclick="filterCategory('state')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="state">
                     State Open Data &amp; Retail (3)
                 </button>
-                <button onclick="filterCategory('research')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="research">
+                <button type="button" aria-pressed="false" aria-label="Filter academic research and data catalogs" onclick="filterCategory('research')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="research">
                     Academic &amp; Catalogs (3)
                 </button>
             </div>
 
             <!-- Search Input -->
             <div class="relative w-full md:w-80">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input type="text" id="feed-search-input" onkeyup="searchFeeds()" placeholder="Search feeds, endpoints, tickers, APIs..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs" aria-hidden="true"></i>
+                <input type="text" id="feed-search-input" aria-label="Search data feeds by name, ticker, or API provider" onkeyup="searchFeeds()" placeholder="Search feeds, endpoints, tickers, APIs..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
             </div>
         </div>
 
@@ -782,7 +782,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                         <p class="text-xs text-slate-400">NOAA NWS weather alerts, SPC convective outlooks, NHC hurricane cones, USGS river stages, USACE locks, and earthquake ShakeMaps.</p>
                     </div>
                 </div>
-                <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">8 Feeds</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">9 Feeds</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1019,6 +1019,64 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                     </div>
                 </div>
 
+                <!-- Card 4.9: Pirate Weather API Historical Reanalysis -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="pirate weather noaa hrrr era5 dark sky reanalysis historical freeze heat stress hub coordinates">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-temperature-arrow-down"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Pirate Weather Reanalysis</h4>
+                                    <span class="font-mono text-xs text-cyan-400">api.pirateweather.net</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Reanalysis &bull; Issue #442</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Dark Sky-compatible historical reanalysis processing NOAA High-Resolution Rapid Refresh (HRRR 3km) and ERA5 data across exact refining hub coordinates for backtesting freeze-off risk and heat stress.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Freeze Duration (&le;32&deg;F), Heat Stress (&ge;95&deg;F), Wind Gusts</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/noaa_weather.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Pirate Weather / NOAA HRRR</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access / Fallback</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.10: NASA FIRMS Active Fire Satellite Telemetry -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="nasa firms satellite viirs modis thermal anomaly flaring refinery flare trip fire satellite">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-satellite"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">NASA FIRMS Satellite Telemetry</h4>
+                                    <span class="font-mono text-xs text-cyan-400">firms.modaps.eosdis.nasa.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">VIIRS/MODIS &bull; Issue #453</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            NASA Fire Information for Resource Management System (FIRMS) active fire and thermal anomaly satellite telemetry (VIIRS NOAA-20/SNPP &amp; MODIS) monitoring refining clusters for flaring upsets and emergency unit shutdowns.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Thermal Radiance (MW), Brightness (K), Thermal Anomaly Z-Score</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/firms_satellite_feed.py</code> &bull; <code class="text-blue-300">src/knowledge_graph.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: NASA EOSDIS / FIRMS</span>
+                        <span class="text-emerald-400 font-semibold">$0 Free Map Key / Cache Fallback</span>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -1243,17 +1301,18 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
             </div>
 
             <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60 shadow-xl">
-                <table class="w-full text-left text-xs text-slate-300 border-collapse min-w-[800px]" id="master-feed-table">
+                <table class="w-full text-left text-xs text-slate-300 border-collapse min-w-[800px]" id="master-feed-table" aria-label="Data Ingestion and Governance Ledger Matrix">
+                    <caption class="sr-only">Data Ingestion &amp; Governance Ledger Matrix</caption>
                     <thead>
                         <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400">
-                            <th class="py-3 px-4">Feed / Identifier</th>
-                            <th class="py-3 px-3">Domain Category</th>
-                            <th class="py-3 px-3">Provider / Endpoint</th>
-                            <th class="py-3 px-3">Protocol / Auth</th>
-                            <th class="py-3 px-3">Cache TTL</th>
-                            <th class="py-3 px-3">Update Cadence</th>
-                            <th class="py-3 px-3">Cost / Safeguard</th>
-                            <th class="py-3 px-3">Consumer Module</th>
+                            <th scope="col" class="py-3 px-4">Feed / Identifier</th>
+                            <th scope="col" class="py-3 px-3">Domain Category</th>
+                            <th scope="col" class="py-3 px-3">Provider / Endpoint</th>
+                            <th scope="col" class="py-3 px-3">Protocol / Auth</th>
+                            <th scope="col" class="py-3 px-3">Cache TTL</th>
+                            <th scope="col" class="py-3 px-3">Update Cadence</th>
+                            <th scope="col" class="py-3 px-3">Cost / Safeguard</th>
+                            <th scope="col" class="py-3 px-3">Consumer Module</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">

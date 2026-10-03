@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-02T23:38:46.335906",
+  "timestamp": "2026-10-02T22:45:43.557132",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-02T23:38:28Z"
+      "timestamp": "2026-10-02T22:45:27Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-10-08",
     "current_base_price": 6.463,
-    "predicted_price_per_gal": 6.495,
-    "expected_change_dollars": 0.032,
-    "expected_change_percent": 0.5,
+    "predicted_price_per_gal": 6.506,
+    "expected_change_dollars": 0.043,
+    "expected_change_percent": 0.67,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 6.375,
-    "prediction_upper_95ci": 6.615,
+    "prediction_lower_95ci": 6.386,
+    "prediction_upper_95ci": 6.626,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.469,
-    "day_2_price": 6.414,
-    "day_3_price": 6.45,
-    "day_4_price": 6.473,
-    "day_5_price": 6.495,
+    "day_1_price": 6.472,
+    "day_2_price": 6.41,
+    "day_3_price": 6.443,
+    "day_4_price": 6.471,
+    "day_5_price": 6.506,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.011,
+        "delta_dollars": 0.015,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.008,
+        "delta_dollars": 0.011,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.006,
+        "delta_dollars": 0.009,
         "share_pct": 20.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -73,7 +73,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -96,37 +96,37 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Oakland CA forecast +$0.032/gal (+0.50%): Driven primarily by Tax & Regulatory Overhead (+$0.011/gal), Refining Yield & Crack Spread (+$0.008/gal).",
+      "summary_text": "Oakland CA forecast +$0.043/gal (+0.67%): Driven primarily by Tax & Regulatory Overhead (+$0.015/gal), Refining Yield & Crack Spread (+$0.011/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.011,
-          "impact_pct": 0.17,
+          "impact_dollars": 0.015,
+          "impact_pct": 0.23,
           "share_pct": 35.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.008,
-          "impact_pct": 0.12,
+          "impact_dollars": 0.011,
+          "impact_pct": 0.17,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.006,
-          "impact_pct": 0.09,
+          "impact_dollars": 0.009,
+          "impact_pct": 0.14,
           "share_pct": 20.0,
           "direction": "UP"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.05,
+          "impact_dollars": 0.004,
+          "impact_pct": 0.06,
           "share_pct": 10.0,
           "direction": "UP"
         },
@@ -153,32 +153,32 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.011,
-      "impact_pct": 0.17,
+      "impact_dollars": 0.015,
+      "impact_pct": 0.23,
       "share_pct": 35.0,
       "direction": "UP"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.008,
-      "impact_pct": 0.12,
+      "impact_dollars": 0.011,
+      "impact_pct": 0.17,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.006,
-      "impact_pct": 0.09,
+      "impact_dollars": 0.009,
+      "impact_pct": 0.14,
       "share_pct": 20.0,
       "direction": "UP"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.05,
+      "impact_dollars": 0.004,
+      "impact_pct": 0.06,
       "share_pct": 10.0,
       "direction": "UP"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Oakland CA forecast +$0.032/gal (+0.50%): Driven primarily by Tax & Regulatory Overhead (+$0.011/gal), Refining Yield & Crack Spread (+$0.008/gal).",
+    "summary_text": "Oakland CA forecast +$0.043/gal (+0.67%): Driven primarily by Tax & Regulatory Overhead (+$0.015/gal), Refining Yield & Crack Spread (+$0.011/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.011,
+        "delta_dollars": 0.015,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.008,
+        "delta_dollars": 0.011,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.006,
+        "delta_dollars": 0.009,
         "share_pct": 20.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -229,7 +229,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"

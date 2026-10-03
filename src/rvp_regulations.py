@@ -334,3 +334,72 @@ class RVPRegulatoryEngine:
         except Exception as e:
             logger.warning(f"Could not persist emergency waiver to {self.rules_path}: {e}")
         return waiver
+
+
+def get_known_future_tax_deltas(
+    region: str,
+    as_of_date: str,
+    horizon_days: int = 5,
+    events_path: str = os.path.join("data", "known_future_events.json")
+) -> float:
+    """
+    Computes cumulative deterministic statutory excise tax / regulatory fee deltas
+    scheduled to take effect within the forecast horizon window [as_of_date, as_of_date + horizon_days] (Issue #451).
+    """
+    if not os.path.exists(events_path):
+        return 0.0
+
+    try:
+        with open(events_path, "r", encoding="utf-8") as f:
+            events = json.load(f)
+    except Exception as e:
+        logger.debug(f"Could not load known future events: {e}")
+        return 0.0
+
+    if not isinstance(events, list):
+        return 0.0
+
+    try:
+        as_of_dt = pd.to_datetime(as_of_date).date()
+        target_dt = (pd.to_datetime(as_of_date) + pd.Timedelta(days=horizon_days)).date()
+    except Exception:
+        return 0.0
+
+    reg_clean = region.lower().strip()
+    total_delta = 0.0
+
+    for ev in events:
+        ev_reg = str(ev.get("region", "")).lower().strip()
+        if ev_reg not in ["national", "all", reg_clean, reg_clean.split("_")[0]]:
+            continue
+
+        try:
+            eff_dt = pd.to_datetime(ev.get("effective_date")).date()
+            if as_of_dt < eff_dt <= target_dt:
+                delta = float(ev.get("delta_tax_dollars", 0.0))
+                total_delta += delta
+        except Exception:
+            continue
+
+    return round(total_delta, 4)
+
+
+def get_forward_regulatory_covariates(
+    dates: pd.Series,
+    region: str = "National",
+    horizon_days: int = 5
+) -> pd.DataFrame:
+    """
+    Constructs a DataFrame of forward statutory tax and regulatory covariates for feature engineering (Issue #451).
+    """
+    records = []
+    for d in dates:
+        d_str = pd.to_datetime(d).strftime("%Y-%m-%d")
+        tax_delta = get_known_future_tax_deltas(region=region, as_of_date=d_str, horizon_days=horizon_days)
+        records.append({
+            "date": pd.to_datetime(d_str),
+            "known_future_tax_delta": tax_delta,
+            "has_forward_tax_event": 1.0 if abs(tax_delta) > 0.001 else 0.0
+        })
+    return pd.DataFrame(records)
+

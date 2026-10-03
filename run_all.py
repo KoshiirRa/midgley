@@ -46,6 +46,23 @@ if __name__ == "__main__":
     else:
         print("\n  [INFO] Running in --dashboard-only mode: skipping individual location training pipelines.")
 
+    exporter_failures = []
+
+    # Issue #483: Evaluate regional failure gate BEFORE generating public artifacts
+    if failed_locations:
+        allow_partial = "--allow-partial" in sys.argv
+        print("\n" + "!" * 80)
+        print(f"  ERROR: {len(failed_locations)} location pipeline(s) failed during execution:")
+        for loc_id, err in failed_locations:
+            print(f"    - {loc_id}: {err}")
+        print("!" * 80)
+        if not allow_partial:
+            print("  [STRICT GATING] Halting with non-zero exit code prior to artifact generation due to failed location pipeline(s).")
+            print("  Use --allow-partial to force artifact generation with available regional models.")
+            sys.exit(1)
+        else:
+            print("  [WARNING] Proceeding with artifact generation in --allow-partial mode.")
+
     print("\n" + "=" * 80)
     print(f"  STEP {total_steps}/{total_steps}: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")
     print("=" * 80)
@@ -53,10 +70,12 @@ if __name__ == "__main__":
         update_readme_forecasts()
     except Exception as e:
         logger.error(f"Error updating README forecasts: {e}", exc_info=True)
+        exporter_failures.append(("update_readme_forecasts", str(e)))
     try:
         generate_public_dashboard()
     except Exception as e:
         logger.error(f"Error generating public dashboard: {e}", exc_info=True)
+        exporter_failures.append(("generate_public_dashboard", str(e)))
 
     # Final Pipeline Cloud Database Sync (Turso / Cloudflare D1 - Issue #498)
     try:
@@ -176,16 +195,14 @@ if __name__ == "__main__":
     except Exception as e:
         logger.debug(f"Notice during Headline Arena execution: {e}")
     
-    if failed_locations:
-        allow_partial = "--allow-partial" in sys.argv
+    if exporter_failures:
         print("\n" + "!" * 80)
-        print(f"  ERROR: {len(failed_locations)} location(s) encountered errors during execution:")
-        for loc_id, err in failed_locations:
-            print(f"    - {loc_id}: {err}")
+        print(f"  ERROR: {len(exporter_failures)} exporter/artifact task(s) failed during execution:")
+        for task_name, err in exporter_failures:
+            print(f"    - {task_name}: {err}")
         print("!" * 80)
-        if not allow_partial:
-            print("  [STRICT GATING] Halting with non-zero exit code due to failed location pipeline(s). Use --allow-partial to bypass.")
-            sys.exit(1)
+        print("  [EXPORTER GATING] Halting with non-zero exit code due to exporter failure(s).")
+        sys.exit(1)
 
     print("\n" + "=" * 80)
     print("                      ALL LOCATIONS EXECUTION COMPLETE")

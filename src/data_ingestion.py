@@ -3591,10 +3591,12 @@ def compute_roll_adjusted_rbob(
 
 def fetch_regional_wholesale_spot_matrix(
     start_date: str = "2022-01-01",
-    end_date: Optional[str] = None
+    end_date: Optional[str] = None,
+    include_provenance: bool = True
 ) -> pd.DataFrame:
     """
-    Fetches and maps physical wholesale spot benchmark series across all regional metro hubs (Issue #444).
+    Fetches and maps physical wholesale spot benchmark series across all regional metro hubs (Issue #444, #480).
+    Attaches field-level provenance metadata to each series (Issue #480).
     Maps:
         - Newark, DE -> NY Harbor Conventional Spot (DGASNYH via FRED)
         - Charlotte, Greenville, Port St. Lucie -> U.S. Gulf Coast Spot (DGASUSGULF via FRED)
@@ -3605,6 +3607,7 @@ def fetch_regional_wholesale_spot_matrix(
     connector = EIARegionalSpotConnector()
     daily_spots = connector.fetch_daily_regional_spot_prices()
     spot_dict = daily_spots.get("spot_prices", {})
+    prov_tag = daily_spots.get("provenance_type", "SYNTHETIC_FALLBACK")
 
     end_dt = end_date or datetime.now().strftime("%Y-%m-%d")
     dates = pd.date_range(start=start_date, end=end_dt, freq="B")
@@ -3613,14 +3616,23 @@ def fetch_regional_wholesale_spot_matrix(
     gulf_coast = spot_dict.get("gulf_coast_spot_per_gal", 2.285)
     la_carbob = spot_dict.get("los_angeles_spot_per_gal", 2.890)
 
-    df = pd.DataFrame({
+    data = {
         "date": dates,
         "spot_ny_harbor_dgasnyh": ny_harbor,
         "spot_us_gulf_coast_dgasusgulf": gulf_coast,
         "spot_la_carbob": la_carbob,
         "spot_tulsa_group3": np.round(gulf_coast + 0.035, 4),
         "spot_cincinnati_chicago_cbob": np.round(gulf_coast + 0.045, 4)
-    })
+    }
+
+    if include_provenance:
+        data["spot_ny_harbor_dgasnyh_provenance"] = prov_tag
+        data["spot_us_gulf_coast_dgasusgulf_provenance"] = prov_tag
+        data["spot_la_carbob_provenance"] = prov_tag if prov_tag != "OBSERVED" else "ESTIMATED_PROXY"
+        data["spot_tulsa_group3_provenance"] = "ESTIMATED_PROXY"
+        data["spot_cincinnati_chicago_cbob_provenance"] = "ESTIMATED_PROXY"
+
+    df = pd.DataFrame(data)
     return df
 
 

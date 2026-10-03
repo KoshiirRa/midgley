@@ -1,0 +1,86 @@
+[
+  {
+    "effective_date": "2022-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.028,
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.028/gal)"
+  },
+  {
+    "effective_date": "2023-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.040,
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.040/gal)"
+  },
+  {
+    "effective_date": "2024-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.017,
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.017/gal)"
+  },
+  {
+    "effective_date": "2025-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.020,
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.020/gal)"
+  },
+  {
+    "effective_date": "2026-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.021,
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.021/gal)"
+  },
+  {
+    "effective_date": "2026-01-01",
+    "region": "Charlotte_NC",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.008,
+    "description": "North Carolina statutory motor fuels tax rate formula adjustment"
+  },
+  {
+    "effective_date": "2026-01-01",
+    "region": "Cincinnati_OH",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.010,
+    "description": "Ohio statutory motor fuel excise tax indexing adjustment"
+  },
+  {
+    "effective_date": "2026-05-01",
+    "region": "National",
+    "event_type": "RVP_TERMINAL_TRANSITION",
+    "delta_tax_dollars": 0.120,
+    "description": "EPA statutory summer RVP terminal delivery compliance deadline (7.8/9.0 psi)"
+  },
+  {
+    "effective_date": "2026-06-01",
+    "region": "National",
+    "event_type": "RVP_RETAIL_COMPLIANCE",
+    "delta_tax_dollars": 0.080,
+    "description": "EPA statutory summer RVP retail compliance dispensing mandate"
+  },
+  {
+    "effective_date": "2026-09-16",
+    "region": "National",
+    "event_type": "RVP_WINTER_TRANSITION",
+    "delta_tax_dollars": -0.100,
+    "description": "EPA statutory winter high-volatility RVP transition (13.5 psi allowable)"
+  },
+  {
+    "effective_date": "2027-05-01",
+    "region": "National",
+    "event_type": "RVP_TERMINAL_TRANSITION",
+    "delta_tax_dollars": 0.120,
+    "description": "EPA statutory summer RVP terminal delivery compliance deadline (7.8/9.0 psi)"
+  },
+  {
+    "effective_date": "2027-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.022,
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset"
+  }
+]

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
 <head>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1ae2ce4322b14229bad5f1c4bf222a01"}'></script>
+
     <!-- Open Graph / Discord Social Embed Metadata -->
     <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
     <meta property="og:type" content="website">
@@ -34,12 +33,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model Data Sources &amp; Intelligence Feeds &bull; Midgley Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     
-    <!-- KaTeX for Math Equations -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+    <!-- KaTeX for Math Equations (Issue #570 SRI) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3qTQ4VJJ0f5K" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+NWtTlCXxCIB6beaVQ6PG6C3P05JE3fZK+16hxegKUAQPC" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
 
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
@@ -77,88 +76,89 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-blue-600 focus:text-white focus:rounded-xl focus:shadow-xl focus:top-2 focus:left-2 font-medium text-sm">Skip to main content</a>
+    <header role="banner" class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <a href="../index.html" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
+                <a href="../index.html" aria-label="Midgley AI Homepage" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
                     <img src="../assets/logo.png" alt="Midgley Logo" class="w-full h-full object-cover">
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.8.2</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-normal" title="MiroFish Multi-Agent Simulation Cohort Active"><i class="fa-solid fa-users-gear text-[10px] mr-1"></i>Multi-Agent Cohort: ON</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.8.4-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 font-normal" title="Standard Linear Scenario Engine Active"><i class="fa-solid fa-users-slash text-[10px] mr-1"></i>Multi-Agent Cohort: OFF</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
             </div>
             
-            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+            <nav aria-label="Main Navigation" class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
                 <a href="../index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-house"></i> Overview
+                    <i class="fa-solid fa-house" aria-hidden="true"></i> Overview
                 </a>
                 <a href="../national.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-globe"></i> National Wholesale
+                    <i class="fa-solid fa-globe" aria-hidden="true"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
                 <div class="relative group">
-                    <button class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    <button type="button" id="metro-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="metro-dropdown-menu" aria-label="Metro Areas Selection Menu" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform" aria-hidden="true"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
-                        <a href="../tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                    <div id="metro-dropdown-menu" role="menu" aria-labelledby="metro-menu-btn" class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a role="menuitem" href="../tulsa.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Tulsa, OK Retail
                         </a>
-                        <a href="../newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        <a role="menuitem" href="../newark.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400" aria-hidden="true"></i> Newark, DE Retail
                         </a>
-                        <a href="../cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        <a role="menuitem" href="../cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a href="../greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        <a role="menuitem" href="../greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
                         </a>
-                        <a href="../charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        <a role="menuitem" href="../charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
                         </a>
-                        <a href="../port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        <a role="menuitem" href="../port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
                         </a>
-                        <a href="../oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        <a role="menuitem" href="../oakland.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400" aria-hidden="true"></i> Oakland, CA Retail
                         </a>
-                        <a href="../bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        <a role="menuitem" href="../bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area Region
                         </a>
                     </div>
                 </div>
 
                 <a href="../diesel.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                    <i class="fa-solid fa-truck-front text-purple-400" aria-hidden="true"></i> Diesel ULSD
                 </a>
                 <a href="../savings.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                    <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Fill-Up Advisor
                 </a>
                 <a href="../telemetry.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                    <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Telemetry & Map
                 </a>
                 <a href="../math.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Math Guide
                 </a>
                 <a href="../sources.html" class="px-3 py-1.5 rounded-lg bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                    <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Data Sources
                 </a>
                 <a href="../citations.html" class="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                    <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations
                 </a>
-                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
-                    <i class="fa-brands fa-github"></i> GitHub
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
                 </a>
-            </div>
+            </nav>
         </div>
     </header>
 
     <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
         
         <!-- Hero Section -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-cyan-900/40 border border-blue-500/30 space-y-6">
@@ -166,32 +166,32 @@
                 <div class="space-y-3 max-w-3xl">
                     <div class="flex items-center gap-2.5 flex-wrap">
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                            <i class="fa-solid fa-server mr-1.5 text-cyan-400"></i> Open Intelligence Suite
+                            <i class="fa-solid fa-server mr-1.5 text-cyan-400" aria-hidden="true"></i> Open Intelligence Suite
                         </span>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                            <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400"></i> $0 Cost &bull; Open Access
+                            <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400" aria-hidden="true"></i> $0 Cost &bull; Open Access
                         </span>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                            <i class="fa-solid fa-layer-group mr-1.5 text-purple-400"></i> Multi-Modal Feature Space
+                            <i class="fa-solid fa-layer-group mr-1.5 text-purple-400" aria-hidden="true"></i> Multi-Modal Feature Space
                         </span>
                     </div>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                        <i class="fa-solid fa-database text-cyan-400"></i> Model Data Sources &amp; Intelligence Feeds
+                        <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Model Data Sources &amp; Intelligence Feeds
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>27 monitored feeds</strong>.
+                        The Midgley Forecasting Engine bridges quantitative financial futures with physical supply-chain telemetry, atmospheric hazard sensors, river navigation gages, state motor fuel tax portals, crowdsourced pump benchmarks, and real-time financial news. Explore complete technical specifications, update cadences, endpoint schemas, and caching policies across all <strong>28 monitored feeds</strong>.
                     </p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0">
                     <a href="math.html" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
-                        <i class="fa-solid fa-graduation-cap"></i> View Math Guide
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> View Math Guide
                     </a>
                     <a href="citations.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations Portal
+                        <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations Portal
                     </a>
                     <a href="telemetry.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Live Telemetry &amp; Quotas
+                        <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Live Telemetry &amp; Quotas
                     </a>
                 </div>
             </div>
@@ -199,7 +199,7 @@
             <!-- Stats Ribbon -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-800/80">
                 <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
-                    <span class="text-2xl font-black text-blue-400 font-mono">27</span>
+                    <span class="text-2xl font-black text-blue-400 font-mono">28</span>
                     <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Ingestion Feeds</p>
                 </div>
                 <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-center">
@@ -221,33 +221,33 @@
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-900/70 p-4 rounded-2xl border border-slate-800 sticky top-20 z-40 backdrop-blur">
             <!-- Filter Chips -->
             <div class="flex items-center gap-2 flex-wrap text-xs" id="category-filter-bar">
-                <button onclick="filterCategory('all')" class="cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-cat="all">
+                <button type="button" aria-pressed="true" aria-label="Filter all 26 data feeds" onclick="filterCategory('all')" class="cat-filter-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-cat="all">
                     All Feeds (26)
                 </button>
-                <button onclick="filterCategory('commodity')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="commodity">
+                <button type="button" aria-pressed="false" aria-label="Filter commodity and futures feeds" onclick="filterCategory('commodity')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="commodity">
                     Commodity &amp; Futures (7)
                 </button>
-                <button onclick="filterCategory('physical')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="physical">
+                <button type="button" aria-pressed="false" aria-label="Filter physical and macro telemetry feeds" onclick="filterCategory('physical')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="physical">
                     Physical &amp; Macro (6)
                 </button>
-                <button onclick="filterCategory('news')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="news">
+                <button type="button" aria-pressed="false" aria-label="Filter news and financial intelligence feeds" onclick="filterCategory('news')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="news">
                     News &amp; Intelligence (6)
                 </button>
-                <button onclick="filterCategory('hazard')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="hazard">
+                <button type="button" aria-pressed="false" aria-label="Filter atmospheric hazard and hydrology feeds" onclick="filterCategory('hazard')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="hazard">
                     Atmospheric &amp; Hydrology (8)
                 </button>
-                <button onclick="filterCategory('state')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="state">
+                <button type="button" aria-pressed="false" aria-label="Filter state open data and retail fuel feeds" onclick="filterCategory('state')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="state">
                     State Open Data &amp; Retail (3)
                 </button>
-                <button onclick="filterCategory('research')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="research">
+                <button type="button" aria-pressed="false" aria-label="Filter academic research and data catalogs" onclick="filterCategory('research')" class="cat-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" data-cat="research">
                     Academic &amp; Catalogs (3)
                 </button>
             </div>
 
             <!-- Search Input -->
             <div class="relative w-full md:w-80">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input type="text" id="feed-search-input" onkeyup="searchFeeds()" placeholder="Search feeds, endpoints, tickers, APIs..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs" aria-hidden="true"></i>
+                <input type="text" id="feed-search-input" aria-label="Search data feeds by name, ticker, or API provider" onkeyup="searchFeeds()" placeholder="Search feeds, endpoints, tickers, APIs..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
             </div>
         </div>
 
@@ -895,7 +895,7 @@
                         <p class="text-xs text-slate-400">NOAA NWS weather alerts, SPC convective outlooks, NHC hurricane cones, USGS river stages, USACE locks, and earthquake ShakeMaps.</p>
                     </div>
                 </div>
-                <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">8 Feeds</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">9 Feeds</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1132,6 +1132,64 @@
                     </div>
                 </div>
 
+                <!-- Card 4.9: Pirate Weather API Historical Reanalysis -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="pirate weather noaa hrrr era5 dark sky reanalysis historical freeze heat stress hub coordinates">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-temperature-arrow-down"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Pirate Weather Reanalysis</h4>
+                                    <span class="font-mono text-xs text-cyan-400">api.pirateweather.net</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Reanalysis &bull; Issue #442</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Dark Sky-compatible historical reanalysis processing NOAA High-Resolution Rapid Refresh (HRRR 3km) and ERA5 data across exact refining hub coordinates for backtesting freeze-off risk and heat stress.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Freeze Duration (&le;32&deg;F), Heat Stress (&ge;95&deg;F), Wind Gusts</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/noaa_weather.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: Pirate Weather / NOAA HRRR</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Access / Fallback</span>
+                    </div>
+                </div>
+
+                <!-- Card 4.10: NASA FIRMS Active Fire Satellite Telemetry -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="nasa firms satellite viirs modis thermal anomaly flaring refinery flare trip fire satellite">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    <i class="fa-solid fa-satellite"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">NASA FIRMS Satellite Telemetry</h4>
+                                    <span class="font-mono text-xs text-cyan-400">firms.modaps.eosdis.nasa.gov</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">VIIRS/MODIS &bull; Issue #453</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            NASA Fire Information for Resource Management System (FIRMS) active fire and thermal anomaly satellite telemetry (VIIRS NOAA-20/SNPP &amp; MODIS) monitoring refining clusters for flaring upsets and emergency unit shutdowns.
+                        </p>
+                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                            <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Thermal Radiance (MW), Brightness (K), Thermal Anomaly Z-Score</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/firms_satellite_feed.py</code> &bull; <code class="text-blue-300">src/knowledge_graph.py</code></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span>Provider: NASA EOSDIS / FIRMS</span>
+                        <span class="text-emerald-400 font-semibold">$0 Free Map Key / Cache Fallback</span>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -1356,17 +1414,18 @@
             </div>
 
             <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60 shadow-xl">
-                <table class="w-full text-left text-xs text-slate-300 border-collapse min-w-[800px]" id="master-feed-table">
+                <table class="w-full text-left text-xs text-slate-300 border-collapse min-w-[800px]" id="master-feed-table" aria-label="Data Ingestion and Governance Ledger Matrix">
+                    <caption class="sr-only">Data Ingestion &amp; Governance Ledger Matrix</caption>
                     <thead>
                         <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400">
-                            <th class="py-3 px-4">Feed / Identifier</th>
-                            <th class="py-3 px-3">Domain Category</th>
-                            <th class="py-3 px-3">Provider / Endpoint</th>
-                            <th class="py-3 px-3">Protocol / Auth</th>
-                            <th class="py-3 px-3">Cache TTL</th>
-                            <th class="py-3 px-3">Update Cadence</th>
-                            <th class="py-3 px-3">Cost / Safeguard</th>
-                            <th class="py-3 px-3">Consumer Module</th>
+                            <th scope="col" class="py-3 px-4">Feed / Identifier</th>
+                            <th scope="col" class="py-3 px-3">Domain Category</th>
+                            <th scope="col" class="py-3 px-3">Provider / Endpoint</th>
+                            <th scope="col" class="py-3 px-3">Protocol / Auth</th>
+                            <th scope="col" class="py-3 px-3">Cache TTL</th>
+                            <th scope="col" class="py-3 px-3">Update Cadence</th>
+                            <th scope="col" class="py-3 px-3">Cost / Safeguard</th>
+                            <th scope="col" class="py-3 px-3">Consumer Module</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">

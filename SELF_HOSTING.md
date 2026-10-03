@@ -97,6 +97,19 @@ MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
+# Optional Pirate Weather API Key (pirateweather.net - Point-in-time HRRR / ERA5 historical reanalysis, Issue #442)
+# Free tier allows 10,000 requests/month. Optional: Climatological / cached physics fallback runs out-of-the-box if unset.
+PIRATE_WEATHER_API_KEY=""
+
+# Optional NASA FIRMS Map Key (firms.modaps.eosdis.nasa.gov - Active fire thermal anomaly satellite telemetry, Issue #453)
+# Free key from NASA FIRMS API. Optional: historical thermal baseline & cached observations run if unset.
+NASA_FIRMS_MAP_KEY=""
+
+# Optional Wayback Machine Save Page Now 2 (SPN2) S3 Credentials (archive.org, Issue #491)
+# Free access keys from Internet Archive user account settings. Enables authenticated priority snapshot queues.
+WAYBACK_ACCESS_KEY=""
+WAYBACK_SECRET_KEY=""
+
 # Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
 # Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
 WANDB_API_KEY="wandb_v1_..."
@@ -538,6 +551,26 @@ python3 run_all.py --use-llm-api
 
 > [!NOTE]
 > If you wish to run only the standalone National Wholesale RBOB model without calibrating regional metros, execute `python3 -m src.locations.national.main --use-llm-api`. Note that `--use-llm-api` is the canonical CLI flag (the `--llm` flag is deprecated and ignored). If `GEMINI_API_KEY` is omitted, `--use-llm-api` gracefully routes event scoring to the zero-cost Tier 3 offline lexicon.
+
+#### Forward Regulatory & Tax Calendar Customization (`data/known_future_events.json`)
+Midgley models deterministic forward shifts (e.g., annual California SB 1 excise tax rate updates on July 1, EPA summer RVP terminal deadlines on May 1, and winter transition on Sept 16) via `data/known_future_events.json`. To register custom state fuel tax adjustments or municipal fee changes:
+```json
+[
+  {
+    "effective_date": "2027-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.022,
+    "description": "California annual statutory fuel excise tax inflation reset"
+  }
+]
+```
+
+#### Mixed-Frequency Kalman Filter Metro Nowcasting (`src/metro_nowcast.py`)
+To generate point-in-time filtered nowcasts fusing daily AAA station prices, crowdsourced GasBuddy metrics, and weekly EIA surveys:
+```bash
+python3 -c "from src.metro_nowcast import nowcast_metro_price; print(nowcast_metro_price('Tulsa_OK'))"
+```
 
 Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
 ```bash
@@ -1119,14 +1152,19 @@ Verify spatial hierarchy consistency (Metros -> PADDs -> National) and test MinT
 python3 -c "from src.hierarchical_engine import build_aggregation_matrix, reconcile_mint; S, n, b = build_aggregation_matrix(); print(f'Aggregation Matrix shape: {S.shape}, Bottom nodes: {b}, Total nodes: {n}')"
 ```
 
-### 15. Verify Adaptive Conformal Inference (ACI) & Calibrated Quantiles (Issue #449)
-Verify dynamic non-stationary step updating and calibrated asymmetric quantile bounds ($P_{10}, P_{50}, P_{90}$):
+### 16. Verify Dashboard Generation & WCAG 2.1 AA Accessibility (Issue #569)
+Generate all static dashboard HTML pages and execute full accessibility test assertions:
 ```bash
-python3 -c "from src.models import AdaptiveConformalInference, compute_calibrated_quantiles; aci = AdaptiveConformalInference(alpha=0.10, gamma=0.05); print(f'ACI initialized, target alpha: {aci.alpha_target}')"
+# Generate public web dashboard and telemetry views
+python3 -c "from src.dashboard_generator import generate_public_dashboard, generate_telemetry_page; generate_public_dashboard(); generate_telemetry_page()"
+
+# Run comprehensive accessibility and dashboard test suite
+pytest tests/test_dashboard_generator.py -v
 ```
 
 ---
 
-*Midgley Version: `v0.8.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.8.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+
 
 

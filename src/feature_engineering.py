@@ -922,6 +922,91 @@ def create_feature_matrix(
         df['marine_terminal_shallow_draft_risk'] = 0.0
     df = df.copy()
 
+    # 12. USACE Lock Performance Monitoring System (LPMS) Telemetry (Issues #181, #276, #565)
+    try:
+        from src.usace_locks import USACELockConnector
+        usace_connector = USACELockConnector()
+        usace_data = usace_connector.fetch_ohio_river_lock_delays() or {}
+        df['usace_ohio_river_lock_delay_hours'] = 1.4
+        df['usace_lock_queue_vessels'] = 3.5
+
+        usace_v_df = _load_vintage_timeseries(
+            "data/usace_lock_vintages.json",
+            {
+                "usace_ohio_river_lock_delay_hours": "usace_ohio_river_lock_delay_hours_v",
+                "usace_lock_queue_vessels": "usace_lock_queue_vessels_v"
+            },
+            as_of_cutoff=as_of_cutoff
+        )
+        if not usace_v_df.empty:
+            df = pd.merge(df, usace_v_df, on='date', how='left')
+            for col in ['usace_ohio_river_lock_delay_hours', 'usace_lock_queue_vessels']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+
+        if len(df) > 0 and usace_data:
+            df.loc[df.index[-1], 'usace_ohio_river_lock_delay_hours'] = usace_data.get('usace_ohio_river_lock_delay_hours', df['usace_ohio_river_lock_delay_hours'].iloc[-1])
+            df.loc[df.index[-1], 'usace_lock_queue_vessels'] = usace_data.get('usace_lock_queue_vessels', df['usace_lock_queue_vessels'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Could not merge USACE lock delay features: {e}")
+        df['usace_ohio_river_lock_delay_hours'] = 1.4
+        df['usace_lock_queue_vessels'] = 3.5
+    df = df.copy()
+
+    # 13. PHMSA Hazardous Liquid Pipeline Outage & Disruption Benchmarks (Issues #386, #565)
+    try:
+        df['phmsa_pipeline_disruption_index'] = 0.0
+        df['phmsa_historical_outage_severity'] = 0.0
+
+        phmsa_v_df = _load_vintage_timeseries(
+            "data/phmsa_pipeline_vintages.json",
+            {
+                "phmsa_pipeline_disruption_index": "phmsa_pipeline_disruption_index_v",
+                "phmsa_historical_outage_severity": "phmsa_historical_outage_severity_v"
+            },
+            as_of_cutoff=as_of_cutoff
+        )
+        if not phmsa_v_df.empty:
+            df = pd.merge(df, phmsa_v_df, on='date', how='left')
+            for col in ['phmsa_pipeline_disruption_index', 'phmsa_historical_outage_severity']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+    except Exception as e:
+        logger.warning(f"Could not merge PHMSA pipeline disruption features: {e}")
+        df['phmsa_pipeline_disruption_index'] = 0.0
+        df['phmsa_historical_outage_severity'] = 0.0
+    df = df.copy()
+
+    # 14. BSEE Gulf of Mexico Offshore Production Shut-Ins (Issues #180, #565)
+    try:
+        df['bsee_gulf_oil_shutin_pct'] = 0.0
+        df['bsee_gulf_evacuated_platforms'] = 0.0
+
+        bsee_v_df = _load_vintage_timeseries(
+            "data/bsee_shutin_vintages.json",
+            {
+                "oil_shutin_pct": "bsee_gulf_oil_shutin_pct_v",
+                "evacuated_platforms": "bsee_gulf_evacuated_platforms_v"
+            },
+            as_of_cutoff=as_of_cutoff
+        )
+        if not bsee_v_df.empty:
+            df = pd.merge(df, bsee_v_df, on='date', how='left')
+            for col in ['bsee_gulf_oil_shutin_pct', 'bsee_gulf_evacuated_platforms']:
+                v_col = f"{col}_v"
+                if v_col in df.columns:
+                    df[col] = df[v_col].combine_first(df[col])
+                    df.drop(columns=[v_col], inplace=True)
+    except Exception as e:
+        logger.warning(f"Could not merge BSEE offshore shut-in features: {e}")
+        df['bsee_gulf_oil_shutin_pct'] = 0.0
+        df['bsee_gulf_evacuated_platforms'] = 0.0
+    df = df.copy()
+
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing & Issue #355)
     llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
     

@@ -144,6 +144,85 @@ def stationary_block_bootstrap(
     }
 
 
+def clark_west_test(
+    y_true: Union[np.ndarray, List[float], pd.Series],
+    y_pred_nested: Union[np.ndarray, List[float], pd.Series],
+    y_pred_full: Union[np.ndarray, List[float], pd.Series],
+    horizon: int = 1
+) -> Tuple[float, float]:
+    r"""
+    Performs the Clark and West (2007) test for out-of-sample comparison of nested models (Issue #567).
+    
+    Adjusts the MSPE differential for parameter estimation noise in the unrestricted model:
+        f_{t+h} = (y_{t+h} - \hat{y}_{1,t+h})^2 - [(y_{t+h} - \hat{y}_{2,t+h})^2 - (\hat{y}_{1,t+h} - \hat{y}_{2,t+h})^2]
+        
+    H0: MSPE_nested = MSPE_full (Unrestricted model does not improve forecast)
+    H1: MSPE_full < MSPE_nested (Unrestricted model has superior predictive ability)
+    
+    Returns:
+        (cw_stat, p_value_one_sided)
+    """
+    yt = np.asarray(y_true, dtype=float)
+    y1 = np.asarray(y_pred_nested, dtype=float)
+    y2 = np.asarray(y_pred_full, dtype=float)
+    T = len(yt)
+    if T < 5:
+        return 0.0, 1.0
+
+    e1_sq = (yt - y1) ** 2
+    e2_sq = (yt - y2) ** 2
+    adj = (y1 - y2) ** 2
+    f = e1_sq - (e2_sq - adj)
+
+    mean_f = float(np.mean(f))
+    gamma0 = float(np.var(f, ddof=0))
+    sum_cov = 0.0
+    for k in range(1, max(1, horizon)):
+        cov_k = float(np.mean((f[k:] - mean_f) * (f[:-k] - mean_f)))
+        weight = 1.0 - (k / max(1, horizon))  # Bartlett kernel
+        sum_cov += 2.0 * weight * cov_k
+
+    long_run_var = max(1e-8, gamma0 + sum_cov)
+    se = np.sqrt(long_run_var / T)
+    cw_stat = mean_f / se
+
+    # One-sided test (H1: mean_f > 0)
+    p_value = float(1.0 - stats.norm.cdf(cw_stat))
+    return round(float(cw_stat), 4), round(float(p_value), 4)
+
+
+def adjust_pvalues_holm_bonferroni(p_values: List[float]) -> List[float]:
+    """Applies step-down Holm-Bonferroni Family-Wise Error Rate (FWER) control (Issue #567)."""
+    m = len(p_values)
+    if m == 0:
+        return []
+    indexed = sorted(enumerate(p_values), key=lambda x: x[1])
+    adjusted = [0.0] * m
+    running_max = 0.0
+    for rank, (orig_idx, p_val) in enumerate(indexed):
+        k = rank + 1
+        adj = (m - k + 1) * p_val
+        running_max = max(running_max, adj)
+        adjusted[orig_idx] = min(1.0, running_max)
+    return [round(p, 4) for p in adjusted]
+
+
+def adjust_pvalues_benjamini_hochberg(p_values: List[float]) -> List[float]:
+    """Applies step-up Benjamini-Hochberg False Discovery Rate (FDR) control (Issue #567)."""
+    m = len(p_values)
+    if m == 0:
+        return []
+    indexed = sorted(enumerate(p_values), key=lambda x: x[1], reverse=True)
+    adjusted = [0.0] * m
+    running_min = 1.0
+    for rank_from_top, (orig_idx, p_val) in enumerate(indexed):
+        k = m - rank_from_top
+        adj = (m / k) * p_val
+        running_min = min(running_min, adj)
+        adjusted[orig_idx] = min(1.0, running_min)
+    return [round(p, 4) for p in adjusted]
+
+
 class ModelHierarchyEvaluator:
     """
     Executes the 5-Tier Nested Model Evaluation Hierarchy:
@@ -228,6 +307,7 @@ class ModelHierarchyEvaluator:
         ]
 
         prev_tier_errors = tier0_errors
+        prev_tier_preds = tier0_pred
 
         for tier_key, tier_desc in active_models:
             sub_feats = tier_feature_map.get(tier_key, [])
@@ -254,6 +334,10 @@ class ModelHierarchyEvaluator:
             # Diebold-Mariano test vs Tier 0 (Naive)
             dm_stat, dm_pval = diebold_mariano_test(tier0_errors, errors, horizon=horizon)
 
+            # Clark-West (2007) test vs previous nested tier (Issue #567)
+            cw_stat_prev, cw_pval_prev = clark_west_test(y_test_arr, prev_tier_preds, preds, horizon=horizon)
+            cw_stat_naive, cw_pval_naive = clark_west_test(y_test_arr, tier0_pred, preds, horizon=horizon)
+
             tier_results[tier_key] = {
                 "tier_name": tier_desc,
                 "features_count": len(sub_feats),
@@ -263,15 +347,34 @@ class ModelHierarchyEvaluator:
                 "persistence_uplift_pct": round(uplift, 2),
                 "dm_stat_vs_naive": dm_stat,
                 "dm_p_value_vs_naive": dm_pval,
+                "cw_stat_vs_prev": cw_stat_prev,
+                "cw_p_value_vs_prev": cw_pval_prev,
+                "cw_stat_vs_naive": cw_stat_naive,
+                "cw_p_value_vs_naive": cw_pval_naive,
                 "pinball_loss_q50": round(compute_pinball_loss(y_test_arr, preds, 0.5), 4)
             }
+            prev_tier_preds = preds
             prev_tier_errors = errors
 
-        # Statistical Promotion Decision Gate (Issue #362, #435)
+        # Multiplicity Control across Tiers (Issue #567)
+        raw_dm_pvals = [tier_results[k]["dm_p_value_vs_naive"] for k, _ in active_models]
+        raw_cw_pvals = [tier_results[k]["cw_p_value_vs_prev"] for k, _ in active_models]
+        holm_dm = adjust_pvalues_holm_bonferroni(raw_dm_pvals)
+        bh_dm = adjust_pvalues_benjamini_hochberg(raw_dm_pvals)
+        holm_cw = adjust_pvalues_holm_bonferroni(raw_cw_pvals)
+        bh_cw = adjust_pvalues_benjamini_hochberg(raw_cw_pvals)
+
+        for i, (k, _) in enumerate(active_models):
+            tier_results[k]["dm_p_value_holm"] = holm_dm[i]
+            tier_results[k]["dm_p_value_bh"] = bh_dm[i]
+            tier_results[k]["cw_p_value_holm"] = holm_cw[i]
+            tier_results[k]["cw_p_value_bh"] = bh_cw[i]
+
+        # Statistical Promotion Decision Gate (Issue #362, #435, #567)
         tier4 = tier_results["Tier_4_Full_Hybrid"]
         promotion_gate_passed = bool(
             tier4["persistence_uplift_pct"] > 0.0
-            and tier4["dm_p_value_vs_naive"] < 0.05
+            and (tier4["dm_p_value_vs_naive"] < 0.05 or tier4["cw_p_value_vs_naive"] < 0.05)
         )
 
         return {

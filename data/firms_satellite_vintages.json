@@ -1,0 +1,173 @@
+[
+  {
+    "hub_code": "baytown_houston",
+    "recorded_at": "2026-10-02T20:32:01.961025+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "baytown_houston",
+      "name": "ExxonMobil Baytown & Houston Ship Channel",
+      "date": "2026-10-02",
+      "total_frp_mw": 18.13,
+      "thermal_pixel_count": 10,
+      "max_brightness_temp_kelvin": 310.7,
+      "baseline_frp_mw": 18.5,
+      "flaring_anomaly_z_score": -0.05,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS VIIRS (NOAA-20 NRT 375m)",
+      "is_live": true,
+      "recorded_at": "2026-10-02T20:32:01.961025+00:00"
+    }
+  },
+  {
+    "hub_code": "galveston_bay_texas_city",
+    "recorded_at": "2026-10-02T20:32:02.418695+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "galveston_bay_texas_city",
+      "name": "Marathon Galveston Bay & Texas City Complex",
+      "date": "2026-10-02",
+      "total_frp_mw": 2.71,
+      "thermal_pixel_count": 1,
+      "max_brightness_temp_kelvin": 306.9,
+      "baseline_frp_mw": 14.0,
+      "flaring_anomaly_z_score": -2.02,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS VIIRS (NOAA-20 NRT 375m)",
+      "is_live": true,
+      "recorded_at": "2026-10-02T20:32:02.418695+00:00"
+    }
+  },
+  {
+    "hub_code": "port_arthur_beaumont",
+    "recorded_at": "2026-10-02T20:32:02.868236+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "port_arthur_beaumont",
+      "name": "Motiva Port Arthur & TotalEnergies Complex",
+      "date": "2026-10-02",
+      "total_frp_mw": 10.49,
+      "thermal_pixel_count": 5,
+      "max_brightness_temp_kelvin": 310.3,
+      "baseline_frp_mw": 22.0,
+      "flaring_anomaly_z_score": -1.31,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS VIIRS (NOAA-20 NRT 375m)",
+      "is_live": true,
+      "recorded_at": "2026-10-02T20:32:02.868236+00:00"
+    }
+  },
+  {
+    "hub_code": "garyville_norco_baton_rouge",
+    "recorded_at": "2026-10-02T20:32:03.270023+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "garyville_norco_baton_rouge",
+      "name": "Marathon Garyville, Shell Norco & ExxonMobil Baton Rouge",
+      "date": "2026-10-02",
+      "total_frp_mw": 8.2,
+      "thermal_pixel_count": 6,
+      "max_brightness_temp_kelvin": 311.9,
+      "baseline_frp_mw": 25.0,
+      "flaring_anomaly_z_score": -1.68,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS VIIRS (NOAA-20 NRT 375m)",
+      "is_live": true,
+      "recorded_at": "2026-10-02T20:32:03.270023+00:00"
+    }
+  },
+  {
+    "hub_code": "lake_charles",
+    "recorded_at": "2026-10-02T20:32:03.698974+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "lake_charles",
+      "name": "Citgo & Phillips 66 Lake Charles Complex",
+      "date": "2026-10-02",
+      "total_frp_mw": 10.89,
+      "thermal_pixel_count": 3,
+      "max_brightness_temp_kelvin": 307.8,
+      "baseline_frp_mw": 11.0,
+      "flaring_anomaly_z_score": -0.02,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS VIIRS (NOAA-20 NRT 375m)",
+      "is_live": true,
+      "recorded_at": "2026-10-02T20:32:03.698974+00:00"
+    }
+  },
+  {
+    "hub_code": "west_tulsa_cushing",
+    "recorded_at": "2026-10-02T20:32:04.128500+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "west_tulsa_cushing",
+      "name": "HF Sinclair West Tulsa & Cushing Storage Terminal",
+      "date": "2026-10-02",
+      "total_frp_mw": 4.5,
+      "thermal_pixel_count": 2,
+      "max_brightness_temp_kelvin": 325.0,
+      "baseline_frp_mw": 4.5,
+      "flaring_anomaly_z_score": 0.0,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS Baseline Physical Anchor",
+      "is_live": false,
+      "recorded_at": "2026-10-02T20:32:04.128500+00:00"
+    }
+  },
+  {
+    "hub_code": "catlettsburg_ohio_valley",
+    "recorded_at": "2026-10-02T20:32:09.465602+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "catlettsburg_ohio_valley",
+      "name": "Marathon Catlettsburg KY Refining Complex",
+      "date": "2026-10-02",
+      "total_frp_mw": 6.0,
+      "thermal_pixel_count": 2,
+      "max_brightness_temp_kelvin": 325.0,
+      "baseline_frp_mw": 6.0,
+      "flaring_anomaly_z_score": 0.0,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS Baseline Physical Anchor",
+      "is_live": false,
+      "recorded_at": "2026-10-02T20:32:09.465602+00:00"
+    }
+  },
+  {
+    "hub_code": "delaware_city_delmarva",
+    "recorded_at": "2026-10-02T20:32:09.816997+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "delaware_city_delmarva",
+      "name": "PBF Delaware City Refinery",
+      "date": "2026-10-02",
+      "total_frp_mw": 5.0,
+      "thermal_pixel_count": 2,
+      "max_brightness_temp_kelvin": 325.0,
+      "baseline_frp_mw": 5.0,
+      "flaring_anomaly_z_score": 0.0,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS Baseline Physical Anchor",
+      "is_live": false,
+      "recorded_at": "2026-10-02T20:32:09.816997+00:00"
+    }
+  },
+  {
+    "hub_code": "richmond_martinez_bay_area",
+    "recorded_at": "2026-10-02T20:32:10.172688+00:00",
+    "date": "2026-10-02",
+    "data": {
+      "hub_code": "richmond_martinez_bay_area",
+      "name": "Chevron Richmond & Martinez Refining Complex",
+      "date": "2026-10-02",
+      "total_frp_mw": 12.0,
+      "thermal_pixel_count": 2,
+      "max_brightness_temp_kelvin": 325.0,
+      "baseline_frp_mw": 12.0,
+      "flaring_anomaly_z_score": 0.0,
+      "is_major_flaring_upset": false,
+      "source": "NASA FIRMS Baseline Physical Anchor",
+      "is_live": false,
+      "recorded_at": "2026-10-02T20:32:10.172688+00:00"
+    }
+  }
+]

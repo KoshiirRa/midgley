@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
+from typing import Dict, Any, Optional, List, Tuple, Union
 import logging
 
 from src.noaa_weather import get_cincinnati_weather_dataset
@@ -170,4 +171,53 @@ def get_cincinnati_regional_events() -> pd.DataFrame:
     # Combine Macro + Regional + Local NOAA Weather + USGS Hydrology + AQI
     combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)
+
+
+def compute_cincinnati_edgeworth_forecast(
+    market_df: pd.DataFrame,
+    live_oh_price: Optional[float] = None,
+    live_ky_price: Optional[float] = None,
+    horizon_days: int = 5
+) -> Dict[str, Any]:
+    """
+    Computes Edgeworth price cycle diagnostics and restoration hazard forecast for Cincinnati OH/KY (Issue #447).
+    """
+    from src.edgeworth_cycle import EdgeworthCycleAnalyzer, RestorationHazardModel
+
+    analyzer = EdgeworthCycleAnalyzer(jump_threshold_cpg=0.08)
+    hazard_model = RestorationHazardModel()
+
+    # Diagnostics on Ohio retail series
+    oh_series = market_df.get('cincinnati_oh_retail_gasoline', pd.Series(dtype=float))
+    rbob_series = market_df.get('gasoline_rbob', pd.Series(dtype=float))
+
+    diag = analyzer.compute_cycle_diagnostics(oh_series)
+
+    if not oh_series.empty and not rbob_series.empty:
+        hazard_model.fit(oh_series, rbob_series)
+
+    current_oh = live_oh_price if live_oh_price is not None else (float(oh_series.iloc[-1]) if not oh_series.empty else 3.25)
+    current_rbob = float(rbob_series.iloc[-1]) if not rbob_series.empty else 2.45
+
+    # Estimate elapsed days since last sharp restoration
+    elapsed = 4
+    if len(oh_series) >= 10:
+        d_oh = oh_series.diff()
+        jumps_idx = np.where(d_oh >= 0.08)[0]
+        if len(jumps_idx) > 0:
+            elapsed = int(len(oh_series) - 1 - jumps_idx[-1])
+
+    forecast_oh = hazard_model.forecast_expected_horizon_change(
+        current_retail=current_oh,
+        current_wholesale=current_rbob,
+        elapsed_days=elapsed,
+        horizon_days=horizon_days
+    )
+
+    return {
+        "region": "Cincinnati_Tri_State",
+        "cycle_diagnostics": diag,
+        "hazard_model_forecast": forecast_oh
+    }
+
 

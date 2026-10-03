@@ -66,6 +66,23 @@ class TestEIARetailFeed(unittest.TestCase):
         self.assertIn("Tulsa_OK", prices)
         self.assertGreater(prices["Oakland_CA"], prices["Tulsa_OK"])
 
+    def test_diesel_series_mapping_and_aliases(self):
+        """Verify all regional diesel keys map cleanly to EIA diesel series (Issue #478)."""
+        diesel_keys = [
+            "National_ULSD", "National_Diesel",
+            "Tulsa_ULSD", "Tulsa_Diesel",
+            "Newark_ULSD", "Newark_Diesel",
+            "Cincinnati_ULSD", "Cincinnati_Diesel",
+            "Greenville_ULSD", "Greenville_Diesel",
+            "Charlotte_ULSD", "Charlotte_Diesel",
+            "Oakland_ULSD", "Oakland_Diesel", "Oakland_CARB_Diesel",
+            "Port_St_Lucie_ULSD", "Port_St_Lucie_Diesel"
+        ]
+        for key in diesel_keys:
+            self.assertIn(key, REGION_TO_EIA_SERIES, f"Missing mapping for diesel key: {key}")
+            series_tuples = REGION_TO_EIA_SERIES[key]
+            self.assertTrue(any("GASDES" in s[0] for s in series_tuples), f"Expected GASDES series in {key}")
+
     def test_vintage_persistence(self):
         """Verify snapshot saving and loading."""
         test_rec = {
@@ -87,3 +104,4 @@ class TestEIARetailFeed(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

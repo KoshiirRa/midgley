@@ -19,6 +19,12 @@ from datetime import datetime, timezone
 import logging
 from src.regional_metadata import render_regional_driver_cards_html
 from src.prediction_logger import read_prediction_history
+from src.narrative_generator import (
+    generate_macro_synthesis_narrative,
+    generate_national_wholesale_narrative,
+    generate_metro_narrative,
+    render_narrative_card_html,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -432,7 +438,7 @@ def get_head_meta_tags(
 
 
 def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
-    """Generates standard sticky header navigation bar with Metro Areas dropdown."""
+    """Generates standard sticky header navigation bar with Metro Areas dropdown and WCAG 2.1 AA ARIA landmarks."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -464,10 +470,11 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     model_badge_html = get_model_badge()
     multi_agent_badge_html = get_multi_agent_sim_badge()
 
-    return f"""    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    return f"""    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-blue-600 focus:text-white focus:rounded-xl focus:shadow-xl focus:top-2 focus:left-2 font-medium text-sm">Skip to main content</a>
+    <header role="banner" class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <a href="{idx_link}" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
+                <a href="{idx_link}" aria-label="Midgley AI Homepage" class="w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 flex items-center justify-center hover:opacity-90 transition shadow-md bg-slate-950 flex-shrink-0">
                     <img src="{rel_prefix}assets/logo.png" alt="Midgley Logo" class="w-full h-full object-cover">
                 </a>
                 <div>
@@ -478,69 +485,69 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                 </div>
             </div>
             
-            <div class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
+            <nav aria-label="Main Navigation" class="flex items-center gap-2 sm:gap-3 text-sm flex-wrap">
                 <a href="{idx_link}" class="px-3 py-1.5 rounded-lg {overview_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-house"></i> Overview
+                    <i class="fa-solid fa-house" aria-hidden="true"></i> Overview
                 </a>
                 <a href="{nat_link}" class="px-3 py-1.5 rounded-lg {national_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-globe"></i> National Wholesale
+                    <i class="fa-solid fa-globe" aria-hidden="true"></i> National Wholesale
                 </a>
 
                 <!-- Metro Areas Dropdown Menu -->
                 <div class="relative group">
-                    <button class="px-3 py-1.5 rounded-lg {metro_cls} transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform"></i>
+                    <button type="button" id="metro-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="metro-dropdown-menu" aria-label="Metro Areas Selection Menu" class="px-3 py-1.5 rounded-lg {metro_cls} transition flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Metro Areas <i class="fa-solid fa-chevron-down text-xs ml-0.5 group-hover:rotate-180 transition-transform" aria-hidden="true"></i>
                     </button>
-                    <div class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
-                        <a href="{tul_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-gas-pump text-emerald-400"></i> Tulsa, OK Retail
+                    <div id="metro-dropdown-menu" role="menu" aria-labelledby="metro-menu-btn" class="absolute left-0 mt-1 w-60 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 p-1.5 space-y-1">
+                        <a role="menuitem" href="{tul_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Tulsa, OK Retail
                         </a>
-                        <a href="{new_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-location-dot text-blue-400"></i> Newark, DE Retail
+                        <a role="menuitem" href="{new_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-location-dot text-blue-400" aria-hidden="true"></i> Newark, DE Retail
                         </a>
-                        <a href="{cin_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-bridge text-purple-400"></i> Cincinnati, OH/KY Retail
+                        <a role="menuitem" href="{cin_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a href="{grn_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
+                        <a role="menuitem" href="{grn_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
                         </a>
-                        <a href="{clt_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                        <a role="menuitem" href="{clt_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
                         </a>
-                        <a href="{psl_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> Port St. Lucie, FL Retail
+                        <a role="menuitem" href="{psl_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
                         </a>
-                        <a href="{oak_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
+                        <a role="menuitem" href="{oak_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-fire text-amber-400" aria-hidden="true"></i> Oakland, CA Retail
                         </a>
-                        <a href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                        <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area Region
                         </a>
                     </div>
                 </div>
 
                 <a href="{dsl_link}" class="px-3 py-1.5 rounded-lg {diesel_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-truck-front text-purple-400"></i> Diesel ULSD
+                    <i class="fa-solid fa-truck-front text-purple-400" aria-hidden="true"></i> Diesel ULSD
                 </a>
                 <a href="{sav_link}" class="px-3 py-1.5 rounded-lg {savings_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-gas-pump text-emerald-400"></i> Fill-Up Advisor
+                    <i class="fa-solid fa-gas-pump text-emerald-400" aria-hidden="true"></i> Fill-Up Advisor
                 </a>
                 <a href="{tel_link}" class="px-3 py-1.5 rounded-lg {telemetry_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-line text-cyan-400"></i> Telemetry & Map
+                    <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Telemetry & Map
                 </a>
                 <a href="{mat_link}" class="px-3 py-1.5 rounded-lg {math_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-graduation-cap"></i> Math Guide
+                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Math Guide
                 </a>
                 <a href="{src_link}" class="px-3 py-1.5 rounded-lg {sources_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-database text-cyan-400"></i> Data Sources
+                    <i class="fa-solid fa-database text-cyan-400" aria-hidden="true"></i> Data Sources
                 </a>
                 <a href="{cit_link}" class="px-3 py-1.5 rounded-lg {citations_cls} transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-book-bookmark text-blue-400"></i> Citations
+                    <i class="fa-solid fa-book-bookmark text-blue-400" aria-hidden="true"></i> Citations
                 </a>
-                <a href="https://github.com/KoshiirRa/midgley" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
-                    <i class="fa-brands fa-github"></i> GitHub
+                <a href="https://github.com/KoshiirRa/midgley" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
                 </a>
-            </div>
+            </nav>
         </div>
     </header>"""
 
@@ -858,6 +865,51 @@ def build_component_attribution_card_html(region_id: str, base_price: float, pre
             </div>
         </div>"""
     return card_html
+ 
+ 
+def build_metro_narrative_card_html(
+    metro_key: str,
+    current_price: float,
+    forecast_price: float,
+    logistics_hub: str = None,
+    crack_spread: float = None,
+    outage_exposure: float = None,
+) -> str:
+    """Renders dynamic plain-English automated narrative synthesis card for a regional metro (Issue #493)."""
+    narrative_data = generate_metro_narrative(
+        metro_key=metro_key,
+        current_price=current_price,
+        forecast_price=forecast_price,
+        horizon_days=5,
+        logistics_hub=logistics_hub,
+        crack_spread=crack_spread,
+        outage_exposure=outage_exposure,
+    )
+    return render_narrative_card_html(narrative_data, variant="metro")
+
+
+def build_national_narrative_card_html(
+    current_price: float,
+    forecast_price: float,
+) -> str:
+    """Renders dynamic plain-English automated narrative synthesis card for National Wholesale RBOB (Issue #493)."""
+    narrative_data = generate_national_wholesale_narrative(
+        current_price=current_price,
+        forecast_price=forecast_price,
+        horizon_days=5,
+    )
+    return render_narrative_card_html(narrative_data, variant="national")
+
+
+def build_macro_narrative_card_html(
+    prices_map: dict,
+) -> str:
+    """Renders dynamic plain-English automated macro synthesis narrative card for the main index dashboard (Issue #493)."""
+    narrative_data = generate_macro_synthesis_narrative(
+        prices_map=prices_map,
+        horizon_days=5,
+    )
+    return render_narrative_card_html(narrative_data, variant="macro")
 
 
 def build_scoreboard_section_html() -> str:
@@ -993,19 +1045,20 @@ def build_scoreboard_section_html() -> str:
                 <!-- Forecast Horizon Breakdown Matrix Table -->
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Forecast Horizon Accuracy Breakdown
+                        <i class="fa-solid fa-chart-line text-cyan-400" aria-hidden="true"></i> Forecast Horizon Accuracy Breakdown
                     </h4>
                     <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                        <table class="w-full text-left text-xs border-collapse">
+                        <table aria-label="Forecast horizon accuracy breakdown matrix" class="w-full text-left text-xs border-collapse">
+                            <caption class="sr-only">Table displaying mean absolute error, root mean square error, directional hit rate, confidence interval coverage, and uplift by forecast horizon</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                    <th class="p-2.5">Horizon</th>
-                                    <th class="p-2.5">N</th>
-                                    <th class="p-2.5">MAE</th>
-                                    <th class="p-2.5">RMSE</th>
-                                    <th class="p-2.5">Hit %</th>
-                                    <th class="p-2.5">95% CI</th>
-                                    <th class="p-2.5">Uplift</th>
+                                    <th scope="col" class="p-2.5">Horizon</th>
+                                    <th scope="col" class="p-2.5">N</th>
+                                    <th scope="col" class="p-2.5">MAE</th>
+                                    <th scope="col" class="p-2.5">RMSE</th>
+                                    <th scope="col" class="p-2.5">Hit %</th>
+                                    <th scope="col" class="p-2.5">95% CI</th>
+                                    <th scope="col" class="p-2.5">Uplift</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1018,19 +1071,20 @@ def build_scoreboard_section_html() -> str:
                 <!-- Regional Scoreboard Matrix Table -->
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-emerald-400"></i> Regional Accuracy Matrix
+                        <i class="fa-solid fa-layer-group text-emerald-400" aria-hidden="true"></i> Regional Accuracy Matrix
                     </h4>
                     <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                        <table class="w-full text-left text-xs border-collapse">
+                        <table aria-label="Regional prediction accuracy matrix" class="w-full text-left text-xs border-collapse">
+                            <caption class="sr-only">Table displaying regional model accuracy metrics across metro locations</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                    <th class="p-2.5">Region</th>
-                                    <th class="p-2.5">N</th>
-                                    <th class="p-2.5">MAE</th>
-                                    <th class="p-2.5">RMSE</th>
-                                    <th class="p-2.5">Hit %</th>
-                                    <th class="p-2.5">95% CI</th>
-                                    <th class="p-2.5">Uplift</th>
+                                    <th scope="col" class="p-2.5">Region</th>
+                                    <th scope="col" class="p-2.5">N</th>
+                                    <th scope="col" class="p-2.5">MAE</th>
+                                    <th scope="col" class="p-2.5">RMSE</th>
+                                    <th scope="col" class="p-2.5">Hit %</th>
+                                    <th scope="col" class="p-2.5">95% CI</th>
+                                    <th scope="col" class="p-2.5">Uplift</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1044,20 +1098,21 @@ def build_scoreboard_section_html() -> str:
             <!-- Recent Realized-vs-Predicted Evaluation Ledger -->
             <div class="space-y-3">
                 <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                    <i class="fa-solid fa-list-check text-emerald-400"></i> Recent Completed Forecast Evaluations
+                    <i class="fa-solid fa-list-check text-emerald-400" aria-hidden="true"></i> Recent Completed Forecast Evaluations
                 </h4>
                 <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
-                    <table class="w-full text-left text-xs border-collapse">
+                    <table aria-label="Recent completed forecast evaluations ledger" class="w-full text-left text-xs border-collapse">
+                        <caption class="sr-only">Table displaying recent out-of-time forecast target dates, base prices, predictions, actual realized prices, and errors</caption>
                         <thead>
                             <tr class="border-b border-slate-800 bg-slate-900 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                                <th class="p-3">Target Date</th>
-                                <th class="p-3">Horizon</th>
-                                <th class="p-3">Region</th>
-                                <th class="p-3">Base</th>
-                                <th class="p-3">Forecast</th>
-                                <th class="p-3">Actual</th>
-                                <th class="p-3">Error</th>
-                                <th class="p-3">Outcome</th>
+                                <th scope="col" class="p-3">Target Date</th>
+                                <th scope="col" class="p-3">Horizon</th>
+                                <th scope="col" class="p-3">Region</th>
+                                <th scope="col" class="p-3">Base</th>
+                                <th scope="col" class="p-3">Forecast</th>
+                                <th scope="col" class="p-3">Actual</th>
+                                <th scope="col" class="p-3">Error</th>
+                                <th scope="col" class="p-3">Outcome</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1689,7 +1744,7 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
         <!-- Banner Card -->
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
@@ -2286,7 +2341,7 @@ def generate_public_dashboard():
 {nav_overview}
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Headline Hero Banner -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-emerald-900/30 border border-blue-500/20 card-glow space-y-4">
@@ -2304,6 +2359,8 @@ def generate_public_dashboard():
                 Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 2.5 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
             </p>
         </div>
+
+        {build_macro_narrative_card_html(prices_map)}
 
         <!-- ACTIVE FORECAST LOCALES SECTION -->
         <section class="space-y-4">
@@ -2667,7 +2724,7 @@ def generate_public_dashboard():
                         <span class="text-emerald-400 font-semibold">&darr; Dropping Error Rate</span>
                     </div>
                     <div class="h-64 w-full">
-                        <canvas id="maeTrendChart"></canvas>
+                        <canvas id="maeTrendChart" role="img" aria-label="30-day rolling Mean Absolute Error trend line chart"></canvas>
                     </div>
                 </div>
 
@@ -2678,7 +2735,7 @@ def generate_public_dashboard():
                         <span class="text-blue-400 font-semibold">&uarr; Rising Accuracy</span>
                     </div>
                     <div class="h-64 w-full">
-                        <canvas id="hitRateTrendChart"></canvas>
+                        <canvas id="hitRateTrendChart" role="img" aria-label="30-day rolling Directional Hit Rate trend line chart"></canvas>
                     </div>
                 </div>
 
@@ -2686,14 +2743,15 @@ def generate_public_dashboard():
 
             <!-- Model Version Timeline Table -->
             <div class="overflow-x-auto pt-2">
-                <table class="w-full text-left text-xs text-slate-300">
+                <table aria-label="Model version evolution timeline and historical accuracy metrics" class="w-full text-left text-xs text-slate-300">
+                    <caption class="sr-only">Historical timeline of model architecture iterations, feature sets, error rates, and directional accuracy</caption>
                     <thead class="bg-slate-950 uppercase text-slate-400 border-b border-slate-800">
                         <tr>
-                            <th class="py-2.5 px-4">Model Iteration</th>
-                            <th class="py-2.5 px-4">Core Feature Architecture</th>
-                            <th class="py-2.5 px-4">MAE Error ($/gal)</th>
-                            <th class="py-2.5 px-4">Directional Hit Rate</th>
-                            <th class="py-2.5 px-4">Status</th>
+                            <th scope="col" class="py-2.5 px-4">Model Iteration</th>
+                            <th scope="col" class="py-2.5 px-4">Core Feature Architecture</th>
+                            <th scope="col" class="py-2.5 px-4">MAE Error ($/gal)</th>
+                            <th scope="col" class="py-2.5 px-4">Directional Hit Rate</th>
+                            <th scope="col" class="py-2.5 px-4">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800">
@@ -2924,6 +2982,7 @@ def generate_public_dashboard():
                         <p class="text-xs text-slate-300 leading-relaxed">
                             Cboe OVX options tail-risk volatility &amp; Baker Hughes drilling rig counts tracking 3-6 month supply pipelines.
                         </p>
+                    </div>
                 </div>
 
                 <!-- Documentation & Data Sources CTA Ribbon -->
@@ -3073,7 +3132,7 @@ def generate_public_dashboard():
 
 {{NAV_NATIONAL}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -3107,7 +3166,7 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
                 <p class="text-3xl font-extrabold text-emerald-400">${{NAT_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: {{NAT_MAPE}} | RMSE: ${{NAT_RMSE}}</p>
+                <p class="text-xs text-slate-500">MAPE: {{NAT_MAPE}} | RMSE: {{NAT_RMSE}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Directional Accuracy</span>
@@ -3122,7 +3181,7 @@ def generate_public_dashboard():
                 <i class="fa-solid fa-chart-area text-blue-400"></i> Historical NYMEX RBOB Prices vs. 5-Day Model Predictions
             </h3>
             <div class="h-80 w-full">
-                <canvas id="nationalChart"></canvas>
+                <canvas id="nationalChart" role="img" aria-label="Historical NYMEX RBOB actual prices versus 5-day model forecast time series chart"></canvas>
             </div>
         </div>
 
@@ -3157,6 +3216,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
 
         <!-- Quantitative Model Pipeline Detail -->
@@ -3224,7 +3284,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{NAT_MAE}}", f"{accuracy_stats['overall_mae_dollars']:.4f}").replace("{{NAT_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NAT_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NAT_HIT_RATE}}", get_hit_rate_display('National')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{NAT_MAE}}", f"{accuracy_stats['overall_mae_dollars']:.4f}").replace("{{NAT_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NAT_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NAT_HIT_RATE}}", get_hit_rate_display('National')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{NARRATIVE_CARD}}", build_national_narrative_card_html(nat_base, nat_pred)).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -3277,7 +3337,7 @@ def generate_public_dashboard():
 
 {{NAV_TULSA}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -3310,8 +3370,8 @@ def generate_public_dashboard():
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
-                <p class="text-3xl font-extrabold text-emerald-400">${{TULSA_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: {{TULSA_MAPE}} | RMSE: ${{TULSA_RMSE}}</p>
+                <p class="text-3xl font-extrabold text-emerald-400">{{TULSA_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{TULSA_MAPE}} | RMSE: {{TULSA_RMSE}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Directional Accuracy</span>
@@ -3326,7 +3386,7 @@ def generate_public_dashboard():
                 <i class="fa-solid fa-chart-line text-emerald-400"></i> Historical Tulsa Retail Prices vs. 5-Day Model Predictions
             </h3>
             <div class="h-80 w-full">
-                <canvas id="tulsaChart"></canvas>
+                <canvas id="tulsaChart" role="img" aria-label="Historical Tulsa retail gas actual prices versus 5-day model forecast time series chart"></canvas>
             </div>
         </div>
 
@@ -3361,6 +3421,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3412,7 +3473,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{TULSA_MAE}}", get_mae_display('Tulsa_OK')).replace("{{TULSA_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{TULSA_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{TULSA_HIT_RATE}}", get_hit_rate_display('Tulsa_OK')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{TULSA_MAE}}", get_mae_display('Tulsa_OK')).replace("{{TULSA_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{TULSA_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{TULSA_HIT_RATE}}", get_hit_rate_display('Tulsa_OK')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'], logistics_hub="Cushing WTI Storage & West Tulsa HF Sinclair")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -3465,7 +3526,7 @@ def generate_public_dashboard():
 
 {{NAV_NEWARK}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -3498,8 +3559,8 @@ def generate_public_dashboard():
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
-                <p class="text-3xl font-extrabold text-emerald-400">${{NEWARK_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: {{NEWARK_MAPE}} | RMSE: ${{NEWARK_RMSE}}</p>
+                <p class="text-3xl font-extrabold text-emerald-400">{{NEWARK_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{NEWARK_MAPE}} | RMSE: {{NEWARK_RMSE}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Directional Accuracy</span>
@@ -3514,7 +3575,7 @@ def generate_public_dashboard():
                 <i class="fa-solid fa-chart-line text-blue-400"></i> Historical Newark Retail Prices vs. 5-Day Model Predictions
             </h3>
             <div class="h-80 w-full">
-                <canvas id="newarkChart"></canvas>
+                <canvas id="newarkChart" role="img" aria-label="Historical Newark retail gas actual prices versus 5-day model forecast time series chart"></canvas>
             </div>
         </div>
 
@@ -3549,6 +3610,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3600,7 +3662,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{NEWARK_MAE}}", get_mae_display('Newark_DE')).replace("{{NEWARK_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NEWARK_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NEWARK_HIT_RATE}}", get_hit_rate_display('Newark_DE')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{NEWARK_MAE}}", get_mae_display('Newark_DE')).replace("{{NEWARK_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NEWARK_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NEWARK_HIT_RATE}}", get_hit_rate_display('Newark_DE')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'], logistics_hub="Delaware City Refinery & PADD 1B Harbor")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -3651,7 +3713,7 @@ def generate_public_dashboard():
 
 {{NAV_CINCINNATI}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -3730,7 +3792,7 @@ def generate_public_dashboard():
                 <i class="fa-solid fa-chart-line text-purple-400"></i> Historical Ohio vs. Kentucky Retail Gas & RBOB Futures
             </h3>
             <div class="h-80 w-full">
-                <canvas id="cincinnatiChart"></canvas>
+                <canvas id="cincinnatiChart" role="img" aria-label="Historical Ohio vs Kentucky retail gas actual prices versus 5-day model forecast time series chart"></canvas>
             </div>
         </div>
 
@@ -3772,6 +3834,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3830,7 +3893,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'], logistics_hub="Catlettsburg Refinery & Ohio River Tow Navigation")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -3883,7 +3946,7 @@ def generate_public_dashboard():
 
 {{NAV_GREENVILLE}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -3926,6 +3989,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -3961,7 +4025,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'], logistics_hub="Colonial Pipeline Selma Junction & NC 40.4¢ State Tax")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -4014,7 +4078,7 @@ def generate_public_dashboard():
 
 {{NAV_CHARLOTTE}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -4057,6 +4121,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4092,7 +4157,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{CHARLOTTE_MAE}}", get_mae_display('charlotte_nc')).replace("{{CHARLOTTE_HIT_RATE}}", get_hit_rate_display('charlotte_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{CHARLOTTE_MAE}}", get_mae_display('charlotte_nc')).replace("{{CHARLOTTE_HIT_RATE}}", get_hit_rate_display('charlotte_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'], logistics_hub="Colonial & Plantation Pipeline Paw Creek Terminal")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -4145,7 +4210,7 @@ def generate_public_dashboard():
 
 {{NAV_PORT_ST_LUCIE}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -4188,6 +4253,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4223,7 +4289,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{PORT_ST_LUCIE_MAE}}", get_mae_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_HIT_RATE}}", get_hit_rate_display('port_st_lucie_fl')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
+""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{PORT_ST_LUCIE_MAE}}", get_mae_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_HIT_RATE}}", get_hit_rate_display('port_st_lucie_fl')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'], logistics_hub="Port Everglades Marine Offloading & Waterborne Freight")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
 
     os.makedirs(PORT_ST_LUCIE_SUB_DIR, exist_ok=True)
     with open(PORT_ST_LUCIE_PATH, "w", encoding="utf-8") as f:
@@ -4262,7 +4328,7 @@ def generate_public_dashboard():
 
 {{NAV_OAKLAND}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -4405,6 +4471,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4412,7 +4479,7 @@ def generate_public_dashboard():
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white">Oakland Retail Gas Price vs NYMEX RBOB Futures</h3>
             <div class="h-80 w-full">
-                <canvas id="oaklandChart"></canvas>
+                <canvas id="oaklandChart" role="img" aria-label="Oakland Retail Gas Price vs NYMEX RBOB Futures time series chart"></canvas>
             </div>
         </div>
 
@@ -4494,7 +4561,7 @@ def generate_public_dashboard():
         else:
             seismic_badge = '<span class="text-emerald-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Baseline Quiet (0.00)</span>'
 
-        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_HIT_RATE}}", get_hit_rate_display('oakland_ca')).replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
+        return html_str.replace("{{NAV_OAKLAND}}", nav_oakland).replace("PREFIX", rel_prefix).replace("{{OAKLAND_BASE}}", f"{oak_base:.3f}").replace("{{OAKLAND_PRED}}", f"{oak_pred:.3f}").replace("{{OAKLAND_PCT}}", f"{oak_pct:+.1f}").replace("{{OAKLAND_HIT_RATE}}", get_hit_rate_display('oakland_ca')).replace("{{OAKLAND_CHART_DATA}}", oak_chart_str).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_oakland).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Oakland_CA', oak_base, oak_pred, logistics_hub="Chevron Richmond Refinery & CARB LCFS/Cap-and-Trade Standard")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Oakland_CA', oak_base, oak_pred)).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('oakland_ca')).replace("{{USGS_SEISMIC_STATUS_BADGE}}", seismic_badge)
 
     with open(OAKLAND_PATH, "w", encoding="utf-8") as f:
         f.write(build_oakland_html(""))
@@ -4532,7 +4599,7 @@ def generate_public_dashboard():
 
 {{NAV_BAYAREA}}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
         <!-- Breadcrumb & Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -4622,15 +4689,16 @@ def generate_public_dashboard():
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                <table class="w-full text-left text-xs text-slate-300 border-collapse" aria-label="NorCal Sub-Locale Quantitative Model Forecasts Matrix">
+                    <caption class="sr-only">NorCal Sub-Locale Quantitative Model Forecasts (5-Day Target Horizon)</caption>
                     <thead>
                         <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider bg-slate-950">
-                            <th class="p-3">Sub-Locale / Region</th>
-                            <th class="p-3">Current Base Price</th>
-                            <th class="p-3">5-Day Model Target</th>
-                            <th class="p-3">Projected Change</th>
-                            <th class="p-3">Primary Logistics & Tax Overhead Driver</th>
-                            <th class="p-3">Model Hit Rate</th>
+                            <th scope="col" class="p-3">Sub-Locale / Region</th>
+                            <th scope="col" class="p-3">Current Base Price</th>
+                            <th scope="col" class="p-3">5-Day Model Target</th>
+                            <th scope="col" class="p-3">Projected Change</th>
+                            <th scope="col" class="p-3">Primary Logistics & Tax Overhead Driver</th>
+                            <th scope="col" class="p-3">Model Hit Rate</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/60">
@@ -4689,6 +4757,7 @@ def generate_public_dashboard():
             </div>
         </div>
 
+        {{NARRATIVE_CARD}}
         {{FEATURE_ATTRIBUTION_CARD}}
         {{REGIONAL_CARDS}}
 
@@ -4696,7 +4765,7 @@ def generate_public_dashboard():
         <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
             <h3 class="text-lg font-bold text-white">9-County SF Bay Area Regional Gas Price Trends & Sub-Locale Forecasts</h3>
             <div class="h-80 w-full">
-                <canvas id="bayAreaChart"></canvas>
+                <canvas id="bayAreaChart" role="img" aria-label="9-County SF Bay Area Regional Gas Price Trends & Sub-Locale Forecasts time series chart"></canvas>
             </div>
         </div>
 
@@ -4834,6 +4903,7 @@ def generate_public_dashboard():
             .replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS)
             .replace("{{ANALYTICS_SCRIPT}}", get_analytics_script())
             .replace("{{HEAD_META}}", head_meta_bayarea)
+            .replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('BayArea_CA', bay_base, bay_pred, logistics_hub="SF Bay 9-County Refining Complex & Carquinez Strait Marine Terminals"))
             .replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('BayArea_CA', bay_base, bay_pred))
             .replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('bayarea_ca'))
         )
@@ -4882,7 +4952,7 @@ def generate_public_dashboard():
 {{NAV_MATH}}
 
     <!-- Main Content Container -->
-    <main class="max-w-5xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
+    <main id="main-content" role="main" class="max-w-5xl mx-auto px-4 py-10 flex-1 w-full space-y-12">
         
         <!-- Hero Section -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-slate-900 to-indigo-900/40 border border-blue-500/30 space-y-4">
@@ -5558,13 +5628,13 @@ def generate_savings_advisor_page():
 {hdr}
 
     <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+    <main id="main-content" role="main" class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
 
         <!-- Title Section -->
         <div class="space-y-2">
             <div class="flex items-center gap-3">
                 <span class="p-3 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-2xl">
-                    <i class="fa-solid fa-calculator text-2xl"></i>
+                    <i class="fa-solid fa-calculator text-2xl" aria-hidden="true"></i>
                 </span>
                 <div>
                     <h1 class="text-3xl font-black text-white tracking-tight">Interactive Fill-Up Timing &amp; Tank Savings Advisor</h1>
@@ -5579,13 +5649,13 @@ def generate_savings_advisor_page():
             <!-- Inputs Card (Left: 5 cols) -->
             <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
                 <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-emerald-400"></i> Vehicle &amp; Tank Parameters
+                    <i class="fa-solid fa-sliders text-emerald-400" aria-hidden="true"></i> Vehicle &amp; Tank Parameters
                 </h3>
 
                 <!-- Vehicle Preset Select -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Vehicle Type Preset</label>
-                    <select id="vehiclePreset" onchange="applyVehiclePreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                    <label for="vehiclePreset" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Vehicle Type Preset</label>
+                    <select id="vehiclePreset" aria-label="Vehicle Type Preset" onchange="applyVehiclePreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
                         <option value="15" selected>Sedan / Mid-Size SUV (15 Gallons)</option>
                         <option value="12">Compact Car / Hybrid (12 Gallons)</option>
                         <option value="24">Full-Size Truck / Large SUV (24 Gallons)</option>
@@ -5596,14 +5666,14 @@ def generate_savings_advisor_page():
 
                 <!-- Tank Capacity Input -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Total Tank Capacity (Gallons)</label>
-                    <input type="number" id="tankCapacity" value="15" step="0.5" min="1" max="1000" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                    <label for="tankCapacity" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Total Tank Capacity (Gallons)</label>
+                    <input type="number" id="tankCapacity" aria-label="Total Tank Capacity in Gallons" value="15" step="0.5" min="1" max="1000" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
                 <!-- Current Fuel Level Select -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Current Fuel Level</label>
-                    <select id="fuelLevel" onchange="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                    <label for="fuelLevel" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Current Fuel Level</label>
+                    <select id="fuelLevel" aria-label="Current Fuel Level" onchange="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
                         <option value="0.25" selected>1/4 Tank Remaining (75% Fill-Up Needed)</option>
                         <option value="0.10">Empty / Low Fuel Light (90% Fill-Up Needed)</option>
                         <option value="0.50">1/2 Tank Remaining (50% Fill-Up Needed)</option>
@@ -5613,16 +5683,16 @@ def generate_savings_advisor_page():
 
                 <!-- Target Market / Metro Region Select -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
-                    <select id="regionPreset" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                    <label for="regionPreset" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
+                    <select id="regionPreset" aria-label="Target Market or Metro Region" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
 {region_options_str}
                     </select>
                 </div>
 
                 <!-- Current Local Pump Price Input -->
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Today's Local Pump Price ($/gal)</label>
-                    <input type="number" id="currentPrice" value="3.450" step="0.01" min="1.00" max="10.00" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm font-mono text-white focus:outline-none focus:border-emerald-500">
+                    <label for="currentPrice" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Today's Local Pump Price ($/gal)</label>
+                    <input type="number" id="currentPrice" aria-label="Today's Local Pump Price in dollars per gallon" value="3.450" step="0.01" min="1.00" max="10.00" oninput="calculateSavings()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm font-mono text-white focus:outline-none focus:border-emerald-500">
                 </div>
             </div>
 
@@ -5663,18 +5733,19 @@ def generate_savings_advisor_page():
         <!-- 5-Day Trajectory Matrix Table -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-chart-line text-emerald-400"></i> 5-Day Price Trajectory &amp; Tank Cost Matrix
+                <i class="fa-solid fa-chart-line text-emerald-400" aria-hidden="true"></i> 5-Day Price Trajectory &amp; Tank Cost Matrix
             </h3>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-300">
+                <table class="w-full text-left text-sm text-slate-300" aria-label="5-Day Price Trajectory and Tank Cost Matrix">
+                    <caption class="sr-only">5-Day Price Trajectory &amp; Tank Cost Matrix</caption>
                     <thead class="bg-slate-950 text-xs text-slate-400 uppercase tracking-wider border-b border-slate-800">
                         <tr>
-                            <th class="p-3">Horizon</th>
-                            <th class="p-3">Forecasted Price</th>
-                            <th class="p-3">Gallons Needed</th>
-                            <th class="p-3">Total Tank Cost</th>
-                            <th class="p-3">Net Savings vs Today</th>
+                            <th scope="col" class="p-3">Horizon</th>
+                            <th scope="col" class="p-3">Forecasted Price</th>
+                            <th scope="col" class="p-3">Gallons Needed</th>
+                            <th scope="col" class="p-3">Total Tank Cost</th>
+                            <th scope="col" class="p-3">Net Savings vs Today</th>
                         </tr>
                     </thead>
                     <tbody id="trajectoryTableBody" class="divide-y divide-slate-800/50 font-mono">
@@ -5986,7 +6057,7 @@ def generate_diesel_page():
 
 {hdr}
 
-    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+    <main id="main-content" role="main" class="max-w-6xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
         <!-- WIP / Experimental Status Banner -->
         <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-amber-300 text-xs sm:text-sm">
             <i class="fa-solid fa-flask-vial text-amber-400 text-xl shrink-0 mt-0.5"></i>
@@ -6223,11 +6294,7 @@ def generate_telemetry_page():
                 lat, lng = state_center_coords[z_st]
                 map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {z_st} ({z_padd})", "hits": z_hits})
     if not map_points:
-        map_points = [
-            {"lat": 34.0736, "lng": -118.4004, "name": "90210 - Beverly Hills, CA (PADD 5)", "hits": 20},
-            {"lat": 29.7604, "lng": -95.3698, "name": "77002 - Houston, TX (PADD 3)", "hits": 10},
-            {"lat": 40.7501, "lng": -73.9996, "name": "10001 - New York, NY (PADD 1B)", "hits": 40}
-        ]
+        map_points = []
     map_points_json = json.dumps(map_points)
 
     def build_telemetry_html(hdr, learning_section_html=""):
@@ -6261,12 +6328,12 @@ def generate_telemetry_page():
 
 {hdr}
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-grow space-y-8 w-full">
         <!-- Hero Banner -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-cyan-900/40 via-slate-900 to-blue-900/40 border border-cyan-500/30 space-y-4">
             <div class="flex items-center gap-3">
                 <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20">
-                    <i class="fa-solid fa-chart-line text-3xl"></i>
+                    <i class="fa-solid fa-chart-line text-3xl" aria-hidden="true"></i>
                 </div>
                 <div>
                     <h2 class="text-3xl font-extrabold text-white tracking-tight">System Observability & Operational Telemetry</h2>
@@ -6303,7 +6370,7 @@ def generate_telemetry_page():
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-brain text-purple-400"></i> Vectorize Hindsight Episodic Memory & Reflection Observability
+                    <i class="fa-solid fa-brain text-purple-400" aria-hidden="true"></i> Vectorize Hindsight Episodic Memory & Reflection Observability
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">Issue #230 & #422</span>
             </div>
@@ -6312,19 +6379,19 @@ def generate_telemetry_page():
                 <!-- Lifecycle Triad -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                     <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-arrows-spin text-purple-400"></i> Operation Triad Throughput
+                        <i class="fa-solid fa-arrows-spin text-purple-400" aria-hidden="true"></i> Operation Triad Throughput
                     </h4>
                     <div class="space-y-3 font-mono text-xs">
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400"></i> Retain (Experience Store)</span>
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-floppy-disk text-emerald-400" aria-hidden="true"></i> Retain (Experience Store)</span>
                             <span class="text-emerald-400 font-bold">{retain_count:,} ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400"></i> Recall (Analogue Search)</span>
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-blue-400" aria-hidden="true"></i> Recall (Analogue Search)</span>
                             <span class="text-blue-400 font-bold">{recall_count:,} ops</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
-                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Reflect (Anomaly Synthesis)</span>
+                            <span class="text-slate-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400" aria-hidden="true"></i> Reflect (Anomaly Synthesis)</span>
                             <span class="text-amber-400 font-bold">{reflect_count:,} ops</span>
                         </div>
                     </div>
@@ -6333,7 +6400,7 @@ def generate_telemetry_page():
                 <!-- Backend Routing Split -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                     <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-network-wired text-cyan-400"></i> Backend Routing Split
+                        <i class="fa-solid fa-network-wired text-cyan-400" aria-hidden="true"></i> Backend Routing Split
                     </h4>
                     <div class="space-y-3 font-mono text-xs">
                         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
@@ -6357,7 +6424,7 @@ def generate_telemetry_page():
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                     <div class="flex justify-between items-center">
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-database text-blue-400"></i> Active Memory Bank
+                            <i class="fa-solid fa-database text-blue-400" aria-hidden="true"></i> Active Memory Bank
                         </h4>
                         <span class="text-[10px] px-2 py-0.5 rounded-full {'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' if mem_source_type == 'remote_cloud' else ('bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' if 'Snapshot' in mem_backend_badge or mem_source_type == 'telemetry_ledger' else 'bg-slate-800 text-slate-400 border border-slate-700')} font-mono">
                             {'☁️ Remote Cluster' if mem_source_type == 'remote_cloud' else ('📦 Verified Snapshot' if 'Snapshot' in mem_backend_badge or mem_source_type == 'telemetry_ledger' else '💾 Local SQLite')}
@@ -6384,7 +6451,7 @@ def generate_telemetry_page():
                             </div>
                         </div>
                         <div class="pt-1">
-                            {"<div class='p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-circle-check text-emerald-400'></i> Cloud Sync Queue</span><span class='font-bold'>0 Pending (Synced)</span></div>" if pending_reconciliation == 0 else f"<div class='p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-cloud-arrow-up text-amber-400'></i> Cloud Sync Queue</span><span class='font-bold'>{pending_reconciliation:,} Queued for Sync</span></div>"}
+                            {"<div class='p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-circle-check text-emerald-400' aria-hidden='true'></i> Cloud Sync Queue</span><span class='font-bold'>0 Pending (Synced)</span></div>" if pending_reconciliation == 0 else f"<div class='p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] flex justify-between items-center font-mono'><span><i class='fa-solid fa-cloud-arrow-up text-amber-400' aria-hidden='true'></i> Cloud Sync Queue</span><span class='font-bold'>{pending_reconciliation:,} Queued for Sync</span></div>"}
                         </div>
                     </div>
                 </div>
@@ -6395,7 +6462,7 @@ def generate_telemetry_page():
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-satellite-dish text-emerald-400"></i> Data Connector Performance & Freshness Audit (7-Day Window)
+                    <i class="fa-solid fa-satellite-dish text-emerald-400" aria-hidden="true"></i> Data Connector Performance & Freshness Audit (7-Day Window)
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">src/connector_telemetry.py</span>
             </div>
@@ -6421,15 +6488,16 @@ def generate_telemetry_page():
                 </div>
 
                 <div class="overflow-x-auto pt-2">
-                    <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                    <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse" aria-label="Data Connector Performance and Freshness Audit Table">
+                        <caption class="sr-only">Data Connector Performance &amp; Freshness Audit (7-Day Window)</caption>
                         <thead>
                             <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                <th class="py-2.5 px-3">Data Connector / Ingestion Feed</th>
-                                <th class="py-2.5 px-3 text-center">Calls</th>
-                                <th class="py-2.5 px-3 text-center">Success Rate</th>
-                                <th class="py-2.5 px-3 text-center">Stale (>24h)</th>
-                                <th class="py-2.5 px-3 text-center">Avg Latency</th>
-                                <th class="py-2.5 px-3 text-right">Avg Data Age</th>
+                                <th scope="col" class="py-2.5 px-3">Data Connector / Ingestion Feed</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Calls</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Success Rate</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Stale (>24h)</th>
+                                <th scope="col" class="py-2.5 px-3 text-center">Avg Latency</th>
+                                <th scope="col" class="py-2.5 px-3 text-right">Avg Data Age</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/50">
@@ -6444,7 +6512,7 @@ def generate_telemetry_page():
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-piggy-bank text-emerald-400"></i> Zero-Cost Fallback & Cumulative Token Savings Ledger
+                    <i class="fa-solid fa-piggy-bank text-emerald-400" aria-hidden="true"></i> Zero-Cost Fallback & Cumulative Token Savings Ledger
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">Issue #196</span>
             </div>
@@ -6476,13 +6544,14 @@ def generate_telemetry_page():
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Zero-Cost Provider Breakdown</h4>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse" aria-label="Zero-Cost Provider Breakdown Table">
+                            <caption class="sr-only">Zero-Cost Provider Breakdown</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                    <th class="py-2 px-3">Zero-Cost Provider / Engine</th>
-                                    <th class="py-2 px-3 text-center">Invocations</th>
-                                    <th class="py-2 px-3 text-center">Cost Rate</th>
-                                    <th class="py-2 px-3 text-right">Status</th>
+                                    <th scope="col" class="py-2 px-3">Zero-Cost Provider / Engine</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Invocations</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Cost Rate</th>
+                                    <th scope="col" class="py-2 px-3 text-right">Status</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800/50">
@@ -6521,7 +6590,7 @@ def generate_telemetry_page():
         <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
             <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> API Provider Quota Ledgers
+                    <i class="fa-solid fa-gauge-high text-emerald-400" aria-hidden="true"></i> API Provider Quota Ledgers
                 </h3>
                 <div class="space-y-3 font-mono text-xs">
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
@@ -6549,7 +6618,7 @@ def generate_telemetry_page():
 
             <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-server text-cyan-400"></i> 3-Tier Cascading Cache Observability
+                    <i class="fa-solid fa-server text-cyan-400" aria-hidden="true"></i> 3-Tier Cascading Cache Observability
                 </h3>
                 <div class="space-y-3 font-mono text-xs">
                     <div class="flex justify-between items-center p-3 rounded-xl bg-slate-950 border border-slate-800">
@@ -6572,7 +6641,7 @@ def generate_telemetry_page():
         <section class="space-y-4 pt-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-coins text-amber-400"></i> TokenTab Local LLM Token Accounting & Cost Ledger
+                    <i class="fa-solid fa-coins text-amber-400" aria-hidden="true"></i> TokenTab Local LLM Token Accounting & Cost Ledger
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Issue #189</span>
             </div>
@@ -6604,14 +6673,15 @@ def generate_telemetry_page():
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider font-mono">Multi-Provider Cost Breakdown</h4>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse">
+                        <table class="w-full text-left text-xs font-mono text-slate-300 border-collapse" aria-label="Multi-Provider Cost Breakdown Table">
+                            <caption class="sr-only">Multi-Provider Cost Breakdown</caption>
                             <thead>
                                 <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
-                                    <th class="py-2 px-3">Provider / Tier</th>
-                                    <th class="py-2 px-3 text-center">Calls</th>
-                                    <th class="py-2 px-3 text-center">Input Tokens</th>
-                                    <th class="py-2 px-3 text-center">Output Tokens</th>
-                                    <th class="py-2 px-3 text-right">Est. Cost (USD)</th>
+                                    <th scope="col" class="py-2 px-3">Provider / Tier</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Calls</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Input Tokens</th>
+                                    <th scope="col" class="py-2 px-3 text-center">Output Tokens</th>
+                                    <th scope="col" class="py-2 px-3 text-right">Est. Cost (USD)</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800/50">
@@ -6661,7 +6731,7 @@ def generate_telemetry_page():
         <section class="space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-map-location-dot text-cyan-400"></i> Out-of-Metro ZIP Code Query Heatmap
+                    <i class="fa-solid fa-map-location-dot text-cyan-400" aria-hidden="true"></i> Out-of-Metro ZIP Code Query Heatmap
                 </h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">Issue #50 & #195</span>
             </div>
@@ -6673,17 +6743,16 @@ def generate_telemetry_page():
                         <span>Geographic Query Density Map</span>
                         <span>Layer: OpenStreetMap CartoDB Dark</span>
                     </div>
-                    <div id="zipMap" class="h-96 rounded-2xl border border-slate-800 z-10"></div>
+                    <div id="zipMap" class="h-96 rounded-2xl border border-slate-800 z-10" role="region" aria-label="Geographic Out-of-Metro ZIP Code Demand Heatmap"></div>
                 </div>
 
                 <!-- Recommended Expansion Metro Hubs (Right 1 Col) -->
                 <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4 flex flex-col justify-between">
                     <div>
                         <h4 class="text-lg font-bold text-white flex items-center gap-2 mb-1">
-                            <i class="fa-solid fa-bullseye text-emerald-400"></i> Candidate Expansion Hubs
+                            <i class="fa-solid fa-bullseye text-emerald-400" aria-hidden="true"></i> Candidate Expansion Hubs
                         </h4>
                         <p class="text-xs text-slate-400 mb-4">Recommended regional metro calibration hubs based on search volume:</p>
-
                         <div class="space-y-3">
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                                 <div class="flex justify-between items-center text-sm font-bold text-white">
