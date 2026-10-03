@@ -3649,13 +3649,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-09-18T10:48:40.267462",
+    "timestamp": "2026-10-03T11:18:33.482931+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "headline": "Today’s Gas Prices By State: Gas Above $4 Nationwide - Forbes",
+    "headline": "Today’s Gas Prices By State: Gas Tops $4 Nationwide - forbes.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxOcG1SSWY2dzdlYXF1bEhTTklUeWpQLU9ZNzJBUllCUmN0SzhFUnhBVG1HN1Naa0sxUVEyYk1XRkFXUS1XQTA3Vm9YVEMyWEdsdWV0a2JnbGwzazFRODBCTmZIS2I3WW52Q0RodkJUd1JES2ctUHp4TmNBMV9PSzlyZXRXbGVNNkxlT0NvZHlZVUIwT2FHRFhiby10c2hvTjFiUk9zRFVxWWxwR3RGbEhV?oc=5": {
     "timestamp": "2026-09-18T10:48:41.416780",
@@ -10589,5 +10589,33 @@
     "headline": "What’s the Status of International Oil Companies in Venezuela?",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxQczJLZGFLbldnVWRFM0hpVS1qV3RGc0RMUDN1VXNtRGJVT05EYzA2Nm5JYkc5RUltSlc1Z09Xb0xxNTBjdDFWWWIwQ2xXWVpWUEYwSFNiS0ZZNEtuSEwwVUFQWWZwVkxXci1ma0E3RHlVMktoeVlmbWdHc2VKdWwwekM5R0ZTcFhMalVqeEdDdlNMTFhhNFE?oc=5",
     "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9tT0U2NXNwWFJyV1pRVm1NT0Z4a3laY2dvYXR3N2ZtNEVsRFQ0bHJGMkpPMnYwOWttQU9WLVRPc0RUbjZKSVoxZ0ZVcTY1RjM1VTVNSUR2aw?oc=5": {
+    "timestamp": "2026-10-03T11:18:40.412981+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9tT0U2NXNwWFJyV1pRVm1NT0Z4a3laY2dvYXR3N2ZtNEVsRFQ0bHJGMkpPMnYwOWttQU9WLVRPc0RUbjZKSVoxZ0ZVcTY1RjM1VTVNSUR2aw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9tT0U2NXNwWFJyV1pRVm1NT0Z4a3laY2dvYXR3N2ZtNEVsRFQ0bHJGMkpPMnYwOWttQU9WLVRPc0RUbjZKSVoxZ0ZVcTY1RjM1VTVNSUR2aw?oc=5",
+    "headline": "CPC to leave domestic gasoline, diesel prices unchanged next week - Focus Taiwan - CNA English News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiV0FVX3lxTE9tT0U2NXNwWFJyV1pRVm1NT0Z4a3laY2dvYXR3N2ZtNEVsRFQ0bHJGMkpPMnYwOWttQU9WLVRPc0RUbjZKSVoxZ0ZVcTY1RjM1VTVNSUR2aw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMimwFBVV95cUxQcXhvSXI4azVpWkZBLVFzUDJlVE01UDhDMTRPMlQtdHE4RWc4MXdYTnpfN2Q4T0JuYmg4TldqRG9rNm5kWkxvLWpEQVFzdGkyYTk4c3dDS1p3dVhvb09iQ293ZzlSYzhSbnh6VTdYOXFhbEpFdDV1ckdCWEMwTzJnYmZyNm1XTnVoWWo0RHpBbXNRWGhEcnhFZ19aQQ?oc=5": {
+    "timestamp": "2026-10-03T11:18:49.622444+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQcXhvSXI4azVpWkZBLVFzUDJlVE01UDhDMTRPMlQtdHE4RWc4MXdYTnpfN2Q4T0JuYmg4TldqRG9rNm5kWkxvLWpEQVFzdGkyYTk4c3dDS1p3dVhvb09iQ293ZzlSYzhSbnh6VTdYOXFhbEpFdDV1ckdCWEMwTzJnYmZyNm1XTnVoWWo0RHpBbXNRWGhEcnhFZ19aQQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQcXhvSXI4azVpWkZBLVFzUDJlVE01UDhDMTRPMlQtdHE4RWc4MXdYTnpfN2Q4T0JuYmg4TldqRG9rNm5kWkxvLWpEQVFzdGkyYTk4c3dDS1p3dVhvb09iQ293ZzlSYzhSbnh6VTdYOXFhbEpFdDV1ckdCWEMwTzJnYmZyNm1XTnVoWWo0RHpBbXNRWGhEcnhFZ19aQQ?oc=5",
+    "headline": "Serbia fuel excise stays cut 25% until October 11 - srpske.rs",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimwFBVV95cUxQcXhvSXI4azVpWkZBLVFzUDJlVE01UDhDMTRPMlQtdHE4RWc4MXdYTnpfN2Q4T0JuYmg4TldqRG9rNm5kWkxvLWpEQVFzdGkyYTk4c3dDS1p3dVhvb09iQ293ZzlSYzhSbnh6VTdYOXFhbEpFdDV1ckdCWEMwTzJnYmZyNm1XTnVoWWo0RHpBbXNRWGhEcnhFZ19aQQ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMitgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQdIBtgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQQ?oc=5": {
+    "timestamp": "2026-10-03T11:18:50.706724+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQdIBtgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQdIBtgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQQ?oc=5",
+    "headline": "Trump says Europe agrees to release diesel stocks - South China Morning Post",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQdIBtgFBVV95cUxQZWgtOEZtY3hyclRPZS1pMGVMTnRidEtUcy1teU03ZGNMUkZSd2xIMlFYZjVXd3Yxa2ttbXpQR2I2dHdtWVR1VWxoeU9ZUjl0aGU2VGJtdWNlaEhtdC1wSDlkdU01N2ZlODIxZkpwblY1MWhjV0ZFYVA1cDhKYkdMcEttSTNieC01WFhOTllnYThRcDMzanIzSkdrS3hidVI3cjdXN2lMSUQ1VUZ2WHJyRkxvZm5wQQ?oc=5",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   }
 }

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-03T01:19:09.925228",
+  "timestamp": "2026-10-03T11:19:44.167897",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.265,
+    "current_price_per_gal": 4.23,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-03T01:16:13Z"
+      "timestamp": "2026-10-03T11:19:25Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 4.265,
-    "predicted_price_per_gal": 4.333,
-    "expected_change_dollars": 0.068,
-    "expected_change_percent": 1.59,
+    "current_base_price": 4.23,
+    "predicted_price_per_gal": 4.299,
+    "expected_change_dollars": 0.069,
+    "expected_change_percent": 1.63,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.131,
-    "prediction_upper_95ci": 4.535,
+    "prediction_lower_95ci": 4.097,
+    "prediction_upper_95ci": 4.501,
     "calibration_method": "conformal",
     "calibration_sample_size": 238,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.268,
-    "day_2_price": 4.284,
-    "day_3_price": 4.314,
-    "day_4_price": 4.334,
-    "day_5_price": 4.333,
+    "day_1_price": 4.233,
+    "day_2_price": 4.249,
+    "day_3_price": 4.279,
+    "day_4_price": 4.299,
+    "day_5_price": 4.299,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -89,20 +89,20 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast +$0.068/gal (+1.59%): Driven primarily by Refining Yield & Crack Spread (+$0.024/gal), Regional Logistics & Hub Delivery (+$0.017/gal).",
+      "summary_text": "Newark DE forecast +$0.069/gal (+1.63%): Driven primarily by Refining Yield & Crack Spread (+$0.024/gal), Regional Logistics & Hub Delivery (+$0.017/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.024,
-          "impact_pct": 0.56,
+          "impact_pct": 0.57,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -126,21 +126,21 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.007,
-          "impact_pct": 0.16,
+          "impact_pct": 0.17,
           "share_pct": 10.0,
-          "direction": "UP"
-        },
-        {
-          "category": "Tax & Regulatory Overhead",
-          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.07,
-          "share_pct": 5.0,
           "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
+          "impact_dollars": 0.004,
+          "impact_pct": 0.09,
+          "share_pct": 5.0,
+          "direction": "UP"
+        },
+        {
+          "category": "Tax & Regulatory Overhead",
+          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.003,
           "impact_pct": 0.07,
           "share_pct": 5.0,
@@ -154,7 +154,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.024,
-      "impact_pct": 0.56,
+      "impact_pct": 0.57,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -178,8 +178,16 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.007,
-      "impact_pct": 0.16,
+      "impact_pct": 0.17,
       "share_pct": 10.0,
+      "direction": "UP"
+    },
+    {
+      "category": "Weather & Environmental Signals",
+      "description": "NOAA severe weather risks, convective alerts & freeze warnings",
+      "impact_dollars": 0.004,
+      "impact_pct": 0.09,
+      "share_pct": 5.0,
       "direction": "UP"
     },
     {
@@ -189,18 +197,10 @@
       "impact_pct": 0.07,
       "share_pct": 5.0,
       "direction": "UP"
-    },
-    {
-      "category": "Weather & Environmental Signals",
-      "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.07,
-      "share_pct": 5.0,
-      "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast +$0.068/gal (+1.59%): Driven primarily by Refining Yield & Crack Spread (+$0.024/gal), Regional Logistics & Hub Delivery (+$0.017/gal).",
+    "summary_text": "Newark DE forecast +$0.069/gal (+1.63%): Driven primarily by Refining Yield & Crack Spread (+$0.024/gal), Regional Logistics & Hub Delivery (+$0.017/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -245,7 +245,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
