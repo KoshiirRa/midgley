@@ -3154,14 +3154,14 @@
     }
   },
   {
-    "as_of": "2026-10-04 04:58:26",
+    "as_of": "2026-10-04 11:59:03",
     "valid_date": "2026-10-04",
     "cluster_key": "all",
     "stations_monitored": 13,
     "indices": {
       "hydrological_barge_bottleneck_index": 0.0,
       "gulf_marine_departure_risk_index": 0.0,
-      "carquinez_berthing_risk_index": 0.609,
+      "carquinez_berthing_risk_index": 1.0,
       "delaware_refinery_thermal_index": 0.0,
       "tulsa_refinery_flood_risk_index": 0.0,
       "florida_canal_flood_risk_index": 0.0,
@@ -3171,7 +3171,7 @@
     },
     "data": {
       "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-      "timestamp": "2026-10-04 04:58:26",
+      "timestamp": "2026-10-04 11:59:03",
       "status": "SUCCESS",
       "stations_monitored": 13,
       "stations": {
@@ -3180,10 +3180,10 @@
           "cluster": "inland_barge",
           "role": "downriver_barge_draft",
           "gage_height_ft": 12.5,
-          "discharge_cfs": 416000.0,
+          "discharge_cfs": 408000.0,
           "water_temp_c": 21.0,
           "specific_conductance_us_cm": 380.0,
-          "last_updated": "2026-10-03T23:00:00.000-05:00"
+          "last_updated": "2026-10-04T06:00:00.000-05:00"
         },
         "03612500": {
           "name": "Ohio River at Cairo, IL",
@@ -3199,51 +3199,51 @@
           "name": "Ohio River at Cincinnati, OH",
           "cluster": "inland_barge",
           "role": "cincinnati_terminal_stage",
-          "gage_height_ft": 27.11,
-          "discharge_cfs": 46300.0,
+          "gage_height_ft": 27.59,
+          "discharge_cfs": 49400.0,
           "water_temp_c": 20.0,
           "specific_conductance_us_cm": 310.0,
-          "last_updated": "2026-10-04T00:00:00.000-04:00"
+          "last_updated": "2026-10-04T07:00:00.000-04:00"
         },
         "08072050": {
           "name": "San Jacinto River nr Sheldon, TX (Houston Ship Channel)",
           "cluster": "gulf_coast",
           "role": "hsc_marine_closure_risk",
-          "gage_height_ft": 1.79,
-          "discharge_cfs": 5880.0,
+          "gage_height_ft": 3.29,
+          "discharge_cfs": 6100.0,
           "water_temp_c": 25.0,
           "specific_conductance_us_cm": 420.0,
-          "last_updated": "2026-10-03T23:15:00.000-05:00"
+          "last_updated": "2026-10-04T06:15:00.000-05:00"
         },
         "07374000": {
           "name": "Mississippi River at Baton Rouge, LA",
           "cluster": "gulf_coast",
           "role": "cancer_alley_refining_stage",
-          "gage_height_ft": 11.79,
-          "discharge_cfs": 326000.0,
-          "water_temp_c": 27.3,
-          "specific_conductance_us_cm": 510.0,
-          "last_updated": "2026-10-03T23:00:00.000-05:00"
+          "gage_height_ft": 11.91,
+          "discharge_cfs": 328000.0,
+          "water_temp_c": 27.1,
+          "specific_conductance_us_cm": 491.0,
+          "last_updated": "2026-10-04T06:00:00.000-05:00"
         },
         "07374525": {
           "name": "Mississippi River at Belle Chasse, LA",
           "cluster": "gulf_coast",
           "role": "gulf_salt_wedge_intrusion",
-          "gage_height_ft": 9.17,
-          "discharge_cfs": 290000.0,
+          "gage_height_ft": 10.2,
+          "discharge_cfs": 276000.0,
           "water_temp_c": 24.0,
           "specific_conductance_us_cm": 480.0,
-          "last_updated": "2026-10-03T23:30:00.000-05:00"
+          "last_updated": "2026-10-04T06:30:00.000-05:00"
         },
         "08041780": {
           "name": "Neches River at Beaumont, TX (Sabine-Neches)",
           "cluster": "gulf_coast",
           "role": "port_arthur_refining_runoff",
-          "gage_height_ft": 3.55,
-          "discharge_cfs": 1750.0,
+          "gage_height_ft": 3.56,
+          "discharge_cfs": 926.0,
           "water_temp_c": 24.5,
           "specific_conductance_us_cm": 390.0,
-          "last_updated": "2026-10-03T23:15:00.000-05:00"
+          "last_updated": "2026-10-04T06:15:00.000-05:00"
         },
         "11162765": {
           "name": "Carquinez Strait at Martinez, CA",
@@ -3251,16 +3251,16 @@
           "role": "refining_corridor_berthing",
           "gage_height_ft": 3.2,
           "discharge_cfs": 18000.0,
-          "water_temp_c": 20.4,
-          "specific_conductance_us_cm": 46500.0,
-          "last_updated": "2026-10-03T15:45:00.000-08:00"
+          "water_temp_c": 21.0,
+          "specific_conductance_us_cm": 46600.0,
+          "last_updated": "2026-10-04T02:45:00.000-08:00"
         },
         "11455420": {
           "name": "Sacramento River at Freeport, CA",
           "cluster": "bay_area",
           "role": "atmospheric_river_runoff",
-          "gage_height_ft": 16.65,
-          "discharge_cfs": -72400.0,
+          "gage_height_ft": 13.11,
+          "discharge_cfs": 111000.0,
           "water_temp_c": 20.7,
           "specific_conductance_us_cm": 168.0,
           "last_updated": "2020-05-12T11:45:00.000-08:00"
@@ -3309,7 +3309,7 @@
       "indices": {
         "hydrological_barge_bottleneck_index": 0.0,
         "gulf_marine_departure_risk_index": 0.0,
-        "carquinez_berthing_risk_index": 0.609,
+        "carquinez_berthing_risk_index": 1.0,
         "delaware_refinery_thermal_index": 0.0,
         "tulsa_refinery_flood_risk_index": 0.0,
         "florida_canal_flood_risk_index": 0.0,

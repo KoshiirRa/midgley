@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-04T04:58:38.236058",
+  "timestamp": "2026-10-04T11:59:13.623435",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.381,
+    "current_price_per_gal": 4.37,
     "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
       "source": "AAA Web Scraper (National Average, US)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-04T04:58:37Z"
+      "timestamp": "2026-10-04T11:59:13Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 4.381,
-    "predicted_price_per_gal": 4.443,
+    "current_base_price": 4.37,
+    "predicted_price_per_gal": 4.432,
     "expected_change_dollars": 0.062,
     "expected_change_percent": 1.42,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.252,
-    "prediction_upper_95ci": 4.634,
+    "prediction_lower_95ci": 4.241,
+    "prediction_upper_95ci": 4.623,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 5,
     "directional_hit_rate_historical": 0.2,
     "historical_mae_dollars": 0.1666,
     "evaluation_sample_size": 5,
-    "day_1_price": 4.383,
-    "day_2_price": 4.409,
-    "day_3_price": 4.436,
-    "day_4_price": 4.46,
-    "day_5_price": 4.443,
+    "day_1_price": 4.372,
+    "day_2_price": 4.398,
+    "day_3_price": 4.425,
+    "day_4_price": 4.449,
+    "day_5_price": 4.432,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",

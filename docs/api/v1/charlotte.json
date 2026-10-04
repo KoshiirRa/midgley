@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-04T04:58:41.414483",
+  "timestamp": "2026-10-04T11:59:16.060583",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.073,
+    "current_price_per_gal": 4.062,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-04T04:58:25Z"
+      "timestamp": "2026-10-04T11:59:01Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 4.073,
-    "predicted_price_per_gal": 4.158,
+    "current_base_price": 4.062,
+    "predicted_price_per_gal": 4.147,
     "expected_change_dollars": 0.085,
     "expected_change_percent": 2.09,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.038,
-    "prediction_upper_95ci": 4.278,
+    "prediction_lower_95ci": 4.027,
+    "prediction_upper_95ci": 4.267,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.075,
-    "day_2_price": 4.103,
-    "day_3_price": 4.127,
-    "day_4_price": 4.162,
-    "day_5_price": 4.158,
+    "day_1_price": 4.064,
+    "day_2_price": 4.092,
+    "day_3_price": 4.116,
+    "day_4_price": 4.151,
+    "day_5_price": 4.147,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -102,7 +102,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.034,
-          "impact_pct": 0.83,
+          "impact_pct": 0.84,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.034,
-      "impact_pct": 0.83,
+      "impact_pct": 0.84,
       "share_pct": 40.0,
       "direction": "UP"
     },

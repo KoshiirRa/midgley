@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-04T04:58:39.845105",
+  "timestamp": "2026-10-04T11:59:14.837602",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.23,
+    "current_price_per_gal": 4.22,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-04T04:58:24Z"
+      "timestamp": "2026-10-04T11:59:00Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 4.23,
-    "predicted_price_per_gal": 4.292,
+    "current_base_price": 4.22,
+    "predicted_price_per_gal": 4.282,
     "expected_change_dollars": 0.062,
     "expected_change_percent": 1.47,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.09,
-    "prediction_upper_95ci": 4.494,
+    "prediction_lower_95ci": 4.08,
+    "prediction_upper_95ci": 4.484,
     "calibration_method": "conformal",
     "calibration_sample_size": 238,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.232,
-    "day_2_price": 4.259,
-    "day_3_price": 4.284,
-    "day_4_price": 4.31,
-    "day_5_price": 4.292,
+    "day_1_price": 4.222,
+    "day_2_price": 4.249,
+    "day_3_price": 4.274,
+    "day_4_price": 4.3,
+    "day_5_price": 4.282,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -110,7 +110,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.015,
-          "impact_pct": 0.35,
+          "impact_pct": 0.36,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -162,7 +162,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.015,
-      "impact_pct": 0.35,
+      "impact_pct": 0.36,
       "share_pct": 25.0,
       "direction": "UP"
     },
