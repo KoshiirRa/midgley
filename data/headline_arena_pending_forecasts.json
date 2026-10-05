@@ -25,56 +25,56 @@
   {
     "asset": "RB",
     "forecast_type": "direction",
-    "created_at": "2026-10-05T08:39:49.010468+00:00",
-    "expires_at": "2026-10-06T08:39:49.010468+00:00",
-    "created_ts": 1791189589.010468,
-    "expires_ts": 1791275989.010468,
+    "created_at": "2026-10-05T19:09:36.444433+00:00",
+    "expires_at": "2026-10-06T19:09:36.444433+00:00",
+    "created_ts": 1791227376.444433,
+    "expires_ts": 1791313776.444433,
     "payload": {
       "asset": "RB",
       "direction": "bullish",
-      "confidence": 0.8023,
-      "reasoning": "[Midgley Multi-Agent Forecast | RBOB Wholesale Gasoline (RB=F)]\n- Executive Direction: BULLISH (Confidence: 80.2% | Settlement Band: +/-0.30% [$/gal3.3025 - $/gal3.3223])\n- Multi-Agent Ensemble Distribution: Open $/gal3.3124, P50 Target $/gal3.3786, 80% CI [N/A - N/A], Volatility sigma=0.0662 $/gal.\n- Dead-Zone CDF Decomposition: P(Bullish)=80.2%, P(Neutral)=7.3%, P(Bearish)=12.5% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Implied 3:2:1 refinery crack spread margin is positioned at $48.01/bbl.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/gal3.3223 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
+      "confidence": 0.9115,
+      "reasoning": "[Midgley Multi-Agent Forecast | RBOB Wholesale Gasoline (RB=F)]\n- Executive Direction: BULLISH (Confidence: 91.1% | Settlement Band: +/-0.30% [$/gal3.3025 - $/gal3.3223])\n- Multi-Agent Ensemble Distribution: Open $/gal3.3124, P50 Target $/gal3.4118, 80% CI [N/A - N/A], Volatility sigma=0.0662 $/gal.\n- Dead-Zone CDF Decomposition: P(Bullish)=91.1%, P(Neutral)=3.9%, P(Bearish)=5.0% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Implied 3:2:1 refinery crack spread margin is positioned at $48.01/bbl.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/gal3.3223 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
       "metadata": {
         "environment": "prod",
         "probabilities": {
-          "bullish": 0.8023,
-          "neutral": 0.0726,
-          "bearish": 0.1251
+          "bullish": 0.9115,
+          "neutral": 0.039,
+          "bearish": 0.0495
         },
         "open_price": 3.3124001026153564,
-        "p50": 3.3786481046676635,
+        "p50": 3.4117721056938173,
         "p10": null,
         "p90": null,
         "dead_zone": 0.003,
-        "timestamp": "2026-10-05T08:39:49.010450+00:00"
+        "timestamp": "2026-10-05T19:09:36.444417+00:00"
       }
     }
   },
   {
     "asset": "CL",
     "forecast_type": "direction",
-    "created_at": "2026-10-05T08:39:50.822475+00:00",
-    "expires_at": "2026-10-06T08:39:50.822475+00:00",
-    "created_ts": 1791189590.822475,
-    "expires_ts": 1791275990.822475,
+    "created_at": "2026-10-05T19:09:38.506350+00:00",
+    "expires_at": "2026-10-06T19:09:38.506350+00:00",
+    "created_ts": 1791227378.50635,
+    "expires_ts": 1791313778.50635,
     "payload": {
       "asset": "CL",
       "direction": "bullish",
-      "confidence": 0.7658,
-      "reasoning": "[Midgley Multi-Agent Forecast | Cushing WTI Crude Oil (CL=F)]\n- Executive Direction: BULLISH (Confidence: 76.6% | Settlement Band: +/-0.30% [$/bbl90.8367 - $/bbl91.3833])\n- Multi-Agent Ensemble Distribution: Open $/bbl91.1100, P50 Target $/bbl92.7044, 80% CI [N/A - N/A], Volatility sigma=1.8222 $/bbl.\n- Dead-Zone CDF Decomposition: P(Bullish)=76.6%, P(Neutral)=8.2%, P(Bearish)=15.3% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Downstream product demand from wholesale RBOB ($3.3124/gal) provides steady crack absorption for prompt physical crude.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/bbl91.3833 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
+      "confidence": 0.8775,
+      "reasoning": "[Midgley Multi-Agent Forecast | Cushing WTI Crude Oil (CL=F)]\n- Executive Direction: BULLISH (Confidence: 87.8% | Settlement Band: +/-0.30% [$/bbl90.8367 - $/bbl91.3833])\n- Multi-Agent Ensemble Distribution: Open $/bbl91.1100, P50 Target $/bbl93.5016, 80% CI [N/A - N/A], Volatility sigma=1.8222 $/bbl.\n- Dead-Zone CDF Decomposition: P(Bullish)=87.8%, P(Neutral)=5.1%, P(Bearish)=7.2% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Downstream product demand from wholesale RBOB ($3.3124/gal) provides steady crack absorption for prompt physical crude.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/bbl91.3833 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
       "metadata": {
         "environment": "prod",
         "probabilities": {
-          "bullish": 0.7658,
-          "neutral": 0.0815,
-          "bearish": 0.1527
+          "bullish": 0.8775,
+          "neutral": 0.0507,
+          "bearish": 0.0718
         },
         "open_price": 91.11000061035156,
-        "p50": 92.70442562103273,
+        "p50": 93.5016381263733,
         "p10": null,
         "p90": null,
         "dead_zone": 0.003,
-        "timestamp": "2026-10-05T08:39:50.822461+00:00"
+        "timestamp": "2026-10-05T19:09:38.506336+00:00"
       }
     }
   }
