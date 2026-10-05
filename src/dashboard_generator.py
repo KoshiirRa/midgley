@@ -309,11 +309,21 @@ def compute_dynamic_accuracy_stats(history_csv_path: str = HISTORY_CSV_PATH) -> 
             reg_n = len(reg_df)
             if reg_n > 0:
                 reg_mae = float(reg_df['error_dollars'].mean())
+                reg_rmse = float(np.sqrt((reg_df['error_dollars'] ** 2).mean())) if not reg_df.empty else 0.145
+                reg_valid = reg_df[reg_df['actual_5d_price'] > 0]
+                if not reg_valid.empty:
+                    reg_mape = float((reg_valid['error_dollars'] / reg_valid['actual_5d_price']).mean() * 100)
+                else:
+                    reg_mape = 4.80
                 reg_hit = float(reg_df['directional_hit'].mean() * 100) if 'directional_hit' in reg_df.columns else 60.0
                 reg_hit_str = f"{reg_hit:.2f}%" if reg_n >= 30 else f"{reg_hit:.2f}%"
                 region_stats[reg] = {
                     "mae": round(reg_mae, 4),
                     "mae_str": f"${reg_mae:.4f}",
+                    "rmse": round(reg_rmse, 4),
+                    "rmse_str": f"${reg_rmse:.4f}",
+                    "mape": round(reg_mape, 2),
+                    "mape_str": f"{reg_mape:.2f}%",
                     "hit_rate": round(reg_hit, 2),
                     "hit_rate_str": reg_hit_str,
                     "sample_size": reg_n,
@@ -2183,12 +2193,34 @@ def generate_public_dashboard():
     def get_hit_rate_display(reg_key: str) -> str:
         if reg_key in reg_stats:
             return reg_stats[reg_key]["hit_rate_str"]
+        for k in reg_stats:
+            if k.lower() == reg_key.lower():
+                return reg_stats[k]["hit_rate_str"]
         return accuracy_stats["overall_hit_rate_str"]
 
     def get_mae_display(reg_key: str) -> str:
         if reg_key in reg_stats:
             return reg_stats[reg_key]["mae_str"]
+        for k in reg_stats:
+            if k.lower() == reg_key.lower():
+                return reg_stats[k]["mae_str"]
         return accuracy_stats["overall_mae_str"]
+
+    def get_mape_display(reg_key: str) -> str:
+        if reg_key in reg_stats and "mape_str" in reg_stats[reg_key]:
+            return reg_stats[reg_key]["mape_str"]
+        for k in reg_stats:
+            if k.lower() == reg_key.lower() and "mape_str" in reg_stats[k]:
+                return reg_stats[k]["mape_str"]
+        return accuracy_stats["overall_mape_str"]
+
+    def get_rmse_display(reg_key: str) -> str:
+        if reg_key in reg_stats and "rmse_str" in reg_stats[reg_key]:
+            return reg_stats[reg_key]["rmse_str"]
+        for k in reg_stats:
+            if k.lower() == reg_key.lower() and "rmse_str" in reg_stats[k]:
+                return reg_stats[k]["rmse_str"]
+        return accuracy_stats["overall_rmse_str"]
 
     dates, rolling_mae, rolling_hit = calculate_rolling_metrics()
 
@@ -3773,7 +3805,7 @@ def generate_public_dashboard():
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
                     <p class="text-3xl font-extrabold text-emerald-400">{{CINCINNATI_MAE}} <span class="text-xs font-normal text-slate-400">/gal</span></p>
-                    <p class="text-xs text-slate-500">MAPE: 4.72% | RMSE: $0.1650</p>
+                    <p class="text-xs text-slate-500">MAPE: {{CINCINNATI_MAPE}} | RMSE: {{CINCINNATI_RMSE}}</p>
                 </div>
 
                 <!-- Directional Accuracy -->
@@ -3893,7 +3925,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'], logistics_hub="Catlettsburg Refinery & Ohio River Tow Navigation")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_MAPE}}", get_mape_display('cincinnati_oh')).replace("{{CINCINNATI_RMSE}}", get_rmse_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'], logistics_hub="Catlettsburg Refinery & Ohio River Tow Navigation")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))
@@ -3980,12 +4012,12 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
                 <p class="text-3xl font-extrabold text-emerald-400">{{GREENVILLE_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: 4.52% | RMSE: $0.1540</p>
+                <p class="text-xs text-slate-500">MAPE: {{GREENVILLE_MAPE}} | RMSE: {{GREENVILLE_RMSE}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Directional Accuracy</span>
                 <p class="text-3xl font-extrabold text-emerald-400">{{GREENVILLE_HIT_RATE}}</p>
-                <p class="text-xs text-slate-500">Ridge α=10.0 Estimator</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
             </div>
         </div>
 
@@ -4025,7 +4057,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'], logistics_hub="Colonial Pipeline Selma Junction & NC 40.4¢ State Tax")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_MAPE}}", get_mape_display('greenville_nc')).replace("{{GREENVILLE_RMSE}}", get_rmse_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'], logistics_hub="Colonial Pipeline Selma Junction & NC 40.4¢ State Tax")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -4112,12 +4144,12 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
                 <p class="text-3xl font-extrabold text-emerald-400">{{CHARLOTTE_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: 4.65% | RMSE: $0.1580</p>
+                <p class="text-xs text-slate-500">MAPE: {{CHARLOTTE_MAPE}} | RMSE: {{CHARLOTTE_RMSE}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Directional Accuracy</span>
                 <p class="text-3xl font-extrabold text-emerald-400">{{CHARLOTTE_HIT_RATE}}</p>
-                <p class="text-xs text-slate-500">Ridge α=10.0 Estimator</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
             </div>
         </div>
 
@@ -4157,7 +4189,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{CHARLOTTE_MAE}}", get_mae_display('charlotte_nc')).replace("{{CHARLOTTE_HIT_RATE}}", get_hit_rate_display('charlotte_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'], logistics_hub="Colonial & Plantation Pipeline Paw Creek Terminal")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
+""".replace("{{NAV_CHARLOTTE}}", nav_charlotte).replace("PREFIX", rel_prefix).replace("{{CHARLOTTE_BASE}}", f"{prices_map['Charlotte_NC']['base']:.3f}").replace("{{CHARLOTTE_PRED}}", f"{prices_map['Charlotte_NC']['pred']:.3f}").replace("{{CHARLOTTE_TREND_TEXT}}", clt_trend_text).replace("{{CHARLOTTE_TREND_COLOR}}", clt_trend_color).replace("{{CHARLOTTE_MAE}}", get_mae_display('charlotte_nc')).replace("{{CHARLOTTE_MAPE}}", get_mape_display('charlotte_nc')).replace("{{CHARLOTTE_RMSE}}", get_rmse_display('charlotte_nc')).replace("{{CHARLOTTE_HIT_RATE}}", get_hit_rate_display('charlotte_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_charlotte).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'], logistics_hub="Colonial & Plantation Pipeline Paw Creek Terminal")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Charlotte_NC', prices_map['Charlotte_NC']['base'], prices_map['Charlotte_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('charlotte_nc'))
 
     with open(CHARLOTTE_PATH, "w", encoding="utf-8") as f:
         f.write(build_charlotte_html(""))
@@ -4244,12 +4276,12 @@ def generate_public_dashboard():
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
                 <p class="text-3xl font-extrabold text-emerald-400">{{PORT_ST_LUCIE_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: 4.65% | RMSE: $0.1580</p>
+                <p class="text-xs text-slate-500">MAPE: {{PORT_ST_LUCIE_MAPE}} | RMSE: {{PORT_ST_LUCIE_RMSE}}</p>
             </div>
             <div class="space-y-1">
                 <span class="text-xs text-slate-400">Directional Accuracy</span>
                 <p class="text-3xl font-extrabold text-emerald-400">{{PORT_ST_LUCIE_HIT_RATE}}</p>
-                <p class="text-xs text-slate-500">Ridge α=10.0 Estimator</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
             </div>
         </div>
 
@@ -4289,7 +4321,7 @@ def generate_public_dashboard():
 
 </body>
 </html>
-""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{PORT_ST_LUCIE_MAE}}", get_mae_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_HIT_RATE}}", get_hit_rate_display('port_st_lucie_fl')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'], logistics_hub="Port Everglades Marine Offloading & Waterborne Freight")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
+""".replace("{{NAV_PORT_ST_LUCIE}}", nav_port_st_lucie).replace("PREFIX", rel_prefix).replace("{{PSL_BASE}}", f"{prices_map['Port_St_Lucie_FL']['base']:.3f}").replace("{{PSL_PRED}}", f"{prices_map['Port_St_Lucie_FL']['pred']:.3f}").replace("{{PSL_TREND_TEXT}}", psl_trend_text).replace("{{PSL_TREND_COLOR}}", psl_trend_color).replace("{{PORT_ST_LUCIE_MAE}}", get_mae_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_MAPE}}", get_mape_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_RMSE}}", get_rmse_display('port_st_lucie_fl')).replace("{{PORT_ST_LUCIE_HIT_RATE}}", get_hit_rate_display('port_st_lucie_fl')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_port_st_lucie).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'], logistics_hub="Port Everglades Marine Offloading & Waterborne Freight")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Port_St_Lucie_FL', prices_map['Port_St_Lucie_FL']['base'], prices_map['Port_St_Lucie_FL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('port_st_lucie_fl'))
 
     os.makedirs(PORT_ST_LUCIE_SUB_DIR, exist_ok=True)
     with open(PORT_ST_LUCIE_PATH, "w", encoding="utf-8") as f:

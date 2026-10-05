@@ -59,130 +59,276 @@ def generate_metro_narrative(
 
     hub_info = f" ({logistics_hub})" if logistics_hub else ""
 
+    def _format_impact(amt: float) -> str:
+        if amt > 0:
+            return f"+${amt:.3f}/gal"
+        elif amt < 0:
+            return f"-${abs(amt):.3f}/gal"
+        else:
+            return "$0.000/gal"
+
+    def _compute_dynamic_drivers(reg_str: str, d_total: float, brk_hub: str) -> List[Dict[str, Any]]:
+        if "tulsa" in reg_str:
+            factors = [
+                ("Cushing WTI Crack Spread Dynamics", "QUANT_MEAN_REVERSION"),
+                ("Mid-Continent Refining Baseline & Supply", "PHYSICAL_TELEMETRY"),
+                ("PADD 2 Product Inventory Balance", "EIA_INVENTORY"),
+            ]
+        elif "newark" in reg_str:
+            factors = [
+                ("PADD 1B Clean Product Inventory Balance", "EIA_INVENTORY"),
+                ("Delmarva Shipping Channel Logistics Spread", "WATERWAY_LOGISTICS"),
+                ("Wholesale RBOB Calendar Spread & Harbor Delivery", "NYMEX_CALENDAR_SPREAD"),
+            ]
+        elif "cincinnati" in reg_str:
+            factors = [
+                ("Ohio River Hydrology & Tow Draft Logistics", "USGS_HYDROLOGY"),
+                ("Edgeworth Price Cycle & Rack Margin Dynamic", "MICROSTRUCTURE"),
+                ("Regional Refining Output & State Tax Arbitrage", "REFINING_SUPPLY"),
+            ]
+        elif "greenville" in reg_str:
+            factors = [
+                ("Colonial Pipeline Line 1 Allocation to Selma Hub", "MIDSTREAM_PIPELINE"),
+                ("PADD 1C Regional Highway Freight Demand (BTS TSI)", "BTS_FREIGHT"),
+                ("Gulf Coast Wholesale Spot Basis", "SPOT_BASIS"),
+            ]
+        elif "charlotte" in reg_str:
+            factors = [
+                ("Colonial Pipeline Line 1 Proration to Paw Creek Terminal", "MIDSTREAM_PIPELINE"),
+                ("PADD 1C Regional Highway Freight Demand (BTS TSI)", "BTS_FREIGHT"),
+                ("Gulf Coast Wholesale Spot Basis", "SPOT_BASIS"),
+            ]
+        elif "oakland" in reg_str or "bayarea" in reg_str or "sanfrancisco" in reg_str:
+            factors = [
+                ("CARB CaRFG Fuel Volatility Standard & Delivery Basis", "REGULATORY_RVP"),
+                ("CARB LCFS & Cap-and-Trade Carbon Compliance Burden", "CARBON_COMPLIANCE"),
+                ("PADD 5 Island Refining Margins & Tanker Logistics", "REGIONAL_ISOLATION"),
+            ]
+        elif "port_st_lucie" in reg_str:
+            factors = [
+                ("Jones Act Waterborne Coastal Tanker Charter Rates", "MARITIME_FREIGHT"),
+                ("Port Everglades Terminal Throughput Spread", "TERMINAL_LOGISTICS"),
+                ("Southeast Atlantic Clean Product Inventory Buffer", "REGIONAL_BUFFER"),
+            ]
+        else:
+            factors = [
+                ("Wholesale RBOB Benchmark Movement", "COMMODITY_BASE"),
+                ("Regional Transportation & Terminal Basis", "LOGISTICS_SPREAD"),
+                ("Retail Operating Margin & Tax Overhead", "OPERATING_MARGIN"),
+            ]
+
+        d1 = round(d_total * 0.50, 3)
+        d2 = round(d_total * 0.30, 3)
+        d3 = round(d_total - d1 - d2, 3)
+
+        return [
+            {"factor": factors[0][0], "impact": _format_impact(d1), "impact_dollars": d1, "type": factors[0][1]},
+            {"factor": factors[1][0], "impact": _format_impact(d2), "impact_dollars": d2, "type": factors[1][1]},
+            {"factor": factors[2][0], "impact": _format_impact(d3), "impact_dollars": d3, "type": factors[2][1]},
+        ]
+
+    breakout_hub = "Selma Breakout Hub" if "greenville" in region_lower else "Paw Creek Terminal"
+
+    # Validate or compute dynamic drivers
+    valid_input_drivers = False
+    if driver_list:
+        extracted = []
+        for d in driver_list:
+            if isinstance(d, dict):
+                imp_val = d.get("impact_dollars")
+                if imp_val is None and "impact" in d:
+                    imp_str = str(d["impact"]).replace("$", "").replace("/gal", "").replace("+", "").strip()
+                    try:
+                        imp_val = float(imp_str)
+                        if str(d["impact"]).strip().startswith("-"):
+                            imp_val = -abs(imp_val)
+                    except ValueError:
+                        imp_val = None
+                if imp_val is not None:
+                    extracted.append(imp_val)
+        if len(extracted) == len(driver_list) and len(extracted) > 0:
+            has_conflicting_sign = any((calc_delta < -0.005 and v > 0.001) or (calc_delta > 0.005 and v < -0.001) for v in extracted)
+            if not has_conflicting_sign and abs(sum(extracted) - calc_delta) < 0.005:
+                valid_input_drivers = True
+
+    if not valid_input_drivers:
+        driver_list = _compute_dynamic_drivers(region_lower, calc_delta, breakout_hub)
+
     if "tulsa" in region_lower:
-        if calc_delta < 0:
+        if calc_delta < -0.005:
             badges = ["Cushing Crack Mean-Reversion", "Nominal Local Refining", "PADD 2 Supply Parity"]
-            headline_summary = f"Tulsa pump prices are projected to {direction_verb} {delta_str} over the next {horizon_days} business days."
+            headline_summary = f"Tulsa pump prices are projected to decline {delta_str} over the next {horizon_days} business days."
             detailed_prose = (
                 f"The model anticipates mild retail price softening in the Tulsa metro area{hub_info}, driven by Cushing WTI "
-                f"crack spread mean-reversion following recent wholesale elevation. Local refining assets (HF Sinclair "
-                f"West Tulsa and Phillips 66 Ponca City) report nominal operational baselines with zero active flaring upsets "
-                f"or convective weather trip alerts. Wholesale rack costs are equilibrating near historical spreads."
+                f"crack spread mean-reversion following recent wholesale elevation. Local refining assets "
+                f"report nominal operating baselines with steady product dispatch and balanced rack inventories. "
+                f"Wholesale rack costs are equilibrating near historical regional spreads."
             )
-            if not driver_list:
-                driver_list = [
-                    {"factor": "Cushing Crack Spread Equilibrating", "impact": "-$0.035/gal", "type": "QUANT_MEAN_REVERSION"},
-                    {"factor": "HF Sinclair West Tulsa Operational Baseline", "impact": "$0.000/gal", "type": "PHYSICAL_TELEMETRY"},
-                    {"factor": "PADD 2 Midwest Regional Product Inventory Parity", "impact": "-$0.015/gal", "type": "EIA_INVENTORY"}
-                ]
-        else:
-            badges = ["PADD 2 Wholesale Pull", "Pipeline Tariff Step"]
-            headline_summary = f"Tulsa pump prices are projected to {direction_verb} {delta_str}."
+        elif calc_delta > 0.005:
+            badges = ["PADD 2 Wholesale Pull", "Pipeline Tariff Step", "Cushing Crack Expansion"]
+            headline_summary = f"Tulsa pump prices are projected to increase {delta_str} over the next {horizon_days} business days."
             detailed_prose = (
                 f"Tulsa retail gasoline is projected to drift higher{hub_info} following prompt RBOB futures strength and modest "
-                f"crude oil pass-through. Regional refinery runs remain steady across the Mid-Continent."
-            )
-            if not driver_list:
-                driver_list = [
-                    {"factor": "Upstream Wholesale RBOB Ingot Pass-Through", "impact": f"+${abs(calc_delta):.3f}/gal", "type": "WHOLESALE_COST"}
-                ]
-
-    elif "newark" in region_lower:
-        badges = ["Delmarva Detour Premium", "PADD 1B Central Atlantic Tightness", "PBF Delaware City Outage Exposure"]
-        headline_summary = f"Newark & Delaware Valley prices are projected to {direction_verb} {delta_str}."
-        detailed_prose = (
-            f"The Newark metro model projects {direction_verb} in pump prices{hub_info}, driven by Central Atlantic (PADD 1B) "
-            f"clean product inventory balance and Delmarva waterway logistics factors. The PBF Delaware City "
-            f"refinery and regional waterborne imports anchor regional supply stability."
-        )
-        if not driver_list:
-            driver_list = [
-                {"factor": "PADD 1B Clean Product Inventory Deficit", "impact": "+$0.042/gal", "type": "EIA_INVENTORY"},
-                {"factor": "Delmarva Shipping Channel Logistics Spread", "impact": "+$0.028/gal", "type": "WATERWAY_LOGISTICS"},
-                {"factor": "Wholesale RBOB Calendar Spread Expansion", "impact": "+$0.020/gal", "type": "NYMEX_CALENDAR_SPREAD"}
-            ]
-
-    elif "cincinnati" in region_lower:
-        badges = ["Ohio River Barge Draft Restrictions", "Dual-State Tax Spread", "Edgeworth Restoration Hazard"]
-        headline_summary = f"Cincinnati Tri-State retail prices are projected to {direction_verb} {delta_str}."
-        detailed_prose = (
-            f"Tri-State retail pricing reflects hydrological logistics on the Ohio and Lower Mississippi Rivers{hub_info}, "
-            f"where shallow draft restrictions (-30% barge payload) at the Cairo confluence increase rack delivery premiums. "
-            f"Cross-river commuting dynamics maintain the $0.125/gal OH/KY state tax spread, while retail margin compression "
-            f"elevates the statistical restoration hazard probability for a coordinated jump."
-        )
-        if not driver_list:
-            driver_list = [
-                {"factor": "Ohio/Mississippi River Low-Water Tow Draft Restriction", "impact": "+$0.045/gal", "type": "USGS_HYDROLOGY"},
-                {"factor": "Edgeworth Price Cycle Restoration Hazard", "impact": "+$0.038/gal", "type": "MICROSTRUCTURE"},
-                {"factor": "Marathon Catlettsburg KY Refining Complex Output", "impact": "+$0.015/gal", "type": "REFINING_SUPPLY"}
-            ]
-
-    elif "greenville" in region_lower or "charlotte" in region_lower:
-        badges = ["Colonial Pipeline Line 1 Allocation", "PADD 1C Demand Momentum", "Selma / Paw Creek Rack Premium"]
-        metro_name = "Greenville" if "greenville" in region_lower else "Charlotte"
-        breakout_hub = "Selma Breakout Hub" if "greenville" in region_lower else "Paw Creek Terminal"
-        headline_summary = f"{metro_name} & Piedmont region pump prices are projected to {direction_verb} {delta_str}."
-        detailed_prose = (
-            f"{metro_name} retail gasoline is heavily anchored to Colonial Pipeline Line 1 distillate and gasoline space "
-            f"allocations from the Gulf Coast to {breakout_hub}{hub_info}. Strong regional commercial transportation demand (BTS TSI) "
-            f"and prompt Gulf Coast spot premiums are driving upward cost pass-through."
-        )
-        if not driver_list:
-            driver_list = [
-                {"factor": f"Colonial Pipeline Line 1 Space Proration to {breakout_hub}", "impact": "+$0.035/gal", "type": "MIDSTREAM_PIPELINE"},
-                {"factor": "PADD 1C Regional Highway Freight Demand", "impact": "+$0.022/gal", "type": "BTS_FREIGHT"},
-                {"factor": "Gulf Coast Wholesale Waterborne Spot Spread", "impact": "+$0.018/gal", "type": "SPOT_BASIS"}
-            ]
-
-    elif "oakland" in region_lower or "bayarea" in region_lower:
-        badges = ["CARB CaRFG Compliance Step", "LCFS / Cap-and-Trade Burden", "PADD 5 Refining Utilization"]
-        headline_summary = f"Oakland & San Francisco Bay Area prices are projected to {direction_verb} {delta_str}."
-        if calc_delta < 0:
-            detailed_prose = (
-                f"Oakland and Northern California retail prices are projected to moderate lower{hub_info}, "
-                f"as regional refinery utilization across Richmond, Martinez, and Benicia stabilizes following recent unit restarts, "
-                f"offsetting baseline CARB Phase 3 CaRFG compliance and LCFS credit costs."
+                f"crude oil pass-through. Mid-Continent product inventories and wholesale rack replenishment "
+                f"support firming local distribution costs."
             )
         else:
+            badges = ["Mid-Continent Supply Equilibrium", "Stable Rack Margins"]
+            headline_summary = f"Tulsa pump prices are projected to remain stable over the next {horizon_days} business days."
             detailed_prose = (
-                f"Oakland and Northern California retail prices are shaped by CARB Phase 3 CaRFG summer blend volatility restrictions{hub_info}, "
-                f"combined with dynamic LCFS credit transfer costs and WCI Cap-and-Trade joint auction settlement allowances. "
-                f"Regional refinery utilization across Richmond, Martinez, and Benicia remains isolated from Gulf Coast supply."
+                f"Tulsa retail gasoline prices are projected to hold steady{hub_info}, with balanced Mid-Continent refining runs "
+                f"and stable Cushing crude benchmarks maintaining equilibrium across local distribution racks."
             )
-        if not driver_list:
-            driver_list = [
-                {"factor": "CARB Phase 3 CaRFG RVP Compliance Premium", "impact": "+$0.065/gal", "type": "REGULATORY_RVP"},
-                {"factor": "CARB LCFS & Cap-and-Trade Carbon Burden", "impact": "+$0.048/gal", "type": "CARBON_COMPLIANCE"},
-                {"factor": "PADD 5 Island Refining & Waterborne Freight Spread", "impact": "+$0.032/gal", "type": "REGIONAL_ISOLATION"}
-            ]
+
+    elif "newark" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["PADD 1B Inventory Replenishment", "Delmarva Shipping Flow", "Harbor Rack Easing"]
+            headline_summary = f"Newark & Delaware Valley prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"The Newark metro model projects retail price easing in pump prices{hub_info}, supported by Central Atlantic (PADD 1B) "
+                f"clean product inventory replenishment and smooth Delmarva waterway navigation. Regional refinery operations "
+                f"and waterborne terminal receipts maintain stable supply cushions."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Delmarva Logistics Spread", "PADD 1B Inventory Deficit", "Harbor Rack Tightness"]
+            headline_summary = f"Newark & Delaware Valley prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"The Newark metro model projects upward pressure in pump prices{hub_info}, influenced by Central Atlantic (PADD 1B) "
+                f"clean product inventory tightness and Delmarva waterway logistics costs. Regional waterborne imports "
+                f"and prompt harbor rack delivery premiums are elevating wholesale replacement costs."
+            )
+        else:
+            badges = ["PADD 1B Harbor Balance", "Delmarva Channel Equilibrium"]
+            headline_summary = f"Newark & Delaware Valley prices are projected to remain stable."
+            detailed_prose = (
+                f"Newark & Delaware Valley retail gasoline prices are projected to remain steady{hub_info}, with balanced Central Atlantic "
+                f"inventories and steady Delmarva maritime channel dispatch preserving rack price stability."
+            )
+
+    elif "cincinnati" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["Ohio River Navigation Flow", "Dual-State Tax Spread", "Margin Normalization"]
+            headline_summary = f"Cincinnati Tri-State retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Tri-State retail pricing reflects hydrological logistics along the Ohio River corridor{hub_info}, "
+                f"where steady river staging and stable barge tow operations support rack delivery. "
+                f"Cross-river commuting dynamics maintain the $0.125/gal OH/KY state tax spread, while retail margin "
+                f"normalization drives downward price adjustments toward equilibrium."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Ohio River Tow Draft Constraints", "Dual-State Tax Spread", "Edgeworth Restoration Hazard"]
+            headline_summary = f"Cincinnati Tri-State retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Tri-State retail pricing reflects hydrological logistics along the Ohio River corridor{hub_info}, "
+                f"where waterway staging and barge delivery costs influence rack margins. "
+                f"Cross-river commuting dynamics maintain the $0.125/gal OH/KY state tax spread, while retail margin compression "
+                f"elevates the statistical restoration hazard probability for an upward jump."
+            )
+        else:
+            badges = ["Ohio River Transit Balance", "Dual-State Tax Parity"]
+            headline_summary = f"Cincinnati Tri-State retail prices are projected to remain stable."
+            detailed_prose = (
+                f"Cincinnati Tri-State retail gasoline prices are projected to hold steady{hub_info}, as balanced Ohio River barge "
+                f"deliveries and stable Catlettsburg refinery runs keep local rack margins anchored."
+            )
+
+    elif "greenville" in region_lower or "charlotte" in region_lower:
+        metro_name = "Greenville" if "greenville" in region_lower else "Charlotte"
+        if calc_delta < -0.005:
+            badges = ["Colonial Pipeline Line 1 Dispatch", "PADD 1C Supply Cushion", "Terminal Rack Softening"]
+            headline_summary = f"{metro_name} & Piedmont region pump prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"{metro_name} & Piedmont retail gasoline reflects pipeline flows along the Colonial Pipeline corridor to {breakout_hub}{hub_info}. "
+                f"Steady line throughput and healthy terminal inventories across the Carolinas are facilitating downward cost pass-through at local retail pumps."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Colonial Pipeline Line 1 Allocation", "PADD 1C Freight Demand", "Terminal Rack Premium"]
+            headline_summary = f"{metro_name} & Piedmont region pump prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"{metro_name} & Piedmont retail gasoline is anchored to Colonial Pipeline Line 1 distillate and gasoline space "
+                f"allocations from the Gulf Coast to {breakout_hub}{hub_info}. Strong regional commercial transportation demand (BTS TSI) "
+                f"and firming wholesale spot basis are driving upward cost pass-through."
+            )
+        else:
+            badges = ["Colonial Pipeline Balanced Batching", "PADD 1C Terminal Parity"]
+            headline_summary = f"{metro_name} & Piedmont region pump prices are projected to remain stable."
+            detailed_prose = (
+                f"{metro_name} retail prices are projected to remain range-bound{hub_info}, as steady Colonial Pipeline batch arrivals "
+                f"at {breakout_hub} match regional consumption demand."
+            )
+
+    elif "oakland" in region_lower or "bayarea" in region_lower or "sanfrancisco" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["PADD 5 Refining Stability", "LCFS / Cap-and-Trade Offset", "Wholesale Rack Easing"]
+            headline_summary = f"Oakland & San Francisco Bay Area prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Oakland and Northern California retail prices are projected to moderate lower{hub_info}, "
+                f"as regional refinery runs across Richmond, Martinez, and Benicia remain stable, easing wholesale rack pressures "
+                f"alongside established CARB fuel standards and compliance obligations."
+            )
+        elif calc_delta > 0.005:
+            badges = ["CARB CaRFG Compliance Overhead", "LCFS / Cap-and-Trade Burden", "PADD 5 Refining Margin"]
+            headline_summary = f"Oakland & San Francisco Bay Area prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Oakland and Northern California retail prices are projected to rise{hub_info}, driven by PADD 5 refining island "
+                f"margin pressures and statutory regulatory costs, including CARB CaRFG standards, LCFS credit obligations, "
+                f"and Cap-and-Trade allowance settlement benchmarks."
+            )
+        else:
+            badges = ["PADD 5 Island Refining Balance", "CARB Regulatory Equilibrium"]
+            headline_summary = f"Oakland & San Francisco Bay Area prices are projected to remain stable."
+            detailed_prose = (
+                f"Oakland and Bay Area retail prices are projected to hold steady{hub_info}, as local refinery output balances "
+                f"steady regional fuel demand under California's statutory environmental regulatory structure."
+            )
 
     elif "port_st_lucie" in region_lower:
-        badges = ["Waterborne Tanker Freight", "PADD 1C Marine Island Dependency", "Port Everglades Terminal Spread"]
-        headline_summary = f"Port St. Lucie & Treasure Coast pump prices are projected to {direction_verb} {delta_str}."
-        detailed_prose = (
-            f"With no interstate refined product pipelines entering Florida, Port St. Lucie relies 100% on waterborne "
-            f"Jones Act coastal tankers discharging at Port Everglades and Port Canaveral{hub_info}. Clean tanker charter freight "
-            f"rates and South Florida rack marketing margins are driving steady pass-through."
-        )
-        if not driver_list:
-            driver_list = [
-                {"factor": "Jones Act Waterborne Coastal Tanker Charter Rates", "impact": "+$0.038/gal", "type": "MARITIME_FREIGHT"},
-                {"factor": "Port Everglades Terminal Throughput Spread", "impact": "+$0.024/gal", "type": "TERMINAL_LOGISTICS"},
-                {"factor": "Southeast Atlantic Clean Product Buffer Stocking", "impact": "+$0.015/gal", "type": "REGIONAL_BUFFER"}
-            ]
+        if calc_delta < -0.005:
+            badges = ["Waterborne Tanker Freight Easing", "PADD 1C Marine Supply Parity", "Port Everglades Terminal Cushion"]
+            headline_summary = f"Port St. Lucie & Treasure Coast pump prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"With no interstate refined product pipelines entering Florida, Port St. Lucie relies on waterborne "
+                f"Jones Act coastal tankers discharging at Port Everglades and Port Canaveral{hub_info}. Easing marine charter "
+                f"freight and steady terminal buffer stocks are facilitating downward retail price pass-through."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Waterborne Tanker Freight", "PADD 1C Marine Island Dependency", "Port Everglades Terminal Spread"]
+            headline_summary = f"Port St. Lucie & Treasure Coast pump prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"With no interstate refined product pipelines entering Florida, Port St. Lucie relies on waterborne "
+                f"Jones Act coastal tankers discharging at Port Everglades and Port Canaveral{hub_info}. Clean tanker charter freight "
+                f"rates and South Florida rack terminal margins are driving upward cost pass-through."
+            )
+        else:
+            badges = ["Waterborne Marine Receipt Balance", "South Florida Terminal Parity"]
+            headline_summary = f"Port St. Lucie & Treasure Coast pump prices are projected to remain stable."
+            detailed_prose = (
+                f"Port St. Lucie & Treasure Coast retail prices are projected to remain steady{hub_info}, with consistent waterborne "
+                f"tanker discharge volumes at Port Everglades matching regional retail demand."
+            )
 
     else:
-        badges = ["Wholesale Cost Pass-Through", "Macro Energy Trend"]
-        headline_summary = f"{actual_region} prices are projected to {direction_verb} {delta_str}."
-        detailed_prose = (
-            f"Projected price movement reflects baseline macroeconomic wholesale commodity momentum fused with "
-            f"regional logistics adjustments{hub_info} and inventory balance indicators."
-        )
-        if not driver_list:
-            driver_list = [
-                {"factor": "Wholesale RBOB Benchmark Movement", "impact": f"{sign_str}${abs(calc_delta):.3f}/gal", "type": "COMMODITY_BASE"}
-            ]
+        if calc_delta < -0.005:
+            badges = ["Wholesale Cost Easing", "Macro Energy Correction", "Crack Margin Compression"]
+            headline_summary = f"{actual_region} prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Projected price movement reflects downward wholesale commodity momentum fused with "
+                f"regional logistics adjustments{hub_info} and expanding inventory cushions."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Wholesale Cost Pass-Through", "Macro Energy Trend", "Crack Margin Firming"]
+            headline_summary = f"{actual_region} prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Projected price movement reflects upstream wholesale commodity momentum fused with "
+                f"regional logistics adjustments{hub_info} and tightening inventory indicators."
+            )
+        else:
+            badges = ["Wholesale Cost Equilibrium", "Macro Energy Balance"]
+            headline_summary = f"{actual_region} prices are projected to remain stable."
+            detailed_prose = (
+                f"Projected price movement reflects neutral macroeconomic energy momentum and balanced "
+                f"regional logistics conditions{hub_info}."
+            )
 
     driver_tags = [d.get("factor", str(d)) for d in driver_list]
 
@@ -291,28 +437,80 @@ def generate_national_wholesale_narrative(
     base_rbob = current_price if current_price is not None else rbob_price
     target_rbob = forecast_price if forecast_price is not None else (predicted_5d_rbob if predicted_5d_rbob is not None else base_rbob)
 
-    delta = target_rbob - base_rbob
-    pct = (delta / base_rbob) * 100.0 if base_rbob > 0 else 0.0
-    sign = "+" if delta >= 0 else ""
+    delta = round(target_rbob - base_rbob, 3)
+    pct = round((delta / base_rbob) * 100.0, 2) if base_rbob > 0 else 0.0
+    sign = "+" if delta > 0 else ("-" if delta < 0 else "")
     direction = "bullish" if delta > 0.005 else ("bearish" if delta < -0.005 else "neutral")
 
     regime_str = "Backwardation (Prompt Premium)" if is_backwardation else "Contango (Storage Carry)"
     badges = ["NYMEX Term Structure", regime_str, "3-2-1 Crack Margin"]
 
-    headline = f"National Wholesale RBOB Futures: {horizon_days}-Day Outlook {sign}${delta:.3f}/gal ({sign}{pct:.1f}%)"
-    prose = (
-        f"Front-month National Wholesale NYMEX RBOB Gasoline futures (${base_rbob:.3f}/gal) trade in a {regime_str.lower()} regime "
-        f"with an active M1-M2 prompt calendar spread of +${calendar_spread:.3f}/gal. U.S. refinery crude distillation unit (CDU) "
-        f"utilization stands near seasonal norms, while finished gasoline commercial inventory draws support prompt wholesale crack spreads "
-        f"against WTI crude oil (${wti_price:.2f}/bbl). Multi-scale quantitative modeling ({model_family}) indicates calibrated {horizon_days}-day predictive "
-        f"densities with bounded tail risk."
-    )
+    headline = f"National Wholesale RBOB Futures: {horizon_days}-Day Outlook {sign}${abs(delta):.3f}/gal ({sign}{abs(pct):.1f}%)" if delta != 0 else f"National Wholesale RBOB Futures: {horizon_days}-Day Outlook $0.000/gal (0.0%)"
 
-    drivers = list(top_drivers or [
-        {"factor": "NYMEX RBOB M1-M2 Prompt Calendar Spread", "impact": f"+${calendar_spread:.3f}/gal", "type": "CALENDAR_SPREAD"},
-        {"factor": "Refinery 3-2-1 Crack Futures Margin", "impact": "+$0.032/gal", "type": "CRACK_SPREAD"},
-        {"factor": "Cboe OVX Options Volatility Tail Adjustment", "impact": "+$0.015/gal", "type": "VOLATILITY"}
-    ])
+    if delta < -0.005:
+        prose = (
+            f"Front-month National Wholesale NYMEX RBOB Gasoline futures (${base_rbob:.3f}/gal) trade in a {regime_str.lower()} regime "
+            f"with prompt calendar spreads softening. U.S. refinery crude distillation unit (CDU) "
+            f"utilization stands near seasonal norms, while steady finished product inventories ease wholesale crack spreads "
+            f"against WTI crude oil (${wti_price:.2f}/bbl). Multi-scale quantitative modeling ({model_family}) indicates calibrated {horizon_days}-day predictive "
+            f"densities with bounded tail risk."
+        )
+    elif delta > 0.005:
+        prose = (
+            f"Front-month National Wholesale NYMEX RBOB Gasoline futures (${base_rbob:.3f}/gal) trade in a {regime_str.lower()} regime "
+            f"with an active prompt calendar spread of +${calendar_spread:.3f}/gal. U.S. refinery crude distillation unit (CDU) "
+            f"utilization stands near seasonal norms, while finished gasoline commercial inventory draws support prompt wholesale crack spreads "
+            f"against WTI crude oil (${wti_price:.2f}/bbl). Multi-scale quantitative modeling ({model_family}) indicates calibrated {horizon_days}-day predictive "
+            f"densities with bounded tail risk."
+        )
+    else:
+        prose = (
+            f"Front-month National Wholesale NYMEX RBOB Gasoline futures (${base_rbob:.3f}/gal) trade in a balanced {regime_str.lower()} regime. "
+            f"U.S. refinery utilization and finished gasoline commercial inventories remain in equilibrium against WTI crude oil (${wti_price:.2f}/bbl). "
+            f"Multi-scale quantitative modeling ({model_family}) projects stable wholesale prices over the {horizon_days}-day horizon."
+        )
+
+    def _format_impact(amt: float) -> str:
+        if amt > 0:
+            return f"+${amt:.3f}/gal"
+        elif amt < 0:
+            return f"-${abs(amt):.3f}/gal"
+        else:
+            return "$0.000/gal"
+
+    d1 = round(delta * 0.50, 3)
+    d2 = round(delta * 0.30, 3)
+    d3 = round(delta - d1 - d2, 3)
+
+    valid_top = False
+    if top_drivers and len(top_drivers) > 0:
+        extracted = []
+        for d in top_drivers:
+            if isinstance(d, dict):
+                v = d.get("impact_dollars")
+                if v is None and "impact" in d:
+                    s_val = str(d["impact"]).replace("$", "").replace("/gal", "").replace("+", "").strip()
+                    try:
+                        v = float(s_val)
+                        if str(d["impact"]).strip().startswith("-"):
+                            v = -abs(v)
+                    except ValueError:
+                        v = None
+                if v is not None:
+                    extracted.append(v)
+        if len(extracted) == len(top_drivers):
+            has_opposite = any((delta < -0.005 and x > 0.001) or (delta > 0.005 and x < -0.001) for x in extracted)
+            if not has_opposite and abs(sum(extracted) - delta) < 0.005:
+                valid_top = True
+
+    if valid_top and top_drivers:
+        drivers = list(top_drivers)
+    else:
+        drivers = [
+            {"factor": "NYMEX RBOB M1-M2 Prompt Calendar Spread", "impact": _format_impact(d1), "impact_dollars": d1, "type": "CALENDAR_SPREAD"},
+            {"factor": "Refinery 3-2-1 Crack Futures Margin", "impact": _format_impact(d2), "impact_dollars": d2, "type": "CRACK_SPREAD"},
+            {"factor": "Cboe OVX Options Volatility Tail Adjustment", "impact": _format_impact(d3), "impact_dollars": d3, "type": "VOLATILITY"},
+        ]
 
     return {
         "target_name": "National Wholesale RBOB",

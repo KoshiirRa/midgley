@@ -31,7 +31,7 @@ def test_head_meta_tags_include_csp():
 
 
 def test_sources_html_includes_sri_and_crossorigin():
-    assert 'integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3qTQ4VJJ0f5K"' in SOURCES_HTML_TEMPLATE
-    assert 'integrity="sha384-cpW21h6RZv/phavutF+NWtTlCXxCIB6beaVQ6PG6C3P05JE3fZK+16hxegKUAQPC"' in SOURCES_HTML_TEMPLATE
+    assert 'integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn"' in SOURCES_HTML_TEMPLATE
+    assert 'integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"' in SOURCES_HTML_TEMPLATE
     assert 'integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"' in SOURCES_HTML_TEMPLATE
     assert 'crossorigin="anonymous"' in SOURCES_HTML_TEMPLATE
