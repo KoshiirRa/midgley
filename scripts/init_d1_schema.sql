@@ -56,3 +56,10 @@ CREATE TABLE IF NOT EXISTS prediction_history (
 CREATE INDEX IF NOT EXISTS idx_pred_history_target ON prediction_history (forecast_target_date, region);
 CREATE INDEX IF NOT EXISTS idx_pred_history_version ON prediction_history (model_version);
 CREATE INDEX IF NOT EXISTS idx_pred_history_log_ts ON prediction_history (log_timestamp, forecast_target_date, region);
+
+-- 4. Intraday Alert Flag Replay Tokens Table (Issue #581, #605)
+CREATE TABLE IF NOT EXISTS flag_replay_tokens (
+    clean_key TEXT PRIMARY KEY,
+    used_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_flag_replay_used_at ON flag_replay_tokens (used_at);

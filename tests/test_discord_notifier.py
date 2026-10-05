@@ -194,6 +194,40 @@ class TestDiscordNotifier(unittest.TestCase):
             )
             self.assertFalse(res)
 
+    def test_flag_link_long_headline_signature_alignment(self):
+        """Asserts that headlines > 120 chars sign the exact truncated URL parameter (Issue #605)."""
+        import urllib.parse
+        import hmac
+        import hashlib
+
+        long_headline = "A" * 150
+        event = {
+            "headline": long_headline,
+            "source": "RSS_GoogleNews",
+            "url": "https://example.com/long-article",
+            "scores": {"overall_price_pressure": 0.20, "supply_disruption": 0.10}
+        }
+        signing_key = "test_signing_key_secret_for_flagging"
+        with patch.dict(os.environ, {"FLAG_SIGNING_KEY": signing_key}):
+            payload = format_intraday_discord_payload(event, include_components=True)
+            comp_url = payload["components"][0]["components"][0]["url"]
+            parsed = urllib.parse.urlparse(comp_url)
+            qs = urllib.parse.parse_qs(parsed.query)
+
+            self.assertIn("headline", qs)
+            url_headline = qs["headline"][0]
+            self.assertEqual(url_headline, "A" * 120 + "...")
+            self.assertIn("sig", qs)
+            sig = qs["sig"][0]
+            exp = qs["exp"][0]
+            event_id = qs["id"][0]
+
+            # Verify that recalculating HMAC on the URL-truncated headline produces the exact same signature
+            headline_hash = hashlib.sha256(url_headline.encode("utf-8")).hexdigest()[:16]
+            expected_msg = f"flag_fp:v2|{event_id}|{headline_hash}|{exp}".encode("utf-8")
+            expected_sig = hmac.new(signing_key.encode("utf-8"), expected_msg, hashlib.sha256).hexdigest()[:32]
+            self.assertEqual(sig, expected_sig)
+
 
 if __name__ == "__main__":
     unittest.main()

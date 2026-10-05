@@ -1064,7 +1064,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
 }
 
 export function getWorkerSigningSecret(env: Env): string | null {
-  return env.FLAG_SIGNING_KEY || env.ADMIN_TOKEN || null;
+  return env.FLAG_SIGNING_KEY || null;
 }
 
 export async function computeSha256Hex(str: string): Promise<string> {
@@ -1088,7 +1088,7 @@ export async function generateEventToken(eventId: string, exp: number, secret: s
     ["sign"]
   );
   const headlineHash = headline ? (await computeSha256Hex(headline)).slice(0, 16) : "";
-  const data = enc.encode(headlineHash ? `flag_fp:${eventId}:${headlineHash}:${exp}` : `flag_fp:${eventId}:${exp}`);
+  const data = enc.encode(`flag_fp:v2|${eventId}|${headlineHash}|${exp}`);
   const signature = await crypto.subtle.sign("HMAC", key, data);
   return Array.from(new Uint8Array(signature))
     .map(b => b.toString(16).padStart(2, "0"))
@@ -1111,15 +1111,13 @@ export function timingSafeEqual(a: string, b: string): boolean {
 
 export async function verifyEventToken(eventId: string, exp: number, sig: string, secret: string, headline?: string): Promise<boolean> {
   if (!sig || !eventId || !secret || !exp) return false;
+  if (!/^[0-9a-f]{16}$/i.test(eventId)) return false;
+  if (!/^\d{10}$/.test(String(exp))) return false;
   const now = Math.floor(Date.now() / 1000);
   if (exp < now) return false;
   
-  if (headline) {
-    const expectedSigBound = await generateEventToken(eventId, exp, secret, headline);
-    if (timingSafeEqual(sig, expectedSigBound)) return true;
-  }
-  const expectedSigLegacy = await generateEventToken(eventId, exp, secret);
-  return timingSafeEqual(sig, expectedSigLegacy);
+  const expectedSigBound = await generateEventToken(eventId, exp, secret, headline);
+  return timingSafeEqual(sig, expectedSigBound);
 }
 
 const USED_TOKENS_CACHE = new Set<string>();
@@ -1141,7 +1139,7 @@ export async function markTokenUsed(tokenKey: string, env: Env): Promise<void> {
   USED_TOKENS_CACHE.add(tokenKey);
   if (env.DB) {
     try {
-      await env.DB.prepare("INSERT OR REPLACE INTO flag_replay_tokens (clean_key, used_at) VALUES (?, datetime('now'))").bind(tokenKey).run();
+      await env.DB.prepare("INSERT INTO flag_replay_tokens (clean_key, used_at) VALUES (?, datetime('now')) ON CONFLICT(clean_key) DO NOTHING").bind(tokenKey).run();
     } catch {
       // D1 schema table may not exist
     }

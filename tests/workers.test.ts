@@ -307,12 +307,13 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
   it("escapes malicious HTML query parameters on GET /flag", async () => {
     const maliciousHeadline = "<script>alert('XSS')</script>";
     const maliciousSource = "<b onmouseover=alert(1)>Source</b>";
+    const testEventId = "0123456789abcdef";
     const env: IntradayEnv = { GH_PAT: "test_token", FLAG_SIGNING_KEY: "test_flag_secret" };
     const exp = Math.floor(Date.now() / 1000) + 3600;
-    const sig = await generateEventToken("123", exp, "test_flag_secret");
+    const sig = await generateEventToken(testEventId, exp, "test_flag_secret", maliciousHeadline);
 
     const req = new Request(
-      `https://worker.local/flag?id=123&exp=${exp}&sig=${sig}&headline=${encodeURIComponent(maliciousHeadline)}&source=${encodeURIComponent(maliciousSource)}`,
+      `https://worker.local/flag?id=${testEventId}&exp=${exp}&sig=${sig}&headline=${encodeURIComponent(maliciousHeadline)}&source=${encodeURIComponent(maliciousSource)}`,
       { method: "GET" }
     );
 
@@ -327,10 +328,10 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
 
   it("rejects unsigned GET /flag requests with HTTP 403", async () => {
     const env: IntradayEnv = {
-      ADMIN_TOKEN: "admin_secret_token"
+      FLAG_SIGNING_KEY: "admin_secret_token"
     };
 
-    const req = new Request("https://worker.local/flag?id=evt_unsigned", {
+    const req = new Request("https://worker.local/flag?id=0123456789abcdef", {
       method: "GET"
     });
 
@@ -343,17 +344,19 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
   it("renders form for valid signed GET /flag requests and accepts signed POST /flag submission", async () => {
     const env: IntradayEnv = {
       GH_PAT: "real_gh_pat_token",
-      ADMIN_TOKEN: "admin_secret_token",
+      FLAG_SIGNING_KEY: "admin_secret_token",
       REPO_OWNER: "KoshiirRa",
       REPO_NAME: "midgley"
     };
 
+    const testEventId = "1234567890abcdef";
+    const headline = "Non-Energy Tariff Trigger";
     const exp = Math.floor(Date.now() / 1000) + 3600;
-    const sig = await generateEventToken("evt_98765", exp, "admin_secret_token");
+    const sig = await generateEventToken(testEventId, exp, "admin_secret_token", headline);
 
     // 1. GET /flag with valid exp & sig renders form
     const getReq = new Request(
-      `https://worker.local/flag?id=evt_98765&exp=${exp}&sig=${sig}&headline=Non-Energy+Tariff+Trigger&source=RSS_GoogleNews`,
+      `https://worker.local/flag?id=${testEventId}&exp=${exp}&sig=${sig}&headline=Non-Energy+Tariff+Trigger&source=RSS_GoogleNews`,
       { method: "GET" }
     );
     const getRes = await intradayWorker.fetch(getReq, env, {});
@@ -377,7 +380,7 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     try {
       // 2. Submit POST /flag with the signed parameters
       const formData = new FormData();
-      formData.append("id", "evt_98765");
+      formData.append("id", "1234567890abcdef");
       formData.append("exp", exp.toString());
       formData.append("sig", sig);
       formData.append("headline", "Non-Energy Tariff Trigger");
@@ -471,7 +474,7 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
 
     const exp = Math.floor(Date.now() / 1000) + 3600;
     const headline = "Replay Attack Headline";
-    const sig = await generateEventToken("evt_replay", exp, "secret_signing_key", headline);
+    const sig = await generateEventToken("deadbeefcafebabe", exp, "secret_signing_key", headline);
 
     const originalFetch = globalThis.fetch;
     globalThis.fetch = vi.fn().mockResolvedValue({
@@ -483,7 +486,7 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     try {
       const createReq = () => {
         const formData = new FormData();
-        formData.append("id", "evt_replay");
+        formData.append("id", "deadbeefcafebabe");
         formData.append("exp", exp.toString());
         formData.append("sig", sig);
         formData.append("headline", headline);

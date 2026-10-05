@@ -2,6 +2,7 @@
 Tests for NASA FIRMS Satellite Telemetry & Topological Outage Exposure (Issue #453).
 """
 
+import os
 import pytest
 from src.firms_satellite_feed import FirmsSatelliteFeedConnector, FIRMS_REFINING_BBOXES
 from src.knowledge_graph import KnowledgeGraphEngine
@@ -22,22 +23,36 @@ def test_firms_refining_bboxes_configuration():
         assert data["baseline_daily_frp_mw"] > 0
 
 
+MOCK_VIIRS_CSV = """latitude,longitude,bright_ti4,scan,track,acq_date,acq_time,satellite,confidence,version,bright_ti5,frp,daynight
+29.75,-95.10,340.5,0.4,0.4,2026-10-05,0600,N,nominal,2.0NRT,295.2,15.2,N
+29.76,-95.11,355.8,0.4,0.4,2026-10-05,0600,N,nominal,2.0NRT,298.1,28.4,N
+"""
+
+
 def test_firms_connector_offline_and_live_fallback():
-    connector = FirmsSatelliteFeedConnector(map_key="22f64ca740591eb1e6d5a6802778b8a8")
+    from unittest.mock import patch, MagicMock
+    mock_key = os.getenv("NASA_FIRMS_MAP_KEY") or os.getenv("FIRMS_MAP_KEY") or "mock_firms_test_key_32chars_long"
+    connector = FirmsSatelliteFeedConnector(map_key=mock_key)
     assert connector.map_key is not None
 
-    telemetry = connector.fetch_hub_firms_telemetry("west_tulsa_cushing", days=1)
-    assert telemetry is not None
-    assert telemetry["hub_code"] == "west_tulsa_cushing"
-    assert "total_frp_mw" in telemetry
-    assert "thermal_pixel_count" in telemetry
-    assert "flaring_anomaly_z_score" in telemetry
-    assert isinstance(telemetry["is_major_flaring_upset"], bool)
+    mock_resp = MagicMock()
+    mock_resp.status = 200
+    mock_resp.read.return_value = MOCK_VIIRS_CSV.encode("utf-8")
+    mock_resp.__enter__.return_value = mock_resp
 
-    all_corridors = connector.fetch_all_refining_corridors()
-    assert all_corridors["status"] == "SUCCESS"
-    assert all_corridors["total_monitored_hubs"] >= 9
-    assert "corridors" in all_corridors
+    with patch("urllib.request.urlopen", return_value=mock_resp):
+        telemetry = connector.fetch_hub_firms_telemetry("west_tulsa_cushing", days=1)
+        assert telemetry is not None
+        assert telemetry["hub_code"] == "west_tulsa_cushing"
+        assert "total_frp_mw" in telemetry
+        assert "thermal_pixel_count" in telemetry
+        assert "flaring_anomaly_z_score" in telemetry
+        assert isinstance(telemetry["is_major_flaring_upset"], bool)
+
+        all_corridors = connector.fetch_all_refining_corridors()
+        assert all_corridors["status"] == "SUCCESS"
+        assert all_corridors["total_monitored_hubs"] >= 9
+        assert "corridors" in all_corridors
 
 
 def test_knowledge_graph_topological_supply_outage_exposure():
