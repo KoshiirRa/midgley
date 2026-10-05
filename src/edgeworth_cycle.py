@@ -82,23 +82,33 @@ class EdgeworthCycleAnalyzer:
 
         mean_run_length = float(np.mean(undercut_runs)) if undercut_runs else 1.0
 
-        # Classification heuristics for Edgeworth cycling market:
-        # 1. fraction_negative > 0.60
-        # 2. skewness > 1.0
-        # 3. at least 1 restoration jump per ~30 days or mean_run_length >= 3.0
+        # Classification heuristics for Edgeworth cycling market (Issue #447, #612):
+        # 1. fraction_negative >= 0.60 (undercutting phase dominates daily time)
+        # 2. skewness >= 0.80 (asymmetric sharp positive spikes)
+        # 3. mean_run_length >= 2.0 (prolonged undercutting runs)
+        # 4. total_restorations_detected >= 2 with discrete jumps (minimum requirement)
         cycling_score = 0.0
         if frac_neg >= 0.60:
-            cycling_score += 0.35
+            cycling_score += 0.30
         if frac_neg >= 0.70:
+            cycling_score += 0.10
+        if skewness >= 0.8:
+            cycling_score += 0.20
+        if skewness >= 1.5:
             cycling_score += 0.15
-        if skewness >= 1.0:
-            cycling_score += 0.25
-        if skewness >= 1.8:
+        if mean_run_length >= 2.5:
             cycling_score += 0.15
-        if mean_run_length >= 3.0:
+        if n_jumps >= 2:
             cycling_score += 0.10
 
-        is_cycling = cycling_score >= 0.60
+        # Strict requirement: Must exhibit authentic asymmetry, undercutting persistence, AND discrete jumps
+        is_cycling = bool(
+            cycling_score >= 0.60
+            and frac_neg >= 0.60
+            and skewness >= 0.80
+            and n_jumps >= 2
+            and mean_run_length >= 2.0
+        )
 
         return {
             "is_cycling": is_cycling,
@@ -191,33 +201,42 @@ class RestorationHazardModel:
         if undercut_mask.sum() > 0:
             self.daily_undercut_rate = float(dr[undercut_mask].mean())
 
-        # Fit logistic regression parameters via MLE
+        # Fit logistic regression parameters via regularized MLE (Issue #612)
         if df_fit["y"].sum() >= 2:
             try:
-                X = np.column_stack([np.ones(len(df_fit)), df_fit["margin"].values, df_fit["elapsed"].values])
+                m_mean = float(df_fit["margin"].mean())
+                m_std = float(max(df_fit["margin"].std(), 0.05))
+                e_mean = float(df_fit["elapsed"].mean())
+                e_std = float(max(df_fit["elapsed"].std(), 1.0))
+
+                m_scaled = (df_fit["margin"].values - m_mean) / m_std
+                e_scaled = (df_fit["elapsed"].values - e_mean) / e_std
+                X_scaled = np.column_stack([np.ones(len(df_fit)), m_scaled, e_scaled])
                 y = df_fit["y"].values
 
                 def neg_log_lik(params):
-                    z = np.dot(X, params)
-                    z = np.clip(z, -20, 20)
+                    z = np.dot(X_scaled, params)
+                    z = np.clip(z, -20.0, 20.0)
                     prob = 1.0 / (1.0 + np.exp(-z))
                     prob = np.clip(prob, 1e-6, 1.0 - 1e-6)
                     ll = np.sum(y * np.log(prob) + (1.0 - y) * np.log(1.0 - prob))
-                    return -ll
+                    l2_pen = 0.5 * 0.1 * (params[1] ** 2 + params[2] ** 2)
+                    return -ll + l2_pen
 
+                # Box bounds: b_scaled <= 0 (margin compression raises hazard), c_scaled >= 0 (longer time raises hazard)
+                bounds = [(-10.0, 5.0), (-10.0, 0.0), (0.0, 10.0)]
                 res = optimize.minimize(
                     neg_log_lik,
-                    [self.a, self.b, self.c],
-                    method="Nelder-Mead",
+                    [-1.8, -0.5, 0.5],
+                    method="L-BFGS-B",
+                    bounds=bounds,
                     options={"maxiter": 200}
                 )
                 if res.success and np.isfinite(res.fun):
-                    self.a, self.b, self.c = float(res.x[0]), float(res.x[1]), float(res.x[2])
-                    # Ensure physical parameter signs: b <= 0 (margin compression raises hazard), c >= 0 (longer time raises hazard)
-                    if self.b > 0:
-                        self.b = -0.5
-                    if self.c < 0:
-                        self.c = 0.05
+                    a_s, b_s, c_s = res.x
+                    self.b = float(b_s / m_std)
+                    self.c = float(c_s / e_std)
+                    self.a = float(a_s - self.b * m_mean - self.c * e_mean)
             except Exception as e:
                 logger.debug(f"Hazard model optimization error: {e}; applying priors.")
 

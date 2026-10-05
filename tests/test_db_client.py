@@ -74,3 +74,36 @@ def test_forecast_insert_and_query(temp_db):
     updated_rows = temp_db.execute("SELECT * FROM forecasts WHERE forecast_id = ?;", ("test_f_001",))
     assert len(updated_rows) == 1
     assert updated_rows[0]["predicted_price"] == 2.4650
+
+
+def test_turso_circuit_breaker_fallback_initializes_sqlite():
+    """Verifies that tripping circuit breaker to local SQLite initializes schema and succeeds (Issue #614 T-34)."""
+    from unittest.mock import patch
+    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
+        db_path = f.name
+
+    try:
+        # Client initialized with fake Turso URL
+        client = DatabaseClient(db_url="https://mock-turso.turso.io", auth_token="mock_token", sqlite_path=db_path)
+        client.is_turso = True
+
+        with patch("urllib.request.urlopen", side_effect=Exception("503 Service Unavailable")):
+            res = client.execute("SELECT * FROM forecasts;")
+            assert res == []
+            assert client.is_turso is False
+
+            # Verify write succeeds on fallen-back local SQLite without "no such table" errors
+            client.execute("""
+                INSERT INTO forecasts (forecast_id, region, model_version, origin_date, horizon, target_date, predicted_price, ci_lower_95, ci_upper_95, run_type)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, ("fb_001", "National", "v1.0", "2026-10-01", 1, "2026-10-02", 2.5, 2.4, 2.6, "TEST"))
+            rows = client.execute("SELECT * FROM forecasts WHERE forecast_id = 'fb_001';")
+            assert len(rows) == 1
+            assert rows[0]["forecast_id"] == "fb_001"
+    finally:
+        if os.path.exists(db_path):
+            try:
+                os.remove(db_path)
+            except Exception:
+                pass
+

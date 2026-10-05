@@ -24,7 +24,7 @@ import json
 import logging
 import urllib.request
 from datetime import datetime
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List, Tuple, Union
 import pandas as pd
 from src.storage_io import atomic_write_json, file_lock
 

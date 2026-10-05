@@ -12,7 +12,7 @@ import urllib.parse
 import defusedxml.ElementTree as ET
 import pandas as pd
 from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 import logging
 from src.lookup_cache import global_cache
 
@@ -105,13 +105,11 @@ def deduplicate_events(events: List[Dict[str, Any]], similarity_threshold: float
         if canon_url and canon_url in seen_urls:
             continue
 
-        headline = str(ev.get("headline", ""))
-        norm_h = normalize_headline(headline)
-        if not norm_h:
-            continue
-        tokens = set(norm_h.split())
+        headline = str(ev.get("headline") or ev.get("title") or ev.get("chokepoint") or ev.get("event") or "")
+        norm_h = normalize_headline(headline) if headline else ""
+        tokens = set(norm_h.split()) if norm_h else set(f"{k}:{v}" for k, v in ev.items() if k != "url")
         if not tokens:
-            continue
+            tokens = {"event"}
 
         dt_str = str(ev.get("date", ""))[:10]
         candidate_dates = [dt_str]

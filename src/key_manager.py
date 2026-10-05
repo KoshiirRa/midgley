@@ -7,6 +7,7 @@ and revocation management for Midgley REST API Gateway & MCP Server.
 
 import os
 import re
+import math
 import sqlite3
 import secrets
 import hashlib
@@ -18,23 +19,49 @@ from typing import Dict, Any, Tuple, List, Optional
 
 logger = logging.getLogger(__name__)
 
-# Secret Redaction Patterns (Issue #570)
+# Secret Redaction Patterns (Issue #570, #614)
 SECRET_PATTERNS = [
     re.compile(r"gh[opusr]_[A-Za-z0-9_]{20,}", re.IGNORECASE),
     re.compile(r"github_pat_[A-Za-z0-9_]{20,}", re.IGNORECASE),
     re.compile(r"mg_(?:prod|dev)_[A-Za-z0-9_]{16,}", re.IGNORECASE),
     re.compile(r"sk-[A-Za-z0-9_-]{20,}", re.IGNORECASE),
+    re.compile(r"https?://(?:[a-zA-Z0-9-]+\.)?hc-ping\.com/[A-Za-z0-9_-]+", re.IGNORECASE),
+    re.compile(r"https?://(?:canary\.|ptb\.)?discord(?:app)?\.com/api/webhooks/[0-9]+/[A-Za-z0-9_-]+", re.IGNORECASE),
+    re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}", re.IGNORECASE),
 ]
 
 
 def redact_secrets(text: Optional[str]) -> str:
-    """Masks secret tokens and sensitive API keys with [REDACTED] (Issue #570)."""
+    """Masks secret tokens and sensitive API keys with [REDACTED] (Issue #570, #614)."""
     if not text:
         return ""
     redacted = str(text)
     for pattern in SECRET_PATTERNS:
         redacted = pattern.sub("[REDACTED]", redacted)
     return redacted
+
+
+class RedactingLoggingFilter(logging.Filter):
+    """Logging filter that sanitizes secret tokens, webhooks, and ping URLs from log messages (Issue #614)."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if isinstance(record.msg, str):
+            record.msg = redact_secrets(record.msg)
+        if record.args:
+            if isinstance(record.args, dict):
+                record.args = {k: (redact_secrets(v) if isinstance(v, str) else v) for k, v in record.args.items()}
+            elif isinstance(record.args, (tuple, list)):
+                record.args = tuple(redact_secrets(a) if isinstance(a, str) else a for a in record.args)
+        return True
+
+
+def setup_logging_redaction(root_logger: Optional[logging.Logger] = None) -> None:
+    """Attaches RedactingLoggingFilter to root and configured handlers (Issue #614)."""
+    target = root_logger or logging.getLogger()
+    filt = RedactingLoggingFilter()
+    for handler in target.handlers:
+        handler.addFilter(filt)
+    target.addFilter(filt)
 
 
 # Default Database Path
@@ -50,6 +77,8 @@ class KeyManager:
     def __init__(self, db_path: str = DEFAULT_DB_PATH):
         self.db_path = db_path
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        # In-memory token verification cache: token_hash -> (cached_at_epoch, is_valid, key_info, err) (Issue #614)
+        self._verification_cache: Dict[str, Tuple[float, bool, Optional[Dict[str, Any]], Optional[str]]] = {}
         self.init_db()
 
     def _get_connection(self) -> sqlite3.Connection:
@@ -83,6 +112,16 @@ class KeyManager:
                     request_count INTEGER NOT NULL DEFAULT 1,
                     PRIMARY KEY (key_prefix, minute_timestamp)
                 )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS rate_limit_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    key_prefix TEXT NOT NULL,
+                    timestamp_sec REAL NOT NULL
+                )
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_rate_limit_events_prefix_ts ON rate_limit_events(key_prefix, timestamp_sec)
             """)
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_api_keys_prefix ON api_keys(key_prefix)
@@ -159,11 +198,18 @@ class KeyManager:
 
     def verify_key(self, token: str) -> Tuple[bool, Optional[Dict[str, Any]], Optional[str]]:
         """
-        Validates an incoming plaintext token against SQLite registry.
+        Validates an incoming plaintext token against SQLite registry with 60-second in-memory caching (Issue #614).
         Returns (is_valid, key_info_dict, error_message).
         """
         if not token or not isinstance(token, str):
             return False, None, "Missing or invalid token string."
+
+        # Check in-memory 60s verification cache
+        cache_key = hashlib.sha256(token.encode("utf-8")).hexdigest()
+        now = time.time()
+        cached = self._verification_cache.get(cache_key)
+        if cached and (now - cached[0] < 60.0):
+            return cached[1], cached[2], cached[3]
 
         parts = token.split("_")
         if len(parts) < 3:
@@ -215,34 +261,50 @@ class KeyManager:
             "expires_at": row["expires_at"]
         }
 
+        # Cache successful verification for 60 seconds
+        self._verification_cache[cache_key] = (now, True, key_info, None)
         return True, key_info, None
 
     def check_rate_limit(self, key_prefix: str, rate_limit_rpm: int = DEFAULT_RPM) -> Tuple[bool, int, int, int]:
         """
-        Enforces 1-minute sliding window rate limiting using atomic SQLite UPSERT.
+        Enforces true continuous 60-second sliding-window rate limiting using SQLite rate_limit_events (Issue #614 T-26).
         Returns (allowed, retry_after_seconds, remaining_requests, reset_seconds).
-        Eliminates UNIQUE constraint race conditions under concurrent async requests (Issue #329, #571).
+        Eliminates 2x boundary bursts across calendar minutes.
         """
-        current_minute = int(time.time() // 60)
-        current_second = int(time.time())
-        retry_after = 60 - (current_second % 60)
-        reset_seconds = retry_after
+        now = time.time()
+        window_start = now - 60.0
 
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            # Fast check: if rate limit was already exceeded in this minute, reject immediately
+            # 1. Prune events older than 60 seconds
+            cursor.execute("DELETE FROM rate_limit_events WHERE timestamp_sec < ?", (window_start,))
+
+            # 2. Count requests in active 60-second trailing window
             cursor.execute(
                 """
-                SELECT request_count FROM rate_limits
-                WHERE key_prefix = ? AND minute_timestamp = ?
+                SELECT COUNT(*), MIN(timestamp_sec)
+                FROM rate_limit_events
+                WHERE key_prefix = ? AND timestamp_sec >= ?
                 """,
-                (key_prefix, current_minute)
+                (key_prefix, window_start)
             )
             row = cursor.fetchone()
-            if row and row["request_count"] >= rate_limit_rpm:
-                return False, retry_after, 0, reset_seconds
+            count = row[0] if row else 0
+            oldest_ts = row[1] if (row and row[1]) else now
 
-            # Atomic UPSERT: insert initial counter or increment existing counter atomically
+            if count >= rate_limit_rpm:
+                retry_after = max(1, int(math.ceil(60.0 - (now - oldest_ts))))
+                conn.commit()
+                return False, retry_after, 0, retry_after
+
+            # 3. Insert current request event into sliding window ledger
+            cursor.execute(
+                "INSERT INTO rate_limit_events (key_prefix, timestamp_sec) VALUES (?, ?)",
+                (key_prefix, now)
+            )
+
+            # 4. Backward-compatible aggregate update in rate_limits table
+            current_minute = int(now // 60)
             cursor.execute(
                 """
                 INSERT INTO rate_limits (key_prefix, minute_timestamp, request_count)
@@ -252,28 +314,10 @@ class KeyManager:
                 """,
                 (key_prefix, current_minute)
             )
-
-            # Retrieve updated request count after atomic upsert
-            cursor.execute(
-                """
-                SELECT request_count FROM rate_limits
-                WHERE key_prefix = ? AND minute_timestamp = ?
-                """,
-                (key_prefix, current_minute)
-            )
-            updated_row = cursor.fetchone()
-            count = updated_row["request_count"] if updated_row else 1
-
-            # Cleanup older minute records (older than 10 minutes)
-            old_cutoff = current_minute - 10
-            cursor.execute("DELETE FROM rate_limits WHERE minute_timestamp < ?", (old_cutoff,))
             conn.commit()
 
-            remaining = max(0, rate_limit_rpm - count)
-            if count > rate_limit_rpm:
-                return False, retry_after, 0, reset_seconds
-
-        return True, 0, remaining, reset_seconds
+            remaining = max(0, rate_limit_rpm - (count + 1))
+            return True, 0, remaining, 60
 
     def list_keys(self, environment: Optional[str] = None) -> List[Dict[str, Any]]:
         """Lists metadata for registered API keys (excluding secret hashes/salts)."""
@@ -312,7 +356,7 @@ class KeyManager:
         ]
 
     def revoke_key(self, key_prefix: str) -> bool:
-        """Revokes an API key by prefix."""
+        """Revokes an API key by prefix and clears verification cache (Issue #614)."""
         with self._get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -323,6 +367,7 @@ class KeyManager:
             updated = cursor.rowcount > 0
 
         if updated:
+            self._verification_cache.clear()
             logger.info(f"Revoked API key prefix [{key_prefix}]")
         return updated
 

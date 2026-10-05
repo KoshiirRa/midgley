@@ -82,11 +82,22 @@ def run_regional_pipeline(
         fetch_market_fn = lambda start_date="2022-01-01", live_current_price=None: fetch_market_data(start_date=start_date)
         get_events_fn = lambda: []
 
+    from src.locations.specs import get_region_spec
+    from src.metro_nowcast import nowcast_metro_price
+
+    spec = get_region_spec(reg_clean)
+    if spec:
+        display_name = spec.display_name
+
     if live_pump_price is None:
         live_res = fetch_live_metro_retail_price(logger_region_key)
-        live_pump_price = live_res["price"]
+        raw_price = float(live_res["price"])
+        nowcast_res = nowcast_metro_price(logger_region_key, live_price=raw_price)
+        live_pump_price = float(nowcast_res["filtered_nowcast"])
+    else:
+        nowcast_res = nowcast_metro_price(logger_region_key, live_price=live_pump_price)
 
-    logger.info(f"Executing Regional Pipeline for '{display_name}' ({logger_region_key}) | Anchor: ${live_pump_price:.2f}/gal")
+    logger.info(f"Executing Regional Pipeline for '{display_name}' ({logger_region_key}) | Nowcast Anchor: ${live_pump_price:.3f}/gal (SE: ${nowcast_res['nowcast_std_err']:.4f})")
 
     # Step 1: Ingest Market Data for Region
     import inspect
@@ -128,6 +139,23 @@ def run_regional_pipeline(
     results = multi_horizon_results[5]
     splits = results['splits']
     results['multi_horizon_results'] = multi_horizon_results
+    results['nowcast'] = nowcast_res
+    if spec:
+        results['region_spec'] = spec
+
+    # Microstructure Edgeworth Cycle Modeling for cycling Midwestern hubs (Issue #447, #612)
+    if spec and spec.has_edgeworth_cycles:
+        try:
+            from src.locations.cincinnati.regional import compute_cincinnati_edgeworth_forecast
+            edgeworth_forecast = compute_cincinnati_edgeworth_forecast(
+                market_df=market_df,
+                live_oh_price=live_pump_price,
+                horizon_days=5
+            )
+            results['edgeworth_cycle_forecast'] = edgeworth_forecast
+            logger.info(f"Edgeworth Cycle Analysis for {display_name}: {edgeworth_forecast['cycle_diagnostics']}")
+        except Exception as e:
+            logger.warning(f"Could not compute Edgeworth cycle forecast for {display_name}: {e}")
 
     # Step 5: Real-Time Scenario Simulations & Prediction Logging
     last_row_hybrid_5 = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:])

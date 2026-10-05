@@ -108,12 +108,14 @@ class GARCHVolatilityModel:
                     self.omega, self.alpha, self.beta = res.x
                     self.gamma = 0.0
             else:
+                msg = getattr(res, "message", "Optimization did not converge")
+                logger.warning(f"GARCH optimization warning: {msg}; applying constrained defaults.")
                 self.omega = sample_var * 0.05
                 self.alpha = 0.07
                 self.gamma = 0.03 if self.asymmetric else 0.0
                 self.beta = 0.86
         except Exception as e:
-            logger.debug(f"GARCH optimization exception: {e}; applying constrained defaults.")
+            logger.warning(f"GARCH optimization exception: {e}; applying constrained defaults.")
             self.omega = sample_var * 0.05
             self.alpha = 0.07
             self.gamma = 0.03 if self.asymmetric else 0.0
@@ -123,7 +125,7 @@ class GARCHVolatilityModel:
         persistence = min(persistence, 0.995)
         self.unconditional_variance = max(self.omega / (1.0 - persistence), 1e-6)
 
-        # Compute last step conditional variance
+        # Compute full daily conditional variance series
         n = len(eps)
         sigma2 = np.zeros(n)
         sigma2[0] = sample_var
@@ -131,6 +133,7 @@ class GARCHVolatilityModel:
             leverage = 1.0 if (self.asymmetric and eps[t - 1] < 0) else 0.0
             sigma2[t] = self.omega + (self.alpha + self.gamma * leverage) * (eps[t - 1] ** 2) + self.beta * sigma2[t - 1]
 
+        self.conditional_variances = sigma2
         last_leverage = 1.0 if (self.asymmetric and eps[-1] < 0) else 0.0
         self.last_variance = float(self.omega + (self.alpha + self.gamma * last_leverage) * (eps[-1] ** 2) + self.beta * sigma2[-1])
         self.is_fitted = True
@@ -166,6 +169,16 @@ class GARCHVolatilityModel:
         path = self.forecast_variance_path(horizon)
         cum_var = sum(path)
         return math.sqrt(max(cum_var, 1e-8))
+
+    def forecast_variance(self, horizon: int = 5) -> Tuple[float, float]:
+        """
+        Calculates cumulative variance and cumulative standard deviation over h-day horizon:
+        Returns (cum_var, cum_vol).
+        """
+        path = self.forecast_variance_path(horizon)
+        cum_var = float(sum(path))
+        cum_vol = math.sqrt(max(cum_var, 1e-8))
+        return cum_var, cum_vol
 
 
 class HARRVModel:
@@ -231,26 +244,26 @@ class HARRVModel:
         except Exception as e:
             logger.debug(f"HAR-RV lstsq error: {e}; using standard priors.")
 
-        # Save last known components
+        # Save last known components and full 22-day trailing history buffer (Issue #611)
         d_last = float(s_rv.iloc[-1])
         w_last = float(s_rv.iloc[-5:].mean()) if len(s_rv) >= 5 else d_last
         m_last = float(s_rv.iloc[-22:].mean()) if len(s_rv) >= 22 else w_last
         self.last_rv_components = (d_last, w_last, m_last)
+        self.trailing_rv_history = [float(x) for x in s_rv.iloc[-22:].values] if len(s_rv) >= 22 else [m_last] * (22 - len(s_rv)) + [float(x) for x in s_rv.values]
         self.is_fitted = True
         return self
 
     def forecast_variance_path(self, horizon: int = 5) -> List[float]:
         """
-        Forecasts h-step forward variance path recursively using HAR components.
+        Forecasts h-step forward variance path recursively preserving trailing lag buffers (Issue #611).
         """
-        d, w, m = self.last_rv_components
         path = []
-        recent_history = [m] * 22 + [w] * 5 + [d]
+        recent_history = list(getattr(self, "trailing_rv_history", [self.last_rv_components[2]] * 22))
 
         for _ in range(horizon):
             d_curr = recent_history[-1]
-            w_curr = np.mean(recent_history[-5:])
-            m_curr = np.mean(recent_history[-22:])
+            w_curr = float(np.mean(recent_history[-5:]))
+            m_curr = float(np.mean(recent_history[-22:]))
             pred_rv = self.intercept + self.beta_d * d_curr + self.beta_w * w_curr + self.beta_m * m_curr
             pred_rv = max(float(pred_rv), 1e-7)
             path.append(pred_rv)
@@ -267,7 +280,7 @@ class StudentTPredictiveDistribution:
     """
     Fat-tailed Student-t Predictive Density Engine.
     Models return innovations R_{t -> t+h} ~ Student-t(loc=mu, scale=s_h, df=nu).
-    Includes PIT uniformity testing and CRPS score calculation.
+    Includes PIT uniformity testing and closed-form CRPS score calculation (Issue #448, #611).
     """
 
     def __init__(self, degrees_of_freedom: float = 6.0):
@@ -345,20 +358,33 @@ class StudentTPredictiveDistribution:
         df: float = 6.0
     ) -> float:
         """
-        Computes Continuous Ranked Probability Score (CRPS) for Student-t predictive density.
-        Uses standard numerical quadrature / closed-form quantile integration.
+        Computes exact closed-form Continuous Ranked Probability Score (CRPS) for Student-t predictive density (Issue #611).
         """
-        scale = cumulative_volatility * math.sqrt((df - 2.0) / df)
-        dist = stats.t(df=df, loc=mu, scale=scale)
+        nu = max(float(df), 1.05)
+        scale = max(float(cumulative_volatility) * math.sqrt((nu - 2.0) / nu) if nu > 2.0 else float(cumulative_volatility), 1e-8)
+        z = (realized_return - mu) / scale
 
-        # Numerical integral approximation of CRPS = integral (F(x) - 1_{x >= y})^2 dx
-        # over [mu - 7*scale, mu + 7*scale]
-        grid = np.linspace(mu - 7 * scale, mu + 7 * scale, 200)
-        cdf_vals = dist.cdf(grid)
-        indicator = (grid >= realized_return).astype(float)
-        integrand = (cdf_vals - indicator) ** 2
-        crps = float(np.trapezoid(integrand, grid))
-        return crps
+        term1 = z * (2.0 * stats.t.cdf(z, df=nu) - 1.0)
+        term2 = 2.0 * stats.t.pdf(z, df=nu) * (nu + z ** 2) / (nu - 1.0)
+        from scipy import special
+        b1 = special.beta(0.5, nu - 0.5)
+        b2 = special.beta(0.5, nu / 2.0)
+        term3 = (2.0 * math.sqrt(nu) / (nu - 1.0)) * (b1 / (b2 ** 2))
+        return float(scale * (term1 + term2 - term3))
+
+    @staticmethod
+    def compute_crps_gaussian(
+        realized_return: float,
+        mu: float,
+        sigma: float
+    ) -> float:
+        """
+        Computes exact closed-form CRPS for Gaussian predictive density (Gneiting & Raftery 2007, Issue #611).
+        """
+        s = max(float(sigma), 1e-8)
+        z = (realized_return - mu) / s
+        crps = s * (z * (2.0 * stats.norm.cdf(z) - 1.0) + 2.0 * stats.norm.pdf(z) - 1.0 / math.sqrt(math.pi))
+        return float(crps)
 
 
 class RBOBVolatilityEngine:
@@ -392,8 +418,12 @@ class RBOBVolatilityEngine:
         realized_variances = log_returns ** 2
         self.har_rv.fit(realized_variances)
 
-        # Standardized residuals for Student-t df fit
-        if len(log_returns) > 30 and self.garch.last_variance > 1e-8:
+        # Standardized residuals for Student-t df fit using daily conditional volatility path (Issue #611)
+        if len(log_returns) > 30 and hasattr(self.garch, "conditional_variances") and self.garch.conditional_variances is not None:
+            cond_stds = np.sqrt(np.maximum(self.garch.conditional_variances, 1e-8))
+            std_residuals = (log_returns - np.mean(log_returns)) / cond_stds
+            self.dist.fit_degrees_of_freedom(std_residuals)
+        elif len(log_returns) > 30 and self.garch.last_variance > 1e-8:
             std_residuals = (log_returns - np.mean(log_returns)) / np.sqrt(self.garch.last_variance)
             self.dist.fit_degrees_of_freedom(std_residuals)
 
@@ -454,3 +484,7 @@ class RBOBVolatilityEngine:
             },
             "horizons": horizon_forecasts
         }
+
+
+# Canonical alias for Wholesale RBOB Volatility Engine (Issue #611, #615)
+WholesaleVolatilityEngine = RBOBVolatilityEngine

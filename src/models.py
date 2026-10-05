@@ -1008,6 +1008,17 @@ def train_multi_horizon_models(
         else:
             res['forecast_target_date'] = None
 
+        # Calibrate wholesale predictive density cone (Issue #448, #611)
+        if 'gasoline_rbob' in market_df.columns:
+            try:
+                from src.volatility_engine import WholesaleVolatilityEngine
+                v_engine = WholesaleVolatilityEngine()
+                v_engine.calibrate(market_df['gasoline_rbob'])
+                v_term = v_engine.forecast_volatility_term_structure(live_base, max_horizon=h)
+                res['volatility_density'] = v_term['horizons'].get(f'horizon_{h}d', {})
+            except Exception as e:
+                logger.debug(f"Wholesale volatility calculation skipped for h={h}: {e}")
+
         multi_results[h] = res
 
     return multi_results

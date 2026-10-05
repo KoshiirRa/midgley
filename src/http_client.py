@@ -23,7 +23,7 @@ DEFAULT_TIMEOUT: Tuple[float, float] = (DEFAULT_CONNECT_TIMEOUT, DEFAULT_READ_TI
 
 DEFAULT_USER_AGENT = os.getenv(
     "MIDGLEY_USER_AGENT",
-    "Midgley-Energy-Analytics/0.8.4 (+https://github.com/KoshiirRa/midgley)"
+    "Midgley-Energy-Analytics/0.8.5 (+https://github.com/KoshiirRa/midgley)"
 )
 
 DEFAULT_RETRY_STATUSES = (429, 500, 502, 503, 504)

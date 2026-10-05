@@ -234,7 +234,8 @@ def create_feature_matrix(
     region: str = "Tulsa_OK",
     as_of_cutoff: str = None,
     use_feast: bool = False,
-    return_unlabelled_frame: bool = False
+    return_unlabelled_frame: bool = False,
+    is_live_inference: bool = False
 ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
     """
     Creates a unified feature dataset for time-series forecasting.
@@ -248,6 +249,7 @@ def create_feature_matrix(
     - decay_half_life_days: Exponential decay half-life for news event sentiment impact
     - region: Target metropolitan area or hub name for locale-specific weather routing
     - as_of_cutoff: Publication timestamp cutoff (YYYY-MM-DD [HH:MM:SS]) for point-in-time bitemporal filtering (Issue #121)
+    - is_live_inference: If True, updates final row with contemporary real-time connector readings. Default False for strict point-in-time backtesting.
     """
     logger.info(f"Engineering features for region '{region}' with {forecast_horizon}-day forecast horizon (use_feast={use_feast})...")
     df = market_df.copy()
@@ -347,38 +349,26 @@ def create_feature_matrix(
     df = df.copy()
 
     # Merge U.S. Treasury Yield Curve & TIPS Inflation Metrics (Issue #66)
-    try:
-        from src.treasury_yield_feed import TreasuryYieldConnector
-        treasury_connector = TreasuryYieldConnector()
-        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2022-01-01"
-        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
-        treasury_df = treasury_connector.fetch_treasury_yield_dataset(start_date=start_str, end_date=end_str)
-        if not treasury_df.empty:
-            df = pd.merge(df, treasury_df, on='date', how='left')
-            for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
-                if col in df.columns:
-                    df[col] = df[col].ffill().fillna(0.0)
-    except Exception as e:
-        logger.warning(f"Could not merge U.S. Treasury yield feed: {e}")
-
     for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
         if col not in df.columns:
             df[col] = 0.0
 
-    # Merge U.S. BTS Freight Transportation Services Index & Truck Tonnage (Issue #74)
-    try:
-        from src.bts_transportation import fetch_bts_transportation_features
-        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2020-01-01"
-        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
-        bts_df = fetch_bts_transportation_features(start_date=start_str, end_date=end_str)
-        if not bts_df.empty:
-            df = pd.merge(df, bts_df, on='date', how='left')
-            for col in [c for c in bts_df.columns if c != 'date']:
-                if col in df.columns:
-                    df[col] = df[col].ffill().fillna(0.0)
-    except Exception as e:
-        logger.warning(f"Could not merge BTS freight transportation feed: {e}")
+    if is_live_inference and not df.empty:
+        try:
+            from src.treasury_yield_feed import TreasuryYieldConnector
+            treasury_connector = TreasuryYieldConnector()
+            start_str = df['date'].min().strftime("%Y-%m-%d") if pd.notna(df['date'].min()) else "2022-01-01"
+            end_str = df['date'].max().strftime("%Y-%m-%d") if pd.notna(df['date'].max()) else None
+            treasury_df = treasury_connector.fetch_treasury_yield_dataset(start_date=start_str, end_date=end_str)
+            if not treasury_df.empty:
+                df = pd.merge(df, treasury_df, on='date', how='left')
+                for col in ['treasury_yield_10y', 'treasury_yield_2y', 'treasury_yield_10y_2y_spread', 'tips_10y_real_yield', 'treasury_spread_delta_5d']:
+                    if col in df.columns:
+                        df[col] = df[col].ffill().fillna(0.0)
+        except Exception as e:
+            logger.warning(f"Could not merge U.S. Treasury yield feed: {e}")
 
+    # Merge U.S. BTS Freight Transportation Services Index & Truck Tonnage (Issue #74)
     for col in [
         'bts_tsi_freight', 'bts_truck_tonnage', 'bts_petroleum_transport',
         'bts_tsi_freight_mom_pct', 'bts_truck_tonnage_mom_pct', 'bts_petroleum_transport_mom_pct',
@@ -387,20 +377,21 @@ def create_feature_matrix(
         if col not in df.columns:
             df[col] = 0.0
 
-    # Merge FHWA Monthly Traffic Volume Trends (TVT / VMT) (Issue #369)
-    try:
-        from src.bts_transportation import fetch_fhwa_traffic_features
-        start_str = df['date'].min().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].min()) else "2020-01-01"
-        end_str = df['date'].max().strftime("%Y-%m-%d") if not df.empty and pd.notna(df['date'].max()) else None
-        fhwa_df = fetch_fhwa_traffic_features(start_date=start_str, end_date=end_str)
-        if not fhwa_df.empty:
-            df = pd.merge(df, fhwa_df, on='date', how='left')
-            for col in [c for c in fhwa_df.columns if c != 'date']:
-                if col in df.columns:
-                    df[col] = df[col].ffill().fillna(0.0)
-    except Exception as e:
-        logger.warning(f"Could not merge FHWA traffic volume trends feed: {e}")
+    if is_live_inference and not df.empty:
+        try:
+            from src.bts_transportation import fetch_bts_transportation_features
+            start_str = df['date'].min().strftime("%Y-%m-%d") if pd.notna(df['date'].min()) else "2020-01-01"
+            end_str = df['date'].max().strftime("%Y-%m-%d") if pd.notna(df['date'].max()) else None
+            bts_df = fetch_bts_transportation_features(start_date=start_str, end_date=end_str)
+            if not bts_df.empty:
+                df = pd.merge(df, bts_df, on='date', how='left')
+                for col in [c for c in bts_df.columns if c != 'date']:
+                    if col in df.columns:
+                        df[col] = df[col].ffill().fillna(0.0)
+        except Exception as e:
+            logger.warning(f"Could not merge BTS freight transportation feed: {e}")
 
+    # Merge FHWA Monthly Traffic Volume Trends (TVT / VMT) (Issue #369)
     for col in [
         'fhwa_vmt_national_billions', 'fhwa_vmt_mom_pct', 'fhwa_vmt_yoy_growth_pct',
         'fhwa_vmt_12m_moving_total', 'fhwa_gasoline_demand_proxy',
@@ -410,30 +401,61 @@ def create_feature_matrix(
         if col not in df.columns:
             df[col] = 0.0
 
+    if is_live_inference and not df.empty:
+        try:
+            from src.bts_transportation import fetch_fhwa_traffic_features
+            start_str = df['date'].min().strftime("%Y-%m-%d") if pd.notna(df['date'].min()) else "2020-01-01"
+            end_str = df['date'].max().strftime("%Y-%m-%d") if pd.notna(df['date'].max()) else None
+            fhwa_df = fetch_fhwa_traffic_features(start_date=start_str, end_date=end_str)
+            if not fhwa_df.empty:
+                df = pd.merge(df, fhwa_df, on='date', how='left')
+                for col in [c for c in fhwa_df.columns if c != 'date']:
+                    if col in df.columns:
+                        df[col] = df[col].ffill().fillna(0.0)
+        except Exception as e:
+            logger.warning(f"Could not merge FHWA traffic volume trends feed: {e}")
+
     # Merge EIA Daily Regional Spot Prices & Basis Spreads (Issue #363)
     try:
-        from src.data_ingestion import EIARegionalSpotConnector
-        spot_conn = EIARegionalSpotConnector()
-        spot_res = spot_conn.fetch_daily_regional_spot_prices()
-        spot_prices = spot_res.get("spot_prices", {})
-        spot_basis = spot_res.get("spot_basis", {})
-        
         reg_lower = str(region).lower()
         if "tulsa" in reg_lower or "cincinnati" in reg_lower or "gulf" in reg_lower:
-            reg_spot = spot_prices.get("gulf_coast_spot_per_gal", 2.285)
-            reg_basis = spot_basis.get("gulf_coast_basis", -0.135)
+            reg_spot = 2.285
+            reg_basis = -0.135
         elif "oakland" in reg_lower or "bayarea" in reg_lower or "california" in reg_lower or "la" in reg_lower:
-            reg_spot = spot_prices.get("los_angeles_spot_per_gal", 2.890)
-            reg_basis = spot_basis.get("los_angeles_basis", 0.470)
+            reg_spot = 2.890
+            reg_basis = 0.470
         else: # Newark, Greenville, Charlotte, Port St. Lucie, National
-            reg_spot = spot_prices.get("ny_harbor_spot_per_gal", 2.395)
-            reg_basis = spot_basis.get("ny_harbor_basis", -0.025)
+            reg_spot = 2.395
+            reg_basis = -0.025
             
         df['eia_regional_spot_price'] = reg_spot
         df['eia_regional_spot_basis'] = reg_basis
-        df['eia_spot_gulf_coast'] = spot_prices.get("gulf_coast_spot_per_gal", 2.285)
-        df['eia_spot_ny_harbor'] = spot_prices.get("ny_harbor_spot_per_gal", 2.395)
-        df['eia_spot_los_angeles'] = spot_prices.get("los_angeles_spot_per_gal", 2.890)
+        df['eia_spot_gulf_coast'] = 2.285
+        df['eia_spot_ny_harbor'] = 2.395
+        df['eia_spot_los_angeles'] = 2.890
+
+        if is_live_inference:
+            from src.data_ingestion import EIARegionalSpotConnector
+            spot_conn = EIARegionalSpotConnector()
+            spot_res = spot_conn.fetch_daily_regional_spot_prices()
+            spot_prices = spot_res.get("spot_prices", {})
+            spot_basis = spot_res.get("spot_basis", {})
+            
+            if "tulsa" in reg_lower or "cincinnati" in reg_lower or "gulf" in reg_lower:
+                reg_spot = spot_prices.get("gulf_coast_spot_per_gal", reg_spot)
+                reg_basis = spot_basis.get("gulf_coast_basis", reg_basis)
+            elif "oakland" in reg_lower or "bayarea" in reg_lower or "california" in reg_lower or "la" in reg_lower:
+                reg_spot = spot_prices.get("los_angeles_spot_per_gal", reg_spot)
+                reg_basis = spot_basis.get("los_angeles_basis", reg_basis)
+            else:
+                reg_spot = spot_prices.get("ny_harbor_spot_per_gal", reg_spot)
+                reg_basis = spot_basis.get("ny_harbor_basis", reg_basis)
+                
+            df['eia_regional_spot_price'] = reg_spot
+            df['eia_regional_spot_basis'] = reg_basis
+            df['eia_spot_gulf_coast'] = spot_prices.get("gulf_coast_spot_per_gal", df['eia_spot_gulf_coast'])
+            df['eia_spot_ny_harbor'] = spot_prices.get("ny_harbor_spot_per_gal", df['eia_spot_ny_harbor'])
+            df['eia_spot_los_angeles'] = spot_prices.get("los_angeles_spot_per_gal", df['eia_spot_los_angeles'])
     except Exception as e:
         logger.warning(f"Could not merge EIA daily regional spot feed: {e}")
 
@@ -443,14 +465,20 @@ def create_feature_matrix(
 
     # Merge EPA Weekly RIN Prices & RVO Compliance Costs (Issue #365)
     try:
-        from src.data_ingestion import EPARINDataConnector
-        rin_conn = EPARINDataConnector()
-        rin_res = rin_conn.fetch_rin_market_data()
-        rin_prices = rin_res.get("rin_prices", {})
-        df['epa_rin_d6_price'] = rin_prices.get("d6_ethanol_per_rin", 0.520)
-        df['epa_rin_d4_price'] = rin_prices.get("d4_biodiesel_per_rin", 0.785)
-        df['epa_rin_d3_price'] = rin_prices.get("d3_cellulosic_per_rin", 1.420)
-        df['epa_rvo_compliance_cost'] = rin_res.get("calculated_rvo_cost_per_gal", 0.091)
+        df['epa_rin_d6_price'] = 0.520
+        df['epa_rin_d4_price'] = 0.785
+        df['epa_rin_d3_price'] = 1.420
+        df['epa_rvo_compliance_cost'] = 0.091
+
+        if is_live_inference:
+            from src.data_ingestion import EPARINDataConnector
+            rin_conn = EPARINDataConnector()
+            rin_res = rin_conn.fetch_rin_market_data()
+            rin_prices = rin_res.get("rin_prices", {})
+            df['epa_rin_d6_price'] = rin_prices.get("d6_ethanol_per_rin", 0.520)
+            df['epa_rin_d4_price'] = rin_prices.get("d4_biodiesel_per_rin", 0.785)
+            df['epa_rin_d3_price'] = rin_prices.get("d3_cellulosic_per_rin", 1.420)
+            df['epa_rvo_compliance_cost'] = rin_res.get("calculated_rvo_cost_per_gal", 0.091)
     except Exception as e:
         logger.warning(f"Could not merge EPA RIN feed: {e}")
 
@@ -460,14 +488,20 @@ def create_feature_matrix(
 
     # Merge NYMEX Forward Curve & Calendar Spread Data (Issue #404)
     try:
-        from src.data_ingestion import NYMEXForwardCurveConnector
-        nymex_conn = NYMEXForwardCurveConnector()
-        nymex_res = nymex_conn.fetch_forward_curve_spreads()
-        fwd_feats = nymex_res.get("forward_features", {})
-        df['rbob_calendar_spread_m1_m2'] = fwd_feats.get("rbob_calendar_spread_m1_m2", 0.025)
-        df['wti_calendar_spread_m1_m2'] = fwd_feats.get("wti_calendar_spread_m1_m2", 0.40)
-        df['crack_spread_forward_321'] = fwd_feats.get("crack_spread_321", 0.58)
-        df['nymex_backwardation_regime'] = fwd_feats.get("curve_backwardation_flag", 1.0)
+        df['rbob_calendar_spread_m1_m2'] = 0.025
+        df['wti_calendar_spread_m1_m2'] = 0.40
+        df['crack_spread_forward_321'] = 0.58
+        df['nymex_backwardation_regime'] = 1.0
+
+        if is_live_inference:
+            from src.data_ingestion import NYMEXForwardCurveConnector
+            nymex_conn = NYMEXForwardCurveConnector()
+            nymex_res = nymex_conn.fetch_forward_curve_spreads()
+            fwd_feats = nymex_res.get("forward_features", {})
+            df['rbob_calendar_spread_m1_m2'] = fwd_feats.get("rbob_calendar_spread_m1_m2", 0.025)
+            df['wti_calendar_spread_m1_m2'] = fwd_feats.get("wti_calendar_spread_m1_m2", 0.40)
+            df['crack_spread_forward_321'] = fwd_feats.get("crack_spread_321", 0.58)
+            df['nymex_backwardation_regime'] = fwd_feats.get("curve_backwardation_flag", 1.0)
     except Exception as e:
         logger.warning(f"Could not merge NYMEX forward curve feed: {e}")
 
@@ -507,15 +541,16 @@ def create_feature_matrix(
             df['freeze_warning_flag'] = df['freeze_warning_flag_v'].combine_first(df['freeze_warning_flag'])
             df.drop(columns=[c for c in ['hdd_daily_v', 'cdd_daily_v', 'freeze_warning_flag_v'] if c in df.columns], inplace=True)
 
-        weather_connector = OpenMeteoDegreeDaysConnector()
-        hub_weather = weather_connector.fetch_hub_degree_days(region)
-        if hub_weather and len(df) > 0:
-            hdd_val = hub_weather.get("heating_degree_days_hdd", float(df['hdd_daily'].iloc[-1]))
-            cdd_val = hub_weather.get("cooling_degree_days_cdd", float(df['cdd_daily'].iloc[-1]))
-            freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else float(df['freeze_warning_flag'].iloc[-1])
-            df.loc[df.index[-1], 'hdd_daily'] = hdd_val
-            df.loc[df.index[-1], 'cdd_daily'] = cdd_val
-            df.loc[df.index[-1], 'freeze_warning_flag'] = freeze_flag
+        if is_live_inference and len(df) > 0:
+            weather_connector = OpenMeteoDegreeDaysConnector()
+            hub_weather = weather_connector.fetch_hub_degree_days(region)
+            if hub_weather:
+                hdd_val = hub_weather.get("heating_degree_days_hdd", float(df['hdd_daily'].iloc[-1]))
+                cdd_val = hub_weather.get("cooling_degree_days_cdd", float(df['cdd_daily'].iloc[-1]))
+                freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else float(df['freeze_warning_flag'].iloc[-1])
+                df.loc[df.index[-1], 'hdd_daily'] = hdd_val
+                df.loc[df.index[-1], 'cdd_daily'] = cdd_val
+                df.loc[df.index[-1], 'freeze_warning_flag'] = freeze_flag
             
         df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
         df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()
@@ -556,13 +591,14 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        cftc_connector = CFTCDataConnector()
-        cot_data = cftc_connector.fetch_cot_positioning_data()
-        if len(df) > 0 and cot_data:
-            df.loc[df.index[-1], 'cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', df['cot_rbob_net_speculative'].iloc[-1])
-            df.loc[df.index[-1], 'cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', df['cot_rbob_zscore_3y'].iloc[-1])
-            df.loc[df.index[-1], 'cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', df['cot_commercial_hedger_ratio'].iloc[-1])
-            df.loc[df.index[-1], 'cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', df['cot_net_position_delta_1w'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            cftc_connector = CFTCDataConnector()
+            cot_data = cftc_connector.fetch_cot_positioning_data()
+            if cot_data:
+                df.loc[df.index[-1], 'cot_rbob_net_speculative'] = cot_data.get('cot_rbob_net_speculative', df['cot_rbob_net_speculative'].iloc[-1])
+                df.loc[df.index[-1], 'cot_rbob_zscore_3y'] = cot_data.get('cot_rbob_zscore_3y', df['cot_rbob_zscore_3y'].iloc[-1])
+                df.loc[df.index[-1], 'cot_commercial_hedger_ratio'] = cot_data.get('cot_commercial_hedger_ratio', df['cot_commercial_hedger_ratio'].iloc[-1])
+                df.loc[df.index[-1], 'cot_net_position_delta_1w'] = cot_data.get('cot_net_position_delta_1w', df['cot_net_position_delta_1w'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge CFTC COT positioning data: {e}")
         cot_spec_series = 80000.0 + 16000.0 * np.sin(2.0 * np.pi * (_day_of_year - 60.0) / 365.25)
@@ -599,13 +635,14 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        ferc_connector = FERCDataConnector()
-        ferc_data = ferc_connector.fetch_pipeline_tariff_data()
-        if len(df) > 0 and ferc_data:
-            df.loc[df.index[-1], 'ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', df['ferc_colonial_line1_tariff_per_bbl'].iloc[-1])
-            df.loc[df.index[-1], 'ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', df['ferc_plantation_tariff_per_bbl'].iloc[-1])
-            df.loc[df.index[-1], 'ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', df['ferc_explorer_tariff_per_bbl'].iloc[-1])
-            df.loc[df.index[-1], 'ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', df['ferc_pipeline_tariff_index_5d'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            ferc_connector = FERCDataConnector()
+            ferc_data = ferc_connector.fetch_pipeline_tariff_data()
+            if ferc_data:
+                df.loc[df.index[-1], 'ferc_colonial_line1_tariff_per_bbl'] = ferc_data.get('ferc_colonial_line1_tariff_per_bbl', df['ferc_colonial_line1_tariff_per_bbl'].iloc[-1])
+                df.loc[df.index[-1], 'ferc_plantation_tariff_per_bbl'] = ferc_data.get('ferc_plantation_tariff_per_bbl', df['ferc_plantation_tariff_per_bbl'].iloc[-1])
+                df.loc[df.index[-1], 'ferc_explorer_tariff_per_bbl'] = ferc_data.get('ferc_explorer_tariff_per_bbl', df['ferc_explorer_tariff_per_bbl'].iloc[-1])
+                df.loc[df.index[-1], 'ferc_pipeline_tariff_index_5d'] = ferc_data.get('ferc_pipeline_tariff_index_5d', df['ferc_pipeline_tariff_index_5d'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge FERC pipeline tariff data: {e}")
         tariff_offset = (_years - 2026) + (_day_of_year / 365.25 - 0.5) * 0.04
@@ -643,15 +680,16 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        from src.usgs_water_feed import USGSWaterFeedConnector
-        usgs_connector = USGSWaterFeedConnector()
-        usgs_data = usgs_connector.fetch_live_water_telemetry() or {}
-        usgs_indices = usgs_data.get('indices', {})
-        if len(df) > 0 and usgs_indices:
-            df.loc[df.index[-1], 'usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', df['usgs_hydrological_barge_bottleneck_index'].iloc[-1])
-            df.loc[df.index[-1], 'usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', df['usgs_gulf_marine_departure_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', df['usgs_carquinez_berthing_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', df['usgs_delaware_refinery_thermal_index'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            from src.usgs_water_feed import USGSWaterFeedConnector
+            usgs_connector = USGSWaterFeedConnector()
+            usgs_data = usgs_connector.fetch_live_water_telemetry() or {}
+            usgs_indices = usgs_data.get('indices', {})
+            if usgs_indices:
+                df.loc[df.index[-1], 'usgs_hydrological_barge_bottleneck_index'] = usgs_indices.get('hydrological_barge_bottleneck_index', df['usgs_hydrological_barge_bottleneck_index'].iloc[-1])
+                df.loc[df.index[-1], 'usgs_gulf_marine_departure_risk_index'] = usgs_indices.get('gulf_marine_departure_risk_index', df['usgs_gulf_marine_departure_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'usgs_carquinez_berthing_risk_index'] = usgs_indices.get('carquinez_berthing_risk_index', df['usgs_carquinez_berthing_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'usgs_delaware_refinery_thermal_index'] = usgs_indices.get('delaware_refinery_thermal_index', df['usgs_delaware_refinery_thermal_index'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USGS water data telemetry: {e}")
         barge_risk = np.maximum(0.0, 0.25 * np.sin(2.0 * np.pi * (_day_of_year - 180.0) / 365.25))
@@ -685,14 +723,15 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        from src.usgs_seismic import USGSSeismicConnector
-        seismic_connector = USGSSeismicConnector()
-        seismic_data = seismic_connector.fetch_live_seismic_telemetry() or {}
-        seismic_indices = seismic_data.get('indices', {})
-        if len(df) > 0 and seismic_indices:
-            df.loc[df.index[-1], 'usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', df['usgs_bay_area_seismic_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', df['usgs_cushing_seismic_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', df['usgs_composite_seismic_risk_index'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            from src.usgs_seismic import USGSSeismicConnector
+            seismic_connector = USGSSeismicConnector()
+            seismic_data = seismic_connector.fetch_live_seismic_telemetry() or {}
+            seismic_indices = seismic_data.get('indices', {})
+            if seismic_indices:
+                df.loc[df.index[-1], 'usgs_bay_area_seismic_risk_index'] = seismic_indices.get('bay_area_seismic_risk_index', df['usgs_bay_area_seismic_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'usgs_cushing_seismic_risk_index'] = seismic_indices.get('cushing_storage_seismic_risk_index', df['usgs_cushing_seismic_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'usgs_composite_seismic_risk_index'] = seismic_indices.get('composite_seismic_risk_index', df['usgs_composite_seismic_risk_index'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USGS seismic data telemetry: {e}")
         df['usgs_bay_area_seismic_risk_index'] = 0.02
@@ -733,18 +772,19 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        from src.aqi_feed import AQIFeedConnector
-        aqi_connector = AQIFeedConnector()
-        aqi_data = aqi_connector.fetch_live_aqi_telemetry() or {}
-        aqi_indices = aqi_data.get('indices', {})
-        if len(df) > 0 and aqi_indices:
-            df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', df['aqi_bay_area_outage_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', df['aqi_tulsa_outage_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', df['aqi_delaware_outage_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', df['aqi_catlettsburg_outage_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', df['aqi_composite_outage_risk_index'].iloc[-1])
-            df.loc[df.index[-1], 'aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', df['aqi_ozone_action_day_count'].iloc[-1]))
-            df.loc[df.index[-1], 'aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', df['aqi_max_rvp_surcharge_per_gal'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            from src.aqi_feed import AQIFeedConnector
+            aqi_connector = AQIFeedConnector()
+            aqi_data = aqi_connector.fetch_live_aqi_telemetry() or {}
+            aqi_indices = aqi_data.get('indices', {})
+            if aqi_indices:
+                df.loc[df.index[-1], 'aqi_bay_area_outage_risk_index'] = aqi_indices.get('bay_area_outage_risk_index', df['aqi_bay_area_outage_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'aqi_tulsa_outage_risk_index'] = aqi_indices.get('tulsa_outage_risk_index', df['aqi_tulsa_outage_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'aqi_delaware_outage_risk_index'] = aqi_indices.get('delaware_valley_outage_risk_index', df['aqi_delaware_outage_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'aqi_catlettsburg_outage_risk_index'] = aqi_indices.get('tri_state_outage_risk_index', df['aqi_catlettsburg_outage_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'aqi_composite_outage_risk_index'] = aqi_indices.get('composite_aqi_shock_index', df['aqi_composite_outage_risk_index'].iloc[-1])
+                df.loc[df.index[-1], 'aqi_ozone_action_day_count'] = float(aqi_indices.get('ozone_action_day_count', df['aqi_ozone_action_day_count'].iloc[-1]))
+                df.loc[df.index[-1], 'aqi_max_rvp_surcharge_per_gal'] = aqi_indices.get('max_rvp_compliance_surcharge_per_gal', df['aqi_max_rvp_surcharge_per_gal'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge AQI industrial emissions telemetry: {e}")
         ozone_season = ((_day_of_year >= 120) & (_day_of_year <= 270)).astype(float)
@@ -783,15 +823,16 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        from src.data_ingestion import CECWeeklyFuelsConnector
-        cec_connector = CECWeeklyFuelsConnector()
-        cec_data = cec_connector.fetch_weekly_fuels_data() or {}
-        cec_metrics = cec_data.get('metrics', {})
-        if len(df) > 0 and cec_metrics:
-            df.loc[df.index[-1], 'cec_carbob_stocks_thousand_barrels'] = cec_metrics.get('ca_carbob_stocks_thousand_barrels', df['cec_carbob_stocks_thousand_barrels'].iloc[-1])
-            df.loc[df.index[-1], 'norcal_refinery_utilization_pct'] = cec_metrics.get('norcal_refinery_utilization_pct', df['norcal_refinery_utilization_pct'].iloc[-1])
-            df.loc[df.index[-1], 'socal_refinery_utilization_pct'] = cec_metrics.get('socal_refinery_utilization_pct', df['socal_refinery_utilization_pct'].iloc[-1])
-            df.loc[df.index[-1], 'statewide_refinery_utilization_pct'] = cec_metrics.get('statewide_refinery_utilization_pct', df['statewide_refinery_utilization_pct'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            from src.data_ingestion import CECWeeklyFuelsConnector
+            cec_connector = CECWeeklyFuelsConnector()
+            cec_data = cec_connector.fetch_weekly_fuels_data() or {}
+            cec_metrics = cec_data.get('metrics', {})
+            if cec_metrics:
+                df.loc[df.index[-1], 'cec_carbob_stocks_thousand_barrels'] = cec_metrics.get('ca_carbob_stocks_thousand_barrels', df['cec_carbob_stocks_thousand_barrels'].iloc[-1])
+                df.loc[df.index[-1], 'norcal_refinery_utilization_pct'] = cec_metrics.get('norcal_refinery_utilization_pct', df['norcal_refinery_utilization_pct'].iloc[-1])
+                df.loc[df.index[-1], 'socal_refinery_utilization_pct'] = cec_metrics.get('socal_refinery_utilization_pct', df['socal_refinery_utilization_pct'].iloc[-1])
+                df.loc[df.index[-1], 'statewide_refinery_utilization_pct'] = cec_metrics.get('statewide_refinery_utilization_pct', df['statewide_refinery_utilization_pct'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge CEC Weekly Fuels telemetry: {e}")
         df['cec_carbob_stocks_thousand_barrels'] = 5820.0 + 350.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
@@ -827,20 +868,21 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        eia_connector = EIADataConnector()
-        eia_data = eia_connector.fetch_padd_inventory_and_refinery_data() or {}
-        if len(df) > 0 and eia_data:
-            stocks_dict = eia_data.get('gasoline_stocks_million_bbl', {})
-            ref_dict = eia_data.get('refinery_utilization', {})
-            prod_dict = eia_data.get('refiner_net_production_thousand_bpd', {})
-            mov_dict = eia_data.get('inter_padd_movements', {})
-            total_stocks = sum(stocks_dict.values()) if stocks_dict else df['eia_gasoline_stocks_us_total'].iloc[-1]
-            avg_util = float(np.mean(list(ref_dict.values()))) if ref_dict else df['eia_refinery_utilization_us_total'].iloc[-1]
-            df.loc[df.index[-1], 'eia_gasoline_stocks_us_total'] = total_stocks
-            df.loc[df.index[-1], 'eia_refinery_utilization_us_total'] = avg_util
-            df.loc[df.index[-1], 'eia_refinery_net_production_padd1'] = prod_dict.get('padd1_finished_gasoline', df['eia_refinery_net_production_padd1'].iloc[-1])
-            df.loc[df.index[-1], 'eia_refinery_net_production_padd3'] = prod_dict.get('padd3_finished_gasoline', df['eia_refinery_net_production_padd3'].iloc[-1])
-            df.loc[df.index[-1], 'eia_pipeline_movements_padd3_to_padd1'] = mov_dict.get('padd3_to_padd1_pipeline_thousand_bpd', df['eia_pipeline_movements_padd3_to_padd1'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            eia_connector = EIADataConnector()
+            eia_data = eia_connector.fetch_padd_inventory_and_refinery_data() or {}
+            if eia_data:
+                stocks_dict = eia_data.get('gasoline_stocks_million_bbl', {})
+                ref_dict = eia_data.get('refinery_utilization', {})
+                prod_dict = eia_data.get('refiner_net_production_thousand_bpd', {})
+                mov_dict = eia_data.get('inter_padd_movements', {})
+                total_stocks = sum(stocks_dict.values()) if stocks_dict else df['eia_gasoline_stocks_us_total'].iloc[-1]
+                avg_util = float(np.mean(list(ref_dict.values()))) if ref_dict else df['eia_refinery_utilization_us_total'].iloc[-1]
+                df.loc[df.index[-1], 'eia_gasoline_stocks_us_total'] = total_stocks
+                df.loc[df.index[-1], 'eia_refinery_utilization_us_total'] = avg_util
+                df.loc[df.index[-1], 'eia_refinery_net_production_padd1'] = prod_dict.get('padd1_finished_gasoline', df['eia_refinery_net_production_padd1'].iloc[-1])
+                df.loc[df.index[-1], 'eia_refinery_net_production_padd3'] = prod_dict.get('padd3_finished_gasoline', df['eia_refinery_net_production_padd3'].iloc[-1])
+                df.loc[df.index[-1], 'eia_pipeline_movements_padd3_to_padd1'] = mov_dict.get('padd3_to_padd1_pipeline_thousand_bpd', df['eia_pipeline_movements_padd3_to_padd1'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge EIA petroleum balances: {e}")
         df['eia_gasoline_stocks_us_total'] = 225.0 + 15.0 * np.cos(2.0 * np.pi * (_day_of_year - 40.0) / 365.25)
@@ -874,12 +916,13 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        usda_connector = USDABiofuelConnector()
-        usda_data = usda_connector.fetch_ethanol_blendstock_costs() or {}
-        if len(df) > 0 and usda_data:
-            df.loc[df.index[-1], 'usda_ethanol_rack_price'] = usda_data.get('e100_ethanol_rack_price_per_gal', df['usda_ethanol_rack_price'].iloc[-1])
-            df.loc[df.index[-1], 'usda_rin_d6_credit_value'] = usda_data.get('rin_d6_credit_value_per_gal', df['usda_rin_d6_credit_value'].iloc[-1])
-            df.loc[df.index[-1], 'usda_e10_blendstock_offset'] = usda_data.get('calculated_e10_blendstock_offset_per_gal', df['usda_e10_blendstock_offset'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            usda_connector = USDABiofuelConnector()
+            usda_data = usda_connector.fetch_ethanol_blendstock_costs() or {}
+            if usda_data:
+                df.loc[df.index[-1], 'usda_ethanol_rack_price'] = usda_data.get('e100_ethanol_rack_price_per_gal', df['usda_ethanol_rack_price'].iloc[-1])
+                df.loc[df.index[-1], 'usda_rin_d6_credit_value'] = usda_data.get('rin_d6_credit_value_per_gal', df['usda_rin_d6_credit_value'].iloc[-1])
+                df.loc[df.index[-1], 'usda_e10_blendstock_offset'] = usda_data.get('calculated_e10_blendstock_offset_per_gal', df['usda_e10_blendstock_offset'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USDA biofuel feed: {e}")
         df['usda_ethanol_rack_price'] = 1.65 + 0.20 * np.sin(2.0 * np.pi * (_day_of_year - 120.0) / 365.25)
@@ -908,12 +951,12 @@ def create_feature_matrix(
 
     # 11. NOAA CO-OPS Coastal Marine Terminal Disruption Telemetry (Issue #368)
     try:
-        from src.data_ingestion import NOAACOOPSConnector
-        coops_connector = NOAACOOPSConnector()
-        coops_data = coops_connector.fetch_coastal_marine_telemetry()
         df['marine_terminal_surge_risk'] = 0.0
         df['marine_terminal_shallow_draft_risk'] = 0.0
-        if len(df) > 0:
+        if is_live_inference and len(df) > 0:
+            from src.data_ingestion import NOAACOOPSConnector
+            coops_connector = NOAACOOPSConnector()
+            coops_data = coops_connector.fetch_coastal_marine_telemetry()
             df.loc[df.index[-1], 'marine_terminal_surge_risk'] = coops_data.get('marine_terminal_surge_risk', 0.0)
             df.loc[df.index[-1], 'marine_terminal_shallow_draft_risk'] = coops_data.get('marine_terminal_shallow_draft_risk', 0.0)
     except Exception as e:
@@ -924,9 +967,6 @@ def create_feature_matrix(
 
     # 12. USACE Lock Performance Monitoring System (LPMS) Telemetry (Issues #181, #276, #565)
     try:
-        from src.usace_locks import USACELockConnector
-        usace_connector = USACELockConnector()
-        usace_data = usace_connector.fetch_ohio_river_lock_delays() or {}
         df['usace_ohio_river_lock_delay_hours'] = 1.4
         df['usace_lock_queue_vessels'] = 3.5
 
@@ -946,9 +986,13 @@ def create_feature_matrix(
                     df[col] = df[v_col].combine_first(df[col])
                     df.drop(columns=[v_col], inplace=True)
 
-        if len(df) > 0 and usace_data:
-            df.loc[df.index[-1], 'usace_ohio_river_lock_delay_hours'] = usace_data.get('usace_ohio_river_lock_delay_hours', df['usace_ohio_river_lock_delay_hours'].iloc[-1])
-            df.loc[df.index[-1], 'usace_lock_queue_vessels'] = usace_data.get('usace_lock_queue_vessels', df['usace_lock_queue_vessels'].iloc[-1])
+        if is_live_inference and len(df) > 0:
+            from src.usace_locks import USACELockConnector
+            usace_connector = USACELockConnector()
+            usace_data = usace_connector.fetch_ohio_river_lock_delays() or {}
+            if usace_data:
+                df.loc[df.index[-1], 'usace_ohio_river_lock_delay_hours'] = usace_data.get('usace_ohio_river_lock_delay_hours', df['usace_ohio_river_lock_delay_hours'].iloc[-1])
+                df.loc[df.index[-1], 'usace_lock_queue_vessels'] = usace_data.get('usace_lock_queue_vessels', df['usace_lock_queue_vessels'].iloc[-1])
     except Exception as e:
         logger.warning(f"Could not merge USACE lock delay features: {e}")
         df['usace_ohio_river_lock_delay_hours'] = 1.4
@@ -987,12 +1031,13 @@ def create_feature_matrix(
         df['bsee_gulf_evacuated_platforms'] = 0.0
 
         bsee_v_df = _load_vintage_timeseries(
-            "data/bsee_shutin_vintages.json",
+            "data/bsee_vintages.json",
             {
-                "oil_shutin_pct": "bsee_gulf_oil_shutin_pct_v",
-                "evacuated_platforms": "bsee_gulf_evacuated_platforms_v"
+                "bsee_gulf_oil_shutin_pct": "bsee_gulf_oil_shutin_pct_v",
+                "bsee_evacuated_platforms_count": "bsee_gulf_evacuated_platforms_v"
             },
-            as_of_cutoff=as_of_cutoff
+            as_of_cutoff=as_of_cutoff,
+            nested_key="data"
         )
         if not bsee_v_df.empty:
             df = pd.merge(df, bsee_v_df, on='date', how='left')
@@ -1005,6 +1050,42 @@ def create_feature_matrix(
         logger.warning(f"Could not merge BSEE offshore shut-in features: {e}")
         df['bsee_gulf_oil_shutin_pct'] = 0.0
         df['bsee_gulf_evacuated_platforms'] = 0.0
+    df = df.copy()
+
+    # 15. NASA FIRMS Satellite Thermal Flaring Anomaly (Issue #612, #615)
+    try:
+        df['firms_flaring_anomaly_z_score'] = 0.0
+
+        firms_v_df = _load_vintage_timeseries(
+            "data/firms_satellite_vintages.json",
+            {
+                "flaring_anomaly_z_score": "firms_flaring_anomaly_z_score_v"
+            },
+            as_of_cutoff=as_of_cutoff,
+            nested_key="data"
+        )
+        if not firms_v_df.empty:
+            df = pd.merge(df, firms_v_df, on='date', how='left')
+            if 'firms_flaring_anomaly_z_score_v' in df.columns:
+                df['firms_flaring_anomaly_z_score'] = df['firms_flaring_anomaly_z_score_v'].combine_first(df['firms_flaring_anomaly_z_score'])
+                df.drop(columns=['firms_flaring_anomaly_z_score_v'], inplace=True)
+
+        if is_live_inference and len(df) > 0:
+            from src.firms_satellite_feed import FIRMSSatelliteConnector
+            firms_connector = FIRMSSatelliteConnector()
+            hub_mapping = {
+                "Tulsa_OK": "west_tulsa",
+                "Newark_DE": "delaware_city",
+                "Oakland_CA": "richmond_sf_bay",
+                "Cincinnati_OH": "catlettsburg_tri_state",
+            }
+            hub_key = hub_mapping.get(region, "baytown_houston")
+            firms_tel = firms_connector.fetch_hub_flaring_telemetry(hub_key)
+            if firms_tel:
+                df.loc[df.index[-1], 'firms_flaring_anomaly_z_score'] = firms_tel.get('flaring_anomaly_z_score', df['firms_flaring_anomaly_z_score'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Could not merge FIRMS satellite flaring anomaly: {e}")
+        df['firms_flaring_anomaly_z_score'] = 0.0
     df = df.copy()
 
     # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing & Issue #355)

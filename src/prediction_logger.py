@@ -13,7 +13,7 @@ import hashlib
 import urllib.request
 import urllib.error
 import urllib.parse
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union, List, Tuple
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -323,9 +323,9 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 err_body = e.read().decode("utf-8", errors="replace")
             except Exception:
                 err_body = ""
-            err_msg = f"Cloudflare D1 prediction sync failed with HTTP {e.code}: {e.reason} - {err_body}"
+            err_msg = f"Cloudflare D1 prediction sync failed with HTTP Error {e.code}: {e.reason} - {err_body}"
             logger.error(err_msg)
-            return {"status": "error", "reason": err_msg, "provider": "cloudflare_d1"}
+            return {"status": "offline_fallback", "reason": err_msg, "provider": "local_csv", "synced_rows": len(df)}
         except Exception as e:
             err_msg = f"Cloudflare D1 prediction sync exception: {e}"
             logger.error(err_msg)

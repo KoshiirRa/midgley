@@ -185,14 +185,30 @@ class FirmsSatelliteFeedConnector:
                     if response.status == 200:
                         csv_data = response.read().decode("utf-8")
                         lines = [l.strip() for l in csv_data.strip().split("\n") if l.strip()]
-                        if len(lines) > 1:
-                            df = pd.read_csv(pd.io.common.StringIO(csv_data))
-                            total_frp = float(df["frp"].sum()) if "frp" in df.columns else 0.0
-                            pixel_count = int(len(df))
-                            max_bright = float(df["bright_ti4"].max()) if "bright_ti4" in df.columns else 300.0
+                        if len(lines) >= 1:
+                            if len(lines) > 1:
+                                df = pd.read_csv(pd.io.common.StringIO(csv_data))
+                                total_frp = float(df["frp"].sum()) if "frp" in df.columns else 0.0
+                                pixel_count = int(len(df))
+                                max_bright = float(df["bright_ti4"].max()) if "bright_ti4" in df.columns else 300.0
+                            else:
+                                # 0 detections is authentic zero flaring (Issue #612)
+                                total_frp = 0.0
+                                pixel_count = 0
+                                max_bright = 295.0
 
                             baseline = hub_info["baseline_daily_frp_mw"]
-                            anomaly_z = (total_frp - baseline) / max(baseline * 0.4, 2.0)
+
+                            # Compute rolling 7-day vs 30-day baseline anomaly if historical vintages exist (Issue #612)
+                            recent_frps = self._get_recent_vintage_frp(hub_code, days=30)
+                            if len(recent_frps) >= 14:
+                                mu_30 = float(np.mean(recent_frps))
+                                std_30 = float(max(np.std(recent_frps), 2.0))
+                                mean_7d = float(np.mean(recent_frps[-7:] + [total_frp]))
+                                anomaly_z = (mean_7d - mu_30) / std_30
+                            else:
+                                anomaly_z = (total_frp - baseline) / max(baseline * 0.4, 2.0)
+
                             is_major_upset = anomaly_z >= 2.5 and total_frp >= (baseline * 2.0)
 
                             res = {
@@ -222,18 +238,37 @@ class FirmsSatelliteFeedConnector:
         # Fallback to nominal operational baseline
         return self._build_nominal_fallback(hub_code, today_str)
 
+    def _get_recent_vintage_frp(self, hub_code: str, days: int = 30) -> List[float]:
+        """Loads trailing authentic FRP observations from vintage store (Issue #612)."""
+        if not os.path.exists(FIRMS_VINTAGES_FILE):
+            return []
+        try:
+            with open(FIRMS_VINTAGES_FILE, "r", encoding="utf-8") as f:
+                vintages = json.load(f)
+            frps = []
+            for v in vintages:
+                data = v.get("data", {})
+                if data.get("hub_code") == hub_code and data.get("is_live", False):
+                    frp = data.get("total_frp_mw")
+                    if frp is not None:
+                        frps.append(float(frp))
+            return frps[-days:]
+        except Exception:
+            return []
+
     def _build_nominal_fallback(self, hub_code: str, date_str: Optional[str] = None) -> Dict[str, Any]:
         today_str = date_str or datetime.now(timezone.utc).strftime("%Y-%m-%d")
         hub_info = self.hubs.get(hub_code, {"name": hub_code, "baseline_daily_frp_mw": 10.0})
         baseline = hub_info.get("baseline_daily_frp_mw", 10.0)
 
+        # Do NOT save test fallback mocks into persistent vintage store (Issue #612, #613)
         res = {
             "hub_code": hub_code,
             "name": hub_info.get("name", hub_code),
             "date": today_str,
             "total_frp_mw": baseline,
-            "thermal_pixel_count": 2,
-            "max_brightness_temp_kelvin": 325.0,
+            "thermal_pixel_count": 0,
+            "max_brightness_temp_kelvin": 300.0,
             "baseline_frp_mw": baseline,
             "flaring_anomaly_z_score": 0.0,
             "is_major_flaring_upset": False,
@@ -241,7 +276,6 @@ class FirmsSatelliteFeedConnector:
             "is_live": False,
             "recorded_at": datetime.now(timezone.utc).isoformat()
         }
-        save_firms_vintage_record(res)
         return res
 
     def fetch_all_refining_corridors(self) -> Dict[str, Any]:

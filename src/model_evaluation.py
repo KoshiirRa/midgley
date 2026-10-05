@@ -36,14 +36,15 @@ def diebold_mariano_test(
     e1: np.ndarray,
     e2: np.ndarray,
     horizon: int = 1,
-    loss_type: str = "absolute"
+    loss_type: str = "absolute",
+    alternative: str = "two-sided"
 ) -> Tuple[float, float]:
     """
     Performs the Diebold-Mariano test for predictive accuracy equality with
-    Harvey-Leybourne-Newbold (HLN 1997) small-sample and multi-step horizon correction. (Issue #362)
+    Harvey-Leybourne-Newbold (HLN 1997) small-sample and multi-step horizon correction. (Issue #362, #609)
     
     H0: E[d_t] = 0 (Both models have equal predictive accuracy)
-    H1: E[d_t] != 0
+    H1: E[d_t] != 0 (two-sided) or E[d_t] > 0 (greater: candidate model 2 is superior to model 1)
     
     Returns:
         (dm_stat, p_value)
@@ -86,7 +87,12 @@ def diebold_mariano_test(
     dm_stat_corrected = dm_stat * hln_factor
 
     # Student-t distribution with T - 1 degrees of freedom
-    p_value = float(2.0 * (1.0 - stats.t.cdf(np.abs(dm_stat_corrected), df=T - 1)))
+    if alternative == "greater":
+        p_value = float(1.0 - stats.t.cdf(dm_stat_corrected, df=T - 1))
+    elif alternative == "less":
+        p_value = float(stats.t.cdf(dm_stat_corrected, df=T - 1))
+    else:  # two-sided
+        p_value = float(2.0 * (1.0 - stats.t.cdf(np.abs(dm_stat_corrected), df=T - 1)))
     return round(float(dm_stat_corrected), 4), round(float(p_value), 4)
 
 
@@ -173,17 +179,28 @@ def clark_west_test(
     e2_sq = (yt - y2) ** 2
     adj = (y1 - y2) ** 2
     f = e1_sq - (e2_sq - adj)
-
     mean_f = float(np.mean(f))
+
+    # Autocovariance estimation up to lag h - 1 (Unweighted rectangular sum for multi-step horizon, Issue #609)
     gamma0 = float(np.var(f, ddof=0))
     sum_cov = 0.0
     for k in range(1, max(1, horizon)):
         cov_k = float(np.mean((f[k:] - mean_f) * (f[:-k] - mean_f)))
-        weight = 1.0 - (k / max(1, horizon))  # Bartlett kernel
-        sum_cov += 2.0 * weight * cov_k
+        sum_cov += 2.0 * cov_k
 
-    long_run_var = max(1e-8, gamma0 + sum_cov)
+    long_run_var = gamma0 + sum_cov
+    if long_run_var <= 0:
+        # Fallback to Bartlett weights if rectangular long-run variance estimate is non-positive
+        sum_cov_bartlett = 0.0
+        for k in range(1, max(1, horizon)):
+            cov_k = float(np.mean((f[k:] - mean_f) * (f[:-k] - mean_f)))
+            weight = 1.0 - (k / max(1, horizon))
+            sum_cov_bartlett += 2.0 * weight * cov_k
+        long_run_var = max(1e-8, gamma0 + sum_cov_bartlett)
+
     se = np.sqrt(long_run_var / T)
+    if se <= 1e-12:
+        return 0.0, 0.50
     cw_stat = mean_f / se
 
     # One-sided test (H1: mean_f > 0)
@@ -192,7 +209,7 @@ def clark_west_test(
 
 
 def adjust_pvalues_holm_bonferroni(p_values: List[float]) -> List[float]:
-    """Applies step-down Holm-Bonferroni Family-Wise Error Rate (FWER) control (Issue #567)."""
+    """Applies step-down Holm-Bonferroni Family-Wise Error Rate (FWER) control (Issue #567, #609)."""
     m = len(p_values)
     if m == 0:
         return []
@@ -208,7 +225,7 @@ def adjust_pvalues_holm_bonferroni(p_values: List[float]) -> List[float]:
 
 
 def adjust_pvalues_benjamini_hochberg(p_values: List[float]) -> List[float]:
-    """Applies step-up Benjamini-Hochberg False Discovery Rate (FDR) control (Issue #567)."""
+    """Applies step-up Benjamini-Hochberg False Discovery Rate (FDR) control (Issue #567, #609)."""
     m = len(p_values)
     if m == 0:
         return []
@@ -221,6 +238,22 @@ def adjust_pvalues_benjamini_hochberg(p_values: List[float]) -> List[float]:
         running_min = min(running_min, adj)
         adjusted[orig_idx] = min(1.0, running_min)
     return [round(p, 4) for p in adjusted]
+
+
+def adjust_family_pvalues(p_values: List[float], method: str = "holm") -> List[float]:
+    """
+    Applies Family-Wise Error Rate (FWER) or False Discovery Rate (FDR) adjustments
+    across a family of multi-horizon and multi-region test p-values (Issue #609).
+    """
+    if not p_values:
+        return []
+    m_lower = method.lower()
+    if m_lower in ["holm", "holm-bonferroni", "fwer"]:
+        return adjust_pvalues_holm_bonferroni(p_values)
+    elif m_lower in ["bh", "benjamini-hochberg", "fdr"]:
+        return adjust_pvalues_benjamini_hochberg(p_values)
+    else:
+        raise ValueError(f"Unknown p-value adjustment method: {method}")
 
 
 class ModelHierarchyEvaluator:
@@ -331,12 +364,11 @@ class ModelHierarchyEvaluator:
 
             uplift = ((tier0_mae - mae) / tier0_mae) * 100.0 if tier0_mae > 0 else 0.0
 
-            # Diebold-Mariano test vs Tier 0 (Naive)
-            dm_stat, dm_pval = diebold_mariano_test(tier0_errors, errors, horizon=horizon)
+            # Diebold-Mariano test vs Tier 0 (Naive) with one-sided superiority test (Issue #609)
+            dm_stat, dm_pval = diebold_mariano_test(tier0_errors, errors, horizon=horizon, alternative="greater")
 
-            # Clark-West (2007) test vs previous nested tier (Issue #567)
+            # Clark-West (2007) test vs previous nested tier (Issue #567, #609)
             cw_stat_prev, cw_pval_prev = clark_west_test(y_test_arr, prev_tier_preds, preds, horizon=horizon)
-            cw_stat_naive, cw_pval_naive = clark_west_test(y_test_arr, tier0_pred, preds, horizon=horizon)
 
             tier_results[tier_key] = {
                 "tier_name": tier_desc,
@@ -349,8 +381,6 @@ class ModelHierarchyEvaluator:
                 "dm_p_value_vs_naive": dm_pval,
                 "cw_stat_vs_prev": cw_stat_prev,
                 "cw_p_value_vs_prev": cw_pval_prev,
-                "cw_stat_vs_naive": cw_stat_naive,
-                "cw_p_value_vs_naive": cw_pval_naive,
                 "pinball_loss_q50": round(compute_pinball_loss(y_test_arr, preds, 0.5), 4)
             }
             prev_tier_preds = preds
@@ -370,11 +400,12 @@ class ModelHierarchyEvaluator:
             tier_results[k]["cw_p_value_holm"] = holm_cw[i]
             tier_results[k]["cw_p_value_bh"] = bh_cw[i]
 
-        # Statistical Promotion Decision Gate (Issue #362, #435, #567)
+        # Statistical Promotion Decision Gate (Issue #362, #435, #567, #609)
         tier4 = tier_results["Tier_4_Full_Hybrid"]
         promotion_gate_passed = bool(
             tier4["persistence_uplift_pct"] > 0.0
-            and (tier4["dm_p_value_vs_naive"] < 0.05 or tier4["cw_p_value_vs_naive"] < 0.05)
+            and tier4["dm_stat_vs_naive"] > 0.0
+            and tier4["dm_p_value_vs_naive"] < 0.05
         )
 
         return {

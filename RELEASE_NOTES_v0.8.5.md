@@ -57,6 +57,44 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 - **Workflow Environment Parity**: Updated [`.github/workflows/weekly_model_review.yml`](.github/workflows/weekly_model_review.yml) to inject missing `HINDSIGHT_API_KEY` and `HINDSIGHT_BANK_ID` secrets into the `Open Weekly GitHub Issue Report & Recommendations` step, ensuring parity across all production review steps.
 - **Historical Prediction Anomaly Reconciliation**: Executed [`scripts/reconcile_hindsight_memory.py`](scripts/reconcile_hindsight_memory.py) across the October 1–5, 2026 window, successfully reconciling and dual-dispatching 16 previously un-synced prediction anomalies (`DIRECTIONAL_FLIP` and `LARGE_OVERESTIMATE` shocks) into the `Midgley` cloud memory bank, restoring continuous World Fact extraction.
 
+### 10. Econometric Model Hierarchy & Statistical Superiority Gating (Issue #609)
+- **Rectangular Multi-Step Covariance in Clark-West**: Updated `clark_west_test()` in [`src/model_evaluation.py`](src/model_evaluation.py) to use unweighted rectangular covariance estimation across lags $k \in [1 .. h-1]$ for multi-step horizons, eliminating Bartlett window down-weighting on short lags and falling back to Bartlett only if positive semi-definiteness fails.
+- **Strictly One-Sided Diebold-Mariano Testing**: Extended `diebold_mariano_test()` with `alternative="greater"` support to test for statistically significant superiority against naive baselines ($H_1: \text{loss}_{\text{naive}} > \text{loss}_{\text{candidate}}$).
+- **Price Change Evaluation & Nested CW Scoping**: Refactored `evaluate_5tier_hierarchy()` to evaluate predicted price returns/changes ($\Delta y$) rather than raw price levels, restricted Clark-West testing strictly to nested tiers ($k$ vs $k-1$), and gated Tier promotion on positive persistence uplift and statistically significant one-sided Diebold-Mariano superiority ($p < 0.05$).
+- **Multi-Horizon FWER / FDR Corrections**: Implemented `adjust_family_pvalues()` supporting Holm-Bonferroni (Family-Wise Error Rate) and Benjamini-Hochberg (False Discovery Rate) corrections across the full family of evaluated regions $\times$ horizons in [`scripts/evaluate_model_hierarchy.py`](scripts/evaluate_model_hierarchy.py).
+
+### 11. Dynamic Kalman Filter Metro Nowcasting & Production Pipeline Anchoring (Issue #610)
+- **Numerical MLE Parameter Estimation**: Implemented full prediction-error log-likelihood evaluation `compute_log_likelihood()` and numerical MLE optimization via `scipy.optimize.minimize(method="L-BFGS-B")` in [`src/metro_nowcast.py`](src/metro_nowcast.py).
+- **Observable Reference Error Optimization**: Replaced hardcoded AAA reference noise variance ($\sigma^2_{\text{AAA}} = 0.0025$) with dynamic MLE estimation alongside GasBuddy and EIA measurement error variances and persistent systematic biases.
+- **Production Pipeline Anchoring**: Wired `nowcast_metro_price()` into `run_regional_pipeline()` in [`src/locations/runner.py`](src/locations/runner.py), dynamically anchoring starting retail prices to the Kalman-filtered state prior to multi-step horizon forecasting.
+
+### 12. Wholesale RBOB Volatility Engine & Predictive Density Distribution (Issue #611)
+- **Analytic Closed-Form CRPS**: Replaced the truncated 200-point trapezoidal approximation in `StudentTPredictiveDistribution` with exact closed-form Continuous Ranked Probability Score (CRPS) for both Student-$t$ (via complete beta functions) and Gaussian distributions (Gneiting & Raftery 2007).
+- **Dynamic Conditional Variance Standardization**: Refactored `RBOBVolatilityEngine` to standardize log returns by the time-varying GARCH conditional standard deviation path ($z_t = \varepsilon_t / \sigma_t$) before fitting Student-$t$ tail degrees of freedom ($\nu$).
+- **Production Wiring into National Model**: Wired `WholesaleVolatilityEngine` into [`src/locations/national/main.py`](src/locations/national/main.py) and [`src/models.py`](src/models.py) to forecast multi-horizon wholesale predictive density cones (`q01` through `q99`).
+
+### 13. Data Feed Remediation & Midwest Edgeworth Cycle Restoration (Issue #612)
+- **Strict Midwestern Edgeworth Cycle Diagnostics**: Refactored `EdgeworthCycleDetector.is_cycling` in [`src/edgeworth_cycle.py`](src/edgeworth_cycle.py) to require strict asymmetry criteria ($\ge 60\%$ negative returns, positive skewness $\ge 0.80$, run length $\ge 2.0$, and $\ge 2$ discrete restoration jumps), preventing false positives on drifting random walks.
+- **Restoration Hazard Regularization**: Added feature standardization and L2 regularization to `RestorationHazardModel.fit()`, and wired hazard jump trajectories into [`src/locations/cincinnati/regional.py`](src/locations/cincinnati/regional.py) and [`src/locations/runner.py`](src/locations/runner.py) for hubs with `has_edgeworth_cycles=True`.
+- **NASA FIRMS Flaring Telemetry Repair**: Corrected zero detections to mean zero flaring activity (not API errors), computed 7d vs 30d Fire Radiative Power (FRP) anomaly z-scores, and eliminated unkeyed mock records.
+- **NOAA Coordinate Hub Routing**: Correctly routed all 10 metro keys to specific refinery/pipeline hub coordinates in `get_hub_coordinates()` in [`src/noaa_weather.py`](src/noaa_weather.py).
+
+### 14. Point-in-Time Cutoff Row Invariance & Test Sandbox Isolation (Issue #613)
+- **Cutoff-Row Invariance Remediation**: Audited all live connectors in [`src/feature_engineering.py`](src/feature_engineering.py) (FERC, USGS water/seismic, AQI, CEC, EIA, USDA, NOAA CO-OPS, USACE) and gated `.loc[df.index[-1], ...]` overwrites with `if is_live_inference:`, guaranteeing strict point-in-time invariance between truncated datasets and historical datasets.
+- **BSEE Vintage Alignment**: Fixed BSEE offshore shut-in vintage loading to map from `data/bsee_vintages.json`.
+- **Production Data Integrity Verification**: Added `verify_data_directory_unpolluted` session fixture in [`tests/conftest.py`](tests/conftest.py) to verify via SHA256 checksums that no tracked files in `data/` or `docs/` are modified during test runs.
+- **Value-Level Analytical Math Tests**: Created [`tests/test_value_math.py`](tests/test_value_math.py) covering GARCH variance recursion, closed-form CRPS, Kalman log-likelihood curvature, Clark-West statistics, and FWER/FDR p-value adjustments.
+
+### 15. REST API Security Hardening & Client Resilience (Issue #614)
+- **Sliding-Window Rate Limiting**: Added strict sliding-window rate limiters (60s window) across all 49 API routes, 120 RPM unauthenticated IP limiter, and 15 RPM authentication failure brute-force throttle in [`src/api_server.py`](src/api_server.py) and [`src/key_manager.py`](src/key_manager.py).
+- **PBKDF2 Verification Caching & Secret Masking**: Added thread-safe PBKDF2 hash cache with LRU eviction and integrated `RedactingLoggingFilter` to redact API keys and bearer tokens from logs.
+- **Database Circuit Breaker**: Added consecutive failure tracking and automatic circuit tripping in [`src/db/client.py`](src/db/client.py).
+- **Batch Insertion Resilience**: Hardened prediction evaluation batch inserts in [`src/prediction_logger.py`](src/prediction_logger.py) with `WHERE EXISTS (...)` and individual statement fallbacks.
+
+### 16. Component Wiring Audit & Architecture Alignment (Issue #615)
+- **Comprehensive Production Caller Audit**: Established active non-test production callers for `metro_nowcast`, `volatility_engine`, `locations/specs`, `edgeworth_cycle`, and `firms_satellite_feed`, verified via automated AST test [`tests/test_caller_audit.py`](tests/test_caller_audit.py).
+- **Repo-Wide Version Harmonization**: Aligned version numbers across `pyproject.toml`, `src/__init__.py`, `src/version.py`, `src/http_client.py`, and `RELEASE_MANIFEST.json` to `0.8.5`.
+
 ---
 
 ## 📦 Closed Issues
@@ -71,3 +109,10 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 | **#606** | `fix(workflows): Fix dirty-tree guard, isolate Headline Arena sync, and ensure resilient forecast ledger commits` | CI/CD / Workflows |
 | **#607** | `fix(modeling): Reconcile asymmetric ECM retail forecasting with genuine retail price history and distinct model versioning` | Econometrics / Modeling |
 | **#608** | `fix(ground-truth): Ingest authentic regional retail gasoline price series and eliminate cross-geography fallbacks` | Ground Truth / EIA |
+| **#609** | `fix(econometrics): Standardize Clark-West covariance, one-sided Diebold-Mariano testing, and multi-horizon FWER/FDR adjustments` | Econometrics / Evaluation |
+| **#610** | `fix(nowcast): Standardize state-space nowcast likelihood, reference observation variance estimation, and production wiring` | Nowcasting / State-Space |
+| **#611** | `fix(volatility): Standardize RBOB volatility distribution engine, closed-form CRPS, and production density cone forecasting` | Volatility / Predictive Density |
+| **#612** | `fix(data-feeds): Repair FIRMS flaring anomaly telemetry, coordinate hub routing in weather, and Midwestern cycle modeling` | Data Ingestion / Feeds |
+| **#613** | `fix(testing): Ensure cutoff-row point-in-time invariance, isolate test environment sandbox, and add value-level math tests` | Testing / Quality Assurance |
+| **#614** | `fix(api): Harden API server rate limiting, PBKDF2 auth cache, SQLite circuit breaker, and evaluation batch inserts` | API / Security / Database |
+| **#615** | `docs(alignment): Audit component production callers, harmonize versioning to v0.8.5, and update multi-agent specifications` | Architecture / Documentation |

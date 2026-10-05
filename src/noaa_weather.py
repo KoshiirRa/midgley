@@ -660,10 +660,45 @@ class PirateWeatherConnector:
         self.hubs = PIRATE_WEATHER_REFINING_HUBS
 
     def get_hub_coordinates(self, hub_name_or_code: str) -> Tuple[float, float]:
-        """Resolves hub name or key to (lat, lon) tuple."""
+        """Resolves hub name or key to (lat, lon) tuple across all regional calibration hubs (Issue #442, #612)."""
         key = hub_name_or_code.lower().strip()
         if key in self.hubs:
             return self.hubs[key]["lat"], self.hubs[key]["lon"]
+
+        REGION_TO_HUB_MAP = {
+            "tulsa": "tulsa_cushing",
+            "tulsa_ok": "tulsa_cushing",
+            "cushing": "tulsa_cushing",
+            "newark": "delaware_city",
+            "newark_de": "delaware_city",
+            "delaware": "delaware_city",
+            "delaware_city": "delaware_city",
+            "cincinnati": "cincinnati_catlettsburg",
+            "cincinnati_oh": "cincinnati_catlettsburg",
+            "cincinnati_ky": "cincinnati_catlettsburg",
+            "catlettsburg": "cincinnati_catlettsburg",
+            "oakland": "oakland_richmond",
+            "oakland_ca": "oakland_richmond",
+            "bayarea": "oakland_richmond",
+            "bay_area": "oakland_richmond",
+            "richmond": "oakland_richmond",
+            "greenville": "greenville_selma",
+            "greenville_nc": "greenville_selma",
+            "selma": "greenville_selma",
+            "charlotte": "charlotte_paw_creek",
+            "charlotte_nc": "charlotte_paw_creek",
+            "paw_creek": "charlotte_paw_creek",
+            "port_st_lucie": "port_st_lucie_everglades",
+            "port_st_lucie_fl": "port_st_lucie_everglades",
+            "everglades": "port_st_lucie_everglades",
+            "national": "gulf_coast_houston",
+            "houston": "gulf_coast_houston",
+            "gulf_coast": "gulf_coast_houston"
+        }
+        hub_mapped = REGION_TO_HUB_MAP.get(key)
+        if hub_mapped and hub_mapped in self.hubs:
+            return self.hubs[hub_mapped]["lat"], self.hubs[hub_mapped]["lon"]
+
         for k, v in self.hubs.items():
             if key in k or key in v["name"].lower():
                 return v["lat"], v["lon"]
@@ -764,7 +799,6 @@ class PirateWeatherConnector:
             global_cache.set(cache_key, res, ttl_seconds=86400 * 7)
         except Exception:
             pass
-        save_pirateweather_vintage_record(res)
         return res
 
     def fetch_historical_range(

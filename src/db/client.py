@@ -43,7 +43,10 @@ class DatabaseClient:
             self.is_turso = bool(self.db_url and self.auth_token)
 
         self.sqlite_path = sqlite_path or os.environ.get("MIDGLEY_DB_PATH", DEFAULT_SQLITE_PATH)
-        
+        os.makedirs(os.path.dirname(os.path.abspath(self.sqlite_path)), exist_ok=True)
+        self._init_sqlite_pragmas()
+        self._init_sqlite_schema()
+
         if self.is_turso:
             # Normalize HTTP endpoint for Turso REST API v2
             if self.db_url.startswith("libsql://"):
@@ -56,13 +59,10 @@ class DatabaseClient:
                 self.pipeline_url = f"{self.http_url}/v2/pipeline"
             else:
                 self.pipeline_url = self.http_url
+            self.init_schema()
         else:
             self.http_url = None
             self.pipeline_url = None
-            os.makedirs(os.path.dirname(os.path.abspath(self.sqlite_path)), exist_ok=True)
-            self._init_sqlite_pragmas()
-
-        self.init_schema()
 
     def _get_sqlite_conn(self) -> sqlite3.Connection:
         """Creates SQLite connection with foreign keys and busy timeout enabled (Issue #577 N-6)."""
@@ -81,6 +81,30 @@ class DatabaseClient:
                 conn.execute("PRAGMA busy_timeout = 5000;")
         except Exception as e:
             logger.debug(f"Notice initializing SQLite pragmas: {e}")
+
+    def _init_sqlite_schema(self):
+        """Idempotently initializes local SQLite tables and indexes from schema.sql (Issue #614 T-34)."""
+        if not os.path.exists(SCHEMA_PATH):
+            logger.warning(f"Schema file not found at {SCHEMA_PATH}")
+            return
+
+        with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
+            schema_sql = f.read()
+
+        statements = [s.strip() for s in schema_sql.split(";") if s.strip()]
+        for stmt in statements:
+            try:
+                self._execute_sqlite(stmt, ())
+            except Exception as e:
+                logger.debug(f"Notice executing SQLite schema statement: {e}")
+
+    def _trip_circuit_breaker(self, reason: str = ""):
+        """Trips Turso circuit breaker to local SQLite and guarantees local schema readiness (Issue #614 T-34)."""
+        self.is_turso = False
+        os.makedirs(os.path.dirname(os.path.abspath(self.sqlite_path)), exist_ok=True)
+        self._init_sqlite_pragmas()
+        self._init_sqlite_schema()
+        logger.warning(f"Turso circuit breaker tripped ({reason}). Falling back to local SQLite at {self.sqlite_path}.")
 
     def init_schema(self):
         """Idempotently initializes tables and indexes from schema.sql."""
@@ -189,8 +213,7 @@ class DatabaseClient:
                 out_rows.append(row_dict)
             return out_rows
         except Exception as e:
-            self.is_turso = False
-            logger.warning(f"Turso execution failed: {e}. Tripping circuit breaker and falling back to local SQLite for this session.")
+            self._trip_circuit_breaker(str(e))
             return self._execute_sqlite(sql, params)
 
     def _execute_batch_turso(self, statements: List[Tuple[str, Union[Tuple, List]]]) -> None:
@@ -226,8 +249,7 @@ class DatabaseClient:
                     if res.get("type") == "error":
                         raise RuntimeError(f"Turso batch error: {res.get('error', {}).get('message')}")
             except Exception as e:
-                self.is_turso = False
-                logger.warning(f"Turso batch execution failed: {e}. Tripping circuit breaker and falling back to local SQLite for remaining {len(statements) - i} statements.")
+                self._trip_circuit_breaker(str(e))
                 remaining_statements = statements[i:]
                 self._execute_batch_sqlite(remaining_statements)
                 return

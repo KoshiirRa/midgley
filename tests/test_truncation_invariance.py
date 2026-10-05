@@ -123,3 +123,50 @@ def test_truncation_invariance_causal_decay(synthetic_multimodal_dataset):
             trunc_val = feat_truncated[feat_truncated["date"] == latest_common_date][col].values[0]
             full_val = feat_full[feat_full["date"] == latest_common_date][col].values[0]
             assert np.isclose(trunc_val, full_val, atol=1e-6), f"Decay feature {col} differs at {latest_common_date}!"
+
+
+def test_truncation_invariance_cutoff_row(synthetic_multimodal_dataset):
+    """
+    Verifies that the final observation row (cutoff row) of a truncated dataset
+    has identical feature values to the corresponding historical row in the full dataset (Issue #613 T-33).
+    Ensures zero live connector pollution on the cutoff row.
+    """
+    market_df, events_df = synthetic_multimodal_dataset
+    cutoff_date = market_df["date"].iloc[80]
+
+    market_truncated = market_df[market_df["date"] <= cutoff_date].copy()
+    events_truncated = events_df[events_df["date"] <= cutoff_date].copy()
+
+    with patch("src.feature_engineering.fetch_cboe_crude_volatility_ovx", return_value=pd.DataFrame()), \
+         patch("src.feature_engineering.fetch_baker_hughes_rig_counts", return_value=pd.DataFrame()):
+        lbl_trunc, unlbl_trunc = create_feature_matrix(
+            market_truncated, events_truncated, region="National", return_unlabelled_frame=True
+        )
+        lbl_full, unlbl_full = create_feature_matrix(
+            market_df, events_df, region="National", return_unlabelled_frame=True
+        )
+
+    # In the truncated dataset, cutoff_date is the final row (unlabelled contemporary inference row)
+    cutoff_row_trunc = unlbl_trunc[unlbl_trunc["date"] == cutoff_date]
+    assert not cutoff_row_trunc.empty, f"Cutoff row {cutoff_date} not found in truncated dataset!"
+
+    # In the full dataset, cutoff_date is at index 80 (part of labelled frame)
+    full_matching_row = lbl_full[lbl_full["date"] == cutoff_date]
+    if full_matching_row.empty:
+        full_matching_row = unlbl_full[unlbl_full["date"] == cutoff_date]
+    assert not full_matching_row.empty, f"Matching row {cutoff_date} not found in full dataset!"
+
+    target_cols = [c for c in cutoff_row_trunc.columns if "target" in c]
+    feature_cols = [c for c in cutoff_row_trunc.columns if c not in ["date"] + target_cols]
+
+    for col in feature_cols:
+        if col in full_matching_row.columns:
+            v_trunc = cutoff_row_trunc[col].iloc[0]
+            v_full = full_matching_row[col].iloc[0]
+            if isinstance(v_trunc, (int, float, np.number)) and isinstance(v_full, (int, float, np.number)):
+                if not (np.isnan(v_trunc) and np.isnan(v_full)):
+                    np.testing.assert_allclose(
+                        v_trunc, v_full, rtol=1e-5, atol=1e-5,
+                        err_msg=f"Cutoff row lookahead mismatch in feature column '{col}' at {cutoff_date}!"
+                    )
+

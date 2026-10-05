@@ -39,9 +39,10 @@ from src.prediction_logger import (
 from src.regional_metadata import list_all_regional_metadata
 from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
 from src.tokentab_accounting import token_tab_manager
-from src.key_manager import global_key_manager
+from src.key_manager import global_key_manager, setup_logging_redaction
 from src.version import get_version, get_model_version
 
+setup_logging_redaction()
 logger = logging.getLogger(__name__)
 
 MIDGLEY_ADMIN_SECRET = os.environ.get("MIDGLEY_ADMIN_SECRET")
@@ -453,52 +454,110 @@ BatchCombinedRequest.model_rebuild()
 HeadlineArenaSubmitRequest.model_rebuild()
 
 
-# Dynamic sliding-window rate limit & unified auth middleware (Issues #437, #571)
+# Dynamic sliding-window rate limit & unified auth middleware (Issues #437, #571, #614 T-26)
 @app.middleware("http")
 async def unified_auth_and_rate_limit_middleware(request: Request, call_next):
     expected_token = os.environ.get("MIDGLEY_API_KEY")
     is_testing = os.environ.get("TESTING") == "1"
 
-    if expected_token and not is_testing:
-        path = request.url.path
-        is_public = (
-            path == "/"
-            or path.startswith((
-                "/docs", "/redoc", "/openapi.json", "/.well-known", "/health",
-                "/status", "/metrics", "/api/v1/metrics", "/robots.txt", "/favicon.ico",
-                "/static", "/api/v1/webhooks", "/api/v1/events/webhook",
-                "/api/v1/events/queue-consumer", "/api/v1/events/poll"
-            ))
-        )
+    # Derive client IP identifier for rate limiting
+    client_ip = request.headers.get("x-forwarded-for", "").split(",")[0].strip() or (request.client.host if request.client else "127.0.0.1")
 
-        # Check for administrative headers
-        admin_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
-        admin_header = request.headers.get("X-Admin-Secret")
-        is_admin_auth = bool(admin_secret and admin_header and hmac.compare_digest(admin_header.encode("utf-8"), admin_secret.encode("utf-8")))
+    path = request.url.path
+    is_public = (
+        path == "/"
+        or path.startswith((
+            "/docs", "/redoc", "/openapi.json", "/.well-known", "/health",
+            "/status", "/metrics", "/api/v1/metrics", "/robots.txt", "/favicon.ico",
+            "/static", "/api/v1/webhooks", "/api/v1/events/webhook",
+            "/api/v1/events/queue-consumer", "/api/v1/events/poll"
+        ))
+    )
 
-        if not is_public and not is_admin_auth:
-            auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
-            token = request.query_params.get("api_key")
-            if auth_header:
-                if auth_header.startswith("Bearer "):
-                    token = auth_header[7:].strip()
+    # Check for administrative headers
+    admin_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
+    admin_header = request.headers.get("X-Admin-Secret")
+    is_admin_auth = bool(admin_secret and admin_header and hmac.compare_digest(admin_header.encode("utf-8"), admin_secret.encode("utf-8")))
+
+    # Extract user auth token
+    auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
+    token = request.query_params.get("api_key")
+    if auth_header:
+        if auth_header.startswith("Bearer "):
+            token = auth_header[7:].strip()
+        else:
+            token = auth_header.strip()
+
+    # Rate limiting bucket resolution
+    rl_key = None
+    rl_limit = 60
+
+    if not is_testing:
+        if token:
+            # Check if global master token
+            if expected_token and hmac.compare_digest(token.encode("utf-8"), expected_token.encode("utf-8")):
+                rl_key = "mg_global_master"
+                rl_limit = 1000
+            else:
+                is_valid, key_info, _ = await global_key_manager.verify_key_async(token)
+                if is_valid and key_info:
+                    rl_key = key_info["key_prefix"]
+                    rl_limit = key_info.get("rate_limit_rpm", 30)
+                    request.state.key_info = key_info
                 else:
-                    token = auth_header.strip()
+                    # Failed authentication attempt -> throttle to prevent PBKDF2/credential flood (15 RPM)
+                    rl_key = f"failed_auth_{client_ip}"
+                    rl_limit = 15
+        elif is_admin_auth:
+            rl_key = "admin_secret"
+            rl_limit = 1000
+        else:
+            # Public unauthenticated route -> sliding window per client IP (120 RPM)
+            rl_key = f"public_{client_ip}"
+            rl_limit = 120
 
-            valid = False
-            if token:
-                if expected_token and hmac.compare_digest(token.encode("utf-8"), expected_token.encode("utf-8")):
-                    valid = True
-                else:
-                    is_valid, _, _ = await global_key_manager.verify_key_async(token)
-                    if is_valid:
-                        valid = True
-
-            if not valid:
+        if rl_key:
+            allowed, retry_after, remaining, reset_sec = await global_key_manager.check_rate_limit_async(
+                key_prefix=rl_key,
+                rate_limit_rpm=rl_limit
+            )
+            request.state.rate_limit = {
+                "limit": rl_limit,
+                "remaining": remaining,
+                "reset": reset_sec
+            }
+            if not allowed:
                 return JSONResponse(
-                    status_code=401,
-                    content={"error": "Unauthorized", "message": "Invalid, missing, or unauthenticated API key."}
+                    status_code=429,
+                    content={
+                        "error": "Too Many Requests",
+                        "message": f"Rate limit of {rl_limit} requests per minute exceeded for bucket '{rl_key}'."
+                    },
+                    headers={
+                        "Retry-After": str(retry_after),
+                        "X-RateLimit-Limit": str(rl_limit),
+                        "X-RateLimit-Remaining": "0",
+                        "X-RateLimit-Reset": str(reset_sec)
+                    }
                 )
+
+    if expected_token and not is_testing and not is_public and not is_admin_auth:
+        valid = False
+        if token:
+            if expected_token and hmac.compare_digest(token.encode("utf-8"), expected_token.encode("utf-8")):
+                valid = True
+            elif getattr(request.state, "key_info", None) is not None:
+                valid = True
+            else:
+                is_valid, key_info, _ = await global_key_manager.verify_key_async(token)
+                if is_valid:
+                    valid = True
+
+        if not valid:
+            return JSONResponse(
+                status_code=401,
+                content={"error": "Unauthorized", "message": "Invalid, missing, or unauthenticated API key."}
+            )
 
     response = await call_next(request)
     rate_limit = getattr(request.state, "rate_limit", None)

@@ -52,6 +52,15 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     results = multi_horizon_results[5]
     splits = results['splits']
     results['multi_horizon_results'] = multi_horizon_results
+
+    # Wholesale Volatility Term Structure & Predictive Density Cones (Issue #448, #611)
+    from src.volatility_engine import WholesaleVolatilityEngine
+    vol_engine = WholesaleVolatilityEngine()
+    current_market_price = float(market_df['gasoline_rbob'].iloc[-1])
+    vol_engine.calibrate(market_df['gasoline_rbob'])
+    vol_forecasts = vol_engine.forecast_volatility_term_structure(current_market_price, max_horizon=5)
+    results['volatility_forecasts'] = vol_forecasts
+    print(f"  -> Calibrated Wholesale Volatility Engine: GARCH uncond var: {vol_engine.garch.unconditional_variance:.6f}, Student-t df: {vol_engine.dist.df:.1f}")
     
     print("\n[Step 4/6] Model Evaluation & Metrics Summary (5-Day Horizon Primary Baseline)...")
     print("\n" + "=" * 65)

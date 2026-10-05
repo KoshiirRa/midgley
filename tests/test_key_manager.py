@@ -156,6 +156,59 @@ class TestKeyManager(unittest.TestCase):
             self.assertIsNotNone(row)
             self.assertEqual(row["request_count"], 25)
 
+    def test_secret_redaction_patterns(self):
+        """Verifies healthcheck ping URLs, Discord webhooks, and JWT tokens are masked (Issue #614 T-27)."""
+        from src.key_manager import redact_secrets
+        raw_msg = (
+            "Ping sent to https://hc-ping.com/abc12345-6789-abcd-ef01-23456789abcd "
+            "and webhook https://discord.com/api/webhooks/1234567890/tokenABC_123-xyz "
+            "with token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.doNotLeakThisToken123456"
+        )
+        redacted = redact_secrets(raw_msg)
+        self.assertNotIn("hc-ping.com/abc12345", redacted)
+        self.assertNotIn("discord.com/api/webhooks", redacted)
+        self.assertNotIn("eyJhbGci", redacted)
+        self.assertIn("[REDACTED]", redacted)
+
+    def test_redacting_logging_filter(self):
+        """Verifies RedactingLoggingFilter intercepts and redacts records."""
+        import logging
+        from src.key_manager import RedactingLoggingFilter
+        filt = RedactingLoggingFilter()
+        record = logging.LogRecord(
+            name="test", level=logging.INFO, pathname=__file__, lineno=1,
+            msg="Notifying https://hc-ping.com/deadbeef-1234-5678-9abc-def012345678",
+            args=(), exc_info=None
+        )
+        self.assertTrue(filt.filter(record))
+        self.assertNotIn("deadbeef", record.msg)
+        self.assertIn("[REDACTED]", record.msg)
+
+    def test_verification_cache_hit_and_invalidation(self):
+        """Verifies 60s in-memory token verification caching and revocation invalidation (Issue #614 T-26)."""
+        res = self.km.create_key(user_id="cached_user", environment="dev")
+        token = res["token"]
+        prefix = res["key_prefix"]
+
+        # First verify fills cache
+        is_valid, key_info, _ = self.km.verify_key(token)
+        self.assertTrue(is_valid)
+        self.assertEqual(len(self.km._verification_cache), 1)
+
+        # Second verify hits cache
+        is_valid2, key_info2, _ = self.km.verify_key(token)
+        self.assertTrue(is_valid2)
+        self.assertEqual(key_info["key_prefix"], key_info2["key_prefix"])
+
+        # Revoking clears cache
+        self.km.revoke_key(prefix)
+        self.assertEqual(len(self.km._verification_cache), 0)
+
+        # Subsequent verify fails
+        is_valid3, _, err = self.km.verify_key(token)
+        self.assertFalse(is_valid3)
+        self.assertIn("revoked", err)
+
 
 if __name__ == "__main__":
     unittest.main()
