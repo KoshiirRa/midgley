@@ -4867,13 +4867,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMiZEFVX3lxTFB6eTJYQnpIZ21mOUhZZUtNODRLT0JLaVYxdFZQV3AtdVRCcVVzVUJ6Y3pqRndhZ1VhYjgtbnNIc0FIbDBmZ3FYYjd2cExSb2F2TmZKWHhMQ0k5MWhhWlo5b3U3QW4?oc=5": {
-    "timestamp": "2026-09-21T09:52:40.814250",
+    "timestamp": "2026-10-05T00:33:42.769177+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFB6eTJYQnpIZ21mOUhZZUtNODRLT0JLaVYxdFZQV3AtdVRCcVVzVUJ6Y3pqRndhZ1VhYjgtbnNIc0FIbDBmZ3FYYjd2cExSb2F2TmZKWHhMQ0k5MWhhWlo5b3U3QW4?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFB6eTJYQnpIZ21mOUhZZUtNODRLT0JLaVYxdFZQV3AtdVRCcVVzVUJ6Y3pqRndhZ1VhYjgtbnNIc0FIbDBmZ3FYYjd2cExSb2F2TmZKWHhMQ0k5MWhhWlo5b3U3QW4?oc=5",
     "headline": "2026 Dodge Durango – Trim Comparison - Critical Differences That Cost Thousands - driving.ca",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiZEFVX3lxTFB6eTJYQnpIZ21mOUhZZUtNODRLT0JLaVYxdFZQV3AtdVRCcVVzVUJ6Y3pqRndhZ1VhYjgtbnNIc0FIbDBmZ3FYYjd2cExSb2F2TmZKWHhMQ0k5MWhhWlo5b3U3QW4?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiigFBVV95cUxQeG5jeVZYcHVKXzNZOTg1S3RIeEJ3VFFmMWNjaTRaYkNUVXlMbmtkaXlKVEd2TmJqS3QyalVSQ0x3ajZac0FVcU9hc01qSGdXNmdpM3JlYlhZS3lzenQ0ckdOakdJOGM4ajNNMkQ1SHVSTUJqQ3A4aUt2OGtEb0dVTlJ0QTAwZEVaNGc?oc=5": {
     "timestamp": "2026-09-21T09:53:07.138108",
@@ -11136,5 +11136,77 @@
     "headline": "Tariffs, sanctions becoming policy instruments, sometimes weaponised: P K Mishra - The Indian Express",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikwFBVV95cUxQM1N4bDNjbnZVb3FmcnFBU1NaVjk5RHBVY1pNZVN3b0JWallobjBzbUlaV2QzcWwxN3BGODdNVGZtZHlDQ19aOVVKZlBHUTJmVlliaHhMTkZnSXlTNW5scEtWWWdFY2NKeFpfekg1aVBWbXJoTXpHRFlnSks2aGRGeU1DOXRSallvbVltVGdqWnhuVzDSAZMBQVVfeXFMUDNTeGwzY252VW9xZnJxQVNTWlY5OURwVWNaTWVTd29CVmpZaG4wc21JWldkM3FsMTdwRjg3TVRmbWR5Q0NfWjlVSmZQR1EyZlZZYmh4TE5GZ0l5UzVubHBLVllnRWNjSnhaX3pINWlQVm1yaE16R0RZZ0pLNmhkRnlNQzl0UmpZb21ZbVRnalp4blcw?oc=5",
     "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMipAFBVV95cUxNclJNdWU2Q3FFNndUOW9ZRnJZOFMtR0tEcjFkR1dBY3pLTHJ2ZGl6NWhnUjhhU3FaSkRhN0FLOENqSDh1NjVPUGtuOXBwMmdNVTNGTXhTTFRQSWQ0cDd5dkw0STBmTU5HTGtYOEVoYTZlRzU2VmpZUU9xb2xCRWJyeTh2elBROVVSSEVJYlBLQnhvVW1LX2lYZVE0VXpickJaZUNpTA?oc=5": {
+    "timestamp": "2026-10-05T00:33:32.043286+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNclJNdWU2Q3FFNndUOW9ZRnJZOFMtR0tEcjFkR1dBY3pLTHJ2ZGl6NWhnUjhhU3FaSkRhN0FLOENqSDh1NjVPUGtuOXBwMmdNVTNGTXhTTFRQSWQ0cDd5dkw0STBmTU5HTGtYOEVoYTZlRzU2VmpZUU9xb2xCRWJyeTh2elBROVVSSEVJYlBLQnhvVW1LX2lYZVE0VXpickJaZUNpTA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNclJNdWU2Q3FFNndUOW9ZRnJZOFMtR0tEcjFkR1dBY3pLTHJ2ZGl6NWhnUjhhU3FaSkRhN0FLOENqSDh1NjVPUGtuOXBwMmdNVTNGTXhTTFRQSWQ0cDd5dkw0STBmTU5HTGtYOEVoYTZlRzU2VmpZUU9xb2xCRWJyeTh2elBROVVSSEVJYlBLQnhvVW1LX2lYZVE0VXpickJaZUNpTA?oc=5",
+    "headline": "Unleaded reaches 12-month high as Tasmanian fuel prices keep rising - Pulse Tasmania",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipAFBVV95cUxNclJNdWU2Q3FFNndUOW9ZRnJZOFMtR0tEcjFkR1dBY3pLTHJ2ZGl6NWhnUjhhU3FaSkRhN0FLOENqSDh1NjVPUGtuOXBwMmdNVTNGTXhTTFRQSWQ0cDd5dkw0STBmTU5HTGtYOEVoYTZlRzU2VmpZUU9xb2xCRWJyeTh2elBROVVSSEVJYlBLQnhvVW1LX2lYZVE0VXpickJaZUNpTA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPRnJ6dGpKR09Wa3BWUzF0WVp4b3M1anFpTUNGY0hNd3JZajQ2QVlmVjN0bVk5LUZCQVhzNmdnLURVZ2ctR1diVXYwTExiY09wWFN6WmVBekJpZjhiRlhjUDlubnFCQ2N2WTRoSHJ5a3R4M0phbk9Ldk1qeTZLUWpnbGtfNW0xcjZwTlN5MDlrS1ZnUlFLUTFUUDRHR3Q3N0VmdTgyZzBGRnE0WXBlUHg5N2tQaVN3c1Fnc2l0NGlOTjJzeUw4MG5obGhMcE15TUNBM3htMElhYlpVV1dZMWxhd1RkZTREa2RETXNjNg?oc=5": {
+    "timestamp": "2026-10-05T00:33:53.303012+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPRnJ6dGpKR09Wa3BWUzF0WVp4b3M1anFpTUNGY0hNd3JZajQ2QVlmVjN0bVk5LUZCQVhzNmdnLURVZ2ctR1diVXYwTExiY09wWFN6WmVBekJpZjhiRlhjUDlubnFCQ2N2WTRoSHJ5a3R4M0phbk9Ldk1qeTZLUWpnbGtfNW0xcjZwTlN5MDlrS1ZnUlFLUTFUUDRHR3Q3N0VmdTgyZzBGRnE0WXBlUHg5N2tQaVN3c1Fnc2l0NGlOTjJzeUw4MG5obGhMcE15TUNBM3htMElhYlpVV1dZMWxhd1RkZTREa2RETXNjNg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPRnJ6dGpKR09Wa3BWUzF0WVp4b3M1anFpTUNGY0hNd3JZajQ2QVlmVjN0bVk5LUZCQVhzNmdnLURVZ2ctR1diVXYwTExiY09wWFN6WmVBekJpZjhiRlhjUDlubnFCQ2N2WTRoSHJ5a3R4M0phbk9Ldk1qeTZLUWpnbGtfNW0xcjZwTlN5MDlrS1ZnUlFLUTFUUDRHR3Q3N0VmdTgyZzBGRnE0WXBlUHg5N2tQaVN3c1Fnc2l0NGlOTjJzeUw4MG5obGhMcE15TUNBM3htMElhYlpVV1dZMWxhd1RkZTREa2RETXNjNg?oc=5",
+    "headline": "Where to find the cheapest fuel in Tweed Heads - dailytelegraph.com.au",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi7AFBVV95cUxPRnJ6dGpKR09Wa3BWUzF0WVp4b3M1anFpTUNGY0hNd3JZajQ2QVlmVjN0bVk5LUZCQVhzNmdnLURVZ2ctR1diVXYwTExiY09wWFN6WmVBekJpZjhiRlhjUDlubnFCQ2N2WTRoSHJ5a3R4M0phbk9Ldk1qeTZLUWpnbGtfNW0xcjZwTlN5MDlrS1ZnUlFLUTFUUDRHR3Q3N0VmdTgyZzBGRnE0WXBlUHg5N2tQaVN3c1Fnc2l0NGlOTjJzeUw4MG5obGhMcE15TUNBM3htMElhYlpVV1dZMWxhd1RkZTREa2RETXNjNg?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9hcWxhS19zN0xERXk5ay0zeWd2bGt1ZWd4S0pMMWxibjRhZUEwMG1nYjZFTUFjQktfS2V2OU55TExJeE9qS3hCVmF1bXc2U2tWelpHY3NKRWhWVlJpaGc1NXh4MzI4bHc?oc=5": {
+    "timestamp": "2026-10-05T00:34:00.528699+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9hcWxhS19zN0xERXk5ay0zeWd2bGt1ZWd4S0pMMWxibjRhZUEwMG1nYjZFTUFjQktfS2V2OU55TExJeE9qS3hCVmF1bXc2U2tWelpHY3NKRWhWVlJpaGc1NXh4MzI4bHc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9hcWxhS19zN0xERXk5ay0zeWd2bGt1ZWd4S0pMMWxibjRhZUEwMG1nYjZFTUFjQktfS2V2OU55TExJeE9qS3hCVmF1bXc2U2tWelpHY3NKRWhWVlJpaGc1NXh4MzI4bHc?oc=5",
+    "headline": "2026 Porsche Cayenne – Trim Comparison - Critical Differences That Cost Thousands - driving.ca",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9hcWxhS19zN0xERXk5ay0zeWd2bGt1ZWd4S0pMMWxibjRhZUEwMG1nYjZFTUFjQktfS2V2OU55TExJeE9qS3hCVmF1bXc2U2tWelpHY3NKRWhWVlJpaGc1NXh4MzI4bHc?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiygFBVV95cUxNMmR3dHltVHZ6WUxmRDhyR25qTHZUUC1ZYkVFUXNWOU16MGdBR2VxMlNlMG8tYjY3OXNZSjNmbGU5WUpFSFQxUzRUTWQzOWl4cW5tTXliaEx0bnoteDhuTGNuN2ZQQTVPUVI0N1gxWE9KWGZBckY2M29RWVhvRWh0Q0taUmNGY2NESUlXSEpId0lOVHpyaXJtSkRxc2I0QmV1cmVwNVNkRW9hUTVkTEcycG1HUE02RThObEpwMUswM19USEp6dmkycGpB?oc=5": {
+    "timestamp": "2026-10-05T00:34:08.541347+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNMmR3dHltVHZ6WUxmRDhyR25qTHZUUC1ZYkVFUXNWOU16MGdBR2VxMlNlMG8tYjY3OXNZSjNmbGU5WUpFSFQxUzRUTWQzOWl4cW5tTXliaEx0bnoteDhuTGNuN2ZQQTVPUVI0N1gxWE9KWGZBckY2M29RWVhvRWh0Q0taUmNGY2NESUlXSEpId0lOVHpyaXJtSkRxc2I0QmV1cmVwNVNkRW9hUTVkTEcycG1HUE02RThObEpwMUswM19USEp6dmkycGpB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNMmR3dHltVHZ6WUxmRDhyR25qTHZUUC1ZYkVFUXNWOU16MGdBR2VxMlNlMG8tYjY3OXNZSjNmbGU5WUpFSFQxUzRUTWQzOWl4cW5tTXliaEx0bnoteDhuTGNuN2ZQQTVPUVI0N1gxWE9KWGZBckY2M29RWVhvRWh0Q0taUmNGY2NESUlXSEpId0lOVHpyaXJtSkRxc2I0QmV1cmVwNVNkRW9hUTVkTEcycG1HUE02RThObEpwMUswM19USEp6dmkycGpB?oc=5",
+    "headline": "Caught Between Moscow and Washington: India’s Energy Challenge - carolinapoliticalreview.org",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiygFBVV95cUxNMmR3dHltVHZ6WUxmRDhyR25qTHZUUC1ZYkVFUXNWOU16MGdBR2VxMlNlMG8tYjY3OXNZSjNmbGU5WUpFSFQxUzRUTWQzOWl4cW5tTXliaEx0bnoteDhuTGNuN2ZQQTVPUVI0N1gxWE9KWGZBckY2M29RWVhvRWh0Q0taUmNGY2NESUlXSEpId0lOVHpyaXJtSkRxc2I0QmV1cmVwNVNkRW9hUTVkTEcycG1HUE02RThObEpwMUswM19USEp6dmkycGpB?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5": {
+    "timestamp": "2026-10-05T00:34:33.837050+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "headline": "THE WORLD BRACES as Trump’s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMigwJBVV95cUxQZkZpUXR6QVFTYUY0MzNQd3ZsMjZUckFpNldnMDRWZ2pncDg1RVZKWXFhbXhCYTl0UG0yVnhWT3ZhZXR4VkhDOW1lUEI3dXpObV9KMG9pVENKbWJXbWpoWktJUlo0anpWWmhwWUVCaXhFdkxRMERRZm9yb0NqejRPSFZVM3Q2bW1FX3ctSVlUMFVBeWtZNkJOdFZobWRSUWVSQTRZdlpTSF9KR2swUE8yLW5HZjhIOXNadGN4TTBIOVg2NmN5dFVBcU5CRDJfTV9ZTUp1ekMtam5qeVRFMzFTY0lwbmpmcVlpR3BMWEhBN0VtRlRyWkt2NV9feG9mM2hFOTdz0gGIAkFVX3lxTE44Mi1YaGtMQjhiemkxV3pWMkZjNjBqNWVwRUNJWTloaXpvZFBCRE0xX0xvMWR5RTA2X2ROcFViQ3JlVkdmYjhjLVFCeThMeGdlM1d0ZGZrUHRJcFUxUG01a2U2MG1Zb0xfSWUxU3hrbENIOVFNSWJaR0ltOWt1QU5PendzenV3UTZLSVhfaVdmLWpSaGdRaTJIWUVHRU93U1JUZXFUblh6ejRyR0tvdUZWaUJuS0w2S096MzV6SUtwbmJ0TWEwcHk2VzJnTnhtMGdDM2d0bHp5QVFmSUNzSmZMWWdXRlJwWXFaNTNPQnc4NEs5Tk90YzA0bzJRc1c3eDN5eHdvMFZ5WA?oc=5": {
+    "timestamp": "2026-10-05T00:34:40.472201+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxQZkZpUXR6QVFTYUY0MzNQd3ZsMjZUckFpNldnMDRWZ2pncDg1RVZKWXFhbXhCYTl0UG0yVnhWT3ZhZXR4VkhDOW1lUEI3dXpObV9KMG9pVENKbWJXbWpoWktJUlo0anpWWmhwWUVCaXhFdkxRMERRZm9yb0NqejRPSFZVM3Q2bW1FX3ctSVlUMFVBeWtZNkJOdFZobWRSUWVSQTRZdlpTSF9KR2swUE8yLW5HZjhIOXNadGN4TTBIOVg2NmN5dFVBcU5CRDJfTV9ZTUp1ekMtam5qeVRFMzFTY0lwbmpmcVlpR3BMWEhBN0VtRlRyWkt2NV9feG9mM2hFOTdz0gGIAkFVX3lxTE44Mi1YaGtMQjhiemkxV3pWMkZjNjBqNWVwRUNJWTloaXpvZFBCRE0xX0xvMWR5RTA2X2ROcFViQ3JlVkdmYjhjLVFCeThMeGdlM1d0ZGZrUHRJcFUxUG01a2U2MG1Zb0xfSWUxU3hrbENIOVFNSWJaR0ltOWt1QU5PendzenV3UTZLSVhfaVdmLWpSaGdRaTJIWUVHRU93U1JUZXFUblh6ejRyR0tvdUZWaUJuS0w2S096MzV6SUtwbmJ0TWEwcHk2VzJnTnhtMGdDM2d0bHp5QVFmSUNzSmZMWWdXRlJwWXFaNTNPQnc4NEs5Tk90YzA0bzJRc1c3eDN5eHdvMFZ5WA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxQZkZpUXR6QVFTYUY0MzNQd3ZsMjZUckFpNldnMDRWZ2pncDg1RVZKWXFhbXhCYTl0UG0yVnhWT3ZhZXR4VkhDOW1lUEI3dXpObV9KMG9pVENKbWJXbWpoWktJUlo0anpWWmhwWUVCaXhFdkxRMERRZm9yb0NqejRPSFZVM3Q2bW1FX3ctSVlUMFVBeWtZNkJOdFZobWRSUWVSQTRZdlpTSF9KR2swUE8yLW5HZjhIOXNadGN4TTBIOVg2NmN5dFVBcU5CRDJfTV9ZTUp1ekMtam5qeVRFMzFTY0lwbmpmcVlpR3BMWEhBN0VtRlRyWkt2NV9feG9mM2hFOTdz0gGIAkFVX3lxTE44Mi1YaGtMQjhiemkxV3pWMkZjNjBqNWVwRUNJWTloaXpvZFBCRE0xX0xvMWR5RTA2X2ROcFViQ3JlVkdmYjhjLVFCeThMeGdlM1d0ZGZrUHRJcFUxUG01a2U2MG1Zb0xfSWUxU3hrbENIOVFNSWJaR0ltOWt1QU5PendzenV3UTZLSVhfaVdmLWpSaGdRaTJIWUVHRU93U1JUZXFUblh6ejRyR0tvdUZWaUJuS0w2S096MzV6SUtwbmJ0TWEwcHk2VzJnTnhtMGdDM2d0bHp5QVFmSUNzSmZMWWdXRlJwWXFaNTNPQnc4NEs5Tk90YzA0bzJRc1c3eDN5eHdvMFZ5WA?oc=5",
+    "headline": "'U.S Military Will Fail If Canada...': Trump Gets Brutal Golden Dome Reality Check Amid Tariff War - The Times of India",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigwJBVV95cUxQZkZpUXR6QVFTYUY0MzNQd3ZsMjZUckFpNldnMDRWZ2pncDg1RVZKWXFhbXhCYTl0UG0yVnhWT3ZhZXR4VkhDOW1lUEI3dXpObV9KMG9pVENKbWJXbWpoWktJUlo0anpWWmhwWUVCaXhFdkxRMERRZm9yb0NqejRPSFZVM3Q2bW1FX3ctSVlUMFVBeWtZNkJOdFZobWRSUWVSQTRZdlpTSF9KR2swUE8yLW5HZjhIOXNadGN4TTBIOVg2NmN5dFVBcU5CRDJfTV9ZTUp1ekMtam5qeVRFMzFTY0lwbmpmcVlpR3BMWEhBN0VtRlRyWkt2NV9feG9mM2hFOTdz0gGIAkFVX3lxTE44Mi1YaGtMQjhiemkxV3pWMkZjNjBqNWVwRUNJWTloaXpvZFBCRE0xX0xvMWR5RTA2X2ROcFViQ3JlVkdmYjhjLVFCeThMeGdlM1d0ZGZrUHRJcFUxUG01a2U2MG1Zb0xfSWUxU3hrbENIOVFNSWJaR0ltOWt1QU5PendzenV3UTZLSVhfaVdmLWpSaGdRaTJIWUVHRU93U1JUZXFUblh6ejRyR0tvdUZWaUJuS0w2S096MzV6SUtwbmJ0TWEwcHk2VzJnTnhtMGdDM2d0bHp5QVFmSUNzSmZMWWdXRlJwWXFaNTNPQnc4NEs5Tk90YzA0bzJRc1c3eDN5eHdvMFZ5WA?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMivAFBVV95cUxQczdwV0VsanNSOUwybDdNemtuM3Mwa3lpTnJlamd2Vngzd2RxRWp0a1B3RjhORVZLR2N2UnAtRm5qWnRRRmNBd2luSmNNMnVQSzhZbXRteWhQZWZsN2RTX2FaTjR6d24wd05VdERXVEJSQzkzMGhXZ1NDV0M5cTRyUndCTG13YlFZZHdFRjdCbWt3b2VaQ2pXVWZzaWYxOVdwcWtYckdMUHFTdFhseTlGZE9NcUxQazZDU3N0dQ?oc=5": {
+    "timestamp": "2026-10-05T00:34:47.385549+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQczdwV0VsanNSOUwybDdNemtuM3Mwa3lpTnJlamd2Vngzd2RxRWp0a1B3RjhORVZLR2N2UnAtRm5qWnRRRmNBd2luSmNNMnVQSzhZbXRteWhQZWZsN2RTX2FaTjR6d24wd05VdERXVEJSQzkzMGhXZ1NDV0M5cTRyUndCTG13YlFZZHdFRjdCbWt3b2VaQ2pXVWZzaWYxOVdwcWtYckdMUHFTdFhseTlGZE9NcUxQazZDU3N0dQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQczdwV0VsanNSOUwybDdNemtuM3Mwa3lpTnJlamd2Vngzd2RxRWp0a1B3RjhORVZLR2N2UnAtRm5qWnRRRmNBd2luSmNNMnVQSzhZbXRteWhQZWZsN2RTX2FaTjR6d24wd05VdERXVEJSQzkzMGhXZ1NDV0M5cTRyUndCTG13YlFZZHdFRjdCbWt3b2VaQ2pXVWZzaWYxOVdwcWtYckdMUHFTdFhseTlGZE9NcUxQazZDU3N0dQ?oc=5",
+    "headline": "Uncertainty hangs over future of suspended Chinese tariffs on Canadian farm products, seafood - The Globe and Mail",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivAFBVV95cUxQczdwV0VsanNSOUwybDdNemtuM3Mwa3lpTnJlamd2Vngzd2RxRWp0a1B3RjhORVZLR2N2UnAtRm5qWnRRRmNBd2luSmNNMnVQSzhZbXRteWhQZWZsN2RTX2FaTjR6d24wd05VdERXVEJSQzkzMGhXZ1NDV0M5cTRyUndCTG13YlFZZHdFRjdCbWt3b2VaQ2pXVWZzaWYxOVdwcWtYckdMUHFTdFhseTlGZE9NcUxQazZDU3N0dQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMTZDUkNqa2pCa3ZicnhUMHNwR2l1cTRvb2JwQUxvOHVUSGRjS3k5bDVnRnViUy00ZGd4Ylo4OXlvdDVuX1NMUlBtbVRDaFpScG84MWhWT3ZTeWZMRGVkTXJSdlQ1Q2RiUUJfaGlzVWtUTlp1REQxSURxMFUxWDFHcDdidk9fVlZSZHNpUGFXVjlsM2QzV0E?oc=5": {
+    "timestamp": "2026-10-05T00:35:07.927896+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMTZDUkNqa2pCa3ZicnhUMHNwR2l1cTRvb2JwQUxvOHVUSGRjS3k5bDVnRnViUy00ZGd4Ylo4OXlvdDVuX1NMUlBtbVRDaFpScG84MWhWT3ZTeWZMRGVkTXJSdlQ1Q2RiUUJfaGlzVWtUTlp1REQxSURxMFUxWDFHcDdidk9fVlZSZHNpUGFXVjlsM2QzV0E?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMTZDUkNqa2pCa3ZicnhUMHNwR2l1cTRvb2JwQUxvOHVUSGRjS3k5bDVnRnViUy00ZGd4Ylo4OXlvdDVuX1NMUlBtbVRDaFpScG84MWhWT3ZTeWZMRGVkTXJSdlQ1Q2RiUUJfaGlzVWtUTlp1REQxSURxMFUxWDFHcDdidk9fVlZSZHNpUGFXVjlsM2QzV0E?oc=5",
+    "headline": "Sanctions Against Russia Are in Doubt — U.S. Officials Explain Trump's Position - UA.NEWS",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxQMTZDUkNqa2pCa3ZicnhUMHNwR2l1cTRvb2JwQUxvOHVUSGRjS3k5bDVnRnViUy00ZGd4Ylo4OXlvdDVuX1NMUlBtbVRDaFpScG84MWhWT3ZTeWZMRGVkTXJSdlQ1Q2RiUUJfaGlzVWtUTlp1REQxSURxMFUxWDFHcDdidk9fVlZSZHNpUGFXVjlsM2QzV0E?oc=5",
+    "error": "<urlopen error timed out>"
   }
 }

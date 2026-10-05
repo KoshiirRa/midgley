@@ -4653,5 +4653,25 @@
       "overall_price_pressure": 0.75
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-05T00:35:07.939301",
+    "headline": "Sanctions Against Russia Are in Doubt \u2014 U.S. Officials Explain Trump's Position - UA.NEWS",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMTZDUkNqa2pCa3ZicnhUMHNwR2l1cTRvb2JwQUxvOHVUSGRjS3k5bDVnRnViUy00ZGd4Ylo4OXlvdDVuX1NMUlBtbVRDaFpScG84MWhWT3ZTeWZMRGVkTXJSdlQ1Q2RiUUJfaGlzVWtUTlp1REQxSURxMFUxWDFHcDdidk9fVlZSZHNpUGFXVjlsM2QzV0E?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMTZDUkNqa2pCa3ZicnhUMHNwR2l1cTRvb2JwQUxvOHVUSGRjS3k5bDVnRnViUy00ZGd4Ylo4OXlvdDVuX1NMUlBtbVRDaFpScG84MWhWT3ZTeWZMRGVkTXJSdlQ1Q2RiUUJfaGlzVWtUTlp1REQxSURxMFUxWDFHcDdidk9fVlZSZHNpUGFXVjlsM2QzV0E?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxQMTZDUkNqa2pCa3ZicnhUMHNwR2l1cTRvb2JwQUxvOHVUSGRjS3k5bDVnRnViUy00ZGd4Ylo4OXlvdDVuX1NMUlBtbVRDaFpScG84MWhWT3ZTeWZMRGVkTXJSdlQ1Q2RiUUJfaGlzVWtUTlp1REQxSURxMFUxWDFHcDdidk9fVlZSZHNpUGFXVjlsM2QzV0E?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": -0.8,
+      "supply_disruption": 0.1,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.7
+    },
+    "discord_notified": true
   }
 ]
