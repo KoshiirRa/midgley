@@ -336,16 +336,29 @@ class RVPRegulatoryEngine:
         return waiver
 
 
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+DEFAULT_EVENTS_PATH = os.path.join(DATA_DIR, "known_future_events.json")
+
+
 def get_known_future_tax_deltas(
     region: str,
     as_of_date: str,
     horizon_days: int = 5,
-    events_path: str = os.path.join("data", "known_future_events.json")
+    events_path: Optional[str] = None
 ) -> float:
     """
     Computes cumulative deterministic statutory excise tax / regulatory fee deltas
-    scheduled to take effect within the forecast horizon window [as_of_date, as_of_date + horizon_days] (Issue #451).
+    scheduled to take effect within the forecast horizon business-day window
+    (as_of_date < effective_date <= target_date) (Issues #451, #601).
     """
+    if events_path is None:
+        events_path = DEFAULT_EVENTS_PATH
+    elif not os.path.isabs(events_path) and not os.path.exists(events_path):
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        candidate = os.path.join(repo_root, events_path)
+        if os.path.exists(candidate):
+            events_path = candidate
+
     if not os.path.exists(events_path):
         return 0.0
 
@@ -361,16 +374,24 @@ def get_known_future_tax_deltas(
 
     try:
         as_of_dt = pd.to_datetime(as_of_date).date()
-        target_dt = (pd.to_datetime(as_of_date) + pd.Timedelta(days=horizon_days)).date()
+        # Evaluate over business-day forecast horizon window (consistent with prediction_logger.py)
+        bdate_seq = pd.bdate_range(start=as_of_dt, periods=int(horizon_days) + 1)
+        target_dt = bdate_seq[-1].date()
     except Exception:
         return 0.0
 
     reg_clean = region.lower().strip()
+    for suffix in ["_diesel", "_ulsd", "_carb_diesel"]:
+        if reg_clean.endswith(suffix):
+            reg_clean = reg_clean[:-len(suffix)]
+            break
+
     total_delta = 0.0
 
     for ev in events:
         ev_reg = str(ev.get("region", "")).lower().strip()
-        if ev_reg not in ["national", "all", reg_clean, reg_clean.split("_")[0]]:
+        # Require exact region key matching (or national / all scoping)
+        if ev_reg not in ["national", "all", reg_clean]:
             continue
 
         try:
