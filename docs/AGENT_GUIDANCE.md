@@ -281,6 +281,32 @@ Whenever new features, regional models, data feeds, or API endpoints are added:
 6. **Form Controls & Formatting Hygiene:**
    - All form inputs, selects, and range controls (such as the Fill-Up Timing & Estimated Savings Advisor in `docs/savings.html`) must define explicit `<label for="...">` associations and descriptive `aria-label` attributes.
    - Template variable substitutions must avoid redundant symbol prefixing (e.g., preventing double dollar artefacts like `$$0.1100`).
+---
 
+## 🛡️ 15. v0.8.5 Resilience, Deduplication & Econometric Grounding Directives (Issues #601–#608)
 
+1. **Canonical Forecast Primary Key Invariants (Issue #602):**
+   - Primary keys for forecast records across all storage tiers (`prediction_history.csv`, Turso libSQL, Cloudflare D1) must be computed with the canonical SHA-256 hash:
+     $$\text{forecast\_id} = \text{SHA256}(\text{target\_date} : \text{region} : \text{model\_version} : \text{horizon\_days}\text{d} : \text{run\_date})[:16]$$
+   - Any migration or logger modification must preserve this exact formula to prevent duplicate entries and broken foreign-key relationships.
 
+2. **Authentic Regional Ground Truth & Zero Fallback Rule (Issue #608):**
+   - Never substitute the national average (`GASREGW`) when evaluating regional predictions.
+   - Mappings in `src/eia_retail_feed.py` are authoritative (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`). Missing regional actuals must produce `NaN` and trigger alerting rather than silent fallback.
+
+3. **Asymmetric ECM Cointegration Integrity (Issue #607):**
+   - Regional cointegration equilibrium and dynamic regressions in `AsymmetricECM` must be trained on authentic regional retail price histories via `get_regional_retail_history()`. Synthetic markups or crude approximations are prohibited.
+   - Model version string is dynamically tagged as `v2.1.0-asym-ecm`.
+
+4. **Narrative Attribution Mathematical Consistency (Issue #604):**
+   - Attribution drivers displayed on public narrative cards must be dynamically calculated and satisfy:
+     $$\sum_{i=1}^3 d_i = \Delta_{\text{forecast}}, \quad \operatorname{sgn}(d_i) \cdot \operatorname{sgn}(\Delta_{\text{forecast}}) \ge 0$$
+   - Never present positive driver dollar amounts when forecasting a retail price drop, and vice versa.
+   - Accuracy metrics (MAE, RMSE, MAPE) in HTML cards must be dynamically populated from `compute_dynamic_accuracy_stats()`.
+
+5. **GitHub Actions Workflow Dirty-Tree Guard (Issue #606):**
+   - In CI workflows, stage newly generated artifacts (`git add -A` or path lists) before executing `git status --porcelain`. Checking porcelain status with untracked files risks false-positive dirty tree skips or uncommitted data loss.
+   - Keep Headline Arena synchronization in an isolated job to prevent rate limits or sync issues from failing the primary forecast commit.
+
+6. **Cloudflare Edge Single-Use Token Invalidation (Issue #605):**
+   - Link-level HMAC review and flag URLs must be validated against the `intraday_flag_tokens` table in Cloudflare D1. Tokens must be atomically marked as consumed (`is_consumed = 1`) upon first access to prevent replay attacks.

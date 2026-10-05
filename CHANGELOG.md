@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.5] - 2026-10-05
+
+### Added
+- Authentic EIA API v2 regional weekly retail gasoline time series (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`) mapped to regional metro evaluation targets (#608).
+- Deterministic forecast ID generator function `generate_canonical_forecast_id()` and in-memory ledger deduplication (#602).
+- Non-destructive union merge logic `merge_historical_geopolitical_records()` in geopolitical news feed (#603).
+- Proportional dynamic narrative attribution driver calculation matching forecast direction signs and sums (#604).
+- Single-use token tracking table `intraday_flag_tokens` in Cloudflare D1 schema with atomic replay enforcement (#605).
+- Dead-man switch heartbeat reporting (Healthchecks.io) in automated prediction pipelines (#606).
+
+### Changed
+- Refactored `AsymmetricECM` to ingest authentic EIA weekly price history for cointegration estimation, replacing synthetic wholesale markup proxies (#607).
+- Upgraded model version tagging to semantic version string `v2.1.0-asym-ecm` dynamically resolved via `src.version` (#607).
+- Replaced hardcoded accuracy metrics in metro HTML dashboard cards with dynamic evaluations (#604).
+- Aligned forecast maturity realization window with business-day calendars (`pd.bdate_range`) (#601).
+- Updated Ohio motor fuel tax calendar with Ohio HB 519 temporary sales tax holiday (August 1–10, 2026) (#601).
+- Isolated Headline Arena sync job into independent non-blocking CI workflow (#606).
+
+### Fixed
+- Eliminated silent fallback to national retail prices when evaluating regional metro forecasts (#608).
+- Fixed uncommitted artifact drops by staging untracked files prior to dirty-tree porcelain status checks in GitHub Actions workflows (#606).
+- Rotated and removed hardcoded NASA FIRMS API key, enforcing non-empty runtime environment variable injection (#605).
+- Fixed high-severity headline truncation and properly URL-encoded Discord webhook flag URLs (#605).
+- Corrected official KaTeX 0.16.8 Subresource Integrity (SRI) SHA384 hashes in public sources dashboard (#604).
+
 ## [0.8.0] - 2026-09-29
 
 ### Added
