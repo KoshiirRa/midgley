@@ -33,34 +33,52 @@ logger = logging.getLogger("midgley.eia_retail_feed")
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 VINTAGES_FILE = os.path.join(DATA_DIR, "eia_retail_vintages.json")
 
+# Mapping of FRED series IDs to official U.S. EIA API v2 Series IDs (Issue #608)
+FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
+    "GASREGW": "EMM_EPM0_PTE_NUS_DPG",
+    "GASREGW01B": "EMM_EPM0_PTE_R1Y_DPG",
+    "GASREGW01C": "EMM_EPM0_PTE_R1Z_DPG",
+    "GASREGWMW": "EMM_EPM0_PTE_R20_DPG",
+    "GASREGWOH": "EMM_EPM0_PTE_SOH_DPG",
+    "GASREGWFL": "EMM_EPM0_PTE_SFL_DPG",
+    "GASREGWCA": "EMM_EPM0_PTE_SCA_DPG",
+    "GASDESW": "EMD_EPD2D_PTE_NUS_DPG",
+    "GASDESW01B": "EMD_EPD2D_PTE_R1Y_DPG",
+    "GASDESW01C": "EMD_EPD2D_PTE_R1Z_DPG",
+    "GASDESWMW": "EMD_EPD2D_PTE_R20_DPG",
+    "GASDESWFL": "EMD_EPD2D_PTE_SFL_DPG",
+    "GASDESWCA": "EMD_EPD2D_PTE_SCA_DPG",
+}
+
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
+# Strictly NO cross-geography national fallbacks for regional targets (Issue #608)
 REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "National": [("GASREGW", "U.S. Regular All Formulations Retail Price")],
-    "Tulsa_OK": [("GASREGWOK", "Oklahoma Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
-    "Newark_DE": [("GASREGW01B", "PADD 1B Central Atlantic Regular Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
+    "Tulsa_OK": [("GASREGWMW", "PADD 2 Midwest Regular Retail Price (Official Regional Benchmark for OK)")],
+    "Newark_DE": [("GASREGW01B", "PADD 1B Central Atlantic Regular Retail Price (Official Regional Benchmark for DE/NJ)")],
     "Cincinnati_OH": [("GASREGWOH", "Ohio Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
-    "Cincinnati_KY": [("GASREGWKY", "Kentucky Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
-    "Greenville_NC": [("GASREGWNC", "North Carolina Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
-    "Charlotte_NC": [("GASREGWNC", "North Carolina Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
+    "Cincinnati_KY": [("GASREGWMW", "PADD 2 Midwest Regular Retail Price (Official Regional Benchmark for KY)")],
+    "Greenville_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
+    "Charlotte_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Port_St_Lucie_FL": [("GASREGWFL", "Florida Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
     "Oakland_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
     "BayArea_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
     "SanFrancisco_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
     "SanJose_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
     "NorthBay_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
-    # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478)
+    # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478, #608)
     "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Tulsa_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Tulsa_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Newark_ULSD": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Cincinnati_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Cincinnati_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Greenville_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Greenville_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Charlotte_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Charlotte_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Tulsa_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OK)")],
+    "Tulsa_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OK)")],
+    "Newark_ULSD": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price (Official Regional Benchmark for DE/NJ)")],
+    "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price (Official Regional Benchmark for DE/NJ)")],
+    "Cincinnati_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OH/KY)")],
+    "Cincinnati_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OH/KY)")],
+    "Greenville_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
+    "Greenville_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
+    "Charlotte_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
+    "Charlotte_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
     "Oakland_ULSD": [("GASDESWCA", "California No 2 Diesel Retail Price")],
     "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
     "Oakland_CARB_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
@@ -74,10 +92,7 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASREGW01B": 3.390,
     "GASREGW01C": 3.250,
     "GASREGWMW": 3.200,
-    "GASREGWOK": 2.950,
     "GASREGWOH": 3.220,
-    "GASREGWKY": 3.150,
-    "GASREGWNC": 3.190,
     "GASREGWFL": 3.320,
     "GASREGWCA": 4.850,
     "GASDESW": 3.850,
@@ -282,3 +297,30 @@ class EIARetailFeed:
                 return records if isinstance(records, list) else []
         except Exception:
             return []
+
+
+def validate_eia_ground_truth_coverage(feed: Optional[EIARetailFeed] = None) -> bool:
+    """
+    Validates EIA ground truth series mapping integrity (Issue #608):
+    1. Asserts no non-national region maps or falls back to national GASREGW / GASDESW.
+    2. Verifies every mapped series resolves to official EIA v2 mapping.
+    3. Verifies that all mapped series resolve to historical or fallback observations.
+    """
+    if feed is None:
+        feed = EIARetailFeed()
+
+    for region, series_list in REGION_TO_EIA_SERIES.items():
+        is_national = region in ("National", "National_ULSD", "National_Diesel")
+        for sid, desc in series_list:
+            if not is_national and sid in ("GASREGW", "GASDESW"):
+                raise ValueError(
+                    f"Violation in {region}: regional metro mapped to national benchmark {sid} ('{desc}')"
+                )
+            if sid not in FRED_TO_EIA_V2_SERIES:
+                raise ValueError(f"Series ID {sid} for region {region} lacks official EIA v2 mapping")
+
+            history = feed.fetch_series_history(sid)
+            if not history and sid not in FALLBACK_RETAIL_PRICES:
+                raise ValueError(f"Series ID {sid} for region {region} has no historical data or fallback price")
+
+    return True

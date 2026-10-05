@@ -9,7 +9,9 @@ from unittest.mock import patch, MagicMock
 from src.eia_retail_feed import (
     EIARetailFeed,
     REGION_TO_EIA_SERIES,
-    FALLBACK_RETAIL_PRICES
+    FRED_TO_EIA_V2_SERIES,
+    FALLBACK_RETAIL_PRICES,
+    validate_eia_ground_truth_coverage
 )
 
 
@@ -29,6 +31,28 @@ class TestEIARetailFeed(unittest.TestCase):
             self.assertIn(reg, REGION_TO_EIA_SERIES)
             self.assertGreater(len(REGION_TO_EIA_SERIES[reg]), 0)
 
+    def test_no_cross_geography_national_fallbacks(self):
+        """Assert no regional metro falls back to national GASREGW or GASDESW (Issue #608)."""
+        national_keys = {"National", "National_ULSD", "National_Diesel"}
+        for region, series_list in REGION_TO_EIA_SERIES.items():
+            if region not in national_keys:
+                for sid, desc in series_list:
+                    self.assertNotIn(
+                        sid, {"GASREGW", "GASDESW"},
+                        f"Regional metro {region} must not use national fallback {sid} ({desc})"
+                    )
+
+        # Specifically verify regional series bindings
+        self.assertEqual(REGION_TO_EIA_SERIES["Tulsa_OK"][0][0], "GASREGWMW")
+        self.assertEqual(REGION_TO_EIA_SERIES["Newark_DE"][0][0], "GASREGW01B")
+        self.assertEqual(REGION_TO_EIA_SERIES["Cincinnati_KY"][0][0], "GASREGWMW")
+        self.assertEqual(REGION_TO_EIA_SERIES["Greenville_NC"][0][0], "GASREGW01C")
+        self.assertEqual(REGION_TO_EIA_SERIES["Charlotte_NC"][0][0], "GASREGW01C")
+
+    def test_validate_eia_ground_truth_coverage(self):
+        """Verify that ground truth coverage validation succeeds without exceptions."""
+        self.assertTrue(validate_eia_ground_truth_coverage(self.feed))
+
     def test_fetch_series_history_mock(self):
         """Verify mock series history generation in testing mode."""
         history = self.feed.fetch_series_history("GASREGW")
@@ -41,8 +65,8 @@ class TestEIARetailFeed(unittest.TestCase):
 
     def test_get_retail_price_for_date_exact_and_window(self):
         """Verify get_retail_price_for_date returns accurate price."""
-        # Inject known dates into feed's cache
-        self.feed._series_cache["GASREGWOK"] = {
+        # Inject known dates into feed's cache for Tulsa's regional benchmark series
+        self.feed._series_cache["GASREGWMW"] = {
             "2026-09-01": 2.95,
             "2026-09-08": 2.98,
             "2026-09-15": 3.02
