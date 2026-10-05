@@ -1,28 +1,5 @@
 [
   {
-    "asset": "EIA_RETAIL_GASOLINE",
-    "forecast_type": "macro",
-    "created_at": "2026-10-04T00:43:31.882823+00:00",
-    "expires_at": "2026-10-05T00:43:31.882823+00:00",
-    "created_ts": 1791074611.882823,
-    "expires_ts": 1791161011.882823,
-    "payload": {
-      "asset": "EIA_RETAIL_GASOLINE",
-      "topic": "EIA_RETAIL_GASOLINE",
-      "predicted_value": 4.475,
-      "predicted_std": 0.097148,
-      "reasoning": "[Midgley Multi-Agent Forecast | EIA US Regular Gasoline Retail Price]\n- Predicted Target (P50 Median): $4.4750/gal\n- Gaussian Uncertainty: sigma=0.0971/gal (80% CI: [$4.3500 - $4.5990])\n- Continuous Ranked Probability Score (CRPS): Closed-form normal distribution CDF evaluation.\n- Multi-Agent Synthesis: Ingests PADD 1-5 refinery runs, spot RBOB crack spreads, EPA RVP compliance curves, and regional rack markups.",
-      "metadata": {
-        "environment": "prod",
-        "p50": 4.475,
-        "p10": 4.35,
-        "p90": 4.599,
-        "sigma": 0.097148,
-        "timestamp": "2026-10-04T00:43:31.882810+00:00"
-      }
-    }
-  },
-  {
     "asset": "RB",
     "forecast_type": "direction",
     "created_at": "2026-10-05T00:35:29.159668+00:00",
