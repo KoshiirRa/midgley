@@ -324,3 +324,47 @@ def validate_eia_ground_truth_coverage(feed: Optional[EIARetailFeed] = None) -> 
                 raise ValueError(f"Series ID {sid} for region {region} has no historical data or fallback price")
 
     return True
+
+
+def get_regional_retail_history(
+    region: str,
+    dates: Union[pd.Series, pd.DatetimeIndex, List[Any]],
+    live_price: Optional[float] = None,
+    feed: Optional[EIARetailFeed] = None
+) -> pd.Series:
+    """
+    Constructs an authentic regional retail price history series aligned to target dates.
+    Uses EIA/FRED official regional survey series (Issues #607, #608).
+    Optionally level-anchors to live pump price while strictly preserving genuine historical variance.
+    """
+    if feed is None:
+        feed = EIARetailFeed()
+
+    series_info = REGION_TO_EIA_SERIES.get(region)
+    primary_sid = series_info[0][0] if series_info else "GASREGW"
+
+    history_dict = feed.fetch_series_history(primary_sid)
+    dt_index = pd.to_datetime(dates)
+
+    if history_dict:
+        eia_series = pd.Series(history_dict, name="retail_price", dtype=float)
+        eia_series.index = pd.to_datetime(eia_series.index)
+        eia_series = eia_series.sort_index()
+        # Union index with target dates to properly forward-fill weekly survey to daily business dates
+        combined_index = eia_series.index.union(dt_index).sort_values()
+        aligned = eia_series.reindex(combined_index).ffill().bfill().reindex(dt_index)
+        fallback_val = FALLBACK_RETAIL_PRICES.get(primary_sid, 3.40)
+        aligned = aligned.fillna(fallback_val)
+    else:
+        fallback_val = FALLBACK_RETAIL_PRICES.get(primary_sid, 3.40)
+        aligned = pd.Series(fallback_val, index=dt_index, dtype=float)
+
+    # If live_price provided, level-anchor to live pump price while preserving historical variance
+    if live_price is not None and len(aligned) > 0 and pd.notna(live_price):
+        current_survey_latest = aligned.dropna().iloc[-1] if not aligned.dropna().empty else fallback_val
+        offset = float(live_price) - float(current_survey_latest)
+        aligned = aligned + offset
+
+    orig_index = dates.index if isinstance(dates, pd.Series) else None
+    return pd.Series(aligned.values, index=orig_index, dtype=float)
+

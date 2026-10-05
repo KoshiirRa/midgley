@@ -445,12 +445,13 @@ def get_regional_calibration_residuals(
 def resolve_model_tag(
     region: str = "National", 
     model_type: str = "Ridge", 
-    custom_version: Optional[str] = None
+    custom_version: Optional[str] = None,
+    pipeline: Optional[str] = None
 ) -> str:
     """
-    Standardizes model version tag generation across national and regional prediction loggers.
-    Dynamically resolves active model version (e.g. 'v1.6-Ipatieff') and attaches region and model type.
-    Example: 'v1.6-Ipatieff-Tulsa-Ridge' or 'v1.6-Ipatieff-National-Ridge'
+    Standardizes model version tag generation across national and regional prediction loggers (Issues #402, #607).
+    Dynamically resolves active model version (e.g. 'v1.6-Ipatieff') and attaches pipeline, region, and model type.
+    Example: 'v1.6-Ipatieff-ECM-Tulsa-Ridge' or 'v1.6-Ipatieff-National-Ridge'
     """
     if custom_version:
         return custom_version
@@ -462,7 +463,11 @@ def resolve_model_tag(
     
     clean_region = region.replace("_", "").replace(" ", "")
     clean_model_type = model_type.capitalize()
-    return f"{base_version}-{clean_region}-{clean_model_type}"
+    
+    prefix = f"{base_version}"
+    if pipeline:
+        prefix = f"{base_version}-{pipeline.upper()}"
+    return f"{prefix}-{clean_region}-{clean_model_type}"
 
 
 def log_predictions(

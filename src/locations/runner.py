@@ -157,21 +157,27 @@ def run_regional_pipeline(
             "Impact (%)": f"{pct_change:+.2f}%"
         })
 
-    model_tag = resolve_model_tag(region=logger_region_key, model_type=model_type)
     last_date = market_df['date'].iloc[-1]
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
-    dynamic_margin = live_pump_price - latest_rbob
 
-    # Fit Asymmetric Pass-Through ECM for region (Issue #443)
+    # Fit Asymmetric Pass-Through ECM for region using authentic retail history (Issues #443, #607, #608)
     ecm_model = None
     try:
         reg_col = f"{reg_clean}_retail_gasoline"
-        retail_series = market_df[reg_col] if reg_col in market_df.columns else (market_df['gasoline_rbob'] + dynamic_margin)
+        if reg_col in market_df.columns:
+            retail_series = market_df[reg_col]
+        else:
+            from src.eia_retail_feed import get_regional_retail_history
+            retail_series = get_regional_retail_history(logger_region_key, market_df['date'], live_pump_price)
         wholesale_series = market_df['gasoline_rbob']
         ecm_model = AsymmetricECM(wholesale_lags=3, retail_lags=2)
         ecm_model.fit(retail_data=retail_series, wholesale_series=wholesale_series)
     except Exception as e:
         logger.debug(f"AsymmetricECM fitting skipped for {logger_region_key}: {e}")
+
+    # Dynamic model version tag distinguishing active ECM pipeline from legacy models (Issue #607, T-2)
+    pipeline_tag = "ECM" if (ecm_model and ecm_model.is_fitted) else None
+    model_tag = resolve_model_tag(region=logger_region_key, model_type=model_type, pipeline=pipeline_tag)
 
     # Pre-fetch secondary dual-anchor retail prices once per regional run (Issue #591)
     dual_anchor_map = {
@@ -187,6 +193,8 @@ def run_regional_pipeline(
             except Exception:
                 sec_cached_prices[sec_key] = sec_default
 
+    is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean)
+
     for h in [1, 2, 3, 4, 5]:
         h_res = multi_horizon_results.get(h)
         if not h_res:
@@ -196,18 +204,53 @@ def run_regional_pipeline(
         h_preds_hybrid = h_res.get('predictions_hybrid', h_res.get('y_pred_hybrid'))
         h_preds_quant = h_res.get('predictions_quant', h_res.get('y_pred_quant'))
 
-        # Determine regional baseline series
+        # Determine regional baseline series from authentic ground truth
         reg_col = f"{reg_clean}_retail_gasoline"
         if reg_col in h_splits['test_df'].columns:
             hist_base = h_splits['test_df'][reg_col]
         else:
-            hist_base = h_splits['test_df']['gasoline_rbob'] + dynamic_margin
+            from src.eia_retail_feed import get_regional_retail_history
+            hist_base = get_regional_retail_history(logger_region_key, h_test_dates, live_pump_price)
 
         rbob_hist = h_splits['test_df']['gasoline_rbob']
         pred_ret_hybrid = (h_preds_hybrid - rbob_hist) / rbob_hist
         pred_ret_quant = (h_preds_quant - rbob_hist) / rbob_hist
-        hist_pred = hist_base * (1.0 + pred_ret_hybrid)
-        hist_quant = hist_base * (1.0 + pred_ret_quant)
+
+        # Backtest full deployed pipeline with ECM and forward tax adjustments (Issue #607, T-2)
+        if ecm_model and ecm_model.is_fitted:
+            hist_pred_vals = []
+            hist_quant_vals = []
+            for idx in range(len(h_test_dates)):
+                t_ret = float(hist_base.iloc[idx] if hasattr(hist_base, 'iloc') else hist_base[idx])
+                t_whl = float(rbob_hist.iloc[idx] if hasattr(rbob_hist, 'iloc') else rbob_hist[idx])
+                t_pred_whl = float(h_preds_hybrid.iloc[idx] if hasattr(h_preds_hybrid, 'iloc') else h_preds_hybrid[idx])
+                t_quant_whl = float(h_preds_quant.iloc[idx] if hasattr(h_preds_quant, 'iloc') else h_preds_quant[idx])
+                t_date = str(h_test_dates.iloc[idx] if hasattr(h_test_dates, 'iloc') else h_test_dates[idx])
+                t_tax = get_known_future_tax_deltas(region=logger_region_key, as_of_date=t_date, horizon_days=h)
+                
+                hp = ecm_model.forecast_horizon(
+                    current_retail=t_ret,
+                    current_wholesale=t_whl,
+                    future_wholesale_deltas=[t_pred_whl - t_whl],
+                    horizon_days=h,
+                    forward_tax_delta=t_tax,
+                    is_california=is_ca
+                )
+                hq = ecm_model.forecast_horizon(
+                    current_retail=t_ret,
+                    current_wholesale=t_whl,
+                    future_wholesale_deltas=[t_quant_whl - t_whl],
+                    horizon_days=h,
+                    forward_tax_delta=t_tax,
+                    is_california=is_ca
+                )
+                hist_pred_vals.append(hp)
+                hist_quant_vals.append(hq)
+            hist_pred = pd.Series(hist_pred_vals, index=h_test_dates.index)
+            hist_quant = pd.Series(hist_quant_vals, index=h_test_dates.index)
+        else:
+            hist_pred = hist_base * (1.0 + pred_ret_hybrid)
+            hist_quant = hist_base * (1.0 + pred_ret_quant)
 
         try:
             backfill_new_region_history(

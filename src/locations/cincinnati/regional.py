@@ -44,17 +44,17 @@ def fetch_cincinnati_market_data(
     logger.info(f"Fetching market data for Cincinnati OH/KY region (Live OH: ${live_oh_price:.3f}/gal, Live KY: ${live_ky_price:.3f}/gal)...")
     
     from src.data_ingestion import fetch_market_data
+    from src.eia_retail_feed import get_regional_retail_history
     base_df = fetch_market_data(start_date=start_date, end_date=end_date)
     if base_df is None or base_df.empty or 'gasoline_rbob' not in base_df.columns:
         return _generate_synthetic_cincinnati_data(start_date, end_date, live_oh_price, live_ky_price)
         
     market_df = base_df.copy()
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
-    margin_oh = live_oh_price - latest_rbob
-    margin_ky = live_ky_price - latest_rbob
     
-    market_df['cincinnati_oh_retail_gasoline'] = market_df['gasoline_rbob'] + margin_oh
-    market_df['cincinnati_ky_retail_gasoline'] = market_df['gasoline_rbob'] + margin_ky
+    # Authentic regional retail series via EIA survey (Issues #607, #608)
+    market_df['cincinnati_oh_retail_gasoline'] = get_regional_retail_history("Cincinnati_OH", market_df['date'], live_oh_price)
+    market_df['cincinnati_ky_retail_gasoline'] = get_regional_retail_history("Cincinnati_KY", market_df['date'], live_ky_price)
     market_df['cincinnati_metro_avg_retail'] = (market_df['cincinnati_oh_retail_gasoline'] + market_df['cincinnati_ky_retail_gasoline']) / 2.0
     
     market_df['brent_crude_per_gal'] = market_df['brent_crude'] / 42.0
@@ -81,8 +81,13 @@ def _generate_synthetic_cincinnati_data(
     margin_oh = live_oh_price - rbob[-1]
     margin_ky = live_ky_price - rbob[-1]
     
-    oh_retail = rbob + margin_oh
-    ky_retail = rbob + margin_ky
+    var_oh = 0.14 * np.sin(np.linspace(0, 4 * np.pi, n)) + np.random.normal(0, 0.02, n)
+    var_ky = 0.12 * np.cos(np.linspace(0, 4 * np.pi, n)) + np.random.normal(0, 0.02, n)
+    var_oh -= var_oh[-1]
+    var_ky -= var_ky[-1]
+    
+    oh_retail = rbob + margin_oh + var_oh
+    ky_retail = rbob + margin_ky + var_ky
     metro_avg = (oh_retail + ky_retail) / 2.0
     
     return pd.DataFrame({
