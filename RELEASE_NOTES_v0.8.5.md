@@ -1,6 +1,6 @@
 # Release Notes - v0.8.5
 
-Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, security hardening, and operational resilience release. It eliminates proxy fallbacks in regional evaluation ground truth, establishes authentic retail historical cointegration for the Asymmetric Error-Correction Model (ECM), unifies deterministic ledger primary keys across all storage engines, hardens Cloudflare edge security against token replay, and reinforces CI/CD workflow synchronization.
+Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, security hardening, and operational resilience release. It eliminates proxy fallbacks in regional evaluation ground truth, establishes authentic retail historical cointegration for the Asymmetric Error-Correction Model (ECM), unifies deterministic ledger primary keys across all storage engines, hardens Cloudflare edge security against token replay, reinforces CI/CD workflow synchronization, and restores Vectorize Hindsight hosted episodic memory ingestion across local dev runners.
 
 ---
 
@@ -51,6 +51,11 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
   $$\sum_{i=1}^3 d_i = \Delta_{\text{forecast}}, \quad \operatorname{sgn}(d_i) = \operatorname{sgn}(\Delta_{\text{forecast}})$$
 - **Elimination of Static Literals**: Replaced hardcoded accuracy strings (`MAPE: 4.52% | RMSE: $0.1540`) in [`src/dashboard_generator.py`](src/dashboard_generator.py) with dynamic metrics computed from `prediction_history.csv`.
 - **Verified Subresource Integrity (SRI)**: Updated KaTeX 0.16.8 CSS and JS hashes in [`src/sources_generator.py`](src/sources_generator.py) and verified against jsdelivr CDN digests.
+ 
+### 9. Vectorize Hindsight Hosted SaaS Synchronization & Runner Resilience (Issue #557 / Operational Fix)
+- **Vectorize Hosted SaaS Reconfiguration**: Resolved endpoint divergence where automated local runners on `dev-vm` (`midgley-daily-forecast.service` and `midgley-weekly-review.service`) attempted memory dispatch to a decommissioned Cloud Run endpoint (`https://midgley-hindsight-66up5e6b4a-uc.a.run.app`) returning `HTTP 503`, failing health probes and silently falling back to offline SQLite. Reconfigured `/home/marty/projects/midgley/.env` to point to Vectorize Hosted SaaS (`https://api.hindsight.vectorize.io`) with authenticated API token and `HINDSIGHT_BANK_ID="Midgley"`.
+- **Workflow Environment Parity**: Updated [`.github/workflows/weekly_model_review.yml`](.github/workflows/weekly_model_review.yml) to inject missing `HINDSIGHT_API_KEY` and `HINDSIGHT_BANK_ID` secrets into the `Open Weekly GitHub Issue Report & Recommendations` step, ensuring parity across all production review steps.
+- **Historical Prediction Anomaly Reconciliation**: Executed [`scripts/reconcile_hindsight_memory.py`](scripts/reconcile_hindsight_memory.py) across the October 1–5, 2026 window, successfully reconciling and dual-dispatching 16 previously un-synced prediction anomalies (`DIRECTIONAL_FLIP` and `LARGE_OVERESTIMATE` shocks) into the `Midgley` cloud memory bank, restoring continuous World Fact extraction.
 
 ---
 
