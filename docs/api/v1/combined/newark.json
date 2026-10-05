@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-05T07:11:17.271216",
+  "timestamp": "2026-10-05T09:31:10.845220",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.22,
+    "current_price_per_gal": 4.205,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-05T07:06:23Z"
+      "timestamp": "2026-10-05T09:30:40Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 4.22,
-    "predicted_price_per_gal": 4.276,
+    "current_base_price": 4.205,
+    "predicted_price_per_gal": 4.261,
     "expected_change_dollars": 0.056,
     "expected_change_percent": 1.33,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.074,
-    "prediction_upper_95ci": 4.478,
+    "prediction_lower_95ci": 4.059,
+    "prediction_upper_95ci": 4.463,
     "calibration_method": "conformal",
     "calibration_sample_size": 238,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.231,
-    "day_2_price": 4.271,
-    "day_3_price": 4.316,
-    "day_4_price": 4.313,
-    "day_5_price": 4.276,
+    "day_1_price": 4.216,
+    "day_2_price": 4.256,
+    "day_3_price": 4.301,
+    "day_4_price": 4.298,
+    "day_5_price": 4.261,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -102,7 +102,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.02,
-          "impact_pct": 0.47,
+          "impact_pct": 0.48,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.02,
-      "impact_pct": 0.47,
+      "impact_pct": 0.48,
       "share_pct": 35.0,
       "direction": "UP"
     },

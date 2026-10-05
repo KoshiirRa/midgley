@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-05T07:11:19.926177",
+  "timestamp": "2026-10-05T09:31:13.616038",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.08,
+    "current_price_per_gal": 4.063,
     "source": "AAA Web Scraper (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Web Scraper (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-05T07:09:55Z"
+      "timestamp": "2026-10-05T09:30:44Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 4.08,
-    "predicted_price_per_gal": 4.128,
+    "current_base_price": 4.063,
+    "predicted_price_per_gal": 4.111,
     "expected_change_dollars": 0.048,
     "expected_change_percent": 1.18,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.008,
-    "prediction_upper_95ci": 4.248,
+    "prediction_lower_95ci": 3.991,
+    "prediction_upper_95ci": 4.231,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.09,
-    "day_2_price": 4.123,
-    "day_3_price": 4.168,
-    "day_4_price": 4.162,
-    "day_5_price": 4.128,
+    "day_1_price": 4.073,
+    "day_2_price": 4.106,
+    "day_3_price": 4.151,
+    "day_4_price": 4.145,
+    "day_5_price": 4.111,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.012,
-          "impact_pct": 0.29,
+          "impact_pct": 0.3,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.012,
-      "impact_pct": 0.29,
+      "impact_pct": 0.3,
       "share_pct": 25.0,
       "direction": "UP"
     },

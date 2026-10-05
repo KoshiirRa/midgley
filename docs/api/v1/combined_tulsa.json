@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-05T07:11:15.702007",
+  "timestamp": "2026-10-05T09:31:09.503969",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.985,
+    "current_price_per_gal": 3.966,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-05T07:10:50Z"
+      "timestamp": "2026-10-05T09:30:39Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-09",
-    "current_base_price": 3.985,
-    "predicted_price_per_gal": 4.008,
-    "expected_change_dollars": 0.023,
-    "expected_change_percent": 0.58,
+    "current_base_price": 3.966,
+    "predicted_price_per_gal": 3.99,
+    "expected_change_dollars": 0.024,
+    "expected_change_percent": 0.61,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.888,
-    "prediction_upper_95ci": 4.128,
+    "prediction_lower_95ci": 3.87,
+    "prediction_upper_95ci": 4.11,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.99,
-    "day_2_price": 4.015,
-    "day_3_price": 4.049,
-    "day_4_price": 4.033,
-    "day_5_price": 4.008,
+    "day_1_price": 3.971,
+    "day_2_price": 3.996,
+    "day_3_price": 4.03,
+    "day_4_price": 4.014,
+    "day_5_price": 3.99,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -89,14 +89,14 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.001,
         "share_pct": 2.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast +$0.023/gal (+0.58%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Refining Yield & Crack Spread (+$0.007/gal).",
+      "summary_text": "Tulsa OK forecast +$0.024/gal (+0.61%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Refining Yield & Crack Spread (+$0.007/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -140,11 +140,11 @@
         },
         {
           "category": "Tax & Regulatory Overhead",
-          "description": "Fixed statutory tax overhead",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+          "impact_dollars": 0.001,
+          "impact_pct": 0.03,
           "share_pct": 2.0,
-          "direction": "FLAT"
+          "direction": "UP"
         }
       ]
     }
@@ -192,15 +192,15 @@
     },
     {
       "category": "Tax & Regulatory Overhead",
-      "description": "Fixed statutory tax overhead",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+      "impact_dollars": 0.001,
+      "impact_pct": 0.03,
       "share_pct": 2.0,
-      "direction": "FLAT"
+      "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast +$0.023/gal (+0.58%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Refining Yield & Crack Spread (+$0.007/gal).",
+    "summary_text": "Tulsa OK forecast +$0.024/gal (+0.61%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Refining Yield & Crack Spread (+$0.007/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.001,
         "share_pct": 2.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     }
   }
