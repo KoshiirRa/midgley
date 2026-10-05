@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-05T01:02:26.483121",
+  "timestamp": "2026-10-05T08:39:47.258754",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.08,
+    "current_price_per_gal": 4.063,
     "source": "AAA Web Scraper (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Web Scraper (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-05T01:01:49Z"
+      "timestamp": "2026-10-05T08:39:29Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-12",
-    "current_base_price": 4.08,
-    "predicted_price_per_gal": 4.047,
+    "current_base_price": 4.063,
+    "predicted_price_per_gal": 4.03,
     "expected_change_dollars": -0.033,
     "expected_change_percent": -0.81,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.927,
-    "prediction_upper_95ci": 4.167,
+    "prediction_lower_95ci": 3.91,
+    "prediction_upper_95ci": 4.15,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.067,
-    "day_2_price": 4.077,
-    "day_3_price": 4.041,
-    "day_4_price": 4.04,
-    "day_5_price": 4.047,
+    "day_1_price": 4.05,
+    "day_2_price": 4.06,
+    "day_3_price": 4.024,
+    "day_4_price": 4.023,
+    "day_5_price": 4.03,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -102,7 +102,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.012,
-          "impact_pct": -0.29,
+          "impact_pct": -0.3,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.012,
-      "impact_pct": -0.29,
+      "impact_pct": -0.3,
       "share_pct": 35.0,
       "direction": "DOWN"
     },

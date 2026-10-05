@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-05T01:02:24.927104",
+  "timestamp": "2026-10-05T08:39:45.574856",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.935,
+    "current_price_per_gal": 3.845,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-05T00:59:47Z"
+      "timestamp": "2026-10-05T08:39:28Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-12",
-    "current_base_price": 3.935,
-    "predicted_price_per_gal": 3.897,
+    "current_base_price": 3.845,
+    "predicted_price_per_gal": 3.807,
     "expected_change_dollars": -0.038,
-    "expected_change_percent": -0.97,
+    "expected_change_percent": -0.99,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.777,
-    "prediction_upper_95ci": 4.017,
+    "prediction_lower_95ci": 3.687,
+    "prediction_upper_95ci": 3.927,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.923,
-    "day_2_price": 3.936,
-    "day_3_price": 3.901,
-    "day_4_price": 3.896,
-    "day_5_price": 3.897,
+    "day_1_price": 3.833,
+    "day_2_price": 3.846,
+    "day_3_price": 3.811,
+    "day_4_price": 3.806,
+    "day_5_price": 3.807,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast $-0.038/gal (-0.97%): Driven primarily by Regional Logistics & Hub Delivery ($-0.013/gal), Refining Yield & Crack Spread ($-0.009/gal).",
+      "summary_text": "Cincinnati OH forecast $-0.038/gal (-0.99%): Driven primarily by Regional Logistics & Hub Delivery ($-0.013/gal), Refining Yield & Crack Spread ($-0.009/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.013,
-          "impact_pct": -0.33,
+          "impact_pct": -0.34,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.008,
-          "impact_pct": -0.2,
+          "impact_pct": -0.21,
           "share_pct": 20.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.013,
-      "impact_pct": -0.33,
+      "impact_pct": -0.34,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.008,
-      "impact_pct": -0.2,
+      "impact_pct": -0.21,
       "share_pct": 20.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast $-0.038/gal (-0.97%): Driven primarily by Regional Logistics & Hub Delivery ($-0.013/gal), Refining Yield & Crack Spread ($-0.009/gal).",
+    "summary_text": "Cincinnati OH forecast $-0.038/gal (-0.99%): Driven primarily by Regional Logistics & Hub Delivery ($-0.013/gal), Refining Yield & Crack Spread ($-0.009/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
