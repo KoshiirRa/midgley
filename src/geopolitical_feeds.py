@@ -29,12 +29,22 @@ TRACKING_QUERY_PARAMS = {
 }
 
 
-def normalize_url(url: str) -> str:
-    """Strips query tracking parameters, anchors, and normalizes URL."""
-    if not url:
+def normalize_url(url: Any) -> str:
+    """Strips query tracking parameters, anchors, and normalizes URL safely handling NaN/null inputs."""
+    if url is None:
+        return ""
+    if not isinstance(url, str):
+        # Handle pandas / numpy NaN
+        if str(url).lower() == "nan" or (isinstance(url, float) and url != url):
+            return ""
+        url = str(url)
+    url_str = url.strip()
+    if not url_str or url_str.lower() in ("nan", "none"):
         return ""
     try:
-        parsed = urllib.parse.urlparse(url.strip())
+        parsed = urllib.parse.urlparse(url_str)
+        if not parsed.scheme or not parsed.netloc:
+            return url_str
         query_pairs = urllib.parse.parse_qsl(parsed.query)
         filtered_pairs = [(k, v) for k, v in query_pairs if k.lower() not in TRACKING_QUERY_PARAMS]
         new_query = urllib.parse.urlencode(filtered_pairs)
@@ -48,16 +58,21 @@ def normalize_url(url: str) -> str:
         ))
         return normalized
     except Exception:
-        return url.strip()
+        return url_str
 
 
 def normalize_headline(headline: str) -> str:
-    """Normalizes headline text by removing publisher suffixes and special characters."""
+    """
+    Normalizes headline text by removing publisher suffixes and special characters.
+    Preserves intra-word hyphens (e.g., 'Iran-backed Houthis' -> 'iran-backed houthis').
+    """
     if not headline:
         return ""
-    text = re.sub(r"\s*-\s*[^-]+$", "", headline).strip()  # Strip ' - Reuters', ' - AP News'
-    text = re.sub(r"\s*\|\s*[^|]+$", "", text).strip()
-    text = re.sub(r"[^\w\s]", "", text).lower()
+    # Strip trailing publisher attributions (preceded by whitespace and hyphen/pipe)
+    text = re.sub(r"\s+-\s+[^-\n]+$", "", headline).strip()
+    text = re.sub(r"\s+\|\s+[^|\n]+$", "", text).strip()
+    # Preserve intra-word hyphens: keep alphanumeric, whitespace, and hyphens
+    text = re.sub(r"[^\w\s-]", "", text).lower()
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -74,32 +89,59 @@ def compute_headline_similarity(h1: str, h2: str) -> float:
 
 def deduplicate_events(events: List[Dict[str, Any]], similarity_threshold: float = 0.85) -> List[Dict[str, Any]]:
     """
-    Deduplicates a list of event dictionaries based on date and normalized headline similarity.
+    Deduplicates a list of event dictionaries across rolling dates (+/- 1 day)
+    using canonical URLs and pre-tokenized Jaccard similarity.
     """
     unique_events: List[Dict[str, Any]] = []
-    seen_by_date: Dict[str, List[str]] = {}
+    seen_urls: set = set()
+    tokenized_by_date: Dict[str, List[Tuple[set, str]]] = {}
 
     for ev in events:
-        dt = str(ev.get("date", ""))[:10]
-        headline = ev.get("headline", "")
+        if not isinstance(ev, dict):
+            continue
+
+        raw_url = ev.get("url")
+        canon_url = normalize_url(raw_url)
+        if canon_url and canon_url in seen_urls:
+            continue
+
+        headline = str(ev.get("headline", ""))
         norm_h = normalize_headline(headline)
         if not norm_h:
             continue
+        tokens = set(norm_h.split())
+        if not tokens:
+            continue
 
-        if dt not in seen_by_date:
-            seen_by_date[dt] = []
+        dt_str = str(ev.get("date", ""))[:10]
+        candidate_dates = [dt_str]
+        try:
+            base_dt = datetime.strptime(dt_str, "%Y-%m-%d").date()
+            candidate_dates.append((base_dt - timedelta(days=1)).strftime("%Y-%m-%d"))
+            candidate_dates.append((base_dt + timedelta(days=1)).strftime("%Y-%m-%d"))
+        except Exception:
+            pass
 
-        # Check for near-duplicate syndicated story on the same or adjacent date
         is_duplicate = False
-        for seen_h in seen_by_date[dt]:
-            if compute_headline_similarity(norm_h, seen_h) >= similarity_threshold:
-                is_duplicate = True
+        for c_dt in candidate_dates:
+            if c_dt in tokenized_by_date:
+                for seen_tokens, _ in tokenized_by_date[c_dt]:
+                    intersection = len(tokens & seen_tokens)
+                    union = len(tokens | seen_tokens)
+                    sim = float(intersection) / float(union) if union > 0 else 0.0
+                    if sim >= similarity_threshold:
+                        is_duplicate = True
+                        break
+            if is_duplicate:
                 break
 
         if not is_duplicate:
-            seen_by_date[dt].append(norm_h)
-            if "url" in ev:
-                ev["url"] = normalize_url(ev["url"])
+            if canon_url:
+                seen_urls.add(canon_url)
+                ev["url"] = canon_url
+            if dt_str not in tokenized_by_date:
+                tokenized_by_date[dt_str] = []
+            tokenized_by_date[dt_str].append((tokens, norm_h))
             unique_events.append(ev)
 
     return unique_events
@@ -415,7 +457,7 @@ def get_geopolitical_maritime_events() -> pd.DataFrame:
         pass
 
     df = pd.DataFrame(deduped_records)
-    df['date'] = pd.to_datetime(df['date'])
+    df['date'] = pd.to_datetime(df['date'], format='mixed')
     return df.sort_values('date').reset_index(drop=True)
 
 
