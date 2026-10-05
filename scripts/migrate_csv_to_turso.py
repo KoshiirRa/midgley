@@ -31,16 +31,9 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 
-def generate_deterministic_forecast_id(
-    region: str,
-    model_version: str,
-    target_date: str,
-    horizon: int,
-    run_type: str
-) -> str:
-    """Computes deterministic 32-character SHA-256 identifier for a forecast."""
-    raw = f"{region.strip().lower()}_{model_version.strip().lower()}_{str(target_date)[:10]}_{int(horizon)}_{run_type.strip().lower()}"
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
+from src.prediction_logger import generate_forecast_id
+
+generate_deterministic_forecast_id = generate_forecast_id
 
 
 def migrate_csv_to_database(csv_path: str = "data/prediction_history.csv", db=None) -> dict:
@@ -94,7 +87,18 @@ def migrate_csv_to_database(csv_path: str = "data/prediction_history.csv", db=No
         run_type_val = row.get("run_type") if pd.notna(row.get("run_type")) else "BACKTEST"
         run_type = str(run_type_val).strip().upper()
 
-        forecast_id = generate_deterministic_forecast_id(region, model_version, target_date, horizon, run_type)
+        existing_fid = row.get("forecast_id")
+        if pd.notna(existing_fid) and str(existing_fid).strip() not in ("", "nan", "None"):
+            forecast_id = str(existing_fid).strip()
+        else:
+            forecast_id = generate_forecast_id(
+                region=region,
+                model_version=model_version,
+                target_date=target_date,
+                horizon_days=horizon,
+                run_type=run_type,
+                issued_at_utc=str(origin_val).strip() if run_type == "LIVE_PROSPECTIVE" and pd.notna(origin_val) else None
+            )
         
         pred_val = row.get("predicted_5d_price") if pd.notna(row.get("predicted_5d_price")) else row.get("predicted_wholesale_price", 0.0)
         try:

@@ -8,6 +8,7 @@ and deterministically re-keys every forecast with immutable SHA-256 primary IDs.
 """
 
 import os
+import sys
 import io
 import hashlib
 import subprocess
@@ -15,64 +16,43 @@ import logging
 from typing import Optional
 import pandas as pd
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 HISTORY_CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "prediction_history.csv")
 
+from src.prediction_logger import generate_forecast_id
 
-def generate_deterministic_forecast_id(
-    region: str,
-    model_version: str,
-    target_date: str,
-    horizon_days: int,
-    run_type: str,
-    issued_at_utc: Optional[str] = None
-) -> str:
-    """Generates a deterministic 32-character hex SHA-256 hash forecast ID."""
-    reg = str(region or "").strip()
-    mv = str(model_version or "").strip()
-    td = str(target_date or "")[:10].strip()
-    h = str(horizon_days or 5).strip()
-    rt = str(run_type or "").strip()
-    
-    if rt == "LIVE_PROSPECTIVE" and issued_at_utc:
-        ts = str(issued_at_utc).strip()
-        raw_key = f"{reg}|{mv}|{ts}|{td}|{h}|{rt}"
-    else:
-        raw_key = f"{reg}|{mv}|{td}|{h}|{rt}"
-    return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:32]
+generate_deterministic_forecast_id = generate_forecast_id
 
 
 def clean_and_rekey_history(
     csv_path: str = HISTORY_CSV_PATH,
-    source_git_rev: str = "a667e0a1~1",
+    source_git_rev: Optional[str] = None,
     output_path: Optional[str] = None
 ) -> pd.DataFrame:
     """
-    Cleans, deduplicates, and re-keys prediction_history.csv deterministically.
+    Cleans, deduplicates, and re-keys prediction_history.csv deterministically (Issue #602).
+    Preserves all live prospective forecasts while deduplicating backtest rows.
     """
     out_path = output_path or csv_path
     
-    # 1. Fetch historical un-truncated CSV from git rev if available
-    df_raw = None
-    try:
-        cmd = ["git", "show", f"{source_git_rev}:data/prediction_history.csv"]
-        res = subprocess.run(cmd, capture_output=True, check=True)
-        df_raw = pd.read_csv(io.BytesIO(res.stdout), low_memory=False)
-        logger.info(f"Loaded {len(df_raw)} raw historical rows from git rev {source_git_rev}")
-    except Exception as e:
-        logger.warning(f"Could not load git rev {source_git_rev} ({e}); falling back to current file at {csv_path}")
-        if os.path.exists(csv_path):
-            df_raw = pd.read_csv(csv_path, low_memory=False)
-        else:
-            raise FileNotFoundError(f"Cannot find {csv_path}")
+    if not os.path.exists(csv_path):
+        raise FileNotFoundError(f"Cannot find {csv_path}")
+
+    logger.info(f"Loading current prediction history ledger from {csv_path}")
+    df_raw = pd.read_csv(csv_path, low_memory=False)
 
     # Standardize columns
     if "forecast_target_date" not in df_raw.columns and "target_date" in df_raw.columns:
         df_raw["forecast_target_date"] = df_raw["target_date"]
     if "forecast_horizon_days" not in df_raw.columns and "horizon_step" in df_raw.columns:
         df_raw["forecast_horizon_days"] = df_raw["horizon_step"]
+
+    df_raw["forecast_target_date"] = df_raw["forecast_target_date"].astype(str).str[:10]
+    df_raw["forecast_horizon_days"] = pd.to_numeric(df_raw["forecast_horizon_days"], errors="coerce").fillna(5).round().astype(int)
 
     # 2. Extract Backtests & Deduplicate
     backtests = df_raw[df_raw["run_type"] == "RETROSPECTIVE_BACKTEST"].copy()

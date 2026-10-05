@@ -50,6 +50,37 @@ def read_prediction_history(path: str = HISTORY_CSV_PATH) -> pd.DataFrame:
     return pd.read_csv(path, dtype=PREDICTION_HISTORY_DTYPES, low_memory=False)
 
 
+def generate_forecast_id(
+    region: str,
+    model_version: str,
+    target_date: str,
+    horizon_days: Union[int, float],
+    run_type: str,
+    issued_at_utc: Optional[str] = None
+) -> str:
+    """
+    Generates a deterministic 32-character hex SHA-256 hash forecast ID (Issue #559, #602).
+    Canonical format:
+    - LIVE_PROSPECTIVE: {region}|{model_version}|{issued_at_utc}|{target_date[:10]}|{horizon_int}|{run_type}
+    - RETROSPECTIVE_BACKTEST: {region}|{model_version}|{target_date[:10]}|{horizon_int}|{run_type}
+    """
+    reg = str(region or "").strip()
+    mv = str(model_version or "").strip()
+    td = str(target_date or "")[:10].strip()
+    try:
+        h_int = int(round(float(horizon_days)))
+    except (ValueError, TypeError):
+        h_int = 5
+    rt = str(run_type or "").strip()
+
+    if rt == "LIVE_PROSPECTIVE" and issued_at_utc:
+        ts = str(issued_at_utc).strip()
+        raw_key = f"{reg}|{mv}|{ts}|{td}|{h_int}|{rt}"
+    else:
+        raw_key = f"{reg}|{mv}|{td}|{h_int}|{rt}"
+    return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:32]
+
+
 def ensure_history_store():
     """Ensures data directory and prediction_history.csv file exist with standard and extended MLOps schema."""
     os.makedirs("data", exist_ok=True)
@@ -525,13 +556,16 @@ def log_predictions(
         if record_run_type in ["DAILY_BATCH", "DAILY_FORECAST", None] or not record_run_type:
             record_run_type = "RETROSPECTIVE_BACKTEST" if is_retro else "LIVE_PROSPECTIVE"
 
-        # Deterministic unique forecast identifier (Issue #559, #585)
+        # Deterministic unique forecast identifier (Issue #559, #585, #602)
         issued_utc = str(row.get('issued_at_utc')) if ('issued_at_utc' in row and pd.notna(row['issued_at_utc'])) else now_utc_str
-        if record_run_type == "LIVE_PROSPECTIVE":
-            raw_key = f"{region.strip()}|{model_version.strip()}|{issued_utc.strip()}|{str(target_date)[:10]}|{int(h_days)}|{record_run_type.strip()}"
-        else:
-            raw_key = f"{region.strip()}|{model_version.strip()}|{str(target_date)[:10]}|{int(h_days)}|{record_run_type.strip()}"
-        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:32]
+        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else generate_forecast_id(
+            region=region,
+            model_version=model_version,
+            target_date=str(target_date)[:10],
+            horizon_days=h_days,
+            run_type=record_run_type,
+            issued_at_utc=issued_utc
+        )
 
         new_records.append({
             "forecast_id": f_id,

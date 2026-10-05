@@ -56,3 +56,52 @@ def test_clean_and_rekey_preserves_live_forecasts(tmp_path):
     assert len(df_cleaned[df_cleaned["run_type"] == "LIVE_PROSPECTIVE"]) == 2
     assert len(df_cleaned[df_cleaned["run_type"] == "INTRADAY_REVISION"]) == 0
     assert df_cleaned["forecast_id"].nunique() == 3
+
+
+def test_log_predictions_idempotent_after_clean(tmp_path, monkeypatch):
+    """Regression test asserting log_predictions adds 0 duplicate backtest rows after clean (Issue #602)."""
+    from src.prediction_logger import log_predictions, generate_forecast_id
+
+    test_csv = str(tmp_path / "prediction_history.csv")
+    monkeypatch.setattr("src.prediction_logger.HISTORY_CSV_PATH", test_csv)
+
+    pred_df = pd.DataFrame([
+        {
+            "date": "2026-09-28",
+            "forecast_target_date": "2026-10-05",
+            "current_price": 2.50,
+            "predicted_5d_price": 2.55,
+            "forecast_horizon_days": 5
+        }
+    ])
+
+    log_predictions(
+        pred_df,
+        region="National",
+        model_version="v1.6-Ridge",
+        run_type="RETROSPECTIVE_BACKTEST",
+        is_retroactive_backtest=True
+    )
+    df1 = pd.read_csv(test_csv)
+    assert len(df1) == 1
+    initial_fid = df1.iloc[0]["forecast_id"]
+    expected_fid = generate_forecast_id("National", "v1.6-Ridge", "2026-10-05", 5, "RETROSPECTIVE_BACKTEST")
+    assert initial_fid == expected_fid
+
+    # Clean the file
+    clean_and_rekey_history(csv_path=test_csv, output_path=test_csv)
+    df_after_clean = pd.read_csv(test_csv)
+    assert len(df_after_clean) == 1
+
+    # Log the exact same prediction again (idempotent logging)
+    log_predictions(
+        pred_df,
+        region="National",
+        model_version="v1.6-Ridge",
+        run_type="RETROSPECTIVE_BACKTEST",
+        is_retroactive_backtest=True
+    )
+    df2 = pd.read_csv(test_csv)
+    assert len(df2) == 1, f"Expected 1 row, got {len(df2)} (duplicate added)"
+    assert df2.iloc[0]["forecast_id"] == expected_fid
+
