@@ -44,7 +44,11 @@ jobs:
 
       - name: Rebase On Latest Remote Changes
         run: |
-          git pull --rebase --autostash origin main || true
+          if ! git pull --rebase origin main; then
+            git rebase --abort || true
+            echo "::warning::Rebase conflict encountered during headline arena sync; aborted cleanly without writing conflict markers."
+            exit 1
+          fi
 
       - name: Commit and Push Updated Pending Cache and Ledger
         uses: stefanzweifel/git-auto-commit-action@v5

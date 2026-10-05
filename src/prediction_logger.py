@@ -292,9 +292,13 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 err_body = e.read().decode("utf-8", errors="replace")
             except Exception:
                 err_body = ""
-            logger.warning(f"Turso prediction cloud sync notice: HTTP Error {e.code}: {e.reason} - {err_body}")
+            err_msg = f"Turso prediction cloud sync failed with HTTP {e.code}: {e.reason} - {err_body}"
+            logger.error(err_msg)
+            return {"status": "error", "reason": err_msg, "provider": "turso_edge"}
         except Exception as e:
-            logger.warning(f"Turso prediction cloud sync notice: {e}")
+            err_msg = f"Turso prediction cloud sync exception: {e}"
+            logger.error(err_msg)
+            return {"status": "error", "reason": err_msg, "provider": "turso_edge"}
 
     # 2. Attempt Cloudflare D1 / Edge Worker sync if credentials present
     if cf_url:
@@ -319,9 +323,13 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 err_body = e.read().decode("utf-8", errors="replace")
             except Exception:
                 err_body = ""
-            logger.warning(f"Cloudflare D1 prediction sync notice: HTTP Error {e.code}: {e.reason} - {err_body}")
+            err_msg = f"Cloudflare D1 prediction sync failed with HTTP {e.code}: {e.reason} - {err_body}"
+            logger.error(err_msg)
+            return {"status": "error", "reason": err_msg, "provider": "cloudflare_d1"}
         except Exception as e:
-            logger.warning(f"Cloudflare D1 prediction sync notice: {e}")
+            err_msg = f"Cloudflare D1 prediction sync exception: {e}"
+            logger.error(err_msg)
+            return {"status": "error", "reason": err_msg, "provider": "cloudflare_d1"}
 
     return {"status": "offline_fallback", "synced_rows": len(df), "provider": "local_csv"}
 

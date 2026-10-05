@@ -28,6 +28,9 @@ if __name__ == "__main__":
     print("      MIDGLEY MASTER FORECASTING ENGINE - ALL LOCATIONS PIPELINE")
     print("=" * 80)
 
+    from src.healthcheck_monitor import ping_healthcheck_start, ping_healthcheck_success, ping_healthcheck_failure
+    ping_healthcheck_start(log_message=f"Starting master forecasting pipeline execution (model={model_choice})")
+
     step_num = 1
     total_steps = len(LOCATIONS) + 1
     
@@ -48,8 +51,16 @@ if __name__ == "__main__":
 
     exporter_failures = []
 
-    # Issue #483: Evaluate regional failure gate BEFORE generating public artifacts
+    # Issue #483, #606: Evaluate regional failure gate and ensure healthy forecasts are preserved
     if failed_locations:
+        # Sync healthy regional forecasts logged so far to cloud prior to halting
+        try:
+            from src.prediction_logger import sync_predictions_to_cloud
+            sync_predictions_to_cloud()
+        except Exception as e:
+            logger.debug(f"Cloud sync notice on partial failure: {e}")
+
+        ping_healthcheck_failure(log_message=f"Pipeline regional failures: {failed_locations}")
         allow_partial = "--allow-partial" in sys.argv
         print("\n" + "!" * 80)
         print(f"  ERROR: {len(failed_locations)} location pipeline(s) failed during execution:")
@@ -77,14 +88,19 @@ if __name__ == "__main__":
         logger.error(f"Error generating public dashboard: {e}", exc_info=True)
         exporter_failures.append(("generate_public_dashboard", str(e)))
 
-    # Final Pipeline Cloud Database Sync (Turso / Cloudflare D1 - Issue #498)
+    # Final Pipeline Cloud Database Sync (Turso / Cloudflare D1 - Issues #498, #606)
     try:
         from src.prediction_logger import sync_predictions_to_cloud
         print("\n  [CLOUD SYNC] Synchronizing finalized prediction ledger to Cloud DB...")
         sync_res = sync_predictions_to_cloud()
         print(f"  -> Cloud Sync Result: {sync_res}")
+        if sync_res.get("status") == "error":
+            err_msg = sync_res.get("reason", "Unknown cloud sync failure")
+            logger.error(f"Cloud sync failed: {err_msg}")
+            exporter_failures.append(("sync_predictions_to_cloud", err_msg))
     except Exception as e:
-        logger.debug(f"Notice during final cloud database sync: {e}")
+        logger.error(f"Error during final cloud database sync: {e}", exc_info=True)
+        exporter_failures.append(("sync_predictions_to_cloud", str(e)))
 
     # Optional Headline Arena Independent CRPS/Brier Benchmark Submission (Issue #182)
     submit_ha = "--submit-headline-arena" in sys.argv
@@ -201,8 +217,12 @@ if __name__ == "__main__":
         for task_name, err in exporter_failures:
             print(f"    - {task_name}: {err}")
         print("!" * 80)
+        ping_healthcheck_failure(log_message=f"Pipeline exporter failures: {exporter_failures}")
         print("  [EXPORTER GATING] Halting with non-zero exit code due to exporter failure(s).")
         sys.exit(1)
+
+    if not failed_locations:
+        ping_healthcheck_success(log_message=f"All locations pipeline completed successfully ({len(LOCATIONS)} locations)")
 
     print("\n" + "=" * 80)
     print("                      ALL LOCATIONS EXECUTION COMPLETE")

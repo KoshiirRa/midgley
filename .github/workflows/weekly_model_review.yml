@@ -96,20 +96,23 @@ jobs:
           python run_all.py --dashboard-only
 
       - name: Commit and Push Updated Performance Metrics & Prediction History
+        if: always()
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout "origin/$BRANCH" -- data/headline_arena_*.json 2>/dev/null || true
           git add README.md MODEL_LEARNING.md docs data
-          if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
-            git status --short
-            echo "::warning::Unstaged tracked modifications detected prior to commit"
-            git add -u
+          if ! git diff --quiet; then
+            git diff --name-only
+            echo "::error::Unexpected modified tracked files detected"
+            exit 1
           fi
           if ! git diff --cached --quiet; then
             git commit -m "chore: Weekly Saturday model performance review & rolling accuracy update [skip ci]"
             for i in 1 2 3; do
+              git checkout "origin/$BRANCH" -- data/headline_arena_*.json 2>/dev/null || true
               if git pull --rebase origin "$BRANCH"; then
                 git push origin "HEAD:$BRANCH" && exit 0
               else
