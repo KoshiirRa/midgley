@@ -1,10 +1,10 @@
 {
   "benchmark_key": "usgs_water",
-  "last_refreshed_utc": "2026-10-05 00:35:16",
+  "last_refreshed_utc": "2026-10-05 01:00:36",
   "records_count": 6,
   "data": {
     "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-    "timestamp": "2026-10-05 00:35:15",
+    "timestamp": "2026-10-05 01:00:28",
     "status": "SUCCESS",
     "stations_monitored": 13,
     "stations": {
@@ -62,11 +62,11 @@
         "name": "Mississippi River at Belle Chasse, LA",
         "cluster": "gulf_coast",
         "role": "gulf_salt_wedge_intrusion",
-        "gage_height_ft": 8.76,
-        "discharge_cfs": 385000.0,
+        "gage_height_ft": 8.7,
+        "discharge_cfs": 381000.0,
         "water_temp_c": 24.0,
         "specific_conductance_us_cm": 480.0,
-        "last_updated": "2026-10-04T18:30:00.000-05:00"
+        "last_updated": "2026-10-04T19:30:00.000-05:00"
       },
       "08041780": {
         "name": "Neches River at Beaumont, TX (Sabine-Neches)",
@@ -92,8 +92,8 @@
         "name": "Sacramento River at Freeport, CA",
         "cluster": "bay_area",
         "role": "atmospheric_river_runoff",
-        "gage_height_ft": 14.49,
-        "discharge_cfs": 76800.0,
+        "gage_height_ft": 14.43,
+        "discharge_cfs": 63500.0,
         "water_temp_c": 20.7,
         "specific_conductance_us_cm": 168.0,
         "last_updated": "2020-05-12T11:45:00.000-08:00"
@@ -142,7 +142,7 @@
     "indices": {
       "hydrological_barge_bottleneck_index": 0.0,
       "gulf_marine_departure_risk_index": 0.0,
-      "carquinez_berthing_risk_index": 0.707,
+      "carquinez_berthing_risk_index": 0.411,
       "delaware_refinery_thermal_index": 0.0,
       "tulsa_refinery_flood_risk_index": 0.0,
       "florida_canal_flood_risk_index": 0.0,
