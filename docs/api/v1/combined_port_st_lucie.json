@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-04T21:45:52.898928",
+  "timestamp": "2026-10-05T06:30:52.954207",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-04T21:45:23Z"
+      "timestamp": "2026-10-05T06:30:29Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -40,7 +40,7 @@
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.094,
+    "day_1_price": 4.095,
     "day_2_price": 4.157,
     "day_3_price": 4.196,
     "day_4_price": 4.197,
