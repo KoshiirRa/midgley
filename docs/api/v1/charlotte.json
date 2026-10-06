@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T05:45:41.533260",
+  "timestamp": "2026-10-06T07:22:12.484216",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T05:45:24Z"
+      "timestamp": "2026-10-06T07:21:27Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-09",
+    "target_date": "2026-10-12",
     "current_base_price": 4.056,
-    "predicted_price_per_gal": 4.112,
-    "expected_change_dollars": 0.056,
-    "expected_change_percent": 1.38,
+    "predicted_price_per_gal": 4.111,
+    "expected_change_dollars": 0.055,
+    "expected_change_percent": 1.36,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.992,
-    "prediction_upper_95ci": 4.232,
+    "prediction_lower_95ci": 3.991,
+    "prediction_upper_95ci": 4.231,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 4.067,
-    "day_2_price": 4.078,
-    "day_3_price": 4.151,
-    "day_4_price": 4.147,
-    "day_5_price": 4.112,
+    "day_2_price": 4.08,
+    "day_3_price": 4.148,
+    "day_4_price": 4.155,
+    "day_5_price": 4.111,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -89,14 +89,14 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast +$0.056/gal (+1.38%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.014/gal).",
+      "summary_text": "Charlotte NC forecast +$0.055/gal (+1.36%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.014/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -141,8 +141,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.07,
+          "impact_dollars": 0.002,
+          "impact_pct": 0.05,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -193,14 +193,14 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.07,
+      "impact_dollars": 0.002,
+      "impact_pct": 0.05,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast +$0.056/gal (+1.38%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.014/gal).",
+    "summary_text": "Charlotte NC forecast +$0.055/gal (+1.36%): Driven primarily by Regional Logistics & Hub Delivery (+$0.022/gal), Futures & Commodity Benchmark (+$0.014/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
