@@ -54,7 +54,44 @@ except ImportError:
         finish_wandb_run = lambda *args, **kwargs: None
         is_wandb_enabled = lambda *args, **kwargs: False
 
+try:
+    from src.market_calendar import get_trading_calendar
+except ImportError:
+    try:
+        from market_calendar import get_trading_calendar
+    except ImportError:
+        get_trading_calendar = None
+
 logger = logging.getLogger(__name__)
+
+
+def _compute_forecast_target_date(origin_date: Any, horizon: int) -> Optional[str]:
+    """Computes target date strictly using exchange trading calendar (Finding A-5)."""
+    if origin_date is None:
+        return None
+    if get_trading_calendar is not None:
+        try:
+            return get_trading_calendar().get_target_date_for_horizon(origin_date, horizon)
+        except Exception:
+            pass
+    try:
+        return pd.bdate_range(start=pd.to_datetime(origin_date), periods=horizon + 1)[-1].strftime('%Y-%m-%d')
+    except Exception:
+        return None
+
+
+def _check_roll_straddling(origin_date: Any, target_date: Optional[str]) -> Tuple[bool, Optional[str]]:
+    """Checks whether forecast window crosses NYMEX RBOB contract roll expiry (Finding A-8)."""
+    if origin_date is None or target_date is None:
+        return False, None
+    if get_trading_calendar is not None:
+        try:
+            is_straddle, expiry_dt = get_trading_calendar().is_roll_straddling(origin_date, target_date)
+            expiry_str = expiry_dt.strftime('%Y-%m-%d') if expiry_dt else None
+            return is_straddle, expiry_str
+        except Exception:
+            pass
+    return False, None
 
 def evaluate_predictions(y_true: pd.Series, y_pred: np.ndarray, y_current: pd.Series = None) -> dict:
     """
@@ -872,10 +909,13 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "feature_cutoff_date": str(live_origin_date) if live_origin_date is not None else None,
         "plausibility_gated": is_gated,
         "plausibility_reason": gate_reason,
-        "forecast_target_date": (
-            pd.bdate_range(start=pd.to_datetime(live_origin_date), periods=int(split_data.get('forecast_horizon', 5)) + 1)[-1].strftime('%Y-%m-%d')
-            if live_origin_date is not None else None
+        "forecast_target_date": _compute_forecast_target_date(
+            live_origin_date, int(split_data.get('forecast_horizon', 5))
         ),
+        "is_roll_straddling": _check_roll_straddling(
+            live_origin_date,
+            _compute_forecast_target_date(live_origin_date, int(split_data.get('forecast_horizon', 5)))
+        )[0],
     }
 
 
@@ -999,14 +1039,19 @@ def train_multi_horizon_models(
         res['forecast_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
         res['feature_cutoff_date'] = str(live_origin_date) if live_origin_date is not None else None
         if live_origin_date is not None:
-            try:
-                origin_dt = pd.to_datetime(live_origin_date)
-                target_dt = pd.bdate_range(start=origin_dt, periods=h+1)[-1]
-                res['forecast_target_date'] = target_dt.strftime('%Y-%m-%d')
-            except Exception:
-                res['forecast_target_date'] = None
+            tgt_date = _compute_forecast_target_date(live_origin_date, h)
+            res['forecast_target_date'] = tgt_date
+            is_straddle, roll_expiry = _check_roll_straddling(live_origin_date, tgt_date)
+            res['is_roll_straddling'] = is_straddle
+            if is_straddle:
+                res['contract_roll_expiry'] = roll_expiry
+                logger.warning(
+                    f"[MarketCalendar] Multi-horizon model h={h} from origin {live_origin_date} to {tgt_date} "
+                    f"straddles NYMEX RBOB contract roll expiry on {roll_expiry}."
+                )
         else:
             res['forecast_target_date'] = None
+            res['is_roll_straddling'] = False
 
         # Calibrate wholesale predictive density cone (Issue #448, #611)
         if 'gasoline_rbob' in market_df.columns:

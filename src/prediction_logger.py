@@ -518,11 +518,27 @@ def log_predictions(
         except (ValueError, TypeError):
             h_days = int(forecast_horizon_days)
 
+        base_dt = pd.to_datetime(row.get('date', row.get('log_timestamp', datetime.now())))
         if 'forecast_target_date' in row and pd.notna(row['forecast_target_date']):
             target_date = str(row['forecast_target_date'])
         else:
-            base_dt = pd.to_datetime(row['date'])
-            target_date = pd.bdate_range(start=base_dt, periods=h_days + 1)[-1].strftime("%Y-%m-%d")
+            try:
+                from src.market_calendar import get_trading_calendar
+                target_date = get_trading_calendar().get_target_date_for_horizon(base_dt, h_days)
+            except Exception:
+                target_date = pd.bdate_range(start=base_dt, periods=h_days + 1)[-1].strftime("%Y-%m-%d")
+
+        # Check NYMEX contract roll straddling (Finding A-5, A-8)
+        try:
+            from src.market_calendar import get_trading_calendar
+            is_straddle, expiry_dt = get_trading_calendar().is_roll_straddling(base_dt, target_date)
+            if is_straddle:
+                logger.warning(
+                    f"[MarketCalendar] Forecast for {region} (origin {base_dt.strftime('%Y-%m-%d')}, "
+                    f"target {target_date}, h={h_days}) straddles NYMEX RBOB contract roll expiry on {expiry_dt}."
+                )
+        except Exception as e:
+            logger.debug(f"Roll straddling check notice: {e}")
         
         quant_base = float(row.get('quant_baseline_5d_price')) if 'quant_baseline_5d_price' in row and pd.notna(row['quant_baseline_5d_price']) else np.nan
         aug_delta = float(row.get('llm_augmentation_delta')) if 'llm_augmentation_delta' in row and pd.notna(row['llm_augmentation_delta']) else (round(pred_price - quant_base, 4) if pd.notna(quant_base) else 0.0)

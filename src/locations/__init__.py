@@ -100,6 +100,8 @@ def list_locations() -> List[str]:
 def get_location(loc_id: str) -> Dict[str, Any]:
     """Retrieves location metadata and execution handlers by location ID."""
     loc_id = loc_id.lower().strip()
+    if loc_id in ("bay_area", "bayarea", "bayarea_ca", "oakland_ca"):
+        loc_id = "oakland"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]
@@ -122,6 +124,10 @@ def build_all_notebooks() -> Dict[str, str]:
         paths[loc_id] = path
     return paths
 
+# Aliases for consolidated Bay Area regional pipeline
+run_bay_area_pipeline = run_oakland_pipeline
+build_bay_area_notebook = build_oakland_notebook
+
 __all__ = [
     "LOCATIONS",
     "list_locations",
@@ -135,5 +141,6 @@ __all__ = [
     "run_greenville_pipeline",
     "run_charlotte_pipeline",
     "run_oakland_pipeline",
+    "run_bay_area_pipeline",
     "run_port_st_lucie_pipeline"
 ]

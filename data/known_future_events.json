@@ -1,79 +1,101 @@
 [
   {
     "effective_date": "2022-07-01",
+    "announced_on": "2022-05-01",
     "region": "Oakland_CA",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.028,
-    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.028/gal)"
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.028/gal)",
+    "source_url": "https://www.cdtfa.ca.gov/taxes-and-fees/tax-rates-stfd.htm"
   },
   {
     "effective_date": "2023-07-01",
+    "announced_on": "2023-05-01",
     "region": "Oakland_CA",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.040,
-    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.040/gal)"
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.040/gal)",
+    "source_url": "https://www.cdtfa.ca.gov/taxes-and-fees/tax-rates-stfd.htm"
   },
   {
     "effective_date": "2024-07-01",
+    "announced_on": "2024-05-01",
     "region": "Oakland_CA",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.017,
-    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.017/gal)"
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (+$0.017/gal)",
+    "source_url": "https://www.cdtfa.ca.gov/taxes-and-fees/tax-rates-stfd.htm"
   },
   {
     "effective_date": "2025-07-01",
+    "announced_on": "2025-05-01",
     "region": "Oakland_CA",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.016,
-    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (59.6¢ -> 61.2¢; CDTFA L-978, +$0.016/gal)"
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (59.6¢ -> 61.2¢; CDTFA L-978, +$0.016/gal)",
+    "source_url": "https://www.cdtfa.ca.gov/taxes-and-fees/tax-rates-stfd.htm"
   },
   {
     "effective_date": "2025-07-01",
+    "announced_on": "2025-05-01",
     "region": "BayArea_CA",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.016,
-    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (59.6¢ -> 61.2¢; CDTFA L-978, +$0.016/gal)"
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (59.6¢ -> 61.2¢; CDTFA L-978, +$0.016/gal)",
+    "source_url": "https://www.cdtfa.ca.gov/taxes-and-fees/tax-rates-stfd.htm"
   },
   {
     "effective_date": "2026-07-01",
+    "announced_on": "2026-05-01",
     "region": "Oakland_CA",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.022,
-    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (61.2¢ -> 63.4¢; CDTFA L-1025, +$0.022/gal)"
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (61.2¢ -> 63.4¢; CDTFA L-1025, +$0.022/gal)",
+    "source_url": "https://www.cdtfa.ca.gov/taxes-and-fees/tax-rates-stfd.htm"
   },
   {
     "effective_date": "2026-07-01",
+    "announced_on": "2026-05-01",
     "region": "BayArea_CA",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.022,
-    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (61.2¢ -> 63.4¢; CDTFA L-1025, +$0.022/gal)"
+    "description": "California annual SB 1 statutory fuel excise tax inflation rate reset (61.2¢ -> 63.4¢; CDTFA L-1025, +$0.022/gal)",
+    "source_url": "https://www.cdtfa.ca.gov/taxes-and-fees/tax-rates-stfd.htm"
   },
   {
     "effective_date": "2026-01-01",
+    "announced_on": "2025-12-15",
     "region": "Charlotte_NC",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.007,
-    "description": "North Carolina statutory motor fuels tax rate formula adjustment (40.3¢ -> 41.0¢; NCDOR, +$0.007/gal)"
+    "description": "North Carolina statutory motor fuels tax rate formula adjustment (40.3¢ -> 41.0¢; NCDOR, +$0.007/gal)",
+    "source_url": "https://www.ncdor.gov/taxes-forms/motor-fuels-tax/motor-fuels-rates"
   },
   {
     "effective_date": "2026-01-01",
+    "announced_on": "2025-12-15",
     "region": "Greenville_NC",
     "event_type": "EXCISE_TAX_ADJUSTMENT",
     "delta_tax_dollars": 0.007,
-    "description": "North Carolina statutory motor fuels tax rate formula adjustment (40.3¢ -> 41.0¢; NCDOR, +$0.007/gal)"
+    "description": "North Carolina statutory motor fuels tax rate formula adjustment (40.3¢ -> 41.0¢; NCDOR, +$0.007/gal)",
+    "source_url": "https://www.ncdor.gov/taxes-forms/motor-fuels-tax/motor-fuels-rates"
   },
   {
     "effective_date": "2026-10-04",
+    "announced_on": "2026-09-18",
     "region": "Cincinnati_OH",
     "event_type": "EXCISE_TAX_HOLIDAY",
     "delta_tax_dollars": -0.385,
-    "description": "Ohio statutory gas-tax holiday (HB 519; 38.5¢/gal dropped to 0.0001¢/gal from 12:01 a.m. 4 Oct 2026 to 11:59 p.m. 2 Jan 2027)"
+    "description": "Ohio statutory gas-tax holiday (HB 519; 38.5¢/gal dropped to 0.0001¢/gal from 12:01 a.m. 4 Oct 2026 to 11:59 p.m. 2 Jan 2027)",
+    "source_url": "https://tax.ohio.gov/help-center/faqs/motor-fuel-tax"
   },
   {
     "effective_date": "2027-01-03",
+    "announced_on": "2026-09-18",
     "region": "Cincinnati_OH",
     "event_type": "EXCISE_TAX_RESTORATION",
     "delta_tax_dollars": 0.385,
-    "description": "Ohio statutory gas-tax holiday expiration and restoration (HB 519; +38.5¢/gal restored on 3 Jan 2027)"
+    "description": "Ohio statutory gas-tax holiday expiration and restoration (HB 519; +38.5¢/gal restored on 3 Jan 2027)",
+    "source_url": "https://tax.ohio.gov/help-center/faqs/motor-fuel-tax"
   }
 ]

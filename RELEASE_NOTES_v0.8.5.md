@@ -95,11 +95,42 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 - **Comprehensive Production Caller Audit**: Established active non-test production callers for `metro_nowcast`, `volatility_engine`, `locations/specs`, `edgeworth_cycle`, and `firms_satellite_feed`, verified via automated AST test [`tests/test_caller_audit.py`](tests/test_caller_audit.py).
 - **Repo-Wide Version Harmonization**: Aligned version numbers across `pyproject.toml`, `src/__init__.py`, `src/version.py`, `src/http_client.py`, and `RELEASE_MANIFEST.json` to `0.8.5`.
 
+### 17. Official EIA API v2 Weekly Ground Truth & WPSR Supply Fundamentals (Finding 3.1 & 3.2, E-2)
+- **EIA API v2 Client Engine**: Built [`src/eia_api_client.py`](src/eia_api_client.py) querying official endpoints (`api.eia.gov/v2/petroleum/pri/gnd/data/` for weekly retail pump prices and `api.eia.gov/v2/seriesid/PET.{id}.W` for Weekly Petroleum Status Report fundamentals).
+- **Honest Provenance Tiering**: Ingests official weekly ground truth with transparent geographical tier tags (`EIA_CITY_SanFrancisco` for `EMM_EPMR_PTE_Y05SF_DPG`, `EIA_STATE_OH` for `EMM_EPMR_PTE_SOH_DPG`, `EIA_PADD_1B`, `EIA_PADD_1C`, `EIA_PADD_2`, `EIA_COUNTRY_US`). Non-city targets (`Tulsa_OK`, `Cincinnati_KY`, `Newark_DE`, `Charlotte_NC`, `Greenville_NC`) are honestly labeled at true PADD tier.
+- **WPSR Supply Fundamentals Ingestion**: Wired weekly inventory and refinery inputs into [`src/data_ingestion.py`](src/data_ingestion.py): Gulf Coast total gasoline (`WGTSTP31`), PADD 2 inventory (`WGTSTP21`), East Coast inventory (`WGTSTP11`), refinery utilization rates (`W_NA_YUP_R20_PER`, `W_NA_YUP_R30_PER`), and refinery production runs (`WGFUPUS2`).
+- **Lookahead-Safe Bitemporal Persistence**: Persists release vintages in `VintageStore` (`data/eia_retail_vintages.json`) with release timing bounds (Tuesdays 15:00 UTC for retail, Wednesdays 15:30 UTC for WPSR).
+
+### 18. USGS River Water Telemetry Migration to OGC API Collection (Finding 3.2)
+- **Modern OGC API Collection Endpoint**: Migrated [`src/usgs_water_feed.py`](src/usgs_water_feed.py) and [`src/usace_locks.py`](src/usace_locks.py) to query modern OGC API (`https://api.waterdata.usgs.gov/ogcapi/v1/collections/continuous/items?monitoring_location_number=...&parameter_code=00065&f=json`), completely insulating Midgley from the legacy `waterservices.usgs.gov` sunset and throttling cutoff scheduled for November 16, 2026.
+- **Robust GeoJSON Parsing & Fallback**: Added `_parse_usgs_ogc_json()` with automated fallback to legacy JSON during the transition period.
+- **Test Sandbox Isolation**: Guarded vintage and benchmark writes with `TESTING == 1` checks to prevent checksum mutation errors in test suites.
+
+### 19. Regional Hub Consolidation: Oakland & SF Bay Area Unified Architecture (Finding 3.7)
+- **Canonical Hub Unification**: Unified `REGIONAL_SPECS["bay_area"]` as canonical `BayArea_CA` targeting slug `bay_area` and EIA series `EMM_EPMR_PTE_Y05SF_DPG` in [`src/locations/specs.py`](src/locations/specs.py).
+- **Transparent Alias Routing**: Aliased `REGIONAL_SPECS["oakland"] = REGIONAL_SPECS["bay_area"]`, and exported `run_bay_area_pipeline = run_oakland_pipeline` in [`src/locations/__init__.py`](src/locations/__init__.py) and [`src/locations/runner.py`](src/locations/runner.py).
+- **Public Dashboard Redirection**: Consolidated Card 5 on index to *"SF Bay Area, CA (incl. Oakland)"*, and refactored `build_oakland_html()` in [`src/dashboard_generator.py`](src/dashboard_generator.py) to generate an instant HTTP refresh/canonical redirect stub at `docs/oakland.html` pointing to `bayarea.html`.
+
+### 20. Statutory Tax Rates, Provenance Attribution & Event Transparency (Findings T-1, T-4)
+- **Provenance-Enriched Events**: Enriched all statutory rows in [`data/known_future_events.json`](data/known_future_events.json) with verified `source_url` and `announced_on` provenance metadata.
+- **Verified Statutory Actions**:
+  - Ohio HB 519 statutory motor fuel tax holiday ($-0.385$/gal effective 12:01 a.m. 4 Oct 2026 through 11:59 p.m. 2 Jan 2027; restoration effective 3 Jan 2027; source: Ohio Dept of Taxation).
+  - California SB 1 annual statutory inflation reset (+2.2¢/gal effective 1 Jul 2026; CDTFA L-1025).
+  - North Carolina formula adjustment (+0.7¢/gal effective 1 Jan 2026; NCDOR).
+
+### 21. Exchange Trading Calendar & NYMEX RBOB Contract Roll Boundary Detection (Findings A-5, A-8)
+- **Deterministic NYMEX Trading Calendar**: Implemented [`NYMEXTradingCalendar`](src/market_calendar.py) in [`src/market_calendar.py`](src/market_calendar.py) with CME Globex holiday schedules (New Year's, MLK, Presidents' Day, Good Friday, Memorial Day, Juneteenth, July 4, Labor Day, Thanksgiving, Christmas) and Gregorian Easter computation.
+- **RBOB Contract Roll Boundary Detection**: Implemented `get_rbob_contract_expiry()` calculating exact NYMEX contract termination dates (last business day of month preceding delivery month) and `is_roll_straddling()` detecting forecast windows straddling contract roll boundaries.
+- **Production Forecasting & Logger Integration**: Replaced naive `bdate_range` in [`src/models.py`](src/models.py) and [`src/prediction_logger.py`](src/prediction_logger.py) with `get_trading_calendar().get_target_date_for_horizon(...)`, logging explicit warnings and setting `is_roll_straddling` flags when multi-day forecast horizons cross monthly roll expirations.
+
+### 22. Preservation of Live Scraping Channels (AAA & GasBuddy)
+- **Commercial Boundary Respect**: In accordance with project instructions, kept live retail fuel scraping channels in [`src/live_fuel_feed.py`](src/live_fuel_feed.py) operational without premature deprecation, while maintainers coordinate directly with OPIS.
+
 ---
 
-## 📦 Closed Issues
+## 📦 Closed Issues & Findings
 
-| Issue | Title | Component |
+| Issue / Finding | Title | Component |
 | :--- | :--- | :--- |
 | **#601** | `fix(regulations): Correct tax calendar for Ohio holiday & statutory rates, and align calendar vs business-day evaluation window` | Regulations / MLOps |
 | **#602** | `fix(data-integrity): Unify forecast ID generation across logger, re-keying, and Turso migration to prevent ledger duplication` | Data Integrity / Ledger |
@@ -116,3 +147,9 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 | **#613** | `fix(testing): Ensure cutoff-row point-in-time invariance, isolate test environment sandbox, and add value-level math tests` | Testing / Quality Assurance |
 | **#614** | `fix(api): Harden API server rate limiting, PBKDF2 auth cache, SQLite circuit breaker, and evaluation batch inserts` | API / Security / Database |
 | **#615** | `docs(alignment): Audit component production callers, harmonize versioning to v0.8.5, and update multi-agent specifications` | Architecture / Documentation |
+| **Finding 3.1 / 3.2** | `feat(eia): Implement official EIA API v2 client and weekly retail ground truth with WPSR supply fundamentals` | Data Ingestion / EIA Client |
+| **Finding 3.2** | `feat(usgs): Migrate USGS water telemetry to OGC API continuous items endpoint ahead of sunset deadline` | Hydrology / Navigation |
+| **Finding 3.7** | `refactor(locations): Merge Oakland and Bay Area into canonical BayArea_CA hub with oakland.html redirect` | Locations / Dashboard |
+| **Finding T-1 / T-4** | `docs(taxes): Enrich statutory tax events in known_future_events.json with source URLs and announcement dates` | Regulations / Provenance |
+| **Finding A-5 / A-8** | `feat(calendar): Implement NYMEXTradingCalendar with CME holiday schedules and RBOB contract roll boundary detection` | Market Calendar / Models |
+| **Finding E-2** | `docs(governance): Document strict non-commercial policy and honest labeling of macro PADD regional actuals` | Governance / Documentation |

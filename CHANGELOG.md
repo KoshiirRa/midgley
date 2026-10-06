@@ -4,10 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.5] - 2026-10-05
+## [0.8.5] - 2026-10-06
 
 ### Added
-- Authentic EIA API v2 regional weekly retail gasoline time series (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`) mapped to regional metro evaluation targets (#608).
+- Official EIA API v2 client (`EIAClientV2`) in `src/eia_api_client.py` for automated weekly retail ground truth and WPSR supply fundamentals (#608, Finding 3.1 & 3.2).
+- Exchange trading calendar engine `NYMEXTradingCalendar` in `src/market_calendar.py` implementing CME Globex holiday rules and RBOB contract roll boundary detection (`is_roll_straddling`) (Finding A-5 & A-8).
+- Modern USGS OGC API continuous items endpoint integration (`api.waterdata.usgs.gov`) in `src/usgs_water_feed.py` and `src/usace_locks.py` ahead of legacy waterservices sunset (Finding 3.2).
+- Source URLs and announcement dates for statutory fuel tax events in `data/known_future_events.json` (Finding T-1 & T-4).
+- Authentic EIA API v2 regional weekly retail gasoline time series (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`, `EMM_EPMR_PTE_Y05SF_DPG`) mapped to regional metro evaluation targets (#608).
 - Deterministic forecast ID generator function `generate_canonical_forecast_id()` and in-memory ledger deduplication (#602).
 - Non-destructive union merge logic `merge_historical_geopolitical_records()` in geopolitical news feed (#603).
 - Proportional dynamic narrative attribution driver calculation matching forecast direction signs and sums (#604).
@@ -15,11 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dead-man switch heartbeat reporting (Healthchecks.io) in automated prediction pipelines (#606).
 
 ### Changed
+- Consolidated Oakland and SF Bay Area into canonical `BayArea_CA` regional hub across specs, runner, public dashboard, and test suites, with `docs/oakland.html` redirecting to `docs/bayarea.html` (Finding 3.7).
+- Replaced naive `bdate_range` calendar calculations in `src/models.py` and `src/prediction_logger.py` with exchange trading calendar `NYMEXTradingCalendar` (Finding A-5 & A-8).
 - Refactored `AsymmetricECM` to ingest authentic EIA weekly price history for cointegration estimation, replacing synthetic wholesale markup proxies (#607).
 - Upgraded model version tagging to semantic version string `v2.1.0-asym-ecm` dynamically resolved via `src.version` (#607).
 - Replaced hardcoded accuracy metrics in metro HTML dashboard cards with dynamic evaluations (#604).
-- Aligned forecast maturity realization window with business-day calendars (`pd.bdate_range`) (#601).
-- Updated Ohio motor fuel tax calendar with Ohio HB 519 temporary sales tax holiday (August 1–10, 2026) (#601).
+- Aligned forecast maturity realization window with exchange trading calendars (`get_target_date_for_horizon`) (#601).
+- Updated Ohio motor fuel tax calendar with Ohio HB 519 statutory tax holiday ($-0.385$/gal effective 4 Oct 2026 to 2 Jan 2027; restoration 3 Jan 2027) (#601, Finding T-1).
 - Isolated Headline Arena sync job into independent non-blocking CI workflow (#606).
 
 ### Fixed
@@ -28,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rotated and removed hardcoded NASA FIRMS API key, enforcing non-empty runtime environment variable injection (#605).
 - Fixed high-severity headline truncation and properly URL-encoded Discord webhook flag URLs (#605).
 - Corrected official KaTeX 0.16.8 Subresource Integrity (SRI) SHA384 hashes in public sources dashboard (#604).
+- Sandboxed `intraday_event_monitor`, `reachability_adapters`, and `wayback_archiver` file writes during test runs in `tests/conftest.py`, eliminating test session fixture checksum pollution (#613).
 
 ## [0.8.0] - 2026-09-29
 

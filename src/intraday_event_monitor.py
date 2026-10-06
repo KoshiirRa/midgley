@@ -603,6 +603,8 @@ class IntradayEventMonitor:
 
     def _save_evaluated_record(self, record: Dict):
         """Appends evaluated headline record to data/evaluated_headlines.json and prunes records older than 48 hours."""
+        if os.environ.get("TESTING") == "1" and not os.environ.get("TEST_TELEMETRY_PERSIST"):
+            return
         os.makedirs("data", exist_ok=True)
         from datetime import timezone
         now = datetime.now(timezone.utc).replace(tzinfo=None)

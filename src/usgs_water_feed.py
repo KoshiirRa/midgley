@@ -31,6 +31,8 @@ USGS_WATER_VINTAGE_FILE = os.path.join("data", "usgs_water_vintages.json")
 
 def save_water_vintage_record(record: dict, filepath: str = USGS_WATER_VINTAGE_FILE) -> None:
     """Persists a bitemporal point-in-time USGS water telemetry observation (Issue #293)."""
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -140,30 +142,47 @@ class USGSWaterFeedConnector:
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         sites_str = ",".join(ALL_SITE_IDS)
         params_str = ",".join(PARAM_CODES)
-        url = (
-            f"https://waterservices.usgs.gov/nwis/iv/?format=json"
-            f"&sites={sites_str}&parameterCd={params_str}&siteStatus=all"
-        )
 
         station_data = {}
+        # 1. Primary: Modern USGS OGC API (api.waterdata.usgs.gov, retiring waterservices.usgs.gov by Nov 2026)
+        ogc_url = (
+            f"https://api.waterdata.usgs.gov/ogcapi/v1/collections/continuous/items?"
+            f"monitoring_location_number={sites_str}&parameter_code={params_str}&f=json&limit=100"
+        )
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            req = urllib.request.Request(ogc_url, headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(req, timeout=DEFAULT_TIMEOUT) as response:
                 if response.status == 200:
                     raw_json = json.loads(response.read().decode("utf-8"))
-                    station_data = self._parse_usgs_json(raw_json)
+                    if raw_json.get("features"):
+                        station_data = self._parse_usgs_ogc_json(raw_json)
         except Exception as e:
-            logger.warning(f"USGS live API request failed ({e}); checking historical benchmark cache.")
-            try:
-                from src.benchmark_updater import load_historical_benchmark
-                bench = load_historical_benchmark("usgs_water")
-                if bench and isinstance(bench, dict) and "stations" in bench:
-                    station_data = bench["stations"]
-            except Exception:
-                station_data = None
+            logger.debug(f"USGS OGC API live request notice ({e}); trying legacy endpoint fallback.")
 
-            if not station_data:
-                station_data = self._generate_synthetic_baseline()
+        # 2. Legacy fallback to waterservices.usgs.gov if OGC API returned no features
+        if not station_data:
+            legacy_url = (
+                f"https://waterservices.usgs.gov/nwis/iv/?format=json"
+                f"&sites={sites_str}&parameterCd={params_str}&siteStatus=all"
+            )
+            try:
+                req = urllib.request.Request(legacy_url, headers={"User-Agent": USER_AGENT})
+                with urllib.request.urlopen(req, timeout=DEFAULT_TIMEOUT) as response:
+                    if response.status == 200:
+                        raw_json = json.loads(response.read().decode("utf-8"))
+                        station_data = self._parse_usgs_json(raw_json)
+            except Exception as e:
+                logger.warning(f"USGS live API request failed ({e}); checking historical benchmark cache.")
+                try:
+                    from src.benchmark_updater import load_historical_benchmark
+                    bench = load_historical_benchmark("usgs_water")
+                    if bench and isinstance(bench, dict) and "stations" in bench:
+                        station_data = bench["stations"]
+                except Exception:
+                    station_data = None
+
+                if not station_data:
+                    station_data = self._generate_synthetic_baseline()
 
         if not station_data:
             station_data = self._generate_synthetic_baseline()
@@ -180,11 +199,12 @@ class USGSWaterFeedConnector:
             "indices": indices
         }
 
-        try:
-            from src.benchmark_updater import save_historical_benchmark
-            save_historical_benchmark("usgs_water", result)
-        except Exception:
-            pass
+        if os.environ.get("TESTING") != "1" or os.environ.get("TEST_PERSIST_RECORD") == "1":
+            try:
+                from src.benchmark_updater import save_historical_benchmark
+                save_historical_benchmark("usgs_water", result)
+            except Exception:
+                pass
 
         save_water_vintage_record(result)
         global_cache.set(cache_key, result, ttl_seconds=900)
@@ -197,6 +217,57 @@ class USGSWaterFeedConnector:
     def get_water_vintages_as_of(self, as_of_date: str, cluster: Optional[str] = None, filepath: str = USGS_WATER_VINTAGE_FILE) -> List[Dict[str, Any]]:
         """Retrieves USGS water vintage records as of a cutoff date (Issue #293)."""
         return get_water_vintages_as_of(as_of_date, cluster=cluster, filepath=filepath)
+
+    def _parse_usgs_ogc_json(self, raw_json: Dict[str, Any]) -> Dict[str, Any]:
+        """Parses USGS Water Data OGC API (api.waterdata.usgs.gov) GeoJSON into clean station dictionaries."""
+        stations = {site_id: {
+            "name": meta["name"],
+            "cluster": meta["cluster"],
+            "role": meta["role"],
+            "gage_height_ft": None,
+            "discharge_cfs": None,
+            "water_temp_c": None,
+            "specific_conductance_us_cm": None,
+            "last_updated": None
+        } for site_id, meta in USGS_STATIONS.items()}
+
+        try:
+            feats = raw_json.get("features", [])
+            for feat in feats:
+                props = feat.get("properties", {})
+                loc_id = props.get("monitoring_location_id", "").replace("USGS-", "").strip()
+                pcode = props.get("parameter_code", "").strip()
+                val_raw = props.get("value")
+                time_str = props.get("time")
+
+                if loc_id in stations and val_raw is not None:
+                    try:
+                        val_float = float(val_raw)
+                        if val_float in (-999999.0, -999999):
+                            continue
+                    except (ValueError, TypeError):
+                        continue
+
+                    if time_str:
+                        stations[loc_id]["last_updated"] = time_str
+                    if pcode == "00065":
+                        stations[loc_id]["gage_height_ft"] = val_float
+                    elif pcode == "00060":
+                        stations[loc_id]["discharge_cfs"] = val_float
+                    elif pcode == "00010":
+                        stations[loc_id]["water_temp_c"] = val_float
+                    elif pcode == "00095":
+                        stations[loc_id]["specific_conductance_us_cm"] = val_float
+        except Exception as e:
+            logger.error(f"Error parsing USGS OGC GeoJSON data: {e}")
+
+        # Fill any missing values with realistic baselines
+        baseline = self._generate_synthetic_baseline()
+        for site_id, station in stations.items():
+            for key in ["gage_height_ft", "discharge_cfs", "water_temp_c", "specific_conductance_us_cm"]:
+                if station[key] is None:
+                    station[key] = baseline.get(site_id, {}).get(key)
+        return stations
 
     def _parse_usgs_json(self, raw_json: Dict[str, Any]) -> Dict[str, Any]:
         """Parses USGS NWIS JSON schema into clean station dictionaries."""

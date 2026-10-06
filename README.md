@@ -15,20 +15,19 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-06 07:21 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-05 18:33 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.246`/gal | **`$3.296`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-National-Ridge` |
-| **Tulsa, OK Metro Retail** | `$3.967`/gal | **`$3.967`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-Tulsa-Ridge` |
-| **Newark, DE Metro Retail** | `$4.206`/gal | **`$4.275`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-Newark-Ridge` |
-| **Cincinnati, OH Retail** | `$3.846`/gal | **`$3.846`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
-| **Northern Kentucky Retail** | `$4.230`/gal | **`$4.294`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
-| **Greenville, NC Metro Retail** | `$4.028`/gal | **`$4.072`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-Greenville-Ridge` |
-| **Charlotte, NC Metro Retail** | `$4.057`/gal | **`$4.112`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-Charlotte-Ridge` |
-| **Port St. Lucie, FL Waterborne** | `$4.064`/gal | **`$4.082`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-PortStLucie-Ridge` |
-| **Oakland, CA Metro Retail** | `$6.457`/gal | **`$6.457`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-Oakland-Ridge` |
-| **SF Bay Area 9-County Avg** | `$6.578`/gal | **`$6.683`/gal** | **UP 📈** | `2026-10-12` | `v1.6-Ipatieff-BayArea-Ridge` |
+| **National Wholesale (RBOB)** | `$3.312`/gal | **`$3.315`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-National-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.985`/gal | **`$4.008`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Tulsa-Ridge` |
+| **Newark, DE Metro Retail** | `$4.220`/gal | **`$4.276`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Newark-Ridge` |
+| **Cincinnati, OH Retail** | `$3.935`/gal | **`$3.993`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
+| **Northern Kentucky Retail** | `$4.240`/gal | **`$4.314`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
+| **Greenville, NC Metro Retail** | `$4.026`/gal | **`$4.080`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Greenville-Ridge` |
+| **Charlotte, NC Metro Retail** | `$4.062`/gal | **`$4.118`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-Charlotte-Ridge` |
+| **Port St. Lucie, FL Waterborne** | `$4.080`/gal | **`$4.128`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-PortStLucie-Ridge` |
+| **SF Bay Area 9-County Avg (incl. Oakland)** | `$6.581`/gal | **`$6.693`/gal** | **UP 📈** | `2026-10-09` | `v1.6-Ipatieff-BayArea-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -57,8 +56,8 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/greenville` (Greenville NC Retail)**: Dedicated Greenville, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Selma/Apex breakout hub dynamics, NC state gas tax ($0.404/gal), and NOAA Pitt County (NCZ081) Tar River flood / hurricane alerts.
 - **`/charlotte` (Charlotte NC Retail)**: Dedicated Charlotte, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Paw Creek breakout hub dynamics, NC/SC cross-border tax differential ($0.404/gal NC vs $0.288/gal SC), and NOAA Mecklenburg County (NCZ071) Catawba River flood / winter ice storm alerts.
 - **`/port_st_lucie` (Port St. Lucie FL Retail)**: Dedicated Port St. Lucie, FL (PADD 1C South Atlantic) metro retail gas forecast featuring Florida >95% waterborne marine barge offloading dependency, upstream USGS Gulf Coast departure tracking, Port Everglades & Port Canaveral marine terminals, FL state fuel tax ($0.384/gal), and NOAA St. Lucie County (FLZ147) Atlantic hurricane alerts.
-- **`/oakland` (Oakland CA Retail)**: Dedicated Oakland / East Bay retail gas forecast featuring CARB regulatory breakdown ($0.953/gal tax burden), USGS Carquinez Strait runoff & berthing telemetry, and physical hazard risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
-- **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
+- **`/oakland` (Oakland CA Retail)**: Seamless client-side redirect to the unified **`/bayarea`** dashboard.
+- **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85), CARB regulatory breakdown ($0.953/gal tax burden), USGS Carquinez Strait runoff & berthing telemetry, and physical hazard risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 15 pipeline sections (including 3-2-1 crack spreads, executive social gap multipliers, and CARB tax breakdown).
 - **`/sources` (Data Sources Catalog)**: Comprehensive public catalog documenting all 26 quantitative commodity futures, NOAA weather sensors, USGS hydrology stations, state tax portals, and financial news feeds.
 - **`/telemetry` (System Observability & Model Evolution)**: Real-time telemetry dashboard featuring Model Learning & Longitudinal Adaptation Tracking (rolling MAE vs naive baseline, LLM win rates, multi-window scoreboards), Vectorize Hindsight episodic memory observability, 7-day zero-cost data connector health audits (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS), zero-cost LLM fallback & cumulative dollar/token savings, expanded API quota safety valves (Firecrawl, Finlight, IPASIS), and dynamic out-of-metro Leaflet demand heatmaps.
@@ -221,6 +220,10 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 45. **5-Tier Nested Model Evaluation Hierarchy & Statistical Validation (`src/model_evaluation.py` & `scripts/evaluate_model_hierarchy.py`, Issue #362):** Formalizes a 5-tier evaluation hierarchy (Tier 0: Naive Persistence $\to$ Tier 1: Price-Only $\to$ Tier 2: Price + Physical $\to$ Tier 3: Price + Qualitative Events $\to$ Tier 4: Full Hybrid Ensemble) with Diebold-Mariano tests (Harvey-Leybourne-Newbold horizon adjustment), stationary block bootstrap, and multi-horizon pinball quantile loss.
 46. **Empirical Event Parameter Calibration & Decoupled PRAXIST Engine (`src/event_calibration.py` & `src/praxist_engine.py`, Issue #361):** Matches real historical energy shocks against commodity abnormal returns (2022–2026) using L-BFGS-B optimization to calibrate empirical half-lives $t_{1/2}$ and sensitivity weights $\beta_{\text{event}}$, decoupling PRAXIST empirical research evaluations from synthetic data.
 47. **Alternative Forecasting Target Formulations & Residual Modeling (`src/models.py`, Issue #360):** Supports `level`, `difference`, `return`, and `persistence_residual` target modes with clipping bounds and automatic price reconstruction, comparing stationarity, variance properties, and out-of-sample forecasting accuracy.
+48. **Official EIA API v2 Weekly Retail Ground Truth & WPSR Fundamentals (`src/eia_api_client.py`, `src/eia_retail_feed.py`, `src/data_ingestion.py`):** Ingests official weekly retail gasoline price actuals (`EMM_EPMR_PTE_*`) directly from the U.S. EIA API v2 with bitemporal release tracking and lookahead-safe vintage caching (`data/eia_retail_vintages.json`), establishing official government ground truth for model backfilling and evaluation. Also ingests Weekly Petroleum Status Report (WPSR) fundamentals including national refinery utilization, crude inputs, and regional gasoline inventories.
+49. **USGS Water Data Modernization & OGC API GeoJSON Telemetry (`src/usgs_water_feed.py` & `src/usace_locks.py`):** Migrated upstream streamflow and stage ingestion from legacy `waterservices.usgs.gov` to modern USGS OGC API continuous features endpoints (`api.waterdata.usgs.gov/ogcapi/v1/collections/continuous/items`) with robust GeoJSON parsing and automatic legacy WaterML fallbacks.
+50. **Deterministic NYMEX Trading Calendar & RBOB Roll Straddle Gating (`src/market_calendar.py` & `src/models.py`):** Features exchange trading holiday schedules (CME Globex calendar, anonymous Easter calculation, New Year's, MLK, Presidents' Day, Good Friday, Memorial Day, Juneteenth, July 4th, Labor Day, Thanksgiving, Christmas) and RBOB contract roll boundary detection (`get_rbob_contract_expiry`), flagging forecasts straddling monthly roll dates (`roll_straddling`) to prevent artificial pricing shocks across contract transitions.
+51. **Statutory Tax Event Provenance & Announcement Tracking (`data/known_future_events.json`):** Tracks statutory state and federal fuel tax adjustments with transparent legislative provenance URLs, statutory citations (e.g. Ohio HB 519, California SB 1), and formal announcement dates, enabling lookahead-safe backtesting and prospective tax shock anticipation.
 
 ---
 

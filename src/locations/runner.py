@@ -41,8 +41,11 @@ REGION_MODULE_MAP = {
     "greenville_nc": ("src.locations.greenville.regional", "fetch_greenville_market_data", "get_greenville_regional_events", "Greenville_NC"),
     "charlotte": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
     "charlotte_nc": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
-    "oakland": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "Oakland_CA"),
-    "oakland_ca": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "Oakland_CA"),
+    "oakland": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "oakland_ca": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "bay_area": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "bayarea": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "bayarea_ca": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
     "port_st_lucie": ("src.locations.port_st_lucie.regional", "fetch_port_st_lucie_market_data", "get_port_st_lucie_regional_events", "Port_St_Lucie_FL"),
     "port_st_lucie_fl": ("src.locations.port_st_lucie.regional", "fetch_port_st_lucie_market_data", "get_port_st_lucie_regional_events", "Port_St_Lucie_FL"),
 }

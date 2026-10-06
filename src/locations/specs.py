@@ -31,10 +31,10 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
     "tulsa": RegionSpec(
         region_key="Tulsa_OK",
         slug="tulsa",
-        display_name="Tulsa Metro, OK",
+        display_name="Tulsa Metro, OK (PADD 2)",
         padd="PADD 2",
         wholesale_spot_col="spot_group_3",
-        eia_retail_series_id="GASREGWOK",
+        eia_retail_series_id="EMM_EPMR_PTE_R20_DPG",
         diesel_series_id="GASDESW",
         baseline_tax_rate=0.20,
         sub_locales={"broken_arrow": -0.02, "owasso": 0.01, "bixby": 0.02},
@@ -47,7 +47,7 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         display_name="Newark Metro, DE (PADD 1B)",
         padd="PADD 1B",
         wholesale_spot_col="spot_ny_harbor",
-        eia_retail_series_id="GASREGW01B",
+        eia_retail_series_id="EMM_EPMR_PTE_R1Y_DPG",
         diesel_series_id="GASDESW",
         baseline_tax_rate=0.23,
         sub_locales={"wilmington": 0.04, "dover": -0.03},
@@ -60,7 +60,7 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         display_name="Cincinnati Tri-State, OH/KY",
         padd="PADD 2",
         wholesale_spot_col="spot_chicago",
-        eia_retail_series_id="GASREGWOH",
+        eia_retail_series_id="EMM_EPMR_PTE_SOH_DPG",
         diesel_series_id="GASDESW",
         baseline_tax_rate=0.385,
         has_edgeworth_cycles=True,
@@ -74,9 +74,9 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         display_name="Greenville Metro, NC (PADD 1C)",
         padd="PADD 1C",
         wholesale_spot_col="spot_gulf_coast",
-        eia_retail_series_id="GASREGWNC",
+        eia_retail_series_id="EMM_EPMR_PTE_R1Z_DPG",
         diesel_series_id="GASDESW",
-        baseline_tax_rate=0.405,
+        baseline_tax_rate=0.410,
         sub_locales={"selma_terminal": -0.04, "wilson": 0.01, "rocky_mount": 0.02},
         primary_refinery="Gulf Coast Refining Complex (PADD 3)",
         primary_pipeline="Colonial Pipeline Lines 1 & 2 / Plantation Pipeline"
@@ -87,24 +87,24 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         display_name="Charlotte Metro, NC (PADD 1C)",
         padd="PADD 1C",
         wholesale_spot_col="spot_gulf_coast",
-        eia_retail_series_id="GASREGWNC",
+        eia_retail_series_id="EMM_EPMR_PTE_R1Z_DPG",
         diesel_series_id="GASDESW",
-        baseline_tax_rate=0.405,
+        baseline_tax_rate=0.410,
         sub_locales={"paw_creek": -0.03, "concord": 0.02, "gastonia": -0.01, "rock_hill_sc": -0.14},
         primary_refinery="Gulf Coast Refining Complex (PADD 3)",
         primary_pipeline="Colonial Pipeline Paw Creek Junction"
     ),
-    "oakland": RegionSpec(
-        region_key="Oakland_CA",
-        slug="oakland",
-        display_name="Oakland & SF Bay Area, CA (PADD 5)",
+    "bay_area": RegionSpec(
+        region_key="BayArea_CA",
+        slug="bay_area",
+        display_name="SF Bay Area, CA (PADD 5)",
         padd="PADD 5",
         wholesale_spot_col="spot_la_carbob",
-        eia_retail_series_id="GASREGWCA",
+        eia_retail_series_id="EMM_EPMR_PTE_Y05SF_DPG",
         diesel_series_id="GASDESW",
-        baseline_tax_rate=0.596,
+        baseline_tax_rate=0.634,
         has_carb_compliance=True,
-        sub_locales={"san_francisco": 0.15, "san_jose": 0.08, "berkeley": 0.05, "richmond": -0.06},
+        sub_locales={"oakland": 0.00, "san_francisco": 0.15, "san_jose": 0.08, "berkeley": 0.05, "richmond": -0.06},
         primary_refinery="Chevron Richmond Refinery (245 kbpd)",
         primary_pipeline="Kinder Morgan SFPP Pacific Northern"
     ),
@@ -114,7 +114,7 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         display_name="Port St. Lucie Metro, FL (PADD 1C)",
         padd="PADD 1C",
         wholesale_spot_col="spot_gulf_coast",
-        eia_retail_series_id="GASREGWFL",
+        eia_retail_series_id="EMM_EPMR_PTE_SFL_DPG",
         diesel_series_id="GASDESW",
         baseline_tax_rate=0.352,
         sub_locales={"fort_pierce": -0.02, "stuart": 0.03, "vero_beach": 0.01},
@@ -123,12 +123,17 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
     )
 }
 
+# Alias oakland to bay_area spec for seamless backward compatibility
+REGIONAL_SPECS["oakland"] = REGIONAL_SPECS["bay_area"]
+
 
 def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
     """Retrieves RegionSpec dataclass by slug or region key."""
     if not region_id_or_slug:
         return None
     key = region_id_or_slug.lower().strip()
+    if key in ("oakland", "oakland_ca", "bayarea", "bayarea_ca", "bay_area", "sf_bay_area"):
+        return REGIONAL_SPECS["bay_area"]
     if key in REGIONAL_SPECS:
         return REGIONAL_SPECS[key]
     for spec in REGIONAL_SPECS.values():

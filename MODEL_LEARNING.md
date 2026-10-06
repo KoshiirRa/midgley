@@ -94,6 +94,19 @@ _No anomalies logged in this category._
   - **Historical Analogy:** Similar to historical National turnaround shocks where market pricing normalized post-event.
   - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
 
+#### 🏷️ Architectural Calibration & Data Source Grounding (October 2026 Handoff)
+- **EIA API v2 Ground Truth Transition (`All Locales` | `2026-10-06`)**
+  - **Root Cause & Learning:** Ground truth evaluation previously suffered from divergence between survey-derived retail aggregators and official historical series. Migrating to official EIA API v2 (`EMM_EPMR_PTE_*`) series provides an uncompromised, bitemporal weekly actuals ground truth for backfilling and multi-horizon residual validation.
+  - **Calibration Suggestion:** `Enforce point-in-time publication lag gating to prevent lookahead leakages while evaluating Friday-to-Monday retail price adjustments.`
+
+- **NYMEX Trading Calendar & RBOB Roll Straddle Gating (`National` | `2026-10-06`)**
+  - **Root Cause & Learning:** Forecast windows that span the monthly RBOB contract roll boundary (last business day of the month) introduce apparent price jumps attributable to prompt-to-second month roll yield ($M_1 - M_2$) rather than spot fundamentals.
+  - **Calibration Suggestion:** `Flag roll-straddling forecast horizons with roll_straddling=True and decompose the expected step-change using NYMEX calendar spreads.`
+
+- **Regional Metro Convergence: Oakland & Bay Area (`BayArea_CA` | `2026-10-06`)**
+  - **Root Cause & Learning:** Operating separate isolated targets for Oakland and SF Bay Area fragmented regional observation density and resulted in collinear feature competition under identical PADD 5 / CARB regulatory drivers.
+  - **Calibration Suggestion:** `Consolidate into canonical BayArea_CA target with county-level sub-indices while redirecting legacy routes.`
+
 ---
 
 ## 🛠️ Continuous Learning Mechanism Overview

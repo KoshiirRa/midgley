@@ -550,37 +550,66 @@ class EIADataConnector:
             "us_distillate_fuel": 3920.0
         }
 
-        # Attempt dynamic fetch from open FRED weekly series (Zero-Cost public CSVs)
-        dynamic_fetches_succeeded = 0
+        # 1. Attempt official EIA API v2 Client for real WPSR fundamentals (Section 4.3)
         try:
-            series_to_fetch = {
-                "WPULEUS1": ("ref_util", "PADD1_EastCoast"),
-                "WPULEUS2": ("ref_util", "PADD2_Midwest"),
+            from src.eia_api_client import get_eia_client
+            client = get_eia_client()
+            wpsr_series_map = {
                 "WPULEUS3": ("ref_util", "PADD3_GulfCoast"),
-                "WPULEUS5": ("ref_util", "PADD5_WestCoast"),
-                "WGFUPUS2": ("prod_supplied", "us_motor_gasoline")
+                "W_NA_YUP_R20_PER": ("ref_util", "PADD2_Midwest"),
+                "W_NA_YUP_R30_PER": ("ref_util", "PADD3_GulfCoast"),
+                "WGFUPUS2": ("prod_supplied", "us_motor_gasoline"),
+                "WGTSTP11": ("gas_stocks", "PADD1"),
+                "WGTSTP21": ("gas_stocks", "PADD2"),
             }
-            for sid, (target_dict, target_key) in series_to_fetch.items():
-                try:
-                    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
-                    req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIAConnector/1.0"})
-                    with urllib.request.urlopen(req, timeout=3) as resp:
-                        if resp.status == 200:
-                            lines = resp.read().decode('utf-8').strip().split('\n')
-                            if len(lines) > 1:
-                                last_row = lines[-1].split(',')
-                                if len(last_row) == 2 and last_row[1] != '.':
-                                    val = float(last_row[1])
-                                    if target_dict == "ref_util":
-                                        ref_util[target_key] = round(val, 1)
-                                        dynamic_fetches_succeeded += 1
-                                    elif target_dict == "prod_supplied":
-                                        prod_supplied[target_key] = round(val, 1)
-                                        dynamic_fetches_succeeded += 1
-                except Exception:
-                    continue
+            for sid, (target_dict_name, target_key) in wpsr_series_map.items():
+                hist = client.fetch_wpsr_supply_series(sid)
+                if hist:
+                    latest_d = max(hist.keys())
+                    val = hist[latest_d]
+                    if target_dict_name == "ref_util":
+                        ref_util[target_key] = round(val, 1)
+                        dynamic_fetches_succeeded += 1
+                    elif target_dict_name == "prod_supplied":
+                        prod_supplied[target_key] = round(val, 1)
+                        dynamic_fetches_succeeded += 1
+                    elif target_dict_name == "gas_stocks":
+                        gas_stocks[target_key] = round(val / 1000.0, 1)
+                        dynamic_fetches_succeeded += 1
         except Exception as e:
-            logger.debug(f"Dynamic EIA/FRED series fetch notice: {e}")
+            logger.debug(f"EIA API v2 WPSR fetch notice: {e}")
+
+        # 2. Fallback to open FRED weekly series if EIA v2 was unconfigured/offline
+        if dynamic_fetches_succeeded == 0:
+            try:
+                series_to_fetch = {
+                    "WPULEUS1": ("ref_util", "PADD1_EastCoast"),
+                    "WPULEUS2": ("ref_util", "PADD2_Midwest"),
+                    "WPULEUS3": ("ref_util", "PADD3_GulfCoast"),
+                    "WPULEUS5": ("ref_util", "PADD5_WestCoast"),
+                    "WGFUPUS2": ("prod_supplied", "us_motor_gasoline")
+                }
+                for sid, (target_dict, target_key) in series_to_fetch.items():
+                    try:
+                        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
+                        req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIAConnector/1.0"})
+                        with urllib.request.urlopen(req, timeout=3) as resp:
+                            if resp.status == 200:
+                                lines = resp.read().decode('utf-8').strip().split('\n')
+                                if len(lines) > 1:
+                                    last_row = lines[-1].split(',')
+                                    if len(last_row) == 2 and last_row[1] != '.':
+                                        val = float(last_row[1])
+                                        if target_dict == "ref_util":
+                                            ref_util[target_key] = round(val, 1)
+                                            dynamic_fetches_succeeded += 1
+                                        elif target_dict == "prod_supplied":
+                                            prod_supplied[target_key] = round(val, 1)
+                                            dynamic_fetches_succeeded += 1
+                    except Exception:
+                        continue
+            except Exception as e:
+                logger.debug(f"Dynamic EIA/FRED series fetch notice: {e}")
 
         if dynamic_fetches_succeeded >= 4:
             status_tag = "OBSERVED"

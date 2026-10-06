@@ -33,15 +33,24 @@ logger = logging.getLogger("midgley.eia_retail_feed")
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 VINTAGES_FILE = os.path.join(DATA_DIR, "eia_retail_vintages.json")
 
-# Mapping of FRED series IDs to official U.S. EIA API v2 Series IDs (Issue #608)
+# Mapping of FRED series IDs to official U.S. EIA API v2 Series IDs (Issue #608, Section 4.1)
 FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
-    "GASREGW": "EMM_EPM0_PTE_NUS_DPG",
-    "GASREGW01B": "EMM_EPM0_PTE_R1Y_DPG",
-    "GASREGW01C": "EMM_EPM0_PTE_R1Z_DPG",
-    "GASREGWMW": "EMM_EPM0_PTE_R20_DPG",
-    "GASREGWOH": "EMM_EPM0_PTE_SOH_DPG",
-    "GASREGWFL": "EMM_EPM0_PTE_SFL_DPG",
-    "GASREGWCA": "EMM_EPM0_PTE_SCA_DPG",
+    "GASREGW": "EMM_EPMR_PTE_NUS_DPG",
+    "GASREGW01B": "EMM_EPMR_PTE_R1Y_DPG",
+    "GASREGW01C": "EMM_EPMR_PTE_R1Z_DPG",
+    "GASREGWMW": "EMM_EPMR_PTE_R20_DPG",
+    "GASREGWOH": "EMM_EPMR_PTE_SOH_DPG",
+    "GASREGWFL": "EMM_EPMR_PTE_SFL_DPG",
+    "GASREGWCA": "EMM_EPMR_PTE_SCA_DPG",
+    "GASREGWSF": "EMM_EPMR_PTE_Y05SF_DPG",
+    "EMM_EPMR_PTE_NUS_DPG": "EMM_EPMR_PTE_NUS_DPG",
+    "EMM_EPMR_PTE_R1Y_DPG": "EMM_EPMR_PTE_R1Y_DPG",
+    "EMM_EPMR_PTE_R1Z_DPG": "EMM_EPMR_PTE_R1Z_DPG",
+    "EMM_EPMR_PTE_R20_DPG": "EMM_EPMR_PTE_R20_DPG",
+    "EMM_EPMR_PTE_SOH_DPG": "EMM_EPMR_PTE_SOH_DPG",
+    "EMM_EPMR_PTE_SFL_DPG": "EMM_EPMR_PTE_SFL_DPG",
+    "EMM_EPMR_PTE_SCA_DPG": "EMM_EPMR_PTE_SCA_DPG",
+    "EMM_EPMR_PTE_Y05SF_DPG": "EMM_EPMR_PTE_Y05SF_DPG",
     "GASDESW": "EMD_EPD2D_PTE_NUS_DPG",
     "GASDESW01B": "EMD_EPD2D_PTE_R1Y_DPG",
     "GASDESW01C": "EMD_EPD2D_PTE_R1Z_DPG",
@@ -61,11 +70,11 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Greenville_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Charlotte_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Port_St_Lucie_FL": [("GASREGWFL", "Florida Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
-    "Oakland_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
-    "BayArea_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
-    "SanFrancisco_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
-    "SanJose_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
-    "NorthBay_CA": [("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "Oakland_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "BayArea_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "SanFrancisco_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "SanJose_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "NorthBay_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
     # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478, #608)
     "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
@@ -95,6 +104,15 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASREGWOH": 3.220,
     "GASREGWFL": 3.320,
     "GASREGWCA": 4.850,
+    "GASREGWSF": 4.950,
+    "EMM_EPMR_PTE_NUS_DPG": 3.450,
+    "EMM_EPMR_PTE_R1Y_DPG": 3.390,
+    "EMM_EPMR_PTE_R1Z_DPG": 3.250,
+    "EMM_EPMR_PTE_R20_DPG": 3.200,
+    "EMM_EPMR_PTE_SOH_DPG": 3.220,
+    "EMM_EPMR_PTE_SFL_DPG": 3.320,
+    "EMM_EPMR_PTE_SCA_DPG": 4.850,
+    "EMM_EPMR_PTE_Y05SF_DPG": 4.950,
     "GASDESW": 3.850,
     "GASDESWMW": 3.750,
     "GASDESW01B": 3.920,
@@ -149,25 +167,46 @@ class EIARetailFeed:
         except Exception:
             pass
 
-        # Query FRED CSV endpoint (Zero-Cost official public gateway)
-        try:
-            url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
-            req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIARetailFeed/1.0"})
-            with urllib.request.urlopen(req, timeout=4) as resp:
-                if resp.status == 200:
-                    lines = resp.read().decode('utf-8').strip().split('\n')
-                    for line in lines[1:]:  # Skip header
-                        parts = line.split(',')
-                        if len(parts) == 2 and parts[1] != '.' and parts[1].strip():
-                            try:
-                                d_str = parts[0].strip()
-                                val = float(parts[1].strip())
-                                if val > 0:
-                                    date_map[d_str] = round(val, 3)
-                            except ValueError:
-                                continue
-        except Exception as e:
-            logger.debug(f"FRED fetch failed for {series_id} ({e}), trying fallback.")
+        # 1. Attempt official EIA API v2 client first (Section 4.1)
+        eia_v2_id = FRED_TO_EIA_V2_SERIES.get(series_id, series_id if series_id.startswith("EMM_") else None)
+        if eia_v2_id:
+            try:
+                from src.eia_api_client import get_eia_client
+                eia_client = get_eia_client()
+                v2_data = eia_client.fetch_retail_gasoline_series(eia_v2_id)
+                if v2_data:
+                    date_map.update(v2_data)
+            except Exception as e:
+                logger.debug(f"Direct EIA API v2 query for {eia_v2_id} failed: {e}")
+
+        # 2. Query FRED CSV endpoint if EIA v2 is unavailable or unconfigured
+        if not date_map:
+            fred_id = series_id if not series_id.startswith("EMM_") else None
+            if not fred_id:
+                # Find reverse mapping
+                for k, v in FRED_TO_EIA_V2_SERIES.items():
+                    if v == series_id and not k.startswith("EMM_"):
+                        fred_id = k
+                        break
+            if fred_id:
+                try:
+                    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={fred_id}"
+                    req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIARetailFeed/1.0"})
+                    with urllib.request.urlopen(req, timeout=4) as resp:
+                        if resp.status == 200:
+                            lines = resp.read().decode('utf-8').strip().split('\n')
+                            for line in lines[1:]:  # Skip header
+                                parts = line.split(',')
+                                if len(parts) == 2 and parts[1] != '.' and parts[1].strip():
+                                    try:
+                                        d_str = parts[0].strip()
+                                        val = float(parts[1].strip())
+                                        if val > 0:
+                                            date_map[d_str] = round(val, 3)
+                                    except ValueError:
+                                        continue
+                except Exception as e:
+                    logger.debug(f"FRED fetch failed for {fred_id} ({e}), trying fallback.")
 
         # Fallback to stored vintages
         if not date_map:

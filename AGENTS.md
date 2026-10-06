@@ -50,7 +50,7 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
                │  • Newark Metro (PADD 1B & Delaware City Refinery Detour)   │                   │
                │  • Cincinnati Tri-State (Dual-State Tax & Ohio/Miss River)  │                   │
                │  • Greenville & Charlotte (PADD 1C Colonial Pipeline)      │                   │
-               │  • Oakland & SF Bay Area (PADD 5 CARB & Richmond Refinery)  │                   │
+               │  • SF Bay Area Metro (PADD 5 CaRFG & Richmond, incl Oakland)│                   │
                │  • Port St. Lucie (PADD 1C Waterborne Terminal Freight)    │                   │
                │  • ULSD Distillate Engine (HO=F & 3-2-1 Margin - WIP)        │                   │
                └──────────────────────────────┬──────────────────────────────┘                   │
@@ -96,6 +96,23 @@ This project utilizes an **LLM Multi-Agent Framework** to forecast wholesale and
 
 * **Role:** Ingests live financial media headlines (`finlight.me`), raw news bulletins, deep web articles, refinery operator disclosures, state motor fuel tax portals, NOAA alerts, USGS earthquake events and seismic risk indices, multi-feed air quality metrics (PurpleAir, OpenAQ, AirNow) for refinery flaring outages, global maritime chokepoints and inland waterway constraints (Ohio/Mississippi River tow drafts, MKARNS navigation, Delmarva detour, Straits of Florida), executive social media posts, Cboe OVX options volatility, Baker Hughes drilling rig counts, official U.S. EIA Daily Regional Spot Prices (`EIARegionalSpotConnector`, Issue #363), EPA Weekly EMTS RIN Credit prices and transaction volumes (`EPARINDataConnector`, Issue #365), California Energy Commission (CEC) Weekly Fuels Watch (`CECWeeklyFuelsConnector`, Issue #364), EPA & CARB Reid Vapor Pressure (RVP) regulatory standards and seasonal blend transition countdowns (`RVPRegulatoryEngine`, Issue #366), and NOAA CO-OPS coastal water levels and marine terminal disruption risk telemetry (`NOAACOOPSConnector`, Issue #368) into structured numerical impact score vectors.
 * **Model Engine:** Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash`) via `google-genai` SDK with deterministic NLP lexicon fallback.
+* **Official EIA API v2 Ground Truth & WPSR Supply Fundamentals (`src/eia_api_client.py` & `src/eia_retail_feed.py` - Issue #403, #608, Findings 3.1 & 3.2):**
+  - **Direct EIA API v2 Engine:** Queries official API v2 endpoints (`api.eia.gov/v2/petroleum/pri/gnd/data/` for weekly retail prices and `api.eia.gov/v2/seriesid/PET.{id}.W` for WPSR weekly fundamentals).
+  - **Honest Provenance Tiering:** Maps official series with explicit geographic tiering: City level (`EIA_CITY_SanFrancisco` for `EMM_EPMR_PTE_Y05SF_DPG`), State level (`EIA_STATE_OH`, `EIA_STATE_FL`, `EIA_STATE_CA`), and PADD level (`EIA_PADD_1B`, `EIA_PADD_1C`, `EIA_PADD_2`, `EIA_COUNTRY_US`). Non-city targets (`Tulsa_OK`, `Cincinnati_KY`, `Newark_DE`, `Charlotte_NC`, `Greenville_NC`) are labeled at true PADD tier.
+  - **WPSR Supply Fundamentals:** Ingests weekly Gulf Coast total gasoline inventories (`WGTSTP31`), PADD 2 inventory (`WGTSTP21`), East Coast inventory (`WGTSTP11`), refinery utilization rates (`W_NA_YUP_R20_PER`, `W_NA_YUP_R30_PER`), and refinery production runs (`WGFUPUS2`).
+  - **Lookahead-Safe Bitemporal Persistence:** Enforces strict release schedules (Tuesdays 15:00 UTC for retail, Wednesdays 15:30 UTC for WPSR) in `data/eia_retail_vintages.json`.
+* **USGS River Water Telemetry & Modern OGC API Migration (`src/usgs_water_feed.py` & `src/usace_locks.py` - Finding 3.2):**
+  - **OGC API Continuous Items Collection:** Migrated river stage telemetry to `https://api.waterdata.usgs.gov/ogcapi/v1/collections/continuous/items?monitoring_location_number=...&parameter_code=00065&f=json`, completely bypassing the November 16, 2026 `waterservices.usgs.gov` sunset and throttling cutoff.
+  - **GeoJSON Parsing:** Implemented `_parse_usgs_ogc_json()` with automated fallback to legacy JSON during transition and `TESTING=1` sandbox isolation.
+* **Exchange Trading Calendar & RBOB Contract Roll Detection (`src/market_calendar.py` - Findings A-5 & A-8):**
+  - **Deterministic NYMEX Trading Calendar:** Models CME Globex energy holiday schedules, Anonymous Gregorian Easter algorithm, and RBOB futures contract expiration rules (last business day of month preceding delivery month).
+  - **Roll-Straddling Detection:** `is_roll_straddling()` detects forecast windows crossing monthly roll boundaries, logging warnings and injecting flags into `src/models.py` and `src/prediction_logger.py` to prevent artificial basis-shift error.
+* **Regional Hub Consolidation & Transparent Routing (`src/locations/specs.py`, `src/locations/runner.py`, `src/dashboard_generator.py` - Finding 3.7):**
+  - **Canonical BayArea_CA Hub:** Merged Oakland and SF Bay Area into canonical `BayArea_CA` hub with transparent `oakland` aliasing and an HTTP redirect stub at `docs/oakland.html` pointing to `docs/bayarea.html`.
+* **Statutory Tax Rates & Provenance Attribution (`data/known_future_events.json` - Findings T-1 & T-4):**
+  - Enriched statutory fuel tax events with verified `source_url` and `announced_on` provenance metadata (Ohio HB 519 holiday, California SB 1, North Carolina statutory rate).
+* **Non-Commercial Framework Directives (Finding E-2):**
+  - Midgley is strictly non-commercial; leverages open data (Open-Meteo, GDELT, EPU, GPR, EIA, USGS, NOAA) and maintains live scraping channels (AAA and GasBuddy) pending direct OPIS resolution.
 * **California Energy Commission (CEC) Weekly Fuels Watch (`src/data_ingestion.py` - Issue #364):**
   - **PADD 5 Regional Supply Intelligence:** Ingests California state refinery crude input, CARBOB production, NorCal vs. SoCal refinery utilization rates, finished gasoline inventories, and waterborne blendstock imports.
   - **Thursday Release Schedule:** Tracks Thursday publication timestamps in `data/cec_fuels_vintages.json` with bitemporal lookahead-safe querying.

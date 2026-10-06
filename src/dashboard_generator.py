@@ -527,11 +527,8 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         <a role="menuitem" href="{psl_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
                         </a>
-                        <a role="menuitem" href="{oak_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-fire text-amber-400" aria-hidden="true"></i> Oakland, CA Retail
-                        </a>
                         <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area Region
+                            <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
                         </a>
                     </div>
                 </div>
@@ -2654,52 +2651,17 @@ def generate_public_dashboard():
                     </a>
                 </div>
 
-                <!-- Card 5: Oakland, CA Retail (High-Cost CARB Benchmark) -->
+                <!-- Card 5: SF Bay Area 9-County Region (incl. Oakland) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 5 High-Cost Benchmark</span>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 5 NorCal Regional Hub</span>
                             <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-fire text-amber-400"></i> Oakland, CA Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                            95.3¢ CARB Tax
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Oakland_CA']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Oakland_CA']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> Richmond: 12 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Oakland_CA')}</strong></span>
-                    </div>
-
-                    <a href="oakland.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Oakland Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 6: SF Bay Area 9-County Region -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">9-County NorCal Metro</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area Region
+                                <i class="fa-solid fa-water text-cyan-400"></i> SF Bay Area, CA (incl. Oakland)
                             </h4>
                         </div>
                         <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                            Regional Matrix
+                            95.3¢ CARB Tax
                         </span>
                     </div>
 
@@ -2715,12 +2677,12 @@ def generate_public_dashboard():
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-city mr-1 text-slate-500"></i> SF / SJ / Oakland</span>
+                        <span><i class="fa-solid fa-city mr-1 text-slate-500"></i> SF / Oakland / SJ</span>
                         <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('BayArea_CA')}</strong></span>
                     </div>
 
                     <a href="bayarea.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Bay Area Matrix <i class="fa-solid fa-arrow-right"></i>
+                        Explore Bay Area Regional Hub <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -4333,6 +4295,22 @@ def generate_public_dashboard():
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
+        target_url = f"{rel_prefix}bayarea.html"
+        return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url={target_url}">
+    <link rel="canonical" href="{target_url}">
+    <title>Oakland & SF Bay Area Retail Gas Forecast - Midgley</title>
+    <script>window.location.href = "{target_url}";</script>
+</head>
+<body style="background:#020617; color:#f8fafc; font-family:sans-serif; padding:40px; text-align:center;">
+    <h2 style="font-size:24px; font-weight:bold;">Oakland Regional Hub Merged</h2>
+    <p style="margin-top:12px; color:#94a3b8;">Oakland and the 9-County Northern California corridor have been unified into the <a href="{target_url}" style="color:#38bdf8; text-decoration:underline;">SF Bay Area Regional Hub</a>.</p>
+    <p style="margin-top:8px; font-size:14px; color:#64748b;">Redirecting to <a href="{target_url}" style="color:#38bdf8;">{target_url}</a>...</p>
+</body>
+</html>"""
         nav_oakland = get_nav_header("oakland", rel_prefix)
         html_str = r"""<!DOCTYPE html>
 <html lang="en">

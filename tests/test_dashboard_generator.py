@@ -117,7 +117,6 @@ def test_katex_mobile_responsive_css():
         TULSA_PATH,
         NEWARK_PATH,
         CINCINNATI_PATH,
-        OAKLAND_PATH,
         BAYAREA_PATH,
         MATH_PATH,
     ]
@@ -410,7 +409,6 @@ def test_all_regional_dashboard_pages_have_dedicated_driver_cards():
         CINCINNATI_PATH,
         GREENVILLE_PATH,
         CHARLOTTE_PATH,
-        OAKLAND_PATH,
         BAYAREA_PATH,
     ]
 
@@ -485,7 +483,7 @@ def test_feature_attribution_card_in_regional_pages():
     """Verify that all regional model pages contain the Component-Level Feature Attribution card."""
     generate_public_dashboard()
 
-    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, OAKLAND_PATH, BAYAREA_PATH]
+    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, BAYAREA_PATH]
 
     for p in pages:
         with open(p, "r", encoding="utf-8") as f:
@@ -545,7 +543,6 @@ def test_dynamic_trend_badges_rendering():
         CINCINNATI_PATH,
         GREENVILLE_PATH,
         CHARLOTTE_PATH,
-        OAKLAND_PATH,
         BAYAREA_PATH,
     ]
 
@@ -573,11 +570,15 @@ def test_dynamic_trend_badges_rendering():
         # Verify dynamic badge structure with % Projected Trend exists on single-region pages
         assert "% Projected Trend" in html, f"Missing dynamic '% Projected Trend' badge in {path}"
 
-    # Verify Oakland renders dynamic percentage trend in its target card
+    # Verify Oakland redirect and Bay Area target card
     with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
         oak_html = f.read()
-        assert "5-Day Target:" in oak_html
-        assert "%" in oak_html
+        assert "bayarea.html" in oak_html
+
+    with open(BAYAREA_PATH, "r", encoding="utf-8") as f:
+        bay_html = f.read()
+        assert "5-Day Target:" in bay_html
+        assert "%" in bay_html
 
 
 def test_unlogged_regions_delta_preservation(monkeypatch, tmp_path):
@@ -868,7 +869,6 @@ def test_dashboard_aria_accessibility_and_landmarks():
         CINCINNATI_PATH,
         GREENVILLE_PATH,
         CHARLOTTE_PATH,
-        OAKLAND_PATH,
         BAYAREA_PATH,
         MATH_PATH,
         SOURCES_PATH,
@@ -877,6 +877,10 @@ def test_dashboard_aria_accessibility_and_landmarks():
         DIESEL_PATH,
         TELEMETRY_PATH,
     ]
+
+    assert os.path.exists(OAKLAND_PATH)
+    with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
+        assert "bayarea.html" in f.read()
 
     for page_path in all_pages:
         assert os.path.exists(page_path), f"Page {page_path} was not generated"

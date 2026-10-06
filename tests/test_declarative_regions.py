@@ -7,7 +7,7 @@ from src.locations.specs import get_region_spec, REGIONAL_SPECS, RegionSpec
 
 
 def test_get_region_spec_all_metros():
-    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "port_st_lucie"]
+    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie"]
     for slug in expected_slugs:
         spec = get_region_spec(slug)
         assert spec is not None
@@ -16,6 +16,11 @@ def test_get_region_spec_all_metros():
         assert len(spec.padd) > 0
         assert len(spec.wholesale_spot_col) > 0
         assert len(spec.eia_retail_series_id) > 0
+
+    # Ensure oakland alias resolves cleanly to canonical bay_area spec
+    oak_spec = get_region_spec("oakland")
+    assert oak_spec is not None
+    assert oak_spec.slug == "bay_area"
 
 
 def test_get_region_spec_by_region_key():
