@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T11:45:45.750234",
+  "timestamp": "2026-10-06T14:27:29.994114",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T11:45:23Z"
+      "timestamp": "2026-10-06T14:25:49Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-12",
+    "target_date": "2026-10-13",
     "current_base_price": 3.742,
     "predicted_price_per_gal": 3.742,
     "expected_change_dollars": 0.0,
