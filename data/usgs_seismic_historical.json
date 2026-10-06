@@ -1,11 +1,11 @@
 {
   "benchmark_key": "usgs_seismic",
-  "last_refreshed_utc": "2026-10-06 08:45:13",
+  "last_refreshed_utc": "2026-10-06 16:40:05",
   "records_count": 8,
   "data": {
     "status": "SUCCESS",
     "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-    "timestamp": "2026-10-06 08:45:13",
+    "timestamp": "2026-10-06 16:40:05",
     "filtered_corridor": "bay_area",
     "temporal_window_days": 30,
     "events": [],
