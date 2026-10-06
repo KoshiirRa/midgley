@@ -1330,6 +1330,20 @@ def get_usgs_seismic_endpoint(
     return connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days or 30, min_mag=min_mag)
 
 
+@app.get("/api/v1/weather/pirate", summary="Get High-Resolution Pirate Weather Reanalysis & Physical Risk Telemetry", tags=["Physical Data Feeds"])
+def get_pirate_weather_endpoint(
+    hub: Optional[str] = Query("tulsa_cushing", description="Refining hub or regional metro: tulsa_cushing, delaware_city, cincinnati_catlettsburg, oakland_richmond, greenville_selma, charlotte_paw_creek, port_st_lucie_everglades, gulf_coast_houston"),
+    target_date: Optional[str] = Query(None, description="Optional target date (YYYY-MM-DD) for historical reanalysis (timemachine mode)")
+):
+    """
+    Returns high-resolution NOAA HRRR (3km grid) and ERA5 reanalysis weather telemetry
+    and physical risk indices (degree days, freeze-off risk, wind gusts) for energy refining hubs (Issue #442).
+    """
+    from src.noaa_weather import PirateWeatherConnector
+    connector = PirateWeatherConnector()
+    return connector.fetch_hub_weather(hub_name_or_code=hub or "tulsa_cushing", target_date=target_date)
+
+
 @app.get("/api/v1/aqi/live", summary="Get Live Refinery Air Quality & Industrial Flaring Telemetry", tags=["Physical Data Feeds"])
 def get_aqi_live_endpoint(
     corridor: Optional[str] = Query("bay_area", description="Optional regional corridor filter: bay_area, tulsa, delaware_valley, tri_state, carolinas_coastal, carolinas_piedmont, south_florida, or 'all'")

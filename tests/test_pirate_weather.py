@@ -67,3 +67,51 @@ def test_pirate_weather_range_and_risk_indices():
     assert "heating_degree_days" in indices
     assert "cooling_degree_days" in indices
     assert 0.0 <= indices["freeze_off_risk_index"] <= 1.0
+
+
+def test_pirate_weather_fetch_hub_weather():
+    connector = PirateWeatherConnector(api_key=None)
+    hub_res = connector.fetch_hub_weather("tulsa_cushing", target_date="2026-01-15")
+
+    assert hub_res is not None
+    assert hub_res["hub_code"] == "tulsa_cushing"
+    assert "West Tulsa" in hub_res["hub_name"]
+    assert "heating_degree_days_hdd" in hub_res
+    assert "cooling_degree_days_cdd" in hub_res
+    assert "freeze_warning" in hub_res
+    assert "freeze_off_risk_index" in hub_res
+    assert "wind_gust" in hub_res
+
+
+def test_scenario_engine_noaa_freeze_hook():
+    from src.scenario_engine import _evaluate_live_telemetry_trigger, evaluate_scenario_plausibility
+    is_active, score_boost, reason = _evaluate_live_telemetry_trigger(
+        telemetry_hook="noaa_freeze",
+        scenario_id="polar_vortex_freeze"
+    )
+    assert isinstance(is_active, bool)
+    assert isinstance(score_boost, float)
+    assert isinstance(reason, str)
+    assert len(reason) > 0
+
+    res = evaluate_scenario_plausibility("polar_vortex_freeze", live_telemetry=True)
+    assert res is not None
+    assert "scenario_id" in res
+
+
+def test_feature_engineering_weather_resolution():
+    from src.feature_engineering import create_feature_matrix
+    dates = pd.date_range("2026-08-01", "2026-09-05", freq="D")
+    market_df = pd.DataFrame({
+        "date": dates,
+        "gasoline_rbob": [2.50 + i * 0.01 for i in range(len(dates))],
+        "wti_crude": [75.0 + i * 0.05 for i in range(len(dates))],
+        "brent_crude": [78.0 + i * 0.05 for i in range(len(dates))]
+    })
+    feat_df = create_feature_matrix(market_df=market_df, region="Tulsa_OK")
+    assert not feat_df.empty
+    assert "hdd_daily" in feat_df.columns
+    assert "cdd_daily" in feat_df.columns
+    assert "freeze_warning_flag" in feat_df.columns
+
+

@@ -126,12 +126,20 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 ### 22. Preservation of Live Scraping Channels (AAA & GasBuddy)
 - **Commercial Boundary Respect**: In accordance with project instructions, kept live retail fuel scraping channels in [`src/live_fuel_feed.py`](src/live_fuel_feed.py) operational without premature deprecation, while maintainers coordinate directly with OPIS.
 
+### 23. Production Wiring of Pirate Weather Telemetry & Reanalysis Engine (Issue #442)
+- **Dual-Endpoint Routing Architecture**: Resolved Pirate Weather API past vs current routing in [`src/noaa_weather.py`](src/noaa_weather.py) by routing timestamps in the past (>2 hours ago) to `https://timemachine.pirateweather.net/forecast/...` while current/forecast queries use `https://api.pirateweather.net/forecast/...`, eliminating HTTP 400 rejection on historical queries.
+- **Production Feature Engineering Ingestion**: Wired `PirateWeatherConnector` into `create_feature_matrix()` in [`src/feature_engineering.py`](src/feature_engineering.py) across all 8 refining hub coordinates, injecting live heating degree days (`hdd_daily`), cooling degree days (`cdd_daily`), and freeze warning flags (`freeze_warning_flag`) with automated fallback to `OpenMeteoDegreeDaysConnector`.
+- **Scenario Simulation Polar Freeze Hook**: Integrated live telemetry into `_evaluate_live_telemetry_trigger()` in [`src/scenario_engine.py`](src/scenario_engine.py) to evaluate refinery freeze-off risk (`freeze_off_risk_index`) and sub-freezing temperatures for `polar_vortex_freeze` scenario gating.
+- **MCP & REST API Exposure**: Added MCP tool `get_pirate_weather_telemetry` in [`src/mcp_server.py`](src/mcp_server.py) and REST route `GET /api/v1/weather/pirate` in [`src/api_server.py`](src/api_server.py).
+- **Test Sandbox Integrity**: Guarded all vintage writes with `TESTING=1` checks and isolated fixtures in `tests/conftest.py`, ensuring zero file mutation in tracked repositories.
+
 ---
 
 ## 📦 Closed Issues & Findings
 
 | Issue / Finding | Title | Component |
 | :--- | :--- | :--- |
+| **#442** | `feat(weather): Wire Pirate Weather connector into feature engineering, scenario simulation, and MCP/REST API` | Weather / Feature Engineering |
 | **#601** | `fix(regulations): Correct tax calendar for Ohio holiday & statutory rates, and align calendar vs business-day evaluation window` | Regulations / MLOps |
 | **#602** | `fix(data-integrity): Unify forecast ID generation across logger, re-keying, and Turso migration to prevent ledger duplication` | Data Integrity / Ledger |
 | **#603** | `fix(data-ingestion): Fix geopolitical feed refresh data truncation and repair headline deduplication logic` | Data Ingestion / NLP |

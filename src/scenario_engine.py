@@ -315,6 +315,19 @@ def _evaluate_live_telemetry_trigger(telemetry_hook: str, scenario_id: str) -> T
             if live_risk >= 0.40:
                 return True, 1.0, f"USGS Bay Area seismic event activity detected (Risk index: {live_risk:.2f})."
 
+        # 4. NOAA Arctic Deep Freeze & Polar Vortex Outbreak (Pirate Weather HRRR / ERA5 Reanalysis)
+        elif telemetry_hook == "noaa_freeze":
+            from src.noaa_weather import PirateWeatherConnector
+            pw_conn = PirateWeatherConnector()
+            hub_code = "tulsa_cushing" if "tulsa" in scenario_id else ("cincinnati_catlettsburg" if "cincinnati" in scenario_id else "gulf_coast_houston")
+            hub_w = pw_conn.fetch_hub_weather(hub_code)
+            temp = float(hub_w.get("temperature", 65.0))
+            freeze_risk = float(hub_w.get("freeze_off_risk_index", 0.0))
+            if temp <= 20.0 or freeze_risk >= 0.80:
+                return True, 1.0, f"Severe arctic freeze outbreak at {hub_code} (Temp: {temp:.1f}°F, Freeze-off Risk: {freeze_risk:.2f})."
+            elif temp <= 32.0 or freeze_risk >= 0.40:
+                return False, 0.25, f"Sub-freezing conditions monitored at {hub_code} (Temp: {temp:.1f}°F)."
+
     except Exception as e:
         logger.debug(f"Telemetry hook evaluation notice for '{scenario_id}': {e}")
 

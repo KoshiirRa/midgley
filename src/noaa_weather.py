@@ -12,7 +12,7 @@ import urllib.request
 import json
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional, Tuple, Union, List
 import logging
 from src.lookup_cache import global_cache
@@ -600,6 +600,8 @@ PIRATE_WEATHER_REFINING_HUBS = {
 
 def save_pirateweather_vintage_record(record: dict, filepath: str = PIRATEWEATHER_VINTAGES_FILE) -> None:
     """Persists a bitemporal point-in-time Pirate Weather reanalysis observation (Issue #442)."""
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -637,8 +639,8 @@ class PirateWeatherConnector:
     https://api.pirateweather.net/forecast/{key}/{lat},{lon},{time}
     """
 
-    def __init__(self, api_key: Optional[str] = None):
-        if not api_key:
+    def __init__(self, api_key: Any = "ENV_DEFAULT"):
+        if api_key == "ENV_DEFAULT":
             try:
                 from dotenv import load_dotenv
                 load_dotenv()
@@ -655,7 +657,9 @@ class PirateWeatherConnector:
                                     os.environ.setdefault(k.strip(), v.strip("\"'"))
                     except Exception:
                         pass
-        self.api_key = api_key or os.getenv("PIRATE_WEATHER_API_KEY") or os.getenv("PIRATEWEATHER_API_KEY")
+            self.api_key = os.getenv("PIRATE_WEATHER_API_KEY") or os.getenv("PIRATEWEATHER_API_KEY")
+        else:
+            self.api_key = api_key
         self.base_url = "https://api.pirateweather.net/forecast"
         self.hubs = PIRATE_WEATHER_REFINING_HUBS
 
@@ -739,7 +743,12 @@ class PirateWeatherConnector:
             pass
 
         if self.api_key:
-            url = f"{self.base_url}/{self.api_key}/{lat:.4f},{lon:.4f},{unix_time}?units=us"
+            now_ts = int(datetime.now(timezone.utc).timestamp())
+            is_past = unix_time < (now_ts - 7200)
+            if is_past:
+                url = f"https://timemachine.pirateweather.net/forecast/{self.api_key}/{lat:.4f},{lon:.4f},{unix_time}?units=us"
+            else:
+                url = f"{self.base_url}/{self.api_key}/{lat:.4f},{lon:.4f}?units=us"
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
                 with urllib.request.urlopen(req, timeout=8) as response:
@@ -857,6 +866,55 @@ class PirateWeatherConnector:
             "cooling_degree_days": round(cdd, 1),
             "freeze_off_risk_index": round(freeze_risk, 3)
         }
+
+    def fetch_hub_weather(
+        self,
+        hub_name_or_code: str = "tulsa_cushing",
+        target_date: Optional[Union[int, str, datetime]] = None
+    ) -> Dict[str, Any]:
+        """
+        Fetches live or historical reanalysis weather for a specified refining hub or regional metro.
+        Returns structured weather dictionary with HDD, CDD, freeze warning, and wind gusts.
+        """
+        lat, lon = self.get_hub_coordinates(hub_name_or_code)
+        target = target_date or datetime.now(timezone.utc)
+        res = self.fetch_historical_point(lat, lon, target)
+
+        temp = float(res.get("temperature", 65.0))
+        hdd = max(0.0, 65.0 - temp)
+        cdd = max(0.0, temp - 65.0)
+        freeze_warning = bool(temp <= 32.0)
+        freeze_off_risk = 1.0 if temp <= 20.0 else (0.5 if temp <= 32.0 else 0.0)
+        extreme_heat = bool(temp >= 95.0)
+
+        hub_code = hub_name_or_code.lower().strip()
+        hub_name = self.hubs.get(hub_code, {}).get("name", hub_name_or_code)
+
+        out = {
+            **res,
+            "hub_code": hub_code,
+            "hub_name": hub_name,
+            "mean_temp_f": round(temp, 1),
+            "heating_degree_days_hdd": round(hdd, 1),
+            "cooling_degree_days_cdd": round(cdd, 1),
+            "freeze_warning": freeze_warning,
+            "freeze_off_risk_index": freeze_off_risk,
+            "extreme_heat_warning": extreme_heat,
+            "source": res.get("source", "Pirate Weather NOAA HRRR / ERA5 Reanalysis")
+        }
+        return out
+
+
+_PIRATE_WEATHER_SINGLETON: Optional[PirateWeatherConnector] = None
+
+
+def get_pirate_weather_connector() -> PirateWeatherConnector:
+    """Returns singleton instance of PirateWeatherConnector."""
+    global _PIRATE_WEATHER_SINGLETON
+    if _PIRATE_WEATHER_SINGLETON is None:
+        _PIRATE_WEATHER_SINGLETON = PirateWeatherConnector()
+    return _PIRATE_WEATHER_SINGLETON
+
 
 
 

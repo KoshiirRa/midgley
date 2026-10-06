@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Proportional dynamic narrative attribution driver calculation matching forecast direction signs and sums (#604).
 - Single-use token tracking table `intraday_flag_tokens` in Cloudflare D1 schema with atomic replay enforcement (#605).
 - Dead-man switch heartbeat reporting (Healthchecks.io) in automated prediction pipelines (#606).
+- Production Pirate Weather connector wiring (`PirateWeatherConnector`) into `create_feature_matrix()` in `src/feature_engineering.py` for live heating degree days (HDD), cooling degree days (CDD), and freeze warning telemetry (#442).
+- Pirate Weather polar freeze telemetry hook in `_evaluate_live_telemetry_trigger()` in `src/scenario_engine.py` evaluating `freeze_off_risk_index` and freezing thresholds for refinery cold-weather outages (#442).
+- Pirate Weather MCP tool `get_pirate_weather_telemetry` in `src/mcp_server.py` and REST endpoint `GET /api/v1/weather/pirate` in `src/api_server.py` (#442).
 
 ### Changed
 - Consolidated Oakland and SF Bay Area into canonical `BayArea_CA` regional hub across specs, runner, public dashboard, and test suites, with `docs/oakland.html` redirecting to `docs/bayarea.html` (Finding 3.7).
@@ -35,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed high-severity headline truncation and properly URL-encoded Discord webhook flag URLs (#605).
 - Corrected official KaTeX 0.16.8 Subresource Integrity (SRI) SHA384 hashes in public sources dashboard (#604).
 - Sandboxed `intraday_event_monitor`, `reachability_adapters`, and `wayback_archiver` file writes during test runs in `tests/conftest.py`, eliminating test session fixture checksum pollution (#613).
+- Fixed Pirate Weather API query routing for historical timestamps (>2h ago) to use `timemachine.pirateweather.net` instead of standard forecast endpoint, preventing HTTP 400 errors during retrospective backtests (#442).
 
 ## [0.8.0] - 2026-09-29
 

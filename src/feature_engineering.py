@@ -541,16 +541,49 @@ def create_feature_matrix(
             df['freeze_warning_flag'] = df['freeze_warning_flag_v'].combine_first(df['freeze_warning_flag'])
             df.drop(columns=[c for c in ['hdd_daily_v', 'cdd_daily_v', 'freeze_warning_flag_v'] if c in df.columns], inplace=True)
 
+        # Ingest Pirate Weather HRRR / ERA5 reanalysis vintages if present (Issue #442)
+        pw_v_df = _load_vintage_timeseries(
+            "data/pirateweather_vintages.json",
+            {"temperature": "pw_temp_v"},
+            as_of_cutoff=as_of_cutoff,
+            nested_key="data"
+        )
+        if not pw_v_df.empty:
+            df = pd.merge(df, pw_v_df, on='date', how='left')
+            if 'pw_temp_v' in df.columns:
+                pw_hdd = np.maximum(0.0, 65.0 - df['pw_temp_v'])
+                pw_cdd = np.maximum(0.0, df['pw_temp_v'] - 65.0)
+                df['hdd_daily'] = pw_hdd.combine_first(df['hdd_daily'])
+                df['cdd_daily'] = pw_cdd.combine_first(df['cdd_daily'])
+                df['freeze_warning_flag'] = (df['hdd_daily'] > 25.0).astype(float)
+                df.drop(columns=['pw_temp_v'], inplace=True)
+
         if is_live_inference and len(df) > 0:
-            weather_connector = OpenMeteoDegreeDaysConnector()
-            hub_weather = weather_connector.fetch_hub_degree_days(region)
-            if hub_weather:
-                hdd_val = hub_weather.get("heating_degree_days_hdd", float(df['hdd_daily'].iloc[-1]))
-                cdd_val = hub_weather.get("cooling_degree_days_cdd", float(df['cdd_daily'].iloc[-1]))
-                freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else float(df['freeze_warning_flag'].iloc[-1])
+            pw_data = None
+            try:
+                from src.noaa_weather import PirateWeatherConnector
+                pw_conn = PirateWeatherConnector()
+                pw_data = pw_conn.fetch_hub_weather(region)
+            except Exception as e:
+                logger.debug(f"Pirate Weather live fetch notice: {e}")
+
+            if pw_data and pw_data.get("temperature") is not None:
+                hdd_val = pw_data.get("heating_degree_days_hdd", float(df['hdd_daily'].iloc[-1]))
+                cdd_val = pw_data.get("cooling_degree_days_cdd", float(df['cdd_daily'].iloc[-1]))
+                freeze_flag = 1.0 if pw_data.get("freeze_warning", False) else float(df['freeze_warning_flag'].iloc[-1])
                 df.loc[df.index[-1], 'hdd_daily'] = hdd_val
                 df.loc[df.index[-1], 'cdd_daily'] = cdd_val
                 df.loc[df.index[-1], 'freeze_warning_flag'] = freeze_flag
+            else:
+                weather_connector = OpenMeteoDegreeDaysConnector()
+                hub_weather = weather_connector.fetch_hub_degree_days(region)
+                if hub_weather:
+                    hdd_val = hub_weather.get("heating_degree_days_hdd", float(df['hdd_daily'].iloc[-1]))
+                    cdd_val = hub_weather.get("cooling_degree_days_cdd", float(df['cdd_daily'].iloc[-1]))
+                    freeze_flag = 1.0 if hub_weather.get("freeze_warning", False) else float(df['freeze_warning_flag'].iloc[-1])
+                    df.loc[df.index[-1], 'hdd_daily'] = hdd_val
+                    df.loc[df.index[-1], 'cdd_daily'] = cdd_val
+                    df.loc[df.index[-1], 'freeze_warning_flag'] = freeze_flag
             
         df['hdd_5d_rolling'] = df['hdd_daily'].rolling(5, min_periods=1).mean()
         df['cdd_5d_rolling'] = df['cdd_daily'].rolling(5, min_periods=1).mean()

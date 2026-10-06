@@ -158,4 +158,10 @@ def isolate_test_environment(tmp_path, monkeypatch):
     except (ImportError, AttributeError):
         pass
 
+    try:
+        import src.noaa_weather as noaa_w
+        monkeypatch.setattr(noaa_w, "PIRATEWEATHER_VINTAGES_FILE", str(tmp_path / "pirateweather_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
     yield tmp_path
