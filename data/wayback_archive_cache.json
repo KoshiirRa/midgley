@@ -3653,11 +3653,11 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-10-03T11:18:33.482931+00:00",
+    "timestamp": "2026-10-06T22:30:07.693071+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "headline": "Today’s Gas Prices By State: Gas Tops $4 Nationwide - forbes.com",
+    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Exceeds $4 - Forbes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "error": "The read operation timed out"
   },
@@ -11768,6 +11768,114 @@
     "canonical_url": "https://truthsocial.com/post/3309168",
     "headline": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/3309168",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5": {
+    "timestamp": "2026-10-06T22:29:58.304918+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5",
+    "headline": "Trump’s red-dye diesel plan has a major flaw - The Washington Post",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiekFVX3lxTE0yeDNXbEVGSFFtSXJKYmZSWDZuRmNZUUhyaHNXaXRxVUlhVmxYbWxYc0ZYbDQtYnlMd05zR3F0SDYweDdCUGhKOUNFbnJjSk9fRFBtZ09jWTlEclYzUHhPcHViWmU2bHg0c28xLXc0Mmppd3NQcGh5d2pB?oc=5": {
+    "timestamp": "2026-10-06T22:30:18.381863+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE0yeDNXbEVGSFFtSXJKYmZSWDZuRmNZUUhyaHNXaXRxVUlhVmxYbWxYc0ZYbDQtYnlMd05zR3F0SDYweDdCUGhKOUNFbnJjSk9fRFBtZ09jWTlEclYzUHhPcHViWmU2bHg0c28xLXc0Mmppd3NQcGh5d2pB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE0yeDNXbEVGSFFtSXJKYmZSWDZuRmNZUUhyaHNXaXRxVUlhVmxYbWxYc0ZYbDQtYnlMd05zR3F0SDYweDdCUGhKOUNFbnJjSk9fRFBtZ09jWTlEclYzUHhPcHViWmU2bHg0c28xLXc0Mmppd3NQcGh5d2pB?oc=5",
+    "headline": "POLL: How much are you spending to fill up on gas? - KEYE",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiekFVX3lxTE0yeDNXbEVGSFFtSXJKYmZSWDZuRmNZUUhyaHNXaXRxVUlhVmxYbWxYc0ZYbDQtYnlMd05zR3F0SDYweDdCUGhKOUNFbnJjSk9fRFBtZ09jWTlEclYzUHhPcHViWmU2bHg0c28xLXc0Mmppd3NQcGh5d2pB?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMieEFVX3lxTE9UNll6Wk9Wa2l1cVptbnljTThVZHRJUUx6S25aYlhBckNDNEc5YjV0UlBiWGN0NXdlWWhJTmZaX3hyNnJnTVUyVXNaYXNnODFRNWhLTWpDRjV5NF9PeWpadkZlNW5DVlhTNzV1a0FNS2FKamxfMG44UNIBjAFBVV95cUxNN0k2cFJtS3cxNGVfVndFblo3RjNUaVRqQXJmX1lfYllIRTdVdUtWWFZKdTFSQnlNUmxYVGl3ZkdwajRuTkFTTURuOGtFQ3kxc1BfNEVKcWRaM2podXR1MFpwUENJMnZyX3dnZFNncm9FVHd2X2VZZjk4VG1XVzVNN21qUEZURzZaWm1INw?oc=5": {
+    "timestamp": "2026-10-06T22:30:25.709544+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9UNll6Wk9Wa2l1cVptbnljTThVZHRJUUx6S25aYlhBckNDNEc5YjV0UlBiWGN0NXdlWWhJTmZaX3hyNnJnTVUyVXNaYXNnODFRNWhLTWpDRjV5NF9PeWpadkZlNW5DVlhTNzV1a0FNS2FKamxfMG44UNIBjAFBVV95cUxNN0k2cFJtS3cxNGVfVndFblo3RjNUaVRqQXJmX1lfYllIRTdVdUtWWFZKdTFSQnlNUmxYVGl3ZkdwajRuTkFTTURuOGtFQ3kxc1BfNEVKcWRaM2podXR1MFpwUENJMnZyX3dnZFNncm9FVHd2X2VZZjk4VG1XVzVNN21qUEZURzZaWm1INw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9UNll6Wk9Wa2l1cVptbnljTThVZHRJUUx6S25aYlhBckNDNEc5YjV0UlBiWGN0NXdlWWhJTmZaX3hyNnJnTVUyVXNaYXNnODFRNWhLTWpDRjV5NF9PeWpadkZlNW5DVlhTNzV1a0FNS2FKamxfMG44UNIBjAFBVV95cUxNN0k2cFJtS3cxNGVfVndFblo3RjNUaVRqQXJmX1lfYllIRTdVdUtWWFZKdTFSQnlNUmxYVGl3ZkdwajRuTkFTTURuOGtFQ3kxc1BfNEVKcWRaM2podXR1MFpwUENJMnZyX3dnZFNncm9FVHd2X2VZZjk4VG1XVzVNN21qUEZURzZaWm1INw?oc=5",
+    "headline": "Tennessee gas prices fall 10 cents - WBBJ-TV",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMieEFVX3lxTE9UNll6Wk9Wa2l1cVptbnljTThVZHRJUUx6S25aYlhBckNDNEc5YjV0UlBiWGN0NXdlWWhJTmZaX3hyNnJnTVUyVXNaYXNnODFRNWhLTWpDRjV5NF9PeWpadkZlNW5DVlhTNzV1a0FNS2FKamxfMG44UNIBjAFBVV95cUxNN0k2cFJtS3cxNGVfVndFblo3RjNUaVRqQXJmX1lfYllIRTdVdUtWWFZKdTFSQnlNUmxYVGl3ZkdwajRuTkFTTURuOGtFQ3kxc1BfNEVKcWRaM2podXR1MFpwUENJMnZyX3dnZFNncm9FVHd2X2VZZjk4VG1XVzVNN21qUEZURzZaWm1INw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilAFBVV95cUxNSVFVekRhRy1pc1V0NC1QUzFZejdNSlZLYjdZeWpBdEJNb1AyaUZHRW8ySEdyX0NLcnpXZjhPMDFnTHhKdjFWdlh4UmpIR09pOWx5eTVOMmhfTGYyVU5selJibnd1NVBuaFRWYkxpd09Na2I5WkVpOU5TYXpqQTVRSmpKUFhSQk5hdVBQUVZ3VmdESlBo0gGUAUFVX3lxTE1JUVV6RGFHLWlzVXQ0LVBTMVl6N01KVktiN1l5akF0Qk1vUDJpRkdFbzJIR3JfQ0tyeldmOE8wMWdMeEp2MVZ2WHhSakhHT2k5bHl5NU4yaF9MZjJVTmx6UmJud3U1UG5oVFZiTGl3T01rYjlaRWk5TlNhempBNVFKakpQWFJCTmF1UFBRVndWZ0RKUGg?oc=5": {
+    "timestamp": "2026-10-06T22:30:35.765266+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNSVFVekRhRy1pc1V0NC1QUzFZejdNSlZLYjdZeWpBdEJNb1AyaUZHRW8ySEdyX0NLcnpXZjhPMDFnTHhKdjFWdlh4UmpIR09pOWx5eTVOMmhfTGYyVU5selJibnd1NVBuaFRWYkxpd09Na2I5WkVpOU5TYXpqQTVRSmpKUFhSQk5hdVBQUVZ3VmdESlBo0gGUAUFVX3lxTE1JUVV6RGFHLWlzVXQ0LVBTMVl6N01KVktiN1l5akF0Qk1vUDJpRkdFbzJIR3JfQ0tyeldmOE8wMWdMeEp2MVZ2WHhSakhHT2k5bHl5NU4yaF9MZjJVTmx6UmJud3U1UG5oVFZiTGl3T01rYjlaRWk5TlNhempBNVFKakpQWFJCTmF1UFBRVndWZ0RKUGg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNSVFVekRhRy1pc1V0NC1QUzFZejdNSlZLYjdZeWpBdEJNb1AyaUZHRW8ySEdyX0NLcnpXZjhPMDFnTHhKdjFWdlh4UmpIR09pOWx5eTVOMmhfTGYyVU5selJibnd1NVBuaFRWYkxpd09Na2I5WkVpOU5TYXpqQTVRSmpKUFhSQk5hdVBQUVZ3VmdESlBo0gGUAUFVX3lxTE1JUVV6RGFHLWlzVXQ0LVBTMVl6N01KVktiN1l5akF0Qk1vUDJpRkdFbzJIR3JfQ0tyeldmOE8wMWdMeEp2MVZ2WHhSakhHT2k5bHl5NU4yaF9MZjJVTmx6UmJud3U1UG5oVFZiTGl3T01rYjlaRWk5TlNhempBNVFKakpQWFJCTmF1UFBRVndWZ0RKUGg?oc=5",
+    "headline": "NC's Democratic governor backs GOP lawmakers’ push for gas tax relief - Raleigh News & Observer",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilAFBVV95cUxNSVFVekRhRy1pc1V0NC1QUzFZejdNSlZLYjdZeWpBdEJNb1AyaUZHRW8ySEdyX0NLcnpXZjhPMDFnTHhKdjFWdlh4UmpIR09pOWx5eTVOMmhfTGYyVU5selJibnd1NVBuaFRWYkxpd09Na2I5WkVpOU5TYXpqQTVRSmpKUFhSQk5hdVBQUVZ3VmdESlBo0gGUAUFVX3lxTE1JUVV6RGFHLWlzVXQ0LVBTMVl6N01KVktiN1l5akF0Qk1vUDJpRkdFbzJIR3JfQ0tyeldmOE8wMWdMeEp2MVZ2WHhSakhHT2k5bHl5NU4yaF9MZjJVTmx6UmJud3U1UG5oVFZiTGl3T01rYjlaRWk5TlNhempBNVFKakpQWFJCTmF1UFBRVndWZ0RKUGg?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMic0FVX3lxTE9iQXdnajFfS0FBbHM4V3FtZmEzbkpBUjR1X1lDd2VGZkhDbTBRX0ljMzM2R0w4TmlUTVQtWEsxbV9WZmpyU3hhME1TTnZxWkI0bGIyWTFBbzlmaXZVa1dPYkJCT0l3Z1ZkcE5hWFAyZHE4eE0?oc=5": {
+    "timestamp": "2026-10-06T22:30:46.085714+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9iQXdnajFfS0FBbHM4V3FtZmEzbkpBUjR1X1lDd2VGZkhDbTBRX0ljMzM2R0w4TmlUTVQtWEsxbV9WZmpyU3hhME1TTnZxWkI0bGIyWTFBbzlmaXZVa1dPYkJCT0l3Z1ZkcE5hWFAyZHE4eE0?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9iQXdnajFfS0FBbHM4V3FtZmEzbkpBUjR1X1lDd2VGZkhDbTBRX0ljMzM2R0w4TmlUTVQtWEsxbV9WZmpyU3hhME1TTnZxWkI0bGIyWTFBbzlmaXZVa1dPYkJCT0l3Z1ZkcE5hWFAyZHE4eE0?oc=5",
+    "headline": "Sioux Falls Gas Prices Explode Overnight By .30¢ Per Gallon - ESPN Sioux Falls",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMic0FVX3lxTE9iQXdnajFfS0FBbHM4V3FtZmEzbkpBUjR1X1lDd2VGZkhDbTBRX0ljMzM2R0w4TmlUTVQtWEsxbV9WZmpyU3hhME1TTnZxWkI0bGIyWTFBbzlmaXZVa1dPYkJCT0l3Z1ZkcE5hWFAyZHE4eE0?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiYEFVX3lxTE8tM05RLVVFRUgtQWFJZnFzYjlSNWZMand1TTJXNFVhamNFVTJUOGJHRmpTNG94MlVfT29mQ0ZBUUNINkZKSlEwVHpyT3liZVliVjF4Q2VnUHpUQlo2Mm0tTA?oc=5": {
+    "timestamp": "2026-10-06T22:30:53.267161+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE8tM05RLVVFRUgtQWFJZnFzYjlSNWZMand1TTJXNFVhamNFVTJUOGJHRmpTNG94MlVfT29mQ0ZBUUNINkZKSlEwVHpyT3liZVliVjF4Q2VnUHpUQlo2Mm0tTA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE8tM05RLVVFRUgtQWFJZnFzYjlSNWZMand1TTJXNFVhamNFVTJUOGJHRmpTNG94MlVfT29mQ0ZBUUNINkZKSlEwVHpyT3liZVliVjF4Q2VnUHpUQlo2Mm0tTA?oc=5",
+    "headline": "Montana Gas Prices Fall in Back-to-Back Weeks for the First Time in Months - Newstalk KGVO",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiYEFVX3lxTE8tM05RLVVFRUgtQWFJZnFzYjlSNWZMand1TTJXNFVhamNFVTJUOGJHRmpTNG94MlVfT29mQ0ZBUUNINkZKSlEwVHpyT3liZVliVjF4Q2VnUHpUQlo2Mm0tTA?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMixAFBVV95cUxOS1c2bEpMZXo0T2lKUFBTS2tsbFpBdlNtMlRGU2k5elRVSDlYTmNNNFo5NUdud2pvdm5MTWdfbTAyeElDQVdTMUZCYkFkSGRMakhGR24tR2lWTUYweFZtNnNxRFVncUpUdlRnYmtsVnJVUmMxWW9tNTlVajlDM2lDekZ4OEhpWHpGeGlQdk1sRFBONzZ3cUxybzg0bGgya2RZVG9hRGNLWDg4S3BWRXh0aV9UVGVSbWhVSUViTFFQZlNsc2tE0gHKAUFVX3lxTE5oX0xVZWZnOUJYbzVuRnlxbk5acFhMZnNMU0lDRnFIWkh3ZERjYzJhemMwd0pjSzFQMVVRV0VEdzlDZmN0ZHNnSzctZ0lONnBLTnVEZFBqd0xrZG9KUThZSDNUb3EzSUVOZjBKV2ltOW94NHVYUjlPWW05ejRtLWdaSGsyMnF2UTNDRzJ6c0hZOFYwM3pvbklmT2czRmJ4SmNMclI5TnNTOXA4NHgtNE1JUENHUDVxaU5jUmxycFdrZWUxSXU2ZlhNMmc?oc=5": {
+    "timestamp": "2026-10-06T22:31:03.354676+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOS1c2bEpMZXo0T2lKUFBTS2tsbFpBdlNtMlRGU2k5elRVSDlYTmNNNFo5NUdud2pvdm5MTWdfbTAyeElDQVdTMUZCYkFkSGRMakhGR24tR2lWTUYweFZtNnNxRFVncUpUdlRnYmtsVnJVUmMxWW9tNTlVajlDM2lDekZ4OEhpWHpGeGlQdk1sRFBONzZ3cUxybzg0bGgya2RZVG9hRGNLWDg4S3BWRXh0aV9UVGVSbWhVSUViTFFQZlNsc2tE0gHKAUFVX3lxTE5oX0xVZWZnOUJYbzVuRnlxbk5acFhMZnNMU0lDRnFIWkh3ZERjYzJhemMwd0pjSzFQMVVRV0VEdzlDZmN0ZHNnSzctZ0lONnBLTnVEZFBqd0xrZG9KUThZSDNUb3EzSUVOZjBKV2ltOW94NHVYUjlPWW05ejRtLWdaSGsyMnF2UTNDRzJ6c0hZOFYwM3pvbklmT2czRmJ4SmNMclI5TnNTOXA4NHgtNE1JUENHUDVxaU5jUmxycFdrZWUxSXU2ZlhNMmc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOS1c2bEpMZXo0T2lKUFBTS2tsbFpBdlNtMlRGU2k5elRVSDlYTmNNNFo5NUdud2pvdm5MTWdfbTAyeElDQVdTMUZCYkFkSGRMakhGR24tR2lWTUYweFZtNnNxRFVncUpUdlRnYmtsVnJVUmMxWW9tNTlVajlDM2lDekZ4OEhpWHpGeGlQdk1sRFBONzZ3cUxybzg0bGgya2RZVG9hRGNLWDg4S3BWRXh0aV9UVGVSbWhVSUViTFFQZlNsc2tE0gHKAUFVX3lxTE5oX0xVZWZnOUJYbzVuRnlxbk5acFhMZnNMU0lDRnFIWkh3ZERjYzJhemMwd0pjSzFQMVVRV0VEdzlDZmN0ZHNnSzctZ0lONnBLTnVEZFBqd0xrZG9KUThZSDNUb3EzSUVOZjBKV2ltOW94NHVYUjlPWW05ejRtLWdaSGsyMnF2UTNDRzJ6c0hZOFYwM3pvbklmT2czRmJ4SmNMclI5TnNTOXA4NHgtNE1JUENHUDVxaU5jUmxycFdrZWUxSXU2ZlhNMmc?oc=5",
+    "headline": "The Latest: Trump agrees to have his super PAC, not taxpayers, pay for his ads - FOX 56 News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMixAFBVV95cUxOS1c2bEpMZXo0T2lKUFBTS2tsbFpBdlNtMlRGU2k5elRVSDlYTmNNNFo5NUdud2pvdm5MTWdfbTAyeElDQVdTMUZCYkFkSGRMakhGR24tR2lWTUYweFZtNnNxRFVncUpUdlRnYmtsVnJVUmMxWW9tNTlVajlDM2lDekZ4OEhpWHpGeGlQdk1sRFBONzZ3cUxybzg0bGgya2RZVG9hRGNLWDg4S3BWRXh0aV9UVGVSbWhVSUViTFFQZlNsc2tE0gHKAUFVX3lxTE5oX0xVZWZnOUJYbzVuRnlxbk5acFhMZnNMU0lDRnFIWkh3ZERjYzJhemMwd0pjSzFQMVVRV0VEdzlDZmN0ZHNnSzctZ0lONnBLTnVEZFBqd0xrZG9KUThZSDNUb3EzSUVOZjBKV2ltOW94NHVYUjlPWW05ejRtLWdaSGsyMnF2UTNDRzJ6c0hZOFYwM3pvbklmT2czRmJ4SmNMclI5TnNTOXA4NHgtNE1JUENHUDVxaU5jUmxycFdrZWUxSXU2ZlhNMmc?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9zYkYwVmhmV3dEMTVrajdrekxCMF9Kc1J5R1dkMmJzSUViX3llWEZXT2dPZGxMUG42VzFTMmNJTzlhZlFQcUJpX0d4VnZHdHhMaFktV1g2ZVN3Z2M?oc=5": {
+    "timestamp": "2026-10-06T22:31:10.245325+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9zYkYwVmhmV3dEMTVrajdrekxCMF9Kc1J5R1dkMmJzSUViX3llWEZXT2dPZGxMUG42VzFTMmNJTzlhZlFQcUJpX0d4VnZHdHhMaFktV1g2ZVN3Z2M?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9zYkYwVmhmV3dEMTVrajdrekxCMF9Kc1J5R1dkMmJzSUViX3llWEZXT2dPZGxMUG42VzFTMmNJTzlhZlFQcUJpX0d4VnZHdHhMaFktV1g2ZVN3Z2M?oc=5",
+    "headline": "Crypto Market Faces Pressure as Global Energy Crisis Risk Grows - Cryptonews.net",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiW0FVX3lxTE9zYkYwVmhmV3dEMTVrajdrekxCMF9Kc1J5R1dkMmJzSUViX3llWEZXT2dPZGxMUG42VzFTMmNJTzlhZlFQcUJpX0d4VnZHdHhMaFktV1g2ZVN3Z2M?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMirwFBVV95cUxQSW4yYVFOTTJmMmRfZ0FKWHRYZVM4bU5BOFg2dW1aQjBQYTRrSG1Tbl9jSGw0enRwX3hBVDYyN1NOUU5EZTMxV3dkUUk0YU4wWUVGMzZ5WnE1azRnekRXZ0lsUHd2Zmx1RnFDVTNKLVY5RktDRzNGYU5KWDcxV1U4SGMyNkszakQ4a1NEY1VkQzJzWDJQazlwQkxvTVFXTjhaU1Z2M0pkXzhXOUFMUmlr?oc=5": {
+    "timestamp": "2026-10-06T22:31:18.026916+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQSW4yYVFOTTJmMmRfZ0FKWHRYZVM4bU5BOFg2dW1aQjBQYTRrSG1Tbl9jSGw0enRwX3hBVDYyN1NOUU5EZTMxV3dkUUk0YU4wWUVGMzZ5WnE1azRnekRXZ0lsUHd2Zmx1RnFDVTNKLVY5RktDRzNGYU5KWDcxV1U4SGMyNkszakQ4a1NEY1VkQzJzWDJQazlwQkxvTVFXTjhaU1Z2M0pkXzhXOUFMUmlr?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQSW4yYVFOTTJmMmRfZ0FKWHRYZVM4bU5BOFg2dW1aQjBQYTRrSG1Tbl9jSGw0enRwX3hBVDYyN1NOUU5EZTMxV3dkUUk0YU4wWUVGMzZ5WnE1azRnekRXZ0lsUHd2Zmx1RnFDVTNKLVY5RktDRzNGYU5KWDcxV1U4SGMyNkszakQ4a1NEY1VkQzJzWDJQazlwQkxvTVFXTjhaU1Z2M0pkXzhXOUFMUmlr?oc=5",
+    "headline": "Can Nigeria Cut Petrol Imports Without Creating A Single-Supplier Risk? - Majorwaves Energy Report",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirwFBVV95cUxQSW4yYVFOTTJmMmRfZ0FKWHRYZVM4bU5BOFg2dW1aQjBQYTRrSG1Tbl9jSGw0enRwX3hBVDYyN1NOUU5EZTMxV3dkUUk0YU4wWUVGMzZ5WnE1azRnekRXZ0lsUHd2Zmx1RnFDVTNKLVY5RktDRzNGYU5KWDcxV1U4SGMyNkszakQ4a1NEY1VkQzJzWDJQazlwQkxvTVFXTjhaU1Z2M0pkXzhXOUFMUmlr?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMifkFVX3lxTE41cmdCYWpkdGxsdVd6M0pGSTJDU3R2RXhvaS1sTFU4d0xpSi1LVlVNUWRRYUhFR2tkZUpBUVQ0cjF4ZkszZ1hYUXV5RW5EUXUwbHdkbUVTV0xYSk9fbkRJLUh5YTNCQjd1blh1OXNZY3djRG5pREYtb3dPeGpRdw?oc=5": {
+    "timestamp": "2026-10-06T22:31:28.613263+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE41cmdCYWpkdGxsdVd6M0pGSTJDU3R2RXhvaS1sTFU4d0xpSi1LVlVNUWRRYUhFR2tkZUpBUVQ0cjF4ZkszZ1hYUXV5RW5EUXUwbHdkbUVTV0xYSk9fbkRJLUh5YTNCQjd1blh1OXNZY3djRG5pREYtb3dPeGpRdw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE41cmdCYWpkdGxsdVd6M0pGSTJDU3R2RXhvaS1sTFU4d0xpSi1LVlVNUWRRYUhFR2tkZUpBUVQ0cjF4ZkszZ1hYUXV5RW5EUXUwbHdkbUVTV0xYSk9fbkRJLUh5YTNCQjd1blh1OXNZY3djRG5pREYtb3dPeGpRdw?oc=5",
+    "headline": "U.S. Trade Deficit Hits 17-Month High Despite Trump’s Tariffs - The New York Times",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMifkFVX3lxTE41cmdCYWpkdGxsdVd6M0pGSTJDU3R2RXhvaS1sTFU4d0xpSi1LVlVNUWRRYUhFR2tkZUpBUVQ0cjF4ZkszZ1hYUXV5RW5EUXUwbHdkbUVTV0xYSk9fbkRJLUh5YTNCQjd1blh1OXNZY3djRG5pREYtb3dPeGpRdw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMigAFBVV95cUxPUGs1b0U4ck4tRkhTT0R3YUljVS1IV0NEV1lnNkJhZkVRVFNTdXJfSm0xSE1vOF9ZbnY3RktsWGljeFl4eTM1VEZINC15eW80dHRRcDZibjU2UUxzdmNZQzhmdDl2SzNMb0tSNVNmTTVFQWY0czRjU1NWMzVwWmZOYw?oc=5": {
+    "timestamp": "2026-10-06T22:31:35.598374+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPUGs1b0U4ck4tRkhTT0R3YUljVS1IV0NEV1lnNkJhZkVRVFNTdXJfSm0xSE1vOF9ZbnY3RktsWGljeFl4eTM1VEZINC15eW80dHRRcDZibjU2UUxzdmNZQzhmdDl2SzNMb0tSNVNmTTVFQWY0czRjU1NWMzVwWmZOYw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPUGs1b0U4ck4tRkhTT0R3YUljVS1IV0NEV1lnNkJhZkVRVFNTdXJfSm0xSE1vOF9ZbnY3RktsWGljeFl4eTM1VEZINC15eW80dHRRcDZibjU2UUxzdmNZQzhmdDl2SzNMb0tSNVNmTTVFQWY0czRjU1NWMzVwWmZOYw?oc=5",
+    "headline": "Fed's Daly: need for more hikes hinges on what happens with shocks - Kansas City Star",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigAFBVV95cUxPUGs1b0U4ck4tRkhTT0R3YUljVS1IV0NEV1lnNkJhZkVRVFNTdXJfSm0xSE1vOF9ZbnY3RktsWGljeFl4eTM1VEZINC15eW80dHRRcDZibjU2UUxzdmNZQzhmdDl2SzNMb0tSNVNmTTVFQWY0czRjU1NWMzVwWmZOYw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMivwFBVV95cUxOSXItdVNvSm00QnY1YnV2VkNJTzRGbmU3YUZGYlBXbm5WTUJta3hLOGtjQnlrZzhCQXlKeWdFRHV3US0xVzhvMDlybDR0VXlPVlpId3VQN1RiU0Jhb2tacnJ3RWFrOHFWUVBQb1UxbExCYWdLZlR0QUMyQ1BqeENHMjV3WWpUQmxOdHFqbm5CdlNHUm13cWQ3WWlwdlU2YkdkZ2ZMYWFVLUd0UldpVzVVLVByX0cwRlhjbThYenpnMA?oc=5": {
+    "timestamp": "2026-10-06T22:31:53.786361+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOSXItdVNvSm00QnY1YnV2VkNJTzRGbmU3YUZGYlBXbm5WTUJta3hLOGtjQnlrZzhCQXlKeWdFRHV3US0xVzhvMDlybDR0VXlPVlpId3VQN1RiU0Jhb2tacnJ3RWFrOHFWUVBQb1UxbExCYWdLZlR0QUMyQ1BqeENHMjV3WWpUQmxOdHFqbm5CdlNHUm13cWQ3WWlwdlU2YkdkZ2ZMYWFVLUd0UldpVzVVLVByX0cwRlhjbThYenpnMA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOSXItdVNvSm00QnY1YnV2VkNJTzRGbmU3YUZGYlBXbm5WTUJta3hLOGtjQnlrZzhCQXlKeWdFRHV3US0xVzhvMDlybDR0VXlPVlpId3VQN1RiU0Jhb2tacnJ3RWFrOHFWUVBQb1UxbExCYWdLZlR0QUMyQ1BqeENHMjV3WWpUQmxOdHFqbm5CdlNHUm13cWQ3WWlwdlU2YkdkZ2ZMYWFVLUd0UldpVzVVLVByX0cwRlhjbThYenpnMA?oc=5",
+    "headline": "Fed’s Daly: More tightening depends on whether AI, tariff and energy shocks persist - investingLive",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivwFBVV95cUxOSXItdVNvSm00QnY1YnV2VkNJTzRGbmU3YUZGYlBXbm5WTUJta3hLOGtjQnlrZzhCQXlKeWdFRHV3US0xVzhvMDlybDR0VXlPVlpId3VQN1RiU0Jhb2tacnJ3RWFrOHFWUVBQb1UxbExCYWdLZlR0QUMyQ1BqeENHMjV3WWpUQmxOdHFqbm5CdlNHUm13cWQ3WWlwdlU2YkdkZ2ZMYWFVLUd0UldpVzVVLVByX0cwRlhjbThYenpnMA?oc=5",
     "error": "<urlopen error timed out>"
   }
 }
