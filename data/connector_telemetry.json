@@ -1,28 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-10-05 19:09:39",
+  "last_updated": "2026-10-06 01:14:39",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-09-30 19:52:28",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 112.47,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:52:30",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 116.32,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-09-30 19:52:32",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9982,26 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-10-06 01:12:40",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 307.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-10-06 01:14:39",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 253.02,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 331 docs, 205 obs, 0 refs"
     }
   ]
 }

@@ -4713,5 +4713,25 @@
       "overall_price_pressure": 0.75
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-06T01:14:16.627573",
+    "headline": "Trump\u2019s India Tariffs over Russian Oil Were Never about Principle - Geopolitical Monitor",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9GVlcxc25pZEd5aWNrS2hwZnZkYkNmd3dpRHZmSkZmcXJGc2lvcE1hWURSMk9NZFFwVERPSmFFX052T0RwTXRnT196LTZmWlVDS1VPNEtEc2dlODVHdHZ0UmZTNG5XMXVvckI0Y2YxN1U3ekJ6TUdr?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9GVlcxc25pZEd5aWNrS2hwZnZkYkNmd3dpRHZmSkZmcXJGc2lvcE1hWURSMk9NZFFwVERPSmFFX052T0RwTXRnT196LTZmWlVDS1VPNEtEc2dlODVHdHZ0UmZTNG5XMXVvckI0Y2YxN1U3ekJ6TUdr?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTE9GVlcxc25pZEd5aWNrS2hwZnZkYkNmd3dpRHZmSkZmcXJGc2lvcE1hWURSMk9NZFFwVERPSmFFX052T0RwTXRnT196LTZmWlVDS1VPNEtEc2dlODVHdHZ0UmZTNG5XMXVvckI0Y2YxN1U3ekJ6TUdr?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.4,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]
