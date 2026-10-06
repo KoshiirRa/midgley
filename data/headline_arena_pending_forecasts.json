@@ -2,56 +2,79 @@
   {
     "asset": "RB",
     "forecast_type": "direction",
-    "created_at": "2026-10-06T01:14:46.000650+00:00",
-    "expires_at": "2026-10-07T01:14:46.000650+00:00",
-    "created_ts": 1791249286.00065,
-    "expires_ts": 1791335686.00065,
+    "created_at": "2026-10-06T02:26:12.874046+00:00",
+    "expires_at": "2026-10-07T02:26:12.874046+00:00",
+    "created_ts": 1791253572.874046,
+    "expires_ts": 1791339972.874046,
     "payload": {
       "asset": "RB",
       "direction": "bullish",
-      "confidence": 0.8531,
-      "reasoning": "[Midgley Multi-Agent Forecast | RBOB Wholesale Gasoline (RB=F)]\n- Executive Direction: BULLISH (Confidence: 85.3% | Settlement Band: +/-0.30% [$/gal3.2201 - $/gal3.2395])\n- Multi-Agent Ensemble Distribution: Open $/gal3.2298, P50 Target $/gal3.3073, 80% CI [N/A - N/A], Volatility sigma=0.0646 $/gal.\n- Dead-Zone CDF Decomposition: P(Bullish)=85.3%, P(Neutral)=5.8%, P(Bearish)=8.8% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Implied 3:2:1 refinery crack spread margin is positioned at $46.25/bbl.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/gal3.2395 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
+      "confidence": 0.5156,
+      "reasoning": "[Midgley Multi-Agent Forecast | RBOB Wholesale Gasoline (RB=F)]\n- Executive Direction: BULLISH (Confidence: 51.6% | Settlement Band: +/-0.30% [$/gal3.2234 - $/gal3.2428])\n- Multi-Agent Ensemble Distribution: Open $/gal3.2331, P50 Target $/gal3.2466, 80% CI [$/gal3.1219 - $/gal3.3713], Volatility sigma=0.0973 $/gal.\n- Dead-Zone CDF Decomposition: P(Bullish)=51.6%, P(Neutral)=7.9%, P(Bearish)=40.6% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Implied 3:2:1 refinery crack spread margin is positioned at $46.14/bbl.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/gal3.2428 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
       "metadata": {
         "environment": "prod",
         "probabilities": {
-          "bullish": 0.8531,
-          "neutral": 0.0584,
-          "bearish": 0.0885
+          "bullish": 0.5156,
+          "neutral": 0.0786,
+          "bearish": 0.4058
         },
-        "open_price": 3.22979998588562,
-        "p50": 3.307315185546875,
-        "p10": null,
-        "p90": null,
+        "open_price": 3.233099937438965,
+        "p50": 3.2466,
+        "p10": 3.1219,
+        "p90": 3.3713,
         "dead_zone": 0.003,
-        "timestamp": "2026-10-06T01:14:46.000635+00:00"
+        "timestamp": "2026-10-06T02:26:12.874031+00:00"
       }
     }
   },
   {
     "asset": "CL",
     "forecast_type": "direction",
-    "created_at": "2026-10-06T01:14:50.751398+00:00",
-    "expires_at": "2026-10-07T01:14:50.751398+00:00",
-    "created_ts": 1791249290.751398,
-    "expires_ts": 1791335690.751398,
+    "created_at": "2026-10-06T02:26:17.750101+00:00",
+    "expires_at": "2026-10-07T02:26:17.750101+00:00",
+    "created_ts": 1791253577.750101,
+    "expires_ts": 1791339977.750101,
     "payload": {
       "asset": "CL",
-      "direction": "bullish",
-      "confidence": 0.8159,
-      "reasoning": "[Midgley Multi-Agent Forecast | Cushing WTI Crude Oil (CL=F)]\n- Executive Direction: BULLISH (Confidence: 81.6% | Settlement Band: +/-0.30% [$/bbl89.1318 - $/bbl89.6682])\n- Multi-Agent Ensemble Distribution: Open $/bbl89.4000, P50 Target $/bbl91.2774, 80% CI [N/A - N/A], Volatility sigma=1.7880 $/bbl.\n- Dead-Zone CDF Decomposition: P(Bullish)=81.6%, P(Neutral)=6.9%, P(Bearish)=11.5% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Downstream product demand from wholesale RBOB ($3.2298/gal) provides steady crack absorption for prompt physical crude.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/bbl89.6682 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
+      "direction": "bearish",
+      "confidence": 0.6422,
+      "reasoning": "[Midgley Multi-Agent Forecast | Cushing WTI Crude Oil (CL=F)]\n- Executive Direction: BEARISH (Confidence: 64.2% | Settlement Band: +/-0.30% [$/bbl89.3811 - $/bbl89.9190])\n- Multi-Agent Ensemble Distribution: Open $/bbl89.6500, P50 Target $/bbl88.7300, 80% CI [$/bbl86.44 - $/bbl91.02], Volatility sigma=1.7869 $/bbl.\n- Dead-Zone CDF Decomposition: P(Bullish)=25.3%, P(Neutral)=10.5%, P(Bearish)=64.2% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Downstream product demand from wholesale RBOB ($3.2331/gal) provides steady crack absorption for prompt physical crude.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to decline below the $/bbl89.3811 lower threshold (-0.30%) driven by negative price pressure (+0.00), softening feedstock margins, and steady refinery throughput counteracting isolated geopolitical risk premia.",
       "metadata": {
         "environment": "prod",
         "probabilities": {
-          "bullish": 0.8159,
-          "neutral": 0.069,
-          "bearish": 0.1151
+          "bullish": 0.2529,
+          "neutral": 0.1049,
+          "bearish": 0.6422
         },
-        "open_price": 89.4000015258789,
-        "p50": 91.27740155792236,
-        "p10": null,
-        "p90": null,
+        "open_price": 89.6500015258789,
+        "p50": 88.73,
+        "p10": 86.44,
+        "p90": 91.02,
         "dead_zone": 0.003,
-        "timestamp": "2026-10-06T01:14:50.751379+00:00"
+        "timestamp": "2026-10-06T02:26:17.750083+00:00"
+      }
+    }
+  },
+  {
+    "asset": "EIA_RETAIL_GASOLINE",
+    "forecast_type": "macro",
+    "created_at": "2026-10-06T02:26:19.965169+00:00",
+    "expires_at": "2026-10-07T02:26:19.965169+00:00",
+    "created_ts": 1791253579.965169,
+    "expires_ts": 1791339979.965169,
+    "payload": {
+      "asset": "EIA_RETAIL_GASOLINE",
+      "topic": "EIA_RETAIL_GASOLINE",
+      "predicted_value": 4.347,
+      "predicted_std": 0.097148,
+      "reasoning": "[Midgley Multi-Agent Forecast | EIA US Regular Gasoline Retail Price]\n- Predicted Target (P50 Median): $4.3470/gal\n- Gaussian Uncertainty: sigma=0.0971/gal (80% CI: [$4.2220 - $4.4710])\n- Continuous Ranked Probability Score (CRPS): Closed-form normal distribution CDF evaluation.\n- Multi-Agent Synthesis: Ingests PADD 1-5 refinery runs, spot RBOB crack spreads, EPA RVP compliance curves, and regional rack markups.",
+      "metadata": {
+        "environment": "prod",
+        "p50": 4.347,
+        "p10": 4.222,
+        "p90": 4.471,
+        "sigma": 0.097148,
+        "timestamp": "2026-10-06T02:26:19.965153+00:00"
       }
     }
   }
