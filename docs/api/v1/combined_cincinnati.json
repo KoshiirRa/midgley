@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-07T05:01:07.804819",
+  "timestamp": "2026-10-07T12:58:33.917335",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.742,
+    "current_price_per_gal": 3.7,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-07T05:00:49Z"
+      "timestamp": "2026-10-07T12:58:18Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-13",
-    "current_base_price": 3.742,
-    "predicted_price_per_gal": 3.752,
+    "current_base_price": 3.7,
+    "predicted_price_per_gal": 3.71,
     "expected_change_dollars": 0.01,
     "expected_change_percent": 0.27,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.632,
-    "prediction_upper_95ci": 3.872,
+    "prediction_lower_95ci": 3.59,
+    "prediction_upper_95ci": 3.83,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.744,
-    "day_2_price": 3.7,
-    "day_3_price": 3.703,
-    "day_4_price": 3.697,
-    "day_5_price": 3.752,
+    "day_1_price": 3.702,
+    "day_2_price": 3.658,
+    "day_3_price": 3.661,
+    "day_4_price": 3.655,
+    "day_5_price": 3.71,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
