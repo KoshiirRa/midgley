@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T22:32:19.238571",
+  "timestamp": "2026-10-07T01:40:43.018635",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T22:32:01Z"
+      "timestamp": "2026-10-07T01:39:16Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-12",
+    "target_date": "2026-10-13",
     "current_base_price": 6.439,
-    "predicted_price_per_gal": 6.452,
-    "expected_change_dollars": 0.013,
-    "expected_change_percent": 0.2,
+    "predicted_price_per_gal": 6.453,
+    "expected_change_dollars": 0.014,
+    "expected_change_percent": 0.22,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 6.332,
-    "prediction_upper_95ci": 6.572,
+    "prediction_lower_95ci": 6.333,
+    "prediction_upper_95ci": 6.573,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 6.442,
-    "day_2_price": 6.415,
-    "day_3_price": 6.412,
-    "day_4_price": 6.434,
-    "day_5_price": 6.452,
+    "day_2_price": 6.397,
+    "day_3_price": 6.402,
+    "day_4_price": 6.392,
+    "day_5_price": 6.453,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Oakland CA forecast +$0.013/gal (+0.20%): Driven primarily by Tax & Regulatory Overhead (+$0.005/gal), Refining Yield & Crack Spread (+$0.003/gal).",
+      "summary_text": "Oakland CA forecast +$0.014/gal (+0.22%): Driven primarily by Tax & Regulatory Overhead (+$0.005/gal), Refining Yield & Crack Spread (+$0.004/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
@@ -109,8 +109,8 @@
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.05,
+          "impact_dollars": 0.004,
+          "impact_pct": 0.06,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -161,8 +161,8 @@
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.05,
+      "impact_dollars": 0.004,
+      "impact_pct": 0.06,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Oakland CA forecast +$0.013/gal (+0.20%): Driven primarily by Tax & Regulatory Overhead (+$0.005/gal), Refining Yield & Crack Spread (+$0.003/gal).",
+    "summary_text": "Oakland CA forecast +$0.014/gal (+0.22%): Driven primarily by Tax & Regulatory Overhead (+$0.005/gal), Refining Yield & Crack Spread (+$0.004/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T22:32:20.632244",
+  "timestamp": "2026-10-07T01:40:44.364596",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T22:32:00Z"
+      "timestamp": "2026-10-07T01:38:22Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-12",
+    "target_date": "2026-10-13",
     "current_base_price": 4.093,
-    "predicted_price_per_gal": 4.101,
-    "expected_change_dollars": 0.008,
-    "expected_change_percent": 0.2,
+    "predicted_price_per_gal": 4.102,
+    "expected_change_dollars": 0.009,
+    "expected_change_percent": 0.22,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.981,
-    "prediction_upper_95ci": 4.221,
+    "prediction_lower_95ci": 3.982,
+    "prediction_upper_95ci": 4.222,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 4.095,
-    "day_2_price": 4.072,
-    "day_3_price": 4.071,
-    "day_4_price": 4.09,
-    "day_5_price": 4.101,
+    "day_2_price": 4.054,
+    "day_3_price": 4.061,
+    "day_4_price": 4.05,
+    "day_5_price": 4.102,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 40.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast +$0.008/gal (+0.20%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Futures & Commodity Benchmark (+$0.002/gal).",
+      "summary_text": "Greenville NC forecast +$0.009/gal (+0.22%): Driven primarily by Regional Logistics & Hub Delivery (+$0.004/gal), Futures & Commodity Benchmark (+$0.002/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.07,
+          "impact_dollars": 0.004,
+          "impact_pct": 0.1,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -153,8 +153,8 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.07,
+      "impact_dollars": 0.004,
+      "impact_pct": 0.1,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast +$0.008/gal (+0.20%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Futures & Commodity Benchmark (+$0.002/gal).",
+    "summary_text": "Greenville NC forecast +$0.009/gal (+0.22%): Driven primarily by Regional Logistics & Hub Delivery (+$0.004/gal), Futures & Commodity Benchmark (+$0.002/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.004,
         "share_pct": 40.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"

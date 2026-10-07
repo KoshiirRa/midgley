@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T22:32:20.182409",
+  "timestamp": "2026-10-07T01:40:43.927256",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T22:31:59Z"
+      "timestamp": "2026-10-07T01:37:35Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-12",
+    "target_date": "2026-10-13",
     "current_base_price": 3.742,
-    "predicted_price_per_gal": 3.751,
-    "expected_change_dollars": 0.009,
-    "expected_change_percent": 0.24,
+    "predicted_price_per_gal": 3.752,
+    "expected_change_dollars": 0.01,
+    "expected_change_percent": 0.27,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.631,
-    "prediction_upper_95ci": 3.871,
+    "prediction_lower_95ci": 3.632,
+    "prediction_upper_95ci": 3.872,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 3.744,
-    "day_2_price": 3.719,
-    "day_3_price": 3.715,
-    "day_4_price": 3.738,
-    "day_5_price": 3.751,
+    "day_2_price": 3.7,
+    "day_3_price": 3.703,
+    "day_4_price": 3.697,
+    "day_5_price": 3.752,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.003,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -81,22 +81,22 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.001,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.001,
+        "delta_dollars": -0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast +$0.009/gal (+0.24%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Refining Yield & Crack Spread (+$0.002/gal).",
+      "summary_text": "Cincinnati OH forecast +$0.010/gal (+0.27%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Refining Yield & Crack Spread (+$0.003/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -109,8 +109,8 @@
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.05,
+          "impact_dollars": 0.003,
+          "impact_pct": 0.08,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -131,18 +131,18 @@
           "direction": "UP"
         },
         {
-          "category": "Unstructured Intelligence & Sentiment",
-          "description": "Geopolitical supply risk news & executive social media hawkish posts",
+          "category": "Weather & Environmental Signals",
+          "description": "NOAA severe weather risks, convective alerts & freeze warnings",
           "impact_dollars": 0.001,
           "impact_pct": 0.03,
           "share_pct": 5.0,
           "direction": "UP"
         },
         {
-          "category": "Weather & Environmental Signals",
-          "description": "Neutral weather impact",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "category": "Unstructured Intelligence & Sentiment",
+          "description": "Neutral news sentiment",
+          "impact_dollars": -0.0,
+          "impact_pct": -0.0,
           "share_pct": 5.0,
           "direction": "FLAT"
         }
@@ -161,8 +161,8 @@
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.002,
-      "impact_pct": 0.05,
+      "impact_dollars": 0.003,
+      "impact_pct": 0.08,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -183,24 +183,24 @@
       "direction": "UP"
     },
     {
-      "category": "Unstructured Intelligence & Sentiment",
-      "description": "Geopolitical supply risk news & executive social media hawkish posts",
+      "category": "Weather & Environmental Signals",
+      "description": "NOAA severe weather risks, convective alerts & freeze warnings",
       "impact_dollars": 0.001,
       "impact_pct": 0.03,
       "share_pct": 5.0,
       "direction": "UP"
     },
     {
-      "category": "Weather & Environmental Signals",
-      "description": "Neutral weather impact",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "category": "Unstructured Intelligence & Sentiment",
+      "description": "Neutral news sentiment",
+      "impact_dollars": -0.0,
+      "impact_pct": -0.0,
       "share_pct": 5.0,
       "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast +$0.009/gal (+0.24%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Refining Yield & Crack Spread (+$0.002/gal).",
+    "summary_text": "Cincinnati OH forecast +$0.010/gal (+0.27%): Driven primarily by Regional Logistics & Hub Delivery (+$0.003/gal), Refining Yield & Crack Spread (+$0.003/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.003,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -237,18 +237,18 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.001,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.001,
+        "delta_dollars": -0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T22:32:21.528913",
+  "timestamp": "2026-10-07T01:40:45.238792",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T22:32:00Z"
+      "timestamp": "2026-10-07T01:40:00Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-12",
+    "target_date": "2026-10-13",
     "current_base_price": 4.144,
-    "predicted_price_per_gal": 4.145,
-    "expected_change_dollars": 0.001,
-    "expected_change_percent": 0.02,
-    "projected_direction": "UP",
-    "prediction_lower_95ci": 4.025,
-    "prediction_upper_95ci": 4.265,
+    "predicted_price_per_gal": 4.144,
+    "expected_change_dollars": 0.0,
+    "expected_change_percent": 0.0,
+    "projected_direction": "FLAT",
+    "prediction_lower_95ci": 4.024,
+    "prediction_upper_95ci": 4.264,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 4.144,
-    "day_2_price": 4.122,
-    "day_3_price": 4.115,
-    "day_4_price": 4.134,
-    "day_5_price": 4.145,
+    "day_2_price": 4.104,
+    "day_3_price": 4.104,
+    "day_4_price": 4.093,
+    "day_5_price": 4.144,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -89,23 +89,15 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast +$0.001/gal (+0.02%): Driven primarily by Unstructured Intelligence & Sentiment (+$0.001/gal).",
+      "summary_text": "Port St Lucie FL forecast stable ($0.000/gal): Balanced supply/demand indicators.",
       "key_drivers": [
-        {
-          "category": "Unstructured Intelligence & Sentiment",
-          "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.02,
-          "share_pct": 5.0,
-          "direction": "UP"
-        },
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Unrestricted terminal dispatch",
@@ -145,19 +137,19 @@
           "impact_pct": 0.0,
           "share_pct": 8.0,
           "direction": "FLAT"
+        },
+        {
+          "category": "Unstructured Intelligence & Sentiment",
+          "description": "Neutral news sentiment",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
+          "share_pct": 5.0,
+          "direction": "FLAT"
         }
       ]
     }
   },
   "key_drivers": [
-    {
-      "category": "Unstructured Intelligence & Sentiment",
-      "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.02,
-      "share_pct": 5.0,
-      "direction": "UP"
-    },
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Unrestricted terminal dispatch",
@@ -197,10 +189,18 @@
       "impact_pct": 0.0,
       "share_pct": 8.0,
       "direction": "FLAT"
+    },
+    {
+      "category": "Unstructured Intelligence & Sentiment",
+      "description": "Neutral news sentiment",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
+      "share_pct": 5.0,
+      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast +$0.001/gal (+0.02%): Driven primarily by Unstructured Intelligence & Sentiment (+$0.001/gal).",
+    "summary_text": "Port St Lucie FL forecast stable ($0.000/gal): Balanced supply/demand indicators.",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -245,10 +245,10 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       }
     }
   }

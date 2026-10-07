@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T22:32:19.730959",
+  "timestamp": "2026-10-07T01:40:43.489974",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T22:31:59Z"
+      "timestamp": "2026-10-07T01:37:08Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-12",
+    "target_date": "2026-10-13",
     "current_base_price": 4.154,
-    "predicted_price_per_gal": 4.165,
-    "expected_change_dollars": 0.011,
-    "expected_change_percent": 0.26,
+    "predicted_price_per_gal": 4.167,
+    "expected_change_dollars": 0.013,
+    "expected_change_percent": 0.31,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.963,
-    "prediction_upper_95ci": 4.367,
+    "prediction_lower_95ci": 3.965,
+    "prediction_upper_95ci": 4.369,
     "calibration_method": "conformal",
     "calibration_sample_size": 238,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.156,
-    "day_2_price": 4.132,
-    "day_3_price": 4.129,
-    "day_4_price": 4.149,
-    "day_5_price": 4.165,
+    "day_1_price": 4.157,
+    "day_2_price": 4.115,
+    "day_3_price": 4.12,
+    "day_4_price": 4.11,
+    "day_5_price": 4.167,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.005,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.003,
         "share_pct": 20.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast +$0.011/gal (+0.26%): Driven primarily by Refining Yield & Crack Spread (+$0.004/gal), Regional Logistics & Hub Delivery (+$0.003/gal).",
+      "summary_text": "Newark DE forecast +$0.013/gal (+0.31%): Driven primarily by Refining Yield & Crack Spread (+$0.005/gal), Regional Logistics & Hub Delivery (+$0.003/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.004,
-          "impact_pct": 0.1,
+          "impact_dollars": 0.005,
+          "impact_pct": 0.12,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -117,8 +117,8 @@
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.05,
+          "impact_dollars": 0.003,
+          "impact_pct": 0.07,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -153,8 +153,8 @@
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.004,
-      "impact_pct": 0.1,
+      "impact_dollars": 0.005,
+      "impact_pct": 0.12,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -169,8 +169,8 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.002,
-      "impact_pct": 0.05,
+      "impact_dollars": 0.003,
+      "impact_pct": 0.07,
       "share_pct": 20.0,
       "direction": "UP"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast +$0.011/gal (+0.26%): Driven primarily by Refining Yield & Crack Spread (+$0.004/gal), Regional Logistics & Hub Delivery (+$0.003/gal).",
+    "summary_text": "Newark DE forecast +$0.013/gal (+0.31%): Driven primarily by Refining Yield & Crack Spread (+$0.005/gal), Regional Logistics & Hub Delivery (+$0.003/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.005,
         "share_pct": 35.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.003,
         "share_pct": 20.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"

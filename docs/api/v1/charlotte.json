@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T22:32:21.078569",
+  "timestamp": "2026-10-07T01:40:44.808455",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T22:32:00Z"
+      "timestamp": "2026-10-07T01:38:49Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-12",
+    "target_date": "2026-10-13",
     "current_base_price": 4.114,
-    "predicted_price_per_gal": 4.11,
-    "expected_change_dollars": -0.004,
-    "expected_change_percent": -0.1,
+    "predicted_price_per_gal": 4.109,
+    "expected_change_dollars": -0.005,
+    "expected_change_percent": -0.12,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.99,
-    "prediction_upper_95ci": 4.23,
+    "prediction_lower_95ci": 3.989,
+    "prediction_upper_95ci": 4.229,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 4.113,
-    "day_2_price": 4.091,
-    "day_3_price": 4.088,
-    "day_4_price": 4.102,
-    "day_5_price": 4.11,
+    "day_2_price": 4.074,
+    "day_3_price": 4.078,
+    "day_4_price": 4.061,
+    "day_5_price": 4.109,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -73,10 +73,10 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 10.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "DOWN",
+        "description": "Favorable multi-basin weather conditions"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast $-0.004/gal (-0.10%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
+      "summary_text": "Charlotte NC forecast $-0.005/gal (-0.12%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -124,11 +124,11 @@
         },
         {
           "category": "Weather & Environmental Signals",
-          "description": "Neutral weather impact",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "description": "Favorable multi-basin weather conditions",
+          "impact_dollars": -0.001,
+          "impact_pct": -0.02,
           "share_pct": 10.0,
-          "direction": "FLAT"
+          "direction": "DOWN"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
@@ -176,11 +176,11 @@
     },
     {
       "category": "Weather & Environmental Signals",
-      "description": "Neutral weather impact",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "description": "Favorable multi-basin weather conditions",
+      "impact_dollars": -0.001,
+      "impact_pct": -0.02,
       "share_pct": 10.0,
-      "direction": "FLAT"
+      "direction": "DOWN"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast $-0.004/gal (-0.10%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
+    "summary_text": "Charlotte NC forecast $-0.005/gal (-0.12%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -229,10 +229,10 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 10.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "DOWN",
+        "description": "Favorable multi-basin weather conditions"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
