@@ -1,28 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-10-07 01:40:40",
+  "last_updated": "2026-10-07 05:01:05",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-09-30 19:53:20",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 115.98,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:53:22",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 108.24,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-09-30 19:53:23",
       "connector_name": "HindsightHosted",
@@ -9999,6 +9979,26 @@
       "target": "Midgley",
       "status": "SUCCESS",
       "latency_ms": 269.47,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 332 docs, 207 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-10-07 05:00:10",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 304.79,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-10-07 05:01:05",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 249.9,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Stats: 332 docs, 207 obs, 0 refs"
