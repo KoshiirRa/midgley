@@ -1,16 +1,16 @@
 {
   "benchmark_key": "usgs_seismic",
-  "last_refreshed_utc": "2026-10-08 02:00:43",
+  "last_refreshed_utc": "2026-10-08 08:36:25",
   "records_count": 8,
   "data": {
     "status": "SUCCESS",
     "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-    "timestamp": "2026-10-08 02:00:43",
-    "filtered_corridor": "mid_atlantic",
+    "timestamp": "2026-10-08 08:36:25",
+    "filtered_corridor": "bay_area",
     "temporal_window_days": 30,
     "events": [],
     "corridors": {
-      "mid_atlantic": {
+      "bay_area": {
         "corridor_risk_index": 0.0,
         "max_magnitude": 0.0,
         "active_events_count": 0,

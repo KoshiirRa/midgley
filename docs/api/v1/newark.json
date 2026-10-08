@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-08T02:04:00.790866",
+  "timestamp": "2026-10-08T08:36:31.095499",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.122,
+    "current_price_per_gal": 4.19,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-08T02:00:42Z"
+      "timestamp": "2026-10-08T08:36:17Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-14",
-    "current_base_price": 4.122,
-    "predicted_price_per_gal": 4.056,
-    "expected_change_dollars": -0.066,
-    "expected_change_percent": -1.6,
+    "current_base_price": 4.19,
+    "predicted_price_per_gal": 4.125,
+    "expected_change_dollars": -0.065,
+    "expected_change_percent": -1.55,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.854,
-    "prediction_upper_95ci": 4.258,
+    "prediction_lower_95ci": 3.923,
+    "prediction_upper_95ci": 4.327,
     "calibration_method": "conformal",
     "calibration_sample_size": 238,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.109,
-    "day_2_price": 4.066,
-    "day_3_price": 4.054,
-    "day_4_price": 4.076,
-    "day_5_price": 4.056,
+    "day_1_price": 4.177,
+    "day_2_price": 4.134,
+    "day_3_price": 4.122,
+    "day_4_price": 4.144,
+    "day_5_price": 4.125,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -57,7 +57,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.016,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -96,21 +96,21 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast $-0.066/gal (-1.60%): Driven primarily by Refining Yield & Crack Spread ($-0.023/gal), Regional Logistics & Hub Delivery ($-0.017/gal).",
+      "summary_text": "Newark DE forecast $-0.065/gal (-1.55%): Driven primarily by Refining Yield & Crack Spread ($-0.023/gal), Regional Logistics & Hub Delivery ($-0.016/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.023,
-          "impact_pct": -0.56,
+          "impact_pct": -0.55,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.017,
-          "impact_pct": -0.41,
+          "impact_dollars": -0.016,
+          "impact_pct": -0.38,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.013,
-          "impact_pct": -0.32,
+          "impact_pct": -0.31,
           "share_pct": 20.0,
           "direction": "DOWN"
         },
@@ -154,15 +154,15 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.023,
-      "impact_pct": -0.56,
+      "impact_pct": -0.55,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.017,
-      "impact_pct": -0.41,
+      "impact_dollars": -0.016,
+      "impact_pct": -0.38,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.013,
-      "impact_pct": -0.32,
+      "impact_pct": -0.31,
       "share_pct": 20.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast $-0.066/gal (-1.60%): Driven primarily by Refining Yield & Crack Spread ($-0.023/gal), Regional Logistics & Hub Delivery ($-0.017/gal).",
+    "summary_text": "Newark DE forecast $-0.065/gal (-1.55%): Driven primarily by Refining Yield & Crack Spread ($-0.023/gal), Regional Logistics & Hub Delivery ($-0.016/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -213,7 +213,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.016,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"

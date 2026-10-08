@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-08T02:04:01.664355",
+  "timestamp": "2026-10-08T08:36:31.609318",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.121,
+    "current_price_per_gal": 4.117,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-08T02:01:54Z"
+      "timestamp": "2026-10-08T08:36:18Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-14",
-    "current_base_price": 4.121,
-    "predicted_price_per_gal": 4.059,
+    "current_base_price": 4.117,
+    "predicted_price_per_gal": 4.055,
     "expected_change_dollars": -0.062,
-    "expected_change_percent": -1.5,
+    "expected_change_percent": -1.51,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.939,
-    "prediction_upper_95ci": 4.179,
+    "prediction_lower_95ci": 3.935,
+    "prediction_upper_95ci": 4.175,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.109,
-    "day_2_price": 4.064,
-    "day_3_price": 4.051,
-    "day_4_price": 4.073,
-    "day_5_price": 4.059,
+    "day_1_price": 4.105,
+    "day_2_price": 4.06,
+    "day_3_price": 4.047,
+    "day_4_price": 4.069,
+    "day_5_price": 4.055,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast $-0.062/gal (-1.50%): Driven primarily by Regional Logistics & Hub Delivery ($-0.025/gal), Futures & Commodity Benchmark ($-0.015/gal).",
+      "summary_text": "Greenville NC forecast $-0.062/gal (-1.51%): Driven primarily by Regional Logistics & Hub Delivery ($-0.025/gal), Futures & Commodity Benchmark ($-0.015/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast $-0.062/gal (-1.50%): Driven primarily by Regional Logistics & Hub Delivery ($-0.025/gal), Futures & Commodity Benchmark ($-0.015/gal).",
+    "summary_text": "Greenville NC forecast $-0.062/gal (-1.51%): Driven primarily by Regional Logistics & Hub Delivery ($-0.025/gal), Futures & Commodity Benchmark ($-0.015/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

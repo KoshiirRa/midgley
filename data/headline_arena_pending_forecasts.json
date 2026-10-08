@@ -1,61 +1,5 @@
 [
   {
-    "asset": "RB",
-    "forecast_type": "direction",
-    "created_at": "2026-10-08T02:04:05.421616+00:00",
-    "expires_at": "2026-10-09T02:04:05.421616+00:00",
-    "created_ts": 1791425045.421616,
-    "expires_ts": 1791511445.421616,
-    "payload": {
-      "asset": "RB",
-      "direction": "bearish",
-      "confidence": 0.707,
-      "reasoning": "[Midgley Multi-Agent Forecast | RBOB Wholesale Gasoline (RB=F)]\n- Executive Direction: BEARISH (Confidence: 70.7% | Settlement Band: +/-0.30% [$/gal3.0908 - $/gal3.1094])\n- Multi-Agent Ensemble Distribution: Open $/gal3.1001, P50 Target $/gal3.0352, 80% CI [$/gal2.9044 - $/gal3.1660], Volatility sigma=0.1021 $/gal.\n- Dead-Zone CDF Decomposition: P(Bullish)=23.4%, P(Neutral)=5.9%, P(Bearish)=70.7% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Implied 3:2:1 refinery crack spread margin is positioned at $40.64/bbl.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to decline below the $/gal3.0908 lower threshold (-0.30%) driven by negative price pressure (+0.00), softening feedstock margins, and steady refinery throughput counteracting isolated geopolitical risk premia.",
-      "metadata": {
-        "environment": "prod",
-        "probabilities": {
-          "bullish": 0.2336,
-          "neutral": 0.0593,
-          "bearish": 0.707
-        },
-        "open_price": 3.100100040435791,
-        "p50": 3.0352,
-        "p10": 2.9044,
-        "p90": 3.166,
-        "dead_zone": 0.003,
-        "timestamp": "2026-10-08T02:04:05.421598+00:00"
-      }
-    }
-  },
-  {
-    "asset": "CL",
-    "forecast_type": "direction",
-    "created_at": "2026-10-08T02:04:06.669799+00:00",
-    "expires_at": "2026-10-09T02:04:06.669799+00:00",
-    "created_ts": 1791425046.669799,
-    "expires_ts": 1791511446.669799,
-    "payload": {
-      "asset": "CL",
-      "direction": "bearish",
-      "confidence": 0.7493,
-      "reasoning": "[Midgley Multi-Agent Forecast | Cushing WTI Crude Oil (CL=F)]\n- Executive Direction: BEARISH (Confidence: 74.9% | Settlement Band: +/-0.30% [$/bbl89.2913 - $/bbl89.8287])\n- Multi-Agent Ensemble Distribution: Open $/bbl89.5600, P50 Target $/bbl88.0900, 80% CI [$/bbl85.80 - $/bbl90.38], Volatility sigma=1.7869 $/bbl.\n- Dead-Zone CDF Decomposition: P(Bullish)=16.5%, P(Neutral)=8.5%, P(Bearish)=74.9% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Downstream product demand from wholesale RBOB ($3.1001/gal) provides steady crack absorption for prompt physical crude.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to decline below the $/bbl89.2913 lower threshold (-0.30%) driven by negative price pressure (+0.00), softening feedstock margins, and steady refinery throughput counteracting isolated geopolitical risk premia.",
-      "metadata": {
-        "environment": "prod",
-        "probabilities": {
-          "bullish": 0.1653,
-          "neutral": 0.0854,
-          "bearish": 0.7493
-        },
-        "open_price": 89.55999755859375,
-        "p50": 88.09,
-        "p10": 85.8,
-        "p90": 90.38,
-        "dead_zone": 0.003,
-        "timestamp": "2026-10-08T02:04:06.669783+00:00"
-      }
-    }
-  },
-  {
     "asset": "EIA_RETAIL_GASOLINE",
     "forecast_type": "macro",
     "created_at": "2026-10-08T02:04:07.970702+00:00",
@@ -75,6 +19,62 @@
         "p90": 4.266,
         "sigma": 0.10222,
         "timestamp": "2026-10-08T02:04:07.970687+00:00"
+      }
+    }
+  },
+  {
+    "asset": "RB",
+    "forecast_type": "direction",
+    "created_at": "2026-10-08T08:36:34.190576+00:00",
+    "expires_at": "2026-10-09T08:36:34.190576+00:00",
+    "created_ts": 1791448594.190576,
+    "expires_ts": 1791534994.190576,
+    "payload": {
+      "asset": "RB",
+      "direction": "bullish",
+      "confidence": 0.9599,
+      "reasoning": "[Midgley Multi-Agent Forecast | RBOB Wholesale Gasoline (RB=F)]\n- Executive Direction: BULLISH (Confidence: 96.0% | Settlement Band: +/-0.30% [$/gal3.2245 - $/gal3.2439])\n- Multi-Agent Ensemble Distribution: Open $/gal3.2342, P50 Target $/gal3.3571, 80% CI [N/A - N/A], Volatility sigma=0.0647 $/gal.\n- Dead-Zone CDF Decomposition: P(Bullish)=96.0%, P(Neutral)=2.0%, P(Bearish)=2.0% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Implied 3:2:1 refinery crack spread margin is positioned at $47.56/bbl.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/gal3.2439 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
+      "metadata": {
+        "environment": "prod",
+        "probabilities": {
+          "bullish": 0.9599,
+          "neutral": 0.0199,
+          "bearish": 0.0202
+        },
+        "open_price": 3.2342000007629395,
+        "p50": 3.357099600791931,
+        "p10": null,
+        "p90": null,
+        "dead_zone": 0.003,
+        "timestamp": "2026-10-08T08:36:34.190558+00:00"
+      }
+    }
+  },
+  {
+    "asset": "CL",
+    "forecast_type": "direction",
+    "created_at": "2026-10-08T08:36:36.327921+00:00",
+    "expires_at": "2026-10-09T08:36:36.327921+00:00",
+    "created_ts": 1791448596.327921,
+    "expires_ts": 1791534996.327921,
+    "payload": {
+      "asset": "CL",
+      "direction": "bullish",
+      "confidence": 0.9348,
+      "reasoning": "[Midgley Multi-Agent Forecast | Cushing WTI Crude Oil (CL=F)]\n- Executive Direction: BULLISH (Confidence: 93.5% | Settlement Band: +/-0.30% [$/bbl88.0152 - $/bbl88.5448])\n- Multi-Agent Ensemble Distribution: Open $/bbl88.2800, P50 Target $/bbl91.2153, 80% CI [N/A - N/A], Volatility sigma=1.7656 $/bbl.\n- Dead-Zone CDF Decomposition: P(Bullish)=93.5%, P(Neutral)=3.0%, P(Bearish)=3.5% based on closed-form standard normal integration over the 30 bps dead-zone bounds.\n- Market Dynamics & Margin Structure: Downstream product demand from wholesale RBOB ($3.2342/gal) provides steady crack absorption for prompt physical crude.\n- Catalysts & Qualitative NLP Scores: Price Pressure: +0.00 | Supply Disruption: 0.00 | Geopolitical Risk: 0.00 | OPEC Action: 0.00. Macro context: Implied energy volatility regime remains bounded, while drilling rig capacity is steady.\n- Settlement Thesis: Model projects spot settlement to advance above the $/bbl88.5448 upper threshold (+0.30%) driven by positive price momentum, upside catalyst weighting (Pressure: +0.00, Disruption: 0.00), and physical supply tightness outstripping short-term inventory cushions.",
+      "metadata": {
+        "environment": "prod",
+        "probabilities": {
+          "bullish": 0.9348,
+          "neutral": 0.0302,
+          "bearish": 0.035
+        },
+        "open_price": 88.27999877929688,
+        "p50": 91.2153087387085,
+        "p10": null,
+        "p90": null,
+        "dead_zone": 0.003,
+        "timestamp": "2026-10-08T08:36:36.327903+00:00"
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-08T02:04:00.316931",
+  "timestamp": "2026-10-08T08:36:30.826656",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.421,
+    "current_price_per_gal": 6.416,
     "source": "AAA Web Scraper (Oakland, CA)",
     "provenance": {
       "source": "AAA Web Scraper (Oakland, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-08T02:02:46Z"
+      "timestamp": "2026-10-08T08:36:18Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-14",
-    "current_base_price": 6.421,
-    "predicted_price_per_gal": 6.349,
+    "current_base_price": 6.416,
+    "predicted_price_per_gal": 6.344,
     "expected_change_dollars": -0.072,
     "expected_change_percent": -1.12,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 6.229,
-    "prediction_upper_95ci": 6.469,
+    "prediction_lower_95ci": 6.224,
+    "prediction_upper_95ci": 6.464,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.407,
-    "day_2_price": 6.361,
-    "day_3_price": 6.349,
-    "day_4_price": 6.371,
-    "day_5_price": 6.349,
+    "day_1_price": 6.402,
+    "day_2_price": 6.356,
+    "day_3_price": 6.344,
+    "day_4_price": 6.366,
+    "day_5_price": 6.344,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

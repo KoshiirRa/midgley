@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-08T02:04:02.526430",
+  "timestamp": "2026-10-08T08:36:32.209995",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.201,
+    "current_price_per_gal": 4.186,
     "source": "AAA Web Scraper (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Web Scraper (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-08T02:03:22Z"
+      "timestamp": "2026-10-08T08:36:18Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-14",
-    "current_base_price": 4.201,
-    "predicted_price_per_gal": 4.139,
+    "current_base_price": 4.186,
+    "predicted_price_per_gal": 4.124,
     "expected_change_dollars": -0.062,
     "expected_change_percent": -1.48,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 4.019,
-    "prediction_upper_95ci": 4.259,
+    "prediction_lower_95ci": 4.004,
+    "prediction_upper_95ci": 4.244,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.189,
-    "day_2_price": 4.142,
-    "day_3_price": 4.134,
-    "day_4_price": 4.155,
-    "day_5_price": 4.139,
+    "day_1_price": 4.174,
+    "day_2_price": 4.127,
+    "day_3_price": 4.119,
+    "day_4_price": 4.14,
+    "day_5_price": 4.124,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -102,7 +102,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.022,
-          "impact_pct": -0.52,
+          "impact_pct": -0.53,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.009,
-          "impact_pct": -0.21,
+          "impact_pct": -0.22,
           "share_pct": 15.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.022,
-      "impact_pct": -0.52,
+      "impact_pct": -0.53,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.009,
-      "impact_pct": -0.21,
+      "impact_pct": -0.22,
       "share_pct": 15.0,
       "direction": "DOWN"
     },
