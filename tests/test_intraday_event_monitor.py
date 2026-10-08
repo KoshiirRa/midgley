@@ -28,6 +28,18 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertTrue(is_anomaly)
         self.assertGreaterEqual(abs(scores["overall_price_pressure"]), 0.40)
 
+    def test_evaluate_headline_edible_oil_suppression(self):
+        """Verifies that agricultural and edible cooking oils (Issue #617) are suppressed as false positives."""
+        rice_bran_headline = "Supreme Court Dismisses Appeal on Classification of Hydrogenated Rice Bran Oil Due to Retention of Essential Characteristics. Classified under Tariff Item 12 as Vegetable Non-Essential Oil"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(rice_bran_headline)
+        self.assertFalse(is_anomaly)
+        self.assertEqual(scores.get("overall_price_pressure", 0.0), 0.0)
+
+        palm_oil_headline = "Tariff values raised for edible oil and palm oil imports"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(palm_oil_headline)
+        self.assertFalse(is_anomaly)
+        self.assertEqual(scores.get("overall_price_pressure", 0.0), 0.0)
+
     def test_process_incoming_headline_structure(self):
         headline = "Houthi Missile Strike Halts Tanker Traffic in Strait of Hormuz"
         res = self.monitor.process_incoming_headline(headline, source="Test_Suite")

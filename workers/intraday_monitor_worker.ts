@@ -85,7 +85,9 @@ const RSS_FEEDS = [
 
 const EXCLUDE_KEYWORDS = [
   "wikipedia", "software outage", "airline outage", "it outage", "it system outage", "it systems outage", "cloud outage", "gaming outage", "network outage",
-  "canola", "cooking oil", "palm oil", "olive oil", "soybean oil"
+  "canola", "cooking oil", "palm oil", "olive oil", "soybean oil",
+  "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
+  "peanut oil", "sesame oil", "edible oil", "hydrogenated oil"
 ];
 
 const EXCLUDE_REGEX = new RegExp(
@@ -97,7 +99,9 @@ const NON_ENERGY_TARIFF_EXCLUDES = [
   "house should not transfer", "tariff authority", "steel tariff", "aluminum tariff",
   "copper tariff", "lumber tariff", "auto tariff", "solar tariff", "washing machine",
   "semiconductor tariff", "chip tariff", "reciprocal trade act", "section 301", "section 232",
-  "canola", "canola oil"
+  "canola", "canola oil", "rice bran", "rice bran oil", "vegetable oil", "sunflower oil",
+  "corn oil", "peanut oil", "sesame oil", "edible oil", "hydrogenated oil", "cooking oil",
+  "palm oil", "olive oil", "soybean oil"
 ];
 
 const NON_ENERGY_TARIFF_REGEX = new RegExp(
@@ -1064,7 +1068,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
 }
 
 export function getWorkerSigningSecret(env: Env): string | null {
-  return env.FLAG_SIGNING_KEY || null;
+  return env.FLAG_SIGNING_KEY || env.ADMIN_TOKEN || env.CLOUDFLARE_AUTH_TOKEN || null;
 }
 
 export async function computeSha256Hex(str: string): Promise<string> {

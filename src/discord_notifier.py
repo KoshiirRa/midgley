@@ -143,7 +143,12 @@ def format_intraday_discord_payload(
     safe_headline_param = (headline[:120] + "...") if len(headline) > 120 else headline
     safe_url_param = (url[:200] + "...") if len(url) > 200 else url
 
-    signing_secret = os.getenv("FLAG_SIGNING_KEY") or ""
+    signing_secret = (
+        os.getenv("FLAG_SIGNING_KEY")
+        or os.getenv("ADMIN_TOKEN")
+        or os.getenv("CLOUDFLARE_AUTH_TOKEN")
+        or ""
+    )
     exp_time = int(time.time()) + (72 * 3600)  # 72 hours validity
     sig_param = ""
     if signing_secret:

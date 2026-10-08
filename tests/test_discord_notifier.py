@@ -228,6 +228,29 @@ class TestDiscordNotifier(unittest.TestCase):
             expected_sig = hmac.new(signing_key.encode("utf-8"), expected_msg, hashlib.sha256).hexdigest()[:32]
             self.assertEqual(sig, expected_sig)
 
+    def test_flag_link_fallback_signing_keys(self):
+        """Asserts that flag links sign using CLOUDFLARE_AUTH_TOKEN or ADMIN_TOKEN if FLAG_SIGNING_KEY is absent."""
+        import urllib.parse
+        event = {
+            "headline": "Energy Supply Interruption",
+            "source": "RSS_Feed",
+            "url": "https://example.com/alert",
+            "scores": {"overall_price_pressure": 0.45, "supply_disruption": 0.50}
+        }
+        # Fallback to CLOUDFLARE_AUTH_TOKEN
+        with patch.dict(os.environ, {"CLOUDFLARE_AUTH_TOKEN": "cf_secret_key"}, clear=True):
+            payload = format_intraday_discord_payload(event, include_components=True)
+            comp_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(comp_url).query)
+            self.assertTrue(bool(qs.get("sig", [""])[0]))
+
+        # Fallback to ADMIN_TOKEN
+        with patch.dict(os.environ, {"ADMIN_TOKEN": "admin_secret_key"}, clear=True):
+            payload = format_intraday_discord_payload(event, include_components=True)
+            comp_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(comp_url).query)
+            self.assertTrue(bool(qs.get("sig", [""])[0]))
+
 
 if __name__ == "__main__":
     unittest.main()

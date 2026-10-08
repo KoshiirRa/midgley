@@ -52,14 +52,19 @@ FREE_RSS_FEEDS = [
 # Excluded Keywords to Filter Non-Energy Outages & Noise
 EXCLUDE_KEYWORDS = [
     "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage",
-    "canola", "cooking oil", "palm oil", "olive oil", "soybean oil"
+    "canola", "cooking oil", "palm oil", "olive oil", "soybean oil",
+    "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
+    "peanut oil", "sesame oil", "edible oil", "hydrogenated oil"
 ]
 
 # Non-Energy Policy Keywords to Filter False Positive Trade/Policy Headlines
 NON_ENERGY_TARIFF_EXCLUDE = [
     "house should not transfer", "tariff authority", "steel tariff", "aluminum tariff", "copper tariff",
     "lumber tariff", "auto tariff", "solar tariff", "washing machine", "semiconductor tariff", "chip tariff",
-    "reciprocal trade act", "section 301", "section 232", "canola", "canola oil"
+    "reciprocal trade act", "section 301", "section 232", "canola", "canola oil",
+    "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
+    "peanut oil", "sesame oil", "edible oil", "hydrogenated oil", "cooking oil",
+    "palm oil", "olive oil", "soybean oil"
 ]
 
 # High-Risk Keyword Lexicon for Stage 1 Cascading Gate

@@ -161,3 +161,5 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 | **Finding T-1 / T-4** | `docs(taxes): Enrich statutory tax events in known_future_events.json with source URLs and announcement dates` | Regulations / Provenance |
 | **Finding A-5 / A-8** | `feat(calendar): Implement NYMEXTradingCalendar with CME holiday schedules and RBOB contract roll boundary detection` | Market Calendar / Models |
 | **Finding E-2** | `docs(governance): Document strict non-commercial policy and honest labeling of macro PADD regional actuals` | Governance / Documentation |
+| **#617** | `fix(edge): Gracefully fallback intraday flag signing keys to CLOUDFLARE_AUTH_TOKEN / ADMIN_TOKEN, suppress edible cooking oil false positives, and parse flag URLs in reviewer` | Edge / Ingestion / CI |
+

@@ -82,6 +82,8 @@ describe("Cloudflare Intraday Monitor Worker", () => {
       expect(isAnomalyHeadline("New steel tariff and aluminum tariff proposed by Congress")).toBe(false);
       expect(isAnomalyHeadline("Section 301 semiconductor tariff under congressional review")).toBe(false);
       expect(isAnomalyHeadline("Canola oil trade tariff sparks agricultural debates")).toBe(false);
+      expect(isAnomalyHeadline("Supreme Court Dismisses Appeal on Classification of Hydrogenated Rice Bran Oil Due to Retention of Essential Characteristics. Classified under Tariff Item 12 as Vegetable Non-Essential Oil")).toBe(false);
+      expect(isAnomalyHeadline("Government raises edible oil and palm oil tariff values")).toBe(false);
     });
   });
 
@@ -339,6 +341,13 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     expect(res.status).toBe(403);
     const data = (await res.json()) as { error: string };
     expect(data.error).toContain("Forbidden: Missing, invalid, or expired signed flag link");
+  });
+
+  it("resolves signing secret falling back to ADMIN_TOKEN and CLOUDFLARE_AUTH_TOKEN", () => {
+    expect(getWorkerSigningSecret({ FLAG_SIGNING_KEY: "flag_key" })).toBe("flag_key");
+    expect(getWorkerSigningSecret({ ADMIN_TOKEN: "admin_key" })).toBe("admin_key");
+    expect(getWorkerSigningSecret({ CLOUDFLARE_AUTH_TOKEN: "cf_key" })).toBe("cf_key");
+    expect(getWorkerSigningSecret({})).toBe(null);
   });
 
   it("renders form for valid signed GET /flag requests and accepts signed POST /flag submission", async () => {

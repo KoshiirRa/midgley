@@ -15,6 +15,7 @@ import argparse
 import logging
 import urllib.request
 import urllib.error
+import urllib.parse
 from typing import Dict, Any, List, Optional
 
 # Ensure UTF-8 stdout encoding across all platforms
@@ -51,7 +52,8 @@ BROAD_POLICY_KEYWORDS = [
 
 AGRICULTURAL_OIL_TOKENS = [
     "cooking oil", "palm oil", "olive oil", "soybean oil", "canola",
-    "vegetable oil", "sunflower oil", "food supply"
+    "vegetable oil", "sunflower oil", "food supply", "rice bran", "rice bran oil",
+    "corn oil", "peanut oil", "sesame oil", "edible oil", "hydrogenated oil"
 ]
 
 
@@ -261,6 +263,16 @@ def parse_headline_from_issue_body(body: str) -> str:
     """Extracts the catalyst headline from an issue body."""
     if not body:
         return ""
+    # Check if body contains a flag URL with a headline query parameter
+    flag_url_match = re.search(r'https?://[^\s/]+/flag\?[^\s)]+', body)
+    if flag_url_match:
+        try:
+            parsed_url = urllib.parse.urlparse(flag_url_match.group(0))
+            qs = urllib.parse.parse_qs(parsed_url.query)
+            if "headline" in qs and qs["headline"][0]:
+                return qs["headline"][0].strip()
+        except Exception:
+            pass
     match = re.search(r'### 🚨 Trigger Catalyst\s*>\s*\*?"?([^\n"\*]+)"?\*?', body)
     if match:
         return match.group(1).strip()
