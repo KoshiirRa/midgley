@@ -4853,5 +4853,25 @@
       "overall_price_pressure": -0.7
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-08T00:06:34.935643",
+    "headline": "US Refinery Outages and Gasoline Demand Drive the September Benzene Market - ChemAnalyst",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPbmFuWjV3OV8yS0psX1lEZ09PX1o4bThPQWlMc29VTi1kOTJ5LW42Zm1WTGdFS1hqQ2l0U09pLWR1N3V5VFUxUkFtR1lJVTMxSmJncGpOSDUxVXZXWkVCT0VnM0tNdVhmOFRTNWpZSTNhMFdYZlJ5RmV6b2llZS1Ic2tnZlExZ0hIQTU1M1k2eEp2YTE5UGlhRVd6NFpMaW9UUGNIaVd5UFVTR0VOSjBpdGlSYlRFR3JMOUE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPbmFuWjV3OV8yS0psX1lEZ09PX1o4bThPQWlMc29VTi1kOTJ5LW42Zm1WTGdFS1hqQ2l0U09pLWR1N3V5VFUxUkFtR1lJVTMxSmJncGpOSDUxVXZXWkVCT0VnM0tNdVhmOFRTNWpZSTNhMFdYZlJ5RmV6b2llZS1Ic2tnZlExZ0hIQTU1M1k2eEp2YTE5UGlhRVd6NFpMaW9UUGNIaVd5UFVTR0VOSjBpdGlSYlRFR3JMOUE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiugFBVV95cUxPbmFuWjV3OV8yS0psX1lEZ09PX1o4bThPQWlMc29VTi1kOTJ5LW42Zm1WTGdFS1hqQ2l0U09pLWR1N3V5VFUxUkFtR1lJVTMxSmJncGpOSDUxVXZXWkVCT0VnM0tNdVhmOFRTNWpZSTNhMFdYZlJ5RmV6b2llZS1Ic2tnZlExZ0hIQTU1M1k2eEp2YTE5UGlhRVd6NFpMaW9UUGNIaVd5UFVTR0VOSjBpdGlSYlRFR3JMOUE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.6,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.8
+    },
+    "discord_notified": true
   }
 ]

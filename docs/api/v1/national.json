@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-07T19:49:21.043608",
+  "timestamp": "2026-10-08T00:07:04.229415",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-07T19:49:20Z"
+      "timestamp": "2026-10-08T00:07:03Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -41,7 +41,7 @@
     "historical_mae_dollars": 0.1883,
     "evaluation_sample_size": 6,
     "day_1_price": 4.37,
-    "day_2_price": 4.327,
+    "day_2_price": 4.373,
     "day_3_price": 4.332,
     "day_4_price": 4.324,
     "day_5_price": 4.382,

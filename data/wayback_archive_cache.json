@@ -3654,13 +3654,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-10-06T22:30:07.693071+00:00",
+    "timestamp": "2026-10-08T00:05:29.437314+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Exceeds $4 - Forbes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "error": "The read operation timed out"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxOcG1SSWY2dzdlYXF1bEhTTklUeWpQLU9ZNzJBUllCUmN0SzhFUnhBVG1HN1Naa0sxUVEyYk1XRkFXUS1XQTA3Vm9YVEMyWEdsdWV0a2JnbGwzazFRODBCTmZIS2I3WW52Q0RodkJUd1JES2ctUHp4TmNBMV9PSzlyZXRXbGVNNkxlT0NvZHlZVUIwT2FHRFhiby10c2hvTjFiUk9zRFVxWWxwR3RGbEhV?oc=5": {
     "timestamp": "2026-09-18T10:48:41.416780",
@@ -11772,13 +11772,13 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5": {
-    "timestamp": "2026-10-06T22:29:58.304918+00:00",
+    "timestamp": "2026-10-08T00:05:46.942268+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5",
     "headline": "Trump’s red-dye diesel plan has a major flaw - The Washington Post",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimAFBVV95cUxOTkppNVJqWFhhLXIxZXVfN2NJdmFlRi1Ld3FhRGNJX2Ffb1czblZlQlRUdXg4U0Zpdi1zSmQzLXh2MXlvcVJRaTBqWUJlU1VBWkhFZ0U5bjNWUWZ4am13ekRtdkJCN2I4bjE2WUhVX2dFMnBEMUdCQUFqZUY0T2F0eEM3dk1YbnUtdjZwa0pEMm5JbEt6MXAyYw?oc=5",
-    "error": "The read operation timed out"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMiekFVX3lxTE0yeDNXbEVGSFFtSXJKYmZSWDZuRmNZUUhyaHNXaXRxVUlhVmxYbWxYc0ZYbDQtYnlMd05zR3F0SDYweDdCUGhKOUNFbnJjSk9fRFBtZ09jWTlEclYzUHhPcHViWmU2bHg0c28xLXc0Mmppd3NQcGh5d2pB?oc=5": {
     "timestamp": "2026-10-06T22:30:18.381863+00:00",
@@ -12043,5 +12043,104 @@
     "headline": "Gas prices for 10/07/26: What President Trump’s executive order means for diesel prices - Cleveland.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiyAFBVV95cUxQSmdPVkxobV9iREVPZG8zcnNBdHktRUhGVVZCY2RwLW00UHh6X19WNUJod25MS3lVdnVRcS05WTNuRWY2dVBRMzJ3YU1QOVA0M3NzVnVzRUxKLWxuZ2VXODhrUHB5ZVVQSGpHTVJscEUzVzYzVjFzSWwtY1RIZ0sxamxSSGtqSzk1WURNUVIzaWtueF9NZzI5NjUtRUpmeFBCck9CODhxX3p1WjRGcGd5NzZiVWtRaTZyUTJNdVYxS0F5NnJoS2ZJRQ?oc=5",
     "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPOVNBcUdWc0Eyd3BsMTJFcjhoajdTdVFXZTdzUWE4MHFEMHl4N2t4d0FzU2tpbTBNMzJwWU5MVE83WnB1N1dYZktLSUotb2tQZk92Q2lGUmU5dnFaUGhxN0Nsd0hPQWl1amxyNkJ5NWQybnhMTkxPaElJQ2RuZHc3cElWdUpxbU9hRThuQnBBc0pjakZTYUIwbXQwU0d4MGp4aDNZeUF4czlqcnBSMks5WHU3S2hHRUhadlFBb2FKY24?oc=5": {
+    "timestamp": "2026-10-08T00:04:30.274805+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPOVNBcUdWc0Eyd3BsMTJFcjhoajdTdVFXZTdzUWE4MHFEMHl4N2t4d0FzU2tpbTBNMzJwWU5MVE83WnB1N1dYZktLSUotb2tQZk92Q2lGUmU5dnFaUGhxN0Nsd0hPQWl1amxyNkJ5NWQybnhMTkxPaElJQ2RuZHc3cElWdUpxbU9hRThuQnBBc0pjakZTYUIwbXQwU0d4MGp4aDNZeUF4czlqcnBSMks5WHU3S2hHRUhadlFBb2FKY24?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPOVNBcUdWc0Eyd3BsMTJFcjhoajdTdVFXZTdzUWE4MHFEMHl4N2t4d0FzU2tpbTBNMzJwWU5MVE83WnB1N1dYZktLSUotb2tQZk92Q2lGUmU5dnFaUGhxN0Nsd0hPQWl1amxyNkJ5NWQybnhMTkxPaElJQ2RuZHc3cElWdUpxbU9hRThuQnBBc0pjakZTYUIwbXQwU0d4MGp4aDNZeUF4czlqcnBSMks5WHU3S2hHRUhadlFBb2FKY24?oc=5",
+    "headline": "Virginia Gas Prices: Cheapest and most expensive places to fill up - Oct. 7, 2026 - WSLS",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwAFBVV95cUxPOVNBcUdWc0Eyd3BsMTJFcjhoajdTdVFXZTdzUWE4MHFEMHl4N2t4d0FzU2tpbTBNMzJwWU5MVE83WnB1N1dYZktLSUotb2tQZk92Q2lGUmU5dnFaUGhxN0Nsd0hPQWl1amxyNkJ5NWQybnhMTkxPaElJQ2RuZHc3cElWdUpxbU9hRThuQnBBc0pjakZTYUIwbXQwU0d4MGp4aDNZeUF4czlqcnBSMks5WHU3S2hHRUhadlFBb2FKY24?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMid0FVX3lxTE1mdm9SaXlRQ0hGMU1WU3VRajF6aEgza19PbzJSLVpPaDlzckVNeFJXdVVVaUZvVExaQWkxdW1fUU5fMkU0UWpkcVFFb1VpUGxuR3ZTNDI4cmUyQ19Wajl3Y0ladEJqbVdBYV9DMDVLOFdCWlk3MEZN?oc=5": {
+    "timestamp": "2026-10-08T00:04:53.643778+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1mdm9SaXlRQ0hGMU1WU3VRajF6aEgza19PbzJSLVpPaDlzckVNeFJXdVVVaUZvVExaQWkxdW1fUU5fMkU0UWpkcVFFb1VpUGxuR3ZTNDI4cmUyQ19Wajl3Y0ladEJqbVdBYV9DMDVLOFdCWlk3MEZN?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1mdm9SaXlRQ0hGMU1WU3VRajF6aEgza19PbzJSLVpPaDlzckVNeFJXdVVVaUZvVExaQWkxdW1fUU5fMkU0UWpkcVFFb1VpUGxuR3ZTNDI4cmUyQ19Wajl3Y0ladEJqbVdBYV9DMDVLOFdCWlk3MEZN?oc=5",
+    "headline": "Trump’s executive order on dyed diesel will offer little relief, farmers and truckers say - Boston Herald",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTE1mdm9SaXlRQ0hGMU1WU3VRajF6aEgza19PbzJSLVpPaDlzckVNeFJXdVVVaUZvVExaQWkxdW1fUU5fMkU0UWpkcVFFb1VpUGxuR3ZTNDI4cmUyQ19Wajl3Y0ladEJqbVdBYV9DMDVLOFdCWlk3MEZN?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMitgFBVV95cUxNdFg5NmNZaU1Eb3pHSlVaUWJTam03bDVhRThtdHlTSjZQbnVsRF9ZeDF0MjJKUjU5eHNPdHZzZmZqcUpEdE9YOWlyRHNDX3p3UC1NbGxmN1VVc1BOamhHb1ZZMXd2VUZTdUR5TG9laHlza19CUXRrYXBBSF9RdGVaeEpiS0VsWTRPQ1FQWUxoTEJsbFpSLVRkTXIxNV93bXdOc1dCeFZXWlZEeXdQa3JxMDdkYXJsdw?oc=5": {
+    "timestamp": "2026-10-08T00:05:00.381569+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNdFg5NmNZaU1Eb3pHSlVaUWJTam03bDVhRThtdHlTSjZQbnVsRF9ZeDF0MjJKUjU5eHNPdHZzZmZqcUpEdE9YOWlyRHNDX3p3UC1NbGxmN1VVc1BOamhHb1ZZMXd2VUZTdUR5TG9laHlza19CUXRrYXBBSF9RdGVaeEpiS0VsWTRPQ1FQWUxoTEJsbFpSLVRkTXIxNV93bXdOc1dCeFZXWlZEeXdQa3JxMDdkYXJsdw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNdFg5NmNZaU1Eb3pHSlVaUWJTam03bDVhRThtdHlTSjZQbnVsRF9ZeDF0MjJKUjU5eHNPdHZzZmZqcUpEdE9YOWlyRHNDX3p3UC1NbGxmN1VVc1BOamhHb1ZZMXd2VUZTdUR5TG9laHlza19CUXRrYXBBSF9RdGVaeEpiS0VsWTRPQ1FQWUxoTEJsbFpSLVRkTXIxNV93bXdOc1dCeFZXWlZEeXdQa3JxMDdkYXJsdw?oc=5",
+    "headline": "Pritzker declares Illinois a diesel disaster area, but fuel retailers are wary - Capitol News Illinois",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitgFBVV95cUxNdFg5NmNZaU1Eb3pHSlVaUWJTam03bDVhRThtdHlTSjZQbnVsRF9ZeDF0MjJKUjU5eHNPdHZzZmZqcUpEdE9YOWlyRHNDX3p3UC1NbGxmN1VVc1BOamhHb1ZZMXd2VUZTdUR5TG9laHlza19CUXRrYXBBSF9RdGVaeEpiS0VsWTRPQ1FQWUxoTEJsbFpSLVRkTXIxNV93bXdOc1dCeFZXWlZEeXdQa3JxMDdkYXJsdw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMinAFBVV95cUxOTFJGcThtWDQ1aTV5QlNTU28zQklMNTMyUm5xM2VaOTRaRkJqR1lxYUZ4aHZMQ3JzRHNkaDJQZjZJRUZYcXU5NkwyOTVjUnpyZ3AzaTJUTkYwYVVRbTd0cEExUWZKbXZNd05iSTJDamkxaGROWERwcVRTMUloRnpTa3RadjJMaHhJT0pJNmswdHNnUXFscjZ2SHFvcFLSAaIBQVVfeXFMUHhfdlk4d0NfbjJmVDFpeHNTaER2MXZyQVRNdnMxTGsteHpsWnpiVGNJeERQTGZYWGRoYWpUdzhLd1kzT1EwRTdPUmc2MnVqSXh0QWlOd2RwMTFoNTJTQ0lPQWE2RnZYZlZueHBydHdLbDE4UXVtTTlfa1BtOEs0d0hESUpSRkRQSXFWM2pOM3VGcmtITmpXeUVROG9vbG4wQVBR?oc=5": {
+    "timestamp": "2026-10-08T00:05:10.949426+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOTFJGcThtWDQ1aTV5QlNTU28zQklMNTMyUm5xM2VaOTRaRkJqR1lxYUZ4aHZMQ3JzRHNkaDJQZjZJRUZYcXU5NkwyOTVjUnpyZ3AzaTJUTkYwYVVRbTd0cEExUWZKbXZNd05iSTJDamkxaGROWERwcVRTMUloRnpTa3RadjJMaHhJT0pJNmswdHNnUXFscjZ2SHFvcFLSAaIBQVVfeXFMUHhfdlk4d0NfbjJmVDFpeHNTaER2MXZyQVRNdnMxTGsteHpsWnpiVGNJeERQTGZYWGRoYWpUdzhLd1kzT1EwRTdPUmc2MnVqSXh0QWlOd2RwMTFoNTJTQ0lPQWE2RnZYZlZueHBydHdLbDE4UXVtTTlfa1BtOEs0d0hESUpSRkRQSXFWM2pOM3VGcmtITmpXeUVROG9vbG4wQVBR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOTFJGcThtWDQ1aTV5QlNTU28zQklMNTMyUm5xM2VaOTRaRkJqR1lxYUZ4aHZMQ3JzRHNkaDJQZjZJRUZYcXU5NkwyOTVjUnpyZ3AzaTJUTkYwYVVRbTd0cEExUWZKbXZNd05iSTJDamkxaGROWERwcVRTMUloRnpTa3RadjJMaHhJT0pJNmswdHNnUXFscjZ2SHFvcFLSAaIBQVVfeXFMUHhfdlk4d0NfbjJmVDFpeHNTaER2MXZyQVRNdnMxTGsteHpsWnpiVGNJeERQTGZYWGRoYWpUdzhLd1kzT1EwRTdPUmc2MnVqSXh0QWlOd2RwMTFoNTJTQ0lPQWE2RnZYZlZueHBydHdLbDE4UXVtTTlfa1BtOEs0d0hESUpSRkRQSXFWM2pOM3VGcmtITmpXeUVROG9vbG4wQVBR?oc=5",
+    "headline": "Gas, diesel fuel tax suspension through Thanksgiving approved by Legislature - The Center Square",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinAFBVV95cUxOTFJGcThtWDQ1aTV5QlNTU28zQklMNTMyUm5xM2VaOTRaRkJqR1lxYUZ4aHZMQ3JzRHNkaDJQZjZJRUZYcXU5NkwyOTVjUnpyZ3AzaTJUTkYwYVVRbTd0cEExUWZKbXZNd05iSTJDamkxaGROWERwcVRTMUloRnpTa3RadjJMaHhJT0pJNmswdHNnUXFscjZ2SHFvcFLSAaIBQVVfeXFMUHhfdlk4d0NfbjJmVDFpeHNTaER2MXZyQVRNdnMxTGsteHpsWnpiVGNJeERQTGZYWGRoYWpUdzhLd1kzT1EwRTdPUmc2MnVqSXh0QWlOd2RwMTFoNTJTQ0lPQWE2RnZYZlZueHBydHdLbDE4UXVtTTlfa1BtOEs0d0hESUpSRkRQSXFWM2pOM3VGcmtITmpXeUVROG9vbG4wQVBR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMirgFBVV95cUxOcUV0ZkFlVUJhM1ZDX3NuN2R1VUJDdTVGWlh6S2lBb1NER2Z2cTU1dkMzeUpyazQ1MEcyMjBwR0N3RldRU1JRYzlhWklSSUdnUG5ycDFVMlVucC1ma1AtUkFjQ0s1cVZQOVZ4akdybjFaOTJHQUpUUlNwdWNqczFSX2taVnNmRHJuckZTZVplZG9wUXFyLWlybkR4bWt5ZDVxUFA5alFCM09PTFZEWHc?oc=5": {
+    "timestamp": "2026-10-08T00:05:18.862643+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOcUV0ZkFlVUJhM1ZDX3NuN2R1VUJDdTVGWlh6S2lBb1NER2Z2cTU1dkMzeUpyazQ1MEcyMjBwR0N3RldRU1JRYzlhWklSSUdnUG5ycDFVMlVucC1ma1AtUkFjQ0s1cVZQOVZ4akdybjFaOTJHQUpUUlNwdWNqczFSX2taVnNmRHJuckZTZVplZG9wUXFyLWlybkR4bWt5ZDVxUFA5alFCM09PTFZEWHc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOcUV0ZkFlVUJhM1ZDX3NuN2R1VUJDdTVGWlh6S2lBb1NER2Z2cTU1dkMzeUpyazQ1MEcyMjBwR0N3RldRU1JRYzlhWklSSUdnUG5ycDFVMlVucC1ma1AtUkFjQ0s1cVZQOVZ4akdybjFaOTJHQUpUUlNwdWNqczFSX2taVnNmRHJuckZTZVplZG9wUXFyLWlybkR4bWt5ZDVxUFA5alFCM09PTFZEWHc?oc=5",
+    "headline": "Whiplash at the pump: Gas prices rise, then fall in Florida - WKMG",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxOcUV0ZkFlVUJhM1ZDX3NuN2R1VUJDdTVGWlh6S2lBb1NER2Z2cTU1dkMzeUpyazQ1MEcyMjBwR0N3RldRU1JRYzlhWklSSUdnUG5ycDFVMlVucC1ma1AtUkFjQ0s1cVZQOVZ4akdybjFaOTJHQUpUUlNwdWNqczFSX2taVnNmRHJuckZTZVplZG9wUXFyLWlybkR4bWt5ZDVxUFA5alFCM09PTFZEWHc?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMipgFBVV95cUxNU1hWVGY2cWlqcE0zRTBNMlZBN1Fna0hTRExnQ3Z3cUFBQXA3eVRzaWMteUhTQlJVYjYwN1lfRlZQdHRtQkhLcmgwWVJCaDdxNWxUenIxeDBBc091OWw2b0lCNjB5LWdKMThvUEVuWVFJOXJfOGRBM1VJbXVlYXNTY0FNZF9qWWhfYVVGbERJQ1lHMXpCZDR5UHlOcVBMM1ZoWlJrTHVn?oc=5": {
+    "timestamp": "2026-10-08T00:05:36.349648+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNU1hWVGY2cWlqcE0zRTBNMlZBN1Fna0hTRExnQ3Z3cUFBQXA3eVRzaWMteUhTQlJVYjYwN1lfRlZQdHRtQkhLcmgwWVJCaDdxNWxUenIxeDBBc091OWw2b0lCNjB5LWdKMThvUEVuWVFJOXJfOGRBM1VJbXVlYXNTY0FNZF9qWWhfYVVGbERJQ1lHMXpCZDR5UHlOcVBMM1ZoWlJrTHVn?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNU1hWVGY2cWlqcE0zRTBNMlZBN1Fna0hTRExnQ3Z3cUFBQXA3eVRzaWMteUhTQlJVYjYwN1lfRlZQdHRtQkhLcmgwWVJCaDdxNWxUenIxeDBBc091OWw2b0lCNjB5LWdKMThvUEVuWVFJOXJfOGRBM1VJbXVlYXNTY0FNZF9qWWhfYVVGbERJQ1lHMXpCZDR5UHlOcVBMM1ZoWlJrTHVn?oc=5",
+    "headline": "The world has nearly burned through its oil stockpile buffer, executives say: ‘System is already straining’ - New York Post",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxNU1hWVGY2cWlqcE0zRTBNMlZBN1Fna0hTRExnQ3Z3cUFBQXA3eVRzaWMteUhTQlJVYjYwN1lfRlZQdHRtQkhLcmgwWVJCaDdxNWxUenIxeDBBc091OWw2b0lCNjB5LWdKMThvUEVuWVFJOXJfOGRBM1VJbXVlYXNTY0FNZF9qWWhfYVVGbERJQ1lHMXpCZDR5UHlOcVBMM1ZoWlJrTHVn?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiowFBVV95cUxOakZoeU9LSkU3VTVMQzVsZFRvYlpPTmJKcVQ2ZW04Q0NWbDJpbE85eUtUQ2p3eFVmZGZsTFlHSmF4MW82Q2lCLVltM0lGMTFvaUlOOEZHWHZYcHkwRWw2My1YZFBzQUtHRDZjTklMS2ZzT0NzdExua0JIM20zazJMazRpVjd5bnpOeElEYWZ5djA2bm1zYjdfMHVlNUNtT2hpdTBN?oc=5": {
+    "timestamp": "2026-10-08T00:05:55.150011+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOakZoeU9LSkU3VTVMQzVsZFRvYlpPTmJKcVQ2ZW04Q0NWbDJpbE85eUtUQ2p3eFVmZGZsTFlHSmF4MW82Q2lCLVltM0lGMTFvaUlOOEZHWHZYcHkwRWw2My1YZFBzQUtHRDZjTklMS2ZzT0NzdExua0JIM20zazJMazRpVjd5bnpOeElEYWZ5djA2bm1zYjdfMHVlNUNtT2hpdTBN?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOakZoeU9LSkU3VTVMQzVsZFRvYlpPTmJKcVQ2ZW04Q0NWbDJpbE85eUtUQ2p3eFVmZGZsTFlHSmF4MW82Q2lCLVltM0lGMTFvaUlOOEZHWHZYcHkwRWw2My1YZFBzQUtHRDZjTklMS2ZzT0NzdExua0JIM20zazJMazRpVjd5bnpOeElEYWZ5djA2bm1zYjdfMHVlNUNtT2hpdTBN?oc=5",
+    "headline": "‘Fuel thieves think they’ve got away from my petrol station – then I chase them in my car’ - The Independent",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiowFBVV95cUxOakZoeU9LSkU3VTVMQzVsZFRvYlpPTmJKcVQ2ZW04Q0NWbDJpbE85eUtUQ2p3eFVmZGZsTFlHSmF4MW82Q2lCLVltM0lGMTFvaUlOOEZHWHZYcHkwRWw2My1YZFBzQUtHRDZjTklMS2ZzT0NzdExua0JIM20zazJMazRpVjd5bnpOeElEYWZ5djA2bm1zYjdfMHVlNUNtT2hpdTBN?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi8AFBVV95cUxOUnliak5SaUtiaE9JX0Z0d3c0dGN6NEYtSDlkUVQ1RDlIVEFZZGhTS0JCLVp4azd1TmVHdEtVeGxvUVo3X0ozazdPdUNsYlc4ZTJTZmJJWVRaNEZ0Mm1RSFNZelBLUE1SWE5pYzFRbTdhVE5lT1dZOUI1QVZmWTRxR0FOR0JxcHpkREtPRHhzTUpwS0V0NFY3bEgwNjd6UF9ob1NmekpjTkRodF9nTGc3ZmdQVFZjTS1fbm80MnFpdjRBZzBoNEYzcHBqNXFHZ3dnYW9hNEROSTQ1dk83aWp5ZWpzc0hhQWxjaXlsR2dzSTM?oc=5": {
+    "timestamp": "2026-10-08T00:06:02.583599+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxOUnliak5SaUtiaE9JX0Z0d3c0dGN6NEYtSDlkUVQ1RDlIVEFZZGhTS0JCLVp4azd1TmVHdEtVeGxvUVo3X0ozazdPdUNsYlc4ZTJTZmJJWVRaNEZ0Mm1RSFNZelBLUE1SWE5pYzFRbTdhVE5lT1dZOUI1QVZmWTRxR0FOR0JxcHpkREtPRHhzTUpwS0V0NFY3bEgwNjd6UF9ob1NmekpjTkRodF9nTGc3ZmdQVFZjTS1fbm80MnFpdjRBZzBoNEYzcHBqNXFHZ3dnYW9hNEROSTQ1dk83aWp5ZWpzc0hhQWxjaXlsR2dzSTM?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxOUnliak5SaUtiaE9JX0Z0d3c0dGN6NEYtSDlkUVQ1RDlIVEFZZGhTS0JCLVp4azd1TmVHdEtVeGxvUVo3X0ozazdPdUNsYlc4ZTJTZmJJWVRaNEZ0Mm1RSFNZelBLUE1SWE5pYzFRbTdhVE5lT1dZOUI1QVZmWTRxR0FOR0JxcHpkREtPRHhzTUpwS0V0NFY3bEgwNjd6UF9ob1NmekpjTkRodF9nTGc3ZmdQVFZjTS1fbm80MnFpdjRBZzBoNEYzcHBqNXFHZ3dnYW9hNEROSTQ1dk83aWp5ZWpzc0hhQWxjaXlsR2dzSTM?oc=5",
+    "headline": "Where to find the cheapest fuel in The Shire - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi8AFBVV95cUxOUnliak5SaUtiaE9JX0Z0d3c0dGN6NEYtSDlkUVQ1RDlIVEFZZGhTS0JCLVp4azd1TmVHdEtVeGxvUVo3X0ozazdPdUNsYlc4ZTJTZmJJWVRaNEZ0Mm1RSFNZelBLUE1SWE5pYzFRbTdhVE5lT1dZOUI1QVZmWTRxR0FOR0JxcHpkREtPRHhzTUpwS0V0NFY3bEgwNjd6UF9ob1NmekpjTkRodF9nTGc3ZmdQVFZjTS1fbm80MnFpdjRBZzBoNEYzcHBqNXFHZ3dnYW9hNEROSTQ1dk83aWp5ZWpzc0hhQWxjaXlsR2dzSTM?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi9gFBVV95cUxOYmxXRENDaEhNY1pWbl9mYWZXMHpyWDc2ZnVWMzVTNTkwWThLMEF3Mnd2NzZQY2JoX0Exd1pWc2JpTUQtY3BfRG5PVkw4cFlVZmI1ZjdPOVJqc0JhUUk0d1FfeVo1U1NaQTU0MjY4cllydEEyR1hjVnhaRE9Yb1QxUnlFeVE0eEVpYUJpQ1ZObGZqNExPN3RJMGwwYzR4NjRBUF9KcHg4WHlDQldGQXNibXM1RzFMMzBQbjNYOWdEWmZHUWZOV25TRS1XUVdlQUhGY19sWFNzbnZoRS1OZktUelBBc1BDc1VObllrcWR1cElhT1p3N0E?oc=5": {
+    "timestamp": "2026-10-08T00:06:09.450488+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxOYmxXRENDaEhNY1pWbl9mYWZXMHpyWDc2ZnVWMzVTNTkwWThLMEF3Mnd2NzZQY2JoX0Exd1pWc2JpTUQtY3BfRG5PVkw4cFlVZmI1ZjdPOVJqc0JhUUk0d1FfeVo1U1NaQTU0MjY4cllydEEyR1hjVnhaRE9Yb1QxUnlFeVE0eEVpYUJpQ1ZObGZqNExPN3RJMGwwYzR4NjRBUF9KcHg4WHlDQldGQXNibXM1RzFMMzBQbjNYOWdEWmZHUWZOV25TRS1XUVdlQUhGY19sWFNzbnZoRS1OZktUelBBc1BDc1VObllrcWR1cElhT1p3N0E?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxOYmxXRENDaEhNY1pWbl9mYWZXMHpyWDc2ZnVWMzVTNTkwWThLMEF3Mnd2NzZQY2JoX0Exd1pWc2JpTUQtY3BfRG5PVkw4cFlVZmI1ZjdPOVJqc0JhUUk0d1FfeVo1U1NaQTU0MjY4cllydEEyR1hjVnhaRE9Yb1QxUnlFeVE0eEVpYUJpQ1ZObGZqNExPN3RJMGwwYzR4NjRBUF9KcHg4WHlDQldGQXNibXM1RzFMMzBQbjNYOWdEWmZHUWZOV25TRS1XUVdlQUhGY19sWFNzbnZoRS1OZktUelBBc1BDc1VObllrcWR1cElhT1p3N0E?oc=5",
+    "headline": "Where to find the cheapest fuel in South Coast - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9gFBVV95cUxOYmxXRENDaEhNY1pWbl9mYWZXMHpyWDc2ZnVWMzVTNTkwWThLMEF3Mnd2NzZQY2JoX0Exd1pWc2JpTUQtY3BfRG5PVkw4cFlVZmI1ZjdPOVJqc0JhUUk0d1FfeVo1U1NaQTU0MjY4cllydEEyR1hjVnhaRE9Yb1QxUnlFeVE0eEVpYUJpQ1ZObGZqNExPN3RJMGwwYzR4NjRBUF9KcHg4WHlDQldGQXNibXM1RzFMMzBQbjNYOWdEWmZHUWZOV25TRS1XUVdlQUhGY19sWFNzbnZoRS1OZktUelBBc1BDc1VObllrcWR1cElhT1p3N0E?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNV0h0a3M3UUh1TlFKcnF5WjVEOTdLMDNUeks0M2lpR0RRT29pSkFKS05faEJCYTZYWWVkWHZsb2dITlZDbklOaGpwYmpSRU9tQUNqSEg0bjlFT2ZyREU3NXo3RzR5aWdzajdoME1XX2x1R0hHT184WEtYb1hINnBSRXlNRjFUY08zX0w3MlpfNi1UUW1wbUFrZk05Vm5IbDI5SXZrRnRjUEZiaENlc1BjUXdadFlwQUhWbFJMYmF3QjRGOTRMSTJuWEVwdXYtZjFDRTdTemRGRjI2N3ROaTRmQ2wzVDVma3V3b1MzNEdQbw?oc=5": {
+    "timestamp": "2026-10-08T00:06:17.186481+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNV0h0a3M3UUh1TlFKcnF5WjVEOTdLMDNUeks0M2lpR0RRT29pSkFKS05faEJCYTZYWWVkWHZsb2dITlZDbklOaGpwYmpSRU9tQUNqSEg0bjlFT2ZyREU3NXo3RzR5aWdzajdoME1XX2x1R0hHT184WEtYb1hINnBSRXlNRjFUY08zX0w3MlpfNi1UUW1wbUFrZk05Vm5IbDI5SXZrRnRjUEZiaENlc1BjUXdadFlwQUhWbFJMYmF3QjRGOTRMSTJuWEVwdXYtZjFDRTdTemRGRjI2N3ROaTRmQ2wzVDVma3V3b1MzNEdQbw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNV0h0a3M3UUh1TlFKcnF5WjVEOTdLMDNUeks0M2lpR0RRT29pSkFKS05faEJCYTZYWWVkWHZsb2dITlZDbklOaGpwYmpSRU9tQUNqSEg0bjlFT2ZyREU3NXo3RzR5aWdzajdoME1XX2x1R0hHT184WEtYb1hINnBSRXlNRjFUY08zX0w3MlpfNi1UUW1wbUFrZk05Vm5IbDI5SXZrRnRjUEZiaENlc1BjUXdadFlwQUhWbFJMYmF3QjRGOTRMSTJuWEVwdXYtZjFDRTdTemRGRjI2N3ROaTRmQ2wzVDVma3V3b1MzNEdQbw?oc=5",
+    "headline": "Where to find the cheapest fuel in Hornsby - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi7wFBVV95cUxNV0h0a3M3UUh1TlFKcnF5WjVEOTdLMDNUeks0M2lpR0RRT29pSkFKS05faEJCYTZYWWVkWHZsb2dITlZDbklOaGpwYmpSRU9tQUNqSEg0bjlFT2ZyREU3NXo3RzR5aWdzajdoME1XX2x1R0hHT184WEtYb1hINnBSRXlNRjFUY08zX0w3MlpfNi1UUW1wbUFrZk05Vm5IbDI5SXZrRnRjUEZiaENlc1BjUXdadFlwQUhWbFJMYmF3QjRGOTRMSTJuWEVwdXYtZjFDRTdTemRGRjI2N3ROaTRmQ2wzVDVma3V3b1MzNEdQbw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiugFBVV95cUxPbmFuWjV3OV8yS0psX1lEZ09PX1o4bThPQWlMc29VTi1kOTJ5LW42Zm1WTGdFS1hqQ2l0U09pLWR1N3V5VFUxUkFtR1lJVTMxSmJncGpOSDUxVXZXWkVCT0VnM0tNdVhmOFRTNWpZSTNhMFdYZlJ5RmV6b2llZS1Ic2tnZlExZ0hIQTU1M1k2eEp2YTE5UGlhRVd6NFpMaW9UUGNIaVd5UFVTR0VOSjBpdGlSYlRFR3JMOUE?oc=5": {
+    "timestamp": "2026-10-08T00:06:34.917213+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPbmFuWjV3OV8yS0psX1lEZ09PX1o4bThPQWlMc29VTi1kOTJ5LW42Zm1WTGdFS1hqQ2l0U09pLWR1N3V5VFUxUkFtR1lJVTMxSmJncGpOSDUxVXZXWkVCT0VnM0tNdVhmOFRTNWpZSTNhMFdYZlJ5RmV6b2llZS1Ic2tnZlExZ0hIQTU1M1k2eEp2YTE5UGlhRVd6NFpMaW9UUGNIaVd5UFVTR0VOSjBpdGlSYlRFR3JMOUE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPbmFuWjV3OV8yS0psX1lEZ09PX1o4bThPQWlMc29VTi1kOTJ5LW42Zm1WTGdFS1hqQ2l0U09pLWR1N3V5VFUxUkFtR1lJVTMxSmJncGpOSDUxVXZXWkVCT0VnM0tNdVhmOFRTNWpZSTNhMFdYZlJ5RmV6b2llZS1Ic2tnZlExZ0hIQTU1M1k2eEp2YTE5UGlhRVd6NFpMaW9UUGNIaVd5UFVTR0VOSjBpdGlSYlRFR3JMOUE?oc=5",
+    "headline": "US Refinery Outages and Gasoline Demand Drive the September Benzene Market - ChemAnalyst",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiugFBVV95cUxPbmFuWjV3OV8yS0psX1lEZ09PX1o4bThPQWlMc29VTi1kOTJ5LW42Zm1WTGdFS1hqQ2l0U09pLWR1N3V5VFUxUkFtR1lJVTMxSmJncGpOSDUxVXZXWkVCT0VnM0tNdVhmOFRTNWpZSTNhMFdYZlJ5RmV6b2llZS1Ic2tnZlExZ0hIQTU1M1k2eEp2YTE5UGlhRVd6NFpMaW9UUGNIaVd5UFVTR0VOSjBpdGlSYlRFR3JMOUE?oc=5",
+    "error": "<urlopen error timed out>"
   }
 }
