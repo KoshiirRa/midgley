@@ -168,6 +168,64 @@
           "stake_bin": null
         }
       }
+    },
+    "6000cbac-344a-4fa8-a7c5-bc1adcdfbe37": {
+      "asset": "RB",
+      "submitted_at": "2026-10-08T00:12:42.510623+00:00",
+      "submitted_ts": 1791418362.510623,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "RB",
+        "challenge_id": "6000cbac-344a-4fa8-a7c5-bc1adcdfbe37",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "1b80e5cd-da23-46c0-a95d-fd393e830899",
+          "challenge_id": "6000cbac-344a-4fa8-a7c5-bc1adcdfbe37",
+          "direction": "bullish",
+          "confidence": 0.9265,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-08T00:12:42.292167",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
+    },
+    "931357c9-f562-40fb-a6bf-a31315ea06f2": {
+      "asset": "CL",
+      "submitted_at": "2026-10-08T00:12:44.543946+00:00",
+      "submitted_ts": 1791418364.543946,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "CL",
+        "challenge_id": "931357c9-f562-40fb-a6bf-a31315ea06f2",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "c2b60901-ba03-4001-a2dd-2f4ba4d34e07",
+          "challenge_id": "931357c9-f562-40fb-a6bf-a31315ea06f2",
+          "direction": "bullish",
+          "confidence": 0.8944,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-08T00:12:44.400992",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
     }
   }
 }
