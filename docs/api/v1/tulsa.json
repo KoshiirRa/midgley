@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-09T05:14:29.209993",
+  "timestamp": "2026-10-09T12:51:44.651334",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.98,
+    "current_price_per_gal": 4.022,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-09T05:14:16Z"
+      "timestamp": "2026-10-09T12:51:29Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-16",
-    "current_base_price": 3.98,
-    "predicted_price_per_gal": 3.944,
+    "current_base_price": 4.022,
+    "predicted_price_per_gal": 3.986,
     "expected_change_dollars": -0.036,
     "expected_change_percent": -0.9,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.824,
-    "prediction_upper_95ci": 4.064,
+    "prediction_lower_95ci": 3.866,
+    "prediction_upper_95ci": 4.106,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.961,
-    "day_2_price": 3.927,
-    "day_3_price": 3.929,
-    "day_4_price": 3.939,
-    "day_5_price": 3.944,
+    "day_1_price": 4.003,
+    "day_2_price": 3.969,
+    "day_3_price": 3.971,
+    "day_4_price": 3.982,
+    "day_5_price": 3.986,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -102,7 +102,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.011,
-          "impact_pct": -0.28,
+          "impact_pct": -0.27,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.011,
-          "impact_pct": -0.28,
+          "impact_pct": -0.27,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.009,
-          "impact_pct": -0.23,
+          "impact_pct": -0.22,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -134,7 +134,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
           "impact_dollars": -0.001,
-          "impact_pct": -0.03,
+          "impact_pct": -0.02,
           "share_pct": 3.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.011,
-      "impact_pct": -0.28,
+      "impact_pct": -0.27,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.011,
-      "impact_pct": -0.28,
+      "impact_pct": -0.27,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.009,
-      "impact_pct": -0.23,
+      "impact_pct": -0.22,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -186,7 +186,7 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "OPEC price pressure talkdown & dovish geopolitical news",
       "impact_dollars": -0.001,
-      "impact_pct": -0.03,
+      "impact_pct": -0.02,
       "share_pct": 3.0,
       "direction": "DOWN"
     },

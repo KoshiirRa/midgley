@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-09T05:14:29.731587",
+  "timestamp": "2026-10-09T12:51:45.173002",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.416,
+    "current_price_per_gal": 6.397,
     "source": "AAA Web Scraper (Oakland, CA)",
     "provenance": {
       "source": "AAA Web Scraper (Oakland, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-09T05:14:17Z"
+      "timestamp": "2026-10-09T12:51:31Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-16",
-    "current_base_price": 6.416,
-    "predicted_price_per_gal": 6.502,
+    "current_base_price": 6.397,
+    "predicted_price_per_gal": 6.483,
     "expected_change_dollars": 0.086,
     "expected_change_percent": 1.34,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 6.382,
-    "prediction_upper_95ci": 6.622,
+    "prediction_lower_95ci": 6.363,
+    "prediction_upper_95ci": 6.603,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.419,
-    "day_2_price": 6.393,
-    "day_3_price": 6.426,
-    "day_4_price": 6.455,
-    "day_5_price": 6.502,
+    "day_1_price": 6.4,
+    "day_2_price": 6.374,
+    "day_3_price": 6.407,
+    "day_4_price": 6.436,
+    "day_5_price": 6.483,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.017,
-          "impact_pct": 0.26,
+          "impact_pct": 0.27,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.017,
-      "impact_pct": 0.26,
+      "impact_pct": 0.27,
       "share_pct": 20.0,
       "direction": "UP"
     },
