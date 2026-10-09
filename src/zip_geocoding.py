@@ -7,6 +7,7 @@ and persistent telemetry logging for out-of-metro lookups (Issues #50 & #195).
 """
 
 import os
+import math
 import json
 import logging
 from typing import Dict, Any, Optional
@@ -284,3 +285,206 @@ def get_unmapped_zip_telemetry() -> Dict[str, Any]:
         "state_distribution": state_dist,
         "recommended_expansion_hubs": expansion_hubs
     }
+
+
+# Calibration hub centroids with spatial coordinates and maximum metro radii
+CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
+    "tulsa": {
+        "name": "Tulsa Metro Area, OK",
+        "region_id": "Tulsa_OK",
+        "lat": 36.1540,
+        "lon": -95.9928,
+        "state": "OK",
+        "padd": "PADD 2",
+        "padd_name": "Midwest",
+        "state_tax": 0.190,
+        "max_radius_miles": 150.0
+    },
+    "cincinnati": {
+        "name": "Cincinnati Tri-State Hub, OH/KY/IN",
+        "region_id": "Cincinnati_OH",
+        "lat": 39.1031,
+        "lon": -84.5120,
+        "state": "OH",
+        "padd": "PADD 2",
+        "padd_name": "Midwest",
+        "state_tax": 0.385,
+        "max_radius_miles": 150.0
+    },
+    "newark": {
+        "name": "Newark Metro Area, NJ / NY Harbor",
+        "region_id": "Newark_DE",
+        "lat": 39.5743,
+        "lon": -75.5908,
+        "state": "NJ",
+        "padd": "PADD 1B",
+        "padd_name": "Central Atlantic",
+        "state_tax": 0.423,
+        "max_radius_miles": 150.0
+    },
+    "oakland": {
+        "name": "Oakland / East Bay, CA",
+        "region_id": "Oakland_CA",
+        "lat": 37.8044,
+        "lon": -122.2712,
+        "state": "CA",
+        "padd": "PADD 5",
+        "padd_name": "West Coast",
+        "state_tax": 0.596,
+        "max_radius_miles": 75.0
+    },
+    "bayarea": {
+        "name": "San Francisco Bay Area, CA",
+        "region_id": "BayArea_CA",
+        "lat": 37.7749,
+        "lon": -122.4194,
+        "state": "CA",
+        "padd": "PADD 5",
+        "padd_name": "West Coast",
+        "state_tax": 0.596,
+        "max_radius_miles": 100.0
+    },
+    "charlotte": {
+        "name": "Charlotte Metro Area, NC",
+        "region_id": "Charlotte_NC",
+        "lat": 35.2271,
+        "lon": -80.8431,
+        "state": "NC",
+        "padd": "PADD 1C",
+        "padd_name": "Lower Atlantic",
+        "state_tax": 0.404,
+        "max_radius_miles": 120.0
+    },
+    "greenville": {
+        "name": "Greenville-Spartanburg, SC (Colonial Pipeline)",
+        "region_id": "Greenville_NC",
+        "lat": 35.6127,
+        "lon": -77.3664,
+        "state": "NC",
+        "padd": "PADD 1C",
+        "padd_name": "Lower Atlantic",
+        "state_tax": 0.404,
+        "max_radius_miles": 120.0
+    },
+    "port_st_lucie": {
+        "name": "Port St. Lucie / Treasure Coast, FL",
+        "region_id": "Port_St_Lucie_FL",
+        "lat": 27.2730,
+        "lon": -80.3582,
+        "state": "FL",
+        "padd": "PADD 1C",
+        "padd_name": "Lower Atlantic",
+        "state_tax": 0.362,
+        "max_radius_miles": 120.0
+    },
+}
+
+
+def haversine_distance_miles(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Computes great-circle distance between two GPS coordinates in statute miles."""
+    r_miles = 3958.8
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+
+    a = math.sin(delta_phi / 2.0) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2.0) ** 2
+    c = 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0 - a))
+    return r_miles * c
+
+
+def resolve_coordinates(lat: float, lon: float) -> Dict[str, Any]:
+    """
+    Resolves arbitrary GPS (lat, lon) coordinates to the nearest Midgley metro refining hub
+    or regional PADD benchmark based on geodesic haversine proximity.
+    """
+    try:
+        f_lat = float(lat)
+        f_lon = float(lon)
+    except (ValueError, TypeError):
+        return {
+            "status": "fallback",
+            "query_type": "coordinates",
+            "resolution_tier": "INVALID_COORDINATES_FALLBACK",
+            "is_metro_cluster_hit": False,
+            "locale_code": "national",
+            "region_id": "National",
+            "name": "National Wholesale / US Average",
+            "padd_region": "PADD 2 (Midwest)",
+            "state": "US",
+            "state_tax_rate_per_gal": 0.184
+        }
+
+    best_hub_key = "national"
+    best_dist = float("inf")
+    best_hub_meta = None
+
+    for hub_key, hub_meta in CALIBRATION_HUBS.items():
+        dist = haversine_distance_miles(f_lat, f_lon, hub_meta["lat"], hub_meta["lon"])
+        if dist < best_dist:
+            best_dist = dist
+            best_hub_key = hub_key
+            best_hub_meta = hub_meta
+
+    if best_hub_meta is None:
+        return {
+            "status": "fallback",
+            "query_type": "coordinates",
+            "resolution_tier": "SPATIAL_FALLBACK",
+            "is_metro_cluster_hit": False,
+            "locale_code": "national",
+            "region_id": "National",
+            "name": "National Wholesale / US Average",
+            "padd_region": "PADD 2",
+            "state": "US",
+            "state_tax_rate_per_gal": 0.184
+        }
+
+    is_metro_hit = best_dist <= best_hub_meta.get("max_radius_miles", 120.0)
+    tier = "METRO_CLUSTER_HIT" if is_metro_hit else "SPATIAL_PROXIMITY_FALLBACK"
+
+    return {
+        "status": "success",
+        "query_type": "coordinates",
+        "lat": round(f_lat, 4),
+        "lon": round(f_lon, 4),
+        "distance_to_hub_miles": round(best_dist, 1),
+        "nearest_hub": best_hub_key,
+        "resolution_tier": tier,
+        "is_metro_cluster_hit": is_metro_hit,
+        "locale_code": best_hub_key,
+        "region_id": best_hub_meta["region_id"],
+        "name": best_hub_meta["name"],
+        "state": best_hub_meta["state"],
+        "padd_region": best_hub_meta["padd"],
+        "padd_name": best_hub_meta["padd_name"],
+        "state_tax_rate_per_gal": best_hub_meta["state_tax"]
+    }
+
+
+def resolve_location(
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None
+) -> Dict[str, Any]:
+    """
+    Unified entry point for location resolution. Prioritizes GPS coordinates if both
+    lat & lon are provided, otherwise falls back to 5-digit US ZIP code resolution.
+    """
+    if lat is not None and lon is not None:
+        return resolve_coordinates(lat, lon)
+    if zip_code:
+        return resolve_zip_code(zip_code)
+    return {
+        "status": "default",
+        "query_type": "default",
+        "resolution_tier": "DEFAULT_NATIONAL",
+        "is_metro_cluster_hit": False,
+        "locale_code": "national",
+        "region_id": "National",
+        "name": "National Wholesale / US Average",
+        "padd_region": "PADD 2",
+        "state": "US",
+        "state_tax_rate_per_gal": 0.184
+    }
+

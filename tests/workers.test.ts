@@ -77,13 +77,20 @@ describe("Cloudflare Intraday Monitor Worker", () => {
       expect(isAnomalyHeadline("Delaware City refinery FCC unit outage reported")).toBe(true);
     });
 
-    it("filters out non-energy tariffs and unrelated outages", () => {
+    it("filters out non-energy tariffs, non-energy sanctions, and localized facility spills", () => {
       expect(isAnomalyHeadline("Global IT airline outage causes major airport delays")).toBe(false);
       expect(isAnomalyHeadline("New steel tariff and aluminum tariff proposed by Congress")).toBe(false);
       expect(isAnomalyHeadline("Section 301 semiconductor tariff under congressional review")).toBe(false);
       expect(isAnomalyHeadline("Canola oil trade tariff sparks agricultural debates")).toBe(false);
       expect(isAnomalyHeadline("Supreme Court Dismisses Appeal on Classification of Hydrogenated Rice Bran Oil Due to Retention of Essential Characteristics. Classified under Tariff Item 12 as Vegetable Non-Essential Oil")).toBe(false);
       expect(isAnomalyHeadline("Government raises edible oil and palm oil tariff values")).toBe(false);
+      // Issues #312, #318: Macro sanctions without petroleum co-occurrence
+      expect(isAnomalyHeadline("Russia sanctions bill gives Trump sweeping new tariff powers - Reuters")).toBe(false);
+      expect(isAnomalyHeadline("Trump signs Russia sanctions bill championed by Lindsey Graham - CBS News")).toBe(false);
+      // Issue #317: Local data center spill
+      expect(isAnomalyHeadline("Data Center’s Spill of 5,000 Gallons of Diesel Forces N.J. River Cleanup")).toBe(false);
+      // Valid petroleum energy sanctions must still be recognized
+      expect(isAnomalyHeadline("New US sanctions target crude oil tankers and petroleum exports")).toBe(true);
     });
   });
 
@@ -514,6 +521,43 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
     } finally {
       globalThis.fetch = originalFetch;
     }
+  });
+
+  it("handles operator review actions for duplicate and distinct decisions", async () => {
+    const signingKey = "test_signing_key_secret";
+    const env: IntradayEnv = {
+      FLAG_SIGNING_KEY: signingKey,
+      REPO_OWNER: "KoshiirRa",
+      REPO_NAME: "midgley"
+    };
+
+    const exp = Math.floor(Date.now() / 1000) + 3600;
+    const eventId = "abc12345";
+    const priorId = "def67890";
+    const headline = "Exxon Joliet refinery suffers secondary flaring";
+
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      "raw",
+      enc.encode(signingKey),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"]
+    );
+    const data = enc.encode(`review_dup:v1|${eventId}|${priorId}|duplicate|${exp}`);
+    const sigBuf = await crypto.subtle.sign("HMAC", key, data);
+    const sig = Array.from(new Uint8Array(sigBuf))
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("")
+      .slice(0, 32);
+
+    const reviewUrl = `https://worker.local/review?id=${eventId}&prior_id=${priorId}&decision=duplicate&exp=${exp}&sig=${sig}&headline=${encodeURIComponent(headline)}`;
+    const req = new Request(reviewUrl, { method: "GET" });
+
+    const res = await intradayWorker.fetch(req, env, {});
+    expect(res.status).toBe(200);
+    const text = await res.text();
+    expect(text).toContain("Confirmed Duplicate");
   });
 
   it("rejects Discord interactions with expired timestamps (>300s)", async () => {

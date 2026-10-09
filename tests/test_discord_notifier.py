@@ -252,5 +252,58 @@ class TestDiscordNotifier(unittest.TestCase):
             self.assertTrue(bool(qs.get("sig", [""])[0]))
 
 
+    def test_format_duplicate_review_payload(self):
+        """Verifies duplicate review payload structure, Amber color, and action links."""
+        from src.discord_notifier import format_duplicate_review_discord_payload
+        new_event = {
+            "headline": "Exxon Joliet refinery unit flare forces unit shutdown",
+            "source": "Feed_Poller",
+            "url": "https://example.com/exxon-new",
+            "target_locales": ["Cincinnati"],
+            "scores": {"overall_price_pressure": 0.45, "supply_disruption": 0.60}
+        }
+        prior_event = {
+            "headline": "Exxon Joliet refinery suffers total power outage",
+            "url": "https://example.com/exxon-old",
+            "age_hours": 14.5
+        }
+        payload = format_duplicate_review_discord_payload(
+            new_event=new_event,
+            prior_event=prior_event,
+            matched_entity="ExxonMobil (Joliet Refinery)",
+            similarity=0.85,
+            environment="prod",
+            include_components=True
+        )
+        self.assertIn("embeds", payload)
+        embed = payload["embeds"][0]
+        self.assertIn("Potential Event Duplicate", embed["title"])
+        self.assertEqual(embed["color"], 15960850)  # Amber
+        self.assertIn("ExxonMobil (Joliet Refinery)", str(embed["fields"]))
+        self.assertIn("85% Overlap", str(embed["fields"]))
+
+        self.assertIn("components", payload)
+        buttons = payload["components"][0]["components"]
+        self.assertEqual(len(buttons), 3)
+        labels = [b["label"] for b in buttons]
+        self.assertIn("🔗 Confirm Duplicate", labels)
+        self.assertIn("⚡ Confirm New Incident", labels)
+        self.assertIn("🚩 Flag False Positive", labels)
+
+    def test_send_duplicate_review_notification_testing_suppression(self):
+        """Verifies duplicate review notification is safely suppressed under TESTING=1."""
+        from src.discord_notifier import send_duplicate_review_discord_notification
+        with patch.dict(os.environ, {"TESTING": "1"}, clear=True):
+            res = send_duplicate_review_discord_notification(
+                new_event={"headline": "New Event"},
+                prior_event={"headline": "Prior Event"},
+                matched_entity="Test Entity",
+                similarity=0.75,
+                webhook_url="https://discord.com/api/webhooks/test"
+            )
+            self.assertTrue(res)
+
+
 if __name__ == "__main__":
     unittest.main()
+

@@ -251,8 +251,12 @@ HISTORICAL_GEOPOLITICAL_EVENTS = [
 ]
 
 
-def save_geopolitical_vintage_record(records: list, filepath: str = GEOPOLITICAL_VINTAGE_FILE) -> None:
+def save_geopolitical_vintage_record(records: list, filepath: Optional[str] = None) -> None:
     """Appends a point-in-time geopolitical event observation vintage record with deduplication."""
+    if os.environ.get("TESTING") == "1" and filepath is None:
+        return
+    if filepath is None:
+        filepath = GEOPOLITICAL_VINTAGE_FILE
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -282,8 +286,10 @@ def save_geopolitical_vintage_record(records: list, filepath: str = GEOPOLITICAL
         logger.debug(f"Failed to persist geopolitical vintage record: {e}")
 
 
-def get_geopolitical_vintages_as_of(as_of_date: str, filepath: str = GEOPOLITICAL_VINTAGE_FILE) -> Optional[List[dict]]:
+def get_geopolitical_vintages_as_of(as_of_date: str, filepath: Optional[str] = None) -> Optional[List[dict]]:
     """Retrieves geopolitical events recorded on or before as_of_date."""
+    if filepath is None:
+        filepath = GEOPOLITICAL_VINTAGE_FILE
     if not os.path.exists(filepath):
         return None
     try:

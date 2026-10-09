@@ -18,6 +18,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_KEY_MOVERS_VINTAGE_FILE = os.path.join("data", "key_movers_vintages.json")
+
 KEY_MOVERS = {
     "Prince_Abdulaziz_bin_Salman": {
         "title": "Saudi Arabian Energy Minister",
@@ -241,10 +243,14 @@ class KeyMoversFeedConnector:
         return df
 
     @staticmethod
-    def save_key_movers_vintage_record(record: dict, filepath: str = os.path.join("data", "key_movers_vintages.json")) -> None:
+    def save_key_movers_vintage_record(record: dict, filepath: str = None) -> None:
         """
         Saves or appends a key market movers event snapshot to persistent vintage storage (Issue #270).
         """
+        if os.environ.get("TESTING") == "1" and filepath is None:
+            return
+        if filepath is None:
+            filepath = DEFAULT_KEY_MOVERS_VINTAGE_FILE
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -270,10 +276,12 @@ class KeyMoversFeedConnector:
             logger.warning(f"Could not persist key movers vintage record: {e}")
 
     @staticmethod
-    def get_key_movers_vintages_as_of(target_as_of: str = None, filepath: str = os.path.join("data", "key_movers_vintages.json")) -> list:
+    def get_key_movers_vintages_as_of(target_as_of: str = None, filepath: str = None) -> list:
         """
         Retrieves key market mover observations published on or before target_as_of (Issue #270).
         """
+        if filepath is None:
+            filepath = DEFAULT_KEY_MOVERS_VINTAGE_FILE
         try:
             if not os.path.exists(filepath):
                 return []

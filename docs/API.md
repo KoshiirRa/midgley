@@ -293,6 +293,43 @@ curl -s "http://localhost:8000/metrics"
 
 ---
 
+### 14. Freeform Location Geocoding & Locale Fuel Tax Ingestion (Issues #622, #623)
+
+Provides arbitrary nationwide location resolution (via 5-digit US ZIP code or GPS coordinates) with automatic mapping to calibrated econometric PADD hubs, regional rack margins, and granular point-in-time motor fuel tax pass-through schedules.
+
+#### A. Freeform Location Resolution Endpoints
+* `GET /api/v1/forecast/predict?zip_code={zip}`: Resolves 5-digit ZIP code to calibrated metro hub or state PADD fallback, returning 5-day forecast and tax regulatory burden.
+* `GET /api/v1/forecast/predict?lat={lat}&lon={lon}`: Spatial resolution for arbitrary latitude/longitude coordinates.
+* `GET /api/v1/prices/live?zip_code={zip}`: Scrapes real-time station-level retail prices for the target ZIP cluster.
+* `GET /api/v1/location/resolve?zip_code={zip}&lat={lat}&lon={lon}`: Standalone resolution endpoint returning resolution tier (`METRO_CLUSTER_HIT`, `STATE_PADD_FALLBACK`, `SPATIAL_PROXIMITY_FALLBACK`), target state, PADD district, and applicable tax burden.
+
+#### B. Motor Fuel Tax Lookup & 50-State Schedules (Issue #623)
+* `GET /api/v1/tax/lookup?zip={zip}&lat={lat}&lon={lon}`: Returns itemized federal, state statutory, environmental UST, and municipal/county fuel tax levies ($/gal).
+* `GET /api/v1/tax/schedule`: Returns point-in-time tax schedules across all 50 US States + DC from `data/state_open_data.json` and IFTA quarterly matrices.
+
+**Example Location Resolution Payload (`GET /api/v1/location/resolve?zip_code=60601`):**
+```json
+{
+  "status": "success",
+  "zip_code": "60601",
+  "resolution_tier": "STATE_PADD_FALLBACK",
+  "state": "IL",
+  "padd_region": "PADD 2",
+  "padd_name": "Midwest",
+  "calibrated_model_used": "Cincinnati_OH (PADD 2)",
+  "tax_breakdown": {
+    "federal_excise_tax": 0.184,
+    "state_excise_tax": 0.470,
+    "environmental_ust_fee": 0.011,
+    "county_municipal_est": 0.140,
+    "sales_tax_est": 0.150,
+    "total_tax_burden_per_gal": 0.955
+  }
+}
+```
+
+---
+
 ## ⚡ Strategy 4 Incoming Webhook Gateway (`POST /api/v1/events/webhook`)
 
 * **Endpoint:** `POST /api/v1/events/webhook`

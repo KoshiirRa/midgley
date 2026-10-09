@@ -164,4 +164,53 @@ def isolate_test_environment(tmp_path, monkeypatch):
     except (ImportError, AttributeError):
         pass
 
+    try:
+        import src.knowledge_graph as kg
+        test_kg_db = str(tmp_path / "knowledge_graph.db")
+        monkeypatch.setattr(kg, "DEFAULT_KG_DB_PATH", test_kg_db)
+        if hasattr(kg, "kg_engine") and hasattr(kg.kg_engine, "db_path"):
+            monkeypatch.setattr(kg.kg_engine, "db_path", test_kg_db)
+            kg.kg_engine._init_db()
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.tokentab_accounting as tta
+        if hasattr(tta, "token_tab_manager"):
+            monkeypatch.setattr(tta.token_tab_manager, "ledger_path", str(tmp_path / "token_usage_ledger.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.telemetry as telem
+        monkeypatch.setattr(telem, "TELEMETRY_LEDGER_PATH", str(tmp_path / "telemetry_ledger.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.fallback_telemetry as ft
+        monkeypatch.setattr(ft, "TELEMETRY_FILE", str(tmp_path / "fallback_telemetry.json"))
+        if hasattr(ft, "fallback_logger") and hasattr(ft.fallback_logger, "filepath"):
+            monkeypatch.setattr(ft.fallback_logger, "filepath", str(tmp_path / "fallback_telemetry.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.executive_social_feed as esf
+        monkeypatch.setattr(esf, "DEFAULT_EXECUTIVE_VINTAGE_FILE", str(tmp_path / "executive_social_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.geopolitical_feeds as gpf
+        monkeypatch.setattr(gpf, "GEOPOLITICAL_VINTAGE_FILE", str(tmp_path / "geopolitical_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.key_movers_feed as kmf
+        monkeypatch.setattr(kmf, "DEFAULT_KEY_MOVERS_VINTAGE_FILE", str(tmp_path / "key_movers_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
     yield tmp_path

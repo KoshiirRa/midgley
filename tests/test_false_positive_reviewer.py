@@ -34,6 +34,22 @@ def test_analyze_headline_triggers_agricultural_oil():
     assert "agricultural or edible oils" in analysis["diagnosis"]
 
 
+def test_analyze_headline_triggers_sanctions_macro():
+    headline = "Russia sanctions bill gives Trump sweeping new tariff powers - Reuters"
+    analysis = analyze_headline_triggers(headline)
+
+    assert analysis["has_energy_context"] is False
+    assert any("sanction" in t for t in analysis["matched_triggers"])
+    assert "non-energy policy false positive" in analysis["diagnosis"]
+
+
+def test_analyze_headline_triggers_data_center_spill():
+    headline = "Data Center’s Spill of 5,000 Gallons of Diesel Forces N.J. River Cleanup"
+    analysis = analyze_headline_triggers(headline)
+
+    assert "minor localized facility/generator spill" in analysis["diagnosis"]
+
+
 def test_parse_headline_from_issue_body():
     body_trigger_block = """## False Positive Anomaly Report (#258)
 

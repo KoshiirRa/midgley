@@ -87,7 +87,9 @@ const EXCLUDE_KEYWORDS = [
   "wikipedia", "software outage", "airline outage", "it outage", "it system outage", "it systems outage", "cloud outage", "gaming outage", "network outage",
   "canola", "cooking oil", "palm oil", "olive oil", "soybean oil",
   "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
-  "peanut oil", "sesame oil", "edible oil", "hydrogenated oil"
+  "peanut oil", "sesame oil", "edible oil", "hydrogenated oil",
+  // Non-commercial / municipal local facility spills (Issue #317)
+  "data center", "data centre", "backup generator", "generator spill", "building spill"
 ];
 
 const EXCLUDE_REGEX = new RegExp(
@@ -112,8 +114,9 @@ const NON_ENERGY_TARIFF_REGEX = new RegExp(
 const TRIGGER_KEYWORDS = [
 
   "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
-  "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
-  "explosion", "tornado", "blackout", "blockade", "sanction",
+  "opec emergency", "pipeline halt", "pipeline outage",
+  "explosion", "tornado", "blackout", "blockade",
+  "energy sanction", "oil sanction", "fuel sanction", "crude sanction", "petroleum sanction",
   "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
   "strait of hormuz", "red sea attack", "spill",
   // Market Technicals & Volatility
@@ -317,8 +320,17 @@ export function isAnomalyHeadline(title: string): boolean {
   }
   // Check if headline mentions tariff/tariffs alongside energy context
   if (/\btariffs?\b/i.test(title)) {
-    const hasEnergyContext = /(?:oil|crude|gasoline|fuel|petroleum|refin|diesel|energy|opec)/i.test(title);
-    return hasEnergyContext;
+    const hasEnergyContext = /(?:oil|crude|gasoline|fuel|petroleum|refin|diesel|energy|opec|tanker|pipeline|barrel)/i.test(title);
+    if (hasEnergyContext) {
+      return true;
+    }
+  }
+  // Check if headline mentions sanction/sanctions alongside energy context (Issues #258, #312, #318)
+  if (/\bsanctions?\b/i.test(title)) {
+    const hasEnergyContext = /(?:oil|crude|gasoline|fuel|petroleum|refin|diesel|energy|opec|tanker|pipeline|barrel)/i.test(title);
+    if (hasEnergyContext) {
+      return true;
+    }
   }
   return false;
 }
@@ -332,7 +344,7 @@ export async function isHeadlineDispatchedInCache(headline: string, env?: Env): 
   if (env && env.DB) {
     try {
       const stmt = env.DB.prepare(
-        "SELECT 1 FROM seen_rss_headlines WHERE clean_key = ? AND datetime(created_at, '+24 hours') > datetime('now') LIMIT 1"
+        "SELECT 1 FROM seen_rss_headlines WHERE clean_key = ? AND datetime(created_at, '+72 hours') > datetime('now') LIMIT 1"
       );
       const row = await stmt.bind(cleanKey).first();
       if (row) {
@@ -395,14 +407,14 @@ export async function markHeadlineDispatchedInCache(headline: string, env?: Env)
     }
   }
 
-  // 2. Also write to Edge Cache
+  // 2. Also write to Edge Cache (72h TTL)
   try {
     if (typeof caches === "undefined" || !caches.default) return;
     const dummyUrl = `https://midgley-cache.internal/dispatched/${cleanKey}`;
     const req = new Request(dummyUrl);
     const resp = new Response("dispatched", {
       headers: {
-        "Cache-Control": "public, max-age=86400"
+        "Cache-Control": "public, max-age=259200"
       }
     });
     await caches.default.put(req, resp);
@@ -1598,6 +1610,148 @@ async function handleFlagWebRequest(request: Request, env: Env, ctx: any): Promi
   return new Response("Method Not Allowed", { status: 405 });
 }
 
+function renderReviewActionHtml(title: string, message: string, headline: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(title)} • Midgley Forecasting</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #12141a;
+      color: #f0f3f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 16px;
+    }
+    .card {
+      background: #1c202a;
+      border: 1px solid #2e3446;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    h2 { margin: 0 0 16px 0; font-size: 1.3rem; color: #f39c12; }
+    p { color: #8b94a8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px; }
+    .btn {
+      display: inline-block;
+      background: #3498db;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>${escapeHtml(title)}</h2>
+    <p>${message}</p>
+    <a href="https://koshiirRa.github.io/midgley/" target="_blank" class="btn">View Forecasting Dashboard ➔</a>
+  </div>
+</body>
+</html>`;
+}
+
+export async function handleReviewWebRequest(request: Request, env: Env, ctx: any): Promise<Response> {
+  const url = new URL(request.url);
+  const id = url.searchParams.get("id") || "";
+  const priorId = url.searchParams.get("prior_id") || "";
+  const decision = (url.searchParams.get("decision") || "duplicate").toLowerCase();
+  const expStr = url.searchParams.get("exp") || "0";
+  const sig = url.searchParams.get("sig") || "";
+  const headline = url.searchParams.get("headline") || "Intraday Anomaly Event";
+  const exp = parseInt(expStr, 10) || 0;
+
+  const signingSecret = getWorkerSigningSecret(env);
+  if (!signingSecret || !sig || !exp) {
+    return new Response(
+      JSON.stringify({ error: "Forbidden: Missing signature parameters" }),
+      { status: 403, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+  if (exp < now) {
+    return new Response(
+      JSON.stringify({ error: "Forbidden: Link expired" }),
+      { status: 403, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // Verify HMAC signature
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(signingSecret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+
+  const prefix = decision === "distinct" ? "review_dist:v1" : "review_dup:v1";
+  const data = enc.encode(`${prefix}|${id}|${priorId}|${decision}|${exp}`);
+  const expectedSigBuf = await crypto.subtle.sign("HMAC", key, data);
+  const expectedSig = Array.from(new Uint8Array(expectedSigBuf))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 32);
+
+  const isValid = timingSafeEqual(sig, expectedSig) || (await verifyEventToken(id, exp, sig, signingSecret, headline));
+  if (!isValid) {
+    return new Response(
+      JSON.stringify({ error: "Forbidden: Invalid review signature" }),
+      { status: 403, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  const replayKey = `review:${id}:${priorId}:${decision}`;
+  if (await isTokenUsed(replayKey, env)) {
+    return new Response(
+      renderReviewActionHtml("Already Applied", "This operator decision has already been executed previously.", headline),
+      { headers: { "Content-Type": "text/html; charset=utf-8" } }
+    );
+  }
+  await markTokenUsed(replayKey, env);
+
+  if (decision === "duplicate") {
+    if (headline) {
+      await markHeadlineDispatchedInCache(headline, env);
+    }
+    return new Response(
+      renderReviewActionHtml(
+        "✅ Confirmed Duplicate / Follow-Up",
+        `Headline <strong>"${escapeHtml(headline)}"</strong> has been clustered with active prior incident <code>${escapeHtml(priorId)}</code>.<br><br>Secondary price shock suppressed. No duplicate revision logged.`,
+        headline
+      ),
+      { headers: { "Content-Type": "text/html; charset=utf-8" } }
+    );
+  } else {
+    // Distinct incident: trigger forecast revision dispatch
+    const dispatchRes = await dispatchGitHubEvent(env, headline, url.searchParams.get("url") || "");
+    const dispatchMsg = dispatchRes.dispatched
+      ? "Forecast revision pipeline dispatched to GitHub Actions successfully."
+      : `Dispatched recorded (Note: ${dispatchRes.error || "Queued"}).`;
+
+    return new Response(
+      renderReviewActionHtml(
+        "⚡ Confirmed New / Distinct Incident",
+        `Headline <strong>"${escapeHtml(headline)}"</strong> released as a distinct operational event.<br><br>${dispatchMsg}`,
+        headline
+      ),
+      { headers: { "Content-Type": "text/html; charset=utf-8" } }
+    );
+  }
+}
+
 export default {
   async scheduled(controller: any, env: Env, ctx: any): Promise<void> {
     try {
@@ -1624,6 +1778,11 @@ export default {
       // Flag Web Route (One-Click Discord Webhook Review Flow)
       if (url.pathname === "/flag") {
         return await handleFlagWebRequest(request, env, ctx);
+      }
+
+      // Duplicate / Distinct Review Route (Human-in-the-Loop Disambiguation Flow)
+      if (url.pathname === "/review") {
+        return await handleReviewWebRequest(request, env, ctx);
       }
 
       // Discord Interactions Endpoint Route

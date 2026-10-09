@@ -302,3 +302,243 @@ def send_intraday_discord_notification(
     except Exception as e:
         logger.warning(f"Failed to dispatch intraday Discord webhook notification: {e}")
         return False
+
+
+def format_duplicate_review_discord_payload(
+    new_event: Dict[str, Any],
+    prior_event: Dict[str, Any],
+    matched_entity: str,
+    similarity: float,
+    environment: Optional[str] = None,
+    include_components: Optional[bool] = None
+) -> Dict[str, Any]:
+    """
+    Constructs an interactive Discord Embed payload alerting operators to a potential
+    event duplicate or follow-up report on the same physical facility/entity.
+    """
+    import hmac
+    import hashlib
+    import urllib.parse
+    import time
+
+    env_label = get_environment_label(environment)
+    is_prod = (env_label == "prod")
+    env_badge = "[PRODUCTION]" if is_prod else "[DEVELOPMENT]"
+
+    new_headline = new_event.get("headline", "New Breaking Headline")
+    prior_headline = prior_event.get("headline", "Prior Active Event")
+    new_url = new_event.get("url", "").strip()
+    prior_url = prior_event.get("url", "").strip()
+
+    target_locales = new_event.get("target_locales", ["National"])
+    locales_str = ", ".join(target_locales) if isinstance(target_locales, list) else str(target_locales)
+
+    scores = new_event.get("scores", {})
+    price_pressure = float(scores.get("overall_price_pressure", 0.0))
+    supply_disruption = float(scores.get("supply_disruption", 0.0))
+
+    new_hash = new_event.get("hash") or hashlib.sha256(new_headline.encode("utf-8", errors="ignore")).hexdigest()[:16]
+    prior_hash = prior_event.get("hash") or hashlib.sha256(prior_headline.encode("utf-8", errors="ignore")).hexdigest()[:16]
+
+    age_hours = float(prior_event.get("age_hours", 0.0))
+    age_str = f"Logged {age_hours:.1f}h ago" if age_hours > 0 else "Recently active"
+
+    signing_secret = (
+        os.getenv("FLAG_SIGNING_KEY")
+        or os.getenv("ADMIN_TOKEN")
+        or os.getenv("CLOUDFLARE_AUTH_TOKEN")
+        or ""
+    )
+    exp_time = int(time.time()) + (72 * 3600)
+    sig_dup = ""
+    sig_dist = ""
+    if signing_secret:
+        msg_dup = f"review_dup:v1|{new_hash}|{prior_hash}|duplicate|{exp_time}".encode("utf-8")
+        sig_dup = hmac.new(signing_secret.encode("utf-8"), msg_dup, hashlib.sha256).hexdigest()[:32]
+        msg_dist = f"review_dist:v1|{new_hash}|{prior_hash}|distinct|{exp_time}".encode("utf-8")
+        sig_dist = hmac.new(signing_secret.encode("utf-8"), msg_dist, hashlib.sha256).hexdigest()[:32]
+
+    base_worker = "https://midgley-intraday-monitor.m-cubed-3.workers.dev"
+    dup_params = urllib.parse.urlencode({
+        "id": new_hash,
+        "prior_id": prior_hash,
+        "decision": "duplicate",
+        "exp": str(exp_time),
+        "sig": sig_dup,
+        "headline": new_headline[:120]
+    })
+    dist_params = urllib.parse.urlencode({
+        "id": new_hash,
+        "prior_id": prior_hash,
+        "decision": "distinct",
+        "exp": str(exp_time),
+        "sig": sig_dist,
+        "headline": new_headline[:120]
+    })
+    flag_params = urllib.parse.urlencode({
+        "id": new_hash,
+        "exp": str(exp_time),
+        "sig": sig_dup,
+        "headline": new_headline[:120],
+        "source": new_event.get("source", "Intraday_Monitor"),
+        "p": f"{price_pressure:+.2f}",
+        "s": f"{supply_disruption:.2f}",
+        "g": "0.00",
+        "url": new_url[:200]
+    })
+
+    dup_url = f"{base_worker}/review?{dup_params}"
+    dist_url = f"{base_worker}/review?{dist_params}"
+    flag_url = f"{base_worker}/flag?{flag_params}"
+
+    fields = [
+        {
+            "name": "📌 Matched Entity",
+            "value": f"`{matched_entity}`",
+            "inline": True
+        },
+        {
+            "name": "🔍 Hindsight Similarity",
+            "value": f"`{similarity * 100:.0f}% Overlap`",
+            "inline": True
+        },
+        {
+            "name": "📍 Target Metro Hubs",
+            "value": f"`{locales_str}`",
+            "inline": True
+        },
+        {
+            "name": "📊 Tentative Impact (ΔP)",
+            "value": f"`{price_pressure:+.2f}/gal`",
+            "inline": True
+        },
+        {
+            "name": "🛢️ Supply Disruption (S)",
+            "value": f"`{supply_disruption:.2f}`",
+            "inline": True
+        }
+    ]
+
+    links = []
+    if new_url:
+        links.append(f"[Incoming Article]({new_url})")
+    if prior_url:
+        links.append(f"[Prior Incident Article]({prior_url})")
+    if links:
+        fields.append({
+            "name": "🔗 Intelligence Sources",
+            "value": " • ".join(links),
+            "inline": False
+        })
+
+    fields.append({
+        "name": "⚡ Operator Disambiguation Actions",
+        "value": f"[🔗 Confirm Duplicate (Suppress)]({dup_url}) • [⚡ Confirm New Incident (Apply)]({dist_url}) • [🚩 Flag False Positive]({flag_url})",
+        "inline": False
+    })
+
+    desc = (
+        f"**Incoming Catalyst (Held in Staging):**\n> *\"{new_headline}\"*\n\n"
+        f"**Prior Active Incident on File ({age_str}):**\n> *\"{prior_headline}\"*"
+    )
+
+    embed = {
+        "title": f"⚠️ {env_badge} Potential Event Duplicate / Follow-Up Review Needed",
+        "description": desc,
+        "url": "https://koshiirRa.github.io/midgley/",
+        "color": 15960850,  # Amber #F39C12
+        "fields": fields,
+        "footer": {
+            "text": f"Midgley Event Deduplication Engine • Candidate ID: {new_hash}"
+        },
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+    payload: Dict[str, Any] = {
+        "username": "Midgley Intraday Monitor",
+        "embeds": [embed]
+    }
+
+    if include_components is None:
+        include_components = os.environ.get("DISCORD_INCLUDE_COMPONENTS", "0").lower() in ("1", "true")
+
+    if include_components:
+        payload["components"] = [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 2,
+                        "style": 5,
+                        "label": "🔗 Confirm Duplicate",
+                        "url": dup_url
+                    },
+                    {
+                        "type": 2,
+                        "style": 5,
+                        "label": "⚡ Confirm New Incident",
+                        "url": dist_url
+                    },
+                    {
+                        "type": 2,
+                        "style": 5,
+                        "label": "🚩 Flag False Positive",
+                        "url": flag_url
+                    }
+                ]
+            }
+        ]
+
+    return payload
+
+
+def send_duplicate_review_discord_notification(
+    new_event: Dict[str, Any],
+    prior_event: Dict[str, Any],
+    matched_entity: str,
+    similarity: float,
+    webhook_url: Optional[str] = None,
+    environment: Optional[str] = None,
+    include_components: Optional[bool] = None
+) -> bool:
+    """Dispatches a duplicate review alert to Discord for operator disambiguation."""
+    if not webhook_url:
+        webhook_url = os.environ.get("DISCORD_INTRADAY_WEBHOOK_URL")
+
+    if not webhook_url:
+        logger.info("No Discord webhook URL configured; skipping duplicate review notification.")
+        return False
+
+    if os.environ.get("TESTING") == "1" and not os.environ.get("TEST_WEBHOOK_DISPATCH"):
+        logger.info("TESTING=1: Suppressed Discord duplicate review notification HTTP POST.")
+        return True
+
+    payload = format_duplicate_review_discord_payload(
+        new_event=new_event,
+        prior_event=prior_event,
+        matched_entity=matched_entity,
+        similarity=similarity,
+        environment=environment,
+        include_components=include_components
+    )
+
+    try:
+        data_bytes = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            webhook_url,
+            data=data_bytes,
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "Midgley-Intraday-Notifier/1.0"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            status_ok = resp.status in (200, 204)
+            if status_ok:
+                logger.info(f"Successfully dispatched duplicate review notification to Discord (HTTP {resp.status})")
+            return status_ok
+    except Exception as e:
+        logger.warning(f"Failed to dispatch duplicate review Discord notification: {e}")
+        return False
+

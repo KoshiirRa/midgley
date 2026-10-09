@@ -37,7 +37,12 @@ from src.prediction_logger import (
     get_cloud_sync_status
 )
 from src.regional_metadata import list_all_regional_metadata
-from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
+from src.zip_geocoding import (
+    resolve_zip_code,
+    get_unmapped_zip_telemetry,
+    resolve_coordinates,
+    resolve_location,
+)
 from src.tokentab_accounting import token_tab_manager
 from src.key_manager import global_key_manager, setup_logging_redaction
 from src.version import get_version, get_model_version
@@ -573,13 +578,21 @@ def _normalize_locale(locale_str: str) -> str:
     return LOCALE_MAP.get(cleaned, "National")
 
 
-def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = None) -> dict:
-    zip_res = None
-    if zip_code:
-        zip_res = resolve_zip_code(zip_code)
-        locale = zip_res.get("locale_code", locale or "national")
+def _get_live_prices_impl(
+    locale: str = "national",
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> dict:
+    loc_res = None
+    if lat is not None and lon is not None:
+        loc_res = resolve_coordinates(float(lat), float(lon))
+        locale = loc_res.get("locale_code", locale or "national")
+    elif zip_code:
+        loc_res = resolve_zip_code(zip_code)
+        locale = loc_res.get("locale_code", locale or "national")
 
-    if zip_code and not zip_res.get("is_metro_cluster_hit", False):
+    if zip_code and not loc_res.get("is_metro_cluster_hit", False):
         gb_data = fetch_gasbuddy_prices_by_zip(zip_code)
         if not gb_data:
             gb_data = {
@@ -589,22 +602,25 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
             }
         region_code = _normalize_locale(locale)
         meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
-        return {
+        res_data = {
             "status": "success",
             "timestamp": datetime.now().isoformat(),
             "zip_code": zip_code,
-            "zip_code_resolution": zip_res,
+            "zip_code_resolution": loc_res,
             "locale": {
                 "code": locale,
                 "region_id": region_code,
                 "name": meta["name"],
-                "padd_region": zip_res.get("padd_region", meta["padd"])
+                "padd_region": loc_res.get("padd_region", meta["padd"])
             },
             "price_per_gal": gb_data.get("average_price"),
             "source": gb_data.get("source"),
             "data": gb_data,
-            "carb_tax_regulatory_burden_per_gal": zip_res.get("state_tax_rate_per_gal", meta["carb_tax"])
+            "carb_tax_regulatory_burden_per_gal": loc_res.get("state_tax_rate_per_gal", meta["carb_tax"])
         }
+        if loc_res:
+            res_data["location_resolution"] = loc_res
+        return res_data
 
     region_code = _normalize_locale(locale)
     live_res = fetch_live_metro_retail_price(region_code)
@@ -634,16 +650,27 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
     }
     if zip_code:
         res["zip_code"] = zip_code
-    if zip_res:
-        res["zip_code_resolution"] = zip_res
+    if loc_res:
+        res["location_resolution"] = loc_res
+        if "zip_code" in loc_res:
+            res["zip_code_resolution"] = loc_res
     return res
 
 
-def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Optional[str] = None) -> dict:
-    zip_res = None
-    if zip_code:
-        zip_res = resolve_zip_code(zip_code)
-        locale = zip_res.get("locale_code", locale or "national")
+def _get_forecast_impl(
+    locale: str = "national",
+    days: int = 5,
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> dict:
+    loc_res = None
+    if lat is not None and lon is not None:
+        loc_res = resolve_coordinates(float(lat), float(lon))
+        locale = loc_res.get("locale_code", locale or "national")
+    elif zip_code:
+        loc_res = resolve_zip_code(zip_code)
+        locale = loc_res.get("locale_code", locale or "national")
 
     region_code = _normalize_locale(locale)
     live_res = fetch_live_metro_retail_price(region_code)
@@ -784,7 +811,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
         predicted_price=predicted_price
     )
 
-    return {
+    resp_data = {
         "status": "success",
         "timestamp": datetime.now().isoformat(),
         "locale": {
@@ -820,6 +847,11 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             }
         }
     }
+    if loc_res:
+        resp_data["location_resolution"] = loc_res
+        if "zip_code" in loc_res:
+            resp_data["zip_code_resolution"] = loc_res
+    return resp_data
 
 
 @app.get("/api/v1/forecast/scoreboard", dependencies=[Depends(get_api_key_user)], summary="Get Realized-vs-Predicted Rolling Scoreboard Metrics")
@@ -1173,38 +1205,62 @@ def revoke_api_key_endpoint(prefix: str):
 @app.get("/api/v1/prices/live", dependencies=[Depends(get_api_key_user)], summary="Get Live Fuel Prices")
 def get_live_prices(
     locale: Optional[str] = Query("national", description="Locale code (national, tulsa, newark, cincinnati, oakland, bayarea)"),
-    zip_code: Optional[str] = Query(None, description="Optional 5-digit US zip code for GasBuddy station lookup")
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US zip code for GasBuddy station lookup"),
+    lat: Optional[float] = Query(None, description="Optional latitude coordinate for GPS resolution"),
+    lon: Optional[float] = Query(None, description="Optional longitude coordinate for GPS resolution")
 ):
     """
     Returns real-time unleaded gasoline pump prices from GasBuddy GraphQL, AAA Web Scraper,
     or benchmark fallbacks with 15-minute response caching.
     """
-    return _get_live_prices_impl(locale=locale or "national", zip_code=zip_code)
+    return _get_live_prices_impl(locale=locale or "national", zip_code=zip_code, lat=lat, lon=lon)
 
 
 @app.get("/api/v1/forecast/predict", dependencies=[Depends(get_api_key_user)], summary="Get 5-Day Out-of-Time Forecast")
 def get_forecast(
     locale: Optional[str] = Query("national", description="Locale code"),
     days: int = Query(5, ge=1, le=30, description="Forecast horizon in days"),
-    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code"),
+    lat: Optional[float] = Query(None, description="Optional latitude coordinate for GPS resolution"),
+    lon: Optional[float] = Query(None, description="Optional longitude coordinate for GPS resolution")
 ):
     """
     Triggers model inference to compute 5-day out-of-time forecast, direction, expected dollar delta,
     and historical accuracy metrics.
     """
-    return _get_forecast_impl(locale=locale or "national", days=days, zip_code=zip_code)
+    return _get_forecast_impl(locale=locale or "national", days=days, zip_code=zip_code, lat=lat, lon=lon)
 
 
+@app.get("/api/v1/locations/resolve", summary="Resolve GPS Coordinates or ZIP Code to Metro Refining Hub")
+def resolve_location_endpoint(
+    lat: Optional[float] = Query(None, description="Latitude coordinate (e.g. 36.1540)"),
+    lon: Optional[float] = Query(None, description="Longitude coordinate (e.g. -95.9928)"),
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
+):
+    """
+    Resolves arbitrary GPS coordinates or a 5-digit US ZIP code to its nearest
+    Midgley metropolitan refining hub, PADD sub-region, and statutory motor fuel tax structure.
+    """
+    return resolve_location(zip_code=zip_code, lat=lat, lon=lon)
 
-def _get_combined_impl(locale: str = "national", zip_code: Optional[str] = None) -> dict:
-    zip_res = None
-    if zip_code:
-        zip_res = resolve_zip_code(zip_code)
-        locale = zip_res.get("locale_code", locale or "national")
+
+def _get_combined_impl(
+    locale: str = "national",
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None
+) -> dict:
+    loc_res = None
+    if lat is not None and lon is not None:
+        loc_res = resolve_coordinates(float(lat), float(lon))
+        locale = loc_res.get("locale_code", locale or "national")
+    elif zip_code:
+        loc_res = resolve_zip_code(zip_code)
+        locale = loc_res.get("locale_code", locale or "national")
 
     loc_clean = locale or "national"
-    live_data = _get_live_prices_impl(locale=loc_clean, zip_code=zip_code)
-    forecast_data = _get_forecast_impl(locale=loc_clean, days=5, zip_code=zip_code)
+    live_data = _get_live_prices_impl(locale=loc_clean, zip_code=zip_code, lat=lat, lon=lon)
+    forecast_data = _get_forecast_impl(locale=loc_clean, days=5, zip_code=zip_code, lat=lat, lon=lon)
     region_code = _normalize_locale(loc_clean)
 
     base_p = forecast_data["forecast"].get("current_base_price", 3.184)
@@ -1235,20 +1291,24 @@ def _get_combined_impl(locale: str = "national", zip_code: Optional[str] = None)
             "components": attr["components"]
         }
     }
-    if zip_res:
-        res["zip_code_resolution"] = zip_res
+    if loc_res:
+        res["location_resolution"] = loc_res
+        if "zip_code" in loc_res:
+            res["zip_code_resolution"] = loc_res
     return res
 
 
 @app.get("/api/v1/combined", dependencies=[Depends(get_api_key_user)], summary="Unified Live Price & Forecast Context")
 def get_combined(
     locale: Optional[str] = Query("national", description="Locale code"),
-    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code"),
+    lat: Optional[float] = Query(None, description="Optional latitude coordinate for GPS resolution"),
+    lon: Optional[float] = Query(None, description="Optional longitude coordinate for GPS resolution")
 ):
     """
     Returns both current live pump price and 5-day out-of-time forecast along with top market drivers.
     """
-    return _get_combined_impl(locale=locale or "national", zip_code=zip_code)
+    return _get_combined_impl(locale=locale or "national", zip_code=zip_code, lat=lat, lon=lon)
 
 
 @app.get("/api/v1/telemetry/unmapped-zips", summary="Get Unmapped Out-of-Metro ZIP Code Search Telemetry")

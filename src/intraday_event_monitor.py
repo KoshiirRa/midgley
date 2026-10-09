@@ -34,10 +34,15 @@ from src.event_analyzer import extract_event_features_llm, extract_event_feature
 from src.finlight_feed import is_trading_hours, fetch_finlight_on_demand, UNIFIED_ENERGY_QUERY
 from src.lookup_cache import clear_lookup_cache
 from src.prediction_logger import log_predictions, resolve_model_tag
+from src.hindsight_dedupe import HindsightEventDeduplicator
 try:
-    from src.discord_notifier import send_intraday_discord_notification
+    from src.discord_notifier import (
+        send_intraday_discord_notification,
+        send_duplicate_review_discord_notification
+    )
 except ImportError:
     send_intraday_discord_notification = None
+    send_duplicate_review_discord_notification = None
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +59,9 @@ EXCLUDE_KEYWORDS = [
     "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage",
     "canola", "cooking oil", "palm oil", "olive oil", "soybean oil",
     "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
-    "peanut oil", "sesame oil", "edible oil", "hydrogenated oil"
+    "peanut oil", "sesame oil", "edible oil", "hydrogenated oil",
+    # Non-commercial / municipal local facility spills (Issue #317)
+    "data center", "data centre", "backup generator", "generator spill", "building spill"
 ]
 
 # Non-Energy Policy Keywords to Filter False Positive Trade/Policy Headlines
@@ -70,8 +77,9 @@ NON_ENERGY_TARIFF_EXCLUDE = [
 # High-Risk Keyword Lexicon for Stage 1 Cascading Gate
 TRIGGER_KEYWORDS = [
     "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
-    "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
-    "explosion", "tornado", "blackout", "blockade", "sanction",
+    "opec emergency", "pipeline halt", "pipeline outage",
+    "explosion", "tornado", "blackout", "blockade",
+    "energy sanction", "oil sanction", "fuel sanction", "crude sanction", "petroleum sanction",
     "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
     "strait of hormuz", "red sea attack", "spill",
     # Market Technicals & Volatility
@@ -110,9 +118,15 @@ def normalize_headline(headline: str) -> str:
     return cleaned
 
 
+KNOWN_PAYWALLED_DOMAINS = [
+    "energyintel.com", "wsj.com", "bloomberg.com", "ft.com", "reuters.com", "barrons.com"
+]
+
+
 class IntradayEventMonitor:
     def __init__(self, shock_threshold: float = 0.40):
         self.shock_threshold = shock_threshold
+        self.deduplicator = HindsightEventDeduplicator()
 
     def fetch_rss_headlines(self, max_age_hours: float = 72.0) -> List[Dict[str, str]]:
         """Fetches breaking titles from free RSS feeds without using API quotas, discarding stale entries older than max_age_hours."""
@@ -230,11 +244,17 @@ class IntradayEventMonitor:
 
         has_keyword = any(kw in text_lower for kw in TRIGGER_KEYWORDS)
 
-        # Allow tariff/tariffs if accompanied by energy/fuel/oil terms
-        if not has_keyword and ("tariff" in text_lower or "tariffs" in text_lower):
-            energy_context = any(e in text_lower for e in ["oil", "crude", "gasoline", "fuel", "petroleum", "refin", "diesel", "opec", "energy"])
-            if energy_context:
-                has_keyword = True
+        # Broad macro policy, sanctions & tariff keywords require co-occurrence with core energy terms (Issues #258, #312, #318)
+        if not has_keyword:
+            has_macro_policy = bool(re.search(r"\b(tariffs?|sanctions?|embargo|trade\s+war|retaliat\w*)\b", text_lower))
+            if has_macro_policy:
+                energy_context = any(e in text_lower for e in [
+                    "oil", "crude", "gasoline", "fuel", "petroleum", "refin", "diesel",
+                    "opec", "energy", "rbob", "distillate", "cushing", "wti", "brent",
+                    "spr", "crack spread", "barrel", "pipeline", "tanker"
+                ])
+                if energy_context:
+                    has_keyword = True
 
         if not has_keyword:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
@@ -258,7 +278,7 @@ class IntradayEventMonitor:
         is_anomaly = (overall_pressure >= self.shock_threshold) or (supply_disruption >= 0.50)
         return is_anomaly, scores
 
-    def is_headline_already_processed(self, headline: str, url: str = "", max_age_hours: float = 24.0) -> bool:
+    def is_headline_already_processed(self, headline: str, url: str = "", max_age_hours: float = 72.0) -> bool:
         """
         Checks data/intraday_events.json and data/evaluated_headlines.json to see if this
         headline or URL has already been evaluated and logged within the last max_age_hours.
@@ -329,12 +349,55 @@ class IntradayEventMonitor:
 
         return False
 
-    def resolve_target_locales(self, headline: str) -> List[str]:
+    def discover_open_source_coverage(self, headline: str, url: str = "") -> Dict[str, Any]:
+        """
+        Queries free Google News RSS for open/non-paywalled syndicated or local sister articles
+        when an article originates from a paywalled or ambiguous source (Issue #311).
+        Returns a dict with discovered articles, additional context text, and resolved facility tokens.
+        Under TESTING=1 or when feedparser is absent, returns an empty discovery structure without network requests.
+        """
+        is_paywalled = any(dom in (url or "").lower() for dom in KNOWN_PAYWALLED_DOMAINS)
+        has_generic_loc = any(g in headline.lower() for g in ["regional fuel", "refinery outage", "refinery trip", "regional prices"])
+
+        if not is_paywalled and not has_generic_loc:
+            return {"discovered_articles": [], "enriched_context": ""}
+
+        if os.environ.get("TESTING") == "1" or feedparser is None:
+            return {"discovered_articles": [], "enriched_context": ""}
+
+        import urllib.parse
+        clean_hl = re.sub(r"\s+[-–—|]\s+[^-–—|]+$", "", headline.strip())
+        tokens = [w for w in clean_hl.split() if w.lower() not in {"adds", "pressure", "to", "regional", "fuel", "prices", "the", "in", "a"}]
+        query_str = " ".join(tokens[:5])
+        if not query_str:
+            return {"discovered_articles": [], "enriched_context": ""}
+
+        search_url = f"https://news.google.com/rss/search?q={urllib.parse.quote_plus(query_str)}+when:3d&hl=en-US&gl=US&ceid=US:en"
+        discovered = []
+        context_snippets = []
+
+        try:
+            feed = feedparser.parse(search_url)
+            for entry in feed.entries[:5]:
+                title = entry.get("title", "").strip()
+                link = entry.get("link", "").strip()
+                if title and link and link != url:
+                    discovered.append({"title": title, "url": link})
+                    context_snippets.append(title)
+        except Exception as e:
+            logger.debug(f"Open-source discovery RSS query failed: {e}")
+
+        return {
+            "discovered_articles": discovered,
+            "enriched_context": " ".join(context_snippets)
+        }
+
+    def resolve_target_locales(self, headline: str, enriched_context: str = "") -> List[str]:
         """
         Maps incoming headline keywords to affected regional metro calibration agents.
         Returns a sorted list of target locale identifiers (e.g. ['Tulsa'], ['Greenville', 'Charlotte'], or ['National']).
         """
-        text = headline.lower()
+        text = (headline + " " + (enriched_context or "")).lower()
         targets = set()
 
         # Tulsa / Cushing / West Tulsa
@@ -345,8 +408,16 @@ class IntradayEventMonitor:
         if any(k in text for k in ["newark", "delaware city", "delaware", "padd 1b", "padd1b"]):
             targets.add("Newark")
 
-        # Cincinnati / Catlettsburg / Ohio River
-        if any(k in text for k in ["cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock"]):
+        # Cincinnati / Catlettsburg / Ohio River / Chicago Spot / Joliet (PADD 2 Midwest)
+        if any(k in text for k in [
+            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock",
+            "joliet", "chicago", "will county"
+        ]):
+            targets.add("Cincinnati")
+
+        # Midcontinent / Group 3 Refining Corridor
+        if any(k in text for k in ["midcontinent", "mid-continent", "group 3"]):
+            targets.add("Tulsa")
             targets.add("Cincinnati")
 
         # Greenville & Charlotte / Colonial Pipeline / Selma / Paw Creek
@@ -388,14 +459,18 @@ class IntradayEventMonitor:
         """
         Evaluates an individual incoming headline (from Webhook or RSS), logs anomalies,
         and triggers cache invalidation / prediction revision logging if threshold is met.
-        Deduplicates against previously processed headlines within 24 hours.
+        Deduplicates against previously processed headlines within 72 hours.
         """
-        target_locales = self.resolve_target_locales(headline)
+        # 1. Discover open-source coverage for paywalled or ambiguous headlines (Issue #311)
+        discovery = self.discover_open_source_coverage(headline, url=url)
+        enriched_context = discovery.get("enriched_context", "")
+
+        target_locales = self.resolve_target_locales(headline, enriched_context=enriched_context)
 
         # Deduplication check unless explicitly skipped or running automated test runner
         if not skip_dedup and not source.startswith("Test_"):
             if self.is_headline_already_processed(headline, url=url):
-                logger.info(f"Skipping duplicate headline within 24h window: '{headline}'")
+                logger.info(f"Skipping duplicate headline within 72h window: '{headline}'")
                 return {
                     "timestamp": datetime.now().isoformat(),
                     "headline": headline,
@@ -435,6 +510,7 @@ class IntradayEventMonitor:
             "archive_url": archive_url,
             "is_anomaly": is_anomaly_bool,
             "target_locales": target_locales,
+            "discovered_sources": discovery.get("discovered_articles", []),
             "scores": clean_scores
         }
 
@@ -443,6 +519,38 @@ class IntradayEventMonitor:
             self._save_evaluated_record(result)
 
         if is_anomaly:
+            # 2. Check for potential duplicate / follow-up reports sharing same entity (Issue #258)
+            dedup_check = self.deduplicator.check_potential_duplicate(headline, source=source, url=url)
+            if dedup_check and not source.startswith("Test_"):
+                logger.warning(
+                    f"⚠️ Potential duplicate anomaly detected on entity '{dedup_check['matched_entity']}' "
+                    f"({dedup_check['similarity']*100:.0f}% overlap). Holding for operator review: '{headline}'"
+                )
+                result["pending_review"] = True
+                result["duplicate_candidate_of"] = (
+                    dedup_check["prior_event"].get("hash")
+                    or dedup_check["prior_event"].get("headline")
+                )
+                result["matched_entity"] = dedup_check["matched_entity"]
+                result["similarity"] = dedup_check["similarity"]
+
+                # Dispatch duplicate disambiguation notification to Discord
+                if send_duplicate_review_discord_notification:
+                    try:
+                        sent = send_duplicate_review_discord_notification(
+                            new_event=result,
+                            prior_event=dedup_check["prior_event"],
+                            matched_entity=dedup_check["matched_entity"],
+                            similarity=dedup_check["similarity"]
+                        )
+                        result["duplicate_review_notified"] = bool(sent)
+                    except Exception as e:
+                        logger.warning(f"Failed to dispatch duplicate review Discord notification: {e}")
+
+                if not is_test:
+                    self._save_anomaly_record(result)
+                return result
+
             logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}] (Targets: {target_locales}): '{headline}' (Scores: {scores})")
 
             # Dispatch Discord Webhook Notification (Issue #234)
@@ -459,6 +567,12 @@ class IntradayEventMonitor:
             else:
                 # 1. Log anomaly event to disk
                 self._save_anomaly_record(result)
+
+                # 1b. Retain confirmed non-duplicate anomaly into Hindsight SaaS memory bank (midgley-event-dedupe)
+                try:
+                    self.deduplicator.retain_event_in_hindsight(result)
+                except Exception as h_err:
+                    logger.debug(f"Hindsight retention notice: {h_err}")
 
                 # 2. Flush 15-minute SQLite response cache
                 clear_lookup_cache()

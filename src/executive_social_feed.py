@@ -12,6 +12,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_EXECUTIVE_VINTAGE_FILE = os.path.join("data", "executive_social_vintages.json")
+
 HISTORICAL_EXECUTIVE_ENERGY_POSTS = [
     # --- HISTORICAL OPEC TALKDOWN TWEETS ---
     {
@@ -326,10 +328,14 @@ class ExecutiveSocialFeedConnector:
         return df
 
     @staticmethod
-    def save_executive_social_vintage_record(record: dict, filepath: str = os.path.join("data", "executive_social_vintages.json")) -> None:
+    def save_executive_social_vintage_record(record: dict, filepath: str = None) -> None:
         """
         Saves or appends an executive social post snapshot to persistent vintage storage (Issue #268).
         """
+        if os.environ.get("TESTING") == "1" and filepath is None:
+            return
+        if filepath is None:
+            filepath = DEFAULT_EXECUTIVE_VINTAGE_FILE
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -356,10 +362,12 @@ class ExecutiveSocialFeedConnector:
             logger.warning(f"Could not persist executive social vintage record: {e}")
 
     @staticmethod
-    def get_executive_social_vintages_as_of(target_as_of: str = None, filepath: str = os.path.join("data", "executive_social_vintages.json")) -> list:
+    def get_executive_social_vintages_as_of(target_as_of: str = None, filepath: str = None) -> list:
         """
         Retrieves executive social observations published on or before target_as_of (Issue #268).
         """
+        if filepath is None:
+            filepath = DEFAULT_EXECUTIVE_VINTAGE_FILE
         try:
             if not os.path.exists(filepath):
                 return []

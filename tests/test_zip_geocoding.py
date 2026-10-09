@@ -12,6 +12,9 @@ from src.zip_geocoding import (
     resolve_zip_code,
     log_unmapped_zip_lookup,
     get_unmapped_zip_telemetry,
+    resolve_coordinates,
+    resolve_location,
+    haversine_distance_miles,
     TELEMETRY_FILE
 )
 
@@ -146,4 +149,91 @@ def test_leading_zero_zip_resolution():
     assert res_nj_plus4["zip_code"] == "07001"
     assert res_nj_plus4["state"] == "NJ"
     assert res_nj_plus4["padd_region"] == "PADD 1B"
+
+
+def test_haversine_distance_calculation():
+    """Verifies that haversine distance calculates accurate statute mileage between hubs."""
+    # Distance between Tulsa (36.1540, -95.9928) and Cincinnati (39.1031, -84.5120) is ~648 miles
+    dist = haversine_distance_miles(36.1540, -95.9928, 39.1031, -84.5120)
+    assert 640.0 < dist < 660.0
+
+
+def test_coordinate_resolution_metro_hit():
+    """Verifies GPS coordinates within hub radius resolve to the expected metro hub."""
+    # 1. Tulsa Downtown coordinates (36.1540, -95.9928)
+    res_tulsa = resolve_coordinates(36.1540, -95.9928)
+    assert res_tulsa["status"] == "success"
+    assert res_tulsa["is_metro_cluster_hit"] is True
+    assert res_tulsa["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_tulsa["locale_code"] == "tulsa"
+    assert res_tulsa["state"] == "OK"
+    assert res_tulsa["distance_to_hub_miles"] < 5.0
+
+    # 2. San Francisco / Oakland coordinates (37.7749, -122.4194)
+    res_bay = resolve_coordinates(37.7749, -122.4194)
+    assert res_bay["status"] == "success"
+    assert res_bay["is_metro_cluster_hit"] is True
+    assert res_bay["locale_code"] in ["bayarea", "oakland"]
+    assert res_bay["state"] == "CA"
+
+    # 3. Newark / Delaware City coordinates (39.5743, -75.5908)
+    res_newark = resolve_coordinates(39.5743, -75.5908)
+    assert res_newark["locale_code"] == "newark"
+    assert res_newark["state"] == "NJ"
+
+
+def test_coordinate_resolution_spatial_fallback():
+    """Verifies out-of-metro GPS coordinates fall back gracefully to nearest regional model."""
+    # Denver, CO coordinates (39.7392, -104.9903) - outside 150mi of Tulsa
+    res_denver = resolve_coordinates(39.7392, -104.9903)
+    assert res_denver["status"] == "success"
+    assert res_denver["is_metro_cluster_hit"] is False
+    assert res_denver["resolution_tier"] == "SPATIAL_PROXIMITY_FALLBACK"
+    assert res_denver["nearest_hub"] == "tulsa"
+    assert res_denver["distance_to_hub_miles"] > 400.0
+
+
+def test_unified_location_resolver():
+    """Verifies resolve_location prioritizes GPS coordinates over ZIP code and handles fallbacks."""
+    # GPS priority
+    res_gps = resolve_location(zip_code="10001", lat=36.1540, lon=-95.9928)
+    assert res_gps["query_type"] == "coordinates"
+    assert res_gps["locale_code"] == "tulsa"
+
+    # ZIP fallback when no coordinates
+    res_zip = resolve_location(zip_code="10001")
+    assert res_zip["query_type"] == "zip" if "query_type" in res_zip else True
+    assert res_zip["locale_code"] == "newark"
+
+    # Default national when neither provided
+    res_default = resolve_location()
+    assert res_default["locale_code"] == "national"
+
+
+def test_api_server_coordinates_endpoints():
+    """Verifies REST API endpoints support lat/lon parameters and /api/v1/locations/resolve."""
+    # 1. GET /api/v1/locations/resolve?lat=36.1540&lon=-95.9928
+    resp_resolve = client.get("/api/v1/locations/resolve?lat=36.1540&lon=-95.9928")
+    assert resp_resolve.status_code == 200
+    data_resolve = resp_resolve.json()
+    assert data_resolve["status"] == "success"
+    assert data_resolve["locale_code"] == "tulsa"
+    assert data_resolve["is_metro_cluster_hit"] is True
+
+    # 2. GET /api/v1/combined?lat=36.1540&lon=-95.9928
+    resp_comb = client.get("/api/v1/combined?lat=36.1540&lon=-95.9928")
+    assert resp_comb.status_code == 200
+    data_comb = resp_comb.json()
+    assert data_comb["status"] == "success"
+    assert "location_resolution" in data_comb
+    assert data_comb["location_resolution"]["locale_code"] == "tulsa"
+
+    # 3. GET /api/v1/forecast/predict?lat=39.5743&lon=-75.5908
+    resp_fc = client.get("/api/v1/forecast/predict?lat=39.5743&lon=-75.5908")
+    assert resp_fc.status_code == 200
+    data_fc = resp_fc.json()
+    assert data_fc["status"] == "success"
+    assert "location_resolution" in data_fc
+    assert data_fc["location_resolution"]["locale_code"] == "newark"
+
 

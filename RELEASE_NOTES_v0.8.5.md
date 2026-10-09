@@ -162,4 +162,29 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 | **Finding A-5 / A-8** | `feat(calendar): Implement NYMEXTradingCalendar with CME holiday schedules and RBOB contract roll boundary detection` | Market Calendar / Models |
 | **Finding E-2** | `docs(governance): Document strict non-commercial policy and honest labeling of macro PADD regional actuals` | Governance / Documentation |
 | **#617** | `fix(edge): Gracefully fallback intraday flag signing keys to CLOUDFLARE_AUTH_TOKEN / ADMIN_TOKEN, suppress edible cooking oil false positives, and parse flag URLs in reviewer` | Edge / Ingestion / CI |
+| **#311** | `fix(ingestion): Ground truth resolution for Joliet refinery outage, Cincinnati/Midcontinent routing, and open-source paywall discovery` | Ingestion / Routing |
+| **#312** | `fix(nlp): Require energy commodity co-occurrence for macro sanctions and retaliation triggers` | Ingestion / NLP |
+| **#317** | `fix(nlp): Exclude localized data center and generator diesel spills, align RSS/edge cache TTL to 72h` | Ingestion / Edge Cache |
+| **#318** | `fix(nlp): Suppress non-petroleum diplomatic sanctions rhetoric from triggering intraday shock evaluation` | Ingestion / NLP |
+| **#258** | `feat(dedupe): Hindsight-driven cross-provider semantic deduplication, temporal clustering, and human-in-the-loop Discord review buttons` | NLP / Alerts / Edge |
+
+| **#618** | `feat(modeling): Expand PADD 4 Rocky Mountain econometric forecasting hub & Denver refinery crack spreads` | Modeling / Regional Hubs |
+| **#619** | `feat(modeling): Implement PADD 1A New England (Boston) regional model & Irving/Barge import logistics` | Modeling / Regional Hubs |
+| **#620** | `feat(modeling): Model PADD 6 Caribbean (Puerto Rico & Virgin Islands) maritime refined product logistics` | Modeling / Maritime Logistics |
+| **#621** | `feat(modeling): Model PADD 7 Pacific Territories (Guam & Northern Marianas) trans-Pacific MR tanker logistics` | Modeling / Maritime Logistics |
+| **#622** | `feat(modeling): Review & refactor PADD 5 modeling to decouple PNW, Desert Southwest & Island sub-markets from California CARB` | Modeling / PADD 5 Architecture |
+| **#623** | `feat(ingestion): Ingest & automate 50-state & local fuel tax schedules for freeform location resolution` | Data Ingestion / Tax Schedules |
+
+### 🔍 Headline Deduplication, Open Discovery & Anomaly Refinements (#311, #312, #317, #318, #258)
+- **Ground Truth & Regional Routing for Joliet Outage (#311)**: Identified the September 2026 power outage incident as ExxonMobil's 250,000 bpd Joliet Refinery in Will County, IL; mapped Joliet and Midcontinent refinery disruptions to Cincinnati (Chicago spot pricing hub) and Tulsa (Group 3).
+- **Syndicated Open-Source Discovery for Paywalls (#311)**: Added automated Google News RSS lookup when paywalled or ambiguous headlines are ingested, extracting syndicated sister articles and local reports to resolve physical facilities.
+- **Energy Co-Occurrence for Macro Sanctions (#312, #318)**: Enforced strict co-occurrence of energy commodity terms (`oil`, `crude`, `gasoline`, `petroleum`, `refinery`, `rbob`, `pipeline`, `tanker`, `cushing`, etc.) before broad diplomatic sanctions or trade war rhetoric can trigger Stage 1 impact scoring.
+- **Localized Spill Exclusion & Cache Alignment (#317)**: Excluded non-commercial facility spills (`data center`, `generator`) from pipeline disruption triggers and aligned Cloudflare edge and D1 cache retention windows from 24h to 72h to match the feed ingestion lookback.
+- **Human-in-the-Loop Discord Review for Candidate Duplicates (#258)**: Instead of auto-suppressing cross-provider reports within 48–72 hours sharing the same physical entity (e.g., ExxonMobil Joliet), candidates are held as pending review and dispatched to Discord with HMAC-signed interactive action buttons (`🔗 Confirm Duplicate`, `⚡ Confirm New Incident`, `🚩 Flag False Positive`) routed to `/review`.
+
+### 24. Freeform Location Geocoding & Automated Locale Fuel Tax Ingestion (#622, #623)
+- **Decoupled PADD 5 Architecture (#622)**: Initiated architectural decoupling of non-California PADD 5 sub-markets (Pacific Northwest Puget Sound refining / Olympic Pipeline, Desert Southwest pipeline egress to Phoenix & Las Vegas, and Alaska/Hawaii island logistics) from California's $0.953/gal CARBOB regulatory burden.
+- **50-State & Municipal Fuel Tax Ingestion (#623)**: Designed end-to-end integration uniting `src/zip_geocoding.py` with `src/state_open_data.py` (`STATE_METADATA`), International Fuel Tax Agreement (IFTA) quarterly schedules, and local option fuel taxes (LOFT) for Cook County/Chicago, Florida, Nevada, and Hawaii to ensure accurate tax pass-through across freeform ZIP codes and GPS coordinates.
+
+
 
