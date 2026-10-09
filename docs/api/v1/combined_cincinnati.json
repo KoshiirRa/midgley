@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.742,
+    "current_price_per_gal": 3.858,
     "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
       "source": "AAA Web Scraper (Cincinnati, OH)",
@@ -81,10 +81,10 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.004,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
@@ -237,10 +237,10 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.004,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",

@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.154,
+    "current_price_per_gal": 4.225,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -91,8 +91,8 @@
         "category": "weather_environmental",
         "delta_dollars": 0.004,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       }
     },
     "driver_breakdown": {
@@ -144,7 +144,7 @@
           "impact_dollars": 0.003,
           "impact_pct": 0.07,
           "share_pct": 5.0,
-          "direction": "FLAT"
+          "direction": "UP"
         }
       ]
     }
@@ -196,7 +196,7 @@
       "impact_dollars": 0.003,
       "impact_pct": 0.07,
       "share_pct": 5.0,
-      "direction": "FLAT"
+      "direction": "UP"
     }
   ],
   "driver_breakdown": {
@@ -247,8 +247,8 @@
         "category": "weather_environmental",
         "delta_dollars": 0.004,
         "share_pct": 5.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "UP",
+        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
       }
     }
   }

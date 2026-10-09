@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.369,
+    "current_price_per_gal": 4.372,
     "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
       "source": "AAA Web Scraper (National Average, US)",
@@ -91,8 +91,8 @@
         "category": "tax_regulatory",
         "delta_dollars": 0.0,
         "share_pct": 2.5,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     },
     "driver_breakdown": {
@@ -144,7 +144,7 @@
           "impact_dollars": 0.0,
           "impact_pct": 0.0,
           "share_pct": 2.5,
-          "direction": "FLAT"
+          "direction": "UP"
         }
       ]
     }
@@ -196,7 +196,7 @@
       "impact_dollars": 0.0,
       "impact_pct": 0.0,
       "share_pct": 2.5,
-      "direction": "FLAT"
+      "direction": "UP"
     }
   ],
   "driver_breakdown": {
@@ -247,8 +247,8 @@
         "category": "tax_regulatory",
         "delta_dollars": 0.0,
         "share_pct": 2.5,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     }
   }

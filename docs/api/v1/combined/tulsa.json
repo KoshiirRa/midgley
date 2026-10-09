@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.943,
+    "current_price_per_gal": 4.022,
     "source": "AAA Web Scraper (Tulsa, OK)",
     "provenance": {
       "source": "AAA Web Scraper (Tulsa, OK)",
@@ -83,8 +83,8 @@
         "category": "unstructured_sentiment",
         "delta_dollars": 0.0,
         "share_pct": 3.0,
-        "direction": "FLAT",
-        "description": "Neutral news sentiment"
+        "direction": "DOWN",
+        "description": "OPEC price pressure talkdown & dovish geopolitical news"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -136,7 +136,7 @@
           "impact_dollars": 0.0,
           "impact_pct": 0.0,
           "share_pct": 3.0,
-          "direction": "FLAT"
+          "direction": "DOWN"
         },
         {
           "category": "Tax & Regulatory Overhead",
@@ -188,7 +188,7 @@
       "impact_dollars": 0.0,
       "impact_pct": 0.0,
       "share_pct": 3.0,
-      "direction": "FLAT"
+      "direction": "DOWN"
     },
     {
       "category": "Tax & Regulatory Overhead",
@@ -239,8 +239,8 @@
         "category": "unstructured_sentiment",
         "delta_dollars": 0.0,
         "share_pct": 3.0,
-        "direction": "FLAT",
-        "description": "Neutral news sentiment"
+        "direction": "DOWN",
+        "description": "OPEC price pressure talkdown & dovish geopolitical news"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
