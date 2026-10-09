@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-10-08 02:03:22",
-  "records_count": 41,
+  "last_refreshed_utc": "2026-10-09 02:16:33",
+  "records_count": 46,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -364,17 +364,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-08 01:56:19",
-      "platform": "Google News RSS",
-      "post_text": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-10-08 01:56:19",
+      "date": "2026-10-09 02:10:11",
       "platform": "Google News RSS",
       "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
       "target": "Energy_Market",
@@ -384,7 +374,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-08 01:56:19",
+      "date": "2026-10-09 02:10:11",
       "platform": "Google News RSS",
       "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
       "target": "Energy_Market",
@@ -394,9 +384,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-08 01:56:19",
+      "date": "2026-10-09 02:10:11",
       "platform": "Google News RSS",
-      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
+      "post_text": "CARNEY RESPONDS - \u201cThey Asked Too Much and Offered Too Little\u201d: Carney Draws a Line as Canada - U.S. Trade Talks Collapse - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -404,7 +394,67 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-08 01:56:19",
+      "date": "2026-10-09 02:10:11",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-09 02:10:11",
+      "platform": "Google News RSS",
+      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-09 02:10:11",
+      "platform": "Google News RSS",
+      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-09 02:10:11",
+      "platform": "Google News RSS",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-09 02:10:11",
+      "platform": "Google News RSS",
+      "post_text": "CARNEY RESPONDS - \u201cThey Asked Too Much and Offered Too Little\u201d: Carney Draws a Line as Canada - U.S. Trade Talks Collapse - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-09 02:10:11",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-09 02:10:11",
       "platform": "Google News RSS",
       "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
       "target": "Energy_Market",

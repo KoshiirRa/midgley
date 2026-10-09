@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-08T23:07:22.795200",
+  "timestamp": "2026-10-09T02:17:08.756087",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-08T23:07:08Z"
+      "timestamp": "2026-10-09T02:13:38Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-14",
+    "target_date": "2026-10-16",
     "current_base_price": 3.98,
-    "predicted_price_per_gal": 3.925,
-    "expected_change_dollars": -0.055,
-    "expected_change_percent": -1.38,
+    "predicted_price_per_gal": 3.944,
+    "expected_change_dollars": -0.036,
+    "expected_change_percent": -0.9,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.805,
-    "prediction_upper_95ci": 4.045,
+    "prediction_lower_95ci": 3.824,
+    "prediction_upper_95ci": 4.064,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.969,
-    "day_2_price": 3.928,
-    "day_3_price": 3.92,
+    "day_1_price": 3.961,
+    "day_2_price": 3.927,
+    "day_3_price": 3.929,
     "day_4_price": 3.939,
-    "day_5_price": 3.925,
+    "day_5_price": 3.944,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.011,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.011,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.014,
+        "delta_dollars": -0.009,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.006,
+        "delta_dollars": -0.004,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -81,7 +81,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.001,
         "share_pct": 3.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -89,62 +89,62 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 2.0,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast $-0.055/gal (-1.38%): Driven primarily by Regional Logistics & Hub Delivery ($-0.017/gal), Refining Yield & Crack Spread ($-0.017/gal).",
+      "summary_text": "Tulsa OK forecast $-0.036/gal (-0.90%): Driven primarily by Regional Logistics & Hub Delivery ($-0.011/gal), Refining Yield & Crack Spread ($-0.011/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.017,
-          "impact_pct": -0.43,
+          "impact_dollars": -0.011,
+          "impact_pct": -0.28,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.017,
-          "impact_pct": -0.43,
+          "impact_dollars": -0.011,
+          "impact_pct": -0.28,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.014,
-          "impact_pct": -0.35,
+          "impact_dollars": -0.009,
+          "impact_pct": -0.23,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
-          "impact_dollars": -0.006,
-          "impact_pct": -0.15,
+          "impact_dollars": -0.004,
+          "impact_pct": -0.1,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.05,
+          "impact_dollars": -0.001,
+          "impact_pct": -0.03,
           "share_pct": 3.0,
           "direction": "DOWN"
         },
         {
           "category": "Tax & Regulatory Overhead",
-          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.001,
-          "impact_pct": 0.03,
+          "description": "Fixed statutory tax overhead",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 2.0,
-          "direction": "UP"
+          "direction": "FLAT"
         }
       ]
     }
@@ -153,59 +153,59 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.017,
-      "impact_pct": -0.43,
+      "impact_dollars": -0.011,
+      "impact_pct": -0.28,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.017,
-      "impact_pct": -0.43,
+      "impact_dollars": -0.011,
+      "impact_pct": -0.28,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.014,
-      "impact_pct": -0.35,
+      "impact_dollars": -0.009,
+      "impact_pct": -0.23,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
-      "impact_dollars": -0.006,
-      "impact_pct": -0.15,
+      "impact_dollars": -0.004,
+      "impact_pct": -0.1,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "OPEC price pressure talkdown & dovish geopolitical news",
-      "impact_dollars": -0.002,
-      "impact_pct": -0.05,
+      "impact_dollars": -0.001,
+      "impact_pct": -0.03,
       "share_pct": 3.0,
       "direction": "DOWN"
     },
     {
       "category": "Tax & Regulatory Overhead",
-      "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.001,
-      "impact_pct": 0.03,
+      "description": "Fixed statutory tax overhead",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 2.0,
-      "direction": "UP"
+      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast $-0.055/gal (-1.38%): Driven primarily by Regional Logistics & Hub Delivery ($-0.017/gal), Refining Yield & Crack Spread ($-0.017/gal).",
+    "summary_text": "Tulsa OK forecast $-0.036/gal (-0.90%): Driven primarily by Regional Logistics & Hub Delivery ($-0.011/gal), Refining Yield & Crack Spread ($-0.011/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.011,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.011,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.014,
+        "delta_dollars": -0.009,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.006,
+        "delta_dollars": -0.004,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -237,7 +237,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.001,
         "share_pct": 3.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 2.0,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     }
   }
