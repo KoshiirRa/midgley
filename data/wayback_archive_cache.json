@@ -8397,13 +8397,13 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5": {
-    "timestamp": "2026-09-30T14:51:23.158727",
+    "timestamp": "2026-10-09T05:13:39.756515+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5",
     "headline": "See How Gas Prices Are Easing Across the U.S. - WSJ",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMipAJBVV95cUxNaThHeGVXMWVBU1YxWkRLa3R0NUhoUERzUFEzcWIxS0VWOXd2bTkyR29IS3hNU3JiVmlFQkgyUXJ0NkU3eElsdmVIblhXSzh1SUZxank3c3BNeUFoT3lXYTFpbDJkYUFuVVNVV2R4b2NLRjI5N3drUmJLRjV5V1NBSURiTC1raTlHaEg5U0RkVVNnbkVnQ2FoYXI1S2pWSk9HVVI3ckhvaURId2NMMlRNQTkwQWZ6QjlqRDFYdFdobGdtZHNHcXo2RzlpVHFPRk1JODZMM2NpZ3Z2VGIwMm9EZ2xoUG5FNlJJcklKVEhGYXF4NjZaMG9VcFdSQUtfdm9TQUY2NVZ4cHp5dTREdGRueUJ0eVJyZldqX2QtMV9fNVhqdTNR?oc=5": {
     "timestamp": "2026-09-30T14:51:24.157737",
@@ -12359,5 +12359,33 @@
     "headline": "How Venezuela's Simultaneous Refinery Explosion and Blackout Crisis Are Testing the U.S. Oil Deal - Latin Times",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivAFBVV95cUxPYWJGM0M2LXJuczFpTFJ2X1B2QkVsajhoX3BvZVBHalBMUjJKM2hSbmJoSUFxeTFsUzVvMGZ3UmRZVVNZTFFNaGV4a28wWTdmd0c5eFRpLW5iQkc0V1JHSXM1ZGxfMVJIWEtfbjB4QVE0X0RuUUZMN0dHUmhjdUotVmw2Z2NGTDFsdFh3dUVBSTdIRUdwX0hISkFMaDVJNnU5SnNEWXVWUC1sTUFOMVVXUzdxM01EaXpZTHVlWQ?oc=5",
     "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMingFBVV95cUxPNS1ndkkwZlVUZnNoZjhpVHI0X2FoWkZZSWNhWUFwTWpvN2VpUFVLNUpvT19vUGg5WEVRdmM4c3R0UVA0RUM1T050RDRuLU0zREluZGo0UGJ0TmVGYkJ2dm12ZTBnZnRIcFJEUGliZEVtNHhNd2hpdHNJYWstNHhXTmdVZW05MWhVT1NPUzJKbmRXeGxfbEVlbWItWmlTZw?oc=5": {
+    "timestamp": "2026-10-09T05:13:48.185939+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPNS1ndkkwZlVUZnNoZjhpVHI0X2FoWkZZSWNhWUFwTWpvN2VpUFVLNUpvT19vUGg5WEVRdmM4c3R0UVA0RUM1T050RDRuLU0zREluZGo0UGJ0TmVGYkJ2dm12ZTBnZnRIcFJEUGliZEVtNHhNd2hpdHNJYWstNHhXTmdVZW05MWhVT1NPUzJKbmRXeGxfbEVlbWItWmlTZw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPNS1ndkkwZlVUZnNoZjhpVHI0X2FoWkZZSWNhWUFwTWpvN2VpUFVLNUpvT19vUGg5WEVRdmM4c3R0UVA0RUM1T050RDRuLU0zREluZGo0UGJ0TmVGYkJ2dm12ZTBnZnRIcFJEUGliZEVtNHhNd2hpdHNJYWstNHhXTmdVZW05MWhVT1NPUzJKbmRXeGxfbEVlbWItWmlTZw?oc=5",
+    "headline": "New Mexico Gas Prices Rise While National Average Falls - 96.3 KKOB",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMingFBVV95cUxPNS1ndkkwZlVUZnNoZjhpVHI0X2FoWkZZSWNhWUFwTWpvN2VpUFVLNUpvT19vUGg5WEVRdmM4c3R0UVA0RUM1T050RDRuLU0zREluZGo0UGJ0TmVGYkJ2dm12ZTBnZnRIcFJEUGliZEVtNHhNd2hpdHNJYWstNHhXTmdVZW05MWhVT1NPUzJKbmRXeGxfbEVlbWItWmlTZw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNX0pJUG52ZzNTOGF2SXM5UjdSYVhLQ29KOHZPYTdpd3NDZkZneG43dThvaTVKRHRSNWNQOTJ0T1JiaTM3RkwtRWxZM2Z1UlZLVzNWU1pQdmQ3RXhBcWNWSE1rZTA0dUlPUXB4a001Q043akpiaWdqSV9jN181N2Y1MlJ1RWNLOWRwZ1pCeGpkZk9rREkxWEFnem9QVkpzcElXWElsY25CMTZmV2hyOV9pVkpXb1VlelF3LWsxaVhndUN4UERwODdfbFNNeGcyU0QwSE5UakwwU1J1S0RVS2djdFdIejRuZjNWZ0E0ZlJkZjg?oc=5": {
+    "timestamp": "2026-10-09T05:13:55.317311+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNX0pJUG52ZzNTOGF2SXM5UjdSYVhLQ29KOHZPYTdpd3NDZkZneG43dThvaTVKRHRSNWNQOTJ0T1JiaTM3RkwtRWxZM2Z1UlZLVzNWU1pQdmQ3RXhBcWNWSE1rZTA0dUlPUXB4a001Q043akpiaWdqSV9jN181N2Y1MlJ1RWNLOWRwZ1pCeGpkZk9rREkxWEFnem9QVkpzcElXWElsY25CMTZmV2hyOV9pVkpXb1VlelF3LWsxaVhndUN4UERwODdfbFNNeGcyU0QwSE5UakwwU1J1S0RVS2djdFdIejRuZjNWZ0E0ZlJkZjg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNX0pJUG52ZzNTOGF2SXM5UjdSYVhLQ29KOHZPYTdpd3NDZkZneG43dThvaTVKRHRSNWNQOTJ0T1JiaTM3RkwtRWxZM2Z1UlZLVzNWU1pQdmQ3RXhBcWNWSE1rZTA0dUlPUXB4a001Q043akpiaWdqSV9jN181N2Y1MlJ1RWNLOWRwZ1pCeGpkZk9rREkxWEFnem9QVkpzcElXWElsY25CMTZmV2hyOV9pVkpXb1VlelF3LWsxaVhndUN4UERwODdfbFNNeGcyU0QwSE5UakwwU1J1S0RVS2djdFdIejRuZjNWZ0E0ZlJkZjg?oc=5",
+    "headline": "Where to find the cheapest fuel in The Shire - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi8AFBVV95cUxNX0pJUG52ZzNTOGF2SXM5UjdSYVhLQ29KOHZPYTdpd3NDZkZneG43dThvaTVKRHRSNWNQOTJ0T1JiaTM3RkwtRWxZM2Z1UlZLVzNWU1pQdmQ3RXhBcWNWSE1rZTA0dUlPUXB4a001Q043akpiaWdqSV9jN181N2Y1MlJ1RWNLOWRwZ1pCeGpkZk9rREkxWEFnem9QVkpzcElXWElsY25CMTZmV2hyOV9pVkpXb1VlelF3LWsxaVhndUN4UERwODdfbFNNeGcyU0QwSE5UakwwU1J1S0RVS2djdFdIejRuZjNWZ0E0ZlJkZjg?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNT0h1N1ZWT1NqS1R2TXBqQjlWZXdQa2tvSWRybTNIVm9MUXBvbGNCdS1SRVV2Vy0zcXE1emtSRUZKMXN4X1JERkpTMjBLSXpvMWlBMnRDZmVOM2VUMk82QktKcnZNVjJZMkVlYWNjbnRiOExzM19maERDNTd6bEdrdjVQMzlwM01FczdIQllBU1R5dTJIOC1oa29CNVFwMl9IUEdzZ1N6MjExc2szaFVjQVVIUnRCN05MVGFXNnBzd2s0TWQweG02RFV4c1hsbXRnc0k2X3FVMTh1TmI2ejFYbHlHR19yazZRbWg0bUxjQTVFdjBoRlE?oc=5": {
+    "timestamp": "2026-10-09T05:13:57.487609+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNT0h1N1ZWT1NqS1R2TXBqQjlWZXdQa2tvSWRybTNIVm9MUXBvbGNCdS1SRVV2Vy0zcXE1emtSRUZKMXN4X1JERkpTMjBLSXpvMWlBMnRDZmVOM2VUMk82QktKcnZNVjJZMkVlYWNjbnRiOExzM19maERDNTd6bEdrdjVQMzlwM01FczdIQllBU1R5dTJIOC1oa29CNVFwMl9IUEdzZ1N6MjExc2szaFVjQVVIUnRCN05MVGFXNnBzd2s0TWQweG02RFV4c1hsbXRnc0k2X3FVMTh1TmI2ejFYbHlHR19yazZRbWg0bUxjQTVFdjBoRlE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNT0h1N1ZWT1NqS1R2TXBqQjlWZXdQa2tvSWRybTNIVm9MUXBvbGNCdS1SRVV2Vy0zcXE1emtSRUZKMXN4X1JERkpTMjBLSXpvMWlBMnRDZmVOM2VUMk82QktKcnZNVjJZMkVlYWNjbnRiOExzM19maERDNTd6bEdrdjVQMzlwM01FczdIQllBU1R5dTJIOC1oa29CNVFwMl9IUEdzZ1N6MjExc2szaFVjQVVIUnRCN05MVGFXNnBzd2s0TWQweG02RFV4c1hsbXRnc0k2X3FVMTh1TmI2ejFYbHlHR19yazZRbWg0bUxjQTVFdjBoRlE?oc=5",
+    "headline": "Where to find the cheapest fuel in South Coast - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9gFBVV95cUxNT0h1N1ZWT1NqS1R2TXBqQjlWZXdQa2tvSWRybTNIVm9MUXBvbGNCdS1SRVV2Vy0zcXE1emtSRUZKMXN4X1JERkpTMjBLSXpvMWlBMnRDZmVOM2VUMk82QktKcnZNVjJZMkVlYWNjbnRiOExzM19maERDNTd6bEdrdjVQMzlwM01FczdIQllBU1R5dTJIOC1oa29CNVFwMl9IUEdzZ1N6MjExc2szaFVjQVVIUnRCN05MVGFXNnBzd2s0TWQweG02RFV4c1hsbXRnc0k2X3FVMTh1TmI2ejFYbHlHR19yazZRbWg0bUxjQTVFdjBoRlE?oc=5",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   }
 }
