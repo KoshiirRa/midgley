@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T18:00:55.087369",
+  "timestamp": "2026-10-09T23:57:09.011354",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T18:00:28Z"
+      "timestamp": "2026-10-09T23:56:50Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-12",
-    "current_base_price": 3.742,
-    "predicted_price_per_gal": 3.742,
+    "current_base_price": 3.858,
+    "predicted_price_per_gal": 3.858,
     "expected_change_dollars": 0.0,
     "expected_change_percent": 0.0,
     "projected_direction": "FLAT",
-    "prediction_lower_95ci": 3.622,
-    "prediction_upper_95ci": 3.862,
+    "prediction_lower_95ci": 3.738,
+    "prediction_upper_95ci": 3.978,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.742,
-    "day_2_price": 3.742,
-    "day_3_price": 3.742,
-    "day_4_price": 3.742,
-    "day_5_price": 3.742,
+    "day_1_price": 3.858,
+    "day_2_price": 3.858,
+    "day_3_price": 3.858,
+    "day_4_price": 3.858,
+    "day_5_price": 3.858,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -81,10 +81,10 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
@@ -237,10 +237,10 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T18:00:55.509189",
+  "timestamp": "2026-10-09T23:57:09.174461",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T18:00:28Z"
+      "timestamp": "2026-10-09T23:56:50Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-12",
-    "current_base_price": 4.093,
-    "predicted_price_per_gal": 4.137,
+    "current_base_price": 4.099,
+    "predicted_price_per_gal": 4.143,
     "expected_change_dollars": 0.044,
-    "expected_change_percent": 1.08,
+    "expected_change_percent": 1.07,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.017,
-    "prediction_upper_95ci": 4.257,
+    "prediction_lower_95ci": 4.023,
+    "prediction_upper_95ci": 4.263,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.102,
-    "day_2_price": 4.108,
-    "day_3_price": 4.173,
-    "day_4_price": 4.178,
-    "day_5_price": 4.137,
+    "day_1_price": 4.108,
+    "day_2_price": 4.117,
+    "day_3_price": 4.125,
+    "day_4_price": 4.134,
+    "day_5_price": 4.143,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -89,14 +89,14 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast +$0.044/gal (+1.08%): Driven primarily by Regional Logistics & Hub Delivery (+$0.018/gal), Futures & Commodity Benchmark (+$0.011/gal).",
+      "summary_text": "Greenville NC forecast +$0.044/gal (+1.07%): Driven primarily by Regional Logistics & Hub Delivery (+$0.018/gal), Futures & Commodity Benchmark (+$0.011/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -141,8 +141,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.07,
+          "impact_dollars": 0.002,
+          "impact_pct": 0.05,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -193,14 +193,14 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.07,
+      "impact_dollars": 0.002,
+      "impact_pct": 0.05,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast +$0.044/gal (+1.08%): Driven primarily by Regional Logistics & Hub Delivery (+$0.018/gal), Futures & Commodity Benchmark (+$0.011/gal).",
+    "summary_text": "Greenville NC forecast +$0.044/gal (+1.07%): Driven primarily by Regional Logistics & Hub Delivery (+$0.018/gal), Futures & Commodity Benchmark (+$0.011/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T18:00:54.268878",
+  "timestamp": "2026-10-09T23:57:08.663061",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T18:00:30Z"
+      "timestamp": "2026-10-09T23:56:51Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-12",
-    "current_base_price": 6.439,
-    "predicted_price_per_gal": 6.439,
+    "current_base_price": 6.397,
+    "predicted_price_per_gal": 6.397,
     "expected_change_dollars": 0.0,
     "expected_change_percent": 0.0,
     "projected_direction": "FLAT",
-    "prediction_lower_95ci": 6.319,
-    "prediction_upper_95ci": 6.559,
+    "prediction_lower_95ci": 6.277,
+    "prediction_upper_95ci": 6.517,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.439,
-    "day_2_price": 6.439,
-    "day_3_price": 6.439,
-    "day_4_price": 6.439,
-    "day_5_price": 6.439,
+    "day_1_price": 6.397,
+    "day_2_price": 6.397,
+    "day_3_price": 6.397,
+    "day_4_price": 6.397,
+    "day_5_price": 6.397,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -91,8 +91,8 @@
         "category": "regional_logistics",
         "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       }
     },
     "driver_breakdown": {
@@ -129,14 +129,6 @@
           "impact_pct": 0.0,
           "share_pct": 10.0,
           "direction": "FLAT"
-        },
-        {
-          "category": "Regional Logistics & Hub Delivery",
-          "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.005,
-          "impact_pct": 0.08,
-          "share_pct": 5.0,
-          "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
@@ -189,14 +181,6 @@
       "impact_pct": 0.0,
       "share_pct": 10.0,
       "direction": "FLAT"
-    },
-    {
-      "category": "Regional Logistics & Hub Delivery",
-      "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.005,
-      "impact_pct": 0.08,
-      "share_pct": 5.0,
-      "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
@@ -263,8 +247,8 @@
         "category": "regional_logistics",
         "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       }
     }
   }

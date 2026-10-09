@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T18:00:53.894276",
+  "timestamp": "2026-10-09T23:57:08.500728",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T18:00:27Z"
+      "timestamp": "2026-10-09T23:56:50Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-12",
-    "current_base_price": 3.943,
-    "predicted_price_per_gal": 3.943,
+    "current_base_price": 4.022,
+    "predicted_price_per_gal": 4.022,
     "expected_change_dollars": 0.0,
     "expected_change_percent": 0.0,
     "projected_direction": "FLAT",
-    "prediction_lower_95ci": 3.823,
-    "prediction_upper_95ci": 4.063,
+    "prediction_lower_95ci": 3.902,
+    "prediction_upper_95ci": 4.142,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.943,
-    "day_2_price": 3.943,
-    "day_3_price": 3.943,
-    "day_4_price": 3.943,
-    "day_5_price": 3.943,
+    "day_1_price": 4.022,
+    "day_2_price": 4.022,
+    "day_3_price": 4.022,
+    "day_4_price": 4.022,
+    "day_5_price": 4.022,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -83,8 +83,8 @@
         "category": "unstructured_sentiment",
         "delta_dollars": 0.0,
         "share_pct": 3.0,
-        "direction": "DOWN",
-        "description": "OPEC price pressure talkdown & dovish geopolitical news"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -136,7 +136,7 @@
           "impact_dollars": 0.0,
           "impact_pct": 0.0,
           "share_pct": 3.0,
-          "direction": "DOWN"
+          "direction": "FLAT"
         },
         {
           "category": "Tax & Regulatory Overhead",
@@ -188,7 +188,7 @@
       "impact_dollars": 0.0,
       "impact_pct": 0.0,
       "share_pct": 3.0,
-      "direction": "DOWN"
+      "direction": "FLAT"
     },
     {
       "category": "Tax & Regulatory Overhead",
@@ -239,8 +239,8 @@
         "category": "unstructured_sentiment",
         "delta_dollars": 0.0,
         "share_pct": 3.0,
-        "direction": "DOWN",
-        "description": "OPEC price pressure talkdown & dovish geopolitical news"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

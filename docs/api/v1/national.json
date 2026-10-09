@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-06T18:00:53.487590",
+  "timestamp": "2026-10-09T23:57:08.335387",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-06T18:00:52Z"
+      "timestamp": "2026-10-09T23:57:08Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-12",
-    "current_base_price": 4.369,
-    "predicted_price_per_gal": 4.419,
+    "current_base_price": 4.372,
+    "predicted_price_per_gal": 4.422,
     "expected_change_dollars": 0.05,
     "expected_change_percent": 1.14,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 4.242,
-    "prediction_upper_95ci": 4.596,
+    "prediction_lower_95ci": 4.245,
+    "prediction_upper_95ci": 4.599,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 6,
     "directional_hit_rate_historical": 0.1667,
     "historical_mae_dollars": 0.1763,
     "evaluation_sample_size": 6,
-    "day_1_price": 4.379,
-    "day_2_price": 4.382,
-    "day_3_price": 4.44,
-    "day_4_price": 4.448,
-    "day_5_price": 4.419,
+    "day_1_price": 4.382,
+    "day_2_price": 4.392,
+    "day_3_price": 4.402,
+    "day_4_price": 4.412,
+    "day_5_price": 4.422,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -91,8 +91,8 @@
         "category": "tax_regulatory",
         "delta_dollars": 0.0,
         "share_pct": 2.5,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     },
     "driver_breakdown": {
@@ -144,7 +144,7 @@
           "impact_dollars": 0.0,
           "impact_pct": 0.0,
           "share_pct": 2.5,
-          "direction": "UP"
+          "direction": "FLAT"
         }
       ]
     }
@@ -196,7 +196,7 @@
       "impact_dollars": 0.0,
       "impact_pct": 0.0,
       "share_pct": 2.5,
-      "direction": "UP"
+      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
@@ -247,8 +247,8 @@
         "category": "tax_regulatory",
         "delta_dollars": 0.0,
         "share_pct": 2.5,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     }
   }
