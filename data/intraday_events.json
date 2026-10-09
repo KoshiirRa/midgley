@@ -4973,5 +4973,25 @@
       "overall_price_pressure": -0.8
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-09T19:23:13.586668",
+    "headline": "Russian strike on Ukrainian public buses kills 30 people as blackouts worsen in Kyiv - Manila Bulletin",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNMHpuUGdPRlJsa1EyUFo1OEFSVmtleVRGbDF5VTNjYlFNWUcyN2VTSFBTSmk3NHEwc3JCYmlkZ0wxVEVtTnlkaVdNVkpqanFvTlZ6NDZaRmpQRnhRRThIb1VYcm1SLVloWFhkazBFemF5MGVkck03NUJPc0hjWC1kNkJhSTkzVnRyQW83T0ZHRUdsWUdMSEZWbjdKc1FvUTZBUHdBMGpPdWdmb0lOTGpPaTl0QQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNMHpuUGdPRlJsa1EyUFo1OEFSVmtleVRGbDF5VTNjYlFNWUcyN2VTSFBTSmk3NHEwc3JCYmlkZ0wxVEVtTnlkaVdNVkpqanFvTlZ6NDZaRmpQRnhRRThIb1VYcm1SLVloWFhkazBFemF5MGVkck03NUJPc0hjWC1kNkJhSTkzVnRyQW83T0ZHRUdsWUdMSEZWbjdKc1FvUTZBUHdBMGpPdWdmb0lOTGpPaTl0QQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiswFBVV95cUxNMHpuUGdPRlJsa1EyUFo1OEFSVmtleVRGbDF5VTNjYlFNWUcyN2VTSFBTSmk3NHEwc3JCYmlkZ0wxVEVtTnlkaVdNVkpqanFvTlZ6NDZaRmpQRnhRRThIb1VYcm1SLVloWFhkazBFemF5MGVkck03NUJPc0hjWC1kNkJhSTkzVnRyQW83T0ZHRUdsWUdMSEZWbjdKc1FvUTZBUHdBMGpPdWdmb0lOTGpPaTl0QQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.1,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.7
+    },
+    "discord_notified": true
   }
 ]
