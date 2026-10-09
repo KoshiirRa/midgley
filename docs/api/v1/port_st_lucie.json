@@ -49,42 +49,42 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.006,
+        "delta_dollars": 0.0,
         "share_pct": 35.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
-        "direction": "UP",
-        "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
+        "direction": "FLAT",
+        "description": "Stable energy commodity baseline"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
         "delta_dollars": 0.003,
         "share_pct": 15.0,
-        "direction": "UP",
-        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.0,
         "share_pct": 12.0,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 8.0,
-        "direction": "UP",
-        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
+        "direction": "FLAT",
+        "description": "Steady refinery utilization"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
@@ -205,42 +205,42 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.006,
+        "delta_dollars": 0.0,
         "share_pct": 35.0,
-        "direction": "UP",
-        "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
+        "direction": "FLAT",
+        "description": "Unrestricted terminal dispatch"
       },
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
-        "direction": "UP",
-        "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
+        "direction": "FLAT",
+        "description": "Stable energy commodity baseline"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
         "delta_dollars": 0.003,
         "share_pct": 15.0,
-        "direction": "UP",
-        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.0,
         "share_pct": 12.0,
-        "direction": "UP",
-        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 8.0,
-        "direction": "UP",
-        "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
+        "direction": "FLAT",
+        "description": "Steady refinery utilization"
       },
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",

@@ -83,13 +83,13 @@
         "category": "unstructured_sentiment",
         "delta_dollars": 0.002,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.001,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
@@ -141,8 +141,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.05,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.02,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -193,8 +193,8 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.002,
-      "impact_pct": 0.05,
+      "impact_dollars": 0.001,
+      "impact_pct": 0.02,
       "share_pct": 5.0,
       "direction": "UP"
     }
@@ -239,13 +239,13 @@
         "category": "unstructured_sentiment",
         "delta_dollars": 0.002,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.001,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"

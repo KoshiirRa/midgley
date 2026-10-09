@@ -91,8 +91,8 @@
         "category": "weather_environmental",
         "delta_dollars": 0.004,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       }
     },
     "driver_breakdown": {
@@ -144,7 +144,7 @@
           "impact_dollars": 0.003,
           "impact_pct": 0.07,
           "share_pct": 5.0,
-          "direction": "UP"
+          "direction": "FLAT"
         }
       ]
     }
@@ -196,7 +196,7 @@
       "impact_dollars": 0.003,
       "impact_pct": 0.07,
       "share_pct": 5.0,
-      "direction": "UP"
+      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
@@ -247,8 +247,8 @@
         "category": "weather_environmental",
         "delta_dollars": 0.004,
         "share_pct": 5.0,
-        "direction": "UP",
-        "description": "NOAA severe weather risks, convective alerts & freeze warnings"
+        "direction": "FLAT",
+        "description": "Neutral weather impact"
       }
     }
   }
