@@ -1,7 +1,7 @@
 {
   "benchmark_key": "geopolitical",
-  "last_refreshed_utc": "2026-10-10 02:45:48",
-  "records_count": 254,
+  "last_refreshed_utc": "2026-10-10 17:57:54",
+  "records_count": 270,
   "data": [
     {
       "date": "2023-04-27 00:00:00",
@@ -1779,6 +1779,118 @@
       "headline": "Iranian Network Reportedly Used Binance to Move $850M in Funds: WSJ",
       "category": "Iran_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Oil tanker explodes after hitting naval mine in Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBBUHBTSEE2RWp1Q2JER29qVzlWOTJ1RlRjVUd3YlB0enNMa1ZmOXYyTWZzVVRZSTdlMkhIaXJFNVlNcjIwdFBJSEFDcko0bFlocjl4U3d0RTE1LVRiN0QwVFp2dFlvcWt4dVE?oc=5"
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Iran\u2019s Guards says oil tanker exploded after hitting mine in Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNQk9TQ0lXdlVGdHh2aXh1dGFoV3ljUzVXN3Z0bnI1QUZRWDJFQjNvMDNpMjZ2YTk2RXU1WFoyTldQZkdZUWtnMmszUFlxUTNhTnZFcllJYTFmUmc3LURjWXJWVFZ6TllmdFV1VklpNHhDS05nREJaelN5bkpwWEx0bXBneWNnQVFpQldGb0xVMjJfcTdXSGNnYnJ4cUpFeE5Mb3VwWFdNaDBkcWptUGtHeDF3?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Maha Capital, Ballard Partners Lobby Venezuelan Oil Approvals",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBGQTgxbXZuM2NBSDVERkQ1cTNUMVlKM0VtTm9keWo1V2NJSXBQVW9feVlXaTVSYU5uVVI2bWswVmI2a0I1WmdsMnJtS1NFdC1Xa0J3OUxtdTJwd2ZkZWtIcEdXeHo1aFIzNnNqX09fWnp2M19YQmE3Wg?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Trump Administration Discusses Taking Stake in Venezuela Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOUEFna0JRelltV2lsTTZOUkhrdi11aVdVejdiYll2MElhYi1lSHVsWDNBb0VTVVh3UkZocTBiYnJKdm12cDFZSW8tT3k0Y0Z0ZXBxWGd0NWVaUHZud2lsaDd6RVhQLWZULVdyQ0pabk9YNFVxTEp1T29jQlB3c01KeDRXTnZ0OFlYTW5KbHY2Mm9mSjM2bW42RHRxRUN2RDFicmdxbzBpbWg?oc=5"
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump Admin Sanctions International Criminal Court Hours After Former Judge Wins Nobel Peace Prize: \u2018Ban Transactions With This Rogue Court,\u2019 Rubio Says",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump vows quick end to Iran war as fighting in Yemen intensifies",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump and Iran agree on one thing. The US election calendar isn't driving their decisions on the war",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Houthis Bombard Saudi Air Links in Effort to Cut Kingdom Off From Rest of World",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump reaches Russian diesel supply deal as U.S. fuel prices surge",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Venezuela president authorizes SpaceX's Starlink to operate in the country",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Iran war live: Kremlin says Trump welcomed Russia\u2019s effort in Iran deal",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Trump's diesel agreement with Putin accused of contradicting Russia sanctions law",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Venezuela Wants to Return to the Days When Its Oil Fields Were Booming\u2014With U.S. Help",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "DOJ Scrutinizing Binance Compliance With 2023 Settlement Accord",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Trump Cuts Deal for Russian Diesel Injection",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "The ICC Is a Threat to America",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
       "url": ""
     }
   ]
