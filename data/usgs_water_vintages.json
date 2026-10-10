@@ -3652,14 +3652,14 @@
     }
   },
   {
-    "as_of": "2026-10-10 17:55:20",
+    "as_of": "2026-10-10 18:19:51",
     "valid_date": "2026-10-10",
     "cluster_key": "all",
     "stations_monitored": 13,
     "indices": {
       "hydrological_barge_bottleneck_index": 0.0,
       "gulf_marine_departure_risk_index": 0.0,
-      "carquinez_berthing_risk_index": 1.0,
+      "carquinez_berthing_risk_index": 0.869,
       "delaware_refinery_thermal_index": 0.0,
       "tulsa_refinery_flood_risk_index": 0.0,
       "florida_canal_flood_risk_index": 0.0,
@@ -3669,7 +3669,7 @@
     },
     "data": {
       "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-      "timestamp": "2026-10-10 17:55:20",
+      "timestamp": "2026-10-10 18:19:51",
       "status": "SUCCESS",
       "stations_monitored": 13,
       "stations": {
@@ -3678,10 +3678,10 @@
           "cluster": "inland_barge",
           "role": "downriver_barge_draft",
           "gage_height_ft": 12.5,
-          "discharge_cfs": 465000.0,
+          "discharge_cfs": 467000.0,
           "water_temp_c": 21.0,
           "specific_conductance_us_cm": 380.0,
-          "last_updated": "2026-10-10T12:00:00.000-05:00"
+          "last_updated": "2026-10-10T13:00:00.000-05:00"
         },
         "03612500": {
           "name": "Ohio River at Cairo, IL",
@@ -3697,11 +3697,11 @@
           "name": "Ohio River at Cincinnati, OH",
           "cluster": "inland_barge",
           "role": "cincinnati_terminal_stage",
-          "gage_height_ft": 26.84,
-          "discharge_cfs": 34300.0,
+          "gage_height_ft": 26.82,
+          "discharge_cfs": 38000.0,
           "water_temp_c": 20.0,
           "specific_conductance_us_cm": 310.0,
-          "last_updated": "2026-10-10T13:00:00.000-04:00"
+          "last_updated": "2026-10-10T14:00:00.000-04:00"
         },
         "08072050": {
           "name": "San Jacinto River nr Sheldon, TX (Houston Ship Channel)",
@@ -3749,16 +3749,16 @@
           "role": "refining_corridor_berthing",
           "gage_height_ft": 3.2,
           "discharge_cfs": 18000.0,
-          "water_temp_c": 20.9,
+          "water_temp_c": 20.4,
           "specific_conductance_us_cm": 46700.0,
-          "last_updated": "2026-10-10T08:45:00.000-08:00"
+          "last_updated": "2026-10-10T10:00:00.000-08:00"
         },
         "11455420": {
           "name": "Sacramento River at Freeport, CA",
           "cluster": "bay_area",
           "role": "atmospheric_river_runoff",
-          "gage_height_ft": 14.19,
-          "discharge_cfs": 99400.0,
+          "gage_height_ft": 14.05,
+          "discharge_cfs": 84100.0,
           "water_temp_c": 20.7,
           "specific_conductance_us_cm": 168.0,
           "last_updated": "2020-05-12T11:45:00.000-08:00"
@@ -3787,8 +3787,8 @@
           "name": "Verdigris River near Inola, OK (Port of Catoosa)",
           "cluster": "tulsa",
           "role": "mkarns_barge_navigation",
-          "gage_height_ft": 1.76,
-          "discharge_cfs": 150.0,
+          "gage_height_ft": 1.75,
+          "discharge_cfs": 147.0,
           "water_temp_c": 23.6,
           "specific_conductance_us_cm": 151.0,
           "last_updated": "2025-07-01T00:30:00.000-05:00"
@@ -3807,7 +3807,7 @@
       "indices": {
         "hydrological_barge_bottleneck_index": 0.0,
         "gulf_marine_departure_risk_index": 0.0,
-        "carquinez_berthing_risk_index": 1.0,
+        "carquinez_berthing_risk_index": 0.869,
         "delaware_refinery_thermal_index": 0.0,
         "tulsa_refinery_flood_risk_index": 0.0,
         "florida_canal_flood_risk_index": 0.0,

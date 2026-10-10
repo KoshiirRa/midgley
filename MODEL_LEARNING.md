@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-10-10 17:58 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-10-10 18:20 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -50,7 +50,7 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`1992`** | Total synthesized reflections: **`14`**
+Total indexed episodic memories in local store: **`0`** | Total synthesized reflections: **`0`**
 
 ### 📂 Categorized Anomaly Case Studies
 
@@ -63,37 +63,11 @@ _No anomalies logged in this category._
 #### 🏷️ Pipeline / Waterway Constraint (0 case studies)
 _No anomalies logged in this category._
 
-#### 🏷️ Geopolitical & OPEC Shock (4 case studies)
-- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
+#### 🏷️ Geopolitical & OPEC Shock (0 case studies)
+_No anomalies logged in this category._
 
-- **Newark_DE Price Discrepancy ($+0.7166/gal)** (`Newark_DE` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.7166/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-23 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-01`)
-  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-#### 🏷️ Price Discrepancy & General Outliers (8 case studies)
-- **Anomaly Post-Mortem** (`None` | `2026-10-10`)
-  - **Root Cause:** 
-  - **Historical Analogy:** 
-  - **Calibration Suggestion:** ``
-
-- **National Price Discrepancy ($+0.6620/gal)** (`National` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.6620/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.
-  - **Historical Analogy:** Similar to historical National turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-- **National Price Discrepancy ($+0.6620/gal)** (`National` | `2026-10-01`)
-  - **Root Cause:** Model underestimated price surge by -$0.6620/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.
-  - **Historical Analogy:** Similar to historical National turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
+#### 🏷️ Price Discrepancy & General Outliers (0 case studies)
+_No anomalies logged in this category._
 
 ---
 
