@@ -119,7 +119,19 @@
       "local_sales_ust_fee": 0.088,
       "total_carb_tax_burden": 1.1345,
       "provenance": "CARB_OFFICIAL_ARCHIVE"
+    },
+    "2026-10-10": {
+      "recorded_at": "2026-10-10T02:45:44.681907",
+      "as_of_date": "2026-10-10",
+      "lcfs_credit_price_mt": 72.5,
+      "cap_trade_allowance_price_mt": 38.2,
+      "carb_state_excise_tax": 0.596,
+      "cap_and_trade_fee_per_gal": 0.3395,
+      "lcfs_credit_fee_per_gal": 0.111,
+      "local_sales_ust_fee": 0.088,
+      "total_carb_tax_burden": 1.1345,
+      "provenance": "CARB_OFFICIAL_ARCHIVE"
     }
   },
-  "last_updated": "2026-10-03T13:00:23.275735"
+  "last_updated": "2026-10-10T02:45:44.681912"
 }
