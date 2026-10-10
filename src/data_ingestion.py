@@ -550,6 +550,8 @@ class EIADataConnector:
             "us_distillate_fuel": 3920.0
         }
 
+        dynamic_fetches_succeeded = 0
+
         # 1. Attempt official EIA API v2 Client for real WPSR fundamentals (Section 4.3)
         try:
             from src.eia_api_client import get_eia_client
@@ -660,6 +662,8 @@ class EIADataConnector:
         """
         Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "eia_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -1886,6 +1890,8 @@ class EIAStateMetroRetailConnector:
         """
         Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "eia_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
