@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-11T04:49:47.021238",
+  "timestamp": "2026-10-11T12:23:06.682965",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.074,
+    "current_price_per_gal": 3.978,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-11T04:49:27Z"
+      "timestamp": "2026-10-11T12:22:47Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-16",
-    "current_base_price": 4.074,
-    "predicted_price_per_gal": 4.092,
+    "current_base_price": 3.978,
+    "predicted_price_per_gal": 3.996,
     "expected_change_dollars": 0.018,
-    "expected_change_percent": 0.44,
+    "expected_change_percent": 0.45,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.972,
-    "prediction_upper_95ci": 4.212,
+    "prediction_lower_95ci": 3.876,
+    "prediction_upper_95ci": 4.116,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.093,
-    "day_2_price": 4.087,
-    "day_3_price": 4.094,
-    "day_4_price": 4.089,
-    "day_5_price": 4.092,
+    "day_1_price": 3.997,
+    "day_2_price": 3.991,
+    "day_3_price": 3.998,
+    "day_4_price": 3.993,
+    "day_5_price": 3.996,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Greenville NC forecast +$0.018/gal (+0.44%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Futures & Commodity Benchmark (+$0.004/gal).",
+      "summary_text": "Greenville NC forecast +$0.018/gal (+0.45%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Futures & Commodity Benchmark (+$0.004/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.007,
-          "impact_pct": 0.17,
+          "impact_pct": 0.18,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.003,
-          "impact_pct": 0.07,
+          "impact_pct": 0.08,
           "share_pct": 15.0,
           "direction": "UP"
         },
@@ -134,7 +134,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "impact_pct": 0.03,
           "share_pct": 5.0,
           "direction": "UP"
         },
@@ -142,7 +142,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.001,
-          "impact_pct": 0.02,
+          "impact_pct": 0.03,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.007,
-      "impact_pct": 0.17,
+      "impact_pct": 0.18,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.003,
-      "impact_pct": 0.07,
+      "impact_pct": 0.08,
       "share_pct": 15.0,
       "direction": "UP"
     },
@@ -186,7 +186,7 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "impact_pct": 0.03,
       "share_pct": 5.0,
       "direction": "UP"
     },
@@ -194,13 +194,13 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.001,
-      "impact_pct": 0.02,
+      "impact_pct": 0.03,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Greenville NC forecast +$0.018/gal (+0.44%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Futures & Commodity Benchmark (+$0.004/gal).",
+    "summary_text": "Greenville NC forecast +$0.018/gal (+0.45%): Driven primarily by Regional Logistics & Hub Delivery (+$0.007/gal), Futures & Commodity Benchmark (+$0.004/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
