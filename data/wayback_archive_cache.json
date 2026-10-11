@@ -128,7 +128,7 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5": {
-    "timestamp": "2026-10-08T17:18:21.708233+00:00",
+    "timestamp": "2026-10-11T18:43:47.231082+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
@@ -7212,13 +7212,13 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiakFVX3lxTE54cWx5MGRYRE9TSmJwV3pJRW9MZEs5MlBOWE1WMUpoV0d4TkVPMDFfcmI2c3FPLWhxYzlVTTBOYjVQZFYzX2loSEpESGpHNmF1SUtPQTAzTnhiaFBnUmhoeF9ld1AyMFFrbmc?oc=5": {
-    "timestamp": "2026-10-04T04:57:42.456600+00:00",
+    "timestamp": "2026-10-11T18:43:12.278442+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54cWx5MGRYRE9TSmJwV3pJRW9MZEs5MlBOWE1WMUpoV0d4TkVPMDFfcmI2c3FPLWhxYzlVTTBOYjVQZFYzX2loSEpESGpHNmF1SUtPQTAzTnhiaFBnUmhoeF9ld1AyMFFrbmc?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54cWx5MGRYRE9TSmJwV3pJRW9MZEs5MlBOWE1WMUpoV0d4TkVPMDFfcmI2c3FPLWhxYzlVTTBOYjVQZFYzX2loSEpESGpHNmF1SUtPQTAzTnhiaFBnUmhoeF9ld1AyMFFrbmc?oc=5",
     "headline": "2026 Chrysler Pacifica – Trim Comparison - Critical Differences That Cost Thousands - driving.ca",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTE54cWx5MGRYRE9TSmJwV3pJRW9MZEs5MlBOWE1WMUpoV0d4TkVPMDFfcmI2c3FPLWhxYzlVTTBOYjVQZFYzX2loSEpESGpHNmF1SUtPQTAzTnhiaFBnUmhoeF9ld1AyMFFrbmc?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMif0FVX3lxTFBKVmVaR0xmdC1zRWxCZ0pHcHc3M1QwWmJUQmRGTy1DQ1VRRTZkNDVPdjJnTF92ajg4OGVmLTNzM254Vi13UTBNcGdqZ2d6eFo0d1Z1eUJOSnVCdGRZTWxqYVgzTDBMc1Z0YURVelcyM1g3ck9yc1p3Y3RiVzkyczA?oc=5": {
     "timestamp": "2026-09-27T19:01:41.912295",
@@ -11355,6 +11355,51 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPMjZUQk92SUZDMDJoVWFnR2xiRjlDaFppM0pIR2VBMWVtNmc2cGFjbnkxUDR0X1lMd3RZbWF5RlNmUDNhdVktLVAwWHhyNEg1VjRKSktwbDQ1MEMxdllGZDgyMldvYm9xaDZqbW1OYkNWc2ZmVUdUNWFDQ3gxajFLbWppLUFmYTBDS3NCRUJ5dTFWZ0lpQkFXUVJGXy1iNWVNNTZXSU1zQkxNVG5GOHZOQnZ1UUE2dG5RVGQ2N0NuenbSAcYBQVVfeXFMTjNnSjhWaDMtWklDcHdjZUJYak44WGVlUUltUEFRUW1UWVlMdnZsLTNfTnh5UDlQdXo0TGVHcTJDbDZMNXpFN0RpbDJZZ0piUXFWa2pna3hyZGt0MFhpbkM1N1NZT0xtRC1RaXFkUjVmS0JYMHFTc0NLQWVkVWE1TGl2NlAyeC14aFJDX0plcmE0blN4X25zekpPaEtkaHRocGExRGZSN3lRV2owZDk4TzJHRXVUVUZCWFJmQkZlRFpDUFBQaHB3?oc=5",
     "headline": "‘India Is Not Funding Our Detractors’: US Lawmaker Calls For Closer Ties With India - News18",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwAFBVV95cUxPMjZUQk92SUZDMDJoVWFnR2xiRjlDaFppM0pIR2VBMWVtNmc2cGFjbnkxUDR0X1lMd3RZbWF5RlNmUDNhdVktLVAwWHhyNEg1VjRKSktwbDQ1MEMxdllGZDgyMldvYm9xaDZqbW1OYkNWc2ZmVUdUNWFDQ3gxajFLbWppLUFmYTBDS3NCRUJ5dTFWZ0lpQkFXUVJGXy1iNWVNNTZXSU1zQkxNVG5GOHZOQnZ1UUE2dG5RVGQ2N0NuenbSAcYBQVVfeXFMTjNnSjhWaDMtWklDcHdjZUJYak44WGVlUUltUEFRUW1UWVlMdnZsLTNfTnh5UDlQdXo0TGVHcTJDbDZMNXpFN0RpbDJZZ0piUXFWa2pna3hyZGt0MFhpbkM1N1NZT0xtRC1RaXFkUjVmS0JYMHFTc0NLQWVkVWE1TGl2NlAyeC14aFJDX0plcmE0blN4X25zekpPaEtkaHRocGExRGZSN3lRV2owZDk4TzJHRXVUVUZCWFJmQkZlRFpDUFBQaHB3?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMidkFVX3lxTFBhNFdLVmttMk16dmpMakFOSUlFQ2lEWUQ0MV94T25xT1BtZFN6dmxMRkh2U004Z2NXdTI0bWUwUmVsQ19CbnQ3MV8wdUVaSWVmYjd2eEl0Y19YR3RnS29GTnhNS0RzYkxyQm1qbTNtczRiOHBCY2c?oc=5": {
+    "timestamp": "2026-10-11T18:42:30.828904+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBhNFdLVmttMk16dmpMakFOSUlFQ2lEWUQ0MV94T25xT1BtZFN6dmxMRkh2U004Z2NXdTI0bWUwUmVsQ19CbnQ3MV8wdUVaSWVmYjd2eEl0Y19YR3RnS29GTnhNS0RzYkxyQm1qbTNtczRiOHBCY2c?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBhNFdLVmttMk16dmpMakFOSUlFQ2lEWUQ0MV94T25xT1BtZFN6dmxMRkh2U004Z2NXdTI0bWUwUmVsQ19CbnQ3MV8wdUVaSWVmYjd2eEl0Y19YR3RnS29GTnhNS0RzYkxyQm1qbTNtczRiOHBCY2c?oc=5",
+    "headline": "No change to fuel prices for fourth week in a row - Taipei Times",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMidkFVX3lxTFBhNFdLVmttMk16dmpMakFOSUlFQ2lEWUQ0MV94T25xT1BtZFN6dmxMRkh2U004Z2NXdTI0bWUwUmVsQ19CbnQ3MV8wdUVaSWVmYjd2eEl0Y19YR3RnS29GTnhNS0RzYkxyQm1qbTNtczRiOHBCY2c?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMimgFBVV95cUxPMWgwSVltbkxJVmRPeHZtbUNLb0wwcEFVUnpnc0MzdEsxSTVTd3NnVGI3TGQ5Y2t2RHVad05VZmF2UmlIZFhFSS00Q05xTEpJSW9nbnJXMndOLVU1bmFLUkJCeGtnSE9uODE0NnFWUmU2YS1rM2FfbjgzNDRObmZpYk9DMWoyUTlUMkZBMU04THAxTFFLdEJockxn?oc=5": {
+    "timestamp": "2026-10-11T18:42:41.553459+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPMWgwSVltbkxJVmRPeHZtbUNLb0wwcEFVUnpnc0MzdEsxSTVTd3NnVGI3TGQ5Y2t2RHVad05VZmF2UmlIZFhFSS00Q05xTEpJSW9nbnJXMndOLVU1bmFLUkJCeGtnSE9uODE0NnFWUmU2YS1rM2FfbjgzNDRObmZpYk9DMWoyUTlUMkZBMU04THAxTFFLdEJockxn?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPMWgwSVltbkxJVmRPeHZtbUNLb0wwcEFVUnpnc0MzdEsxSTVTd3NnVGI3TGQ5Y2t2RHVad05VZmF2UmlIZFhFSS00Q05xTEpJSW9nbnJXMndOLVU1bmFLUkJCeGtnSE9uODE0NnFWUmU2YS1rM2FfbjgzNDRObmZpYk9DMWoyUTlUMkZBMU04THAxTFFLdEJockxn?oc=5",
+    "headline": "Tracking U.S., state and county gas prices, in maps and charts. Updated daily. - NBC News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimgFBVV95cUxPMWgwSVltbkxJVmRPeHZtbUNLb0wwcEFVUnpnc0MzdEsxSTVTd3NnVGI3TGQ5Y2t2RHVad05VZmF2UmlIZFhFSS00Q05xTEpJSW9nbnJXMndOLVU1bmFLUkJCeGtnSE9uODE0NnFWUmU2YS1rM2FfbjgzNDRObmZpYk9DMWoyUTlUMkZBMU04THAxTFFLdEJockxn?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQREV4ZWtHV21JeHlaT2dPeDg4eG4zLUlDN1NQdWsyRy1wNVdFb1hFM1M1ZTZDVm5TWWtnSG5Ec1hkODhlRU9XSjJVbVYwNnQzM1pwc2xJemZhallKVGNJa3cyUGVFdXdEVkdhSDdGazVCMWptcERKeFk4bXdic01XVGExX1pwdnhseFIzVTgydDUteFBiSU9MZUctMW80RzJNbVRnWkhuR1U0a2phTTNqZVBlMmcwbnRjaDVNUGhFcW1LMkVCcEhfcU4yUnNrdzAwNlJBcg?oc=5": {
+    "timestamp": "2026-10-11T18:42:52.311817+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQREV4ZWtHV21JeHlaT2dPeDg4eG4zLUlDN1NQdWsyRy1wNVdFb1hFM1M1ZTZDVm5TWWtnSG5Ec1hkODhlRU9XSjJVbVYwNnQzM1pwc2xJemZhallKVGNJa3cyUGVFdXdEVkdhSDdGazVCMWptcERKeFk4bXdic01XVGExX1pwdnhseFIzVTgydDUteFBiSU9MZUctMW80RzJNbVRnWkhuR1U0a2phTTNqZVBlMmcwbnRjaDVNUGhFcW1LMkVCcEhfcU4yUnNrdzAwNlJBcg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQREV4ZWtHV21JeHlaT2dPeDg4eG4zLUlDN1NQdWsyRy1wNVdFb1hFM1M1ZTZDVm5TWWtnSG5Ec1hkODhlRU9XSjJVbVYwNnQzM1pwc2xJemZhallKVGNJa3cyUGVFdXdEVkdhSDdGazVCMWptcERKeFk4bXdic01XVGExX1pwdnhseFIzVTgydDUteFBiSU9MZUctMW80RzJNbVRnWkhuR1U0a2phTTNqZVBlMmcwbnRjaDVNUGhFcW1LMkVCcEhfcU4yUnNrdzAwNlJBcg?oc=5",
+    "headline": "Gas prices for 10/11/26: Which states paying the most and least as the weekend comes to a close? - Cleveland.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1AFBVV95cUxQREV4ZWtHV21JeHlaT2dPeDg4eG4zLUlDN1NQdWsyRy1wNVdFb1hFM1M1ZTZDVm5TWWtnSG5Ec1hkODhlRU9XSjJVbVYwNnQzM1pwc2xJemZhallKVGNJa3cyUGVFdXdEVkdhSDdGazVCMWptcERKeFk4bXdic01XVGExX1pwdnhseFIzVTgydDUteFBiSU9MZUctMW80RzJNbVRnWkhuR1U0a2phTTNqZVBlMmcwbnRjaDVNUGhFcW1LMkVCcEhfcU4yUnNrdzAwNlJBcg?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMickFVX3lxTE9vQnNQNXpoTFg3R21YVXYzclBfc0IyUXFLTFZqOWZ4T19xZFVELUxBSlBOS3AyZW95cFowS3BQQUpuNloxS1RDV0lVSzZwRlc4SXNvWl9CeUFrU3R6QzRkMjMtREcwOVk3TWNkN1htZXJXQQ?oc=5": {
+    "timestamp": "2026-10-11T18:43:02.889466+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9vQnNQNXpoTFg3R21YVXYzclBfc0IyUXFLTFZqOWZ4T19xZFVELUxBSlBOS3AyZW95cFowS3BQQUpuNloxS1RDV0lVSzZwRlc4SXNvWl9CeUFrU3R6QzRkMjMtREcwOVk3TWNkN1htZXJXQQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9vQnNQNXpoTFg3R21YVXYzclBfc0IyUXFLTFZqOWZ4T19xZFVELUxBSlBOS3AyZW95cFowS3BQQUpuNloxS1RDV0lVSzZwRlc4SXNvWl9CeUFrU3R6QzRkMjMtREcwOVk3TWNkN1htZXJXQQ?oc=5",
+    "headline": "2017 Hyundai Elantra Sedan – Trim Comparison - Critical Differences That Cost Thousands - driving.ca",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMickFVX3lxTE9vQnNQNXpoTFg3R21YVXYzclBfc0IyUXFLTFZqOWZ4T19xZFVELUxBSlBOS3AyZW95cFowS3BQQUpuNloxS1RDV0lVSzZwRlc4SXNvWl9CeUFrU3R6QzRkMjMtREcwOVk3TWNkN1htZXJXQQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiY0FVX3lxTE14TWNnOFRTY3FyNm5hMWRrLV9NNjVGa3lpMmJwMC0zV2ZGWElBVnhPN0ZZLUQzZS1BZGViREhZSkd4TlZsLVR5ekVtNGs1WklCaXBsOEZLeVRBc3NMZnNTOE1wOA?oc=5": {
+    "timestamp": "2026-10-11T18:43:22.748795+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE14TWNnOFRTY3FyNm5hMWRrLV9NNjVGa3lpMmJwMC0zV2ZGWElBVnhPN0ZZLUQzZS1BZGViREhZSkd4TlZsLVR5ekVtNGs1WklCaXBsOEZLeVRBc3NMZnNTOE1wOA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE14TWNnOFRTY3FyNm5hMWRrLV9NNjVGa3lpMmJwMC0zV2ZGWElBVnhPN0ZZLUQzZS1BZGViREhZSkd4TlZsLVR5ekVtNGs1WklCaXBsOEZLeVRBc3NMZnNTOE1wOA?oc=5",
+    "headline": "2026 Kia Carnival – Trim Comparison - Critical Differences That Cost Thousands - driving.ca",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiY0FVX3lxTE14TWNnOFRTY3FyNm5hMWRrLV9NNjVGa3lpMmJwMC0zV2ZGWElBVnhPN0ZZLUQzZS1BZGViREhZSkd4TlZsLVR5ekVtNGs1WklCaXBsOEZLeVRBc3NMZnNTOE1wOA?oc=5",
     "error": "<urlopen error timed out>"
   }
 }
