@@ -116,6 +116,12 @@ def generate_metro_narrative(
                 ("Cook County / Northwest Indiana Tax Differential Arbitrage", "TAX_ARBITRAGE"),
                 ("Chicago CBOB Wholesale Spot Rack Basis", "SPOT_BASIS"),
             ]
+        elif "houston" in reg_str:
+            factors = [
+                ("USGC Mega-Refinery Runs & Baytown/Port Arthur Capacity", "REFINING_SUPPLY"),
+                ("Colonial Pipeline Line 1 Inbound Terminal Clearing", "PIPELINE_OUTFLOW"),
+                ("Houston Ship Channel Spot-to-Rack Compression", "GATE_PRICING"),
+            ]
         else:
             factors = [
                 ("Wholesale RBOB Benchmark Movement", "COMMODITY_BASE"),
@@ -337,6 +343,32 @@ def generate_metro_narrative(
             detailed_prose = (
                 f"Chicagoland retail gasoline prices are projected to hold steady{hub_info}, as balanced throughput from BP Whiting "
                 f"and CITGO Lemont matches metropolitan commuter demand across Cook County and Northwest Indiana."
+            )
+
+    elif "houston" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["USGC Refining Surplus", "Baytown/Port Arthur Runs", "Refinery Gate Margin Compression"]
+            headline_summary = f"Houston & Gulf Coast retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Houston retail gasoline pricing is anchored to the world's densest refining cluster{hub_info}, "
+                f"where immense operable throughput across ExxonMobil Baytown (560 kbpd) and Motiva Port Arthur (630 kbpd) "
+                f"supplies abundant prompt wholesale product. Direct gate delivery minimizes distribution freight, "
+                f"while stable Texas motor fuel taxes ($0.200/gal) allow prompt downward wholesale cost pass-through to retail pumps."
+            )
+        elif calc_delta > 0.005:
+            badges = ["USGC Refining Outage", "Tropical Disturbance Risk", "Waterborne Cargo Arbitrage"]
+            headline_summary = f"Houston & Gulf Coast retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Houston retail fuel pricing reflects localized refining dynamics and waterborne vessel logistics{hub_info}. "
+                f"Tightening prompt Gulf Coast conventional spot basis, offshore storm precautionary shut-ins, or Colonial Pipeline "
+                f"origin terminal constraints create temporary upward price pressure at local retail dispensers."
+            )
+        else:
+            badges = ["USGC Refining Equilibrium", "Ship Channel Clearing Parity"]
+            headline_summary = f"Houston & Gulf Coast retail prices are projected to remain stable."
+            detailed_prose = (
+                f"Houston retail prices are projected to hold steady{hub_info}, as balanced throughput from Baytown, Deer Park, "
+                f"and Port Arthur refineries matches metropolitan commuter demand and outbound pipeline nominations."
             )
 
     else:

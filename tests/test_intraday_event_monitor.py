@@ -134,6 +134,10 @@ class TestIntradayEventMonitor(unittest.TestCase):
         t_chicago = self.monitor.resolve_target_locales("BP Whiting Refinery reports flaring incident in Northwest Indiana")
         self.assertEqual(t_chicago, ["Chicago"])
 
+        # Test Houston locale routing
+        t_houston = self.monitor.resolve_target_locales("ExxonMobil Baytown Refinery reports flaring shut-in along Houston Ship Channel")
+        self.assertEqual(t_houston, ["Houston"])
+
         # Test Default National routing
         t_nat = self.monitor.resolve_target_locales("OPEC Announces Emergency Production Quota Cut")
         self.assertEqual(t_nat, ["National"])

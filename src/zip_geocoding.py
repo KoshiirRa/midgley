@@ -32,7 +32,9 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "940": "bayarea", "941": "bayarea", "942": "bayarea", "943": "bayarea", "944": "bayarea",
     "600": "chicago", "601": "chicago", "602": "chicago", "603": "chicago", "604": "chicago",
     "605": "chicago", "606": "chicago", "607": "chicago", "608": "chicago",
-    "463": "chicago", "464": "chicago"
+    "463": "chicago", "464": "chicago",
+    "770": "houston", "772": "houston", "773": "houston", "774": "houston", "775": "houston",
+    "776": "houston", "777": "houston"
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -116,8 +118,8 @@ STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
     "OH": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.385},
     "IL": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.470},
     "IN": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.350},
-    "TX": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "national", "fallback_model": "National Wholesale (PADD 3)", "state_tax": 0.200},
-    "LA": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "national", "fallback_model": "National Wholesale (PADD 3)", "state_tax": 0.200}
+    "TX": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.200},
+    "LA": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.200}
 }
 
 
@@ -379,6 +381,28 @@ CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
         "padd": "PADD 1C",
         "padd_name": "Lower Atlantic",
         "state_tax": 0.362,
+        "max_radius_miles": 120.0
+    },
+    "chicago": {
+        "name": "Greater Chicago Metro Hub, IL/IN",
+        "region_id": "Chicago_IL",
+        "lat": 41.8781,
+        "lon": -87.6298,
+        "state": "IL",
+        "padd": "PADD 2",
+        "padd_name": "Midwest",
+        "state_tax": 0.470,
+        "max_radius_miles": 100.0
+    },
+    "houston": {
+        "name": "Houston & USGC Refining Hub, TX",
+        "region_id": "Houston_TX",
+        "lat": 29.7604,
+        "lon": -95.3698,
+        "state": "TX",
+        "padd": "PADD 3",
+        "padd_name": "Gulf Coast",
+        "state_tax": 0.200,
         "max_radius_miles": 120.0
     },
 }

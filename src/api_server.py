@@ -224,7 +224,10 @@ LOCALE_MAP = {
     "psl": "Port_St_Lucie_FL",
     "chicago": "Chicago_IL",
     "chicago_il": "Chicago_IL",
-    "chi": "Chicago_IL"
+    "chi": "Chicago_IL",
+    "houston": "Houston_TX",
+    "houston_tx": "Houston_TX",
+    "hou": "Houston_TX"
 }
 
 # Regional PADD metadata
@@ -238,6 +241,7 @@ PADD_METADATA = {
     "Charlotte_NC": {"name": "Charlotte Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Port_St_Lucie_FL": {"name": "Port St. Lucie Metro Area, FL", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Chicago_IL": {"name": "Greater Chicago Metro Area, IL/IN", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
+    "Houston_TX": {"name": "Houston & USGC Refining Corridor, TX", "padd": "PADD 3 Gulf Coast", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -318,6 +322,33 @@ SCENARIOS_CATALOG = {
         "season_window": "Dec 01 – Mar 15",
         "telemetry_hook": "openmeteo_freeze",
         "locales": ["chicago", "national"]
+    },
+    "gulf_hurricane_shut_in": {
+        "name": "Category 4 Gulf Hurricane Landfall (Houston Ship Channel Surge)",
+        "headline": "Severe hurricane forces storm surge closures and emergency flaring across Baytown, Galveston Bay, and Port Arthur refineries.",
+        "shock_pct": 0.1228,
+        "category": "meteorological_tropical",
+        "season_window": "Jun 01 – Nov 30",
+        "telemetry_hook": "noaa_nhc",
+        "locales": ["houston", "national"]
+    },
+    "colonial_line1_origin_trip": {
+        "name": "Colonial Pipeline Line 1 Origin Metering Trip",
+        "headline": "Pasadena breakout station electrical failure halts outbound shipments on Colonial Line 1, trapping supply in USGC storage.",
+        "shock_pct": -0.0333,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["houston", "national"]
+    },
+    "gulf_hard_freeze": {
+        "name": "Severe Gulf Coast Hard Freeze (Winter Storm Uri Repeat)",
+        "headline": "Deep Arctic freeze drops Upper Texas Coast below 15°F, freezing uninsulated boiler lines and taking 1.5M bpd capacity offline.",
+        "shock_pct": 0.0860,
+        "category": "meteorological",
+        "season_window": "Dec 01 – Mar 01",
+        "telemetry_hook": "openmeteo_freeze",
+        "locales": ["houston", "national"]
     },
     "mississippi_low_water": {
         "name": "Lower Mississippi & Ohio River Low-Water Barge Bottleneck",

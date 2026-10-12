@@ -21,6 +21,8 @@ from src.dashboard_generator import (
     PORT_ST_LUCIE_PATH,
     CHICAGO_PATH,
     CHICAGO_SUB_PATH,
+    HOUSTON_PATH,
+    HOUSTON_SUB_PATH,
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
@@ -39,7 +41,7 @@ def test_dashboard_generation_and_math_katex():
     generate_public_dashboard()
 
     # Verify existence of all expected dashboard HTML files
-    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
+    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
         assert os.path.exists(path), f"Expected file does not exist: {path}"
         assert os.path.getsize(path) > 0, f"Generated file is empty: {path}"
 
@@ -988,6 +990,29 @@ def test_chicago_page_generation():
     assert "Citgo Lemont" in content or "CITGO Lemont" in content
     assert "PADD 2 Great Lakes Hub" in content
     assert "file:///" not in content
+
+
+def test_houston_page_generation():
+    """Verify that generate_public_dashboard generates docs/houston.html and docs/houston/index.html
+    with Houston & USGC refining corridor content, Baytown/Port Arthur logistics,
+    and shock scenarios (Issue #220).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(HOUSTON_PATH), f"Expected file does not exist: {HOUSTON_PATH}"
+    assert os.path.getsize(HOUSTON_PATH) > 0, f"Generated file is empty: {HOUSTON_PATH}"
+    assert os.path.exists(HOUSTON_SUB_PATH), f"Expected file does not exist: {HOUSTON_SUB_PATH}"
+    assert os.path.getsize(HOUSTON_SUB_PATH) > 0, f"Generated file is empty: {HOUSTON_SUB_PATH}"
+
+    with open(HOUSTON_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "Houston, TX Metro Retail Gas Forecast" in content
+    assert "Baytown" in content
+    assert "Port Arthur" in content
+    assert "PADD 3 USGC Refining Epicenter" in content
+    assert "file:///" not in content
+
 
 
 

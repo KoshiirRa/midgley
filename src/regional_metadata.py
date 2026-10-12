@@ -34,6 +34,8 @@ REGION_ALIASES: Dict[str, str] = {
     "portstlucie": "port_st_lucie_fl",
     "chicago": "chicago_il",
     "greater_chicago": "chicago_il",
+    "houston": "houston_tx",
+    "houston_metro": "houston_tx",
 }
 
 

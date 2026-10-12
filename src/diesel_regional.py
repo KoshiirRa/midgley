@@ -86,7 +86,8 @@ DIESEL_BASE_ANCHORS = {
     "charlotte": 3.730,
     "oakland": 5.250,
     "port_st_lucie": 3.820,
-    "chicago": 3.890
+    "chicago": 3.890,
+    "houston": 3.450
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -98,7 +99,8 @@ LOCALE_TO_REGION_MAP = {
     "charlotte": "Charlotte_NC",
     "oakland": "Oakland_CA",
     "port_st_lucie": "Port_St_Lucie_FL",
-    "chicago": "Chicago_IL"
+    "chicago": "Chicago_IL",
+    "houston": "Houston_TX"
 }
 
 

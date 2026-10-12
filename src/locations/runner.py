@@ -50,6 +50,8 @@ REGION_MODULE_MAP = {
     "port_st_lucie_fl": ("src.locations.port_st_lucie.regional", "fetch_port_st_lucie_market_data", "get_port_st_lucie_regional_events", "Port_St_Lucie_FL"),
     "chicago": ("src.locations.chicago.regional", "fetch_chicago_market_data", "get_chicago_regional_events", "Chicago_IL"),
     "chicago_il": ("src.locations.chicago.regional", "fetch_chicago_market_data", "get_chicago_regional_events", "Chicago_IL"),
+    "houston": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
+    "houston_tx": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
 }
 
 

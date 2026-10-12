@@ -40,6 +40,7 @@ class TestHierarchicalEngine(unittest.TestCase):
             "PADD_1B": 3.70,
             "PADD_1C": 3.35,
             "PADD_2": 3.20,
+            "PADD_3": 2.80,
             "PADD_5": 5.10,
             "Tulsa_OK": 3.10,
             "Newark_DE": 3.75,
@@ -50,7 +51,8 @@ class TestHierarchicalEngine(unittest.TestCase):
             "Port_St_Lucie_FL": 3.42,
             "Oakland_CA": 5.15,
             "BayArea_CA": 5.18,
-            "Chicago_IL": 3.55
+            "Chicago_IL": 3.55,
+            "Houston_TX": 2.85
         }
 
         reconciled = engine.reconcile_forecast_dict(base_forecasts)
@@ -63,6 +65,10 @@ class TestHierarchicalEngine(unittest.TestCase):
         # 2. PADD_2 == average of Tulsa, Cincinnati_OH, Cincinnati_KY, and Chicago_IL
         padd2_calc = (reconciled["Tulsa_OK"] + reconciled["Cincinnati_OH"] + reconciled["Cincinnati_KY"] + reconciled["Chicago_IL"]) / 4.0
         self.assertAlmostEqual(reconciled["PADD_2"], padd2_calc, places=3)
+
+        # 3. PADD_3 == Houston_TX
+        padd3_calc = reconciled["Houston_TX"]
+        self.assertAlmostEqual(reconciled["PADD_3"], padd3_calc, places=3)
 
     def test_empirical_bayes_shrinkage_regression(self):
         np.random.seed(42)

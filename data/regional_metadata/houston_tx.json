@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "houston_tx",
+  "logger_region_key": "Houston_TX",
+  "display_name": "Houston & USGC Refining Complex, TX",
+  "padd_region": "PADD 3 Gulf Coast",
+  "primary_city": "Houston, TX",
+  "counties": [
+    "Harris",
+    "Galveston",
+    "Brazoria",
+    "Chambers",
+    "Fort Bend",
+    "Montgomery",
+    "Liberty",
+    "Jefferson"
+  ],
+  "baseline_price": 2.85,
+  "icon_class": "fa-oil-well",
+  "theme_color": "emerald",
+  "econometric_drivers": {
+    "title": "USGC Refining Epicenter & Direct Gate Pricing Pass-Through",
+    "description": "Models razor-thin retail rack margins resulting from direct refinery gate proximity to mega-refinery clusters along the Houston Ship Channel, Baytown, and Port Arthur. Anchored by the lowest state fuel excise taxes in the country ($0.200/gal TX MFT + $0.184/gal federal = $0.384/gal baseline) with high sensitivity to Atlantic/Gulf tropical weather systems, hurricane shut-ins, and waterborne export cargo arbitrage."
+  },
+  "refining_logistics": {
+    "title": "North American Refining Epicenter (>52% of U.S. Operable Capacity)",
+    "description": "Anchored by the world's densest concentration of mega-refining assets: ExxonMobil Baytown (560 kbpd), Motiva Port Arthur (630 kbpd), Marathon Galveston Bay (593 kbpd), PEMEX Deer Park (312 kbpd), Valero Port Arthur (395 kbpd), and Chevron Pasadena (112 kbpd). Serves as origin injection point for Colonial Pipeline (Lines 1 & 2) supplying the Atlantic Seaboard and Explorer Pipeline supplying the Midwest.",
+    "primary_refinery": "ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd)",
+    "capacity_bpd": 2602000,
+    "pipelines": [
+      "Colonial Pipeline Lines 1 & 2",
+      "Explorer Pipeline",
+      "Centennial Pipeline",
+      "Kinder Morgan Teppco",
+      "Longhorn Pipeline",
+      "Seaway Pipeline",
+      "Houston Ship Channel Marine Barge Waterway"
+    ]
+  },
+  "tax_structure": {
+    "title": "Texas Statutory Motor Fuel Excise Tax Burden",
+    "description": "Texas state motor fuel tax ($0.200/gal statutory fixed excise, no sales tax on motor fuel) and Federal excise tax ($0.184/gal) create a total baseline tax burden of $0.384/gal, among the lowest in the United States.",
+    "state_tax_per_gal": 0.200,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.384,
+    "notes": "Statutory baseline excise tax of $0.384/gal with zero local municipal sales tax add-on"
+  },
+  "infrastructure_delivery": {
+    "title": "Houston Ship Channel Wholesale Spot & Rack Margin Dynamics",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Houston}} = P_{\\text{Houston Retail}} - P_{\\text{USGC Spot}} = \\$2.850 - \\$2.150 = \\$0.700/\\text{gal}",
+    "description": "Reflects prompt US Gulf Coast conventional gasoline spot benchmark at Houston Ship Channel terminals, EPA 7.8 psi summer volatility standard, and razor-thin retail distribution margins.",
+    "hub_distance_miles": 12,
+    "hub_name": "Houston Ship Channel / Pasadena Waterborne Terminal Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Category 4 Gulf Hurricane Landfall",
+      "subtitle": "Houston Ship Channel Storm Surge & Channel Closure",
+      "price_impact_per_gal": 0.350,
+      "pct_impact": 12.28,
+      "description": "Forces precautionary shutdown of Baytown and Texas City refineries, cutting >1.5M bpd capacity"
+    },
+    {
+      "name": "Colonial Pipeline Line 1 Origin Metering Trip",
+      "subtitle": "Pasadena Breakout Station Inbound Chokepoint",
+      "price_impact_per_gal": -0.095,
+      "pct_impact": -3.33,
+      "description": "Traps refined product in USGC storage, depressing local wholesale spot price while spiking East Coast"
+    },
+    {
+      "name": "Severe Gulf Coast Hard Freeze",
+      "subtitle": "Uninsulated Instrument Freeze-Off",
+      "price_impact_per_gal": 0.245,
+      "pct_impact": 8.60,
+      "description": "Cuts industrial power and freezes refinery boiler feedwater lines, taking multiple USGC units offline"
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 2680000,
+    "zero_vehicle_pct": 5.4,
+    "vehicles_per_household": 1.88,
+    "drive_alone_share": 0.795,
+    "carpool_share": 0.098,
+    "public_transit_share": 0.021,
+    "work_from_home_share": 0.086,
+    "mean_commute_minutes": 30.5,
+    "vehicle_dependency_ratio": 0.893,
+    "transit_alternative_index": 0.045,
+    "inelastic_demand_score": 0.862
+  }
+}

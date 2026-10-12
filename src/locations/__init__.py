@@ -16,6 +16,7 @@ from src.locations.charlotte import run_charlotte_pipeline, build_charlotte_note
 from src.locations.oakland import run_oakland_pipeline, build_oakland_notebook
 from src.locations.port_st_lucie import run_port_st_lucie_pipeline, build_port_st_lucie_notebook
 from src.locations.chicago import run_chicago_pipeline, build_chicago_notebook
+from src.locations.houston import run_houston_pipeline, build_houston_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -100,6 +101,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_chicago_pipeline,
         "build_notebook": build_chicago_notebook,
         "notebook_filename": "chicago_gas_price_llm_forecasting.ipynb"
+    },
+    "houston": {
+        "id": "houston",
+        "name": "Houston & USGC Refining Complex, TX",
+        "type": "regional",
+        "module": "src.locations.houston",
+        "run_pipeline": run_houston_pipeline,
+        "build_notebook": build_houston_notebook,
+        "notebook_filename": "houston_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -114,6 +124,8 @@ def get_location(loc_id: str) -> Dict[str, Any]:
         loc_id = "oakland"
     if loc_id in ("chicago_il", "greater_chicago"):
         loc_id = "chicago"
+    if loc_id in ("houston_tx", "houston_metro"):
+        loc_id = "houston"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]
@@ -156,5 +168,7 @@ __all__ = [
     "run_bay_area_pipeline",
     "run_port_st_lucie_pipeline",
     "run_chicago_pipeline",
-    "build_chicago_notebook"
+    "build_chicago_notebook",
+    "run_houston_pipeline",
+    "build_houston_notebook"
 ]

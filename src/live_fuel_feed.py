@@ -195,6 +195,13 @@ REGION_METADATA = {
         "static_anchor": 3.850,
         "name": "Greater Chicago Metro Retail",
         "aaa_keywords": ["Chicago", "Cook County", "Metro Average"]
+    },
+    "Houston_TX": {
+        "zip": "77002",
+        "state": "TX",
+        "static_anchor": 2.850,
+        "name": "Houston, TX Metro Retail",
+        "aaa_keywords": ["Houston", "Harris County", "Texas"]
     }
 }
 
@@ -427,7 +434,8 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                     "Greenville_NC": 0.781,
                     "Charlotte_NC": 0.811,
                     "Port_St_Lucie_FL": 0.976,
-                    "Chicago_IL": 1.150
+                    "Chicago_IL": 1.150,
+                    "Houston_TX": 0.520
                 }
                 offset = margins.get(region_code, 0.95)
                 est_price = latest_rbob + offset

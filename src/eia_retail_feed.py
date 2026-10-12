@@ -45,6 +45,9 @@ FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
     "GASREGWSF": "EMM_EPMR_PTE_Y05SF_DPG",
     "GASREGWCHI": "EMM_EPMR_PTE_Y03CH_DPG",
     "GASREGWIL": "EMM_EPMR_PTE_SIL_DPG",
+    "GASREGWHO": "EMM_EPMR_PTE_Y44HO_DPG",
+    "GASREGWTX": "EMM_EPMR_PTE_STX_DPG",
+    "GASREGWGC": "EMM_EPMR_PTE_R30_DPG",
     "EMM_EPMR_PTE_NUS_DPG": "EMM_EPMR_PTE_NUS_DPG",
     "EMM_EPMR_PTE_R1Y_DPG": "EMM_EPMR_PTE_R1Y_DPG",
     "EMM_EPMR_PTE_R1Z_DPG": "EMM_EPMR_PTE_R1Z_DPG",
@@ -55,12 +58,17 @@ FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
     "EMM_EPMR_PTE_Y05SF_DPG": "EMM_EPMR_PTE_Y05SF_DPG",
     "EMM_EPMR_PTE_Y03CH_DPG": "EMM_EPMR_PTE_Y03CH_DPG",
     "EMM_EPMR_PTE_SIL_DPG": "EMM_EPMR_PTE_SIL_DPG",
+    "EMM_EPMR_PTE_Y44HO_DPG": "EMM_EPMR_PTE_Y44HO_DPG",
+    "EMM_EPMR_PTE_STX_DPG": "EMM_EPMR_PTE_STX_DPG",
+    "EMM_EPMR_PTE_R30_DPG": "EMM_EPMR_PTE_R30_DPG",
     "GASDESW": "EMD_EPD2D_PTE_NUS_DPG",
     "GASDESW01B": "EMD_EPD2D_PTE_R1Y_DPG",
     "GASDESW01C": "EMD_EPD2D_PTE_R1Z_DPG",
     "GASDESWMW": "EMD_EPD2D_PTE_R20_DPG",
     "GASDESWFL": "EMD_EPD2D_PTE_SFL_DPG",
     "GASDESWCA": "EMD_EPD2D_PTE_SCA_DPG",
+    "GASDESWGC": "EMD_EPD2D_PTE_R30_DPG",
+    "EMD_EPD2D_PTE_R30_DPG": "EMD_EPD2D_PTE_R30_DPG",
 }
 
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
@@ -72,6 +80,7 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Cincinnati_OH": [("GASREGWOH", "Ohio Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
     "Cincinnati_KY": [("GASREGWMW", "PADD 2 Midwest Regular Retail Price (Official Regional Benchmark for KY)")],
     "Chicago_IL": [("GASREGWCHI", "Chicago Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWIL", "Illinois Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
+    "Houston_TX": [("GASREGWHO", "Houston Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWTX", "Texas Regular Conventional Retail Price"), ("GASREGWGC", "PADD 3 Gulf Coast Regular Retail Price")],
     "Greenville_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Charlotte_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Port_St_Lucie_FL": [("GASREGWFL", "Florida Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
@@ -91,6 +100,8 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Cincinnati_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OH/KY)")],
     "Chicago_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for IL/IN)")],
     "Chicago_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for IL/IN)")],
+    "Houston_ULSD": [("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price (Official Regional Benchmark for TX)")],
+    "Houston_Diesel": [("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price (Official Regional Benchmark for TX)")],
     "Greenville_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
     "Greenville_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
     "Charlotte_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
@@ -114,6 +125,9 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASREGWSF": 4.950,
     "GASREGWCHI": 3.850,
     "GASREGWIL": 3.650,
+    "GASREGWHO": 2.850,
+    "GASREGWTX": 2.820,
+    "GASREGWGC": 2.800,
     "EMM_EPMR_PTE_NUS_DPG": 3.450,
     "EMM_EPMR_PTE_R1Y_DPG": 3.390,
     "EMM_EPMR_PTE_R1Z_DPG": 3.250,
@@ -124,12 +138,17 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "EMM_EPMR_PTE_Y05SF_DPG": 4.950,
     "EMM_EPMR_PTE_Y03CH_DPG": 3.850,
     "EMM_EPMR_PTE_SIL_DPG": 3.650,
+    "EMM_EPMR_PTE_Y44HO_DPG": 2.850,
+    "EMM_EPMR_PTE_STX_DPG": 2.820,
+    "EMM_EPMR_PTE_R30_DPG": 2.800,
     "GASDESW": 3.850,
     "GASDESWMW": 3.750,
     "GASDESW01B": 3.920,
     "GASDESW01C": 3.790,
     "GASDESWFL": 3.820,
-    "GASDESWCA": 5.150
+    "GASDESWCA": 5.150,
+    "GASDESWGC": 3.450,
+    "EMD_EPD2D_PTE_R30_DPG": 3.450
 }
 
 

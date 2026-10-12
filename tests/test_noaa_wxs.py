@@ -155,3 +155,46 @@ def test_get_chicago_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa)
     assert any("Blizzard Warning" in h for h in headlines)
     assert any("Freeze Warning" in h for h in headlines)
 
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_houston_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_houston_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-456",
+            "area": "TXZ213",
+            "event": "Gulf Hurricane Warning",
+            "headline": "NOAA NWS Hurricane Warning for Harris County and Upper Texas Coast",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Severe Convective Surge"],
+        "convective_risk_score": 0.85,
+        "categorical_risk": "MDT",
+        "tornado_risk_score": 0.50,
+        "hail_risk_score": 0.60,
+        "wind_risk_score": 0.90
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Houston_TX",
+        "min_temp_f": 72.0,
+        "max_temp_f": 92.0,
+        "heating_degree_days_hdd": 0.0,
+        "cooling_degree_days_cdd": 22.0,
+        "freeze_warning": False,
+        "extreme_heat_warning": True
+    }
+
+    df = get_houston_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Hurricane Warning" in h for h in headlines)
+    assert any("Excessive Heat Warning" in h for h in headlines)
+
+

@@ -318,6 +318,39 @@ def get_chicago_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_houston_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather, Tropical & Flood Risk Dataset for Houston & USGC Refining Corridor (TXZ213 Harris County TX / Zip 77002):
+    - NOAA NHC Atlantic/Gulf Hurricane & Tropical Storm Advisories (Harvey, Beryl, Nicholas shut-ins along Ship Channel)
+    - NOAA NWS Flash Flood Emergencies (San Jacinto River / Buffalo Bayou floodwaters inundating refining gates and racks)
+    - Deep Arctic Freezes / Polar Vortex Events (Winter Storm Uri uninsulated instrument freeze-offs and ERCOT grid curtailments)
+    - NOAA NWS Severe Heat Advisories (Industrial cooling tower capacity stress and voluntary power reductions)
+    - Actively queries live NOAA alerts (TX, TXZ213), SPC convective risks (77002), and Open-Meteo degree days.
+    """
+    houston_weather_events = [
+        {"date": "2021-02-15", "headline": "NOAA NWS Hard Freeze Emergency: Winter Storm Uri drops Houston to 13°F; ERCOT grid blackouts force catastrophic emergency shutdowns across Baytown, Pasadena, and Texas City refineries.", "zone": "TXZ213 (Harris County TX)", "weather_type": "Polar Vortex Hard Freeze"},
+        {"date": "2021-09-14", "headline": "NOAA NHC Tropical Storm Warning: Hurricane Nicholas makes landfall near Matagorda Peninsula, causing 6-foot storm surges and closing the Houston Ship Channel to inbound crude tankers.", "zone": "TXZ213 / Galveston Bay", "weather_type": "Tropical Storm / Surge"},
+        {"date": "2022-07-11", "headline": "NOAA NWS Excessive Heat Warning: Triple-digit temperatures (105°F) strain industrial cooling towers across Pasadena petrochemical complex, requiring voluntary operational throttles.", "zone": "TXZ213 (Harris County TX)", "weather_type": "Excessive Heat Advisory"},
+        {"date": "2022-12-23", "headline": "NOAA NWS Hard Freeze Warning: Pre-Christmas Arctic front plunges Upper Texas Coast to 18°F, causing minor instrument freeze-ups at Beaumont and Port Arthur facilities.", "zone": "TXZ213 / Jefferson TX", "weather_type": "Gulf Coast Hard Freeze"},
+        {"date": "2023-08-25", "headline": "NOAA NWS Red Flag Fire Weather Warning: Historic drought and 108°F heatwave across southeast Texas triggers peak summer cooling load electricity curtailments.", "zone": "TXZ213 (Harris County TX)", "weather_type": "Extreme Heatwave / Grid Peak"},
+        {"date": "2024-01-16", "headline": "NOAA NWS Hard Freeze Warning: Deep Arctic freeze (-4°F wind chill) sweeps Greater Houston; Ship Channel chemical facilities report brief operational hiccups.", "zone": "TXZ213 (Harris County TX)", "weather_type": "Arctic Freeze Warning"},
+        {"date": "2024-05-16", "headline": "NOAA NWS Severe Thunderstorm & Derecho Warning: Destructive 100 mph derecho slams Downtown Houston, toppling major high-voltage transmission towers and knocking out power to 1M customers.", "zone": "TXZ213 (Harris County TX)", "weather_type": "Derecho / Severe Convective"},
+        {"date": "2024-07-08", "headline": "NOAA NHC Hurricane Warning: Hurricane Beryl strikes Matagorda Bay/Brazoria County as Category 1 hurricane; 85 mph wind gusts knock out CenterPoint grid across Houston, idling Pasadena racks.", "zone": "TXZ213 (Harris County TX)", "weather_type": "Hurricane Landfall / Grid Outage"}
+    ]
+    events = list(houston_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["TX", "TXZ213"],
+            zip_code="77002",
+            hub_code="Houston_TX",
+            region_label="Houston / USGC Refining"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
 def get_oakland_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather, Environmental & Seismic Risk Dataset for Oakland & SF Bay Area Metro Region:
@@ -473,7 +506,8 @@ METRO_ZIP_MAP = {
     "Charlotte_NC": "28202",    # Paw Creek Distribution Hub
     "Oakland_CA": "94612",       # SF Bay Area Chevron Richmond Refinery
     "Port_St_Lucie_FL": "34952", # Port Everglades & Port Canaveral Marine Terminals
-    "Chicago_IL": "60601"       # BP Whiting & Citgo Lemont Refining Corridor
+    "Chicago_IL": "60601",      # BP Whiting & Citgo Lemont Refining Corridor
+    "Houston_TX": "77002"       # Houston Ship Channel & USGC Refining Corridor
 }
 
 
@@ -687,7 +721,8 @@ class OpenMeteoDegreeDaysConnector:
             "Greenville_NC": {"lat": 35.612, "lon": -77.366, "name": "Colonial Pipeline Selma NC Breakout Hub"},
             "Charlotte_NC": {"lat": 35.227, "lon": -80.843, "name": "Paw Creek Petroleum Distribution Terminal"},
             "Port_St_Lucie_FL": {"lat": 27.273, "lon": -80.358, "name": "Port Everglades & Port Canaveral Marine Terminals"},
-            "Chicago_IL": {"lat": 41.678, "lon": -87.498, "name": "BP Whiting IN & Citgo Lemont IL Refineries"}
+            "Chicago_IL": {"lat": 41.678, "lon": -87.498, "name": "BP Whiting IN & Citgo Lemont IL Refineries"},
+            "Houston_TX": {"lat": 29.760, "lon": -95.369, "name": "Houston Ship Channel & USGC Refining Complex"}
         }
 
     def save_degree_days_vintage_record(self, record: dict, filepath: str = None) -> None:

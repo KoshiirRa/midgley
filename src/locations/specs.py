@@ -134,12 +134,27 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         sub_locales={"cook_county": 0.08, "chicago_city": 0.15, "dupage": -0.04, "will_county": -0.06, "nw_indiana": -0.38},
         primary_refinery="BP Whiting Refinery (435 kbpd) & CITGO Lemont (177 kbpd)",
         primary_pipeline="Explorer / Wolverine / West Shore / Badger Pipelines"
+    ),
+    "houston": RegionSpec(
+        region_key="Houston_TX",
+        slug="houston",
+        display_name="Houston Metro, TX (PADD 3)",
+        padd="PADD 3",
+        wholesale_spot_col="spot_gulf_coast",
+        eia_retail_series_id="EMM_EPMR_PTE_Y44HO_DPG",
+        diesel_series_id="GASDESWGC",
+        baseline_tax_rate=0.200,
+        has_edgeworth_cycles=False,
+        sub_locales={"houston_city": 0.00, "galveston": 0.04, "baytown": -0.03, "pasadena": -0.02, "sugar_land": 0.02, "the_woodlands": 0.03, "beaumont_port_arthur": -0.04},
+        primary_refinery="ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd)",
+        primary_pipeline="Colonial Pipeline Lines 1 & 2 / Explorer Pipeline"
     )
 }
 
 # Alias oakland to bay_area spec for seamless backward compatibility
 REGIONAL_SPECS["oakland"] = REGIONAL_SPECS["bay_area"]
 REGIONAL_SPECS["chicago_il"] = REGIONAL_SPECS["chicago"]
+REGIONAL_SPECS["houston_tx"] = REGIONAL_SPECS["houston"]
 
 
 def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
@@ -151,6 +166,8 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
         return REGIONAL_SPECS["bay_area"]
     if key in ("chicago", "chicago_il", "greater_chicago"):
         return REGIONAL_SPECS["chicago"]
+    if key in ("houston", "houston_tx", "houston_metro"):
+        return REGIONAL_SPECS["houston"]
     if key in REGIONAL_SPECS:
         return REGIONAL_SPECS[key]
     for spec in REGIONAL_SPECS.values():

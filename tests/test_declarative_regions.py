@@ -7,7 +7,7 @@ from src.locations.specs import get_region_spec, REGIONAL_SPECS, RegionSpec
 
 
 def test_get_region_spec_all_metros():
-    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie", "chicago"]
+    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie", "chicago", "houston"]
     for slug in expected_slugs:
         spec = get_region_spec(slug)
         assert spec is not None
@@ -27,6 +27,11 @@ def test_get_region_spec_all_metros():
     assert chi_spec is not None
     assert chi_spec.slug == "chicago"
 
+    # Ensure houston_tx alias resolves cleanly to houston spec
+    hou_spec = get_region_spec("houston_tx")
+    assert hou_spec is not None
+    assert hou_spec.slug == "houston"
+
 
 def test_get_region_spec_by_region_key():
     spec = get_region_spec("Tulsa_OK")
@@ -41,6 +46,12 @@ def test_get_region_spec_by_region_key():
     assert chi_spec.slug == "chicago"
     assert chi_spec.wholesale_spot_col == "spot_chicago"
 
+    hou_spec = get_region_spec("Houston_TX")
+    assert hou_spec is not None
+    assert hou_spec.region_key == "Houston_TX"
+    assert hou_spec.slug == "houston"
+    assert hou_spec.wholesale_spot_col == "spot_gulf_coast"
+
 
 def test_region_spec_microstructure_flags():
     cincy = get_region_spec("cincinnati")
@@ -49,6 +60,10 @@ def test_region_spec_microstructure_flags():
     chicago = get_region_spec("chicago")
     assert chicago.has_edgeworth_cycles is True
     assert chicago.baseline_tax_rate >= 0.50
+
+    houston = get_region_spec("houston")
+    assert houston.baseline_tax_rate == 0.200
+    assert houston.padd == "PADD 3"
     
     oakland = get_region_spec("oakland")
     assert oakland.has_carb_compliance is True

@@ -137,6 +137,38 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 251000,
         "padd": "PADD 2",
         "primary_locales": ["Chicago_IL"]
+    },
+    "ExxonMobil_Baytown": {
+        "name": "ExxonMobil Baytown Refinery (Baytown, TX)",
+        "lat": 29.7497,
+        "lon": -95.0125,
+        "capacity_bpd": 560000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
+    },
+    "Motiva_Port_Arthur": {
+        "name": "Motiva Port Arthur Refinery (Port Arthur, TX)",
+        "lat": 29.8690,
+        "lon": -93.9610,
+        "capacity_bpd": 630000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
+    },
+    "Marathon_Galveston_Bay": {
+        "name": "Marathon Galveston Bay Refinery (Texas City, TX)",
+        "lat": 29.3789,
+        "lon": -94.9216,
+        "capacity_bpd": 593000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
+    },
+    "Deer_Park_Pemex": {
+        "name": "PEMEX Deer Park Refinery (Deer Park, TX)",
+        "lat": 29.7188,
+        "lon": -95.1274,
+        "capacity_bpd": 312000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
     }
 }
 
@@ -201,6 +233,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 41.8781,
         "lon": -87.6298,
         "zip": "60601"
+    },
+    "Houston_TX": {
+        "name": "Houston Metro & USGC Refining Corridor, TX",
+        "lat": 29.7604,
+        "lon": -95.3698,
+        "zip": "77002"
     }
 }
 

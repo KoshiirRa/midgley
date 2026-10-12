@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Subpackage implementation `src/locations/chicago/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#219).
 - Public dashboard page `docs/chicago.html` with multi-agent architecture, Leaflet refinery delivery corridor maps, and live weather telemetry (#219).
 - EPA RVP Reformulated Gasoline (RFG) rules (7.4 psi summer, 13.0 psi winter) for Greater Chicago in `data/regulatory_rvp_rules.json` and `src/rvp_regulations.py` (#219).
+- Houston & USGC Metro Calibration Hub (`Houston_TX`, PADD 3) anchoring the US Gulf Coast refining epicenter (>52% US operable refining capacity: Baytown, Port Arthur, Galveston Bay, Deer Park, Pasadena) (#220).
+- Point-in-time regional metadata `data/regional_metadata/houston_tx.json` with Texas motor fuel tax structure ($0.200/gal statutory fixed excise, $0.384/gal total baseline with federal), Houston Ship Channel spot pass-through, EPA Low-RVP Area standard (7.8 psi summer), and hurricane/freeze shock scenarios (#220).
+- Subpackage implementation `src/locations/houston/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#220).
+- Public dashboard page `docs/houston.html` with USGC refining corridor shock simulations, plain-English automated narrative synthesis, and live weather telemetry (#220).
+- EIA API v2 retail gasoline series mappings (`EMM_EPMR_PTE_Y44HO_DPG` for Houston, `EMM_EPMR_PTE_STX_DPG` for Texas, `EMM_EPMR_PTE_R30_DPG` for PADD 3 Gulf Coast) in `src/eia_retail_feed.py` (#220).
 
 ## [0.8.5] - 2026-10-06
 

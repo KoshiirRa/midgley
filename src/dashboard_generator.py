@@ -39,6 +39,7 @@ GREENVILLE_PATH = os.path.join(DOCS_DIR, "greenville.html")
 CHARLOTTE_PATH = os.path.join(DOCS_DIR, "charlotte.html")
 PORT_ST_LUCIE_PATH = os.path.join(DOCS_DIR, "port_st_lucie.html")
 CHICAGO_PATH = os.path.join(DOCS_DIR, "chicago.html")
+HOUSTON_PATH = os.path.join(DOCS_DIR, "houston.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
@@ -57,6 +58,7 @@ GREENVILLE_SUB_DIR = os.path.join(DOCS_DIR, "greenville")
 CHARLOTTE_SUB_DIR = os.path.join(DOCS_DIR, "charlotte")
 PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
 CHICAGO_SUB_DIR = os.path.join(DOCS_DIR, "chicago")
+HOUSTON_SUB_DIR = os.path.join(DOCS_DIR, "houston")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
@@ -72,6 +74,7 @@ GREENVILLE_SUB_PATH = os.path.join(GREENVILLE_SUB_DIR, "index.html")
 CHARLOTTE_SUB_PATH = os.path.join(CHARLOTTE_SUB_DIR, "index.html")
 PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
 CHICAGO_SUB_PATH = os.path.join(CHICAGO_SUB_DIR, "index.html")
+HOUSTON_SUB_PATH = os.path.join(HOUSTON_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
@@ -454,7 +457,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown and WCAG 2.1 AA ARIA landmarks."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -471,6 +474,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     clt_link = f"{rel_prefix}charlotte.html"
     psl_link = f"{rel_prefix}port_st_lucie.html"
     chi_link = f"{rel_prefix}chicago.html"
+    hou_link = f"{rel_prefix}houston.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -533,6 +537,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         </a>
                         <a role="menuitem" href="{chi_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-city text-sky-400" aria-hidden="true"></i> Chicago, IL/IN Retail
+                        </a>
+                        <a role="menuitem" href="{hou_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-industry text-amber-400" aria-hidden="true"></i> Houston, TX Retail
                         </a>
                         <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
@@ -2242,6 +2249,7 @@ def generate_public_dashboard():
         'Charlotte_NC': {'base': 3.980, 'pred': 3.880},
         'Port_St_Lucie_FL': {'base': 4.145, 'pred': 4.050},
         'Chicago_IL': {'base': 3.850, 'pred': 3.765},
+        'Houston_TX': {'base': 2.850, 'pred': 2.785},
         'Oakland_CA': {'base': 6.050, 'pred': 5.340},
         'BayArea_CA': {'base': 6.160, 'pred': 5.450},
         'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
@@ -2691,6 +2699,41 @@ def generate_public_dashboard():
 
                     <a href="chicago.html" class="w-full py-2.5 px-4 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
                         Explore Chicago Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 9: Houston, TX Retail (PADD 3 USGC Refining Epicenter) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 3 USGC Epicenter</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-industry text-amber-400"></i> Houston, TX
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            38.4¢ Base Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Houston_TX']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Houston_TX']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> Baytown & Port Arthur</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Houston_TX')}</strong></span>
+                    </div>
+
+                    <a href="houston.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Houston Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -4468,6 +4511,139 @@ def generate_public_dashboard():
         f.write(build_chicago_html("../"))
 
     # ---------------------------------------------------------------------------
+    # HOUSTON METRO RETAIL GAS PAGE (docs/houston.html & docs/houston/index.html)
+    # ---------------------------------------------------------------------------
+    def build_houston_html(rel_prefix: str = "") -> str:
+        nav_houston = get_nav_header("houston", rel_prefix)
+        hou_base = prices_map['Houston_TX']['base']
+        hou_pred = prices_map['Houston_TX']['pred']
+        hou_delta = hou_pred - hou_base
+        hou_pct = (hou_delta / hou_base * 100.0) if hou_base > 0 else 0.0
+        hou_sign = "+" if hou_delta > 0 else ""
+        hou_color = "#10b981" if hou_pct < -0.2 else ("#ef4444" if hou_pct > 0.2 else "#0ea5e9")
+        hou_trend_text = f"{hou_sign}{hou_pct:.1f}% Projected Trend"
+        hou_trend_color = "text-emerald-300" if hou_pct < -0.2 else ("text-rose-300" if hou_pct > 0.2 else "text-sky-300")
+        head_meta_houston = get_head_meta_tags(
+            title=f"Houston TX Retail Gas Forecast (${hou_base:.3f} → ${hou_pred:.3f} | {hou_sign}{hou_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Houston TX metro. Baseline ${hou_base:.3f}/gal, projected target ${hou_pred:.3f}/gal. ExxonMobil Baytown 560 kbpd & Motiva Port Arthur 630 kbpd mega-refining complex.",
+            canonical_path="houston.html" if rel_prefix == "" else "houston/index.html",
+            image_filename="houston.png",
+            theme_color=hou_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Houston, TX Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_HOUSTON}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Houston Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-industry text-emerald-400"></i> Houston, TX Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                PADD 3 USGC Refining Epicenter
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{HOUSTON_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{HOUSTON_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{HOUSTON_TREND_COLOR}} font-semibold">{{HOUSTON_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{HOUSTON_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{HOUSTON_MAPE}} | RMSE: {{HOUSTON_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{HOUSTON_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Houston Regional Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Category 4 Gulf Hurricane Landfall</h4>
+                    <p class="text-xs text-slate-400">Forces precautionary shutdown of Baytown and Texas City refineries, cutting >1.5M bpd capacity.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.350/gal (+12.28%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Colonial Pipeline Line 1 Origin Metering Trip</h4>
+                    <p class="text-xs text-slate-400">Traps refined product in USGC storage, depressing local wholesale spot price while spiking East Coast.</p>
+                    <div class="text-sm font-extrabold text-emerald-400">- $0.095/gal (-3.33%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Severe Gulf Coast Hard Freeze</h4>
+                    <p class="text-xs text-slate-400">Cuts industrial power and freezes refinery boiler feedwater lines, taking multiple USGC units offline.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.245/gal (+8.60%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Houston, TX Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_HOUSTON}}", nav_houston).replace("PREFIX", rel_prefix).replace("{{HOUSTON_BASE}}", f"{prices_map['Houston_TX']['base']:.3f}").replace("{{HOUSTON_PRED}}", f"{prices_map['Houston_TX']['pred']:.3f}").replace("{{HOUSTON_TREND_TEXT}}", hou_trend_text).replace("{{HOUSTON_TREND_COLOR}}", hou_trend_color).replace("{{HOUSTON_MAE}}", get_mae_display('houston_tx')).replace("{{HOUSTON_MAPE}}", get_mape_display('houston_tx')).replace("{{HOUSTON_RMSE}}", get_rmse_display('houston_tx')).replace("{{HOUSTON_HIT_RATE}}", get_hit_rate_display('houston_tx')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_houston).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Houston_TX', prices_map['Houston_TX']['base'], prices_map['Houston_TX']['pred'], logistics_hub="ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd) Refining Complex")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Houston_TX', prices_map['Houston_TX']['base'], prices_map['Houston_TX']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('houston_tx'))
+
+    os.makedirs(HOUSTON_SUB_DIR, exist_ok=True)
+    with open(HOUSTON_PATH, "w", encoding="utf-8") as f:
+        f.write(build_houston_html(""))
+    with open(HOUSTON_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_houston_html("../"))
+
+    # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
@@ -5332,7 +5508,7 @@ def generate_public_dashboard():
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 5.1: Multi-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
-                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}} + \mathbf{W}_{\text{Chicago}}$$
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}} + \mathbf{W}_{\text{Chicago}} + \mathbf{W}_{\text{Houston}}$$
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
                     <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks (PADD 3 refining corridor) &amp; Permian/Bakken production basin polar vortex freezes.<br>
@@ -5343,7 +5519,8 @@ def generate_public_dashboard():
                     <strong>Tier 2 (Charlotte NC):</strong> Mecklenburg County (<code class="text-amber-300">NCZ071</code>) inland tropical cyclone wind gusts, Catawba River basin flooding, and severe convective power substation trips halting truck dispatches at Paw Creek petroleum tank farms.<br>
                     <strong>Tier 2 (Oakland &amp; SF Bay Area CA):</strong> Alameda County (<code class="text-amber-300">CAZ508</code>) &amp; Contra Costa County (<code class="text-amber-300">CAZ511</code>) atmospheric river bomb cyclones, PG&amp;E Public Safety Power Shutoffs (PSPS) / Diablo winds impacting Chevron Richmond (\(245,000\text{ bpd}\)) CaRFG units, and USGS Hayward Fault seismic pipeline shutoffs.<br>
                     <strong>Tier 2 (Port St. Lucie FL):</strong> St. Lucie County (<code class="text-amber-300">FLZ147</code> / Zip <code class="text-amber-300">34952</code>) Atlantic hurricane evacuations/landfalls (Ian, Nicole, Milton), South Florida 25-inch flash flood rack washouts, and marine barge delays into Port Everglades and Port Canaveral berths.<br>
-                    <strong>Tier 2 (Chicago IL/IN):</strong> Cook County (<code class="text-amber-300">ILZ104</code> / Zip <code class="text-amber-300">60601</code>) and Lake County IN (<code class="text-amber-300">INZ001</code>) Lake Michigan polar vortex freezes, summer severe convective derechos, and BP Whiting/CITGO Lemont cooling water intake loops.
+                    <strong>Tier 2 (Chicago IL/IN):</strong> Cook County (<code class="text-amber-300">ILZ104</code> / Zip <code class="text-amber-300">60601</code>) and Lake County IN (<code class="text-amber-300">INZ001</code>) Lake Michigan polar vortex freezes, summer severe convective derechos, and BP Whiting/CITGO Lemont cooling water intake loops.<br>
+                    <strong>Tier 2 (Houston TX):</strong> Harris County (<code class="text-amber-300">TXZ213</code> / Zip <code class="text-amber-300">77002</code>) and Galveston/Jefferson Counties Gulf hurricane storm surges, tropical convective inundation (Harvey-style), winter freeze-offs, and Houston Ship Channel marine draft restrictions across Baytown (560 kbpd) and Port Arthur (630 kbpd).
                 </p>
             </div>
         </section>
@@ -5591,7 +5768,8 @@ def generate_public_dashboard():
                     <strong>Greenville NC &amp; Charlotte NC:</strong> PADD 1C Colonial Pipeline Line 1 tariffs, Selma/Apex rack differentials, and North Carolina excise tax (\(\$0.404/\text{gal}\)).<br>
                     <strong>Oakland &amp; SF Bay Area CA:</strong> PADD 5 isolated island with statutory CARB regulatory burden (\(\$0.953/\text{gal}\)) and local county sales taxes.<br>
                     <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).<br>
-                    <strong>Chicago IL/IN:</strong> Multi-tiered Illinois (\(\$0.470/\text{gal}\)), Cook County (\(\$0.060/\text{gal}\)), and Chicago city (\(\$0.080/\text{gal}\)) motor fuel taxes with Indiana cross-border arbitrage and BP Whiting / CITGO Lemont rack margin pass-through.
+                    <strong>Chicago IL/IN:</strong> Multi-tiered Illinois (\(\$0.470/\text{gal}\)), Cook County (\(\$0.060/\text{gal}\)), and Chicago city (\(\$0.080/\text{gal}\)) motor fuel taxes with Indiana cross-border arbitrage and BP Whiting / CITGO Lemont rack margin pass-through.<br>
+                    <strong>Houston TX:</strong> PADD 3 Gulf Coast refining epicenter directly adjacent to Baytown and Port Arthur mega-refineries, Texas state excise tax (\(\$0.200/\text{gal}\)), prompt USGC spot pass-through, and zero local pipeline import tariff.
                 </p>
             </div>
         </section>
@@ -5724,6 +5902,7 @@ def get_savings_regional_trajectories() -> dict:
         "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.280, "delta": -0.030},
         "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 3.380, "delta": -0.025},
         "Chicago_IL": {"name": "Chicago, IL/IN Retail", "base": 3.850, "delta": -0.040},
+        "Houston_TX": {"name": "Houston, TX Retail", "base": 2.850, "delta": -0.020},
         "Oakland_CA": {"name": "Oakland, CA Retail", "base": 4.850, "delta": -0.060},
         "BayArea_CA": {"name": "SF Bay Area Region", "base": 4.950, "delta": -0.058},
     }

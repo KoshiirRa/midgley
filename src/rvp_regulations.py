@@ -65,11 +65,11 @@ DEFAULT_RVP_RULES = {
             "is_carb": False
         },
         "Houston_TX": {
-            "name": "Houston-Galveston-Brazoria",
-            "program": "EPA Non-Attainment / RFG Adjacent Area",
+            "name": "Houston-Galveston-Brazoria (PADD 3)",
+            "program": "EPA Low-RVP Area / Texas Low Emission Diesel",
             "summer_rvp_psi": 7.8,
-            "winter_rvp_psi": 13.5,
-            "summer_compliance_premium_per_gal": 0.14,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.08,
             "is_rfg": False,
             "is_carb": False
         },
@@ -198,6 +198,8 @@ class RVPRegulatoryEngine:
                 "Cincinnati": "Cincinnati_OH",
                 "Dallas": "Dallas_TX",
                 "Houston": "Houston_TX",
+                "houston": "Houston_TX",
+                "houston_tx": "Houston_TX",
                 "Newark": "Newark_DE",
                 "Newark_DE": "Newark_DE",
                 "Newark_NJ": "Newark_NJ",

@@ -427,7 +427,7 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - FINLIGHT_API_KEY=${FINLIGHT_API_KEY}
       - MIDGLEY_ADMIN_SECRET=${MIDGLEY_ADMIN_SECRET}
-      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie,chicago
+      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie,chicago,houston
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -544,7 +544,7 @@ curl http://localhost:8000/api/v1/system/quota
 ```
 
 ### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
-Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, Chicago, regional diesel engines, and generates the public web dashboard):
+Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, Chicago, Houston, regional diesel engines, and generates the public web dashboard):
 ```bash
 python3 run_all.py --use-llm-api
 ```
